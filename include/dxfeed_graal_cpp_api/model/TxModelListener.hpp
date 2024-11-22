@@ -26,6 +26,10 @@ DXFCPP_BEGIN_NAMESPACE
 
 class IndexedEventSource;
 
+/**
+ * The listener for receiving indexed events with the specified type (if necessary) from the IndexedTxModel or
+ * TimeSeriesTxModel.
+ */
 struct DXFCPP_EXPORT TxModelListener : RequireMakeShared<TxModelListener> {
     explicit TxModelListener(LockExternalConstructionTag);
     ~TxModelListener() noexcept override;
@@ -34,11 +38,61 @@ struct DXFCPP_EXPORT TxModelListener : RequireMakeShared<TxModelListener> {
     void createHandle(Id<TxModelListener> id);
 
   public:
+    /**
+     * Creates a listener for receiving indexed events.
+     *
+     * ```cpp
+     * auto listener = TxModelListener::create([](const auto &, const auto &events, bool isSnapshot) {
+     *     if (isSnapshot) {
+     *         std::cout << "Snapshot:" << std::endl;
+     *     } else {
+     *         std::cout << "Update:" << std::endl;
+     *     }
+     *
+     *     for (const auto &e : events) {
+     *         if (auto o = e->template sharedAs<Order>()) {
+     *              std::cout << "[" << o->getEventFlagsMask().toString() << "]:" << o << std::endl;
+     *         }
+     *     }
+     *
+     *     std::cout << std::endl;
+     * });
+     *
+     * builder->withListener(listener);
+     * ```
+     *
+     * @param onEventsReceived A functional object, lambda, or function to which indexed event data will be passed.
+     * @return A smart pointer to the listener.
+     */
     static std::shared_ptr<TxModelListener>
     create(std::function<void(const IndexedEventSource & /* source */,
                               const std::vector<std::shared_ptr<EventType>> & /* events */, bool /* isSnapshot */)>
                onEventsReceived);
 
+    /**
+     * Creates a listener for receiving indexed events (with instantiation by event type `E` and verification)
+     *
+     * ```cpp
+     * auto listener = TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+     *     if (isSnapshot) {
+     *         std::cout << "Snapshot:" << std::endl;
+     *     } else {
+     *         std::cout << "Update:" << std::endl;
+     *     }
+     *
+     *     for (const auto &e : events) {
+     *         std::cout << "[" << e->getEventFlagsMask().toString() << "]:" << e << std::endl;
+     *     }
+     *
+     *     std::cout << std::endl;
+     * });
+     *
+     * builder->withListener(listener);
+     * ```
+     * @tparam E The event type.
+     * @param onEventsReceived A functional object, lambda, or function to which indexed event data will be passed.
+     * @return A smart pointer to the listener.
+     */
     template <Derived<IndexedEvent> E>
     static std::shared_ptr<TxModelListener>
     create(std::function<void(const IndexedEventSource & /* source */,
@@ -67,6 +121,11 @@ struct DXFCPP_EXPORT TxModelListener : RequireMakeShared<TxModelListener> {
         return listener;
     }
 
+    /**
+     * Returns a handle of the current listener.
+     *
+     * @return The listener's handle.
+     */
     const JavaObjectHandle<TxModelListener> &getHandle() const;
 
   private:

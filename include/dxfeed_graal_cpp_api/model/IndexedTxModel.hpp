@@ -142,10 +142,70 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          */
         std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const;
 
+        /**
+         * Sets the @ref DXFeed "feed" for the model being created.
+         * The @ref DXFeed "feed" can also be attached later, after the model has been created,
+         * by calling @ref IndexedTxModel::attach() "attach".
+         *
+         * @param feed The @ref DXFeed "feed".
+         * @return `this` builder.
+         */
         std::shared_ptr<Builder> withFeed(std::shared_ptr<DXFeed> feed) const;
 
+        /**
+         * Sets the subscription symbol for the model being created.
+         * The symbol cannot be added or changed after the model has been built.
+         *
+         * @param symbol The subscription symbol.
+         * @return `this` builder.
+         */
         std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const;
 
+        /**
+         * Sets the listener for transaction notifications.
+         * The listener cannot be changed or added once the model has been built.
+         *
+         * ```cpp
+         * auto listener = TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+         *     if (isSnapshot) {
+         *         std::cout << "Snapshot:" << std::endl;
+         *     } else {
+         *         std::cout << "Update:" << std::endl;
+         *     }
+         *
+         *     for (const auto &e : events) {
+         *         std::cout << "[" << e->getEventFlagsMask().toString() << "]:" << e << std::endl;
+         *     }
+         *
+         *     std::cout << std::endl;
+         * });
+         *
+         * builder->withListener(listener);
+         * ```
+         *
+         * ```cpp
+         *     auto builder = IndexedTxModel::newBuilder(Order::TYPE);
+         *
+         *     builder->withListener(TxModelListener::create([](const auto &, const auto &events, bool isSnapshot) {
+         *         if (isSnapshot) {
+         *             std::cout << "Snapshot:" << std::endl;
+         *         } else {
+         *             std::cout << "Update:" << std::endl;
+         *         }
+         *
+         *         for (const auto &e : events) {
+         *             if (auto o = e->template sharedAs<Order>()) {
+         *                 std::cout << "[" << o->getEventFlagsMask().toString() << "]:" << o << std::endl;
+         *             }
+         *         }
+         *
+         *         std::cout << std::endl;
+         *     }));
+         * ```
+         *
+         * @param listener The transaction listener.
+         * @return `this` builder.
+         */
         std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener> listener) const;
 
         /**
@@ -243,6 +303,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
     IndexedTxModel(LockExternalConstructionTag tag, JavaObjectHandle<IndexedTxModel> &&handle,
                    std::shared_ptr<TxModelListener> listener);
 
+    /// Calls @ref IndexedTxModel::close "close" method and destructs this model.
     ~IndexedTxModel() noexcept override;
 
     /**
@@ -257,14 +318,44 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
      */
     static std::shared_ptr<Builder> newBuilder(const EventTypeEnum &eventType);
 
+    /**
+     * Returns whether batch processing is enabled.
+     * See @ref IndexedTxModel::Builder::withBatchProcessing() "withBatchProcessing".
+     *
+     * @return `true` if batch processing is enabled; `false` otherwise.
+     */
     bool isBatchProcessing() const;
 
+    /**
+     * Returns whether snapshot processing is enabled.
+     * See @ref IndexedTxModel::Builder::withSnapshotProcessing() "withSnapshotProcessing".
+     *
+     * @return `true` if snapshot processing is enabled; `false` otherwise.
+     */
     bool isSnapshotProcessing() const;
 
+    /**
+     * Attaches this model to the specified feed.
+     * Technically, this model can be attached to multiple feeds at once,
+     * but this is rarely needed and not recommended.
+     *
+     * @param feed The feed to attach to.
+     */
     void attach(std::shared_ptr<DXFeed> feed) const;
 
+    /**
+     * Detaches this model from the specified feed.
+     *
+     * @param feed The feed to detach from.
+     */
     void detach(std::shared_ptr<DXFeed> feed) const;
 
+    /**
+     * Closes this model and makes it <i>permanently detached</i>.
+     *
+     * <p>This method clears installed listener and ensures that the model
+     * can be safely garbage-collected when all outside references to it are lost.
+     */
     void close() const;
 
     /**
