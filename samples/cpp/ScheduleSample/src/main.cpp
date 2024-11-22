@@ -225,5 +225,9 @@ int main(int argc, char *argv[]) {
         printNearestTradingSession(profile, time);
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }

@@ -104,5 +104,9 @@ int main(int argc, char *argv[]) {
         connection->close();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }

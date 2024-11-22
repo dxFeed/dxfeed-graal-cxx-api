@@ -76,7 +76,6 @@ int main(int argc, char *argv[]) {
     using namespace std::string_literals;
 
     try {
-
         if (argc < 2) {
             std::cout << R"(
 Usage:
@@ -96,5 +95,9 @@ Where:
         testTradeSnapshots(symbol);
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }
