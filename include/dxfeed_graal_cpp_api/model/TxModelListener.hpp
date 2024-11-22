@@ -4,7 +4,6 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
-#include "../internal/Handler.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -12,14 +11,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/EventType.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/IndexedEventSource.hpp"
+#include "../internal/Handler.hpp"
+#include "../internal/Id.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../internal/context/ApiContext.hpp"
 
 #include <functional>
 #include <memory>
 #include <mutex>
-#include <thread>
-#include <unordered_set>
 #include <vector>
 
 DXFCPP_BEGIN_NAMESPACE
