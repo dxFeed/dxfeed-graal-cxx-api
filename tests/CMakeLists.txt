@@ -20,7 +20,6 @@ set(CXX_EXTENSIONS OFF)
 set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-${DOCTEST_VERSION} ../third_party/range-v3-${RANGE_VERSION}/include)
 
 set(DXFC_TEST_SOURCES
-        exceptions/ExceptionsTest.cpp
         api/CandleSymbolTest.cpp
         api/DataIntegrityTest.cpp
         api/DXEndpointTest.cpp
@@ -29,6 +28,8 @@ set(DXFC_TEST_SOURCES
         api/MarketEventSymbolsTest.cpp
         api/OrderSourceTest.cpp
         event/EventsTest.cpp
+        exceptions/ExceptionsTest.cpp
+        model/IndexedTxModelTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp)

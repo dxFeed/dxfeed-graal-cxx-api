@@ -13,6 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/IndexedEvent.hpp"
 #include "../event/IndexedEventSource.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../internal/context/ApiContext.hpp"
 
 #include <functional>
 #include <memory>
@@ -29,10 +30,42 @@ struct DXFCPP_EXPORT TxModelListener : RequireMakeShared<TxModelListener> {
     explicit TxModelListener(LockExternalConstructionTag);
     ~TxModelListener() noexcept override;
 
+  private:
+    void createHandle(Id<TxModelListener> id);
+
+  public:
     static std::shared_ptr<TxModelListener>
     create(std::function<void(const IndexedEventSource & /* source */,
                               const std::vector<std::shared_ptr<EventType>> & /* events */, bool /* isSnapshot */)>
                onEventsReceived);
+
+    template <Derived<IndexedEvent> E>
+    static std::shared_ptr<TxModelListener>
+    create(std::function<void(const IndexedEventSource & /* source */,
+                              const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
+               onEventsReceived) {
+        auto listener = createShared();
+        listener->createHandle(
+            ApiContext::getInstance()->getManager<EntityManager<TxModelListener>>()->registerEntity(listener));
+
+        listener->onEventsReceived_ +=
+            [l = onEventsReceived](const IndexedEventSource &source,
+                                   const std::vector<std::shared_ptr<EventType>> &events, bool isSnapshot) {
+                std::vector<std::shared_ptr<E>> filteredEvents{};
+
+                filteredEvents.reserve(events.size());
+
+                for (const auto &e : events) {
+                    if (auto expected = e->template sharedAs<E>(); expected) {
+                        filteredEvents.emplace_back(expected);
+                    }
+                }
+
+                l(source, filteredEvents, isSnapshot);
+            };
+
+        return listener;
+    }
 
     const JavaObjectHandle<TxModelListener> &getHandle() const;
 

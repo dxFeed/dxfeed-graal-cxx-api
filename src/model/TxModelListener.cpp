@@ -41,15 +41,21 @@ TxModelListener::TxModelListener(LockExternalConstructionTag) : handle_{}, impl_
 TxModelListener::~TxModelListener() noexcept {
 }
 
+void TxModelListener::createHandle(Id<TxModelListener> id) {
+    std::lock_guard guard{mutex_};
+
+    handle_ = isolated::model::IsolatedTxModelListener::create(dxfcpp::bit_cast<void *>(&Impl::onEventsReceived),
+                                                               dxfcpp::bit_cast<void *>(id.getValue()));
+}
+
 std::shared_ptr<TxModelListener> TxModelListener::create(
     std::function<void(const IndexedEventSource & /* source */,
                        const std::vector<std::shared_ptr<EventType>> & /* events */, bool /* isSnapshot */)>
         onEventsReceived) {
     auto listener = createShared();
-    auto id = ApiContext::getInstance()->getManager<EntityManager<TxModelListener>>()->registerEntity(listener);
 
-    listener->handle_ = isolated::model::IsolatedTxModelListener::create(
-        dxfcpp::bit_cast<void *>(&Impl::onEventsReceived), dxfcpp::bit_cast<void *>(id.getValue()));
+    listener->createHandle(
+        ApiContext::getInstance()->getManager<EntityManager<TxModelListener>>()->registerEntity(listener));
     listener->onEventsReceived_ += std::move(onEventsReceived);
 
     return listener;
