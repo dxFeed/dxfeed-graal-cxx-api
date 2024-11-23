@@ -13,10 +13,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../managers/DXFeedManager.hpp"
 #include "../managers/DXFeedSubscriptionManager.hpp"
 #include "../managers/DXPublisherManager.hpp"
-#include "../managers/InstrumentProfileCollectorManager.hpp"
-#include "../managers/InstrumentProfileConnectionManager.hpp"
-#include "../managers/InstrumentProfileReaderManager.hpp"
-#include "../managers/OnDemandServiceManager.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -34,11 +30,7 @@ template <typename Manager> struct AddManagerMixin {
 class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
                                  AddManagerMixin<DXFeedSubscriptionManager>,
                                  AddManagerMixin<DXFeedManager>,
-                                 AddManagerMixin<DXPublisherManager>,
-                                 AddManagerMixin<InstrumentProfileReaderManager>,
-                                 AddManagerMixin<InstrumentProfileCollectorManager>,
-                                 AddManagerMixin<InstrumentProfileConnectionManager>,
-                                 AddManagerMixin<OnDemandServiceManager> {
+                                 AddManagerMixin<DXPublisherManager> {
     ApiContext() noexcept = default;
 
   public:

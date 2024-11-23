@@ -18,12 +18,12 @@ using namespace dxfcpp;
 
 class IndexedTxModelFixture {
     std::shared_ptr<DXFeed> dxfeed;
-    std::shared_ptr<TxModelListener> listener;
+    std::shared_ptr<TxModelListener<Order>> listener;
 
   public:
     IndexedTxModelFixture()
         : dxfeed(DXEndpoint::getInstance(DXEndpoint::Role::FEED)->connect("demo.dxfeed.com:7300")->getFeed()),
-          listener(TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+          listener(TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
               if (isSnapshot) {
                   std::cout << "Snapshot:" << std::endl;
               } else {
@@ -43,7 +43,7 @@ class IndexedTxModelFixture {
         return dxfeed;
     }
 
-    [[nodiscard]] std::shared_ptr<TxModelListener> getListener() const {
+    [[nodiscard]] std::shared_ptr<TxModelListener<Order>> getListener() const {
         return listener;
     }
 };

@@ -16,8 +16,8 @@ DXFCPP_BEGIN_NAMESPACE
 
 template <typename T> struct JavaObjectHandle {
 #if DXFCPP_DEBUG == 1
-    static auto getDebugName() {
-        return std::string("JavaObjectHandle<") + typeid(T).name() + ">";
+    static std::string getDebugName() {
+        return typeid(JavaObjectHandle<T>).name();
     }
 #endif
 

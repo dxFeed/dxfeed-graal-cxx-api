@@ -86,7 +86,7 @@ JavaObjectHandle<TimeSeriesTxModel::Builder> withSymbol(const JavaObjectHandle<T
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withListener(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
 JavaObjectHandle<TimeSeriesTxModel::Builder> withListener(const JavaObjectHandle<TimeSeriesTxModel::Builder> &builder,
-                                                          const JavaObjectHandle<TxModelListener> &listener);
+                                                          const JavaObjectHandle<TxModelListenerTag> &listener);
 
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withExecutor(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_executor_t* executor);

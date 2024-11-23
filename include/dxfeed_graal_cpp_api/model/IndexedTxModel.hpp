@@ -9,8 +9,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventSourceWrapper.hpp"
+#include "../event/IndexedEvent.hpp"
 #include "../event/market/OrderSource.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "TxModelListener.hpp"
 
 #include <memory>
 #include <unordered_set>
@@ -19,7 +21,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct SymbolWrapper;
 struct DXFeed;
-struct TxModelListener;
 
 /**
  * An incremental model for indexed events.
@@ -94,15 +95,16 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
     struct DXFCPP_EXPORT Builder : RequireMakeShared<Builder> {
       private:
         JavaObjectHandle<Builder> handle_;
-        std::shared_ptr<TxModelListener> listener_;
+        std::shared_ptr<TxModelListenerCommon> listener_;
 
         JavaObjectHandle<Builder> withSourcesImpl(void *graalEventSourceList) const;
+        JavaObjectHandle<Builder> withListenerImpl(const JavaObjectHandle<TxModelListenerTag> &listener) const;
 
       public:
         Builder(LockExternalConstructionTag tag, JavaObjectHandle<Builder> &&handle);
 
         Builder(LockExternalConstructionTag tag, JavaObjectHandle<Builder> &&handle,
-                std::shared_ptr<TxModelListener> listener);
+                std::shared_ptr<TxModelListenerCommon> listener);
 
         /**
          * Enables or disables batch processing.
@@ -206,7 +208,11 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * @param listener The transaction listener.
          * @return `this` builder.
          */
-        std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener> listener) const;
+        template <Derived<IndexedEvent> E>
+        std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener<E>> listener) const {
+            return createShared(std::move(withListenerImpl(listener->getHandle())),
+                                listener->template sharedAs<TxModelListenerCommon>());
+        }
 
         /**
          * Sets the sources from which to subscribe for indexed events.
@@ -293,7 +299,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
 
   private:
     JavaObjectHandle<IndexedTxModel> handle_;
-    std::shared_ptr<TxModelListener> listener_;
+    std::shared_ptr<TxModelListenerCommon> listener_;
 
     void setSourcesImpl(void *graalEventSourceList) const;
 
@@ -301,7 +307,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
     IndexedTxModel(LockExternalConstructionTag tag, JavaObjectHandle<IndexedTxModel> &&handle);
 
     IndexedTxModel(LockExternalConstructionTag tag, JavaObjectHandle<IndexedTxModel> &&handle,
-                   std::shared_ptr<TxModelListener> listener);
+                   std::shared_ptr<TxModelListenerCommon> listener);
 
     /// Calls @ref IndexedTxModel::close "close" method and destructs this model.
     ~IndexedTxModel() noexcept override;

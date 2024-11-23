@@ -403,8 +403,10 @@ add_library(${PROJECT_NAME}_static STATIC
 )
 
 if (WIN32)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        list(APPEND CMAKE_RC_FLAGS "--use-temp-file")
+    if (MINGW)
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            list(APPEND CMAKE_RC_FLAGS "--use-temp-file")
+        endif ()
     endif ()
 
     add_library(${PROJECT_NAME} SHARED

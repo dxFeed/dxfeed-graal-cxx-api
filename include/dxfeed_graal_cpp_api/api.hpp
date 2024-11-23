@@ -27,9 +27,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "internal/managers/DXFeedManager.hpp"
 #include "internal/managers/DXFeedSubscriptionManager.hpp"
 #include "internal/managers/DXPublisherManager.hpp"
-#include "internal/managers/InstrumentProfileReaderManager.hpp"
-#include "internal/managers/InstrumentProfileCollectorManager.hpp"
-#include "internal/managers/InstrumentProfileConnectionManager.hpp"
 #include "internal/managers/EntityManager.hpp"
 #include "internal/managers/ErrorHandlingManager.hpp"
 

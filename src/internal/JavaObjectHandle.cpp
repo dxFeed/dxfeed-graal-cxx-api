@@ -93,7 +93,7 @@ template struct JavaObjectHandle<TimePeriod>;
 
 template struct JavaObjectHandle<AuthToken>;
 
-template struct JavaObjectHandle<TxModelListener>;
+template struct JavaObjectHandle<TxModelListenerTag>;
 template struct JavaObjectHandle<IndexedTxModel>;
 template struct JavaObjectHandle<IndexedTxModel::Builder>;
 template struct JavaObjectHandle<TimeSeriesTxModel>;

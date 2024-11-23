@@ -121,6 +121,34 @@ struct DXFCPP_EXPORT DayFilter {
 
     /// Bitwise mask of required days (2 for Monday, 4 for Tuesday, 128 for Sunday), <code>0</code> if not relevant.
     std::uint32_t dayOfWeekMask_;
+
+  public:
+
+    [[nodiscard]] DayFilterEnum getCode() const {
+        return code_;
+    }
+
+    [[nodiscard]] std::string getName() const {
+        return name_;
+    }
+
+    [[nodiscard]] std::uint32_t getDayOfWeekMask() const {
+        return dayOfWeekMask_;
+    }
+
+    [[nodiscard]] Tristate isHoliday() const {
+        return holiday_;
+    }
+
+    [[nodiscard]] Tristate isShortDay() const {
+        return shortDay_;
+    }
+
+    [[nodiscard]] Tristate isTrading() const {
+        return trading_;
+    }
+
+  private:
     /// Required holiday flag, Tristate::NONE if not relevant.
     Tristate holiday_;
     /// Required short day flag, Tristate::NONE if not relevant.

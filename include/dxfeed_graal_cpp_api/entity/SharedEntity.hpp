@@ -76,7 +76,7 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
 };
 
 template <typename T>
-struct RequireMakeShared : SharedEntity {
+struct RequireMakeShared : virtual SharedEntity {
   protected:
 
     struct LockExternalConstructionTag {

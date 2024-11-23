@@ -61,7 +61,8 @@ struct InstrumentProfileCollector::Impl {
         auto [collectorId, listenerId] = dxfcpp::unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
         auto id = Id<InstrumentProfileCollector>::from(collectorId);
-        auto collector = ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->getEntity(id);
+        auto collector =
+            ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileCollector>>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
             Debugger::debug("InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate2: id = " +
@@ -133,7 +134,7 @@ InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() {
     auto collector = std::shared_ptr<InstrumentProfileCollector>(new InstrumentProfileCollector());
 
     collector->id_ =
-        ApiContext::getInstance()->getManager<InstrumentProfileCollectorManager>()->registerEntity(collector);
+        ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileCollector>>()->registerEntity(collector);
 
     return collector;
 }
