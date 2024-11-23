@@ -36,7 +36,7 @@ struct DXFeed;
  * <p>This model must be configured using the @ref TimeSeriesTxModel::Builder "builder", as most configuration
  * settings cannot be changed once the model is built. This model requires configuration with
  * a @ref TimeSeriesTxModel::Builder::withSymbol() "symbol" and a @ref TimeSeriesTxModel::Builder::withFromTime()
- * "fromTime" for subscription, and it must be @ref TimeSeriesTxModel::Builder::withFeed(DXFeed) attached} to a DXFeed
+ * "fromTime" for subscription, and it must be @ref TimeSeriesTxModel::Builder::withFeed() "attached" to a DXFeed
  * instance to begin operation. For ease of use, some of these configurations can be changed after the model is built,
  * see
  * @ref TimeSeriesTxModel::setFromTime() "setFromTime", @ref TimeSeriesTxModel::attach() "attach".
