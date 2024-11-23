@@ -1,3 +1,5 @@
+* **\[MDAPI-84]\[C++]** Implement TimeSeriesTxModel
+    * Added `TimeSeriesTxModel` class.
 * **\[MDAPI-83]\[C++]** Implement IndexedTxModel
     * Added `TxModelListener` class.
     * Added `IndexedTxModel` class.
