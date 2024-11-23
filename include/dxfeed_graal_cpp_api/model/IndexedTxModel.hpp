@@ -62,7 +62,7 @@ struct DXFeed;
  *
  * ```cpp
  * auto feed = DXEndpoint::getInstance(DXEndpoint::Role::FEED)->connect("demo.dxfeed.com:7300")->getFeed();
- * auto listener = TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+ * auto listener = TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
  *     if (isSnapshot) {
  *         std::cout << "Snapshot:" << std::endl;
  *     } else {
@@ -168,7 +168,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * The listener cannot be changed or added once the model has been built.
          *
          * ```cpp
-         * auto listener = TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+         * auto listener = TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
          *     if (isSnapshot) {
          *         std::cout << "Snapshot:" << std::endl;
          *     } else {
@@ -183,26 +183,6 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * });
          *
          * builder->withListener(listener);
-         * ```
-         *
-         * ```cpp
-         *     auto builder = IndexedTxModel::newBuilder(Order::TYPE);
-         *
-         *     builder->withListener(TxModelListener::create([](const auto &, const auto &events, bool isSnapshot) {
-         *         if (isSnapshot) {
-         *             std::cout << "Snapshot:" << std::endl;
-         *         } else {
-         *             std::cout << "Update:" << std::endl;
-         *         }
-         *
-         *         for (const auto &e : events) {
-         *             if (auto o = e->template sharedAs<Order>()) {
-         *                 std::cout << "[" << o->getEventFlagsMask().toString() << "]:" << o << std::endl;
-         *             }
-         *         }
-         *
-         *         std::cout << std::endl;
-         *     }));
          * ```
          *
          * @param listener The transaction listener.

@@ -67,7 +67,7 @@ struct DXFCPP_EXPORT TxModelListener : TxModelListenerCommon, RequireMakeShared<
      * Creates a listener for receiving indexed events (with instantiation by event type `E` and verification)
      *
      * ```cpp
-     * auto listener = TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+     * auto listener = TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
      *     if (isSnapshot) {
      *         std::cout << "Snapshot:" << std::endl;
      *     } else {
