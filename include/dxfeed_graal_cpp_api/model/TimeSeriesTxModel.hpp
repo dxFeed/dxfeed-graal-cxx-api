@@ -94,7 +94,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel : RequireMakeShared<TimeSeriesTxModel> {
          * The listener cannot be changed or added once the model has been built.
          *
          * ```cpp
-         * auto listener = TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+         * auto listener = TxModelListener<Candle>::create([](const auto &, const auto &events, bool isSnapshot) {
          *     if (isSnapshot) {
          *         std::cout << "Snapshot:" << std::endl;
          *     } else {
@@ -111,30 +111,14 @@ struct DXFCPP_EXPORT TimeSeriesTxModel : RequireMakeShared<TimeSeriesTxModel> {
          * builder->withListener(listener);
          * ```
          *
-         * ```cpp
-         *     auto builder = IndexedTxModel::newBuilder(Cnadle::TYPE);
-         *
-         *     builder->withListener(TxModelListener::create([](const auto &, const auto &events, bool isSnapshot) {
-         *         if (isSnapshot) {
-         *             std::cout << "Snapshot:" << std::endl;
-         *         } else {
-         *             std::cout << "Update:" << std::endl;
-         *         }
-         *
-         *         for (const auto &e : events) {
-         *             if (auto o = e->template sharedAs<Order>()) {
-         *                 std::cout << "[" << o->getEventFlagsMask().toString() << "]:" << o << std::endl;
-         *             }
-         *         }
-         *
-         *         std::cout << std::endl;
-         *     }));
-         * ```
-         *
          * @param listener The transaction listener.
          * @return `this` builder.
          */
-        std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListenerCommon> listener) const;
+        template <Derived<TimeSeriesEvent> E>
+        std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener<E>> listener) const {
+            return createShared(std::move(withListenerImpl(listener->getHandle())),
+                                listener->template sharedAs<TxModelListenerCommon>());
+        }
     };
 
 private:
