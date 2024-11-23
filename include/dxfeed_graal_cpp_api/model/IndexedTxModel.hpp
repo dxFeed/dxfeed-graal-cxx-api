@@ -45,14 +45,11 @@ struct DXFeed;
  * <h3>Resource management and closed models</h3>
  *
  * <p>Attached model is a potential memory leak. If the pointer to attached model is lost, then there is no way
- * to detach this model from the feed and the model will not be reclaimed by the garbage collector as long as the
- * corresponding feed is still used. Detached model can be reclaimed by the garbage collector, but detaching model
- * requires knowing the pointer to the feed at the place of the call, which is not always convenient.
+ * to detach this model from the feed.
  *
  * <p>The convenient way to detach model from the feed is to call its @ref IndexedTxModel::close "close" method
  * (it is automatically called when the destructor is called, i.e. RAII). Closed model
- * becomes permanently detached from all feeds, removes all its listeners and is guaranteed to be reclaimable by
- * the garbage collector as soon as all external references to it are cleared.
+ * becomes permanently detached from all feeds, removes all its listeners.
  *
  * <h3>Threads and locks</h3>
  *
@@ -339,8 +336,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
     /**
      * Closes this model and makes it <i>permanently detached</i>.
      *
-     * <p>This method clears installed listener and ensures that the model
-     * can be safely garbage-collected when all outside references to it are lost.
+     * <p>This method clears installed listener.
      */
     void close() const;
 
@@ -407,6 +403,24 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
      * @param sources The specified sources.
      */
     void setSources(std::initializer_list<EventSourceWrapper> sources) const;
+
+    std::string toString() const override;
+
+    friend std::ostream &operator<<(std::ostream &os, const IndexedTxModel &m) {
+        return os << m.toString();
+    }
+
+    std::size_t hashCode() const;
+
+    bool operator==(const IndexedTxModel &other) const noexcept;
 };
 
 DXFCPP_END_NAMESPACE
+
+template <> struct std::hash<dxfcpp::IndexedTxModel> {
+    std::size_t operator()(const dxfcpp::IndexedTxModel &m) const noexcept {
+        return m.hashCode();
+    }
+};
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

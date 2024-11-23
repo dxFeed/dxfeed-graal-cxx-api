@@ -265,6 +265,7 @@ set(dxFeedGraalCxxApi_Ipf_Sources
 set(dxFeedGraalCxxApi_Model_Sources
         src/model/TxModelListener.cpp
         src/model/IndexedTxModel.cpp
+        src/model/TimeSeriesTxModel.cpp
 )
 
 set(dxFeedGraalCxxApi_OnDemand_Sources

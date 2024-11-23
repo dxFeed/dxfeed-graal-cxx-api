@@ -25,7 +25,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 class IndexedEventSource;
 
-struct TxModelListenerTag {};
+struct DXFCPP_EXPORT TxModelListenerTag {};
 
 struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
     TxModelListenerCommon();
@@ -37,6 +37,16 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
      * @return The listener's handle.
      */
     const JavaObjectHandle<TxModelListenerTag> &getHandle() const;
+
+    std::string toString() const override;
+
+    friend std::ostream &operator<<(std::ostream &os, const TxModelListenerCommon &l) {
+        return os << l.toString();
+    }
+
+    std::size_t hashCode() const;
+
+    bool operator==(const TxModelListenerCommon &other) const noexcept;
 
   protected:
     mutable std::recursive_mutex mutex_{};
@@ -114,6 +124,28 @@ struct DXFCPP_EXPORT TxModelListener : TxModelListenerCommon, RequireMakeShared<
 
         return listener;
     }
+
+    friend std::ostream &operator<<(std::ostream &os, const TxModelListener<E> &l) {
+        return os << l.toString();
+    }
+
+    bool operator==(const TxModelListener<E> &other) const noexcept {
+        return TxModelListenerCommon::operator==(other);
+    }
 };
 
 DXFCPP_END_NAMESPACE
+
+template <> struct std::hash<dxfcpp::TxModelListenerCommon> {
+    std::size_t operator()(const dxfcpp::TxModelListenerCommon &l) const noexcept {
+        return l.hashCode();
+    }
+};
+
+template <dxfcpp::Derived<dxfcpp::IndexedEvent> E> struct std::hash<dxfcpp::TxModelListener<E>> {
+    std::size_t operator()(const dxfcpp::TxModelListener<E> &l) const noexcept {
+        return l.hashCode();
+    }
+};
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

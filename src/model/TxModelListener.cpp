@@ -8,7 +8,7 @@
 #include <dxfeed_graal_cpp_api/event/EventMapper.hpp>
 #include <dxfeed_graal_cpp_api/internal/Id.hpp>
 #include <dxfeed_graal_cpp_api/internal/context/ApiContext.hpp>
-
+#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp>
 #include <dxfeed_graal_cpp_api/isolated/model/IsolatedTxModelListener.hpp>
 
 struct dxfg_indexed_event_source_t;
@@ -49,6 +49,18 @@ const JavaObjectHandle<TxModelListenerTag> &TxModelListenerCommon::getHandle() c
     std::lock_guard guard{mutex_};
 
     return handle_;
+}
+
+std::string TxModelListenerCommon::toString() const {
+    return isolated::internal::IsolatedObject::toString(handle_.get());
+}
+
+std::size_t TxModelListenerCommon::hashCode() const {
+    return isolated::internal::IsolatedObject::hashCode(handle_.get());
+}
+
+bool TxModelListenerCommon::operator==(const TxModelListenerCommon &other) const noexcept {
+    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
 }
 
 void TxModelListenerCommon::createHandle(Id<TxModelListenerTag> id) {

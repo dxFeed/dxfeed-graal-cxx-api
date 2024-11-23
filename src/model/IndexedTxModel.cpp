@@ -133,4 +133,16 @@ void IndexedTxModel::setSources(std::initializer_list<EventSourceWrapper> collec
     setSources(collection.begin(), collection.end());
 }
 
+std::string IndexedTxModel::toString() const {
+    return isolated::internal::IsolatedObject::toString(handle_.get());
+}
+
+std::size_t IndexedTxModel::hashCode() const {
+    return isolated::internal::IsolatedObject::hashCode(handle_.get());
+}
+
+bool IndexedTxModel::operator==(const IndexedTxModel &other) const noexcept {
+    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
+}
+
 DXFCPP_END_NAMESPACE
