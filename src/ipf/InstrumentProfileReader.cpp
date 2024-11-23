@@ -25,7 +25,8 @@ InstrumentProfileReader::InstrumentProfileReader() : id_{Id<InstrumentProfileRea
 InstrumentProfileReader::Ptr InstrumentProfileReader::create() {
     auto reader = std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
 
-    reader->id_ = ApiContext::getInstance()->getManager<InstrumentProfileReaderManager>()->registerEntity(reader);
+    reader->id_ =
+        ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileReader>>()->registerEntity(reader);
 
     return reader;
 }
@@ -64,7 +65,7 @@ InstrumentProfileReader::readFromFile(const StringLikeWrapper &address, const St
 std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(const StringLikeWrapper &address,
                                                                                       const AuthToken &token) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
-        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, token.handle_));
+        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, token.getHandle()));
     auto result = InstrumentProfile::List::fromGraal(list.get());
 
     return result;

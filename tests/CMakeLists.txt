@@ -30,6 +30,7 @@ set(DXFC_TEST_SOURCES
         event/EventsTest.cpp
         exceptions/ExceptionsTest.cpp
         model/IndexedTxModelTest.cpp
+        model/TimeSeriesTxModelTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp)

@@ -32,39 +32,37 @@ JavaObjectHandle<IndexedTxModel::Builder> IndexedTxModel::Builder::withSourcesIm
     return isolated::model::IsolatedIndexedTxModel::Builder::withSources(handle_, graalEventSourceList);
 }
 
+JavaObjectHandle<IndexedTxModel::Builder>
+IndexedTxModel::Builder::withListenerImpl(const JavaObjectHandle<TxModelListenerTag> &listener) const {
+    return isolated::model::IsolatedIndexedTxModel::Builder::withListener(handle_, listener);
+}
+
 IndexedTxModel::Builder::Builder(LockExternalConstructionTag, JavaObjectHandle<Builder> &&handle)
     : handle_(std::move(handle)) {
 }
 
 IndexedTxModel::Builder::Builder(LockExternalConstructionTag, JavaObjectHandle<Builder> &&handle,
-                                 std::shared_ptr<TxModelListener> listener)
+                                 std::shared_ptr<TxModelListenerCommon> listener)
     : handle_(std::move(handle)), listener_(std::move(listener)) {
 }
 
 std::shared_ptr<IndexedTxModel::Builder> IndexedTxModel::Builder::withBatchProcessing(bool isBatchProcessing) const {
     return createShared(
-        std::move(isolated::model::IsolatedIndexedTxModel::Builder::withBatchProcessing(handle_, isBatchProcessing)));
+        isolated::model::IsolatedIndexedTxModel::Builder::withBatchProcessing(handle_, isBatchProcessing));
 }
 
 std::shared_ptr<IndexedTxModel::Builder>
 IndexedTxModel::Builder::withSnapshotProcessing(bool isSnapshotProcessing) const {
-    return createShared(std::move(
-        isolated::model::IsolatedIndexedTxModel::Builder::withSnapshotProcessing(handle_, isSnapshotProcessing)));
+    return createShared(
+        isolated::model::IsolatedIndexedTxModel::Builder::withSnapshotProcessing(handle_, isSnapshotProcessing));
 }
 
 std::shared_ptr<IndexedTxModel::Builder> IndexedTxModel::Builder::withFeed(std::shared_ptr<DXFeed> feed) const {
-    return createShared(std::move(isolated::model::IsolatedIndexedTxModel::Builder::withFeed(handle_, feed->handle_)));
+    return createShared(isolated::model::IsolatedIndexedTxModel::Builder::withFeed(handle_, feed->handle_));
 }
 
 std::shared_ptr<IndexedTxModel::Builder> IndexedTxModel::Builder::withSymbol(const SymbolWrapper &symbol) const {
-    return createShared(std::move(isolated::model::IsolatedIndexedTxModel::Builder::withSymbol(handle_, symbol)));
-}
-
-std::shared_ptr<IndexedTxModel::Builder>
-IndexedTxModel::Builder::withListener(std::shared_ptr<TxModelListener> listener) const {
-    return createShared(
-        std::move(isolated::model::IsolatedIndexedTxModel::Builder::withListener(handle_, listener->getHandle())),
-        listener);
+    return createShared(isolated::model::IsolatedIndexedTxModel::Builder::withSymbol(handle_, symbol));
 }
 
 std::shared_ptr<IndexedTxModel::Builder>
@@ -73,7 +71,7 @@ IndexedTxModel::Builder::withSources(std::initializer_list<EventSourceWrapper> c
 }
 
 std::shared_ptr<IndexedTxModel> IndexedTxModel::Builder::build() const {
-    return IndexedTxModel::createShared(std::move(isolated::model::IsolatedIndexedTxModel::Builder::build(handle_)),
+    return IndexedTxModel::createShared(isolated::model::IsolatedIndexedTxModel::Builder::build(handle_),
                                         listener_);
 }
 
@@ -86,7 +84,7 @@ IndexedTxModel::IndexedTxModel(LockExternalConstructionTag, JavaObjectHandle<Ind
 }
 
 IndexedTxModel::IndexedTxModel(LockExternalConstructionTag, JavaObjectHandle<IndexedTxModel> &&handle,
-                               std::shared_ptr<TxModelListener> listener)
+                               std::shared_ptr<TxModelListenerCommon> listener)
     : handle_(std::move(handle)), listener_(std::move(listener)) {
 }
 
@@ -95,7 +93,7 @@ IndexedTxModel::~IndexedTxModel() noexcept {
 }
 
 std::shared_ptr<IndexedTxModel::Builder> IndexedTxModel::newBuilder(const EventTypeEnum &eventType) {
-    return Builder::createShared(std::move(isolated::model::IsolatedIndexedTxModel::newBuilder(eventType)));
+    return Builder::createShared(isolated::model::IsolatedIndexedTxModel::newBuilder(eventType));
 }
 
 bool IndexedTxModel::isBatchProcessing() const {
@@ -133,6 +131,18 @@ std::unordered_set<EventSourceWrapper> IndexedTxModel::getSources() const {
 
 void IndexedTxModel::setSources(std::initializer_list<EventSourceWrapper> collection) const {
     setSources(collection.begin(), collection.end());
+}
+
+std::string IndexedTxModel::toString() const {
+    return isolated::internal::IsolatedObject::toString(handle_.get());
+}
+
+std::size_t IndexedTxModel::hashCode() const {
+    return isolated::internal::IsolatedObject::hashCode(handle_.get());
+}
+
+bool IndexedTxModel::operator==(const IndexedTxModel &other) const noexcept {
+    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
 }
 
 DXFCPP_END_NAMESPACE

@@ -16,14 +16,14 @@
 using namespace std::literals;
 using namespace dxfcpp;
 
-class IndexedTxModelFixture {
+class TimeSeriesTxModelFixture {
     std::shared_ptr<DXFeed> dxfeed;
-    std::shared_ptr<TxModelListener<Order>> listener;
+    std::shared_ptr<TxModelListener<Candle>> listener;
 
   public:
-    IndexedTxModelFixture()
+    TimeSeriesTxModelFixture()
         : dxfeed(DXEndpoint::getInstance(DXEndpoint::Role::FEED)->connect("demo.dxfeed.com:7300")->getFeed()),
-          listener(TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
+          listener(TxModelListener<Candle>::create([](const auto &, const auto &events, bool isSnapshot) {
               if (isSnapshot) {
                   std::cout << "Snapshot:" << std::endl;
               } else {
@@ -43,32 +43,20 @@ class IndexedTxModelFixture {
         return dxfeed;
     }
 
-    [[nodiscard]] std::shared_ptr<TxModelListener<Order>> getListener() const {
+    [[nodiscard]] std::shared_ptr<TxModelListener<Candle>> getListener() const {
         return listener;
     }
 };
 
-TEST_CASE_FIXTURE(IndexedTxModelFixture, "The model must subscribe to AAPL#NTV orders") {
-    auto model = IndexedTxModel::newBuilder(Order::TYPE)
+TEST_CASE_FIXTURE(TimeSeriesTxModelFixture, "The model must subscribe to AAPL&Q{=1m} candles") {
+    auto model = TimeSeriesTxModel::newBuilder(Candle::TYPE)
                      ->withFeed(getDxFeed())
                      ->withBatchProcessing(true)
                      ->withSnapshotProcessing(true)
-                     ->withSources({OrderSource::NTV})
+                     ->withFromTime(std::chrono::milliseconds(dxfcpp::now()) - std::chrono::days(3))
                      ->withListener(getListener())
-                     ->withSymbol("AAPL")
-                     ->build();
-
-    std::this_thread::sleep_for(10s);
-}
-
-TEST_CASE_FIXTURE(IndexedTxModelFixture, "The model must subscribe to IBM#NTV and IBM#DEX orders simultaneously") {
-    auto model = IndexedTxModel::newBuilder(Order::TYPE)
-                     ->withFeed(getDxFeed())
-                     ->withBatchProcessing(true)
-                     ->withSnapshotProcessing(true)
-                     ->withSources({OrderSource::NTV, OrderSource::DEX})
-                     ->withListener(getListener())
-                     ->withSymbol("IBM")
+                     ->withSymbol(CandleSymbol::valueOf("AAPL&Q{=1m}"))
+                     //->withSymbol("AAPL&Q{=1m}")
                      ->build();
 
     std::this_thread::sleep_for(10s);

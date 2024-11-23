@@ -40,7 +40,8 @@ struct InstrumentProfileConnection::Impl {
                               dxfg_ipf_connection_state_t newState, void *userData) noexcept {
         auto id = Id<InstrumentProfileConnection>::from(
             dxfcpp::bit_cast<Id<InstrumentProfileConnection>::ValueType>(userData));
-        auto connection = ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->getEntity(id);
+        auto connection =
+            ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileConnection>>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
             Debugger::debug("InstrumentProfileConnection::Impl::onStateChange: id = " + std::to_string(id.getValue()));
@@ -51,7 +52,8 @@ struct InstrumentProfileConnection::Impl {
                                        graalIpfConnectionStateToState(newState));
 
             if (newState == DXFG_IPF_CONNECTION_STATE_CLOSED) {
-                ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id);
+                ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileConnection>>()->unregisterEntity(
+                    id);
             }
         }
     }
@@ -67,7 +69,7 @@ InstrumentProfileConnection::createConnection(const StringLikeWrapper &address,
     std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 
     connection->id_ =
-        ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->registerEntity(connection);
+        ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileConnection>>()->registerEntity(connection);
     connection->handle_ =
         isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address, collector->handle_);
     connection->stateChangeListenerHandle_ = isolated::ipf::live::IsolatedIpfPropertyChangeListener::create(

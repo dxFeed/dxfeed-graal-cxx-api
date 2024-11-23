@@ -9,8 +9,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventSourceWrapper.hpp"
+#include "../event/IndexedEvent.hpp"
 #include "../event/market/OrderSource.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "TxModelListener.hpp"
 
 #include <memory>
 #include <unordered_set>
@@ -19,7 +21,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct SymbolWrapper;
 struct DXFeed;
-struct TxModelListener;
 
 /**
  * An incremental model for indexed events.
@@ -44,14 +45,11 @@ struct TxModelListener;
  * <h3>Resource management and closed models</h3>
  *
  * <p>Attached model is a potential memory leak. If the pointer to attached model is lost, then there is no way
- * to detach this model from the feed and the model will not be reclaimed by the garbage collector as long as the
- * corresponding feed is still used. Detached model can be reclaimed by the garbage collector, but detaching model
- * requires knowing the pointer to the feed at the place of the call, which is not always convenient.
+ * to detach this model from the feed.
  *
  * <p>The convenient way to detach model from the feed is to call its @ref IndexedTxModel::close "close" method
  * (it is automatically called when the destructor is called, i.e. RAII). Closed model
- * becomes permanently detached from all feeds, removes all its listeners and is guaranteed to be reclaimable by
- * the garbage collector as soon as all external references to it are cleared.
+ * becomes permanently detached from all feeds, removes all its listeners.
  *
  * <h3>Threads and locks</h3>
  *
@@ -61,7 +59,7 @@ struct TxModelListener;
  *
  * ```cpp
  * auto feed = DXEndpoint::getInstance(DXEndpoint::Role::FEED)->connect("demo.dxfeed.com:7300")->getFeed();
- * auto listener = TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+ * auto listener = TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
  *     if (isSnapshot) {
  *         std::cout << "Snapshot:" << std::endl;
  *     } else {
@@ -94,15 +92,16 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
     struct DXFCPP_EXPORT Builder : RequireMakeShared<Builder> {
       private:
         JavaObjectHandle<Builder> handle_;
-        std::shared_ptr<TxModelListener> listener_;
+        std::shared_ptr<TxModelListenerCommon> listener_;
 
         JavaObjectHandle<Builder> withSourcesImpl(void *graalEventSourceList) const;
+        JavaObjectHandle<Builder> withListenerImpl(const JavaObjectHandle<TxModelListenerTag> &listener) const;
 
       public:
         Builder(LockExternalConstructionTag tag, JavaObjectHandle<Builder> &&handle);
 
         Builder(LockExternalConstructionTag tag, JavaObjectHandle<Builder> &&handle,
-                std::shared_ptr<TxModelListener> listener);
+                std::shared_ptr<TxModelListenerCommon> listener);
 
         /**
          * Enables or disables batch processing.
@@ -166,7 +165,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * The listener cannot be changed or added once the model has been built.
          *
          * ```cpp
-         * auto listener = TxModelListener::create<Order>([](const auto &, const auto &events, bool isSnapshot) {
+         * auto listener = TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
          *     if (isSnapshot) {
          *         std::cout << "Snapshot:" << std::endl;
          *     } else {
@@ -183,30 +182,14 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * builder->withListener(listener);
          * ```
          *
-         * ```cpp
-         *     auto builder = IndexedTxModel::newBuilder(Order::TYPE);
-         *
-         *     builder->withListener(TxModelListener::create([](const auto &, const auto &events, bool isSnapshot) {
-         *         if (isSnapshot) {
-         *             std::cout << "Snapshot:" << std::endl;
-         *         } else {
-         *             std::cout << "Update:" << std::endl;
-         *         }
-         *
-         *         for (const auto &e : events) {
-         *             if (auto o = e->template sharedAs<Order>()) {
-         *                 std::cout << "[" << o->getEventFlagsMask().toString() << "]:" << o << std::endl;
-         *             }
-         *         }
-         *
-         *         std::cout << std::endl;
-         *     }));
-         * ```
-         *
          * @param listener The transaction listener.
          * @return `this` builder.
          */
-        std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener> listener) const;
+        template <Derived<IndexedEvent> E>
+        std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener<E>> listener) const {
+            return createShared(std::move(withListenerImpl(listener->getHandle())),
+                                listener->template sharedAs<TxModelListenerCommon>());
+        }
 
         /**
          * Sets the sources from which to subscribe for indexed events.
@@ -293,7 +276,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
 
   private:
     JavaObjectHandle<IndexedTxModel> handle_;
-    std::shared_ptr<TxModelListener> listener_;
+    std::shared_ptr<TxModelListenerCommon> listener_;
 
     void setSourcesImpl(void *graalEventSourceList) const;
 
@@ -301,7 +284,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
     IndexedTxModel(LockExternalConstructionTag tag, JavaObjectHandle<IndexedTxModel> &&handle);
 
     IndexedTxModel(LockExternalConstructionTag tag, JavaObjectHandle<IndexedTxModel> &&handle,
-                   std::shared_ptr<TxModelListener> listener);
+                   std::shared_ptr<TxModelListenerCommon> listener);
 
     /// Calls @ref IndexedTxModel::close "close" method and destructs this model.
     ~IndexedTxModel() noexcept override;
@@ -353,8 +336,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
     /**
      * Closes this model and makes it <i>permanently detached</i>.
      *
-     * <p>This method clears installed listener and ensures that the model
-     * can be safely garbage-collected when all outside references to it are lost.
+     * <p>This method clears installed listener.
      */
     void close() const;
 
@@ -421,6 +403,24 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
      * @param sources The specified sources.
      */
     void setSources(std::initializer_list<EventSourceWrapper> sources) const;
+
+    std::string toString() const override;
+
+    friend std::ostream &operator<<(std::ostream &os, const IndexedTxModel &m) {
+        return os << m.toString();
+    }
+
+    std::size_t hashCode() const;
+
+    bool operator==(const IndexedTxModel &other) const noexcept;
 };
 
 DXFCPP_END_NAMESPACE
+
+template <> struct std::hash<dxfcpp::IndexedTxModel> {
+    std::size_t operator()(const dxfcpp::IndexedTxModel &m) const noexcept {
+        return m.hashCode();
+    }
+};
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -15,8 +15,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-class InstrumentProfileReader;
-
 /**
  * The AuthToken class represents an authorization token and encapsulates information about the authorization scheme
  * and its associated value.
@@ -30,8 +28,6 @@ class InstrumentProfileReader;
  * </ul>
  */
 struct DXFCPP_EXPORT AuthToken {
-    friend class InstrumentProfileReader;
-
     static const std::string BASIC_SCHEME;
     static const std::string BEARER_SCHEME;
 
@@ -161,7 +157,15 @@ struct DXFCPP_EXPORT AuthToken {
 private:
 
     JavaObjectHandle<AuthToken> handle_;
-    std::atomic<bool> isNull_;
+
+public:
+
+  const JavaObjectHandle<AuthToken>& getHandle() const& {
+      return handle_;
+  }
+
+private:
+  std::atomic<bool> isNull_;
 
     explicit AuthToken(JavaObjectHandle<AuthToken> &&handle, bool isNull = false);
 };

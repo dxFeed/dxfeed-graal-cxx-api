@@ -527,6 +527,10 @@ struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
     EndpointWrapper(std::shared_ptr<dxfcpp::DXEndpoint> endpoint, void *userData)
         : endpoint{std::move(endpoint)}, userData{userData}, listeners{} {
     }
+
+    std::string toString() const noexcept {
+        return "EndpointWrapper{" + endpoint->toString() + "}";
+    }
 };
 
 namespace EndpointWrapperRegistry {

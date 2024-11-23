@@ -12,6 +12,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../auth/AuthToken.hpp"
+#include "../../ipf/InstrumentProfileReader.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
