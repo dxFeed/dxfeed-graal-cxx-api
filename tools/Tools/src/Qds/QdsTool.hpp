@@ -65,6 +65,8 @@ struct QdsTool {
                     properties = parseResult.result;
                     propertiesIsParsed = true;
                     index = parseResult.nextIndex;
+                } else {
+                    qdsArgs.result += " " + args[index++];
                 }
             }
 
