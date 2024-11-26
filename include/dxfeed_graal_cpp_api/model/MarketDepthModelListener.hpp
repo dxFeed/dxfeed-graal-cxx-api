@@ -16,8 +16,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct DXFCPP_EXPORT MarketDepthModelListenerCommon : virtual SharedEntity {
+
+};
+
 template <Derived<OrderBase> E>
-struct DXFCPP_EXPORT MarketDepthModelListener : RequireMakeShared<MarketDepthModelListener<E>> {
+struct DXFCPP_EXPORT MarketDepthModelListener : MarketDepthModelListenerCommon, RequireMakeShared<MarketDepthModelListener<E>> {
     static std::shared_ptr<MarketDepthModelListener<E>>
     create(std::function<void(const std::vector<std::shared_ptr<E>> & /* buy */,
                               const std::vector<std::shared_ptr<E>> & /* sell */)>
