@@ -16,6 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 #include <unordered_set>
+#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -31,7 +32,7 @@ struct DXFCPP_EXPORT MarketDepthModel : RequireMakeShared<MarketDepthModel> {
         std::int64_t aggregationPeriodMillis;
 
         std::shared_ptr<Builder> withFeed(std::shared_ptr<DXFeed> feed) {
-            builder = builder->withFeed(feed);
+            builder = builder->withFeed(std::move(feed));
 
             return sharedAs<Builder>();
         }
@@ -44,7 +45,7 @@ struct DXFCPP_EXPORT MarketDepthModel : RequireMakeShared<MarketDepthModel> {
 
         template <Derived<OrderBase> E>
         std::shared_ptr<Builder> withListener(std::shared_ptr<MarketDepthModelListener<E>> listener) {
-            //TODO: implement
+            listener = listener->template sharedAs<MarketDepthModelListenerCommon>();
 
             return sharedAs<Builder>();
         }
