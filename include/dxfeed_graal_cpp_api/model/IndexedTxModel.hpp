@@ -182,6 +182,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * builder->withListener(listener);
          * ```
          *
+         * @tparam E The type of event (derived from IndexedEvent)
          * @param listener The transaction listener.
          * @return `this` builder.
          */
@@ -189,6 +190,39 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
         std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener<E>> listener) const {
             return createShared(std::move(withListenerImpl(listener->getHandle())),
                                 listener->template sharedAs<TxModelListenerCommon>());
+        }
+
+        /**
+         * Sets the listener for transaction notifications.
+         * The listener cannot be changed or added once the model has been built.
+         *
+         * ```cpp
+         * auto builder = IndexedTxModel::newBuilder(Order::TYPE);
+         *
+         * builder = builder->withListener<Order>([](const auto &, const auto &events, bool isSnapshot) {
+         *     if (isSnapshot) {
+         *         std::cout << "Snapshot:" << std::endl;
+         *     } else {
+         *         std::cout << "Update:" << std::endl;
+         *     }
+         *
+         *     for (const auto &e : events) {
+         *         std::cout << "[" << e->getEventFlagsMask().toString() << "]:" << e << std::endl;
+         *     }
+         *
+         *     std::cout << std::endl;
+         * });
+         * ```
+         *
+         * @tparam E The type of event (derived from IndexedEvent)
+         * @param onEventsReceived A functional object, lambda, or function to which indexed event data will be passed.
+         * @return `this` builder.
+         */
+        template <Derived<IndexedEvent> E>
+        std::shared_ptr<Builder> withListener(std::function<void(const IndexedEventSource & /* source */,
+                              const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
+               onEventsReceived) const {
+            return withListener(TxModelListener<E>::create(onEventsReceived));
         }
 
         /**

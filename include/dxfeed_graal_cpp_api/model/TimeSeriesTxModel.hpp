@@ -180,6 +180,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel : RequireMakeShared<TimeSeriesTxModel> {
          * builder->withListener(listener);
          * ```
          *
+         * @tparam E The type of event (derived from TimeSeriesEvent)
          * @param listener The transaction listener.
          * @return `this` builder.
          */
@@ -187,6 +188,39 @@ struct DXFCPP_EXPORT TimeSeriesTxModel : RequireMakeShared<TimeSeriesTxModel> {
         std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener<E>> listener) const {
             return createShared(std::move(withListenerImpl(listener->getHandle())),
                                 listener->template sharedAs<TxModelListenerCommon>());
+        }
+
+        /**
+         * Sets the listener for transaction notifications.
+         * The listener cannot be changed or added once the model has been built.
+         *
+         * ```cpp
+         * auto builder = TimeSeriesTxModel::newBuilder(Candle::TYPE);
+         *
+         * builder = builder->withListener<Candle>([](const auto &, const auto &events, bool isSnapshot) {
+         *     if (isSnapshot) {
+         *         std::cout << "Snapshot:" << std::endl;
+         *     } else {
+         *         std::cout << "Update:" << std::endl;
+         *     }
+         *
+         *     for (const auto &e : events) {
+         *         std::cout << "[" << e->getEventFlagsMask().toString() << "]:" << e << std::endl;
+         *     }
+         *
+         *     std::cout << std::endl;
+         * });
+         * ```
+         *
+         * @tparam E The type of event (derived from TimeSeriesEvent)
+         * @param onEventsReceived A functional object, lambda, or function to which time series event data will be passed.
+         * @return `this` builder.
+         */
+        template <Derived<TimeSeriesEvent> E>
+        std::shared_ptr<Builder> withListener(std::function<void(const IndexedEventSource & /* source */,
+                              const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
+               onEventsReceived) const {
+            return withListener(TxModelListener<E>::create(onEventsReceived));
         }
 
         /**

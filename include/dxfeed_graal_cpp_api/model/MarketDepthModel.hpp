@@ -45,7 +45,17 @@ struct DXFCPP_EXPORT MarketDepthModel : RequireMakeShared<MarketDepthModel> {
 
         template <Derived<OrderBase> E>
         std::shared_ptr<Builder> withListener(std::shared_ptr<MarketDepthModelListener<E>> listener) {
-            listener = listener->template sharedAs<MarketDepthModelListenerCommon>();
+            //listener = listener->template sharedAs<MarketDepthModelListenerCommon>();
+            this->listener = listener;
+
+            return sharedAs<Builder>();
+        }
+
+        template <Derived<OrderBase> E>
+        std::shared_ptr<Builder> withListener(std::function<void(const std::vector<std::shared_ptr<E>> & /* buy */,
+                              const std::vector<std::shared_ptr<E>> & /* sell */)>
+               onEventsReceived) {
+
 
             return sharedAs<Builder>();
         }
