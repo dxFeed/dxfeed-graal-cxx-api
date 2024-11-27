@@ -266,6 +266,7 @@ set(dxFeedGraalCxxApi_Model_Sources
         src/model/TxModelListener.cpp
         src/model/IndexedTxModel.cpp
         src/model/TimeSeriesTxModel.cpp
+        src/model/MarketDepthModel.cpp
 )
 
 set(dxFeedGraalCxxApi_OnDemand_Sources
