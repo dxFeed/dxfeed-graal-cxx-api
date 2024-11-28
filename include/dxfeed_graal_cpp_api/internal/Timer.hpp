@@ -34,7 +34,7 @@ struct Timer {
         }
     }
 
-    constexpr void sleep(std::uint64_t ms) const {
+    void sleep(std::uint64_t ms) const {
         sleep(std::chrono::milliseconds(ms));
     }
 

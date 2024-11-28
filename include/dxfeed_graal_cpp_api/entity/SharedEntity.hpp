@@ -75,6 +75,8 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     }
 };
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
+
 template <typename T>
 struct RequireMakeShared : virtual SharedEntity {
   protected:
@@ -92,6 +94,8 @@ struct RequireMakeShared : virtual SharedEntity {
         return std::make_shared<T>(LockExternalConstructionTag{}, std::forward<Args>(args)...);
     }
 };
+
+DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
 template <typename EBase, Derived<EBase> EDerived>
 static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
