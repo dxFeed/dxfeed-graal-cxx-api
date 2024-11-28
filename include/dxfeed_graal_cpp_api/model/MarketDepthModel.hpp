@@ -26,62 +26,72 @@ struct SymbolWrapper;
 struct DXFCPP_EXPORT MarketDepthModel : RequireMakeShared<MarketDepthModel> {
 
     struct DXFCPP_EXPORT Builder : RequireMakeShared<Builder> {
-        std::shared_ptr<IndexedTxModel::Builder> builder;
-        std::shared_ptr<MarketDepthModelListenerCommon> listener;
-        std::size_t depthLimit;
-        std::int64_t aggregationPeriodMillis;
+        friend struct MarketDepthModel;
 
-        std::shared_ptr<Builder> withFeed(std::shared_ptr<DXFeed> feed) {
-            builder = builder->withFeed(std::move(feed));
+      private:
+        std::shared_ptr<IndexedTxModel::Builder> builder_{};
+        std::shared_ptr<MarketDepthModelListenerCommon> listener_{};
+        std::size_t depthLimit_{};
+        std::int64_t aggregationPeriodMillis_{};
 
-            return sharedAs<Builder>();
-        }
+      public:
+        Builder(LockExternalConstructionTag);
 
-        std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) {
-            builder = builder->withSymbol(symbol);
+        ~Builder() override;
 
-            return sharedAs<Builder>();
-        }
+        std::shared_ptr<Builder> withFeed(std::shared_ptr<DXFeed> feed);
+
+        std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol);
 
         template <Derived<OrderBase> E>
         std::shared_ptr<Builder> withListener(std::shared_ptr<MarketDepthModelListener<E>> listener) {
-            //listener = listener->template sharedAs<MarketDepthModelListenerCommon>();
-            this->listener = listener;
+            // listener = listener->template sharedAs<MarketDepthModelListenerCommon>();
+            this->listener_ = listener;
 
             return sharedAs<Builder>();
         }
 
         template <Derived<OrderBase> E>
         std::shared_ptr<Builder> withListener(std::function<void(const std::vector<std::shared_ptr<E>> & /* buy */,
-                              const std::vector<std::shared_ptr<E>> & /* sell */)>
-               onEventsReceived) {
-
+                                                                 const std::vector<std::shared_ptr<E>> & /* sell */)>
+                                                  onEventsReceived) {
+            this->listener_ = MarketDepthModelListener<E>::create(onEventsReceived);
 
             return sharedAs<Builder>();
         }
 
-        template <typename EventSourceIt>
-        std::shared_ptr<Builder> withSources(EventSourceIt begin, EventSourceIt end) const {
-            builder = builder->withSources(begin, end);
+        template <typename EventSourceIt> std::shared_ptr<Builder> withSources(EventSourceIt begin, EventSourceIt end) {
+            builder_ = builder_->withSources(begin, end);
 
             return sharedAs<Builder>();
         }
 
         template <ConvertibleToEventSourceWrapperCollection EventSourceCollection>
-        std::shared_ptr<Builder> withSources(EventSourceCollection &&sources) const {
+        std::shared_ptr<Builder> withSources(EventSourceCollection &&sources) {
             return withSources(std::begin(sources), std::end(sources));
         }
 
-        std::shared_ptr<Builder> withSources(std::initializer_list<EventSourceWrapper> sources) const;
+        std::shared_ptr<Builder> withSources(std::initializer_list<EventSourceWrapper> sources);
 
-        std::shared_ptr<Builder> withDepthLimit(std::size_t depthLimit) const;
+        std::shared_ptr<Builder> withDepthLimit(std::size_t depthLimit);
 
-        std::shared_ptr<Builder> withAggregationPeriod(std::int64_t aggregationPeriodMillis) const;
+        std::shared_ptr<Builder> withAggregationPeriod(std::int64_t aggregationPeriodMillis);
 
-        std::shared_ptr<Builder> withAggregationPeriod(std::chrono::milliseconds aggregationPeriod) const;
+        std::shared_ptr<Builder> withAggregationPeriod(std::chrono::milliseconds aggregationPeriod);
 
         std::shared_ptr<MarketDepthModel> build() const;
     };
+
+  private:
+    std::shared_ptr<IndexedTxModel> indexedTxModel_{};
+    std::shared_ptr<MarketDepthModelListenerCommon> listener_{};
+    std::size_t depthLimit_{};
+    std::int64_t aggregationPeriodMillis_{};
+
+  public:
+    MarketDepthModel(LockExternalConstructionTag, std::shared_ptr<Builder> builder);
+
+    ~MarketDepthModel() override;
 
     static std::shared_ptr<Builder> newBuilder();
 
