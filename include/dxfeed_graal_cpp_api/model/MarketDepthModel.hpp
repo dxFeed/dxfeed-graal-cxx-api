@@ -80,11 +80,11 @@ struct DXFCPP_EXPORT MarketDepthModel final : RequireMakeShared<MarketDepthModel
 
         std::shared_ptr<Builder> withAggregationPeriod(std::chrono::milliseconds aggregationPeriod);
 
-        std::shared_ptr<MarketDepthModel> build() const;
+        std::shared_ptr<MarketDepthModel> build();
     };
 
   private:
-    std::recursive_mutex mtx_{};
+    mutable std::recursive_mutex mtx_{};
     std::shared_ptr<IndexedTxModel> indexedTxModel_{};
     std::shared_ptr<MarketDepthModelListenerCommon> listener_{};
     std::size_t depthLimit_{};

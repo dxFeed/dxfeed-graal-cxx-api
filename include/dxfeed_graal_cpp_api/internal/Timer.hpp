@@ -28,7 +28,7 @@ struct Timer {
     Timer() noexcept = default;
 
   public:
-    constexpr void sleep(std::chrono::milliseconds ms) const {
+    void sleep(std::chrono::milliseconds ms) const {
         while (isRunning_) {
             std::this_thread::sleep_for(ms);
         }

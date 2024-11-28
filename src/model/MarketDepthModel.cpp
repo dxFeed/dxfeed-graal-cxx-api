@@ -46,7 +46,7 @@ MarketDepthModel::Builder::withAggregationPeriod(std::chrono::milliseconds aggre
     return withAggregationPeriod(aggregationPeriod.count());
 }
 
-std::shared_ptr<MarketDepthModel> MarketDepthModel::Builder::build() const {
+std::shared_ptr<MarketDepthModel> MarketDepthModel::Builder::build() {
     return MarketDepthModel::createShared(sharedAs<Builder>());
 }
 
