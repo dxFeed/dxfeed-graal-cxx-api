@@ -35,9 +35,9 @@ struct DXFCPP_EXPORT MarketDepthModelListenerCommon : virtual SharedEntity {
 };
 
 template <Derived<OrderBase> E>
-struct DXFCPP_EXPORT MarketDepthModelListener : MarketDepthModelListenerCommon,
+struct DXFCPP_EXPORT MarketDepthModelListener final : MarketDepthModelListenerCommon,
                                                 RequireMakeShared<MarketDepthModelListener<E>> {
-    explicit MarketDepthModelListener(RequireMakeShared<MarketDepthModelListener<E>>::LockExternalConstructionTag) {};
+    explicit MarketDepthModelListener(LockExternalConstructionTag) {};
 
     ~MarketDepthModelListener() override = default;
 

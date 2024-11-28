@@ -6,7 +6,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-MarketDepthModel::Builder::Builder(RequireMakeShared<Builder>::LockExternalConstructionTag) {
+MarketDepthModel::Builder::Builder(LockExternalConstructionTag) {
 }
 
 MarketDepthModel::Builder::~Builder() = default;
@@ -50,13 +50,81 @@ std::shared_ptr<MarketDepthModel> MarketDepthModel::Builder::build() const {
     return MarketDepthModel::createShared(sharedAs<Builder>());
 }
 
-MarketDepthModel::MarketDepthModel(LockExternalConstructionTag, std::shared_ptr<Builder> builder) {
+std::shared_ptr<MarketDepthModel> MarketDepthModel::create(std::shared_ptr<Builder> builder) {
+    auto marketDepthModel = createShared(builder);
+
+    marketDepthModel->indexedTxModel_ =
+        builder->builder_
+            ->withListener<OrderBase>([m = marketDepthModel->weak_from_this()](
+                                          const IndexedEventSource &source,
+                                          const std::vector<std::shared_ptr<OrderBase>> &events, bool isSnapshot) {
+                if (const auto model = m.lock()) {
+                    model->sharedAs<MarketDepthModel>()->eventsReceived(source, events, isSnapshot);
+                }
+            })
+            ->build();
+
+    return marketDepthModel;
+}
+
+void MarketDepthModel::eventsReceived(const IndexedEventSource &source,
+                                      const std::vector<std::shared_ptr<OrderBase>> &events, bool isSnapshot) {
+    std::lock_guard guard(mtx_);
+}
+
+void MarketDepthModel::notifyListeners() {
+    //TODO: implement
+    listener_->getHandler().handle({}, {});
+}
+
+MarketDepthModel::MarketDepthModel(LockExternalConstructionTag, const std::shared_ptr<Builder> &builder) {
     depthLimit_ = builder->depthLimit_;
     // buyOrders_.setDepthLimit(depthLimit_);
     // sellOrders.setDepthLimit(depthLimit_);
     aggregationPeriodMillis_ = builder->aggregationPeriodMillis_;
     listener_ = builder->listener_;
-    indexedTxModel_ =
+}
+
+MarketDepthModel::~MarketDepthModel() {
+    close();
+}
+
+std::shared_ptr<MarketDepthModel::Builder> MarketDepthModel::newBuilder() {
+    return Builder::createShared();
+}
+
+std::size_t MarketDepthModel::getDepthLimit() const {
+    std::lock_guard guard(mtx_);
+
+    return depthLimit_;
+}
+
+void MarketDepthModel::setDepthLimit(std::size_t depthLimit) {
+    std::lock_guard guard(mtx_);
+
+    depthLimit_ = depthLimit;
+}
+
+std::int64_t MarketDepthModel::getAggregationPeriod() const {
+    std::lock_guard guard(mtx_);
+
+    return aggregationPeriodMillis_;
+}
+
+void MarketDepthModel::setAggregationPeriod(std::int64_t aggregationPeriodMillis) {
+    std::lock_guard guard(mtx_);
+
+    aggregationPeriodMillis_ = aggregationPeriodMillis;
+}
+
+void MarketDepthModel::setAggregationPeriod(std::chrono::milliseconds aggregationPeriod) {
+    setAggregationPeriod(aggregationPeriod.count());
+}
+
+void MarketDepthModel::close() {
+    std::lock_guard guard(mtx_);
+
+    indexedTxModel_->close();
 }
 
 DXFCPP_END_NAMESPACE

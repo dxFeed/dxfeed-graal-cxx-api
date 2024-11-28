@@ -84,12 +84,12 @@ struct DXFeed;
  * std::this_thread::sleep_for(10s);
  * ```
  */
-struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
+struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
 
     /**
      * A builder class for creating an instance of IndexedTxModel.
      */
-    struct DXFCPP_EXPORT Builder : RequireMakeShared<Builder> {
+    struct DXFCPP_EXPORT Builder final : RequireMakeShared<Builder> {
       private:
         JavaObjectHandle<Builder> handle_;
         std::shared_ptr<TxModelListenerCommon> listener_;

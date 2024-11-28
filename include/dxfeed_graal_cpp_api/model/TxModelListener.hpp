@@ -67,7 +67,7 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
  * TimeSeriesTxModel.
  */
 template <Derived<IndexedEvent> E>
-struct DXFCPP_EXPORT TxModelListener : TxModelListenerCommon, RequireMakeShared<TxModelListener<E>> {
+struct DXFCPP_EXPORT TxModelListener final : TxModelListenerCommon, RequireMakeShared<TxModelListener<E>> {
     TxModelListener(RequireMakeShared<TxModelListener<E>>::LockExternalConstructionTag) {};
 
     ~TxModelListener() noexcept override {

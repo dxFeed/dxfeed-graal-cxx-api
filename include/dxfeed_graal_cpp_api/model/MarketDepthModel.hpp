@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/market/OrderBase.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../internal/Timer.hpp"
 #include "IndexedTxModel.hpp"
 #include "MarketDepthModelListener.hpp"
 
@@ -23,9 +24,9 @@ DXFCPP_BEGIN_NAMESPACE
 struct DXFeed;
 struct SymbolWrapper;
 
-struct DXFCPP_EXPORT MarketDepthModel : RequireMakeShared<MarketDepthModel> {
+struct DXFCPP_EXPORT MarketDepthModel final : RequireMakeShared<MarketDepthModel> {
 
-    struct DXFCPP_EXPORT Builder : RequireMakeShared<Builder> {
+    struct DXFCPP_EXPORT Builder final : RequireMakeShared<Builder> {
         friend struct MarketDepthModel;
 
       private:
@@ -35,7 +36,7 @@ struct DXFCPP_EXPORT MarketDepthModel : RequireMakeShared<MarketDepthModel> {
         std::int64_t aggregationPeriodMillis_{};
 
       public:
-        Builder(LockExternalConstructionTag);
+        explicit Builder(LockExternalConstructionTag);
 
         ~Builder() override;
 
@@ -83,13 +84,22 @@ struct DXFCPP_EXPORT MarketDepthModel : RequireMakeShared<MarketDepthModel> {
     };
 
   private:
+    std::recursive_mutex mtx_{};
     std::shared_ptr<IndexedTxModel> indexedTxModel_{};
     std::shared_ptr<MarketDepthModelListenerCommon> listener_{};
     std::size_t depthLimit_{};
     std::int64_t aggregationPeriodMillis_{};
+    std::shared_ptr<Timer> timer_{};
+
+    static std::shared_ptr<MarketDepthModel> create(std::shared_ptr<Builder> builder);
+
+    void eventsReceived(const IndexedEventSource &source, const std::vector<std::shared_ptr<OrderBase>> &events,
+                        bool isSnapshot);
+
+    void notifyListeners();
 
   public:
-    MarketDepthModel(LockExternalConstructionTag, std::shared_ptr<Builder> builder);
+    MarketDepthModel(LockExternalConstructionTag, const std::shared_ptr<Builder> &builder);
 
     ~MarketDepthModel() override;
 
