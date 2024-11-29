@@ -22,20 +22,22 @@ DXFCPP_BEGIN_NAMESPACE
 struct Timer {
   private:
     std::unique_ptr<std::future<void>> future_;
-
     std::atomic<bool> isRunning_{};
 
     Timer() noexcept = default;
 
   public:
-    void sleep(std::chrono::milliseconds ms) const {
-        while (isRunning_) {
-            std::this_thread::sleep_for(ms);
+    void interruptableSleep(std::chrono::milliseconds ms) const {
+        const auto MIN_SLEEP = std::chrono::milliseconds(10);
+        const auto startTimeStamp = std::chrono::steady_clock::now();
+
+        while (isRunning_ && std::chrono::steady_clock::now() - startTimeStamp < ms) {
+            std::this_thread::sleep_for(MIN_SLEEP);
         }
     }
 
-    void sleep(std::uint64_t ms) const {
-        sleep(std::chrono::milliseconds(ms));
+    void interruptableSleep(std::uint64_t ms) const {
+        interruptableSleep(std::chrono::milliseconds(ms));
     }
 
     template <typename F, typename Delay, typename Period>
@@ -46,11 +48,11 @@ struct Timer {
             std::launch::async,
             [self = t](auto &&f, auto &&d, auto &&p) {
                 self->isRunning_ = true;
-                self->sleep(d);
+                self->interruptableSleep(d);
 
                 while (self->isRunning_) {
                     f();
-                    self->sleep(p);
+                    self->interruptableSleep(p);
                 }
 
                 self->isRunning_ = false;
@@ -67,7 +69,7 @@ struct Timer {
             std::launch::async,
             [self = t](auto &&f, auto &&d) {
                 self->isRunning_ = true;
-                self->sleep(d);
+                self->interruptableSleep(d);
                 f();
                 self->isRunning_ = false;
             },
