@@ -55,12 +55,12 @@ struct IpfPropertyChangeListener {};
 
 struct InstrumentProfileUpdateListener {};
 
-template <typename... T> constexpr void ignore_unused(const T &...) {
+template <typename... T> constexpr void ignoreUnused(const T &...) {
 }
 
 constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept -> bool {
 #ifdef __cpp_lib_is_constant_evaluated
-    ignore_unused(default_value);
+    ignoreUnused(default_value);
     return std::is_constant_evaluated();
 #else
     return default_value;

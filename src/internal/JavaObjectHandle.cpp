@@ -23,7 +23,7 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
             return true;
         },
         false);
-    dxfcpp::ignore_unused(result);
+    dxfcpp::ignoreUnused(result);
 
     if constexpr (Debugger::isDebug) {
         Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
@@ -46,7 +46,7 @@ template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexce
             return true;
         },
         false);
-    dxfcpp::ignore_unused(result);
+    dxfcpp::ignoreUnused(result);
 
     if constexpr (Debugger::isDebug) {
         Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +

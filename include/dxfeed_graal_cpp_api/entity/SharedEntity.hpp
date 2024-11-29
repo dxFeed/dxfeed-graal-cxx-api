@@ -31,7 +31,8 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     template <typename T> bool is() const noexcept {
         try {
             auto p = dynamic_cast<const T *>(this);
-            (void)(p);
+
+            ignoreUnused(p);
 
             return true;
         } catch (const std::bad_cast &) {

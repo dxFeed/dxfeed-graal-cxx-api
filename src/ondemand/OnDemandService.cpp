@@ -40,7 +40,7 @@ std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DX
     std::shared_ptr<OnDemandService> onDemandService{new OnDemandService{}};
 
     auto id = ApiContext::getInstance()->getManager<EntityManager<OnDemandService>>()->registerEntity(onDemandService);
-    ignore_unused(id);
+    ignoreUnused(id);
 
     onDemandService->endpoint_ = endpoint;
     onDemandService->handle_ = isolated::ondemand::IsolatedOnDemandService::getInstance(endpoint->handle_);
