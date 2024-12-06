@@ -99,4 +99,6 @@ template struct JavaObjectHandle<IndexedTxModel::Builder>;
 template struct JavaObjectHandle<TimeSeriesTxModel>;
 template struct JavaObjectHandle<TimeSeriesTxModel::Builder>;
 
+template struct JavaObjectHandle<ExecutorTag>;
+
 DXFCPP_END_NAMESPACE

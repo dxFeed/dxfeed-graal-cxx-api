@@ -205,6 +205,10 @@ set(dxFeedGraalCxxApi_Exceptions_Sources
         src/exceptions/JavaException.cpp
 )
 
+set(dxFeedGraalCxxApi_Executors_Sources
+        src/executors/InPlaceExecutor.cpp
+)
+
 set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXFeed.cpp
         src/isolated/api/IsolatedDXEndpoint.cpp
@@ -214,6 +218,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
         src/isolated/auth/IsolatedAuthToken.cpp
         src/isolated/event/IsolatedEventType.cpp
+        src/isolated/executors/IsolatedInPlaceExecutor.cpp
         src/isolated/internal/IsolatedString.cpp
         src/isolated/internal/IsolatedObject.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
@@ -366,6 +371,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_InternalUtilsDebug_Sources}
         ${dxFeedGraalCxxApi_Isolated_Sources}
         ${dxFeedGraalCxxApi_Exceptions_Sources}
+        ${dxFeedGraalCxxApi_Executors_Sources}
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Auth_Sources}

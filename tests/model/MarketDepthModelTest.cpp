@@ -22,6 +22,7 @@ class MarketDepthModelTestFixture {
   protected:
     const char *symbol_ = "INDEX-TEST";
 
+    std::shared_ptr<InPlaceExecutor> executor_;
     std::vector<std::shared_ptr<Order>> publishedEvents_{};
     std::vector<std::shared_ptr<Order>> buyOrders_{};
     std::vector<std::shared_ptr<Order>> sellOrders_{};
@@ -121,7 +122,9 @@ class MarketDepthModelTestFixture {
 
   public:
     MarketDepthModelTestFixture() {
+        executor_ = InPlaceExecutor::create();
         endpoint_ = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);
+        endpoint_->executor(executor_);
         feed_ = endpoint_->getFeed();
         publisher_ = endpoint_->getPublisher();
         model_ = createBuilder()->build();

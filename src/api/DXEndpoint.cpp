@@ -145,6 +145,10 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     return endpoint;
 }
 
+void DXEndpoint::executorImpl(const JavaObjectHandle<ExecutorTag> &executor) const {
+    isolated::api::IsolatedDXEndpoint::executor(handle_, executor);
+}
+
 DXEndpoint::State DXEndpoint::getState() const {
     return isolated::api::IsolatedDXEndpoint::getState(handle_);
 }
