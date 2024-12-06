@@ -31,6 +31,7 @@ set(DXFC_TEST_SOURCES
         exceptions/ExceptionsTest.cpp
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp
+        model/MarketDepthModelTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp)

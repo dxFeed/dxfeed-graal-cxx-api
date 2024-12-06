@@ -31,6 +31,23 @@ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
                                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
+// int32_t dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, dxfg_executor_t
+// *executor);
+void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaObjectHandle<dxfcpp::ExecutorTag> &ex) {
+    if (!endpoint) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXEndpoint_executor`. The `endpoint` handle is invalid");
+    }
+
+    if (!endpoint) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXEndpoint_executor`. The `ex` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_executor, static_cast<dxfg_endpoint_t *>(endpoint.get()),
+                                           static_cast<dxfg_executor_t *>(ex.get()));
+}
+
 void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
                         std::string_view user) {
     if (!endpoint) {
@@ -144,11 +161,13 @@ void removeStateChangeListener(
         &listener) {
 
     if (!endpoint) {
-        throw InvalidArgumentException("Unable to remove DXEndpointStateChangeListener. The `endpoint` handle is invalid");
+        throw InvalidArgumentException(
+            "Unable to remove DXEndpointStateChangeListener. The `endpoint` handle is invalid");
     }
 
     if (!listener) {
-        throw InvalidArgumentException("Unable to remove DXEndpointStateChangeListener. The `listener` handle is invalid");
+        throw InvalidArgumentException(
+            "Unable to remove DXEndpointStateChangeListener. The `listener` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_removeStateChangeListener,

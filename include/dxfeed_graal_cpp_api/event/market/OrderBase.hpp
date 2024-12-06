@@ -16,6 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEvent.hpp"
 #include "../IndexedEventSource.hpp"
+#include "../../exceptions/InvalidArgumentException.hpp"
 #include "MarketEvent.hpp"
 #include "OrderAction.hpp"
 #include "OrderSource.hpp"

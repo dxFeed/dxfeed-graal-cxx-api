@@ -47,6 +47,10 @@ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
 
 // dxfg_endpoint_role_t            dxfg_DXEndpoint_getRole(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
 
+// int32_t dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, dxfg_executor_t
+// *executor);
+void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaObjectHandle<dxfcpp::ExecutorTag> &ex);
+
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_user` in isolation.
  *

@@ -105,7 +105,7 @@ std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEn
     auto sub = createShared(eventType);
     auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
-    dxfcpp::ignore_unused(id);
+    dxfcpp::ignoreUnused(id);
 
     return sub;
 }
@@ -114,7 +114,7 @@ std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(std::initializer_
     auto sub = createShared(eventTypes);
     auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
-    dxfcpp::ignore_unused(id);
+    dxfcpp::ignoreUnused(id);
 
     return sub;
 }

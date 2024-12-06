@@ -14,6 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 #include "DXFeed.hpp"
 #include "DXPublisher.hpp"
+#include "../executors/InPlaceExecutor.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -487,6 +488,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties);
 
+    void executorImpl(const JavaObjectHandle<ExecutorTag>& executor) const;
+
     struct Impl;
 
     std::unique_ptr<Impl> impl_;
@@ -649,6 +652,13 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @return onStateChange handler with `void(State, State)` signature
      */
     SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &onStateChange() noexcept;
+
+    template <typename Executor>
+    std::shared_ptr<DXEndpoint> executor(const std::shared_ptr<Executor> &executor) {
+        executorImpl(executor->getHandle());
+
+        return sharedAs<DXEndpoint>();
+    }
 
     /**
      * Changes user name for this endpoint.

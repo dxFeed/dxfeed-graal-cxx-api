@@ -185,7 +185,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         auto sub = createShared(begin, end);
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
-        dxfcpp::ignore_unused(id);
+        dxfcpp::ignoreUnused(id);
 
         return sub;
     }
@@ -226,7 +226,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         auto sub = createShared(std::forward<EventTypesCollection>(eventTypes));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
-        dxfcpp::ignore_unused(id);
+        dxfcpp::ignoreUnused(id);
 
         return sub;
     }
