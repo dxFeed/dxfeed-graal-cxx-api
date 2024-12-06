@@ -70,8 +70,11 @@ struct Timer {
             [self = t](auto &&f, auto &&d) {
                 self->isRunning_ = true;
                 self->interruptableSleep(d);
-                f();
-                self->isRunning_ = false;
+
+                if (self->isRunning_) {
+                    f();
+                    self->isRunning_ = false;
+                }
             },
             std::forward<F>(f), std::forward<Delay>(delay)));
 

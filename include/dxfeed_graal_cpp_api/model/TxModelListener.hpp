@@ -125,6 +125,10 @@ struct DXFCPP_EXPORT TxModelListener final : TxModelListenerCommon, RequireMakeS
         return listener;
     }
 
+    std::string toString() const override {
+        return TxModelListenerCommon::toString();
+    }
+
     friend std::ostream &operator<<(std::ostream &os, const TxModelListener<E> &l) {
         return os << l.toString();
     }

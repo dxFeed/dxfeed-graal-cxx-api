@@ -366,7 +366,7 @@ class EventFlagsMask final {
     /**
      * Creates event flags mask by initializer list with flags\
      *
-     * @param eventTypes The list with flags
+     * @param eventFlags The list with flags
      */
     EventFlagsMask(std::initializer_list<EventFlag> eventFlags) noexcept
         : EventFlagsMask(eventFlags.begin(), eventFlags.end()) {
@@ -379,6 +379,14 @@ class EventFlagsMask final {
      */
     constexpr std::uint32_t getMask() const noexcept {
         return mask_;
+    }
+
+    /**
+     * @param flag The flag to check.
+     * @return `true` if this mask contains the flag.
+     */
+    bool contains(const EventFlag& flag) const noexcept {
+        return (mask_ & flag.getFlag()) != 0;
     }
 
     /**
