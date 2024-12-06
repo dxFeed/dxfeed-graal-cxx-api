@@ -232,8 +232,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `or` operation with two event flags
      *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag (std::int32_t)
+     * @param eventFlag1 The first event flag
+     * @param eventFlag2 The second event flag (std::int32_t)
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator|(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
@@ -243,8 +243,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `or` operation with two event flags
      *
-     * @param eventType1 The first event flag (std::int32_t)
-     * @param eventType2 The second event flag
+     * @param eventFlag1 The first event flag (std::int32_t)
+     * @param eventFlag2 The second event flag
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator|(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
@@ -254,8 +254,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `and` operation with two event flags
      *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag (std::int32_t)
+     * @param eventFlag1 The first event flag
+     * @param eventFlag2 The second event flag (std::int32_t)
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator&(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
@@ -265,8 +265,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `and` operation with two event flags
      *
-     * @param eventType1 The first event flag (std::int32_t)
-     * @param eventType2 The second event flag
+     * @param eventFlag1 The first event flag (std::int32_t)
+     * @param eventFlag2 The second event flag
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator&(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
@@ -276,8 +276,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `or` operation with two event flags
      *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag (std::uint32_t)
+     * @param eventFlag1 The first event flag
+     * @param eventFlag2 The second event flag (std::uint32_t)
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator|(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
@@ -287,8 +287,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `or` operation with two event flags
      *
-     * @param eventType1 The first event flag (std::uint32_t)
-     * @param eventType2 The second event flag
+     * @param eventFlag1 The first event flag (std::uint32_t)
+     * @param eventFlag2 The second event flag
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator|(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
@@ -298,8 +298,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `and` operation with two event flags
      *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag (std::uint32_t)
+     * @param eventFlag1 The first event flag
+     * @param eventFlag2 The second event flag (std::uint32_t)
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
@@ -309,8 +309,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `and` operation with two event flags
      *
-     * @param eventType1 The first event flag (std::uint32_t)
-     * @param eventType2 The second event flag
+     * @param eventFlag1 The first event flag (std::uint32_t)
+     * @param eventFlag2 The second event flag
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
@@ -364,7 +364,7 @@ class EventFlagsMask final {
     }
 
     /**
-     * Creates event flags mask by initializer list with flags\
+     * Creates event flags mask by initializer list with flags
      *
      * @param eventFlags The list with flags
      */
@@ -385,7 +385,7 @@ class EventFlagsMask final {
      * @param flag The flag to check.
      * @return `true` if this mask contains the flag.
      */
-    bool contains(const EventFlag& flag) const noexcept {
+    bool contains(const EventFlag &flag) const noexcept {
         return (mask_ & flag.getFlag()) != 0;
     }
 
@@ -409,17 +409,6 @@ class EventFlagsMask final {
      */
     friend EventFlagsMask operator&(const EventFlagsMask &eventFlagsMask, const EventFlag &eventFlag) noexcept {
         return EventFlagsMask{eventFlagsMask.mask_ & eventFlag.getFlag()};
-    }
-
-    /**
-     * Performs a bit `or` operation with two event flags
-     *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag
-     * @return The result (event flags' mask )
-     */
-    friend EventFlagsMask operator|(const EventFlag &eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return EventFlagsMask{eventFlag1.getFlag() | eventFlag2.getFlag()};
     }
 
     ///
@@ -448,5 +437,17 @@ class EventFlagsMask final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/**
+ * Performs a bit `or` operation with two event flags
+ *
+ * @param eventFlag1 The first event flag
+ * @param eventFlag2 The second event flag
+ * @return The result (event flags' mask )
+ */
+inline dxfcpp::EventFlagsMask operator|(const dxfcpp::EventFlag &eventFlag1,
+                                        const dxfcpp::EventFlag &eventFlag2) noexcept {
+    return dxfcpp::EventFlagsMask{eventFlag1.getFlag() | eventFlag2.getFlag()};
+}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

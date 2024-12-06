@@ -12,7 +12,7 @@ MarketDepthModel::Builder::Builder(LockExternalConstructionTag) {
 MarketDepthModel::Builder::~Builder() = default;
 
 std::shared_ptr<MarketDepthModel::Builder> MarketDepthModel::Builder::withFeed(std::shared_ptr<DXFeed> feed) {
-    builder_ = builder_->withFeed(std::move(feed));
+    builder_ = builder_->withFeed(feed);
 
     return sharedAs<Builder>();
 }
