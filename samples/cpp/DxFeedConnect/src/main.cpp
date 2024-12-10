@@ -1,12 +1,16 @@
 // Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "dxfeed_graal_cpp_api/model/MarketDepthModel.hpp"
+
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <atomic>
 #include <chrono>
 #include <mutex>
 #include <string>
+
+#include <format>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
@@ -50,6 +54,45 @@ Examples:
 
 int main(int argc, char *argv[]) {
     try {
+        auto ep = DXEndpoint::getInstance();
+        auto feed = ep->getFeed();
+        MarketDepthModel<Order>::newBuilder()
+            ->withFeed(feed)
+            ->withSources({OrderSource::NTV})
+            ->withSymbol("AAPL")
+            ->withDepthLimit(10)
+            ->withListener(
+                [](const std::vector<std::shared_ptr<Order>> &buy, const std::vector<std::shared_ptr<Order>> &sell) {
+                    std::size_t size = std::max(buy.size(), sell.size());
+                    for (auto buyIt = buy.begin(), sellIt = sell.begin(); buyIt != buy.end() && sellIt != sell.end();) {
+                        std::string row{};
+                        if (buyIt != buy.end()) {
+                            row += std::format("{:^30}", std::format("{}@{}", (*buyIt)->getPrice(), (*buyIt)->getSize()));
+
+                            ++buyIt;
+                        } else {
+                            row += std::format("{:^30}", "");
+                        }
+
+                        row += " | ";
+
+                        if (sellIt != sell.end()) {
+                            row += std::format("{:^30}", std::format("{:}@{}", (*sellIt)->getPrice(), (*sellIt)->getSize()));
+
+                            ++sellIt;
+                        } else {
+                            row += std::format("{:^30}", "");
+                        }
+
+                        row += "\n";
+                    }
+                });
+
+        ep->connect("demo.dxfeed.com:7300");
+
+        std::cin.get();
+
+        return 0;
         if (argc < 4) {
             printUsage();
 

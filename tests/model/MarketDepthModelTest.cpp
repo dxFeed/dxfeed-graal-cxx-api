@@ -5,11 +5,11 @@
 
 #include "dxfeed_graal_cpp_api/model/MarketDepthModel.hpp"
 
+#include <random>
 #include <string>
 #include <thread>
 #include <unordered_map>
 #include <vector>
-#include <random>
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
@@ -30,7 +30,7 @@ class MarketDepthModelTestFixture {
     std::shared_ptr<DXEndpoint> endpoint_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
-    std::shared_ptr<MarketDepthModel> model_{};
+    std::shared_ptr<MarketDepthModel<Order>> model_{};
 
     std::size_t listenerCalls_{};
     std::size_t changesBuy_{};
@@ -171,13 +171,13 @@ class MarketDepthModelTestFixture {
         return order->withMarketMaker(mmid.value()).sharedAs<Order>();
     }
 
-    std::shared_ptr<MarketDepthModel::Builder> createBuilder() {
-        return MarketDepthModel::newBuilder()
+    std::shared_ptr<MarketDepthModel<Order>::Builder> createBuilder() {
+        return MarketDepthModel<Order>::newBuilder()
             ->withFeed(feed_)
             ->withSymbol(symbol_)
             ->withSources({OrderSource::DEFAULT})
-            ->withListener<Order>([&](const std::vector<std::shared_ptr<Order>> &buyOrders,
-                                      const std::vector<std::shared_ptr<Order>> &sellOrders) {
+            ->withListener([&](const std::vector<std::shared_ptr<Order>> &buyOrders,
+                               const std::vector<std::shared_ptr<Order>> &sellOrders) {
                 listenerCalls_++;
 
                 if (!equals(buyOrders_, buyOrders)) {
@@ -313,11 +313,11 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestEnforceEntryLimit") {
     publishAndProcess(true, createOrder(1, Side::BUY, 4, 1, 0));
     publishAndProcess(true, createOrder(2, Side::BUY, 3, 1, 0));
 
-    publishAndProcess(false, createOrder(3, Side::BUY, 2, 1, 0));          // outside limit
-    publishAndProcess(false, createOrder(4, Side::BUY, 1, 1, 0));          // outside limit
-    publishAndProcess(false, createOrder(4, Side::BUY, 1, 2, 0));          // modify outside limit
+    publishAndProcess(false, createOrder(3, Side::BUY, 2, 1, 0));         // outside limit
+    publishAndProcess(false, createOrder(4, Side::BUY, 1, 1, 0));         // outside limit
+    publishAndProcess(false, createOrder(4, Side::BUY, 1, 2, 0));         // modify outside limit
     publishAndProcess(false, createOrder(3, Side::BUY, 1, math::NaN, 0)); // remove outside limit
-    publishAndProcess(true, createOrder(2, Side::BUY, 3, 2, 0));           // update in limit
+    publishAndProcess(true, createOrder(2, Side::BUY, 3, 2, 0));          // update in limit
     publishAndProcess(true, createOrder(1, Side::BUY, 3, math::NaN, 0));  // remove in limit
 
     publishAndProcess(true, createOrder(4, Side::SELL, 1, 1, 0));
@@ -332,7 +332,7 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestEnforceEntryLimit") {
     checkChanged(false);
     publishAndProcess(false, createOrder(8, Side::SELL, 5, math::NaN, 0)); // remove outside limit
     checkChanged(false);
-    publishAndProcess(true, createOrder(6, Side::SELL, 4, 2, 0));          // update in limit
+    publishAndProcess(true, createOrder(6, Side::SELL, 4, 2, 0));         // update in limit
     publishAndProcess(true, createOrder(5, Side::SELL, 2, math::NaN, 0)); // remove in limit
 
     model_->setDepthLimit(0); // disable limit
@@ -345,9 +345,9 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestEnforceEntryLimit") {
 }
 
 TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestStressBuySellOrders") {
-    publishAndProcess(false,
-                      createOrder(0, Side::BUY, math::NaN, math::NaN,
-                                  (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END | EventFlag::REMOVE_EVENT).getMask()));
+    publishAndProcess(
+        false, createOrder(0, Side::BUY, math::NaN, math::NaN,
+                           (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END | EventFlag::REMOVE_EVENT).getMask()));
     listenerCalls_ = 0;
     buyOrders_.clear();
     publishedEvents_.clear();
@@ -370,8 +370,8 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestStressBuySellOrders") {
 
     for (auto i = 0; i < 10000; i++) {
         auto index = bookDistrib(gen);
-        auto order =
-            createOrder(Scope::ORDER, sideDistrib(gen) != 0 ? Side::BUY : Side::SELL, index, valueDistrib(gen), '\0', std::nullopt);
+        auto order = createOrder(Scope::ORDER, sideDistrib(gen) != 0 ? Side::BUY : Side::SELL, index, valueDistrib(gen),
+                                 '\0', std::nullopt);
         auto old = book[index];
 
         book[index] = order;
