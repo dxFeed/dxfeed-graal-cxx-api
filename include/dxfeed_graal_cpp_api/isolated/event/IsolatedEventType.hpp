@@ -7,6 +7,8 @@
 
 #include "../../internal/Common.hpp"
 
+#include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
+
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE

@@ -101,4 +101,6 @@ template struct JavaObjectHandle<TimeSeriesTxModel::Builder>;
 
 template struct JavaObjectHandle<ExecutorTag>;
 
+template struct JavaObjectHandle<Logging::ListenerTag>;
+
 DXFCPP_END_NAMESPACE

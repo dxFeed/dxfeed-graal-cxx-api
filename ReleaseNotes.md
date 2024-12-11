@@ -1,3 +1,5 @@
+* **\[MDAPI-211]\[C++]** Implement logging management
+    * Added `Logging` class.
 * **\[MDAPI-82]\[C++]** Implement MarketDepthModel
     * Added `MarketDepthModel` class.
     * Added `MarketDepthModelListener` class.
