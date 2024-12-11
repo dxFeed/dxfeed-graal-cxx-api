@@ -1,3 +1,6 @@
+* **\[MDAPI-82]\[C++]** Implement MarketDepthModel
+    * Added `MarketDepthModel` class.
+    * Added `MarketDepthModelListener` class.
 * **\[MDAPI-84]\[C++]** Implement TimeSeriesTxModel
     * Added `TimeSeriesTxModel` class.
 * **\[MDAPI-83]\[C++]** Implement IndexedTxModel

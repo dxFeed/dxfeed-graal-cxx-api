@@ -27,6 +27,93 @@ DXFCPP_BEGIN_NAMESPACE
 struct DXFeed;
 struct SymbolWrapper;
 
+/**
+ * Represents a model for market depth, tracking buy and sell orders and notifies listener of changes in the order book.
+ *
+ * This model can set depth limit and aggregation period. This model notifies the user of received transactions through
+ * an installed MarketDepthModelListener.
+ *
+ * The depth limit specifies the maximum number of buy or sell orders to maintain in the order book.
+ * For example, if the depth limit is set to 10, the model will only keep track of the top 10 buy orders and the top 10
+ * sell orders. This helps in managing the size of the order book.
+ *
+ * The aggregation period, specified in milliseconds, determines the frequency at which the model aggregates and
+ * notifies changes in the order book to the listeners. For instance, if the aggregation period is set to 1000
+ * milliseconds the model will aggregate changes and notify listeners every second. A value of 0 means that changes are
+ * notified immediately.
+ *
+ * <h3>Configuration</h3>
+ *
+ * This model must be configured using the @ref MarketDepthModel::Builder "Builder" class, as most configuration
+ * settings cannot be changed once the model is built. This model requires configuration
+ * MarketDepthModel::Builder::withSymbol() and it must be MarketDepthModel::Builder::withFeed() attached to a DXFeed
+ * instance to begin operation.
+ *
+ * This model only supports single symbol subscriptions; multiple symbols cannot be configured.
+ *
+ * The convenient way to detach model from the feed is to call its MarketDepthModel::close() method. Closed model
+ * becomes permanently detached from all feeds, removes all its listeners.
+ *
+ * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
+ *
+ * Sample:
+ *
+ * ```cpp
+ * using namespace std::literals;
+ *
+ * auto ep = DXEndpoint::getInstance();
+ * auto feed = ep->getFeed();
+ *
+ * auto model =
+ *     MarketDepthModel<Order>::newBuilder()
+ *         ->withFeed(feed)
+ *         ->withSources({OrderSource::NTV})
+ *         ->withSymbol("AAPL")
+ *         ->withDepthLimit(10)
+ *         ->withAggregationPeriod(5s)
+ *         ->withListener([](const std::vector<std::shared_ptr<Order>> &buy,
+ *                           const std::vector<std::shared_ptr<Order>> &sell) {
+ *             if (buy.empty() && sell.empty()) {
+ *                 return;
+ *             }
+ *
+ *             std::cout << std::format("{:=^66}\n", "");
+ *             std::cout << std::format("{:^31} || {:^31}\n", "ASK", "BID");
+ *             std::cout << std::format("{0:^15}|{1:^15} || {0:^15}|{1:^15}\n", "Price", "Size");
+ *             std::cout << std::format("{:-^66}\n", "");
+ *
+ *             for (auto buyIt = buy.begin(), sellIt = sell.begin(); buyIt != buy.end() && sellIt != sell.end();) {
+ *                 std::string row{};
+ *                 if (buyIt != buy.end()) {
+ *                     row += std::format("{:>14.4f} | {:<14.2f}", (*buyIt)->getPrice(), (*buyIt)->getSize());
+ *
+ *                     ++buyIt;
+ *                 } else {
+ *                     row += std::format("{:>14} | {:<14}", "", "");
+ *                 }
+ *
+ *                 row += " || ";
+ *
+ *                 if (sellIt != sell.end()) {
+ *                     row += std::format("{:>14.4f} | {:<14.2f}", (*sellIt)->getPrice(), (*sellIt)->getSize());
+ *
+ *                     ++sellIt;
+ *                 } else {
+ *                     row += std::format("{:>14} | {:<14}", "", "");
+ *                 }
+ *
+ *                 std::cout << row << std::endl;
+ *             }
+ *
+ *             std::cout << std::format("{:=^66}\n", "");
+ *         })
+ *         ->build();
+ *
+ * ep->connect("demo.dxfeed.com:7300");
+ * ```
+ *
+ * @tparam O The type of order derived from OrderBase.
+ */
 template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : RequireMakeShared<MarketDepthModel<O>> {
 
     struct DXFCPP_EXPORT Builder final : RequireMakeShared<Builder> {
@@ -46,24 +133,52 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
         ~Builder() override {
         }
 
+        /**
+         * Sets the DXFeed for the model being created.
+         * The feed cannot be attached after the model has been built.
+         *
+         * @param feed The DXFeed.
+         * @return The builder instance.
+         */
         std::shared_ptr<Builder> withFeed(std::shared_ptr<DXFeed> feed) {
             builder_ = builder_->withFeed(std::move(feed));
 
             return this->template sharedAs<Builder>();
         }
 
+        /**
+         * Sets the subscription symbol for the model being created.
+         * The symbol cannot be added or changed after the model has been built.
+         *
+         * @param symbol The subscription symbol.
+         * @return The builder instance.
+         */
         std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) {
             builder_ = builder_->withSymbol(symbol);
 
             return this->template sharedAs<Builder>();
         }
 
+        /**
+         * Sets the listener for transaction notifications.
+         * The listener cannot be changed or added once the model has been built.
+         *
+         * @param listener The transaction listener.
+         * @return The builder instance.
+         */
         std::shared_ptr<Builder> withListener(std::shared_ptr<MarketDepthModelListener<O>> listener) {
             this->listener_ = listener;
 
             return this->template sharedAs<Builder>();
         }
 
+        /**
+         * Creates and sets the listener for transaction notifications.
+         * The listener cannot be changed or added once the model has been built.
+         *
+         * @param onEventsReceived The callback.
+         * @return The builder instance.
+         */
         std::shared_ptr<Builder> withListener(std::function<void(const std::vector<std::shared_ptr<O>> & /* buy */,
                                                                  const std::vector<std::shared_ptr<O>> & /* sell */)>
                                                   onEventsReceived) {
@@ -72,37 +187,93 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
             return this->template sharedAs<Builder>();
         }
 
+        /**
+         * Sets the sources from which to subscribe for indexed events.
+         * If no sources have been set, subscriptions will default to all possible sources.
+         *
+         * @remark The default value for this source is an empty set, which means that this model subscribes to all
+         * available sources.
+         * @tparam EventSourceIt The source collection iterator type.
+         * @param begin The beginning of the collection of sources.
+         * @param end The end of the collection of sources.
+         * @return The builder instance.
+         */
         template <typename EventSourceIt> std::shared_ptr<Builder> withSources(EventSourceIt begin, EventSourceIt end) {
             builder_ = builder_->withSources(begin, end);
 
             return this->template sharedAs<Builder>();
         }
 
+        /**
+         * Sets the sources from which to subscribe for indexed events.
+         * If no sources have been set, subscriptions will default to all possible sources.
+         *
+         * @remark The default value for this source is an empty set, which means that this model subscribes to all
+         * available sources.
+         *
+         * @tparam EventSourceCollection A type of the collection of sources (std::vector<EventSourceWrapper>,
+         * std::set<OrderSource>, etc.)
+         * @param sources The specified sources.
+         * @return The builder instance.
+         */
         template <ConvertibleToEventSourceWrapperCollection EventSourceCollection>
         std::shared_ptr<Builder> withSources(EventSourceCollection &&sources) {
             return withSources(std::begin(sources), std::end(sources));
         }
 
+        /**
+         * Sets the sources from which to subscribe for indexed events.
+         * If no sources have been set, subscriptions will default to all possible sources.
+         *
+         * @remark The default value for this source is an empty set, which means that this model subscribes to all
+         * available sources.
+         *
+         * @param sources The specified sources.
+         * @return The builder instance.
+         */
         std::shared_ptr<Builder> withSources(std::initializer_list<EventSourceWrapper> sources) {
             return withSources(sources.begin(), sources.end());
         }
 
+        /**
+         * Sets the depth limit.
+         *
+         * @param depthLimit The depth limit.
+         * @return The builder instance.
+         */
         std::shared_ptr<Builder> withDepthLimit(std::size_t depthLimit) {
             depthLimit_ = depthLimit;
 
             return this->template sharedAs<Builder>();
         }
 
+        /**
+         * Sets the aggregation period.
+         *
+         * @param aggregationPeriodMillis The aggregation period in milliseconds.
+         * @return The builder instance.
+         */
         std::shared_ptr<Builder> withAggregationPeriod(std::int64_t aggregationPeriodMillis) {
             aggregationPeriodMillis_ = aggregationPeriodMillis;
 
             return this->template sharedAs<Builder>();
         }
 
+        /**
+         * Sets the aggregation period.
+         *
+         * @param aggregationPeriod The aggregation period.
+         * @return The builder instance.
+         */
         std::shared_ptr<Builder> withAggregationPeriod(std::chrono::milliseconds aggregationPeriod) {
             return withAggregationPeriod(aggregationPeriod.count());
         }
 
+        /**
+         * Builds an instance of MarketDepthModel based on the provided parameters.
+         *
+         * @return The created MarketDepthModel.
+         */
         std::shared_ptr<MarketDepthModel> build() {
             return MarketDepthModel::create(this->template sharedAs<Builder>());
         }
@@ -541,16 +712,29 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
         close();
     }
 
+    /**
+     * Creates a new builder instance for constructing a MarketDepthModel.
+     *
+     * @return A new instance of the builder.
+     */
     static std::shared_ptr<Builder> newBuilder() {
         return Builder::createShared();
     }
 
+    /**
+     * @return The depth limit of the book.
+     */
     std::size_t getDepthLimit() const {
         std::lock_guard guard(mtx_);
 
         return depthLimit_;
     }
 
+    /**
+     * Sets the depth limit of the book.
+     *
+     * @param depthLimit The new depth limit value.
+     */
     void setDepthLimit(std::size_t depthLimit) {
         std::lock_guard guard(mtx_);
 
@@ -565,12 +749,20 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
         notifyListeners();
     }
 
+    /**
+     * @return The aggregation period of the book.
+     */
     std::int64_t getAggregationPeriod() const {
         std::lock_guard guard(mtx_);
 
         return aggregationPeriodMillis_;
     }
 
+    /**
+     * Sets the aggregation period in milliseconds.
+     *
+     * @param aggregationPeriodMillis The new aggregation period value.
+     */
     void setAggregationPeriod(std::int64_t aggregationPeriodMillis) {
         std::lock_guard guard(mtx_);
 
@@ -582,10 +774,18 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
         rescheduleTaskIfNeeded(std::chrono::milliseconds(aggregationPeriodMillis_));
     }
 
+    /**
+     * Sets the aggregation period.
+     *
+     * @param aggregationPeriod The new aggregation period value.
+     */
     void setAggregationPeriod(std::chrono::milliseconds aggregationPeriod) {
         setAggregationPeriod(aggregationPeriod.count());
     }
 
+    /**
+     * Closes this model and makes it <i>permanently detached</i>.
+     */
     void close() const {
         std::lock_guard guard(mtx_);
 

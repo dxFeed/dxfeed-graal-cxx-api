@@ -115,7 +115,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : RequireMakeShared<TimeSeriesTxMod
          * into a single listener notification.
          *
          * @param isBatchProcessing `true` to enable batch processing; `false` otherwise.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withBatchProcessing(bool isBatchProcessing) const;
 
@@ -135,7 +135,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : RequireMakeShared<TimeSeriesTxMod
          * This flag only affects the processing of transactions that are a snapshot.
          *
          * @param isSnapshotProcessing `true` to enable snapshot processing; `false` otherwise.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const;
 
@@ -145,7 +145,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : RequireMakeShared<TimeSeriesTxMod
          * by calling @ref TimeSeriesTxModel::attach() "attach".
          *
          * @param feed The @ref DXFeed "feed".
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withFeed(std::shared_ptr<DXFeed> feed) const;
 
@@ -154,7 +154,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : RequireMakeShared<TimeSeriesTxMod
          * The symbol cannot be added or changed after the model has been built.
          *
          * @param symbol The subscription symbol.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const;
 
@@ -182,7 +182,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : RequireMakeShared<TimeSeriesTxMod
          *
          * @tparam E The type of event (derived from TimeSeriesEvent)
          * @param listener The transaction listener.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         template <Derived<TimeSeriesEvent> E>
         std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener<E>> listener) const {
@@ -214,7 +214,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : RequireMakeShared<TimeSeriesTxMod
          *
          * @tparam E The type of event (derived from TimeSeriesEvent)
          * @param onEventsReceived A functional object, lambda, or function to which time series event data will be passed.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         template <Derived<TimeSeriesEvent> E>
         std::shared_ptr<Builder> withListener(std::function<void(const IndexedEventSource & /* source */,
@@ -231,7 +231,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : RequireMakeShared<TimeSeriesTxMod
          * TimeSeriesTxModel::setFromTime() "setFromTime".
          *
          * @param fromTime The time in milliseconds, since Unix epoch of January 1, 1970.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withFromTime(std::int64_t fromTime) const;
 
@@ -243,7 +243,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : RequireMakeShared<TimeSeriesTxMod
          * calling @ref TimeSeriesTxModel::setFromTime() "setFromTime".
          *
          * @param fromTime The duration in milliseconds, since Unix epoch of January 1, 1970.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withFromTime(std::chrono::milliseconds fromTime) const {
             return withFromTime(fromTime.count());
