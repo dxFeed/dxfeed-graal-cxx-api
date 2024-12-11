@@ -104,7 +104,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
         }
 
         std::shared_ptr<MarketDepthModel> build() {
-            return MarketDepthModel::createShared(this->template sharedAs<Builder>());
+            return MarketDepthModel::create(this->template sharedAs<Builder>());
         }
     };
 
@@ -197,11 +197,11 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
     struct SellComparator {
         int operator()(const std::shared_ptr<O> &o1, const std::shared_ptr<O> &o2) const {
             if (o1->getPrice() < o2->getPrice()) {
-                return 1; // desc
+                return -1; // asc
             }
 
             if (o1->getPrice() > o2->getPrice()) {
-                return -1;
+                return 1;
             }
 
             return OrderComparator{}(o1, o2);
@@ -383,7 +383,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
     std::shared_ptr<Timer> taskTimer_{};
 
     static std::shared_ptr<MarketDepthModel> create(std::shared_ptr<Builder> builder) {
-        auto marketDepthModel = createShared(builder);
+        auto marketDepthModel = MarketDepthModel::createShared(builder);
 
         marketDepthModel->indexedTxModel_ =
             builder->builder_
@@ -422,7 +422,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
     void notifyListeners() {
         std::lock_guard guard(mtx_);
 
-        listener_->getHandler().handle(getBuyOrders(), getSellOrders());
+        listener_->getHandler()(getBuyOrders(), getSellOrders());
         taskScheduled_ = false;
     }
 

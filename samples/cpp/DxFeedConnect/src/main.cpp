@@ -56,37 +56,55 @@ int main(int argc, char *argv[]) {
     try {
         auto ep = DXEndpoint::getInstance();
         auto feed = ep->getFeed();
-        MarketDepthModel<Order>::newBuilder()
-            ->withFeed(feed)
-            ->withSources({OrderSource::NTV})
-            ->withSymbol("AAPL")
-            ->withDepthLimit(10)
-            ->withListener(
-                [](const std::vector<std::shared_ptr<Order>> &buy, const std::vector<std::shared_ptr<Order>> &sell) {
-                    std::size_t size = std::max(buy.size(), sell.size());
+
+        // IndexedTxModel::newBuilder(Order::TYPE)->withFeed(feed)->withSources({OrderSource::NTV})->withSymbol("AAPL")->withListener<Order>([](const
+        // IndexedEventSource & IndexedEventSource, const std::vector<std::shared_ptr<Order>> & SharedPtrs, bool Cond) {
+        // })
+
+        auto model =
+            MarketDepthModel<Order>::newBuilder()
+                ->withFeed(feed)
+                ->withSources({OrderSource::NTV})
+                ->withSymbol("AAPL")
+                ->withDepthLimit(10)
+                ->withAggregationPeriod(5s)
+                ->withListener([](const std::vector<std::shared_ptr<Order>> &buy,
+                                  const std::vector<std::shared_ptr<Order>> &sell) {
+                    if (buy.empty() && sell.empty()) {
+                        return;
+                    }
+
+                    std::cout << std::format("{:=^66}\n", "");
+                    std::cout << std::format("{:^31} || {:^31}\n", "ASK", "BID");
+                    std::cout << std::format("{0:^15}|{1:^15} || {0:^15}|{1:^15}\n", "Price", "Size");
+                    std::cout << std::format("{:-^66}\n", "");
+
                     for (auto buyIt = buy.begin(), sellIt = sell.begin(); buyIt != buy.end() && sellIt != sell.end();) {
                         std::string row{};
                         if (buyIt != buy.end()) {
-                            row += std::format("{:^30}", std::format("{}@{}", (*buyIt)->getPrice(), (*buyIt)->getSize()));
+                            row += std::format("{:>14.4f} | {:<14.2f}", (*buyIt)->getPrice(), (*buyIt)->getSize());
 
                             ++buyIt;
                         } else {
-                            row += std::format("{:^30}", "");
+                            row += std::format("{:>14} | {:<14}", "", "");
                         }
 
-                        row += " | ";
+                        row += " || ";
 
                         if (sellIt != sell.end()) {
-                            row += std::format("{:^30}", std::format("{:}@{}", (*sellIt)->getPrice(), (*sellIt)->getSize()));
+                            row += std::format("{:>14.4f} | {:<14.2f}", (*sellIt)->getPrice(), (*sellIt)->getSize());
 
                             ++sellIt;
                         } else {
-                            row += std::format("{:^30}", "");
+                            row += std::format("{:>14} | {:<14}", "", "");
                         }
 
-                        row += "\n";
+                        std::cout << row << std::endl;
                     }
-                });
+
+                    std::cout << std::format("{:=^66}\n", "");
+                })
+                ->build();
 
         ep->connect("demo.dxfeed.com:7300");
 

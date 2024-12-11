@@ -124,16 +124,24 @@ class MarketDepthModelTestFixture {
     }
 
     static int oneIfBuy(const std::shared_ptr<Order> &order) {
-        return order->getOrderSide() == Side::BUY && !!math::equals(order->getSize(), 0) ? 1 : 0;
+        return order && order->getOrderSide() == Side::BUY && !math::equals(order->getSize(), 0) ? 1 : 0;
     }
 
     static int oneIfSell(const std::shared_ptr<Order> &order) {
-        return order->getOrderSide() == Side::SELL && !!math::equals(order->getSize(), 0) ? 1 : 0;
+        return order && order->getOrderSide() == Side::SELL && !math::equals(order->getSize(), 0) ? 1 : 0;
     }
 
     static bool same(const std::shared_ptr<Order> &order, const std::shared_ptr<Order> &old) {
-        if (order->getSize() == 0) {
+        if (order && order->getSize() == 0) {
             return true; // order with zero size is the same as null (missing)
+        }
+
+        if (!order && !old) {
+            return true;
+        }
+
+        if (!order || !old) {
+            return false;
         }
 
         // Check just relevant attributes
