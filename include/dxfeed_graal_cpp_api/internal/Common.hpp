@@ -932,24 +932,16 @@ inline void checkChar(char c, std::uint32_t mask, const std::string &name) {
 
 namespace math {
 
-template <typename ComparatorResultType, typename ResultType = int>
-ResultType normalizeComparatorResult(ComparatorResultType r) {
-    if constexpr (std::is_signed_v<ComparatorResultType>) {
-        return r < 0 ? -1 : r > 0 ? 1 : 0;
-    } else {
-        auto result = static_cast<std::make_signed_t<ComparatorResultType>>(r);
-
-        return result < 0 ? -1 : result > 0 ? 1 : 0;
-    }
-}
-
 template <Integral Type, typename ResultType = int> ResultType compare(Type v1, Type v2) {
-    if constexpr (std::is_signed_v<Type>) {
-        return normalizeComparatorResult<ResultType>(v1 - v2);
-    } else {
-        return normalizeComparatorResult<ResultType>(static_cast<std::make_signed_t<Type>>(v1) -
-                                                     static_cast<std::make_signed_t<Type>>(v2));
+    if (v1 < v2) {
+        return -1;
     }
+
+    if (v2 < v1) {
+        return 1;
+    }
+
+    return 0;
 }
 
 inline int compare(double d1, double d2) {
