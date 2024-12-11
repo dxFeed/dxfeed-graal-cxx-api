@@ -5,12 +5,9 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <atomic>
 #include <chrono>
 #include <mutex>
 #include <string>
-
-#include <format>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
