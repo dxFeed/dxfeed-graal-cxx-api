@@ -55,48 +55,56 @@ struct DXFCPP_EXPORT Logging final {
 
   public:
     /**
+     * Initializes logging and sets the logging level.
      *
-     * @param level
+     * This is equivalent to the following code:
+     *
+     * ```cpp
+     * System::setProperty("log.className", "com.devexperts.logging.InterceptableLogging");
+     * System::setProperty("log.level", levelToString(level));
+     * System::setProperty("err.level", levelToString(level));
+     * ```
+     * @param level The logging level.
      */
     static void init(Level level = Level::OFF);
 
     /**
+     * Initializes logging, sets the path to the logging file and the logging level.
      *
-     * @param logFile
-     * @param logLevel
+     * This is equivalent to the following code:
+     *
+     * ```cpp
+     * System::setProperty("log.className", "com.devexperts.logging.InterceptableLogging");
+     * System::setProperty("log.file", logFile);
+     * System::setProperty("log.level", levelToString(logLevel));
+     * ```
+     *
+     * @param logFile The logging file.
+     * @param logLevel The logging level.
      */
     static void init(const std::string &logFile, Level logLevel = Level::INFO);
 
     /**
+     * Initializes logging, sets the path to the file for logging, to the file for outputting errors and warnings, and
+     * sets the logging level for both files.
      *
-     * @param logFile
-     * @param errFile
-     * @param logLevel
-     * @param errFileLevel
+     * This is equivalent to the following code:
+     *
+     * ```cpp
+     * System::setProperty("log.className", "com.devexperts.logging.InterceptableLogging");
+     * System::setProperty("log.file", logFile);
+     * System::setProperty("log.level", levelToString(logLevel));
+     * System::setProperty("err.file", errFile);
+     * System::setProperty("err.level", levelToString(errFileLevel));
+     * ```
+     *
+     * @param logFile The logging file.
+     * @param errFile The err file.
+     * @param logLevel The logging level.
+     * @param errFileLevel The err file logging level.
      */
     static void init(const std::string &logFile, const std::string &errFile, Level logLevel = Level::INFO,
                      Level errFileLevel = Level::WARN);
-
-    /**
-     *
-     * @param listener
-     */
-    static void setListener(std::function<void(Level, std::int64_t /*timestamp*/, const std::string & /*threadName*/,
-                                               std::int64_t /*threadId*/, const std::string & /*loggerName*/,
-                                               const std::string & /*message*/)>
-                                listener);
-
-    /**
-     *
-     * @param level
-     */
-    static void setLogLevel(Level level);
-
-    /**
-     *
-     * @param level
-     */
-    static void setErrFileLevel(Level level);
 };
 
 DXFCPP_END_NAMESPACE

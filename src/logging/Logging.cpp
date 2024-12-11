@@ -70,29 +70,29 @@ void Logging::init(const std::string &logFile, const std::string &errFile, Level
     System::setProperty("err.level", levelToString(errFileLevel));
 }
 
-void Logging::setListener(std::function<void(Level, std::int64_t, const std::string &, std::int64_t,
-                                             const std::string &, const std::string &)>
-                              listener) {
-    static auto id = static_cast<std::size_t>(-1);
-
-    if (id != static_cast<std::size_t>(-1)) {
-        handler_ -= id;
-    }
-
-    id = handler_ += std::move(listener);
-
-    if (!Impl::listenerHandle) {
-        Impl::listenerHandle =
-            isolated::logging::IsolatedLogging::createListener(dxfcpp::bit_cast<void *>(&Impl::onLog), nullptr);
-    }
-}
-
-void Logging::setLogLevel(Level level) {
-    isolated::logging::IsolatedLogging::setLogLevel(level);
-}
-
-void Logging::setErrFileLevel(Level level) {
-    isolated::logging::IsolatedLogging::setErrFileLevel(level);
-}
+// void Logging::setListener(std::function<void(Level, std::int64_t, const std::string &, std::int64_t,
+//                                              const std::string &, const std::string &)>
+//                               listener) {
+//     static auto id = static_cast<std::size_t>(-1);
+//
+//     if (id != static_cast<std::size_t>(-1)) {
+//         handler_ -= id;
+//     }
+//
+//     id = handler_ += std::move(listener);
+//
+//     if (!Impl::listenerHandle) {
+//         Impl::listenerHandle =
+//             isolated::logging::IsolatedLogging::createListener(dxfcpp::bit_cast<void *>(&Impl::onLog), nullptr);
+//     }
+// }
+//
+// void Logging::setLogLevel(Level level) {
+//     isolated::logging::IsolatedLogging::setLogLevel(level);
+// }
+//
+// void Logging::setErrFileLevel(Level level) {
+//     isolated::logging::IsolatedLogging::setErrFileLevel(level);
+// }
 
 DXFCPP_END_NAMESPACE
