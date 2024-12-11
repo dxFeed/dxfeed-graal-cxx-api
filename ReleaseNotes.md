@@ -1,3 +1,4 @@
+* Migrated to Graal SDK v2.1.2
 * **\[MDAPI-211]\[C++]** Implement logging management
     * Added `Logging` class.
 * **\[MDAPI-82]\[C++]** Implement MarketDepthModel
