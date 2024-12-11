@@ -75,6 +75,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
 #include "isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp"
 #include "isolated/ipf/IsolatedInstrumentProfileReader.hpp"
+#include "isolated/logging/IsolatedLogging.hpp"
 #include "isolated/model/IsolatedTxModelListener.hpp"
 #include "isolated/model/IsolatedIndexedTxModel.hpp"
 #include "isolated/model/IsolatedTimeSeriesTxModel.hpp"
@@ -83,6 +84,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/schedule/IsolatedDay.hpp"
 #include "isolated/schedule/IsolatedSession.hpp"
 #include "isolated/schedule/IsolatedSchedule.hpp"
+
+#include "logging/Logging.hpp"
 
 #include "ondemand/OnDemandService.hpp"
 

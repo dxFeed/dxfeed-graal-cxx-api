@@ -228,6 +228,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileCollector.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
+        src/isolated/logging/IsolatedLogging.cpp
         src/isolated/model/IsolatedTxModelListener.cpp
         src/isolated/model/IsolatedIndexedTxModel.cpp
         src/isolated/model/IsolatedTimeSeriesTxModel.cpp
@@ -265,6 +266,10 @@ set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/live/InstrumentProfileCollector.cpp
         src/ipf/live/InstrumentProfileConnection.cpp
         src/ipf/live/IterableInstrumentProfile.cpp
+)
+
+set(dxFeedGraalCxxApi_Logging_Sources
+        src/logging/Logging.cpp
 )
 
 set(dxFeedGraalCxxApi_Model_Sources
@@ -376,6 +381,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Auth_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
+        ${dxFeedGraalCxxApi_Logging_Sources}
         ${dxFeedGraalCxxApi_Model_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
         ${dxFeedGraalCxxApi_Promise_Sources}
