@@ -47,6 +47,28 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
   public:
     /**
      * Creates time-series subscription symbol with a specified event symbol and subscription time.
+     *
+     * ```cpp
+     * auto subscription = DXFeed::getInstance()->createSubscription({Candle::TYPE, Quote::TYPE});
+     *
+     * subscription->addEventListener([](const auto &events) {
+     *     for (const auto &e : events) {
+     *         if (const auto &q = e->template sharedAs<Quote>()) {
+     *             std::cout << q << std::endl;
+     *         } else if (const auto &c = e->template sharedAs<Candle>()) {
+     *             std::cout << c << std::endl;
+     *         }
+     *     }
+     * });
+     *
+     * auto fromTime = dxfcpp::now();
+     *
+     * subscription->addSymbols(
+     *     {symbol,
+     *      TimeSeriesSubscriptionSymbol(
+     *          CandleSymbol::valueOf(symbol, CandlePeriod::valueOf(1, CandleType::MINUTE)).toString(), fromTime)});
+     * ```
+     *
      * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
      * @param fromTime the subscription time.
      */

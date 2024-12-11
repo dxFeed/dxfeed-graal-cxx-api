@@ -84,12 +84,12 @@ struct DXFeed;
  * std::this_thread::sleep_for(10s);
  * ```
  */
-struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
+struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
 
     /**
      * A builder class for creating an instance of IndexedTxModel.
      */
-    struct DXFCPP_EXPORT Builder : RequireMakeShared<Builder> {
+    struct DXFCPP_EXPORT Builder final : RequireMakeShared<Builder> {
       private:
         JavaObjectHandle<Builder> handle_;
         std::shared_ptr<TxModelListenerCommon> listener_;
@@ -117,7 +117,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * into a single listener notification.
          *
          * @param isBatchProcessing `true` to enable batch processing; `false` otherwise.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withBatchProcessing(bool isBatchProcessing) const;
 
@@ -137,7 +137,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * This flag only affects the processing of transactions that are a snapshot.
          *
          * @param isSnapshotProcessing `true` to enable snapshot processing; `false` otherwise.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const;
 
@@ -147,7 +147,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * by calling @ref IndexedTxModel::attach() "attach".
          *
          * @param feed The @ref DXFeed "feed".
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withFeed(std::shared_ptr<DXFeed> feed) const;
 
@@ -156,7 +156,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * The symbol cannot be added or changed after the model has been built.
          *
          * @param symbol The subscription symbol.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const;
 
@@ -182,13 +182,47 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * builder->withListener(listener);
          * ```
          *
+         * @tparam E The type of event (derived from IndexedEvent)
          * @param listener The transaction listener.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         template <Derived<IndexedEvent> E>
         std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener<E>> listener) const {
             return createShared(std::move(withListenerImpl(listener->getHandle())),
                                 listener->template sharedAs<TxModelListenerCommon>());
+        }
+
+        /**
+         * Sets the listener for transaction notifications.
+         * The listener cannot be changed or added once the model has been built.
+         *
+         * ```cpp
+         * auto builder = IndexedTxModel::newBuilder(Order::TYPE);
+         *
+         * builder = builder->withListener<Order>([](const auto &, const auto &events, bool isSnapshot) {
+         *     if (isSnapshot) {
+         *         std::cout << "Snapshot:" << std::endl;
+         *     } else {
+         *         std::cout << "Update:" << std::endl;
+         *     }
+         *
+         *     for (const auto &e : events) {
+         *         std::cout << "[" << e->getEventFlagsMask().toString() << "]:" << e << std::endl;
+         *     }
+         *
+         *     std::cout << std::endl;
+         * });
+         * ```
+         *
+         * @tparam E The type of event (derived from IndexedEvent)
+         * @param onEventsReceived A functional object, lambda, or function to which indexed event data will be passed.
+         * @return The builder instance.
+         */
+        template <Derived<IndexedEvent> E>
+        std::shared_ptr<Builder> withListener(std::function<void(const IndexedEventSource & /* source */,
+                              const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
+               onEventsReceived) const {
+            return withListener(TxModelListener<E>::create(onEventsReceived));
         }
 
         /**
@@ -209,7 +243,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * @tparam EventSourceIt The source collection iterator type.
          * @param begin The beginning of the collection of sources.
          * @param end The end of the collection of sources.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         template <typename EventSourceIt>
         std::shared_ptr<Builder> withSources(EventSourceIt begin, EventSourceIt end) const {
@@ -236,7 +270,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * @tparam EventSourceCollection A type of the collection of sources (std::vector<EventSourceWrapper>,
          * std::set<OrderSource>, etc.)
          * @param sources The specified sources.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         template <ConvertibleToEventSourceWrapperCollection EventSourceCollection>
         std::shared_ptr<Builder> withSources(EventSourceCollection &&sources) const {
@@ -258,7 +292,7 @@ struct DXFCPP_EXPORT IndexedTxModel : RequireMakeShared<IndexedTxModel> {
          * ```
          *
          * @param sources The specified sources.
-         * @return `this` builder.
+         * @return The builder instance.
          */
         std::shared_ptr<Builder> withSources(std::initializer_list<EventSourceWrapper> sources) const;
 

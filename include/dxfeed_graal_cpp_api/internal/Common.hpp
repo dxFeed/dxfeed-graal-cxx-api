@@ -55,12 +55,12 @@ struct IpfPropertyChangeListener {};
 
 struct InstrumentProfileUpdateListener {};
 
-template <typename... T> constexpr void ignore_unused(const T &...) {
+template <typename... T> constexpr void ignoreUnused(const T &...) {
 }
 
 constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept -> bool {
 #ifdef __cpp_lib_is_constant_evaluated
-    ignore_unused(default_value);
+    ignoreUnused(default_value);
     return std::is_constant_evaluated();
 #else
     return default_value;
@@ -927,7 +927,40 @@ inline void checkChar(char c, std::uint32_t mask, const std::string &name) {
         throwInvalidChar(c, name);
     }
 }
+
 } // namespace util
+
+namespace math {
+
+template <Integral Type, typename ResultType = int> ResultType compare(Type v1, Type v2) {
+    if (v1 < v2) {
+        return -1;
+    }
+
+    if (v2 < v1) {
+        return 1;
+    }
+
+    return 0;
+}
+
+inline int compare(double d1, double d2) {
+    if (std::isnan(d1) || std::isnan(d2)) {
+        return std::isnan(d1) ? (std::isnan(d2) ? 0 : -1) : 1;
+    }
+
+    if (d1 < d2) {
+        return -1;
+    }
+
+    if (d1 > d2) {
+        return 1;
+    }
+
+    return 0;
+}
+
+}
 
 DXFCPP_END_NAMESPACE
 

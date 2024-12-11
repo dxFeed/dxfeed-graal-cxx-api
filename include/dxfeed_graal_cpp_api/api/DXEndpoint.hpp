@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../executors/InPlaceExecutor.hpp"
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
@@ -487,6 +488,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties);
 
+    void executorImpl(const JavaObjectHandle<ExecutorTag> &executor) const;
+
     struct Impl;
 
     std::unique_ptr<Impl> impl_;
@@ -619,19 +622,11 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * <p>Installed listener can be removed by `id` with DXEndpoint::removeStateChangeListener method or by call
      * `::onStateChange() -= id`;
      *
-     * @tparam StateChangeListener The listener type. It can be any callable with signature: `void(State, State)`
      * @param listener The listener to add
      * @return the listener id
      */
-    template <typename StateChangeListener>
-    std::size_t addStateChangeListener(StateChangeListener &&listener) noexcept
-#if __cpp_concepts
-        requires requires {
-            { listener(State{}, State{}) } -> std::same_as<void>;
-        }
-#endif
-    {
-        return onStateChange_ += listener;
+    std::size_t addStateChangeListener(std::function<void(State, State)> listener) noexcept {
+        return onStateChange_ += std::move(listener);
     }
 
     /**
@@ -649,6 +644,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @return onStateChange handler with `void(State, State)` signature
      */
     SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &onStateChange() noexcept;
+
+    template <typename Executor> std::shared_ptr<DXEndpoint> executor(const std::shared_ptr<Executor> &executor) {
+        executorImpl(executor->getHandle());
+
+        return sharedAs<DXEndpoint>();
+    }
 
     /**
      * Changes user name for this endpoint.
@@ -986,5 +987,11 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 };
 
 DXFCPP_END_NAMESPACE
+
+template <typename OS> OS &operator<<(OS &os, dxfcpp::DXEndpoint::State state) {
+    os << dxfcpp::DXEndpoint::stateToString(state);
+
+    return os;
+}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

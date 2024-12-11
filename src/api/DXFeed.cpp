@@ -114,7 +114,7 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     std::shared_ptr<DXFeed> feed{new DXFeed{}};
 
     auto id = ApiContext::getInstance()->getManager<DXFeedManager>()->registerEntity(feed);
-    ignore_unused(id);
+    ignoreUnused(id);
 
     feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
 

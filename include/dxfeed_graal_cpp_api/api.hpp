@@ -55,6 +55,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "exceptions/JavaException.hpp"
 #include "exceptions/GraalException.hpp"
 
+#include "executors/InPlaceExecutor.hpp"
+
 #include "isolated/api/IsolatedDXFeed.hpp"
 #include "isolated/api/IsolatedDXEndpoint.hpp"
 #include "isolated/api/IsolatedDXFeedSubscription.hpp"
@@ -63,6 +65,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
 #include "isolated/auth/IsolatedAuthToken.hpp"
 #include "isolated/event/IsolatedEventType.hpp"
+#include "isolated/executors/IsolatedInPlaceExecutor.hpp"
 #include "isolated/promise/IsolatedPromise.hpp"
 #include "isolated/internal/IsolatedString.hpp"
 #include "isolated/internal/IsolatedObject.hpp"

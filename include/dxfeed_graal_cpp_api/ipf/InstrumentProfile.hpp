@@ -7,6 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
+
 #include "../internal/Common.hpp"
 
 #include <cstdint>
@@ -794,5 +796,7 @@ template <> struct std::hash<dxfcpp::InstrumentProfile::Ptr> {
         return t->hashCode();
     }
 };
+
+DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

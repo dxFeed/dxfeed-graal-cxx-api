@@ -78,7 +78,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      * @param event the event to use as source.
      */
     virtual void assign(std::shared_ptr<EventType> event) {
-        ignore_unused(event);
+        ignoreUnused(event);
     }
 
     ///
