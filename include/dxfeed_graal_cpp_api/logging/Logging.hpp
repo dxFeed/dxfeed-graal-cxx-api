@@ -13,7 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 /**
- *
+ * A class of utility methods for managing the logging mechanism.
  */
 struct DXFCPP_EXPORT Logging final {
     struct ListenerTag {};
@@ -43,6 +43,12 @@ struct DXFCPP_EXPORT Logging final {
         OFF,
     };
 
+    /**
+     * Converts enum Level values to their string representation.
+     *
+     * @param level The enum Level value.
+     * @return The string representation.
+     */
     static std::string levelToString(Level level);
 
   private:
