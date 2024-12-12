@@ -5,6 +5,7 @@ var class_message =
     [ "Message", "d4/d03/class_message.html#af20055721940f8bdbaeac742a5fed878", null ],
     [ "Message", "d4/d03/class_message.html#a974a40147271d3279c3e2c03a612fb8d", null ],
     [ "Message", "d4/d03/class_message.html#a1f6468e62c712ef350c8bc907ba58c7c", null ],
+    [ "assign", "d4/d03/class_message.html#af895c1c46934a70d66b97f3d6312373c", null ],
     [ "getAttachment", "d4/d03/class_message.html#aba03c458bb3416d949d47c6127442c67", null ],
     [ "getAttachmentOpt", "d4/d03/class_message.html#a5ba50e784936125500dcc1d8e1b81c78", null ],
     [ "getEventSymbol", "d4/d03/class_message.html#a1e633559b4d0af8a025e4162eba315ca", null ],
@@ -14,7 +15,7 @@ var class_message =
     [ "setEventSymbol", "d4/d03/class_message.html#a0134e5bc98853deb4796697a4a3e9681", null ],
     [ "setEventTime", "d4/d03/class_message.html#a0d08f81e081d22724c597f562c998163", null ],
     [ "toGraal", "d4/d03/class_message.html#a52523f9a10a77e9bc250f3eb7fc30f0e", null ],
-    [ "toString", "d4/d03/class_message.html#abe482dcaa45133def4eaf4481eda36b9", null ],
+    [ "toString", "d4/d03/class_message.html#a7b636d01e02388bcf9fe2faf94bd19a6", null ],
     [ "withAttachment", "d4/d03/class_message.html#a39c78d1c0f5ed58eb4b4f02df3691b81", null ],
     [ "withEventSymbol", "d4/d03/class_message.html#ac59bc5f8a2f54ffeff8afe3ae0c8dcac", null ],
     [ "withEventTime", "d4/d03/class_message.html#a1009f14a0a30fc096eb984efc559a57d", null ]

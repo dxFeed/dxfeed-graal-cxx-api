@@ -1,0 +1,63 @@
+\hypertarget{structDirection}{}\doxysubsection{Direction Struct Reference}
+\label{structDirection}\index{Direction@{Direction}}
+
+
+\mbox{\hyperlink{structDirection}{Direction}} of the price movement.  
+
+
+
+
+{\ttfamily \#include $<$Direction.\+hpp$>$}
+
+
+
+Inherits Enum$<$ Child, Code $>$.
+
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structDirection}{Direction}} \mbox{\hyperlink{structDirection_a04c7cefe80029a7bd4a228e18cb21bc5}{UNDEFINED}} \{0, \char`\"{}UNDEFINED\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{structDirection}{Direction}} is undefined, unknown or inapplicable. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structDirection_a06c0264c2f84a465618c2c65a8e90c8c}\label{structDirection_a06c0264c2f84a465618c2c65a8e90c8c}} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structDirection}{Direction}} \mbox{\hyperlink{structDirection_a06c0264c2f84a465618c2c65a8e90c8c}{DOWN}} \{1, \char`\"{}DOWN\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is lower than previous price. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structDirection_a4b12560fe073808faea78a7f07dd2855}\label{structDirection_a4b12560fe073808faea78a7f07dd2855}} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structDirection}{Direction}} \mbox{\hyperlink{structDirection_a4b12560fe073808faea78a7f07dd2855}{ZERO\+\_\+\+DOWN}} \{2, \char`\"{}ZERO\+\_\+\+DOWN\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is the same as previous price and is lower than the last known price of different value. \end{DoxyCompactList}\item 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structDirection}{Direction}} \mbox{\hyperlink{structDirection_a239064573fb1e619078fc545f9bced58}{ZERO}} \{3, \char`\"{}ZERO\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is equal to the only known price value suitable for price direction computation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structDirection_aed226ae7fb889c633805f6239446b4e3}\label{structDirection_aed226ae7fb889c633805f6239446b4e3}} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structDirection}{Direction}} \mbox{\hyperlink{structDirection_aed226ae7fb889c633805f6239446b4e3}{ZERO\+\_\+\+UP}} \{4, \char`\"{}ZERO\+\_\+\+UP\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is the same as previous price and is higher than the last known price of different value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structDirection_ae43281276568e135dc1e6c3b23bcb4b7}\label{structDirection_ae43281276568e135dc1e6c3b23bcb4b7}} 
+static const DXFCPP\+\_\+\+EXPORT \mbox{\hyperlink{structDirection}{Direction}} \mbox{\hyperlink{structDirection_ae43281276568e135dc1e6c3b23bcb4b7}{UP}} \{5, \char`\"{}UP\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em Current price is higher than previous price. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{structDirection}{Direction}} of the price movement. 
+
+For example tick direction for last trade price. 
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{structDirection_a04c7cefe80029a7bd4a228e18cb21bc5}\label{structDirection_a04c7cefe80029a7bd4a228e18cb21bc5}} 
+\index{Direction@{Direction}!UNDEFINED@{UNDEFINED}}
+\index{UNDEFINED@{UNDEFINED}!Direction@{Direction}}
+\doxyparagraph{\texorpdfstring{UNDEFINED}{UNDEFINED}}
+{\footnotesize\ttfamily DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE const \mbox{\hyperlink{structDirection}{Direction}} Direction\+::\+UNDEFINED \{0, \char`\"{}UNDEFINED\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\mbox{\hyperlink{structDirection}{Direction}} is undefined, unknown or inapplicable. 
+
+It includes cases with undefined price value or when direction computation was not performed. \mbox{\Hypertarget{structDirection_a239064573fb1e619078fc545f9bced58}\label{structDirection_a239064573fb1e619078fc545f9bced58}} 
+\index{Direction@{Direction}!ZERO@{ZERO}}
+\index{ZERO@{ZERO}!Direction@{Direction}}
+\doxyparagraph{\texorpdfstring{ZERO}{ZERO}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structDirection}{Direction}} Direction\+::\+ZERO \{3, \char`\"{}ZERO\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Current price is equal to the only known price value suitable for price direction computation. 
+
+Unlike {\bfseries{UNDEFINED}} the {\bfseries{ZERO}} direction implies that current price is defined and direction computation was duly performed but has failed to detect any upward or downward price movement. It is also reported for cases when price sequence was broken and direction computation was restarted anew. 

@@ -2,7 +2,8 @@ var class_order_base =
 [
     [ "OrderBase", "df/d01/class_order_base.html#af7c7b2fc55a7b120552d0b88506f6356", null ],
     [ "OrderBase", "df/d01/class_order_base.html#a4fe7633c925eb59d9ab5084711f57d36", null ],
-    [ "baseFieldsToString", "df/d01/class_order_base.html#a97118268ae013762b34b77e3769b5b25", null ],
+    [ "assign", "df/d01/class_order_base.html#a40f09d3025feb6a649581e4919a6c5f2", null ],
+    [ "baseFieldsToString", "df/d01/class_order_base.html#a60ab0060374ea9e6db4a598d7c8a30f5", null ],
     [ "getAction", "df/d01/class_order_base.html#ab4ce8591b90e6d8f8e67ebb562204ad1", null ],
     [ "getActionTime", "df/d01/class_order_base.html#af885b39d4cc4628cfc4dcffb9eadf3c3", null ],
     [ "getAuxOrderId", "df/d01/class_order_base.html#a2770d970f2c61e40475e1031f6a0ed2f", null ],

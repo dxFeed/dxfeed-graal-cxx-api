@@ -1,0 +1,1063 @@
+\hypertarget{classAnalyticOrder}{}\doxysubsection{Analytic\+Order Class Reference}
+\label{classAnalyticOrder}\index{AnalyticOrder@{AnalyticOrder}}
+
+
+Represents an extension of \mbox{\hyperlink{classOrder}{Order}} introducing analytic information, e.\+g.  
+
+
+
+
+{\ttfamily \#include $<$Analytic\+Order.\+hpp$>$}
+
+Inheritance diagram for Analytic\+Order\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=8.000000cm]{df/d61/classAnalyticOrder}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classAnalyticOrder_a7ad7922e071caf4a306130afb35ffe21}\label{classAnalyticOrder_a7ad7922e071caf4a306130afb35ffe21}} 
+using \mbox{\hyperlink{classAnalyticOrder_a7ad7922e071caf4a306130afb35ffe21}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classAnalyticOrder_a643b9c34559695ef7db7eba838fae47d}\label{classAnalyticOrder_a643b9c34559695ef7db7eba838fae47d}} 
+using \mbox{\hyperlink{classAnalyticOrder_a643b9c34559695ef7db7eba838fae47d}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classAnalyticOrder_a285ed6ee467a1281ae9660afebc2da32}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classAnalyticOrder_a2760efc5bfd36ee8bd11b23358c8dade}\label{classAnalyticOrder_a2760efc5bfd36ee8bd11b23358c8dade}} 
+\mbox{\hyperlink{classAnalyticOrder_a2760efc5bfd36ee8bd11b23358c8dade}{Analytic\+Order}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new analytic order event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder_a6bfa9104c2e8d605c051dd75dce4762f}{Analytic\+Order}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new analytic order event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a03ad5f3ad8b7b1114d2c9e4e2d89e147}{with\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a6798d3542146d4a11f2d6d9d4a4e52a2}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a0dd73cd907e47f6853a696fbc9258eb2}{with\+Source}} (const \mbox{\hyperlink{classOrderSource}{Order\+Source}} \&source) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s source and returns the current analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a04459cdc557a40fd97de891281844299}{with\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_af8b3433d742d06284706264de33d906e}{with\+Event\+Flags}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_acb6c4d19d7f2af6b003b5ee4b9b1ed2d}{with\+Index}} (std\+::int64\+\_\+t index) noexcept
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this analytic order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a402580a17ecfaad7ab533bb86e04d08f}{with\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this analytic order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a3a885f9f9699f411081c51702c59b1d9}{with\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_ad02488ecea95f25861f53fb5d0025107}{with\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \mbox{\hyperlink{classOrderBase_aa1eda2dddd2b512e54941f49d9754003}{sequence number}} of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_aba2d8042490b98363936464e9b44a294}{with\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this analytic order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a638793ddd800139ef7b68d7031a692ff}{with\+Action}} (const \mbox{\hyperlink{structOrderAction}{Order\+Action}} \&action) noexcept
+\begin{DoxyCompactList}\small\item\em Changes action of this analytic order and returns it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a1c07e9b4c8b30f93af87f98a56ef0d2e}{with\+Action\+Time}} (std\+::int64\+\_\+t action\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last action and returns current analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a2162127e1df3d9d7abc4792a41d1c5e6}{with\+Order\+Id}} (std\+::int64\+\_\+t order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a47dc91ab41065ae95cc480b726c7cded}{with\+Aux\+Order\+Id}} (std\+::int64\+\_\+t aux\+Order\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes auxiliary order ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a6f2eb1513407d9292c1d49ab209c799e}{with\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_ad612e2bcbd67b4d9abab1329312ef04b}{with\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_aabd0a74c1380805908d4be1ec376a1bd}{with\+Executed\+Size}} (double executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes executed size of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_ae623d12f42cab28b6c2e0bf9906015b4}{with\+Count}} (std\+::int64\+\_\+t count) noexcept
+\begin{DoxyCompactList}\small\item\em Changes number of individual orders in this aggregate order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_ac0b9aa03f5a30f9905104a65776b2055}{with\+Trade\+Id}} (std\+::int64\+\_\+t trade\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a2f078111443a924c997c7a8af7619469}{with\+Trade\+Price}} (double trade\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a3e4789f4575a6a6dc25a521d84b8f0c8}{with\+Trade\+Size}} (double trade\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trade size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_ad13e563e03abbe23bb01b4f128802075}{with\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a839e3cdef8e62cc48c0561fc53c8ef93}{with\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_aee4d593b410fe71b7afcedba35ceca8b}{with\+Order\+Side}} (const \mbox{\hyperlink{structSide}{Side}} \&side) noexcept
+\begin{DoxyCompactList}\small\item\em Changes side of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_ae979ff9a631c78dbba7ea098c1d27a2c}{with\+Scope}} (const \mbox{\hyperlink{structScope}{Scope}} \&scope) noexcept
+\begin{DoxyCompactList}\small\item\em Changes scope of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_aa448902ba9f07b7a0b88f06c433acdcc}{with\+Market\+Maker}} (std\+::string market\+Maker) noexcept
+\begin{DoxyCompactList}\small\item\em Changes market maker or other aggregate identifier of this analytic order. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classAnalyticOrder_a57ae9239ea997a589845f693f69bc17c}{get\+Iceberg\+Peak\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns iceberg peak size of this analytic order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAnalyticOrder_a462caed22d653abfbf006d1d977ae5f7}{set\+Iceberg\+Peak\+Size}} (double iceberg\+Peak\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg peak size of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a38c468cc6399bf8f5f86a87337d39b8c}{with\+Iceberg\+Peak\+Size}} (double iceberg\+Peak\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg peak size and returns the current analytic order. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classAnalyticOrder_a21de1b88caf4eb9730d225909437a64e}{get\+Iceberg\+Hidden\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns iceberg hidden size of this analytic order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAnalyticOrder_a5cdd2ab7f74bce3ce84106b6949ac333}{set\+Iceberg\+Hidden\+Size}} (double iceberg\+Hidden\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg hidden size of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a0a5c951511f3a49c7162ed0128e75006}{with\+Iceberg\+Hidden\+Size}} (double iceberg\+Hidden\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg hidden size and returns the current analytic order. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classAnalyticOrder_a9ec4f7b3e2ee5d252496cfceae8e9734}{get\+Iceberg\+Executed\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns iceberg executed size of this analytic order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAnalyticOrder_a59221797f7980be619aeae5414c4ccb6}{set\+Iceberg\+Executed\+Size}} (double iceberg\+Executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg executed size of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_aa065175bd79b8bafed0f4c1d5ca7db70}{with\+Iceberg\+Executed\+Size}} (double iceberg\+Executed\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg executed size and returns the current analytic order. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structIcebergType}{Iceberg\+Type}} \& \mbox{\hyperlink{classAnalyticOrder_a28accdb1454f389e180271c1b253087b}{get\+Iceberg\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns iceberg type of this analytic order. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classAnalyticOrder_ac490dbdb4708962c10da43cc2335522b}{set\+Iceberg\+Type}} (const \mbox{\hyperlink{structIcebergType}{Iceberg\+Type}} \&iceberg\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg type of this analytic order. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} \& \mbox{\hyperlink{classAnalyticOrder_a5d6df3018838c7f61b1139ad3c57c626}{with\+Iceberg\+Type}} (const \mbox{\hyperlink{structIcebergType}{Iceberg\+Type}} \&iceberg\+Type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes iceberg type and returns the current analytic order. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classAnalyticOrder_abdfec5e3e519718617b2f92a8538d2da}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classAnalyticOrder_a2da75c1bf370ee31c9f26b1e75836cbf}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classAnalyticOrder_a2d54f6c82a95612840aae605d4b4ae45}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classAnalyticOrder_a64321ee89963fa6f1f5829de54683dbd}\label{classAnalyticOrder_a64321ee89963fa6f1f5829de54683dbd}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classAnalyticOrder_a64321ee89963fa6f1f5829de54683dbd}{TYPE}} = Event\+Type\+Enum\+::\+ANALYTIC\+\_\+\+ORDER
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+Represents an extension of \mbox{\hyperlink{classOrder}{Order}} introducing analytic information, e.\+g. 
+
+adding to this order iceberg related information (\mbox{\hyperlink{classAnalyticOrder_a57ae9239ea997a589845f693f69bc17c}{iceberg\+Peak\+Size}}, \mbox{\hyperlink{classAnalyticOrder_a21de1b88caf4eb9730d225909437a64e}{iceberg\+Hidden\+Size}}, \mbox{\hyperlink{classAnalyticOrder_a9ec4f7b3e2ee5d252496cfceae8e9734}{iceberg\+Executed\+Size}}). The collection of analytic order events of a symbol represents the most recent analytic information that is available about orders on the market at any given moment of time.
+
+Analytic order is similar to a regular \mbox{\hyperlink{classOrder}{Order}}. In addition this event has few additional properties\+: 
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{classAnalyticOrder_a57ae9239ea997a589845f693f69bc17c}{iceberg\+Peak\+Size}} -\/ the size of the peak, i.\+e. the visible part of the iceberg, that is being continually refilled until the order is fully traded or cancelled; 
+\item \mbox{\hyperlink{classAnalyticOrder_a21de1b88caf4eb9730d225909437a64e}{iceberg\+Hidden\+Size}} -\/ the prediction of current hidden size of the iceberg, as inferred by the model; 
+\item \mbox{\hyperlink{classAnalyticOrder_a9ec4f7b3e2ee5d252496cfceae8e9734}{iceberg\+Executed\+Size}} -\/ the executed size of the iceberg order. For \mbox{\hyperlink{structIcebergType_a0e29a6c8573c0d6b6cf33b17dbc70902}{Iceberg\+Type\+::\+SYNTHETIC}} type represents total executed size of all orders composing current iceberg; 
+\item \mbox{\hyperlink{classAnalyticOrder_a28accdb1454f389e180271c1b253087b}{Analytic\+Order\+::get\+Iceberg\+Type()}} -\/ type of the iceberg, either native (exchange-\/managed) or synthetic (managed outside of the exchange). 
+\end{DoxyItemize}
+
+\doxysubparagraph*{Implementation details}
+
+This event is implemented on top of QDS records {\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\#$<$source-\/id$>$}, where {\ttfamily $<$source-\/id$>$} is up to 4 ASCII characters with a mnemonic for the source like \char`\"{}\+GLBX\char`\"{}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classAnalyticOrder_a6bfa9104c2e8d605c051dd75dce4762f}\label{classAnalyticOrder_a6bfa9104c2e8d605c051dd75dce4762f}} 
+\index{AnalyticOrder@{AnalyticOrder}!AnalyticOrder@{AnalyticOrder}}
+\index{AnalyticOrder@{AnalyticOrder}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{AnalyticOrder()}{AnalyticOrder()}}
+{\footnotesize\ttfamily Analytic\+Order\+::\+Analytic\+Order (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new analytic order event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classAnalyticOrder_a2d54f6c82a95612840aae605d4b4ae45}\label{classAnalyticOrder_a2d54f6c82a95612840aae605d4b4ae45}} 
+\index{AnalyticOrder@{AnalyticOrder}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Analytic\+Order\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classAnalyticOrder_a2da75c1bf370ee31c9f26b1e75836cbf}\label{classAnalyticOrder_a2da75c1bf370ee31c9f26b1e75836cbf}} 
+\index{AnalyticOrder@{AnalyticOrder}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}} $>$ Analytic\+Order\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classAnalyticOrder_a9ec4f7b3e2ee5d252496cfceae8e9734}\label{classAnalyticOrder_a9ec4f7b3e2ee5d252496cfceae8e9734}} 
+\index{AnalyticOrder@{AnalyticOrder}!getIcebergExecutedSize@{getIcebergExecutedSize}}
+\index{getIcebergExecutedSize@{getIcebergExecutedSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{getIcebergExecutedSize()}{getIcebergExecutedSize()}}
+{\footnotesize\ttfamily double Analytic\+Order\+::get\+Iceberg\+Executed\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns iceberg executed size of this analytic order. 
+
+\begin{DoxyReturn}{Returns}
+iceberg executed size of this analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_a21de1b88caf4eb9730d225909437a64e}\label{classAnalyticOrder_a21de1b88caf4eb9730d225909437a64e}} 
+\index{AnalyticOrder@{AnalyticOrder}!getIcebergHiddenSize@{getIcebergHiddenSize}}
+\index{getIcebergHiddenSize@{getIcebergHiddenSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{getIcebergHiddenSize()}{getIcebergHiddenSize()}}
+{\footnotesize\ttfamily double Analytic\+Order\+::get\+Iceberg\+Hidden\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns iceberg hidden size of this analytic order. 
+
+\begin{DoxyReturn}{Returns}
+iceberg hidden size of this analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_a57ae9239ea997a589845f693f69bc17c}\label{classAnalyticOrder_a57ae9239ea997a589845f693f69bc17c}} 
+\index{AnalyticOrder@{AnalyticOrder}!getIcebergPeakSize@{getIcebergPeakSize}}
+\index{getIcebergPeakSize@{getIcebergPeakSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{getIcebergPeakSize()}{getIcebergPeakSize()}}
+{\footnotesize\ttfamily double Analytic\+Order\+::get\+Iceberg\+Peak\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns iceberg peak size of this analytic order. 
+
+\begin{DoxyReturn}{Returns}
+iceberg peak size of this analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_a28accdb1454f389e180271c1b253087b}\label{classAnalyticOrder_a28accdb1454f389e180271c1b253087b}} 
+\index{AnalyticOrder@{AnalyticOrder}!getIcebergType@{getIcebergType}}
+\index{getIcebergType@{getIcebergType}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{getIcebergType()}{getIcebergType()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structIcebergType}{Iceberg\+Type}}\& Analytic\+Order\+::get\+Iceberg\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns iceberg type of this analytic order. 
+
+\begin{DoxyReturn}{Returns}
+iceberg type of this analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_a59221797f7980be619aeae5414c4ccb6}\label{classAnalyticOrder_a59221797f7980be619aeae5414c4ccb6}} 
+\index{AnalyticOrder@{AnalyticOrder}!setIcebergExecutedSize@{setIcebergExecutedSize}}
+\index{setIcebergExecutedSize@{setIcebergExecutedSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{setIcebergExecutedSize()}{setIcebergExecutedSize()}}
+{\footnotesize\ttfamily void Analytic\+Order\+::set\+Iceberg\+Executed\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Executed\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg executed size of this analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Executed\+Size} & iceberg executed size of this analytic order. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Iceberg\+Executed\+Size().
+
+\mbox{\Hypertarget{classAnalyticOrder_a5cdd2ab7f74bce3ce84106b6949ac333}\label{classAnalyticOrder_a5cdd2ab7f74bce3ce84106b6949ac333}} 
+\index{AnalyticOrder@{AnalyticOrder}!setIcebergHiddenSize@{setIcebergHiddenSize}}
+\index{setIcebergHiddenSize@{setIcebergHiddenSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{setIcebergHiddenSize()}{setIcebergHiddenSize()}}
+{\footnotesize\ttfamily void Analytic\+Order\+::set\+Iceberg\+Hidden\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Hidden\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg hidden size of this analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Hidden\+Size} & iceberg hidden size of this analytic order. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Iceberg\+Hidden\+Size().
+
+\mbox{\Hypertarget{classAnalyticOrder_a462caed22d653abfbf006d1d977ae5f7}\label{classAnalyticOrder_a462caed22d653abfbf006d1d977ae5f7}} 
+\index{AnalyticOrder@{AnalyticOrder}!setIcebergPeakSize@{setIcebergPeakSize}}
+\index{setIcebergPeakSize@{setIcebergPeakSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{setIcebergPeakSize()}{setIcebergPeakSize()}}
+{\footnotesize\ttfamily void Analytic\+Order\+::set\+Iceberg\+Peak\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Peak\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg peak size of this analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Peak\+Size} & iceberg peak size of this analytic order. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Iceberg\+Peak\+Size().
+
+\mbox{\Hypertarget{classAnalyticOrder_ac490dbdb4708962c10da43cc2335522b}\label{classAnalyticOrder_ac490dbdb4708962c10da43cc2335522b}} 
+\index{AnalyticOrder@{AnalyticOrder}!setIcebergType@{setIcebergType}}
+\index{setIcebergType@{setIcebergType}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{setIcebergType()}{setIcebergType()}}
+{\footnotesize\ttfamily void Analytic\+Order\+::set\+Iceberg\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structIcebergType}{Iceberg\+Type}} \&}]{iceberg\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg type of this analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Type} & iceberg type of this analytic order. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Iceberg\+Type().
+
+\mbox{\Hypertarget{classAnalyticOrder_a285ed6ee467a1281ae9660afebc2da32}\label{classAnalyticOrder_a285ed6ee467a1281ae9660afebc2da32}} 
+\index{AnalyticOrder@{AnalyticOrder}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Analytic\+Order\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classOrder_a92a68ce77b46e3a0987abfe82ede3161}{Order}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classAnalyticOrder_abdfec5e3e519718617b2f92a8538d2da}\label{classAnalyticOrder_abdfec5e3e519718617b2f92a8538d2da}} 
+\index{AnalyticOrder@{AnalyticOrder}!toString@{toString}}
+\index{toString@{toString}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Analytic\+Order\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classOrder_ad34c32a4f0b8d43cd78cb61d17f75578}{Order}}.
+
+
+
+Referenced by to\+Graal().
+
+\mbox{\Hypertarget{classAnalyticOrder_a638793ddd800139ef7b68d7031a692ff}\label{classAnalyticOrder_a638793ddd800139ef7b68d7031a692ff}} 
+\index{AnalyticOrder@{AnalyticOrder}!withAction@{withAction}}
+\index{withAction@{withAction}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withAction()}{withAction()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Action (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structOrderAction}{Order\+Action}} \&}]{action }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes action of this analytic order and returns it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em action} & The side of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Action().
+
+\mbox{\Hypertarget{classAnalyticOrder_a1c07e9b4c8b30f93af87f98a56ef0d2e}\label{classAnalyticOrder_a1c07e9b4c8b30f93af87f98a56ef0d2e}} 
+\index{AnalyticOrder@{AnalyticOrder}!withActionTime@{withActionTime}}
+\index{withActionTime@{withActionTime}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withActionTime()}{withActionTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Action\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{action\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last action and returns current analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em action\+Time} & The last order action time. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Action\+Time().
+
+\mbox{\Hypertarget{classAnalyticOrder_a47dc91ab41065ae95cc480b726c7cded}\label{classAnalyticOrder_a47dc91ab41065ae95cc480b726c7cded}} 
+\index{AnalyticOrder@{AnalyticOrder}!withAuxOrderId@{withAuxOrderId}}
+\index{withAuxOrderId@{withAuxOrderId}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withAuxOrderId()}{withAuxOrderId()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Aux\+Order\+Id (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{aux\+Order\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes auxiliary order ID. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em aux\+Order\+Id} & The auxiliary order ID. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Aux\+Order\+Id().
+
+\mbox{\Hypertarget{classAnalyticOrder_ae623d12f42cab28b6c2e0bf9906015b4}\label{classAnalyticOrder_ae623d12f42cab28b6c2e0bf9906015b4}} 
+\index{AnalyticOrder@{AnalyticOrder}!withCount@{withCount}}
+\index{withCount@{withCount}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withCount()}{withCount()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Count (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{count }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes number of individual orders in this aggregate order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em count} & The number of individual orders in this aggregate order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Count().
+
+\mbox{\Hypertarget{classAnalyticOrder_af8b3433d742d06284706264de33d906e}\label{classAnalyticOrder_af8b3433d742d06284706264de33d906e}} 
+\index{AnalyticOrder@{AnalyticOrder}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current analytic order. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_a04459cdc557a40fd97de891281844299}\label{classAnalyticOrder_a04459cdc557a40fd97de891281844299}} 
+\index{AnalyticOrder@{AnalyticOrder}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current analytic order. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_a03ad5f3ad8b7b1114d2c9e4e2d89e147}\label{classAnalyticOrder_a03ad5f3ad8b7b1114d2c9e4e2d89e147}} 
+\index{AnalyticOrder@{AnalyticOrder}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classOrder_a8c26d6356007bf34077e66d6c154d2c1}{Order}}.
+
+\mbox{\Hypertarget{classAnalyticOrder_a6798d3542146d4a11f2d6d9d4a4e52a2}\label{classAnalyticOrder_a6798d3542146d4a11f2d6d9d4a4e52a2}} 
+\index{AnalyticOrder@{AnalyticOrder}!withEventTime@{withEventTime}}
+\index{withEventTime@{withEventTime}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withEventTime()}{withEventTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns the current analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Event\+Time().
+
+\mbox{\Hypertarget{classAnalyticOrder_ad13e563e03abbe23bb01b4f128802075}\label{classAnalyticOrder_ad13e563e03abbe23bb01b4f128802075}} 
+\index{AnalyticOrder@{AnalyticOrder}!withExchangeCode@{withExchangeCode}}
+\index{withExchangeCode@{withExchangeCode}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withExchangeCode()}{withExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & The exchange code of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_a839e3cdef8e62cc48c0561fc53c8ef93}\label{classAnalyticOrder_a839e3cdef8e62cc48c0561fc53c8ef93}} 
+\index{AnalyticOrder@{AnalyticOrder}!withExchangeCode@{withExchangeCode}}
+\index{withExchangeCode@{withExchangeCode}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withExchangeCode()}{withExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & The exchange code of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_aabd0a74c1380805908d4be1ec376a1bd}\label{classAnalyticOrder_aabd0a74c1380805908d4be1ec376a1bd}} 
+\index{AnalyticOrder@{AnalyticOrder}!withExecutedSize@{withExecutedSize}}
+\index{withExecutedSize@{withExecutedSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withExecutedSize()}{withExecutedSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Executed\+Size (\begin{DoxyParamCaption}\item[{double}]{executed\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes executed size of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em executed\+Size} & The executed size of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Executed\+Size().
+
+\mbox{\Hypertarget{classAnalyticOrder_aa065175bd79b8bafed0f4c1d5ca7db70}\label{classAnalyticOrder_aa065175bd79b8bafed0f4c1d5ca7db70}} 
+\index{AnalyticOrder@{AnalyticOrder}!withIcebergExecutedSize@{withIcebergExecutedSize}}
+\index{withIcebergExecutedSize@{withIcebergExecutedSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withIcebergExecutedSize()}{withIcebergExecutedSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Iceberg\+Executed\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Executed\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg executed size and returns the current analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Executed\+Size} & iceberg executed size of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References set\+Iceberg\+Executed\+Size().
+
+\mbox{\Hypertarget{classAnalyticOrder_a0a5c951511f3a49c7162ed0128e75006}\label{classAnalyticOrder_a0a5c951511f3a49c7162ed0128e75006}} 
+\index{AnalyticOrder@{AnalyticOrder}!withIcebergHiddenSize@{withIcebergHiddenSize}}
+\index{withIcebergHiddenSize@{withIcebergHiddenSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withIcebergHiddenSize()}{withIcebergHiddenSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Iceberg\+Hidden\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Hidden\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg hidden size and returns the current analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Hidden\+Size} & iceberg hidden size of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References set\+Iceberg\+Hidden\+Size().
+
+\mbox{\Hypertarget{classAnalyticOrder_a38c468cc6399bf8f5f86a87337d39b8c}\label{classAnalyticOrder_a38c468cc6399bf8f5f86a87337d39b8c}} 
+\index{AnalyticOrder@{AnalyticOrder}!withIcebergPeakSize@{withIcebergPeakSize}}
+\index{withIcebergPeakSize@{withIcebergPeakSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withIcebergPeakSize()}{withIcebergPeakSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Iceberg\+Peak\+Size (\begin{DoxyParamCaption}\item[{double}]{iceberg\+Peak\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg peak size and returns the current analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Peak\+Size} & iceberg peak size of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References set\+Iceberg\+Peak\+Size().
+
+\mbox{\Hypertarget{classAnalyticOrder_a5d6df3018838c7f61b1139ad3c57c626}\label{classAnalyticOrder_a5d6df3018838c7f61b1139ad3c57c626}} 
+\index{AnalyticOrder@{AnalyticOrder}!withIcebergType@{withIcebergType}}
+\index{withIcebergType@{withIcebergType}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withIcebergType()}{withIcebergType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Iceberg\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structIcebergType}{Iceberg\+Type}} \&}]{iceberg\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes iceberg type and returns the current analytic order. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em iceberg\+Type} & iceberg type of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References set\+Iceberg\+Type().
+
+\mbox{\Hypertarget{classAnalyticOrder_acb6c4d19d7f2af6b003b5ee4b9b1ed2d}\label{classAnalyticOrder_acb6c4d19d7f2af6b003b5ee4b9b1ed2d}} 
+\index{AnalyticOrder@{AnalyticOrder}!withIndex@{withIndex}}
+\index{withIndex@{withIndex}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withIndex()}{withIndex()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes unique per-\/symbol index of this analytic order and returns it. 
+
+Note, that this method also changes \mbox{\hyperlink{classOrderBase_a7b05cf003bff0e042f15493e561f8e1d}{source}}, whose id occupies highest bits of index. Use \mbox{\hyperlink{classOrderBase_a3451d2eb5655cd3c902c78e3368ecfe3}{Order\+Base\+::set\+Source()}} after invocation of this method to set the desired value of source.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & unique per-\/symbol index of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Index().
+
+\mbox{\Hypertarget{classAnalyticOrder_aa448902ba9f07b7a0b88f06c433acdcc}\label{classAnalyticOrder_aa448902ba9f07b7a0b88f06c433acdcc}} 
+\index{AnalyticOrder@{AnalyticOrder}!withMarketMaker@{withMarketMaker}}
+\index{withMarketMaker@{withMarketMaker}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withMarketMaker()}{withMarketMaker()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Market\+Maker (\begin{DoxyParamCaption}\item[{std\+::string}]{market\+Maker }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes market maker or other aggregate identifier of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em market\+Maker} & The market maker or other aggregate identifier of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classAnalyticOrder_a2162127e1df3d9d7abc4792a41d1c5e6}\label{classAnalyticOrder_a2162127e1df3d9d7abc4792a41d1c5e6}} 
+\index{AnalyticOrder@{AnalyticOrder}!withOrderId@{withOrderId}}
+\index{withOrderId@{withOrderId}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withOrderId()}{withOrderId()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Order\+Id (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{order\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes order ID. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em order\+Id} & The order ID. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Order\+Id().
+
+\mbox{\Hypertarget{classAnalyticOrder_aee4d593b410fe71b7afcedba35ceca8b}\label{classAnalyticOrder_aee4d593b410fe71b7afcedba35ceca8b}} 
+\index{AnalyticOrder@{AnalyticOrder}!withOrderSide@{withOrderSide}}
+\index{withOrderSide@{withOrderSide}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withOrderSide()}{withOrderSide()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Order\+Side (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structSide}{Side}} \&}]{side }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes side of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em side} & The side of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Order\+Side().
+
+\mbox{\Hypertarget{classAnalyticOrder_a6f2eb1513407d9292c1d49ab209c799e}\label{classAnalyticOrder_a6f2eb1513407d9292c1d49ab209c799e}} 
+\index{AnalyticOrder@{AnalyticOrder}!withPrice@{withPrice}}
+\index{withPrice@{withPrice}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withPrice()}{withPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Price (\begin{DoxyParamCaption}\item[{double}]{price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes price of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & The price of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Price().
+
+\mbox{\Hypertarget{classAnalyticOrder_ae979ff9a631c78dbba7ea098c1d27a2c}\label{classAnalyticOrder_ae979ff9a631c78dbba7ea098c1d27a2c}} 
+\index{AnalyticOrder@{AnalyticOrder}!withScope@{withScope}}
+\index{withScope@{withScope}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withScope()}{withScope()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Scope (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structScope}{Scope}} \&}]{scope }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes scope of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em scope} & The scope of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Scope().
+
+\mbox{\Hypertarget{classAnalyticOrder_ad02488ecea95f25861f53fb5d0025107}\label{classAnalyticOrder_ad02488ecea95f25861f53fb5d0025107}} 
+\index{AnalyticOrder@{AnalyticOrder}!withSequence@{withSequence}}
+\index{withSequence@{withSequence}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withSequence()}{withSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \mbox{\hyperlink{classOrderBase_aa1eda2dddd2b512e54941f49d9754003}{sequence number}} of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classOrderBase_aa1eda2dddd2b512e54941f49d9754003}{Order\+Base\+::get\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+References Order\+::with\+Sequence().
+
+\mbox{\Hypertarget{classAnalyticOrder_ad612e2bcbd67b4d9abab1329312ef04b}\label{classAnalyticOrder_ad612e2bcbd67b4d9abab1329312ef04b}} 
+\index{AnalyticOrder@{AnalyticOrder}!withSize@{withSize}}
+\index{withSize@{withSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withSize()}{withSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Size (\begin{DoxyParamCaption}\item[{double}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes size of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Size().
+
+\mbox{\Hypertarget{classAnalyticOrder_a0dd73cd907e47f6853a696fbc9258eb2}\label{classAnalyticOrder_a0dd73cd907e47f6853a696fbc9258eb2}} 
+\index{AnalyticOrder@{AnalyticOrder}!withSource@{withSource}}
+\index{withSource@{withSource}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withSource()}{withSource()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Source (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classOrderSource}{Order\+Source}} \&}]{source }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s source and returns the current analytic order. 
+
+This method changes highest bits of the \mbox{\hyperlink{classOrderBase_a21bc36fb881577927015977bc5f71ec6}{index}} of this event.
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & source of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Source().
+
+\mbox{\Hypertarget{classAnalyticOrder_a402580a17ecfaad7ab533bb86e04d08f}\label{classAnalyticOrder_a402580a17ecfaad7ab533bb86e04d08f}} 
+\index{AnalyticOrder@{AnalyticOrder}!withTime@{withTime}}
+\index{withTime@{withTime}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withTime()}{withTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this analytic order and returns it. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Time().
+
+\mbox{\Hypertarget{classAnalyticOrder_a3a885f9f9699f411081c51702c59b1d9}\label{classAnalyticOrder_a3a885f9f9699f411081c51702c59b1d9}} 
+\index{AnalyticOrder@{AnalyticOrder}!withTimeNanoPart@{withTimeNanoPart}}
+\index{withTimeNanoPart@{withTimeNanoPart}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withTimeNanoPart()}{withTimeNanoPart()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds time part of this analytic order. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & microseconds and nanoseconds time part of this analytic order. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Time\+Nano\+Part().
+
+\mbox{\Hypertarget{classAnalyticOrder_aba2d8042490b98363936464e9b44a294}\label{classAnalyticOrder_aba2d8042490b98363936464e9b44a294}} 
+\index{AnalyticOrder@{AnalyticOrder}!withTimeNanos@{withTimeNanos}}
+\index{withTimeNanos@{withTimeNanos}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withTimeNanos()}{withTimeNanos()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Time\+Nanos (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Nanos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this analytic order and returns it. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nanos} & The time of this analytic order in nanoseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Time\+Nanos().
+
+\mbox{\Hypertarget{classAnalyticOrder_ac0b9aa03f5a30f9905104a65776b2055}\label{classAnalyticOrder_ac0b9aa03f5a30f9905104a65776b2055}} 
+\index{AnalyticOrder@{AnalyticOrder}!withTradeId@{withTradeId}}
+\index{withTradeId@{withTradeId}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withTradeId()}{withTradeId()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Trade\+Id (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{trade\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trade ID. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trade\+Id} & The trade ID. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Trade\+Id().
+
+\mbox{\Hypertarget{classAnalyticOrder_a2f078111443a924c997c7a8af7619469}\label{classAnalyticOrder_a2f078111443a924c997c7a8af7619469}} 
+\index{AnalyticOrder@{AnalyticOrder}!withTradePrice@{withTradePrice}}
+\index{withTradePrice@{withTradePrice}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withTradePrice()}{withTradePrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Trade\+Price (\begin{DoxyParamCaption}\item[{double}]{trade\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trade price. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trade\+Price} & The trade price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Trade\+Price().
+
+\mbox{\Hypertarget{classAnalyticOrder_a3e4789f4575a6a6dc25a521d84b8f0c8}\label{classAnalyticOrder_a3e4789f4575a6a6dc25a521d84b8f0c8}} 
+\index{AnalyticOrder@{AnalyticOrder}!withTradeSize@{withTradeSize}}
+\index{withTradeSize@{withTradeSize}!AnalyticOrder@{AnalyticOrder}}
+\doxyparagraph{\texorpdfstring{withTradeSize()}{withTradeSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classAnalyticOrder}{Analytic\+Order}}\& Analytic\+Order\+::with\+Trade\+Size (\begin{DoxyParamCaption}\item[{double}]{trade\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trade size. 
+
+Returns the current analytic order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em trade\+Size} & The trade size. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current analytic order. 
+\end{DoxyReturn}
+
+
+References Order\+::with\+Trade\+Size().
+

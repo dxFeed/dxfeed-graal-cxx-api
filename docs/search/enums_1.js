@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['role_0',['Role',['../d9/d00/struct_d_x_endpoint.html#a4257e04caaa1ff898a60ece339e02810',1,'DXEndpoint']]]
+  ['level_0',['Level',['../d4/d00/struct_logging.html#a7f6d028eac8c3c88801fb52c728cdcbd',1,'Logging']]]
 ];

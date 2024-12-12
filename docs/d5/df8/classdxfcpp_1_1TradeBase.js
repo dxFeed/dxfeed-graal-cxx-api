@@ -8,6 +8,7 @@ var classdxfcpp_1_1TradeBase =
     [ "getDayTurnover", "d5/df8/classdxfcpp_1_1TradeBase.html#ad7530dc14b38d8e4c86acd51f51a3c12", null ],
     [ "getDayVolume", "d5/df8/classdxfcpp_1_1TradeBase.html#a05dc10a230f3c6c733cb11a04b0ecf53", null ],
     [ "getExchangeCode", "d5/df8/classdxfcpp_1_1TradeBase.html#ab8069584ccd268a1670ebfcf8294dbbd", null ],
+    [ "getExchangeCodeString", "d5/df8/classdxfcpp_1_1TradeBase.html#aaa26e07694ac55e0f19d7a8033cfb9ed", null ],
     [ "getPrice", "d5/df8/classdxfcpp_1_1TradeBase.html#ab62ed854fb2de1e4b905575374029c4a", null ],
     [ "getSequence", "d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517", null ],
     [ "getSize", "d5/df8/classdxfcpp_1_1TradeBase.html#a9568e902c69285d548a005d778aadc6b", null ],

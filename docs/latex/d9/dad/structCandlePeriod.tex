@@ -1,0 +1,271 @@
+\hypertarget{structCandlePeriod}{}\doxysubsection{Candle\+Period Struct Reference}
+\label{structCandlePeriod}\index{CandlePeriod@{CandlePeriod}}
+
+
+Period attribute of \mbox{\hyperlink{structCandleSymbol}{Candle\+Symbol}} defines aggregation period of the candles.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Period.\+hpp$>$}
+
+Inheritance diagram for Candle\+Period\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d9/dad/structCandlePeriod}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structCandlePeriod_a53dbe11a74f3c615a78f4de4b5f7739b}{get\+Period\+Interval\+Millis}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns aggregation period in milliseconds as closely as possible. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structCandlePeriod_aa7b17bb53727e17da2d4ff3ccfb8ceb3}{change\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol) const override
+\begin{DoxyCompactList}\small\item\em Returns candle event symbol string with this aggregation period set. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{structCandlePeriod_a1e2e33ae5421ab04b022a50db2a4ad0a}{get\+Value}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns aggregation period value. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structCandleType}{Candle\+Type}} \& \mbox{\hyperlink{structCandlePeriod_ad3a01c476df66e8f88e0a92752c180a0}{get\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns aggregation period type. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{structCandlePeriod_af79df084a414944a3de776502dcff3b5}{to\+String}} () const \&
+\begin{DoxyCompactList}\small\item\em Returns string representation of this aggregation period. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} \mbox{\hyperlink{structCandlePeriod_a0364876e4a53e6ae705f556ee893fb8b}{parse}} (const dxfcpp\+::\+String\+Like\+Wrapper \&s)
+\begin{DoxyCompactList}\small\item\em Parses string representation of aggregation period into object. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} \mbox{\hyperlink{structCandlePeriod_a836135ef6c3d1046a0d312829731ba15}{value\+Of}} (double value, const \mbox{\hyperlink{structCandleType}{Candle\+Type}} \&type) noexcept
+\begin{DoxyCompactList}\small\item\em Returns candle period with the given value and type. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} \mbox{\hyperlink{structCandlePeriod_ad8f6706e2012684485aef1af01b33a77}{get\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns candle period of the given candle symbol string. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{structCandlePeriod_ac70aabaecf28bbd08053163f707c8275}{normalize\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol)
+\begin{DoxyCompactList}\small\item\em Returns candle symbol string with the normalized representation of the candle period attribute. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structCandlePeriod_a2934f6797a1c4aeb8ff49560370f0550}\label{structCandlePeriod_a2934f6797a1c4aeb8ff49560370f0550}} 
+static const \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} \mbox{\hyperlink{structCandlePeriod_a2934f6797a1c4aeb8ff49560370f0550}{TICK}} \{1, Candle\+Type\+::\+TICK\}
+\begin{DoxyCompactList}\small\item\em Tick aggregation where each candle represents an individual tick. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structCandlePeriod_a74fefa9d33ad566bcaaec6675b6825cf}\label{structCandlePeriod_a74fefa9d33ad566bcaaec6675b6825cf}} 
+static const \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} \mbox{\hyperlink{structCandlePeriod_a74fefa9d33ad566bcaaec6675b6825cf}{DAY}} \{1, Candle\+Type\+::\+DAY\}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{structDay}{Day}} aggregation where each candle represents a day. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structCandlePeriod_a53114c636dd5fbd432648c0ff089dd8b}\label{structCandlePeriod_a53114c636dd5fbd432648c0ff089dd8b}} 
+static const \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} \mbox{\hyperlink{structCandlePeriod_a53114c636dd5fbd432648c0ff089dd8b}{DEFAULT}} = \mbox{\hyperlink{structCandlePeriod_a2934f6797a1c4aeb8ff49560370f0550}{TICK}}
+\begin{DoxyCompactList}\small\item\em Default period is \mbox{\hyperlink{structCandlePeriod_a2934f6797a1c4aeb8ff49560370f0550}{Candle\+Period\+::\+TICK}}. \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{structCandlePeriod_a2875205da52d8568bdbe57b6a59cf154}{ATTRIBUTE\+\_\+\+KEY}} \{\}
+\begin{DoxyCompactList}\small\item\em The attribute key that is used to store the value of {\ttfamily \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}}} in a symbol string using methods of \mbox{\hyperlink{structMarketEventSymbols}{Market\+Event\+Symbols}} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Period attribute of \mbox{\hyperlink{structCandleSymbol}{Candle\+Symbol}} defines aggregation period of the candles. 
+
+Aggregation period is defined as pair of a \mbox{\hyperlink{structCandlePeriod_a1e2e33ae5421ab04b022a50db2a4ad0a}{value}} and \mbox{\hyperlink{structCandlePeriod_ad3a01c476df66e8f88e0a92752c180a0}{type}}.
+
+\doxysubparagraph*{Implementation details}
+
+This attribute is encoded in a symbol string with \mbox{\hyperlink{structMarketEventSymbols_a87a94614e292548132480d85a1dfbe9d}{Market\+Event\+Symbols.get\+Attribute\+String\+By\+Key}}, \mbox{\hyperlink{structMarketEventSymbols_ab4184832b9b58374117d61b1f8c94617}{change\+Attribute\+String\+By\+Key}}, and \mbox{\hyperlink{structMarketEventSymbols_ab0369d51b1181a4fb7ccb674923ddb9d}{remove\+Attribute\+String\+By\+Key}} methods. The key to use with these methods is available via \mbox{\hyperlink{structCandlePeriod_a2875205da52d8568bdbe57b6a59cf154}{Candle\+Period\+::\+ATTRIBUTE\+\_\+\+KEY}} constant. The value that this key shall be set to is equal to the corresponding \mbox{\hyperlink{structCandlePeriod_af79df084a414944a3de776502dcff3b5}{Candle\+Period\+::to\+String()}} \char`\"{}\+Candle\+Period.\+to\+String()\char`\"{} 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structCandlePeriod_aa7b17bb53727e17da2d4ff3ccfb8ceb3}\label{structCandlePeriod_aa7b17bb53727e17da2d4ff3ccfb8ceb3}} 
+\index{CandlePeriod@{CandlePeriod}!changeAttributeForSymbol@{changeAttributeForSymbol}}
+\index{changeAttributeForSymbol@{changeAttributeForSymbol}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{changeAttributeForSymbol()}{changeAttributeForSymbol()}}
+{\footnotesize\ttfamily std\+::string Candle\+Period\+::change\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Returns candle event symbol string with this aggregation period set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & original candle event symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle event symbol string with this aggregation period set. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structCandleSymbolAttribute_a965d1af360208c9f1733d47ac278bdad}{Candle\+Symbol\+Attribute}}.
+
+
+
+References ATTRIBUTE\+\_\+\+KEY, Market\+Event\+Symbols\+::change\+Attribute\+String\+By\+Key(), DEFAULT, Market\+Event\+Symbols\+::remove\+Attribute\+String\+By\+Key(), and to\+String().
+
+\mbox{\Hypertarget{structCandlePeriod_ad8f6706e2012684485aef1af01b33a77}\label{structCandlePeriod_ad8f6706e2012684485aef1af01b33a77}} 
+\index{CandlePeriod@{CandlePeriod}!getAttributeForSymbol@{getAttributeForSymbol}}
+\index{getAttributeForSymbol@{getAttributeForSymbol}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{getAttributeForSymbol()}{getAttributeForSymbol()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} Candle\+Period\+::get\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle period of the given candle symbol string. 
+
+The result is \mbox{\hyperlink{structCandlePeriod_a53114c636dd5fbd432648c0ff089dd8b}{Candle\+Period\+::\+DEFAULT}} if the symbol does not have candle period attribute.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle period of the given candle symbol string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structCandlePeriod_a53dbe11a74f3c615a78f4de4b5f7739b}\label{structCandlePeriod_a53dbe11a74f3c615a78f4de4b5f7739b}} 
+\index{CandlePeriod@{CandlePeriod}!getPeriodIntervalMillis@{getPeriodIntervalMillis}}
+\index{getPeriodIntervalMillis@{getPeriodIntervalMillis}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{getPeriodIntervalMillis()}{getPeriodIntervalMillis()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Candle\+Period\+::get\+Period\+Interval\+Millis (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns aggregation period in milliseconds as closely as possible. 
+
+Certain aggregation types like \mbox{\hyperlink{structCandleType_ab8170e814aa322766ea077e7dcd7e781}{SECOND}} and \mbox{\hyperlink{structCandleType_a2691cc240091a23dd83aa1de4d1b802b}{DAY}} span a specific number of milliseconds. \mbox{\hyperlink{structCandleType_a11b9390c342db5b8d2d8c17847c85880}{Candle\+Type\+::\+MONTH}}, \mbox{\hyperlink{structCandleType_aa39b745f4e42a37ef2a09caff9a9ebe1}{Candle\+Type\+::\+OPTEXP}} and \mbox{\hyperlink{structCandleType_afb593fcdd34322e4a858a1d4bf0f15e1}{Candle\+Type\+::\+YEAR}} are approximate. \mbox{\hyperlink{classCandle}{Candle}} period of \mbox{\hyperlink{structCandleType_a9b1b3884a43c821fb523bf37aec6ed48}{Candle\+Type\+::\+TICK}}, \mbox{\hyperlink{structCandleType_a098d111740846b69e69c8fd5d9f1c909}{Candle\+Type\+::\+VOLUME}}, \mbox{\hyperlink{structCandleType_a740fe9610a9f04c517e34ba0ebb6aca0}{Candle\+Type\+::\+PRICE}}, \mbox{\hyperlink{structCandleType_af4e5c164a1cc5209d2ec521ac8979818}{Candle\+Type\+::\+PRICE\+\_\+\+MOMENTUM}} and \mbox{\hyperlink{structCandleType_a1e8bb5d604e019c943c5af9cc2c6847f}{Candle\+Type\+::\+PRICE\+\_\+\+RENKO}} is not defined and this method returns {\ttfamily 0}. The result of this method is equal to {\ttfamily static\+\_\+cast$<$std\+::int64\+\_\+t$>$(this-\/$>$\mbox{\hyperlink{structCandlePeriod_ad3a01c476df66e8f88e0a92752c180a0}{get\+Type()}}.\mbox{\hyperlink{structCandlePeriod_a53dbe11a74f3c615a78f4de4b5f7739b}{get\+Period\+Interval\+Millis()}} $\ast$ this-\/$>$\mbox{\hyperlink{structCandlePeriod_a1e2e33ae5421ab04b022a50db2a4ad0a}{get\+Value()}})} \begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structCandleType_a27fd5004e3830b14c56fcb81b4146e68}{Candle\+Type\+::get\+Period\+Interval\+Millis()}} 
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+aggregation period in milliseconds. 
+\end{DoxyReturn}
+
+
+References Candle\+Type\+::get\+Period\+Interval\+Millis().
+
+\mbox{\Hypertarget{structCandlePeriod_ad3a01c476df66e8f88e0a92752c180a0}\label{structCandlePeriod_ad3a01c476df66e8f88e0a92752c180a0}} 
+\index{CandlePeriod@{CandlePeriod}!getType@{getType}}
+\index{getType@{getType}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structCandleType}{Candle\+Type}}\& Candle\+Period\+::get\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns aggregation period type. 
+
+\begin{DoxyReturn}{Returns}
+aggregation period type. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structCandlePeriod_a1e2e33ae5421ab04b022a50db2a4ad0a}\label{structCandlePeriod_a1e2e33ae5421ab04b022a50db2a4ad0a}} 
+\index{CandlePeriod@{CandlePeriod}!getValue@{getValue}}
+\index{getValue@{getValue}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{getValue()}{getValue()}}
+{\footnotesize\ttfamily double Candle\+Period\+::get\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns aggregation period value. 
+
+For example, the value of {\ttfamily 5} with the candle type of \mbox{\hyperlink{structCandleType_ab974d4262142377679bf1fac841cb993}{MINUTE}} represents {\ttfamily 5} minute aggregation period.
+
+\begin{DoxyReturn}{Returns}
+aggregation period value. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structCandlePeriod_ac70aabaecf28bbd08053163f707c8275}\label{structCandlePeriod_ac70aabaecf28bbd08053163f707c8275}} 
+\index{CandlePeriod@{CandlePeriod}!normalizeAttributeForSymbol@{normalizeAttributeForSymbol}}
+\index{normalizeAttributeForSymbol@{normalizeAttributeForSymbol}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{normalizeAttributeForSymbol()}{normalizeAttributeForSymbol()}}
+{\footnotesize\ttfamily static std\+::string Candle\+Period\+::normalize\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns candle symbol string with the normalized representation of the candle period attribute. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle symbol string with the normalized representation of the the candle period attribute. 
+\end{DoxyReturn}
+
+
+References ATTRIBUTE\+\_\+\+KEY, and Market\+Event\+Symbols\+::remove\+Attribute\+String\+By\+Key().
+
+\mbox{\Hypertarget{structCandlePeriod_a0364876e4a53e6ae705f556ee893fb8b}\label{structCandlePeriod_a0364876e4a53e6ae705f556ee893fb8b}} 
+\index{CandlePeriod@{CandlePeriod}!parse@{parse}}
+\index{parse@{parse}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} Candle\+Period\+::parse (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Parses string representation of aggregation period into object. 
+
+Any string that was returned by \mbox{\hyperlink{structCandlePeriod_af79df084a414944a3de776502dcff3b5}{Candle\+Period\+::to\+String()}} can be parsed. This method is flexible in the way candle types can be specified. See \mbox{\hyperlink{structCandleType_ab95804640039b4b2ec913ccfda4f6289}{Candle\+Type\+::parse()}} for details.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string representation of aggregation period. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The aggregation period. 
+\end{DoxyReturn}
+
+
+References DAY, Candle\+Type\+::\+DAY, TICK, Candle\+Type\+::\+TICK, and Candle\+Type\+::to\+String().
+
+\mbox{\Hypertarget{structCandlePeriod_af79df084a414944a3de776502dcff3b5}\label{structCandlePeriod_af79df084a414944a3de776502dcff3b5}} 
+\index{CandlePeriod@{CandlePeriod}!toString@{toString}}
+\index{toString@{toString}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily const std\+::string\& Candle\+Period\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns string representation of this aggregation period. 
+
+The string representation is composed of value and type string. For example, 5 minute aggregation is represented as {\ttfamily \char`\"{}5m\char`\"{}}. The value of {\ttfamily 1} is omitted in the string representation, so \mbox{\hyperlink{structCandlePeriod_a74fefa9d33ad566bcaaec6675b6825cf}{Candle\+Period\+::\+DAY}} (one day) is represented as {\ttfamily \char`\"{}d\char`\"{}}. This string representation can be converted back into object with \mbox{\hyperlink{structCandlePeriod_a0364876e4a53e6ae705f556ee893fb8b}{Candle\+Period\+::parse()}} method.
+
+\begin{DoxyReturn}{Returns}
+string representation of this aggregation period. 
+\end{DoxyReturn}
+
+
+References Candle\+Type\+::to\+String().
+
+
+
+Referenced by change\+Attribute\+For\+Symbol().
+
+\mbox{\Hypertarget{structCandlePeriod_a836135ef6c3d1046a0d312829731ba15}\label{structCandlePeriod_a836135ef6c3d1046a0d312829731ba15}} 
+\index{CandlePeriod@{CandlePeriod}!valueOf@{valueOf}}
+\index{valueOf@{valueOf}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{valueOf()}{valueOf()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} Candle\+Period\+::value\+Of (\begin{DoxyParamCaption}\item[{double}]{value,  }\item[{const \mbox{\hyperlink{structCandleType}{Candle\+Type}} \&}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle period with the given value and type. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & candle period value. \\
+\hline
+{\em type} & candle period type. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle period with the given value and type. 
+\end{DoxyReturn}
+
+
+References DAY, Candle\+Type\+::\+DAY, TICK, and Candle\+Type\+::\+TICK.
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{structCandlePeriod_a2875205da52d8568bdbe57b6a59cf154}\label{structCandlePeriod_a2875205da52d8568bdbe57b6a59cf154}} 
+\index{CandlePeriod@{CandlePeriod}!ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}}
+\index{ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}!CandlePeriod@{CandlePeriod}}
+\doxyparagraph{\texorpdfstring{ATTRIBUTE\_KEY}{ATTRIBUTE\_KEY}}
+{\footnotesize\ttfamily const std\+::string Candle\+Period\+::\+ATTRIBUTE\+\_\+\+KEY \{\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The attribute key that is used to store the value of {\ttfamily \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}}} in a symbol string using methods of \mbox{\hyperlink{structMarketEventSymbols}{Market\+Event\+Symbols}} class. 
+
+The value of this constant is an empty string, because this is the main attribute that every \mbox{\hyperlink{structCandleSymbol}{Candle\+Symbol}} must have. The value that this key shall be set to is equal to the corresponding \mbox{\hyperlink{structCandlePeriod_af79df084a414944a3de776502dcff3b5}{Candle\+Period\+::to\+String()}} 
+
+Referenced by change\+Attribute\+For\+Symbol(), and normalize\+Attribute\+For\+Symbol().
+

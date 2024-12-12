@@ -1,0 +1,54 @@
+\hypertarget{structSessionType}{}\doxysubsection{Session\+Type Struct Reference}
+\label{structSessionType}\index{SessionType@{SessionType}}
+
+
+Defines type of session -\/ what kind of trading activity is allowed (if any), what rules are used, what impact on daily trading statistics it has, etc.  
+
+
+
+
+{\ttfamily \#include $<$Session\+Type.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{structSessionType_ab71ae4ac80c460d53a7626169c2656fa}{is\+Trading}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if trading activity is allowed for this type of session. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSessionType_a54a07823a8e290b498ae61a6896fe7b9}\label{structSessionType_a54a07823a8e290b498ae61a6896fe7b9}} 
+static const \mbox{\hyperlink{structSessionType}{Session\+Type}} \mbox{\hyperlink{structSessionType_a54a07823a8e290b498ae61a6896fe7b9}{NO\+\_\+\+TRADING}} \{Session\+Type\+Enum\+::\+NO\+\_\+\+TRADING, \char`\"{}NO\+\_\+\+TRADING\char`\"{}, false\}
+\begin{DoxyCompactList}\small\item\em Non-\/trading session type is used to mark periods of time during which trading is not allowed. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionType_a218d9ab5ed4f897e3ff3406b57a2991b}\label{structSessionType_a218d9ab5ed4f897e3ff3406b57a2991b}} 
+static const \mbox{\hyperlink{structSessionType}{Session\+Type}} \mbox{\hyperlink{structSessionType_a218d9ab5ed4f897e3ff3406b57a2991b}{PRE\+\_\+\+MARKET}} \{Session\+Type\+Enum\+::\+PRE\+\_\+\+MARKET, \char`\"{}PRE\+\_\+\+MARKET\char`\"{}, true\}
+\begin{DoxyCompactList}\small\item\em Pre-\/market session type marks extended trading session before regular trading hours. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionType_a4cf5e16f9081aeebe3863cf54d919ce5}\label{structSessionType_a4cf5e16f9081aeebe3863cf54d919ce5}} 
+static const \mbox{\hyperlink{structSessionType}{Session\+Type}} \mbox{\hyperlink{structSessionType_a4cf5e16f9081aeebe3863cf54d919ce5}{REGULAR}} \{Session\+Type\+Enum\+::\+REGULAR, \char`\"{}REGULAR\char`\"{}, true\}
+\begin{DoxyCompactList}\small\item\em Regular session type marks regular trading hours session. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionType_a180e6440f87435b7b73527df878b70bf}\label{structSessionType_a180e6440f87435b7b73527df878b70bf}} 
+static const \mbox{\hyperlink{structSessionType}{Session\+Type}} \mbox{\hyperlink{structSessionType_a180e6440f87435b7b73527df878b70bf}{AFTER\+\_\+\+MARKET}} \{Session\+Type\+Enum\+::\+AFTER\+\_\+\+MARKET, \char`\"{}AFTER\+\_\+\+MARKET\char`\"{}, true\}
+\begin{DoxyCompactList}\small\item\em After-\/market session type marks extended trading session after regular trading hours. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Defines type of session -\/ what kind of trading activity is allowed (if any), what rules are used, what impact on daily trading statistics it has, etc. 
+
+The \mbox{\hyperlink{structSessionType_a54a07823a8e290b498ae61a6896fe7b9}{Session\+Type\+::\+NO\+\_\+\+TRADING}} session type is used for non-\/trading sessions. 
+
+Some exchanges support all session types defined here, others do not. 
+
+Some sessions may have zero duration -\/ e.\+g. indices that post value once a day. Such sessions can be of any appropriate type, trading or non-\/trading. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structSessionType_ab71ae4ac80c460d53a7626169c2656fa}\label{structSessionType_ab71ae4ac80c460d53a7626169c2656fa}} 
+\index{SessionType@{SessionType}!isTrading@{isTrading}}
+\index{isTrading@{isTrading}!SessionType@{SessionType}}
+\doxyparagraph{\texorpdfstring{isTrading()}{isTrading()}}
+{\footnotesize\ttfamily bool Session\+Type\+::is\+Trading (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if trading activity is allowed for this type of session. 
+
+Some sessions may have zero duration -\/ e.\+g. indices that post value once a day. Such sessions can be of any appropriate type, trading or non-\/trading. 

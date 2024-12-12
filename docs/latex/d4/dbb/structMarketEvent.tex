@@ -1,0 +1,174 @@
+\hypertarget{structMarketEvent}{}\doxysubsection{Market\+Event Struct Reference}
+\label{structMarketEvent}\index{MarketEvent@{MarketEvent}}
+
+
+Base class for all market events.  
+
+
+
+
+{\ttfamily \#include $<$Market\+Event.\+hpp$>$}
+
+Inheritance diagram for Market\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=12.000000cm]{d4/dbb/structMarketEvent}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structMarketEvent_a2f52c1b23ed15da34ae1c9c92820bb47}\label{structMarketEvent_a2f52c1b23ed15da34ae1c9c92820bb47}} 
+using \mbox{\hyperlink{structMarketEvent_a2f52c1b23ed15da34ae1c9c92820bb47}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structMarketEvent}{Market\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structMarketEvent}{Market\+Event}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const std\+::string \& \mbox{\hyperlink{structMarketEvent_ab45c1e474a01b8641bd97986930f531d}{get\+Event\+Symbol}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{structMarketEvent_a4af83f9c8ebc90cd85176591870ce9eb}{get\+Event\+Symbol\+Opt}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structMarketEvent_ae3358224a62a18b5e4ad9bad053dc8ed}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes symbol of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structMarketEvent_a9c8e8dd0fe8c615d776d6e1dc781be8d}{get\+Event\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structMarketEvent_a084532c668491c224eeb498bb29e2cbd}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structMarketEvent_afb6b53469aa08abc5f7d46f420a978d2}{Market\+Event}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Base class for all market events. 
+
+All market events are POCO that extend this class. Market event classes are simple beans with setter and getter methods for their properties and minimal business logic. All market events have {\ttfamily event\+Symbol} property that is defined by this class. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structMarketEvent_afb6b53469aa08abc5f7d46f420a978d2}\label{structMarketEvent_afb6b53469aa08abc5f7d46f420a978d2}} 
+\index{MarketEvent@{MarketEvent}!MarketEvent@{MarketEvent}}
+\index{MarketEvent@{MarketEvent}!MarketEvent@{MarketEvent}}
+\doxyparagraph{\texorpdfstring{MarketEvent()}{MarketEvent()}}
+{\footnotesize\ttfamily Market\+Event\+::\+Market\+Event (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [protected]}, {\ttfamily [noexcept]}}
+
+
+
+Protected constructor for concrete implementation classes that initializes {\ttfamily event\+Symbol} property. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by Greeks\+::\+Greeks(), Option\+Sale\+::\+Option\+Sale(), Profile\+::\+Profile(), Series\+::\+Series(), Summary\+::\+Summary(), Theo\+Price\+::\+Theo\+Price(), Time\+And\+Sale\+::\+Time\+And\+Sale(), Trade\+Base\+::\+Trade\+Base(), and Underlying\+::\+Underlying().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structMarketEvent_ab45c1e474a01b8641bd97986930f531d}\label{structMarketEvent_ab45c1e474a01b8641bd97986930f531d}} 
+\index{MarketEvent@{MarketEvent}!getEventSymbol@{getEventSymbol}}
+\index{getEventSymbol@{getEventSymbol}!MarketEvent@{MarketEvent}}
+\doxyparagraph{\texorpdfstring{getEventSymbol()}{getEventSymbol()}}
+{\footnotesize\ttfamily const std\+::string\& Market\+Event\+::get\+Event\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns symbol of this event. 
+
+\begin{DoxyReturn}{Returns}
+symbol of this event or dxfcpp\+::\+String\+::\+NUL ({\ttfamily std\+::string\{\char`\"{}$<$null$>$\char`\"{}\}}) 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventTypeWithSymbol_a1ab6590a5835f45ef7d9779cd20bfe8f}{Event\+Type\+With\+Symbol$<$ std\+::string $>$}}.
+
+\mbox{\Hypertarget{structMarketEvent_a4af83f9c8ebc90cd85176591870ce9eb}\label{structMarketEvent_a4af83f9c8ebc90cd85176591870ce9eb}} 
+\index{MarketEvent@{MarketEvent}!getEventSymbolOpt@{getEventSymbolOpt}}
+\index{getEventSymbolOpt@{getEventSymbolOpt}!MarketEvent@{MarketEvent}}
+\doxyparagraph{\texorpdfstring{getEventSymbolOpt()}{getEventSymbolOpt()}}
+{\footnotesize\ttfamily const std\+::optional$<$std\+::string$>$\& Market\+Event\+::get\+Event\+Symbol\+Opt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns symbol of this event. 
+
+\begin{DoxyReturn}{Returns}
+symbol of this event or {\ttfamily std\+::nullopt}. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventTypeWithSymbol_a55953df4e0de30ce7761ede1883741a5}{Event\+Type\+With\+Symbol$<$ std\+::string $>$}}.
+
+\mbox{\Hypertarget{structMarketEvent_a9c8e8dd0fe8c615d776d6e1dc781be8d}\label{structMarketEvent_a9c8e8dd0fe8c615d776d6e1dc781be8d}} 
+\index{MarketEvent@{MarketEvent}!getEventTime@{getEventTime}}
+\index{getEventTime@{getEventTime}!MarketEvent@{MarketEvent}}
+\doxyparagraph{\texorpdfstring{getEventTime()}{getEventTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Market\+Event\+::get\+Event\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time when event was created or zero when time is not available. 
+
+This event time is available only when the corresponding \mbox{\hyperlink{structDXEndpoint}{DXEndpoint}} is created with \mbox{\hyperlink{structDXEndpoint_a59bc3053ef198595c2ed5a450ba5a2a4}{DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY}} and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from \mbox{\hyperlink{structOnDemandService}{On\+Demand\+Service}}. Events that are coming from a network connections do not have an embedded event time information and this method will return zero for them, meaning that event was received just now.
+
+Default implementation returns 0.
+
+\begin{DoxyReturn}{Returns}
+The difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC or zero when time is not available. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a1c9c34884f4fcce70579a059252bdf1a}{Event\+Type}}.
+
+\mbox{\Hypertarget{structMarketEvent_ae3358224a62a18b5e4ad9bad053dc8ed}\label{structMarketEvent_ae3358224a62a18b5e4ad9bad053dc8ed}} 
+\index{MarketEvent@{MarketEvent}!setEventSymbol@{setEventSymbol}}
+\index{setEventSymbol@{setEventSymbol}!MarketEvent@{MarketEvent}}
+\doxyparagraph{\texorpdfstring{setEventSymbol()}{setEventSymbol()}}
+{\footnotesize\ttfamily void Market\+Event\+::set\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes symbol of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structEventTypeWithSymbol_a8ea9877b148603252021aad739c7e524}{Event\+Type\+With\+Symbol$<$ std\+::string $>$}}.
+
+
+
+Referenced by Option\+Sale\+::with\+Event\+Symbol(), and Series\+::with\+Event\+Symbol().
+
+\mbox{\Hypertarget{structMarketEvent_a084532c668491c224eeb498bb29e2cbd}\label{structMarketEvent_a084532c668491c224eeb498bb29e2cbd}} 
+\index{MarketEvent@{MarketEvent}!setEventTime@{setEventTime}}
+\index{setEventTime@{setEventTime}!MarketEvent@{MarketEvent}}
+\doxyparagraph{\texorpdfstring{setEventTime()}{setEventTime()}}
+{\footnotesize\ttfamily void Market\+Event\+::set\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event creation time. 
+
+Default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_ad5ae35b7dac44e2f0df5fa44c0830ad9}{Event\+Type}}.
+
+
+
+Referenced by Option\+Sale\+::with\+Event\+Time(), Order\+::with\+Event\+Time(), Quote\+::with\+Event\+Time(), Spread\+Order\+::with\+Event\+Time(), and Series\+::with\+Event\+Time().
+

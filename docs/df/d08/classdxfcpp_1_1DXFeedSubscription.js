@@ -1,5 +1,7 @@
 var classdxfcpp_1_1DXFeedSubscription =
 [
+    [ "Ptr", "df/d08/classdxfcpp_1_1DXFeedSubscription.html#aac050e687c066f7e76b48971798c3274", null ],
+    [ "Unique", "df/d08/classdxfcpp_1_1DXFeedSubscription.html#a07e7721da188474fb189e34eaeec3182", null ],
     [ "addEventListener", "df/d08/classdxfcpp_1_1DXFeedSubscription.html#a3cbf630dbc54ce3be50412392102f993", null ],
     [ "addEventListener", "df/d08/classdxfcpp_1_1DXFeedSubscription.html#a29f66305828ece7a72b657472359a528", null ],
     [ "addSymbols", "df/d08/classdxfcpp_1_1DXFeedSubscription.html#a4f060880d62dbfea3cd81636bb442e1d", null ],

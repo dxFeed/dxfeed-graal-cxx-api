@@ -1,0 +1,25 @@
+\hypertarget{structFilteredSubscriptionSymbol}{}\doxysubsection{Filtered\+Subscription\+Symbol Struct Reference}
+\label{structFilteredSubscriptionSymbol}\index{FilteredSubscriptionSymbol@{FilteredSubscriptionSymbol}}
+
+
+This marker interface marks subscription symbol classes (like \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol}{Time\+Series\+Subscription\+Symbol}}) that attach \char`\"{}filters\char`\"{} to the actual symbols.  
+
+
+
+
+{\ttfamily \#include $<$Filtered\+Subscription\+Symbol.\+hpp$>$}
+
+Inheritance diagram for Filtered\+Subscription\+Symbol\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d7/dc8/structFilteredSubscriptionSymbol}
+\end{center}
+\end{figure}
+
+
+\doxysubsubsection{Detailed Description}
+This marker interface marks subscription symbol classes (like \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol}{Time\+Series\+Subscription\+Symbol}}) that attach \char`\"{}filters\char`\"{} to the actual symbols. 
+
+Filtered subscription symbols implement their {\ttfamily operator ==} and {\ttfamily std\+::hash$<$$>$} based on their symbol only, without considering their \char`\"{}filter\char`\"{} part (for example, a \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol}{Time\+Series\+Subscription\+Symbol}} has a \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a7ea676e77bdea236aa088925ce8a3c93}{from\+Time}} filter on a time range of events).
+
+\mbox{\hyperlink{classDXFeedSubscription}{DXFeed\+Subscription}} has the following behavior for filtered symbols. There can be only one active filter per symbol. Adding new filtered symbol with the same symbol but different filter removes the old one from subscription, adds the new one, and {\itshape notifies} Observable\+Subscription\+Change\+Listener {\itshape about this subscription change}. The later is a special behaviour for filtered subscription symbols, because on other types of symbols (like \mbox{\hyperlink{structStringSymbol}{String\+Symbol}}, for example) there is no notification when replacing one symbol with the other that is \char`\"{}equal\char`\"{} to the first one. 

@@ -1,0 +1,651 @@
+\hypertarget{classTheoPrice}{}\doxysubsection{Theo\+Price Class Reference}
+\label{classTheoPrice}\index{TheoPrice@{TheoPrice}}
+
+
+Theo price is a snapshot of the theoretical option price computation that is periodically performed by \href{http://www.devexperts.com/en/products/price.html}{\texttt{ dx\+Price}} model-\/free computation.  
+
+
+
+
+{\ttfamily \#include $<$Theo\+Price.\+hpp$>$}
+
+Inheritance diagram for Theo\+Price\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.045045cm]{d2/d88/classTheoPrice}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTheoPrice_a48b6e9c6c845c6958e16c1cb1ab8d0ea}\label{classTheoPrice_a48b6e9c6c845c6958e16c1cb1ab8d0ea}} 
+using \mbox{\hyperlink{classTheoPrice_a48b6e9c6c845c6958e16c1cb1ab8d0ea}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTheoPrice}{Theo\+Price}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classTheoPrice}{Theo\+Price}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTheoPrice_a5a5ff926e9b3b0b62172cf7f6674d1d7}\label{classTheoPrice_a5a5ff926e9b3b0b62172cf7f6674d1d7}} 
+using \mbox{\hyperlink{classTheoPrice_a5a5ff926e9b3b0b62172cf7f6674d1d7}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classTheoPrice}{Theo\+Price}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classTheoPrice}{Theo\+Price}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classTheoPrice_aa4e4101ed4ba8a07d2703c6d28774052}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTheoPrice_ab362a5017a9421813f96593f1e07b34b}\label{classTheoPrice_ab362a5017a9421813f96593f1e07b34b}} 
+\mbox{\hyperlink{classTheoPrice_ab362a5017a9421813f96593f1e07b34b}{Theo\+Price}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new theoprice event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTheoPrice_ad823a54171d036be0366905fbc8f0a1a}{Theo\+Price}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new theoprice event with the specified event symbol. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{classTheoPrice_a32eaebb3b5565a9323de363ff3b36e03}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classTheoPrice_a395c746a2bf5523b2d66c72a1fc2feab}{get\+Event\+Flags}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classTheoPrice_a480fb599df1c2db60f387b61ce373df1}{get\+Event\+Flags\+Mask}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_a2268fe83a4685ee9642b0ceb03a3b15a}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_aad35985dcbce875f06e06e1135e0d91b}{set\+Event\+Flags}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classTheoPrice_a3ce75d4942ba13a4645bdf234c945d56}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_ad41f2200ff600aad64503366393ffb67}{set\+Index}} (std\+::int64\+\_\+t index) override
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classTheoPrice_a558ade41de4e5030d761a667fe495def}{get\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_a84340c87338fcf94d14cbf2b2dd21fec}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classTheoPrice_ada2f46621a1cb674bd10c8f42275f432}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the sequence number of this event to distinguish events that have the same time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_a381106e310ec24f37488093198512131}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes sequence number of this event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTheoPrice_a400b34292e5209932021ea22acc8fdb4}{get\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns theoretical option price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_a1a2ee577d72a26e6d805d6b12fdad2cf}{set\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes theoretical option price. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTheoPrice_acffe1f15604e06c3d2362023d4412442}{get\+Underlying\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns underlying price at the time of theo price computation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_a277df49bb6a253c68b37c556677fd5c6}{set\+Underlying\+Price}} (double underlying\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes underlying price at the time of theo price computation. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTheoPrice_ae67c036b1630017da4b3abeb84c2ad3a}{get\+Delta}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns delta of the theoretical price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_a97fb03c7dc8d42ee4587c51e61c3ebfb}{set\+Delta}} (double delta) noexcept
+\begin{DoxyCompactList}\small\item\em Changes delta of the theoretical price. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTheoPrice_a43056137e9ee2ed4e8d937b8978e1b4b}{get\+Gamma}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns gamma of the theoretical price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_a148fd057efb48e9866961e9fff23ff22}{set\+Gamma}} (double gamma) noexcept
+\begin{DoxyCompactList}\small\item\em Changes gamma of the theoretical price. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTheoPrice_aa3c8368d34c77771d8451bd7d2c51d6f}{get\+Dividend}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns implied simple dividend return of the corresponding option series. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_ab69c5d4a00953932afa26b93771fbb21}{set\+Dividend}} (double dividend) noexcept
+\begin{DoxyCompactList}\small\item\em Changes implied simple dividend return of the corresponding option series. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTheoPrice_afec0fbd94fa4be4f125807281049a54c}{get\+Interest}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns implied simple interest return of the corresponding option series. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTheoPrice_a0c6eeaa37c489a3462965393ce89e0e8}{set\+Interest}} (double interest) noexcept
+\begin{DoxyCompactList}\small\item\em Changes implied simple interest return of the corresponding option series. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classTheoPrice_a7688718de97d2529cea3177f13c457f1}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classTheoPrice_a5fd84d0633d58de139e78fcb81b7e0ef}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classTheoPrice_aeef377e33797473ecf4e3fb7f1f1c8ce}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTheoPrice_acc3f09f80aa50266de98ada31a914385}\label{classTheoPrice_acc3f09f80aa50266de98ada31a914385}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classTheoPrice_acc3f09f80aa50266de98ada31a914385}{TYPE}} = Event\+Type\+Enum\+::\+THEO\+\_\+\+PRICE
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classTheoPrice_a68fb7aefe40dbc7dc49d602bbdff11a9}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+Theo price is a snapshot of the theoretical option price computation that is periodically performed by \href{http://www.devexperts.com/en/products/price.html}{\texttt{ dx\+Price}} model-\/free computation. 
+
+It represents the most recent information that is available about the corresponding values at any given moment of time. The values include first and second order derivative of the price curve by price, so that the real-\/time theoretical option price can be estimated on real-\/time changes of the underlying price in the vicinity.
+
+\doxysubparagraph*{\label{_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+Some \mbox{\hyperlink{classTheoPrice}{Theo\+Price}} sources provide a consistent view of the set of known \mbox{\hyperlink{classTheoPrice}{Theo\+Price}}. The corresponding information is carried in event\+Flags property. The logic behind this property is detailed in \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}} class documentation. Multiple event sources for the same symbol are not supported for \mbox{\hyperlink{classTheoPrice}{Theo\+Price}}, thus source property is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}}.
+
+Time\+Series\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list current of time-\/series events order by their time.
+
+\doxysubparagraph*{Publishing \mbox{\hyperlink{classTheoPrice}{Theo\+Price}}}
+
+Publishing of \mbox{\hyperlink{classTheoPrice}{Theo\+Price}} events follows the general rules explained in \mbox{\hyperlink{structTimeSeriesEvent}{Time\+Series\+Event}} class documentation.
+
+\doxysubparagraph*{Implementation details}
+
+This event is implemented on top of QDS records {\ttfamily \mbox{\hyperlink{classTheoPrice}{Theo\+Price}}}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTheoPrice_ad823a54171d036be0366905fbc8f0a1a}\label{classTheoPrice_ad823a54171d036be0366905fbc8f0a1a}} 
+\index{TheoPrice@{TheoPrice}!TheoPrice@{TheoPrice}}
+\index{TheoPrice@{TheoPrice}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{TheoPrice()}{TheoPrice()}}
+{\footnotesize\ttfamily Theo\+Price\+::\+Theo\+Price (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new theoprice event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Market\+Event\+::\+Market\+Event().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTheoPrice_aeef377e33797473ecf4e3fb7f1f1c8ce}\label{classTheoPrice_aeef377e33797473ecf4e3fb7f1f1c8ce}} 
+\index{TheoPrice@{TheoPrice}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Theo\+Price\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTheoPrice_a5fd84d0633d58de139e78fcb81b7e0ef}\label{classTheoPrice_a5fd84d0633d58de139e78fcb81b7e0ef}} 
+\index{TheoPrice@{TheoPrice}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTheoPrice}{Theo\+Price}} $>$ Theo\+Price\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classTheoPrice_ae67c036b1630017da4b3abeb84c2ad3a}\label{classTheoPrice_ae67c036b1630017da4b3abeb84c2ad3a}} 
+\index{TheoPrice@{TheoPrice}!getDelta@{getDelta}}
+\index{getDelta@{getDelta}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getDelta()}{getDelta()}}
+{\footnotesize\ttfamily double Theo\+Price\+::get\+Delta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns delta of the theoretical price. 
+
+Delta is the first derivative of the theoretical price by the underlying price.
+
+\begin{DoxyReturn}{Returns}
+delta of the theoretical price. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTheoPrice_aa3c8368d34c77771d8451bd7d2c51d6f}\label{classTheoPrice_aa3c8368d34c77771d8451bd7d2c51d6f}} 
+\index{TheoPrice@{TheoPrice}!getDividend@{getDividend}}
+\index{getDividend@{getDividend}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getDividend()}{getDividend()}}
+{\footnotesize\ttfamily double Theo\+Price\+::get\+Dividend (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied simple dividend return of the corresponding option series. 
+
+\begin{DoxyReturn}{Returns}
+implied simple dividend return of the corresponding option series. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTheoPrice_a395c746a2bf5523b2d66c72a1fc2feab}\label{classTheoPrice_a395c746a2bf5523b2d66c72a1fc2feab}} 
+\index{TheoPrice@{TheoPrice}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Theo\+Price\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classTheoPrice_a480fb599df1c2db60f387b61ce373df1}\label{classTheoPrice_a480fb599df1c2db60f387b61ce373df1}} 
+\index{TheoPrice@{TheoPrice}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} Theo\+Price\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a01ae5fda2a1ada2279c541f821a03ada}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classTheoPrice_a43056137e9ee2ed4e8d937b8978e1b4b}\label{classTheoPrice_a43056137e9ee2ed4e8d937b8978e1b4b}} 
+\index{TheoPrice@{TheoPrice}!getGamma@{getGamma}}
+\index{getGamma@{getGamma}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getGamma()}{getGamma()}}
+{\footnotesize\ttfamily double Theo\+Price\+::get\+Gamma (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns gamma of the theoretical price. 
+
+Gamma is the second derivative of the theoretical price by the underlying price.
+
+\begin{DoxyReturn}{Returns}
+gamma of the theoretical price. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTheoPrice_a3ce75d4942ba13a4645bdf234c945d56}\label{classTheoPrice_a3ce75d4942ba13a4645bdf234c945d56}} 
+\index{TheoPrice@{TheoPrice}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Theo\+Price\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+The index is composed of time and sequence. Changing either time or sequence changes event index.
+
+\begin{DoxyReturn}{Returns}
+unique index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a4310a26785d5142efba9d7c0094125bc}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classTheoPrice_afec0fbd94fa4be4f125807281049a54c}\label{classTheoPrice_afec0fbd94fa4be4f125807281049a54c}} 
+\index{TheoPrice@{TheoPrice}!getInterest@{getInterest}}
+\index{getInterest@{getInterest}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getInterest()}{getInterest()}}
+{\footnotesize\ttfamily double Theo\+Price\+::get\+Interest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied simple interest return of the corresponding option series. 
+
+\begin{DoxyReturn}{Returns}
+implied simple interest return of the corresponding option series. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTheoPrice_a400b34292e5209932021ea22acc8fdb4}\label{classTheoPrice_a400b34292e5209932021ea22acc8fdb4}} 
+\index{TheoPrice@{TheoPrice}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily double Theo\+Price\+::get\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns theoretical option price. 
+
+\begin{DoxyReturn}{Returns}
+theoretical option price. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTheoPrice_ada2f46621a1cb674bd10c8f42275f432}\label{classTheoPrice_ada2f46621a1cb674bd10c8f42275f432}} 
+\index{TheoPrice@{TheoPrice}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Theo\+Price\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the sequence number of this event to distinguish events that have the same time. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \+::\+MAX\+\_\+\+SEQUENCE.
+
+\begin{DoxyReturn}{Returns}
+The sequence number of this event 
+\end{DoxyReturn}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+
+
+Referenced by set\+Time().
+
+\mbox{\Hypertarget{classTheoPrice_a32eaebb3b5565a9323de363ff3b36e03}\label{classTheoPrice_a32eaebb3b5565a9323de363ff3b36e03}} 
+\index{TheoPrice@{TheoPrice}!getSource@{getSource}}
+\index{getSource@{getSource}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}}\& Theo\+Price\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source of this event. 
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a54d06fa64c5f66ed78b328f4c36a633b}{Indexed\+Event}}.
+
+
+
+References Indexed\+Event\+Source\+::\+DEFAULT.
+
+\mbox{\Hypertarget{classTheoPrice_a558ade41de4e5030d761a667fe495def}\label{classTheoPrice_a558ade41de4e5030d761a667fe495def}} 
+\index{TheoPrice@{TheoPrice}!getTime@{getTime}}
+\index{getTime@{getTime}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Theo\+Price\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns timestamp of the event in milliseconds. 
+
+\begin{DoxyReturn}{Returns}
+timestamp of the event in milliseconds 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structTimeSeriesEvent_a9d2ae41520f33140a6e823ae650e216a}{Time\+Series\+Event}}.
+
+\mbox{\Hypertarget{classTheoPrice_acffe1f15604e06c3d2362023d4412442}\label{classTheoPrice_acffe1f15604e06c3d2362023d4412442}} 
+\index{TheoPrice@{TheoPrice}!getUnderlyingPrice@{getUnderlyingPrice}}
+\index{getUnderlyingPrice@{getUnderlyingPrice}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{getUnderlyingPrice()}{getUnderlyingPrice()}}
+{\footnotesize\ttfamily double Theo\+Price\+::get\+Underlying\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns underlying price at the time of theo price computation. 
+
+\begin{DoxyReturn}{Returns}
+underlying price at the time of theo price computation. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTheoPrice_a97fb03c7dc8d42ee4587c51e61c3ebfb}\label{classTheoPrice_a97fb03c7dc8d42ee4587c51e61c3ebfb}} 
+\index{TheoPrice@{TheoPrice}!setDelta@{setDelta}}
+\index{setDelta@{setDelta}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setDelta()}{setDelta()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Delta (\begin{DoxyParamCaption}\item[{double}]{delta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes delta of the theoretical price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta} & delta of the theoretical price. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTheoPrice_ab69c5d4a00953932afa26b93771fbb21}\label{classTheoPrice_ab69c5d4a00953932afa26b93771fbb21}} 
+\index{TheoPrice@{TheoPrice}!setDividend@{setDividend}}
+\index{setDividend@{setDividend}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setDividend()}{setDividend()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Dividend (\begin{DoxyParamCaption}\item[{double}]{dividend }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied simple dividend return of the corresponding option series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dividend} & implied simple dividend return of the corresponding option series. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTheoPrice_aad35985dcbce875f06e06e1135e0d91b}\label{classTheoPrice_aad35985dcbce875f06e06e1135e0d91b}} 
+\index{TheoPrice@{TheoPrice}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_affbf8ba9b25153efb7201800d9c8b182}{Indexed\+Event}}.
+
+
+
+References Event\+Flags\+Mask\+::get\+Mask().
+
+\mbox{\Hypertarget{classTheoPrice_a2268fe83a4685ee9642b0ceb03a3b15a}\label{classTheoPrice_a2268fe83a4685ee9642b0ceb03a3b15a}} 
+\index{TheoPrice@{TheoPrice}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_aefd0ab36275fc9adf6f7d57c2833c200}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classTheoPrice_a148fd057efb48e9866961e9fff23ff22}\label{classTheoPrice_a148fd057efb48e9866961e9fff23ff22}} 
+\index{TheoPrice@{TheoPrice}!setGamma@{setGamma}}
+\index{setGamma@{setGamma}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setGamma()}{setGamma()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Gamma (\begin{DoxyParamCaption}\item[{double}]{gamma }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes gamma of the theoretical price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamma} & gamma of the theoretical price. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTheoPrice_ad41f2200ff600aad64503366393ffb67}\label{classTheoPrice_ad41f2200ff600aad64503366393ffb67}} 
+\index{TheoPrice@{TheoPrice}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+The index is composed of time and sequence and invocation of this method changes time and sequence. {\bfseries{Do not use this method directly.}} Change time and/or sequence.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the event index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Index() 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a9e8731cb11daf84a0eb17fb570af9684}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classTheoPrice_a0c6eeaa37c489a3462965393ce89e0e8}\label{classTheoPrice_a0c6eeaa37c489a3462965393ce89e0e8}} 
+\index{TheoPrice@{TheoPrice}!setInterest@{setInterest}}
+\index{setInterest@{setInterest}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setInterest()}{setInterest()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Interest (\begin{DoxyParamCaption}\item[{double}]{interest }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied simple interest return of the corresponding option series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em interest} & implied simple interest return of the corresponding option series. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTheoPrice_a1a2ee577d72a26e6d805d6b12fdad2cf}\label{classTheoPrice_a1a2ee577d72a26e6d805d6b12fdad2cf}} 
+\index{TheoPrice@{TheoPrice}!setPrice@{setPrice}}
+\index{setPrice@{setPrice}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setPrice()}{setPrice()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Price (\begin{DoxyParamCaption}\item[{double}]{price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes theoretical option price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & theoretical option price. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTheoPrice_a381106e310ec24f37488093198512131}\label{classTheoPrice_a381106e310ec24f37488093198512131}} 
+\index{TheoPrice@{TheoPrice}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes sequence number of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Sequence() 
+\end{DoxySeeAlso}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+\mbox{\Hypertarget{classTheoPrice_a84340c87338fcf94d14cbf2b2dd21fec}\label{classTheoPrice_a84340c87338fcf94d14cbf2b2dd21fec}} 
+\index{TheoPrice@{TheoPrice}!setTime@{setTime}}
+\index{setTime@{setTime}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes timestamp of the event in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & timestamp of the event in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Time() 
+\end{DoxySeeAlso}
+
+
+References get\+Sequence().
+
+\mbox{\Hypertarget{classTheoPrice_a277df49bb6a253c68b37c556677fd5c6}\label{classTheoPrice_a277df49bb6a253c68b37c556677fd5c6}} 
+\index{TheoPrice@{TheoPrice}!setUnderlyingPrice@{setUnderlyingPrice}}
+\index{setUnderlyingPrice@{setUnderlyingPrice}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{setUnderlyingPrice()}{setUnderlyingPrice()}}
+{\footnotesize\ttfamily void Theo\+Price\+::set\+Underlying\+Price (\begin{DoxyParamCaption}\item[{double}]{underlying\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes underlying price at the time of theo price computation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em underlying\+Price} & underlying price at the time of theo price computation. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTheoPrice_aa4e4101ed4ba8a07d2703c6d28774052}\label{classTheoPrice_aa4e4101ed4ba8a07d2703c6d28774052}} 
+\index{TheoPrice@{TheoPrice}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Theo\+Price\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classTheoPrice_a7688718de97d2529cea3177f13c457f1}\label{classTheoPrice_a7688718de97d2529cea3177f13c457f1}} 
+\index{TheoPrice@{TheoPrice}!toString@{toString}}
+\index{toString@{toString}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Theo\+Price\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{classTheoPrice_a68fb7aefe40dbc7dc49d602bbdff11a9}\label{classTheoPrice_a68fb7aefe40dbc7dc49d602bbdff11a9}} 
+\index{TheoPrice@{TheoPrice}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!TheoPrice@{TheoPrice}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily constexpr std\+::uint32\+\_\+t Theo\+Price\+::\+MAX\+\_\+\+SEQUENCE = (1U $<$$<$ 22U) -\/ 1U\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\+::set\+Sequence() 
+\end{DoxySeeAlso}
+
+
+Referenced by get\+Sequence(), and set\+Sequence().
+

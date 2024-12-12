@@ -2,7 +2,8 @@ var class_trade_base =
 [
     [ "TradeBase", "d1/d00/class_trade_base.html#a2edb30c57996672f73471ddae079710d", null ],
     [ "TradeBase", "d1/d00/class_trade_base.html#a5052029c1b8852fc10eb876e147b2c5b", null ],
-    [ "baseFieldsToString", "d1/d00/class_trade_base.html#a3573f576ea6b528c69831efdb9b07423", null ],
+    [ "assign", "d1/d00/class_trade_base.html#a09147b530319757f84a8fc0676d7b0ae", null ],
+    [ "baseFieldsToString", "d1/d00/class_trade_base.html#a3891e6084b779baad5abde0adf204db2", null ],
     [ "getChange", "d1/d00/class_trade_base.html#a1ba68544e527dfd3b740e5798c706d8d", null ],
     [ "getDayId", "d1/d00/class_trade_base.html#a49359e7e646d6916337477a298bef4ea", null ],
     [ "getDayTurnover", "d1/d00/class_trade_base.html#a6f9aff4fe560ba262c8bf524274a2408", null ],

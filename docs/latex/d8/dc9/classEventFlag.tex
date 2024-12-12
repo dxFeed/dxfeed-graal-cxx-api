@@ -1,0 +1,462 @@
+\hypertarget{classEventFlag}{}\doxysubsection{Event\+Flag Class Reference}
+\label{classEventFlag}\index{EventFlag@{EventFlag}}
+
+
+{\ttfamily \#include $<$Event\+Flag.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classEventFlag_a4373f4534b27d6b000b6760a84a53e17}\label{classEventFlag_a4373f4534b27d6b000b6760a84a53e17}} 
+\mbox{\hyperlink{classEventFlag_a4373f4534b27d6b000b6760a84a53e17}{Event\+Flag}} () noexcept
+\begin{DoxyCompactList}\small\item\em Creates the invalid event flag. \end{DoxyCompactList}\item 
+std\+::uint32\+\_\+t \mbox{\hyperlink{classEventFlag_a0c4ab83954c100a812e6133133659ee7}{get\+Flag}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classEventFlag_a09014057d39dfa6b033b8089e98b933d}{in}} (std\+::uint32\+\_\+t event\+Flags\+Mask) const noexcept
+\begin{DoxyCompactList}\small\item\em Determines if the given flag is in the mask. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+Flags\+Mask $>$ }\\bool \mbox{\hyperlink{classEventFlag_a6bc5bf251a9d20db70b810f80d4747d2}{in}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags\+Mask) const noexcept
+\begin{DoxyCompactList}\small\item\em Determines if the given flag is in the mask. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \mbox{\hyperlink{classEventFlag_a71255c51ec6183bab9adf3561929429a}{TX\+\_\+\+PENDING}} \{0x01u, \char`\"{}TX\+\_\+\+PENDING\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of event\+Flags property. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \mbox{\hyperlink{classEventFlag_af6f440540c8c371ef1acef7d910ab23d}{REMOVE\+\_\+\+EVENT}} \{0x02u, \char`\"{}REMOVE\+\_\+\+EVENT\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of event\+Flags property. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \mbox{\hyperlink{classEventFlag_ab1246c3963485123672b05d5b9dbdfec}{SNAPSHOT\+\_\+\+BEGIN}} \{0x04u, \char`\"{}SNAPSHOT\+\_\+\+BEGIN\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of event\+Flags property. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \mbox{\hyperlink{classEventFlag_adc2ec8ed07a2a2efaf2389fe4f7459c6}{SNAPSHOT\+\_\+\+END}} \{0x08u, \char`\"{}SNAPSHOT\+\_\+\+END\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of event\+Flags property. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \mbox{\hyperlink{classEventFlag_a522d708878957a9412299bebfb3e1e4d}{SNAPSHOT\+\_\+\+SNIP}} \{0x10u, \char`\"{}SNAPSHOT\+\_\+\+SNIP\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of event\+Flags property. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \mbox{\hyperlink{classEventFlag_a689ed612dddae7bb9e0f3387711842b8}{SNAPSHOT\+\_\+\+MODE}} \{0x40u, \char`\"{}SNAPSHOT\+\_\+\+MODE\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of event\+Flags property. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \mbox{\hyperlink{classEventFlag_aca64bfd839413b0612f2530f6c5d9d36}{REMOVE\+\_\+\+SYMBOL}} \{0x80u, \char`\"{}REMOVE\+\_\+\+SYMBOL\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em {\ttfamily 0x80} -\/ For internal use. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classEventFlag_a35ee25c6a8d7ce838443e529ad830deb}{operator$\vert$}} (const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&event\+Flag1, std\+::int32\+\_\+t event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily or} operation with two event flags. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classEventFlag_a538948d97dc613e29f32fcc859f5df40}{operator$\vert$}} (std\+::int32\+\_\+t event\+Flag1, const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily or} operation with two event flags. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classEventFlag_a4d76868ccb82effad248ce3f1b9bdd4d}{operator\&}} (const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&event\+Flag1, std\+::int32\+\_\+t event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily and} operation with two event flags. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classEventFlag_a65ef9e1ee26b3e8f8390d98de08a17bd}{operator\&}} (std\+::int32\+\_\+t event\+Flag1, const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily and} operation with two event flags. \end{DoxyCompactList}\item 
+std\+::uint32\+\_\+t \mbox{\hyperlink{classEventFlag_a8d07316b301b7df2b0595dc529f92d13}{operator$\vert$}} (const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&event\+Flag1, std\+::uint32\+\_\+t event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily or} operation with two event flags. \end{DoxyCompactList}\item 
+std\+::uint32\+\_\+t \mbox{\hyperlink{classEventFlag_a2a1dd311e064a894a0621af1b4bd6bcc}{operator$\vert$}} (std\+::uint32\+\_\+t event\+Flag1, const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily or} operation with two event flags. \end{DoxyCompactList}\item 
+std\+::uint32\+\_\+t \mbox{\hyperlink{classEventFlag_a2e3541e8c6988f1e72c306076e669597}{operator\&}} (const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&event\+Flag1, std\+::uint32\+\_\+t event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily and} operation with two event flags. \end{DoxyCompactList}\item 
+std\+::uint32\+\_\+t \mbox{\hyperlink{classEventFlag_ac20b1c15b4dd06be79d33a32ae79c2ca}{operator\&}} (std\+::uint32\+\_\+t event\+Flag1, const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&event\+Flag2) noexcept
+\begin{DoxyCompactList}\small\item\em Performs a bit {\ttfamily and} operation with two event flags. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\doxysubparagraph*{\label{_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+Some indexed event sources provide a consistent view of a set of events for a given symbol. Their updates may incorporate multiple changes that have to be processed at the same time. The corresponding information is carried in \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags}} property.
+
+The value of \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags}} property has several significant bits that are packed into an integer in the following way\+:
+
+
+\begin{DoxyPre}{\ttfamily 
+   31..7    6    5    4    3    2    1    0
++-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+
+|         | SM |    | SS | SE | SB | RE | TX |
++-\/-\/-\/-\/-\/-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+-\/-\/-\/-\/+
+}\end{DoxyPre}
+
+
+Each source updates its transactional state using these bits separately. The state of each source has to be tracked separately in a map for each source. However, event \mbox{\hyperlink{structIndexedEvent_a4310a26785d5142efba9d7c0094125bc}{index}} is unique across the sources. This is achieved by allocating an event-\/specific number of most significant bits of \mbox{\hyperlink{structIndexedEvent_a4310a26785d5142efba9d7c0094125bc}{index}} for use as a \mbox{\hyperlink{structIndexedEvent_a54d06fa64c5f66ed78b328f4c36a633b}{source}} \mbox{\hyperlink{classIndexedEventSource_acd2b67cd96f688d1255b45783e9a1df9}{id}}.
+
+{\ttfamily TX} (bit 0) --- \+::\+TX\+\_\+\+PENDING is an indicator of pending transactional update. It can be retrieved from {\ttfamily event\+Flags} with the following piece of code\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} txPending = (\textcolor{keyword}{event}-\/> getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_a11615cb90f791068cfa9edaa8b0056ae}{IndexedEvent::TX\_PENDING}}) != 0;}
+
+\end{DoxyCode}
+
+
+When {\ttfamily tx\+Pending} is {\ttfamily true} it means, that an ongoing transaction update that spans multiple events is in process. All events with {\ttfamily tx\+Pending} {\ttfamily true} shall be put into a separate {\itshape pending list} for each source id and should be processed later when an event for this source id with {\ttfamily tx\+Pending} {\ttfamily false} comes.
+
+{\ttfamily RE} (bit 1) --- \+::\+REMOVE\+\_\+\+EVENT is used to indicate that that the event with the corresponding index has to be removed.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} removeEvent = (\textcolor{keyword}{event}-\/> getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_a98e078c04445c983d19db700df469b58}{IndexedEvent::REMOVE\_EVENT}}) != 0;}
+
+\end{DoxyCode}
+
+
+{\ttfamily SB} (bit 2) --- \+::\+SNAPSHOT\+\_\+\+BEGIN is used to indicate when the loading of a snapshot starts.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} snapshotBegin = (\textcolor{keyword}{event}-\/> getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_ac87eb588da470259ee75b490dbcaabf7}{IndexedEvent::SNAPSHOT\_BEGIN}}) != 0;}
+
+\end{DoxyCode}
+
+
+Snapshot load starts on new subscription and the first indexed event that arrives for each non-\/zero source id on new subscription may have {\ttfamily snapshot\+Begin} set to {\ttfamily true}. It means, that an ongoing snapshot consisting of multiple events is incoming. All events for this source id shall be put into a separate {\itshape pending list} for each source id.
+
+{\ttfamily SE} (bit 3) --- \+::\+SNAPSHOT\+\_\+\+END or {\ttfamily SS} (bit 4) --- \+::\+SNAPSHOT\+\_\+\+SNIP are used to indicate the end of a snapshot.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} snapshotEnd = (\textcolor{keyword}{event}-\/>getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_a4604235ec9a455bea7c80d1b71546bf9}{IndexedEvent::SNAPSHOT\_END}}) != 0;}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} snapshotSnip = (\textcolor{keyword}{event}-\/>getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_a8824670805f7487194b7070fe06afe47}{IndexedEvent::SNAPSHOT\_SNIP}}) != 0;}
+
+\end{DoxyCode}
+
+
+The last event of a snapshot is marked with either {\ttfamily snapshot\+End} or {\ttfamily snapshot\+Snip}. At this time, all events from a {\itshape pending list} for the corresponding source can be processed, unless {\ttfamily tx\+Pending} is also set to {\ttfamily true}. In the later case, the processing shall be further delayed due to ongoing transaction.
+
+The difference between {\ttfamily snapshot\+End} and {\ttfamily snapshot\+Snip} is the following. {\ttfamily snapshot\+End} indicates that the data source had sent all the data pertaining to the subscription for the corresponding indexed event, while {\ttfamily snapshot\+Snip} indicates that some limit on the amount of data was reached and while there still might be more data available, it will not be provided.
+
+{\ttfamily SM} (bit 6) --- \+::\+SNAPSHOT\+\_\+\+MODE is used to instruct dx\+Feed to use snapshot mode. It is intended to be used only for publishing to activate (if not yet activated) snapshot mode. The difference from \+::\+SNAPSHOT\+\_\+\+BEGIN flag is that \+::\+SNAPSHOT\+\_\+\+MODE only switches on snapshot mode without starting snapshot synchronization protocol.
+
+When a snapshot is empty or consists of a single event, then the event can have both {\ttfamily snapshot\+Begin} and {\ttfamily snapshot\+End} or {\ttfamily snapshot\+Snip} flags. In case of an empty snapshot, {\ttfamily remove\+Event} on this event is also set to {\ttfamily true}. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classEventFlag_a0c4ab83954c100a812e6133133659ee7}\label{classEventFlag_a0c4ab83954c100a812e6133133659ee7}} 
+\index{EventFlag@{EventFlag}!getFlag@{getFlag}}
+\index{getFlag@{getFlag}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{getFlag()}{getFlag()}}
+{\footnotesize\ttfamily std\+::uint32\+\_\+t Event\+Flag\+::get\+Flag (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The event flag\textquotesingle{}s value 
+\end{DoxyReturn}
+
+
+Referenced by Event\+Flags\+Mask\+::\+Event\+Flags\+Mask().
+
+\mbox{\Hypertarget{classEventFlag_a6bc5bf251a9d20db70b810f80d4747d2}\label{classEventFlag_a6bc5bf251a9d20db70b810f80d4747d2}} 
+\index{EventFlag@{EventFlag}!in@{in}}
+\index{in@{in}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{in()}{in()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Event\+Flags\+Mask $>$ \\
+bool Event\+Flag\+::in (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags\+Mask }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Determines if the given flag is in the mask. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}}} & An event flags mask type that satisfies the condition\+: there is a {\ttfamily get\+Mask} method that returns std\+::uint32\+\_\+t \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags\+Mask} & The event flags mask. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} the given flag is in the mask. 
+\end{DoxyReturn}
+
+
+References in().
+
+
+
+Referenced by in().
+
+\mbox{\Hypertarget{classEventFlag_a09014057d39dfa6b033b8089e98b933d}\label{classEventFlag_a09014057d39dfa6b033b8089e98b933d}} 
+\index{EventFlag@{EventFlag}!in@{in}}
+\index{in@{in}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{in()}{in()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool Event\+Flag\+::in (\begin{DoxyParamCaption}\item[{std\+::uint32\+\_\+t}]{event\+Flags\+Mask }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Determines if the given flag is in the mask. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags\+Mask} & The event flags mask\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} the given flag is in the mask. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classEventFlag_a4d76868ccb82effad248ce3f1b9bdd4d}\label{classEventFlag_a4d76868ccb82effad248ce3f1b9bdd4d}} 
+\index{EventFlag@{EventFlag}!operator\&@{operator\&}}
+\index{operator\&@{operator\&}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{operator\&}{operator\&}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t operator\& (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&}]{event\+Flag1,  }\item[{std\+::int32\+\_\+t}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily and} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag \\
+\hline
+{\em event\+Type2} & The second event flag (std\+::int32\+\_\+t) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (std\+::int32\+\_\+t) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventFlag_a2e3541e8c6988f1e72c306076e669597}\label{classEventFlag_a2e3541e8c6988f1e72c306076e669597}} 
+\index{EventFlag@{EventFlag}!operator\&@{operator\&}}
+\index{operator\&@{operator\&}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{operator\&}{operator\&}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily std\+::uint32\+\_\+t operator\& (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&}]{event\+Flag1,  }\item[{std\+::uint32\+\_\+t}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily and} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag \\
+\hline
+{\em event\+Type2} & The second event flag (std\+::uint32\+\_\+t) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (std\+::uint32\+\_\+t) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventFlag_a65ef9e1ee26b3e8f8390d98de08a17bd}\label{classEventFlag_a65ef9e1ee26b3e8f8390d98de08a17bd}} 
+\index{EventFlag@{EventFlag}!operator\&@{operator\&}}
+\index{operator\&@{operator\&}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{operator\&}{operator\&}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t operator\& (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flag1,  }\item[{const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily and} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag (std\+::int32\+\_\+t) \\
+\hline
+{\em event\+Type2} & The second event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (std\+::int32\+\_\+t) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventFlag_ac20b1c15b4dd06be79d33a32ae79c2ca}\label{classEventFlag_ac20b1c15b4dd06be79d33a32ae79c2ca}} 
+\index{EventFlag@{EventFlag}!operator\&@{operator\&}}
+\index{operator\&@{operator\&}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{operator\&}{operator\&}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily std\+::uint32\+\_\+t operator\& (\begin{DoxyParamCaption}\item[{std\+::uint32\+\_\+t}]{event\+Flag1,  }\item[{const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily and} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag (std\+::uint32\+\_\+t) \\
+\hline
+{\em event\+Type2} & The second event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (std\+::uint32\+\_\+t) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventFlag_a35ee25c6a8d7ce838443e529ad830deb}\label{classEventFlag_a35ee25c6a8d7ce838443e529ad830deb}} 
+\index{EventFlag@{EventFlag}!operator\texttt{"|}@{operator\texttt{"|}}}
+\index{operator\texttt{"|}@{operator\texttt{"|}}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{operator\texttt{"|}}{operator|}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t operator$\vert$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&}]{event\+Flag1,  }\item[{std\+::int32\+\_\+t}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily or} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag \\
+\hline
+{\em event\+Type2} & The second event flag (std\+::int32\+\_\+t) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (std\+::int32\+\_\+t) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventFlag_a8d07316b301b7df2b0595dc529f92d13}\label{classEventFlag_a8d07316b301b7df2b0595dc529f92d13}} 
+\index{EventFlag@{EventFlag}!operator\texttt{"|}@{operator\texttt{"|}}}
+\index{operator\texttt{"|}@{operator\texttt{"|}}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{operator\texttt{"|}}{operator|}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily std\+::uint32\+\_\+t operator$\vert$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&}]{event\+Flag1,  }\item[{std\+::uint32\+\_\+t}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily or} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag \\
+\hline
+{\em event\+Type2} & The second event flag (std\+::uint32\+\_\+t) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (std\+::uint32\+\_\+t) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventFlag_a538948d97dc613e29f32fcc859f5df40}\label{classEventFlag_a538948d97dc613e29f32fcc859f5df40}} 
+\index{EventFlag@{EventFlag}!operator\texttt{"|}@{operator\texttt{"|}}}
+\index{operator\texttt{"|}@{operator\texttt{"|}}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{operator\texttt{"|}}{operator|}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t operator$\vert$ (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flag1,  }\item[{const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily or} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag (std\+::int32\+\_\+t) \\
+\hline
+{\em event\+Type2} & The second event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (std\+::int32\+\_\+t) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventFlag_a2a1dd311e064a894a0621af1b4bd6bcc}\label{classEventFlag_a2a1dd311e064a894a0621af1b4bd6bcc}} 
+\index{EventFlag@{EventFlag}!operator\texttt{"|}@{operator\texttt{"|}}}
+\index{operator\texttt{"|}@{operator\texttt{"|}}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{operator\texttt{"|}}{operator|}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily std\+::uint32\+\_\+t operator$\vert$ (\begin{DoxyParamCaption}\item[{std\+::uint32\+\_\+t}]{event\+Flag1,  }\item[{const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \&}]{event\+Flag2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Performs a bit {\ttfamily or} operation with two event flags. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type1} & The first event flag (std\+::uint32\+\_\+t) \\
+\hline
+{\em event\+Type2} & The second event flag \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result (std\+::uint32\+\_\+t) 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{classEventFlag_af6f440540c8c371ef1acef7d910ab23d}\label{classEventFlag_af6f440540c8c371ef1acef7d910ab23d}} 
+\index{EventFlag@{EventFlag}!REMOVE\_EVENT@{REMOVE\_EVENT}}
+\index{REMOVE\_EVENT@{REMOVE\_EVENT}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{REMOVE\_EVENT}{REMOVE\_EVENT}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} Event\+Flag\+::\+REMOVE\+\_\+\+EVENT \{0x02u, \char`\"{}REMOVE\+\_\+\+EVENT\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x02} -\/ A bitmask to get removal indicator from the value of event\+Flags property. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} removeEvent = (\textcolor{keyword}{event}-\/> getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_a98e078c04445c983d19db700df469b58}{IndexedEvent::REMOVE\_EVENT}}) != 0;}
+
+\end{DoxyCode}
+
+
+See \href{\#eventFlagsSection}{\texttt{ \char`\"{}\+Event Flags\char`\"{} section}} \mbox{\Hypertarget{classEventFlag_aca64bfd839413b0612f2530f6c5d9d36}\label{classEventFlag_aca64bfd839413b0612f2530f6c5d9d36}} 
+\index{EventFlag@{EventFlag}!REMOVE\_SYMBOL@{REMOVE\_SYMBOL}}
+\index{REMOVE\_SYMBOL@{REMOVE\_SYMBOL}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{REMOVE\_SYMBOL}{REMOVE\_SYMBOL}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} Event\+Flag\+::\+REMOVE\+\_\+\+SYMBOL \{0x80u, \char`\"{}REMOVE\+\_\+\+SYMBOL\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x80} -\/ For internal use. 
+
+Marks a subscription for deletion. \mbox{\Hypertarget{classEventFlag_ab1246c3963485123672b05d5b9dbdfec}\label{classEventFlag_ab1246c3963485123672b05d5b9dbdfec}} 
+\index{EventFlag@{EventFlag}!SNAPSHOT\_BEGIN@{SNAPSHOT\_BEGIN}}
+\index{SNAPSHOT\_BEGIN@{SNAPSHOT\_BEGIN}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{SNAPSHOT\_BEGIN}{SNAPSHOT\_BEGIN}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} Event\+Flag\+::\+SNAPSHOT\+\_\+\+BEGIN \{0x04u, \char`\"{}SNAPSHOT\+\_\+\+BEGIN\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x04} -\/ A bitmask to get snapshot begin indicator from the value of event\+Flags property. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} snapshotBegin = (\textcolor{keyword}{event}-\/> getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_ac87eb588da470259ee75b490dbcaabf7}{IndexedEvent::SNAPSHOT\_BEGIN}}) != 0;}
+
+\end{DoxyCode}
+
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ \char`\"{}\+Event Flags\char`\"{} section}} \mbox{\Hypertarget{classEventFlag_adc2ec8ed07a2a2efaf2389fe4f7459c6}\label{classEventFlag_adc2ec8ed07a2a2efaf2389fe4f7459c6}} 
+\index{EventFlag@{EventFlag}!SNAPSHOT\_END@{SNAPSHOT\_END}}
+\index{SNAPSHOT\_END@{SNAPSHOT\_END}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{SNAPSHOT\_END}{SNAPSHOT\_END}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} Event\+Flag\+::\+SNAPSHOT\+\_\+\+END \{0x08u, \char`\"{}SNAPSHOT\+\_\+\+END\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x08} -\/ A bitmask to get snapshot end indicator from the value of event\+Flags property. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} snapshotEnd = (\textcolor{keyword}{event}-\/> getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_a4604235ec9a455bea7c80d1b71546bf9}{IndexedEvent::SNAPSHOT\_END}}) != 0;}
+
+\end{DoxyCode}
+
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ \char`\"{}\+Event Flags\char`\"{} section}} \mbox{\Hypertarget{classEventFlag_a689ed612dddae7bb9e0f3387711842b8}\label{classEventFlag_a689ed612dddae7bb9e0f3387711842b8}} 
+\index{EventFlag@{EventFlag}!SNAPSHOT\_MODE@{SNAPSHOT\_MODE}}
+\index{SNAPSHOT\_MODE@{SNAPSHOT\_MODE}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{SNAPSHOT\_MODE}{SNAPSHOT\_MODE}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} Event\+Flag\+::\+SNAPSHOT\+\_\+\+MODE \{0x40u, \char`\"{}SNAPSHOT\+\_\+\+MODE\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x40} -\/ A bitmask to set snapshot mode indicator into the value of event\+Flags property. 
+
+This flag is intended for publishing only.
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ \char`\"{}\+Event Flags\char`\"{} section}} \mbox{\Hypertarget{classEventFlag_a522d708878957a9412299bebfb3e1e4d}\label{classEventFlag_a522d708878957a9412299bebfb3e1e4d}} 
+\index{EventFlag@{EventFlag}!SNAPSHOT\_SNIP@{SNAPSHOT\_SNIP}}
+\index{SNAPSHOT\_SNIP@{SNAPSHOT\_SNIP}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{SNAPSHOT\_SNIP}{SNAPSHOT\_SNIP}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} Event\+Flag\+::\+SNAPSHOT\+\_\+\+SNIP \{0x10u, \char`\"{}SNAPSHOT\+\_\+\+SNIP\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x10} -\/ A bitmask to get snapshot snip indicator from the value of event\+Flags property. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} snapshotSnip = (\textcolor{keyword}{event}-\/> getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_a8824670805f7487194b7070fe06afe47}{IndexedEvent::SNAPSHOT\_SNIP}}) != 0;}
+
+\end{DoxyCode}
+
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ \char`\"{}\+Event Flags\char`\"{} section}} \mbox{\Hypertarget{classEventFlag_a71255c51ec6183bab9adf3561929429a}\label{classEventFlag_a71255c51ec6183bab9adf3561929429a}} 
+\index{EventFlag@{EventFlag}!TX\_PENDING@{TX\_PENDING}}
+\index{TX\_PENDING@{TX\_PENDING}!EventFlag@{EventFlag}}
+\doxyparagraph{\texorpdfstring{TX\_PENDING}{TX\_PENDING}}
+{\footnotesize\ttfamily DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE const \mbox{\hyperlink{classEventFlag}{Event\+Flag}} Event\+Flag\+::\+TX\+\_\+\+PENDING \{0x01u, \char`\"{}TX\+\_\+\+PENDING\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+{\ttfamily 0x01} -\/ A bitmask to get transaction pending indicator from the value of event\+Flags property. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keywordtype}{bool} txPending = (\textcolor{keyword}{event}-\/> getEventFlags() \& \mbox{\hyperlink{structIndexedEvent_a11615cb90f791068cfa9edaa8b0056ae}{IndexedEvent::TX\_PENDING}}) != 0;}
+
+\end{DoxyCode}
+
+
+See \href{./de/d03/classdxfcpp_1_1_event_flag.html\#eventFlagsSection}{\texttt{ \char`\"{}\+Event Flags\char`\"{} section}} 

@@ -1,0 +1,662 @@
+\hypertarget{classUnderlying}{}\doxysubsection{Underlying Class Reference}
+\label{classUnderlying}\index{Underlying@{Underlying}}
+
+
+\mbox{\hyperlink{classUnderlying}{Underlying}} event is a snapshot of computed values that are available for an option underlying symbol based on the option prices on the market.  
+
+
+
+
+{\ttfamily \#include $<$Underlying.\+hpp$>$}
+
+Inheritance diagram for Underlying\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.045045cm]{de/d06/classUnderlying}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classUnderlying_ae754c2d227b62b37bedf1ec0393c28c8}\label{classUnderlying_ae754c2d227b62b37bedf1ec0393c28c8}} 
+using \mbox{\hyperlink{classUnderlying_ae754c2d227b62b37bedf1ec0393c28c8}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classUnderlying}{Underlying}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classUnderlying}{Underlying}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classUnderlying_a04dd73eab6d112ad74dd63253b625aa7}\label{classUnderlying_a04dd73eab6d112ad74dd63253b625aa7}} 
+using \mbox{\hyperlink{classUnderlying_a04dd73eab6d112ad74dd63253b625aa7}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classUnderlying}{Underlying}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classUnderlying}{Underlying}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classUnderlying_a21e85dee0bdd684f0433e0eb4c483154}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classUnderlying_a49ddc22b3c1c51407483c97fd00c5877}\label{classUnderlying_a49ddc22b3c1c51407483c97fd00c5877}} 
+\mbox{\hyperlink{classUnderlying_a49ddc22b3c1c51407483c97fd00c5877}{Underlying}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new underlying event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classUnderlying_ae344045c04204e88fa09a4398ea19f6b}{Underlying}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new underlying event with the specified event symbol. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{classUnderlying_ac764dc5b1b190128711f51faddf6d8a8}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classUnderlying_a79bc065e8e06ea8947b7c83558d87bc2}{get\+Event\+Flags}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classUnderlying_a64564e64107aa1bf8cc00c4e5c101222}{get\+Event\+Flags\+Mask}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_ab0375b4b9c1144125157277bd1f8c139}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_aefb853c9878a82bcc6c77786cdfa8b5d}{set\+Event\+Flags}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classUnderlying_a02b5b2e75cd69750ccc4191fa1a74331}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a31a73ca8cf5b908e35796747b2aa5e3e}{set\+Index}} (std\+::int64\+\_\+t index) override
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classUnderlying_a6f0e627f1f3ad7b7c5a47ca9e5adf36e}{get\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a3f960a90de36116ec0b23315cd58b702}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classUnderlying_a7d2f16e37abbef8cf92bfd4cc772ce66}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the sequence number of this event to distinguish events that have the same time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a501318431e20886bf8751bf0565c4956}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes sequence number of this event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classUnderlying_ade8eddc5916ebbbd7402fdf80e8e56f4}{get\+Volatility}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns 30-\/day implied volatility for this underlying based on VIX methodology. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a2ed716a9033cca30ae73ade2d06d4752}{set\+Volatility}} (double volatility) noexcept
+\begin{DoxyCompactList}\small\item\em Changes 30-\/day implied volatility for this underlying based on VIX methodology. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classUnderlying_aac11b7c2af8f41017c165f7a7d66cd7d}{get\+Front\+Volatility}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns front month implied volatility for this underlying based on VIX methodology. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a236133b44797075f03bcc2ae8efcd797}{set\+Front\+Volatility}} (double front\+Volatility) noexcept
+\begin{DoxyCompactList}\small\item\em Changes front month implied volatility for this underlying based on VIX methodology. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classUnderlying_a4c54bf206e8b2c97e2b71ccb5eb9a3fe}{get\+Back\+Volatility}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns back month implied volatility for this underlying based on VIX methodology. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a5ea09ad40aa38f1926ce3549185bd935}{set\+Back\+Volatility}} (double back\+Volatility) noexcept
+\begin{DoxyCompactList}\small\item\em Changes back month implied volatility for this underlying based on VIX methodology. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classUnderlying_a20476339440877271d89be4cee7d70af}{get\+Call\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns call options traded volume for a day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a62b6b0a6d851ffaac8426bd430d49a20}{set\+Call\+Volume}} (double call\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes call options traded volume for a day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classUnderlying_a7a413083cce48cc961dd3426ea60ff42}{get\+Put\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns put options traded volume for a day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a26cafc241db5733aa45f104eb7906e54}{set\+Put\+Volume}} (double put\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes put options traded volume for a day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classUnderlying_acf3ceff42a0cad35c1e501d4dd097ec3}{get\+Option\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns options traded volume for a day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classUnderlying_afe2ab9c5aa4f47ae58e942bb13a01d7a}{get\+Put\+Call\+Ratio}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns ratio of put options traded volume to call options traded volume for a day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classUnderlying_a53108399663ab0249e85a33139a3f484}{set\+Put\+Call\+Ratio}} (double put\+Call\+Ratio) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ratio of put options traded volume to call options traded volume for a day. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classUnderlying_a35136aa30b4bbba8e01819a86e7d45eb}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classUnderlying_a69fc687d7910fe129aa036542c07b3ce}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classUnderlying_aa22f44ab263c7bb1838de3aba25e47c6}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classUnderlying_a9d55f75bd916934e90427a18473f001e}\label{classUnderlying_a9d55f75bd916934e90427a18473f001e}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classUnderlying_a9d55f75bd916934e90427a18473f001e}{TYPE}} = Event\+Type\+Enum\+::\+UNDERLYING
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classUnderlying_a225ff98de9e4f5381f8eb1f2b942195a}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classUnderlying}{Underlying}} event is a snapshot of computed values that are available for an option underlying symbol based on the option prices on the market. 
+
+It represents the most recent information that is available about the corresponding values on the market at any given moment of time.
+
+\doxysubparagraph*{\label{_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+Some \mbox{\hyperlink{classUnderlying}{Underlying}} sources provide a consistent view of the set of known \mbox{\hyperlink{classUnderlying}{Underlying}} events. The corresponding information is carried in event\+Flags property. The logic behind this property is detailed in \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}} class documentation. Multiple event sources for the same symbol are not supported for \mbox{\hyperlink{classUnderlying}{Underlying}}, thus source property is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}}.
+
+Time\+Series\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list current of time-\/series events order by their time.
+
+\doxysubparagraph*{Publishing \mbox{\hyperlink{classUnderlying}{Underlying}}}
+
+Publishing of \mbox{\hyperlink{classUnderlying}{Underlying}} events follows the general rules explained in \mbox{\hyperlink{structTimeSeriesEvent}{Time\+Series\+Event}} class documentation.
+
+\doxysubparagraph*{Implementation details}
+
+This event is implemented on top of QDS record {\ttfamily \mbox{\hyperlink{classUnderlying}{Underlying}}}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classUnderlying_ae344045c04204e88fa09a4398ea19f6b}\label{classUnderlying_ae344045c04204e88fa09a4398ea19f6b}} 
+\index{Underlying@{Underlying}!Underlying@{Underlying}}
+\index{Underlying@{Underlying}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{Underlying()}{Underlying()}}
+{\footnotesize\ttfamily Underlying\+::\+Underlying (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new underlying event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Market\+Event\+::\+Market\+Event().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classUnderlying_aa22f44ab263c7bb1838de3aba25e47c6}\label{classUnderlying_aa22f44ab263c7bb1838de3aba25e47c6}} 
+\index{Underlying@{Underlying}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Underlying\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUnderlying_a69fc687d7910fe129aa036542c07b3ce}\label{classUnderlying_a69fc687d7910fe129aa036542c07b3ce}} 
+\index{Underlying@{Underlying}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classUnderlying}{Underlying}} $>$ Underlying\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classUnderlying_a4c54bf206e8b2c97e2b71ccb5eb9a3fe}\label{classUnderlying_a4c54bf206e8b2c97e2b71ccb5eb9a3fe}} 
+\index{Underlying@{Underlying}!getBackVolatility@{getBackVolatility}}
+\index{getBackVolatility@{getBackVolatility}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getBackVolatility()}{getBackVolatility()}}
+{\footnotesize\ttfamily double Underlying\+::get\+Back\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns back month implied volatility for this underlying based on VIX methodology. 
+
+\begin{DoxyReturn}{Returns}
+back month implied volatility for this underlying based on VIX methodology. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUnderlying_a20476339440877271d89be4cee7d70af}\label{classUnderlying_a20476339440877271d89be4cee7d70af}} 
+\index{Underlying@{Underlying}!getCallVolume@{getCallVolume}}
+\index{getCallVolume@{getCallVolume}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getCallVolume()}{getCallVolume()}}
+{\footnotesize\ttfamily double Underlying\+::get\+Call\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns call options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+call options traded volume for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUnderlying_a79bc065e8e06ea8947b7c83558d87bc2}\label{classUnderlying_a79bc065e8e06ea8947b7c83558d87bc2}} 
+\index{Underlying@{Underlying}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Underlying\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classUnderlying_a64564e64107aa1bf8cc00c4e5c101222}\label{classUnderlying_a64564e64107aa1bf8cc00c4e5c101222}} 
+\index{Underlying@{Underlying}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} Underlying\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a01ae5fda2a1ada2279c541f821a03ada}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classUnderlying_aac11b7c2af8f41017c165f7a7d66cd7d}\label{classUnderlying_aac11b7c2af8f41017c165f7a7d66cd7d}} 
+\index{Underlying@{Underlying}!getFrontVolatility@{getFrontVolatility}}
+\index{getFrontVolatility@{getFrontVolatility}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getFrontVolatility()}{getFrontVolatility()}}
+{\footnotesize\ttfamily double Underlying\+::get\+Front\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns front month implied volatility for this underlying based on VIX methodology. 
+
+\begin{DoxyReturn}{Returns}
+front month implied volatility for this underlying based on VIX methodology. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUnderlying_a02b5b2e75cd69750ccc4191fa1a74331}\label{classUnderlying_a02b5b2e75cd69750ccc4191fa1a74331}} 
+\index{Underlying@{Underlying}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Underlying\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+The index is composed of time and sequence. Changing either time or sequence changes event index.
+
+\begin{DoxyReturn}{Returns}
+unique index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a4310a26785d5142efba9d7c0094125bc}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classUnderlying_acf3ceff42a0cad35c1e501d4dd097ec3}\label{classUnderlying_acf3ceff42a0cad35c1e501d4dd097ec3}} 
+\index{Underlying@{Underlying}!getOptionVolume@{getOptionVolume}}
+\index{getOptionVolume@{getOptionVolume}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getOptionVolume()}{getOptionVolume()}}
+{\footnotesize\ttfamily double Underlying\+::get\+Option\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+options traded volume for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUnderlying_afe2ab9c5aa4f47ae58e942bb13a01d7a}\label{classUnderlying_afe2ab9c5aa4f47ae58e942bb13a01d7a}} 
+\index{Underlying@{Underlying}!getPutCallRatio@{getPutCallRatio}}
+\index{getPutCallRatio@{getPutCallRatio}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getPutCallRatio()}{getPutCallRatio()}}
+{\footnotesize\ttfamily double Underlying\+::get\+Put\+Call\+Ratio (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns ratio of put options traded volume to call options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+ratio of put options traded volume to call options traded volume for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUnderlying_a7a413083cce48cc961dd3426ea60ff42}\label{classUnderlying_a7a413083cce48cc961dd3426ea60ff42}} 
+\index{Underlying@{Underlying}!getPutVolume@{getPutVolume}}
+\index{getPutVolume@{getPutVolume}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getPutVolume()}{getPutVolume()}}
+{\footnotesize\ttfamily double Underlying\+::get\+Put\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns put options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+put options traded volume for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUnderlying_a7d2f16e37abbef8cf92bfd4cc772ce66}\label{classUnderlying_a7d2f16e37abbef8cf92bfd4cc772ce66}} 
+\index{Underlying@{Underlying}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Underlying\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the sequence number of this event to distinguish events that have the same time. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \+::\+MAX\+\_\+\+SEQUENCE.
+
+\begin{DoxyReturn}{Returns}
+The sequence number of this event 
+\end{DoxyReturn}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+
+
+Referenced by set\+Time().
+
+\mbox{\Hypertarget{classUnderlying_ac764dc5b1b190128711f51faddf6d8a8}\label{classUnderlying_ac764dc5b1b190128711f51faddf6d8a8}} 
+\index{Underlying@{Underlying}!getSource@{getSource}}
+\index{getSource@{getSource}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}}\& Underlying\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source of this event. 
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a54d06fa64c5f66ed78b328f4c36a633b}{Indexed\+Event}}.
+
+
+
+References Indexed\+Event\+Source\+::\+DEFAULT.
+
+\mbox{\Hypertarget{classUnderlying_a6f0e627f1f3ad7b7c5a47ca9e5adf36e}\label{classUnderlying_a6f0e627f1f3ad7b7c5a47ca9e5adf36e}} 
+\index{Underlying@{Underlying}!getTime@{getTime}}
+\index{getTime@{getTime}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Underlying\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns timestamp of the event in milliseconds. 
+
+\begin{DoxyReturn}{Returns}
+timestamp of the event in milliseconds 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structTimeSeriesEvent_a9d2ae41520f33140a6e823ae650e216a}{Time\+Series\+Event}}.
+
+\mbox{\Hypertarget{classUnderlying_ade8eddc5916ebbbd7402fdf80e8e56f4}\label{classUnderlying_ade8eddc5916ebbbd7402fdf80e8e56f4}} 
+\index{Underlying@{Underlying}!getVolatility@{getVolatility}}
+\index{getVolatility@{getVolatility}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{getVolatility()}{getVolatility()}}
+{\footnotesize\ttfamily double Underlying\+::get\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns 30-\/day implied volatility for this underlying based on VIX methodology. 
+
+\begin{DoxyReturn}{Returns}
+30-\/day implied volatility for this underlying based on VIX methodology. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classUnderlying_a5ea09ad40aa38f1926ce3549185bd935}\label{classUnderlying_a5ea09ad40aa38f1926ce3549185bd935}} 
+\index{Underlying@{Underlying}!setBackVolatility@{setBackVolatility}}
+\index{setBackVolatility@{setBackVolatility}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setBackVolatility()}{setBackVolatility()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Back\+Volatility (\begin{DoxyParamCaption}\item[{double}]{back\+Volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes back month implied volatility for this underlying based on VIX methodology. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em back\+Volatility} & back month implied volatility for this underlying based on VIX methodology. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUnderlying_a62b6b0a6d851ffaac8426bd430d49a20}\label{classUnderlying_a62b6b0a6d851ffaac8426bd430d49a20}} 
+\index{Underlying@{Underlying}!setCallVolume@{setCallVolume}}
+\index{setCallVolume@{setCallVolume}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setCallVolume()}{setCallVolume()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Call\+Volume (\begin{DoxyParamCaption}\item[{double}]{call\+Volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes call options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em call\+Volume} & call options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUnderlying_aefb853c9878a82bcc6c77786cdfa8b5d}\label{classUnderlying_aefb853c9878a82bcc6c77786cdfa8b5d}} 
+\index{Underlying@{Underlying}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Underlying\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_affbf8ba9b25153efb7201800d9c8b182}{Indexed\+Event}}.
+
+
+
+References Event\+Flags\+Mask\+::get\+Mask().
+
+\mbox{\Hypertarget{classUnderlying_ab0375b4b9c1144125157277bd1f8c139}\label{classUnderlying_ab0375b4b9c1144125157277bd1f8c139}} 
+\index{Underlying@{Underlying}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Underlying\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_aefd0ab36275fc9adf6f7d57c2833c200}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classUnderlying_a236133b44797075f03bcc2ae8efcd797}\label{classUnderlying_a236133b44797075f03bcc2ae8efcd797}} 
+\index{Underlying@{Underlying}!setFrontVolatility@{setFrontVolatility}}
+\index{setFrontVolatility@{setFrontVolatility}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setFrontVolatility()}{setFrontVolatility()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Front\+Volatility (\begin{DoxyParamCaption}\item[{double}]{front\+Volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes front month implied volatility for this underlying based on VIX methodology. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em front\+Volatility} & front month implied volatility for this underlying based on VIX methodology. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUnderlying_a31a73ca8cf5b908e35796747b2aa5e3e}\label{classUnderlying_a31a73ca8cf5b908e35796747b2aa5e3e}} 
+\index{Underlying@{Underlying}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+The index is composed of time and sequence and invocation of this method changes time and sequence. {\bfseries{Do not use this method directly.}} Change time and/or sequence.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the event index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Index() 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a9e8731cb11daf84a0eb17fb570af9684}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classUnderlying_a53108399663ab0249e85a33139a3f484}\label{classUnderlying_a53108399663ab0249e85a33139a3f484}} 
+\index{Underlying@{Underlying}!setPutCallRatio@{setPutCallRatio}}
+\index{setPutCallRatio@{setPutCallRatio}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setPutCallRatio()}{setPutCallRatio()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Put\+Call\+Ratio (\begin{DoxyParamCaption}\item[{double}]{put\+Call\+Ratio }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ratio of put options traded volume to call options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em put\+Call\+Ratio} & ratio of put options traded volume to call options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUnderlying_a26cafc241db5733aa45f104eb7906e54}\label{classUnderlying_a26cafc241db5733aa45f104eb7906e54}} 
+\index{Underlying@{Underlying}!setPutVolume@{setPutVolume}}
+\index{setPutVolume@{setPutVolume}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setPutVolume()}{setPutVolume()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Put\+Volume (\begin{DoxyParamCaption}\item[{double}]{put\+Volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes put options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em put\+Volume} & put options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUnderlying_a501318431e20886bf8751bf0565c4956}\label{classUnderlying_a501318431e20886bf8751bf0565c4956}} 
+\index{Underlying@{Underlying}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes sequence number of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Sequence() 
+\end{DoxySeeAlso}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+\mbox{\Hypertarget{classUnderlying_a3f960a90de36116ec0b23315cd58b702}\label{classUnderlying_a3f960a90de36116ec0b23315cd58b702}} 
+\index{Underlying@{Underlying}!setTime@{setTime}}
+\index{setTime@{setTime}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes timestamp of the event in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & timestamp of the event in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Time() 
+\end{DoxySeeAlso}
+
+
+References get\+Sequence().
+
+\mbox{\Hypertarget{classUnderlying_a2ed716a9033cca30ae73ade2d06d4752}\label{classUnderlying_a2ed716a9033cca30ae73ade2d06d4752}} 
+\index{Underlying@{Underlying}!setVolatility@{setVolatility}}
+\index{setVolatility@{setVolatility}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{setVolatility()}{setVolatility()}}
+{\footnotesize\ttfamily void Underlying\+::set\+Volatility (\begin{DoxyParamCaption}\item[{double}]{volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes 30-\/day implied volatility for this underlying based on VIX methodology. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volatility} & 30-\/day implied volatility for this underlying based on VIX methodology. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classUnderlying_a21e85dee0bdd684f0433e0eb4c483154}\label{classUnderlying_a21e85dee0bdd684f0433e0eb4c483154}} 
+\index{Underlying@{Underlying}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Underlying\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classUnderlying_a35136aa30b4bbba8e01819a86e7d45eb}\label{classUnderlying_a35136aa30b4bbba8e01819a86e7d45eb}} 
+\index{Underlying@{Underlying}!toString@{toString}}
+\index{toString@{toString}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Underlying\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{classUnderlying_a225ff98de9e4f5381f8eb1f2b942195a}\label{classUnderlying_a225ff98de9e4f5381f8eb1f2b942195a}} 
+\index{Underlying@{Underlying}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!Underlying@{Underlying}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily constexpr std\+::uint32\+\_\+t Underlying\+::\+MAX\+\_\+\+SEQUENCE = (1U $<$$<$ 22U) -\/ 1U\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\+::set\+Sequence() 
+\end{DoxySeeAlso}
+
+
+Referenced by get\+Sequence(), and set\+Sequence().
+

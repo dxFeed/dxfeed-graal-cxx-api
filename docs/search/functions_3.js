@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['detach_0',['detach',['../dc/d00/class_d_x_feed_subscription.html#abe5fa8fdc03fe385d685195a938e11a2',1,'DXFeedSubscription']]],
-  ['detachsubscription_1',['detachSubscription',['../d1/d00/struct_d_x_feed.html#a5052561608cdd4772d2fadc01f4b8c7e',1,'DXFeed']]],
-  ['detachsubscriptionandclear_2',['detachSubscriptionAndClear',['../d1/d00/struct_d_x_feed.html#a55951c9ededf92ffa426dfb52d80cda6',1,'DXFeed']]],
+  ['detach_0',['detach',['../d6/d02/struct_indexed_tx_model.html#a4238c71c1d21929f2bd9d7a4bce8c6da',1,'IndexedTxModel::detach()'],['../dc/d03/struct_time_series_tx_model.html#a376e9ec6f344f0424bef6db87f2159ce',1,'TimeSeriesTxModel::detach()'],['../dc/d00/class_d_x_feed_subscription.html#aef2b9f771864130756cd8bb93b9e1da8',1,'DXFeedSubscription::detach()']]],
+  ['detachsubscription_1',['detachSubscription',['../d1/d00/struct_d_x_feed.html#aa942979b75cb8dd6e7694ad25ed0d31e',1,'DXFeed']]],
+  ['detachsubscriptionandclear_2',['detachSubscriptionAndClear',['../d1/d00/struct_d_x_feed.html#a1ca09f0839d300d541a50fcef811fac9',1,'DXFeed']]],
   ['disconnect_3',['disconnect',['../d9/d00/struct_d_x_endpoint.html#af9899de33d7550f1ab4173718e86aae1',1,'DXEndpoint']]],
   ['disconnectandclear_4',['disconnectAndClear',['../d9/d00/struct_d_x_endpoint.html#a2e72d4d9098d6fa281e059925ba0e455',1,'DXEndpoint']]],
-  ['downloaddefaults_5',['downloadDefaults',['../d3/d03/struct_schedule.html#a06d71538a7d9f8bcd568b5630810a7d9',1,'Schedule']]],
+  ['downloaddefaults_5',['downloadDefaults',['../d3/d03/struct_schedule.html#a5880f2aa876dbb23019b071c7f6c1813',1,'Schedule']]],
   ['dxfc_5fdxendpoint_5fadd_5fstate_5fchange_5flistener_6',['dxfc_dxendpoint_add_state_change_listener',['../dc/d01/api_8h.html#af2f5c570bbf2897082c2ff8c3dc8d784',1,'DXEndpoint.cpp']]],
   ['dxfc_5fdxendpoint_5fawait_5fnot_5fconnected_7',['dxfc_dxendpoint_await_not_connected',['../dc/d01/api_8h.html#a1efb70ae4cc208bcfe65150b5c345612',1,'DXEndpoint.cpp']]],
   ['dxfc_5fdxendpoint_5fawait_5fprocessed_8',['dxfc_dxendpoint_await_processed',['../dc/d01/api_8h.html#afcd8a7bdbfd180aaed93a75ea844a88c',1,'DXEndpoint.cpp']]],

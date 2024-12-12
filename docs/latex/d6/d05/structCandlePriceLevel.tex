@@ -1,0 +1,230 @@
+\hypertarget{structCandlePriceLevel}{}\doxysubsection{Candle\+Price\+Level Struct Reference}
+\label{structCandlePriceLevel}\index{CandlePriceLevel@{CandlePriceLevel}}
+
+
+\mbox{\hyperlink{classCandle}{Candle}} price level attribute of \mbox{\hyperlink{structCandleSymbol}{Candle\+Symbol}} defines how candles shall be aggregated in respect to price interval.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Price\+Level.\+hpp$>$}
+
+Inheritance diagram for Candle\+Price\+Level\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{d6/d05/structCandlePriceLevel}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{structCandlePriceLevel_a662a8c5042413a617eff88b91962c0da}{get\+Value}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns price level value. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structCandlePriceLevel_a06e82b25463992714578bb56fe5fb0ac}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this price level. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structCandlePriceLevel_aad10423d3a6ad15c090b294c1fd4348a}{change\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol) const override
+\begin{DoxyCompactList}\small\item\em Returns candle event symbol string with this candle price level set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}} \mbox{\hyperlink{structCandlePriceLevel_a75e4a8b822ed34f55175b7da9687b6b2}{parse}} (const dxfcpp\+::\+String\+Like\+Wrapper \&s)
+\begin{DoxyCompactList}\small\item\em Parses string representation of candle price level into object. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}} \mbox{\hyperlink{structCandlePriceLevel_a8f88e74bda74cef15110663e454d485e}{value\+Of}} (double value)
+\begin{DoxyCompactList}\small\item\em Returns candle price level with the given value. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}} \mbox{\hyperlink{structCandlePriceLevel_ae0e338d7347621a81a565de30600a325}{get\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol)
+\begin{DoxyCompactList}\small\item\em Returns candle price level of the given candle symbol string. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{structCandlePriceLevel_aa97bd449ff664667f43a946050072e88}{normalize\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol)
+\begin{DoxyCompactList}\small\item\em Returns candle symbol string with the normalized representation of the candle price level attribute. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structCandlePriceLevel_ad576786d0c07507d5edb6afde34b80bf}\label{structCandlePriceLevel_ad576786d0c07507d5edb6afde34b80bf}} 
+static const \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}} \mbox{\hyperlink{structCandlePriceLevel_ad576786d0c07507d5edb6afde34b80bf}{DEFAULT}} \{math\+::\+NaN\}
+\begin{DoxyCompactList}\small\item\em Default price level corresponds to {\ttfamily NaN (std\+::numeric\+\_\+limits$<$double$>$\+::quiet\+\_\+\+Na\+N())} \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{structCandlePriceLevel_a7f251a4f9dc8ff3bfb447561fcad9d89}{ATTRIBUTE\+\_\+\+KEY}} \{\char`\"{}pl\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em The attribute key that is used to store the value of {\ttfamily \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}}} in a symbol string using methods of \mbox{\hyperlink{structMarketEventSymbols}{Market\+Event\+Symbols}} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classCandle}{Candle}} price level attribute of \mbox{\hyperlink{structCandleSymbol}{Candle\+Symbol}} defines how candles shall be aggregated in respect to price interval. 
+
+The negative or infinite values of price interval are treated as exceptional. 
+\begin{DoxyItemize}
+\item Price interval may be equal to zero. It means every unique price creates a particular candle to aggregate all events with this price for the chosen \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}}. 
+\item Non-\/zero price level creates sequence of intervals starting from 0\+: ...,\mbox{[}-\/pl;0),\mbox{[}0;pl),\mbox{[}pl;2$\ast$pl),...,\mbox{[}n$\ast$pl,n$\ast$pl+pl). Events aggregated by chosen \mbox{\hyperlink{structCandlePeriod}{Candle\+Period}} and price intervals. 
+\end{DoxyItemize}
+
+\doxysubparagraph*{Implementation details}
+
+This attribute is encoded in a symbol string with \mbox{\hyperlink{structMarketEventSymbols_a87a94614e292548132480d85a1dfbe9d}{Market\+Event\+Symbols.get\+Attribute\+String\+By\+Key}}, \mbox{\hyperlink{structMarketEventSymbols_ab4184832b9b58374117d61b1f8c94617}{change\+Attribute\+String\+By\+Key}}, and \mbox{\hyperlink{structMarketEventSymbols_ab0369d51b1181a4fb7ccb674923ddb9d}{remove\+Attribute\+String\+By\+Key}} methods. The key to use with these methods is available via \mbox{\hyperlink{structCandlePriceLevel_a7f251a4f9dc8ff3bfb447561fcad9d89}{Candle\+Price\+Level\+::\+ATTRIBUTE\+\_\+\+KEY}} constant. The value that this key shall be set to is equal to the corresponding \mbox{\hyperlink{structCandlePriceLevel_a06e82b25463992714578bb56fe5fb0ac}{Candle\+Price\+Level\+::to\+String()}} 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structCandlePriceLevel_aad10423d3a6ad15c090b294c1fd4348a}\label{structCandlePriceLevel_aad10423d3a6ad15c090b294c1fd4348a}} 
+\index{CandlePriceLevel@{CandlePriceLevel}!changeAttributeForSymbol@{changeAttributeForSymbol}}
+\index{changeAttributeForSymbol@{changeAttributeForSymbol}!CandlePriceLevel@{CandlePriceLevel}}
+\doxyparagraph{\texorpdfstring{changeAttributeForSymbol()}{changeAttributeForSymbol()}}
+{\footnotesize\ttfamily std\+::string Candle\+Price\+Level\+::change\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Returns candle event symbol string with this candle price level set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & original candle event symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle event symbol string with this candle price level set. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structCandleSymbolAttribute_a965d1af360208c9f1733d47ac278bdad}{Candle\+Symbol\+Attribute}}.
+
+
+
+References ATTRIBUTE\+\_\+\+KEY, Market\+Event\+Symbols\+::change\+Attribute\+String\+By\+Key(), DEFAULT, Market\+Event\+Symbols\+::remove\+Attribute\+String\+By\+Key(), and to\+String().
+
+\mbox{\Hypertarget{structCandlePriceLevel_ae0e338d7347621a81a565de30600a325}\label{structCandlePriceLevel_ae0e338d7347621a81a565de30600a325}} 
+\index{CandlePriceLevel@{CandlePriceLevel}!getAttributeForSymbol@{getAttributeForSymbol}}
+\index{getAttributeForSymbol@{getAttributeForSymbol}!CandlePriceLevel@{CandlePriceLevel}}
+\doxyparagraph{\texorpdfstring{getAttributeForSymbol()}{getAttributeForSymbol()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}} Candle\+Price\+Level\+::get\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns candle price level of the given candle symbol string. 
+
+The result is \mbox{\hyperlink{structCandlePriceLevel_ad576786d0c07507d5edb6afde34b80bf}{Candle\+Price\+Level\+::\+DEFAULT}} if the symbol does not have candle price level attribute.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle price level of the given candle symbol string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structCandlePriceLevel_a662a8c5042413a617eff88b91962c0da}\label{structCandlePriceLevel_a662a8c5042413a617eff88b91962c0da}} 
+\index{CandlePriceLevel@{CandlePriceLevel}!getValue@{getValue}}
+\index{getValue@{getValue}!CandlePriceLevel@{CandlePriceLevel}}
+\doxyparagraph{\texorpdfstring{getValue()}{getValue()}}
+{\footnotesize\ttfamily double Candle\+Price\+Level\+::get\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns price level value. 
+
+For example, the value of {\ttfamily 1} represents {\ttfamily \mbox{[}0;1), \mbox{[}1;2)} and so on intervals to build candles.
+
+\begin{DoxyReturn}{Returns}
+price level value. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structCandlePriceLevel_aa97bd449ff664667f43a946050072e88}\label{structCandlePriceLevel_aa97bd449ff664667f43a946050072e88}} 
+\index{CandlePriceLevel@{CandlePriceLevel}!normalizeAttributeForSymbol@{normalizeAttributeForSymbol}}
+\index{normalizeAttributeForSymbol@{normalizeAttributeForSymbol}!CandlePriceLevel@{CandlePriceLevel}}
+\doxyparagraph{\texorpdfstring{normalizeAttributeForSymbol()}{normalizeAttributeForSymbol()}}
+{\footnotesize\ttfamily static std\+::string Candle\+Price\+Level\+::normalize\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns candle symbol string with the normalized representation of the candle price level attribute. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle symbol string with the normalized representation of the the candle price level attribute. 
+\end{DoxyReturn}
+
+
+References ATTRIBUTE\+\_\+\+KEY, and Market\+Event\+Symbols\+::remove\+Attribute\+String\+By\+Key().
+
+\mbox{\Hypertarget{structCandlePriceLevel_a75e4a8b822ed34f55175b7da9687b6b2}\label{structCandlePriceLevel_a75e4a8b822ed34f55175b7da9687b6b2}} 
+\index{CandlePriceLevel@{CandlePriceLevel}!parse@{parse}}
+\index{parse@{parse}!CandlePriceLevel@{CandlePriceLevel}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}} Candle\+Price\+Level\+::parse (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Parses string representation of candle price level into object. 
+
+Any string that was returned by \mbox{\hyperlink{structCandlePriceLevel_a06e82b25463992714578bb56fe5fb0ac}{Candle\+Price\+Level\+::to\+String()}} can be parsed and case is ignored for parsing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & string representation of candle price level. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle price level. 
+\end{DoxyReturn}
+
+
+References value\+Of().
+
+\mbox{\Hypertarget{structCandlePriceLevel_a06e82b25463992714578bb56fe5fb0ac}\label{structCandlePriceLevel_a06e82b25463992714578bb56fe5fb0ac}} 
+\index{CandlePriceLevel@{CandlePriceLevel}!toString@{toString}}
+\index{toString@{toString}!CandlePriceLevel@{CandlePriceLevel}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Candle\+Price\+Level\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this price level. 
+
+The string representation is composed of value. This string representation can be converted back into object with \mbox{\hyperlink{structCandlePriceLevel_a75e4a8b822ed34f55175b7da9687b6b2}{Candle\+Price\+Level\+::parse()}} method.
+
+\begin{DoxyReturn}{Returns}
+string representation of this price level. 
+\end{DoxyReturn}
+
+
+Referenced by change\+Attribute\+For\+Symbol().
+
+\mbox{\Hypertarget{structCandlePriceLevel_a8f88e74bda74cef15110663e454d485e}\label{structCandlePriceLevel_a8f88e74bda74cef15110663e454d485e}} 
+\index{CandlePriceLevel@{CandlePriceLevel}!valueOf@{valueOf}}
+\index{valueOf@{valueOf}!CandlePriceLevel@{CandlePriceLevel}}
+\doxyparagraph{\texorpdfstring{valueOf()}{valueOf()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}} Candle\+Price\+Level\+::value\+Of (\begin{DoxyParamCaption}\item[{double}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns candle price level with the given value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & candle price level value. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle price level with the given value and type. 
+\end{DoxyReturn}
+
+
+References DEFAULT.
+
+
+
+Referenced by parse().
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{structCandlePriceLevel_a7f251a4f9dc8ff3bfb447561fcad9d89}\label{structCandlePriceLevel_a7f251a4f9dc8ff3bfb447561fcad9d89}} 
+\index{CandlePriceLevel@{CandlePriceLevel}!ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}}
+\index{ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}!CandlePriceLevel@{CandlePriceLevel}}
+\doxyparagraph{\texorpdfstring{ATTRIBUTE\_KEY}{ATTRIBUTE\_KEY}}
+{\footnotesize\ttfamily const std\+::string Candle\+Price\+Level\+::\+ATTRIBUTE\+\_\+\+KEY \{\char`\"{}pl\char`\"{}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The attribute key that is used to store the value of {\ttfamily \mbox{\hyperlink{structCandlePriceLevel}{Candle\+Price\+Level}}} in a symbol string using methods of \mbox{\hyperlink{structMarketEventSymbols}{Market\+Event\+Symbols}} class. 
+
+The value of this constant is \char`\"{}pl\char`\"{}. The value that this key shall be set to is equal to the corresponding \mbox{\hyperlink{structCandlePriceLevel_a06e82b25463992714578bb56fe5fb0ac}{Candle\+Price\+Level\+::to\+String()}} 
+
+Referenced by change\+Attribute\+For\+Symbol(), and normalize\+Attribute\+For\+Symbol().
+

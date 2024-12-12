@@ -1,0 +1,428 @@
+\hypertarget{classMessage}{}\doxysubsection{Message Class Reference}
+\label{classMessage}\index{Message@{Message}}
+
+
+\mbox{\hyperlink{classMessage}{Message}} event with application-\/specific attachment.  
+
+
+
+
+{\ttfamily \#include $<$Message.\+hpp$>$}
+
+Inheritance diagram for Message\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.000000cm]{d6/d28/classMessage}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMessage_a2f33300b0c592f02e1d4305a97238c59}\label{classMessage_a2f33300b0c592f02e1d4305a97238c59}} 
+using \mbox{\hyperlink{classMessage_a2f33300b0c592f02e1d4305a97238c59}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMessage}{Message}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classMessage}{Message}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classMessage_a6fe5c32b2c9e184e703ba245d8cf9d21}\label{classMessage_a6fe5c32b2c9e184e703ba245d8cf9d21}} 
+using \mbox{\hyperlink{classMessage_a6fe5c32b2c9e184e703ba245d8cf9d21}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classMessage}{Message}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classMessage}{Message}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classMessage_a52523f9a10a77e9bc250f3eb7fc30f0e}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classMessage_af20055721940f8bdbaeac742a5fed878}\label{classMessage_af20055721940f8bdbaeac742a5fed878}} 
+\mbox{\hyperlink{classMessage_af20055721940f8bdbaeac742a5fed878}{Message}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new message with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMessage_a974a40147271d3279c3e2c03a612fb8d}{Message}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new message with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMessage_a1f6468e62c712ef350c8bc907ba58c7c}{Message}} (std\+::string event\+Symbol, std\+::string attachment) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new message with the specified event symbol and attachment. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classMessage_a7ee613d664a53f315c19bc1f85d9ebd5}{get\+Event\+Symbol}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{classMessage_ae2a204ec25fe34381223907f12548e53}{get\+Event\+Symbol\+Opt}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns symbol of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMessage_a0134e5bc98853deb4796697a4a3e9681}{set\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes symbol of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMessage}{Message}} \& \mbox{\hyperlink{classMessage_ab24784e1c06dca5b0df0e40cf1af043d}{with\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current message. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classMessage_a3fef2ab663e769e87d282a1e999fa1f7}{get\+Event\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMessage_a0d08f81e081d22724c597f562c998163}{set\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMessage}{Message}} \& \mbox{\hyperlink{classMessage_ab68b49fe09f643120bb145671b1ee105}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current message. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classMessage_a5efaa38076a77393a7ceccf844c7b73a}{get\+Attachment}} () const \&
+\begin{DoxyCompactList}\small\item\em Returns attachment. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{classMessage_ad06bce78df95d20d5fa48262422372d6}{get\+Attachment\+Opt}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns attachment of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classMessage_af94952d3f54ae03d7ddf5321e31be1da}{set\+Attachment}} (std\+::string attachment)
+\begin{DoxyCompactList}\small\item\em Changes attachment. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classMessage}{Message}} \& \mbox{\hyperlink{classMessage_afd317f70019cd3d4020dc50068c73de3}{with\+Attachment}} (std\+::string attachment) noexcept
+\begin{DoxyCompactList}\small\item\em Changes attachment. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classMessage_abe482dcaa45133def4eaf4481eda36b9}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classMessage_ab8eda26a7f699fd1b7f039e1b4a53f09}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classMessage_acb2e40a006d05ce1d3c4670deb0ba811}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classMessage_a6c21931937ce9b32cd405dce1f57867b}\label{classMessage_a6c21931937ce9b32cd405dce1f57867b}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classMessage_a6c21931937ce9b32cd405dce1f57867b}{TYPE}} = Event\+Type\+Enum\+::\+MESSAGE
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classMessage}{Message}} event with application-\/specific attachment. 
+
+Messages are never conflated and are delivered to all connected subscribers. There is no built-\/in persistence for messages. They are lost when subscribers are not connected to the message publisher, so they shall be only used for notification purposes in addition to persistence mechanism.
+
+\doxysubparagraph*{Implementation details}
+
+This event is implemented on top of QDS record {\ttfamily \mbox{\hyperlink{classMessage}{Message}}}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMessage_a974a40147271d3279c3e2c03a612fb8d}\label{classMessage_a974a40147271d3279c3e2c03a612fb8d}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new message with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & event symbol. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classMessage_a1f6468e62c712ef350c8bc907ba58c7c}\label{classMessage_a1f6468e62c712ef350c8bc907ba58c7c}} 
+\index{Message@{Message}!Message@{Message}}
+\index{Message@{Message}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{Message()}{Message()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Message\+::\+Message (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol,  }\item[{std\+::string}]{attachment }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new message with the specified event symbol and attachment. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & event symbol. \\
+\hline
+{\em attachment} & attachment. \\
+\hline
+\end{DoxyParams}
+
+
+References Message().
+
+
+
+Referenced by Message().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMessage_acb2e40a006d05ce1d3c4670deb0ba811}\label{classMessage_acb2e40a006d05ce1d3c4670deb0ba811}} 
+\index{Message@{Message}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Message\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classMessage_ab8eda26a7f699fd1b7f039e1b4a53f09}\label{classMessage_ab8eda26a7f699fd1b7f039e1b4a53f09}} 
+\index{Message@{Message}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classMessage}{Message}} $>$ Message\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classMessage_a5efaa38076a77393a7ceccf844c7b73a}\label{classMessage_a5efaa38076a77393a7ceccf844c7b73a}} 
+\index{Message@{Message}!getAttachment@{getAttachment}}
+\index{getAttachment@{getAttachment}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{getAttachment()}{getAttachment()}}
+{\footnotesize\ttfamily const std\+::string\& Message\+::get\+Attachment (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns attachment. 
+
+\begin{DoxyReturn}{Returns}
+attachment. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classMessage_ad06bce78df95d20d5fa48262422372d6}\label{classMessage_ad06bce78df95d20d5fa48262422372d6}} 
+\index{Message@{Message}!getAttachmentOpt@{getAttachmentOpt}}
+\index{getAttachmentOpt@{getAttachmentOpt}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{getAttachmentOpt()}{getAttachmentOpt()}}
+{\footnotesize\ttfamily const std\+::optional$<$std\+::string$>$\& Message\+::get\+Attachment\+Opt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns attachment of this event. 
+
+\begin{DoxyReturn}{Returns}
+attachment of this event or {\ttfamily std\+::nullopt}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classMessage_a7ee613d664a53f315c19bc1f85d9ebd5}\label{classMessage_a7ee613d664a53f315c19bc1f85d9ebd5}} 
+\index{Message@{Message}!getEventSymbol@{getEventSymbol}}
+\index{getEventSymbol@{getEventSymbol}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{getEventSymbol()}{getEventSymbol()}}
+{\footnotesize\ttfamily const std\+::string\& Message\+::get\+Event\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns symbol of this event. 
+
+\begin{DoxyReturn}{Returns}
+symbol of this event or dxfcpp\+::\+String\+::\+NUL ({\ttfamily std\+::string\{\char`\"{}$<$null$>$\char`\"{}\}}) 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventTypeWithSymbol_a1ab6590a5835f45ef7d9779cd20bfe8f}{Event\+Type\+With\+Symbol$<$ std\+::string $>$}}.
+
+\mbox{\Hypertarget{classMessage_ae2a204ec25fe34381223907f12548e53}\label{classMessage_ae2a204ec25fe34381223907f12548e53}} 
+\index{Message@{Message}!getEventSymbolOpt@{getEventSymbolOpt}}
+\index{getEventSymbolOpt@{getEventSymbolOpt}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{getEventSymbolOpt()}{getEventSymbolOpt()}}
+{\footnotesize\ttfamily const std\+::optional$<$std\+::string$>$\& Message\+::get\+Event\+Symbol\+Opt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns symbol of this event. 
+
+\begin{DoxyReturn}{Returns}
+symbol of this event or {\ttfamily std\+::nullopt}. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventTypeWithSymbol_a55953df4e0de30ce7761ede1883741a5}{Event\+Type\+With\+Symbol$<$ std\+::string $>$}}.
+
+\mbox{\Hypertarget{classMessage_a3fef2ab663e769e87d282a1e999fa1f7}\label{classMessage_a3fef2ab663e769e87d282a1e999fa1f7}} 
+\index{Message@{Message}!getEventTime@{getEventTime}}
+\index{getEventTime@{getEventTime}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{getEventTime()}{getEventTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Message\+::get\+Event\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time when event was created or zero when time is not available. 
+
+This event time is available only when the corresponding \mbox{\hyperlink{structDXEndpoint}{DXEndpoint}} is created with \mbox{\hyperlink{structDXEndpoint_a59bc3053ef198595c2ed5a450ba5a2a4}{DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY}} and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from \mbox{\hyperlink{structOnDemandService}{On\+Demand\+Service}}. Events that are coming from a network connections do not have an embedded event time information and this method will return zero for them, meaning that event was received just now.
+
+Default implementation returns 0.
+
+\begin{DoxyReturn}{Returns}
+The difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC or zero when time is not available. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a1c9c34884f4fcce70579a059252bdf1a}{Event\+Type}}.
+
+\mbox{\Hypertarget{classMessage_af94952d3f54ae03d7ddf5321e31be1da}\label{classMessage_af94952d3f54ae03d7ddf5321e31be1da}} 
+\index{Message@{Message}!setAttachment@{setAttachment}}
+\index{setAttachment@{setAttachment}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{setAttachment()}{setAttachment()}}
+{\footnotesize\ttfamily void Message\+::set\+Attachment (\begin{DoxyParamCaption}\item[{std\+::string}]{attachment }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes attachment. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em attachment} & attachment. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Attachment().
+
+\mbox{\Hypertarget{classMessage_a0134e5bc98853deb4796697a4a3e9681}\label{classMessage_a0134e5bc98853deb4796697a4a3e9681}} 
+\index{Message@{Message}!setEventSymbol@{setEventSymbol}}
+\index{setEventSymbol@{setEventSymbol}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{setEventSymbol()}{setEventSymbol()}}
+{\footnotesize\ttfamily void Message\+::set\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes symbol of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structEventTypeWithSymbol_a8ea9877b148603252021aad739c7e524}{Event\+Type\+With\+Symbol$<$ std\+::string $>$}}.
+
+
+
+Referenced by with\+Event\+Symbol().
+
+\mbox{\Hypertarget{classMessage_a0d08f81e081d22724c597f562c998163}\label{classMessage_a0d08f81e081d22724c597f562c998163}} 
+\index{Message@{Message}!setEventTime@{setEventTime}}
+\index{setEventTime@{setEventTime}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{setEventTime()}{setEventTime()}}
+{\footnotesize\ttfamily void Message\+::set\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event creation time. 
+
+Default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_ad5ae35b7dac44e2f0df5fa44c0830ad9}{Event\+Type}}.
+
+
+
+Referenced by with\+Event\+Time().
+
+\mbox{\Hypertarget{classMessage_a52523f9a10a77e9bc250f3eb7fc30f0e}\label{classMessage_a52523f9a10a77e9bc250f3eb7fc30f0e}} 
+\index{Message@{Message}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Message\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classMessage_abe482dcaa45133def4eaf4481eda36b9}\label{classMessage_abe482dcaa45133def4eaf4481eda36b9}} 
+\index{Message@{Message}!toString@{toString}}
+\index{toString@{toString}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Message\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+
+\mbox{\Hypertarget{classMessage_afd317f70019cd3d4020dc50068c73de3}\label{classMessage_afd317f70019cd3d4020dc50068c73de3}} 
+\index{Message@{Message}!withAttachment@{withAttachment}}
+\index{withAttachment@{withAttachment}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{withAttachment()}{withAttachment()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMessage}{Message}}\& Message\+::with\+Attachment (\begin{DoxyParamCaption}\item[{std\+::string}]{attachment }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes attachment. 
+
+and returns the current message.
+
+
+\begin{DoxyParams}{Parameters}
+{\em attachment} & attachment.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current message. 
+\end{DoxyReturn}
+
+
+References set\+Attachment().
+
+\mbox{\Hypertarget{classMessage_ab24784e1c06dca5b0df0e40cf1af043d}\label{classMessage_ab24784e1c06dca5b0df0e40cf1af043d}} 
+\index{Message@{Message}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMessage}{Message}}\& Message\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current message. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current message. 
+\end{DoxyReturn}
+
+
+References set\+Event\+Symbol().
+
+\mbox{\Hypertarget{classMessage_ab68b49fe09f643120bb145671b1ee105}\label{classMessage_ab68b49fe09f643120bb145671b1ee105}} 
+\index{Message@{Message}!withEventTime@{withEventTime}}
+\index{withEventTime@{withEventTime}!Message@{Message}}
+\doxyparagraph{\texorpdfstring{withEventTime()}{withEventTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMessage}{Message}}\& Message\+::with\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns the current message. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current message. 
+\end{DoxyReturn}
+
+
+References set\+Event\+Time().
+

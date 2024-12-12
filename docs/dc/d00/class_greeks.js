@@ -4,6 +4,7 @@ var class_greeks =
     [ "Unique", "dc/d00/class_greeks.html#a474a7ee4e85c47600092a12deb794a8b", null ],
     [ "Greeks", "dc/d00/class_greeks.html#a79bfd339b3653425dd9db1b6878e97d1", null ],
     [ "Greeks", "dc/d00/class_greeks.html#ac7fa6bb7140876e1532f0865f5b85010", null ],
+    [ "assign", "dc/d00/class_greeks.html#aef14e96a041808651db2ab18d5aad900", null ],
     [ "getDelta", "dc/d00/class_greeks.html#a9c028325cdb21bcf7f65ea5131ead520", null ],
     [ "getEventFlags", "dc/d00/class_greeks.html#a8e9fbcf81dd2fb99b624b0693bf38b58", null ],
     [ "getEventFlagsMask", "dc/d00/class_greeks.html#a8ab19de7aca32ba8fa3724a2e1dd5a6c", null ],
@@ -30,5 +31,5 @@ var class_greeks =
     [ "setVega", "dc/d00/class_greeks.html#a4efbbe21163bc05c242de53bd6a4e014", null ],
     [ "setVolatility", "dc/d00/class_greeks.html#a11937d4c3a691f3490756783640ae9c8", null ],
     [ "toGraal", "dc/d00/class_greeks.html#ab4d005fd60478fd5ec526b4506fe91cf", null ],
-    [ "toString", "dc/d00/class_greeks.html#a7add57bcfa465480b062f979a2a9185a", null ]
+    [ "toString", "dc/d00/class_greeks.html#a5c38f08c17f9c5e6b9a81ce073770699", null ]
 ];

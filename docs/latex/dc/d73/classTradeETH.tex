@@ -1,0 +1,202 @@
+\hypertarget{classTradeETH}{}\doxysubsection{Trade\+ETH Class Reference}
+\label{classTradeETH}\index{TradeETH@{TradeETH}}
+
+
+\mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event is a snapshot of the price and size of the last trade during extended trading hours and the extended trading hours day volume and day turnover.  
+
+
+
+
+{\ttfamily \#include $<$Trade\+ETH.\+hpp$>$}
+
+Inheritance diagram for Trade\+ETH\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=7.000000cm]{dc/d73/classTradeETH}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTradeETH_ac134346114939ea08f8c4f07ef65fda4}\label{classTradeETH_ac134346114939ea08f8c4f07ef65fda4}} 
+using \mbox{\hyperlink{classTradeETH_ac134346114939ea08f8c4f07ef65fda4}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTradeETH_ade7e12c7f050496acfddab7577900d7d}\label{classTradeETH_ade7e12c7f050496acfddab7577900d7d}} 
+using \mbox{\hyperlink{classTradeETH_ade7e12c7f050496acfddab7577900d7d}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classTradeETH_a53153439ab22a927b6df15e72f65f59d}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTradeETH_ab0485ea7eb826fc2c31e8017052d7da7}\label{classTradeETH_ab0485ea7eb826fc2c31e8017052d7da7}} 
+\mbox{\hyperlink{classTradeETH_ab0485ea7eb826fc2c31e8017052d7da7}{Trade\+ETH}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new trade event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTradeETH_a5e25dec319c2b38bb20e16ac791a556b}{Trade\+ETH}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new trade event with the specified event symbol. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classTradeETH_a726a477ce9d765b6a91d1c5562c8a23a}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classTradeETH_aca894405419b1c9cb865eb7f5ce37a6b}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classTradeETH_a1123706a4a00c0c099983fbd6bc2dbee}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTradeETH_ad8179fb1bf35cd8b8c4059f82601d670}\label{classTradeETH_ad8179fb1bf35cd8b8c4059f82601d670}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classTradeETH_ad8179fb1bf35cd8b8c4059f82601d670}{TYPE}} = Event\+Type\+Enum\+::\+TRADE\+\_\+\+ETH
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event is a snapshot of the price and size of the last trade during extended trading hours and the extended trading hours day volume and day turnover. 
+
+This event is defined only for symbols (typically stocks and ETFs) with a designated {\bfseries{extended trading hours}} (ETH, pre market and post market trading sessions). It represents the most recent information that is available about ETH last trade on the market at any given moment of time.
+
+\doxysubparagraph*{Trading sessions}
+
+The \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event defines last trade \mbox{\hyperlink{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{price}} as officially defined by the corresponding exchange for its {\bfseries{extended trading hours}} (ETH). It also includes \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume}} and day\+Turnover {\bfseries{for the extended trading hours only}} of the trading day identified by \mbox{\hyperlink{classTradeBase_a49359e7e646d6916337477a298bef4ea}{day\+Id}}. This event is not defined for symbols that has no concept of ETH.
+
+When the first trade of {\bfseries{regular trading hours}} (RTH) happens, then \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event is generated with \mbox{\hyperlink{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours}} property set to {\ttfamily false}. Afterwards, during RTH, \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event is not updated and retains information about the last trade, volume and turnover of the pre market trading session.
+
+When the first trade of {\bfseries{extended trading hours}} (ETH) happens, then \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event is generated with \mbox{\hyperlink{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours}} property set to {\ttfamily true}. Afterwards, during ETH, \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event is updated on each trade with the last trade information from post market trading session and total volume and turnover of the pre and post market trading session (excluding the volume and turnover of a regular trading session).
+
+Note, that during pre-\/ and post-\/market sessions, \mbox{\hyperlink{classTrade}{Trade}} event also updates, but only its \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume}} and \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover}} properties change to reflect the overall official volume and turnover as reported by exchanges. During post market trading session, exchanges may correct their official RTH last trading price, which results in the update to \mbox{\hyperlink{classTrade}{Trade}} event.
+
+\doxysubparagraph*{Volume and Turnover}
+
+Note that one can compute volume-\/weighted average price (VWAP) for extended trading hours by this formula\+: ~\newline
+{\ttfamily vwap = \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover}} / day\+Volume;}
+
+\doxysubparagraph*{Daily reset}
+
+Daily reset procedure that happens on a schedule during non-\/trading hours resets \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume}} and \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover}} to math\+::\+NaN and sets \mbox{\hyperlink{classTradeBase_a49359e7e646d6916337477a298bef4ea}{day\+Id}} to the next trading day in preparation to the next day\textquotesingle{}s pre-\/market trading session (or for regular trading if there is no pre-\/market) while leaving all other properties intact. They reflect information about the last known ETH trade until the next ETH trade happens.
+
+\doxysubparagraph*{The most recent last trade price}
+
+The most recent last trade price (\char`\"{}extended last price\char`\"{}) in the market can be found by combining information from both \mbox{\hyperlink{classTrade}{Trade}} and \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} events using \mbox{\hyperlink{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}{is\+Extended\+Trading\+Hours}} method to figure out which trading session had the most recent trade. The following piece of code finds the most recent last trade price from the given \mbox{\hyperlink{structDXFeed}{feed}} for a given {\ttfamily symbol}, assuming there is a \mbox{\hyperlink{classDXFeedSubscription}{subscription}} for both \mbox{\hyperlink{classTrade}{Trade}} and \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} events for the given {\ttfamily symbol}\+:
+
+
+\begin{DoxyPre}{\ttfamily 
+    auto \mbox{\hyperlink{classTrade}{trade}} = feed-\/>getLastEvent(Trade::create(symbol));
+    auto \mbox{\hyperlink{classTradeETH}{tradeEth}} = feed-\/>getLastEvent(TradeETH::create(symbol));
+    {\bfseries{double}} extLast = tradeEth-\/>\mbox{\hyperlink{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}{isExtendedTradingHours}}() ?
+tradeEth-\/>\mbox{\hyperlink{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{getPrice}}() : trade-\/>\mbox{\hyperlink{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{getPrice}}();
+}\end{DoxyPre}
+
+
+Note, that the above code works correctly for symbols that has no concept of ETH, too, because in this case the DXFeed\+::get\+Last\+Event() leaves default values in \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event properties, which means that \mbox{\hyperlink{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours}} flag is {\ttfamily false} and a regular \mbox{\hyperlink{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{Trade\+::get\+Price()}} is used.
+
+\doxysubparagraph*{Implementation details}
+
+This event is implemented on top of QDS record {\ttfamily \mbox{\hyperlink{classTradeETH}{Trade\+ETH}}} and {\ttfamily \mbox{\hyperlink{classTradeETH}{Trade\+ETH}}\&X} for regional exchange extended trade hours. \mbox{\hyperlink{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours}} property is internally represented as a last bit of the \char`\"{}\+Flags\char`\"{} field of the record. Regional records do not explicitly store a field for \mbox{\hyperlink{classTradeBase_a5044e7359f50ff34f59c7ab201b1847b}{exchange\+Code}} property. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTradeETH_a5e25dec319c2b38bb20e16ac791a556b}\label{classTradeETH_a5e25dec319c2b38bb20e16ac791a556b}} 
+\index{TradeETH@{TradeETH}!TradeETH@{TradeETH}}
+\index{TradeETH@{TradeETH}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{TradeETH()}{TradeETH()}}
+{\footnotesize\ttfamily Trade\+ETH\+::\+Trade\+ETH (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new trade event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Trade\+Base\+::\+Trade\+Base().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTradeETH_a1123706a4a00c0c099983fbd6bc2dbee}\label{classTradeETH_a1123706a4a00c0c099983fbd6bc2dbee}} 
+\index{TradeETH@{TradeETH}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Trade\+ETH\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeETH_aca894405419b1c9cb865eb7f5ce37a6b}\label{classTradeETH_aca894405419b1c9cb865eb7f5ce37a6b}} 
+\index{TradeETH@{TradeETH}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} $>$ Trade\+ETH\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classTradeETH_a53153439ab22a927b6df15e72f65f59d}\label{classTradeETH_a53153439ab22a927b6df15e72f65f59d}} 
+\index{TradeETH@{TradeETH}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Trade\+ETH\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classTradeETH_a726a477ce9d765b6a91d1c5562c8a23a}\label{classTradeETH_a726a477ce9d765b6a91d1c5562c8a23a}} 
+\index{TradeETH@{TradeETH}!toString@{toString}}
+\index{toString@{toString}!TradeETH@{TradeETH}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Trade\+ETH\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+

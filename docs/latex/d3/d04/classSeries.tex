@@ -1,0 +1,957 @@
+\hypertarget{classSeries}{}\doxysubsection{Series Class Reference}
+\label{classSeries}\index{Series@{Series}}
+
+
+\mbox{\hyperlink{classSeries}{Series}} event is a snapshot of computed values that are available for all option series for a given underlying symbol based on the option prices on the market.  
+
+
+
+
+{\ttfamily \#include $<$Series.\+hpp$>$}
+
+Inheritance diagram for Series\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{d3/d04/classSeries}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSeries_a5bb9608a5b617e3013af5f3eea00870c}\label{classSeries_a5bb9608a5b617e3013af5f3eea00870c}} 
+using \mbox{\hyperlink{classSeries_a5bb9608a5b617e3013af5f3eea00870c}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classSeries}{Series}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classSeries}{Series}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSeries_a3556076826bb6461a444ff5e505a98a1}\label{classSeries_a3556076826bb6461a444ff5e505a98a1}} 
+using \mbox{\hyperlink{classSeries_a3556076826bb6461a444ff5e505a98a1}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classSeries}{Series}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classSeries}{Series}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classSeries_afd18361d44fee4c4f6917a795d4787c8}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSeries_ab5a573f4ffe904090bb949d8296049c6}\label{classSeries_ab5a573f4ffe904090bb949d8296049c6}} 
+\mbox{\hyperlink{classSeries_ab5a573f4ffe904090bb949d8296049c6}{Series}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new series event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSeries_a0df0b1a5308067253a9494992bcb2823}{Series}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new series event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSeries}{Series}} \& \mbox{\hyperlink{classSeries_ad44f0042399d12a5089edfcf8f46a838}{with\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current series. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSeries}{Series}} \& \mbox{\hyperlink{classSeries_ad82b21c539dba9296931304486833174}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current series. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{classSeries_ae7d22a26cd01ca43be9dedfdaccbc264}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classSeries_aa7a2cf69f440c96e959215d91b74be18}{get\+Event\+Flags}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classSeries_a57dab2f4fe5dc2c7186030ce7cbe484b}{get\+Event\+Flags\+Mask}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_ae0abef41ae9d2d515ac8ecbc57862f02}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_aa2ee5498ab7b306c0da28894de3af9d8}{set\+Event\+Flags}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSeries}{Series}} \& \mbox{\hyperlink{classSeries_adbb9637fa8a54c01267432aa897177c1}{with\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current series. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSeries}{Series}} \& \mbox{\hyperlink{classSeries_a747084203daae5d482e1ed42e8cec667}{with\+Event\+Flags}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current series. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classSeries_a7813d76291d673ec40f1dbc4e91a957a}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_ac86e234a0bbdc974ea0d8363870164ae}{set\+Index}} (std\+::int64\+\_\+t index) override
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSeries}{Series}} \& \mbox{\hyperlink{classSeries_ac7d2ba3214d64e9d2dfdbf13e5c17d3a}{with\+Index}} (std\+::int64\+\_\+t index) noexcept
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this series and returns it. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classSeries_a07dee451dfa17b1b6e95900577b77efa}{get\+Time\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time and sequence of this event packaged into single long value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_a3283369b1939e785b22e8be79f466d7b}{set\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time and sequence of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classSeries_a7a1ed0b1efc3e47e43c6f9e553b98818}{get\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of this series event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_a7121b54c5851cdc8f819172f3effe093}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this series event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSeries}{Series}} \& \mbox{\hyperlink{classSeries_a065b7412cb4887751dd6b8e931e45491}{with\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this series and returns it. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classSeries_ad55aef28d2eba7f75089d20bb1dac659}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns sequence number of this series event to distinguish trades that have the same time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_a46961aff2b54780ebb5358fcd3fde184}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes \mbox{\hyperlink{classSeries_ad55aef28d2eba7f75089d20bb1dac659}{sequence number}} of this series event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSeries}{Series}} \& \mbox{\hyperlink{classSeries_aa6508da459d99c013d804cf9e42d246e}{with\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \mbox{\hyperlink{classSeries_ad55aef28d2eba7f75089d20bb1dac659}{sequence number}} of this series. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classSeries_ad9d84082306a664c5c1d7f0ca8b7fc6e}{get\+Expiration}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns day id of expiration. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_aabc12a6514fc953ddfaf46c53e145862}{set\+Expiration}} (std\+::int32\+\_\+t expiration) noexcept
+\begin{DoxyCompactList}\small\item\em Changes day id of expiration. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSeries_a678aa71d62ad22ab4d1242079a8f12fc}{get\+Volatility}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns implied volatility index for this series based on VIX methodology. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_a44ce9b30dcb011e7200cfc1ab37c41e8}{set\+Volatility}} (double volatility) noexcept
+\begin{DoxyCompactList}\small\item\em Changes implied volatility index for this series based on VIX methodology. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSeries_ab63426aceb8a0c9925776263a6e8a551}{get\+Call\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns call options traded volume for a day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_ae5180cafcd153f2a49340a8bc0ab634a}{set\+Call\+Volume}} (double call\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes call options traded volume for a day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSeries_a3f1bd4de14c3902e8d4aae0687efd59a}{get\+Put\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns put options traded volume for a day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_aff9cf61c14d231b4c84386d9e9423f09}{set\+Put\+Volume}} (double put\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes put options traded volume for a day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSeries_a725bec59580e6c67e6525b231c33bad4}{get\+Option\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns options traded volume for a day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSeries_a6f8583c5c117f2f238f636dd4090b68a}{get\+Put\+Call\+Ratio}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns ratio of put options traded volume to call options traded volume for a day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_aa73a273c9b7d9cfcf9a6668e59cf08c0}{set\+Put\+Call\+Ratio}} (double put\+Call\+Ratio) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ratio of put options traded volume to call options traded volume for a day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSeries_ab915cdffd8ce2c2285f9cc82df1b77c7}{get\+Forward\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns implied forward price for this option series. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_ad9744173ded5af5b84483beb854ef23b}{set\+Forward\+Price}} (double forward\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes implied forward price for this option series. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSeries_a2cade5d5cf706feac9854164fa4389a6}{get\+Dividend}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns implied simple dividend return of the corresponding option series. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_a568d52a5960b3a380d157f194764a8cb}{set\+Dividend}} (double dividend) noexcept
+\begin{DoxyCompactList}\small\item\em Changes implied simple dividend return of the corresponding option series. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSeries_ae5508d6130e4cbf07ea46df9d76da419}{get\+Interest}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns implied simple interest return of the corresponding option series. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSeries_a5325f102382cc003733ee5fa8e40139a}{set\+Interest}} (double interest) noexcept
+\begin{DoxyCompactList}\small\item\em Changes implied simple interest return of the corresponding option series. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classSeries_a35652445c968755a5988b3887bcbfd36}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classSeries_a5ae89ec5d5cfcd7f2ef53dfc7280e1ed}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classSeries_aa6bd2c4473585c7cfdf34372f9628f80}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSeries_a59b5eed9428d46e96784f55f1782e51e}\label{classSeries_a59b5eed9428d46e96784f55f1782e51e}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classSeries_a59b5eed9428d46e96784f55f1782e51e}{TYPE}} = Event\+Type\+Enum\+::\+SERIES
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classSeries_a68ff7781ae0e619ab7cf5ca31d4ebc0d}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classSeries}{Series}} event is a snapshot of computed values that are available for all option series for a given underlying symbol based on the option prices on the market. 
+
+It represents the most recent information that is available about the corresponding values on the market at any given moment of time.
+
+\mbox{\hyperlink{classSeries}{Series}} is an \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}} with multiple instances of event available for each underlying symbol. Each series event instance corresponds to an Option\+Series of the corresponding underlying. The correspondence between a series event instance and an Option\+Series is established via \mbox{\hyperlink{classSeries_ad9d84082306a664c5c1d7f0ca8b7fc6e}{expiration}} property. If case where there are multiple series at the same expiration day id, then series events are are ordered by their \mbox{\hyperlink{classSeries_a7813d76291d673ec40f1dbc4e91a957a}{index}} in the same order as the corresponding Option\+Series are ordered by their attributes.
+
+\doxysubparagraph*{\label{_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+\mbox{\hyperlink{classSeries}{Series}} data source provides a consistent view of the set of known series. The corresponding information is carried in event\+Flags property. The logic behind this property is detailed in \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}} class documentation. Multiple event sources for the same symbol are not supported for series, thus source property is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}}.
+
+Indexed\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list current of events.
+
+\doxysubparagraph*{Implementation details}
+
+This event is implemented on top of QDS records {\ttfamily \mbox{\hyperlink{classSeries}{Series}}}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSeries_a0df0b1a5308067253a9494992bcb2823}\label{classSeries_a0df0b1a5308067253a9494992bcb2823}} 
+\index{Series@{Series}!Series@{Series}}
+\index{Series@{Series}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{Series()}{Series()}}
+{\footnotesize\ttfamily Series\+::\+Series (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new series event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Market\+Event\+::\+Market\+Event().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSeries_aa6bd2c4473585c7cfdf34372f9628f80}\label{classSeries_aa6bd2c4473585c7cfdf34372f9628f80}} 
+\index{Series@{Series}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Series\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_a5ae89ec5d5cfcd7f2ef53dfc7280e1ed}\label{classSeries_a5ae89ec5d5cfcd7f2ef53dfc7280e1ed}} 
+\index{Series@{Series}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classSeries}{Series}} $>$ Series\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classSeries_ab63426aceb8a0c9925776263a6e8a551}\label{classSeries_ab63426aceb8a0c9925776263a6e8a551}} 
+\index{Series@{Series}!getCallVolume@{getCallVolume}}
+\index{getCallVolume@{getCallVolume}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getCallVolume()}{getCallVolume()}}
+{\footnotesize\ttfamily double Series\+::get\+Call\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns call options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+call options traded volume for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_a2cade5d5cf706feac9854164fa4389a6}\label{classSeries_a2cade5d5cf706feac9854164fa4389a6}} 
+\index{Series@{Series}!getDividend@{getDividend}}
+\index{getDividend@{getDividend}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getDividend()}{getDividend()}}
+{\footnotesize\ttfamily double Series\+::get\+Dividend (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied simple dividend return of the corresponding option series. 
+
+\begin{DoxyReturn}{Returns}
+implied simple dividend return of the corresponding option series. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_aa7a2cf69f440c96e959215d91b74be18}\label{classSeries_aa7a2cf69f440c96e959215d91b74be18}} 
+\index{Series@{Series}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Series\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classSeries_a57dab2f4fe5dc2c7186030ce7cbe484b}\label{classSeries_a57dab2f4fe5dc2c7186030ce7cbe484b}} 
+\index{Series@{Series}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} Series\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a01ae5fda2a1ada2279c541f821a03ada}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classSeries_ad9d84082306a664c5c1d7f0ca8b7fc6e}\label{classSeries_ad9d84082306a664c5c1d7f0ca8b7fc6e}} 
+\index{Series@{Series}!getExpiration@{getExpiration}}
+\index{getExpiration@{getExpiration}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getExpiration()}{getExpiration()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Series\+::get\+Expiration (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns day id of expiration. 
+
+Example\+: day\+\_\+util\+:\+:\#get\+Day\+Id\+By\+Year\+Month\+Day() \char`\"{}dxfcpp\+::day\+\_\+util\+::get\+Day\+Id\+By\+Year\+Month\+Day\char`\"{}(20090117).
+
+\begin{DoxyReturn}{Returns}
+day id of expiration. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_ab915cdffd8ce2c2285f9cc82df1b77c7}\label{classSeries_ab915cdffd8ce2c2285f9cc82df1b77c7}} 
+\index{Series@{Series}!getForwardPrice@{getForwardPrice}}
+\index{getForwardPrice@{getForwardPrice}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getForwardPrice()}{getForwardPrice()}}
+{\footnotesize\ttfamily double Series\+::get\+Forward\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied forward price for this option series. 
+
+\begin{DoxyReturn}{Returns}
+implied forward price for this option series. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_a7813d76291d673ec40f1dbc4e91a957a}\label{classSeries_a7813d76291d673ec40f1dbc4e91a957a}} 
+\index{Series@{Series}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Series\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+The index is composed of time and sequence. Changing either time or sequence changes event index.
+
+\begin{DoxyReturn}{Returns}
+unique index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a4310a26785d5142efba9d7c0094125bc}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classSeries_ae5508d6130e4cbf07ea46df9d76da419}\label{classSeries_ae5508d6130e4cbf07ea46df9d76da419}} 
+\index{Series@{Series}!getInterest@{getInterest}}
+\index{getInterest@{getInterest}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getInterest()}{getInterest()}}
+{\footnotesize\ttfamily double Series\+::get\+Interest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied simple interest return of the corresponding option series. 
+
+\begin{DoxyReturn}{Returns}
+implied simple interest return of the corresponding option series. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_a725bec59580e6c67e6525b231c33bad4}\label{classSeries_a725bec59580e6c67e6525b231c33bad4}} 
+\index{Series@{Series}!getOptionVolume@{getOptionVolume}}
+\index{getOptionVolume@{getOptionVolume}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getOptionVolume()}{getOptionVolume()}}
+{\footnotesize\ttfamily double Series\+::get\+Option\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+options traded volume for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_a6f8583c5c117f2f238f636dd4090b68a}\label{classSeries_a6f8583c5c117f2f238f636dd4090b68a}} 
+\index{Series@{Series}!getPutCallRatio@{getPutCallRatio}}
+\index{getPutCallRatio@{getPutCallRatio}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getPutCallRatio()}{getPutCallRatio()}}
+{\footnotesize\ttfamily double Series\+::get\+Put\+Call\+Ratio (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns ratio of put options traded volume to call options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+ratio of put options traded volume to call options traded volume for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_a3f1bd4de14c3902e8d4aae0687efd59a}\label{classSeries_a3f1bd4de14c3902e8d4aae0687efd59a}} 
+\index{Series@{Series}!getPutVolume@{getPutVolume}}
+\index{getPutVolume@{getPutVolume}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getPutVolume()}{getPutVolume()}}
+{\footnotesize\ttfamily double Series\+::get\+Put\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns put options traded volume for a day. 
+
+\begin{DoxyReturn}{Returns}
+put options traded volume for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_ad55aef28d2eba7f75089d20bb1dac659}\label{classSeries_ad55aef28d2eba7f75089d20bb1dac659}} 
+\index{Series@{Series}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Series\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns sequence number of this series event to distinguish trades that have the same time. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \+::\+MAX\+\_\+\+SEQUENCE.
+
+\begin{DoxyReturn}{Returns}
+sequence of this series event. 
+\end{DoxyReturn}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+
+
+Referenced by set\+Time().
+
+\mbox{\Hypertarget{classSeries_ae7d22a26cd01ca43be9dedfdaccbc264}\label{classSeries_ae7d22a26cd01ca43be9dedfdaccbc264}} 
+\index{Series@{Series}!getSource@{getSource}}
+\index{getSource@{getSource}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}}\& Series\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source of this event. 
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a54d06fa64c5f66ed78b328f4c36a633b}{Indexed\+Event}}.
+
+
+
+References Indexed\+Event\+Source\+::\+DEFAULT.
+
+\mbox{\Hypertarget{classSeries_a7a1ed0b1efc3e47e43c6f9e553b98818}\label{classSeries_a7a1ed0b1efc3e47e43c6f9e553b98818}} 
+\index{Series@{Series}!getTime@{getTime}}
+\index{getTime@{getTime}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Series\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of this series event. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+time of this series event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_a07dee451dfa17b1b6e95900577b77efa}\label{classSeries_a07dee451dfa17b1b6e95900577b77efa}} 
+\index{Series@{Series}!getTimeSequence@{getTimeSequence}}
+\index{getTimeSequence@{getTimeSequence}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getTimeSequence()}{getTimeSequence()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Series\+::get\+Time\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time and sequence of this event packaged into single long value. 
+
+\begin{DoxyReturn}{Returns}
+time and sequence of this event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_a678aa71d62ad22ab4d1242079a8f12fc}\label{classSeries_a678aa71d62ad22ab4d1242079a8f12fc}} 
+\index{Series@{Series}!getVolatility@{getVolatility}}
+\index{getVolatility@{getVolatility}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{getVolatility()}{getVolatility()}}
+{\footnotesize\ttfamily double Series\+::get\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns implied volatility index for this series based on VIX methodology. 
+
+\begin{DoxyReturn}{Returns}
+implied volatility index for this series based on VIX methodology. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSeries_ae5180cafcd153f2a49340a8bc0ab634a}\label{classSeries_ae5180cafcd153f2a49340a8bc0ab634a}} 
+\index{Series@{Series}!setCallVolume@{setCallVolume}}
+\index{setCallVolume@{setCallVolume}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setCallVolume()}{setCallVolume()}}
+{\footnotesize\ttfamily void Series\+::set\+Call\+Volume (\begin{DoxyParamCaption}\item[{double}]{call\+Volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes call options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em call\+Volume} & call options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_a568d52a5960b3a380d157f194764a8cb}\label{classSeries_a568d52a5960b3a380d157f194764a8cb}} 
+\index{Series@{Series}!setDividend@{setDividend}}
+\index{setDividend@{setDividend}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setDividend()}{setDividend()}}
+{\footnotesize\ttfamily void Series\+::set\+Dividend (\begin{DoxyParamCaption}\item[{double}]{dividend }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied simple dividend return of the corresponding option series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dividend} & implied simple dividend return of the corresponding option series. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_aa2ee5498ab7b306c0da28894de3af9d8}\label{classSeries_aa2ee5498ab7b306c0da28894de3af9d8}} 
+\index{Series@{Series}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Series\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_affbf8ba9b25153efb7201800d9c8b182}{Indexed\+Event}}.
+
+
+
+References Event\+Flags\+Mask\+::get\+Mask().
+
+
+
+Referenced by with\+Event\+Flags().
+
+\mbox{\Hypertarget{classSeries_ae0abef41ae9d2d515ac8ecbc57862f02}\label{classSeries_ae0abef41ae9d2d515ac8ecbc57862f02}} 
+\index{Series@{Series}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Series\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_aefd0ab36275fc9adf6f7d57c2833c200}{Indexed\+Event}}.
+
+
+
+Referenced by with\+Event\+Flags().
+
+\mbox{\Hypertarget{classSeries_aabc12a6514fc953ddfaf46c53e145862}\label{classSeries_aabc12a6514fc953ddfaf46c53e145862}} 
+\index{Series@{Series}!setExpiration@{setExpiration}}
+\index{setExpiration@{setExpiration}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setExpiration()}{setExpiration()}}
+{\footnotesize\ttfamily void Series\+::set\+Expiration (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{expiration }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes day id of expiration. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em expiration} & day id of expiration. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_ad9744173ded5af5b84483beb854ef23b}\label{classSeries_ad9744173ded5af5b84483beb854ef23b}} 
+\index{Series@{Series}!setForwardPrice@{setForwardPrice}}
+\index{setForwardPrice@{setForwardPrice}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setForwardPrice()}{setForwardPrice()}}
+{\footnotesize\ttfamily void Series\+::set\+Forward\+Price (\begin{DoxyParamCaption}\item[{double}]{forward\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied forward price for this option series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em forward\+Price} & implied forward price for this option series. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_ac86e234a0bbdc974ea0d8363870164ae}\label{classSeries_ac86e234a0bbdc974ea0d8363870164ae}} 
+\index{Series@{Series}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily void Series\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the event index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classSeries_a7813d76291d673ec40f1dbc4e91a957a}{Series\+::get\+Index()}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a9e8731cb11daf84a0eb17fb570af9684}{Indexed\+Event}}.
+
+
+
+Referenced by with\+Index().
+
+\mbox{\Hypertarget{classSeries_a5325f102382cc003733ee5fa8e40139a}\label{classSeries_a5325f102382cc003733ee5fa8e40139a}} 
+\index{Series@{Series}!setInterest@{setInterest}}
+\index{setInterest@{setInterest}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setInterest()}{setInterest()}}
+{\footnotesize\ttfamily void Series\+::set\+Interest (\begin{DoxyParamCaption}\item[{double}]{interest }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied simple interest return of the corresponding option series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em interest} & implied simple interest return of the corresponding option series. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_aa73a273c9b7d9cfcf9a6668e59cf08c0}\label{classSeries_aa73a273c9b7d9cfcf9a6668e59cf08c0}} 
+\index{Series@{Series}!setPutCallRatio@{setPutCallRatio}}
+\index{setPutCallRatio@{setPutCallRatio}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setPutCallRatio()}{setPutCallRatio()}}
+{\footnotesize\ttfamily void Series\+::set\+Put\+Call\+Ratio (\begin{DoxyParamCaption}\item[{double}]{put\+Call\+Ratio }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ratio of put options traded volume to call options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em put\+Call\+Ratio} & ratio of put options traded volume to call options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_aff9cf61c14d231b4c84386d9e9423f09}\label{classSeries_aff9cf61c14d231b4c84386d9e9423f09}} 
+\index{Series@{Series}!setPutVolume@{setPutVolume}}
+\index{setPutVolume@{setPutVolume}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setPutVolume()}{setPutVolume()}}
+{\footnotesize\ttfamily void Series\+::set\+Put\+Volume (\begin{DoxyParamCaption}\item[{double}]{put\+Volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes put options traded volume for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em put\+Volume} & put options traded volume for a day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_a46961aff2b54780ebb5358fcd3fde184}\label{classSeries_a46961aff2b54780ebb5358fcd3fde184}} 
+\index{Series@{Series}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily void Series\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes \mbox{\hyperlink{classSeries_ad55aef28d2eba7f75089d20bb1dac659}{sequence number}} of this series event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classSeries_ad55aef28d2eba7f75089d20bb1dac659}{Series\+::get\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+
+
+Referenced by with\+Sequence().
+
+\mbox{\Hypertarget{classSeries_a7121b54c5851cdc8f819172f3effe093}\label{classSeries_a7121b54c5851cdc8f819172f3effe093}} 
+\index{Series@{Series}!setTime@{setTime}}
+\index{setTime@{setTime}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily void Series\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this series event. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time of this series event. \\
+\hline
+\end{DoxyParams}
+
+
+References get\+Sequence().
+
+
+
+Referenced by with\+Time().
+
+\mbox{\Hypertarget{classSeries_a3283369b1939e785b22e8be79f466d7b}\label{classSeries_a3283369b1939e785b22e8be79f466d7b}} 
+\index{Series@{Series}!setTimeSequence@{setTimeSequence}}
+\index{setTimeSequence@{setTimeSequence}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setTimeSequence()}{setTimeSequence()}}
+{\footnotesize\ttfamily void Series\+::set\+Time\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time and sequence of this event. 
+
+{\bfseries{Do not use this method directly.}} Change \mbox{\hyperlink{classSeries_a7121b54c5851cdc8f819172f3effe093}{time}} and/or \mbox{\hyperlink{classSeries_a46961aff2b54780ebb5358fcd3fde184}{sequence}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Sequence} & the time and sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Time\+Sequence() 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classSeries_a44ce9b30dcb011e7200cfc1ab37c41e8}\label{classSeries_a44ce9b30dcb011e7200cfc1ab37c41e8}} 
+\index{Series@{Series}!setVolatility@{setVolatility}}
+\index{setVolatility@{setVolatility}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{setVolatility()}{setVolatility()}}
+{\footnotesize\ttfamily void Series\+::set\+Volatility (\begin{DoxyParamCaption}\item[{double}]{volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes implied volatility index for this series based on VIX methodology. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volatility} & implied volatility index for this series based on VIX methodology. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSeries_afd18361d44fee4c4f6917a795d4787c8}\label{classSeries_afd18361d44fee4c4f6917a795d4787c8}} 
+\index{Series@{Series}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Series\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classSeries_a35652445c968755a5988b3887bcbfd36}\label{classSeries_a35652445c968755a5988b3887bcbfd36}} 
+\index{Series@{Series}!toString@{toString}}
+\index{toString@{toString}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Series\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+
+\mbox{\Hypertarget{classSeries_a747084203daae5d482e1ed42e8cec667}\label{classSeries_a747084203daae5d482e1ed42e8cec667}} 
+\index{Series@{Series}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSeries}{Series}}\& Series\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current series. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current series. 
+\end{DoxyReturn}
+
+
+References set\+Event\+Flags().
+
+\mbox{\Hypertarget{classSeries_adbb9637fa8a54c01267432aa897177c1}\label{classSeries_adbb9637fa8a54c01267432aa897177c1}} 
+\index{Series@{Series}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSeries}{Series}}\& Series\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current series. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current series. 
+\end{DoxyReturn}
+
+
+References set\+Event\+Flags().
+
+\mbox{\Hypertarget{classSeries_ad44f0042399d12a5089edfcf8f46a838}\label{classSeries_ad44f0042399d12a5089edfcf8f46a838}} 
+\index{Series@{Series}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSeries}{Series}}\& Series\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current series. 
+\end{DoxyReturn}
+
+
+References Market\+Event\+::set\+Event\+Symbol().
+
+\mbox{\Hypertarget{classSeries_ad82b21c539dba9296931304486833174}\label{classSeries_ad82b21c539dba9296931304486833174}} 
+\index{Series@{Series}!withEventTime@{withEventTime}}
+\index{withEventTime@{withEventTime}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{withEventTime()}{withEventTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSeries}{Series}}\& Series\+::with\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns the current series. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current series. 
+\end{DoxyReturn}
+
+
+References Market\+Event\+::set\+Event\+Time().
+
+\mbox{\Hypertarget{classSeries_ac7d2ba3214d64e9d2dfdbf13e5c17d3a}\label{classSeries_ac7d2ba3214d64e9d2dfdbf13e5c17d3a}} 
+\index{Series@{Series}!withIndex@{withIndex}}
+\index{withIndex@{withIndex}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{withIndex()}{withIndex()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSeries}{Series}}\& Series\+::with\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes unique per-\/symbol index of this series and returns it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & unique per-\/symbol index of this series. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current series. 
+\end{DoxyReturn}
+
+
+References set\+Index().
+
+\mbox{\Hypertarget{classSeries_aa6508da459d99c013d804cf9e42d246e}\label{classSeries_aa6508da459d99c013d804cf9e42d246e}} 
+\index{Series@{Series}!withSequence@{withSequence}}
+\index{withSequence@{withSequence}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{withSequence()}{withSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSeries}{Series}}\& Series\+::with\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \mbox{\hyperlink{classSeries_ad55aef28d2eba7f75089d20bb1dac659}{sequence number}} of this series. 
+
+Returns the current order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current series. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classSeries_ad55aef28d2eba7f75089d20bb1dac659}{Series\+::get\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+References set\+Sequence().
+
+\mbox{\Hypertarget{classSeries_a065b7412cb4887751dd6b8e931e45491}\label{classSeries_a065b7412cb4887751dd6b8e931e45491}} 
+\index{Series@{Series}!withTime@{withTime}}
+\index{withTime@{withTime}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{withTime()}{withTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSeries}{Series}}\& Series\+::with\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this series and returns it. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time of this series. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current series. 
+\end{DoxyReturn}
+
+
+References set\+Time().
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{classSeries_a68ff7781ae0e619ab7cf5ca31d4ebc0d}\label{classSeries_a68ff7781ae0e619ab7cf5ca31d4ebc0d}} 
+\index{Series@{Series}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!Series@{Series}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily constexpr std\+::uint32\+\_\+t Series\+::\+MAX\+\_\+\+SEQUENCE = (1U $<$$<$ 22U) -\/ 1U\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\+::set\+Sequence() 
+\end{DoxySeeAlso}
+
+
+Referenced by get\+Sequence(), and set\+Sequence().
+

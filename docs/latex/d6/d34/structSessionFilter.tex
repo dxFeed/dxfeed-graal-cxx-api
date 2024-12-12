@@ -1,0 +1,118 @@
+\hypertarget{structSessionFilter}{}\doxysubsection{Session\+Filter Struct Reference}
+\label{structSessionFilter}\index{SessionFilter@{SessionFilter}}
+
+
+A filter for sessions used by various search methods.  
+
+
+
+
+{\ttfamily \#include $<$Session\+Filter.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structSessionFilter_aa89f8ffb1d1687c9385a9ba2a102a3cd}{Session\+Filter}} (Session\+Filter\+Enum code, std\+::string name, std\+::optional$<$ \mbox{\hyperlink{structSessionType}{Session\+Type}} $>$ type, std\+::optional$<$ bool $>$ trading) noexcept
+\begin{DoxyCompactList}\small\item\em Creates filter with specified type and trading flag conditions. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Session $>$ }\\bool \mbox{\hyperlink{structSessionFilter_adbf951521149cf505da2e6677cd2c430}{accept}} (\mbox{\hyperlink{structSession}{Session}} session) const noexcept
+\begin{DoxyCompactList}\small\item\em Tests whether or not the specified session is an acceptable result. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSessionFilter_a50e4dee1c7f3f0bff8af5c2aa151a565}\label{structSessionFilter_a50e4dee1c7f3f0bff8af5c2aa151a565}} 
+static const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \mbox{\hyperlink{structSessionFilter_a50e4dee1c7f3f0bff8af5c2aa151a565}{ANY}} \{Session\+Filter\+Enum\+::\+ANY, \char`\"{}ANY\char`\"{}, std\+::nullopt, std\+::nullopt\}
+\begin{DoxyCompactList}\small\item\em Accepts any session -\/ useful for pure schedule navigation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionFilter_a2487ef594cd32bd646cc21ba920242a8}\label{structSessionFilter_a2487ef594cd32bd646cc21ba920242a8}} 
+static const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \mbox{\hyperlink{structSessionFilter_a2487ef594cd32bd646cc21ba920242a8}{TRADING}} \{Session\+Filter\+Enum\+::\+TRADING, \char`\"{}TRADING\char`\"{}, std\+::nullopt, true\}
+\begin{DoxyCompactList}\small\item\em Accepts trading sessions only -\/ those with {\ttfamily (\mbox{\hyperlink{structSession_af0c0ffbf572cacdc2f77be540628deeb}{Session\+::is\+Trading()}} == true)}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionFilter_acebbd7bb49f943c7fe0a4987ba26c7ad}\label{structSessionFilter_acebbd7bb49f943c7fe0a4987ba26c7ad}} 
+static const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \mbox{\hyperlink{structSessionFilter_acebbd7bb49f943c7fe0a4987ba26c7ad}{NON\+\_\+\+TRADING}} \{Session\+Filter\+Enum\+::\+NON\+\_\+\+TRADING, \char`\"{}NON\+\_\+\+TRADING\char`\"{}, std\+::nullopt, false\}
+\begin{DoxyCompactList}\small\item\em Accepts non-\/trading sessions only -\/ those with {\ttfamily (\mbox{\hyperlink{structSession_af0c0ffbf572cacdc2f77be540628deeb}{Session\+::is\+Trading()}} == false)}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionFilter_aa98aaae1420b0eaccd9f282a099cd923}\label{structSessionFilter_aa98aaae1420b0eaccd9f282a099cd923}} 
+static const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \mbox{\hyperlink{structSessionFilter_aa98aaae1420b0eaccd9f282a099cd923}{NO\+\_\+\+TRADING}}
+\begin{DoxyCompactList}\small\item\em Accepts any session with type \mbox{\hyperlink{structSessionType_a54a07823a8e290b498ae61a6896fe7b9}{Session\+Type\+::\+NO\+\_\+\+TRADING}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionFilter_ad0e64d847a221cc47f5ec7e9b967fcce}\label{structSessionFilter_ad0e64d847a221cc47f5ec7e9b967fcce}} 
+static const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \mbox{\hyperlink{structSessionFilter_ad0e64d847a221cc47f5ec7e9b967fcce}{PRE\+\_\+\+MARKET}}
+\begin{DoxyCompactList}\small\item\em Accepts any session with type \mbox{\hyperlink{structSessionType_a218d9ab5ed4f897e3ff3406b57a2991b}{Session\+Type\+::\+PRE\+\_\+\+MARKET}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionFilter_a8a068a3b03798fb21e27939ee23d6ea9}\label{structSessionFilter_a8a068a3b03798fb21e27939ee23d6ea9}} 
+static const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \mbox{\hyperlink{structSessionFilter_a8a068a3b03798fb21e27939ee23d6ea9}{REGULAR}} \{Session\+Filter\+Enum\+::\+REGULAR, \char`\"{}REGULAR\char`\"{}, Session\+Type\+::\+REGULAR, std\+::nullopt\}
+\begin{DoxyCompactList}\small\item\em Accepts any session with type \mbox{\hyperlink{structSessionType_a4cf5e16f9081aeebe3863cf54d919ce5}{Session\+Type\+::\+REGULAR}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionFilter_a82fb8b53b7c374edef5864ca591cdee3}\label{structSessionFilter_a82fb8b53b7c374edef5864ca591cdee3}} 
+static const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \mbox{\hyperlink{structSessionFilter_a82fb8b53b7c374edef5864ca591cdee3}{AFTER\+\_\+\+MARKET}}
+\begin{DoxyCompactList}\small\item\em Accepts any session with type \mbox{\hyperlink{structSessionType_a180e6440f87435b7b73527df878b70bf}{Session\+Type\+::\+AFTER\+\_\+\+MARKET}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSessionFilter_aec60a92fe4a0981877eeb43709ea5989}\label{structSessionFilter_aec60a92fe4a0981877eeb43709ea5989}} 
+std\+::optional$<$ \mbox{\hyperlink{structSessionType}{Session\+Type}} $>$ \mbox{\hyperlink{structSessionFilter_aec60a92fe4a0981877eeb43709ea5989}{type\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Required type, std\+::nullopt if not relevant. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSessionFilter_ae38c98e1cd9bb42b653ffbba3d5c55a6}\label{structSessionFilter_ae38c98e1cd9bb42b653ffbba3d5c55a6}} 
+std\+::optional$<$ bool $>$ \mbox{\hyperlink{structSessionFilter_ae38c98e1cd9bb42b653ffbba3d5c55a6}{trading\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Required trading flag, std\+::nullopt if not relevant. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSessionFilter_a5531b3c302ec427a9d0bc483e5d5b7af}\label{structSessionFilter_a5531b3c302ec427a9d0bc483e5d5b7af}} 
+struct {\bfseries Session}
+\item 
+\mbox{\Hypertarget{structSessionFilter_ad4aee90a3774c331f27ea20a52583d5f}\label{structSessionFilter_ad4aee90a3774c331f27ea20a52583d5f}} 
+struct {\bfseries Schedule}
+\item 
+\mbox{\Hypertarget{structSessionFilter_a815a518a0b2fd8492d61196e3aafa201}\label{structSessionFilter_a815a518a0b2fd8492d61196e3aafa201}} 
+struct {\bfseries Day}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A filter for sessions used by various search methods. 
+
+This class provides predefined filters for certain \mbox{\hyperlink{structSession}{Session}} attributes, although users can create their own filters to suit their needs. 
+
+Please note that sessions can be either trading or non-\/trading, and this distinction can be either based on rules (e.\+g. weekends) or dictated by special occasions (e.\+g. holidays). Different filters treat this distinction differently -\/ some accept only trading sessions, some only non-\/trading, and some ignore type of session altogether. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structSessionFilter_aa89f8ffb1d1687c9385a9ba2a102a3cd}\label{structSessionFilter_aa89f8ffb1d1687c9385a9ba2a102a3cd}} 
+\index{SessionFilter@{SessionFilter}!SessionFilter@{SessionFilter}}
+\index{SessionFilter@{SessionFilter}!SessionFilter@{SessionFilter}}
+\doxyparagraph{\texorpdfstring{SessionFilter()}{SessionFilter()}}
+{\footnotesize\ttfamily Session\+Filter\+::\+Session\+Filter (\begin{DoxyParamCaption}\item[{Session\+Filter\+Enum}]{code,  }\item[{std\+::string}]{name,  }\item[{std\+::optional$<$ \mbox{\hyperlink{structSessionType}{Session\+Type}} $>$}]{type,  }\item[{std\+::optional$<$ bool $>$}]{trading }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Creates filter with specified type and trading flag conditions. 
+
+Both parameters specify what value corresponding attributes should have. If some parameter is std\+::nullopt then corresponding attribute is ignored (any value is accepted).
+
+
+\begin{DoxyParams}{Parameters}
+{\em code} & The enum code \\
+\hline
+{\em name} & The enum name \\
+\hline
+{\em type} & required type, std\+::nullopt if not relevant \\
+\hline
+{\em trading} & required trading flag, std\+::nullopt if not relevant \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structSessionFilter_adbf951521149cf505da2e6677cd2c430}\label{structSessionFilter_adbf951521149cf505da2e6677cd2c430}} 
+\index{SessionFilter@{SessionFilter}!accept@{accept}}
+\index{accept@{accept}!SessionFilter@{SessionFilter}}
+\doxyparagraph{\texorpdfstring{accept()}{accept()}}
+{\footnotesize\ttfamily template$<$typename Session $>$ \\
+bool Session\+Filter\+::accept (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structSession}{Session}}}]{session }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Tests whether or not the specified session is an acceptable result. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em session} & the session to be tested \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if specified session is accepted 
+\end{DoxyReturn}

@@ -1,0 +1,170 @@
+\hypertarget{classInstrumentProfileCollector}{}\doxysubsection{Instrument\+Profile\+Collector Class Reference}
+\label{classInstrumentProfileCollector}\index{InstrumentProfileCollector@{InstrumentProfileCollector}}
+
+
+Collects instrument profile updates and provides the live list of instrument profiles.  
+
+
+
+
+{\ttfamily \#include $<$Instrument\+Profile\+Collector.\+hpp$>$}
+
+Inheritance diagram for Instrument\+Profile\+Collector\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d8/d38/classInstrumentProfileCollector}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classInstrumentProfileCollector_a1b70a07a3a7da3e46380276955c34792}\label{classInstrumentProfileCollector_a1b70a07a3a7da3e46380276955c34792}} 
+using \mbox{\hyperlink{classInstrumentProfileCollector_a1b70a07a3a7da3e46380276955c34792}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfileCollector}{Instrument\+Profile\+Collector}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classInstrumentProfileCollector}{Instrument\+Profile\+Collector}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classInstrumentProfileCollector_a5f92a317f66ebf1de8efc84deb065238}\label{classInstrumentProfileCollector_a5f92a317f66ebf1de8efc84deb065238}} 
+using \mbox{\hyperlink{classInstrumentProfileCollector_a5f92a317f66ebf1de8efc84deb065238}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfileCollector}{Instrument\+Profile\+Collector}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classInstrumentProfileCollector}{Instrument\+Profile\+Collector}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classInstrumentProfileCollector_a4204de9853c90fbffdd72c8519249f7c}{get\+Last\+Update\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown. \end{DoxyCompactList}\item 
+std\+::chrono\+::milliseconds \mbox{\hyperlink{classInstrumentProfileCollector_a058a7f34e8e0fcfa24baf55bea44557c}{get\+Last\+Update\+Time\+As\+Duration}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns last modification time (as std\+::chrono\+::milliseconds) of instrument profiles or zero if it is unknown. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInstrumentProfileCollector_aac80b2de1a1d61c6aee8f17cca72613e}{update\+Instrument\+Profile}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$ ip) const
+\begin{DoxyCompactList}\small\item\em Convenience method to update one instrument profile in this collector. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInstrumentProfileCollector_a7a099f2838c9703acf038fbfeae1e54f}{update\+Instrument\+Profile}} (const \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} \&ip) const
+\begin{DoxyCompactList}\small\item\em Convenience method to update one instrument profile in this collector. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classIterableInstrumentProfile}{Iterable\+Instrument\+Profile}} $>$ \mbox{\hyperlink{classInstrumentProfileCollector_a6768fa8f7aa9b16f8672f8a472ebe090}{view}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a concurrent view of the set of instrument profiles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classInstrumentProfileCollector_a1b70a07a3a7da3e46380276955c34792}{Ptr}} \mbox{\hyperlink{classInstrumentProfileCollector_a535905b66eb7bbd98b36b80c7c2851a5}{create}} ()
+\begin{DoxyCompactList}\small\item\em Creates the new \mbox{\hyperlink{classInstrumentProfileCollector}{Instrument\+Profile\+Collector}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Collects instrument profile updates and provides the live list of instrument profiles. 
+
+This class contains a map that keeps a unique instrument profile per symbol. This class is intended to be used with \mbox{\hyperlink{classInstrumentProfileConnection}{Instrument\+Profile\+Connection}} as a repository that keeps profiles of all known instruments. See \mbox{\hyperlink{classInstrumentProfileConnection}{Instrument\+Profile\+Connection}} for a usage example.
+
+As set of instrument profiles stored in this collector can be accessed with \mbox{\hyperlink{classInstrumentProfileCollector_a6768fa8f7aa9b16f8672f8a472ebe090}{view}} method. A snapshot plus a live stream of updates can be accessed with add\+Update\+Listener method.
+
+Removal of instrument profile is represented by an \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} instance with a \mbox{\hyperlink{classInstrumentProfile_ab28532b83358e3074c8d3a7c4b832a3d}{type}} equal to {\ttfamily \mbox{\hyperlink{structInstrumentProfileType}{Instrument\+Profile\+Type}}\+::REMOVED.get\+Name()}.
+
+{\bfseries{This class is thread-\/safe.}} 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classInstrumentProfileCollector_a535905b66eb7bbd98b36b80c7c2851a5}\label{classInstrumentProfileCollector_a535905b66eb7bbd98b36b80c7c2851a5}} 
+\index{InstrumentProfileCollector@{InstrumentProfileCollector}!create@{create}}
+\index{create@{create}!InstrumentProfileCollector@{InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classInstrumentProfileCollector_a1b70a07a3a7da3e46380276955c34792}{Instrument\+Profile\+Collector\+::\+Ptr}} Instrument\+Profile\+Collector\+::create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Creates the new \mbox{\hyperlink{classInstrumentProfileCollector}{Instrument\+Profile\+Collector}}. 
+
+\begin{DoxyReturn}{Returns}
+The new \mbox{\hyperlink{classInstrumentProfileCollector}{Instrument\+Profile\+Collector}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInstrumentProfileCollector_a4204de9853c90fbffdd72c8519249f7c}\label{classInstrumentProfileCollector_a4204de9853c90fbffdd72c8519249f7c}} 
+\index{InstrumentProfileCollector@{InstrumentProfileCollector}!getLastUpdateTime@{getLastUpdateTime}}
+\index{getLastUpdateTime@{getLastUpdateTime}!InstrumentProfileCollector@{InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{getLastUpdateTime()}{getLastUpdateTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Instrument\+Profile\+Collector\+::get\+Last\+Update\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown. 
+
+Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+
+\begin{DoxyReturn}{Returns}
+The last modification time (in milliseconds) of instrument profiles or zero if it is unknown. 
+\end{DoxyReturn}
+
+
+Referenced by get\+Last\+Update\+Time\+As\+Duration().
+
+\mbox{\Hypertarget{classInstrumentProfileCollector_a058a7f34e8e0fcfa24baf55bea44557c}\label{classInstrumentProfileCollector_a058a7f34e8e0fcfa24baf55bea44557c}} 
+\index{InstrumentProfileCollector@{InstrumentProfileCollector}!getLastUpdateTimeAsDuration@{getLastUpdateTimeAsDuration}}
+\index{getLastUpdateTimeAsDuration@{getLastUpdateTimeAsDuration}!InstrumentProfileCollector@{InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{getLastUpdateTimeAsDuration()}{getLastUpdateTimeAsDuration()}}
+{\footnotesize\ttfamily std\+::chrono\+::milliseconds Instrument\+Profile\+Collector\+::get\+Last\+Update\+Time\+As\+Duration (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns last modification time (as std\+::chrono\+::milliseconds) of instrument profiles or zero if it is unknown. 
+
+Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+
+\begin{DoxyReturn}{Returns}
+The last modification time (as std\+::chrono\+::milliseconds) of instrument profiles or zero if it is unknown. 
+\end{DoxyReturn}
+
+
+References get\+Last\+Update\+Time().
+
+\mbox{\Hypertarget{classInstrumentProfileCollector_a7a099f2838c9703acf038fbfeae1e54f}\label{classInstrumentProfileCollector_a7a099f2838c9703acf038fbfeae1e54f}} 
+\index{InstrumentProfileCollector@{InstrumentProfileCollector}!updateInstrumentProfile@{updateInstrumentProfile}}
+\index{updateInstrumentProfile@{updateInstrumentProfile}!InstrumentProfileCollector@{InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{updateInstrumentProfile()}{updateInstrumentProfile()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Instrument\+Profile\+Collector\+::update\+Instrument\+Profile (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} \&}]{ip }\end{DoxyParamCaption}) const}
+
+
+
+Convenience method to update one instrument profile in this collector. 
+
+This is a shortcut for\+: 
+\begin{DoxyPre}{\ttfamily 
+   updateInstrumentProfiles(\{ip\}, nullptr);
+}\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em ip} & The instrument profile. \\
+\hline
+\end{DoxyParams}
+
+
+References Instrument\+Profile\+::free\+Graal(), and Instrument\+Profile\+::to\+Graal().
+
+\mbox{\Hypertarget{classInstrumentProfileCollector_aac80b2de1a1d61c6aee8f17cca72613e}\label{classInstrumentProfileCollector_aac80b2de1a1d61c6aee8f17cca72613e}} 
+\index{InstrumentProfileCollector@{InstrumentProfileCollector}!updateInstrumentProfile@{updateInstrumentProfile}}
+\index{updateInstrumentProfile@{updateInstrumentProfile}!InstrumentProfileCollector@{InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{updateInstrumentProfile()}{updateInstrumentProfile()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Instrument\+Profile\+Collector\+::update\+Instrument\+Profile (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$}]{ip }\end{DoxyParamCaption}) const}
+
+
+
+Convenience method to update one instrument profile in this collector. 
+
+This is a shortcut for\+: 
+\begin{DoxyPre}{\ttfamily 
+   updateInstrumentProfiles(\{ip\}, nullptr);
+}\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em ip} & The instrument profile. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classInstrumentProfileCollector_a6768fa8f7aa9b16f8672f8a472ebe090}\label{classInstrumentProfileCollector_a6768fa8f7aa9b16f8672f8a472ebe090}} 
+\index{InstrumentProfileCollector@{InstrumentProfileCollector}!view@{view}}
+\index{view@{view}!InstrumentProfileCollector@{InstrumentProfileCollector}}
+\doxyparagraph{\texorpdfstring{view()}{view()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classIterableInstrumentProfile}{Iterable\+Instrument\+Profile}} $>$ Instrument\+Profile\+Collector\+::view (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns a concurrent view of the set of instrument profiles. 
+
+Note, that removal of instrument profile is represented by an \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} instance with a \mbox{\hyperlink{classInstrumentProfile_ab28532b83358e3074c8d3a7c4b832a3d}{type}} equal to {\ttfamily \mbox{\hyperlink{structInstrumentProfileType}{Instrument\+Profile\+Type}}\+::REMOVED.get\+Name()}. Normally, this view exposes only non-\/removed profiles. However, if iteration is concurrent with removal, then a removed instrument profile (with a removed type) can be exposed by this view.
+
+\begin{DoxyReturn}{Returns}
+A concurrent view of the set of instrument profiles. 
+\end{DoxyReturn}

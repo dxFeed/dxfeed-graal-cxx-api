@@ -1,5 +1,7 @@
 var classdxfcpp_1_1Series =
 [
+    [ "Ptr", "df/da3/classdxfcpp_1_1Series.html#ae6798e75a7db3056a0468818e428936c", null ],
+    [ "Unique", "df/da3/classdxfcpp_1_1Series.html#a689e1bbfd344628a62e9007b0aca1acd", null ],
     [ "Series", "df/da3/classdxfcpp_1_1Series.html#a8d353ffbfcfaf1f7e3cb2b1bb9add279", null ],
     [ "Series", "df/da3/classdxfcpp_1_1Series.html#aac06ab7c3783e1c2b70065c1ba7b555f", null ],
     [ "getCallVolume", "df/da3/classdxfcpp_1_1Series.html#accbd9d05dc739bd07ddceddc36dd6d75", null ],
@@ -33,5 +35,19 @@ var classdxfcpp_1_1Series =
     [ "setTimeSequence", "df/da3/classdxfcpp_1_1Series.html#a4f865ebe992d1759467c93a55fce9b76", null ],
     [ "setVolatility", "df/da3/classdxfcpp_1_1Series.html#a03e81c865f159f206a6d363303a86424", null ],
     [ "toGraal", "df/da3/classdxfcpp_1_1Series.html#a7c711320747079dbd506d63c1d4730d7", null ],
-    [ "toString", "df/da3/classdxfcpp_1_1Series.html#a2b964d3b9d9275abbc2dc962d6e73578", null ]
+    [ "toString", "df/da3/classdxfcpp_1_1Series.html#a2b964d3b9d9275abbc2dc962d6e73578", null ],
+    [ "withEventFlags", "df/da3/classdxfcpp_1_1Series.html#a686c79a13a9cbfc2e69f2f897c8b1a19", null ],
+    [ "withEventFlags", "df/da3/classdxfcpp_1_1Series.html#aa0c031a0e3d8eff2ffa09f1243ecf94c", null ],
+    [ "withEventFlagsShared", "df/da3/classdxfcpp_1_1Series.html#acd9367cfadfd24ab6360d6ff2152d780", null ],
+    [ "withEventFlagsShared", "df/da3/classdxfcpp_1_1Series.html#a0ba1451ce5d9af1ccf890ec24837d3fb", null ],
+    [ "withEventSymbol", "df/da3/classdxfcpp_1_1Series.html#ae287dcd5bdcd6405b0a62cb7ff342874", null ],
+    [ "withEventSymbolShared", "df/da3/classdxfcpp_1_1Series.html#a0ccf33524a9a6c845cfce9e0fe809a96", null ],
+    [ "withEventTime", "df/da3/classdxfcpp_1_1Series.html#afcfed75c0c8a6881dc487a8bccd20eeb", null ],
+    [ "withEventTimeShared", "df/da3/classdxfcpp_1_1Series.html#afd57a78c0c0336f246b309346a72bf43", null ],
+    [ "withIndex", "df/da3/classdxfcpp_1_1Series.html#a9d29c8eff2e683ce7fda6ed01e71d8db", null ],
+    [ "withIndexShared", "df/da3/classdxfcpp_1_1Series.html#afdcad8f2db1fa12ebb6379f3f34da364", null ],
+    [ "withSequence", "df/da3/classdxfcpp_1_1Series.html#a82aa611758f10ce208bf3f7ec469e9e3", null ],
+    [ "withSequenceShared", "df/da3/classdxfcpp_1_1Series.html#af665d6ea0cabad8a2b70c6e61810de9c", null ],
+    [ "withTime", "df/da3/classdxfcpp_1_1Series.html#a1b0ab3ce0949c0474ba78970fc2ecadb", null ],
+    [ "withTimeShared", "df/da3/classdxfcpp_1_1Series.html#a785a0576560c73dd94f455108d3c47c5", null ]
 ];

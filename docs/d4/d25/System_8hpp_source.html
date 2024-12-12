@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('d4/d25/System_8hpp_source.html','../..
 <div class="title">System.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -123,15 +123,27 @@ $(document).ready(function(){initNavTree('d4/d25/System_8hpp_source.html','../..
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="../../d6/dc1/structdxfcpp_1_1System.html#aac369091e4fd1d35efcfc018db452905">setProperty</a>(<span class="keyword">const</span> std::string &amp;key, <span class="keyword">const</span> std::string &amp;value);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">     * Gets the system property indicated by the specified key.</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">     * @param key The name of the system property (UTF-8 string).</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">     * @return The value of a JVM system property (UTF-8 string), or an empty string.</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">     * Sets the JVM system properties to the Properties argument.</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">     * @tparam Properties The properties&#39; type (std::map, std::unordered_map etc).</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">     * @param properties The new system properties.</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">     * @return</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">static</span> std::string <a class="code" href="../../d6/dc1/structdxfcpp_1_1System.html#af2918454df4b12fa0d26476ac800d208">getProperty</a>(<span class="keyword">const</span> std::string &amp;key);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;};</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="../../d6/dc1/structdxfcpp_1_1System.html#a4d6dec1437d62a3d41c1a413f68517bf">   37</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Properties&gt; <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="../../d6/dc1/structdxfcpp_1_1System.html#a4d6dec1437d62a3d41c1a413f68517bf">setProperties</a>(Properties &amp;&amp;properties) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;&amp;[k, v] : properties) {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <a class="code" href="../../d6/dc1/structdxfcpp_1_1System.html#aac369091e4fd1d35efcfc018db452905">setProperty</a><a class="code" href="../../d6/dc1/structdxfcpp_1_1System.html#aac369091e4fd1d35efcfc018db452905">(</a>k<a class="code" href="../../d6/dc1/structdxfcpp_1_1System.html#aac369091e4fd1d35efcfc018db452905">,</a> v<a class="code" href="../../d6/dc1/structdxfcpp_1_1System.html#aac369091e4fd1d35efcfc018db452905">)</a>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">     * Gets the system property indicated by the specified key.</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">     * @param key The name of the system property (UTF-8 string).</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">     * @return The value of a JVM system property (UTF-8 string), or an empty string.</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">static</span> std::string <a class="code" href="../../d6/dc1/structdxfcpp_1_1System.html#af2918454df4b12fa0d26476ac800d208">getProperty</a>(<span class="keyword">const</span> std::string &amp;key);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;};</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -1,0 +1,395 @@
+\hypertarget{classInstrumentProfileConnection}{}\doxysubsection{Instrument\+Profile\+Connection Class Reference}
+\label{classInstrumentProfileConnection}\index{InstrumentProfileConnection@{InstrumentProfileConnection}}
+
+
+Connects to an instrument profile URL and reads instrument profiles with support of streaming live updates.  
+
+
+
+
+{\ttfamily \#include $<$Instrument\+Profile\+Connection.\+hpp$>$}
+
+Inheritance diagram for Instrument\+Profile\+Connection\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{da/dd7/classInstrumentProfileConnection}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47}{State}} \+: std\+::int32\+\_\+t \{ \newline
+\mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47ad91be9b5ceb9fe0af02b9b02413eccf8}{NOT\+\_\+\+CONNECTED}}
+, \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a9a14f95e151eec641316e7c784ce832d}{CONNECTING}}
+, \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47aa5afd6edd5336d91316964e493936858}{CONNECTED}}
+, \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a8f7afecbc8fbc4cd0f50a57d1172482e}{COMPLETED}}
+, \newline
+\mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}}
+ \}
+\begin{DoxyCompactList}\small\item\em Instrument profile connection state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classInstrumentProfileConnection_a62b6555d2b6352864e019b8f07e0736e}\label{classInstrumentProfileConnection_a62b6555d2b6352864e019b8f07e0736e}} 
+using \mbox{\hyperlink{classInstrumentProfileConnection_a62b6555d2b6352864e019b8f07e0736e}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfileConnection}{Instrument\+Profile\+Connection}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classInstrumentProfileConnection}{Instrument\+Profile\+Connection}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classInstrumentProfileConnection_ab84160a1458f809aeb8ed20a974e48ba}\label{classInstrumentProfileConnection_ab84160a1458f809aeb8ed20a974e48ba}} 
+using \mbox{\hyperlink{classInstrumentProfileConnection_ab84160a1458f809aeb8ed20a974e48ba}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfileConnection}{Instrument\+Profile\+Connection}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classInstrumentProfileConnection}{Instrument\+Profile\+Connection}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{classInstrumentProfileConnection_ae81feefd19ad41c1e3f372a44a095df1}{get\+Address}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the address of this instrument profile connection. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classInstrumentProfileConnection_a3828118661a663677a0e104ef1c32732}{get\+Update\+Period}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns update period in milliseconds. \end{DoxyCompactList}\item 
+std\+::chrono\+::milliseconds \mbox{\hyperlink{classInstrumentProfileConnection_a2b27ad27c61412f220c1bf8ac46804b4}{get\+Update\+Period\+As\+Duration}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns update period in milliseconds as chrono\+::duration It is period of an update check when the instrument profiles source does not support live updates and/or when connection is dropped. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInstrumentProfileConnection_a7d7b86d7b2cd285d2ee60d95b8d8d68f}{set\+Update\+Period}} (std\+::int64\+\_\+t update\+Period) const noexcept
+\begin{DoxyCompactList}\small\item\em Changes the update period in milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInstrumentProfileConnection_ac6444068aa7f98e30227ff99c03a6227}{set\+Update\+Period}} (std\+::chrono\+::milliseconds update\+Period) const noexcept
+\begin{DoxyCompactList}\small\item\em Changes the update period in milliseconds as chrono\+::duration. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47}{State}} \mbox{\hyperlink{classInstrumentProfileConnection_a6834928897fc3cb2149b64382eb1ab02}{get\+State}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns state of this instrument profile connections. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classInstrumentProfileConnection_aaea6203b7c46fa3c9b0062edc380318d}{get\+Last\+Modified}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInstrumentProfileConnection_ab3e84e571d878e46efb08d15a60e05be}{start}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Starts this instrument profile connection. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInstrumentProfileConnection_a19b95f408a0bb8b98516d02a43b737c4}{close}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Closes this instrument profile connection. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename State\+Change\+Listener $>$ }\\std\+::size\+\_\+t \mbox{\hyperlink{classInstrumentProfileConnection_adf459854e8a161b138c2318a2125887d}{add\+State\+Change\+Listener}} (State\+Change\+Listener \&\&listener) noexcept
+\begin{DoxyCompactList}\small\item\em Adds listener that is notified about changes in \mbox{\hyperlink{classInstrumentProfileConnection_a6834928897fc3cb2149b64382eb1ab02}{state}} property. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classInstrumentProfileConnection_a31916bc19a5dc932280b6c6d3fb05ed7}{remove\+State\+Change\+Listener}} (std\+::size\+\_\+t listener\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Removes listener that is notified about changes in \mbox{\hyperlink{classInstrumentProfileConnection_a6834928897fc3cb2149b64382eb1ab02}{state}} property. \end{DoxyCompactList}\item 
+auto \& \mbox{\hyperlink{classInstrumentProfileConnection_a4102fad32fecb43caaed0b70b70917f9}{on\+State\+Change}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns the on\+State\+Change \mbox{\hyperlink{structSimpleHandler}{handler}} that can be used to add or remove listeners. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classInstrumentProfileConnection_acc280f5f11f13580ad6c4b1ca666e0a9}{wait\+Until\+Completed}} (std\+::int64\+\_\+t timeout) const noexcept
+\begin{DoxyCompactList}\small\item\em Synchronously waits for full first snapshot read with the specified timeout. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classInstrumentProfileConnection_af619acb76794e599ee59f343a0a3c0a0}{wait\+Until\+Completed}} (std\+::chrono\+::milliseconds timeout) const noexcept
+\begin{DoxyCompactList}\small\item\em Synchronously waits for full first snapshot read with the specified timeout. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structSharedEntity_ab7cfbb67329faf3203faea77a9a00e16}{Ptr}} \mbox{\hyperlink{classInstrumentProfileConnection_a4a3ae6e9dd1dcdb0646d97b651df82ee}{create\+Connection}} (const std\+::string \&address, \mbox{\hyperlink{classInstrumentProfileCollector_a1b70a07a3a7da3e46380276955c34792}{Instrument\+Profile\+Collector\+::\+Ptr}} collector)
+\begin{DoxyCompactList}\small\item\em Creates instrument profile connection with a specified address and collector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Connects to an instrument profile URL and reads instrument profiles with support of streaming live updates. 
+
+Please see {\bfseries{Instrument \mbox{\hyperlink{classProfile}{Profile}} Format}} documentation for complete description. 
+
+\doxysubsubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47}\label{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!State@{State}}
+\index{State@{State}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{State}{State}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47}{Instrument\+Profile\+Connection\+::\+State}} \+: std\+::int32\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Instrument profile connection state. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NOT\_CONNECTED@{NOT\_CONNECTED}!InstrumentProfileConnection@{InstrumentProfileConnection}}\index{InstrumentProfileConnection@{InstrumentProfileConnection}!NOT\_CONNECTED@{NOT\_CONNECTED}}}\mbox{\Hypertarget{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47ad91be9b5ceb9fe0af02b9b02413eccf8}\label{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47ad91be9b5ceb9fe0af02b9b02413eccf8}} 
+NOT\+\_\+\+CONNECTED&Instrument profile connection is not started yet. \mbox{\hyperlink{classInstrumentProfileConnection_ab3e84e571d878e46efb08d15a60e05be}{start}} was not invoked yet. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CONNECTING@{CONNECTING}!InstrumentProfileConnection@{InstrumentProfileConnection}}\index{InstrumentProfileConnection@{InstrumentProfileConnection}!CONNECTING@{CONNECTING}}}\mbox{\Hypertarget{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a9a14f95e151eec641316e7c784ce832d}\label{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a9a14f95e151eec641316e7c784ce832d}} 
+CONNECTING&Connection is being established. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CONNECTED@{CONNECTED}!InstrumentProfileConnection@{InstrumentProfileConnection}}\index{InstrumentProfileConnection@{InstrumentProfileConnection}!CONNECTED@{CONNECTED}}}\mbox{\Hypertarget{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47aa5afd6edd5336d91316964e493936858}\label{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47aa5afd6edd5336d91316964e493936858}} 
+CONNECTED&Connection was established. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{COMPLETED@{COMPLETED}!InstrumentProfileConnection@{InstrumentProfileConnection}}\index{InstrumentProfileConnection@{InstrumentProfileConnection}!COMPLETED@{COMPLETED}}}\mbox{\Hypertarget{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a8f7afecbc8fbc4cd0f50a57d1172482e}\label{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a8f7afecbc8fbc4cd0f50a57d1172482e}} 
+COMPLETED&Initial instrument profiles snapshot was fully read (this state is set only once). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CLOSED@{CLOSED}!InstrumentProfileConnection@{InstrumentProfileConnection}}\index{InstrumentProfileConnection@{InstrumentProfileConnection}!CLOSED@{CLOSED}}}\mbox{\Hypertarget{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a110ccf2f5d2ff4eda1fd1a494293467d}\label{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a110ccf2f5d2ff4eda1fd1a494293467d}} 
+CLOSED&Instrument profile connection was \mbox{\hyperlink{classInstrumentProfileConnection_a19b95f408a0bb8b98516d02a43b737c4}{closed}}. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classInstrumentProfileConnection_adf459854e8a161b138c2318a2125887d}\label{classInstrumentProfileConnection_adf459854e8a161b138c2318a2125887d}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!addStateChangeListener@{addStateChangeListener}}
+\index{addStateChangeListener@{addStateChangeListener}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{addStateChangeListener()}{addStateChangeListener()}}
+{\footnotesize\ttfamily template$<$typename State\+Change\+Listener $>$ \\
+bool Instrument\+Profile\+Connection\+::add\+State\+Change\+Listener (\begin{DoxyParamCaption}\item[{State\+Change\+Listener \&\&}]{listener }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Adds listener that is notified about changes in \mbox{\hyperlink{classInstrumentProfileConnection_a6834928897fc3cb2149b64382eb1ab02}{state}} property. 
+
+Installed listener can be removed by {\ttfamily id} with \mbox{\hyperlink{classInstrumentProfileConnection_a31916bc19a5dc932280b6c6d3fb05ed7}{Instrument\+Profile\+Connection\+::remove\+State\+Change\+Listener}} method or by call {\ttfamily \mbox{\hyperlink{classInstrumentProfileConnection_a4102fad32fecb43caaed0b70b70917f9}{Instrument\+Profile\+Connection\+::on\+State\+Change()}} -\/= id};
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em State\+Change\+Listener} & The listener type. It can be any callable with signature\+: {\ttfamily void(\+State, State)} \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em listener} & The listener to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the listener id 
+\end{DoxyReturn}
+
+
+References add\+State\+Change\+Listener().
+
+
+
+Referenced by add\+State\+Change\+Listener().
+
+\mbox{\Hypertarget{classInstrumentProfileConnection_a19b95f408a0bb8b98516d02a43b737c4}\label{classInstrumentProfileConnection_a19b95f408a0bb8b98516d02a43b737c4}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!close@{close}}
+\index{close@{close}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{close()}{close()}}
+{\footnotesize\ttfamily void Instrument\+Profile\+Connection\+::close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Closes this instrument profile connection. 
+
+This connection\textquotesingle{}s state immediately changes to \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a110ccf2f5d2ff4eda1fd1a494293467d}{CLOSED}} and the background update procedures are terminated. \mbox{\Hypertarget{classInstrumentProfileConnection_a4a3ae6e9dd1dcdb0646d97b651df82ee}\label{classInstrumentProfileConnection_a4a3ae6e9dd1dcdb0646d97b651df82ee}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!createConnection@{createConnection}}
+\index{createConnection@{createConnection}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{createConnection()}{createConnection()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classInstrumentProfileConnection_a62b6555d2b6352864e019b8f07e0736e}{Instrument\+Profile\+Connection\+::\+Ptr}} Instrument\+Profile\+Connection\+::create\+Connection (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{address,  }\item[{\mbox{\hyperlink{classInstrumentProfileCollector_a1b70a07a3a7da3e46380276955c34792}{Instrument\+Profile\+Collector\+::\+Ptr}}}]{collector }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Creates instrument profile connection with a specified address and collector. 
+
+Address may be just \char`\"{}$<$host$>$\+:$<$port$>$\char`\"{} of server, URL, or a file path. The \char`\"{}\mbox{[}update=$<$period$>$\mbox{]}\char`\"{} clause can be optionally added at the end of the address to specify an \mbox{\hyperlink{classInstrumentProfileConnection_a3828118661a663677a0e104ef1c32732}{update period}} via an address string. Default update period is 1 minute.
+
+Connection needs to be \mbox{\hyperlink{classInstrumentProfileConnection_ab3e84e571d878e46efb08d15a60e05be}{started}} to begin an actual operation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The address. \\
+\hline
+{\em collector} & The instrument profile collector to push updates into.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new instrument profile connection. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInstrumentProfileConnection_ae81feefd19ad41c1e3f372a44a095df1}\label{classInstrumentProfileConnection_ae81feefd19ad41c1e3f372a44a095df1}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!getAddress@{getAddress}}
+\index{getAddress@{getAddress}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getAddress()}{getAddress()}}
+{\footnotesize\ttfamily std\+::string Instrument\+Profile\+Connection\+::get\+Address (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns the address of this instrument profile connection. 
+
+It does not include additional options specified as part of the address.
+
+\begin{DoxyReturn}{Returns}
+The address of this instrument profile connection. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInstrumentProfileConnection_aaea6203b7c46fa3c9b0062edc380318d}\label{classInstrumentProfileConnection_aaea6203b7c46fa3c9b0062edc380318d}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!getLastModified@{getLastModified}}
+\index{getLastModified@{getLastModified}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getLastModified()}{getLastModified()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Instrument\+Profile\+Connection\+::get\+Last\+Modified (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown. 
+
+Note, that while the time is represented in milliseconds, the actual granularity of time here is a second.
+
+\begin{DoxyReturn}{Returns}
+The last modification time (in milliseconds) of instrument profiles or zero if it is unknown. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInstrumentProfileConnection_a6834928897fc3cb2149b64382eb1ab02}\label{classInstrumentProfileConnection_a6834928897fc3cb2149b64382eb1ab02}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!getState@{getState}}
+\index{getState@{getState}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getState()}{getState()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47}{Instrument\+Profile\+Connection\+::\+State}} Instrument\+Profile\+Connection\+::get\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns state of this instrument profile connections. 
+
+\begin{DoxyReturn}{Returns}
+The state of this instrument profile connections. 
+\end{DoxyReturn}
+
+
+References CLOSED.
+
+\mbox{\Hypertarget{classInstrumentProfileConnection_a3828118661a663677a0e104ef1c32732}\label{classInstrumentProfileConnection_a3828118661a663677a0e104ef1c32732}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!getUpdatePeriod@{getUpdatePeriod}}
+\index{getUpdatePeriod@{getUpdatePeriod}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getUpdatePeriod()}{getUpdatePeriod()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Instrument\+Profile\+Connection\+::get\+Update\+Period (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns update period in milliseconds. 
+
+It is period of an update check when the instrument profiles source does not support live updates and/or when connection is dropped. Default update period is 1 minute, unless overridden in an \mbox{\hyperlink{classInstrumentProfileConnection_a4a3ae6e9dd1dcdb0646d97b651df82ee}{address string}}.
+
+\begin{DoxyReturn}{Returns}
+The update period in milliseconds. 
+\end{DoxyReturn}
+
+
+Referenced by get\+Update\+Period\+As\+Duration().
+
+\mbox{\Hypertarget{classInstrumentProfileConnection_a2b27ad27c61412f220c1bf8ac46804b4}\label{classInstrumentProfileConnection_a2b27ad27c61412f220c1bf8ac46804b4}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!getUpdatePeriodAsDuration@{getUpdatePeriodAsDuration}}
+\index{getUpdatePeriodAsDuration@{getUpdatePeriodAsDuration}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{getUpdatePeriodAsDuration()}{getUpdatePeriodAsDuration()}}
+{\footnotesize\ttfamily std\+::chrono\+::milliseconds Instrument\+Profile\+Connection\+::get\+Update\+Period\+As\+Duration (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns update period in milliseconds as chrono\+::duration It is period of an update check when the instrument profiles source does not support live updates and/or when connection is dropped. 
+
+Default update period is 1 minute, unless overridden in an \mbox{\hyperlink{classInstrumentProfileConnection_a4a3ae6e9dd1dcdb0646d97b651df82ee}{address string}}.
+
+\begin{DoxyReturn}{Returns}
+The update period in milliseconds as chrono\+::duration. 
+\end{DoxyReturn}
+
+
+References get\+Update\+Period().
+
+\mbox{\Hypertarget{classInstrumentProfileConnection_a4102fad32fecb43caaed0b70b70917f9}\label{classInstrumentProfileConnection_a4102fad32fecb43caaed0b70b70917f9}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!onStateChange@{onStateChange}}
+\index{onStateChange@{onStateChange}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{onStateChange()}{onStateChange()}}
+{\footnotesize\ttfamily auto\& Instrument\+Profile\+Connection\+::on\+State\+Change (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the on\+State\+Change \mbox{\hyperlink{structSimpleHandler}{handler}} that can be used to add or remove listeners. 
+
+\begin{DoxyReturn}{Returns}
+on\+State\+Change handler with {\ttfamily void(\+State, State)} signature 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInstrumentProfileConnection_a31916bc19a5dc932280b6c6d3fb05ed7}\label{classInstrumentProfileConnection_a31916bc19a5dc932280b6c6d3fb05ed7}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!removeStateChangeListener@{removeStateChangeListener}}
+\index{removeStateChangeListener@{removeStateChangeListener}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{removeStateChangeListener()}{removeStateChangeListener()}}
+{\footnotesize\ttfamily void Instrument\+Profile\+Connection\+::remove\+State\+Change\+Listener (\begin{DoxyParamCaption}\item[{std\+::size\+\_\+t}]{listener\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Removes listener that is notified about changes in \mbox{\hyperlink{classInstrumentProfileConnection_a6834928897fc3cb2149b64382eb1ab02}{state}} property. 
+
+It removes the listener that was previously installed with \mbox{\hyperlink{classInstrumentProfileConnection_adf459854e8a161b138c2318a2125887d}{Instrument\+Profile\+Connection\+::add\+State\+Change\+Listener}} method.
+
+
+\begin{DoxyParams}{Parameters}
+{\em listener\+Id} & The listener id to remove \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classInstrumentProfileConnection_ac6444068aa7f98e30227ff99c03a6227}\label{classInstrumentProfileConnection_ac6444068aa7f98e30227ff99c03a6227}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!setUpdatePeriod@{setUpdatePeriod}}
+\index{setUpdatePeriod@{setUpdatePeriod}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{setUpdatePeriod()}{setUpdatePeriod()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Instrument\+Profile\+Connection\+::set\+Update\+Period (\begin{DoxyParamCaption}\item[{std\+::chrono\+::milliseconds}]{update\+Period }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the update period in milliseconds as chrono\+::duration. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em update\+Period} & The update period in milliseconds as chrono\+::duration. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classInstrumentProfileConnection_a3828118661a663677a0e104ef1c32732}{Instrument\+Profile\+Connection\+::get\+Update\+Period()}} 
+\end{DoxySeeAlso}
+
+
+References set\+Update\+Period().
+
+\mbox{\Hypertarget{classInstrumentProfileConnection_a7d7b86d7b2cd285d2ee60d95b8d8d68f}\label{classInstrumentProfileConnection_a7d7b86d7b2cd285d2ee60d95b8d8d68f}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!setUpdatePeriod@{setUpdatePeriod}}
+\index{setUpdatePeriod@{setUpdatePeriod}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{setUpdatePeriod()}{setUpdatePeriod()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Instrument\+Profile\+Connection\+::set\+Update\+Period (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{update\+Period }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes the update period in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em update\+Period} & The update period in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classInstrumentProfileConnection_a3828118661a663677a0e104ef1c32732}{Instrument\+Profile\+Connection\+::get\+Update\+Period()}} 
+\end{DoxySeeAlso}
+
+
+Referenced by set\+Update\+Period().
+
+\mbox{\Hypertarget{classInstrumentProfileConnection_ab3e84e571d878e46efb08d15a60e05be}\label{classInstrumentProfileConnection_ab3e84e571d878e46efb08d15a60e05be}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!start@{start}}
+\index{start@{start}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void Instrument\+Profile\+Connection\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Starts this instrument profile connection. 
+
+This connection\textquotesingle{}s state immediately changes to \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a9a14f95e151eec641316e7c784ce832d}{CONNECTING}} and the actual connection establishment proceeds in the background. \mbox{\Hypertarget{classInstrumentProfileConnection_af619acb76794e599ee59f343a0a3c0a0}\label{classInstrumentProfileConnection_af619acb76794e599ee59f343a0a3c0a0}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!waitUntilCompleted@{waitUntilCompleted}}
+\index{waitUntilCompleted@{waitUntilCompleted}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{waitUntilCompleted()}{waitUntilCompleted()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool Instrument\+Profile\+Connection\+::wait\+Until\+Completed (\begin{DoxyParamCaption}\item[{std\+::chrono\+::milliseconds}]{timeout }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Synchronously waits for full first snapshot read with the specified timeout. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timeout} & The maximum time to wait \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a8f7afecbc8fbc4cd0f50a57d1172482e}{COMPLETED}} state was reached and {\ttfamily false} if the waiting time elapsed before snapshot was fully read. 
+\end{DoxyReturn}
+
+
+References wait\+Until\+Completed().
+
+\mbox{\Hypertarget{classInstrumentProfileConnection_acc280f5f11f13580ad6c4b1ca666e0a9}\label{classInstrumentProfileConnection_acc280f5f11f13580ad6c4b1ca666e0a9}} 
+\index{InstrumentProfileConnection@{InstrumentProfileConnection}!waitUntilCompleted@{waitUntilCompleted}}
+\index{waitUntilCompleted@{waitUntilCompleted}!InstrumentProfileConnection@{InstrumentProfileConnection}}
+\doxyparagraph{\texorpdfstring{waitUntilCompleted()}{waitUntilCompleted()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool Instrument\+Profile\+Connection\+::wait\+Until\+Completed (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{timeout }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Synchronously waits for full first snapshot read with the specified timeout. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timeout} & The maximum time (in millis) to wait \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if \mbox{\hyperlink{classInstrumentProfileConnection_a682d61b269f1cdcef3387c6cf283cb47a8f7afecbc8fbc4cd0f50a57d1172482e}{COMPLETED}} state was reached and {\ttfamily false} if the waiting time elapsed before snapshot was fully read. 
+\end{DoxyReturn}
+
+
+Referenced by wait\+Until\+Completed().
+

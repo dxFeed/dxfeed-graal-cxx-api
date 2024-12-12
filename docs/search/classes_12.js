@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wildcardsymbol_0',['WildcardSymbol',['../d3/d00/struct_wildcard_symbol.html',1,'']]]
+  ['underlying_0',['Underlying',['../d3/d00/class_underlying.html',1,'']]]
 ];

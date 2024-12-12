@@ -1,0 +1,104 @@
+\hypertarget{structEventTypeWithSymbol}{}\doxysubsection{Event\+Type\+With\+Symbol$<$ Symbol $>$ Struct Template Reference}
+\label{structEventTypeWithSymbol}\index{EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}}
+
+
+Event type parametrized by a symbol.  
+
+
+
+
+{\ttfamily \#include $<$Event\+Type.\+hpp$>$}
+
+Inheritance diagram for Event\+Type\+With\+Symbol$<$ Symbol $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{d2/db9/structEventTypeWithSymbol}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structEventTypeWithSymbol_ab1293015ab39872078da4910e3c06a39}\label{structEventTypeWithSymbol_ab1293015ab39872078da4910e3c06a39}} 
+using \mbox{\hyperlink{structEventTypeWithSymbol_ab1293015ab39872078da4910e3c06a39}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structEventTypeWithSymbol}{Event\+Type\+With\+Symbol}}$<$ Symbol $>$ $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structEventTypeWithSymbol}{Event\+Type\+With\+Symbol}}\textquotesingle{}s child object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual const Symbol \& \mbox{\hyperlink{structEventTypeWithSymbol_a1ab6590a5835f45ef7d9779cd20bfe8f}{get\+Event\+Symbol}} () const \&noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns event symbol that identifies this event type in \mbox{\hyperlink{classDXFeedSubscription}{subscription}}. \end{DoxyCompactList}\item 
+virtual const std\+::optional$<$ Symbol $>$ \& \mbox{\hyperlink{structEventTypeWithSymbol_a55953df4e0de30ce7761ede1883741a5}{get\+Event\+Symbol\+Opt}} () const \&noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns event symbol that identifies this event type in \mbox{\hyperlink{classDXFeedSubscription}{subscription}}. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{structEventTypeWithSymbol_a8ea9877b148603252021aad739c7e524}{set\+Event\+Symbol}} (const Symbol \&event\+Symbol) noexcept=0
+\begin{DoxyCompactList}\small\item\em Changes event symbol that identifies this event type in \mbox{\hyperlink{classDXFeedSubscription}{subscription}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\subsubsection*{template$<$typename Symbol$>$\newline
+struct Event\+Type\+With\+Symbol$<$ Symbol $>$}
+
+Event type parametrized by a symbol. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Symbol} & The type od symbol \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structEventTypeWithSymbol_a1ab6590a5835f45ef7d9779cd20bfe8f}\label{structEventTypeWithSymbol_a1ab6590a5835f45ef7d9779cd20bfe8f}} 
+\index{EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}!getEventSymbol@{getEventSymbol}}
+\index{getEventSymbol@{getEventSymbol}!EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}}
+\doxyparagraph{\texorpdfstring{getEventSymbol()}{getEventSymbol()}}
+{\footnotesize\ttfamily template$<$typename Symbol $>$ \\
+virtual const Symbol\& \mbox{\hyperlink{structEventTypeWithSymbol}{Event\+Type\+With\+Symbol}}$<$ Symbol $>$\+::get\+Event\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns event symbol that identifies this event type in \mbox{\hyperlink{classDXFeedSubscription}{subscription}}. 
+
+\begin{DoxyReturn}{Returns}
+The event symbol. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classMessage_a7ee613d664a53f315c19bc1f85d9ebd5}{Message}}, \mbox{\hyperlink{structMarketEvent_ab45c1e474a01b8641bd97986930f531d}{Market\+Event}}, and \mbox{\hyperlink{classCandle_a361d68cf82789d3cad4c46341e376a12}{Candle}}.
+
+\mbox{\Hypertarget{structEventTypeWithSymbol_a55953df4e0de30ce7761ede1883741a5}\label{structEventTypeWithSymbol_a55953df4e0de30ce7761ede1883741a5}} 
+\index{EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}!getEventSymbolOpt@{getEventSymbolOpt}}
+\index{getEventSymbolOpt@{getEventSymbolOpt}!EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}}
+\doxyparagraph{\texorpdfstring{getEventSymbolOpt()}{getEventSymbolOpt()}}
+{\footnotesize\ttfamily template$<$typename Symbol $>$ \\
+virtual const std\+::optional$<$Symbol$>$\& \mbox{\hyperlink{structEventTypeWithSymbol}{Event\+Type\+With\+Symbol}}$<$ Symbol $>$\+::get\+Event\+Symbol\+Opt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns event symbol that identifies this event type in \mbox{\hyperlink{classDXFeedSubscription}{subscription}}. 
+
+\begin{DoxyReturn}{Returns}
+The event symbol or std\+::nullopt. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classMessage_ae2a204ec25fe34381223907f12548e53}{Message}}, \mbox{\hyperlink{structMarketEvent_a4af83f9c8ebc90cd85176591870ce9eb}{Market\+Event}}, and \mbox{\hyperlink{classCandle_a82ed2e1e684befd3d0b9fc963b0be58d}{Candle}}.
+
+\mbox{\Hypertarget{structEventTypeWithSymbol_a8ea9877b148603252021aad739c7e524}\label{structEventTypeWithSymbol_a8ea9877b148603252021aad739c7e524}} 
+\index{EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}!setEventSymbol@{setEventSymbol}}
+\index{setEventSymbol@{setEventSymbol}!EventTypeWithSymbol$<$ Symbol $>$@{EventTypeWithSymbol$<$ Symbol $>$}}
+\doxyparagraph{\texorpdfstring{setEventSymbol()}{setEventSymbol()}}
+{\footnotesize\ttfamily template$<$typename Symbol $>$ \\
+virtual void \mbox{\hyperlink{structEventTypeWithSymbol}{Event\+Type\+With\+Symbol}}$<$ Symbol $>$\+::set\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const Symbol \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event symbol that identifies this event type in \mbox{\hyperlink{classDXFeedSubscription}{subscription}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classMessage_a0134e5bc98853deb4796697a4a3e9681}{Message}}, \mbox{\hyperlink{structMarketEvent_ae3358224a62a18b5e4ad9bad053dc8ed}{Market\+Event}}, and \mbox{\hyperlink{classCandle_a3dd1414e8fb0b4bb69fe804c84304cb3}{Candle}}.
+

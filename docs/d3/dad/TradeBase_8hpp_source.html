@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('d3/dad/TradeBase_8hpp_source.html','..
 <div class="title">TradeBase.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -181,7 +181,7 @@ $(document).ready(function(){initNavTree('d3/dad/TradeBase_8hpp_source.html','..
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">     * @param eventSymbol The event symbol.</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#aa2c14ca3644e13d88c7a8d861c91ab11">   90</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#aa2c14ca3644e13d88c7a8d861c91ab11">TradeBase</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">MarketEvent</a>(std::move(eventSymbol)) {</div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#aa2c14ca3644e13d88c7a8d861c91ab11">   90</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#aa2c14ca3644e13d88c7a8d861c91ab11">TradeBase</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">MarketEvent</a><a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#afeb8874ca4d6b603d5b941f19e0735cf">(</a>std::move(eventSymbol)<a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#afeb8874ca4d6b603d5b941f19e0735cf">)</a> {</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    }</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="comment">/**</span></div>
@@ -223,257 +223,270 @@ $(document).ready(function(){initNavTree('d3/dad/TradeBase_8hpp_source.html','..
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">     * @param time time of the last trade.</span></div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="comment">     */</span></div>
 <div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4285521e8bf51e311496009fa834b2c8">  131</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4285521e8bf51e311496009fa834b2c8">setTime</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        tradeBaseData_.timeSequence = orOp(</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            orOp(sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getMillisFromTime(time)), MILLISECONDS_MASK), <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">getSequence</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">(</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">)</a>));</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    }</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment">     * Returns time of the last trade in nanoseconds.</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment">     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment">     * @return time of the last trade in nanoseconds.</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a1276cd16081a8790648eb2d56c87f4fc">  143</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a1276cd16081a8790648eb2d56c87f4fc">int64_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a1276cd16081a8790648eb2d56c87f4fc">getTimeNanos</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordflow">return</span> time_nanos_util::getNanosFromMillisAndNanoPart(<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#af5def7c30701690b60bc3ef9ecc3e2e4">getTime</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#af5def7c30701690b60bc3ef9ecc3e2e4">(</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#af5def7c30701690b60bc3ef9ecc3e2e4">)</a>, tradeBaseData_.timeNanoPart);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    }</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment">     * Changes time of the last trade.</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">     * @param timeNanos time of the last trade in nanoseconds.</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a3abf14052142b5e15de71c048762c136">  153</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a3abf14052142b5e15de71c048762c136">setTimeNanos</a>(std::int64_t timeNanos) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4285521e8bf51e311496009fa834b2c8">setTime</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4285521e8bf51e311496009fa834b2c8">(</a>time_nanos_util::getMillisFromNanos(timeNanos)<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4285521e8bf51e311496009fa834b2c8">)</a>;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        tradeBaseData_.timeNanoPart = time_nanos_util::getNanoPartFromNanos(timeNanos);</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    }</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="comment">     * Changes microseconds and nanoseconds time part of the last trade.</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="comment">     * @param timeNanoPart microseconds and nanoseconds time part of the last trade.</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a59c96e11b04d70f8454585d49abbf0a6">  163</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a59c96e11b04d70f8454585d49abbf0a6">setTimeNanoPart</a>(std::int32_t timeNanoPart) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        tradeBaseData_.timeNanoPart = timeNanoPart;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    }</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="comment">     * Returns microseconds and nanoseconds time part of the last trade.</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="comment">     * @return microseconds and nanoseconds time part of the last trade.</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a83b4392e3c0503aed2f83c707f0b0fc4">  172</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a83b4392e3c0503aed2f83c707f0b0fc4">int32_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a83b4392e3c0503aed2f83c707f0b0fc4">getTimeNanoPart</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.timeNanoPart;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    }</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="comment">     * Returns sequence number of the last trade to distinguish trades that have the same</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="comment">     * @ref TradeBase::getTime() &quot;time&quot;. This sequence number does not have to be unique and</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="comment">     * does not need to be sequential. Sequence can range from 0 to TradeBase::MAX_SEQUENCE.</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="comment">     * @return sequence of the last trade.</span></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">  183</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">int32_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">getSequence</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(andOp(tradeBaseData_.timeSequence, <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b2a21a413d01613757151188417715b">MAX_SEQUENCE</a>));</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    }</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment">     * Changes @ref TradeBase::getSequence() &quot;sequence number&quot; of the last trade.</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">     * @param sequence the sequence.</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">     * @see TradeBase::getSequence()</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a650813196c892ea289c782cf0cae7281">  193</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a650813196c892ea289c782cf0cae7281">setSequence</a>(std::int32_t sequence) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="comment">// TODO: Improve error handling</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        assert(sequence &gt;= 0 &amp;&amp; sequence &lt;= <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b2a21a413d01613757151188417715b">MAX_SEQUENCE</a>);</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b2a21a413d01613757151188417715b">MAX_SEQUENCE</a>), sequence);</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    }</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="comment">     * Returns exchange code of the last trade.</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">     * @return exchange code of the last trade.</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab8069584ccd268a1670ebfcf8294dbbd">  205</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab8069584ccd268a1670ebfcf8294dbbd">int16_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab8069584ccd268a1670ebfcf8294dbbd">getExchangeCode</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.exchangeCode;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="comment">     * Changes exchange code of the last trade.</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="comment">     * @param exchangeCode exchange code of the last trade.</span></div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00214"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a7ebd027e215c3804b9ee44b57501173b">  214</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a7ebd027e215c3804b9ee44b57501173b">setExchangeCode</a>(<span class="keywordtype">char</span> exchangeCode) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        tradeBaseData_.exchangeCode = utf8to16(exchangeCode);</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    }</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        tradeBaseData_.timeSequence =</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            orOp(orOp(sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                      sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                 <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">getSequence</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">(</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">)</a>);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    }</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment">     * Returns time of the last trade in nanoseconds.</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment">     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">     * @return time of the last trade in nanoseconds.</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a1276cd16081a8790648eb2d56c87f4fc">  144</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a1276cd16081a8790648eb2d56c87f4fc">int64_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a1276cd16081a8790648eb2d56c87f4fc">getTimeNanos</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">return</span> time_nanos_util::getNanosFromMillisAndNanoPart(<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#af5def7c30701690b60bc3ef9ecc3e2e4">getTime</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#af5def7c30701690b60bc3ef9ecc3e2e4">(</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#af5def7c30701690b60bc3ef9ecc3e2e4">)</a>, tradeBaseData_.timeNanoPart);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    }</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">     * Changes time of the last trade.</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="comment">     * @param timeNanos time of the last trade in nanoseconds.</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a3abf14052142b5e15de71c048762c136">  154</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a3abf14052142b5e15de71c048762c136">setTimeNanos</a>(std::int64_t timeNanos) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4285521e8bf51e311496009fa834b2c8">setTime</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4285521e8bf51e311496009fa834b2c8">(</a>time_nanos_util::getMillisFromNanos(timeNanos)<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4285521e8bf51e311496009fa834b2c8">)</a>;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        tradeBaseData_.timeNanoPart = time_nanos_util::getNanoPartFromNanos(timeNanos);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    }</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="comment">     * Changes microseconds and nanoseconds time part of the last trade.</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment">     * @param timeNanoPart microseconds and nanoseconds time part of the last trade.</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a59c96e11b04d70f8454585d49abbf0a6">  164</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a59c96e11b04d70f8454585d49abbf0a6">setTimeNanoPart</a>(std::int32_t timeNanoPart) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        tradeBaseData_.timeNanoPart = timeNanoPart;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    }</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment">     * Returns microseconds and nanoseconds time part of the last trade.</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="comment">     * @return microseconds and nanoseconds time part of the last trade.</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a83b4392e3c0503aed2f83c707f0b0fc4">  173</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a83b4392e3c0503aed2f83c707f0b0fc4">int32_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a83b4392e3c0503aed2f83c707f0b0fc4">getTimeNanoPart</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.timeNanoPart;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    }</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="comment">     * Returns sequence number of the last trade to distinguish trades that have the same</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="comment">     * @ref TradeBase::getTime() &quot;time&quot;. This sequence number does not have to be unique and</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="comment">     * does not need to be sequential. Sequence can range from 0 to TradeBase::MAX_SEQUENCE.</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="comment">     * @return sequence of the last trade.</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">  184</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">int32_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9c2a0a6140c2f7685cd722a8e70cb517">getSequence</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(andOp(tradeBaseData_.timeSequence, <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b2a21a413d01613757151188417715b">MAX_SEQUENCE</a>));</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    }</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">     * Changes @ref TradeBase::getSequence() &quot;sequence number&quot; of the last trade.</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">     * @param sequence the sequence.</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">     * @see TradeBase::getSequence()</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a650813196c892ea289c782cf0cae7281">  194</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a650813196c892ea289c782cf0cae7281">setSequence</a>(std::int32_t sequence) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="comment">// TODO: Improve error handling [EN-8232]</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        assert(sequence &gt;= 0 &amp;&amp; sequence &lt;= <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b2a21a413d01613757151188417715b">MAX_SEQUENCE</a>);</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b2a21a413d01613757151188417715b">MAX_SEQUENCE</a>), sequence);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    }</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">     * Returns exchange code of the last trade.</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">     * @return exchange code of the last trade.</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab8069584ccd268a1670ebfcf8294dbbd">  206</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab8069584ccd268a1670ebfcf8294dbbd">int16_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab8069584ccd268a1670ebfcf8294dbbd">getExchangeCode</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.exchangeCode;</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="comment">     * Returns exchange code of last trade as UTF8 string.</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="comment">     * @return exchange code of last trade as UTF8 string.</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#aaa26e07694ac55e0f19d7a8033cfb9ed">  215</a></span>&#160;    std::string <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#aaa26e07694ac55e0f19d7a8033cfb9ed">getExchangeCodeString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <span class="comment">// TODO: cache [EN-8231]</span></div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment">     * Changes exchange code of the last trade.</span></div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="comment">     * @param exchangeCode exchange code of the last trade.</span></div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00223"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#afd887007783cd05b4bddc6eed4e458d5">  223</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#afd887007783cd05b4bddc6eed4e458d5">setExchangeCode</a>(std::int16_t exchangeCode) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        tradeBaseData_.exchangeCode = exchangeCode;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    }</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="comment">     * Returns price of the last trade.</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">     * @return price of the last trade.</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab62ed854fb2de1e4b905575374029c4a">  232</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab62ed854fb2de1e4b905575374029c4a">getPrice</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.price;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    }</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="comment">     * Changes price of the last trade.</span></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="comment">     * @param price price of the last trade.</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a618e034171f93d01bbfbc0199efebef2">  241</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a618e034171f93d01bbfbc0199efebef2">setPrice</a>(<span class="keywordtype">double</span> price) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        tradeBaseData_.price = price;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    }</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">     * Returns size of the last trade as floating number with fractions.</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">     * @return size of the last trade as floating number with fractions.</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9568e902c69285d548a005d778aadc6b">  250</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9568e902c69285d548a005d778aadc6b">getSize</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.size;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    }</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="comment">     * Changes size of the last trade as floating number with fractions.</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">     * @param size size of the last trade as floating number with fractions.</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a18117ffa89cfe50aed5b3cd6b96f7dc9">  259</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a18117ffa89cfe50aed5b3cd6b96f7dc9">setSize</a>(<span class="keywordtype">double</span> size) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        tradeBaseData_.size = size;</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    }</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">     * Returns identifier of the current trading day.</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">     * Identifier of the day is the number of days passed since January 1, 1970.</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="comment">     * @return identifier of the current trading day.</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a624e8620427f7e525d84a6d3a87f4cfc">  269</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a624e8620427f7e525d84a6d3a87f4cfc">int32_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a624e8620427f7e525d84a6d3a87f4cfc">getDayId</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.dayId;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    }</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="comment">     * Changes identifier of the current trading day.</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment">     * Identifier of the day is the number of days passed since January 1, 1970.</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">     * @param dayId identifier of the current trading day.</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9596168061d99ae4559a7df3703d07ab">  279</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9596168061d99ae4559a7df3703d07ab">setDayId</a>(std::int32_t dayId) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        tradeBaseData_.dayId = dayId;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    }</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="comment">     * Returns total volume traded for a day as floating number with fractions.</span></div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="comment">     * @return total volume traded for a day as floating number with fractions.</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a05dc10a230f3c6c733cb11a04b0ecf53">  288</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a05dc10a230f3c6c733cb11a04b0ecf53">getDayVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.dayVolume;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    }</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="comment">     * Changes total volume traded for a day as floating number with fractions.</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="comment">     * @param dayVolume total volume traded for a day as floating number with fractions.</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a8217fe86989da7aef479b74f095c8c69">  297</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a8217fe86989da7aef479b74f095c8c69">setDayVolume</a>(<span class="keywordtype">double</span> dayVolume) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        tradeBaseData_.dayVolume = dayVolume;</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    }</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="comment">     * Returns total turnover traded for a day.</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="comment">     * Day VWAP can be computed with `getDayTurnover() / getDayVolume()`.</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="comment">     * @return total turnover traded for a day.</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ad7530dc14b38d8e4c86acd51f51a3c12">  307</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ad7530dc14b38d8e4c86acd51f51a3c12">getDayTurnover</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.dayTurnover;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    }</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="comment">     * Changes total turnover traded for a day.</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="comment">     * @param dayTurnover total turnover traded for a day.</span></div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00316"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b9431e0f877488087e2fbbef8bc7a0a">  316</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b9431e0f877488087e2fbbef8bc7a0a">setDayTurnover</a>(<span class="keywordtype">double</span> dayTurnover) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        tradeBaseData_.dayTurnover = dayTurnover;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    }</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="comment">     * Returns tick direction of the last trade.</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="comment">     * @return tick direction of the last trade.</span></div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00325"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a94003d8efba9545deea0f8cd3320ee6d">  325</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d1/d94/structdxfcpp_1_1Direction.html">Direction</a> &amp;<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a94003d8efba9545deea0f8cd3320ee6d">getTickDirection</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keywordflow">return</span> Direction::valueOf(getBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT));</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    }</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="comment">     * Changes tick direction of the last trade.</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="comment">     * @param direction tick direction of the last trade.</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab215b976bbf3afcf82d56079ff67f897">  334</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab215b976bbf3afcf82d56079ff67f897">setTickDirection</a>(<span class="keyword">const</span> <a class="code" href="../../d1/d94/structdxfcpp_1_1Direction.html">Direction</a> &amp;direction) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        tradeBaseData_.flags = setBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT, direction.getCode());</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    }</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="comment">     * Returns whether last trade was in extended trading hours.</span></div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="comment">     * @return `true` if last trade was in extended trading hours.</span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4edeabe4466107f4ba0aba1cf03a99d4">  343</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4edeabe4466107f4ba0aba1cf03a99d4">isExtendedTradingHours</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="keywordflow">return</span> andOp(tradeBaseData_.flags, ETH) != 0;</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    }</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="comment">     * Changes whether last trade was in extended trading hours.</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="comment">     * @param extendedTradingHours `true` if last trade was in extended trading hours.</span></div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00352"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ad32047ef428470ab9482479e99e2c5a3">  352</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ad32047ef428470ab9482479e99e2c5a3">setExtendedTradingHours</a>(<span class="keywordtype">bool</span> extendedTradingHours) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        tradeBaseData_.flags = extendedTradingHours ? orOp(tradeBaseData_.flags, ETH) : andOp(tradeBaseData_.flags, ~ETH);</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    }</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="comment">     * Returns change of the last trade.</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="comment">     * @return change of the last trade.</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a7216cb91ede511a4b0c8f2069d592f21">  361</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a7216cb91ede511a4b0c8f2069d592f21">getChange</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.change;</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    }</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160; </div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="comment">     * Changes change of the last trade.</span></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;<span class="comment">     * @param change price of the last trade.</span></div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00370"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab9f833ed575b4cd1a53730393e984661">  370</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab9f833ed575b4cd1a53730393e984661">setChange</a>(<span class="keywordtype">double</span> change) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        tradeBaseData_.change = change;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    }</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160; </div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="comment">     * Returns string representation of this trade event&#39;s fields.</span></div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;<span class="comment">     * @return string representation of this trade event&#39;s fields.</span></div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    std::string <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a52ae73ef41cf03060509cddecc2d48de">baseFieldsToString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;};</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160; </div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <span class="keywordflow">return</span> dxfcpp::utf16toUtf8String(tradeBaseData_.exchangeCode);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    }</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="comment">     * Changes exchange code of the last trade.</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment">     * @param exchangeCode exchange code of the last trade.</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a7ebd027e215c3804b9ee44b57501173b">  226</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a7ebd027e215c3804b9ee44b57501173b">setExchangeCode</a>(<span class="keywordtype">char</span> exchangeCode) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        tradeBaseData_.exchangeCode = utf8to16(exchangeCode);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    }</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">     * Changes exchange code of the last trade.</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="comment">     * @param exchangeCode exchange code of the last trade.</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#afd887007783cd05b4bddc6eed4e458d5">  235</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#afd887007783cd05b4bddc6eed4e458d5">setExchangeCode</a>(std::int16_t exchangeCode) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        tradeBaseData_.exchangeCode = exchangeCode;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    }</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">     * Returns price of the last trade.</span></div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="comment">     * @return price of the last trade.</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab62ed854fb2de1e4b905575374029c4a">  244</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab62ed854fb2de1e4b905575374029c4a">getPrice</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.price;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    }</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="comment">     * Changes price of the last trade.</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="comment">     * @param price price of the last trade.</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a618e034171f93d01bbfbc0199efebef2">  253</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a618e034171f93d01bbfbc0199efebef2">setPrice</a>(<span class="keywordtype">double</span> price) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        tradeBaseData_.price = price;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">     * Returns size of the last trade as floating number with fractions.</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">     * @return size of the last trade as floating number with fractions.</span></div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9568e902c69285d548a005d778aadc6b">  262</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9568e902c69285d548a005d778aadc6b">getSize</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.size;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    }</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="comment">     * Changes size of the last trade as floating number with fractions.</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">     * @param size size of the last trade as floating number with fractions.</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a18117ffa89cfe50aed5b3cd6b96f7dc9">  271</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a18117ffa89cfe50aed5b3cd6b96f7dc9">setSize</a>(<span class="keywordtype">double</span> size) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        tradeBaseData_.size = size;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    }</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">     * Returns identifier of the current trading day.</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">     * Identifier of the day is the number of days passed since January 1, 1970.</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment">     * @return identifier of the current trading day.</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a624e8620427f7e525d84a6d3a87f4cfc">  281</a></span>&#160;    std::<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a624e8620427f7e525d84a6d3a87f4cfc">int32_t</a> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a624e8620427f7e525d84a6d3a87f4cfc">getDayId</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.dayId;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="comment">     * Changes identifier of the current trading day.</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="comment">     * Identifier of the day is the number of days passed since January 1, 1970.</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="comment">     * @param dayId identifier of the current trading day.</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9596168061d99ae4559a7df3703d07ab">  291</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a9596168061d99ae4559a7df3703d07ab">setDayId</a>(std::int32_t dayId) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        tradeBaseData_.dayId = dayId;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    }</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="comment">     * Returns total volume traded for a day as floating number with fractions.</span></div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="comment">     * @return total volume traded for a day as floating number with fractions.</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a05dc10a230f3c6c733cb11a04b0ecf53">  300</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a05dc10a230f3c6c733cb11a04b0ecf53">getDayVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.dayVolume;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    }</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="comment">     * Changes total volume traded for a day as floating number with fractions.</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="comment">     * @param dayVolume total volume traded for a day as floating number with fractions.</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00309"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a8217fe86989da7aef479b74f095c8c69">  309</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a8217fe86989da7aef479b74f095c8c69">setDayVolume</a>(<span class="keywordtype">double</span> dayVolume) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        tradeBaseData_.dayVolume = dayVolume;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    }</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="comment">     * Returns total turnover traded for a day.</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="comment">     * Day VWAP can be computed with `getDayTurnover() / getDayVolume()`.</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;<span class="comment">     * @return total turnover traded for a day.</span></div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ad7530dc14b38d8e4c86acd51f51a3c12">  319</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ad7530dc14b38d8e4c86acd51f51a3c12">getDayTurnover</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.dayTurnover;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    }</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="comment">     * Changes total turnover traded for a day.</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="comment">     * @param dayTurnover total turnover traded for a day.</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b9431e0f877488087e2fbbef8bc7a0a">  328</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a5b9431e0f877488087e2fbbef8bc7a0a">setDayTurnover</a>(<span class="keywordtype">double</span> dayTurnover) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        tradeBaseData_.dayTurnover = dayTurnover;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    }</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="comment">     * Returns tick direction of the last trade.</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="comment">     * @return tick direction of the last trade.</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a94003d8efba9545deea0f8cd3320ee6d">  337</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a94003d8efba9545deea0f8cd3320ee6d">Direction</a> &amp;<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a94003d8efba9545deea0f8cd3320ee6d">getTickDirection</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="keywordflow">return</span> Direction::valueOf(getBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT));</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    }</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="comment">     * Changes tick direction of the last trade.</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="comment">     * @param direction tick direction of the last trade.</span></div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00346"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab215b976bbf3afcf82d56079ff67f897">  346</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab215b976bbf3afcf82d56079ff67f897">setTickDirection</a>(<span class="keyword">const</span> Direction &amp;direction) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        tradeBaseData_.flags = setBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT, direction.getCode());</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    }</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="comment">     * Returns whether last trade was in extended trading hours.</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="comment">     * @return `true` if last trade was in extended trading hours.</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4edeabe4466107f4ba0aba1cf03a99d4">  355</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a4edeabe4466107f4ba0aba1cf03a99d4">isExtendedTradingHours</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keywordflow">return</span> andOp(tradeBaseData_.flags, ETH) != 0;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    }</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="comment">     * Changes whether last trade was in extended trading hours.</span></div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="comment">     * @param extendedTradingHours `true` if last trade was in extended trading hours.</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ad32047ef428470ab9482479e99e2c5a3">  364</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ad32047ef428470ab9482479e99e2c5a3">setExtendedTradingHours</a>(<span class="keywordtype">bool</span> extendedTradingHours) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        tradeBaseData_.flags =</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            extendedTradingHours ? orOp(tradeBaseData_.flags, ETH) : andOp(tradeBaseData_.flags, ~ETH);</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    }</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="comment">     * Returns change of the last trade.</span></div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;<span class="comment">     * @return change of the last trade.</span></div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00374"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a7216cb91ede511a4b0c8f2069d592f21">  374</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a7216cb91ede511a4b0c8f2069d592f21">getChange</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        <span class="keywordflow">return</span> tradeBaseData_.change;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    }</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="comment">     * Changes change of the last trade.</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">     * @param change price of the last trade.</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno"><a class="line" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab9f833ed575b4cd1a53730393e984661">  383</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#ab9f833ed575b4cd1a53730393e984661">setChange</a>(<span class="keywordtype">double</span> change) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        tradeBaseData_.change = change;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    }</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160; </div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="comment">     * Returns string representation of this trade event&#39;s fields.</span></div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;<span class="comment">     * @return string representation of this trade event&#39;s fields.</span></div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    std::string <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#a52ae73ef41cf03060509cddecc2d48de">baseFieldsToString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span>;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;};</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160; </div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

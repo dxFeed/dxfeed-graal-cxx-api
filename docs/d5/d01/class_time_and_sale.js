@@ -4,6 +4,7 @@ var class_time_and_sale =
     [ "Unique", "d5/d01/class_time_and_sale.html#aff455acb7e0b38cdf171c9b54a95d977", null ],
     [ "TimeAndSale", "d5/d01/class_time_and_sale.html#a0a75f355155b61ac3775be2c0b808173", null ],
     [ "TimeAndSale", "d5/d01/class_time_and_sale.html#a8f9a839a9bb3bae09176304079e74ba6", null ],
+    [ "assign", "d5/d01/class_time_and_sale.html#af889ea45337dbb7a42d03d254aeebd52", null ],
     [ "getAggressorSide", "d5/d01/class_time_and_sale.html#af5c0039f64cd8d6cecfd671d160893af", null ],
     [ "getAskPrice", "d5/d01/class_time_and_sale.html#a2438dd885e89a7a5e16612d1c329bbf1", null ],
     [ "getBidPrice", "d5/d01/class_time_and_sale.html#a22cf28f0a712fb61fba35281c88d8b16", null ],
@@ -56,5 +57,5 @@ var class_time_and_sale =
     [ "setType", "d5/d01/class_time_and_sale.html#ac6540878d72f7aa99b4dd6fd96e779cd", null ],
     [ "setValidTick", "d5/d01/class_time_and_sale.html#a32526001161d452fade89e3a41f44cc2", null ],
     [ "toGraal", "d5/d01/class_time_and_sale.html#a8af4eae83cc0765bc1cb2d779b07a7dc", null ],
-    [ "toString", "d5/d01/class_time_and_sale.html#a74021da461ae7334dfdd1b001c20e60f", null ]
+    [ "toString", "d5/d01/class_time_and_sale.html#a6881d58571ce3290458b8a621a1cecde", null ]
 ];

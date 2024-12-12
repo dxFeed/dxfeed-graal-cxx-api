@@ -1,0 +1,69 @@
+\hypertarget{structJavaException}{}\doxysubsection{Java\+Exception Struct Reference}
+\label{structJavaException}\index{JavaException@{JavaException}}
+
+
+A wrapper over the interceptable Java exceptions thrown by the dx\+Feed Native Graal SDK.  
+
+
+
+
+{\ttfamily \#include $<$Java\+Exception.\+hpp$>$}
+
+Inheritance diagram for Java\+Exception\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{da/da7/structJavaException}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structJavaException_a09ad75bce356bbec83cb2951d9788a0d}{Java\+Exception}} (const std\+::string \&message, const std\+::string \&class\+Name, std\+::string stack\+Trace)
+\begin{DoxyCompactList}\small\item\em Creates an exception using Java message, class\+Name and stack trace. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{structJavaException_a7b5e651d47f7656e9ad747f73beaf5d8}{get\+Stack\+Trace}} () const \&
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structJavaException_a9f1802826420621d99da7f44f1ba85d3}\label{structJavaException_a9f1802826420621d99da7f44f1ba85d3}} 
+static void \mbox{\hyperlink{structJavaException_a9f1802826420621d99da7f44f1ba85d3}{throw\+If\+Java\+Thread\+Exception\+Exists}} ()
+\begin{DoxyCompactList}\small\item\em Throws a \mbox{\hyperlink{structJavaException}{Java\+Exception}} if it exists (i.\+e. intercepted by Graal SDK) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A wrapper over the interceptable Java exceptions thrown by the dx\+Feed Native Graal SDK. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structJavaException_a09ad75bce356bbec83cb2951d9788a0d}\label{structJavaException_a09ad75bce356bbec83cb2951d9788a0d}} 
+\index{JavaException@{JavaException}!JavaException@{JavaException}}
+\index{JavaException@{JavaException}!JavaException@{JavaException}}
+\doxyparagraph{\texorpdfstring{JavaException()}{JavaException()}}
+{\footnotesize\ttfamily Java\+Exception\+::\+Java\+Exception (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message,  }\item[{const std\+::string \&}]{class\+Name,  }\item[{std\+::string}]{stack\+Trace }\end{DoxyParamCaption})}
+
+
+
+Creates an exception using Java message, class\+Name and stack trace. 
+
+Also uses current stack trace.
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & Java message. \\
+\hline
+{\em class\+Name} & Java class name. \\
+\hline
+{\em stack\+Trace} & Java stack trace. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structJavaException_a7b5e651d47f7656e9ad747f73beaf5d8}\label{structJavaException_a7b5e651d47f7656e9ad747f73beaf5d8}} 
+\index{JavaException@{JavaException}!getStackTrace@{getStackTrace}}
+\index{getStackTrace@{getStackTrace}!JavaException@{JavaException}}
+\doxyparagraph{\texorpdfstring{getStackTrace()}{getStackTrace()}}
+{\footnotesize\ttfamily const std\+::string \& Java\+Exception\+::get\+Stack\+Trace (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&}
+
+\begin{DoxyReturn}{Returns}
+dx\+Feed Graal CXX API stack trace + Java (Graal\+VM) exception\textquotesingle{}s stack trace. 
+\end{DoxyReturn}

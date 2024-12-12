@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('db/d55/EventType_8hpp_source.html','..
 <div class="title">EventType.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -121,7 +121,7 @@ $(document).ready(function(){initNavTree('db/d55/EventType_8hpp_source.html','..
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> * @see DXFeed</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="../../d4/d2c/structdxfcpp_1_1EventType.html">   29</a></span>&#160;<span class="keyword">struct</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> <a class="code" href="../../d4/d2c/structdxfcpp_1_1EventType.html">EventType</a> : <span class="keyword">public</span> <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">SharedEntity</a> {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="comment">/// The alias to a type of shared pointer to the EventType&#39;s child object.</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="comment">/// The alias to a type of shared pointer to the EventType object.</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a79078a83cb055e5250b65c06e8ea9fbe">   31</a></span>&#160;    <span class="keyword">using</span> Ptr = std::shared_ptr&lt;<a class="code" href="../../d4/d2c/structdxfcpp_1_1EventType.html">EventType</a>&gt;;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="comment">/**</span></div>
@@ -162,7 +162,7 @@ $(document).ready(function(){initNavTree('db/d55/EventType_8hpp_source.html','..
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">     * @return The pointer to the filled dxFeed Graal SDK structure</span></div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a2556987f22d4af6a4cd08e15bd4c5c25">   71</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span>* <a class="code" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a2556987f22d4af6a4cd08e15bd4c5c25">toGraal</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> = 0;</div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a2556987f22d4af6a4cd08e15bd4c5c25">   71</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> *<a class="code" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a2556987f22d4af6a4cd08e15bd4c5c25">toGraal</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> = 0;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="comment">///</span></div>
 <div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a54c84141d4eff181553b9064db6500e9">   74</a></span>&#160;    std::string <a class="code" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a54c84141d4eff181553b9064db6500e9">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
@@ -203,17 +203,24 @@ $(document).ready(function(){initNavTree('db/d55/EventType_8hpp_source.html','..
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment">     * @return The event symbol.</span></div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#a8bf9399bba53191728d3595773286afc">  112</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> Symbol &amp;<a class="code" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#a8bf9399bba53191728d3595773286afc">getEventSymbol</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> = 0;</div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#a4649fee730841027496509bc8188a1fc">  112</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> Symbol &amp;<a class="code" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#a4649fee730841027496509bc8188a1fc">getEventSymbol</a>() <span class="keyword">const</span>&amp; <span class="keyword">noexcept</span> = 0;</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">     * Changes event symbol that identifies this event type in @ref DXFeedSubscription &quot;subscription&quot;.</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">     * Returns event symbol that identifies this event type in @ref DXFeedSubscription &quot;subscription&quot;.</span></div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">     * @param eventSymbol event symbol.</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">     * @return The event symbol or std::nullopt.</span></div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#af4577800cd16018b9f85b36911fc79d9">  119</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#af4577800cd16018b9f85b36911fc79d9">setEventSymbol</a>(<span class="keyword">const</span> Symbol &amp;eventSymbol) <span class="keyword">noexcept</span> = 0;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno"><a class="line" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#aa8ef960ec161d594d714ea5b99d58d7d">  119</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#aa8ef960ec161d594d714ea5b99d58d7d">std</a>::<a class="code" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#aa8ef960ec161d594d714ea5b99d58d7d">optional</a>&lt;<a class="code" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#aa8ef960ec161d594d714ea5b99d58d7d">Symbol</a>&gt; &amp;<a class="code" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#aa8ef960ec161d594d714ea5b99d58d7d">getEventSymbolOpt</a>() <span class="keyword">const</span>&amp; <span class="keyword">noexcept</span> = 0;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">     * Changes event symbol that identifies this event type in @ref DXFeedSubscription &quot;subscription&quot;.</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment">     * @param eventSymbol event symbol.</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno"><a class="line" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#af4577800cd16018b9f85b36911fc79d9">  126</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#af4577800cd16018b9f85b36911fc79d9">setEventSymbol</a>(<span class="keyword">const</span> Symbol &amp;eventSymbol) <span class="keyword">noexcept</span> = 0;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;};</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

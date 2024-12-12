@@ -111,25 +111,25 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:a6885846053d5dfadd349f93710ca0fa3"><td class="memItemLeft" align="right" valign="top"><a id="a6885846053d5dfadd349f93710ca0fa3"></a>
-static const <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html">SessionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#a6885846053d5dfadd349f93710ca0fa3">NO_TRADING</a> {&quot;NO_TRADING&quot;, false}</td></tr>
+static const <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html">SessionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#a6885846053d5dfadd349f93710ca0fa3">NO_TRADING</a> {SessionTypeEnum::NO_TRADING, &quot;NO_TRADING&quot;, false}</td></tr>
 <tr class="memdesc:a6885846053d5dfadd349f93710ca0fa3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Non-trading session type is used to mark periods of time during which trading is not allowed. <br /></td></tr>
 <tr class="separator:a6885846053d5dfadd349f93710ca0fa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae343864a83844a9785b517522531330a"><td class="memItemLeft" align="right" valign="top"><a id="ae343864a83844a9785b517522531330a"></a>
-static const <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html">SessionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#ae343864a83844a9785b517522531330a">PRE_MARKET</a> {&quot;PRE_MARKET&quot;, true}</td></tr>
+static const <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html">SessionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#ae343864a83844a9785b517522531330a">PRE_MARKET</a> {SessionTypeEnum::PRE_MARKET, &quot;PRE_MARKET&quot;, true}</td></tr>
 <tr class="memdesc:ae343864a83844a9785b517522531330a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pre-market session type marks extended trading session before regular trading hours. <br /></td></tr>
 <tr class="separator:ae343864a83844a9785b517522531330a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0684f14af67113af717d7adaab3faf4c"><td class="memItemLeft" align="right" valign="top"><a id="a0684f14af67113af717d7adaab3faf4c"></a>
-static const <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html">SessionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#a0684f14af67113af717d7adaab3faf4c">REGULAR</a> {&quot;REGULAR&quot;, true}</td></tr>
+static const <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html">SessionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#a0684f14af67113af717d7adaab3faf4c">REGULAR</a> {SessionTypeEnum::REGULAR, &quot;REGULAR&quot;, true}</td></tr>
 <tr class="memdesc:a0684f14af67113af717d7adaab3faf4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Regular session type marks regular trading hours session. <br /></td></tr>
 <tr class="separator:a0684f14af67113af717d7adaab3faf4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbcad8dd2286e381cc9912caa9e29f5b"><td class="memItemLeft" align="right" valign="top"><a id="abbcad8dd2286e381cc9912caa9e29f5b"></a>
-static const <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html">SessionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#abbcad8dd2286e381cc9912caa9e29f5b">AFTER_MARKET</a> {&quot;AFTER_MARKET&quot;, true}</td></tr>
+static const <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html">SessionType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#abbcad8dd2286e381cc9912caa9e29f5b">AFTER_MARKET</a> {SessionTypeEnum::AFTER_MARKET, &quot;AFTER_MARKET&quot;, true}</td></tr>
 <tr class="memdesc:abbcad8dd2286e381cc9912caa9e29f5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">After-market session type marks extended trading session after regular trading hours. <br /></td></tr>
 <tr class="separator:abbcad8dd2286e381cc9912caa9e29f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines type of session - what kind of trading activity is allowed (if any), what rules are used, what impact on daily trading statistics it has, etc. </p>
-<p>The ::NO_TRADING session type is used for non-trading sessions. </p>
+<p>The <a class="el" href="../../d7/d7e/structdxfcpp_1_1SessionType.html#a6885846053d5dfadd349f93710ca0fa3" title="Non-trading session type is used to mark periods of time during which trading is not allowed.">SessionType::NO_TRADING</a> session type is used for non-trading sessions. </p>
 <p>Some exchanges support all session types defined here, others do not. </p>
 <p>Some sessions may have zero duration - e.g. indices that post value once a day. Such sessions can be of any appropriate type, trading or non-trading. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>

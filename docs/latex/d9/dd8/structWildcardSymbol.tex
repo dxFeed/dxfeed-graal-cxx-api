@@ -1,0 +1,151 @@
+\hypertarget{structWildcardSymbol}{}\doxysubsection{Wildcard\+Symbol Struct Reference}
+\label{structWildcardSymbol}\index{WildcardSymbol@{WildcardSymbol}}
+
+
+Represents \mbox{[}wildcard\mbox{]} subscription to all events of the specific event type.  
+
+
+
+
+{\ttfamily \#include $<$Wildcard\+Symbol.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{structWildcardSymbol_ac95a378b0826cad79317d4398afc1810}{to\+Graal}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structWildcardSymbol_a574a599f4ba3ce59927d21676fa80f27}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this wildcard subscription symbol. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{structWildcardSymbol_a5975db96e4f01c88d732f8ca104037bf}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{structWildcardSymbol}{Wildcard\+Symbol}} \& \mbox{\hyperlink{structWildcardSymbol_aae2b0c44923c2081b691d2acb06d1ac6}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const std\+::string \mbox{\hyperlink{structWildcardSymbol_affd42aad48cb63eb5bfbadb1b42f7cb8}{RESERVED\+\_\+\+PREFIX}} = \char`\"{}$\ast$\char`\"{}
+\begin{DoxyCompactList}\small\item\em Symbol prefix that is reserved for wildcard subscriptions. \end{DoxyCompactList}\item 
+static const \mbox{\hyperlink{structWildcardSymbol}{Wildcard\+Symbol}} \mbox{\hyperlink{structWildcardSymbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{ALL}} \{\mbox{\hyperlink{structWildcardSymbol_affd42aad48cb63eb5bfbadb1b42f7cb8}{RESERVED\+\_\+\+PREFIX}}\}
+\begin{DoxyCompactList}\small\item\em Represents \mbox{[}wildcard\mbox{]} subscription to all events of the specific event type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents \mbox{[}wildcard\mbox{]} subscription to all events of the specific event type. 
+
+The \mbox{\hyperlink{structWildcardSymbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{Wildcard\+Symbol\+::\+ALL}} constant can be added to any \mbox{\hyperlink{classDXFeedSubscription}{DXFeed\+Subscription}} instance with \mbox{\hyperlink{classDXFeedSubscription_a43713365d3db41d8cf9e3a9e894611a4}{add\+Symbols}} method to the effect of subscribing to all possible event symbols. The corresponding subscription will start receiving all published events of the corresponding types. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structWildcardSymbol_a5975db96e4f01c88d732f8ca104037bf}\label{structWildcardSymbol_a5975db96e4f01c88d732f8ca104037bf}} 
+\index{WildcardSymbol@{WildcardSymbol}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!WildcardSymbol@{WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Wildcard\+Symbol\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by Symbol\+Wrapper\+::free\+Graal().
+
+\mbox{\Hypertarget{structWildcardSymbol_aae2b0c44923c2081b691d2acb06d1ac6}\label{structWildcardSymbol_aae2b0c44923c2081b691d2acb06d1ac6}} 
+\index{WildcardSymbol@{WildcardSymbol}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!WildcardSymbol@{WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structWildcardSymbol}{Wildcard\+Symbol}} \& Wildcard\+Symbol\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+
+
+References ALL.
+
+
+
+Referenced by Symbol\+Wrapper\+::from\+Graal().
+
+\mbox{\Hypertarget{structWildcardSymbol_ac95a378b0826cad79317d4398afc1810}\label{structWildcardSymbol_ac95a378b0826cad79317d4398afc1810}} 
+\index{WildcardSymbol@{WildcardSymbol}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!WildcardSymbol@{WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Wildcard\+Symbol\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structWildcardSymbol_a574a599f4ba3ce59927d21676fa80f27}\label{structWildcardSymbol_a574a599f4ba3ce59927d21676fa80f27}} 
+\index{WildcardSymbol@{WildcardSymbol}!toString@{toString}}
+\index{toString@{toString}!WildcardSymbol@{WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Wildcard\+Symbol\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this wildcard subscription symbol. 
+
+\begin{DoxyReturn}{Returns}
+string representation of this wildcard subscription symbol. 
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{structWildcardSymbol_acf6b6b4eeecdb9cca6e311ed7db387f6}\label{structWildcardSymbol_acf6b6b4eeecdb9cca6e311ed7db387f6}} 
+\index{WildcardSymbol@{WildcardSymbol}!ALL@{ALL}}
+\index{ALL@{ALL}!WildcardSymbol@{WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{ALL}{ALL}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structWildcardSymbol}{Wildcard\+Symbol}} Wildcard\+Symbol\+::\+ALL \{\mbox{\hyperlink{structWildcardSymbol_affd42aad48cb63eb5bfbadb1b42f7cb8}{RESERVED\+\_\+\+PREFIX}}\}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Represents \mbox{[}wildcard\mbox{]} subscription to all events of the specific event type. 
+
+{\bfseries{NOTE\+:}} Wildcard subscription can create extremely high network and CPU load for certain kinds of high-\/frequency events like quotes. It requires a special arrangement on the side of upstream data provider and is disabled by default in upstream feed configuration. Make that sure you have adequate resources and understand the impact before using it. It can be used for low-\/frequency events only (like Forex quotes), because each instance of \mbox{\hyperlink{classDXFeedSubscription}{DXFeed\+Subscription}} processes events in a single thread and there is no provision to load-\/balance wildcard subscription amongst multiple threads. Contact your data provider for the corresponding configuration arrangement if needed.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structWildcardSymbol}{Wildcard\+Symbol}} 
+\end{DoxySeeAlso}
+
+
+Referenced by from\+Graal().
+
+\mbox{\Hypertarget{structWildcardSymbol_affd42aad48cb63eb5bfbadb1b42f7cb8}\label{structWildcardSymbol_affd42aad48cb63eb5bfbadb1b42f7cb8}} 
+\index{WildcardSymbol@{WildcardSymbol}!RESERVED\_PREFIX@{RESERVED\_PREFIX}}
+\index{RESERVED\_PREFIX@{RESERVED\_PREFIX}!WildcardSymbol@{WildcardSymbol}}
+\doxyparagraph{\texorpdfstring{RESERVED\_PREFIX}{RESERVED\_PREFIX}}
+{\footnotesize\ttfamily DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE const std\+::string Wildcard\+Symbol\+::\+RESERVED\+\_\+\+PREFIX = \char`\"{}$\ast$\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Symbol prefix that is reserved for wildcard subscriptions. 
+
+Any subscription starting with \char`\"{}$\ast$\char`\"{} is ignored with the exception of \mbox{\hyperlink{structWildcardSymbol}{Wildcard\+Symbol}} subscription. 

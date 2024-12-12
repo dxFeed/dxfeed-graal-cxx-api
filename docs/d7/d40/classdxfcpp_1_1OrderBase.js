@@ -10,6 +10,7 @@ var classdxfcpp_1_1OrderBase =
     [ "getEventFlags", "d7/d40/classdxfcpp_1_1OrderBase.html#a6d1da10a6ba9bb4fcc3466a5c0b07ac5", null ],
     [ "getEventFlagsMask", "d7/d40/classdxfcpp_1_1OrderBase.html#a9a987f817602b6780dff3469535211ca", null ],
     [ "getExchangeCode", "d7/d40/classdxfcpp_1_1OrderBase.html#aa5e88e61e39f5716d1ab7a41775fdad0", null ],
+    [ "getExchangeCodeString", "d7/d40/classdxfcpp_1_1OrderBase.html#a5f0325d572de8695f64e3b710eb2609d", null ],
     [ "getExecutedSize", "d7/d40/classdxfcpp_1_1OrderBase.html#ae63959b4fad491605a6fecbb3a962187", null ],
     [ "getIndex", "d7/d40/classdxfcpp_1_1OrderBase.html#ae40f5bf3aadb65c03f0d512569a23b74", null ],
     [ "getOrderId", "d7/d40/classdxfcpp_1_1OrderBase.html#a95444e9de035938611e1421be0a3e68f", null ],

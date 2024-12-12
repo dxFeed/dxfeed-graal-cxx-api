@@ -1,5 +1,7 @@
 var classdxfcpp_1_1OptionSale =
 [
+    [ "Ptr", "db/d4a/classdxfcpp_1_1OptionSale.html#aa6db312877927ad3e0a880e007c7e64a", null ],
+    [ "Unique", "db/d4a/classdxfcpp_1_1OptionSale.html#a295c6e3764b6a5311dbb6b43450f30ea", null ],
     [ "OptionSale", "db/d4a/classdxfcpp_1_1OptionSale.html#a7f9e70835c82a90dca2427326bf7b924", null ],
     [ "OptionSale", "db/d4a/classdxfcpp_1_1OptionSale.html#a2ba24b6d87ad9dfd3a757da3bc3ab336", null ],
     [ "getAggressorSide", "db/d4a/classdxfcpp_1_1OptionSale.html#af5acc29690f4241d2a2396b1dc01778d", null ],
@@ -9,9 +11,12 @@ var classdxfcpp_1_1OptionSale =
     [ "getEventFlags", "db/d4a/classdxfcpp_1_1OptionSale.html#afc6217f0e312d5d1e3abc6e43bbcf847", null ],
     [ "getEventFlagsMask", "db/d4a/classdxfcpp_1_1OptionSale.html#a2405ea5fca56c6136fda028f12c1f628", null ],
     [ "getExchangeCode", "db/d4a/classdxfcpp_1_1OptionSale.html#ae55fe7f7c266ebb0001e7d83a791e1a7", null ],
+    [ "getExchangeCodeString", "db/d4a/classdxfcpp_1_1OptionSale.html#a95ac7f4ae0afc48c59dad5bbeedfcda6", null ],
     [ "getExchangeSaleConditions", "db/d4a/classdxfcpp_1_1OptionSale.html#ab3ee85faa385e51936ecda535fe74049", null ],
+    [ "getExchangeSaleConditionsOpt", "db/d4a/classdxfcpp_1_1OptionSale.html#a66718f6c2ef693fd03723fdae8e5ca24", null ],
     [ "getIndex", "db/d4a/classdxfcpp_1_1OptionSale.html#a2b08a54a6d18bfb8b40a4937d9c19ef8", null ],
     [ "getOptionSymbol", "db/d4a/classdxfcpp_1_1OptionSale.html#ac04d90c234f066bd3b68aadca3e4ddf5", null ],
+    [ "getOptionSymbolOpt", "db/d4a/classdxfcpp_1_1OptionSale.html#a4f2dfff8eab9be25caadf0a47bae9240", null ],
     [ "getPrice", "db/d4a/classdxfcpp_1_1OptionSale.html#a9a9cd294dd2263aefc858554c2b620ac", null ],
     [ "getSequence", "db/d4a/classdxfcpp_1_1OptionSale.html#a62d9817b5309b69cf502521710c42627", null ],
     [ "getSize", "db/d4a/classdxfcpp_1_1OptionSale.html#a9a8f8f8201d9690c9e85a865939a667e", null ],

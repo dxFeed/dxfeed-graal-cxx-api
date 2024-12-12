@@ -11,11 +11,14 @@ var struct_symbol_wrapper =
     [ "asStringSymbol", "d1/d01/struct_symbol_wrapper.html#a6f8b0e47c71716a1c23e25d0eacc8a8d", null ],
     [ "asTimeSeriesSubscriptionSymbol", "d1/d01/struct_symbol_wrapper.html#ab74479c3153ded5d9608c3f8c3b6649b", null ],
     [ "asWildcardSymbol", "d1/d01/struct_symbol_wrapper.html#a7c87ee22a491ec4483cf9ed916e16682", null ],
+    [ "getData", "d1/d01/struct_symbol_wrapper.html#a6da302753150679e3e1f25918d6cc2ca", null ],
     [ "isCandleSymbol", "d1/d01/struct_symbol_wrapper.html#aa85e5465f6b4ed9a5f58f07d060e3dae", null ],
     [ "isIndexedEventSubscriptionSymbol", "d1/d01/struct_symbol_wrapper.html#a17143b85508f75e9ef1605417bee0303", null ],
     [ "isStringSymbol", "d1/d01/struct_symbol_wrapper.html#a41d1a6b653b546dae9da14c836075dcc", null ],
     [ "isTimeSeriesSubscriptionSymbol", "d1/d01/struct_symbol_wrapper.html#aa0e37838f86b3ff7e08e23b1fc2fc537", null ],
     [ "isWildcardSymbol", "d1/d01/struct_symbol_wrapper.html#a487797c0d1536652d507699e97fb076e", null ],
     [ "toGraal", "d1/d01/struct_symbol_wrapper.html#a57eb7a3e84a39a2e9383f5c62bc3d3ac", null ],
-    [ "toString", "d1/d01/struct_symbol_wrapper.html#a381c43e0b9088ad4a011beb62f09d439", null ]
+    [ "toGraalUnique", "d1/d01/struct_symbol_wrapper.html#a330ea321ea9cb8f05f96b563d8054e05", null ],
+    [ "toString", "d1/d01/struct_symbol_wrapper.html#a29f2c8369954dafa8d915c70cfa68981", null ],
+    [ "toStringUnderlying", "d1/d01/struct_symbol_wrapper.html#a2c8a300dfae0213c8287de2d66be2757", null ]
 ];

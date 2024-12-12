@@ -1,0 +1,158 @@
+\hypertarget{classInstrumentProfileReader}{}\doxysubsection{Instrument\+Profile\+Reader Class Reference}
+\label{classInstrumentProfileReader}\index{InstrumentProfileReader@{InstrumentProfileReader}}
+
+
+Reads instrument profiles from the stream using Instrument \mbox{\hyperlink{classProfile}{Profile}} Format (IPF).  
+
+
+
+
+{\ttfamily \#include $<$Instrument\+Profile\+Reader.\+hpp$>$}
+
+Inheritance diagram for Instrument\+Profile\+Reader\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d5/d9c/classInstrumentProfileReader}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classInstrumentProfileReader_a7f3fb3c117da892c14a6194ad9282ac5}\label{classInstrumentProfileReader_a7f3fb3c117da892c14a6194ad9282ac5}} 
+using \mbox{\hyperlink{classInstrumentProfileReader_a7f3fb3c117da892c14a6194ad9282ac5}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfileReader}{Instrument\+Profile\+Reader}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classInstrumentProfileReader}{Instrument\+Profile\+Reader}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classInstrumentProfileReader_a73c1d5408aa6dbc64b136cb7a9e0dc58}\label{classInstrumentProfileReader_a73c1d5408aa6dbc64b136cb7a9e0dc58}} 
+using \mbox{\hyperlink{classInstrumentProfileReader_a73c1d5408aa6dbc64b136cb7a9e0dc58}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfileReader}{Instrument\+Profile\+Reader}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classInstrumentProfileReader}{Instrument\+Profile\+Reader}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classInstrumentProfileReader_a47cbdd423b46f6ad7fdf31c167297544}\label{classInstrumentProfileReader_a47cbdd423b46f6ad7fdf31c167297544}} 
+std\+::int64\+\_\+t \mbox{\hyperlink{classInstrumentProfileReader_a47cbdd423b46f6ad7fdf31c167297544}{get\+Last\+Modified}} () const
+\begin{DoxyCompactList}\small\item\em Returns last modification time (in milliseconds) from last \mbox{\hyperlink{classInstrumentProfileReader_ad30a80a51ea7b299047badf70537c6a1}{Instrument\+Profile\+Reader\+::read\+From\+File()}} operation or zero if it is unknown. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classInstrumentProfileReader_ad868ab91f891c36002dd8d67413bcb29}\label{classInstrumentProfileReader_ad868ab91f891c36002dd8d67413bcb29}} 
+bool \mbox{\hyperlink{classInstrumentProfileReader_ad868ab91f891c36002dd8d67413bcb29}{was\+Complete}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if IPF was fully read on last \mbox{\hyperlink{classInstrumentProfileReader_ad30a80a51ea7b299047badf70537c6a1}{Instrument\+Profile\+Reader\+::read\+From\+File()}} operation. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$ $>$ \mbox{\hyperlink{classInstrumentProfileReader_ad30a80a51ea7b299047badf70537c6a1}{read\+From\+File}} (const std\+::string \&address) const
+\begin{DoxyCompactList}\small\item\em Reads and returns instrument profiles from specified file. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$ $>$ \mbox{\hyperlink{classInstrumentProfileReader_a7de2dddf372698a32e3554363aa88050}{read\+From\+File}} (const std\+::string \&address, const std\+::string \&user, const std\+::string \&password) const
+\begin{DoxyCompactList}\small\item\em Reads and returns instrument profiles from specified address with a specified basic user and password credentials. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classInstrumentProfileReader_a7f3fb3c117da892c14a6194ad9282ac5}{Ptr}} \mbox{\hyperlink{classInstrumentProfileReader_a92f0b3f03747c7e47795a33fb852fe49}{create}} ()
+\begin{DoxyCompactList}\small\item\em Creates the new \mbox{\hyperlink{classInstrumentProfileReader}{Instrument\+Profile\+Reader}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classInstrumentProfileReader_a4501c8c3e3bd01b430a115bcdcee21b0}\label{classInstrumentProfileReader_a4501c8c3e3bd01b430a115bcdcee21b0}} 
+static std\+::string \mbox{\hyperlink{classInstrumentProfileReader_a4501c8c3e3bd01b430a115bcdcee21b0}{resolve\+Source\+URL}} (const std\+::string \&address) noexcept
+\begin{DoxyCompactList}\small\item\em Converts a specified string address specification into an URL that will be read by \mbox{\hyperlink{classInstrumentProfileReader_ad30a80a51ea7b299047badf70537c6a1}{Instrument\+Profile\+Reader\+::read\+From\+File()}} method. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Reads instrument profiles from the stream using Instrument \mbox{\hyperlink{classProfile}{Profile}} Format (IPF). 
+
+Please see {\bfseries{Instrument \mbox{\hyperlink{classProfile}{Profile}} Format}} documentation for complete description. This reader automatically uses data formats as specified in the stream.
+
+This reader is intended for \char`\"{}one time only\char`\"{} usage\+: create new instances for new IPF reads. 
+
+Use \mbox{\hyperlink{classInstrumentProfileConnection}{Instrument\+Profile\+Connection}} if support for streaming updates of instrument profiles is needed.
+
+For backward compatibility reader can be configured with system property \char`\"{}-\/\+Dcom.\+dxfeed.\+ipf.\+complete\char`\"{} to control the strategy for missing \char`\"{}\#\#\+COMPLETE\char`\"{} tag when reading IPF, possible values are\+: 
+\begin{DoxyItemize}
+\item 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{warn }
+
+\end{DoxyCode}
+ -\/ show warning in the log (default) 
+\item 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{error }
+
+\end{DoxyCode}
+ -\/ throw exception (future default) 
+\item 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ignore }
+
+\end{DoxyCode}
+ -\/ do nothing (for backward compatibility) 
+\end{DoxyItemize}
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classInstrumentProfileReader_a92f0b3f03747c7e47795a33fb852fe49}\label{classInstrumentProfileReader_a92f0b3f03747c7e47795a33fb852fe49}} 
+\index{InstrumentProfileReader@{InstrumentProfileReader}!create@{create}}
+\index{create@{create}!InstrumentProfileReader@{InstrumentProfileReader}}
+\doxyparagraph{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classInstrumentProfileReader_a7f3fb3c117da892c14a6194ad9282ac5}{Instrument\+Profile\+Reader\+::\+Ptr}} Instrument\+Profile\+Reader\+::create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates the new \mbox{\hyperlink{classInstrumentProfileReader}{Instrument\+Profile\+Reader}}. 
+
+\begin{DoxyReturn}{Returns}
+The new \mbox{\hyperlink{classInstrumentProfileReader}{Instrument\+Profile\+Reader}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInstrumentProfileReader_ad30a80a51ea7b299047badf70537c6a1}\label{classInstrumentProfileReader_ad30a80a51ea7b299047badf70537c6a1}} 
+\index{InstrumentProfileReader@{InstrumentProfileReader}!readFromFile@{readFromFile}}
+\index{readFromFile@{readFromFile}!InstrumentProfileReader@{InstrumentProfileReader}}
+\doxyparagraph{\texorpdfstring{readFromFile()}{readFromFile()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$ $>$ Instrument\+Profile\+Reader\+::read\+From\+File (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{address }\end{DoxyParamCaption}) const}
+
+
+
+Reads and returns instrument profiles from specified file. 
+
+This method recognizes data compression formats \char`\"{}zip\char`\"{} and \char`\"{}gzip\char`\"{} automatically. In case of {\itshape zip} the first file entry will be read and parsed as a plain data stream. In case of {\itshape gzip} compressed content will be read and processed. In other cases data considered uncompressed and will be parsed as is.
+
+Authentication information can be supplied to this method as part of URL user info like
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}http://user:password@host:port/path/file.ipf"{}} }
+
+\end{DoxyCode}
+ .
+
+This is a shortcut for {\ttfamily \mbox{\hyperlink{}{read\+From\+File}}(address, {\bfseries{null}}, {\bfseries{null}})}.
+
+This operation updates \mbox{\hyperlink{classInstrumentProfileReader_a47cbdd423b46f6ad7fdf31c167297544}{last\+Modified}} and \mbox{\hyperlink{classInstrumentProfileReader_ad868ab91f891c36002dd8d67413bcb29}{was\+Complete}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & URL of file to read from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+list of instrument profiles 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classInstrumentProfileReader_a7de2dddf372698a32e3554363aa88050}\label{classInstrumentProfileReader_a7de2dddf372698a32e3554363aa88050}} 
+\index{InstrumentProfileReader@{InstrumentProfileReader}!readFromFile@{readFromFile}}
+\index{readFromFile@{readFromFile}!InstrumentProfileReader@{InstrumentProfileReader}}
+\doxyparagraph{\texorpdfstring{readFromFile()}{readFromFile()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$ $>$ Instrument\+Profile\+Reader\+::read\+From\+File (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{address,  }\item[{const std\+::string \&}]{user,  }\item[{const std\+::string \&}]{password }\end{DoxyParamCaption}) const}
+
+
+
+Reads and returns instrument profiles from specified address with a specified basic user and password credentials. 
+
+This method recognizes data compression formats \char`\"{}zip\char`\"{} and \char`\"{}gzip\char`\"{} automatically. In case of {\itshape zip} the first file entry will be read and parsed as a plain data stream. In case of {\itshape gzip} compressed content will be read and processed. In other cases data considered uncompressed and will be parsed as is.
+
+Specified user and password take precedence over authentication information that is supplied to this method as part of URL user info like
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{stringliteral}{"{}http://user:password@host:port/path/file.ipf"{}} }
+
+\end{DoxyCode}
+ .
+
+This operation updates \mbox{\hyperlink{classInstrumentProfileReader_a47cbdd423b46f6ad7fdf31c167297544}{last\+Modified}} and \mbox{\hyperlink{classInstrumentProfileReader_ad868ab91f891c36002dd8d67413bcb29}{was\+Complete}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & URL of file to read from \\
+\hline
+{\em user} & the user name (may be null) \\
+\hline
+{\em password} & the password (may be null) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+list of instrument profiles 
+\end{DoxyReturn}

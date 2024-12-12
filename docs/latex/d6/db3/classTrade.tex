@@ -1,0 +1,187 @@
+\hypertarget{classTrade}{}\doxysubsection{Trade Class Reference}
+\label{classTrade}\index{Trade@{Trade}}
+
+
+\mbox{\hyperlink{classTrade}{Trade}} event is a snapshot of the price and size of the last trade during regular trading hours and an overall day volume and day turnover.  
+
+
+
+
+{\ttfamily \#include $<$Trade.\+hpp$>$}
+
+Inheritance diagram for Trade\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=7.000000cm]{d6/db3/classTrade}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTrade_af70088b33b7a7c7217cbe9e3034f56f9}\label{classTrade_af70088b33b7a7c7217cbe9e3034f56f9}} 
+using \mbox{\hyperlink{classTrade_af70088b33b7a7c7217cbe9e3034f56f9}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTrade}{Trade}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classTrade}{Trade}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTrade_aa20966a4e7c281f54148f7ced4ef7337}\label{classTrade_aa20966a4e7c281f54148f7ced4ef7337}} 
+using \mbox{\hyperlink{classTrade_aa20966a4e7c281f54148f7ced4ef7337}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classTrade}{Trade}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classTrade}{Trade}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classTrade_ae45660706d7e48ee71e3c1856f26b510}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classTrade_a5a121872ecb6b9b0a73ad1bec4f6985d}\label{classTrade_a5a121872ecb6b9b0a73ad1bec4f6985d}} 
+\mbox{\hyperlink{classTrade_a5a121872ecb6b9b0a73ad1bec4f6985d}{Trade}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new trade event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTrade_a87688597a43b7abf3ebb7501dbb0cdc4}{Trade}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new trade event with the specified event symbol. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classTrade_a0b9594c3abcb062a0eb64238ab7f750b}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classTrade_a983d7d88f194839911bead29ac1fce1d}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classTrade_a6e91d41bee91da1f3d22e27f4f4460da}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTrade_a2ac80fbec5eff5162e191e7bfc528fc3}\label{classTrade_a2ac80fbec5eff5162e191e7bfc528fc3}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classTrade_a2ac80fbec5eff5162e191e7bfc528fc3}{TYPE}} = Event\+Type\+Enum\+::\+TRADE
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classTrade}{Trade}} event is a snapshot of the price and size of the last trade during regular trading hours and an overall day volume and day turnover. 
+
+It represents the most recent information that is available about the regular last trade on the market at any given moment of time.
+
+\doxysubparagraph*{Trading sessions}
+
+The \mbox{\hyperlink{classTrade}{Trade}} event defines last trade \mbox{\hyperlink{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{price}} as officially defined by the corresponding exchange for its {\bfseries{regular trading hours}} (RTH). It also include an official exchange \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume}} and \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover}} {\bfseries{for the whole trading day}} identified by \mbox{\hyperlink{classTradeBase_a49359e7e646d6916337477a298bef4ea}{day\+Id}}. So, \mbox{\hyperlink{classTrade}{Trade}} event captures all the official numbers that are typically reported by exchange.
+
+Trades that happen in {\bfseries{extended trading hours}} (ETH, pre-\/market and post-\/market trading sessions), which are typically defined for stocks and ETFs, do not update last trade \mbox{\hyperlink{classTradeBase_a42691e5d2128fa83fbe6361975426953}{time}}, \mbox{\hyperlink{classTradeBase_a5044e7359f50ff34f59c7ab201b1847b}{exchange\+Code}}, \mbox{\hyperlink{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{price}}, \mbox{\hyperlink{classTradeBase_a1ba68544e527dfd3b740e5798c706d8d}{change}}, \mbox{\hyperlink{classTradeBase_a4dbbf63f2435bcb5eb44a16f20d44424}{size}}, and \mbox{\hyperlink{classTradeBase_a8e7718492b2922cf081e60acd8e280ed}{tick\+Direction}} in the \mbox{\hyperlink{classTrade}{Trade}} event, but they do update \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume}} and \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover}}.
+
+During extended trading hours a \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event is generated on each trade with its \mbox{\hyperlink{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}{extended\+Trading\+Hours}} property set to {\ttfamily true}.
+
+\doxysubparagraph*{Volume and Turnover}
+
+The volume and turnover are included into the \mbox{\hyperlink{classTrade}{Trade}} event instead of \mbox{\hyperlink{classSummary}{Summary}} event, because both volume and turnover typically update with each trade. The \mbox{\hyperlink{classTradeBase_a49359e7e646d6916337477a298bef4ea}{day\+Id}} field identifies current trading day for which volume and turnover statistics are computed. This solution avoids generation of multiple events on each trade during regular trading hours. \mbox{\hyperlink{classSummary}{Summary}} event is generated during the trading day only when new highs or lows are reached or other properties change.
+
+Note that one can compute volume-\/weighted average price (VWAP) for a day by this formula\+: ~\newline
+{\ttfamily vwap = \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover}} / \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume}};}
+
+\doxysubparagraph*{Daily reset}
+
+Daily reset procedure that happens on a schedule during non-\/trading hours resets \mbox{\hyperlink{classTrade}{Trade}} \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{day\+Volume}} and \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{day\+Turnover}} to math\+::\+NaN and sets \mbox{\hyperlink{classTradeBase_a49359e7e646d6916337477a298bef4ea}{day\+Id}} to the next trading day in preparation to the next day\textquotesingle{}s pre-\/market trading session (or for regular trading if there is no pre-\/market) while leaving all other properties intact. They reflect information about the last known RTH trade until the next RTH trade happens.
+
+\doxysubparagraph*{Implementation details}
+
+This event is implemented on top of QDS records {\ttfamily \mbox{\hyperlink{classTrade}{Trade}}} and {\ttfamily \mbox{\hyperlink{classTrade}{Trade}}\&X} for regional exchange trades. Regional records do not explicitly store a field for \mbox{\hyperlink{classTradeBase_a5044e7359f50ff34f59c7ab201b1847b}{exchange\+Code}} property. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTrade_a87688597a43b7abf3ebb7501dbb0cdc4}\label{classTrade_a87688597a43b7abf3ebb7501dbb0cdc4}} 
+\index{Trade@{Trade}!Trade@{Trade}}
+\index{Trade@{Trade}!Trade@{Trade}}
+\doxyparagraph{\texorpdfstring{Trade()}{Trade()}}
+{\footnotesize\ttfamily Trade\+::\+Trade (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new trade event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Trade\+Base\+::\+Trade\+Base().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTrade_a6e91d41bee91da1f3d22e27f4f4460da}\label{classTrade_a6e91d41bee91da1f3d22e27f4f4460da}} 
+\index{Trade@{Trade}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Trade@{Trade}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Trade\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTrade_a983d7d88f194839911bead29ac1fce1d}\label{classTrade_a983d7d88f194839911bead29ac1fce1d}} 
+\index{Trade@{Trade}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Trade@{Trade}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classTrade}{Trade}} $>$ Trade\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classTrade_ae45660706d7e48ee71e3c1856f26b510}\label{classTrade_ae45660706d7e48ee71e3c1856f26b510}} 
+\index{Trade@{Trade}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Trade@{Trade}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Trade\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classTrade_a0b9594c3abcb062a0eb64238ab7f750b}\label{classTrade_a0b9594c3abcb062a0eb64238ab7f750b}} 
+\index{Trade@{Trade}!toString@{toString}}
+\index{toString@{toString}!Trade@{Trade}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Trade\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+

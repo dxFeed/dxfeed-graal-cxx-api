@@ -1,0 +1,524 @@
+\hypertarget{classSummary}{}\doxysubsection{Summary Class Reference}
+\label{classSummary}\index{Summary@{Summary}}
+
+
+\mbox{\hyperlink{classSummary}{Summary}} information snapshot about the trading session including session highs, lows, etc.  
+
+
+
+
+{\ttfamily \#include $<$Summary.\+hpp$>$}
+
+Inheritance diagram for Summary\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{de/d9a/classSummary}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSummary_a4ae2ee49b74ded32f74bfd0271320496}\label{classSummary_a4ae2ee49b74ded32f74bfd0271320496}} 
+using \mbox{\hyperlink{classSummary_a4ae2ee49b74ded32f74bfd0271320496}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classSummary}{Summary}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classSummary}{Summary}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSummary_a8e982ad7d6966877d8ec5f16b678d193}\label{classSummary_a8e982ad7d6966877d8ec5f16b678d193}} 
+using \mbox{\hyperlink{classSummary_a8e982ad7d6966877d8ec5f16b678d193}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classSummary}{Summary}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classSummary}{Summary}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classSummary_a8c7d63124ad917aa87c583a35b1ccc41}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classSummary_a5b3af9e181034ebf63b55ef2f9e0e847}\label{classSummary_a5b3af9e181034ebf63b55ef2f9e0e847}} 
+\mbox{\hyperlink{classSummary_a5b3af9e181034ebf63b55ef2f9e0e847}{Summary}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new summary event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSummary_ab1104364a1e078dc8d6981368890255c}{Summary}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new summary event with the specified event symbol. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classSummary_ad7ec66c2c25555d714076ff4c5316aef}{get\+Day\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns identifier of the day that this summary represents. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_ac2c4098bd23002f62cd1c9257ebce767}{set\+Day\+Id}} (std\+::int32\+\_\+t day\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of the day that this summary represents. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSummary_a519554f0f7ba9f0d89c36938ce1f7748}{get\+Day\+Open\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the first (open) price for the day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_a56efc72923f5a6af3c32daf6863a2d5a}{set\+Day\+Open\+Price}} (double day\+Open\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the first (open) price for the day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSummary_aa68a70631721e06e6c6fe5d662a01ac4}{get\+Day\+High\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the maximal (high) price for the day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_ae46dae1b223e5350d4a2f56e25853469}{set\+Day\+High\+Price}} (double day\+High\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the maximal (high) price for the day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSummary_a61be437541231c11284f11321c31696d}{get\+Day\+Low\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the minimal (low) price for the day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_ae0b7bfec1ef3c3a818d07db2a4ecb497}{set\+Day\+Low\+Price}} (double day\+Low\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the minimal (low) price for the day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSummary_ad38760a92af38015dd5c1aa1256b5909}{get\+Day\+Close\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the last (close) price for the day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_aa5459b6d06b70dfcf401b357f3cc8d11}{set\+Day\+Close\+Price}} (double day\+Close\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the last (close) price for the day. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structPriceType}{Price\+Type}} \& \mbox{\hyperlink{classSummary_a361d7377c36adf4a3cecfc9d342c7e29}{get\+Day\+Close\+Price\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns the price type of the last (close) price for the day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_aa040705ed8d5b1d8e56696b3e16054e0}{set\+Day\+Close\+Price\+Type}} (const \mbox{\hyperlink{structPriceType}{Price\+Type}} \&type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the price type of the last (close) price for the day. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classSummary_af8fcdf52e3d47812be5a0788172a54d9}{get\+Prev\+Day\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns identifier of the previous day that this summary represents. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_a19f19d9301756283e37c3fb69a6f0e29}{set\+Prev\+Day\+Id}} (std\+::int32\+\_\+t prev\+Day\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of the previous day that this summary represents. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSummary_acf2cb75a9415251a81e7aac93fb2b9c8}{get\+Prev\+Day\+Close\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the last (close) price for the previous day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_a9124003fe1113b593e6ccab7e0f6ea17}{set\+Prev\+Day\+Close\+Price}} (double prev\+Day\+Close\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the last (close) price for the previous day. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structPriceType}{Price\+Type}} \& \mbox{\hyperlink{classSummary_a08ac4984f43d6fc9a2c2b1cbf9c20496}{get\+Prev\+Day\+Close\+Price\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns the price type of the last (close) price for the previous day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_aad563e865828f82a4ebe7c7a9ad3cf84}{set\+Prev\+Day\+Close\+Price\+Type}} (const \mbox{\hyperlink{structPriceType}{Price\+Type}} \&type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the price type of the last (close) price for the previous day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSummary_a94d2a257ee4e2b02f651b4d32f3a37d6}{get\+Prev\+Day\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns total volume traded for the previous day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_ac42ba09c9c8909b6e76ed687e11b3c9b}{set\+Prev\+Day\+Volume}} (double prev\+Day\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total volume traded for the previous day. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classSummary_af8ef57947df49c3c2cc6f246e9924a6b}{get\+Open\+Interest}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns open interest of the symbol as the number of open contracts. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classSummary_ad7f0bedfab6006e3359568da94201472}{set\+Open\+Interest}} (std\+::int64\+\_\+t open\+Interest) noexcept
+\begin{DoxyCompactList}\small\item\em Changes open interest of the symbol as the number of open contracts. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classSummary_ae7939f5b3bab6494900c545d986b3f76}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classSummary_a55d678665de262f067c7db950a6602fb}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classSummary_ac824faf652b90ad850f127acd0a10358}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSummary_a5bd165d2fa5578589dfc3bf068832f40}\label{classSummary_a5bd165d2fa5578589dfc3bf068832f40}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classSummary_a5bd165d2fa5578589dfc3bf068832f40}{TYPE}} = Event\+Type\+Enum\+::\+SUMMARY
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classSummary}{Summary}} information snapshot about the trading session including session highs, lows, etc. 
+
+It represents the most recent information that is available about the trading session in the market at any given moment of time. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSummary_ab1104364a1e078dc8d6981368890255c}\label{classSummary_ab1104364a1e078dc8d6981368890255c}} 
+\index{Summary@{Summary}!Summary@{Summary}}
+\index{Summary@{Summary}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{Summary()}{Summary()}}
+{\footnotesize\ttfamily Summary\+::\+Summary (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new summary event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Market\+Event\+::\+Market\+Event().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSummary_ac824faf652b90ad850f127acd0a10358}\label{classSummary_ac824faf652b90ad850f127acd0a10358}} 
+\index{Summary@{Summary}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Summary\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_a55d678665de262f067c7db950a6602fb}\label{classSummary_a55d678665de262f067c7db950a6602fb}} 
+\index{Summary@{Summary}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classSummary}{Summary}} $>$ Summary\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classSummary_ad38760a92af38015dd5c1aa1256b5909}\label{classSummary_ad38760a92af38015dd5c1aa1256b5909}} 
+\index{Summary@{Summary}!getDayClosePrice@{getDayClosePrice}}
+\index{getDayClosePrice@{getDayClosePrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getDayClosePrice()}{getDayClosePrice()}}
+{\footnotesize\ttfamily double Summary\+::get\+Day\+Close\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the last (close) price for the day. 
+
+\begin{DoxyReturn}{Returns}
+the last (close) price for the day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_a361d7377c36adf4a3cecfc9d342c7e29}\label{classSummary_a361d7377c36adf4a3cecfc9d342c7e29}} 
+\index{Summary@{Summary}!getDayClosePriceType@{getDayClosePriceType}}
+\index{getDayClosePriceType@{getDayClosePriceType}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getDayClosePriceType()}{getDayClosePriceType()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structPriceType}{Price\+Type}}\& Summary\+::get\+Day\+Close\+Price\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the price type of the last (close) price for the day. 
+
+\begin{DoxyReturn}{Returns}
+the price type of the last (close) price for the day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_aa68a70631721e06e6c6fe5d662a01ac4}\label{classSummary_aa68a70631721e06e6c6fe5d662a01ac4}} 
+\index{Summary@{Summary}!getDayHighPrice@{getDayHighPrice}}
+\index{getDayHighPrice@{getDayHighPrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getDayHighPrice()}{getDayHighPrice()}}
+{\footnotesize\ttfamily double Summary\+::get\+Day\+High\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the maximal (high) price for the day. 
+
+\begin{DoxyReturn}{Returns}
+the maximal (high) price for the day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_ad7ec66c2c25555d714076ff4c5316aef}\label{classSummary_ad7ec66c2c25555d714076ff4c5316aef}} 
+\index{Summary@{Summary}!getDayId@{getDayId}}
+\index{getDayId@{getDayId}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getDayId()}{getDayId()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Summary\+::get\+Day\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns identifier of the day that this summary represents. 
+
+Identifier of the day is the number of days passed since January 1, 1970.
+
+\begin{DoxyReturn}{Returns}
+identifier of the day that this summary represents. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_a61be437541231c11284f11321c31696d}\label{classSummary_a61be437541231c11284f11321c31696d}} 
+\index{Summary@{Summary}!getDayLowPrice@{getDayLowPrice}}
+\index{getDayLowPrice@{getDayLowPrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getDayLowPrice()}{getDayLowPrice()}}
+{\footnotesize\ttfamily double Summary\+::get\+Day\+Low\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the minimal (low) price for the day. 
+
+\begin{DoxyReturn}{Returns}
+the minimal (low) price for the day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_a519554f0f7ba9f0d89c36938ce1f7748}\label{classSummary_a519554f0f7ba9f0d89c36938ce1f7748}} 
+\index{Summary@{Summary}!getDayOpenPrice@{getDayOpenPrice}}
+\index{getDayOpenPrice@{getDayOpenPrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getDayOpenPrice()}{getDayOpenPrice()}}
+{\footnotesize\ttfamily double Summary\+::get\+Day\+Open\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the first (open) price for the day. 
+
+\begin{DoxyReturn}{Returns}
+the first (open) price for the day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_af8ef57947df49c3c2cc6f246e9924a6b}\label{classSummary_af8ef57947df49c3c2cc6f246e9924a6b}} 
+\index{Summary@{Summary}!getOpenInterest@{getOpenInterest}}
+\index{getOpenInterest@{getOpenInterest}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getOpenInterest()}{getOpenInterest()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Summary\+::get\+Open\+Interest (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns open interest of the symbol as the number of open contracts. 
+
+\begin{DoxyReturn}{Returns}
+open interest of the symbol as the number of open contracts. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_acf2cb75a9415251a81e7aac93fb2b9c8}\label{classSummary_acf2cb75a9415251a81e7aac93fb2b9c8}} 
+\index{Summary@{Summary}!getPrevDayClosePrice@{getPrevDayClosePrice}}
+\index{getPrevDayClosePrice@{getPrevDayClosePrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getPrevDayClosePrice()}{getPrevDayClosePrice()}}
+{\footnotesize\ttfamily double Summary\+::get\+Prev\+Day\+Close\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the last (close) price for the previous day. 
+
+\begin{DoxyReturn}{Returns}
+the last (close) price for the previous day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_a08ac4984f43d6fc9a2c2b1cbf9c20496}\label{classSummary_a08ac4984f43d6fc9a2c2b1cbf9c20496}} 
+\index{Summary@{Summary}!getPrevDayClosePriceType@{getPrevDayClosePriceType}}
+\index{getPrevDayClosePriceType@{getPrevDayClosePriceType}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getPrevDayClosePriceType()}{getPrevDayClosePriceType()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structPriceType}{Price\+Type}}\& Summary\+::get\+Prev\+Day\+Close\+Price\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the price type of the last (close) price for the previous day. 
+
+\begin{DoxyReturn}{Returns}
+the price type of the last (close) price for the previous day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_af8fcdf52e3d47812be5a0788172a54d9}\label{classSummary_af8fcdf52e3d47812be5a0788172a54d9}} 
+\index{Summary@{Summary}!getPrevDayId@{getPrevDayId}}
+\index{getPrevDayId@{getPrevDayId}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getPrevDayId()}{getPrevDayId()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Summary\+::get\+Prev\+Day\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns identifier of the previous day that this summary represents. 
+
+Identifier of the day is the number of days passed since January 1, 1970.
+
+\begin{DoxyReturn}{Returns}
+identifier of the previous day that this summary represents. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_a94d2a257ee4e2b02f651b4d32f3a37d6}\label{classSummary_a94d2a257ee4e2b02f651b4d32f3a37d6}} 
+\index{Summary@{Summary}!getPrevDayVolume@{getPrevDayVolume}}
+\index{getPrevDayVolume@{getPrevDayVolume}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{getPrevDayVolume()}{getPrevDayVolume()}}
+{\footnotesize\ttfamily double Summary\+::get\+Prev\+Day\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns total volume traded for the previous day. 
+
+\begin{DoxyReturn}{Returns}
+total volume traded for the previous day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSummary_aa5459b6d06b70dfcf401b357f3cc8d11}\label{classSummary_aa5459b6d06b70dfcf401b357f3cc8d11}} 
+\index{Summary@{Summary}!setDayClosePrice@{setDayClosePrice}}
+\index{setDayClosePrice@{setDayClosePrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setDayClosePrice()}{setDayClosePrice()}}
+{\footnotesize\ttfamily void Summary\+::set\+Day\+Close\+Price (\begin{DoxyParamCaption}\item[{double}]{day\+Close\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the last (close) price for the day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+Close\+Price} & the last (close) price for the day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_aa040705ed8d5b1d8e56696b3e16054e0}\label{classSummary_aa040705ed8d5b1d8e56696b3e16054e0}} 
+\index{Summary@{Summary}!setDayClosePriceType@{setDayClosePriceType}}
+\index{setDayClosePriceType@{setDayClosePriceType}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setDayClosePriceType()}{setDayClosePriceType()}}
+{\footnotesize\ttfamily void Summary\+::set\+Day\+Close\+Price\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structPriceType}{Price\+Type}} \&}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the price type of the last (close) price for the day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & the price type of the last (close) price for the day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_ae46dae1b223e5350d4a2f56e25853469}\label{classSummary_ae46dae1b223e5350d4a2f56e25853469}} 
+\index{Summary@{Summary}!setDayHighPrice@{setDayHighPrice}}
+\index{setDayHighPrice@{setDayHighPrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setDayHighPrice()}{setDayHighPrice()}}
+{\footnotesize\ttfamily void Summary\+::set\+Day\+High\+Price (\begin{DoxyParamCaption}\item[{double}]{day\+High\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the maximal (high) price for the day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+High\+Price} & the maximal (high) price for the day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_ac2c4098bd23002f62cd1c9257ebce767}\label{classSummary_ac2c4098bd23002f62cd1c9257ebce767}} 
+\index{Summary@{Summary}!setDayId@{setDayId}}
+\index{setDayId@{setDayId}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setDayId()}{setDayId()}}
+{\footnotesize\ttfamily void Summary\+::set\+Day\+Id (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{day\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes identifier of the day that this summary represents. 
+
+Identifier of the day is the number of days passed since January 1, 1970.
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+Id} & identifier of the day that this summary represents. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_ae0b7bfec1ef3c3a818d07db2a4ecb497}\label{classSummary_ae0b7bfec1ef3c3a818d07db2a4ecb497}} 
+\index{Summary@{Summary}!setDayLowPrice@{setDayLowPrice}}
+\index{setDayLowPrice@{setDayLowPrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setDayLowPrice()}{setDayLowPrice()}}
+{\footnotesize\ttfamily void Summary\+::set\+Day\+Low\+Price (\begin{DoxyParamCaption}\item[{double}]{day\+Low\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the minimal (low) price for the day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+Low\+Price} & the minimal (low) price for the day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_a56efc72923f5a6af3c32daf6863a2d5a}\label{classSummary_a56efc72923f5a6af3c32daf6863a2d5a}} 
+\index{Summary@{Summary}!setDayOpenPrice@{setDayOpenPrice}}
+\index{setDayOpenPrice@{setDayOpenPrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setDayOpenPrice()}{setDayOpenPrice()}}
+{\footnotesize\ttfamily void Summary\+::set\+Day\+Open\+Price (\begin{DoxyParamCaption}\item[{double}]{day\+Open\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the first (open) price for the day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+Open\+Price} & the first (open) price for the day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_ad7f0bedfab6006e3359568da94201472}\label{classSummary_ad7f0bedfab6006e3359568da94201472}} 
+\index{Summary@{Summary}!setOpenInterest@{setOpenInterest}}
+\index{setOpenInterest@{setOpenInterest}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setOpenInterest()}{setOpenInterest()}}
+{\footnotesize\ttfamily void Summary\+::set\+Open\+Interest (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{open\+Interest }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes open interest of the symbol as the number of open contracts. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em open\+Interest} & open interest of the symbol as the number of open contracts. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_a9124003fe1113b593e6ccab7e0f6ea17}\label{classSummary_a9124003fe1113b593e6ccab7e0f6ea17}} 
+\index{Summary@{Summary}!setPrevDayClosePrice@{setPrevDayClosePrice}}
+\index{setPrevDayClosePrice@{setPrevDayClosePrice}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setPrevDayClosePrice()}{setPrevDayClosePrice()}}
+{\footnotesize\ttfamily void Summary\+::set\+Prev\+Day\+Close\+Price (\begin{DoxyParamCaption}\item[{double}]{prev\+Day\+Close\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the last (close) price for the previous day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em prev\+Day\+Close\+Price} & the last (close) price for the previous day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_aad563e865828f82a4ebe7c7a9ad3cf84}\label{classSummary_aad563e865828f82a4ebe7c7a9ad3cf84}} 
+\index{Summary@{Summary}!setPrevDayClosePriceType@{setPrevDayClosePriceType}}
+\index{setPrevDayClosePriceType@{setPrevDayClosePriceType}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setPrevDayClosePriceType()}{setPrevDayClosePriceType()}}
+{\footnotesize\ttfamily void Summary\+::set\+Prev\+Day\+Close\+Price\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structPriceType}{Price\+Type}} \&}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the price type of the last (close) price for the previous day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & the price type of the last (close) price for the previous day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_a19f19d9301756283e37c3fb69a6f0e29}\label{classSummary_a19f19d9301756283e37c3fb69a6f0e29}} 
+\index{Summary@{Summary}!setPrevDayId@{setPrevDayId}}
+\index{setPrevDayId@{setPrevDayId}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setPrevDayId()}{setPrevDayId()}}
+{\footnotesize\ttfamily void Summary\+::set\+Prev\+Day\+Id (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{prev\+Day\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes identifier of the previous day that this summary represents. 
+
+Identifier of the day is the number of days passed since January 1, 1970.
+
+
+\begin{DoxyParams}{Parameters}
+{\em prev\+Day\+Id} & identifier of the previous day that this summary represents. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_ac42ba09c9c8909b6e76ed687e11b3c9b}\label{classSummary_ac42ba09c9c8909b6e76ed687e11b3c9b}} 
+\index{Summary@{Summary}!setPrevDayVolume@{setPrevDayVolume}}
+\index{setPrevDayVolume@{setPrevDayVolume}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{setPrevDayVolume()}{setPrevDayVolume()}}
+{\footnotesize\ttfamily void Summary\+::set\+Prev\+Day\+Volume (\begin{DoxyParamCaption}\item[{double}]{prev\+Day\+Volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes total volume traded for the previous day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em prev\+Day\+Volume} & total volume traded for the previous day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classSummary_a8c7d63124ad917aa87c583a35b1ccc41}\label{classSummary_a8c7d63124ad917aa87c583a35b1ccc41}} 
+\index{Summary@{Summary}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Summary\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classSummary_ae7939f5b3bab6494900c545d986b3f76}\label{classSummary_ae7939f5b3bab6494900c545d986b3f76}} 
+\index{Summary@{Summary}!toString@{toString}}
+\index{toString@{toString}!Summary@{Summary}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Summary\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+

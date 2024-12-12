@@ -1,0 +1,151 @@
+\hypertarget{structTimeSeriesEvent}{}\doxysubsection{Time\+Series\+Event Struct Reference}
+\label{structTimeSeriesEvent}\index{TimeSeriesEvent@{TimeSeriesEvent}}
+
+
+Represents time-\/series snapshots of some process that is evolving in time or actual events in some external system that have an associated time stamp and can be uniquely identified.  
+
+
+
+
+{\ttfamily \#include $<$Time\+Series\+Event.\+hpp$>$}
+
+Inheritance diagram for Time\+Series\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.947368cm]{d6/d1d/structTimeSeriesEvent}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structTimeSeriesEvent_a5b94e87401d76aae756e8d7e1b7b7831}\label{structTimeSeriesEvent_a5b94e87401d76aae756e8d7e1b7b7831}} 
+using \mbox{\hyperlink{structTimeSeriesEvent_a5b94e87401d76aae756e8d7e1b7b7831}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structTimeSeriesEvent}{Time\+Series\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structTimeSeriesEvent}{Time\+Series\+Event}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{structTimeSeriesEvent_ababb3568ebcdb65d4fa1ed5811d4ac1a}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source identifier for this event, which is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}} for time-\/series events. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structTimeSeriesEvent_a8a4b57e2b6726274743c2b76689b693d}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structTimeSeriesEvent_ad25d260c1c1ac819205e17971cda2f73}{get\+Event\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structTimeSeriesEvent_a9d2ae41520f33140a6e823ae650e216a}{get\+Time}} () const noexcept=0
+\begin{DoxyCompactList}\small\item\em Returns timestamp of the event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+Represents time-\/series snapshots of some process that is evolving in time or actual events in some external system that have an associated time stamp and can be uniquely identified. 
+
+For example, \mbox{\hyperlink{classTimeAndSale}{Time\+And\+Sale}} events represent the actual sales that happen on a market exchange at specific time moments, while \mbox{\hyperlink{classCandle}{Candle}} events represent snapshots of aggregate information about trading over a specific time period.
+
+Time-\/series events can be used with DXFeed\+Time\+Series\+Subscription to receive a time-\/series history of past events. Time-\/series events are conflated based on unique index for each symbol. Last indexed event for each symbol and index is always delivered to event listeners on subscription, but intermediate (next-\/to-\/last) events for each symbol+index pair are not queued anywhere, they are simply discarded as stale events.
+
+Timestamp of an event is available via time property with a millisecond precision. Some events may happen multiple times per millisecond. In this case they have the same time, but different index. An ordering of index is the same as an ordering of time. That is, an collection of time-\/series events that is ordered by index is ascending order will be also ordered by time in ascending order.
+
+Time-\/series events are a more specific subtype of \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}}. All general documentation and \href{IndexedEvent.html\#eventFlagsSection}{\texttt{ Event Flags}} section, in particular, applies to time-\/series events. However, the time-\/series events never come from multiple sources for the same symbol and their \mbox{\hyperlink{structTimeSeriesEvent_ababb3568ebcdb65d4fa1ed5811d4ac1a}{source}} is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}}.
+
+Unlike a general \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}} that is subscribed to via \mbox{\hyperlink{classDXFeedSubscription}{DXFeed\+Subscription}}\} using a plain symbol to receive all events for all indices, time-\/series events are typically subscribed to using \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol}{Time\+Series\+Subscription\+Symbol}} class to specific time range of the subscription. There is a dedicated DXFeed\+Time\+Series\+Subscription class that is designed to simplify the task of subscribing for time-\/series events.
+
+Time\+Series\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list of current time-\/series events ordered by their \mbox{\hyperlink{structTimeSeriesEvent_a9d2ae41520f33140a6e823ae650e216a}{time}}. It relies on the code of Abstract\+Indexed\+Event\+Model to handle this logic. Use the source code of Abstract\+Indexed\+Event\+Model for clarification on transactions and snapshot logic.
+
+Classes that implement this interface may also implement \mbox{\hyperlink{structLastingEvent}{Lasting\+Event}} interface, which makes it possible to use DXFeed\+::get\+Last\+Event() method to retrieve the last event for the corresponding symbol.
+
+\doxysubparagraph*{Publishing time-\/series}
+
+When publishing time-\/series event with \mbox{\hyperlink{structDXPublisher_ae6e8cb6b370ea60f1ad5cb80cea2df30}{DXPublisher\+::publish\+Events()}} method on incoming \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol}{Time\+Series\+Subscription\+Symbol}} the snapshot of currently known events for the requested time range has to be published first.
+
+A snapshot is published in the {\itshape descending} order of \mbox{\hyperlink{structTimeSeriesEvent_a8a4b57e2b6726274743c2b76689b693d}{index}} (which is the same as the descending order of \mbox{\hyperlink{structTimeSeriesEvent_a9d2ae41520f33140a6e823ae650e216a}{time}}), starting with an event with the largest index and marking it with \mbox{\hyperlink{structIndexedEvent_ac87eb588da470259ee75b490dbcaabf7}{Time\+Series\+Event\+::\+SNAPSHOT\+\_\+\+BEGIN}} bit in \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags}}. All other event follow with default, zero \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags}}. If there is no actual event at the time that was specified in subscription \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a7ea676e77bdea236aa088925ce8a3c93}{from\+Time}} property, then event with the corresponding time has to be created anyway and published. To distinguish it from the actual event, it has to be marked with \mbox{\hyperlink{structIndexedEvent_a98e078c04445c983d19db700df469b58}{Time\+Series\+Event\+::\+REMOVE\+\_\+\+EVENT}} bit in \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags}}. \mbox{\hyperlink{structIndexedEvent_a4604235ec9a455bea7c80d1b71546bf9}{Time\+Series\+Event\+::\+SNAPSHOT\+\_\+\+END}} bit in this event\textquotesingle{}s \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{event\+Flags}} s optional during publishing. It will be properly set on receiving end anyway. Note, that publishing any event with time that is below subscription \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a7ea676e77bdea236aa088925ce8a3c93}{from\+Time}} also works as a legal indicator for the end of the snapshot.
+
+Both \mbox{\hyperlink{classTimeAndSale}{Time\+And\+Sale}} and \mbox{\hyperlink{classCandle}{Candle}} time-\/series events define a sequence property that is mixed into an index property. It provides a way to distinguish different events at the same time. For a snapshot end event the sequence has to be left at its default zero value. It means, that if there is an actual event to be published at subscription \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a7ea676e77bdea236aa088925ce8a3c93}{from\+Time}} with non-\/zero sequence, then generation of an additional snapshot end event with the subscription \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a7ea676e77bdea236aa088925ce8a3c93}{from\+Time}} and zero sequence is still required. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structTimeSeriesEvent_ad25d260c1c1ac819205e17971cda2f73}\label{structTimeSeriesEvent_ad25d260c1c1ac819205e17971cda2f73}} 
+\index{TimeSeriesEvent@{TimeSeriesEvent}!getEventId@{getEventId}}
+\index{getEventId@{getEventId}!TimeSeriesEvent@{TimeSeriesEvent}}
+\doxyparagraph{\texorpdfstring{getEventId()}{getEventId()}}
+{\footnotesize\ttfamily virtual std\+::int64\+\_\+t Time\+Series\+Event\+::get\+Event\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+\begin{DoxyReturn}{Returns}
+unique per-\/symbol index of this event. 
+\end{DoxyReturn}
+\begin{DoxyRefDesc}{Deprecated}
+\item[\mbox{\hyperlink{deprecated__deprecated000001}{Deprecated}}]Use \+::get\+Index() \end{DoxyRefDesc}
+
+
+References get\+Index().
+
+\mbox{\Hypertarget{structTimeSeriesEvent_a8a4b57e2b6726274743c2b76689b693d}\label{structTimeSeriesEvent_a8a4b57e2b6726274743c2b76689b693d}} 
+\index{TimeSeriesEvent@{TimeSeriesEvent}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!TimeSeriesEvent@{TimeSeriesEvent}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Time\+Series\+Event\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+Event indices are unique within event symbol. Typically event index for a time series event includes time inside.
+
+\doxysubparagraph*{Implementation notes}
+
+The most common scheme for event indices is to set highest 32 bits of event index to event timestamp in seconds. The lowest 32 bits are then split as follows. Bits 22 to 31 encode milliseconds of time stamp, and bits 0 to 21 encode some kind of a sequence number.
+
+Ultimately, the scheme for event indices is specific for each even type. The actual classes for specific event types perform the corresponding encoding.
+
+\begin{DoxyReturn}{Returns}
+unique per-\/symbol index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a4310a26785d5142efba9d7c0094125bc}{Indexed\+Event}}.
+
+
+
+Referenced by get\+Event\+Id().
+
+\mbox{\Hypertarget{structTimeSeriesEvent_ababb3568ebcdb65d4fa1ed5811d4ac1a}\label{structTimeSeriesEvent_ababb3568ebcdb65d4fa1ed5811d4ac1a}} 
+\index{TimeSeriesEvent@{TimeSeriesEvent}!getSource@{getSource}}
+\index{getSource@{getSource}!TimeSeriesEvent@{TimeSeriesEvent}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}}\& Time\+Series\+Event\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source identifier for this event, which is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}} for time-\/series events. 
+
+\begin{DoxyReturn}{Returns}
+The source identifier for this event, which is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}} for time-\/series events. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a54d06fa64c5f66ed78b328f4c36a633b}{Indexed\+Event}}.
+
+
+
+References Indexed\+Event\+Source\+::\+DEFAULT.
+
+\mbox{\Hypertarget{structTimeSeriesEvent_a9d2ae41520f33140a6e823ae650e216a}\label{structTimeSeriesEvent_a9d2ae41520f33140a6e823ae650e216a}} 
+\index{TimeSeriesEvent@{TimeSeriesEvent}!getTime@{getTime}}
+\index{getTime@{getTime}!TimeSeriesEvent@{TimeSeriesEvent}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily virtual std\+::int64\+\_\+t Time\+Series\+Event\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns timestamp of the event. 
+
+The timestamp is in milliseconds from midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+timestamp of the event. 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classUnderlying_a6f0e627f1f3ad7b7c5a47ca9e5adf36e}{Underlying}}, \mbox{\hyperlink{classTheoPrice_a558ade41de4e5030d761a667fe495def}{Theo\+Price}}, \mbox{\hyperlink{classGreeks_abfa6973297c02cfc7d4f160d8cc919ed}{Greeks}}, \mbox{\hyperlink{classTimeAndSale_a14baaebf9aa23be5d229d04394e4dd24}{Time\+And\+Sale}}, and \mbox{\hyperlink{classCandle_a2a229f6b56a57a9277bac05388466ebc}{Candle}}.
+

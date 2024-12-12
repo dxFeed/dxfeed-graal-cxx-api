@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('dc/d63/Order_8hpp_source.html','../../
 <div class="title">Order.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -103,30 +103,30 @@ $(document).ready(function(){initNavTree('dc/d63/Order_8hpp_source.html','../../
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&lt;</span><span class="preprocessor">cstdint</span><span class="preprocessor">&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&lt;</span><span class="preprocessor">memory</span><span class="preprocessor">&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&lt;</span><span class="preprocessor">string</span><span class="preprocessor">&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../../internal/Common.hpp&quot;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../EventTypeEnum.hpp&quot;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <a class="code" href="../../db/d41/OrderBase_8hpp.html">&quot;OrderBase.hpp&quot;</a></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace</span> dxfcpp {</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">struct</span> EventMapper;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment"> * Order event is a snapshot for a full available market depth for a symbol.</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * The collection of order events of a symbol represents the most recent information</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> * that is available about orders on the market at any given moment of time.</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> * Order events give information on several levels of details, called scopes - see Scope.</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> * Scope of an order is available via @ref Order::getScope &quot;scope&quot; property.</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> * &lt;p&gt; Order events arrive from</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * multiple sources for the same market symbol and are distinguished by their @ref Order::getIndex &quot;index&quot;. Index is a</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * unique per symbol identifier of the event.</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * It is unique across all the sources of depth information for the symbol.</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> * The event with @ref Order::getSize() &quot;size&quot; either `0` or `NaN` is a signal to remove previously received order for the</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> * corresponding index.</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> * The method Order::hasSize() is a convenient method to test for size presence.</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&lt;</span><span class="preprocessor">optional</span><span class="preprocessor">&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../../internal/Common.hpp&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../EventTypeEnum.hpp&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <a class="code" href="../../db/d41/OrderBase_8hpp.html">&quot;OrderBase.hpp&quot;</a></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace</span> dxfcpp {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">struct</span> EventMapper;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment"> * Order event is a snapshot for a full available market depth for a symbol.</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment"> * The collection of order events of a symbol represents the most recent information</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment"> * that is available about orders on the market at any given moment of time.</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"> * Order events give information on several levels of details, called scopes - see Scope.</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> * Scope of an order is available via @ref Order::getScope &quot;scope&quot; property.</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * &lt;p&gt; Order events arrive from</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * multiple sources for the same market symbol and are distinguished by their @ref Order::getIndex &quot;index&quot;. Index is a</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * unique per symbol identifier of the event.</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> * It is unique across all the sources of depth information for the symbol.</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> * The event with @ref Order::getSize() &quot;size&quot; either `0` or `NaN` is a signal to remove previously received order for</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> * the corresponding index. The method Order::hasSize() is a convenient method to test for size presence.</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> * &lt;p&gt; Events from finer-grained Scope of detail give more information and include events</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * from coarse-grained Scope of detail. For a consistent representation of the market depth</span></div>
@@ -148,57 +148,57 @@ $(document).ready(function(){initNavTree('dc/d63/Order_8hpp_source.html','../../
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment"> * &lt;h3&gt;Publishing order books&lt;/h3&gt;</span></div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"> * When publishing an order event with DXPublisher::publishEvents() method, least significant 32 bits of</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> * order @ref Order::getIndex() &quot;index&quot; must be in a range of from 0 to `std::numeric_limits&lt;std::int32_t&gt;::max()` inclusive.</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> * Use Order::setSource() method after Order::setIndex() to properly include source identifier into the index.</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> * A snapshot has to be published in the &lt;em&gt;descending&lt;/em&gt; order of @ref Order::getIndex() &quot;index&quot;, starting with</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"> * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref Order::getEventFlags() &quot;eventFlags&quot;,</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> * and finishing the snapshot with an event that has zero 32 least significant bits of index.</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * EventFlag::SNAPSHOT_END bit in @ref Order::getEventFlags() &quot;eventFlags&quot; is optional during publishing.</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> * It will be properly set on receiving end anyway.</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment"> * &lt;h3&gt;Limitations&lt;/h3&gt;</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"> * This event type cannot be used with DXFeed::getLastEvent() method.</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment"> * &lt;h3&gt;&lt;a name=&quot;fobSection&quot;&gt;Full Order Book Support&lt;/a&gt;&lt;/h3&gt;</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment"> * Some feeds provide support for &quot;Full Order Book&quot; (FOB) where additional fields will be available:</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment"> * &lt;ul&gt;</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getAction() &quot;action&quot; - event business meaning (see OrderAction for more details)&lt;/li&gt;</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getActionTime() &quot;actionTime&quot; - time of the last action&lt;/li&gt;</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getOrderId() &quot;orderId&quot; - ID of this order&lt;/li&gt;</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getAuxOrderId() &quot;auxOrderId&quot; - additional ID for this order&lt;/li&gt;</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getTradeId() &quot;tradeId&quot; - trade (order execution) ID&lt;/li&gt;</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getTradePrice() &quot;tradePrice&quot; - price of the trade&lt;/li&gt;</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getTradeSize() &quot;tradeSize&quot; - size of the trade&lt;/li&gt;</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment"> * &lt;/ul&gt;</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment"> * &lt;h3&gt;Implementation details&lt;/h3&gt;</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment"> * This event is implemented on top of QDS record `Quote` for composite quotes with Scope::COMPOSITE,</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment"> * record `Quote&amp;X` for regional exchange best quotes with Scope::REGIONAL,</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment"> * record `MarketMaker` for market-maker quotes and futures price level aggregates with Scope::AGGREGATE,</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment"> * record `Order` for the most fine-grained Scope::ORDER with zero source id,</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment"> * and records `Order#&lt;source-id&gt;` for specific source ids,</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment"> * where `&lt;source-id&gt;` is up to 4 ASCII characters with a mnemonic for the source like &quot;NTV&quot;.</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html">   92</a></span>&#160;<span class="keyword">class</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> : <span class="keyword">public</span> <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a> {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">friend</span> <span class="keyword">struct</span> EventMapper;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keyword">struct</span> OrderData {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        std::string marketMaker{};</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    };</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    OrderData orderData_{};</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">void</span> fillData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">void</span> fillGraalData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> freeGraalData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> * order @ref Order::getIndex() &quot;index&quot; must be in a range of from 0 to `std::numeric_limits&lt;std::int32_t&gt;::max()`</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> * inclusive. Use Order::setSource() method after Order::setIndex() to properly include source identifier into the</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> * index.</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"> * A snapshot has to be published in the &lt;em&gt;descending&lt;/em&gt; order of @ref Order::getIndex() &quot;index&quot;, starting with</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref Order::getEventFlags()</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * &quot;eventFlags&quot;, and finishing the snapshot with an event that has zero 32 least significant bits of index.</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> * EventFlag::SNAPSHOT_END bit in @ref Order::getEventFlags() &quot;eventFlags&quot; is optional during publishing.</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"> * It will be properly set on receiving end anyway.</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment"> * &lt;h3&gt;Limitations&lt;/h3&gt;</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment"> * This event type cannot be used with DXFeed::getLastEvent() method.</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment"> * &lt;h3&gt;&lt;a name=&quot;fobSection&quot;&gt;Full Order Book Support&lt;/a&gt;&lt;/h3&gt;</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment"> * Some feeds provide support for &quot;Full Order Book&quot; (FOB) where additional fields will be available:</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment"> * &lt;ul&gt;</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getAction() &quot;action&quot; - event business meaning (see OrderAction for more details)&lt;/li&gt;</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getActionTime() &quot;actionTime&quot; - time of the last action&lt;/li&gt;</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getOrderId() &quot;orderId&quot; - ID of this order&lt;/li&gt;</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getAuxOrderId() &quot;auxOrderId&quot; - additional ID for this order&lt;/li&gt;</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getTradeId() &quot;tradeId&quot; - trade (order execution) ID&lt;/li&gt;</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getTradePrice() &quot;tradePrice&quot; - price of the trade&lt;/li&gt;</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment"> * &lt;li&gt;@ref Order::getTradeSize() &quot;tradeSize&quot; - size of the trade&lt;/li&gt;</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment"> * &lt;/ul&gt;</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment"> * &lt;h3&gt;Implementation details&lt;/h3&gt;</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment"> * This event is implemented on top of QDS record `Quote` for composite quotes with Scope::COMPOSITE,</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment"> * record `Quote&amp;X` for regional exchange best quotes with Scope::REGIONAL,</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment"> * record `MarketMaker` for market-maker quotes and futures price level aggregates with Scope::AGGREGATE,</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment"> * record `Order` for the most fine-grained Scope::ORDER with zero source id,</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment"> * and records `Order#&lt;source-id&gt;` for specific source ids,</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment"> * where `&lt;source-id&gt;` is up to 4 ASCII characters with a mnemonic for the source like &quot;NTV&quot;.</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html">   93</a></span>&#160;<span class="keyword">class</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> : <span class="keyword">public</span> <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a> {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">friend</span> <span class="keyword">struct</span> EventMapper;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;  <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keyword">struct</span> OrderData {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        std::optional&lt;std::string&gt; marketMaker{};</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    };</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    OrderData orderData_{};</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">void</span> fillData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">void</span> fillGraalData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> freeGraalData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">static</span> std::shared_ptr&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt; fromGraal(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="comment">/**</span></div>
@@ -208,58 +208,836 @@ $(document).ready(function(){initNavTree('dc/d63/Order_8hpp_source.html','../../
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">     * @return The pointer to the filled dxFeed Graal SDK structure</span></div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span>* <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aff2c9d717969967a1ccf4fbb70813c4f">toGraal</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aff2c9d717969967a1ccf4fbb70813c4f">override</a>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aff2c9d717969967a1ccf4fbb70813c4f">toGraal</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aff2c9d717969967a1ccf4fbb70813c4f">override</a>;</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="comment">/**</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).</span></div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">     * @param graalNative The pointer to the dxFeed Graal SDK structure.</span></div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a362238c83fc87eb026e13f6441d19a25">freeGraal</a>(<span class="keywordtype">void</span>* graalNative) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a362238c83fc87eb026e13f6441d19a25">freeGraal</a>(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="comment">/// Type identifier and additional information about the current event class.</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#adf74ebb2958a1382183eb0b43728a53a">  128</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html">EventTypeEnum</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#adf74ebb2958a1382183eb0b43728a53a">TYPE</a>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="comment">/// The alias to a type of shared pointer to the Order object</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aecb17d4d7b106ad51566805e8956d44a">  128</a></span>&#160;    <span class="keyword">using</span> Ptr = std::shared_ptr&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;;</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="comment">/// Creates new order event with default values.</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a6588db9aab3b926b94cda473e3c196dc">  131</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a6588db9aab3b926b94cda473e3c196dc">Order</a>() <span class="keyword">noexcept</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="comment">/// The alias to a type of unique pointer to the Order object</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aa8bd5e70ab1a456ffb3f6eb11ad7cdb4">  131</a></span>&#160;    <span class="keyword">using</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Unique</a> = <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">std</a>::<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">unique_ptr</a>&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;;</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment">     * Creates new order event with the specified event symbol.</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment">     * @param eventSymbol The event symbol.</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#af335dfcaa5dfb37b36c3e5b26ec7fd39">  138</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#af335dfcaa5dfb37b36c3e5b26ec7fd39">Order</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>(std::move(eventSymbol)) {</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    }</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">     * Returns market maker or other aggregate identifier of this order.</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">     * This value is defined for Scope::AGGREGATE and Scope::ORDER orders.</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="comment">     * @return market maker or other aggregate identifier of this order.</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a92ab31587e40650fdf6e3a0acabee4b4">  147</a></span>&#160;    <span class="keyword">const</span> std::string &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a92ab31587e40650fdf6e3a0acabee4b4">getMarketMaker</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="keywordflow">return</span> orderData_.marketMaker;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    }</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="comment">     * Changes market maker or other aggregate identifier of this order.</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="comment">     * @param marketMaker market maker or other aggregate identifier of this order.</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">  156</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">setMarketMaker</a>(std::string marketMaker) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        orderData_.marketMaker = std::move(marketMaker);</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    }</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="comment">     * Returns a string representation of the current object.</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="comment">     * @return a string representation</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    std::string <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a62de3f2d3e1f66409a2ab57e4303f806">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a62de3f2d3e1f66409a2ab57e4303f806">override</a>;</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;};</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="comment">/// Type identifier and additional information about the current event class.</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#adf74ebb2958a1382183eb0b43728a53a">  134</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html">EventTypeEnum</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#adf74ebb2958a1382183eb0b43728a53a">TYPE</a>;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="comment">/// Creates new order event with default values.</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a6588db9aab3b926b94cda473e3c196dc">  137</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a6588db9aab3b926b94cda473e3c196dc">Order</a>() <span class="keyword">noexcept</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment">     * Creates new order event with the specified event symbol.</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">     * @param eventSymbol The event symbol.</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#af335dfcaa5dfb37b36c3e5b26ec7fd39">  144</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#af335dfcaa5dfb37b36c3e5b26ec7fd39">Order</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>(std::move(eventSymbol)) {</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    }</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment">     * Changes event&#39;s symbol and returns the current order.</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">     * @param eventSymbol The symbol of this event.</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#af3b9ba2a9858f1576c87bfc5eaffa848">  153</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#af3b9ba2a9858f1576c87bfc5eaffa848">withEventSymbol</a>(<span class="keyword">const</span> std::string &amp;eventSymbol) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">MarketEvent</a>::setEventSymbol(eventSymbol);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    }</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="comment">     * Changes event&#39;s symbol and returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="comment">     * @param eventSymbol The symbol of this event.</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a1849f2ca31e6349c4fbd98ddb4764f5f">  168</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a1849f2ca31e6349c4fbd98ddb4764f5f">withEventSymbolShared</a>(<span class="keyword">const</span> std::string &amp;eventSymbol) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">MarketEvent</a>::setEventSymbol(eventSymbol);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    }</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="comment">     * Changes event&#39;s creation time and returns the current order.</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="comment">     * @param eventTime the difference, measured in milliseconds, between the event creation time and</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="comment">     * midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#ab40017e6609de0b2bf0455370eda89c4">  181</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#ab40017e6609de0b2bf0455370eda89c4">withEventTime</a>(std::int64_t eventTime) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">MarketEvent</a><a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a80b9add6fad6c1121ddd0497d423f7ce">::</a><a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a80b9add6fad6c1121ddd0497d423f7ce">setEventTime</a>(eventTime);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    }</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment">     * Changes event&#39;s creation time and returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">     * @param eventTime the difference, measured in milliseconds, between the event creation time and</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="comment">     * midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a216107e58a65282aec886c8959e0b399">  197</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a216107e58a65282aec886c8959e0b399">withEventTimeShared</a>(std::int64_t eventTime) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">MarketEvent</a><a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a80b9add6fad6c1121ddd0497d423f7ce">::</a><a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a80b9add6fad6c1121ddd0497d423f7ce">setEventTime</a>(eventTime);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    }</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">     * Changes event&#39;s source and returns the current order.</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="comment">     * This method changes highest bits of the @ref OrderBase::getIndex() &quot;index&quot; of this event.</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="comment">     * @param source source of this event.</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a6bc7a6440849a240cde0ec8abadfd065">  210</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a6bc7a6440849a240cde0ec8abadfd065">withSource</a>(<span class="keyword">const</span> OrderSource &amp;source) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1813c11582e335c3654c028ad80b7a0d">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1813c11582e335c3654c028ad80b7a0d">setSource</a>(source);</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    }</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="comment">     * Changes event&#39;s source and returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="comment">     * This method changes highest bits of the @ref OrderBase::getIndex() &quot;index&quot; of this event.</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="comment">     * @param source source of this event.</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#acc32eafdd0ec25913ce058181f87913f">  226</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#acc32eafdd0ec25913ce058181f87913f">withSourceShared</a>(<span class="keyword">const</span> OrderSource &amp;source) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1813c11582e335c3654c028ad80b7a0d">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1813c11582e335c3654c028ad80b7a0d">setSource</a>(source);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    }</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="comment">     * Changes transactional event flags and returns the current order.</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">     * See EventFlag &quot;Event Flags&quot; section.</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">     * @param eventFlags transactional event flags.</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a9cccbc65bda668c39128b8eda5096b5c">  239</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a9cccbc65bda668c39128b8eda5096b5c">withEventFlags</a>(std::int32_t eventFlags) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>::setEventFlags(eventFlags);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    }</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">     * Changes transactional event flags and returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">     * See EventFlag &quot;Event Flags&quot; section.</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">     * @param eventFlags transactional event flags.</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a8d32cc9f40d71b052a5ffdb9daeff771">  255</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a8d32cc9f40d71b052a5ffdb9daeff771">withEventFlagsShared</a>(std::int32_t eventFlags) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>::setEventFlags(eventFlags);</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    }</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment">     * Changes transactional event flags and returns the current order.</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="comment">     * See EventFlag &quot;Event Flags&quot; section.</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">     * @param eventFlags transactional event flags&#39; mask.</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a076976ca0209bbf5fa5d1bb43695df3e">  268</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a076976ca0209bbf5fa5d1bb43695df3e">withEventFlags</a>(<span class="keyword">const</span> EventFlagsMask &amp;eventFlags) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>::setEventFlags(eventFlags);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    }</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment">     * Changes transactional event flags and returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">     * See EventFlag &quot;Event Flags&quot; section.</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">     * @param eventFlags transactional event flags&#39; mask.</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a6886b9a3a1ff88386f2ab3e5ce024630">  284</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a6886b9a3a1ff88386f2ab3e5ce024630">withEventFlagsShared</a>(<span class="keyword">const</span> EventFlagsMask &amp;eventFlags) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>::setEventFlags(eventFlags);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    }</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160; </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="comment">     * Changes unique per-symbol index of this order and returns it. Note, that this method also changes</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="comment">     * @ref OrderBase::getSource() &quot;source&quot;, whose id occupies highest bits of index.</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="comment">     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="comment">     * @param index unique per-symbol index of this order.</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aaf7a32923d7f0f24e42e0e984adf79a0">  298</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aaf7a32923d7f0f24e42e0e984adf79a0">withIndex</a>(std::int64_t index) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3cb36dcbcc027ad5e93bf56faffff748">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3cb36dcbcc027ad5e93bf56faffff748">setIndex</a>(index);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    }</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="comment">     * Changes unique per-symbol index of this order and returns a shared pointer to it. Note, that this method also</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="comment">     * changes</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="comment">     * @ref OrderBase::getSource() &quot;source&quot;, whose id occupies highest bits of index.</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="comment">     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.</span></div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="comment">     * @param index unique per-symbol index of this order.</span></div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a16a898275f2c48f95a6a99e8c810a914">  316</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a16a898275f2c48f95a6a99e8c810a914">withIndexShared</a>(std::int64_t index) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3cb36dcbcc027ad5e93bf56faffff748">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3cb36dcbcc027ad5e93bf56faffff748">setIndex</a>(index);</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160; </div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    }</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="comment">     * Changes time of this order and returns it.</span></div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="comment">     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="comment">     * @param time time of this order.</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#ab6b4bbf0d93b729fd874af6335620c79">  329</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#ab6b4bbf0d93b729fd874af6335620c79">withTime</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a57ed23b4847fac141d11bbd42be48f89">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a57ed23b4847fac141d11bbd42be48f89">setTime</a>(time);</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    }</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="comment">     * Changes time of this order and returns a shared pointer to it.</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="comment">     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="comment">     * @param time time of this order.</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00345"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#acfc206d46e32006a1b498d9117d79636">  345</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#acfc206d46e32006a1b498d9117d79636">withTimeShared</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a57ed23b4847fac141d11bbd42be48f89">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a57ed23b4847fac141d11bbd42be48f89">setTime</a>(time);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    }</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="comment">     * Changes microseconds and nanoseconds time part of this order.</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="comment">     * @param timeNanoPart microseconds and nanoseconds time part of this order.</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00358"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a67f1f29101f936b3ff673134d86fd617">  358</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a67f1f29101f936b3ff673134d86fd617">withTimeNanoPart</a>(std::int32_t timeNanoPart) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a0afca98632cdac7d5a9fa9dae830a7b9">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a0afca98632cdac7d5a9fa9dae830a7b9">setTimeNanoPart</a>(timeNanoPart);</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160; </div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    }</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="comment">     * Changes microseconds and nanoseconds time part of this order.</span></div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;<span class="comment">     * @param timeNanoPart microseconds and nanoseconds time part of this order.</span></div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00374"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a38b740402f6f09a34fefd583937683a2">  374</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a38b740402f6f09a34fefd583937683a2">withTimeNanoPartShared</a>(std::int32_t timeNanoPart) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a0afca98632cdac7d5a9fa9dae830a7b9">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a0afca98632cdac7d5a9fa9dae830a7b9">setTimeNanoPart</a>(timeNanoPart);</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160; </div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    }</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160; </div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">     * Changes @ref OrderBase::getSequence() &quot;sequence number&quot; of this order.</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="comment">     * @param sequence the sequence.</span></div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;<span class="comment">     * @see OrderBase::getSequence()</span></div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00388"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a922bf6a612d9c31d4556160284313a27">  388</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a922bf6a612d9c31d4556160284313a27">withSequence</a>(std::int32_t sequence) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9b1e2b7d06c6c05e55b310eb6b6ac9f9">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9b1e2b7d06c6c05e55b310eb6b6ac9f9">setSequence</a>(sequence);</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160; </div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    }</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;<span class="comment">     * Changes @ref OrderBase::getSequence() &quot;sequence number&quot; of this order.</span></div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;<span class="comment">     * @param sequence the sequence.</span></div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;<span class="comment">     * @see OrderBase::getSequence()</span></div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00405"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a20fb15b4f9c2feb224fc42ba9cfb53bb">  405</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a20fb15b4f9c2feb224fc42ba9cfb53bb">withSequenceShared</a>(std::int32_t sequence) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9b1e2b7d06c6c05e55b310eb6b6ac9f9">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9b1e2b7d06c6c05e55b310eb6b6ac9f9">setSequence</a>(sequence);</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160; </div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    }</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160; </div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="comment">     * Changes time of this order and returns it.</span></div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="comment">     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="comment">     * @param timeNanos The time of this order in nanoseconds.</span></div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00418"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a78ca333f6c737b22371cb3ace3ce7c31">  418</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a78ca333f6c737b22371cb3ace3ce7c31">withTimeNanos</a>(std::int64_t timeNanos) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4ca0b3a1ee27f2f007a4bc761f25a91f">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4ca0b3a1ee27f2f007a4bc761f25a91f">setTimeNanos</a>(timeNanos);</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160; </div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    }</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160; </div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;<span class="comment">     * Changes time of this order.</span></div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;<span class="comment">     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.</span></div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;<span class="comment">     * @param timeNanos time of this order in nanoseconds.</span></div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00435"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#adf05fdb01af70d25bd68843c71831948">  435</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#adf05fdb01af70d25bd68843c71831948">withTimeNanosShared</a>(std::int64_t timeNanos) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4ca0b3a1ee27f2f007a4bc761f25a91f">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4ca0b3a1ee27f2f007a4bc761f25a91f">setTimeNanos</a>(timeNanos);</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; </div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    }</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160; </div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;<span class="comment">     * Changes action of this order and returns it.</span></div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;<span class="comment">     * @param action The side of this order.</span></div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00447"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a97b1daccc914f85a3ad008e2b98b32a8">  447</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a97b1daccc914f85a3ad008e2b98b32a8">withAction</a>(<span class="keyword">const</span> <a class="code" href="../../df/de9/structdxfcpp_1_1OrderAction.html">OrderAction</a> &amp;action) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ab0ff7764c21f30f92442ea92fc3c3d14">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ab0ff7764c21f30f92442ea92fc3c3d14">setAction</a>(action);</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160; </div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    }</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160; </div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;<span class="comment">     * Changes action of this order.</span></div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;<span class="comment">     * @param action The action of this order.</span></div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00463"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#af5a5ba6a1fdfc8c66a7a75767a31f2a2">  463</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#af5a5ba6a1fdfc8c66a7a75767a31f2a2">withActionShared</a>(<span class="keyword">const</span> <a class="code" href="../../df/de9/structdxfcpp_1_1OrderAction.html">OrderAction</a> &amp;action) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ab0ff7764c21f30f92442ea92fc3c3d14">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ab0ff7764c21f30f92442ea92fc3c3d14">setAction</a>(action);</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160; </div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    }</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160; </div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="comment">     * Changes time of the last action and returns current order.</span></div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="comment">     * @param actionTime The last order action time.</span></div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00475"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a4b9dbda2b54d143fffdf2b47fa006e22">  475</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a4b9dbda2b54d143fffdf2b47fa006e22">withActionTime</a>(std::int64_t actionTime) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ac8ddc02ab5f428d4340b9b9ec2a2d6aa">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ac8ddc02ab5f428d4340b9b9ec2a2d6aa">setActionTime</a>(actionTime);</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;    }</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160; </div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;<span class="comment">     * Changes time of the last action and returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;<span class="comment">     * @param actionTime The last order action time.</span></div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00490"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a215ae8b0ae3fa64ff0bfc35c1f36d78f">  490</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a215ae8b0ae3fa64ff0bfc35c1f36d78f">withActionTimeShared</a>(std::int64_t actionTime) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ac8ddc02ab5f428d4340b9b9ec2a2d6aa">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ac8ddc02ab5f428d4340b9b9ec2a2d6aa">setActionTime</a>(actionTime);</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160; </div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    }</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160; </div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;<span class="comment">     * Changes order ID.</span></div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="comment">     * @param orderId The order ID.</span></div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00503"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a8c91cdc80f49012a86a9a5cee45376a9">  503</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a8c91cdc80f49012a86a9a5cee45376a9">withOrderId</a>(std::int64_t orderId) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a519b8485d8e6ce119b63923f833ce59a">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a519b8485d8e6ce119b63923f833ce59a">setOrderId</a>(orderId);</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160; </div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;    }</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160; </div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;<span class="comment">     * Changes order ID.</span></div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;<span class="comment">     * @param orderId order ID.</span></div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00519"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a09f7642abc4270a6505e34820a582ad9">  519</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a09f7642abc4270a6505e34820a582ad9">withOrderIdShared</a>(std::int64_t orderId) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a519b8485d8e6ce119b63923f833ce59a">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a519b8485d8e6ce119b63923f833ce59a">setOrderId</a>(orderId);</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160; </div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    }</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160; </div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;<span class="comment">     * Changes auxiliary order ID.</span></div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="comment">     * @param auxOrderId The auxiliary order ID.</span></div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00532"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a6ef2cc1f844cf2cbcdc8f03829d55f36">  532</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a6ef2cc1f844cf2cbcdc8f03829d55f36">withAuxOrderId</a>(std::int64_t auxOrderId) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9f52291d9b6712a4611673c078c8247b">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9f52291d9b6712a4611673c078c8247b">setAuxOrderId</a>(auxOrderId);</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160; </div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;    }</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160; </div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;<span class="comment">     * Changes auxiliary order ID.</span></div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;<span class="comment">     * @param auxOrderId The auxiliary order ID.</span></div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00548"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aba9d14eca5d78995436770004acb496d">  548</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aba9d14eca5d78995436770004acb496d">withAuxOrderIdShared</a>(std::int64_t auxOrderId) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9f52291d9b6712a4611673c078c8247b">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9f52291d9b6712a4611673c078c8247b">setAuxOrderId</a>(auxOrderId);</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160; </div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;    }</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160; </div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;<span class="comment">     * Changes price of this order.</span></div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;<span class="comment">     * @param price The price of this order.</span></div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00561"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a92807ddf8f5605d01eb2c3507bd59197">  561</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a92807ddf8f5605d01eb2c3507bd59197">withPrice</a>(<span class="keywordtype">double</span> price) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ad8672701e0cec3aa6c0211e17fae4f49">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ad8672701e0cec3aa6c0211e17fae4f49">setPrice</a>(price);</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160; </div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;    }</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160; </div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;<span class="comment">     * Changes price of this order.</span></div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;<span class="comment">     * @param price The price of this order.</span></div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00577"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a9557b326b71dbeb5818bb033958eecee">  577</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a9557b326b71dbeb5818bb033958eecee">withPriceShared</a>(<span class="keywordtype">double</span> price) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ad8672701e0cec3aa6c0211e17fae4f49">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ad8672701e0cec3aa6c0211e17fae4f49">setPrice</a>(price);</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160; </div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;    }</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160; </div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;<span class="comment">     * Changes size of this order.</span></div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;<span class="comment">     * @param size The size of this order.</span></div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00590"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aa9497760d0a4316061e39be12294a25a">  590</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa9497760d0a4316061e39be12294a25a">withSize</a>(<span class="keywordtype">double</span> size) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a34d1ee3266ecd0502c76bc278a977b28">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a34d1ee3266ecd0502c76bc278a977b28">setSize</a>(size);</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160; </div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;    }</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160; </div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;<span class="comment">     * Changes size of this order.</span></div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;<span class="comment">     * @param size The size of this order.</span></div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00606"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aeed46d7128a3ac38268ef3db66ac8c1c">  606</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aeed46d7128a3ac38268ef3db66ac8c1c">withSizeShared</a>(<span class="keywordtype">double</span> size) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a34d1ee3266ecd0502c76bc278a977b28">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a34d1ee3266ecd0502c76bc278a977b28">setSize</a>(size);</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160; </div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;    }</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160; </div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160;<span class="comment">     * Changes executed size of this order.</span></div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;<span class="comment">     * @param executedSize The executed size of this order.</span></div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00619"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a1b2f81782e4be0123290ada570d0f517">  619</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a1b2f81782e4be0123290ada570d0f517">withExecutedSize</a>(<span class="keywordtype">double</span> executedSize) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a059f1f8107f9556a7bcc9cc5c59f1305">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a059f1f8107f9556a7bcc9cc5c59f1305">setExecutedSize</a>(executedSize);</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; </div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;    }</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160; </div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;<span class="comment">     * Changes executed size of this order.</span></div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;<span class="comment">     * @param executedSize The executed size of this order.</span></div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00635"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#af809f858dc6a58bd0573e94a9de2d7f6">  635</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#af809f858dc6a58bd0573e94a9de2d7f6">withExecutedSizeShared</a>(<span class="keywordtype">double</span> executedSize) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a059f1f8107f9556a7bcc9cc5c59f1305">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a059f1f8107f9556a7bcc9cc5c59f1305">setExecutedSize</a>(executedSize);</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; </div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;    }</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160; </div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;<span class="comment">     * Changes number of individual orders in this aggregate order.</span></div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;<span class="comment">     * @param count The number of individual orders in this aggregate order.</span></div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00648"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a0e90833f9141c325f91cd4c3a5ddfa78">  648</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a0e90833f9141c325f91cd4c3a5ddfa78">withCount</a>(std::int64_t count) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a07aba66be613beacd5e80bdd86464272">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a07aba66be613beacd5e80bdd86464272">setCount</a>(count);</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; </div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;    }</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160; </div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;<span class="comment">     * Changes number of individual orders in this aggregate order.</span></div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;<span class="comment">     * @param count The number of individual orders in this aggregate order.</span></div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00664"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a052d2ee15b771cd65d11371294c32c91">  664</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a052d2ee15b771cd65d11371294c32c91">withCountShared</a>(std::int64_t count) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a07aba66be613beacd5e80bdd86464272">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a07aba66be613beacd5e80bdd86464272">setCount</a>(count);</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160; </div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;    }</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160; </div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;<span class="comment">     * Changes trade ID.</span></div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;<span class="comment">     * @param tradeId The trade ID.</span></div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00677"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a48e25eedd0a289309f1a2a66b7677e8a">  677</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a48e25eedd0a289309f1a2a66b7677e8a">withTradeId</a>(std::int64_t tradeId) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4441865a957926aa7b8d20445dff9063">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4441865a957926aa7b8d20445dff9063">setTradeId</a>(tradeId);</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160; </div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;    }</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160; </div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;<span class="comment">     * Changes trade ID.</span></div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;<span class="comment">     * @param tradeId The trade ID.</span></div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00693"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a1f85087d1e1dd214308b7f6ac31fc3c9">  693</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a1f85087d1e1dd214308b7f6ac31fc3c9">withTradeShared</a>(std::int64_t tradeId) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4441865a957926aa7b8d20445dff9063">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4441865a957926aa7b8d20445dff9063">setTradeId</a>(tradeId);</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160; </div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;    }</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160; </div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;<span class="comment">     * Changes trade price.</span></div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;<span class="comment">     * @param tradePrice The trade price.</span></div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00706"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#ae2c49297fd41e8454dcccb0da5d6a758">  706</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#ae2c49297fd41e8454dcccb0da5d6a758">withTradePrice</a>(<span class="keywordtype">double</span> tradePrice) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#abce2b1d941922c8ac30efec21773e572">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#abce2b1d941922c8ac30efec21773e572">setTradePrice</a>(tradePrice);</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160; </div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    }</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160; </div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;<span class="comment">     * Changes trade price.</span></div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;<span class="comment">     * @param tradePrice The trade price.</span></div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00722"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a64e841a57e96fbd9f646f57c9b37515d">  722</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a64e841a57e96fbd9f646f57c9b37515d">withTradePriceShared</a>(<span class="keywordtype">double</span> tradePrice) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#abce2b1d941922c8ac30efec21773e572">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#abce2b1d941922c8ac30efec21773e572">setTradePrice</a>(tradePrice);</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160; </div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;    }</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;<span class="comment">     * Changes trade size.</span></div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;<span class="comment">     * @param tradeSize The trade size.</span></div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00735"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a6efb274e6bbfbaca64acda0952fd48cd">  735</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a6efb274e6bbfbaca64acda0952fd48cd">withTradeSize</a>(<span class="keywordtype">double</span> tradeSize) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#abd6f26430a933b22f59b546b545f38be">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#abd6f26430a933b22f59b546b545f38be">setTradeSize</a>(tradeSize);</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160; </div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;    }</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160; </div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;<span class="comment">     * Changes trade size.</span></div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;<span class="comment">     * @param tradeSize The trade size.</span></div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00751"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aa18bab121bafc2eb08bcb06c9ceb5e21">  751</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa18bab121bafc2eb08bcb06c9ceb5e21">withTradeSizeShared</a>(<span class="keywordtype">double</span> tradeSize) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#abd6f26430a933b22f59b546b545f38be">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#abd6f26430a933b22f59b546b545f38be">setTradeSize</a>(tradeSize);</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160; </div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;    }</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160; </div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;<span class="comment">     * Changes exchange code of this order.</span></div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;<span class="comment">     * @param exchangeCode The exchange code of this order.</span></div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00764"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#afbef9e3a87fec527bcd08c78e3c6e885">  764</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#afbef9e3a87fec527bcd08c78e3c6e885">withExchangeCode</a>(<span class="keywordtype">char</span> exchangeCode) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>::setExchangeCode(exchangeCode);</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160; </div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;    }</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160; </div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;<span class="comment">     * Changes exchange code of this order.</span></div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;<span class="comment">     * @param exchangeCode The exchange code of this order.</span></div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00780"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#adca23105b8335e3e4c73d2785b859669">  780</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#adca23105b8335e3e4c73d2785b859669">withExchangeCodeShared</a>(<span class="keywordtype">char</span> exchangeCode) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>::setExchangeCode(exchangeCode);</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160; </div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;    }</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160; </div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;<span class="comment">     * Changes exchange code of this order.</span></div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;<span class="comment">     * @param exchangeCode The exchange code of this order.</span></div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00793"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a51421124e4ce2f74906108f42f5c31b4">  793</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a51421124e4ce2f74906108f42f5c31b4">withExchangeCode</a>(std::int16_t exchangeCode) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>::setExchangeCode(exchangeCode);</div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160; </div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;    }</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160; </div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;<span class="comment">     * Changes exchange code of this order.</span></div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;<span class="comment">     * @param exchangeCode The exchange code of this order.</span></div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00809"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a8e409725ff46574fff289f285ce12eaf">  809</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a8e409725ff46574fff289f285ce12eaf">withExchangeCodeShared</a>(std::int16_t exchangeCode) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a>::setExchangeCode(exchangeCode);</div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160; </div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;    }</div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160; </div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;<span class="comment">     * Changes side of this order.</span></div>
+<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;<span class="comment">     * @param side The side of this order.</span></div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00822"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#af4c196e95bf57f8c1efc257f0712ff1c">  822</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#af4c196e95bf57f8c1efc257f0712ff1c">withOrderSide</a>(<span class="keyword">const</span> <a class="code" href="../../d5/d16/structdxfcpp_1_1Side.html">Side</a> &amp;side) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3b81e276c468529920df6d49db9247b4">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3b81e276c468529920df6d49db9247b4">setOrderSide</a>(side);</div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160; </div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;    }</div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160; </div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;<span class="comment">     * Changes side of this order.</span></div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;<span class="comment">     * @param side The side of this order.</span></div>
+<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00838"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a6d1df1d81c67be511b1590e2b3115edc">  838</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a6d1df1d81c67be511b1590e2b3115edc">withOrderSideShared</a>(<span class="keyword">const</span> <a class="code" href="../../d5/d16/structdxfcpp_1_1Side.html">Side</a> &amp;side) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3b81e276c468529920df6d49db9247b4">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3b81e276c468529920df6d49db9247b4">setOrderSide</a>(side);</div>
+<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160; </div>
+<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;    }</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160; </div>
+<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;<span class="comment">     * Changes scope of this order.</span></div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;<span class="comment">     * @param scope The scope of this order.</span></div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00851"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#af1250676b791bb46f320137ce1d9aa61">  851</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#af1250676b791bb46f320137ce1d9aa61">withScope</a>(<span class="keyword">const</span> <a class="code" href="../../d8/d00/structdxfcpp_1_1Scope.html">Scope</a> &amp;scope) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1a80699b40d296360bc250d196e18c0d">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1a80699b40d296360bc250d196e18c0d">setScope</a>(scope);</div>
+<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160; </div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;    }</div>
+<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160; </div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;<span class="comment">     * Changes scope of this order.</span></div>
+<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;<span class="comment">     * @param scope The scope of this order.</span></div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00867"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aafff82e635eaa743021773252d6b4c08">  867</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aafff82e635eaa743021773252d6b4c08">withScopeShared</a>(<span class="keyword">const</span> <a class="code" href="../../d8/d00/structdxfcpp_1_1Scope.html">Scope</a> &amp;scope) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;        <a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html">OrderBase</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1a80699b40d296360bc250d196e18c0d">::</a><a class="code" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1a80699b40d296360bc250d196e18c0d">setScope</a>(scope);</div>
+<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160; </div>
+<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;    }</div>
+<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160; </div>
+<div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160;    <span class="comment">// ----------------------------</span></div>
+<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160; </div>
+<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;<span class="comment">     * Returns market maker or other aggregate identifier of this order.</span></div>
+<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;<span class="comment">     * This value is defined for Scope::AGGREGATE and Scope::ORDER orders.</span></div>
+<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;<span class="comment">     * @return market maker or other aggregate identifier of this order or dxfcpp::String::NUL</span></div>
+<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;<span class="comment">     * (`std::string{&quot;&lt;null&gt;&quot;}`).</span></div>
+<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00882"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a92ab31587e40650fdf6e3a0acabee4b4">  882</a></span>&#160;    <span class="keyword">const</span> std::string &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a92ab31587e40650fdf6e3a0acabee4b4">getMarketMaker</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;        <span class="keywordflow">if</span> (!orderData_.marketMaker) {</div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;            <span class="keywordflow">return</span> dxfcpp::String::NUL;</div>
+<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;        }</div>
+<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160; </div>
+<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;        <span class="keywordflow">return</span> orderData_.marketMaker.value();</div>
+<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;    }</div>
+<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160; </div>
+<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160;<span class="comment">     * Returns market maker or other aggregate identifier of this order.</span></div>
+<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;<span class="comment">     * This value is defined for Scope::AGGREGATE and Scope::ORDER orders.</span></div>
+<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;<span class="comment">     * @return market maker or other aggregate identifier of this order or `std::nullopt`.</span></div>
+<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00896"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aa0d23e6b1430782a3261e7c336a999ff">  896</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa0d23e6b1430782a3261e7c336a999ff">std</a>::<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa0d23e6b1430782a3261e7c336a999ff">optional</a>&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa0d23e6b1430782a3261e7c336a999ff">std</a>::<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa0d23e6b1430782a3261e7c336a999ff">string</a>&gt; &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa0d23e6b1430782a3261e7c336a999ff">getMarketMakerOpt</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;        <span class="keywordflow">return</span> orderData_.marketMaker;</div>
+<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160;    }</div>
+<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160; </div>
+<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;<span class="comment">     * Changes market maker or other aggregate identifier of this order.</span></div>
+<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;<span class="comment">     * @param marketMaker market maker or other aggregate identifier of this order.</span></div>
+<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00905"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">  905</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">setMarketMaker</a>(std::string marketMaker) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;        orderData_.marketMaker = std::move(marketMaker);</div>
+<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;    }</div>
+<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160; </div>
+<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;<span class="comment">     * Changes market maker or other aggregate identifier of this order.</span></div>
+<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;<span class="comment">     * Returns the current order.</span></div>
+<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;<span class="comment">     * @param marketMaker The market maker or other aggregate identifier of this order.</span></div>
+<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;<span class="comment">     * @return The current order.</span></div>
+<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00916"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#a61843a6407adf84e0ece7be9a1a50afc">  916</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a> &amp;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a61843a6407adf84e0ece7be9a1a50afc">withMarketMaker</a>(std::string marketMaker) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;        <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">setMarketMaker</a><a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">(</a>std::move(marketMaker)<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">)</a>;</div>
+<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160; </div>
+<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160;    }</div>
+<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160; </div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;<span class="comment">     * Changes market maker or other aggregate identifier of this order.</span></div>
+<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;<span class="comment">     * Returns a shared pointer to the current order.</span></div>
+<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;Order&gt;(new</span></div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;<span class="comment">     * Order(...))` or `std::make_shared&lt;Order&gt;(...)`</span></div>
+<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;<span class="comment">     * @param marketMaker The market maker or other aggregate identifier of this order.</span></div>
+<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;<span class="comment">     * @return A shared pointer to the current order.</span></div>
+<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00932"></a><span class="lineno"><a class="line" href="../../d2/df6/classdxfcpp_1_1Order.html#ad1fb5a8134f1c6f938406bde28121206">  932</a></span>&#160;    <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>::Ptr <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#ad1fb5a8134f1c6f938406bde28121206">withMarketMakerShared</a>(std::string marketMaker) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;        <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">setMarketMaker</a><a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">(</a>std::move(marketMaker)<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#aa90a84f25b8d4c065cc9b7d52e454d82">)</a>;</div>
+<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160; </div>
+<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;        <span class="keywordflow">return</span> shared_from_this()-&gt;sharedAs&lt;<a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html">Order</a>&gt;();</div>
+<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;    }</div>
+<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160; </div>
+<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;<span class="comment">     * Returns a string representation of the current object.</span></div>
+<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;<span class="comment">     * @return a string representation</span></div>
+<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;    std::string <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a62de3f2d3e1f66409a2ab57e4303f806">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../d2/df6/classdxfcpp_1_1Order.html#a62de3f2d3e1f66409a2ab57e4303f806">override</a>;</div>
+<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;};</div>
+<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160; </div>
+<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

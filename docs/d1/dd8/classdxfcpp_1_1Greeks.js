@@ -1,5 +1,7 @@
 var classdxfcpp_1_1Greeks =
 [
+    [ "Ptr", "d1/dd8/classdxfcpp_1_1Greeks.html#a6c457c1fb73999194d1cd38063275c21", null ],
+    [ "Unique", "d1/dd8/classdxfcpp_1_1Greeks.html#aec3774b048e6825522bd2ec90c493cf5", null ],
     [ "Greeks", "d1/dd8/classdxfcpp_1_1Greeks.html#a9d81e079adbe74adfec721eb20fb183b", null ],
     [ "Greeks", "d1/dd8/classdxfcpp_1_1Greeks.html#a18d66b2b9e0051907298ddc3ae1c4730", null ],
     [ "getDelta", "d1/dd8/classdxfcpp_1_1Greeks.html#a5b40de93269908fa94947e3cb14f4a1f", null ],

@@ -1,5 +1,7 @@
 var classdxfcpp_1_1Underlying =
 [
+    [ "Ptr", "dc/df7/classdxfcpp_1_1Underlying.html#a9d0abf70272f34679524e23d845d597c", null ],
+    [ "Unique", "dc/df7/classdxfcpp_1_1Underlying.html#a089916dae578c8aeb4ba47d7f7ed7186", null ],
     [ "Underlying", "dc/df7/classdxfcpp_1_1Underlying.html#a18d8a57aa869b731346c648d73c50f5f", null ],
     [ "Underlying", "dc/df7/classdxfcpp_1_1Underlying.html#a5445fdf7d6f394272ce151f32785eb1f", null ],
     [ "getBackVolatility", "dc/df7/classdxfcpp_1_1Underlying.html#a48788205926cfbba3dfe46a5a0d79239", null ],

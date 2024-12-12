@@ -1,0 +1,175 @@
+\hypertarget{classTimeSeriesSubscriptionSymbol}{}\doxysubsection{Time\+Series\+Subscription\+Symbol Class Reference}
+\label{classTimeSeriesSubscriptionSymbol}\index{TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}}
+
+
+Represents subscription to time-\/series of events.  
+
+
+
+
+{\ttfamily \#include $<$Time\+Series\+Subscription\+Symbol.\+hpp$>$}
+
+Inheritance diagram for Time\+Series\+Subscription\+Symbol\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{db/d5f/classTimeSeriesSubscriptionSymbol}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a010ad3395d096a5780102360b8ec4cfa}{Time\+Series\+Subscription\+Symbol}} (const \mbox{\hyperlink{structSymbolWrapper}{Symbol\+Wrapper}} \&event\+Symbol, std\+::int64\+\_\+t from\+Time)
+\begin{DoxyCompactList}\small\item\em Creates time-\/series subscription symbol with a specified event symbol and subscription time. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a7ea676e77bdea236aa088925ce8a3c93}{get\+From\+Time}} () const
+\begin{DoxyCompactList}\small\item\em Returns the subscription time. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a05cae06d2c9cbb24f39e60b7a8da2fa9}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_ad6e252263aae3ee58428c0bd06345d6f}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns string representation of this time-\/series subscription symbol. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_afe08a6a35380eeccc885d0b19431e951}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol}{Time\+Series\+Subscription\+Symbol}} \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol_a9207edf3e3299851e38f6225af81fa2a}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+Represents subscription to time-\/series of events. 
+
+This is symbol is observed by Observable\+Subscription\+Change\+Listener methods symbols\+Added and symbols\+Removed when time-\/series subscription is created via DXFeed\+Time\+Series\+Subscription class.
+
+Instances of this class can be used with \mbox{\hyperlink{classDXFeedSubscription}{DXFeed\+Subscription}} to specify subscription for time series events from a specific time. By default, subscribing to time-\/series events by their event symbol object, the subscription is performed to a stream of new events as they happen only.
+
+\mbox{\hyperlink{structTimeSeriesEvent}{Time\+Series\+Event}} represents a special subtype of \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}}. The source identifier of a time-\/series event is always zero and thus
+
+\doxysubparagraph*{Equality and hash codes}
+
+This is a \mbox{\hyperlink{structFilteredSubscriptionSymbol}{Filtered\+Subscription\+Symbol}}. Time-\/series subscription symbols are compared based on their \mbox{\hyperlink{classIndexedEventSubscriptionSymbol_a261f514071ad68164ff238f9bb34f775}{event\+Symbol}} only. It means, that a set of time-\/series subscription symbols can contain at most one time-\/series subscription for each event symbol. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTimeSeriesSubscriptionSymbol_a010ad3395d096a5780102360b8ec4cfa}\label{classTimeSeriesSubscriptionSymbol_a010ad3395d096a5780102360b8ec4cfa}} 
+\index{TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}!TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}}
+\index{TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}!TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{TimeSeriesSubscriptionSymbol()}{TimeSeriesSubscriptionSymbol()}}
+{\footnotesize\ttfamily Time\+Series\+Subscription\+Symbol\+::\+Time\+Series\+Subscription\+Symbol (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structSymbolWrapper}{Symbol\+Wrapper}} \&}]{event\+Symbol,  }\item[{std\+::int64\+\_\+t}]{from\+Time }\end{DoxyParamCaption})}
+
+
+
+Creates time-\/series subscription symbol with a specified event symbol and subscription time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & the wrapped event symbol (\mbox{\hyperlink{structCandleSymbol}{Candle\+Symbol}}, \mbox{\hyperlink{structWildcardSymbol}{Wildcard\+Symbol}}, etc). \\
+\hline
+{\em from\+Time} & the subscription time. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTimeSeriesSubscriptionSymbol_afe08a6a35380eeccc885d0b19431e951}\label{classTimeSeriesSubscriptionSymbol_afe08a6a35380eeccc885d0b19431e951}} 
+\index{TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Time\+Series\+Subscription\+Symbol\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+
+
+References Symbol\+Wrapper\+::free\+Graal().
+
+
+
+Referenced by Symbol\+Wrapper\+::free\+Graal().
+
+\mbox{\Hypertarget{classTimeSeriesSubscriptionSymbol_a9207edf3e3299851e38f6225af81fa2a}\label{classTimeSeriesSubscriptionSymbol_a9207edf3e3299851e38f6225af81fa2a}} 
+\index{TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol}{Time\+Series\+Subscription\+Symbol}} Time\+Series\+Subscription\+Symbol\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+
+
+References Symbol\+Wrapper\+::from\+Graal().
+
+
+
+Referenced by Symbol\+Wrapper\+::from\+Graal().
+
+\mbox{\Hypertarget{classTimeSeriesSubscriptionSymbol_a7ea676e77bdea236aa088925ce8a3c93}\label{classTimeSeriesSubscriptionSymbol_a7ea676e77bdea236aa088925ce8a3c93}} 
+\index{TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}!getFromTime@{getFromTime}}
+\index{getFromTime@{getFromTime}!TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{getFromTime()}{getFromTime()}}
+{\footnotesize\ttfamily int64\+\_\+t Time\+Series\+Subscription\+Symbol\+::get\+From\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns the subscription time. 
+
+\begin{DoxyReturn}{Returns}
+the subscription time. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTimeSeriesSubscriptionSymbol_a05cae06d2c9cbb24f39e60b7a8da2fa9}\label{classTimeSeriesSubscriptionSymbol_a05cae06d2c9cbb24f39e60b7a8da2fa9}} 
+\index{TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Time\+Series\+Subscription\+Symbol\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classIndexedEventSubscriptionSymbol_a3904a2928d86d860290af46b414eace2}{Indexed\+Event\+Subscription\+Symbol}}.
+
+\mbox{\Hypertarget{classTimeSeriesSubscriptionSymbol_ad6e252263aae3ee58428c0bd06345d6f}\label{classTimeSeriesSubscriptionSymbol_ad6e252263aae3ee58428c0bd06345d6f}} 
+\index{TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}!toString@{toString}}
+\index{toString@{toString}!TimeSeriesSubscriptionSymbol@{TimeSeriesSubscriptionSymbol}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Time\+Series\+Subscription\+Symbol\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this time-\/series subscription symbol. 
+
+\begin{DoxyReturn}{Returns}
+string representation of this time-\/series subscription symbol. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classIndexedEventSubscriptionSymbol_a5efb867e3ec450e05225cd73059319b5}{Indexed\+Event\+Subscription\+Symbol}}.
+

@@ -1,0 +1,796 @@
+\hypertarget{classProfile}{}\doxysubsection{Profile Class Reference}
+\label{classProfile}\index{Profile@{Profile}}
+
+
+\mbox{\hyperlink{classProfile}{Profile}} information snapshot that contains security instrument description.  
+
+
+
+
+{\ttfamily \#include $<$Profile.\+hpp$>$}
+
+Inheritance diagram for Profile\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{dd/d34/classProfile}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classProfile_a2ba454fc9f90eb19f02729d039229091}\label{classProfile_a2ba454fc9f90eb19f02729d039229091}} 
+using \mbox{\hyperlink{classProfile_a2ba454fc9f90eb19f02729d039229091}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProfile}{Profile}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classProfile}{Profile}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classProfile_a607252a62f6cb5336d19b3982629e285}\label{classProfile_a607252a62f6cb5336d19b3982629e285}} 
+using \mbox{\hyperlink{classProfile_a607252a62f6cb5336d19b3982629e285}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classProfile}{Profile}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classProfile}{Profile}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classProfile_ac0b81ebac2f9c28785c39a2b3e8cd7c2}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classProfile_a96c25c06caecc38a89c6bbd1c1bf5572}\label{classProfile_a96c25c06caecc38a89c6bbd1c1bf5572}} 
+\mbox{\hyperlink{classProfile_a96c25c06caecc38a89c6bbd1c1bf5572}{Profile}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new profile event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classProfile_aff37ce5265758619f882f058314b31a3}{Profile}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new profile event with the specified event symbol. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classProfile_a8774749d1fd45895dd27be0d5b191808}{get\+Description}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns description of the security instrument. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{classProfile_a6b1e8367e9abe9d23672550db1f13824}{get\+Description\+Opt}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns description of the security instrument. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_ada6db909ea888d6324fabb5eb75a4e34}{set\+Description}} (std\+::string description) noexcept
+\begin{DoxyCompactList}\small\item\em Changes description of the security instrument. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structShortSaleRestriction}{Short\+Sale\+Restriction}} \& \mbox{\hyperlink{classProfile_a037643c8eb8d9ca1985600fbaef8895f}{get\+Short\+Sale\+Restriction}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns short sale restriction of the security instrument. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_abba4b0c994cccc6128f057a987cdd336}{set\+Short\+Sale\+Restriction}} (const \mbox{\hyperlink{structShortSaleRestriction}{Short\+Sale\+Restriction}} \&restriction) noexcept
+\begin{DoxyCompactList}\small\item\em Changes short sale restriction of the security instrument. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classProfile_a0a607bf023d8d19ecefa1203431eaf5d}{is\+Short\+Sale\+Restricted}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns short sale restriction status of the security instrument. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structTradingStatus}{Trading\+Status}} \& \mbox{\hyperlink{classProfile_aeee8363d66af26b93f2697eff44e0b29}{get\+Trading\+Status}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns trading status of the security instrument. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_adc45483d5fa3f7c9e3878b81711d6e6c}{set\+Trading\+Status}} (const \mbox{\hyperlink{structTradingStatus}{Trading\+Status}} \&status) noexcept
+\begin{DoxyCompactList}\small\item\em Changes trading status of the security instrument. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classProfile_a5b87ac11fa1406c44b4a3e8a287f3594}{is\+Trading\+Halted}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns trading halt status of the security instrument. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classProfile_abd08f3273c0be959ea20b311e3715ec2}{get\+Status\+Reason}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns description of the reason that trading was halted. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{classProfile_a8a3aad249c56a6b514f7fc77d875908c}{get\+Status\+Reason\+Opt}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns description of the reason that trading was halted. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_a80597cc307a280d6e9379a46bb731076}{set\+Status\+Reason}} (std\+::string status\+Reason) noexcept
+\begin{DoxyCompactList}\small\item\em Changes description of the reason that trading was halted. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classProfile_a9ee1224ba81d4669b9957350f5b9ebe5}{get\+Halt\+Start\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns starting time of the trading halt interval. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_ae5036c20adfcb38746d46bbcc6721475}{set\+Halt\+Start\+Time}} (std\+::int64\+\_\+t halt\+Start\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes starting time of the trading halt interval. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classProfile_afa820b0754ae97c04653ea5ba1721e3d}{get\+Halt\+End\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns ending time of the trading halt interval. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_a4c275c1574475a6e7baf2102c8f8344c}{set\+Halt\+End\+Time}} (std\+::int64\+\_\+t halt\+End\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ending time of the trading halt interval. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a73f64216db93e9913e7bd214e0125efe}{get\+High\+Limit\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the maximal (high) allowed price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_a8da4dab8c04910c42a09f817fc724a85}{set\+High\+Limit\+Price}} (double high\+Limit\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the maximal (high) allowed price. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a54203c82c69ae5fe061ff783994865db}{get\+Low\+Limit\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the minimal (low) allowed price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_aad2c5c3295e54ee9158770aa4555f075}{set\+Low\+Limit\+Price}} (double low\+Limit\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the minimal (low) allowed price. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a3d21ebeea573b313f9f7a7fe08d5772d}{get\+High52\+Week\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the maximal (high) price in last 52 weeks. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_a50486460b1a214d2141e1c51c56420cb}{set\+High52\+Week\+Price}} (double high52\+Week\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the maximal (high) price in last 52 weeks. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a3bc58e60927d062c2066c7b5640fcc7c}{get\+Low52\+Week\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the minimal (low) price in last 52 weeks. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_ab84ba3b324d042327c3e2aa270e2e26c}{set\+Low52\+Week\+Price}} (double low52\+Week\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the minimal (low) price in last 52 weeks. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a511fa9246b6405cf59de0be01f0c0063}{get\+Beta}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the correlation coefficient of the instrument to the S\&P500 index. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_ae4ba3d32d8c1c99c5197c3d9cd367570}{set\+Beta}} (double beta) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the correlation coefficient of the instrument to the S\&P500 index. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a9575846e0c0f3e79759c3dd140360b4e}{get\+Earnings\+Per\+Share}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns earnings per share (the company’s profits divided by the number of shares). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_a588892bf8464eae4dfd7f3775a5db684}{set\+Earnings\+Per\+Share}} (double earnings\+Per\+Share) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Earnings per share (the company’s profits divided by the number of shares). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a74d5718b0eb867c8459c203cc9411168}{get\+Dividend\+Frequency}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns frequency of cash dividends payments per year (calculated). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_a81ff41a969028a9629e1583c6e249e24}{set\+Dividend\+Frequency}} (double dividend\+Frequency) noexcept
+\begin{DoxyCompactList}\small\item\em Changes frequency of cash dividends payments per year. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a3e78ea7a097ffe7e14669d7d37d14c84}{get\+Ex\+Dividend\+Amount}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the amount of the last paid dividend. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_a774e59e236bb6741528682f687938017}{set\+Ex\+Dividend\+Amount}} (double ex\+Dividend\+Amount) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the amount of the last paid dividend. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classProfile_acae009e519a35d96bf3c42a0061399af}{get\+Ex\+Dividend\+Day\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns identifier of the day of the last dividend payment (ex-\/dividend date). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_acfff722efb50f817f00c66f81ae716b0}{set\+Ex\+Dividend\+Day\+Id}} (std\+::int32\+\_\+t ex\+Dividend\+Day\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of the day of the last dividend payment (ex-\/dividend date). \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_ac192e2427445e64a717621ba270b3557}{get\+Shares}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the number of shares outstanding. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_abcff305ab6eab6cebef592c92456dc9d}{set\+Shares}} (double shares) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the number of shares outstanding. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classProfile_a518f1df6d6a047e251358425993c4b21}{get\+Free\+Float}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns free-\/float -\/ the number of shares outstanding that are available to the public for trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classProfile_a7e6c6ac19b517914effcdff15c316fa9}{set\+Free\+Float}} (double free\+Float) noexcept
+\begin{DoxyCompactList}\small\item\em Changes free-\/float -\/ the number of shares outstanding that are available to the public for trade. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classProfile_a17f6624fa32e5718ddfafcd226eee044}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classProfile_af3310231285eb67eec106a13d8f516b2}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classProfile_ad61f7b53cdc1c3278ee15876521eebd8}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classProfile_a346d66b5d3fe2beac174ce090a87e261}\label{classProfile_a346d66b5d3fe2beac174ce090a87e261}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classProfile_a346d66b5d3fe2beac174ce090a87e261}{TYPE}} = Event\+Type\+Enum\+::\+PROFILE
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classProfile}{Profile}} information snapshot that contains security instrument description. 
+
+It represents the most recent information that is available about the traded security on the market at any given moment of time. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classProfile_aff37ce5265758619f882f058314b31a3}\label{classProfile_aff37ce5265758619f882f058314b31a3}} 
+\index{Profile@{Profile}!Profile@{Profile}}
+\index{Profile@{Profile}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{Profile()}{Profile()}}
+{\footnotesize\ttfamily Profile\+::\+Profile (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new profile event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Market\+Event\+::\+Market\+Event().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classProfile_ad61f7b53cdc1c3278ee15876521eebd8}\label{classProfile_ad61f7b53cdc1c3278ee15876521eebd8}} 
+\index{Profile@{Profile}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Profile\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_af3310231285eb67eec106a13d8f516b2}\label{classProfile_af3310231285eb67eec106a13d8f516b2}} 
+\index{Profile@{Profile}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classProfile}{Profile}} $>$ Profile\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classProfile_a511fa9246b6405cf59de0be01f0c0063}\label{classProfile_a511fa9246b6405cf59de0be01f0c0063}} 
+\index{Profile@{Profile}!getBeta@{getBeta}}
+\index{getBeta@{getBeta}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getBeta()}{getBeta()}}
+{\footnotesize\ttfamily double Profile\+::get\+Beta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the correlation coefficient of the instrument to the S\&P500 index. 
+
+\begin{DoxyReturn}{Returns}
+the correlation coefficient of the instrument to the S\&P500 index. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a8774749d1fd45895dd27be0d5b191808}\label{classProfile_a8774749d1fd45895dd27be0d5b191808}} 
+\index{Profile@{Profile}!getDescription@{getDescription}}
+\index{getDescription@{getDescription}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getDescription()}{getDescription()}}
+{\footnotesize\ttfamily const std\+::string\& Profile\+::get\+Description (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns description of the security instrument. 
+
+\begin{DoxyReturn}{Returns}
+description of the security instrument or dxfcpp\+::\+String\+::\+NUL ({\ttfamily std\+::string\{\char`\"{}$<$null$>$\char`\"{}\}}). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a6b1e8367e9abe9d23672550db1f13824}\label{classProfile_a6b1e8367e9abe9d23672550db1f13824}} 
+\index{Profile@{Profile}!getDescriptionOpt@{getDescriptionOpt}}
+\index{getDescriptionOpt@{getDescriptionOpt}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getDescriptionOpt()}{getDescriptionOpt()}}
+{\footnotesize\ttfamily const std\+::optional$<$std\+::string$>$\& Profile\+::get\+Description\+Opt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns description of the security instrument. 
+
+\begin{DoxyReturn}{Returns}
+description of the security instrument or std\+::nullopt 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a74d5718b0eb867c8459c203cc9411168}\label{classProfile_a74d5718b0eb867c8459c203cc9411168}} 
+\index{Profile@{Profile}!getDividendFrequency@{getDividendFrequency}}
+\index{getDividendFrequency@{getDividendFrequency}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getDividendFrequency()}{getDividendFrequency()}}
+{\footnotesize\ttfamily double Profile\+::get\+Dividend\+Frequency (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns frequency of cash dividends payments per year (calculated). 
+
+\begin{DoxyReturn}{Returns}
+Frequency of cash dividends payments per year 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a9575846e0c0f3e79759c3dd140360b4e}\label{classProfile_a9575846e0c0f3e79759c3dd140360b4e}} 
+\index{Profile@{Profile}!getEarningsPerShare@{getEarningsPerShare}}
+\index{getEarningsPerShare@{getEarningsPerShare}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getEarningsPerShare()}{getEarningsPerShare()}}
+{\footnotesize\ttfamily double Profile\+::get\+Earnings\+Per\+Share (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns earnings per share (the company’s profits divided by the number of shares). 
+
+\begin{DoxyReturn}{Returns}
+earnings per share 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a3e78ea7a097ffe7e14669d7d37d14c84}\label{classProfile_a3e78ea7a097ffe7e14669d7d37d14c84}} 
+\index{Profile@{Profile}!getExDividendAmount@{getExDividendAmount}}
+\index{getExDividendAmount@{getExDividendAmount}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getExDividendAmount()}{getExDividendAmount()}}
+{\footnotesize\ttfamily double Profile\+::get\+Ex\+Dividend\+Amount (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the amount of the last paid dividend. 
+
+\begin{DoxyReturn}{Returns}
+the amount of the last paid dividend 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_acae009e519a35d96bf3c42a0061399af}\label{classProfile_acae009e519a35d96bf3c42a0061399af}} 
+\index{Profile@{Profile}!getExDividendDayId@{getExDividendDayId}}
+\index{getExDividendDayId@{getExDividendDayId}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getExDividendDayId()}{getExDividendDayId()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Profile\+::get\+Ex\+Dividend\+Day\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns identifier of the day of the last dividend payment (ex-\/dividend date). 
+
+Identifier of the day is the number of days passed since January 1, 1970.
+
+\begin{DoxyReturn}{Returns}
+the identifier of the day of the last dividend payment 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a518f1df6d6a047e251358425993c4b21}\label{classProfile_a518f1df6d6a047e251358425993c4b21}} 
+\index{Profile@{Profile}!getFreeFloat@{getFreeFloat}}
+\index{getFreeFloat@{getFreeFloat}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getFreeFloat()}{getFreeFloat()}}
+{\footnotesize\ttfamily double Profile\+::get\+Free\+Float (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns free-\/float -\/ the number of shares outstanding that are available to the public for trade. 
+
+\begin{DoxyReturn}{Returns}
+free-\/float 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_afa820b0754ae97c04653ea5ba1721e3d}\label{classProfile_afa820b0754ae97c04653ea5ba1721e3d}} 
+\index{Profile@{Profile}!getHaltEndTime@{getHaltEndTime}}
+\index{getHaltEndTime@{getHaltEndTime}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getHaltEndTime()}{getHaltEndTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Profile\+::get\+Halt\+End\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns ending time of the trading halt interval. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+ending time of the trading halt interval. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a9ee1224ba81d4669b9957350f5b9ebe5}\label{classProfile_a9ee1224ba81d4669b9957350f5b9ebe5}} 
+\index{Profile@{Profile}!getHaltStartTime@{getHaltStartTime}}
+\index{getHaltStartTime@{getHaltStartTime}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getHaltStartTime()}{getHaltStartTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Profile\+::get\+Halt\+Start\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns starting time of the trading halt interval. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+starting time of the trading halt interval. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a3d21ebeea573b313f9f7a7fe08d5772d}\label{classProfile_a3d21ebeea573b313f9f7a7fe08d5772d}} 
+\index{Profile@{Profile}!getHigh52WeekPrice@{getHigh52WeekPrice}}
+\index{getHigh52WeekPrice@{getHigh52WeekPrice}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getHigh52WeekPrice()}{getHigh52WeekPrice()}}
+{\footnotesize\ttfamily double Profile\+::get\+High52\+Week\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the maximal (high) price in last 52 weeks. 
+
+\begin{DoxyReturn}{Returns}
+the maximal (high) price in last 52 weeks. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a73f64216db93e9913e7bd214e0125efe}\label{classProfile_a73f64216db93e9913e7bd214e0125efe}} 
+\index{Profile@{Profile}!getHighLimitPrice@{getHighLimitPrice}}
+\index{getHighLimitPrice@{getHighLimitPrice}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getHighLimitPrice()}{getHighLimitPrice()}}
+{\footnotesize\ttfamily double Profile\+::get\+High\+Limit\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the maximal (high) allowed price. 
+
+\begin{DoxyReturn}{Returns}
+the maximal (high) allowed price. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a3bc58e60927d062c2066c7b5640fcc7c}\label{classProfile_a3bc58e60927d062c2066c7b5640fcc7c}} 
+\index{Profile@{Profile}!getLow52WeekPrice@{getLow52WeekPrice}}
+\index{getLow52WeekPrice@{getLow52WeekPrice}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getLow52WeekPrice()}{getLow52WeekPrice()}}
+{\footnotesize\ttfamily double Profile\+::get\+Low52\+Week\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the minimal (low) price in last 52 weeks. 
+
+\begin{DoxyReturn}{Returns}
+the minimal (low) price in last 52 weeks. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a54203c82c69ae5fe061ff783994865db}\label{classProfile_a54203c82c69ae5fe061ff783994865db}} 
+\index{Profile@{Profile}!getLowLimitPrice@{getLowLimitPrice}}
+\index{getLowLimitPrice@{getLowLimitPrice}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getLowLimitPrice()}{getLowLimitPrice()}}
+{\footnotesize\ttfamily double Profile\+::get\+Low\+Limit\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the minimal (low) allowed price. 
+
+\begin{DoxyReturn}{Returns}
+the minimal (low) allowed price. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_ac192e2427445e64a717621ba270b3557}\label{classProfile_ac192e2427445e64a717621ba270b3557}} 
+\index{Profile@{Profile}!getShares@{getShares}}
+\index{getShares@{getShares}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getShares()}{getShares()}}
+{\footnotesize\ttfamily double Profile\+::get\+Shares (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the number of shares outstanding. 
+
+\begin{DoxyReturn}{Returns}
+shares outstanding 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a037643c8eb8d9ca1985600fbaef8895f}\label{classProfile_a037643c8eb8d9ca1985600fbaef8895f}} 
+\index{Profile@{Profile}!getShortSaleRestriction@{getShortSaleRestriction}}
+\index{getShortSaleRestriction@{getShortSaleRestriction}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getShortSaleRestriction()}{getShortSaleRestriction()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structShortSaleRestriction}{Short\+Sale\+Restriction}}\& Profile\+::get\+Short\+Sale\+Restriction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns short sale restriction of the security instrument. 
+
+\begin{DoxyReturn}{Returns}
+short sale restriction of the security instrument. 
+\end{DoxyReturn}
+
+
+Referenced by is\+Short\+Sale\+Restricted().
+
+\mbox{\Hypertarget{classProfile_abd08f3273c0be959ea20b311e3715ec2}\label{classProfile_abd08f3273c0be959ea20b311e3715ec2}} 
+\index{Profile@{Profile}!getStatusReason@{getStatusReason}}
+\index{getStatusReason@{getStatusReason}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getStatusReason()}{getStatusReason()}}
+{\footnotesize\ttfamily const std\+::string\& Profile\+::get\+Status\+Reason (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns description of the reason that trading was halted. 
+
+\begin{DoxyReturn}{Returns}
+description of the reason that trading was halted or dxfcpp\+::\+String\+::\+NUL ({\ttfamily std\+::string\{\char`\"{}$<$null$>$\char`\"{}\}}). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_a8a3aad249c56a6b514f7fc77d875908c}\label{classProfile_a8a3aad249c56a6b514f7fc77d875908c}} 
+\index{Profile@{Profile}!getStatusReasonOpt@{getStatusReasonOpt}}
+\index{getStatusReasonOpt@{getStatusReasonOpt}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getStatusReasonOpt()}{getStatusReasonOpt()}}
+{\footnotesize\ttfamily const std\+::optional$<$std\+::string$>$\& Profile\+::get\+Status\+Reason\+Opt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns description of the reason that trading was halted. 
+
+\begin{DoxyReturn}{Returns}
+description of the reason that trading was halted or std\+::nullopt. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classProfile_aeee8363d66af26b93f2697eff44e0b29}\label{classProfile_aeee8363d66af26b93f2697eff44e0b29}} 
+\index{Profile@{Profile}!getTradingStatus@{getTradingStatus}}
+\index{getTradingStatus@{getTradingStatus}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{getTradingStatus()}{getTradingStatus()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structTradingStatus}{Trading\+Status}}\& Profile\+::get\+Trading\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns trading status of the security instrument. 
+
+\begin{DoxyReturn}{Returns}
+trading status of the security instrument. 
+\end{DoxyReturn}
+
+
+Referenced by is\+Trading\+Halted().
+
+\mbox{\Hypertarget{classProfile_a0a607bf023d8d19ecefa1203431eaf5d}\label{classProfile_a0a607bf023d8d19ecefa1203431eaf5d}} 
+\index{Profile@{Profile}!isShortSaleRestricted@{isShortSaleRestricted}}
+\index{isShortSaleRestricted@{isShortSaleRestricted}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{isShortSaleRestricted()}{isShortSaleRestricted()}}
+{\footnotesize\ttfamily bool Profile\+::is\+Short\+Sale\+Restricted (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns short sale restriction status of the security instrument. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if short sale of the security instrument is restricted. 
+\end{DoxyReturn}
+
+
+References Short\+Sale\+Restriction\+::\+ACTIVE, and get\+Short\+Sale\+Restriction().
+
+\mbox{\Hypertarget{classProfile_a5b87ac11fa1406c44b4a3e8a287f3594}\label{classProfile_a5b87ac11fa1406c44b4a3e8a287f3594}} 
+\index{Profile@{Profile}!isTradingHalted@{isTradingHalted}}
+\index{isTradingHalted@{isTradingHalted}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{isTradingHalted()}{isTradingHalted()}}
+{\footnotesize\ttfamily bool Profile\+::is\+Trading\+Halted (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns trading halt status of the security instrument. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if trading of the security instrument is halted. 
+\end{DoxyReturn}
+
+
+References get\+Trading\+Status(), and Trading\+Status\+::\+HALTED.
+
+\mbox{\Hypertarget{classProfile_ae4ba3d32d8c1c99c5197c3d9cd367570}\label{classProfile_ae4ba3d32d8c1c99c5197c3d9cd367570}} 
+\index{Profile@{Profile}!setBeta@{setBeta}}
+\index{setBeta@{setBeta}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setBeta()}{setBeta()}}
+{\footnotesize\ttfamily void Profile\+::set\+Beta (\begin{DoxyParamCaption}\item[{double}]{beta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the correlation coefficient of the instrument to the S\&P500 index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em beta} & the correlation coefficient of the instrument to the S\&P500 index \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_ada6db909ea888d6324fabb5eb75a4e34}\label{classProfile_ada6db909ea888d6324fabb5eb75a4e34}} 
+\index{Profile@{Profile}!setDescription@{setDescription}}
+\index{setDescription@{setDescription}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setDescription()}{setDescription()}}
+{\footnotesize\ttfamily void Profile\+::set\+Description (\begin{DoxyParamCaption}\item[{std\+::string}]{description }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes description of the security instrument. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em description} & description of the security instrument. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_a81ff41a969028a9629e1583c6e249e24}\label{classProfile_a81ff41a969028a9629e1583c6e249e24}} 
+\index{Profile@{Profile}!setDividendFrequency@{setDividendFrequency}}
+\index{setDividendFrequency@{setDividendFrequency}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setDividendFrequency()}{setDividendFrequency()}}
+{\footnotesize\ttfamily void Profile\+::set\+Dividend\+Frequency (\begin{DoxyParamCaption}\item[{double}]{dividend\+Frequency }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes frequency of cash dividends payments per year. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dividend\+Frequency} & frequency of cash dividends payments per year \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_a588892bf8464eae4dfd7f3775a5db684}\label{classProfile_a588892bf8464eae4dfd7f3775a5db684}} 
+\index{Profile@{Profile}!setEarningsPerShare@{setEarningsPerShare}}
+\index{setEarningsPerShare@{setEarningsPerShare}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setEarningsPerShare()}{setEarningsPerShare()}}
+{\footnotesize\ttfamily void Profile\+::set\+Earnings\+Per\+Share (\begin{DoxyParamCaption}\item[{double}]{earnings\+Per\+Share }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Earnings per share (the company’s profits divided by the number of shares). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em earnings\+Per\+Share} & earnings per share \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_a774e59e236bb6741528682f687938017}\label{classProfile_a774e59e236bb6741528682f687938017}} 
+\index{Profile@{Profile}!setExDividendAmount@{setExDividendAmount}}
+\index{setExDividendAmount@{setExDividendAmount}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setExDividendAmount()}{setExDividendAmount()}}
+{\footnotesize\ttfamily void Profile\+::set\+Ex\+Dividend\+Amount (\begin{DoxyParamCaption}\item[{double}]{ex\+Dividend\+Amount }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the amount of the last paid dividend. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ex\+Dividend\+Amount} & the amount of the last paid dividend \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_acfff722efb50f817f00c66f81ae716b0}\label{classProfile_acfff722efb50f817f00c66f81ae716b0}} 
+\index{Profile@{Profile}!setExDividendDayId@{setExDividendDayId}}
+\index{setExDividendDayId@{setExDividendDayId}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setExDividendDayId()}{setExDividendDayId()}}
+{\footnotesize\ttfamily void Profile\+::set\+Ex\+Dividend\+Day\+Id (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{ex\+Dividend\+Day\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes identifier of the day of the last dividend payment (ex-\/dividend date). 
+
+Identifier of the day is the number of days passed since January 1, 1970.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ex\+Dividend\+Day\+Id} & identifier of the day of the last dividend payment \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_a7e6c6ac19b517914effcdff15c316fa9}\label{classProfile_a7e6c6ac19b517914effcdff15c316fa9}} 
+\index{Profile@{Profile}!setFreeFloat@{setFreeFloat}}
+\index{setFreeFloat@{setFreeFloat}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setFreeFloat()}{setFreeFloat()}}
+{\footnotesize\ttfamily void Profile\+::set\+Free\+Float (\begin{DoxyParamCaption}\item[{double}]{free\+Float }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes free-\/float -\/ the number of shares outstanding that are available to the public for trade. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em free\+Float} & the number of shares outstanding that are available to the public for trade \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_a4c275c1574475a6e7baf2102c8f8344c}\label{classProfile_a4c275c1574475a6e7baf2102c8f8344c}} 
+\index{Profile@{Profile}!setHaltEndTime@{setHaltEndTime}}
+\index{setHaltEndTime@{setHaltEndTime}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setHaltEndTime()}{setHaltEndTime()}}
+{\footnotesize\ttfamily void Profile\+::set\+Halt\+End\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{halt\+End\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ending time of the trading halt interval. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em halt\+End\+Time} & ending time of the trading halt interval. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_ae5036c20adfcb38746d46bbcc6721475}\label{classProfile_ae5036c20adfcb38746d46bbcc6721475}} 
+\index{Profile@{Profile}!setHaltStartTime@{setHaltStartTime}}
+\index{setHaltStartTime@{setHaltStartTime}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setHaltStartTime()}{setHaltStartTime()}}
+{\footnotesize\ttfamily void Profile\+::set\+Halt\+Start\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{halt\+Start\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes starting time of the trading halt interval. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em halt\+Start\+Time} & starting time of the trading halt interval. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_a50486460b1a214d2141e1c51c56420cb}\label{classProfile_a50486460b1a214d2141e1c51c56420cb}} 
+\index{Profile@{Profile}!setHigh52WeekPrice@{setHigh52WeekPrice}}
+\index{setHigh52WeekPrice@{setHigh52WeekPrice}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setHigh52WeekPrice()}{setHigh52WeekPrice()}}
+{\footnotesize\ttfamily void Profile\+::set\+High52\+Week\+Price (\begin{DoxyParamCaption}\item[{double}]{high52\+Week\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the maximal (high) price in last 52 weeks. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em high52\+Week\+Price} & the maximal (high) price in last 52 weeks. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_a8da4dab8c04910c42a09f817fc724a85}\label{classProfile_a8da4dab8c04910c42a09f817fc724a85}} 
+\index{Profile@{Profile}!setHighLimitPrice@{setHighLimitPrice}}
+\index{setHighLimitPrice@{setHighLimitPrice}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setHighLimitPrice()}{setHighLimitPrice()}}
+{\footnotesize\ttfamily void Profile\+::set\+High\+Limit\+Price (\begin{DoxyParamCaption}\item[{double}]{high\+Limit\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the maximal (high) allowed price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em high\+Limit\+Price} & the maximal (high) allowed price. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_ab84ba3b324d042327c3e2aa270e2e26c}\label{classProfile_ab84ba3b324d042327c3e2aa270e2e26c}} 
+\index{Profile@{Profile}!setLow52WeekPrice@{setLow52WeekPrice}}
+\index{setLow52WeekPrice@{setLow52WeekPrice}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setLow52WeekPrice()}{setLow52WeekPrice()}}
+{\footnotesize\ttfamily void Profile\+::set\+Low52\+Week\+Price (\begin{DoxyParamCaption}\item[{double}]{low52\+Week\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the minimal (low) price in last 52 weeks. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em low52\+Week\+Price} & the minimal (low) price in last 52 weeks. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_aad2c5c3295e54ee9158770aa4555f075}\label{classProfile_aad2c5c3295e54ee9158770aa4555f075}} 
+\index{Profile@{Profile}!setLowLimitPrice@{setLowLimitPrice}}
+\index{setLowLimitPrice@{setLowLimitPrice}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setLowLimitPrice()}{setLowLimitPrice()}}
+{\footnotesize\ttfamily void Profile\+::set\+Low\+Limit\+Price (\begin{DoxyParamCaption}\item[{double}]{low\+Limit\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the minimal (low) allowed price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em low\+Limit\+Price} & the minimal (low) allowed price. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_abcff305ab6eab6cebef592c92456dc9d}\label{classProfile_abcff305ab6eab6cebef592c92456dc9d}} 
+\index{Profile@{Profile}!setShares@{setShares}}
+\index{setShares@{setShares}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setShares()}{setShares()}}
+{\footnotesize\ttfamily void Profile\+::set\+Shares (\begin{DoxyParamCaption}\item[{double}]{shares }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the number of shares outstanding. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em shares} & shares outstanding. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_abba4b0c994cccc6128f057a987cdd336}\label{classProfile_abba4b0c994cccc6128f057a987cdd336}} 
+\index{Profile@{Profile}!setShortSaleRestriction@{setShortSaleRestriction}}
+\index{setShortSaleRestriction@{setShortSaleRestriction}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setShortSaleRestriction()}{setShortSaleRestriction()}}
+{\footnotesize\ttfamily void Profile\+::set\+Short\+Sale\+Restriction (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structShortSaleRestriction}{Short\+Sale\+Restriction}} \&}]{restriction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes short sale restriction of the security instrument. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em restriction} & short sale restriction of the security instrument. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_a80597cc307a280d6e9379a46bb731076}\label{classProfile_a80597cc307a280d6e9379a46bb731076}} 
+\index{Profile@{Profile}!setStatusReason@{setStatusReason}}
+\index{setStatusReason@{setStatusReason}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setStatusReason()}{setStatusReason()}}
+{\footnotesize\ttfamily void Profile\+::set\+Status\+Reason (\begin{DoxyParamCaption}\item[{std\+::string}]{status\+Reason }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes description of the reason that trading was halted. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em status\+Reason} & description of the reason that trading was halted. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_adc45483d5fa3f7c9e3878b81711d6e6c}\label{classProfile_adc45483d5fa3f7c9e3878b81711d6e6c}} 
+\index{Profile@{Profile}!setTradingStatus@{setTradingStatus}}
+\index{setTradingStatus@{setTradingStatus}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{setTradingStatus()}{setTradingStatus()}}
+{\footnotesize\ttfamily void Profile\+::set\+Trading\+Status (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structTradingStatus}{Trading\+Status}} \&}]{status }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes trading status of the security instrument. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em status} & trading status of the security instrument. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classProfile_ac0b81ebac2f9c28785c39a2b3e8cd7c2}\label{classProfile_ac0b81ebac2f9c28785c39a2b3e8cd7c2}} 
+\index{Profile@{Profile}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Profile\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classProfile_a17f6624fa32e5718ddfafcd226eee044}\label{classProfile_a17f6624fa32e5718ddfafcd226eee044}} 
+\index{Profile@{Profile}!toString@{toString}}
+\index{toString@{toString}!Profile@{Profile}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Profile\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+

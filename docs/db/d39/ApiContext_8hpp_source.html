@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('db/d39/ApiContext_8hpp_source.html','.
 <div class="title">ApiContext.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -102,37 +102,50 @@ $(document).ready(function(){initNavTree('db/d39/ApiContext_8hpp_source.html','.
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&lt;</span><span class="preprocessor">memory</span><span class="preprocessor">&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/DXEndpointManager.hpp&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/DXFeedSubscriptionManager.hpp&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace</span> dxfcpp {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">class</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> ApiContext {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">mutable</span> std::shared_ptr&lt;DXEndpointManager&gt; dxEndpointManager_;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">mutable</span> std::shared_ptr&lt;DXFeedSubscriptionManager&gt; dxFeedSubscriptionManager_;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    std::atomic&lt;<span class="keywordtype">bool</span>&gt; initialized{<span class="keyword">false</span>};</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    ApiContext() <span class="keyword">noexcept</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        : dxEndpointManager_{std::make_shared&lt;DXEndpointManager&gt;()},</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;          dxFeedSubscriptionManager_{std::make_shared&lt;DXFeedSubscriptionManager&gt;()} {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    }</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">static</span> std::shared_ptr&lt;ApiContext&gt; getInstance() <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;ApiContext&gt; instance = std::shared_ptr&lt;ApiContext&gt;(<span class="keyword">new</span> (std::nothrow) ApiContext{});</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordflow">return</span> instance;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    }</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/DXFeedManager.hpp&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/DXFeedSubscriptionManager.hpp&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/DXPublisherManager.hpp&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/InstrumentProfileCollectorManager.hpp&quot;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/InstrumentProfileConnectionManager.hpp&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/InstrumentProfileReaderManager.hpp&quot;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">include</span> <span class="preprocessor">&quot;../managers/OnDemandServiceManager.hpp&quot;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace</span> dxfcpp {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Manager&gt; <span class="keyword">struct</span> AddManagerMixin {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">mutable</span> std::shared_ptr&lt;Manager&gt; manager_;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    AddManagerMixin() <span class="keyword">noexcept</span> : manager_{std::make_shared&lt;Manager&gt;()} {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    }</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    std::shared_ptr&lt;Manager&gt; getManager() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordflow">return</span> manager_;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    }</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;};</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    std::shared_ptr&lt;DXEndpointManager&gt; getDxEndpointManager() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keywordflow">return</span> dxEndpointManager_;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::shared_ptr&lt;DXFeedSubscriptionManager&gt; getDxFeedSubscriptionManager() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordflow">return</span> dxFeedSubscriptionManager_;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;};</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">class</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> ApiContext : AddManagerMixin&lt;DXEndpointManager&gt;,</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                                 AddManagerMixin&lt;DXFeedSubscriptionManager&gt;,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                                 AddManagerMixin&lt;DXFeedManager&gt;,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                                 AddManagerMixin&lt;DXPublisherManager&gt;,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                                 AddManagerMixin&lt;InstrumentProfileReaderManager&gt;,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                                 AddManagerMixin&lt;InstrumentProfileCollectorManager&gt;,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                                 AddManagerMixin&lt;InstrumentProfileConnectionManager&gt;,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                                 AddManagerMixin&lt;OnDemandServiceManager&gt; {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    ApiContext() <span class="keyword">noexcept</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">static</span> std::shared_ptr&lt;ApiContext&gt; getInstance() <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">static</span> std::shared_ptr&lt;ApiContext&gt; instance = std::shared_ptr&lt;ApiContext&gt;(<span class="keyword">new</span> (std::nothrow) ApiContext{});</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> instance;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Manager&gt; std::shared_ptr&lt;Manager&gt; getManager() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordflow">return</span> AddManagerMixin&lt;Manager&gt;::getManager();</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;};</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

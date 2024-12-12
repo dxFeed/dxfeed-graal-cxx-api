@@ -1,0 +1,370 @@
+\hypertarget{structSchedule}{}\doxysubsection{Schedule Struct Reference}
+\label{structSchedule}\index{Schedule@{Schedule}}
+
+
+{\bfseries{\mbox{\hyperlink{structSchedule}{Schedule}}}} class provides API to retrieve and explore trading schedules of different exchanges and different classes of financial instruments.  
+
+
+
+
+{\ttfamily \#include $<$Schedule.\+hpp$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}\label{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}} 
+using \mbox{\hyperlink{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSchedule}{Schedule}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structSchedule}{Schedule}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structSchedule_aeee2ecdbf85dc82c68f5c4849f738f66}\label{structSchedule_aeee2ecdbf85dc82c68f5c4849f738f66}} 
+using \mbox{\hyperlink{structSchedule_aeee2ecdbf85dc82c68f5c4849f738f66}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structSchedule}{Schedule}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{structSchedule}{Schedule}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}} \mbox{\hyperlink{structSchedule_a7e193ebd83f9f1769ee10c85bdd5cee9}{get\+Session\+By\+Time}} (std\+::int64\+\_\+t time) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns session that contains specified time. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \mbox{\hyperlink{structSchedule_ae2191af5b57ac6995a8492fcbe931818}{get\+Day\+By\+Time}} (std\+::int64\+\_\+t time) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns day that contains specified time. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \mbox{\hyperlink{structSchedule_abb1a991322bd4df722a8347c0aa6d7cf}{get\+Day\+By\+Id}} (std\+::int32\+\_\+t day\+Id) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns day for specified day identifier. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \mbox{\hyperlink{structSchedule_a9aa31d3292ae5901d5e50665f834cecb}{get\+Day\+By\+Year\+Month\+Day}} (std\+::int32\+\_\+t year\+Month\+Day) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns day for specified year, month and day numbers. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}} \mbox{\hyperlink{structSchedule_ad12692181478e6f0efbcb7e844c39601}{get\+Nearest\+Session\+By\+Time}} (std\+::int64\+\_\+t time, const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns session that is nearest to the specified time and that is accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}} \mbox{\hyperlink{structSchedule_a0082d4a976a9e972d53574450b80c3e3}{find\+Nearest\+Session\+By\+Time}} (std\+::int64\+\_\+t time, const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns session that is nearest to the specified time and that is accepted by specified filter. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structSchedule_ad626de7a68a12b5936718c95a5ede88a}{get\+Name}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns name of this schedule. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structSchedule_a9cb0eb32e4538e91337e15a5521557d8}{get\+Time\+Zone\+Display\+Name}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time zone display name in which this schedule is defined. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structSchedule_aca4dc155234e51535e12ba3a556dcf3a}{get\+Time\+Zone\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time zone id in which this schedule is defined. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}{Schedule\+::\+Ptr}} \mbox{\hyperlink{structSchedule_ad6952457d94887d98fe974b57f0aabd0}{get\+Instance}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$ profile)
+\begin{DoxyCompactList}\small\item\em Returns default schedule instance for specified instrument profile. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}{Schedule\+::\+Ptr}} \mbox{\hyperlink{structSchedule_ac51924f028359ed7c1d60153ab7ac037}{get\+Instance}} (const std\+::string \&schedule\+Definition)
+\begin{DoxyCompactList}\small\item\em Returns default schedule instance for specified schedule definition. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}{Schedule\+::\+Ptr}} \mbox{\hyperlink{structSchedule_a21284386e83a8fa54e9d18eba848125b}{get\+Instance}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$ profile, const std\+::string \&venue)
+\begin{DoxyCompactList}\small\item\em Returns schedule instance for specified instrument profile and trading venue. \end{DoxyCompactList}\item 
+static std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{structSchedule_a031f23f634bff9e31e00ea0c72e4a217}{get\+Trading\+Venues}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$ profile)
+\begin{DoxyCompactList}\small\item\em Returns trading venues for specified instrument profile. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{structSchedule_a06d71538a7d9f8bcd568b5630810a7d9}{download\+Defaults}} (const std\+::string \&download\+Config) noexcept
+\begin{DoxyCompactList}\small\item\em Downloads defaults using specified download config and optionally start periodic download. \end{DoxyCompactList}\item 
+static bool \mbox{\hyperlink{structSchedule_a3658101bb1fa1b22078fd0e9150bb839}{set\+Defaults}} (const std\+::vector$<$ char $>$ \&data) noexcept
+\begin{DoxyCompactList}\small\item\em Sets shared defaults that are used by individual schedule instances. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSchedule_a815a518a0b2fd8492d61196e3aafa201}\label{structSchedule_a815a518a0b2fd8492d61196e3aafa201}} 
+struct {\bfseries Day}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+{\bfseries{\mbox{\hyperlink{structSchedule}{Schedule}}}} class provides API to retrieve and explore trading schedules of different exchanges and different classes of financial instruments. 
+
+Each instance of schedule covers separate trading schedule of some class of instruments, i.\+e. NYSE stock trading schedule or CME corn futures trading schedule. Each schedule splits entire time scale into separate \mbox{\hyperlink{structDay}{days}} that are aligned to the specific trading hours of covered trading schedule. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structSchedule_a06d71538a7d9f8bcd568b5630810a7d9}\label{structSchedule_a06d71538a7d9f8bcd568b5630810a7d9}} 
+\index{Schedule@{Schedule}!downloadDefaults@{downloadDefaults}}
+\index{downloadDefaults@{downloadDefaults}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{downloadDefaults()}{downloadDefaults()}}
+{\footnotesize\ttfamily void Schedule\+::download\+Defaults (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{download\+Config }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Downloads defaults using specified download config and optionally start periodic download. 
+
+The specified config can be one of the following\+:
+\begin{DoxyItemize}
+\item \char`\"{}\char`\"{} -\/ stop periodic download 
+\item URL -\/ download once from specified URL and stop periodic download 
+\item URL,period -\/ start periodic download from specified URL 
+\item \char`\"{}auto\char`\"{} -\/ start periodic download from default location 
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em download\+Config} & download config \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structSchedule_a0082d4a976a9e972d53574450b80c3e3}\label{structSchedule_a0082d4a976a9e972d53574450b80c3e3}} 
+\index{Schedule@{Schedule}!findNearestSessionByTime@{findNearestSessionByTime}}
+\index{findNearestSessionByTime@{findNearestSessionByTime}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{findNearestSessionByTime()}{findNearestSessionByTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}} Schedule\+::find\+Nearest\+Session\+By\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time,  }\item[{const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns session that is nearest to the specified time and that is accepted by specified filter. 
+
+This method will return {\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if specified time falls outside of valid date range from 0001-\/01-\/02 to 9999-\/12-\/30. If no sessions acceptable by specified filter are found within one year this method will return {\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}). 
+
+To find nearest trading session of any type use this code\+: 
+\begin{DoxyPre}session = schedule-\/>findNearestSessionByTime(time, SessionFilter::TRADING);\end{DoxyPre}
+ To find nearest regular trading session use this code\+: 
+\begin{DoxyPre}session = schedule-\/>findNearestSessionByTime(time, SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The time to search for \\
+\hline
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The session that is nearest to the specified time and that is accepted by specified filter or {\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if specified time falls outside of valid date range 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_abb1a991322bd4df722a8347c0aa6d7cf}\label{structSchedule_abb1a991322bd4df722a8347c0aa6d7cf}} 
+\index{Schedule@{Schedule}!getDayById@{getDayById}}
+\index{getDayById@{getDayById}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getDayById()}{getDayById()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} Schedule\+::get\+Day\+By\+Id (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{day\+Id }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns day for specified day identifier. 
+
+This method will return {\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if specified day identifier falls outside of valid date range from 0001-\/01-\/02 to 9999-\/12-\/30.
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+Id} & The day identifier to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The day for specified day identifier or {\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if specified day identifier falls outside of valid date range 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structDay_ae40b4316da099c2a0c4a31a9f98aed76}{Day\+::get\+Day\+Id()}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{structSchedule_ae2191af5b57ac6995a8492fcbe931818}\label{structSchedule_ae2191af5b57ac6995a8492fcbe931818}} 
+\index{Schedule@{Schedule}!getDayByTime@{getDayByTime}}
+\index{getDayByTime@{getDayByTime}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getDayByTime()}{getDayByTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} Schedule\+::get\+Day\+By\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns day that contains specified time. 
+
+This method will return {\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if specified time falls outside of valid date range from 0001-\/01-\/02 to 9999-\/12-\/30.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The time to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The day that contains specified time or {\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if specified time falls outside of valid date range 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_a9aa31d3292ae5901d5e50665f834cecb}\label{structSchedule_a9aa31d3292ae5901d5e50665f834cecb}} 
+\index{Schedule@{Schedule}!getDayByYearMonthDay@{getDayByYearMonthDay}}
+\index{getDayByYearMonthDay@{getDayByYearMonthDay}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getDayByYearMonthDay()}{getDayByYearMonthDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} Schedule\+::get\+Day\+By\+Year\+Month\+Day (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{year\+Month\+Day }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns day for specified year, month and day numbers. 
+
+Year, month, and day numbers shall be packed in the following way\+: 
+\begin{DoxyPre}YearMonthDay = year * 10000 + month * 100 + day\end{DoxyPre}
+ For example, September 28, 1977 has value 19770928. 
+
+If specified day does not exist then this method returns day with the lowest valid Year\+Month\+Day that is greater than specified one. This method will return {\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if specified year, month and day numbers fall outside of valid date range from 0001-\/01-\/02 to 9999-\/12-\/30.
+
+
+\begin{DoxyParams}{Parameters}
+{\em year\+Month\+Day} & The year, month and day numbers to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The day for specified year, month and day numbers or {\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if specified year, month and day numbers fall outside of valid date range 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structDay_ab7ef98e627f0c9857d0ea82ed9877166}{Day\+::get\+Year\+Month\+Day()}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{structSchedule_ac51924f028359ed7c1d60153ab7ac037}\label{structSchedule_ac51924f028359ed7c1d60153ab7ac037}} 
+\index{Schedule@{Schedule}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}{Schedule\+::\+Ptr}} Schedule\+::get\+Instance (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{schedule\+Definition }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns default schedule instance for specified schedule definition. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em schedule\+Definition} & The schedule definition of requested schedule \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The default schedule instance for specified schedule definition 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_ad6952457d94887d98fe974b57f0aabd0}\label{structSchedule_ad6952457d94887d98fe974b57f0aabd0}} 
+\index{Schedule@{Schedule}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}{Schedule\+::\+Ptr}} Schedule\+::get\+Instance (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$}]{profile }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Returns default schedule instance for specified instrument profile. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em profile} & The instrument profile those schedule is requested \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The default schedule instance for specified instrument profile 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_a21284386e83a8fa54e9d18eba848125b}\label{structSchedule_a21284386e83a8fa54e9d18eba848125b}} 
+\index{Schedule@{Schedule}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structSchedule_ad7a2cfe255b5a057b1e24d2db3135daf}{Schedule\+::\+Ptr}} Schedule\+::get\+Instance (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$}]{profile,  }\item[{const std\+::string \&}]{venue }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Returns schedule instance for specified instrument profile and trading venue. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em profile} & The instrument profile those schedule is requested \\
+\hline
+{\em venue} & The trading venue those schedule is requested \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The schedule instance for specified instrument profile and trading venue 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_ad626de7a68a12b5936718c95a5ede88a}\label{structSchedule_ad626de7a68a12b5936718c95a5ede88a}} 
+\index{Schedule@{Schedule}!getName@{getName}}
+\index{getName@{getName}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily std\+::string Schedule\+::get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns name of this schedule. 
+
+\begin{DoxyReturn}{Returns}
+The name of this schedule 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_ad12692181478e6f0efbcb7e844c39601}\label{structSchedule_ad12692181478e6f0efbcb7e844c39601}} 
+\index{Schedule@{Schedule}!getNearestSessionByTime@{getNearestSessionByTime}}
+\index{getNearestSessionByTime@{getNearestSessionByTime}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getNearestSessionByTime()}{getNearestSessionByTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}} Schedule\+::get\+Nearest\+Session\+By\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time,  }\item[{const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns session that is nearest to the specified time and that is accepted by specified filter. 
+
+This method will return {\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if specified time falls outside of valid date range from 0001-\/01-\/02 to 9999-\/12-\/30 or if no sessions acceptable by specified filter are found within one year this method 
+
+To find nearest trading session of any type use this code\+: 
+\begin{DoxyPre}session = schedule-\/>getNearestSessionByTime(time, SessionFilter::TRADING);\end{DoxyPre}
+ To find nearest regular trading session use this code\+: 
+\begin{DoxyPre}session = schedule-\/>getNearestSessionByTime(time, SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The time to search for \\
+\hline
+{\em filter} & the filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+session that is nearest to the specified time and that is accepted by specified filter or {\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\}} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if specified time falls outside of valid date range or if no such day was found within one year 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_a7e193ebd83f9f1769ee10c85bdd5cee9}\label{structSchedule_a7e193ebd83f9f1769ee10c85bdd5cee9}} 
+\index{Schedule@{Schedule}!getSessionByTime@{getSessionByTime}}
+\index{getSessionByTime@{getSessionByTime}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getSessionByTime()}{getSessionByTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}} Schedule\+::get\+Session\+By\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns session that contains specified time. 
+
+This method will return {\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\}} if specified time falls outside of valid date range from 0001-\/01-\/02 to 9999-\/12-\/30.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & the time to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+session that contains specified time or {\ttfamily \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\}} if specified time falls outside of valid date range from 0001-\/01-\/02 to 9999-\/12-\/30. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_a9cb0eb32e4538e91337e15a5521557d8}\label{structSchedule_a9cb0eb32e4538e91337e15a5521557d8}} 
+\index{Schedule@{Schedule}!getTimeZoneDisplayName@{getTimeZoneDisplayName}}
+\index{getTimeZoneDisplayName@{getTimeZoneDisplayName}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getTimeZoneDisplayName()}{getTimeZoneDisplayName()}}
+{\footnotesize\ttfamily std\+::string Schedule\+::get\+Time\+Zone\+Display\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns time zone display name in which this schedule is defined. 
+
+\begin{DoxyReturn}{Returns}
+time zone display name in which this schedule is defined 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_aca4dc155234e51535e12ba3a556dcf3a}\label{structSchedule_aca4dc155234e51535e12ba3a556dcf3a}} 
+\index{Schedule@{Schedule}!getTimeZoneId@{getTimeZoneId}}
+\index{getTimeZoneId@{getTimeZoneId}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getTimeZoneId()}{getTimeZoneId()}}
+{\footnotesize\ttfamily std\+::string Schedule\+::get\+Time\+Zone\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns time zone id in which this schedule is defined. 
+
+\begin{DoxyReturn}{Returns}
+time zone id in which this schedule is defined 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_a031f23f634bff9e31e00ea0c72e4a217}\label{structSchedule_a031f23f634bff9e31e00ea0c72e4a217}} 
+\index{Schedule@{Schedule}!getTradingVenues@{getTradingVenues}}
+\index{getTradingVenues@{getTradingVenues}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{getTradingVenues()}{getTradingVenues()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ Schedule\+::get\+Trading\+Venues (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classInstrumentProfile}{Instrument\+Profile}} $>$}]{profile }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns trading venues for specified instrument profile. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em profile} & The instrument profile those trading venues are requested \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+trading venues for specified instrument profile 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSchedule_a3658101bb1fa1b22078fd0e9150bb839}\label{structSchedule_a3658101bb1fa1b22078fd0e9150bb839}} 
+\index{Schedule@{Schedule}!setDefaults@{setDefaults}}
+\index{setDefaults@{setDefaults}!Schedule@{Schedule}}
+\doxyparagraph{\texorpdfstring{setDefaults()}{setDefaults()}}
+{\footnotesize\ttfamily bool Schedule\+::set\+Defaults (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ char $>$ \&}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Sets shared defaults that are used by individual schedule instances. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & The content of default data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if OK 
+\end{DoxyReturn}

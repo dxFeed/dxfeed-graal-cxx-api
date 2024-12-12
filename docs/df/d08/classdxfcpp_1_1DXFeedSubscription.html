@@ -89,6 +89,7 @@ $(document).ready(function(){initNavTree('df/d08/classdxfcpp_1_1DXFeedSubscripti
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="../../db/dc5/classdxfcpp_1_1DXFeedSubscription-members.html">List of all members</a>  </div>
@@ -114,6 +115,22 @@ $(document).ready(function(){initNavTree('df/d08/classdxfcpp_1_1DXFeedSubscripti
   </map>
 </div></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:aac050e687c066f7e76b48971798c3274"><td class="memItemLeft" align="right" valign="top"><a id="aac050e687c066f7e76b48971798c3274"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#aac050e687c066f7e76b48971798c3274">Ptr</a> = std::shared_ptr&lt; <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">DXFeedSubscription</a> &gt;</td></tr>
+<tr class="memdesc:aac050e687c066f7e76b48971798c3274"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of shared pointer to the <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html" title="Subscription for a set of symbols and event types.">DXFeedSubscription</a> object. <br /></td></tr>
+<tr class="separator:aac050e687c066f7e76b48971798c3274"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07e7721da188474fb189e34eaeec3182"><td class="memItemLeft" align="right" valign="top"><a id="a07e7721da188474fb189e34eaeec3182"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#a07e7721da188474fb189e34eaeec3182">Unique</a> = std::unique_ptr&lt; <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">DXFeedSubscription</a> &gt;</td></tr>
+<tr class="memdesc:a07e7721da188474fb189e34eaeec3182"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of unique pointer to the <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html" title="Subscription for a set of symbols and event types.">DXFeedSubscription</a> object. <br /></td></tr>
+<tr class="separator:a07e7721da188474fb189e34eaeec3182"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_structdxfcpp_1_1SharedEntity"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structdxfcpp_1_1SharedEntity')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">dxfcpp::SharedEntity</a></td></tr>
+<tr class="memitem:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="memItemLeft" align="right" valign="top"><a id="a922751cdf32a5c59b9471354aac47e24"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#a922751cdf32a5c59b9471354aac47e24">Ptr</a> = std::shared_ptr&lt; <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">SharedEntity</a> &gt;</td></tr>
+<tr class="memdesc:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of shared pointer to the <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html" title="Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism.">SharedEntity</a> object. <br /></td></tr>
+<tr class="separator:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a33916dff655c409093c0f9bf72ac9eb4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#a33916dff655c409093c0f9bf72ac9eb4">toString</a> () const noexcept override</td></tr>
@@ -235,14 +252,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac650c57e3701e2a9374a25e37f7cc9c5"><td class="memTemplItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">DXFeedSubscription</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#ac650c57e3701e2a9374a25e37f7cc9c5">create</a> (EventTypesCollection &amp;&amp;eventTypes) noexcept</td></tr>
 <tr class="memdesc:ac650c57e3701e2a9374a25e37f7cc9c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates <em>detached</em> subscription for the given collection of event types.  <a href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#ac650c57e3701e2a9374a25e37f7cc9c5">More...</a><br /></td></tr>
 <tr class="separator:ac650c57e3701e2a9374a25e37f7cc9c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_structdxfcpp_1_1SharedEntity"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structdxfcpp_1_1SharedEntity')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">dxfcpp::SharedEntity</a></td></tr>
-<tr class="memitem:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="memItemLeft" align="right" valign="top"><a id="a922751cdf32a5c59b9471354aac47e24"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#a922751cdf32a5c59b9471354aac47e24">Ptr</a> = std::shared_ptr&lt; <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">SharedEntity</a> &gt;</td></tr>
-<tr class="memdesc:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="mdescLeft">&#160;</td><td class="mdescRight">The simple type synonym for the <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html" title="Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism.">SharedEntity</a> type. <br /></td></tr>
-<tr class="separator:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Subscription for a set of symbols and event types. </p>
@@ -289,8 +298,8 @@ template&lt;typename EventListener &gt; </div>
 <div class="line">});</div>
 <div class="line"> </div>
 <div class="line">sub-&gt;addSymbols({<span class="stringliteral">&quot;$TOP10L/Q&quot;</span>, <span class="stringliteral">&quot;$SP500#45&quot;</span>, <span class="stringliteral">&quot;$TICK&quot;</span>, <span class="stringliteral">&quot;SPX&quot;</span>});</div>
-<div class="ttc" id="aclassdxfcpp_1_1Quote_html_ac881f63bd1164e30e255e23ff49a3d1a"><div class="ttname"><a href="../../d1/dad/classdxfcpp_1_1Quote.html#ac881f63bd1164e30e255e23ff49a3d1a">dxfcpp::Quote::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition:</b> Quote.hpp:88</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1TimeAndSale_html_aa2801064f0d75ce152dc5dd6ab202ffa"><div class="ttname"><a href="../../dc/d9c/classdxfcpp_1_1TimeAndSale.html#aa2801064f0d75ce152dc5dd6ab202ffa">dxfcpp::TimeAndSale::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition:</b> TimeAndSale.hpp:142</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1Quote_html_ac881f63bd1164e30e255e23ff49a3d1a"><div class="ttname"><a href="../../d1/dad/classdxfcpp_1_1Quote.html#ac881f63bd1164e30e255e23ff49a3d1a">dxfcpp::Quote::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition:</b> Quote.hpp:93</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1TimeAndSale_html_aa2801064f0d75ce152dc5dd6ab202ffa"><div class="ttname"><a href="../../dc/d9c/classdxfcpp_1_1TimeAndSale.html#aa2801064f0d75ce152dc5dd6ab202ffa">dxfcpp::TimeAndSale::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition:</b> TimeAndSale.hpp:148</div></div>
 </div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">EventListener</td><td>The listener type. Listener can be callable with signature: <code>void(const std::vector&lt;std::shared_ptr&lt;<a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html" title="Marks all event types that can be received via dxFeed API.">EventType</a>&gt;&amp;)</code> </td></tr>
@@ -354,11 +363,18 @@ template&lt;typename EventT &gt; </div>
 <div class="line">    }</div>
 <div class="line">});</div>
 <div class="line"> </div>
+<div class="line">sub-&gt;addEventListener&lt;<a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">dxfcpp::MarketEvent</a>&gt;([](<span class="keyword">const</span> <span class="keyword">auto</span> &amp;marketEvents) -&gt; <span class="keywordtype">void</span> {</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp;me : marketEvents) {</div>
+<div class="line">        std::cout &lt;&lt; <span class="stringliteral">&quot;Market Event&#39;s symbol: &quot;</span> + me-&gt;getEventSymbol() &lt;&lt; std::endl;</div>
+<div class="line">    }</div>
+<div class="line">});</div>
+<div class="line"> </div>
 <div class="line">sub-&gt;addSymbols({<span class="stringliteral">&quot;$TOP10L/Q&quot;</span>, <span class="stringliteral">&quot;AAPL&quot;</span>, <span class="stringliteral">&quot;$TICK&quot;</span>, <span class="stringliteral">&quot;SPX&quot;</span>});</div>
-<div class="ttc" id="aclassdxfcpp_1_1TimeAndSale_html"><div class="ttname"><a href="../../dc/d9c/classdxfcpp_1_1TimeAndSale.html">dxfcpp::TimeAndSale</a></div><div class="ttdoc">Time and Sale represents a trade or other market event with price, like market open/close price,...</div><div class="ttdef"><b>Definition:</b> TimeAndSale.hpp:49</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1TimeAndSale_html"><div class="ttname"><a href="../../dc/d9c/classdxfcpp_1_1TimeAndSale.html">dxfcpp::TimeAndSale</a></div><div class="ttdoc">Time and Sale represents a trade or other market event with price, like market open/close price,...</div><div class="ttdef"><b>Definition:</b> TimeAndSale.hpp:50</div></div>
+<div class="ttc" id="astructdxfcpp_1_1MarketEvent_html"><div class="ttname"><a href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">dxfcpp::MarketEvent</a></div><div class="ttdoc">Base class for all market events.</div><div class="ttdef"><b>Definition:</b> MarketEvent.hpp:23</div></div>
 </div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">EventT</td><td>The event type (<a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html" title="Marks all event types that can be received via dxFeed API.">EventType</a>'s child with field Type, convertible to <a class="el" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html" title="The enumeration type that provides additional information about the dxFeed Graal C++-API event type.">EventTypeEnum</a> </td></tr>
+    <tr><td class="paramname">EventT</td><td>The event type (<a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html" title="Marks all event types that can be received via dxFeed API.">EventType</a>'s child with field TYPE, convertible to <a class="el" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html" title="The enumeration type that provides additional information about the dxFeed Graal C++-API event type.">EventTypeEnum</a> or <a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html" title="Base class for all market events.">MarketEvent</a> or <a class="el" href="../../d4/da9/structdxfcpp_1_1LastingEvent.html" title="Represents up-to-date information about some condition or state of an external entity that updates in...">LastingEvent</a> or <a class="el" href="../../d2/d30/structdxfcpp_1_1TimeSeriesEvent.html" title="Represents time-series snapshots of some process that is evolving in time or actual events in some ex...">TimeSeriesEvent</a> or <a class="el" href="../../d6/dd7/structdxfcpp_1_1IndexedEvent.html" title="Represents an indexed collection of up-to-date information about some condition or state of an extern...">IndexedEvent</a>) </td></tr>
   </table>
   </dd>
 </dl>
@@ -675,7 +691,7 @@ template&lt;typename SymbolIt &gt; </div>
 
 <p>Creates <em>detached</em> subscription for a single event type. </p>
 <p>Example: </p><div class="fragment"><div class="line"><span class="keyword">auto</span> sub = <a class="code" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#ab00cf35aca9ddcd921576418da3835f8">dxfcpp::DXFeedSubscription::create</a>(<a class="code" href="../../d1/dad/classdxfcpp_1_1Quote.html#ac881f63bd1164e30e255e23ff49a3d1a">dxfcpp::Quote::TYPE</a>);</div>
-<div class="ttc" id="aclassdxfcpp_1_1DXFeedSubscription_html_ab00cf35aca9ddcd921576418da3835f8"><div class="ttname"><a href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#ab00cf35aca9ddcd921576418da3835f8">dxfcpp::DXFeedSubscription::create</a></div><div class="ttdeci">static std::shared_ptr&lt; DXFeedSubscription &gt; create(const EventTypeEnum &amp;eventType) noexcept</div><div class="ttdoc">Creates detached subscription for a single event type.</div><div class="ttdef"><b>Definition:</b> DXFeedSubscription.hpp:132</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1DXFeedSubscription_html_ab00cf35aca9ddcd921576418da3835f8"><div class="ttname"><a href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#ab00cf35aca9ddcd921576418da3835f8">dxfcpp::DXFeedSubscription::create</a></div><div class="ttdeci">static std::shared_ptr&lt; DXFeedSubscription &gt; create(const EventTypeEnum &amp;eventType) noexcept</div><div class="ttdoc">Creates detached subscription for a single event type.</div><div class="ttdef"><b>Definition:</b> DXFeedSubscription.hpp:145</div></div>
 </div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">eventType</td><td>the event type. </td></tr>
@@ -683,7 +699,7 @@ template&lt;typename SymbolIt &gt; </div>
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html#a712fcab18a55c60fe4729015b1b80a30">dxfcpp::EventTypeEnum::getName()</a>.</p>
+<p class="reference">References <a class="el" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html#a93e8178587c3ccbbf08b2409c0d18b0f">dxfcpp::EventTypeEnum::getName()</a>.</p>
 
 </div>
 </div>
@@ -730,8 +746,8 @@ template&lt;typename EventTypeIt &gt; </div>
 </div><!-- fragment --><div class="fragment"><div class="line">std::vector types{<a class="code" href="../../d1/dad/classdxfcpp_1_1Quote.html#ac881f63bd1164e30e255e23ff49a3d1a">dxfcpp::Quote::TYPE</a>, <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a9fcaf1ac1ea410b336be7ae55a97609c">dxfcpp::Trade::TYPE</a>, <a class="code" href="../../db/d1c/classdxfcpp_1_1Summary.html#a047356cbfbb3279928463abec2823339">dxfcpp::Summary::TYPE</a>};</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">auto</span> sub = <a class="code" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#ab00cf35aca9ddcd921576418da3835f8">dxfcpp::DXFeedSubscription::create</a>(types.begin(), types.end());</div>
-<div class="ttc" id="aclassdxfcpp_1_1Summary_html_a047356cbfbb3279928463abec2823339"><div class="ttname"><a href="../../db/d1c/classdxfcpp_1_1Summary.html#a047356cbfbb3279928463abec2823339">dxfcpp::Summary::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition:</b> Summary.hpp:86</div></div>
-<div class="ttc" id="aclassdxfcpp_1_1Trade_html_a9fcaf1ac1ea410b336be7ae55a97609c"><div class="ttname"><a href="../../d8/dfa/classdxfcpp_1_1Trade.html#a9fcaf1ac1ea410b336be7ae55a97609c">dxfcpp::Trade::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition:</b> Trade.hpp:99</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1Summary_html_a047356cbfbb3279928463abec2823339"><div class="ttname"><a href="../../db/d1c/classdxfcpp_1_1Summary.html#a047356cbfbb3279928463abec2823339">dxfcpp::Summary::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition:</b> Summary.hpp:91</div></div>
+<div class="ttc" id="aclassdxfcpp_1_1Trade_html_a9fcaf1ac1ea410b336be7ae55a97609c"><div class="ttname"><a href="../../d8/dfa/classdxfcpp_1_1Trade.html#a9fcaf1ac1ea410b336be7ae55a97609c">dxfcpp::Trade::TYPE</a></div><div class="ttdeci">static const EventTypeEnum &amp; TYPE</div><div class="ttdoc">Type identifier and additional information about the current event class.</div><div class="ttdef"><b>Definition:</b> Trade.hpp:105</div></div>
 </div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">EventTypeIt</td><td>The collection's iterator type </td></tr>
@@ -1091,7 +1107,7 @@ template&lt;typename EventTypesCollection &gt; </div>
 </div><div class="memdoc">
 
 <p>Removes the specified symbol from the set of subscribed symbols. </p>
-<p>To conveniently remove one or few symbols you can use removeSymbols(symbols) method.</p>
+<p>To conveniently remove one or few symbols you can use <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html#abc1905b4894aa4b90d18a939120f0b94">DXFeedSubscription::removeSymbols</a>(const SymbolsCollection &amp;collection) "removeSymbols(symbols)" method.</p>
 <p>Example: </p><div class="fragment"><div class="line">sub-&gt;removeSymbols(<span class="stringliteral">&quot;TSLA&quot;</span>);</div>
 <div class="line">sub-&gt;removeSymbols(<span class="stringliteral">&quot;XBT/USD:GDAX&quot;</span>s);</div>
 <div class="line">sub-&gt;removeSymbols(<span class="stringliteral">&quot;BTC/EUR:CXBITF&quot;</span>sv);</div>

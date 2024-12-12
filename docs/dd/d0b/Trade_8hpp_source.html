@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('dd/d0b/Trade_8hpp_source.html','../../
 <div class="title">Trade.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -124,52 +124,52 @@ $(document).ready(function(){initNavTree('dd/d0b/Trade_8hpp_source.html','../../
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * The Trade event defines last trade @ref Trade::getPrice() &quot;price&quot; as officially defined</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * by the corresponding exchange for its &lt;b&gt;regular trading hours&lt;/b&gt; (RTH).</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> * It also include an official exchange @ref Trade::getDayVolume() &quot;dayVolume&quot; and @ref Trade::getDayTurnover() &quot;dayTurnover&quot;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> * &lt;b&gt;for the whole trading day&lt;/b&gt; identified by @ref Trade::getDayId() &quot;dayId&quot;.</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> * So, Trade event captures all the official numbers that are typically reported by exchange.</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> * It also include an official exchange @ref Trade::getDayVolume() &quot;dayVolume&quot; and @ref Trade::getDayTurnover()</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> * &quot;dayTurnover&quot; &lt;b&gt;for the whole trading day&lt;/b&gt; identified by @ref Trade::getDayId() &quot;dayId&quot;. So, Trade event captures</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> * all the official numbers that are typically reported by exchange.</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> * &lt;p&gt;Trades that happen in &lt;b&gt;extended trading hours&lt;/b&gt; (ETH, pre-market and post-market trading sessions),</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * which are typically defined for stocks and ETFs, do not update last trade @ref Trade::getTime() &quot;time&quot;,</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> * @ref Trade::getExchangeCode() &quot;exchangeCode&quot;, @ref Trade::getPrice() &quot;price&quot;, @ref Trade::getChange() &quot;change&quot;,</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> * @ref Trade::getSize() &quot;size&quot;, and @ref Trade::getTickDirection() &quot;tickDirection&quot; in the Trade event, but they do update</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment"> * @ref Trade::getDayVolume() &quot;dayVolume&quot; and @ref Trade::getDayTurnover() &quot;dayTurnover&quot;.</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> * &lt;p&gt;During extended trading hours a TradeETH event is generated on each trade with its</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> * @ref TradeETH::isExtendedTradingHours() &quot;extendedTradingHours&quot; property set to `true`.&lt;/p&gt;</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> * &lt;h3&gt;Volume and Turnover&lt;/h3&gt;</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment"> * &lt;p&gt;The volume and turnover are included into the Trade event instead</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment"> * of Summary event, because both volume and turnover typically update with each trade.</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment"> * The @ref Trade::getDayId() &quot;dayId&quot; field identifies current trading day for which volume and turnover statistics are</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment"> * computed. This solution avoids generation of multiple events on each trade during regular trading hours. Summary</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment"> * event is generated during the trading day only when new highs or lows are reached or other properties change.</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment"> * &lt;p&gt;Note that one can compute volume-weighted average price (VWAP) for a day by this formula:</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"> * &lt;br&gt;&lt;code&gt;vwap = @ref Trade::getDayTurnover() &quot;dayTurnover&quot; / @ref Trade::getDayVolume() &quot;dayVolume&quot;;&lt;/code&gt;</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> * &lt;h3&gt;Daily reset&lt;/h3&gt;</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> * Daily reset procedure that happens on a schedule during non-trading hours resets Trade</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> * @ref Trade::getDayVolume() &quot;dayVolume&quot; and @ref Trade::getDayTurnover() &quot;dayTurnover&quot; to math::NaN</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"> * and sets @ref Trade::getDayId() &quot;dayId&quot; to the next trading day in preparation to the next day&#39;s pre-market trading</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> * session (or for regular trading if there is no pre-market) while leaving all other properties intact. They reflect</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * information about the last known RTH trade until the next RTH trade happens.</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"> * &lt;h3&gt;Implementation details&lt;/h3&gt;</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment"> * This event is implemented on top of QDS records `Trade` and `Trade&amp;X`</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"> * for regional exchange trades.</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment"> * Regional records do not explicitly store a field for @ref Trade::getExchangeCode() &quot;exchangeCode&quot; property.</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html">   71</a></span>&#160;<span class="keyword">class</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> Trade <span class="keyword">final</span> : <span class="keyword">public</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html">TradeBase</a> {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">friend</span> <span class="keyword">struct</span> EventMapper;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> fillData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> fillGraalData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> * @ref Trade::getSize() &quot;size&quot;, and @ref Trade::getTickDirection() &quot;tickDirection&quot; in the Trade event, but they do</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment"> * update</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment"> * @ref Trade::getDayVolume() &quot;dayVolume&quot; and @ref Trade::getDayTurnover() &quot;dayTurnover&quot;.</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment"> * &lt;p&gt;During extended trading hours a TradeETH event is generated on each trade with its</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment"> * @ref TradeETH::isExtendedTradingHours() &quot;extendedTradingHours&quot; property set to `true`.&lt;/p&gt;</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment"> * &lt;h3&gt;Volume and Turnover&lt;/h3&gt;</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment"> * &lt;p&gt;The volume and turnover are included into the Trade event instead</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment"> * of Summary event, because both volume and turnover typically update with each trade.</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment"> * The @ref Trade::getDayId() &quot;dayId&quot; field identifies current trading day for which volume and turnover statistics are</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment"> * computed. This solution avoids generation of multiple events on each trade during regular trading hours. Summary</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment"> * event is generated during the trading day only when new highs or lows are reached or other properties change.</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment"> * &lt;p&gt;Note that one can compute volume-weighted average price (VWAP) for a day by this formula:</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"> * &lt;br&gt;&lt;code&gt;vwap = @ref Trade::getDayTurnover() &quot;dayTurnover&quot; / @ref Trade::getDayVolume() &quot;dayVolume&quot;;&lt;/code&gt;</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"> * &lt;h3&gt;Daily reset&lt;/h3&gt;</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment"> * Daily reset procedure that happens on a schedule during non-trading hours resets Trade</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment"> * @ref Trade::getDayVolume() &quot;dayVolume&quot; and @ref Trade::getDayTurnover() &quot;dayTurnover&quot; to math::NaN</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"> * and sets @ref Trade::getDayId() &quot;dayId&quot; to the next trading day in preparation to the next day&#39;s pre-market trading</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment"> * session (or for regular trading if there is no pre-market) while leaving all other properties intact. They reflect</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"> * information about the last known RTH trade until the next RTH trade happens.</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment"> * &lt;h3&gt;Implementation details&lt;/h3&gt;</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment"> * This event is implemented on top of QDS records `Trade` and `Trade&amp;X`</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment"> * for regional exchange trades.</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment"> * Regional records do not explicitly store a field for @ref Trade::getExchangeCode() &quot;exchangeCode&quot; property.</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html">   72</a></span>&#160;<span class="keyword">class</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> Trade <span class="keyword">final</span> : <span class="keyword">public</span> <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html">TradeBase</a> {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">friend</span> <span class="keyword">struct</span> EventMapper;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span> fillData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> fillGraalData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">static</span> std::shared_ptr&lt;Trade&gt; fromGraal(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">/**</span></div>
@@ -179,39 +179,45 @@ $(document).ready(function(){initNavTree('dd/d0b/Trade_8hpp_source.html','../../
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">     * @return The pointer to the filled dxFeed Graal SDK structure</span></div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">void</span>* <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#abb4cbedaa26ff0cf4755fdab0bc2a411">toGraal</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#abb4cbedaa26ff0cf4755fdab0bc2a411">override</a>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#abb4cbedaa26ff0cf4755fdab0bc2a411">toGraal</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#abb4cbedaa26ff0cf4755fdab0bc2a411">override</a>;</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="comment">/**</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">     * @param graalNative The pointer to the dxFeed Graal SDK structure.</span></div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#aab4234b4f437149d81066c409899bde7">freeGraal</a>(<span class="keywordtype">void</span>* graalNative) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#aab4234b4f437149d81066c409899bde7">freeGraal</a>(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="comment">/// Type identifier and additional information about the current event class.</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a9fcaf1ac1ea410b336be7ae55a97609c">   99</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html">EventTypeEnum</a> &amp;<a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a9fcaf1ac1ea410b336be7ae55a97609c">TYPE</a>;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="comment">/// The alias to a type of shared pointer to the Trade object</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a073c9c7d73017a98668012f3e810a9c6">   99</a></span>&#160;    <span class="keyword">using</span> Ptr = std::shared_ptr&lt;Trade&gt;;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="comment">/// Creates new trade event with default values.</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a01247f0dbddc302890382a6c1ef579ea">  102</a></span>&#160;    <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a01247f0dbddc302890382a6c1ef579ea">Trade</a>() <span class="keyword">noexcept</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="comment">/// The alias to a type of unique pointer to the Trade object</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html#ad131b8bded6f49cd798a80fdea749c3e">  102</a></span>&#160;    <span class="keyword">using</span> Unique = std::unique_ptr&lt;Trade&gt;;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">     * Creates new trade event with the specified event symbol.</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">     * @param eventSymbol The event symbol.</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html#acd22a0117f9b19fc2869f8b6bd0ff222">  109</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#acd22a0117f9b19fc2869f8b6bd0ff222">Trade</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html">TradeBase</a>(std::move(eventSymbol)) {</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    }</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment">     * Returns a string representation of the current object.</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">     * @return a string representation</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    std::string <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#acf5865291043641274a0738e96bff2d0">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#acf5865291043641274a0738e96bff2d0">override</a>;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;};</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="comment">/// Type identifier and additional information about the current event class.</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a9fcaf1ac1ea410b336be7ae55a97609c">  105</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html">EventTypeEnum</a> &amp;<a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a9fcaf1ac1ea410b336be7ae55a97609c">TYPE</a>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="comment">/// Creates new trade event with default values.</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a01247f0dbddc302890382a6c1ef579ea">  108</a></span>&#160;    <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#a01247f0dbddc302890382a6c1ef579ea">Trade</a>() <span class="keyword">noexcept</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">     * Creates new trade event with the specified event symbol.</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment">     * @param eventSymbol The event symbol.</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="../../d8/dfa/classdxfcpp_1_1Trade.html#acd22a0117f9b19fc2869f8b6bd0ff222">  115</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#acd22a0117f9b19fc2869f8b6bd0ff222">Trade</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html">TradeBase</a><a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#aa2c14ca3644e13d88c7a8d861c91ab11">(</a>std::move(eventSymbol)<a class="code" href="../../d5/df8/classdxfcpp_1_1TradeBase.html#aa2c14ca3644e13d88c7a8d861c91ab11">)</a> {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">     * Returns a string representation of the current object.</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">     * @return a string representation</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    std::string <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#acf5865291043641274a0738e96bff2d0">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../d8/dfa/classdxfcpp_1_1Trade.html#acf5865291043641274a0738e96bff2d0">override</a>;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;};</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

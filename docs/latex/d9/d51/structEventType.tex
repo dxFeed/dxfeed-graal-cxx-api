@@ -1,0 +1,131 @@
+\hypertarget{structEventType}{}\doxysubsection{Event\+Type Struct Reference}
+\label{structEventType}\index{EventType@{EventType}}
+
+
+Marks all event types that can be received via dx\+Feed API.  
+
+
+
+
+{\ttfamily \#include $<$Event\+Type.\+hpp$>$}
+
+Inheritance diagram for Event\+Type\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=8.960000cm]{d9/d51/structEventType}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structEventType_a5b15d561aa47ab33de362543f3027416}\label{structEventType_a5b15d561aa47ab33de362543f3027416}} 
+using \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structEventType}{Event\+Type}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structEventType}{Event\+Type}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual std\+::int64\+\_\+t \mbox{\hyperlink{structEventType_a1c9c34884f4fcce70579a059252bdf1a}{get\+Event\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time when event was created or zero when time is not available. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{structEventType_ad5ae35b7dac44e2f0df5fa44c0830ad9}{set\+Event\+Time}} (std\+::int64\+\_\+t) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event creation time. \end{DoxyCompactList}\item 
+virtual void $\ast$ \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{to\+Graal}} () const =0
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Marks all event types that can be received via dx\+Feed API. 
+
+Events are considered instantaneous, non-\/persistent, and unconflateable (each event is individually delivered) unless they implement one of interfaces defined in this package to further refine their meaning.
+
+Event types are POCO (plain old cpp objects, not POD) that follow bean naming convention with getters and setters for their properties. All event types are serializable, because they are transferred over network from publishers to data feed consumers. However, they are using custom serialization format for this purpose.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{structDXFeed}{DXFeed}} 
+\end{DoxySeeAlso}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structEventType_a1c9c34884f4fcce70579a059252bdf1a}\label{structEventType_a1c9c34884f4fcce70579a059252bdf1a}} 
+\index{EventType@{EventType}!getEventTime@{getEventTime}}
+\index{getEventTime@{getEventTime}!EventType@{EventType}}
+\doxyparagraph{\texorpdfstring{getEventTime()}{getEventTime()}}
+{\footnotesize\ttfamily virtual std\+::int64\+\_\+t Event\+Type\+::get\+Event\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time when event was created or zero when time is not available. 
+
+This event time is available only when the corresponding \mbox{\hyperlink{structDXEndpoint}{DXEndpoint}} is created with \mbox{\hyperlink{structDXEndpoint_a59bc3053ef198595c2ed5a450ba5a2a4}{DXENDPOINT\+\_\+\+EVENT\+\_\+\+TIME\+\_\+\+PROPERTY}} and the data source has embedded event times. This is typically true only for data events that are read from historical tape files and from \mbox{\hyperlink{structOnDemandService}{On\+Demand\+Service}}. Events that are coming from a network connections do not have an embedded event time information and this method will return zero for them, meaning that event was received just now.
+
+Default implementation returns 0.
+
+\begin{DoxyReturn}{Returns}
+The difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC or zero when time is not available. 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{classMessage_a3fef2ab663e769e87d282a1e999fa1f7}{Message}}, \mbox{\hyperlink{structMarketEvent_a9c8e8dd0fe8c615d776d6e1dc781be8d}{Market\+Event}}, and \mbox{\hyperlink{classCandle_ad497043cf7e1de9e0a285a835bb2dd05}{Candle}}.
+
+\mbox{\Hypertarget{structEventType_ad5ae35b7dac44e2f0df5fa44c0830ad9}\label{structEventType_ad5ae35b7dac44e2f0df5fa44c0830ad9}} 
+\index{EventType@{EventType}!setEventTime@{setEventTime}}
+\index{setEventTime@{setEventTime}!EventType@{EventType}}
+\doxyparagraph{\texorpdfstring{setEventTime()}{setEventTime()}}
+{\footnotesize\ttfamily virtual void Event\+Type\+::set\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event creation time. 
+
+Default implementation does nothing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{classMessage_a0d08f81e081d22724c597f562c998163}{Message}}, \mbox{\hyperlink{structMarketEvent_a084532c668491c224eeb498bb29e2cbd}{Market\+Event}}, and \mbox{\hyperlink{classCandle_a7b899baf6e140e1b3d75a12c5d34340b}{Candle}}.
+
+\mbox{\Hypertarget{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}\label{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}} 
+\index{EventType@{EventType}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!EventType@{EventType}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily virtual void$\ast$ Event\+Type\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classUnderlying_a21e85dee0bdd684f0433e0eb4c483154}{Underlying}}, \mbox{\hyperlink{classTheoPrice_aa4e4101ed4ba8a07d2703c6d28774052}{Theo\+Price}}, \mbox{\hyperlink{classSeries_afd18361d44fee4c4f6917a795d4787c8}{Series}}, \mbox{\hyperlink{classGreeks_ab4d005fd60478fd5ec526b4506fe91cf}{Greeks}}, \mbox{\hyperlink{classMessage_a52523f9a10a77e9bc250f3eb7fc30f0e}{Message}}, \mbox{\hyperlink{classTradeETH_a53153439ab22a927b6df15e72f65f59d}{Trade\+ETH}}, \mbox{\hyperlink{classTrade_ae45660706d7e48ee71e3c1856f26b510}{Trade}}, \mbox{\hyperlink{classTimeAndSale_a8af4eae83cc0765bc1cb2d779b07a7dc}{Time\+And\+Sale}}, \mbox{\hyperlink{classSummary_a8c7d63124ad917aa87c583a35b1ccc41}{Summary}}, \mbox{\hyperlink{classSpreadOrder_a98d9b0d70db94214c757ff4025c0ebde}{Spread\+Order}}, \mbox{\hyperlink{classQuote_a811b4b2b5c0f2435a2dc05a5d787471d}{Quote}}, \mbox{\hyperlink{classProfile_ac0b81ebac2f9c28785c39a2b3e8cd7c2}{Profile}}, \mbox{\hyperlink{classOtcMarketsOrder_ad036bcb2b2a072937a5f9bfc38d6347f}{Otc\+Markets\+Order}}, \mbox{\hyperlink{classOrder_a92a68ce77b46e3a0987abfe82ede3161}{Order}}, \mbox{\hyperlink{classOptionSale_a74ae4dedc15b3ba5e16f3ff3d057d838}{Option\+Sale}}, \mbox{\hyperlink{classAnalyticOrder_a285ed6ee467a1281ae9660afebc2da32}{Analytic\+Order}}, and \mbox{\hyperlink{classCandle_a9e2e74f855856be1427b763739a8d7aa}{Candle}}.
+
+\mbox{\Hypertarget{structEventType_a6d1f37572f827b462dfb95857f19f4d2}\label{structEventType_a6d1f37572f827b462dfb95857f19f4d2}} 
+\index{EventType@{EventType}!toString@{toString}}
+\index{toString@{toString}!EventType@{EventType}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Event\+Type\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structSharedEntity_a84179ef824d835d61488dab36f4f0325}{Shared\+Entity}}.
+
+
+
+Reimplemented in \mbox{\hyperlink{classUnderlying_a35136aa30b4bbba8e01819a86e7d45eb}{Underlying}}, \mbox{\hyperlink{classTheoPrice_a7688718de97d2529cea3177f13c457f1}{Theo\+Price}}, \mbox{\hyperlink{classSeries_a35652445c968755a5988b3887bcbfd36}{Series}}, \mbox{\hyperlink{classGreeks_a7add57bcfa465480b062f979a2a9185a}{Greeks}}, \mbox{\hyperlink{classMessage_abe482dcaa45133def4eaf4481eda36b9}{Message}}, \mbox{\hyperlink{classTradeETH_a726a477ce9d765b6a91d1c5562c8a23a}{Trade\+ETH}}, \mbox{\hyperlink{classTrade_a0b9594c3abcb062a0eb64238ab7f750b}{Trade}}, \mbox{\hyperlink{classTimeAndSale_a74021da461ae7334dfdd1b001c20e60f}{Time\+And\+Sale}}, \mbox{\hyperlink{classSummary_ae7939f5b3bab6494900c545d986b3f76}{Summary}}, \mbox{\hyperlink{classSpreadOrder_a51a0d62458faf22680326615c0e4d6a4}{Spread\+Order}}, \mbox{\hyperlink{classQuote_a112016da3fca1fb30053a45ad164958d}{Quote}}, \mbox{\hyperlink{classProfile_a17f6624fa32e5718ddfafcd226eee044}{Profile}}, \mbox{\hyperlink{classOtcMarketsOrder_a0d96397e3824a369fa980a1de892a734}{Otc\+Markets\+Order}}, \mbox{\hyperlink{classOrder_ad34c32a4f0b8d43cd78cb61d17f75578}{Order}}, \mbox{\hyperlink{classOptionSale_a72592c3071c1039ef18008640fd39e08}{Option\+Sale}}, \mbox{\hyperlink{classAnalyticOrder_abdfec5e3e519718617b2f92a8538d2da}{Analytic\+Order}}, and \mbox{\hyperlink{classCandle_a8e4362a595a51b7907b79bea57eadaaf}{Candle}}.
+

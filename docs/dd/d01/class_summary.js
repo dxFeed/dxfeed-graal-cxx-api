@@ -4,6 +4,7 @@ var class_summary =
     [ "Unique", "dd/d01/class_summary.html#a8e982ad7d6966877d8ec5f16b678d193", null ],
     [ "Summary", "dd/d01/class_summary.html#a5b3af9e181034ebf63b55ef2f9e0e847", null ],
     [ "Summary", "dd/d01/class_summary.html#ab1104364a1e078dc8d6981368890255c", null ],
+    [ "assign", "dd/d01/class_summary.html#ad270e6aa8462447972a513e3c90faae2", null ],
     [ "getDayClosePrice", "dd/d01/class_summary.html#ad38760a92af38015dd5c1aa1256b5909", null ],
     [ "getDayClosePriceType", "dd/d01/class_summary.html#a92a8d3799dadf6be21c0a79b639d03fe", null ],
     [ "getDayHighPrice", "dd/d01/class_summary.html#aa68a70631721e06e6c6fe5d662a01ac4", null ],
@@ -27,5 +28,5 @@ var class_summary =
     [ "setPrevDayId", "dd/d01/class_summary.html#a19f19d9301756283e37c3fb69a6f0e29", null ],
     [ "setPrevDayVolume", "dd/d01/class_summary.html#ac42ba09c9c8909b6e76ed687e11b3c9b", null ],
     [ "toGraal", "dd/d01/class_summary.html#a8c7d63124ad917aa87c583a35b1ccc41", null ],
-    [ "toString", "dd/d01/class_summary.html#ae7939f5b3bab6494900c545d986b3f76", null ]
+    [ "toString", "dd/d01/class_summary.html#a1da6b1d463b786661916a5b921941d5a", null ]
 ];

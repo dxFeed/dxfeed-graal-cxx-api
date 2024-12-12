@@ -1,0 +1,114 @@
+\hypertarget{classEventTypeEnum}{}\doxysubsection{Event\+Type\+Enum Class Reference}
+\label{classEventTypeEnum}\index{EventTypeEnum@{EventTypeEnum}}
+
+
+The enumeration type that provides additional information about the dx\+Feed Graal C++-\/\+API event type.  
+
+
+
+
+{\ttfamily \#include $<$Event\+Type\+Enum.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::uint32\+\_\+t \mbox{\hyperlink{classEventTypeEnum_ac76dd8774b1f3d0192fed7a9dd98a9f6}{get\+Id}} () const noexcept
+\item 
+const std\+::string \& \mbox{\hyperlink{classEventTypeEnum_afa9dedf0ccabfadc305ac598240522a1}{get\+Name}} () const \&noexcept
+\item 
+const std\+::string \& \mbox{\hyperlink{classEventTypeEnum_abd513289b24d35efd58ce89c0fc996c7}{get\+Class\+Name}} () const \&noexcept
+\item 
+bool \mbox{\hyperlink{classEventTypeEnum_a74786d2b61aa2719693a76b74e792fc1}{is\+Lasting}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classEventTypeEnum_ab4a84d7eddb337ee77bc3a5dcf64cf01}{is\+Indexed}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classEventTypeEnum_a0ebf6c43f4f44bbb295f484cb10caadb}{is\+Time\+Series}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classEventTypeEnum_a9f7e80a13dcdae6f620293637ca1fdfe}{is\+Only\+Indexed}} () const noexcept
+\item 
+bool \mbox{\hyperlink{classEventTypeEnum_af4686c05ec8270a9774c4051354b3c46}{is\+Market}} () const noexcept
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+The enumeration type that provides additional information about the dx\+Feed Graal C++-\/\+API event type. 
+
+Useful when used as a subscription parameter. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classEventTypeEnum_abd513289b24d35efd58ce89c0fc996c7}\label{classEventTypeEnum_abd513289b24d35efd58ce89c0fc996c7}} 
+\index{EventTypeEnum@{EventTypeEnum}!getClassName@{getClassName}}
+\index{getClassName@{getClassName}!EventTypeEnum@{EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{getClassName()}{getClassName()}}
+{\footnotesize\ttfamily const std\+::string\& Event\+Type\+Enum\+::get\+Class\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The current enum element class name 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventTypeEnum_ac76dd8774b1f3d0192fed7a9dd98a9f6}\label{classEventTypeEnum_ac76dd8774b1f3d0192fed7a9dd98a9f6}} 
+\index{EventTypeEnum@{EventTypeEnum}!getId@{getId}}
+\index{getId@{getId}!EventTypeEnum@{EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{getId()}{getId()}}
+{\footnotesize\ttfamily std\+::uint32\+\_\+t Event\+Type\+Enum\+::get\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The dx\+Feed Graal Native C-\/\+API event class id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventTypeEnum_afa9dedf0ccabfadc305ac598240522a1}\label{classEventTypeEnum_afa9dedf0ccabfadc305ac598240522a1}} 
+\index{EventTypeEnum@{EventTypeEnum}!getName@{getName}}
+\index{getName@{getName}!EventTypeEnum@{EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{getName()}{getName()}}
+{\footnotesize\ttfamily const std\+::string\& Event\+Type\+Enum\+::get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The current enum element name 
+\end{DoxyReturn}
+
+
+Referenced by DXFeed\+Subscription\+::create(), and DXFeed\+::create\+Subscription().
+
+\mbox{\Hypertarget{classEventTypeEnum_ab4a84d7eddb337ee77bc3a5dcf64cf01}\label{classEventTypeEnum_ab4a84d7eddb337ee77bc3a5dcf64cf01}} 
+\index{EventTypeEnum@{EventTypeEnum}!isIndexed@{isIndexed}}
+\index{isIndexed@{isIndexed}!EventTypeEnum@{EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isIndexed()}{isIndexed()}}
+{\footnotesize\ttfamily bool Event\+Type\+Enum\+::is\+Indexed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Indexed event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventTypeEnum_a74786d2b61aa2719693a76b74e792fc1}\label{classEventTypeEnum_a74786d2b61aa2719693a76b74e792fc1}} 
+\index{EventTypeEnum@{EventTypeEnum}!isLasting@{isLasting}}
+\index{isLasting@{isLasting}!EventTypeEnum@{EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isLasting()}{isLasting()}}
+{\footnotesize\ttfamily bool Event\+Type\+Enum\+::is\+Lasting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Lasting (TICKER) event 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventTypeEnum_af4686c05ec8270a9774c4051354b3c46}\label{classEventTypeEnum_af4686c05ec8270a9774c4051354b3c46}} 
+\index{EventTypeEnum@{EventTypeEnum}!isMarket@{isMarket}}
+\index{isMarket@{isMarket}!EventTypeEnum@{EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isMarket()}{isMarket()}}
+{\footnotesize\ttfamily bool Event\+Type\+Enum\+::is\+Market (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Market event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventTypeEnum_a9f7e80a13dcdae6f620293637ca1fdfe}\label{classEventTypeEnum_a9f7e80a13dcdae6f620293637ca1fdfe}} 
+\index{EventTypeEnum@{EventTypeEnum}!isOnlyIndexed@{isOnlyIndexed}}
+\index{isOnlyIndexed@{isOnlyIndexed}!EventTypeEnum@{EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isOnlyIndexed()}{isOnlyIndexed()}}
+{\footnotesize\ttfamily bool Event\+Type\+Enum\+::is\+Only\+Indexed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Only\+Indexed (Indexed, but not Time\+Series) event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEventTypeEnum_a0ebf6c43f4f44bbb295f484cb10caadb}\label{classEventTypeEnum_a0ebf6c43f4f44bbb295f484cb10caadb}} 
+\index{EventTypeEnum@{EventTypeEnum}!isTimeSeries@{isTimeSeries}}
+\index{isTimeSeries@{isTimeSeries}!EventTypeEnum@{EventTypeEnum}}
+\doxyparagraph{\texorpdfstring{isTimeSeries()}{isTimeSeries()}}
+{\footnotesize\ttfamily bool Event\+Type\+Enum\+::is\+Time\+Series (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if the current enum element is characterizing the Time\+Series (HISTORY) event. 
+\end{DoxyReturn}

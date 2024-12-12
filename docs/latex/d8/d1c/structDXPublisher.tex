@@ -1,0 +1,283 @@
+\hypertarget{structDXPublisher}{}\doxysubsection{DXPublisher Struct Reference}
+\label{structDXPublisher}\index{DXPublisher@{DXPublisher}}
+
+
+Provides API for publishing of events to local or remote \mbox{\hyperlink{structDXFeed}{DXFeed}}.  
+
+
+
+
+{\ttfamily \#include $<$DXPublisher.\+hpp$>$}
+
+Inheritance diagram for DXPublisher\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{d8/d1c/structDXPublisher}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structDXPublisher_a321f09fb884fb50903e29e269269fc46}\label{structDXPublisher_a321f09fb884fb50903e29e269269fc46}} 
+using \mbox{\hyperlink{structDXPublisher_a321f09fb884fb50903e29e269269fc46}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structDXPublisher}{DXPublisher}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structDXPublisher}{DXPublisher}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structDXPublisher_a1236057c24fce5cfc9205afd9e6aa6b4}\label{structDXPublisher_a1236057c24fce5cfc9205afd9e6aa6b4}} 
+using \mbox{\hyperlink{structDXPublisher_a1236057c24fce5cfc9205afd9e6aa6b4}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structDXPublisher}{DXPublisher}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{structDXPublisher}{DXPublisher}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Events\+Collection $>$ }\\void \mbox{\hyperlink{structDXPublisher_ae6e8cb6b370ea60f1ad5cb80cea2df30}{publish\+Events}} (Events\+Collection \&\&events) noexcept
+\begin{DoxyCompactList}\small\item\em Publishes events to the corresponding feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structDXPublisher_a14702bbc9952656b2a2cbc9d607bf2ab}{publish\+Events}} (std\+::initializer\+\_\+list$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structEventType}{Event\+Type}} $>$$>$ events) noexcept
+\begin{DoxyCompactList}\small\item\em Publishes events to the corresponding feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structDXPublisher_aea23a3d950b97bb2d839df79e494023c}{publish\+Events}} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structEventType}{Event\+Type}} $>$ event) noexcept
+\begin{DoxyCompactList}\small\item\em Publishes an event to the corresponding feed. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Event\+It $>$ }\\void \mbox{\hyperlink{structDXPublisher_a5bb058a66da27619e7ad017d8c52d936}{publish\+Events}} (Event\+It begin, Event\+It end)
+\begin{DoxyCompactList}\small\item\em Publishes events to the corresponding feed. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structObservableSubscription}{Observable\+Subscription}} $>$ \mbox{\hyperlink{structDXPublisher_a37411b5420828b6d8dbd7ba920bff3ad}{get\+Subscription}} (const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \&event\+Type)
+\begin{DoxyCompactList}\small\item\em Returns observable set of subscribed symbols for the specified event type. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structDXPublisher_a2cdf4b9e4ad4582c591792b6ede47299}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structDXPublisher}{DXPublisher}} $>$ \mbox{\hyperlink{structDXPublisher_accd39b45edf0fa304b3a896a8782af4d}{get\+Instance}} ()
+\begin{DoxyCompactList}\small\item\em Returns a default application-\/wide singleton instance of \mbox{\hyperlink{structDXPublisher}{DXPublisher}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structDXPublisher_a99ca9e3a2966be589876135ed3d833a7}\label{structDXPublisher_a99ca9e3a2966be589876135ed3d833a7}} 
+struct {\bfseries DXEndpoint}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Provides API for publishing of events to local or remote \mbox{\hyperlink{structDXFeed}{DXFeed}}. 
+
+\doxysubparagraph*{Sample usage}
+
+This section gives sample usage scenarios.
+
+\doxysubparagraph*{Default singleton instance}
+
+There is a singleton instance of the publisher that is returned by \mbox{\hyperlink{structDXPublisher_accd39b45edf0fa304b3a896a8782af4d}{DXPublisher\+::get\+Instance()}} method. It is created on the first use with default configuration properties that are explained in detail in documentation for \mbox{\hyperlink{structDXEndpoint}{DXEndpoint}} class in the \char`\"{}\+Default properties\char`\"{} section. In particular, you can provide a default address to connect using \textquotesingle{}\mbox{\hyperlink{structDXEndpoint_aa4b009e5a7c4ff24f959845940d85d3a}{dxpublisher.address}}\textquotesingle{} system property or by putting it into \textquotesingle{}\mbox{\hyperlink{structDXEndpoint_acca58c4de1589b6a92a08fc2fb8c7f0a}{dxpublisher.properties}}\textquotesingle{} file in the current directory.
+
+\doxysubparagraph*{Publish a single event}
+
+The following code publishes a single quote for a \char`\"{}\+A\+:\+TEST\char`\"{} symbol\+: 
+\begin{DoxyPre}{\ttfamily 
+auto \mbox{\hyperlink{classQuote}{quote}} = std::make\_shared<\mbox{\hyperlink{classQuote}{Quote}}>("{}A:TEST"{});
+quote-\/>\mbox{\hyperlink{classQuote_a38533a816b50f07986fd1d5b01d1dd15}{setBidPrice}}(100);
+quote-\/>\mbox{\hyperlink{classQuote_a452793d7bd52c4231d7f3739de2f681b}{setAskPrice}}(101);
+\mbox{\hyperlink{structDXPublisher}{DXPublisher}}::\mbox{\hyperlink{structDXPublisher_accd39b45edf0fa304b3a896a8782af4d}{getInstance}}()-\/>\mbox{\hyperlink{structDXPublisher_ae6e8cb6b370ea60f1ad5cb80cea2df30}{publishEvents}}(quote);}\end{DoxyPre}
+
+
+\doxysubparagraph*{Threads and locks}
+
+This class is thread-\/safe and can be used concurrently from multiple threads without external synchronization. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structDXPublisher_accd39b45edf0fa304b3a896a8782af4d}\label{structDXPublisher_accd39b45edf0fa304b3a896a8782af4d}} 
+\index{DXPublisher@{DXPublisher}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!DXPublisher@{DXPublisher}}
+\doxyparagraph{\texorpdfstring{getInstance()}{getInstance()}}
+{\footnotesize\ttfamily DXFCPP\+\_\+\+BEGIN\+\_\+\+NAMESPACE std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structDXPublisher}{DXPublisher}} $>$ DXPublisher\+::get\+Instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Returns a default application-\/wide singleton instance of \mbox{\hyperlink{structDXPublisher}{DXPublisher}}. 
+
+Most applications use only a single data-\/sink and should rely on this method to get one. This is a shortcut to \mbox{\hyperlink{structDXEndpoint}{DXEndpoint}}\+::\mbox{\hyperlink{structDXEndpoint_a9ee308e31ef33e66ec8b8b83b9cff4de}{get\+Instance}}(\mbox{\hyperlink{structDXEndpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{DXEndpoint\+::\+Role\+::\+PUBLISHER}})-\/$>$\mbox{\hyperlink{structDXEndpoint_a6ea691ae833f90eb88367de17d2fbcbf}{get\+Publisher}}(). \mbox{\Hypertarget{structDXPublisher_a37411b5420828b6d8dbd7ba920bff3ad}\label{structDXPublisher_a37411b5420828b6d8dbd7ba920bff3ad}} 
+\index{DXPublisher@{DXPublisher}!getSubscription@{getSubscription}}
+\index{getSubscription@{getSubscription}!DXPublisher@{DXPublisher}}
+\doxyparagraph{\texorpdfstring{getSubscription()}{getSubscription()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structObservableSubscription}{Observable\+Subscription}} $>$ DXPublisher\+::get\+Subscription (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \&}]{event\+Type }\end{DoxyParamCaption})}
+
+
+
+Returns observable set of subscribed symbols for the specified event type. 
+
+Note, that subscription is represented by \mbox{\hyperlink{structSymbolWrapper}{Symbol\+Wrapper}} symbols. Check the type of each symbol in \mbox{\hyperlink{structObservableSubscription}{Observable\+Subscription}} using \mbox{\hyperlink{structSymbolWrapper_a41d1a6b653b546dae9da14c836075dcc}{Symbol\+Wrapper\+::is\+String\+Symbol()}}, \mbox{\hyperlink{structSymbolWrapper_a487797c0d1536652d507699e97fb076e}{Symbol\+Wrapper\+::is\+Wildcard\+Symbol()}}, \mbox{\hyperlink{structSymbolWrapper_a17143b85508f75e9ef1605417bee0303}{Symbol\+Wrapper\+::is\+Indexed\+Event\+Subscription\+Symbol()}}, \mbox{\hyperlink{structSymbolWrapper_aa0e37838f86b3ff7e08e23b1fc2fc537}{Symbol\+Wrapper\+::is\+Time\+Series\+Subscription\+Symbol()}}, \mbox{\hyperlink{structSymbolWrapper_aa85e5465f6b4ed9a5f58f07d060e3dae}{Symbol\+Wrapper\+::is\+Candle\+Symbol()}}.
+
+The set of subscribed symbols contains \mbox{\hyperlink{structWildcardSymbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{Wildcard\+Symbol\+::\+ALL}} if and only if there is a subscription to this wildcard symbol.
+
+If DXFeed\+Time\+Series\+Subscription is used to subscribe to time-\/service of the events of this type, then instances of \mbox{\hyperlink{classTimeSeriesSubscriptionSymbol}{Time\+Series\+Subscription\+Symbol}} class represent the corresponding subscription item.
+
+The resulting observable subscription can generate repeated Observable\+Subscription\+Change\+Listener\+::on\+Symbols\+Added\+\_\+ notifications to its listeners for the same symbols without the corresponding Observable\+Subscription\+Change\+Listener\+::on\+Symbols\+Removed\+\_\+ notifications in between them. It happens when subscription disappears, cached data is lost, and subscription reappears again. On each Observable\+Subscription\+Change\+Listener\+::on\+Symbols\+Added\+\_\+ notification data provider shall \mbox{\hyperlink{structDXPublisher_ae6e8cb6b370ea60f1ad5cb80cea2df30}{publish}} the most recent events for the corresponding symbols.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Type} & The event type. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Observable subscription for the specified event type. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDXPublisher_a5bb058a66da27619e7ad017d8c52d936}\label{structDXPublisher_a5bb058a66da27619e7ad017d8c52d936}} 
+\index{DXPublisher@{DXPublisher}!publishEvents@{publishEvents}}
+\index{publishEvents@{publishEvents}!DXPublisher@{DXPublisher}}
+\doxyparagraph{\texorpdfstring{publishEvents()}{publishEvents()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily template$<$typename Event\+It $>$ \\
+void DXPublisher\+::publish\+Events (\begin{DoxyParamCaption}\item[{Event\+It}]{begin,  }\item[{Event\+It}]{end }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Publishes events to the corresponding feed. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Event\+It} & The collection\textquotesingle{}s iterator type \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em begin} & The beginning of the collection of events. \\
+\hline
+{\em end} & The end of events collection. \\
+\hline
+\end{DoxyParams}
+
+
+References to\+String().
+
+\mbox{\Hypertarget{structDXPublisher_ae6e8cb6b370ea60f1ad5cb80cea2df30}\label{structDXPublisher_ae6e8cb6b370ea60f1ad5cb80cea2df30}} 
+\index{DXPublisher@{DXPublisher}!publishEvents@{publishEvents}}
+\index{publishEvents@{publishEvents}!DXPublisher@{DXPublisher}}
+\doxyparagraph{\texorpdfstring{publishEvents()}{publishEvents()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily template$<$typename Events\+Collection $>$ \\
+void DXPublisher\+::publish\+Events (\begin{DoxyParamCaption}\item[{Events\+Collection \&\&}]{events }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Publishes events to the corresponding feed. 
+
+If the \mbox{\hyperlink{structDXEndpoint}{endpoint}} of this publisher has \mbox{\hyperlink{structDXEndpoint_ae81f772b56b6aa100fcc1e4e4f954bc7}{role}} of \mbox{\hyperlink{structDXEndpoint_a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae}{DXEndpoint\+::\+Role\+::\+PUBLISHER}} and it is connected, the published events will be delivered to the remote endpoints. Local \mbox{\hyperlink{structDXEndpoint_a4edad7a8744b1e91873c8c4e2fe244a3}{feed}} will always receive published events.
+
+This method serializes all events into internal representation, so that the instance of the collection as well as the instances of events can be reused after invocation of this method returns.
+
+\mbox{\hyperlink{structDXFeed}{DXFeed}} instances that are connected to this publisher either locally or via network receive published events if and only if they are subscribed to the corresponding symbols, or they are subscribed via \mbox{\hyperlink{structWildcardSymbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{Wildcard\+Symbol\+::\+ALL}}, or, in case of \mbox{\hyperlink{structTimeSeriesEvent}{Time\+Series\+Event}} type, they are subscribed via DXFeed\+Time\+Series\+Subscription for the corresponding symbol and time frame.
+
+Published events are not stored and get immediately lost if there is no subscription. Last published events of \mbox{\hyperlink{structLastingEvent}{Lasting\+Event}} types are cached as long as subscription to them is maintained via a specific event symbol (\mbox{\hyperlink{structWildcardSymbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{Wildcard\+Symbol\+::\+ALL}} does not count) and the cache is discarded as soon as subscription disappears.
+
+Example\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{using namespace }dxfcpp;}
+\DoxyCodeLine{\textcolor{keyword}{using namespace }dxfcpp::literals;}
+\DoxyCodeLine{\textcolor{keyword}{using namespace }std::literals;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{structSystem_aa186bb9091ffb41fe84d616b29f4a189}{System::setProperty}}(\textcolor{stringliteral}{"{}dxendpoint.eventTime"{}}, \textcolor{stringliteral}{"{}true"{}});}
+\DoxyCodeLine{\mbox{\hyperlink{structSystem_aa186bb9091ffb41fe84d616b29f4a189}{System::setProperty}}(\textcolor{stringliteral}{"{}dxscheme.nanoTime"{}}, \textcolor{stringliteral}{"{}true"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{auto} endpoint = \mbox{\hyperlink{structDXEndpoint_a386ce8b42d0c703d2991a6790983c693}{DXEndpoint::create}}(\mbox{\hyperlink{structDXEndpoint_a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c}{DXEndpoint::Role::FEED}});}
+\DoxyCodeLine{\textcolor{keyword}{auto} feed = endpoint-\/>getFeed();}
+\DoxyCodeLine{\textcolor{keyword}{auto} publisher = endpoint-\/>getPublisher();}
+\DoxyCodeLine{\textcolor{keyword}{auto} sub = feed-\/>createSubscription(\{\mbox{\hyperlink{classQuote_a21144621df5bd59e2a342592bd501d0e}{Quote::TYPE}}\});}
+\DoxyCodeLine{\textcolor{keyword}{auto} quote = std::make\_shared<Quote>(\textcolor{stringliteral}{"{}AAPL"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{quote-\/>setEventTime(1692975409000);}
+\DoxyCodeLine{quote-\/>setTimeNanoPart(123);}
+\DoxyCodeLine{quote-\/>setSequence(123);}
+\DoxyCodeLine{quote-\/>setBidTime(1692975409000);}
+\DoxyCodeLine{quote-\/>setBidExchangeCode(\textcolor{charliteral}{'B'});}
+\DoxyCodeLine{quote-\/>setBidPrice(176.08);}
+\DoxyCodeLine{quote-\/>setBidSize(1.0);}
+\DoxyCodeLine{quote-\/>setAskTime(1692975409000);}
+\DoxyCodeLine{quote-\/>setAskExchangeCode(\textcolor{charliteral}{'A'});}
+\DoxyCodeLine{quote-\/>setAskPrice(176.16);}
+\DoxyCodeLine{quote-\/>setAskSize(2.0);}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addEventListener([](\textcolor{keyword}{const} \textcolor{keyword}{auto} \&events) \{}
+\DoxyCodeLine{    \textcolor{keywordflow}{for} (\textcolor{keyword}{const} \textcolor{keyword}{auto} \&e : events) \{}
+\DoxyCodeLine{        \textcolor{keywordflow}{if} (\textcolor{keyword}{const} \textcolor{keyword}{auto} \&q = e-\/>template sharedAs<Quote>(); q) \{}
+\DoxyCodeLine{            std::cout << q << std::endl;}
+\DoxyCodeLine{        \}}
+\DoxyCodeLine{    \}}
+\DoxyCodeLine{\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{sub-\/>addSymbols(\textcolor{stringliteral}{"{}AAPL"{}});}
+\DoxyCodeLine{publisher-\/>publishEvents(quote);}
+\DoxyCodeLine{publisher-\/>publishEvents(\{quote, quote\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{std::vector<EventType::Ptr> events\{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{events.push\_back(quote);}
+\DoxyCodeLine{events.push\_back(quote);}
+\DoxyCodeLine{publisher-\/>publishEvents(events);}
+\DoxyCodeLine{std::this\_thread::sleep\_for(1000ms);}
+\DoxyCodeLine{endpoint-\/>close();}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Events\+Collection} & The type of events collection (for example\+: std\+::vector$<$\+::\+Event\+Type\+::\+Ptr$>$) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em events} & The collection of events to publish. \\
+\hline
+\end{DoxyParams}
+
+
+References publish\+Events().
+
+
+
+Referenced by publish\+Events().
+
+\mbox{\Hypertarget{structDXPublisher_a14702bbc9952656b2a2cbc9d607bf2ab}\label{structDXPublisher_a14702bbc9952656b2a2cbc9d607bf2ab}} 
+\index{DXPublisher@{DXPublisher}!publishEvents@{publishEvents}}
+\index{publishEvents@{publishEvents}!DXPublisher@{DXPublisher}}
+\doxyparagraph{\texorpdfstring{publishEvents()}{publishEvents()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily void DXPublisher\+::publish\+Events (\begin{DoxyParamCaption}\item[{std\+::initializer\+\_\+list$<$ std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structEventType}{Event\+Type}} $>$$>$}]{events }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Publishes events to the corresponding feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em events} & The collection of events to publish. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structDXPublisher_aea23a3d950b97bb2d839df79e494023c}\label{structDXPublisher_aea23a3d950b97bb2d839df79e494023c}} 
+\index{DXPublisher@{DXPublisher}!publishEvents@{publishEvents}}
+\index{publishEvents@{publishEvents}!DXPublisher@{DXPublisher}}
+\doxyparagraph{\texorpdfstring{publishEvents()}{publishEvents()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily void DXPublisher\+::publish\+Events (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structEventType}{Event\+Type}} $>$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Publishes an event to the corresponding feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The event to publish. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structDXPublisher_a2cdf4b9e4ad4582c591792b6ede47299}\label{structDXPublisher_a2cdf4b9e4ad4582c591792b6ede47299}} 
+\index{DXPublisher@{DXPublisher}!toString@{toString}}
+\index{toString@{toString}!DXPublisher@{DXPublisher}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string DXPublisher\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structSharedEntity_a84179ef824d835d61488dab36f4f0325}{Shared\+Entity}}.
+
+
+
+Referenced by publish\+Events().
+

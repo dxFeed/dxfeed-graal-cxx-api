@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('d2/da5/Underlying_8hpp_source.html','.
 <div class="title">Underlying.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -176,275 +176,280 @@ $(document).ready(function(){initNavTree('d2/da5/Underlying_8hpp_source.html','.
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordtype">void</span> fillGraalData(<span class="keywordtype">void</span> *graalNative) <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">static</span> std::shared_ptr&lt;Underlying&gt; fromGraal(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">     * Fills the dxFeed Graal SDK structure&#39;s fields by the data of the current entity (recursively if necessary).</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">     * Returns the pointer to the filled structure.</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">     * @return The pointer to the filled dxFeed Graal SDK structure</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">void</span>* <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#ad6b1e0ca82a0cce81c5ce9d947eddcaa">toGraal</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#ad6b1e0ca82a0cce81c5ce9d947eddcaa">override</a>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="comment">     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="comment">     * @param graalNative The pointer to the dxFeed Graal SDK structure.</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a16ef0364d71dc0b2f7b44a5becffb7b1">freeGraal</a>(<span class="keywordtype">void</span>* graalNative) <span class="keyword">noexcept</span>;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">     * Maximum allowed sequence value.</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">     * @see ::setSequence()</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">  110</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">constexpr</span> std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">uint32_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">MAX_SEQUENCE</a> = (1U &lt;&lt; 22U) - 1U;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="comment">/// Type identifier and additional information about the current event class.</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2481789a24dcdaf0336a569be64c47f8">  113</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html">EventTypeEnum</a> &amp;<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2481789a24dcdaf0336a569be64c47f8">TYPE</a>;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="comment">/// Creates new underlying event with default values.</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a18d8a57aa869b731346c648d73c50f5f">  116</a></span>&#160;    <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a18d8a57aa869b731346c648d73c50f5f">Underlying</a>() <span class="keyword">noexcept</span> = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">     * Creates new underlying event with the specified event symbol.</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">     * @param eventSymbol The event symbol.</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a5445fdf7d6f394272ce151f32785eb1f">  123</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a5445fdf7d6f394272ce151f32785eb1f">Underlying</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">MarketEvent</a>(std::move(eventSymbol)) {</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    }</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="comment">///</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a80d31bcbd299c46c671d41fc02c4c726">  127</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html">IndexedEventSource</a> &amp;<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a80d31bcbd299c46c671d41fc02c4c726">getSource</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html">IndexedEventSource</a><a class="code" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html#ab7bc1a5037c8e18b2adeb45237cea5eb">::</a><a class="code" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html#ab7bc1a5037c8e18b2adeb45237cea5eb">DEFAULT</a>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">static</span> std::shared_ptr&lt;Underlying&gt; fromGraal(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">     * Fills the dxFeed Graal SDK structure&#39;s fields by the data of the current entity (recursively if necessary).</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">     * Returns the pointer to the filled structure.</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">     * @return The pointer to the filled dxFeed Graal SDK structure</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#ad6b1e0ca82a0cce81c5ce9d947eddcaa">toGraal</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#ad6b1e0ca82a0cce81c5ce9d947eddcaa">override</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment">     * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="comment">     * @param graalNative The pointer to the dxFeed Graal SDK structure.</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a16ef0364d71dc0b2f7b44a5becffb7b1">freeGraal</a>(<span class="keywordtype">void</span> *graalNative) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">     * Maximum allowed sequence value.</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">     * @see ::setSequence()</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">  109</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">constexpr</span> std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">uint32_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">MAX_SEQUENCE</a> = (1U &lt;&lt; 22U) - 1U;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">/// The alias to a type of shared pointer to the Underlying object</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a9d0abf70272f34679524e23d845d597c">  112</a></span>&#160;    <span class="keyword">using</span> Ptr = std::shared_ptr&lt;Underlying&gt;;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="comment">/// The alias to a type of unique pointer to the Underlying object</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a089916dae578c8aeb4ba47d7f7ed7186">  115</a></span>&#160;    <span class="keyword">using</span> Unique = std::unique_ptr&lt;Underlying&gt;;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="comment">/// Type identifier and additional information about the current event class.</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2481789a24dcdaf0336a569be64c47f8">  118</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="../../d3/df2/classdxfcpp_1_1EventTypeEnum.html">EventTypeEnum</a> &amp;<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2481789a24dcdaf0336a569be64c47f8">TYPE</a>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="comment">/// Creates new underlying event with default values.</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a18d8a57aa869b731346c648d73c50f5f">  121</a></span>&#160;    <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a18d8a57aa869b731346c648d73c50f5f">Underlying</a>() <span class="keyword">noexcept</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment">     * Creates new underlying event with the specified event symbol.</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">     * @param eventSymbol The event symbol.</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a5445fdf7d6f394272ce151f32785eb1f">  128</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a5445fdf7d6f394272ce151f32785eb1f">Underlying</a>(std::string eventSymbol) <span class="keyword">noexcept</span> : <a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">MarketEvent</a><a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#afeb8874ca4d6b603d5b941f19e0735cf">(</a>std::move(eventSymbol)<a class="code" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#afeb8874ca4d6b603d5b941f19e0735cf">)</a> {</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    }</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="comment">///</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a33ac7e578de3e04991b67bddd3bacd25">  132</a></span>&#160;    std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a33ac7e578de3e04991b67bddd3bacd25">int32_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a33ac7e578de3e04991b67bddd3bacd25">getEventFlags</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">return</span> data_.eventFlags;</div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a80d31bcbd299c46c671d41fc02c4c726">  132</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html">IndexedEventSource</a> &amp;<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a80d31bcbd299c46c671d41fc02c4c726">getSource</a>() <span class="keyword">const</span> &amp; <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html">IndexedEventSource</a><a class="code" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html#ab7bc1a5037c8e18b2adeb45237cea5eb">::</a><a class="code" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html#ab7bc1a5037c8e18b2adeb45237cea5eb">DEFAULT</a>;</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    }</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="comment">///</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a11514eb1e2b85dadf06d318f2bbbe992">  137</a></span>&#160;    EventFlagsMask <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a11514eb1e2b85dadf06d318f2bbbe992">getEventFlagsMask</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordflow">return</span> EventFlagsMask(data_.eventFlags);</div>
+<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a33ac7e578de3e04991b67bddd3bacd25">  137</a></span>&#160;    std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a33ac7e578de3e04991b67bddd3bacd25">int32_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a33ac7e578de3e04991b67bddd3bacd25">getEventFlags</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordflow">return</span> data_.eventFlags;</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    }</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="comment">///</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a3bdc7776d3b3c24a57b5e1adf465f37f">  142</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a3bdc7776d3b3c24a57b5e1adf465f37f">setEventFlags</a>(std::int32_t eventFlags) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        data_.eventFlags = eventFlags;</div>
+<div class="line"><a name="l00142"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a11514eb1e2b85dadf06d318f2bbbe992">  142</a></span>&#160;    EventFlagsMask <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a11514eb1e2b85dadf06d318f2bbbe992">getEventFlagsMask</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keywordflow">return</span> EventFlagsMask(data_.eventFlags);</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    }</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="comment">///</span></div>
-<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2fd83b36a57a86ecf03ae4052718ef9b">  147</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2fd83b36a57a86ecf03ae4052718ef9b">setEventFlags</a>(<span class="keyword">const</span> EventFlagsMask &amp;eventFlags) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        data_.eventFlags = <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(eventFlags<a class="code" href="../../dc/dbc/classdxfcpp_1_1EventFlagsMask.html#a1b25dedbfced78bf9e15ca5a2f65d977">.</a><a class="code" href="../../dc/dbc/classdxfcpp_1_1EventFlagsMask.html#a1b25dedbfced78bf9e15ca5a2f65d977">getMask</a><a class="code" href="../../dc/dbc/classdxfcpp_1_1EventFlagsMask.html#a1b25dedbfced78bf9e15ca5a2f65d977">(</a><a class="code" href="../../dc/dbc/classdxfcpp_1_1EventFlagsMask.html#a1b25dedbfced78bf9e15ca5a2f65d977">)</a>);</div>
+<div class="line"><a name="l00147"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a3bdc7776d3b3c24a57b5e1adf465f37f">  147</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a3bdc7776d3b3c24a57b5e1adf465f37f">setEventFlags</a>(std::int32_t eventFlags) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        data_.eventFlags = eventFlags;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    }</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="comment">     * Returns unique per-symbol index of this event.</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="comment">     * The index is composed of @ref ::getTime() &quot;time&quot; and @ref ::getSequence() &quot;sequence&quot;.</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="comment">     * Changing either time or sequence changes event index.</span></div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="comment">     * @return unique index of this event.</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a7c9492943d011108c23266d7b0deb8d5">  158</a></span>&#160;    std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a7c9492943d011108c23266d7b0deb8d5">int64_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a7c9492943d011108c23266d7b0deb8d5">getIndex</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keywordflow">return</span> data_.index;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    }</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="comment">     * Changes unique per-symbol index of this event.</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="comment">     * The index is composed of @ref ::getTime() &quot;time&quot; and @ref ::getSequence() &quot;sequence&quot; and</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="comment">     * invocation of this method changes time and sequence.</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="comment">     * &lt;b&gt;Do not use this method directly.&lt;/b&gt;</span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="comment">     * Change @ref ::setTime() &quot;time&quot; and/or @ref ::setSequence() &quot;sequence&quot;.</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment">     * @param index the event index.</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="comment">     * @see ::getIndex()</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a770902ed833fcea9f9d5f5d979e5de07">  172</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a770902ed833fcea9f9d5f5d979e5de07">setIndex</a>(std::int64_t index) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        data_.index = index;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    }</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="comment">     * Returns timestamp of the event in milliseconds.</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="comment">     * @return timestamp of the event in milliseconds</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a976f14e478a007a93eb6b0b4a5e71aab">  181</a></span>&#160;    std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a976f14e478a007a93eb6b0b4a5e71aab">int64_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a976f14e478a007a93eb6b0b4a5e71aab">getTime</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">return</span> sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    }</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="comment">     * Changes timestamp of the event in milliseconds.</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment">     * @param time timestamp of the event in milliseconds.</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">     * @see ::getTime()</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a915f7c1f724706e576c469951738fc5a">  191</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a915f7c1f724706e576c469951738fc5a">setTime</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        data_.index = orOp(orOp(sal(time_util::getSecondsFromTime(time), SECONDS_SHIFT),</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                                sal(time_util::getMillisFromTime(time), MILLISECONDS_SHIFT)),</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                           <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">getSequence</a><a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">(</a><a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">)</a>);</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    }</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment">     * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() &quot;time&quot;.</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="comment">     * This sequence number does not have to be unique and does not need to be sequential.</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="comment">     * Sequence can range from 0 to ::MAX_SEQUENCE.</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">     * @return The sequence number of this event</span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">  204</a></span>&#160;    std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">int32_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">getSequence</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(andOp(data_.index, <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">MAX_SEQUENCE</a>));</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    }</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="comment">     * Changes @ref ::getSequence() &quot;sequence number&quot; of this event.</span></div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="comment">     * @param sequence the sequence.</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="comment">     * @see ::getSequence()</span></div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00213"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a10c1add840d702b0fb09d400100a4355">  213</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a10c1add840d702b0fb09d400100a4355">setSequence</a>(<span class="keywordtype">int</span> sequence) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <span class="comment">// TODO: Improve error handling</span></div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        assert(sequence &gt;= 0 &amp;&amp; sequence &lt;= <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">MAX_SEQUENCE</a>);</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        data_.index = orOp(andOp(data_.index, ~<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">MAX_SEQUENCE</a>), sequence);</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    }</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="comment">     * Returns 30-day implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="comment">     * @return 30-day implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00225"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#aee21f053139cd3da85b7c08a93a859c7">  225</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#aee21f053139cd3da85b7c08a93a859c7">getVolatility</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordflow">return</span> data_.volatility;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    }</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">     * Changes 30-day implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">     * @param volatility 30-day implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#af68c743595adf1f46cc02e3a43023090">  234</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#af68c743595adf1f46cc02e3a43023090">setVolatility</a>(<span class="keywordtype">double</span> volatility) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        data_.volatility = volatility;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    }</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="comment">     * Returns front month implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="comment">     * @return front month implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a968393ce79b478011642d05a5c868600">  243</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a968393ce79b478011642d05a5c868600">getFrontVolatility</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keywordflow">return</span> data_.frontVolatility;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    }</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">     * Changes front month implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment">     * @param frontVolatility front month implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00252"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#adcd82f98f618f711c41ee4620de30c4a">  252</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#adcd82f98f618f711c41ee4620de30c4a">setFrontVolatility</a>(<span class="keywordtype">double</span> frontVolatility) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        data_.frontVolatility = frontVolatility;</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    }</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">     * Returns back month implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">     * @return back month implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a48788205926cfbba3dfe46a5a0d79239">  261</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a48788205926cfbba3dfe46a5a0d79239">getBackVolatility</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        <span class="keywordflow">return</span> data_.backVolatility;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    }</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">     * Changes back month implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="comment">     * @param backVolatility back month implied volatility for this underlying based on VIX methodology.</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a95e4ac7113083fbd606e04ea492194b7">  270</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a95e4ac7113083fbd606e04ea492194b7">setBackVolatility</a>(<span class="keywordtype">double</span> backVolatility) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        data_.backVolatility = backVolatility;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    }</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment">     * Returns call options traded volume for a day.</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">     * @return call options traded volume for a day.</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a3997272ff947f29a7301d3d8ffd75c0a">  279</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a3997272ff947f29a7301d3d8ffd75c0a">getCallVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="keywordflow">return</span> data_.callVolume;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    }</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="comment">     * Changes call options traded volume for a day.</span></div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="comment">     * @param callVolume call options traded volume for a day.</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a03dd7cc5f3cbaa36d944fbb788c5b719">  288</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a03dd7cc5f3cbaa36d944fbb788c5b719">setCallVolume</a>(<span class="keywordtype">double</span> callVolume) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        data_.callVolume = callVolume;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    }</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="comment">     * Returns put options traded volume for a day.</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="comment">     * @return put options traded volume for a day.</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#adfd08b69ef39c9bc0d8e9a9c485af767">  297</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#adfd08b69ef39c9bc0d8e9a9c485af767">getPutVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keywordflow">return</span> data_.putVolume;</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    }</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="comment">     * Changes put options traded volume for a day.</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="comment">     * @param putVolume put options traded volume for a day.</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#ae55ee36340e0c91d03e110c5f4d67679">  306</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#ae55ee36340e0c91d03e110c5f4d67679">setPutVolume</a>(<span class="keywordtype">double</span> putVolume) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        data_.putVolume = putVolume;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    }</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="comment">     * Returns options traded volume for a day.</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="comment">     * @return options traded volume for a day.</span></div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00315"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a40434e85254a8121b6e9a8be2201bb1a">  315</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a40434e85254a8121b6e9a8be2201bb1a">getOptionVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordflow">if</span> (std::isnan(data_.putVolume)) {</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <span class="keywordflow">return</span> data_.callVolume;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        }</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <span class="keywordflow">if</span> (std::isnan(data_.callVolume)) {</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <span class="keywordflow">return</span> data_.putVolume;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        }</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="keywordflow">return</span> data_.putVolume + data_.callVolume;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    }</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160; </div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="comment">     * Returns ratio of put options traded volume to call options traded volume for a day.</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="comment">     * @return ratio of put options traded volume to call options traded volume for a day.</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2cdf9a1b69ce4b705533b9618508ba74">  332</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2cdf9a1b69ce4b705533b9618508ba74">getPutCallRatio</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">return</span> data_.putCallRatio;</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    }</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="comment">     * Changes ratio of put options traded volume to call options traded volume for a day.</span></div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="comment">     * @param putCallRatio ratio of put options traded volume to call options traded volume for a day.</span></div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a8be8e54f2831072904a2a62cbd57c9ad">  341</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a8be8e54f2831072904a2a62cbd57c9ad">setPutCallRatio</a>(<span class="keywordtype">double</span> putCallRatio) <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        data_.putCallRatio = putCallRatio;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    }</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;<span class="comment">     * Returns a string representation of the current object.</span></div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="comment">     * @return a string representation</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    std::string <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a6e16858261e572d142c9c42d058cfca9">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a6e16858261e572d142c9c42d058cfca9">override</a>;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;};</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="comment">///</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2fd83b36a57a86ecf03ae4052718ef9b">  152</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2fd83b36a57a86ecf03ae4052718ef9b">setEventFlags</a>(<span class="keyword">const</span> EventFlagsMask &amp;eventFlags) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        data_.eventFlags = <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(eventFlags<a class="code" href="../../dc/dbc/classdxfcpp_1_1EventFlagsMask.html#a1b25dedbfced78bf9e15ca5a2f65d977">.</a><a class="code" href="../../dc/dbc/classdxfcpp_1_1EventFlagsMask.html#a1b25dedbfced78bf9e15ca5a2f65d977">getMask</a><a class="code" href="../../dc/dbc/classdxfcpp_1_1EventFlagsMask.html#a1b25dedbfced78bf9e15ca5a2f65d977">(</a><a class="code" href="../../dc/dbc/classdxfcpp_1_1EventFlagsMask.html#a1b25dedbfced78bf9e15ca5a2f65d977">)</a>);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    }</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="comment">     * Returns unique per-symbol index of this event.</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="comment">     * The index is composed of @ref ::getTime() &quot;time&quot; and @ref ::getSequence() &quot;sequence&quot;.</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="comment">     * Changing either time or sequence changes event index.</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="comment">     * @return unique index of this event.</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a7c9492943d011108c23266d7b0deb8d5">  163</a></span>&#160;    std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a7c9492943d011108c23266d7b0deb8d5">int64_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a7c9492943d011108c23266d7b0deb8d5">getIndex</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordflow">return</span> data_.index;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    }</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="comment">     * Changes unique per-symbol index of this event.</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment">     * The index is composed of @ref ::getTime() &quot;time&quot; and @ref ::getSequence() &quot;sequence&quot; and</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="comment">     * invocation of this method changes time and sequence.</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="comment">     * &lt;b&gt;Do not use this method directly.&lt;/b&gt;</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="comment">     * Change @ref ::setTime() &quot;time&quot; and/or @ref ::setSequence() &quot;sequence&quot;.</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="comment">     * @param index the event index.</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="comment">     * @see ::getIndex()</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a770902ed833fcea9f9d5f5d979e5de07">  177</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a770902ed833fcea9f9d5f5d979e5de07">setIndex</a>(std::int64_t index) <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        data_.index = index;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    }</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160; </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="comment">     * Returns timestamp of the event in milliseconds.</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="comment">     * @return timestamp of the event in milliseconds</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a976f14e478a007a93eb6b0b4a5e71aab">  186</a></span>&#160;    std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a976f14e478a007a93eb6b0b4a5e71aab">int64_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a976f14e478a007a93eb6b0b4a5e71aab">getTime</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <span class="keyword">override</span> {</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keywordflow">return</span> sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    }</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">     * Changes timestamp of the event in milliseconds.</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">     * @param time timestamp of the event in milliseconds.</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="comment">     * @see ::getTime()</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a915f7c1f724706e576c469951738fc5a">  196</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a915f7c1f724706e576c469951738fc5a">setTime</a>(std::int64_t time) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        data_.index = orOp(orOp(sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                                sal(<span class="keyword">static_cast</span>&lt;std::int64_t&gt;(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                           <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">getSequence</a><a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">(</a><a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">)</a>);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    }</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">     * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() &quot;time&quot;.</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">     * This sequence number does not have to be unique and does not need to be sequential.</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="comment">     * Sequence can range from 0 to ::MAX_SEQUENCE.</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="comment">     * @return The sequence number of this event</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">  209</a></span>&#160;    std::<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">int32_t</a> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a72cfecf404fb92e2d0b575055f44240d">getSequence</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast</span>&lt;std::int32_t&gt;(andOp(data_.index, <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">MAX_SEQUENCE</a>));</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="comment">     * Changes @ref ::getSequence() &quot;sequence number&quot; of this event.</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="comment">     * @param sequence the sequence.</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="comment">     * @see ::getSequence()</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a10c1add840d702b0fb09d400100a4355">  218</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a10c1add840d702b0fb09d400100a4355">setSequence</a>(<span class="keywordtype">int</span> sequence) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="comment">// TODO: Improve error handling [EN-8232]</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        assert(sequence &gt;= 0 &amp;&amp; sequence &lt;= <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">MAX_SEQUENCE</a>);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        data_.index = orOp(andOp(data_.index, ~<a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#afd9a3e6609accf6ffaeab59f1a13f746">MAX_SEQUENCE</a>), sequence);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    }</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="comment">     * Returns 30-day implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="comment">     * @return 30-day implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#aee21f053139cd3da85b7c08a93a859c7">  230</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#aee21f053139cd3da85b7c08a93a859c7">getVolatility</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordflow">return</span> data_.volatility;</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    }</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">     * Changes 30-day implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="comment">     * @param volatility 30-day implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#af68c743595adf1f46cc02e3a43023090">  239</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#af68c743595adf1f46cc02e3a43023090">setVolatility</a>(<span class="keywordtype">double</span> volatility) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        data_.volatility = volatility;</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    }</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="comment">     * Returns front month implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">     * @return front month implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a968393ce79b478011642d05a5c868600">  248</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a968393ce79b478011642d05a5c868600">getFrontVolatility</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keywordflow">return</span> data_.frontVolatility;</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    }</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160; </div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">     * Changes front month implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="comment">     * @param frontVolatility front month implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#adcd82f98f618f711c41ee4620de30c4a">  257</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#adcd82f98f618f711c41ee4620de30c4a">setFrontVolatility</a>(<span class="keywordtype">double</span> frontVolatility) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        data_.frontVolatility = frontVolatility;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    }</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment">     * Returns back month implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">     * @return back month implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a48788205926cfbba3dfe46a5a0d79239">  266</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a48788205926cfbba3dfe46a5a0d79239">getBackVolatility</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">return</span> data_.backVolatility;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    }</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="comment">     * Changes back month implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="comment">     * @param backVolatility back month implied volatility for this underlying based on VIX methodology.</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a95e4ac7113083fbd606e04ea492194b7">  275</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a95e4ac7113083fbd606e04ea492194b7">setBackVolatility</a>(<span class="keywordtype">double</span> backVolatility) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        data_.backVolatility = backVolatility;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    }</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">     * Returns call options traded volume for a day.</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="comment">     * @return call options traded volume for a day.</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a3997272ff947f29a7301d3d8ffd75c0a">  284</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a3997272ff947f29a7301d3d8ffd75c0a">getCallVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <span class="keywordflow">return</span> data_.callVolume;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    }</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="comment">     * Changes call options traded volume for a day.</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="comment">     * @param callVolume call options traded volume for a day.</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a03dd7cc5f3cbaa36d944fbb788c5b719">  293</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a03dd7cc5f3cbaa36d944fbb788c5b719">setCallVolume</a>(<span class="keywordtype">double</span> callVolume) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        data_.callVolume = callVolume;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    }</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="comment">     * Returns put options traded volume for a day.</span></div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="comment">     * @return put options traded volume for a day.</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#adfd08b69ef39c9bc0d8e9a9c485af767">  302</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#adfd08b69ef39c9bc0d8e9a9c485af767">getPutVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordflow">return</span> data_.putVolume;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    }</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="comment">     * Changes put options traded volume for a day.</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;<span class="comment">     * @param putVolume put options traded volume for a day.</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00311"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#ae55ee36340e0c91d03e110c5f4d67679">  311</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#ae55ee36340e0c91d03e110c5f4d67679">setPutVolume</a>(<span class="keywordtype">double</span> putVolume) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        data_.putVolume = putVolume;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    }</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="comment">     * Returns options traded volume for a day.</span></div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="comment">     * @return options traded volume for a day.</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00320"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a40434e85254a8121b6e9a8be2201bb1a">  320</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a40434e85254a8121b6e9a8be2201bb1a">getOptionVolume</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keywordflow">if</span> (std::isnan(data_.putVolume)) {</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            <span class="keywordflow">return</span> data_.callVolume;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        }</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">if</span> (std::isnan(data_.callVolume)) {</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="keywordflow">return</span> data_.putVolume;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        }</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="keywordflow">return</span> data_.putVolume + data_.callVolume;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    }</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="comment">     * Returns ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="comment">     * @return ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2cdf9a1b69ce4b705533b9618508ba74">  337</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a2cdf9a1b69ce4b705533b9618508ba74">getPutCallRatio</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="keywordflow">return</span> data_.putCallRatio;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    }</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="comment">     * Changes ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="comment">     * @param putCallRatio ratio of put options traded volume to call options traded volume for a day.</span></div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00346"></a><span class="lineno"><a class="line" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a8be8e54f2831072904a2a62cbd57c9ad">  346</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a8be8e54f2831072904a2a62cbd57c9ad">setPutCallRatio</a>(<span class="keywordtype">double</span> putCallRatio) <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        data_.putCallRatio = putCallRatio;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    }</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="comment">     * Returns a string representation of the current object.</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="comment">     * @return a string representation</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    std::string <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a6e16858261e572d142c9c42d058cfca9">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> <a class="code" href="../../dc/df7/classdxfcpp_1_1Underlying.html#a6e16858261e572d142c9c42d058cfca9">override</a>;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;};</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160; </div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

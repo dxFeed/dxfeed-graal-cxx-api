@@ -1,9 +1,12 @@
 var classdxfcpp_1_1Profile =
 [
+    [ "Ptr", "dd/d66/classdxfcpp_1_1Profile.html#a95bde6319ac822178fd93094046c570f", null ],
+    [ "Unique", "dd/d66/classdxfcpp_1_1Profile.html#a8c12170571342462f8272293465807e1", null ],
     [ "Profile", "dd/d66/classdxfcpp_1_1Profile.html#a871eadbd163126f0fce23384cf1524da", null ],
     [ "Profile", "dd/d66/classdxfcpp_1_1Profile.html#a7b9a19b3905978f52fc30350a930cc60", null ],
     [ "getBeta", "dd/d66/classdxfcpp_1_1Profile.html#a609627da094f594fa5577800a5357e74", null ],
     [ "getDescription", "dd/d66/classdxfcpp_1_1Profile.html#a7dd4f1b9951202cfad240cdf0dbf1632", null ],
+    [ "getDescriptionOpt", "dd/d66/classdxfcpp_1_1Profile.html#a317ff1cb3da812a9f5f654a725156935", null ],
     [ "getDividendFrequency", "dd/d66/classdxfcpp_1_1Profile.html#a2a0b8eb4839ebe5139ee99fe7a9a3145", null ],
     [ "getEarningsPerShare", "dd/d66/classdxfcpp_1_1Profile.html#a1fd5f4ebc372331aef3d91e6ab9f4e86", null ],
     [ "getExDividendAmount", "dd/d66/classdxfcpp_1_1Profile.html#ac6b8e08327bff30865cbf1a5beaaa177", null ],
@@ -18,6 +21,7 @@ var classdxfcpp_1_1Profile =
     [ "getShares", "dd/d66/classdxfcpp_1_1Profile.html#a251c309dc1f2e6e36a708a5c088eea78", null ],
     [ "getShortSaleRestriction", "dd/d66/classdxfcpp_1_1Profile.html#a279c4325c698e47e6e14f53e8056a7fa", null ],
     [ "getStatusReason", "dd/d66/classdxfcpp_1_1Profile.html#a7aee2dc0caf6fca229d8515a2522aaa9", null ],
+    [ "getStatusReasonOpt", "dd/d66/classdxfcpp_1_1Profile.html#a3416fb72e79dd5e1f77458732cececba", null ],
     [ "getTradingStatus", "dd/d66/classdxfcpp_1_1Profile.html#a54680bd83aed71427cda3c3d928fd40b", null ],
     [ "isShortSaleRestricted", "dd/d66/classdxfcpp_1_1Profile.html#afdb8200924e421b8d221290baf3de447", null ],
     [ "isTradingHalted", "dd/d66/classdxfcpp_1_1Profile.html#a46302b3f64b88162be137d5d8b2bbddb", null ],

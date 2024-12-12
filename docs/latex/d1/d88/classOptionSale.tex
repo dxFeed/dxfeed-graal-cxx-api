@@ -1,0 +1,1562 @@
+\hypertarget{classOptionSale}{}\doxysubsection{Option\+Sale Class Reference}
+\label{classOptionSale}\index{OptionSale@{OptionSale}}
+
+
+Option Sale event represents a trade or another market event with the price (for example, market open/close price, etc.) for each option symbol listed under the specified \mbox{\hyperlink{classUnderlying}{Underlying}}.  
+
+
+
+
+{\ttfamily \#include $<$Option\+Sale.\+hpp$>$}
+
+Inheritance diagram for Option\+Sale\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{d1/d88/classOptionSale}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classOptionSale_aa2255b630f4632ed23b4f05c57c43dce}\label{classOptionSale_aa2255b630f4632ed23b4f05c57c43dce}} 
+using \mbox{\hyperlink{classOptionSale_aa2255b630f4632ed23b4f05c57c43dce}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classOptionSale}{Option\+Sale}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classOptionSale}{Option\+Sale}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classOptionSale_a92b39547f9fcdd1b23585feef6bff31c}\label{classOptionSale_a92b39547f9fcdd1b23585feef6bff31c}} 
+using \mbox{\hyperlink{classOptionSale_a92b39547f9fcdd1b23585feef6bff31c}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classOptionSale}{Option\+Sale}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classOptionSale}{Option\+Sale}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classOptionSale_a74ae4dedc15b3ba5e16f3ff3d057d838}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classOptionSale_ad46c6f3542ce03a8196427f4965bdea7}\label{classOptionSale_ad46c6f3542ce03a8196427f4965bdea7}} 
+\mbox{\hyperlink{classOptionSale_ad46c6f3542ce03a8196427f4965bdea7}{Option\+Sale}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new option sale event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale_ac200e9a57c7bc77c3cfc124ab4061195}{Option\+Sale}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new option sale event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_af15adbe35f7312aada6f64903e7c8bcc}{with\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current option sale. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_a0fe00630abcbba2e7b69438f8056b0da}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current option sale. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{classOptionSale_a1d2305856f07f2718579d75062765eff}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classOptionSale_ad3795401d748d7151cde6fe71ef168cc}{get\+Event\+Flags}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classOptionSale_ae1104b19093594f12bd5b83ea76de7c5}{get\+Event\+Flags\+Mask}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a1d6ba039e4d999122721afda1f7aeefb}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_aadc0e7e6e8c90805de936ff354a2fc97}{with\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current option sale. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_af8e4c7d40d60b34b5ecd8f21278981a8}{set\+Event\+Flags}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_a556c73a67e27d47da31002d61bc0e85b}{with\+Event\+Flags}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags and returns the current option sale. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classOptionSale_a944fc7602702af9149559f29d195cedd}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a24b267c4c5cb4ea08cb8a5a80e12186f}{set\+Index}} (std\+::int64\+\_\+t index) override
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_a694fc78b47739897609482146c36ab75}{with\+Index}} (std\+::int64\+\_\+t index) noexcept
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classOptionSale_a2179ab2d5392f4d8b6b57f0326aafb61}{get\+Time\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time and sequence of this event packaged into single long value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a281abeb36949230622e73e2ab866ea92}{set\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time and sequence of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_a8500b3b1be11c2fa661c11dd6daf1d37}{with\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time and sequence of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classOptionSale_a2b74f33eb4884fe5661b0d7c46c51e10}{get\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_ae92d826a518c8e67707e3e195c97618c}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_ae7bcb244c41d6f9de1613c66926518d2}{with\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classOptionSale_a77862af1cc0b381e5e1ffc8c1a6b72b5}{get\+Time\+Nanos}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the original event in nanoseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_acb1cead98d52bda7f14d5526bedaa1e6}{set\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the original event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_a62155c6e9109d5e5bcde6e69398f1522}{with\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of this option sale and returns it. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_af80cfa2894682c85e4515ec7c45f43cb}{set\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of the original event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_ae157870de34085c14f7f5b3e6b86ef20}{with\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of this option sale. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classOptionSale_a8f8665f04e548373a58809b350922798}{get\+Time\+Nano\+Part}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns microseconds and nanoseconds time part of the original event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classOptionSale_aaee951c7dbe87a6f6975a32e49a47686}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the sequence number of this event to distinguish events that have the same time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_abe1d78b4d8ebfdd3217bef5455abea0b}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes sequence number of this event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_a02c8eb9a389b0fd84a46d309efd91efc}{with\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes sequence number of this event. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{classOptionSale_a6450e4c054c06b106f2651a20f50c795}{get\+Exchange\+Code}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of this option sale event. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classOptionSale_a1baf1d89124c9a73c33b20e5a4c3f1ea}{get\+Exchange\+Code\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of this option sale as UTF8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a741d6bf44132cbb70670e1796dc971d5}{set\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this option sale event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_a2a60a9825473b861b80fd256c789287c}{with\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a30a1fd9bc4cf889ddd22ec9e4bffe761}{set\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this option sale event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_a0b6e1a6123c121bafb6be970559408e9}{with\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of this option sale event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classOptionSale_a47d0be135fa61ba1b38fb0b787186619}{get\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns price of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a34152fb2e98be35a9d51481b6e45e477}{set\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this option sale event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classOptionSale}{Option\+Sale}} \& \mbox{\hyperlink{classOptionSale_af7df1990de5aa7b14ea7cb67c45e3a9a}{with\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this option sale event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classOptionSale_af3a5b2db9a77aa121209cbe0156a9922}{get\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns size of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a8235576132788dbdb2339ee447f92384}{set\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of this option sale event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classOptionSale_af1665e13e483dc510e718928381bbafa}{get\+Bid\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the current bid price on the market when this option sale event had occurred. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_aaf0b850efca72739b4cb36c0625e1dc6}{set\+Bid\+Price}} (double bid\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes the current bid price on the market when this option sale event had occurred. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classOptionSale_ae02250f9cd04f68fc0afc2b3c08e5109}{get\+Ask\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the current ask price on the market when this option sale event had occurred. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a933ee2ee4c779a5571b61c65f5ee0561}{set\+Ask\+Price}} (double ask\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of this time and sale event.\+the current ask price on the market when this option sale event had occurred. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classOptionSale_a0e1bea1c50aebd16480a5ad3e4fb4271}{get\+Exchange\+Sale\+Conditions}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns sale conditions provided for this event by data feed. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{classOptionSale_a79af5462e6d6ebcaf4b9c00710865a0b}{get\+Exchange\+Sale\+Conditions\+Opt}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns sale conditions provided for this event by data feed. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_aa888e2e94b4fa7d692da73c45d3b76ee}{set\+Exchange\+Sale\+Conditions}} (std\+::string exchange\+Sale\+Conditions) noexcept
+\begin{DoxyCompactList}\small\item\em Changes sale conditions provided for this event by data feed. \end{DoxyCompactList}\item 
+char \mbox{\hyperlink{classOptionSale_ad92ef2318f47522285e428b918d93303}{get\+Trade\+Through\+Exempt}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns Trade\+Through\+Exempt flag of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a69094c33d42df1d674e2be3be7051dfa}{set\+Trade\+Through\+Exempt}} (char trade\+Through\+Exempt)
+\begin{DoxyCompactList}\small\item\em Changes Trade\+Through\+Exempt flag of this option sale event. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structSide}{Side}} \& \mbox{\hyperlink{classOptionSale_a8a13eeacc0079f8d1dd0aa7520066d79}{get\+Aggressor\+Side}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns aggressor side of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a0d77c7961018ebf72e52b083f9435f2c}{set\+Aggressor\+Side}} (const \mbox{\hyperlink{structSide}{Side}} \&side) noexcept
+\begin{DoxyCompactList}\small\item\em Changes aggressor side of this option sale event. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classOptionSale_a107613d5c10bb0e43bf47edda8fca355}{is\+Spread\+Leg}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this event represents a spread leg. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a86ad2569f74b495eadc2aa4f88dfa4ba}{set\+Spread\+Leg}} (bool spread\+Leg) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event represents a spread leg. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classOptionSale_a392a186ca37f0dbd04c7fefd0eb00a20}{is\+Extended\+Trading\+Hours}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this event represents an extended trading hours sale. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a914bcba317a2fd007ce4246e53fe4963}{set\+Extended\+Trading\+Hours}} (bool extended\+Trading\+Hours) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event represents an extended trading hours sale. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classOptionSale_a0bc6787763c6e86a0088e8003df78c9d}{is\+Valid\+Tick}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this event represents a valid intraday tick. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a948271fe49332f9b3431a4728254f54d}{set\+Valid\+Tick}} (bool valid\+Tick) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether this event represents a valid intraday tick. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structTimeAndSaleType}{Time\+And\+Sale\+Type}} \& \mbox{\hyperlink{classOptionSale_ae47a7bfe07040b3d403fd7a75c4bdb46}{get\+Type}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns type of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_ab36a6da989fdc08f09e1fd0a097aea6f}{set\+Type}} (const \mbox{\hyperlink{structTimeAndSaleType}{Time\+And\+Sale\+Type}} \&type) noexcept
+\begin{DoxyCompactList}\small\item\em Changes type of this option sale event. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classOptionSale_a680da55590b28e87a5a0f517cc51cfd5}{is\+New}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this is a new event (not cancellation or correction). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classOptionSale_aee5305a7e95efe9ccaba19a202fb7dbf}{is\+Correction}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this is a correction of a previous event. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classOptionSale_ac88481d692c464963843ab6343ac8c39}{is\+Cancel}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether this is a cancellation of a previous event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classOptionSale_af944cfefa7d53c7ae4c0b56bf70ad050}{get\+Underlying\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns underlying price at the time of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a0424e49380f307506db91c3dc18349be}{set\+Underlying\+Price}} (double underlying\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes underlying price at the time of this option sale event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classOptionSale_ae3a8159ff1028ff198b8c513165f5589}{get\+Volatility}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns Black-\/\+Scholes implied volatility of the option at the time of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a3d0a38af168ee7d335b441975ccdfc2e}{set\+Volatility}} (double volatility) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Black-\/\+Scholes implied volatility of the option at the time of this option sale event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classOptionSale_afe7a8661d0deb2ac64a95f6e8fe7893b}{get\+Delta}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Return option delta at the time of this option sale event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_abf5bd8cea5bf341e9826ec2e60521417}{set\+Delta}} (double delta) noexcept
+\begin{DoxyCompactList}\small\item\em Changes option delta at the time of this option sale event. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classOptionSale_a51ee0e36229868bdbcd13fc911c24a60}{get\+Option\+Symbol}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns option symbol of this event. \end{DoxyCompactList}\item 
+const std\+::optional$<$ std\+::string $>$ \& \mbox{\hyperlink{classOptionSale_a39d8fcca64f350b7c550908994ba9b57}{get\+Option\+Symbol\+Opt}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns option symbol of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classOptionSale_a59403457a44031186763bc2b90be8d19}{set\+Option\+Symbol}} (std\+::string option\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes option symbol of this event. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classOptionSale_a72592c3071c1039ef18008640fd39e08}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classOptionSale_a8c2b4853977f92ffcf1a65cfa8e32413}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classOptionSale_a55fca860cb1b18e456d3732be3eb7a3d}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classOptionSale_a71d3cd50b0d2573b08e752af785e2a95}\label{classOptionSale_a71d3cd50b0d2573b08e752af785e2a95}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classOptionSale_a71d3cd50b0d2573b08e752af785e2a95}{TYPE}} = Event\+Type\+Enum\+::\+OPTION\+\_\+\+SALE
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classOptionSale_a23bff62edb5b4bf7d777ff70af0e272d}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+Option Sale event represents a trade or another market event with the price (for example, market open/close price, etc.) for each option symbol listed under the specified \mbox{\hyperlink{classUnderlying}{Underlying}}. 
+
+Option Sales are intended to provide information about option trades {\bfseries{in a continuous time slice}} with the additional metrics, like Option Volatility, Option Delta, and \mbox{\hyperlink{classUnderlying}{Underlying}} Price.
+
+Option Sale events have unique \mbox{\hyperlink{classOptionSale_a944fc7602702af9149559f29d195cedd}{index}} which can be used for later correction/cancellation processing.
+
+Option sale data source provides a consistent view of the set of known option sales. The corresponding information is carried in \mbox{\hyperlink{classOptionSale_ad3795401d748d7151cde6fe71ef168cc}{event\+Flags}} property. The logic behind this property is detailed in \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}} class documentation. Multiple event sources for the same symbol are not supported for option sale events, thus \mbox{\hyperlink{classOptionSale_a1d2305856f07f2718579d75062765eff}{source}} property is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}}.
+
+This event is implemented on top of QDS records {\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}}. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classOptionSale_ac200e9a57c7bc77c3cfc124ab4061195}\label{classOptionSale_ac200e9a57c7bc77c3cfc124ab4061195}} 
+\index{OptionSale@{OptionSale}!OptionSale@{OptionSale}}
+\index{OptionSale@{OptionSale}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{OptionSale()}{OptionSale()}}
+{\footnotesize\ttfamily Option\+Sale\+::\+Option\+Sale (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new option sale event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Market\+Event\+::\+Market\+Event().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classOptionSale_a55fca860cb1b18e456d3732be3eb7a3d}\label{classOptionSale_a55fca860cb1b18e456d3732be3eb7a3d}} 
+\index{OptionSale@{OptionSale}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Option\+Sale\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a8c2b4853977f92ffcf1a65cfa8e32413}\label{classOptionSale_a8c2b4853977f92ffcf1a65cfa8e32413}} 
+\index{OptionSale@{OptionSale}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classOptionSale}{Option\+Sale}} $>$ Option\+Sale\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classOptionSale_a8a13eeacc0079f8d1dd0aa7520066d79}\label{classOptionSale_a8a13eeacc0079f8d1dd0aa7520066d79}} 
+\index{OptionSale@{OptionSale}!getAggressorSide@{getAggressorSide}}
+\index{getAggressorSide@{getAggressorSide}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getAggressorSide()}{getAggressorSide()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structSide}{Side}}\& Option\+Sale\+::get\+Aggressor\+Side (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns aggressor side of this option sale event. 
+
+\begin{DoxyReturn}{Returns}
+aggressor side of this option sale event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_ae02250f9cd04f68fc0afc2b3c08e5109}\label{classOptionSale_ae02250f9cd04f68fc0afc2b3c08e5109}} 
+\index{OptionSale@{OptionSale}!getAskPrice@{getAskPrice}}
+\index{getAskPrice@{getAskPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getAskPrice()}{getAskPrice()}}
+{\footnotesize\ttfamily double Option\+Sale\+::get\+Ask\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the current ask price on the market when this option sale event had occurred. 
+
+\begin{DoxyReturn}{Returns}
+the current ask price on the market when this option sale event had occurred. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_af1665e13e483dc510e718928381bbafa}\label{classOptionSale_af1665e13e483dc510e718928381bbafa}} 
+\index{OptionSale@{OptionSale}!getBidPrice@{getBidPrice}}
+\index{getBidPrice@{getBidPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getBidPrice()}{getBidPrice()}}
+{\footnotesize\ttfamily double Option\+Sale\+::get\+Bid\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the current bid price on the market when this option sale event had occurred. 
+
+\begin{DoxyReturn}{Returns}
+the current bid price on the market when this option sale event had occurred. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_afe7a8661d0deb2ac64a95f6e8fe7893b}\label{classOptionSale_afe7a8661d0deb2ac64a95f6e8fe7893b}} 
+\index{OptionSale@{OptionSale}!getDelta@{getDelta}}
+\index{getDelta@{getDelta}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getDelta()}{getDelta()}}
+{\footnotesize\ttfamily double Option\+Sale\+::get\+Delta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Return option delta at the time of this option sale event. 
+
+Delta is the first derivative of an option price by an underlying price.
+
+\begin{DoxyReturn}{Returns}
+option delta at the time of this option sale event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_ad3795401d748d7151cde6fe71ef168cc}\label{classOptionSale_ad3795401d748d7151cde6fe71ef168cc}} 
+\index{OptionSale@{OptionSale}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Option\+Sale\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classOptionSale_ae1104b19093594f12bd5b83ea76de7c5}\label{classOptionSale_ae1104b19093594f12bd5b83ea76de7c5}} 
+\index{OptionSale@{OptionSale}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} Option\+Sale\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a01ae5fda2a1ada2279c541f821a03ada}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classOptionSale_a6450e4c054c06b106f2651a20f50c795}\label{classOptionSale_a6450e4c054c06b106f2651a20f50c795}} 
+\index{OptionSale@{OptionSale}!getExchangeCode@{getExchangeCode}}
+\index{getExchangeCode@{getExchangeCode}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getExchangeCode()}{getExchangeCode()}}
+{\footnotesize\ttfamily std\+::int16\+\_\+t Option\+Sale\+::get\+Exchange\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange code of this option sale event. 
+
+\begin{DoxyReturn}{Returns}
+exchange code of this option sale event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a1baf1d89124c9a73c33b20e5a4c3f1ea}\label{classOptionSale_a1baf1d89124c9a73c33b20e5a4c3f1ea}} 
+\index{OptionSale@{OptionSale}!getExchangeCodeString@{getExchangeCodeString}}
+\index{getExchangeCodeString@{getExchangeCodeString}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getExchangeCodeString()}{getExchangeCodeString()}}
+{\footnotesize\ttfamily std\+::string Option\+Sale\+::get\+Exchange\+Code\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange code of this option sale as UTF8 string. 
+
+\begin{DoxyReturn}{Returns}
+exchange code of this option sale as UTF8 string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a0e1bea1c50aebd16480a5ad3e4fb4271}\label{classOptionSale_a0e1bea1c50aebd16480a5ad3e4fb4271}} 
+\index{OptionSale@{OptionSale}!getExchangeSaleConditions@{getExchangeSaleConditions}}
+\index{getExchangeSaleConditions@{getExchangeSaleConditions}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getExchangeSaleConditions()}{getExchangeSaleConditions()}}
+{\footnotesize\ttfamily const std\+::string\& Option\+Sale\+::get\+Exchange\+Sale\+Conditions (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns sale conditions provided for this event by data feed. 
+
+This field format is specific for every particular data feed.
+
+\begin{DoxyReturn}{Returns}
+sale conditions or dxfcpp\+::\+String\+::\+NUL ({\ttfamily std\+::string\{\char`\"{}$<$null$>$\char`\"{}\}}). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a79af5462e6d6ebcaf4b9c00710865a0b}\label{classOptionSale_a79af5462e6d6ebcaf4b9c00710865a0b}} 
+\index{OptionSale@{OptionSale}!getExchangeSaleConditionsOpt@{getExchangeSaleConditionsOpt}}
+\index{getExchangeSaleConditionsOpt@{getExchangeSaleConditionsOpt}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getExchangeSaleConditionsOpt()}{getExchangeSaleConditionsOpt()}}
+{\footnotesize\ttfamily const std\+::optional$<$std\+::string$>$\& Option\+Sale\+::get\+Exchange\+Sale\+Conditions\+Opt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns sale conditions provided for this event by data feed. 
+
+This field format is specific for every particular data feed.
+
+\begin{DoxyReturn}{Returns}
+sale conditions or {\ttfamily std\+::nullopt}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a944fc7602702af9149559f29d195cedd}\label{classOptionSale_a944fc7602702af9149559f29d195cedd}} 
+\index{OptionSale@{OptionSale}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Option\+Sale\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+The index is composed of \mbox{\hyperlink{classOptionSale_a2b74f33eb4884fe5661b0d7c46c51e10}{time}} and \mbox{\hyperlink{classOptionSale_aaee951c7dbe87a6f6975a32e49a47686}{sequence}}. Changing either time or sequence changes event index.
+
+\begin{DoxyReturn}{Returns}
+unique index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a4310a26785d5142efba9d7c0094125bc}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classOptionSale_a51ee0e36229868bdbcd13fc911c24a60}\label{classOptionSale_a51ee0e36229868bdbcd13fc911c24a60}} 
+\index{OptionSale@{OptionSale}!getOptionSymbol@{getOptionSymbol}}
+\index{getOptionSymbol@{getOptionSymbol}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getOptionSymbol()}{getOptionSymbol()}}
+{\footnotesize\ttfamily const std\+::string\& Option\+Sale\+::get\+Option\+Symbol (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option symbol of this event. 
+
+\begin{DoxyReturn}{Returns}
+option symbol of this event or dxfcpp\+::\+String\+::\+NUL ({\ttfamily std\+::string\{\char`\"{}$<$null$>$\char`\"{}\}}). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a39d8fcca64f350b7c550908994ba9b57}\label{classOptionSale_a39d8fcca64f350b7c550908994ba9b57}} 
+\index{OptionSale@{OptionSale}!getOptionSymbolOpt@{getOptionSymbolOpt}}
+\index{getOptionSymbolOpt@{getOptionSymbolOpt}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getOptionSymbolOpt()}{getOptionSymbolOpt()}}
+{\footnotesize\ttfamily const std\+::optional$<$std\+::string$>$\& Option\+Sale\+::get\+Option\+Symbol\+Opt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option symbol of this event. 
+
+\begin{DoxyReturn}{Returns}
+option symbol of this event or std\+::nullopt 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a47d0be135fa61ba1b38fb0b787186619}\label{classOptionSale_a47d0be135fa61ba1b38fb0b787186619}} 
+\index{OptionSale@{OptionSale}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily double Option\+Sale\+::get\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns price of this option sale event. 
+
+\begin{DoxyReturn}{Returns}
+price of this option sale event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_aaee951c7dbe87a6f6975a32e49a47686}\label{classOptionSale_aaee951c7dbe87a6f6975a32e49a47686}} 
+\index{OptionSale@{OptionSale}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Option\+Sale\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the sequence number of this event to distinguish events that have the same time. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \+::\+MAX\+\_\+\+SEQUENCE.
+
+\begin{DoxyReturn}{Returns}
+The sequence number of this event 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_af3a5b2db9a77aa121209cbe0156a9922}\label{classOptionSale_af3a5b2db9a77aa121209cbe0156a9922}} 
+\index{OptionSale@{OptionSale}!getSize@{getSize}}
+\index{getSize@{getSize}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getSize()}{getSize()}}
+{\footnotesize\ttfamily double Option\+Sale\+::get\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns size of this option sale event. 
+
+\begin{DoxyReturn}{Returns}
+size of this option sale event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a1d2305856f07f2718579d75062765eff}\label{classOptionSale_a1d2305856f07f2718579d75062765eff}} 
+\index{OptionSale@{OptionSale}!getSource@{getSource}}
+\index{getSource@{getSource}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}}\& Option\+Sale\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source of this event. 
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a54d06fa64c5f66ed78b328f4c36a633b}{Indexed\+Event}}.
+
+
+
+References Indexed\+Event\+Source\+::\+DEFAULT.
+
+\mbox{\Hypertarget{classOptionSale_a2b74f33eb4884fe5661b0d7c46c51e10}\label{classOptionSale_a2b74f33eb4884fe5661b0d7c46c51e10}} 
+\index{OptionSale@{OptionSale}!getTime@{getTime}}
+\index{getTime@{getTime}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Option\+Sale\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of this event. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+time of this event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a8f8665f04e548373a58809b350922798}\label{classOptionSale_a8f8665f04e548373a58809b350922798}} 
+\index{OptionSale@{OptionSale}!getTimeNanoPart@{getTimeNanoPart}}
+\index{getTimeNanoPart@{getTimeNanoPart}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getTimeNanoPart()}{getTimeNanoPart()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Option\+Sale\+::get\+Time\+Nano\+Part (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns microseconds and nanoseconds time part of the original event. 
+
+\begin{DoxyReturn}{Returns}
+microseconds and nanoseconds time part of the original event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a77862af1cc0b381e5e1ffc8c1a6b72b5}\label{classOptionSale_a77862af1cc0b381e5e1ffc8c1a6b72b5}} 
+\index{OptionSale@{OptionSale}!getTimeNanos@{getTimeNanos}}
+\index{getTimeNanos@{getTimeNanos}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getTimeNanos()}{getTimeNanos()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Option\+Sale\+::get\+Time\+Nanos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the original event in nanoseconds. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+time of the original event in nanoseconds. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a2179ab2d5392f4d8b6b57f0326aafb61}\label{classOptionSale_a2179ab2d5392f4d8b6b57f0326aafb61}} 
+\index{OptionSale@{OptionSale}!getTimeSequence@{getTimeSequence}}
+\index{getTimeSequence@{getTimeSequence}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getTimeSequence()}{getTimeSequence()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Option\+Sale\+::get\+Time\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time and sequence of this event packaged into single long value. 
+
+\begin{DoxyReturn}{Returns}
+time and sequence of this event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_ad92ef2318f47522285e428b918d93303}\label{classOptionSale_ad92ef2318f47522285e428b918d93303}} 
+\index{OptionSale@{OptionSale}!getTradeThroughExempt@{getTradeThroughExempt}}
+\index{getTradeThroughExempt@{getTradeThroughExempt}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getTradeThroughExempt()}{getTradeThroughExempt()}}
+{\footnotesize\ttfamily char Option\+Sale\+::get\+Trade\+Through\+Exempt (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Trade\+Through\+Exempt flag of this option sale event. 
+
+\begin{DoxyReturn}{Returns}
+Trade\+Through\+Exempt flag of this option sale event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_ae47a7bfe07040b3d403fd7a75c4bdb46}\label{classOptionSale_ae47a7bfe07040b3d403fd7a75c4bdb46}} 
+\index{OptionSale@{OptionSale}!getType@{getType}}
+\index{getType@{getType}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getType()}{getType()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structTimeAndSaleType}{Time\+And\+Sale\+Type}}\& Option\+Sale\+::get\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns type of this option sale event. 
+
+\begin{DoxyReturn}{Returns}
+type of this option sale event. 
+\end{DoxyReturn}
+
+
+Referenced by is\+Cancel(), is\+Correction(), and is\+New().
+
+\mbox{\Hypertarget{classOptionSale_af944cfefa7d53c7ae4c0b56bf70ad050}\label{classOptionSale_af944cfefa7d53c7ae4c0b56bf70ad050}} 
+\index{OptionSale@{OptionSale}!getUnderlyingPrice@{getUnderlyingPrice}}
+\index{getUnderlyingPrice@{getUnderlyingPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getUnderlyingPrice()}{getUnderlyingPrice()}}
+{\footnotesize\ttfamily double Option\+Sale\+::get\+Underlying\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns underlying price at the time of this option sale event. 
+
+\begin{DoxyReturn}{Returns}
+underlying price at the time of this option sale event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_ae3a8159ff1028ff198b8c513165f5589}\label{classOptionSale_ae3a8159ff1028ff198b8c513165f5589}} 
+\index{OptionSale@{OptionSale}!getVolatility@{getVolatility}}
+\index{getVolatility@{getVolatility}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{getVolatility()}{getVolatility()}}
+{\footnotesize\ttfamily double Option\+Sale\+::get\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Black-\/\+Scholes implied volatility of the option at the time of this option sale event. 
+
+\begin{DoxyReturn}{Returns}
+Black-\/\+Scholes implied volatility of the option at the time of this option sale event. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_ac88481d692c464963843ab6343ac8c39}\label{classOptionSale_ac88481d692c464963843ab6343ac8c39}} 
+\index{OptionSale@{OptionSale}!isCancel@{isCancel}}
+\index{isCancel@{isCancel}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{isCancel()}{isCancel()}}
+{\footnotesize\ttfamily bool Option\+Sale\+::is\+Cancel (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this is a cancellation of a previous event. 
+
+It is {\ttfamily false} for newly created option sale event. \begin{DoxyReturn}{Returns}
+{\ttfamily true} if this is a cancellation of a previous event 
+\end{DoxyReturn}
+
+
+References Time\+And\+Sale\+Type\+::\+CANCEL, and get\+Type().
+
+\mbox{\Hypertarget{classOptionSale_aee5305a7e95efe9ccaba19a202fb7dbf}\label{classOptionSale_aee5305a7e95efe9ccaba19a202fb7dbf}} 
+\index{OptionSale@{OptionSale}!isCorrection@{isCorrection}}
+\index{isCorrection@{isCorrection}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{isCorrection()}{isCorrection()}}
+{\footnotesize\ttfamily bool Option\+Sale\+::is\+Correction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this is a correction of a previous event. 
+
+It is {\ttfamily false} for newly created option sale event.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this is a correction of a previous event 
+\end{DoxyReturn}
+
+
+References Time\+And\+Sale\+Type\+::\+CORRECTION, and get\+Type().
+
+\mbox{\Hypertarget{classOptionSale_a392a186ca37f0dbd04c7fefd0eb00a20}\label{classOptionSale_a392a186ca37f0dbd04c7fefd0eb00a20}} 
+\index{OptionSale@{OptionSale}!isExtendedTradingHours@{isExtendedTradingHours}}
+\index{isExtendedTradingHours@{isExtendedTradingHours}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{isExtendedTradingHours()}{isExtendedTradingHours()}}
+{\footnotesize\ttfamily bool Option\+Sale\+::is\+Extended\+Trading\+Hours (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this event represents an extended trading hours sale. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event represents an extended trading hours sale. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a680da55590b28e87a5a0f517cc51cfd5}\label{classOptionSale_a680da55590b28e87a5a0f517cc51cfd5}} 
+\index{OptionSale@{OptionSale}!isNew@{isNew}}
+\index{isNew@{isNew}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{isNew()}{isNew()}}
+{\footnotesize\ttfamily bool Option\+Sale\+::is\+New (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this is a new event (not cancellation or correction). 
+
+It is {\ttfamily true} for newly created option sale event.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this is a new event (not cancellation or correction). 
+\end{DoxyReturn}
+
+
+References get\+Type(), and Time\+And\+Sale\+Type\+::\+NEW.
+
+\mbox{\Hypertarget{classOptionSale_a107613d5c10bb0e43bf47edda8fca355}\label{classOptionSale_a107613d5c10bb0e43bf47edda8fca355}} 
+\index{OptionSale@{OptionSale}!isSpreadLeg@{isSpreadLeg}}
+\index{isSpreadLeg@{isSpreadLeg}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{isSpreadLeg()}{isSpreadLeg()}}
+{\footnotesize\ttfamily bool Option\+Sale\+::is\+Spread\+Leg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this event represents a spread leg. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event represents a spread leg. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a0bc6787763c6e86a0088e8003df78c9d}\label{classOptionSale_a0bc6787763c6e86a0088e8003df78c9d}} 
+\index{OptionSale@{OptionSale}!isValidTick@{isValidTick}}
+\index{isValidTick@{isValidTick}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{isValidTick()}{isValidTick()}}
+{\footnotesize\ttfamily bool Option\+Sale\+::is\+Valid\+Tick (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether this event represents a valid intraday tick. 
+
+Note, that a correction for a previously distributed valid tick represents a new valid tick itself, but a cancellation of a previous valid tick does not.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this event represents a valid intraday tick. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classOptionSale_a0d77c7961018ebf72e52b083f9435f2c}\label{classOptionSale_a0d77c7961018ebf72e52b083f9435f2c}} 
+\index{OptionSale@{OptionSale}!setAggressorSide@{setAggressorSide}}
+\index{setAggressorSide@{setAggressorSide}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setAggressorSide()}{setAggressorSide()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Aggressor\+Side (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structSide}{Side}} \&}]{side }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes aggressor side of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em side} & aggressor side of this option sale event. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a933ee2ee4c779a5571b61c65f5ee0561}\label{classOptionSale_a933ee2ee4c779a5571b61c65f5ee0561}} 
+\index{OptionSale@{OptionSale}!setAskPrice@{setAskPrice}}
+\index{setAskPrice@{setAskPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setAskPrice()}{setAskPrice()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Ask\+Price (\begin{DoxyParamCaption}\item[{double}]{ask\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes price of this time and sale event.\+the current ask price on the market when this option sale event had occurred. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Price} & the current ask price on the market when this option sale event had occurred. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_aaf0b850efca72739b4cb36c0625e1dc6}\label{classOptionSale_aaf0b850efca72739b4cb36c0625e1dc6}} 
+\index{OptionSale@{OptionSale}!setBidPrice@{setBidPrice}}
+\index{setBidPrice@{setBidPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setBidPrice()}{setBidPrice()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Bid\+Price (\begin{DoxyParamCaption}\item[{double}]{bid\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes the current bid price on the market when this option sale event had occurred. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Price} & the current bid price on the market when this option sale event had occurred. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_abf5bd8cea5bf341e9826ec2e60521417}\label{classOptionSale_abf5bd8cea5bf341e9826ec2e60521417}} 
+\index{OptionSale@{OptionSale}!setDelta@{setDelta}}
+\index{setDelta@{setDelta}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setDelta()}{setDelta()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Delta (\begin{DoxyParamCaption}\item[{double}]{delta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option delta at the time of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta} & option delta at the time of this option sale event. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_af8e4c7d40d60b34b5ecd8f21278981a8}\label{classOptionSale_af8e4c7d40d60b34b5ecd8f21278981a8}} 
+\index{OptionSale@{OptionSale}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_affbf8ba9b25153efb7201800d9c8b182}{Indexed\+Event}}.
+
+
+
+Referenced by with\+Event\+Flags().
+
+\mbox{\Hypertarget{classOptionSale_a1d6ba039e4d999122721afda1f7aeefb}\label{classOptionSale_a1d6ba039e4d999122721afda1f7aeefb}} 
+\index{OptionSale@{OptionSale}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_aefd0ab36275fc9adf6f7d57c2833c200}{Indexed\+Event}}.
+
+
+
+Referenced by with\+Event\+Flags().
+
+\mbox{\Hypertarget{classOptionSale_a741d6bf44132cbb70670e1796dc971d5}\label{classOptionSale_a741d6bf44132cbb70670e1796dc971d5}} 
+\index{OptionSale@{OptionSale}!setExchangeCode@{setExchangeCode}}
+\index{setExchangeCode@{setExchangeCode}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setExchangeCode()}{setExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & exchange code of this option sale event. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Exchange\+Code().
+
+\mbox{\Hypertarget{classOptionSale_a30a1fd9bc4cf889ddd22ec9e4bffe761}\label{classOptionSale_a30a1fd9bc4cf889ddd22ec9e4bffe761}} 
+\index{OptionSale@{OptionSale}!setExchangeCode@{setExchangeCode}}
+\index{setExchangeCode@{setExchangeCode}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setExchangeCode()}{setExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & exchange code of this option sale event. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Exchange\+Code().
+
+\mbox{\Hypertarget{classOptionSale_aa888e2e94b4fa7d692da73c45d3b76ee}\label{classOptionSale_aa888e2e94b4fa7d692da73c45d3b76ee}} 
+\index{OptionSale@{OptionSale}!setExchangeSaleConditions@{setExchangeSaleConditions}}
+\index{setExchangeSaleConditions@{setExchangeSaleConditions}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setExchangeSaleConditions()}{setExchangeSaleConditions()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Exchange\+Sale\+Conditions (\begin{DoxyParamCaption}\item[{std\+::string}]{exchange\+Sale\+Conditions }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes sale conditions provided for this event by data feed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Sale\+Conditions} & sale conditions. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a914bcba317a2fd007ce4246e53fe4963}\label{classOptionSale_a914bcba317a2fd007ce4246e53fe4963}} 
+\index{OptionSale@{OptionSale}!setExtendedTradingHours@{setExtendedTradingHours}}
+\index{setExtendedTradingHours@{setExtendedTradingHours}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setExtendedTradingHours()}{setExtendedTradingHours()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Extended\+Trading\+Hours (\begin{DoxyParamCaption}\item[{bool}]{extended\+Trading\+Hours }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event represents an extended trading hours sale. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em extended\+Trading\+Hours} & {\ttfamily true} if this event represents an extended trading hours sale. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a24b267c4c5cb4ea08cb8a5a80e12186f}\label{classOptionSale_a24b267c4c5cb4ea08cb8a5a80e12186f}} 
+\index{OptionSale@{OptionSale}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+The index is composed of \mbox{\hyperlink{classOptionSale_a2b74f33eb4884fe5661b0d7c46c51e10}{time}} and \mbox{\hyperlink{classOptionSale_aaee951c7dbe87a6f6975a32e49a47686}{sequence}} and invocation of this method changes time and sequence. {\bfseries{Do not use this method directly.}} Change \mbox{\hyperlink{classOptionSale_ae92d826a518c8e67707e3e195c97618c}{time}} and/or \mbox{\hyperlink{classOptionSale_abe1d78b4d8ebfdd3217bef5455abea0b}{sequence}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the event index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classOptionSale_a944fc7602702af9149559f29d195cedd}{Option\+Sale\+::get\+Index()}} 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a9e8731cb11daf84a0eb17fb570af9684}{Indexed\+Event}}.
+
+
+
+Referenced by with\+Index().
+
+\mbox{\Hypertarget{classOptionSale_a59403457a44031186763bc2b90be8d19}\label{classOptionSale_a59403457a44031186763bc2b90be8d19}} 
+\index{OptionSale@{OptionSale}!setOptionSymbol@{setOptionSymbol}}
+\index{setOptionSymbol@{setOptionSymbol}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setOptionSymbol()}{setOptionSymbol()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Option\+Symbol (\begin{DoxyParamCaption}\item[{std\+::string}]{option\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option symbol of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em option\+Symbol} & option symbol of this event. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a34152fb2e98be35a9d51481b6e45e477}\label{classOptionSale_a34152fb2e98be35a9d51481b6e45e477}} 
+\index{OptionSale@{OptionSale}!setPrice@{setPrice}}
+\index{setPrice@{setPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setPrice()}{setPrice()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Price (\begin{DoxyParamCaption}\item[{double}]{price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes price of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & price of this option sale event. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Price().
+
+\mbox{\Hypertarget{classOptionSale_abe1d78b4d8ebfdd3217bef5455abea0b}\label{classOptionSale_abe1d78b4d8ebfdd3217bef5455abea0b}} 
+\index{OptionSale@{OptionSale}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes sequence number of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Sequence() 
+\end{DoxySeeAlso}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+
+
+Referenced by with\+Sequence().
+
+\mbox{\Hypertarget{classOptionSale_a8235576132788dbdb2339ee447f92384}\label{classOptionSale_a8235576132788dbdb2339ee447f92384}} 
+\index{OptionSale@{OptionSale}!setSize@{setSize}}
+\index{setSize@{setSize}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setSize()}{setSize()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Size (\begin{DoxyParamCaption}\item[{double}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes size of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & size of this option sale event. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a86ad2569f74b495eadc2aa4f88dfa4ba}\label{classOptionSale_a86ad2569f74b495eadc2aa4f88dfa4ba}} 
+\index{OptionSale@{OptionSale}!setSpreadLeg@{setSpreadLeg}}
+\index{setSpreadLeg@{setSpreadLeg}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setSpreadLeg()}{setSpreadLeg()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Spread\+Leg (\begin{DoxyParamCaption}\item[{bool}]{spread\+Leg }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event represents a spread leg. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em spread\+Leg} & {\ttfamily true} if this event represents a spread leg. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_ae92d826a518c8e67707e3e195c97618c}\label{classOptionSale_ae92d826a518c8e67707e3e195c97618c}} 
+\index{OptionSale@{OptionSale}!setTime@{setTime}}
+\index{setTime@{setTime}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this event. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time of this event. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by set\+Time\+Nanos(), and with\+Time().
+
+\mbox{\Hypertarget{classOptionSale_af80cfa2894682c85e4515ec7c45f43cb}\label{classOptionSale_af80cfa2894682c85e4515ec7c45f43cb}} 
+\index{OptionSale@{OptionSale}!setTimeNanoPart@{setTimeNanoPart}}
+\index{setTimeNanoPart@{setTimeNanoPart}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setTimeNanoPart()}{setTimeNanoPart()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds time part of the original event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & microseconds and nanoseconds time part of the original event. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Time\+Nano\+Part().
+
+\mbox{\Hypertarget{classOptionSale_acb1cead98d52bda7f14d5526bedaa1e6}\label{classOptionSale_acb1cead98d52bda7f14d5526bedaa1e6}} 
+\index{OptionSale@{OptionSale}!setTimeNanos@{setTimeNanos}}
+\index{setTimeNanos@{setTimeNanos}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setTimeNanos()}{setTimeNanos()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Time\+Nanos (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Nanos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the original event. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nanos} & time of the original event in nanoseconds. \\
+\hline
+\end{DoxyParams}
+
+
+References set\+Time().
+
+
+
+Referenced by with\+Time\+Nanos().
+
+\mbox{\Hypertarget{classOptionSale_a281abeb36949230622e73e2ab866ea92}\label{classOptionSale_a281abeb36949230622e73e2ab866ea92}} 
+\index{OptionSale@{OptionSale}!setTimeSequence@{setTimeSequence}}
+\index{setTimeSequence@{setTimeSequence}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setTimeSequence()}{setTimeSequence()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Time\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time and sequence of this event. 
+
+{\bfseries{Do not use this method directly.}} Change \mbox{\hyperlink{classOptionSale_ae92d826a518c8e67707e3e195c97618c}{time}} and/or \mbox{\hyperlink{classOptionSale_abe1d78b4d8ebfdd3217bef5455abea0b}{sequence}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Sequence} & the time and sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Time\+Sequence() 
+\end{DoxySeeAlso}
+
+
+Referenced by with\+Time\+Sequence().
+
+\mbox{\Hypertarget{classOptionSale_a69094c33d42df1d674e2be3be7051dfa}\label{classOptionSale_a69094c33d42df1d674e2be3be7051dfa}} 
+\index{OptionSale@{OptionSale}!setTradeThroughExempt@{setTradeThroughExempt}}
+\index{setTradeThroughExempt@{setTradeThroughExempt}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setTradeThroughExempt()}{setTradeThroughExempt()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Trade\+Through\+Exempt (\begin{DoxyParamCaption}\item[{char}]{trade\+Through\+Exempt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes Trade\+Through\+Exempt flag of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em trade\+Through\+Exempt} & Trade\+Through\+Exempt flag of this option sale event. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_ab36a6da989fdc08f09e1fd0a097aea6f}\label{classOptionSale_ab36a6da989fdc08f09e1fd0a097aea6f}} 
+\index{OptionSale@{OptionSale}!setType@{setType}}
+\index{setType@{setType}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setType()}{setType()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Type (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structTimeAndSaleType}{Time\+And\+Sale\+Type}} \&}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes type of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type} & type of this option sale event. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a0424e49380f307506db91c3dc18349be}\label{classOptionSale_a0424e49380f307506db91c3dc18349be}} 
+\index{OptionSale@{OptionSale}!setUnderlyingPrice@{setUnderlyingPrice}}
+\index{setUnderlyingPrice@{setUnderlyingPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setUnderlyingPrice()}{setUnderlyingPrice()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Underlying\+Price (\begin{DoxyParamCaption}\item[{double}]{underlying\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes underlying price at the time of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em underlying\+Price} & underlying price at the time of this option sale event. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a948271fe49332f9b3431a4728254f54d}\label{classOptionSale_a948271fe49332f9b3431a4728254f54d}} 
+\index{OptionSale@{OptionSale}!setValidTick@{setValidTick}}
+\index{setValidTick@{setValidTick}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setValidTick()}{setValidTick()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Valid\+Tick (\begin{DoxyParamCaption}\item[{bool}]{valid\+Tick }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether this event represents a valid intraday tick. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em valid\+Tick} & {\ttfamily true} if this event represents a valid intraday tick. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a3d0a38af168ee7d335b441975ccdfc2e}\label{classOptionSale_a3d0a38af168ee7d335b441975ccdfc2e}} 
+\index{OptionSale@{OptionSale}!setVolatility@{setVolatility}}
+\index{setVolatility@{setVolatility}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{setVolatility()}{setVolatility()}}
+{\footnotesize\ttfamily void Option\+Sale\+::set\+Volatility (\begin{DoxyParamCaption}\item[{double}]{volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Black-\/\+Scholes implied volatility of the option at the time of this option sale event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volatility} & Black-\/\+Scholes implied volatility of the option at the time of this option sale event. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classOptionSale_a74ae4dedc15b3ba5e16f3ff3d057d838}\label{classOptionSale_a74ae4dedc15b3ba5e16f3ff3d057d838}} 
+\index{OptionSale@{OptionSale}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Option\+Sale\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classOptionSale_a72592c3071c1039ef18008640fd39e08}\label{classOptionSale_a72592c3071c1039ef18008640fd39e08}} 
+\index{OptionSale@{OptionSale}!toString@{toString}}
+\index{toString@{toString}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Option\+Sale\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+
+\mbox{\Hypertarget{classOptionSale_a556c73a67e27d47da31002d61bc0e85b}\label{classOptionSale_a556c73a67e27d47da31002d61bc0e85b}} 
+\index{OptionSale@{OptionSale}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current option sale. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Event\+Flags().
+
+\mbox{\Hypertarget{classOptionSale_aadc0e7e6e8c90805de936ff354a2fc97}\label{classOptionSale_aadc0e7e6e8c90805de936ff354a2fc97}} 
+\index{OptionSale@{OptionSale}!withEventFlags@{withEventFlags}}
+\index{withEventFlags@{withEventFlags}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withEventFlags()}{withEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags and returns the current option sale. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Event\+Flags().
+
+\mbox{\Hypertarget{classOptionSale_af15adbe35f7312aada6f64903e7c8bcc}\label{classOptionSale_af15adbe35f7312aada6f64903e7c8bcc}} 
+\index{OptionSale@{OptionSale}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current option sale. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References Market\+Event\+::set\+Event\+Symbol().
+
+\mbox{\Hypertarget{classOptionSale_a0fe00630abcbba2e7b69438f8056b0da}\label{classOptionSale_a0fe00630abcbba2e7b69438f8056b0da}} 
+\index{OptionSale@{OptionSale}!withEventTime@{withEventTime}}
+\index{withEventTime@{withEventTime}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withEventTime()}{withEventTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns the current option sale. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References Market\+Event\+::set\+Event\+Time().
+
+\mbox{\Hypertarget{classOptionSale_a2a60a9825473b861b80fd256c789287c}\label{classOptionSale_a2a60a9825473b861b80fd256c789287c}} 
+\index{OptionSale@{OptionSale}!withExchangeCode@{withExchangeCode}}
+\index{withExchangeCode@{withExchangeCode}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withExchangeCode()}{withExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of this option sale event. 
+
+Returns the current option sale.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & The exchange code of this option sale. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Exchange\+Code().
+
+\mbox{\Hypertarget{classOptionSale_a0b6e1a6123c121bafb6be970559408e9}\label{classOptionSale_a0b6e1a6123c121bafb6be970559408e9}} 
+\index{OptionSale@{OptionSale}!withExchangeCode@{withExchangeCode}}
+\index{withExchangeCode@{withExchangeCode}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withExchangeCode()}{withExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of this option sale event. 
+
+Returns the current order.
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & The exchange code of this option sale. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Exchange\+Code().
+
+\mbox{\Hypertarget{classOptionSale_a694fc78b47739897609482146c36ab75}\label{classOptionSale_a694fc78b47739897609482146c36ab75}} 
+\index{OptionSale@{OptionSale}!withIndex@{withIndex}}
+\index{withIndex@{withIndex}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withIndex()}{withIndex()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+Returns the current option sale.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & unique per-\/symbol index of this option sale. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Index().
+
+\mbox{\Hypertarget{classOptionSale_af7df1990de5aa7b14ea7cb67c45e3a9a}\label{classOptionSale_af7df1990de5aa7b14ea7cb67c45e3a9a}} 
+\index{OptionSale@{OptionSale}!withPrice@{withPrice}}
+\index{withPrice@{withPrice}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withPrice()}{withPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Price (\begin{DoxyParamCaption}\item[{double}]{price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes price of this option sale event. 
+
+Returns the current option sale.
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & The price of this option sale. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Price().
+
+\mbox{\Hypertarget{classOptionSale_a02c8eb9a389b0fd84a46d309efd91efc}\label{classOptionSale_a02c8eb9a389b0fd84a46d309efd91efc}} 
+\index{OptionSale@{OptionSale}!withSequence@{withSequence}}
+\index{withSequence@{withSequence}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withSequence()}{withSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes sequence number of this event. 
+
+Returns the current option sale.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Sequence() 
+\end{DoxySeeAlso}
+
+
+References set\+Sequence().
+
+\mbox{\Hypertarget{classOptionSale_ae7bcb244c41d6f9de1613c66926518d2}\label{classOptionSale_ae7bcb244c41d6f9de1613c66926518d2}} 
+\index{OptionSale@{OptionSale}!withTime@{withTime}}
+\index{withTime@{withTime}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withTime()}{withTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes timestamp of the event in milliseconds. 
+
+Returns the current option sale.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & timestamp of the event in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Time().
+
+\mbox{\Hypertarget{classOptionSale_ae157870de34085c14f7f5b3e6b86ef20}\label{classOptionSale_ae157870de34085c14f7f5b3e6b86ef20}} 
+\index{OptionSale@{OptionSale}!withTimeNanoPart@{withTimeNanoPart}}
+\index{withTimeNanoPart@{withTimeNanoPart}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withTimeNanoPart()}{withTimeNanoPart()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds time part of this option sale. 
+
+Returns the current option sale.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & microseconds and nanoseconds time part of this option sale. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Time\+Nano\+Part().
+
+\mbox{\Hypertarget{classOptionSale_a62155c6e9109d5e5bcde6e69398f1522}\label{classOptionSale_a62155c6e9109d5e5bcde6e69398f1522}} 
+\index{OptionSale@{OptionSale}!withTimeNanos@{withTimeNanos}}
+\index{withTimeNanos@{withTimeNanos}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withTimeNanos()}{withTimeNanos()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Time\+Nanos (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Nanos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of this option sale and returns it. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nanos} & The time of this option sale in nanoseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Time\+Nanos().
+
+\mbox{\Hypertarget{classOptionSale_a8500b3b1be11c2fa661c11dd6daf1d37}\label{classOptionSale_a8500b3b1be11c2fa661c11dd6daf1d37}} 
+\index{OptionSale@{OptionSale}!withTimeSequence@{withTimeSequence}}
+\index{withTimeSequence@{withTimeSequence}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{withTimeSequence()}{withTimeSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classOptionSale}{Option\+Sale}}\& Option\+Sale\+::with\+Time\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time and sequence of this event. 
+
+Returns the current option sale.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Sequence} & the time and sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current option sale. 
+\end{DoxyReturn}
+
+
+References set\+Time\+Sequence().
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{classOptionSale_a23bff62edb5b4bf7d777ff70af0e272d}\label{classOptionSale_a23bff62edb5b4bf7d777ff70af0e272d}} 
+\index{OptionSale@{OptionSale}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!OptionSale@{OptionSale}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily constexpr std\+::uint32\+\_\+t Option\+Sale\+::\+MAX\+\_\+\+SEQUENCE = (1U $<$$<$ 22U) -\/ 1U\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classOptionSale_abe1d78b4d8ebfdd3217bef5455abea0b}{Option\+Sale\+::set\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+Referenced by set\+Sequence().
+

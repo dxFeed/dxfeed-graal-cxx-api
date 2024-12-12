@@ -1,5 +1,7 @@
 var classdxfcpp_1_1Summary =
 [
+    [ "Ptr", "db/d1c/classdxfcpp_1_1Summary.html#a38ae0015c08e3e6c7d860ed180c25c6f", null ],
+    [ "Unique", "db/d1c/classdxfcpp_1_1Summary.html#ae53887396057e97ad8ed3ab32a5fb552", null ],
     [ "Summary", "db/d1c/classdxfcpp_1_1Summary.html#a1cc650c3e373ad9336fefeb8101abfe4", null ],
     [ "Summary", "db/d1c/classdxfcpp_1_1Summary.html#a9d11a72888ffa9e339dfe5bdbc246a43", null ],
     [ "getDayClosePrice", "db/d1c/classdxfcpp_1_1Summary.html#ad8228746e552de35ded8da2e074e0475", null ],

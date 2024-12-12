@@ -1,0 +1,685 @@
+\hypertarget{classGreeks}{}\doxysubsection{Greeks Class Reference}
+\label{classGreeks}\index{Greeks@{Greeks}}
+
+
+\mbox{\hyperlink{classGreeks}{Greeks}} event is a snapshot of the option price, Black-\/\+Scholes volatility and greeks.  
+
+
+
+
+{\ttfamily \#include $<$Greeks.\+hpp$>$}
+
+Inheritance diagram for Greeks\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.045045cm]{da/df2/classGreeks}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classGreeks_a6c52af422bfec42a9de867aac4b4a16d}\label{classGreeks_a6c52af422bfec42a9de867aac4b4a16d}} 
+using \mbox{\hyperlink{classGreeks_a6c52af422bfec42a9de867aac4b4a16d}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classGreeks}{Greeks}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classGreeks}{Greeks}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classGreeks_a474a7ee4e85c47600092a12deb794a8b}\label{classGreeks_a474a7ee4e85c47600092a12deb794a8b}} 
+using \mbox{\hyperlink{classGreeks_a474a7ee4e85c47600092a12deb794a8b}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classGreeks}{Greeks}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classGreeks}{Greeks}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classGreeks_ab4d005fd60478fd5ec526b4506fe91cf}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classGreeks_a79bfd339b3653425dd9db1b6878e97d1}\label{classGreeks_a79bfd339b3653425dd9db1b6878e97d1}} 
+\mbox{\hyperlink{classGreeks_a79bfd339b3653425dd9db1b6878e97d1}{Greeks}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new greeks event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classGreeks_ac7fa6bb7140876e1532f0865f5b85010}{Greeks}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new greeks event with the specified event symbol. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}} \& \mbox{\hyperlink{classGreeks_a3730ff4d5a109ca66d14c522c72e3e21}{get\+Source}} () const \&noexcept override
+\begin{DoxyCompactList}\small\item\em Returns the source of this event. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classGreeks_a8e9fbcf81dd2fb99b624b0693bf38b58}{get\+Event\+Flags}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \mbox{\hyperlink{classGreeks_a8ab19de7aca32ba8fa3724a2e1dd5a6c}{get\+Event\+Flags\+Mask}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_a8a2b998e23ed91c5be7f0ab61fcc9b87}{set\+Event\+Flags}} (std\+::int32\+\_\+t event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_ab4562f8998b0fea4c12ad845936a38ad}{set\+Event\+Flags}} (const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&event\+Flags) noexcept override
+\begin{DoxyCompactList}\small\item\em Changes transactional event flags. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classGreeks_a14a2a6b7356682b3a8393d59891b9cf1}{get\+Index}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_a1db18d51e77025db4219b6b70cdcc1f4}{set\+Index}} (std\+::int64\+\_\+t index) override
+\begin{DoxyCompactList}\small\item\em Changes unique per-\/symbol index of this event. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classGreeks_abfa6973297c02cfc7d4f160d8cc919ed}{get\+Time}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_abfa9a89e3a9b1f5ca33f0b25d1595350}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes timestamp of the event in milliseconds. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classGreeks_a56bc59e6a3ef6bd6c7324dd53b3ddf2a}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns the sequence number of this event to distinguish events that have the same time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_a0000f9f6942b6eebc9971e5d5a91ad10}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes sequence number of this event. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classGreeks_a3e451ec03aebb0b6b8c9bbb901234364}{get\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns option market price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_acce6c0d443d74d9f559a0296ab182365}{set\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes option market price. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classGreeks_ac7a8d24870d0511892364a6567d58bd0}{get\+Volatility}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns Black-\/\+Scholes implied volatility of the option. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_a11937d4c3a691f3490756783640ae9c8}{set\+Volatility}} (double volatility) noexcept
+\begin{DoxyCompactList}\small\item\em Changes Black-\/\+Scholes implied volatility of the option. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classGreeks_a9c028325cdb21bcf7f65ea5131ead520}{get\+Delta}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Return option delta. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_af9c15c6eaf8a56ab03e1c6dca5b50ad5}{set\+Delta}} (double delta) noexcept
+\begin{DoxyCompactList}\small\item\em Changes option delta. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classGreeks_a4147c8a022da8e37b70c765d4e800a37}{get\+Gamma}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns option gamma. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_a988034430d968c47ca108d2462f7b232}{set\+Gamma}} (double gamma) noexcept
+\begin{DoxyCompactList}\small\item\em Changes option gamma. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classGreeks_a10be815cb2a3f73e142fd86a590ad431}{get\+Theta}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns option theta. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_acaf51d9f282cb0131c9c3a3c6c66ff99}{set\+Theta}} (double theta) noexcept
+\begin{DoxyCompactList}\small\item\em Changes option theta. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classGreeks_a442f0f34a14f4874567308cdffbeede5}{get\+Rho}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns option rho. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_aa92139c9199ea92dd61301eab7e2a7ed}{set\+Rho}} (double rho) noexcept
+\begin{DoxyCompactList}\small\item\em Changes option rho. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classGreeks_a4fbc06735282537645df20bf696d1e9f}{get\+Vega}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns option vega. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classGreeks_a4efbbe21163bc05c242de53bd6a4e014}{set\+Vega}} (double vega) noexcept
+\begin{DoxyCompactList}\small\item\em Changes option vega. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classGreeks_a7add57bcfa465480b062f979a2a9185a}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classGreeks_a21f658b2b5c5da84c1134fe025629bf0}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classGreeks_a2496c9e2f3e5c54f4478f427c08933f9}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classGreeks_a727f5f007bf20099c1d454ba2d17abfa}\label{classGreeks_a727f5f007bf20099c1d454ba2d17abfa}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classGreeks_a727f5f007bf20099c1d454ba2d17abfa}{TYPE}} = Event\+Type\+Enum\+::\+GREEKS
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classGreeks_ae4b1c1192555e2409d3ef209303e34f8}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classGreeks}{Greeks}} event is a snapshot of the option price, Black-\/\+Scholes volatility and greeks. 
+
+It represents the most recent information that is available about the corresponding values on the market at any given moment of time.
+
+\doxysubparagraph*{\label{_eventFlagsSection}%
+Event flags, transactions and snapshots}
+
+Some greeks sources provide a consistent view of the set of known greeks. The corresponding information is carried in event\+Flags property. The logic behind this property is detailed in \mbox{\hyperlink{structIndexedEvent}{Indexed\+Event}} class documentation. Multiple event sources for the same symbol are not supported for greeks, thus source property is always \mbox{\hyperlink{classIndexedEventSource_ab359b82d74ee151707106b66eec0a4e3}{DEFAULT}}.
+
+Time\+Series\+Event\+Model class handles all the snapshot and transaction logic and conveniently represents a list current of time-\/series events order by their time. It relies on the code of Abstract\+Indexed\+Event\+Model to handle this logic. Use the source code of Abstract\+Indexed\+Event\+Model for clarification on transactions and snapshot logic.
+
+\doxysubparagraph*{Publishing \mbox{\hyperlink{classGreeks}{Greeks}}}
+
+Publishing of greeks events follows the general rules explained in \mbox{\hyperlink{structTimeSeriesEvent}{Time\+Series\+Event}} class documentation. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classGreeks_ac7fa6bb7140876e1532f0865f5b85010}\label{classGreeks_ac7fa6bb7140876e1532f0865f5b85010}} 
+\index{Greeks@{Greeks}!Greeks@{Greeks}}
+\index{Greeks@{Greeks}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{Greeks()}{Greeks()}}
+{\footnotesize\ttfamily Greeks\+::\+Greeks (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new greeks event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Market\+Event\+::\+Market\+Event().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classGreeks_a2496c9e2f3e5c54f4478f427c08933f9}\label{classGreeks_a2496c9e2f3e5c54f4478f427c08933f9}} 
+\index{Greeks@{Greeks}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Greeks\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGreeks_a21f658b2b5c5da84c1134fe025629bf0}\label{classGreeks_a21f658b2b5c5da84c1134fe025629bf0}} 
+\index{Greeks@{Greeks}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classGreeks}{Greeks}} $>$ Greeks\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classGreeks_a9c028325cdb21bcf7f65ea5131ead520}\label{classGreeks_a9c028325cdb21bcf7f65ea5131ead520}} 
+\index{Greeks@{Greeks}!getDelta@{getDelta}}
+\index{getDelta@{getDelta}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getDelta()}{getDelta()}}
+{\footnotesize\ttfamily double Greeks\+::get\+Delta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Return option delta. 
+
+Delta is the first derivative of an option price by an underlying price.
+
+\begin{DoxyReturn}{Returns}
+option delta. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGreeks_a8e9fbcf81dd2fb99b624b0693bf38b58}\label{classGreeks_a8e9fbcf81dd2fb99b624b0693bf38b58}} 
+\index{Greeks@{Greeks}!getEventFlags@{getEventFlags}}
+\index{getEventFlags@{getEventFlags}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getEventFlags()}{getEventFlags()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Greeks\+::get\+Event\+Flags (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a5bf54899ccd5dd4bd162ae64fbcc695b}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classGreeks_a8ab19de7aca32ba8fa3724a2e1dd5a6c}\label{classGreeks_a8ab19de7aca32ba8fa3724a2e1dd5a6c}} 
+\index{Greeks@{Greeks}!getEventFlagsMask@{getEventFlagsMask}}
+\index{getEventFlagsMask@{getEventFlagsMask}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getEventFlagsMask()}{getEventFlagsMask()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} Greeks\+::get\+Event\+Flags\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+\begin{DoxyReturn}{Returns}
+The transactional event flags\textquotesingle{} mask. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a01ae5fda2a1ada2279c541f821a03ada}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classGreeks_a4147c8a022da8e37b70c765d4e800a37}\label{classGreeks_a4147c8a022da8e37b70c765d4e800a37}} 
+\index{Greeks@{Greeks}!getGamma@{getGamma}}
+\index{getGamma@{getGamma}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getGamma()}{getGamma()}}
+{\footnotesize\ttfamily double Greeks\+::get\+Gamma (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option gamma. 
+
+Gamma is the second derivative of an option price by an underlying price.
+
+\begin{DoxyReturn}{Returns}
+option gamma. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGreeks_a14a2a6b7356682b3a8393d59891b9cf1}\label{classGreeks_a14a2a6b7356682b3a8393d59891b9cf1}} 
+\index{Greeks@{Greeks}!getIndex@{getIndex}}
+\index{getIndex@{getIndex}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getIndex()}{getIndex()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Greeks\+::get\+Index (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns unique per-\/symbol index of this event. 
+
+The index is composed of time and sequence. Changing either time or sequence changes event index.
+
+\begin{DoxyReturn}{Returns}
+unique index of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a4310a26785d5142efba9d7c0094125bc}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classGreeks_a3e451ec03aebb0b6b8c9bbb901234364}\label{classGreeks_a3e451ec03aebb0b6b8c9bbb901234364}} 
+\index{Greeks@{Greeks}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily double Greeks\+::get\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option market price. 
+
+\begin{DoxyReturn}{Returns}
+option market price. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGreeks_a442f0f34a14f4874567308cdffbeede5}\label{classGreeks_a442f0f34a14f4874567308cdffbeede5}} 
+\index{Greeks@{Greeks}!getRho@{getRho}}
+\index{getRho@{getRho}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getRho()}{getRho()}}
+{\footnotesize\ttfamily double Greeks\+::get\+Rho (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option rho. 
+
+Rho is the first derivative of an option price by percentage interest rate.
+
+\begin{DoxyReturn}{Returns}
+option rho. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGreeks_a56bc59e6a3ef6bd6c7324dd53b3ddf2a}\label{classGreeks_a56bc59e6a3ef6bd6c7324dd53b3ddf2a}} 
+\index{Greeks@{Greeks}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Greeks\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the sequence number of this event to distinguish events that have the same time. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \+::\+MAX\+\_\+\+SEQUENCE.
+
+\begin{DoxyReturn}{Returns}
+The sequence number of this event 
+\end{DoxyReturn}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+
+
+Referenced by set\+Time().
+
+\mbox{\Hypertarget{classGreeks_a3730ff4d5a109ca66d14c522c72e3e21}\label{classGreeks_a3730ff4d5a109ca66d14c522c72e3e21}} 
+\index{Greeks@{Greeks}!getSource@{getSource}}
+\index{getSource@{getSource}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getSource()}{getSource()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{classIndexedEventSource}{Indexed\+Event\+Source}}\& Greeks\+::get\+Source (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns the source of this event. 
+
+\begin{DoxyReturn}{Returns}
+The source of this event. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a54d06fa64c5f66ed78b328f4c36a633b}{Indexed\+Event}}.
+
+
+
+References Indexed\+Event\+Source\+::\+DEFAULT.
+
+\mbox{\Hypertarget{classGreeks_a10be815cb2a3f73e142fd86a590ad431}\label{classGreeks_a10be815cb2a3f73e142fd86a590ad431}} 
+\index{Greeks@{Greeks}!getTheta@{getTheta}}
+\index{getTheta@{getTheta}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getTheta()}{getTheta()}}
+{\footnotesize\ttfamily double Greeks\+::get\+Theta (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option theta. 
+
+Theta is the first derivative of an option price by a number of days to expiration.
+
+\begin{DoxyReturn}{Returns}
+option theta. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGreeks_abfa6973297c02cfc7d4f160d8cc919ed}\label{classGreeks_abfa6973297c02cfc7d4f160d8cc919ed}} 
+\index{Greeks@{Greeks}!getTime@{getTime}}
+\index{getTime@{getTime}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Greeks\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns timestamp of the event in milliseconds. 
+
+\begin{DoxyReturn}{Returns}
+timestamp of the event in milliseconds 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structTimeSeriesEvent_a9d2ae41520f33140a6e823ae650e216a}{Time\+Series\+Event}}.
+
+\mbox{\Hypertarget{classGreeks_a4fbc06735282537645df20bf696d1e9f}\label{classGreeks_a4fbc06735282537645df20bf696d1e9f}} 
+\index{Greeks@{Greeks}!getVega@{getVega}}
+\index{getVega@{getVega}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getVega()}{getVega()}}
+{\footnotesize\ttfamily double Greeks\+::get\+Vega (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns option vega. 
+
+Vega is the first derivative of an option price by percentage volatility.
+
+\begin{DoxyReturn}{Returns}
+option vega. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGreeks_ac7a8d24870d0511892364a6567d58bd0}\label{classGreeks_ac7a8d24870d0511892364a6567d58bd0}} 
+\index{Greeks@{Greeks}!getVolatility@{getVolatility}}
+\index{getVolatility@{getVolatility}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{getVolatility()}{getVolatility()}}
+{\footnotesize\ttfamily double Greeks\+::get\+Volatility (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns Black-\/\+Scholes implied volatility of the option. 
+
+\begin{DoxyReturn}{Returns}
+Black-\/\+Scholes implied volatility of the option. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classGreeks_af9c15c6eaf8a56ab03e1c6dca5b50ad5}\label{classGreeks_af9c15c6eaf8a56ab03e1c6dca5b50ad5}} 
+\index{Greeks@{Greeks}!setDelta@{setDelta}}
+\index{setDelta@{setDelta}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setDelta()}{setDelta()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Delta (\begin{DoxyParamCaption}\item[{double}]{delta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option delta. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta} & option delta. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGreeks_ab4562f8998b0fea4c12ad845936a38ad}\label{classGreeks_ab4562f8998b0fea4c12ad845936a38ad}} 
+\index{Greeks@{Greeks}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Greeks\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classEventFlagsMask}{Event\+Flags\+Mask}} \&}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags\textquotesingle{} mask. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_affbf8ba9b25153efb7201800d9c8b182}{Indexed\+Event}}.
+
+
+
+References Event\+Flags\+Mask\+::get\+Mask().
+
+\mbox{\Hypertarget{classGreeks_a8a2b998e23ed91c5be7f0ab61fcc9b87}\label{classGreeks_a8a2b998e23ed91c5be7f0ab61fcc9b87}} 
+\index{Greeks@{Greeks}!setEventFlags@{setEventFlags}}
+\index{setEventFlags@{setEventFlags}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setEventFlags()}{setEventFlags()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Greeks\+::set\+Event\+Flags (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{event\+Flags }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Changes transactional event flags. 
+
+See \mbox{\hyperlink{classEventFlag}{Event\+Flag}} \char`\"{}\+Event Flags\char`\"{} section.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Flags} & transactional event flags. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_aefd0ab36275fc9adf6f7d57c2833c200}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classGreeks_a988034430d968c47ca108d2462f7b232}\label{classGreeks_a988034430d968c47ca108d2462f7b232}} 
+\index{Greeks@{Greeks}!setGamma@{setGamma}}
+\index{setGamma@{setGamma}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setGamma()}{setGamma()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Gamma (\begin{DoxyParamCaption}\item[{double}]{gamma }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option gamma. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gamma} & option gamma. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGreeks_a1db18d51e77025db4219b6b70cdcc1f4}\label{classGreeks_a1db18d51e77025db4219b6b70cdcc1f4}} 
+\index{Greeks@{Greeks}!setIndex@{setIndex}}
+\index{setIndex@{setIndex}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setIndex()}{setIndex()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Index (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{index }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Changes unique per-\/symbol index of this event. 
+
+The index is composed of time and sequence and invocation of this method changes time and sequence. {\bfseries{Do not use this method directly.}} Change time and/or sequence.
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & the event index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Index() 
+\end{DoxySeeAlso}
+
+
+Implements \mbox{\hyperlink{structIndexedEvent_a9e8731cb11daf84a0eb17fb570af9684}{Indexed\+Event}}.
+
+\mbox{\Hypertarget{classGreeks_acce6c0d443d74d9f559a0296ab182365}\label{classGreeks_acce6c0d443d74d9f559a0296ab182365}} 
+\index{Greeks@{Greeks}!setPrice@{setPrice}}
+\index{setPrice@{setPrice}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setPrice()}{setPrice()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Price (\begin{DoxyParamCaption}\item[{double}]{price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option market price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & option market price. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGreeks_aa92139c9199ea92dd61301eab7e2a7ed}\label{classGreeks_aa92139c9199ea92dd61301eab7e2a7ed}} 
+\index{Greeks@{Greeks}!setRho@{setRho}}
+\index{setRho@{setRho}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setRho()}{setRho()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Rho (\begin{DoxyParamCaption}\item[{double}]{rho }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option rho. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rho} & option rho. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGreeks_a0000f9f6942b6eebc9971e5d5a91ad10}\label{classGreeks_a0000f9f6942b6eebc9971e5d5a91ad10}} 
+\index{Greeks@{Greeks}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes sequence number of this event. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Sequence() 
+\end{DoxySeeAlso}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+\mbox{\Hypertarget{classGreeks_acaf51d9f282cb0131c9c3a3c6c66ff99}\label{classGreeks_acaf51d9f282cb0131c9c3a3c6c66ff99}} 
+\index{Greeks@{Greeks}!setTheta@{setTheta}}
+\index{setTheta@{setTheta}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setTheta()}{setTheta()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Theta (\begin{DoxyParamCaption}\item[{double}]{theta }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option theta. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em theta} & option theta. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGreeks_abfa9a89e3a9b1f5ca33f0b25d1595350}\label{classGreeks_abfa9a89e3a9b1f5ca33f0b25d1595350}} 
+\index{Greeks@{Greeks}!setTime@{setTime}}
+\index{setTime@{setTime}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes timestamp of the event in milliseconds. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & timestamp of the event in milliseconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\+::get\+Time() 
+\end{DoxySeeAlso}
+
+
+References get\+Sequence().
+
+\mbox{\Hypertarget{classGreeks_a4efbbe21163bc05c242de53bd6a4e014}\label{classGreeks_a4efbbe21163bc05c242de53bd6a4e014}} 
+\index{Greeks@{Greeks}!setVega@{setVega}}
+\index{setVega@{setVega}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setVega()}{setVega()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Vega (\begin{DoxyParamCaption}\item[{double}]{vega }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes option vega. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vega} & option vega. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGreeks_a11937d4c3a691f3490756783640ae9c8}\label{classGreeks_a11937d4c3a691f3490756783640ae9c8}} 
+\index{Greeks@{Greeks}!setVolatility@{setVolatility}}
+\index{setVolatility@{setVolatility}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{setVolatility()}{setVolatility()}}
+{\footnotesize\ttfamily void Greeks\+::set\+Volatility (\begin{DoxyParamCaption}\item[{double}]{volatility }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes Black-\/\+Scholes implied volatility of the option. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em volatility} & Black-\/\+Scholes implied volatility of the option. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classGreeks_ab4d005fd60478fd5ec526b4506fe91cf}\label{classGreeks_ab4d005fd60478fd5ec526b4506fe91cf}} 
+\index{Greeks@{Greeks}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Greeks\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classGreeks_a7add57bcfa465480b062f979a2a9185a}\label{classGreeks_a7add57bcfa465480b062f979a2a9185a}} 
+\index{Greeks@{Greeks}!toString@{toString}}
+\index{toString@{toString}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Greeks\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{classGreeks_ae4b1c1192555e2409d3ef209303e34f8}\label{classGreeks_ae4b1c1192555e2409d3ef209303e34f8}} 
+\index{Greeks@{Greeks}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!Greeks@{Greeks}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily constexpr std\+::uint32\+\_\+t Greeks\+::\+MAX\+\_\+\+SEQUENCE = (1U $<$$<$ 22U) -\/ 1U\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\+::set\+Sequence() 
+\end{DoxySeeAlso}
+
+
+Referenced by get\+Sequence(), and set\+Sequence().
+

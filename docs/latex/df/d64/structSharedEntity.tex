@@ -1,0 +1,120 @@
+\hypertarget{structSharedEntity}{}\doxysubsection{Shared\+Entity Struct Reference}
+\label{structSharedEntity}\index{SharedEntity@{SharedEntity}}
+
+
+Base abstract \char`\"{}shared entity\char`\"{} class. Has some helpers for dynamic polymorphism.  
+
+
+
+
+{\ttfamily \#include $<$Shared\+Entity.\+hpp$>$}
+
+Inheritance diagram for Shared\+Entity\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=11.000000cm]{df/d64/structSharedEntity}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structSharedEntity_ab7cfbb67329faf3203faea77a9a00e16}\label{structSharedEntity_ab7cfbb67329faf3203faea77a9a00e16}} 
+using \mbox{\hyperlink{structSharedEntity_ab7cfbb67329faf3203faea77a9a00e16}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSharedEntity}{Shared\+Entity}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structSharedEntity}{Shared\+Entity}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\bool \mbox{\hyperlink{structSharedEntity_ae774e293e95fbf8ebb4d22f714e80272}{is}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Checks that pointer to the current type could be converted to type T$\ast$ In other words\+: whether type T belongs to the type hierarchy in which the current type resides. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structSharedEntity_a76615bbc58d01bbcfbab6b9282af8d3d}{shared\+As}} () noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::shared\+\_\+ptr$<$ T $>$ \mbox{\hyperlink{structSharedEntity_a39c67ade53a5ec5ebe72a6f603e4437c}{shared\+As}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the current object wrapped in a smart pointer to type T. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{structSharedEntity_a84179ef824d835d61488dab36f4f0325}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Base abstract \char`\"{}shared entity\char`\"{} class. Has some helpers for dynamic polymorphism. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structSharedEntity_ae774e293e95fbf8ebb4d22f714e80272}\label{structSharedEntity_ae774e293e95fbf8ebb4d22f714e80272}} 
+\index{SharedEntity@{SharedEntity}!is@{is}}
+\index{is@{is}!SharedEntity@{SharedEntity}}
+\doxyparagraph{\texorpdfstring{is()}{is()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool Shared\+Entity\+::is (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Checks that pointer to the current type could be converted to type T$\ast$ In other words\+: whether type T belongs to the type hierarchy in which the current type resides. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type to check \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+true if type belongs to the type hierarchy in which the current type resides. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSharedEntity_a39c67ade53a5ec5ebe72a6f603e4437c}\label{structSharedEntity_a39c67ade53a5ec5ebe72a6f603e4437c}} 
+\index{SharedEntity@{SharedEntity}!sharedAs@{sharedAs}}
+\index{sharedAs@{sharedAs}!SharedEntity@{SharedEntity}}
+\doxyparagraph{\texorpdfstring{sharedAs()}{sharedAs()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::shared\+\_\+ptr$<$T$>$ Shared\+Entity\+::shared\+As (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a pointer to the current object wrapped in a smart pointer to type T. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr$<$T$>$(new T(...))} or {\ttfamily std\+::make\+\_\+shared$<$T$>$(...)}
+\end{DoxyWarning}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type to convert to a pointer to \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+a smart pointer to type T 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSharedEntity_a76615bbc58d01bbcfbab6b9282af8d3d}\label{structSharedEntity_a76615bbc58d01bbcfbab6b9282af8d3d}} 
+\index{SharedEntity@{SharedEntity}!sharedAs@{sharedAs}}
+\index{sharedAs@{sharedAs}!SharedEntity@{SharedEntity}}
+\doxyparagraph{\texorpdfstring{sharedAs()}{sharedAs()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::shared\+\_\+ptr$<$T$>$ Shared\+Entity\+::shared\+As (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a pointer to the current object wrapped in a smart pointer to type T. 
+
+\begin{DoxyWarning}{Warning}
+Please do not use this method unless the object was created with {\ttfamily std\+::shared\+\_\+ptr$<$T$>$(new T(...))} or {\ttfamily std\+::make\+\_\+shared$<$T$>$(...)}
+\end{DoxyWarning}
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type to convert to a pointer to \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+a smart pointer to type T 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structSharedEntity_a84179ef824d835d61488dab36f4f0325}\label{structSharedEntity_a84179ef824d835d61488dab36f4f0325}} 
+\index{SharedEntity@{SharedEntity}!toString@{toString}}
+\index{toString@{toString}!SharedEntity@{SharedEntity}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily virtual std\+::string Shared\+Entity\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{classUnderlying_a35136aa30b4bbba8e01819a86e7d45eb}{Underlying}}, \mbox{\hyperlink{classTheoPrice_a7688718de97d2529cea3177f13c457f1}{Theo\+Price}}, \mbox{\hyperlink{classSeries_a35652445c968755a5988b3887bcbfd36}{Series}}, \mbox{\hyperlink{classGreeks_a7add57bcfa465480b062f979a2a9185a}{Greeks}}, \mbox{\hyperlink{classMessage_abe482dcaa45133def4eaf4481eda36b9}{Message}}, \mbox{\hyperlink{classTradeETH_a726a477ce9d765b6a91d1c5562c8a23a}{Trade\+ETH}}, \mbox{\hyperlink{classTrade_a0b9594c3abcb062a0eb64238ab7f750b}{Trade}}, \mbox{\hyperlink{classTimeAndSale_a74021da461ae7334dfdd1b001c20e60f}{Time\+And\+Sale}}, \mbox{\hyperlink{classSummary_ae7939f5b3bab6494900c545d986b3f76}{Summary}}, \mbox{\hyperlink{classSpreadOrder_a51a0d62458faf22680326615c0e4d6a4}{Spread\+Order}}, \mbox{\hyperlink{classQuote_a112016da3fca1fb30053a45ad164958d}{Quote}}, \mbox{\hyperlink{classProfile_a17f6624fa32e5718ddfafcd226eee044}{Profile}}, \mbox{\hyperlink{classOtcMarketsOrder_a0d96397e3824a369fa980a1de892a734}{Otc\+Markets\+Order}}, \mbox{\hyperlink{classOrder_ad34c32a4f0b8d43cd78cb61d17f75578}{Order}}, \mbox{\hyperlink{classOptionSale_a72592c3071c1039ef18008640fd39e08}{Option\+Sale}}, \mbox{\hyperlink{classAnalyticOrder_abdfec5e3e519718617b2f92a8538d2da}{Analytic\+Order}}, \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}, \mbox{\hyperlink{classCandle_a8e4362a595a51b7907b79bea57eadaaf}{Candle}}, \mbox{\hyperlink{structDXPublisher_a2cdf4b9e4ad4582c591792b6ede47299}{DXPublisher}}, \mbox{\hyperlink{classDXFeedSubscription_a05b9969b304a7df67c369cbc7f3dfae1}{DXFeed\+Subscription}}, \mbox{\hyperlink{structDXFeed_a2a75e4581b0117ee3051a63020d6729a}{DXFeed}}, and \mbox{\hyperlink{structDXEndpoint_aff039fb8eef7fc51fe3e7ae62e84fc25}{DXEndpoint}}.
+

@@ -1,0 +1,203 @@
+\hypertarget{structCandleSession}{}\doxysubsection{Candle\+Session Struct Reference}
+\label{structCandleSession}\index{CandleSession@{CandleSession}}
+
+
+\mbox{\hyperlink{structSession}{Session}} attribute of \mbox{\hyperlink{structCandleSymbol}{Candle\+Symbol}} defines trading that is used to build the candles.  
+
+
+
+
+{\ttfamily \#include $<$Candle\+Session.\+hpp$>$}
+
+Inheritance diagram for Candle\+Session\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{df/d7e/structCandleSession}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \& \mbox{\hyperlink{structCandleSession_aa2a1c140927fde6a01ab5ff3f4f3bda6}{get\+Session\+Filter}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns session filter that corresponds to this session attribute. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structCandleSession_a0b1d667d74d74192719b7a96f7d9ad88}{change\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol) const override
+\begin{DoxyCompactList}\small\item\em Returns candle event symbol string with this session attribute set. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{structCandleSession_a179a6e0bc362ec0965acb621ec504288}{to\+String}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this candle session attribute. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{structCandleSession}{Candle\+Session}} $>$ \mbox{\hyperlink{structCandleSession_a773a8373aea818040f4beea34f2e1c5e}{parse}} (const dxfcpp\+::\+String\+Like\+Wrapper \&s)
+\begin{DoxyCompactList}\small\item\em Parses string representation of candle session attribute into object. \end{DoxyCompactList}\item 
+static std\+::reference\+\_\+wrapper$<$ const \mbox{\hyperlink{structCandleSession}{Candle\+Session}} $>$ \mbox{\hyperlink{structCandleSession_a57435fb69bd14dab2fe55c12ea6525c2}{get\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol)
+\begin{DoxyCompactList}\small\item\em Returns candle session attribute of the given candle symbol string. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{structCandleSession_a1f7d1d9e94da88d44c555ebb9f8a05c6}{normalize\+Attribute\+For\+Symbol}} (const dxfcpp\+::\+String\+Like\+Wrapper \&symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Returns candle symbol string with the normalized representation of the candle session attribute. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structCandleSession_a67d891c75a8f8571d1c63d09615c98c6}\label{structCandleSession_a67d891c75a8f8571d1c63d09615c98c6}} 
+static const \mbox{\hyperlink{structCandleSession}{Candle\+Session}} \mbox{\hyperlink{structCandleSession_a67d891c75a8f8571d1c63d09615c98c6}{ANY}} \{Session\+Filter\+::\+ANY, \char`\"{}false\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em All trading sessions are used to build candles. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structCandleSession_a0bcf55985ba269b352c4868ddaeb5ae9}\label{structCandleSession_a0bcf55985ba269b352c4868ddaeb5ae9}} 
+static const \mbox{\hyperlink{structCandleSession}{Candle\+Session}} \mbox{\hyperlink{structCandleSession_a0bcf55985ba269b352c4868ddaeb5ae9}{REGULAR}} \{Session\+Filter\+::\+REGULAR, \char`\"{}true\char`\"{}\}
+\begin{DoxyCompactList}\small\item\em Only regular trading session data is used to build candles. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structCandleSession_adfca884c06a101bfe4df1f7e60c076c0}\label{structCandleSession_adfca884c06a101bfe4df1f7e60c076c0}} 
+static const \mbox{\hyperlink{structCandleSession}{Candle\+Session}} \mbox{\hyperlink{structCandleSession_adfca884c06a101bfe4df1f7e60c076c0}{DEFAULT}} = \mbox{\hyperlink{structCandleSession_a67d891c75a8f8571d1c63d09615c98c6}{ANY}}
+\begin{DoxyCompactList}\small\item\em Default trading session is \mbox{\hyperlink{structCandleSession_a67d891c75a8f8571d1c63d09615c98c6}{Candle\+Session\+::\+ANY}}. \end{DoxyCompactList}\item 
+static const std\+::string \mbox{\hyperlink{structCandleSession_a9711ee826ebf3527e69f5e01725ca5e4}{ATTRIBUTE\+\_\+\+KEY}} = \char`\"{}tho\char`\"{}
+\begin{DoxyCompactList}\small\item\em The attribute key that is used to store the value of \mbox{\hyperlink{structCandleSession}{Candle\+Session}} in a symbol string using methods of \mbox{\hyperlink{structMarketEventSymbols}{Market\+Event\+Symbols}} class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{structSession}{Session}} attribute of \mbox{\hyperlink{structCandleSymbol}{Candle\+Symbol}} defines trading that is used to build the candles. 
+
+\doxysubparagraph*{Implementation details}
+
+This attribute is encoded in a symbol string with \mbox{\hyperlink{structMarketEventSymbols_a87a94614e292548132480d85a1dfbe9d}{Market\+Event\+Symbols.get\+Attribute\+String\+By\+Key}}, \mbox{\hyperlink{structMarketEventSymbols_ab4184832b9b58374117d61b1f8c94617}{change\+Attribute\+String\+By\+Key}}, and \mbox{\hyperlink{structMarketEventSymbols_ab0369d51b1181a4fb7ccb674923ddb9d}{remove\+Attribute\+String\+By\+Key}} methods.
+
+\mbox{\hyperlink{structCandleSession_a67d891c75a8f8571d1c63d09615c98c6}{Candle\+Session\+::\+ANY}} session is a default. The key to use with these methods is available via \mbox{\hyperlink{structCandleSession_a9711ee826ebf3527e69f5e01725ca5e4}{Candle\+Session\+::\+ATTRIBUTE\+\_\+\+KEY}} constant. The value that this key shall be set to is equal to the corresponding \mbox{\hyperlink{structCandleSession_a179a6e0bc362ec0965acb621ec504288}{Candle\+Session\+::to\+String()}} 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structCandleSession_a0b1d667d74d74192719b7a96f7d9ad88}\label{structCandleSession_a0b1d667d74d74192719b7a96f7d9ad88}} 
+\index{CandleSession@{CandleSession}!changeAttributeForSymbol@{changeAttributeForSymbol}}
+\index{changeAttributeForSymbol@{changeAttributeForSymbol}!CandleSession@{CandleSession}}
+\doxyparagraph{\texorpdfstring{changeAttributeForSymbol()}{changeAttributeForSymbol()}}
+{\footnotesize\ttfamily std\+::string Candle\+Session\+::change\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Returns candle event symbol string with this session attribute set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & original candle event symbol. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle event symbol string with this session attribute set. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structCandleSymbolAttribute_a965d1af360208c9f1733d47ac278bdad}{Candle\+Symbol\+Attribute}}.
+
+
+
+References ATTRIBUTE\+\_\+\+KEY, Market\+Event\+Symbols\+::change\+Attribute\+String\+By\+Key(), DEFAULT, Market\+Event\+Symbols\+::remove\+Attribute\+String\+By\+Key(), and to\+String().
+
+\mbox{\Hypertarget{structCandleSession_a57435fb69bd14dab2fe55c12ea6525c2}\label{structCandleSession_a57435fb69bd14dab2fe55c12ea6525c2}} 
+\index{CandleSession@{CandleSession}!getAttributeForSymbol@{getAttributeForSymbol}}
+\index{getAttributeForSymbol@{getAttributeForSymbol}!CandleSession@{CandleSession}}
+\doxyparagraph{\texorpdfstring{getAttributeForSymbol()}{getAttributeForSymbol()}}
+{\footnotesize\ttfamily static std\+::reference\+\_\+wrapper$<$const \mbox{\hyperlink{structCandleSession}{Candle\+Session}}$>$ Candle\+Session\+::get\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Returns candle session attribute of the given candle symbol string. 
+
+The result is \mbox{\hyperlink{structCandleSession_adfca884c06a101bfe4df1f7e60c076c0}{Candle\+Session\+::\+DEFAULT}} if the symbol does not have candle session attribute.
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & The candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle session attribute of the given candle symbol string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structCandleSession_aa2a1c140927fde6a01ab5ff3f4f3bda6}\label{structCandleSession_aa2a1c140927fde6a01ab5ff3f4f3bda6}} 
+\index{CandleSession@{CandleSession}!getSessionFilter@{getSessionFilter}}
+\index{getSessionFilter@{getSessionFilter}!CandleSession@{CandleSession}}
+\doxyparagraph{\texorpdfstring{getSessionFilter()}{getSessionFilter()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}}\& Candle\+Session\+::get\+Session\+Filter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns session filter that corresponds to this session attribute. 
+
+\begin{DoxyReturn}{Returns}
+session filter that corresponds to this session attribute. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structCandleSession_a1f7d1d9e94da88d44c555ebb9f8a05c6}\label{structCandleSession_a1f7d1d9e94da88d44c555ebb9f8a05c6}} 
+\index{CandleSession@{CandleSession}!normalizeAttributeForSymbol@{normalizeAttributeForSymbol}}
+\index{normalizeAttributeForSymbol@{normalizeAttributeForSymbol}!CandleSession@{CandleSession}}
+\doxyparagraph{\texorpdfstring{normalizeAttributeForSymbol()}{normalizeAttributeForSymbol()}}
+{\footnotesize\ttfamily static std\+::string Candle\+Session\+::normalize\+Attribute\+For\+Symbol (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [noexcept]}}
+
+
+
+Returns candle symbol string with the normalized representation of the candle session attribute. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em symbol} & candle symbol string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+candle symbol string with the normalized representation of the the candle session attribute. 
+\end{DoxyReturn}
+
+
+References ATTRIBUTE\+\_\+\+KEY, and Market\+Event\+Symbols\+::remove\+Attribute\+String\+By\+Key().
+
+\mbox{\Hypertarget{structCandleSession_a773a8373aea818040f4beea34f2e1c5e}\label{structCandleSession_a773a8373aea818040f4beea34f2e1c5e}} 
+\index{CandleSession@{CandleSession}!parse@{parse}}
+\index{parse@{parse}!CandleSession@{CandleSession}}
+\doxyparagraph{\texorpdfstring{parse()}{parse()}}
+{\footnotesize\ttfamily static std\+::reference\+\_\+wrapper$<$const \mbox{\hyperlink{structCandleSession}{Candle\+Session}}$>$ Candle\+Session\+::parse (\begin{DoxyParamCaption}\item[{const dxfcpp\+::\+String\+Like\+Wrapper \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+
+
+Parses string representation of candle session attribute into object. 
+
+Any string that was returned by \mbox{\hyperlink{structCandleSession_a179a6e0bc362ec0965acb621ec504288}{Candle\+Session\+::to\+String()}} can be parsed and case is ignored for parsing.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & The string representation of candle session attribute. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The candle session attribute (reference). 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{structCandleSession_a179a6e0bc362ec0965acb621ec504288}\label{structCandleSession_a179a6e0bc362ec0965acb621ec504288}} 
+\index{CandleSession@{CandleSession}!toString@{toString}}
+\index{toString@{toString}!CandleSession@{CandleSession}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily const std\+::string\& Candle\+Session\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this candle session attribute. 
+
+The string representation of candle session attribute is a lower case string that corresponds to its name. For example, \mbox{\hyperlink{structCandleSession_a67d891c75a8f8571d1c63d09615c98c6}{Candle\+Session\+::\+ANY}} is represented as \char`\"{}any\char`\"{}.
+
+\begin{DoxyReturn}{Returns}
+string representation of this candle session attribute. 
+\end{DoxyReturn}
+
+
+Referenced by change\+Attribute\+For\+Symbol().
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{structCandleSession_a9711ee826ebf3527e69f5e01725ca5e4}\label{structCandleSession_a9711ee826ebf3527e69f5e01725ca5e4}} 
+\index{CandleSession@{CandleSession}!ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}}
+\index{ATTRIBUTE\_KEY@{ATTRIBUTE\_KEY}!CandleSession@{CandleSession}}
+\doxyparagraph{\texorpdfstring{ATTRIBUTE\_KEY}{ATTRIBUTE\_KEY}}
+{\footnotesize\ttfamily const std\+::string Candle\+Session\+::\+ATTRIBUTE\+\_\+\+KEY = \char`\"{}tho\char`\"{}\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The attribute key that is used to store the value of \mbox{\hyperlink{structCandleSession}{Candle\+Session}} in a symbol string using methods of \mbox{\hyperlink{structMarketEventSymbols}{Market\+Event\+Symbols}} class. 
+
+The value of this constant is \char`\"{}tho\char`\"{}, which is an abbreviation for \char`\"{}trading hours only\char`\"{}. The value that this key shall be set to is equal to the corresponding \mbox{\hyperlink{structCandleSession_a179a6e0bc362ec0965acb621ec504288}{Candle\+Session\+::to\+String()}} 
+
+Referenced by change\+Attribute\+For\+Symbol(), and normalize\+Attribute\+For\+Symbol().
+

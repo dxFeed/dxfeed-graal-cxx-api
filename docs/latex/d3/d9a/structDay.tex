@@ -1,0 +1,498 @@
+\hypertarget{structDay}{}\doxysubsection{Day Struct Reference}
+\label{structDay}\index{Day@{Day}}
+
+
+{\bfseries{\mbox{\hyperlink{structDay}{Day}}}} represents a continuous period of time approximately 24 hours long.  
+
+
+
+
+{\ttfamily \#include $<$Day.\+hpp$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structDay_ac6c51f24cad5f5262a648ffb721812fb}\label{structDay_ac6c51f24cad5f5262a648ffb721812fb}} 
+using \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structDay}{Day}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structDay}{Day}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structDay_a10f43f26c4371a7d05e03c723738c4e1}\label{structDay_a10f43f26c4371a7d05e03c723738c4e1}} 
+using \mbox{\hyperlink{structDay_a10f43f26c4371a7d05e03c723738c4e1}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{structDay}{Day}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{structDay}{Day}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSchedule}{Schedule}} $>$ \mbox{\hyperlink{structDay_af25fb115ec6f029af14d319a0422d7cd}{get\+Schedule}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structDay_ae40b4316da099c2a0c4a31a9f98aed76}{get\+Day\+Id}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structDay_ab7ef98e627f0c9857d0ea82ed9877166}{get\+Year\+Month\+Day}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns year, month and day numbers packed in the following way\+: \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structDay_a67be6e9709f9eb3073ad683bd475ef5c}{get\+Year}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structDay_ae6c4ded078c63a1d2fa617b9dd668b13}{get\+Month\+Of\+Year}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structDay_a5a2f666848de5945f31c60b4215dbe5d}{get\+Day\+Of\+Month}} () const noexcept
+\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{structDay_a94710e25338834327912adbb8dc5802a}{get\+Day\+Of\+Week}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structDay_aa4d218e87860a923a2c320bf7fc990be}{is\+Holiday}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structDay_a1281a6e962e6f69887f6c106d5602811}{is\+Short\+Day}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structDay_aac78ea8b473097c6c58ae0d1cbfd99ba}{is\+Trading}} () const noexcept
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structDay_a5725376bd35db253034dd9668b678bd6}{get\+Start\+Time}} () const noexcept
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structDay_a8e0ea7a985be88fe2b1633489855d054}{get\+End\+Time}} () const noexcept
+\item 
+bool \mbox{\hyperlink{structDay_a0890cd6334e7a839e133705afbf78f17}{contains\+Time}} (std\+::int64\+\_\+t time) const noexcept
+\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{structDay_acb536ad21a7a34e1a76f5b0b202052c6}{get\+Reset\+Time}} () const noexcept
+\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ \mbox{\hyperlink{structDay_ab472add2d160db1167f97a5f74582f41}{get\+Session\+By\+Time}} (std\+::int64\+\_\+t time) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns session belonging to this day that contains specified time. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ \mbox{\hyperlink{structDay_a6dc0f88d762162f28c7faf0fef8c947b}{get\+First\+Session}} (const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns first session belonging to this day accepted by specified filter. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ \mbox{\hyperlink{structDay_a0a28f018202dc05a5ab1cce7320ab477}{get\+Last\+Session}} (const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns last session belonging to this day accepted by specified filter. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ \mbox{\hyperlink{structDay_a3b120620df85937510b1017a74f9af27}{find\+First\+Session}} (const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns first session belonging to this day accepted by specified filter. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ \mbox{\hyperlink{structDay_a9c8458ea13cd6113070d5d983d7884d5}{find\+Last\+Session}} (const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns last session belonging to this day accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \mbox{\hyperlink{structDay_a1b421d89b515376e3771a35c663c9f68}{get\+Prev\+Day}} (const \mbox{\hyperlink{structDayFilter}{Day\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns previous day accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \mbox{\hyperlink{structDay_a596df1eeab15ecfe878e0dc24fbaf1a8}{get\+Next\+Day}} (const \mbox{\hyperlink{structDayFilter}{Day\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns following day accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \mbox{\hyperlink{structDay_ab9a55c083eab49b4ecb493878bc3e65a}{find\+Prev\+Day}} (const \mbox{\hyperlink{structDayFilter}{Day\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns previous day accepted by specified filter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \mbox{\hyperlink{structDay_ab868680c827e5f733d88de58a621fda5}{find\+Next\+Day}} (const \mbox{\hyperlink{structDayFilter}{Day\+Filter}} \&filter) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns following day accepted by specified filter. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structDay_a94c7d312389e3804fee124b033c32bb6}{operator==}} (const \mbox{\hyperlink{structDay}{Day}} \&other) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structDay_a74db7a7204eb9c6b654a9f9b69ed85d3}{operator==}} (const \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \&other) const noexcept
+\begin{DoxyCompactList}\small\item\em Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \mbox{\hyperlink{structDay_a73570ab381a71f18f9aae12a4422a247}{get\+Hash\+Code}} () const noexcept
+\item 
+std\+::string \mbox{\hyperlink{structDay_aff452e46c0ce861a298446d43b902f05}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structDay_ad4aee90a3774c331f27ea20a52583d5f}\label{structDay_ad4aee90a3774c331f27ea20a52583d5f}} 
+struct {\bfseries Schedule}
+\item 
+\mbox{\Hypertarget{structDay_a5531b3c302ec427a9d0bc483e5d5b7af}\label{structDay_a5531b3c302ec427a9d0bc483e5d5b7af}} 
+struct {\bfseries Session}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+{\bfseries{\mbox{\hyperlink{structDay}{Day}}}} represents a continuous period of time approximately 24 hours long. 
+
+The day is aligned to the start and the end of business activities of a certain business entity or business process. For example, the day may be aligned to a trading schedule of a particular instrument on an exchange. Thus, different days may start and end at various local times depending on the related trading schedules. 
+
+The length of the day depends on the trading schedule and other circumstances. For example, it is possible that day for Monday is longer than 24 hours because it includes part of Sunday; consequently, the day for Sunday will be shorter than 24 hours to avoid overlapping with Monday. 
+
+Days do not overlap with each other -\/ rather they form consecutive chain of adjacent periods of time that cover entire time scale. The point on a border line is considered to belong to following day that starts there. 
+
+Each day consists of sessions that cover entire duration of the day. If day contains at least one trading session (i.\+e. session within which trading activity is allowed), then the day is considered trading day. Otherwise the day is considered non-\/trading day (e.\+g. weekend or holiday). 
+
+\mbox{\hyperlink{structDay}{Day}} may contain sessions with zero duration -\/ e.\+g. indices that post value once a day. Such sessions can be of any appropriate type, trading or non-\/trading. \mbox{\hyperlink{structDay}{Day}} may have zero duration as well -\/ e.\+g. when all time within it is transferred to other days. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structDay_a0890cd6334e7a839e133705afbf78f17}\label{structDay_a0890cd6334e7a839e133705afbf78f17}} 
+\index{Day@{Day}!containsTime@{containsTime}}
+\index{containsTime@{containsTime}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{containsTime()}{containsTime()}}
+{\footnotesize\ttfamily bool Day\+::contains\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if specified time belongs to this day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a3b120620df85937510b1017a74f9af27}\label{structDay_a3b120620df85937510b1017a74f9af27}} 
+\index{Day@{Day}!findFirstSession@{findFirstSession}}
+\index{findFirstSession@{findFirstSession}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{findFirstSession()}{findFirstSession()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ Day\+::find\+First\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns first session belonging to this day accepted by specified filter. 
+
+This method does not cross the day boundary. If no such session was found within this day this method will return \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) 
+
+To find first trading session of any type use this code\+: 
+\begin{DoxyPre}auto session = day-\/>findFirstSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find first regular trading session use this code\+: 
+\begin{DoxyPre}auto session = day-\/>findFirstSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first session that is accepted by the filter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a9c8458ea13cd6113070d5d983d7884d5}\label{structDay_a9c8458ea13cd6113070d5d983d7884d5}} 
+\index{Day@{Day}!findLastSession@{findLastSession}}
+\index{findLastSession@{findLastSession}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{findLastSession()}{findLastSession()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ Day\+::find\+Last\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns last session belonging to this day accepted by specified filter. 
+
+This method does not cross the day boundary. If no such session was found within this day this method will return \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) 
+
+To find last trading session of any type use this code\+: 
+\begin{DoxyPre}auto session = day-\/>findLastSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find last regular trading session use this code\+: 
+\begin{DoxyPre}auto session = day-\/>findLastSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The last session that is accepted by the filter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_ab868680c827e5f733d88de58a621fda5}\label{structDay_ab868680c827e5f733d88de58a621fda5}} 
+\index{Day@{Day}!findNextDay@{findNextDay}}
+\index{findNextDay@{findNextDay}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{findNextDay()}{findNextDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} Day\+::find\+Next\+Day (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structDayFilter}{Day\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns following day accepted by specified filter. 
+
+This method looks for appropriate day up to a year in the future. If no such day was found within one year this method will return \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test days \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest following day that is accepted by the filter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_ab9a55c083eab49b4ecb493878bc3e65a}\label{structDay_ab9a55c083eab49b4ecb493878bc3e65a}} 
+\index{Day@{Day}!findPrevDay@{findPrevDay}}
+\index{findPrevDay@{findPrevDay}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{findPrevDay()}{findPrevDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} Day\+::find\+Prev\+Day (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structDayFilter}{Day\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns previous day accepted by specified filter. 
+
+This method looks for appropriate day up to a year back in time. If no such day was found within one year this method will return \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test days \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest previous day that is accepted by the filter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_ae40b4316da099c2a0c4a31a9f98aed76}\label{structDay_ae40b4316da099c2a0c4a31a9f98aed76}} 
+\index{Day@{Day}!getDayId@{getDayId}}
+\index{getDayId@{getDayId}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getDayId()}{getDayId()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Day\+::get\+Day\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The number of this day since January 1, 1970 (that day has identifier of 0 and previous days have negative identifiers). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a5a2f666848de5945f31c60b4215dbe5d}\label{structDay_a5a2f666848de5945f31c60b4215dbe5d}} 
+\index{Day@{Day}!getDayOfMonth@{getDayOfMonth}}
+\index{getDayOfMonth@{getDayOfMonth}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getDayOfMonth()}{getDayOfMonth()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Day\+::get\+Day\+Of\+Month (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The ordinal day number in the month starting with {\bfseries{1}} for the first day of month. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a94710e25338834327912adbb8dc5802a}\label{structDay_a94710e25338834327912adbb8dc5802a}} 
+\index{Day@{Day}!getDayOfWeek@{getDayOfWeek}}
+\index{getDayOfWeek@{getDayOfWeek}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getDayOfWeek()}{getDayOfWeek()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Day\+::get\+Day\+Of\+Week (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The ordinal day number in the week starting with {\bfseries{1=Monday}} and ending with {\bfseries{7=Sunday}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a8e0ea7a985be88fe2b1633489855d054}\label{structDay_a8e0ea7a985be88fe2b1633489855d054}} 
+\index{Day@{Day}!getEndTime@{getEndTime}}
+\index{getEndTime@{getEndTime}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getEndTime()}{getEndTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Day\+::get\+End\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The end time of this day (exclusive). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a6dc0f88d762162f28c7faf0fef8c947b}\label{structDay_a6dc0f88d762162f28c7faf0fef8c947b}} 
+\index{Day@{Day}!getFirstSession@{getFirstSession}}
+\index{getFirstSession@{getFirstSession}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getFirstSession()}{getFirstSession()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ Day\+::get\+First\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns first session belonging to this day accepted by specified filter. 
+
+This method does not cross the day boundary. If no such session was found within this day this method will return \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) 
+
+To find first trading session of any type use this code\+: 
+\begin{DoxyPre}\mbox{\hyperlink{structSession}{Session}} session = day-\/>getFirstSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find first regular trading session use this code\+: 
+\begin{DoxyPre}\mbox{\hyperlink{structSession}{Session}} session = day-\/>getFirstSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first session that is accepted by the filter or \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within this day 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a73570ab381a71f18f9aae12a4422a247}\label{structDay_a73570ab381a71f18f9aae12a4422a247}} 
+\index{Day@{Day}!getHashCode@{getHashCode}}
+\index{getHashCode@{getHashCode}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getHashCode()}{getHashCode()}}
+{\footnotesize\ttfamily std\+::size\+\_\+t Day\+::get\+Hash\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+A hash code value for this object. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a0a28f018202dc05a5ab1cce7320ab477}\label{structDay_a0a28f018202dc05a5ab1cce7320ab477}} 
+\index{Day@{Day}!getLastSession@{getLastSession}}
+\index{getLastSession@{getLastSession}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getLastSession()}{getLastSession()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ Day\+::get\+Last\+Session (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structSessionFilter}{Session\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns last session belonging to this day accepted by specified filter. 
+
+This method does not cross the day boundary. If no such session was found within this day this method will return \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) 
+
+To find last trading session of any type use this code\+: 
+\begin{DoxyPre}auto session = day-\/>getLastSession(SessionFilter::TRADING);\end{DoxyPre}
+ To find last regular trading session use this code\+: 
+\begin{DoxyPre}auto session = day-\/>getLastSession(SessionFilter::REGULAR);\end{DoxyPre}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to test sessions \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The last session that is accepted by the filter or \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within this day 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_ae6c4ded078c63a1d2fa617b9dd668b13}\label{structDay_ae6c4ded078c63a1d2fa617b9dd668b13}} 
+\index{Day@{Day}!getMonthOfYear@{getMonthOfYear}}
+\index{getMonthOfYear@{getMonthOfYear}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getMonthOfYear()}{getMonthOfYear()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Day\+::get\+Month\+Of\+Year (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The calendar month number in the year starting with {\bfseries{1=January}} and ending with {\bfseries{12=December}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a596df1eeab15ecfe878e0dc24fbaf1a8}\label{structDay_a596df1eeab15ecfe878e0dc24fbaf1a8}} 
+\index{Day@{Day}!getNextDay@{getNextDay}}
+\index{getNextDay@{getNextDay}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getNextDay()}{getNextDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} Day\+::get\+Next\+Day (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structDayFilter}{Day\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns following day accepted by specified filter. 
+
+This method looks for appropriate day up to a year in the future. If no such day was found within one year this method will return \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em The} & filter the filter to test days \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest following day that is accepted by the filter or \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if no such day was found within one year 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a1b421d89b515376e3771a35c663c9f68}\label{structDay_a1b421d89b515376e3771a35c663c9f68}} 
+\index{Day@{Day}!getPrevDay@{getPrevDay}}
+\index{getPrevDay@{getPrevDay}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getPrevDay()}{getPrevDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} Day\+::get\+Prev\+Day (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structDayFilter}{Day\+Filter}} \&}]{filter }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns previous day accepted by specified filter. 
+
+This method looks for appropriate day up to a year back in time. If no such day was found within one year this method will return \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em The} & filter the filter to test days \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The nearest previous day that is accepted by the filter or \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Day$>$\{nullptr\}) if no such day was found within one year 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_acb536ad21a7a34e1a76f5b0b202052c6}\label{structDay_acb536ad21a7a34e1a76f5b0b202052c6}} 
+\index{Day@{Day}!getResetTime@{getResetTime}}
+\index{getResetTime@{getResetTime}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getResetTime()}{getResetTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Day\+::get\+Reset\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The reset time for this day. Reset of daily data is performed on trading days only, the result has no meaning for non-\/trading days. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_af25fb115ec6f029af14d319a0422d7cd}\label{structDay_af25fb115ec6f029af14d319a0422d7cd}} 
+\index{Day@{Day}!getSchedule@{getSchedule}}
+\index{getSchedule@{getSchedule}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getSchedule()}{getSchedule()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSchedule}{Schedule}} $>$ Day\+::get\+Schedule (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The schedule to which this day belongs. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_ab472add2d160db1167f97a5f74582f41}\label{structDay_ab472add2d160db1167f97a5f74582f41}} 
+\index{Day@{Day}!getSessionByTime@{getSessionByTime}}
+\index{getSessionByTime@{getSessionByTime}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getSessionByTime()}{getSessionByTime()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structSession}{Session}} $>$ Day\+::get\+Session\+By\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns session belonging to this day that contains specified time. 
+
+If no such session was found within this day this method will return \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}).
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & The time to search for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The session that contains specified time or \mbox{\hyperlink{structSession_a7ac390e8412a2d4a3081b55e7c433596}{Session\+::\+Ptr}}\{nullptr\} (std\+::shared\+\_\+ptr$<$\+Session$>$\{nullptr\}) if no such session was found within this day 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a5725376bd35db253034dd9668b678bd6}\label{structDay_a5725376bd35db253034dd9668b678bd6}} 
+\index{Day@{Day}!getStartTime@{getStartTime}}
+\index{getStartTime@{getStartTime}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getStartTime()}{getStartTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Day\+::get\+Start\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The start time of this day (inclusive). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a67be6e9709f9eb3073ad683bd475ef5c}\label{structDay_a67be6e9709f9eb3073ad683bd475ef5c}} 
+\index{Day@{Day}!getYear@{getYear}}
+\index{getYear@{getYear}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getYear()}{getYear()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Day\+::get\+Year (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+The calendar year -\/ i.\+e. it returns {\ttfamily 1977} for the year {\ttfamily 1977}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_ab7ef98e627f0c9857d0ea82ed9877166}\label{structDay_ab7ef98e627f0c9857d0ea82ed9877166}} 
+\index{Day@{Day}!getYearMonthDay@{getYearMonthDay}}
+\index{getYearMonthDay@{getYearMonthDay}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{getYearMonthDay()}{getYearMonthDay()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Day\+::get\+Year\+Month\+Day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns year, month and day numbers packed in the following way\+: 
+
+
+\begin{DoxyPre}YearMonthDay = year * 10000 + month * 100 + day\end{DoxyPre}
+ For example, September 28, 1977 has value 19770928.
+
+\begin{DoxyReturn}{Returns}
+Packed year, month and day numbers 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_aa4d218e87860a923a2c320bf7fc990be}\label{structDay_aa4d218e87860a923a2c320bf7fc990be}} 
+\index{Day@{Day}!isHoliday@{isHoliday}}
+\index{isHoliday@{isHoliday}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{isHoliday()}{isHoliday()}}
+{\footnotesize\ttfamily bool Day\+::is\+Holiday (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this day is an exchange holiday. Usually there are no trading takes place on an exchange holiday. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a1281a6e962e6f69887f6c106d5602811}\label{structDay_a1281a6e962e6f69887f6c106d5602811}} 
+\index{Day@{Day}!isShortDay@{isShortDay}}
+\index{isShortDay@{isShortDay}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{isShortDay()}{isShortDay()}}
+{\footnotesize\ttfamily bool Day\+::is\+Short\+Day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this day is a short day. Usually trading stops earlier on a short day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_aac78ea8b473097c6c58ae0d1cbfd99ba}\label{structDay_aac78ea8b473097c6c58ae0d1cbfd99ba}} 
+\index{Day@{Day}!isTrading@{isTrading}}
+\index{isTrading@{isTrading}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{isTrading()}{isTrading()}}
+{\footnotesize\ttfamily bool Day\+::is\+Trading (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if trading activity is allowed within this day. Positive result assumes that day has at least one trading session. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a94c7d312389e3804fee124b033c32bb6}\label{structDay_a94c7d312389e3804fee124b033c32bb6}} 
+\index{Day@{Day}!operator==@{operator==}}
+\index{operator==@{operator==}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily bool Day\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structDay}{Day}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & Another object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this object is equal to {\ttfamily other} object 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_a74db7a7204eb9c6b654a9f9b69ed85d3}\label{structDay_a74db7a7204eb9c6b654a9f9b69ed85d3}} 
+\index{Day@{Day}!operator==@{operator==}}
+\index{operator==@{operator==}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{operator==()}{operator==()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily bool Day\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structDay_ac6c51f24cad5f5262a648ffb721812fb}{Day\+::\+Ptr}} \&}]{other }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns {\ttfamily true} if this object is equal to {\ttfamily other} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & Another object \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if this object is equal to {\ttfamily other} object 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structDay_aff452e46c0ce861a298446d43b902f05}\label{structDay_aff452e46c0ce861a298446d43b902f05}} 
+\index{Day@{Day}!toString@{toString}}
+\index{toString@{toString}!Day@{Day}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Day\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+A string representation 
+\end{DoxyReturn}

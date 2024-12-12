@@ -4,6 +4,7 @@ var class_theo_price =
     [ "Unique", "d3/d03/class_theo_price.html#a5a5ff926e9b3b0b62172cf7f6674d1d7", null ],
     [ "TheoPrice", "d3/d03/class_theo_price.html#ab362a5017a9421813f96593f1e07b34b", null ],
     [ "TheoPrice", "d3/d03/class_theo_price.html#ad823a54171d036be0366905fbc8f0a1a", null ],
+    [ "assign", "d3/d03/class_theo_price.html#ae5f4cb985d8efec46daf6d405ba25eb0", null ],
     [ "getDelta", "d3/d03/class_theo_price.html#ae67c036b1630017da4b3abeb84c2ad3a", null ],
     [ "getDividend", "d3/d03/class_theo_price.html#aa3c8368d34c77771d8451bd7d2c51d6f", null ],
     [ "getEventFlags", "d3/d03/class_theo_price.html#a395c746a2bf5523b2d66c72a1fc2feab", null ],
@@ -28,5 +29,5 @@ var class_theo_price =
     [ "setTime", "d3/d03/class_theo_price.html#a84340c87338fcf94d14cbf2b2dd21fec", null ],
     [ "setUnderlyingPrice", "d3/d03/class_theo_price.html#a277df49bb6a253c68b37c556677fd5c6", null ],
     [ "toGraal", "d3/d03/class_theo_price.html#aa4e4101ed4ba8a07d2703c6d28774052", null ],
-    [ "toString", "d3/d03/class_theo_price.html#a7688718de97d2529cea3177f13c457f1", null ]
+    [ "toString", "d3/d03/class_theo_price.html#ae5abb4dd29b3e3f45844f9f67b151709", null ]
 ];

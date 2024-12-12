@@ -4,6 +4,7 @@ var class_underlying =
     [ "Unique", "d3/d00/class_underlying.html#a04dd73eab6d112ad74dd63253b625aa7", null ],
     [ "Underlying", "d3/d00/class_underlying.html#a49ddc22b3c1c51407483c97fd00c5877", null ],
     [ "Underlying", "d3/d00/class_underlying.html#ae344045c04204e88fa09a4398ea19f6b", null ],
+    [ "assign", "d3/d00/class_underlying.html#ac072a3c57eaffed14a6c290ce4c5eb52", null ],
     [ "getBackVolatility", "d3/d00/class_underlying.html#a4c54bf206e8b2c97e2b71ccb5eb9a3fe", null ],
     [ "getCallVolume", "d3/d00/class_underlying.html#a20476339440877271d89be4cee7d70af", null ],
     [ "getEventFlags", "d3/d00/class_underlying.html#a79bc065e8e06ea8947b7c83558d87bc2", null ],
@@ -29,5 +30,5 @@ var class_underlying =
     [ "setTime", "d3/d00/class_underlying.html#a3f960a90de36116ec0b23315cd58b702", null ],
     [ "setVolatility", "d3/d00/class_underlying.html#a2ed716a9033cca30ae73ade2d06d4752", null ],
     [ "toGraal", "d3/d00/class_underlying.html#a21e85dee0bdd684f0433e0eb4c483154", null ],
-    [ "toString", "d3/d00/class_underlying.html#a35136aa30b4bbba8e01819a86e7d45eb", null ]
+    [ "toString", "d3/d00/class_underlying.html#a9186ec8cd23487039f93487163a2621b", null ]
 ];

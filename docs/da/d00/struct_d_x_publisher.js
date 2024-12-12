@@ -7,5 +7,5 @@ var struct_d_x_publisher =
     [ "publishEvents", "da/d00/struct_d_x_publisher.html#ae6e8cb6b370ea60f1ad5cb80cea2df30", null ],
     [ "publishEvents", "da/d00/struct_d_x_publisher.html#a3914d56df33f327b1ff0f90d193a2805", null ],
     [ "publishEvents", "da/d00/struct_d_x_publisher.html#aea23a3d950b97bb2d839df79e494023c", null ],
-    [ "toString", "da/d00/struct_d_x_publisher.html#a2cdf4b9e4ad4582c591792b6ede47299", null ]
+    [ "toString", "da/d00/struct_d_x_publisher.html#a9c78bac47e4c39b079d56bb204ce640f", null ]
 ];

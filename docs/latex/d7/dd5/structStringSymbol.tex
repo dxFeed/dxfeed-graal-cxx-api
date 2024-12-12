@@ -1,0 +1,144 @@
+\hypertarget{structStringSymbol}{}\doxysubsection{String\+Symbol Struct Reference}
+\label{structStringSymbol}\index{StringSymbol@{StringSymbol}}
+
+
+A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal Graal representation.  
+
+
+
+
+{\ttfamily \#include $<$String\+Symbol.\+hpp$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structStringSymbol_a1d4bb6623f564796c0aa1ae4000a1b88}{String\+Symbol}} (const char $\ast$chars) noexcept
+\begin{DoxyCompactList}\small\item\em Constructs \mbox{\hyperlink{structStringSymbol}{String\+Symbol}} from a char array. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structStringSymbol_a11c21b77ee035aa4b5b1fe4d6e3954c9}{String\+Symbol}} (std\+::string\+\_\+view string\+View) noexcept
+\begin{DoxyCompactList}\small\item\em Constructs \mbox{\hyperlink{structStringSymbol}{String\+Symbol}} from a std\+::string\+\_\+view. \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{structStringSymbol_af683e5b96e58e0cb3a41be2521377500}{to\+Graal}} () const
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{structStringSymbol_a8ca1bec2ef7ed28dcff5535f2bea0492}{to\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{structStringSymbol_a432b70283102c55cb03a6556721c2d46}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structStringSymbol}{String\+Symbol}} \mbox{\hyperlink{structStringSymbol_ae0ed1b40cbbe52d7cd1537b38e66c00b}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+A helper wrapper class needed to pass heterogeneous string symbols using a container and convert them to internal Graal representation. 
+
+The current implementation is suboptimal (by memory usage) and will be enhanced. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{structStringSymbol_a1d4bb6623f564796c0aa1ae4000a1b88}\label{structStringSymbol_a1d4bb6623f564796c0aa1ae4000a1b88}} 
+\index{StringSymbol@{StringSymbol}!StringSymbol@{StringSymbol}}
+\index{StringSymbol@{StringSymbol}!StringSymbol@{StringSymbol}}
+\doxyparagraph{\texorpdfstring{StringSymbol()}{StringSymbol()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily String\+Symbol\+::\+String\+Symbol (\begin{DoxyParamCaption}\item[{const char $\ast$}]{chars }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructs \mbox{\hyperlink{structStringSymbol}{String\+Symbol}} from a char array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em chars} & The array of chars \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{structStringSymbol_a11c21b77ee035aa4b5b1fe4d6e3954c9}\label{structStringSymbol_a11c21b77ee035aa4b5b1fe4d6e3954c9}} 
+\index{StringSymbol@{StringSymbol}!StringSymbol@{StringSymbol}}
+\index{StringSymbol@{StringSymbol}!StringSymbol@{StringSymbol}}
+\doxyparagraph{\texorpdfstring{StringSymbol()}{StringSymbol()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily String\+Symbol\+::\+String\+Symbol (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view}]{string\+View }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Constructs \mbox{\hyperlink{structStringSymbol}{String\+Symbol}} from a std\+::string\+\_\+view. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string\+View} & The string view \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{structStringSymbol_a432b70283102c55cb03a6556721c2d46}\label{structStringSymbol_a432b70283102c55cb03a6556721c2d46}} 
+\index{StringSymbol@{StringSymbol}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!StringSymbol@{StringSymbol}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void String\+Symbol\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by Symbol\+Wrapper\+::free\+Graal().
+
+\mbox{\Hypertarget{structStringSymbol_ae0ed1b40cbbe52d7cd1537b38e66c00b}\label{structStringSymbol_ae0ed1b40cbbe52d7cd1537b38e66c00b}} 
+\index{StringSymbol@{StringSymbol}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!StringSymbol@{StringSymbol}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structStringSymbol}{String\+Symbol}} String\+Symbol\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+
+
+Referenced by Symbol\+Wrapper\+::from\+Graal().
+
+\mbox{\Hypertarget{structStringSymbol_af683e5b96e58e0cb3a41be2521377500}\label{structStringSymbol_af683e5b96e58e0cb3a41be2521377500}} 
+\index{StringSymbol@{StringSymbol}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!StringSymbol@{StringSymbol}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ String\+Symbol\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+\mbox{\Hypertarget{structStringSymbol_a8ca1bec2ef7ed28dcff5535f2bea0492}\label{structStringSymbol_a8ca1bec2ef7ed28dcff5535f2bea0492}} 
+\index{StringSymbol@{StringSymbol}!toString@{toString}}
+\index{toString@{toString}!StringSymbol@{StringSymbol}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string String\+Symbol\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+a string representation 
+\end{DoxyReturn}

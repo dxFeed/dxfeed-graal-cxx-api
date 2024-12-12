@@ -56,12 +56,13 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"d3/d03/_market_module_8hpp_source.html",
-"d5/d03/class_candle.html#a1e53573765534cea0e105462317ce5f5",
-"d8/d00/_time_format_8hpp_source.html",
-"dc/d00/class_d_x_feed_subscription.html#acc00804915e18fcf303837490b04d485",
-"dd/d01/struct_candle_price_level.html#a06e82b25463992714578bb56fe5fb0ac",
-"functions_func_h.html"
+"d3/d00/class_underlying.html#a9186ec8cd23487039f93487163a2621b",
+"d5/d01/class_time_and_sale.html#a85fdb9a95f435b793ef0078d5e53b33e",
+"d7/d00/class_instrument_profile_connection.html#a682d61b269f1cdcef3387c6cf283cb47ad91be9b5ceb9fe0af02b9b02413eccf8",
+"da/d02/struct_session.html#ab4cc5478cf558173489976b41f3cfd8e",
+"dc/d03/struct_time_series_tx_model.html#a376e9ec6f344f0424bef6db87f2159ce",
+"df/d00/struct_on_demand_service.html#aefa5f87edb5c8cb5798f9e633312f52c",
+"index.html#autotoc_md28"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

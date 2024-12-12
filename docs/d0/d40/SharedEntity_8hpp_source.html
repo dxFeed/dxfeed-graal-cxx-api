@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('d0/d40/SharedEntity_8hpp_source.html',
 <div class="title">SharedEntity.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('d0/d40/SharedEntity_8hpp_source.html',
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">/// Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">   15</a></span>&#160;<span class="keyword">struct</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">SharedEntity</a> : <span class="keyword">public</span> <a class="code" href="../../d9/dc2/structdxfcpp_1_1Entity.html">Entity</a>, <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">std</a>::<a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">enable_shared_from_this</a>&lt;<a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">SharedEntity</a>&gt; {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="comment">/// The simple type synonym for the SharedEntity type</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="comment">/// The alias to a type of shared pointer to the SharedEntity object.</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#a922751cdf32a5c59b9471354aac47e24">   17</a></span>&#160;    <span class="keyword">using</span> Ptr = std::shared_ptr&lt;<a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">SharedEntity</a>&gt;;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="comment">/**</span></div>
@@ -130,34 +130,40 @@ $(document).ready(function(){initNavTree('d0/d40/SharedEntity_8hpp_source.html',
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="comment">/**</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">     * Returns a pointer to the current object wrapped in a smart pointer to type T</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">     * @tparam T The type to convert to a pointer to</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">     * @return a smart pointer to type T</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#acd65c739e3809a9aa0a4e59cfca7af95">   42</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; std::shared_ptr&lt;T&gt; <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#acd65c739e3809a9aa0a4e59cfca7af95">sharedAs</a>() <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">return</span> std::dynamic_pointer_cast&lt;T&gt;(shared_from_this());</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">     * Returns a pointer to the current object wrapped in a smart pointer to type T</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">     * @tparam T The type to convert to a pointer to</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">     * @return a smart pointer to type T</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#afab7983ddfe641908997d1b9097046e8">   52</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; std::shared_ptr&lt;T&gt; <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#afab7983ddfe641908997d1b9097046e8">sharedAs</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> std::dynamic_pointer_cast&lt;T&gt;(shared_from_this());</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">/**</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">     * Returns a string representation of the current object.</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">     * @return a string representation</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#ac5e5e03dd0deb47e0f9b13ee9df9d672">   61</a></span>&#160;    <span class="keyword">virtual</span> std::string <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#ac5e5e03dd0deb47e0f9b13ee9df9d672">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;SharedEntity{}&quot;</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;};</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;T&gt;(new T(...))` or</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">     * `std::make_shared&lt;T&gt;(...)`</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">     * @tparam T The type to convert to a pointer to</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">     * @return a smart pointer to type T</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#acd65c739e3809a9aa0a4e59cfca7af95">   45</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; std::shared_ptr&lt;T&gt; <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#acd65c739e3809a9aa0a4e59cfca7af95">sharedAs</a>() <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> std::dynamic_pointer_cast&lt;T&gt;(shared_from_this());</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">     * Returns a pointer to the current object wrapped in a smart pointer to type T</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">     * @warning Please do not use this method unless the object was created with `std::shared_ptr&lt;T&gt;(new T(...))` or</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">     * `std::make_shared&lt;T&gt;(...)`</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">     * @tparam T The type to convert to a pointer to</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">     * @return a smart pointer to type T</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#afab7983ddfe641908997d1b9097046e8">   58</a></span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; std::shared_ptr&lt;T&gt; <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#afab7983ddfe641908997d1b9097046e8">sharedAs</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">return</span> std::dynamic_pointer_cast&lt;T&gt;(shared_from_this());</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">/**</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">     * Returns a string representation of the current object.</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">     * @return a string representation</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#ac5e5e03dd0deb47e0f9b13ee9df9d672">   67</a></span>&#160;    <span class="keyword">virtual</span> std::string <a class="code" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#ac5e5e03dd0deb47e0f9b13ee9df9d672">toString</a>() <span class="keyword">const</span> <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> <span class="stringliteral">&quot;SharedEntity{}&quot;</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;};</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;} <span class="comment">// namespace dxfcpp</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

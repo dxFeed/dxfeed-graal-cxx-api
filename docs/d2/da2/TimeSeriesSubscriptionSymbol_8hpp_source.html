@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('d2/da2/TimeSeriesSubscriptionSymbol_8h
 <div class="title">TimeSeriesSubscriptionSymbol.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -128,9 +128,9 @@ $(document).ready(function(){initNavTree('d2/da2/TimeSeriesSubscriptionSymbol_8h
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> * &lt;h3&gt;Equality and hash codes&lt;/h3&gt;</span></div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"> * This is a FilteredSubscriptionSymbol.</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> * Time-series subscription symbols are compared based on their @ref TimeSeriesSubscriptionSymbol::getEventSymbol() &quot;eventSymbol&quot; only.</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * It means, that a set of time-series subscription symbols can contain at most one time-series subscription</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> * for each event symbol.</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> * Time-series subscription symbols are compared based on their @ref TimeSeriesSubscriptionSymbol::getEventSymbol()</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * &quot;eventSymbol&quot; only. It means, that a set of time-series subscription symbols can contain at most one time-series</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> * subscription for each event symbol.</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> */</span></div>
 <div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="../../de/dd0/classdxfcpp_1_1TimeSeriesSubscriptionSymbol.html">   41</a></span>&#160;<span class="keyword">class</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> TimeSeriesSubscriptionSymbol <span class="keyword">final</span> : <span class="keyword">public</span> <a class="code" href="../../d5/d05/classdxfcpp_1_1IndexedEventSubscriptionSymbol.html">IndexedEventSubscriptionSymbol</a>,</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;                                                         <span class="keyword">public</span> <a class="code" href="../../dd/d13/structdxfcpp_1_1FilteredSubscriptionSymbol.html">FilteredSubscriptionSymbol</a> {</div>

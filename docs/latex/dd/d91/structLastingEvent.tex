@@ -1,0 +1,35 @@
+\hypertarget{structLastingEvent}{}\doxysubsection{Lasting\+Event Struct Reference}
+\label{structLastingEvent}\index{LastingEvent@{LastingEvent}}
+
+
+Represents up-\/to-\/date information about some condition or state of an external entity that updates in real-\/time.  
+
+
+
+
+{\ttfamily \#include $<$Lasting\+Event.\+hpp$>$}
+
+Inheritance diagram for Lasting\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=9.000000cm]{dd/d91/structLastingEvent}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structLastingEvent_a55d859afdcade742824a7ca1c485a474}\label{structLastingEvent_a55d859afdcade742824a7ca1c485a474}} 
+using \mbox{\hyperlink{structLastingEvent_a55d859afdcade742824a7ca1c485a474}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{structLastingEvent}{Lasting\+Event}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{structLastingEvent}{Lasting\+Event}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Represents up-\/to-\/date information about some condition or state of an external entity that updates in real-\/time. 
+
+For example, a \mbox{\hyperlink{classQuote}{Quote}} is an up-\/to-\/date information about best bid and best offer for a specific symbol.
+
+Lasting events are conflated for each symbol. Last event for each symbol is always delivered to event listeners on subscription, but intermediate (next-\/to-\/last) events are not queued anywhere, they are simply discarded as stale events. More recent events represent an up-\/to-\/date information about some external entity.
+
+Lasting events can be used with DXFeed\+::get\+Last\+Event() and DXFeed\+::get\+Last\+Events methods to retrieve last events for each symbol.
+
+Note, that subscription to all lasting events of a specific type via \mbox{\hyperlink{structWildcardSymbol_acf6b6b4eeecdb9cca6e311ed7db387f6}{Wildcard\+Symbol\+::\+ALL}} symbol object does not benefit from the above advantages of lasting events. 

@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('d2/d74/structdxfcpp_1_1CandleSession.h
 </div><!--header-->
 <div class="contents">
 
-<p>Session attribute of <a class="el" href="../../d8/d91/structdxfcpp_1_1CandleSymbol.html" title="Symbol that should be used with DXFeedSubscription class to subscribe for Candle events.">CandleSymbol</a> defines trading that is used to build the candles.  
+<p><a class="el" href="../../d6/d30/structdxfcpp_1_1Session.html" title="Session represents a continuous period of time during which apply same rules regarding trading activi...">Session</a> attribute of <a class="el" href="../../d8/d91/structdxfcpp_1_1CandleSymbol.html" title="Symbol that should be used with DXFeedSubscription class to subscribe for Candle events.">CandleSymbol</a> defines trading that is used to build the candles.  
  <a href="../../d2/d74/structdxfcpp_1_1CandleSession.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="../../d8/d40/CandleSession_8hpp_source.html">CandleSession.hpp</a>&gt;</code></p>
@@ -157,7 +157,7 @@ static const <a class="el" href="../../d2/d74/structdxfcpp_1_1CandleSession.html
 <tr class="separator:adfd0e3e15583968f4af20d2cb1ed9c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Session attribute of <a class="el" href="../../d8/d91/structdxfcpp_1_1CandleSymbol.html" title="Symbol that should be used with DXFeedSubscription class to subscribe for Candle events.">CandleSymbol</a> defines trading that is used to build the candles. </p>
+<div class="textblock"><p><a class="el" href="../../d6/d30/structdxfcpp_1_1Session.html" title="Session represents a continuous period of time during which apply same rules regarding trading activi...">Session</a> attribute of <a class="el" href="../../d8/d91/structdxfcpp_1_1CandleSymbol.html" title="Symbol that should be used with DXFeedSubscription class to subscribe for Candle events.">CandleSymbol</a> defines trading that is used to build the candles. </p>
 <h3>Implementation details</h3>
 <p>This attribute is encoded in a symbol string with <a class="el" href="../../d8/d45/structdxfcpp_1_1MarketEventSymbols.html#a09885cbda27fa29fb12fe9be61d94757">MarketEventSymbols.getAttributeStringByKey</a>, <a class="el" href="../../d8/d45/structdxfcpp_1_1MarketEventSymbols.html#a05f9118ae0d921489495dec94159e8f0">changeAttributeStringByKey</a>, and <a class="el" href="../../d8/d45/structdxfcpp_1_1MarketEventSymbols.html#a0f662cf613e3e6decd079d9782d9742d">removeAttributeStringByKey</a> methods.</p>
 <p><a class="el" href="../../d2/d74/structdxfcpp_1_1CandleSession.html#ab7e6e4a28535cf8b18fb811be3687031" title="All trading sessions are used to build candles.">CandleSession::ANY</a> session is a default. The key to use with these methods is available via <a class="el" href="../../d2/d74/structdxfcpp_1_1CandleSession.html#adfd0e3e15583968f4af20d2cb1ed9c75" title="The attribute key that is used to store the value of CandleSession in a symbol string using methods o...">CandleSession::ATTRIBUTE_KEY</a> constant. The value that this key shall be set to is equal to the corresponding <a class="el" href="../../d2/d74/structdxfcpp_1_1CandleSession.html#aefe37b1fcae390c34921c88872113961" title="Returns string representation of this candle session attribute.">CandleSession::toString()</a> </p>

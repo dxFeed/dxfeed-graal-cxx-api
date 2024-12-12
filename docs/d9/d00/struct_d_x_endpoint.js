@@ -17,7 +17,7 @@ var struct_d_x_endpoint =
       [ "CONNECTED", "d9/d00/struct_d_x_endpoint.html#a262bde1f84968663012a21898c646737aa5afd6edd5336d91316964e493936858", null ],
       [ "CLOSED", "d9/d00/struct_d_x_endpoint.html#a262bde1f84968663012a21898c646737a110ccf2f5d2ff4eda1fd1a494293467d", null ]
     ] ],
-    [ "addStateChangeListener", "d9/d00/struct_d_x_endpoint.html#a0c0702ccc58a355c9be982716e11efb8", null ],
+    [ "addStateChangeListener", "d9/d00/struct_d_x_endpoint.html#a57c57f292163bbf696635fca6480ed5a", null ],
     [ "awaitNotConnected", "d9/d00/struct_d_x_endpoint.html#a8080b3c2f79a7e80c411248dc6a5bc63", null ],
     [ "awaitProcessed", "d9/d00/struct_d_x_endpoint.html#a1d1329829cb13fd1a4cc8dddf2475f18", null ],
     [ "close", "d9/d00/struct_d_x_endpoint.html#a70b8f61781bf5991e1c0b77e4a13cb06", null ],
@@ -35,6 +35,6 @@ var struct_d_x_endpoint =
     [ "password", "d9/d00/struct_d_x_endpoint.html#a7034d598bddd78f65578a0db952f9edf", null ],
     [ "reconnect", "d9/d00/struct_d_x_endpoint.html#a301fe3402bcdb2f2b73c995a94582e41", null ],
     [ "removeStateChangeListener", "d9/d00/struct_d_x_endpoint.html#a3ac9ae2a08ffceedc4a0d25c2019a93e", null ],
-    [ "toString", "d9/d00/struct_d_x_endpoint.html#aff039fb8eef7fc51fe3e7ae62e84fc25", null ],
+    [ "toString", "d9/d00/struct_d_x_endpoint.html#a481de28d2a061a52d8c92b71d3cf633f", null ],
     [ "user", "d9/d00/struct_d_x_endpoint.html#a9842b7d2972913abca385169ae105323", null ]
 ];

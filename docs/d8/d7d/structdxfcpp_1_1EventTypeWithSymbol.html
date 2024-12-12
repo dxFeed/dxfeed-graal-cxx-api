@@ -124,19 +124,22 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../
 <tr class="inherit_header pub_types_structdxfcpp_1_1EventType"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structdxfcpp_1_1EventType')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html">dxfcpp::EventType</a></td></tr>
 <tr class="memitem:a79078a83cb055e5250b65c06e8ea9fbe inherit pub_types_structdxfcpp_1_1EventType"><td class="memItemLeft" align="right" valign="top"><a id="a79078a83cb055e5250b65c06e8ea9fbe"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a79078a83cb055e5250b65c06e8ea9fbe">Ptr</a> = std::shared_ptr&lt; <a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html">EventType</a> &gt;</td></tr>
-<tr class="memdesc:a79078a83cb055e5250b65c06e8ea9fbe inherit pub_types_structdxfcpp_1_1EventType"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of shared pointer to the <a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html" title="Marks all event types that can be received via dxFeed API.">EventType</a>'s child object. <br /></td></tr>
+<tr class="memdesc:a79078a83cb055e5250b65c06e8ea9fbe inherit pub_types_structdxfcpp_1_1EventType"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of shared pointer to the <a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html" title="Marks all event types that can be received via dxFeed API.">EventType</a> object. <br /></td></tr>
 <tr class="separator:a79078a83cb055e5250b65c06e8ea9fbe inherit pub_types_structdxfcpp_1_1EventType"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_structdxfcpp_1_1SharedEntity"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structdxfcpp_1_1SharedEntity')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">dxfcpp::SharedEntity</a></td></tr>
 <tr class="memitem:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="memItemLeft" align="right" valign="top"><a id="a922751cdf32a5c59b9471354aac47e24"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#a922751cdf32a5c59b9471354aac47e24">Ptr</a> = std::shared_ptr&lt; <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">SharedEntity</a> &gt;</td></tr>
-<tr class="memdesc:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="mdescLeft">&#160;</td><td class="mdescRight">The simple type synonym for the <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html" title="Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism.">SharedEntity</a> type. <br /></td></tr>
+<tr class="memdesc:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of shared pointer to the <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html" title="Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism.">SharedEntity</a> object. <br /></td></tr>
 <tr class="separator:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8bf9399bba53191728d3595773286afc"><td class="memItemLeft" align="right" valign="top">virtual const Symbol &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#a8bf9399bba53191728d3595773286afc">getEventSymbol</a> () const noexcept=0</td></tr>
-<tr class="memdesc:a8bf9399bba53191728d3595773286afc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns event symbol that identifies this event type in <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">subscription</a>.  <a href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#a8bf9399bba53191728d3595773286afc">More...</a><br /></td></tr>
-<tr class="separator:a8bf9399bba53191728d3595773286afc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4649fee730841027496509bc8188a1fc"><td class="memItemLeft" align="right" valign="top">virtual const Symbol &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#a4649fee730841027496509bc8188a1fc">getEventSymbol</a> () const &amp;noexcept=0</td></tr>
+<tr class="memdesc:a4649fee730841027496509bc8188a1fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns event symbol that identifies this event type in <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">subscription</a>.  <a href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#a4649fee730841027496509bc8188a1fc">More...</a><br /></td></tr>
+<tr class="separator:a4649fee730841027496509bc8188a1fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8ef960ec161d594d714ea5b99d58d7d"><td class="memItemLeft" align="right" valign="top">virtual const std::optional&lt; Symbol &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#aa8ef960ec161d594d714ea5b99d58d7d">getEventSymbolOpt</a> () const &amp;noexcept=0</td></tr>
+<tr class="memdesc:aa8ef960ec161d594d714ea5b99d58d7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns event symbol that identifies this event type in <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">subscription</a>.  <a href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#aa8ef960ec161d594d714ea5b99d58d7d">More...</a><br /></td></tr>
+<tr class="separator:aa8ef960ec161d594d714ea5b99d58d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4577800cd16018b9f85b36911fc79d9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#af4577800cd16018b9f85b36911fc79d9">setEventSymbol</a> (const Symbol &amp;eventSymbol) noexcept=0</td></tr>
 <tr class="memdesc:af4577800cd16018b9f85b36911fc79d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes event symbol that identifies this event type in <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">subscription</a>.  <a href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html#af4577800cd16018b9f85b36911fc79d9">More...</a><br /></td></tr>
 <tr class="separator:af4577800cd16018b9f85b36911fc79d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,8 +187,8 @@ struct dxfcpp::EventTypeWithSymbol&lt; Symbol &gt;</h3>
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8bf9399bba53191728d3595773286afc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bf9399bba53191728d3595773286afc">&#9670;&nbsp;</a></span>getEventSymbol()</h2>
+<a id="a4649fee730841027496509bc8188a1fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4649fee730841027496509bc8188a1fc">&#9670;&nbsp;</a></span>getEventSymbol()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -199,7 +202,7 @@ template&lt;typename Symbol &gt; </div>
           <td class="memname">virtual const Symbol&amp; <a class="el" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html">dxfcpp::EventTypeWithSymbol</a>&lt; Symbol &gt;::getEventSymbol </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const &amp;</td>
         </tr>
       </table>
   </td>
@@ -212,7 +215,39 @@ template&lt;typename Symbol &gt; </div>
 <p>Returns event symbol that identifies this event type in <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">subscription</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>The event symbol. </dd></dl>
 
-<p>Implemented in <a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a21adae793a31d20782ca9a5ed30f6607">dxfcpp::MarketEvent</a>, and <a class="el" href="../../d2/d34/classdxfcpp_1_1Candle.html#a0311559743622bc20a3cece4fce68daa">dxfcpp::Candle</a>.</p>
+<p>Implemented in <a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a35de94f83041d63df953e0447a195134">dxfcpp::MarketEvent</a>, and <a class="el" href="../../d2/d34/classdxfcpp_1_1Candle.html#aa0ea042b83ce32c1e731b245038cd483">dxfcpp::Candle</a>.</p>
+
+</div>
+</div>
+<a id="aa8ef960ec161d594d714ea5b99d58d7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8ef960ec161d594d714ea5b99d58d7d">&#9670;&nbsp;</a></span>getEventSymbolOpt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Symbol &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const std::optional&lt;Symbol&gt;&amp; <a class="el" href="../../d8/d7d/structdxfcpp_1_1EventTypeWithSymbol.html">dxfcpp::EventTypeWithSymbol</a>&lt; Symbol &gt;::getEventSymbolOpt </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const &amp;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns event symbol that identifies this event type in <a class="el" href="../../df/d08/classdxfcpp_1_1DXFeedSubscription.html">subscription</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>The event symbol or std::nullopt. </dd></dl>
+
+<p>Implemented in <a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#ac09ac04a2ee026c87a0871bfaf482087">dxfcpp::MarketEvent</a>, and <a class="el" href="../../d2/d34/classdxfcpp_1_1Candle.html#a5c9c6d8be066b5a2aaad39ae94a01f20">dxfcpp::Candle</a>.</p>
 
 </div>
 </div>

@@ -106,6 +106,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aac369091e4fd1d35efcfc018db452905"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dc1/structdxfcpp_1_1System.html#aac369091e4fd1d35efcfc018db452905">setProperty</a> (const std::string &amp;key, const std::string &amp;value)</td></tr>
 <tr class="memdesc:aac369091e4fd1d35efcfc018db452905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the JVM system property indicated by the specified key.  <a href="../../d6/dc1/structdxfcpp_1_1System.html#aac369091e4fd1d35efcfc018db452905">More...</a><br /></td></tr>
 <tr class="separator:aac369091e4fd1d35efcfc018db452905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d6dec1437d62a3d41c1a413f68517bf"><td class="memTemplParams" colspan="2">template&lt;typename Properties &gt; </td></tr>
+<tr class="memitem:a4d6dec1437d62a3d41c1a413f68517bf"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d6/dc1/structdxfcpp_1_1System.html#a4d6dec1437d62a3d41c1a413f68517bf">setProperties</a> (Properties &amp;&amp;properties)</td></tr>
+<tr class="memdesc:a4d6dec1437d62a3d41c1a413f68517bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the JVM system properties to the Properties argument.  <a href="../../d6/dc1/structdxfcpp_1_1System.html#a4d6dec1437d62a3d41c1a413f68517bf">More...</a><br /></td></tr>
+<tr class="separator:a4d6dec1437d62a3d41c1a413f68517bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2918454df4b12fa0d26476ac800d208"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dc1/structdxfcpp_1_1System.html#af2918454df4b12fa0d26476ac800d208">getProperty</a> (const std::string &amp;key)</td></tr>
 <tr class="memdesc:af2918454df4b12fa0d26476ac800d208"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the system property indicated by the specified key.  <a href="../../d6/dc1/structdxfcpp_1_1System.html#af2918454df4b12fa0d26476ac800d208">More...</a><br /></td></tr>
 <tr class="separator:af2918454df4b12fa0d26476ac800d208"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,6 +149,51 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The value of a JVM system property (UTF-8 string), or an empty string. </dd></dl>
+
+</div>
+</div>
+<a id="a4d6dec1437d62a3d41c1a413f68517bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d6dec1437d62a3d41c1a413f68517bf">&#9670;&nbsp;</a></span>setProperties()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Properties &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void dxfcpp::System::setProperties </td>
+          <td>(</td>
+          <td class="paramtype">Properties &amp;&amp;&#160;</td>
+          <td class="paramname"><em>properties</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the JVM system properties to the Properties argument. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Properties</td><td>The properties' type (std::map, std::unordered_map etc). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">properties</td><td>The new system properties. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+<p class="reference">References <a class="el" href="../../d6/dc1/structdxfcpp_1_1System.html#aac369091e4fd1d35efcfc018db452905">setProperty()</a>.</p>
 
 </div>
 </div>
@@ -191,6 +240,8 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the setting of the JVM system property succeeded. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d6/dc1/structdxfcpp_1_1System.html#a4d6dec1437d62a3d41c1a413f68517bf">setProperties()</a>.</p>
 
 </div>
 </div>

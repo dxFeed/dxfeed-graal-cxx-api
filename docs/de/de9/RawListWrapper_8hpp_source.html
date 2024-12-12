@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('de/de9/RawListWrapper_8hpp_source.html
 <div class="title">RawListWrapper.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2023 Devexperts LLC.</span></div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">// Copyright (c) 2024 Devexperts LLC.</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// SPDX-License-Identifier: MPL-2.0</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#</span><span class="preprocessor">pragma</span> <span class="preprocessor">once</span></div>
@@ -176,12 +176,12 @@ $(document).ready(function(){initNavTree('de/de9/RawListWrapper_8hpp_source.html
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast</span>&lt;std::size_t&gt;(list_.size);</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    }</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span> *getHandler() <span class="keyword">noexcept</span> {</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span> *getHandle() <span class="keyword">noexcept</span> {</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (Debugger::traceLists) {</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            Debugger::trace(getDebugName() + <span class="stringliteral">&quot;::getHandler() -&gt; &quot;</span> + dxfcpp::toString(bit_cast&lt;<span class="keywordtype">void</span> *&gt;(&amp;list_)));</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            Debugger::trace(getDebugName() + <span class="stringliteral">&quot;::getHandle() -&gt; &quot;</span> + dxfcpp::toString(dxfcpp::bit_cast&lt;<span class="keywordtype">void</span> *&gt;(&amp;list_)));</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        }</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">return</span> bit_cast&lt;<span class="keywordtype">void</span> *&gt;(&amp;list_);</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">return</span> dxfcpp::bit_cast&lt;<span class="keywordtype">void</span> *&gt;(&amp;list_);</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    }</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordtype">void</span> init(std::size_t size) <span class="keyword">noexcept</span> {</div>

@@ -97,7 +97,7 @@ $(document).ready(function(){initNavTree('d7/d40/classdxfcpp_1_1OrderBase.html',
 </div><!--header-->
 <div class="contents">
 
-<p>Base class for common fields of <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol.">Order</a>, <a class="el" href="../../d4/d1f/classdxfcpp_1_1AnalyticOrder.html" title="Represents an extension of Order introducing analytic information, e.g.">AnalyticOrder</a> and SpreadOrder events.  
+<p>Base class for common fields of <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol.">Order</a>, <a class="el" href="../../d4/d1f/classdxfcpp_1_1AnalyticOrder.html" title="Represents an extension of Order introducing analytic information, e.g.">AnalyticOrder</a> and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html" title="Spread order event is a snapshot for a full available market depth for all spreads on a given underly...">SpreadOrder</a> events.  
  <a href="../../d7/d40/classdxfcpp_1_1OrderBase.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="../../db/d41/OrderBase_8hpp_source.html">OrderBase.hpp</a>&gt;</code></p>
@@ -115,8 +115,9 @@ $(document).ready(function(){initNavTree('d7/d40/classdxfcpp_1_1OrderBase.html',
 <area href="../../d4/d2c/structdxfcpp_1_1EventType.html" title="Marks all event types that can be received via dxFeed API." alt="dxfcpp::EventType" shape="rect" coords="0,112,258,136"/>
 <area href="../../db/d51/structdxfcpp_1_1SharedEntity.html" title="Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism." alt="dxfcpp::SharedEntity" shape="rect" coords="0,56,258,80"/>
 <area href="../../d9/dc2/structdxfcpp_1_1Entity.html" title="Base abstract class for all dxFeed C++ API entities." alt="dxfcpp::Entity" shape="rect" coords="0,0,258,24"/>
-<area href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol." alt="dxfcpp::Order" shape="rect" coords="134,336,392,360"/>
-<area href="../../d4/d1f/classdxfcpp_1_1AnalyticOrder.html" title="Represents an extension of Order introducing analytic information, e.g." alt="dxfcpp::AnalyticOrder" shape="rect" coords="134,392,392,416"/>
+<area href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol." alt="dxfcpp::Order" shape="rect" coords="0,336,258,360"/>
+<area href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html" title="Spread order event is a snapshot for a full available market depth for all spreads on a given underly..." alt="dxfcpp::SpreadOrder" shape="rect" coords="268,336,526,360"/>
+<area href="../../d4/d1f/classdxfcpp_1_1AnalyticOrder.html" title="Represents an extension of Order introducing analytic information, e.g." alt="dxfcpp::AnalyticOrder" shape="rect" coords="0,392,258,416"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -129,10 +130,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7f7a28d1386e9a83d761af33dc5fa4f5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a7f7a28d1386e9a83d761af33dc5fa4f5">OrderBase</a> (std::string eventSymbol) noexcept</td></tr>
 <tr class="memdesc:a7f7a28d1386e9a83d761af33dc5fa4f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates new order event with the specified event symbol.  <a href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a7f7a28d1386e9a83d761af33dc5fa4f5">More...</a><br /></td></tr>
 <tr class="separator:a7f7a28d1386e9a83d761af33dc5fa4f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9418a6aece0777c86ac124469fbee09e"><td class="memItemLeft" align="right" valign="top">const OrderSource &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9418a6aece0777c86ac124469fbee09e">getSource</a> () const &amp;noexcept override</td></tr>
+<tr class="memitem:a9418a6aece0777c86ac124469fbee09e"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../db/d0f/classdxfcpp_1_1OrderSource.html">OrderSource</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9418a6aece0777c86ac124469fbee09e">getSource</a> () const &amp;noexcept override</td></tr>
 <tr class="memdesc:a9418a6aece0777c86ac124469fbee09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns source of this event.  <a href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9418a6aece0777c86ac124469fbee09e">More...</a><br /></td></tr>
 <tr class="separator:a9418a6aece0777c86ac124469fbee09e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1813c11582e335c3654c028ad80b7a0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1813c11582e335c3654c028ad80b7a0d">setSource</a> (const OrderSource &amp;source) noexcept</td></tr>
+<tr class="memitem:a1813c11582e335c3654c028ad80b7a0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1813c11582e335c3654c028ad80b7a0d">setSource</a> (const <a class="el" href="../../db/d0f/classdxfcpp_1_1OrderSource.html">OrderSource</a> &amp;source) noexcept</td></tr>
 <tr class="memdesc:a1813c11582e335c3654c028ad80b7a0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes source of this event.  <a href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a1813c11582e335c3654c028ad80b7a0d">More...</a><br /></td></tr>
 <tr class="separator:a1813c11582e335c3654c028ad80b7a0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d1da10a6ba9bb4fcc3466a5c0b07ac5"><td class="memItemLeft" align="right" valign="top">std::int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a6d1da10a6ba9bb4fcc3466a5c0b07ac5">getEventFlags</a> () const noexcept override</td></tr>
@@ -255,6 +256,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa5e88e61e39f5716d1ab7a41775fdad0"><td class="memItemLeft" align="right" valign="top">std::int16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#aa5e88e61e39f5716d1ab7a41775fdad0">getExchangeCode</a> () const noexcept</td></tr>
 <tr class="memdesc:aa5e88e61e39f5716d1ab7a41775fdad0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns exchange code of this order.  <a href="../../d7/d40/classdxfcpp_1_1OrderBase.html#aa5e88e61e39f5716d1ab7a41775fdad0">More...</a><br /></td></tr>
 <tr class="separator:aa5e88e61e39f5716d1ab7a41775fdad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f0325d572de8695f64e3b710eb2609d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a5f0325d572de8695f64e3b710eb2609d">getExchangeCodeString</a> () const noexcept</td></tr>
+<tr class="memdesc:a5f0325d572de8695f64e3b710eb2609d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns exchange code of this order as UTF8 string.  <a href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a5f0325d572de8695f64e3b710eb2609d">More...</a><br /></td></tr>
+<tr class="separator:a5f0325d572de8695f64e3b710eb2609d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c7f49b4ed39331942da4a7a8b98718a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a5c7f49b4ed39331942da4a7a8b98718a">setExchangeCode</a> (char exchangeCode) noexcept</td></tr>
 <tr class="memdesc:a5c7f49b4ed39331942da4a7a8b98718a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes exchange code of this order.  <a href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a5c7f49b4ed39331942da4a7a8b98718a">More...</a><br /></td></tr>
 <tr class="separator:a5c7f49b4ed39331942da4a7a8b98718a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -277,9 +281,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ab23a7bb4ba4aba697e6c9d9dcaf61ba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns string representation of this order event's fields.  <a href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ab23a7bb4ba4aba697e6c9d9dcaf61ba6">More...</a><br /></td></tr>
 <tr class="separator:ab23a7bb4ba4aba697e6c9d9dcaf61ba6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_structdxfcpp_1_1MarketEvent"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_structdxfcpp_1_1MarketEvent')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html">dxfcpp::MarketEvent</a></td></tr>
-<tr class="memitem:a21adae793a31d20782ca9a5ed30f6607 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a21adae793a31d20782ca9a5ed30f6607">getEventSymbol</a> () const noexcept override</td></tr>
-<tr class="memdesc:a21adae793a31d20782ca9a5ed30f6607 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns symbol of this event.  <a href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a21adae793a31d20782ca9a5ed30f6607">More...</a><br /></td></tr>
-<tr class="separator:a21adae793a31d20782ca9a5ed30f6607 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35de94f83041d63df953e0447a195134 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a35de94f83041d63df953e0447a195134">getEventSymbol</a> () const &amp;noexcept override</td></tr>
+<tr class="memdesc:a35de94f83041d63df953e0447a195134 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns symbol of this event.  <a href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a35de94f83041d63df953e0447a195134">More...</a><br /></td></tr>
+<tr class="separator:a35de94f83041d63df953e0447a195134 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac09ac04a2ee026c87a0871bfaf482087 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="memItemLeft" align="right" valign="top">const std::optional&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#ac09ac04a2ee026c87a0871bfaf482087">getEventSymbolOpt</a> () const &amp;noexcept override</td></tr>
+<tr class="memdesc:ac09ac04a2ee026c87a0871bfaf482087 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns symbol of this event.  <a href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#ac09ac04a2ee026c87a0871bfaf482087">More...</a><br /></td></tr>
+<tr class="separator:ac09ac04a2ee026c87a0871bfaf482087 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a371a67895ed8276685d29e0657b53899 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a371a67895ed8276685d29e0657b53899">setEventSymbol</a> (const std::string &amp;eventSymbol) noexcept override</td></tr>
 <tr class="memdesc:a371a67895ed8276685d29e0657b53899 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes symbol of this event.  <a href="../../d9/df0/structdxfcpp_1_1MarketEvent.html#a371a67895ed8276685d29e0657b53899">More...</a><br /></td></tr>
 <tr class="separator:a371a67895ed8276685d29e0657b53899 inherit pub_methods_structdxfcpp_1_1MarketEvent"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -355,12 +362,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../
 <tr class="inherit_header pub_types_structdxfcpp_1_1EventType"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structdxfcpp_1_1EventType')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html">dxfcpp::EventType</a></td></tr>
 <tr class="memitem:a79078a83cb055e5250b65c06e8ea9fbe inherit pub_types_structdxfcpp_1_1EventType"><td class="memItemLeft" align="right" valign="top"><a id="a79078a83cb055e5250b65c06e8ea9fbe"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html#a79078a83cb055e5250b65c06e8ea9fbe">Ptr</a> = std::shared_ptr&lt; <a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html">EventType</a> &gt;</td></tr>
-<tr class="memdesc:a79078a83cb055e5250b65c06e8ea9fbe inherit pub_types_structdxfcpp_1_1EventType"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of shared pointer to the <a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html" title="Marks all event types that can be received via dxFeed API.">EventType</a>'s child object. <br /></td></tr>
+<tr class="memdesc:a79078a83cb055e5250b65c06e8ea9fbe inherit pub_types_structdxfcpp_1_1EventType"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of shared pointer to the <a class="el" href="../../d4/d2c/structdxfcpp_1_1EventType.html" title="Marks all event types that can be received via dxFeed API.">EventType</a> object. <br /></td></tr>
 <tr class="separator:a79078a83cb055e5250b65c06e8ea9fbe inherit pub_types_structdxfcpp_1_1EventType"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_structdxfcpp_1_1SharedEntity"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structdxfcpp_1_1SharedEntity')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">dxfcpp::SharedEntity</a></td></tr>
 <tr class="memitem:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="memItemLeft" align="right" valign="top"><a id="a922751cdf32a5c59b9471354aac47e24"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html#a922751cdf32a5c59b9471354aac47e24">Ptr</a> = std::shared_ptr&lt; <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html">SharedEntity</a> &gt;</td></tr>
-<tr class="memdesc:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="mdescLeft">&#160;</td><td class="mdescRight">The simple type synonym for the <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html" title="Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism.">SharedEntity</a> type. <br /></td></tr>
+<tr class="memdesc:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="mdescLeft">&#160;</td><td class="mdescRight">The alias to a type of shared pointer to the <a class="el" href="../../db/d51/structdxfcpp_1_1SharedEntity.html" title="Base abstract &quot;shared entity&quot; class. Has some helpers for dynamic polymorphism.">SharedEntity</a> object. <br /></td></tr>
 <tr class="separator:a922751cdf32a5c59b9471354aac47e24 inherit pub_types_structdxfcpp_1_1SharedEntity"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_structdxfcpp_1_1IndexedEvent"><td colspan="2" onclick="javascript:toggleInherit('pub_types_structdxfcpp_1_1IndexedEvent')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../d6/dd7/structdxfcpp_1_1IndexedEvent.html">dxfcpp::IndexedEvent</a></td></tr>
 <tr class="memitem:ae11dfc2d415ed6c039c7745a2acf4683 inherit pub_types_structdxfcpp_1_1IndexedEvent"><td class="memItemLeft" align="right" valign="top"><a id="ae11dfc2d415ed6c039c7745a2acf4683"></a>
@@ -373,11 +380,11 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../
 <tr class="separator:afeb8874ca4d6b603d5b941f19e0735cf inherit pro_methods_structdxfcpp_1_1MarketEvent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Base class for common fields of <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol.">Order</a>, <a class="el" href="../../d4/d1f/classdxfcpp_1_1AnalyticOrder.html" title="Represents an extension of Order introducing analytic information, e.g.">AnalyticOrder</a> and SpreadOrder events. </p>
+<div class="textblock"><p>Base class for common fields of <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol.">Order</a>, <a class="el" href="../../d4/d1f/classdxfcpp_1_1AnalyticOrder.html" title="Represents an extension of Order introducing analytic information, e.g.">AnalyticOrder</a> and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html" title="Spread order event is a snapshot for a full available market depth for all spreads on a given underly...">SpreadOrder</a> events. </p>
 <p><a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol.">Order</a> events represent a snapshot for a full available market depth for a symbol. The collection of order events of a symbol represents the most recent information that is available about orders on the market at any given moment of time.</p>
 <p><a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol.">Order</a> event represents market depth for a <b>specific symbol</b>.</p>
 <p><a class="el" href="../../d4/d1f/classdxfcpp_1_1AnalyticOrder.html" title="Represents an extension of Order introducing analytic information, e.g.">AnalyticOrder</a> event represents market depth for a <b>specific symbol</b> extended with an analytic information, for example, whether particular order represent an iceberg or not.</p>
-<p>SpreadOrder event represents market depth for <b>all spreads on a given underlying symbol</b>.</p>
+<p><a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html" title="Spread order event is a snapshot for a full available market depth for all spreads on a given underly...">SpreadOrder</a> event represents market depth for <b>all spreads on a given underlying symbol</b>.</p>
 <p><a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html" title="Order event is a snapshot for a full available market depth for a symbol.">Order</a> events arrive from multiple sources for the same market symbol and are distinguished by their <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#ae40f5bf3aadb65c03f0d512569a23b74">index</a>. Index is a unique per symbol identifier of the event. It is unique across all the sources of depth information for the symbol. The event with <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a3772a63a9d2a79b8cb9a687a2b2c0a7a">size</a> either <code>0</code> or <code>NaN</code> is a signal to remove previously received order for the corresponding index. The method <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#aa7c935513d5717625af3563761703350">hasSize</a> is a convenient method to test for size presence.</p>
 <h3><a class="anchor" id="eventFlagsSection"></a>Event flags, transactions and snapshots</h3>
 <p>Some order event sources provide a consistent view of the price-level or detailed order book. Their updates may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time. The corresponding information is carried in <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a6d1da10a6ba9bb4fcc3466a5c0b07ac5">eventFlags</a> property. The logic behind this property is detailed in <a class="el" href="../../d6/dd7/structdxfcpp_1_1IndexedEvent.html" title="Represents an indexed collection of up-to-date information about some condition or state of an extern...">IndexedEvent</a> class documentation.</p>
@@ -663,6 +670,34 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
 
 </div>
 </div>
+<a id="a5f0325d572de8695f64e3b710eb2609d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f0325d572de8695f64e3b710eb2609d">&#9670;&nbsp;</a></span>getExchangeCodeString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string dxfcpp::OrderBase::getExchangeCodeString </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns exchange code of this order as UTF8 string. </p>
+<dl class="section return"><dt>Returns</dt><dd>exchange code of this order as UTF8 string. </dd></dl>
+
+</div>
+</div>
 <a id="ae63959b4fad491605a6fecbb3a962187"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae63959b4fad491605a6fecbb3a962187">&#9670;&nbsp;</a></span>getExecutedSize()</h2>
 
@@ -907,7 +942,7 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const OrderSource&amp; dxfcpp::OrderBase::getSource </td>
+          <td class="memname">const <a class="el" href="../../db/d0f/classdxfcpp_1_1OrderSource.html">OrderSource</a>&amp; dxfcpp::OrderBase::getSource </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const &amp;</td>
@@ -1189,10 +1224,12 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
 <p>Changes action of this order. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">action</td><td>side of this order. </td></tr>
+    <tr><td class="paramname">action</td><td>The action of this order. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a97b1daccc914f85a3ad008e2b98b32a8">dxfcpp::Order::withAction()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#acea177a4e0802a80e5bba602a1b11514">dxfcpp::SpreadOrder::withAction()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#af5a5ba6a1fdfc8c66a7a75767a31f2a2">dxfcpp::Order::withActionShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a603455bc7541a1bf0f4982a2fab58756">dxfcpp::SpreadOrder::withActionShared()</a>.</p>
 
 </div>
 </div>
@@ -1228,6 +1265,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a4b9dbda2b54d143fffdf2b47fa006e22">dxfcpp::Order::withActionTime()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a769dccfe54a0ca2e03b00406a6092116">dxfcpp::SpreadOrder::withActionTime()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a215ae8b0ae3fa64ff0bfc35c1f36d78f">dxfcpp::Order::withActionTimeShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a64e9ecf295fe0b16c1d74d053b19e863">dxfcpp::SpreadOrder::withActionTimeShared()</a>.</p>
+
 </div>
 </div>
 <a id="a9f52291d9b6712a4611673c078c8247b"></a>
@@ -1262,6 +1301,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a6ef2cc1f844cf2cbcdc8f03829d55f36">dxfcpp::Order::withAuxOrderId()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#ab11d740f2ad8f90a2e4de0b958d843a2">dxfcpp::SpreadOrder::withAuxOrderId()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#aba9d14eca5d78995436770004acb496d">dxfcpp::Order::withAuxOrderIdShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a5e4743cc23b7fc6dfeb88fca4533f04a">dxfcpp::SpreadOrder::withAuxOrderIdShared()</a>.</p>
+
 </div>
 </div>
 <a id="a07aba66be613beacd5e80bdd86464272"></a>
@@ -1295,6 +1336,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </table>
   </dd>
 </dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a0e90833f9141c325f91cd4c3a5ddfa78">dxfcpp::Order::withCount()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#ae3d50e5b34a133d89bab59b64c2a2640">dxfcpp::SpreadOrder::withCount()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a052d2ee15b771cd65d11371294c32c91">dxfcpp::Order::withCountShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#af0c0f02b7bcfde5fa192192b6782462f">dxfcpp::SpreadOrder::withCountShared()</a>.</p>
 
 </div>
 </div>
@@ -1478,6 +1521,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a1b2f81782e4be0123290ada570d0f517">dxfcpp::Order::withExecutedSize()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#aead378da5745cd691cf4b8ef658a522a">dxfcpp::SpreadOrder::withExecutedSize()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#af809f858dc6a58bd0573e94a9de2d7f6">dxfcpp::Order::withExecutedSizeShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a88422c71acc975f525fb27b6968df984">dxfcpp::SpreadOrder::withExecutedSizeShared()</a>.</p>
+
 </div>
 </div>
 <a id="a3cb36dcbcc027ad5e93bf56faffff748"></a>
@@ -1515,6 +1560,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
 
 <p>Implements <a class="el" href="../../d6/dd7/structdxfcpp_1_1IndexedEvent.html#a5467b31a73a69502b6590656980b108d">dxfcpp::IndexedEvent</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#aaf7a32923d7f0f24e42e0e984adf79a0">dxfcpp::Order::withIndex()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a68cd63a6665bf277e810d528e499e95d">dxfcpp::SpreadOrder::withIndex()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a16a898275f2c48f95a6a99e8c810a914">dxfcpp::Order::withIndexShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a46051af17b608427cc4507ffb7244db4">dxfcpp::SpreadOrder::withIndexShared()</a>.</p>
+
 </div>
 </div>
 <a id="a519b8485d8e6ce119b63923f833ce59a"></a>
@@ -1548,6 +1595,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </table>
   </dd>
 </dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a8c91cdc80f49012a86a9a5cee45376a9">dxfcpp::Order::withOrderId()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#ae2baf6d251bfaa01f8a19b51a6b0209c">dxfcpp::SpreadOrder::withOrderId()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a09f7642abc4270a6505e34820a582ad9">dxfcpp::Order::withOrderIdShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a73688cfd1691a964eae46c8c18ef6cb6">dxfcpp::SpreadOrder::withOrderIdShared()</a>.</p>
 
 </div>
 </div>
@@ -1583,6 +1632,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#af4c196e95bf57f8c1efc257f0712ff1c">dxfcpp::Order::withOrderSide()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#aeb8f6b8711655cfaf38de5cccfa54300">dxfcpp::SpreadOrder::withOrderSide()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a6d1df1d81c67be511b1590e2b3115edc">dxfcpp::Order::withOrderSideShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#ad8ba6d0e534539839aef027773a455f9">dxfcpp::SpreadOrder::withOrderSideShared()</a>.</p>
+
 </div>
 </div>
 <a id="ad8672701e0cec3aa6c0211e17fae4f49"></a>
@@ -1617,6 +1668,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a92807ddf8f5605d01eb2c3507bd59197">dxfcpp::Order::withPrice()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a20ef504d42c3c9fe5ed11405c6d94e64">dxfcpp::SpreadOrder::withPrice()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a9557b326b71dbeb5818bb033958eecee">dxfcpp::Order::withPriceShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#aea244fbad923d0b06d90ea968bb03282">dxfcpp::SpreadOrder::withPriceShared()</a>.</p>
+
 </div>
 </div>
 <a id="a1a80699b40d296360bc250d196e18c0d"></a>
@@ -1650,6 +1703,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </table>
   </dd>
 </dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#af1250676b791bb46f320137ce1d9aa61">dxfcpp::Order::withScope()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a28261406dca67f58f5bdd17cc505d3cd">dxfcpp::SpreadOrder::withScope()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#aafff82e635eaa743021773252d6b4c08">dxfcpp::Order::withScopeShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a4ff600e850a2bfb9d2e4e2965ba747dc">dxfcpp::SpreadOrder::withScopeShared()</a>.</p>
 
 </div>
 </div>
@@ -1688,6 +1743,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
 
 <p class="reference">References <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a37a525baa7dab5dad92d638175d1dd70">MAX_SEQUENCE</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a922bf6a612d9c31d4556160284313a27">dxfcpp::Order::withSequence()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#aefb616024f30c3d823e1e4e1de3f9dba">dxfcpp::SpreadOrder::withSequence()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a20fb15b4f9c2feb224fc42ba9cfb53bb">dxfcpp::Order::withSequenceShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#af3c3690e78e72c7b38127c2af2bc6b51">dxfcpp::SpreadOrder::withSequenceShared()</a>.</p>
+
 </div>
 </div>
 <a id="a34d1ee3266ecd0502c76bc278a977b28"></a>
@@ -1722,6 +1779,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#aa9497760d0a4316061e39be12294a25a">dxfcpp::Order::withSize()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a7667569abf62d74ce938b4498f31ace4">dxfcpp::SpreadOrder::withSize()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#aeed46d7128a3ac38268ef3db66ac8c1c">dxfcpp::Order::withSizeShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a297fe225b11f18fee22c88ae19a91255">dxfcpp::SpreadOrder::withSizeShared()</a>.</p>
+
 </div>
 </div>
 <a id="a1813c11582e335c3654c028ad80b7a0d"></a>
@@ -1736,7 +1795,7 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
         <tr>
           <td class="memname">void dxfcpp::OrderBase::setSource </td>
           <td>(</td>
-          <td class="paramtype">const OrderSource &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="../../db/d0f/classdxfcpp_1_1OrderSource.html">OrderSource</a> &amp;&#160;</td>
           <td class="paramname"><em>source</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1757,7 +1816,9 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
-<p class="reference">References <a class="el" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html#a251e43b2d80bda9d117e8dd1c3aa5413">dxfcpp::IndexedEventSource::id()</a>.</p>
+<p class="reference">References <a class="el" href="../../df/da4/classdxfcpp_1_1IndexedEventSource.html#a251e43b2d80bda9d117e8dd1c3aa5413">dxfcpp::IndexedEventSource::id()</a>, and <a class="el" href="../../db/d0f/classdxfcpp_1_1OrderSource.html#a47e0a6e6956ca161fc413f3526a34ffd">dxfcpp::OrderSource::isSpecialSourceId()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a6bc7a6440849a240cde0ec8abadfd065">dxfcpp::Order::withSource()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a2a240c777ad2998d8c08d8877cf8b613">dxfcpp::SpreadOrder::withSource()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#acc32eafdd0ec25913ce058181f87913f">dxfcpp::Order::withSourceShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a3b95b0c31d71c9fdba4c73beaa93fb96">dxfcpp::SpreadOrder::withSourceShared()</a>.</p>
 
 </div>
 </div>
@@ -1796,7 +1857,7 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
 
 <p class="reference">References <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#aef0e8dd63d54105ad9c2c62f3f5766fa">getSequence()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4ca0b3a1ee27f2f007a4bc761f25a91f">setTimeNanos()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a4ca0b3a1ee27f2f007a4bc761f25a91f">setTimeNanos()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#ab6b4bbf0d93b729fd874af6335620c79">dxfcpp::Order::withTime()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a8a4766e215af05965493928c77b7dacc">dxfcpp::SpreadOrder::withTime()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#acfc206d46e32006a1b498d9117d79636">dxfcpp::Order::withTimeShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#aa1a1634a6825ed1b27a58d975cd9cb41">dxfcpp::SpreadOrder::withTimeShared()</a>.</p>
 
 </div>
 </div>
@@ -1831,6 +1892,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </table>
   </dd>
 </dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a67f1f29101f936b3ff673134d86fd617">dxfcpp::Order::withTimeNanoPart()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#aed74dae13da240922e07dfcde32d2a24">dxfcpp::SpreadOrder::withTimeNanoPart()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a38b740402f6f09a34fefd583937683a2">dxfcpp::Order::withTimeNanoPartShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#af215a794afc16fd12331e09d1c4ef3b8">dxfcpp::SpreadOrder::withTimeNanoPartShared()</a>.</p>
 
 </div>
 </div>
@@ -1869,6 +1932,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
 
 <p class="reference">References <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a57ed23b4847fac141d11bbd42be48f89">setTime()</a>.</p>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a78ca333f6c737b22371cb3ace3ce7c31">dxfcpp::Order::withTimeNanos()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a4ee28b43bb9aed2a34537cf263f4e07c">dxfcpp::SpreadOrder::withTimeNanos()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#adf05fdb01af70d25bd68843c71831948">dxfcpp::Order::withTimeNanosShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a5a311d2b1afac9e2d1bd48b93eac5b75">dxfcpp::SpreadOrder::withTimeNanosShared()</a>.</p>
+
 </div>
 </div>
 <a id="a02fa5a6147ce8ed12ca9a12bf9eb0944"></a>
@@ -1896,7 +1961,7 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
 </div><div class="memdoc">
 
 <p>Changes time and sequence of this order. </p>
-<p><b>Do not use this method directly.</b> Change <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a57ed23b4847fac141d11bbd42be48f89">time</a> and/or <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9b1e2b7d06c6c05e55b310eb6b6ac9f9">sequence</a>.</p>
+<dl class="section warning"><dt>Warning</dt><dd><b>Do not use this method directly.</b> Change <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a57ed23b4847fac141d11bbd42be48f89">time</a> and/or <a class="el" href="../../d7/d40/classdxfcpp_1_1OrderBase.html#a9b1e2b7d06c6c05e55b310eb6b6ac9f9">sequence</a>.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">timeSequence</td><td>the time and sequence. </td></tr>
@@ -1939,6 +2004,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a48e25eedd0a289309f1a2a66b7677e8a">dxfcpp::Order::withTradeId()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#aa34c99621da34e2877f90ecf75b7fe43">dxfcpp::SpreadOrder::withTradeId()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a1f85087d1e1dd214308b7f6ac31fc3c9">dxfcpp::Order::withTradeShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#ae1e6f27eed8290855fa9831f04b863f7">dxfcpp::SpreadOrder::withTradeShared()</a>.</p>
+
 </div>
 </div>
 <a id="abce2b1d941922c8ac30efec21773e572"></a>
@@ -1973,6 +2040,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </dd>
 </dl>
 
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#ae2c49297fd41e8454dcccb0da5d6a758">dxfcpp::Order::withTradePrice()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#add9ad8ff9f18c0c8f5dcddb09ba6ace4">dxfcpp::SpreadOrder::withTradePrice()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a64e841a57e96fbd9f646f57c9b37515d">dxfcpp::Order::withTradePriceShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a585d9244a757a9cb64da7cc18a6796a5">dxfcpp::SpreadOrder::withTradePriceShared()</a>.</p>
+
 </div>
 </div>
 <a id="abd6f26430a933b22f59b546b545f38be"></a>
@@ -2006,6 +2075,8 @@ in <a class="el" href="../../df/de9/structdxfcpp_1_1OrderAction.html#ad904daf87e
   </table>
   </dd>
 </dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#a6efb274e6bbfbaca64acda0952fd48cd">dxfcpp::Order::withTradeSize()</a>, <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#ada30a417b14f7ecb2ab65987a490bc3c">dxfcpp::SpreadOrder::withTradeSize()</a>, <a class="el" href="../../d2/df6/classdxfcpp_1_1Order.html#aa18bab121bafc2eb08bcb06c9ceb5e21">dxfcpp::Order::withTradeSizeShared()</a>, and <a class="el" href="../../d7/d27/classdxfcpp_1_1SpreadOrder.html#a7cfe1fd67451db26bed9cdc29d70d877">dxfcpp::SpreadOrder::withTradeSizeShared()</a>.</p>
 
 </div>
 </div>

@@ -108,7 +108,7 @@ $(document).ready(function(){initNavTree('de/d6d/ErrorHandlingManager_8hpp_sourc
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace</span> dxfcpp {</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// TODO: serialization</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">// TODO: serialization [EN-8232]</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">struct</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> Error {</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">static</span> <span class="keyword">constexpr</span> std::size_t UNKNOWN_ID{<span class="keyword">static_cast</span>&lt;std::size_t&gt;(-1)};</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('de/d6d/ErrorHandlingManager_8hpp_sourc
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    }</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;};</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">// TODO: implement retrieving, grouping methods</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">// TODO: implement retrieving, grouping methods [EN-8232]</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">class</span> <a class="code" href="../../d7/d34/Conf_8hpp.html#a2247137e794d0adca60e1208433f3ec9">DXFCPP_EXPORT</a> ErrorHandlingManager {</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">static</span> <span class="keyword">constexpr</span> std::size_t DEFAULT_ERROR_COLLECTION_CAPACITY{1024ULL};</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">const</span> Error NO_ERROR{Error::UNKNOWN_ID, 0, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;NO ERROR&quot;</span>};</div>

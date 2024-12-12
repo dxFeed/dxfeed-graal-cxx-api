@@ -4,6 +4,7 @@ var class_profile =
     [ "Unique", "d6/d03/class_profile.html#a607252a62f6cb5336d19b3982629e285", null ],
     [ "Profile", "d6/d03/class_profile.html#a96c25c06caecc38a89c6bbd1c1bf5572", null ],
     [ "Profile", "d6/d03/class_profile.html#aff37ce5265758619f882f058314b31a3", null ],
+    [ "assign", "d6/d03/class_profile.html#ae80c6ca7f33c1c97862cfea1069b33c4", null ],
     [ "getBeta", "d6/d03/class_profile.html#a511fa9246b6405cf59de0be01f0c0063", null ],
     [ "getDescription", "d6/d03/class_profile.html#a8733dc59e755cac7bbeb7e909a5c3f3c", null ],
     [ "getDescriptionOpt", "d6/d03/class_profile.html#ac44024060da814396c43d11a300e2d67", null ],
@@ -43,5 +44,5 @@ var class_profile =
     [ "setStatusReason", "d6/d03/class_profile.html#a80597cc307a280d6e9379a46bb731076", null ],
     [ "setTradingStatus", "d6/d03/class_profile.html#adc45483d5fa3f7c9e3878b81711d6e6c", null ],
     [ "toGraal", "d6/d03/class_profile.html#ac0b81ebac2f9c28785c39a2b3e8cd7c2", null ],
-    [ "toString", "d6/d03/class_profile.html#a17f6624fa32e5718ddfafcd226eee044", null ]
+    [ "toString", "d6/d03/class_profile.html#a9746f84d4732665ccc3308648b3050dd", null ]
 ];

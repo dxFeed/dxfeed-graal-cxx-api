@@ -1,0 +1,1034 @@
+\hypertarget{classQuote}{}\doxysubsection{Quote Class Reference}
+\label{classQuote}\index{Quote@{Quote}}
+
+
+\mbox{\hyperlink{classQuote}{Quote}} event is a snapshot of the best bid and ask prices, and other fields that change with each quote.  
+
+
+
+
+{\ttfamily \#include $<$Quote.\+hpp$>$}
+
+Inheritance diagram for Quote\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=6.000000cm]{df/d98/classQuote}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classQuote_a7eae8b14f9fcf2dc940014de513cab19}\label{classQuote_a7eae8b14f9fcf2dc940014de513cab19}} 
+using \mbox{\hyperlink{classQuote_a7eae8b14f9fcf2dc940014de513cab19}{Ptr}} = std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classQuote}{Quote}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of shared pointer to the \mbox{\hyperlink{classQuote}{Quote}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classQuote_acc603160c486b5a3cf878e283c2f52bb}\label{classQuote_acc603160c486b5a3cf878e283c2f52bb}} 
+using \mbox{\hyperlink{classQuote_acc603160c486b5a3cf878e283c2f52bb}{Unique}} = std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classQuote}{Quote}} $>$
+\begin{DoxyCompactList}\small\item\em The alias to a type of unique pointer to the \mbox{\hyperlink{classQuote}{Quote}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classQuote_a811b4b2b5c0f2435a2dc05a5d787471d}{to\+Graal}} () const override
+\begin{DoxyCompactList}\small\item\em Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classQuote_acad4bb6e54354302a71a7f903fe23a6a}\label{classQuote_acad4bb6e54354302a71a7f903fe23a6a}} 
+\mbox{\hyperlink{classQuote_acad4bb6e54354302a71a7f903fe23a6a}{Quote}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new quote event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote_a577f7de09465b226285dfb8c1051241b}{Quote}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new quote event with the specified event symbol. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_a8848d11b9c32888ebaac63e7b4e5e034}{with\+Event\+Symbol}} (const std\+::string \&event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s symbol and returns the current quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_a9081c3e195ec249978ffb211866aec15}{with\+Event\+Time}} (std\+::int64\+\_\+t event\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes event\textquotesingle{}s creation time and returns the current quote. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns sequence number of this quote to distinguish quotes that have the same \mbox{\hyperlink{classQuote_aadd06ef7afb2cd2d50867974d50bc130}{time}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_acd3804a8bc51c5a3ad7baee3adf9a7c2}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes \mbox{\hyperlink{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}{sequence number}} of this quote. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_af8cc7347234581ce43fcbe1f3d64bcd6}{with\+Sequence}} (std\+::int32\+\_\+t sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes \mbox{\hyperlink{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}{sequence number}} of this quote and returns the current quote. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classQuote_aadd06ef7afb2cd2d50867974d50bc130}{get\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last bid or ask change. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classQuote_a31269ae01adf60d51fec1952a0ad21ba}{get\+Time\+Nanos}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last bid or ask change in nanoseconds. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classQuote_ad65a3bb7104bd77bc0bd9647bbb43bbc}{get\+Time\+Nano\+Part}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns microseconds and nanoseconds part of time of the last bid or ask change. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_a379d1b76c50654504aea17f289450b21}{set\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds part of time of the last bid or ask change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_a921b6298bb7c6faa8a9e203829056cd2}{with\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds part of time of the last bid or ask change and returns the current quote. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classQuote_a452c77eac675a6f82cc371e36a0826ec}{get\+Bid\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last bid change. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_a2dcc6da2f6ac35aad6d35bb375466c33}{set\+Bid\+Time}} (std\+::int64\+\_\+t bid\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last bid change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_ab861a2e6d98b388e16bdfc1931437ae7}{with\+Bid\+Time}} (std\+::int64\+\_\+t bid\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last bid change and returns the current quote. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{classQuote_a23c39e09c72f3f97282755d8a36bc769}{get\+Bid\+Exchange\+Code}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns bid exchange code. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classQuote_adfd6860ede69a86a7ad8fb1309c92dbd}{get\+Bid\+Exchange\+Code\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns bid exchange code as UTF8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_acfb7b46820840a7f1487da96de7555b4}{set\+Bid\+Exchange\+Code}} (char bid\+Exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_a4d7516ed1b33023d6f54c7d51aef6c14}{with\+Bid\+Exchange\+Code}} (char bid\+Exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code and returns the current quote. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_ae197496787f754a6746dc20148356eac}{set\+Bid\+Exchange\+Code}} (std\+::int16\+\_\+t bid\+Exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_ae4101effa2e227389250aaa79670a7ea}{with\+Bid\+Exchange\+Code}} (std\+::int16\+\_\+t bid\+Exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid exchange code and returns the current quote. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classQuote_a55ac60689157fcb1cdc4540c15324a43}{get\+Bid\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns bid price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_a38533a816b50f07986fd1d5b01d1dd15}{set\+Bid\+Price}} (double bid\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_acbf751033110e39b3cab2ecef693b96f}{with\+Bid\+Price}} (double bid\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid price and returns the current quote. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classQuote_ac038db93d0b2922e1ee84c89f6721026}{get\+Bid\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns bid size. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_aecb9467d620852658ab41e140fc5ba81}{set\+Bid\+Size}} (double bid\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_a551fe4a999d0e1a2b22725c81715cc78}{with\+Bid\+Size}} (double bid\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes bid size and returns the current quote. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classQuote_a5e6b5b4de0eb8486a3f37180e3500e3f}{get\+Ask\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last ask change. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_a9c86128b00b0741fb6f8cb7d2917750c}{set\+Ask\+Time}} (std\+::int64\+\_\+t ask\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last ask change. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_aeedf6dc16a3368ca0c9244482be97696}{with\+Ask\+Time}} (std\+::int64\+\_\+t ask\+Time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last ask change and returns the current quote. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{classQuote_af15ea660a0a3db937d317ff23c0a26a6}{get\+Ask\+Exchange\+Code}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns ask exchange code. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classQuote_a18bb4184dccc392e2f513b107b7ae000}{get\+Ask\+Exchange\+Code\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns ask exchange code as UTF8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_a37281fd1f71e66bf79eb5185909a82b1}{set\+Ask\+Exchange\+Code}} (char ask\+Exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_a5ceeda9b8ecc462f56eb15da19fc609c}{with\+Ask\+Exchange\+Code}} (char ask\+Exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code and returns the current quote. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_a567c6f5d57ecdf44e951098faf3fe324}{set\+Ask\+Exchange\+Code}} (std\+::int16\+\_\+t ask\+Exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_ada0846a57df609ca8b3e8eb0bcbc679d}{with\+Ask\+Exchange\+Code}} (std\+::int16\+\_\+t ask\+Exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ask exchange code and returns the current quote. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classQuote_af5e7f5da9d7414d7281242d72c272ea5}{get\+Ask\+Price}} () const
+\begin{DoxyCompactList}\small\item\em Returns ask price. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_a452793d7bd52c4231d7f3739de2f681b}{set\+Ask\+Price}} (double ask\+Price)
+\begin{DoxyCompactList}\small\item\em Changes ask price. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_a91d0ae46f7c2d86419c3d190b8f5f846}{with\+Ask\+Price}} (double ask\+Price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ask price and returns the current quote. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classQuote_a3247f37141d14cd1566dd4f4b13c2cd4}{get\+Ask\+Size}} () const
+\begin{DoxyCompactList}\small\item\em Returns ask size. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classQuote_a46d5f6a4a1c33f63fadb5b954b3200c8}{set\+Ask\+Size}} (double ask\+Size)
+\begin{DoxyCompactList}\small\item\em Changes ask size. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classQuote}{Quote}} \& \mbox{\hyperlink{classQuote_af4993ba0254eeb30ff98346177935924}{with\+Ask\+Size}} (double ask\+Size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes ask size and returns the current quote. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classQuote_a112016da3fca1fb30053a45ad164958d}{to\+String}} () const noexcept override
+\begin{DoxyCompactList}\small\item\em Returns a string representation of the current object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{structEventType_a5b15d561aa47ab33de362543f3027416}{Ptr}} \mbox{\hyperlink{classQuote_a80df58bc469cf17ae7a565139cad4c2c}{from\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classQuote_a6f32bce6c1a3bcffd71f1126351ad368}{free\+Graal}} (void $\ast$graal\+Native)
+\begin{DoxyCompactList}\small\item\em Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classQuote_a21144621df5bd59e2a342592bd501d0e}\label{classQuote_a21144621df5bd59e2a342592bd501d0e}} 
+static const \mbox{\hyperlink{classEventTypeEnum}{Event\+Type\+Enum}} \& \mbox{\hyperlink{classQuote_a21144621df5bd59e2a342592bd501d0e}{TYPE}} = Event\+Type\+Enum\+::\+QUOTE
+\begin{DoxyCompactList}\small\item\em Type identifier and additional information about the current event class. \end{DoxyCompactList}\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classQuote_ad865934864802406170a78e8f77a2268}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+\mbox{\hyperlink{classQuote}{Quote}} event is a snapshot of the best bid and ask prices, and other fields that change with each quote. 
+
+It represents the most recent information that is available about the best quote on the market at any given moment of time.
+
+Bid corresponds to the best (maximal price) order to buy, ask corresponds to the best (minimal price) order to sell. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classQuote_a577f7de09465b226285dfb8c1051241b}\label{classQuote_a577f7de09465b226285dfb8c1051241b}} 
+\index{Quote@{Quote}!Quote@{Quote}}
+\index{Quote@{Quote}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{Quote()}{Quote()}}
+{\footnotesize\ttfamily Quote\+::\+Quote (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new quote event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classQuote_a6f32bce6c1a3bcffd71f1126351ad368}\label{classQuote_a6f32bce6c1a3bcffd71f1126351ad368}} 
+\index{Quote@{Quote}!freeGraal@{freeGraal}}
+\index{freeGraal@{freeGraal}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{freeGraal()}{freeGraal()}}
+{\footnotesize\ttfamily void Quote\+::free\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Releases the memory occupied by the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classQuote_a80df58bc469cf17ae7a565139cad4c2c}\label{classQuote_a80df58bc469cf17ae7a565139cad4c2c}} 
+\index{Quote@{Quote}!fromGraal@{fromGraal}}
+\index{fromGraal@{fromGraal}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{fromGraal()}{fromGraal()}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{classQuote}{Quote}} $>$ Quote\+::from\+Graal (\begin{DoxyParamCaption}\item[{void $\ast$}]{graal\+Native }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Creates an object of the current type and fills it with data from the the dx\+Feed Graal SDK structure. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em graal\+Native} & The pointer to the dx\+Feed Graal SDK structure. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The object of current type. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::invalid\+\_\+argument} & \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classQuote_af15ea660a0a3db937d317ff23c0a26a6}\label{classQuote_af15ea660a0a3db937d317ff23c0a26a6}} 
+\index{Quote@{Quote}!getAskExchangeCode@{getAskExchangeCode}}
+\index{getAskExchangeCode@{getAskExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getAskExchangeCode()}{getAskExchangeCode()}}
+{\footnotesize\ttfamily std\+::int16\+\_\+t Quote\+::get\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns ask exchange code. 
+
+\begin{DoxyReturn}{Returns}
+The ask exchange code. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_a18bb4184dccc392e2f513b107b7ae000}\label{classQuote_a18bb4184dccc392e2f513b107b7ae000}} 
+\index{Quote@{Quote}!getAskExchangeCodeString@{getAskExchangeCodeString}}
+\index{getAskExchangeCodeString@{getAskExchangeCodeString}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getAskExchangeCodeString()}{getAskExchangeCodeString()}}
+{\footnotesize\ttfamily std\+::string Quote\+::get\+Ask\+Exchange\+Code\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns ask exchange code as UTF8 string. 
+
+\begin{DoxyReturn}{Returns}
+The ask exchange code as UTF8 string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_af5e7f5da9d7414d7281242d72c272ea5}\label{classQuote_af5e7f5da9d7414d7281242d72c272ea5}} 
+\index{Quote@{Quote}!getAskPrice@{getAskPrice}}
+\index{getAskPrice@{getAskPrice}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getAskPrice()}{getAskPrice()}}
+{\footnotesize\ttfamily double Quote\+::get\+Ask\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns ask price. 
+
+\begin{DoxyReturn}{Returns}
+The ask price. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_a3247f37141d14cd1566dd4f4b13c2cd4}\label{classQuote_a3247f37141d14cd1566dd4f4b13c2cd4}} 
+\index{Quote@{Quote}!getAskSize@{getAskSize}}
+\index{getAskSize@{getAskSize}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getAskSize()}{getAskSize()}}
+{\footnotesize\ttfamily double Quote\+::get\+Ask\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Returns ask size. 
+
+\begin{DoxyReturn}{Returns}
+The ask size 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_a5e6b5b4de0eb8486a3f37180e3500e3f}\label{classQuote_a5e6b5b4de0eb8486a3f37180e3500e3f}} 
+\index{Quote@{Quote}!getAskTime@{getAskTime}}
+\index{getAskTime@{getAskTime}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getAskTime()}{getAskTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Quote\+::get\+Ask\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last ask change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+{\bfseries{This time is always transmitted with seconds precision, so the result of this method is usually a multiple of 1000.}}
+
+\begin{DoxyReturn}{Returns}
+The time of the last ask change. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_a23c39e09c72f3f97282755d8a36bc769}\label{classQuote_a23c39e09c72f3f97282755d8a36bc769}} 
+\index{Quote@{Quote}!getBidExchangeCode@{getBidExchangeCode}}
+\index{getBidExchangeCode@{getBidExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getBidExchangeCode()}{getBidExchangeCode()}}
+{\footnotesize\ttfamily std\+::int16\+\_\+t Quote\+::get\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns bid exchange code. 
+
+\begin{DoxyReturn}{Returns}
+The bid exchange code. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_adfd6860ede69a86a7ad8fb1309c92dbd}\label{classQuote_adfd6860ede69a86a7ad8fb1309c92dbd}} 
+\index{Quote@{Quote}!getBidExchangeCodeString@{getBidExchangeCodeString}}
+\index{getBidExchangeCodeString@{getBidExchangeCodeString}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getBidExchangeCodeString()}{getBidExchangeCodeString()}}
+{\footnotesize\ttfamily std\+::string Quote\+::get\+Bid\+Exchange\+Code\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns bid exchange code as UTF8 string. 
+
+\begin{DoxyReturn}{Returns}
+The bid exchange code as UTF8 string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_a55ac60689157fcb1cdc4540c15324a43}\label{classQuote_a55ac60689157fcb1cdc4540c15324a43}} 
+\index{Quote@{Quote}!getBidPrice@{getBidPrice}}
+\index{getBidPrice@{getBidPrice}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getBidPrice()}{getBidPrice()}}
+{\footnotesize\ttfamily double Quote\+::get\+Bid\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns bid price. 
+
+\begin{DoxyReturn}{Returns}
+The bid price. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_ac038db93d0b2922e1ee84c89f6721026}\label{classQuote_ac038db93d0b2922e1ee84c89f6721026}} 
+\index{Quote@{Quote}!getBidSize@{getBidSize}}
+\index{getBidSize@{getBidSize}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getBidSize()}{getBidSize()}}
+{\footnotesize\ttfamily double Quote\+::get\+Bid\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns bid size. 
+
+\begin{DoxyReturn}{Returns}
+The bid size 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_a452c77eac675a6f82cc371e36a0826ec}\label{classQuote_a452c77eac675a6f82cc371e36a0826ec}} 
+\index{Quote@{Quote}!getBidTime@{getBidTime}}
+\index{getBidTime@{getBidTime}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getBidTime()}{getBidTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Quote\+::get\+Bid\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last bid change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+{\bfseries{This time is always transmitted with seconds precision, so the result of this method is usually a multiple of 1000.}}
+
+\begin{DoxyReturn}{Returns}
+The time of the last bid change. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}\label{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}} 
+\index{Quote@{Quote}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Quote\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns sequence number of this quote to distinguish quotes that have the same \mbox{\hyperlink{classQuote_aadd06ef7afb2cd2d50867974d50bc130}{time}}. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \mbox{\hyperlink{classQuote_ad865934864802406170a78e8f77a2268}{Quote\+::\+MAX\+\_\+\+SEQUENCE}}.
+
+\begin{DoxyReturn}{Returns}
+sequence of this quote. 
+\end{DoxyReturn}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+\mbox{\Hypertarget{classQuote_aadd06ef7afb2cd2d50867974d50bc130}\label{classQuote_aadd06ef7afb2cd2d50867974d50bc130}} 
+\index{Quote@{Quote}!getTime@{getTime}}
+\index{getTime@{getTime}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Quote\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last bid or ask change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+The time of the last bid or ask change. 
+\end{DoxyReturn}
+
+
+Referenced by get\+Time\+Nanos().
+
+\mbox{\Hypertarget{classQuote_ad65a3bb7104bd77bc0bd9647bbb43bbc}\label{classQuote_ad65a3bb7104bd77bc0bd9647bbb43bbc}} 
+\index{Quote@{Quote}!getTimeNanoPart@{getTimeNanoPart}}
+\index{getTimeNanoPart@{getTimeNanoPart}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getTimeNanoPart()}{getTimeNanoPart()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Quote\+::get\+Time\+Nano\+Part (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns microseconds and nanoseconds part of time of the last bid or ask change. 
+
+\begin{DoxyReturn}{Returns}
+The microseconds and nanoseconds part of time of the last bid or ask change. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_a31269ae01adf60d51fec1952a0ad21ba}\label{classQuote_a31269ae01adf60d51fec1952a0ad21ba}} 
+\index{Quote@{Quote}!getTimeNanos@{getTimeNanos}}
+\index{getTimeNanos@{getTimeNanos}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{getTimeNanos()}{getTimeNanos()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Quote\+::get\+Time\+Nanos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last bid or ask change in nanoseconds. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+The time of the last bid or ask change in nanoseconds. 
+\end{DoxyReturn}
+
+
+References get\+Time().
+
+\mbox{\Hypertarget{classQuote_a37281fd1f71e66bf79eb5185909a82b1}\label{classQuote_a37281fd1f71e66bf79eb5185909a82b1}} 
+\index{Quote@{Quote}!setAskExchangeCode@{setAskExchangeCode}}
+\index{setAskExchangeCode@{setAskExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setAskExchangeCode()}{setAskExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Quote\+::set\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Ask\+Exchange\+Code().
+
+\mbox{\Hypertarget{classQuote_a567c6f5d57ecdf44e951098faf3fe324}\label{classQuote_a567c6f5d57ecdf44e951098faf3fe324}} 
+\index{Quote@{Quote}!setAskExchangeCode@{setAskExchangeCode}}
+\index{setAskExchangeCode@{setAskExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setAskExchangeCode()}{setAskExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Quote\+::set\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Ask\+Exchange\+Code().
+
+\mbox{\Hypertarget{classQuote_a452793d7bd52c4231d7f3739de2f681b}\label{classQuote_a452793d7bd52c4231d7f3739de2f681b}} 
+\index{Quote@{Quote}!setAskPrice@{setAskPrice}}
+\index{setAskPrice@{setAskPrice}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setAskPrice()}{setAskPrice()}}
+{\footnotesize\ttfamily void Quote\+::set\+Ask\+Price (\begin{DoxyParamCaption}\item[{double}]{ask\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes ask price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Price} & The ask price. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Ask\+Price().
+
+\mbox{\Hypertarget{classQuote_a46d5f6a4a1c33f63fadb5b954b3200c8}\label{classQuote_a46d5f6a4a1c33f63fadb5b954b3200c8}} 
+\index{Quote@{Quote}!setAskSize@{setAskSize}}
+\index{setAskSize@{setAskSize}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setAskSize()}{setAskSize()}}
+{\footnotesize\ttfamily void Quote\+::set\+Ask\+Size (\begin{DoxyParamCaption}\item[{double}]{ask\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes ask size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Size} & The ask size. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Ask\+Size().
+
+\mbox{\Hypertarget{classQuote_a9c86128b00b0741fb6f8cb7d2917750c}\label{classQuote_a9c86128b00b0741fb6f8cb7d2917750c}} 
+\index{Quote@{Quote}!setAskTime@{setAskTime}}
+\index{setAskTime@{setAskTime}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setAskTime()}{setAskTime()}}
+{\footnotesize\ttfamily void Quote\+::set\+Ask\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ask\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last ask change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \mbox{\hyperlink{classQuote_aadd06ef7afb2cd2d50867974d50bc130}{Quote\+::get\+Time()}} of this quote even precise up to a millisecond.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Time} & The time of the last ask change. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Ask\+Time().
+
+\mbox{\Hypertarget{classQuote_acfb7b46820840a7f1487da96de7555b4}\label{classQuote_acfb7b46820840a7f1487da96de7555b4}} 
+\index{Quote@{Quote}!setBidExchangeCode@{setBidExchangeCode}}
+\index{setBidExchangeCode@{setBidExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setBidExchangeCode()}{setBidExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Quote\+::set\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & The bid exchange code. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Bid\+Exchange\+Code().
+
+\mbox{\Hypertarget{classQuote_ae197496787f754a6746dc20148356eac}\label{classQuote_ae197496787f754a6746dc20148356eac}} 
+\index{Quote@{Quote}!setBidExchangeCode@{setBidExchangeCode}}
+\index{setBidExchangeCode@{setBidExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setBidExchangeCode()}{setBidExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Quote\+::set\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & bid exchange code. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Bid\+Exchange\+Code().
+
+\mbox{\Hypertarget{classQuote_a38533a816b50f07986fd1d5b01d1dd15}\label{classQuote_a38533a816b50f07986fd1d5b01d1dd15}} 
+\index{Quote@{Quote}!setBidPrice@{setBidPrice}}
+\index{setBidPrice@{setBidPrice}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setBidPrice()}{setBidPrice()}}
+{\footnotesize\ttfamily void Quote\+::set\+Bid\+Price (\begin{DoxyParamCaption}\item[{double}]{bid\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid price. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Price} & The bid price. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Bid\+Price().
+
+\mbox{\Hypertarget{classQuote_aecb9467d620852658ab41e140fc5ba81}\label{classQuote_aecb9467d620852658ab41e140fc5ba81}} 
+\index{Quote@{Quote}!setBidSize@{setBidSize}}
+\index{setBidSize@{setBidSize}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setBidSize()}{setBidSize()}}
+{\footnotesize\ttfamily void Quote\+::set\+Bid\+Size (\begin{DoxyParamCaption}\item[{double}]{bid\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid size. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Size} & The bid size. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Bid\+Size().
+
+\mbox{\Hypertarget{classQuote_a2dcc6da2f6ac35aad6d35bb375466c33}\label{classQuote_a2dcc6da2f6ac35aad6d35bb375466c33}} 
+\index{Quote@{Quote}!setBidTime@{setBidTime}}
+\index{setBidTime@{setBidTime}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setBidTime()}{setBidTime()}}
+{\footnotesize\ttfamily void Quote\+::set\+Bid\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{bid\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last bid change. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \mbox{\hyperlink{classQuote_aadd06ef7afb2cd2d50867974d50bc130}{Quote\+::get\+Time()}} of this quote even precise up to a millisecond.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Time} & The time of the last bid change. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Bid\+Time().
+
+\mbox{\Hypertarget{classQuote_acd3804a8bc51c5a3ad7baee3adf9a7c2}\label{classQuote_acd3804a8bc51c5a3ad7baee3adf9a7c2}} 
+\index{Quote@{Quote}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily void Quote\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes \mbox{\hyperlink{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}{sequence number}} of this quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & The sequence.\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}{Quote\+::get\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+
+
+Referenced by with\+Sequence().
+
+\mbox{\Hypertarget{classQuote_a379d1b76c50654504aea17f289450b21}\label{classQuote_a379d1b76c50654504aea17f289450b21}} 
+\index{Quote@{Quote}!setTimeNanoPart@{setTimeNanoPart}}
+\index{setTimeNanoPart@{setTimeNanoPart}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{setTimeNanoPart()}{setTimeNanoPart()}}
+{\footnotesize\ttfamily void Quote\+::set\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds part of time of the last bid or ask change. 
+
+{\bfseries{This method changes \mbox{\hyperlink{classQuote_a31269ae01adf60d51fec1952a0ad21ba}{Quote\+::get\+Time\+Nanos()}} result.}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & The microseconds and nanoseconds part of time of the last bid or ask change. \\
+\hline
+\end{DoxyParams}
+
+
+Referenced by with\+Time\+Nano\+Part().
+
+\mbox{\Hypertarget{classQuote_a811b4b2b5c0f2435a2dc05a5d787471d}\label{classQuote_a811b4b2b5c0f2435a2dc05a5d787471d}} 
+\index{Quote@{Quote}!toGraal@{toGraal}}
+\index{toGraal@{toGraal}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{toGraal()}{toGraal()}}
+{\footnotesize\ttfamily void $\ast$ Quote\+::to\+Graal (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Allocates memory for the dx\+Feed Graal SDK structure (recursively if necessary). 
+
+Fills the dx\+Feed Graal SDK structure\textquotesingle{}s fields by the data of the current entity (recursively if necessary). Returns the pointer to the filled structure.
+
+\begin{DoxyReturn}{Returns}
+The pointer to the filled dx\+Feed Graal SDK structure 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{structEventType_a6bd1c27c2d1ff10f8e97ee43c2ede26a}{Event\+Type}}.
+
+
+
+References to\+String().
+
+\mbox{\Hypertarget{classQuote_a112016da3fca1fb30053a45ad164958d}\label{classQuote_a112016da3fca1fb30053a45ad164958d}} 
+\index{Quote@{Quote}!toString@{toString}}
+\index{toString@{toString}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{toString()}{toString()}}
+{\footnotesize\ttfamily std\+::string Quote\+::to\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Returns a string representation of the current object. 
+
+\begin{DoxyReturn}{Returns}
+A string representation. 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{structEventType_a6d1f37572f827b462dfb95857f19f4d2}{Event\+Type}}.
+
+
+
+Referenced by to\+Graal().
+
+\mbox{\Hypertarget{classQuote_a5ceeda9b8ecc462f56eb15da19fc609c}\label{classQuote_a5ceeda9b8ecc462f56eb15da19fc609c}} 
+\index{Quote@{Quote}!withAskExchangeCode@{withAskExchangeCode}}
+\index{withAskExchangeCode@{withAskExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withAskExchangeCode()}{withAskExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote 
+\end{DoxyReturn}
+
+
+References set\+Ask\+Exchange\+Code().
+
+\mbox{\Hypertarget{classQuote_ada0846a57df609ca8b3e8eb0bcbc679d}\label{classQuote_ada0846a57df609ca8b3e8eb0bcbc679d}} 
+\index{Quote@{Quote}!withAskExchangeCode@{withAskExchangeCode}}
+\index{withAskExchangeCode@{withAskExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withAskExchangeCode()}{withAskExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Ask\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{ask\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask exchange code and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Exchange\+Code} & The ask exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+
+
+References set\+Ask\+Exchange\+Code().
+
+\mbox{\Hypertarget{classQuote_a91d0ae46f7c2d86419c3d190b8f5f846}\label{classQuote_a91d0ae46f7c2d86419c3d190b8f5f846}} 
+\index{Quote@{Quote}!withAskPrice@{withAskPrice}}
+\index{withAskPrice@{withAskPrice}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withAskPrice()}{withAskPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Ask\+Price (\begin{DoxyParamCaption}\item[{double}]{ask\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask price and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Price} & The ask price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote 
+\end{DoxyReturn}
+
+
+References set\+Ask\+Price().
+
+\mbox{\Hypertarget{classQuote_af4993ba0254eeb30ff98346177935924}\label{classQuote_af4993ba0254eeb30ff98346177935924}} 
+\index{Quote@{Quote}!withAskSize@{withAskSize}}
+\index{withAskSize@{withAskSize}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withAskSize()}{withAskSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Ask\+Size (\begin{DoxyParamCaption}\item[{double}]{ask\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes ask size and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Size} & The ask size. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+
+
+References set\+Ask\+Size().
+
+\mbox{\Hypertarget{classQuote_aeedf6dc16a3368ca0c9244482be97696}\label{classQuote_aeedf6dc16a3368ca0c9244482be97696}} 
+\index{Quote@{Quote}!withAskTime@{withAskTime}}
+\index{withAskTime@{withAskTime}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withAskTime()}{withAskTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Ask\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{ask\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last ask change and returns the current quote. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \mbox{\hyperlink{classQuote_aadd06ef7afb2cd2d50867974d50bc130}{Quote\+::get\+Time()}} of this quote even precise up to a millisecond.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ask\+Time} & The time of the last ask change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+
+
+References set\+Ask\+Time().
+
+\mbox{\Hypertarget{classQuote_a4d7516ed1b33023d6f54c7d51aef6c14}\label{classQuote_a4d7516ed1b33023d6f54c7d51aef6c14}} 
+\index{Quote@{Quote}!withBidExchangeCode@{withBidExchangeCode}}
+\index{withBidExchangeCode@{withBidExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withBidExchangeCode()}{withBidExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & The bid exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote 
+\end{DoxyReturn}
+
+
+References set\+Bid\+Exchange\+Code().
+
+\mbox{\Hypertarget{classQuote_ae4101effa2e227389250aaa79670a7ea}\label{classQuote_ae4101effa2e227389250aaa79670a7ea}} 
+\index{Quote@{Quote}!withBidExchangeCode@{withBidExchangeCode}}
+\index{withBidExchangeCode@{withBidExchangeCode}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withBidExchangeCode()}{withBidExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Bid\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{bid\+Exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid exchange code and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Exchange\+Code} & The bid exchange code. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+
+
+References set\+Bid\+Exchange\+Code().
+
+\mbox{\Hypertarget{classQuote_acbf751033110e39b3cab2ecef693b96f}\label{classQuote_acbf751033110e39b3cab2ecef693b96f}} 
+\index{Quote@{Quote}!withBidPrice@{withBidPrice}}
+\index{withBidPrice@{withBidPrice}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withBidPrice()}{withBidPrice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Bid\+Price (\begin{DoxyParamCaption}\item[{double}]{bid\+Price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid price and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Price} & The bid price. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote 
+\end{DoxyReturn}
+
+
+References set\+Bid\+Price().
+
+\mbox{\Hypertarget{classQuote_a551fe4a999d0e1a2b22725c81715cc78}\label{classQuote_a551fe4a999d0e1a2b22725c81715cc78}} 
+\index{Quote@{Quote}!withBidSize@{withBidSize}}
+\index{withBidSize@{withBidSize}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withBidSize()}{withBidSize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Bid\+Size (\begin{DoxyParamCaption}\item[{double}]{bid\+Size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes bid size and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Size} & The bid size. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+
+
+References set\+Bid\+Size().
+
+\mbox{\Hypertarget{classQuote_ab861a2e6d98b388e16bdfc1931437ae7}\label{classQuote_ab861a2e6d98b388e16bdfc1931437ae7}} 
+\index{Quote@{Quote}!withBidTime@{withBidTime}}
+\index{withBidTime@{withBidTime}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withBidTime()}{withBidTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Bid\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{bid\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last bid change and returns the current quote. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+You can set the actual millisecond-\/precision time here to publish event and the millisecond part will make the \mbox{\hyperlink{classQuote_aadd06ef7afb2cd2d50867974d50bc130}{Quote\+::get\+Time()}} of this quote even precise up to a millisecond.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bid\+Time} & The time of the last bid change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+
+
+References set\+Bid\+Time().
+
+\mbox{\Hypertarget{classQuote_a8848d11b9c32888ebaac63e7b4e5e034}\label{classQuote_a8848d11b9c32888ebaac63e7b4e5e034}} 
+\index{Quote@{Quote}!withEventSymbol@{withEventSymbol}}
+\index{withEventSymbol@{withEventSymbol}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withEventSymbol()}{withEventSymbol()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Event\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s symbol and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The symbol of this event. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classQuote_a9081c3e195ec249978ffb211866aec15}\label{classQuote_a9081c3e195ec249978ffb211866aec15}} 
+\index{Quote@{Quote}!withEventTime@{withEventTime}}
+\index{withEventTime@{withEventTime}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withEventTime()}{withEventTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Event\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{event\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes event\textquotesingle{}s creation time and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Time} & the difference, measured in milliseconds, between the event creation time and midnight, January 1, 1970 UTC. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+
+
+References Market\+Event\+::set\+Event\+Time().
+
+\mbox{\Hypertarget{classQuote_af8cc7347234581ce43fcbe1f3d64bcd6}\label{classQuote_af8cc7347234581ce43fcbe1f3d64bcd6}} 
+\index{Quote@{Quote}!withSequence@{withSequence}}
+\index{withSequence@{withSequence}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withSequence()}{withSequence()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes \mbox{\hyperlink{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}{sequence number}} of this quote and returns the current quote. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & The sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classQuote_ad95e5bcc04c77b927a1170b5b6f71633}{Quote\+::get\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+References set\+Sequence().
+
+\mbox{\Hypertarget{classQuote_a921b6298bb7c6faa8a9e203829056cd2}\label{classQuote_a921b6298bb7c6faa8a9e203829056cd2}} 
+\index{Quote@{Quote}!withTimeNanoPart@{withTimeNanoPart}}
+\index{withTimeNanoPart@{withTimeNanoPart}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{withTimeNanoPart()}{withTimeNanoPart()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classQuote}{Quote}}\& Quote\+::with\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds part of time of the last bid or ask change and returns the current quote. 
+
+{\bfseries{This method changes \mbox{\hyperlink{classQuote_a31269ae01adf60d51fec1952a0ad21ba}{Quote\+::get\+Time\+Nanos()}} result.}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & The microseconds and nanoseconds part of time of the last bid or ask change. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current quote. 
+\end{DoxyReturn}
+
+
+References set\+Time\+Nano\+Part().
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{classQuote_ad865934864802406170a78e8f77a2268}\label{classQuote_ad865934864802406170a78e8f77a2268}} 
+\index{Quote@{Quote}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!Quote@{Quote}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily constexpr std\+::uint32\+\_\+t Quote\+::\+MAX\+\_\+\+SEQUENCE = (1U $<$$<$ 22U) -\/ 1U\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classQuote_acd3804a8bc51c5a3ad7baee3adf9a7c2}{Quote\+::set\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+Referenced by get\+Sequence(), and set\+Sequence().
+

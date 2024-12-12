@@ -1,5 +1,7 @@
 var classdxfcpp_1_1TheoPrice =
 [
+    [ "Ptr", "d8/d4f/classdxfcpp_1_1TheoPrice.html#a0f003fc944fa7856eb9658048ac2c0f3", null ],
+    [ "Unique", "d8/d4f/classdxfcpp_1_1TheoPrice.html#ad60cb83d7e337b8d354094dafe12da85", null ],
     [ "TheoPrice", "d8/d4f/classdxfcpp_1_1TheoPrice.html#a0486ba978f89e3ff2153dbb0722e4470", null ],
     [ "TheoPrice", "d8/d4f/classdxfcpp_1_1TheoPrice.html#aa73e254510efea4c7a773f9c9dcf08da", null ],
     [ "getDelta", "d8/d4f/classdxfcpp_1_1TheoPrice.html#a4d2b9af3d87c5edbefcf80e29acd6091", null ],

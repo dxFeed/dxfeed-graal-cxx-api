@@ -1,0 +1,640 @@
+\hypertarget{classTradeBase}{}\doxysubsection{Trade\+Base Class Reference}
+\label{classTradeBase}\index{TradeBase@{TradeBase}}
+
+
+Base class for common fields of \mbox{\hyperlink{classTrade}{Trade}}\} and \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} events.  
+
+
+
+
+{\ttfamily \#include $<$Trade\+Base.\+hpp$>$}
+
+Inheritance diagram for Trade\+Base\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=7.000000cm]{de/d9f/classTradeBase}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classTradeBase_a2edb30c57996672f73471ddae079710d}\label{classTradeBase_a2edb30c57996672f73471ddae079710d}} 
+\mbox{\hyperlink{classTradeBase_a2edb30c57996672f73471ddae079710d}{Trade\+Base}} () noexcept=default
+\begin{DoxyCompactList}\small\item\em Creates new trade event with default values. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classTradeBase_a5052029c1b8852fc10eb876e147b2c5b}{Trade\+Base}} (std\+::string event\+Symbol) noexcept
+\begin{DoxyCompactList}\small\item\em Creates new trade event with the specified event symbol. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classTradeBase_a83f22afbe96cbdff9a5aa8d186047ac9}{get\+Time\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time and sequence of last trade packaged into single long value. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a8ba3dd85e9c949f7f618a765dc3abb83}{set\+Time\+Sequence}} (std\+::int64\+\_\+t time\+Sequence) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time and sequence of last trade. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classTradeBase_a42691e5d2128fa83fbe6361975426953}{get\+Time}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_aa9db209fe26b0b8a4f0ab66e0699715b}{set\+Time}} (std\+::int64\+\_\+t time) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last trade. \end{DoxyCompactList}\item 
+std\+::int64\+\_\+t \mbox{\hyperlink{classTradeBase_ae57a3eb6498884d8623e4ddb1a62b7d0}{get\+Time\+Nanos}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns time of the last trade in nanoseconds. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_ae1ff9d862d2c19259ce6935882f3f55a}{set\+Time\+Nanos}} (std\+::int64\+\_\+t time\+Nanos) noexcept
+\begin{DoxyCompactList}\small\item\em Changes time of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a7d9a2256e7c2cb12d58fc57a3d59274f}{set\+Time\+Nano\+Part}} (std\+::int32\+\_\+t time\+Nano\+Part) noexcept
+\begin{DoxyCompactList}\small\item\em Changes microseconds and nanoseconds time part of the last trade. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classTradeBase_adcddb045b7648829029eeaefd5743685}{get\+Time\+Nano\+Part}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns microseconds and nanoseconds time part of the last trade. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classTradeBase_a63df429d3976d99fe42e519cf7e9500b}{get\+Sequence}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns sequence number of the last trade to distinguish trades that have the same \mbox{\hyperlink{classTradeBase_a42691e5d2128fa83fbe6361975426953}{time}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a10dc7ef96daee70432fd5a4f0b3b6e7e}{set\+Sequence}} (std\+::int32\+\_\+t sequence)
+\begin{DoxyCompactList}\small\item\em Changes \mbox{\hyperlink{classTradeBase_a63df429d3976d99fe42e519cf7e9500b}{sequence number}} of the last trade. \end{DoxyCompactList}\item 
+std\+::int16\+\_\+t \mbox{\hyperlink{classTradeBase_a5044e7359f50ff34f59c7ab201b1847b}{get\+Exchange\+Code}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of the last trade. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classTradeBase_acb8f122830156d2599fe2bb91fe63f95}{get\+Exchange\+Code\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns exchange code of last trade as UTF8 string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_aa03964a1a1346a9c58502731316378b4}{set\+Exchange\+Code}} (char exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a0262dab69ee99d960d4d84f4c070e969}{set\+Exchange\+Code}} (std\+::int16\+\_\+t exchange\+Code) noexcept
+\begin{DoxyCompactList}\small\item\em Changes exchange code of the last trade. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}{get\+Price}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns price of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_ad543d90a0b565961cd573fa4c9299c5c}{set\+Price}} (double price) noexcept
+\begin{DoxyCompactList}\small\item\em Changes price of the last trade. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTradeBase_a4dbbf63f2435bcb5eb44a16f20d44424}{get\+Size}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns size of the last trade as floating number with fractions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a7cbd2d6a08fc4aa7128a879577e7648e}{set\+Size}} (double size) noexcept
+\begin{DoxyCompactList}\small\item\em Changes size of the last trade as floating number with fractions. \end{DoxyCompactList}\item 
+std\+::int32\+\_\+t \mbox{\hyperlink{classTradeBase_a49359e7e646d6916337477a298bef4ea}{get\+Day\+Id}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns identifier of the current trading day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a34a2813f8363994fbf84090a5148bd21}{set\+Day\+Id}} (std\+::int32\+\_\+t day\+Id) noexcept
+\begin{DoxyCompactList}\small\item\em Changes identifier of the current trading day. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{get\+Day\+Volume}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns total volume traded for a day as floating number with fractions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_af8f227da778f63dd07141427953090e4}{set\+Day\+Volume}} (double day\+Volume) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total volume traded for a day as floating number with fractions. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{get\+Day\+Turnover}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns total turnover traded for a day. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a7482626d0eba8526c9cd5b51abfdfdeb}{set\+Day\+Turnover}} (double day\+Turnover) noexcept
+\begin{DoxyCompactList}\small\item\em Changes total turnover traded for a day. \end{DoxyCompactList}\item 
+const \mbox{\hyperlink{structDirection}{Direction}} \& \mbox{\hyperlink{classTradeBase_a8e7718492b2922cf081e60acd8e280ed}{get\+Tick\+Direction}} () const \&noexcept
+\begin{DoxyCompactList}\small\item\em Returns tick direction of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a67932fb75642ae2ea97e57fe3fd4ac2b}{set\+Tick\+Direction}} (const \mbox{\hyperlink{structDirection}{Direction}} \&direction) noexcept
+\begin{DoxyCompactList}\small\item\em Changes tick direction of the last trade. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}{is\+Extended\+Trading\+Hours}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns whether last trade was in extended trading hours. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_ae14e9deb4e3591695c4f3491cba68f25}{set\+Extended\+Trading\+Hours}} (bool extended\+Trading\+Hours) noexcept
+\begin{DoxyCompactList}\small\item\em Changes whether last trade was in extended trading hours. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classTradeBase_a1ba68544e527dfd3b740e5798c706d8d}{get\+Change}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns change of the last trade. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classTradeBase_a303063b2780ed44db1178d8b28b9d7d8}{set\+Change}} (double change) noexcept
+\begin{DoxyCompactList}\small\item\em Changes change of the last trade. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classTradeBase_a3573f576ea6b528c69831efdb9b07423}{base\+Fields\+To\+String}} () const noexcept
+\begin{DoxyCompactList}\small\item\em Returns string representation of this trade event\textquotesingle{}s fields. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr std\+::uint32\+\_\+t \mbox{\hyperlink{classTradeBase_a698882fa4ee241b50a642a72f8adc799}{MAX\+\_\+\+SEQUENCE}} = (1U $<$$<$ 22U) -\/ 1U
+\begin{DoxyCompactList}\small\item\em Maximum allowed sequence value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Additional Inherited Members}
+
+
+\doxysubsubsection{Detailed Description}
+Base class for common fields of \mbox{\hyperlink{classTrade}{Trade}}\} and \mbox{\hyperlink{classTradeETH}{Trade\+ETH}} events. 
+
+\mbox{\hyperlink{classTrade}{Trade}} events represent the most recent information that is available about the last trade on the market at any given moment of time.
+
+\mbox{\hyperlink{classTrade}{Trade}} event represents last trade information for {\bfseries{regular trading hours}} (RTH) with an official volume and turnover {\bfseries{for the whole trading day}} identified by \mbox{\hyperlink{classTradeBase_a49359e7e646d6916337477a298bef4ea}{day\+Id}} field.
+
+\mbox{\hyperlink{classTradeETH}{Trade\+ETH}} event is defined only for symbols (typically stocks and ETFs) with a designated {\bfseries{extended trading hours}} (ETH, pre market and post market trading sessions). It represents last trade price during ETH and also accumulated volume and turnover during ETH for current trading day. 
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classTradeBase_a5052029c1b8852fc10eb876e147b2c5b}\label{classTradeBase_a5052029c1b8852fc10eb876e147b2c5b}} 
+\index{TradeBase@{TradeBase}!TradeBase@{TradeBase}}
+\index{TradeBase@{TradeBase}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{TradeBase()}{TradeBase()}}
+{\footnotesize\ttfamily Trade\+Base\+::\+Trade\+Base (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Symbol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+
+
+
+Creates new trade event with the specified event symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Symbol} & The event symbol. \\
+\hline
+\end{DoxyParams}
+
+
+References Market\+Event\+::\+Market\+Event().
+
+
+
+Referenced by Trade\+::\+Trade(), and Trade\+ETH\+::\+Trade\+ETH().
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{classTradeBase_a3573f576ea6b528c69831efdb9b07423}\label{classTradeBase_a3573f576ea6b528c69831efdb9b07423}} 
+\index{TradeBase@{TradeBase}!baseFieldsToString@{baseFieldsToString}}
+\index{baseFieldsToString@{baseFieldsToString}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{baseFieldsToString()}{baseFieldsToString()}}
+{\footnotesize\ttfamily std\+::string Trade\+Base\+::base\+Fields\+To\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Returns string representation of this trade event\textquotesingle{}s fields. 
+
+\begin{DoxyReturn}{Returns}
+string representation of this trade event\textquotesingle{}s fields. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a1ba68544e527dfd3b740e5798c706d8d}\label{classTradeBase_a1ba68544e527dfd3b740e5798c706d8d}} 
+\index{TradeBase@{TradeBase}!getChange@{getChange}}
+\index{getChange@{getChange}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getChange()}{getChange()}}
+{\footnotesize\ttfamily double Trade\+Base\+::get\+Change (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns change of the last trade. 
+
+\begin{DoxyReturn}{Returns}
+change of the last trade. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a49359e7e646d6916337477a298bef4ea}\label{classTradeBase_a49359e7e646d6916337477a298bef4ea}} 
+\index{TradeBase@{TradeBase}!getDayId@{getDayId}}
+\index{getDayId@{getDayId}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getDayId()}{getDayId()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Trade\+Base\+::get\+Day\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns identifier of the current trading day. 
+
+Identifier of the day is the number of days passed since January 1, 1970.
+
+\begin{DoxyReturn}{Returns}
+identifier of the current trading day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}\label{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}} 
+\index{TradeBase@{TradeBase}!getDayTurnover@{getDayTurnover}}
+\index{getDayTurnover@{getDayTurnover}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getDayTurnover()}{getDayTurnover()}}
+{\footnotesize\ttfamily double Trade\+Base\+::get\+Day\+Turnover (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns total turnover traded for a day. 
+
+\mbox{\hyperlink{structDay}{Day}} VWAP can be computed with {\ttfamily \mbox{\hyperlink{classTradeBase_a6f9aff4fe560ba262c8bf524274a2408}{get\+Day\+Turnover()}} / \mbox{\hyperlink{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}{get\+Day\+Volume()}}}.
+
+\begin{DoxyReturn}{Returns}
+total turnover traded for a day. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}\label{classTradeBase_a9a956f99368a4bdd97047d3ce8e80790}} 
+\index{TradeBase@{TradeBase}!getDayVolume@{getDayVolume}}
+\index{getDayVolume@{getDayVolume}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getDayVolume()}{getDayVolume()}}
+{\footnotesize\ttfamily double Trade\+Base\+::get\+Day\+Volume (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns total volume traded for a day as floating number with fractions. 
+
+\begin{DoxyReturn}{Returns}
+total volume traded for a day as floating number with fractions. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a5044e7359f50ff34f59c7ab201b1847b}\label{classTradeBase_a5044e7359f50ff34f59c7ab201b1847b}} 
+\index{TradeBase@{TradeBase}!getExchangeCode@{getExchangeCode}}
+\index{getExchangeCode@{getExchangeCode}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getExchangeCode()}{getExchangeCode()}}
+{\footnotesize\ttfamily std\+::int16\+\_\+t Trade\+Base\+::get\+Exchange\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange code of the last trade. 
+
+\begin{DoxyReturn}{Returns}
+exchange code of the last trade. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_acb8f122830156d2599fe2bb91fe63f95}\label{classTradeBase_acb8f122830156d2599fe2bb91fe63f95}} 
+\index{TradeBase@{TradeBase}!getExchangeCodeString@{getExchangeCodeString}}
+\index{getExchangeCodeString@{getExchangeCodeString}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getExchangeCodeString()}{getExchangeCodeString()}}
+{\footnotesize\ttfamily std\+::string Trade\+Base\+::get\+Exchange\+Code\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns exchange code of last trade as UTF8 string. 
+
+\begin{DoxyReturn}{Returns}
+exchange code of last trade as UTF8 string. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}\label{classTradeBase_ac49916e7a2b3d5bfcbbf36d604b7d9f6}} 
+\index{TradeBase@{TradeBase}!getPrice@{getPrice}}
+\index{getPrice@{getPrice}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getPrice()}{getPrice()}}
+{\footnotesize\ttfamily double Trade\+Base\+::get\+Price (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns price of the last trade. 
+
+\begin{DoxyReturn}{Returns}
+price of the last trade. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a63df429d3976d99fe42e519cf7e9500b}\label{classTradeBase_a63df429d3976d99fe42e519cf7e9500b}} 
+\index{TradeBase@{TradeBase}!getSequence@{getSequence}}
+\index{getSequence@{getSequence}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getSequence()}{getSequence()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Trade\+Base\+::get\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns sequence number of the last trade to distinguish trades that have the same \mbox{\hyperlink{classTradeBase_a42691e5d2128fa83fbe6361975426953}{time}}. 
+
+This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to \mbox{\hyperlink{classTradeBase_a698882fa4ee241b50a642a72f8adc799}{Trade\+Base\+::\+MAX\+\_\+\+SEQUENCE}}.
+
+\begin{DoxyReturn}{Returns}
+sequence of the last trade. 
+\end{DoxyReturn}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+
+
+Referenced by set\+Time().
+
+\mbox{\Hypertarget{classTradeBase_a4dbbf63f2435bcb5eb44a16f20d44424}\label{classTradeBase_a4dbbf63f2435bcb5eb44a16f20d44424}} 
+\index{TradeBase@{TradeBase}!getSize@{getSize}}
+\index{getSize@{getSize}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getSize()}{getSize()}}
+{\footnotesize\ttfamily double Trade\+Base\+::get\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns size of the last trade as floating number with fractions. 
+
+\begin{DoxyReturn}{Returns}
+size of the last trade as floating number with fractions. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a8e7718492b2922cf081e60acd8e280ed}\label{classTradeBase_a8e7718492b2922cf081e60acd8e280ed}} 
+\index{TradeBase@{TradeBase}!getTickDirection@{getTickDirection}}
+\index{getTickDirection@{getTickDirection}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getTickDirection()}{getTickDirection()}}
+{\footnotesize\ttfamily const \mbox{\hyperlink{structDirection}{Direction}}\& Trade\+Base\+::get\+Tick\+Direction (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const \&\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns tick direction of the last trade. 
+
+\begin{DoxyReturn}{Returns}
+tick direction of the last trade. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a42691e5d2128fa83fbe6361975426953}\label{classTradeBase_a42691e5d2128fa83fbe6361975426953}} 
+\index{TradeBase@{TradeBase}!getTime@{getTime}}
+\index{getTime@{getTime}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getTime()}{getTime()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Trade\+Base\+::get\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last trade. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+time of the last trade. 
+\end{DoxyReturn}
+
+
+Referenced by get\+Time\+Nanos().
+
+\mbox{\Hypertarget{classTradeBase_adcddb045b7648829029eeaefd5743685}\label{classTradeBase_adcddb045b7648829029eeaefd5743685}} 
+\index{TradeBase@{TradeBase}!getTimeNanoPart@{getTimeNanoPart}}
+\index{getTimeNanoPart@{getTimeNanoPart}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getTimeNanoPart()}{getTimeNanoPart()}}
+{\footnotesize\ttfamily std\+::int32\+\_\+t Trade\+Base\+::get\+Time\+Nano\+Part (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns microseconds and nanoseconds time part of the last trade. 
+
+\begin{DoxyReturn}{Returns}
+microseconds and nanoseconds time part of the last trade. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_ae57a3eb6498884d8623e4ddb1a62b7d0}\label{classTradeBase_ae57a3eb6498884d8623e4ddb1a62b7d0}} 
+\index{TradeBase@{TradeBase}!getTimeNanos@{getTimeNanos}}
+\index{getTimeNanos@{getTimeNanos}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getTimeNanos()}{getTimeNanos()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Trade\+Base\+::get\+Time\+Nanos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time of the last trade in nanoseconds. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+\begin{DoxyReturn}{Returns}
+time of the last trade in nanoseconds. 
+\end{DoxyReturn}
+
+
+References get\+Time().
+
+\mbox{\Hypertarget{classTradeBase_a83f22afbe96cbdff9a5aa8d186047ac9}\label{classTradeBase_a83f22afbe96cbdff9a5aa8d186047ac9}} 
+\index{TradeBase@{TradeBase}!getTimeSequence@{getTimeSequence}}
+\index{getTimeSequence@{getTimeSequence}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{getTimeSequence()}{getTimeSequence()}}
+{\footnotesize\ttfamily std\+::int64\+\_\+t Trade\+Base\+::get\+Time\+Sequence (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns time and sequence of last trade packaged into single long value. 
+
+\begin{DoxyReturn}{Returns}
+time and sequence of last trade. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}\label{classTradeBase_a8555f0cf2950d73e7b0f5bf2d1f70621}} 
+\index{TradeBase@{TradeBase}!isExtendedTradingHours@{isExtendedTradingHours}}
+\index{isExtendedTradingHours@{isExtendedTradingHours}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{isExtendedTradingHours()}{isExtendedTradingHours()}}
+{\footnotesize\ttfamily bool Trade\+Base\+::is\+Extended\+Trading\+Hours (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Returns whether last trade was in extended trading hours. 
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} if last trade was in extended trading hours. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classTradeBase_a303063b2780ed44db1178d8b28b9d7d8}\label{classTradeBase_a303063b2780ed44db1178d8b28b9d7d8}} 
+\index{TradeBase@{TradeBase}!setChange@{setChange}}
+\index{setChange@{setChange}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setChange()}{setChange()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Change (\begin{DoxyParamCaption}\item[{double}]{change }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes change of the last trade. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em change} & price of the last trade. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_a34a2813f8363994fbf84090a5148bd21}\label{classTradeBase_a34a2813f8363994fbf84090a5148bd21}} 
+\index{TradeBase@{TradeBase}!setDayId@{setDayId}}
+\index{setDayId@{setDayId}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setDayId()}{setDayId()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Day\+Id (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{day\+Id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes identifier of the current trading day. 
+
+Identifier of the day is the number of days passed since January 1, 1970.
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+Id} & identifier of the current trading day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_a7482626d0eba8526c9cd5b51abfdfdeb}\label{classTradeBase_a7482626d0eba8526c9cd5b51abfdfdeb}} 
+\index{TradeBase@{TradeBase}!setDayTurnover@{setDayTurnover}}
+\index{setDayTurnover@{setDayTurnover}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setDayTurnover()}{setDayTurnover()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Day\+Turnover (\begin{DoxyParamCaption}\item[{double}]{day\+Turnover }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes total turnover traded for a day. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+Turnover} & total turnover traded for a day. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_af8f227da778f63dd07141427953090e4}\label{classTradeBase_af8f227da778f63dd07141427953090e4}} 
+\index{TradeBase@{TradeBase}!setDayVolume@{setDayVolume}}
+\index{setDayVolume@{setDayVolume}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setDayVolume()}{setDayVolume()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Day\+Volume (\begin{DoxyParamCaption}\item[{double}]{day\+Volume }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes total volume traded for a day as floating number with fractions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em day\+Volume} & total volume traded for a day as floating number with fractions. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_aa03964a1a1346a9c58502731316378b4}\label{classTradeBase_aa03964a1a1346a9c58502731316378b4}} 
+\index{TradeBase@{TradeBase}!setExchangeCode@{setExchangeCode}}
+\index{setExchangeCode@{setExchangeCode}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setExchangeCode()}{setExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Exchange\+Code (\begin{DoxyParamCaption}\item[{char}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of the last trade. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & exchange code of the last trade. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_a0262dab69ee99d960d4d84f4c070e969}\label{classTradeBase_a0262dab69ee99d960d4d84f4c070e969}} 
+\index{TradeBase@{TradeBase}!setExchangeCode@{setExchangeCode}}
+\index{setExchangeCode@{setExchangeCode}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setExchangeCode()}{setExchangeCode()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Exchange\+Code (\begin{DoxyParamCaption}\item[{std\+::int16\+\_\+t}]{exchange\+Code }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes exchange code of the last trade. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exchange\+Code} & exchange code of the last trade. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_ae14e9deb4e3591695c4f3491cba68f25}\label{classTradeBase_ae14e9deb4e3591695c4f3491cba68f25}} 
+\index{TradeBase@{TradeBase}!setExtendedTradingHours@{setExtendedTradingHours}}
+\index{setExtendedTradingHours@{setExtendedTradingHours}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setExtendedTradingHours()}{setExtendedTradingHours()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Extended\+Trading\+Hours (\begin{DoxyParamCaption}\item[{bool}]{extended\+Trading\+Hours }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes whether last trade was in extended trading hours. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em extended\+Trading\+Hours} & {\ttfamily true} if last trade was in extended trading hours. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_ad543d90a0b565961cd573fa4c9299c5c}\label{classTradeBase_ad543d90a0b565961cd573fa4c9299c5c}} 
+\index{TradeBase@{TradeBase}!setPrice@{setPrice}}
+\index{setPrice@{setPrice}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setPrice()}{setPrice()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Price (\begin{DoxyParamCaption}\item[{double}]{price }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes price of the last trade. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em price} & price of the last trade. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_a10dc7ef96daee70432fd5a4f0b3b6e7e}\label{classTradeBase_a10dc7ef96daee70432fd5a4f0b3b6e7e}} 
+\index{TradeBase@{TradeBase}!setSequence@{setSequence}}
+\index{setSequence@{setSequence}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setSequence()}{setSequence()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Changes \mbox{\hyperlink{classTradeBase_a63df429d3976d99fe42e519cf7e9500b}{sequence number}} of the last trade. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence} & the sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classTradeBase_a63df429d3976d99fe42e519cf7e9500b}{Trade\+Base\+::get\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+References MAX\+\_\+\+SEQUENCE.
+
+\mbox{\Hypertarget{classTradeBase_a7cbd2d6a08fc4aa7128a879577e7648e}\label{classTradeBase_a7cbd2d6a08fc4aa7128a879577e7648e}} 
+\index{TradeBase@{TradeBase}!setSize@{setSize}}
+\index{setSize@{setSize}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setSize()}{setSize()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Size (\begin{DoxyParamCaption}\item[{double}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes size of the last trade as floating number with fractions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & size of the last trade as floating number with fractions. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_a67932fb75642ae2ea97e57fe3fd4ac2b}\label{classTradeBase_a67932fb75642ae2ea97e57fe3fd4ac2b}} 
+\index{TradeBase@{TradeBase}!setTickDirection@{setTickDirection}}
+\index{setTickDirection@{setTickDirection}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setTickDirection()}{setTickDirection()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Tick\+Direction (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structDirection}{Direction}} \&}]{direction }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes tick direction of the last trade. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em direction} & tick direction of the last trade. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_aa9db209fe26b0b8a4f0ab66e0699715b}\label{classTradeBase_aa9db209fe26b0b8a4f0ab66e0699715b}} 
+\index{TradeBase@{TradeBase}!setTime@{setTime}}
+\index{setTime@{setTime}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setTime()}{setTime()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Time (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last trade. 
+
+Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & time of the last trade. \\
+\hline
+\end{DoxyParams}
+
+
+References get\+Sequence().
+
+
+
+Referenced by set\+Time\+Nanos().
+
+\mbox{\Hypertarget{classTradeBase_a7d9a2256e7c2cb12d58fc57a3d59274f}\label{classTradeBase_a7d9a2256e7c2cb12d58fc57a3d59274f}} 
+\index{TradeBase@{TradeBase}!setTimeNanoPart@{setTimeNanoPart}}
+\index{setTimeNanoPart@{setTimeNanoPart}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setTimeNanoPart()}{setTimeNanoPart()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Time\+Nano\+Part (\begin{DoxyParamCaption}\item[{std\+::int32\+\_\+t}]{time\+Nano\+Part }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes microseconds and nanoseconds time part of the last trade. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nano\+Part} & microseconds and nanoseconds time part of the last trade. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classTradeBase_ae1ff9d862d2c19259ce6935882f3f55a}\label{classTradeBase_ae1ff9d862d2c19259ce6935882f3f55a}} 
+\index{TradeBase@{TradeBase}!setTimeNanos@{setTimeNanos}}
+\index{setTimeNanos@{setTimeNanos}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setTimeNanos()}{setTimeNanos()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Time\+Nanos (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Nanos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time of the last trade. 
+
+Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Nanos} & time of the last trade in nanoseconds. \\
+\hline
+\end{DoxyParams}
+
+
+References set\+Time().
+
+\mbox{\Hypertarget{classTradeBase_a8ba3dd85e9c949f7f618a765dc3abb83}\label{classTradeBase_a8ba3dd85e9c949f7f618a765dc3abb83}} 
+\index{TradeBase@{TradeBase}!setTimeSequence@{setTimeSequence}}
+\index{setTimeSequence@{setTimeSequence}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{setTimeSequence()}{setTimeSequence()}}
+{\footnotesize\ttfamily void Trade\+Base\+::set\+Time\+Sequence (\begin{DoxyParamCaption}\item[{std\+::int64\+\_\+t}]{time\+Sequence }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Changes time and sequence of last trade. 
+
+{\bfseries{Do not use this method directly.}} Change \mbox{\hyperlink{classTradeBase_aa9db209fe26b0b8a4f0ab66e0699715b}{time}} and/or \mbox{\hyperlink{classTradeBase_a10dc7ef96daee70432fd5a4f0b3b6e7e}{sequence}}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em time\+Sequence} & the time and sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classTradeBase_a83f22afbe96cbdff9a5aa8d186047ac9}{Trade\+Base\+::get\+Time\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{classTradeBase_a698882fa4ee241b50a642a72f8adc799}\label{classTradeBase_a698882fa4ee241b50a642a72f8adc799}} 
+\index{TradeBase@{TradeBase}!MAX\_SEQUENCE@{MAX\_SEQUENCE}}
+\index{MAX\_SEQUENCE@{MAX\_SEQUENCE}!TradeBase@{TradeBase}}
+\doxyparagraph{\texorpdfstring{MAX\_SEQUENCE}{MAX\_SEQUENCE}}
+{\footnotesize\ttfamily constexpr std\+::uint32\+\_\+t Trade\+Base\+::\+MAX\+\_\+\+SEQUENCE = (1U $<$$<$ 22U) -\/ 1U\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Maximum allowed sequence value. 
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{classTradeBase_a10dc7ef96daee70432fd5a4f0b3b6e7e}{Trade\+Base\+::set\+Sequence()}} 
+\end{DoxySeeAlso}
+
+
+Referenced by get\+Sequence(), and set\+Sequence().
+

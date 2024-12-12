@@ -7,6 +7,7 @@ var dir_8f24a72b510f8c4bed2e9fff519587e2 =
     [ "EventFlag.hpp", "d5/d03/_event_flag_8hpp_source.html", null ],
     [ "EventMapper.hpp", "d2/d03/_event_mapper_8hpp_source.html", null ],
     [ "EventModule.hpp", "d1/d02/_event_module_8hpp_source.html", null ],
+    [ "EventSourceWrapper.hpp", "d5/d01/_event_source_wrapper_8hpp_source.html", null ],
     [ "EventType.hpp", "de/d03/_event_type_8hpp_source.html", null ],
     [ "EventTypeEnum.hpp", "d8/d00/_event_type_enum_8hpp_source.html", null ],
     [ "IndexedEvent.hpp", "d3/d01/_indexed_event_8hpp_source.html", null ],
