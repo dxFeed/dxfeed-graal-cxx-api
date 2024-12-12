@@ -24,8 +24,8 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
 class EventTypeEnum;
-struct IndexedTxModel;
-struct TimeSeriesTxModel;
+struct IndexedTxModelImpl;
+struct TimeSeriesTxModelImpl;
 
 /**
  * Main entry class for dxFeed API (<b>read it first</b>).
@@ -122,8 +122,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     using Unique = std::unique_ptr<DXFeed>;
 
     friend struct DXEndpoint;
-    friend struct IndexedTxModel;
-    friend struct TimeSeriesTxModel;
+    friend struct TimeSeriesTxModelImpl;
+    friend struct IndexedTxModelImpl;
 
   private:
     JavaObjectHandle<DXFeed> handle_;

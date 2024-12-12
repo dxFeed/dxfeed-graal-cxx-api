@@ -10,8 +10,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "Entity.hpp"
 
@@ -78,19 +78,26 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
 
 DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 
-template <typename T>
-struct RequireMakeShared : virtual SharedEntity {
+/**
+ * A helper class needed to construct smart pointers to objects, and does not allow explicit construction of objects.
+ * @tparam T The object type.
+ */
+template <typename T> struct RequireMakeShared : virtual SharedEntity {
   protected:
-
     struct LockExternalConstructionTag {
         explicit LockExternalConstructionTag() = default;
     };
 
   public:
-
-    template <typename... Args>
-    static auto createShared(Args&&... args) {
-        static_assert(std::is_convertible_v<T*, RequireMakeShared*>, "Must derive publicly from RequireMakeShared");
+    /**
+     * Creates smart pointer to object.
+     *
+     * @tparam Args Types or arguments.
+     * @param args The arguments.
+     * @return A new smart pointer to object.
+     */
+    template <typename... Args> static auto createShared(Args &&...args) {
+        static_assert(std::is_convertible_v<T *, RequireMakeShared *>, "Must derive publicly from RequireMakeShared");
 
         return std::make_shared<T>(LockExternalConstructionTag{}, std::forward<Args>(args)...);
     }

@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventType.hpp"
+#include "../event/TimeSeriesEvent.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/IndexedEventSource.hpp"
 #include "../internal/Handler.hpp"
@@ -25,7 +26,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 class IndexedEventSource;
 
-struct DXFCPP_EXPORT TxModelListenerTag {};
+struct DXFCPP_EXPORT TxModelListenerTag{};
 
 struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
     TxModelListenerCommon();
@@ -63,25 +64,23 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
 };
 
 /**
- * The listener for receiving indexed events with the specified type (if necessary) from the IndexedTxModel or
- * TimeSeriesTxModel.
+ * The listener for receiving indexed events with the specified type from the IndexedTxModel.
  */
 template <Derived<IndexedEvent> E>
-struct DXFCPP_EXPORT TxModelListener final : TxModelListenerCommon, RequireMakeShared<TxModelListener<E>> {
-    TxModelListener(RequireMakeShared<TxModelListener<E>>::LockExternalConstructionTag) {};
+struct DXFCPP_EXPORT IndexedTxModelListener final : TxModelListenerCommon,
+                                                    RequireMakeShared<IndexedTxModelListener<E>> {
+    IndexedTxModelListener(RequireMakeShared<IndexedTxModelListener<E>>::LockExternalConstructionTag) {};
 
-    ~TxModelListener() noexcept override {
+    ~IndexedTxModelListener() noexcept override {
     }
 
     /**
      * Creates a listener for receiving indexed events (with instantiation by event type `E` and verification)
      *
      * ```cpp
-     * auto listener = TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
-     *     if (isSnapshot) {
-     *         std::cout << "Snapshot:" << std::endl;
-     *     } else {
-     *         std::cout << "Update:" << std::endl;
+     * auto listener = IndexedTxModelListener<Order>::create([](const auto & orderSource, const auto &events, bool
+     * isSnapshot) { if (isSnapshot) { std::cout << "Snapshot:" << std::endl; } else { std::cout << "Update:" <<
+     * std::endl;
      *     }
      *
      *     for (const auto &e : events) {
@@ -97,11 +96,11 @@ struct DXFCPP_EXPORT TxModelListener final : TxModelListenerCommon, RequireMakeS
      * @param onEventsReceived A functional object, lambda, or function to which indexed event data will be passed.
      * @return A smart pointer to the listener.
      */
-    static std::shared_ptr<TxModelListener<E>>
+    static std::shared_ptr<IndexedTxModelListener<E>>
     create(std::function<void(const IndexedEventSource & /* source */,
                               const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
                onEventsReceived) {
-        auto listener = RequireMakeShared<TxModelListener<E>>::createShared();
+        auto listener = RequireMakeShared<IndexedTxModelListener<E>>::createShared();
         listener->createHandle(ApiContext::getInstance()
                                    ->getManager<EntityManager<TxModelListenerCommon, TxModelListenerTag>>()
                                    ->registerEntity(listener));
@@ -129,11 +128,86 @@ struct DXFCPP_EXPORT TxModelListener final : TxModelListenerCommon, RequireMakeS
         return TxModelListenerCommon::toString();
     }
 
-    friend std::ostream &operator<<(std::ostream &os, const TxModelListener<E> &l) {
+    friend std::ostream &operator<<(std::ostream &os, const IndexedTxModelListener<E> &l) {
         return os << l.toString();
     }
 
-    bool operator==(const TxModelListener<E> &other) const noexcept {
+    bool operator==(const IndexedTxModelListener<E> &other) const noexcept {
+        return TxModelListenerCommon::operator==(other);
+    }
+};
+
+/**
+ * The listener for receiving time series events with the specified type from the TimeSeriesTxModel.
+ */
+template <Derived<TimeSeriesEvent> E>
+struct DXFCPP_EXPORT TimeSeriesTxModelListener final : TxModelListenerCommon,
+                                                       RequireMakeShared<TimeSeriesTxModelListener<E>> {
+    TimeSeriesTxModelListener(RequireMakeShared<TimeSeriesTxModelListener<E>>::LockExternalConstructionTag) {};
+
+    ~TimeSeriesTxModelListener() noexcept override {
+    }
+
+    /**
+     * Creates a listener for receiving time series events (with instantiation by event type `E` and verification)
+     *
+     * ```cpp
+     * auto listener = TimeSeriesTxModelListener<Candle>::create([](const auto &events, bool isSnapshot) {
+     *     if (isSnapshot) {
+     *         std::cout << "Snapshot:" << std::endl;
+     *     } else {
+     *         std::cout << "Update:" << std::endl;
+     *     }
+     *
+     *     for (const auto &e : events) {
+     *         std::cout << "[" << e->getEventFlagsMask().toString() << "]:" << e << std::endl;
+     *     }
+     *
+     *     std::cout << std::endl;
+     * });
+     *
+     * builder->withListener(listener);
+     * ```
+     * @tparam E The event type.
+     * @param onEventsReceived A functional object, lambda, or function to which indexed event data will be passed.
+     * @return A smart pointer to the listener.
+     */
+    static std::shared_ptr<TimeSeriesTxModelListener<E>>
+    create(std::function<void(const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
+               onEventsReceived) {
+        auto listener = RequireMakeShared<TimeSeriesTxModelListener<E>>::createShared();
+        listener->createHandle(ApiContext::getInstance()
+                                   ->getManager<EntityManager<TxModelListenerCommon, TxModelListenerTag>>()
+                                   ->registerEntity(listener));
+
+        listener->onEventsReceived_ +=
+            [l = onEventsReceived](const IndexedEventSource &, const std::vector<std::shared_ptr<EventType>> &events,
+                                   bool isSnapshot) {
+                std::vector<std::shared_ptr<E>> filteredEvents{};
+
+                filteredEvents.reserve(events.size());
+
+                for (const auto &e : events) {
+                    if (auto expected = e->template sharedAs<E>(); expected) {
+                        filteredEvents.emplace_back(expected);
+                    }
+                }
+
+                l(filteredEvents, isSnapshot);
+            };
+
+        return listener;
+    }
+
+    std::string toString() const override {
+        return TxModelListenerCommon::toString();
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const TimeSeriesTxModelListener<E> &l) {
+        return os << l.toString();
+    }
+
+    bool operator==(const TimeSeriesTxModelListener<E> &other) const noexcept {
         return TxModelListenerCommon::operator==(other);
     }
 };
@@ -146,8 +220,14 @@ template <> struct std::hash<dxfcpp::TxModelListenerCommon> {
     }
 };
 
-template <dxfcpp::Derived<dxfcpp::IndexedEvent> E> struct std::hash<dxfcpp::TxModelListener<E>> {
-    std::size_t operator()(const dxfcpp::TxModelListener<E> &l) const noexcept {
+template <dxfcpp::Derived<dxfcpp::IndexedEvent> E> struct std::hash<dxfcpp::IndexedTxModelListener<E>> {
+    std::size_t operator()(const dxfcpp::IndexedTxModelListener<E> &l) const noexcept {
+        return l.hashCode();
+    }
+};
+
+template <dxfcpp::Derived<dxfcpp::TimeSeriesEvent> E> struct std::hash<dxfcpp::TimeSeriesTxModelListener<E>> {
+    std::size_t operator()(const dxfcpp::TimeSeriesTxModelListener<E> &l) const noexcept {
         return l.hashCode();
     }
 };

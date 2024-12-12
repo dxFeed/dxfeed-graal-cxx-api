@@ -5,8 +5,6 @@
 
 #include <string>
 #include <thread>
-#include <unordered_map>
-#include <vector>
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
@@ -18,12 +16,12 @@ using namespace dxfcpp;
 
 class TimeSeriesTxModelFixture {
     std::shared_ptr<DXFeed> dxfeed;
-    std::shared_ptr<TxModelListener<Candle>> listener;
+    std::shared_ptr<TimeSeriesTxModelListener<Candle>> listener;
 
   public:
     TimeSeriesTxModelFixture()
         : dxfeed(DXEndpoint::getInstance(DXEndpoint::Role::FEED)->connect("demo.dxfeed.com:7300")->getFeed()),
-          listener(TxModelListener<Candle>::create([](const auto &, const auto &events, bool isSnapshot) {
+          listener(TimeSeriesTxModelListener<Candle>::create([](const auto &events, bool isSnapshot) {
               if (isSnapshot) {
                   std::cout << "Snapshot:" << std::endl;
               } else {
@@ -43,13 +41,13 @@ class TimeSeriesTxModelFixture {
         return dxfeed;
     }
 
-    [[nodiscard]] std::shared_ptr<TxModelListener<Candle>> getListener() const {
+    [[nodiscard]] std::shared_ptr<TimeSeriesTxModelListener<Candle>> getListener() const {
         return listener;
     }
 };
 
 TEST_CASE_FIXTURE(TimeSeriesTxModelFixture, "The model must subscribe to AAPL&Q{=1m} candles") {
-    auto model = TimeSeriesTxModel::newBuilder(Candle::TYPE)
+    auto model = TimeSeriesTxModel<Candle>::newBuilder()
                      ->withFeed(getDxFeed())
                      ->withBatchProcessing(true)
                      ->withSnapshotProcessing(true)

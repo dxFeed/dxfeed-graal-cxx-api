@@ -120,14 +120,14 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
         friend struct MarketDepthModel;
 
       private:
-        std::shared_ptr<IndexedTxModel::Builder> builder_{};
+        std::shared_ptr<typename IndexedTxModel<O>::Builder> builder_{};
         std::shared_ptr<MarketDepthModelListener<O>> listener_{};
         std::size_t depthLimit_{};
         std::int64_t aggregationPeriodMillis_{};
 
       public:
         explicit Builder(RequireMakeShared<Builder>::LockExternalConstructionTag) {
-            builder_ = IndexedTxModel::newBuilder(O::TYPE);
+            builder_ = IndexedTxModel<O>::newBuilder();
         }
 
         ~Builder() override {
@@ -546,7 +546,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
     std::unordered_map<std::int64_t, std::shared_ptr<O>> ordersByIndex_{};
     SortedOrderSet<BuyLess> buyOrders_{};
     SortedOrderSet<SellLess> sellOrders_{};
-    std::shared_ptr<IndexedTxModel> indexedTxModel_{};
+    std::shared_ptr<IndexedTxModel<O>> indexedTxModel_{};
     std::shared_ptr<MarketDepthModelListener<O>> listener_{};
     std::size_t depthLimit_{};
     std::int64_t aggregationPeriodMillis_{};
@@ -558,9 +558,9 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
 
         marketDepthModel->indexedTxModel_ =
             builder->builder_
-                ->template withListener<O>([m = marketDepthModel->weak_from_this()](
-                                               const IndexedEventSource &source,
-                                               const std::vector<std::shared_ptr<O>> &events, bool isSnapshot) {
+                ->withListener([m = marketDepthModel->weak_from_this()](const IndexedEventSource &source,
+                                                                        const std::vector<std::shared_ptr<O>> &events,
+                                                                        bool isSnapshot) {
                     if (const auto model = m.lock()) {
                         model->template sharedAs<MarketDepthModel>()->eventsReceived(source, events, isSnapshot);
                     }

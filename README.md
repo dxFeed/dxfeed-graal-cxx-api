@@ -336,7 +336,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 
 ### API
 
-- [ ] [AuthSample](samples/cpp/AuthSample/src/main.cpp)
+- [x] [AuthSample](samples/cpp/AuthSample/src/main.cpp)
   demonstrates how to connect to an endpoint that requires an authentication token,
   subscribe to market data events, and handle periodic token updates
 - [x] [ConnectSample](samples/cpp/DxFeedConnect/src/main.cpp)
@@ -346,7 +346,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   and `dxfeed.properties` file
 - [x] [QuoteAndTradeSample](samples/cpp/DxFeedSample/src/main.cpp)
   demonstrates how to create multiple event listeners and subscribe to `Quote` and `Trade` events
-- [ ] [ReconnectSample](samples/cpp/ReconnectSample/src/main.cpp)
+- [x] [ReconnectSample](samples/cpp/ReconnectSample/src/main.cpp)
   demonstrates how to connect to an endpoint, subscribe to market data events, handle reconnections
   and re-subscribing
 
@@ -387,9 +387,9 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 
 ### Model
 
-- [ ] [IncOrderSnapshotSample](samples/cpp/IncOrderSnapshotSample/src/main.cpp)
+- [x] [IncOrderSnapshotSample](samples/cpp/IncOrderSnapshotSample/src/main.cpp)
   demonstrates how to subscribe to the Order event and handle snapshots and updates
-- [ ] [MultipleMarketDepthSample](samples/cpp/MultipleMarketDepthSample/src/main.cpp)
+- [x] [MultipleMarketDepthSample](samples/cpp/MultipleMarketDepthSample/src/main.cpp)
   demonstrates how to use the `MarketDepthModel` to manage and display order books for multiple symbols
 
 ### Schedule
@@ -405,9 +405,9 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 ### UI
 
 - [ ] [MarketDepthModelSample](samples/cpp/MarketDepthModelSample/src/main.cpp)
-  demonstrates how to draw a Market Depth using Avalonia UI
+  demonstrates how to draw a Market Depth.
 - [ ] [CandleChartSample](samples/cpp/CandleChartSample/src/main.cpp)
-  demonstrates how to draw a Candlestick Chart using Avalonia UI
+  demonstrates how to draw a Candlestick Chart.
 - [ ] [PriceLevelBookSample](samples/cpp/PriceLevelBookSample/src/main.cpp)
   demonstrates how to compile a price level book (market by price) that aggregates individual orders
   (market by order)
