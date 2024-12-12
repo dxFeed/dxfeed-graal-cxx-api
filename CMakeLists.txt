@@ -17,7 +17,7 @@ project(dxFeedGraalCxxApi)
 
 include(cmake/ParseVersion.cmake)
 
-set(DXFCXX_VERSION "v3.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v4.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
