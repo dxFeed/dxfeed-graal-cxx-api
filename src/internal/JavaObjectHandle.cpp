@@ -8,6 +8,18 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+std::string JavaObject::toString(void *handle) {
+    return isolated::internal::IsolatedObject::toString(handle);
+}
+
+std::size_t JavaObject::hashCode(void *handle) {
+    return isolated::internal::IsolatedObject::hashCode(handle);
+}
+
+bool JavaObject::equals(void *objectHandle1, void *objectHandle2) {
+    return isolated::internal::IsolatedObject::equals(objectHandle1, objectHandle2) == 1;
+}
+
 template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
     auto result = runIsolatedOrElse(
         [handle = handle](auto threadHandle) {
@@ -94,10 +106,10 @@ template struct JavaObjectHandle<TimePeriod>;
 template struct JavaObjectHandle<AuthToken>;
 
 template struct JavaObjectHandle<TxModelListenerTag>;
-template struct JavaObjectHandle<IndexedTxModel>;
-template struct JavaObjectHandle<IndexedTxModel::Builder>;
-template struct JavaObjectHandle<TimeSeriesTxModel>;
-template struct JavaObjectHandle<TimeSeriesTxModel::Builder>;
+template struct JavaObjectHandle<IndexedTxModelTag>;
+template struct JavaObjectHandle<IndexedTxModelBuilderTag>;
+template struct JavaObjectHandle<TimeSeriesTxModelTag>;
+template struct JavaObjectHandle<TimeSeriesTxModelBuilderTag>;
 
 template struct JavaObjectHandle<ExecutorTag>;
 

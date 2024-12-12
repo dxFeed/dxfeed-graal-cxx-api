@@ -13,104 +13,80 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-JavaObjectHandle<TimeSeriesTxModel::Builder>
-TimeSeriesTxModel::Builder::withListenerImpl(const JavaObjectHandle<TxModelListenerTag> &listener) const {
-    return isolated::model::IsolatedTimeSeriesTxModel::Builder::withListener(handle_, listener);
+JavaObjectHandle<TimeSeriesTxModelBuilderTag>
+TimeSeriesTxModelImpl::Builder::withBatchProcessingImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle,
+                                                        bool isBatchProcessing) {
+    return isolated::model::IsolatedTimeSeriesTxModel::Builder::withBatchProcessing(handle, isBatchProcessing);
 }
 
-TimeSeriesTxModel::Builder::Builder(LockExternalConstructionTag, JavaObjectHandle<Builder> &&handle)
-    : handle_(std::move(handle)) {
+JavaObjectHandle<TimeSeriesTxModelBuilderTag>
+TimeSeriesTxModelImpl::Builder::withSnapshotProcessingImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle,
+                                                           bool isSnapshotProcessing) {
+    return isolated::model::IsolatedTimeSeriesTxModel::Builder::withSnapshotProcessing(handle, isSnapshotProcessing);
 }
 
-TimeSeriesTxModel::Builder::Builder(LockExternalConstructionTag, JavaObjectHandle<Builder> &&handle,
-                                    std::shared_ptr<TxModelListenerCommon> listener)
-    : handle_(std::move(handle)), listener_(std::move(listener)) {
+JavaObjectHandle<TimeSeriesTxModelBuilderTag>
+TimeSeriesTxModelImpl::Builder::withFeedImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle,
+                                             const std::shared_ptr<DXFeed> &feed) {
+    return isolated::model::IsolatedTimeSeriesTxModel::Builder::withFeed(handle, feed->handle_);
 }
 
-std::shared_ptr<TimeSeriesTxModel::Builder>
-TimeSeriesTxModel::Builder::withBatchProcessing(bool isBatchProcessing) const {
-    return createShared(
-        isolated::model::IsolatedTimeSeriesTxModel::Builder::withBatchProcessing(handle_, isBatchProcessing));
+JavaObjectHandle<TimeSeriesTxModelBuilderTag>
+TimeSeriesTxModelImpl::Builder::withSymbolImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle,
+                                               const SymbolWrapper &symbol) {
+    return isolated::model::IsolatedTimeSeriesTxModel::Builder::withSymbol(handle, symbol);
 }
 
-std::shared_ptr<TimeSeriesTxModel::Builder>
-TimeSeriesTxModel::Builder::withSnapshotProcessing(bool isSnapshotProcessing) const {
-    return createShared(
-        isolated::model::IsolatedTimeSeriesTxModel::Builder::withSnapshotProcessing(handle_, isSnapshotProcessing));
+JavaObjectHandle<TimeSeriesTxModelBuilderTag>
+TimeSeriesTxModelImpl::Builder::withListenerImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle,
+                                                 const JavaObjectHandle<TxModelListenerTag> &listener) {
+    return isolated::model::IsolatedTimeSeriesTxModel::Builder::withListener(handle, listener);
 }
 
-std::shared_ptr<TimeSeriesTxModel::Builder> TimeSeriesTxModel::Builder::withFeed(std::shared_ptr<DXFeed> feed) const {
-    return createShared(isolated::model::IsolatedTimeSeriesTxModel::Builder::withFeed(handle_, feed->handle_));
+JavaObjectHandle<TimeSeriesTxModelBuilderTag>
+TimeSeriesTxModelImpl::Builder::withFromTimeImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle,
+                                                 std::int64_t fromTime) {
+    return isolated::model::IsolatedTimeSeriesTxModel::Builder::withFromTime(handle, fromTime);
 }
 
-std::shared_ptr<TimeSeriesTxModel::Builder> TimeSeriesTxModel::Builder::withSymbol(const SymbolWrapper &symbol) const {
-    return createShared(isolated::model::IsolatedTimeSeriesTxModel::Builder::withSymbol(handle_, symbol));
+JavaObjectHandle<TimeSeriesTxModelTag>
+TimeSeriesTxModelImpl::Builder::buildImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle) {
+    return isolated::model::IsolatedTimeSeriesTxModel::Builder::build(handle);
 }
 
-std::shared_ptr<TimeSeriesTxModel::Builder> TimeSeriesTxModel::Builder::withFromTime(std::int64_t fromTime) const {
-    return createShared(isolated::model::IsolatedTimeSeriesTxModel::Builder::withFromTime(handle_, fromTime));
+JavaObjectHandle<TimeSeriesTxModelBuilderTag> TimeSeriesTxModelImpl::newBuilderImpl(const EventTypeEnum &eventType) {
+    return isolated::model::IsolatedTimeSeriesTxModel::newBuilder(eventType);
 }
 
-std::shared_ptr<TimeSeriesTxModel> TimeSeriesTxModel::Builder::build() const {
-    return TimeSeriesTxModel::createShared(isolated::model::IsolatedTimeSeriesTxModel::Builder::build(handle_),
-                                           listener_);
+bool TimeSeriesTxModelImpl::isBatchProcessingImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle) {
+    return isolated::model::IsolatedTimeSeriesTxModel::isBatchProcessing(handle);
 }
 
-TimeSeriesTxModel::TimeSeriesTxModel(LockExternalConstructionTag, JavaObjectHandle<TimeSeriesTxModel> &&handle)
-    : handle_(std::move(handle)) {
+bool TimeSeriesTxModelImpl::isSnapshotProcessingImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle) {
+    return isolated::model::IsolatedTimeSeriesTxModel::isSnapshotProcessing(handle);
 }
 
-TimeSeriesTxModel::TimeSeriesTxModel(LockExternalConstructionTag, JavaObjectHandle<TimeSeriesTxModel> &&handle,
-                                     std::shared_ptr<TxModelListenerCommon> listener)
-    : handle_(std::move(handle)), listener_(std::move(listener)) {
+void TimeSeriesTxModelImpl::attachImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle,
+                                       const std::shared_ptr<DXFeed> &feed) {
+    isolated::model::IsolatedTimeSeriesTxModel::attach(handle, feed->handle_);
 }
 
-TimeSeriesTxModel::~TimeSeriesTxModel() noexcept {
-    close();
+void TimeSeriesTxModelImpl::detachImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle,
+                                       const std::shared_ptr<DXFeed> &feed) {
+    isolated::model::IsolatedTimeSeriesTxModel::detach(handle, feed->handle_);
 }
 
-std::shared_ptr<TimeSeriesTxModel::Builder> TimeSeriesTxModel::newBuilder(const EventTypeEnum &eventType) {
-    return Builder::createShared(isolated::model::IsolatedTimeSeriesTxModel::newBuilder(eventType));
+void TimeSeriesTxModelImpl::closeImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle) {
+    isolated::model::IsolatedTimeSeriesTxModel::close(handle);
 }
 
-bool TimeSeriesTxModel::isBatchProcessing() const {
-    return isolated::model::IsolatedTimeSeriesTxModel::isBatchProcessing(handle_);
+std::int64_t TimeSeriesTxModelImpl::getFromTimeImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle) {
+    return isolated::model::IsolatedTimeSeriesTxModel::getFromTime(handle);
 }
 
-bool TimeSeriesTxModel::isSnapshotProcessing() const {
-    return isolated::model::IsolatedTimeSeriesTxModel::isSnapshotProcessing(handle_);
-}
-
-void TimeSeriesTxModel::attach(std::shared_ptr<DXFeed> feed) const {
-    isolated::model::IsolatedTimeSeriesTxModel::attach(handle_, feed->handle_);
-}
-
-void TimeSeriesTxModel::detach(std::shared_ptr<DXFeed> feed) const {
-    isolated::model::IsolatedTimeSeriesTxModel::detach(handle_, feed->handle_);
-}
-
-void TimeSeriesTxModel::close() const {
-    isolated::model::IsolatedTimeSeriesTxModel::close(handle_);
-}
-
-std::int64_t TimeSeriesTxModel::getFromTime() const {
-    return isolated::model::IsolatedTimeSeriesTxModel::getFromTime(handle_);
-}
-
-void TimeSeriesTxModel::setFromTime(std::int64_t fromTime) const {
-    isolated::model::IsolatedTimeSeriesTxModel::setFromTime(handle_, fromTime);
-}
-
-std::string TimeSeriesTxModel::toString() const {
-    return isolated::internal::IsolatedObject::toString(handle_.get());
-}
-
-std::size_t TimeSeriesTxModel::hashCode() const {
-    return isolated::internal::IsolatedObject::hashCode(handle_.get());
-}
-
-bool TimeSeriesTxModel::operator==(const TimeSeriesTxModel &other) const noexcept {
-    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
+void TimeSeriesTxModelImpl::setFromTimeImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle,
+                                            std::int64_t fromTime) {
+    isolated::model::IsolatedTimeSeriesTxModel::setFromTime(handle, fromTime);
 }
 
 DXFCPP_END_NAMESPACE

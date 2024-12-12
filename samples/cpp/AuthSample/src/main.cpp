@@ -54,7 +54,7 @@ int main() {
         // After reconnection, all existing subscriptions will be re-subscribed automatically.
         auto updateTokenTimer = dxfcpp::Timer::schedule(
             [address, &generateToken] {
-                DXEndpoint::getInstance()->connect(std::format("{}[login=entitle:{}]", address, generateToken()));
+                DXEndpoint::getInstance()->connect(fmt::format("{}[login=entitle:{}]", address, generateToken()));
             },
             0, 10s);
 

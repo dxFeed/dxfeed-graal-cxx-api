@@ -28,97 +28,77 @@ void releaseGraalSources(void *sources) {
     isolated::internal::freeGraal(sources);
 }
 
-JavaObjectHandle<IndexedTxModel::Builder> IndexedTxModel::Builder::withSourcesImpl(void *graalEventSourceList) const {
-    return isolated::model::IsolatedIndexedTxModel::Builder::withSources(handle_, graalEventSourceList);
+JavaObjectHandle<IndexedTxModelBuilderTag>
+IndexedTxModelImpl::Builder::withBatchProcessingImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle,
+                                                     bool isBatchProcessing) {
+    return isolated::model::IsolatedIndexedTxModel::Builder::withBatchProcessing(handle, isBatchProcessing);
 }
 
-JavaObjectHandle<IndexedTxModel::Builder>
-IndexedTxModel::Builder::withListenerImpl(const JavaObjectHandle<TxModelListenerTag> &listener) const {
-    return isolated::model::IsolatedIndexedTxModel::Builder::withListener(handle_, listener);
+JavaObjectHandle<IndexedTxModelBuilderTag>
+IndexedTxModelImpl::Builder::withSnapshotProcessingImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle,
+                                                        bool isSnapshotProcessing) {
+    return isolated::model::IsolatedIndexedTxModel::Builder::withSnapshotProcessing(handle, isSnapshotProcessing);
 }
 
-IndexedTxModel::Builder::Builder(LockExternalConstructionTag, JavaObjectHandle<Builder> &&handle)
-    : handle_(std::move(handle)) {
+JavaObjectHandle<IndexedTxModelBuilderTag>
+IndexedTxModelImpl::Builder::withFeedImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle,
+                                          const std::shared_ptr<DXFeed> &feed) {
+    return isolated::model::IsolatedIndexedTxModel::Builder::withFeed(handle, feed->handle_);
 }
 
-IndexedTxModel::Builder::Builder(LockExternalConstructionTag, JavaObjectHandle<Builder> &&handle,
-                                 std::shared_ptr<TxModelListenerCommon> listener)
-    : handle_(std::move(handle)), listener_(std::move(listener)) {
+JavaObjectHandle<IndexedTxModelBuilderTag>
+IndexedTxModelImpl::Builder::withSymbolImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle,
+                                            const SymbolWrapper &symbol) {
+    return isolated::model::IsolatedIndexedTxModel::Builder::withSymbol(handle, symbol);
 }
 
-std::shared_ptr<IndexedTxModel::Builder> IndexedTxModel::Builder::withBatchProcessing(bool isBatchProcessing) const {
-    return createShared(
-        isolated::model::IsolatedIndexedTxModel::Builder::withBatchProcessing(handle_, isBatchProcessing));
+JavaObjectHandle<IndexedTxModelBuilderTag>
+IndexedTxModelImpl::Builder::withListenerImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle,
+                                              const JavaObjectHandle<TxModelListenerTag> &listener) {
+    return isolated::model::IsolatedIndexedTxModel::Builder::withListener(handle, listener);
 }
 
-std::shared_ptr<IndexedTxModel::Builder>
-IndexedTxModel::Builder::withSnapshotProcessing(bool isSnapshotProcessing) const {
-    return createShared(
-        isolated::model::IsolatedIndexedTxModel::Builder::withSnapshotProcessing(handle_, isSnapshotProcessing));
+JavaObjectHandle<IndexedTxModelBuilderTag>
+IndexedTxModelImpl::Builder::withSourcesImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle,
+                                             void *graalEventSourceList) {
+    return isolated::model::IsolatedIndexedTxModel::Builder::withSources(handle, graalEventSourceList);
 }
 
-std::shared_ptr<IndexedTxModel::Builder> IndexedTxModel::Builder::withFeed(std::shared_ptr<DXFeed> feed) const {
-    return createShared(isolated::model::IsolatedIndexedTxModel::Builder::withFeed(handle_, feed->handle_));
+JavaObjectHandle<IndexedTxModelTag>
+IndexedTxModelImpl::Builder::buildImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle) {
+    return isolated::model::IsolatedIndexedTxModel::Builder::build(handle);
 }
 
-std::shared_ptr<IndexedTxModel::Builder> IndexedTxModel::Builder::withSymbol(const SymbolWrapper &symbol) const {
-    return createShared(isolated::model::IsolatedIndexedTxModel::Builder::withSymbol(handle_, symbol));
+JavaObjectHandle<IndexedTxModelBuilderTag> IndexedTxModelImpl::newBuilderImpl(const EventTypeEnum &eventType) {
+    return isolated::model::IsolatedIndexedTxModel::newBuilder(eventType);
 }
 
-std::shared_ptr<IndexedTxModel::Builder>
-IndexedTxModel::Builder::withSources(std::initializer_list<EventSourceWrapper> collection) const {
-    return withSources(collection.begin(), collection.end());
+bool IndexedTxModelImpl::isBatchProcessingImpl(const JavaObjectHandle<IndexedTxModelTag> &handle) {
+    return isolated::model::IsolatedIndexedTxModel::isBatchProcessing(handle);
 }
 
-std::shared_ptr<IndexedTxModel> IndexedTxModel::Builder::build() const {
-    return IndexedTxModel::createShared(isolated::model::IsolatedIndexedTxModel::Builder::build(handle_),
-                                        listener_);
+bool IndexedTxModelImpl::isSnapshotProcessingImpl(const JavaObjectHandle<IndexedTxModelTag> &handle) {
+    return isolated::model::IsolatedIndexedTxModel::isSnapshotProcessing(handle);
 }
 
-void IndexedTxModel::setSourcesImpl(void *graalEventSourceList) const {
-    isolated::model::IsolatedIndexedTxModel::setSources(handle_, graalEventSourceList);
+void IndexedTxModelImpl::attachImpl(const JavaObjectHandle<IndexedTxModelTag> &handle,
+                                    const std::shared_ptr<DXFeed> &feed) {
+    isolated::model::IsolatedIndexedTxModel::attach(handle, feed->handle_);
 }
 
-IndexedTxModel::IndexedTxModel(LockExternalConstructionTag, JavaObjectHandle<IndexedTxModel> &&handle)
-    : handle_(std::move(handle)) {
+void IndexedTxModelImpl::detachImpl(const JavaObjectHandle<IndexedTxModelTag> &handle,
+                                    const std::shared_ptr<DXFeed> &feed) {
+    isolated::model::IsolatedIndexedTxModel::detach(handle, feed->handle_);
 }
 
-IndexedTxModel::IndexedTxModel(LockExternalConstructionTag, JavaObjectHandle<IndexedTxModel> &&handle,
-                               std::shared_ptr<TxModelListenerCommon> listener)
-    : handle_(std::move(handle)), listener_(std::move(listener)) {
+void IndexedTxModelImpl::closeImpl(const JavaObjectHandle<IndexedTxModelTag> &handle) {
+    isolated::model::IsolatedIndexedTxModel::close(handle);
 }
 
-IndexedTxModel::~IndexedTxModel() noexcept {
-    close();
-}
-
-std::shared_ptr<IndexedTxModel::Builder> IndexedTxModel::newBuilder(const EventTypeEnum &eventType) {
-    return Builder::createShared(isolated::model::IsolatedIndexedTxModel::newBuilder(eventType));
-}
-
-bool IndexedTxModel::isBatchProcessing() const {
-    return isolated::model::IsolatedIndexedTxModel::isBatchProcessing(handle_);
-}
-
-bool IndexedTxModel::isSnapshotProcessing() const {
-    return isolated::model::IsolatedIndexedTxModel::isSnapshotProcessing(handle_);
-}
-
-void IndexedTxModel::attach(std::shared_ptr<DXFeed> feed) const {
-    isolated::model::IsolatedIndexedTxModel::attach(handle_, feed->handle_);
-}
-
-void IndexedTxModel::detach(std::shared_ptr<DXFeed> feed) const {
-    isolated::model::IsolatedIndexedTxModel::detach(handle_, feed->handle_);
-}
-
-void IndexedTxModel::close() const {
-    isolated::model::IsolatedIndexedTxModel::close(handle_);
-}
-
-std::unordered_set<EventSourceWrapper> IndexedTxModel::getSources() const {
+std::unordered_set<EventSourceWrapper>
+IndexedTxModelImpl::getSourcesImpl(const JavaObjectHandle<IndexedTxModelTag> &handle) {
     std::unique_ptr<void, decltype(&releaseGraalSources)> graalSources{
-        isolated::model::IsolatedIndexedTxModel::getSources(handle_), releaseGraalSources};
+        isolated::model::IsolatedIndexedTxModel::getSources(handle), releaseGraalSources};
 
     if (graalSources == nullptr) {
         return {};
@@ -129,20 +109,8 @@ std::unordered_set<EventSourceWrapper> IndexedTxModel::getSources() const {
     return {sources.begin(), sources.end()};
 }
 
-void IndexedTxModel::setSources(std::initializer_list<EventSourceWrapper> collection) const {
-    setSources(collection.begin(), collection.end());
-}
-
-std::string IndexedTxModel::toString() const {
-    return isolated::internal::IsolatedObject::toString(handle_.get());
-}
-
-std::size_t IndexedTxModel::hashCode() const {
-    return isolated::internal::IsolatedObject::hashCode(handle_.get());
-}
-
-bool IndexedTxModel::operator==(const IndexedTxModel &other) const noexcept {
-    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
+void IndexedTxModelImpl::setSourcesImpl(const JavaObjectHandle<IndexedTxModelTag> &handle, void *graalEventSourceList) {
+    isolated::model::IsolatedIndexedTxModel::setSources(handle, graalEventSourceList);
 }
 
 DXFCPP_END_NAMESPACE

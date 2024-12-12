@@ -18,12 +18,12 @@ using namespace dxfcpp;
 
 class IndexedTxModelFixture {
     std::shared_ptr<DXFeed> dxfeed;
-    std::shared_ptr<TxModelListener<Order>> listener;
+    std::shared_ptr<IndexedTxModelListener<Order>> listener;
 
   public:
     IndexedTxModelFixture()
         : dxfeed(DXEndpoint::getInstance(DXEndpoint::Role::FEED)->connect("demo.dxfeed.com:7300")->getFeed()),
-          listener(TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
+          listener(IndexedTxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
               if (isSnapshot) {
                   std::cout << "Snapshot:" << std::endl;
               } else {
@@ -43,13 +43,13 @@ class IndexedTxModelFixture {
         return dxfeed;
     }
 
-    [[nodiscard]] std::shared_ptr<TxModelListener<Order>> getListener() const {
+    [[nodiscard]] std::shared_ptr<IndexedTxModelListener<Order>> getListener() const {
         return listener;
     }
 };
 
 TEST_CASE_FIXTURE(IndexedTxModelFixture, "The model must subscribe to AAPL#NTV orders") {
-    auto model = IndexedTxModel::newBuilder(Order::TYPE)
+    auto model = IndexedTxModel<Order>::newBuilder()
                      ->withFeed(getDxFeed())
                      ->withBatchProcessing(true)
                      ->withSnapshotProcessing(true)
@@ -62,7 +62,7 @@ TEST_CASE_FIXTURE(IndexedTxModelFixture, "The model must subscribe to AAPL#NTV o
 }
 
 TEST_CASE_FIXTURE(IndexedTxModelFixture, "The model must subscribe to IBM#NTV and IBM#DEX orders simultaneously") {
-    auto model = IndexedTxModel::newBuilder(Order::TYPE)
+    auto model = IndexedTxModel<Order>::newBuilder()
                      ->withFeed(getDxFeed())
                      ->withBatchProcessing(true)
                      ->withSnapshotProcessing(true)

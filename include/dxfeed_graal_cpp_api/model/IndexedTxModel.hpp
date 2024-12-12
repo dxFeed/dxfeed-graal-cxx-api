@@ -22,6 +22,52 @@ DXFCPP_BEGIN_NAMESPACE
 struct SymbolWrapper;
 struct DXFeed;
 
+struct DXFCPP_EXPORT IndexedTxModelTag{};
+struct DXFCPP_EXPORT IndexedTxModelBuilderTag{};
+
+struct DXFCPP_EXPORT IndexedTxModelImpl {
+    struct DXFCPP_EXPORT Builder {
+      protected:
+        static JavaObjectHandle<IndexedTxModelBuilderTag>
+        withBatchProcessingImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle, bool isBatchProcessing);
+
+        static JavaObjectHandle<IndexedTxModelBuilderTag>
+        withSnapshotProcessingImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle, bool isSnapshotProcessing);
+
+        static JavaObjectHandle<IndexedTxModelBuilderTag>
+        withFeedImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle, const std::shared_ptr<DXFeed> &feed);
+
+        static JavaObjectHandle<IndexedTxModelBuilderTag>
+        withSymbolImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle, const SymbolWrapper &symbol);
+
+        static JavaObjectHandle<IndexedTxModelBuilderTag>
+        withListenerImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle,
+                         const JavaObjectHandle<TxModelListenerTag> &listener);
+
+        static JavaObjectHandle<IndexedTxModelBuilderTag>
+        withSourcesImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle, void *graalEventSourceList);
+
+        static JavaObjectHandle<IndexedTxModelTag> buildImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle);
+    };
+
+  protected:
+    static JavaObjectHandle<IndexedTxModelBuilderTag> newBuilderImpl(const EventTypeEnum &eventType);
+
+    static bool isBatchProcessingImpl(const JavaObjectHandle<IndexedTxModelTag> &handle);
+
+    static bool isSnapshotProcessingImpl(const JavaObjectHandle<IndexedTxModelTag> &handle);
+
+    static void attachImpl(const JavaObjectHandle<IndexedTxModelTag> &handle, const std::shared_ptr<DXFeed> &feed);
+
+    static void detachImpl(const JavaObjectHandle<IndexedTxModelTag> &handle, const std::shared_ptr<DXFeed> &feed);
+
+    static void closeImpl(const JavaObjectHandle<IndexedTxModelTag> &handle);
+
+    static std::unordered_set<EventSourceWrapper> getSourcesImpl(const JavaObjectHandle<IndexedTxModelTag> &handle);
+
+    static void setSourcesImpl(const JavaObjectHandle<IndexedTxModelTag> &handle, void *graalEventSourceList);
+};
+
 /**
  * An incremental model for indexed events.
  * This model manages all snapshot and transaction logic, subscription handling, and listener notifications.
@@ -59,7 +105,7 @@ struct DXFeed;
  *
  * ```cpp
  * auto feed = DXEndpoint::getInstance(DXEndpoint::Role::FEED)->connect("demo.dxfeed.com:7300")->getFeed();
- * auto listener = TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
+ * auto listener = IndexedTxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
  *     if (isSnapshot) {
  *         std::cout << "Snapshot:" << std::endl;
  *     } else {
@@ -72,7 +118,7 @@ struct DXFeed;
  *
  *     std::cout << std::endl;
  * });
- * auto model = IndexedTxModel::newBuilder(Order::TYPE)
+ * auto model = IndexedTxModel<Order>::newBuilder()
  *                  ->withFeed(feed)
  *                  ->withBatchProcessing(true)
  *                  ->withSnapshotProcessing(true)
@@ -83,25 +129,28 @@ struct DXFeed;
  *
  * std::this_thread::sleep_for(10s);
  * ```
+ * @tparam E The type of event (derived from IndexedEvent)
  */
-struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
+template <Derived<IndexedEvent> E>
+struct DXFCPP_EXPORT IndexedTxModel final : IndexedTxModelImpl, RequireMakeShared<IndexedTxModel<E>> {
 
     /**
      * A builder class for creating an instance of IndexedTxModel.
      */
-    struct DXFCPP_EXPORT Builder final : RequireMakeShared<Builder> {
+    struct DXFCPP_EXPORT Builder final : IndexedTxModelImpl::Builder, RequireMakeShared<Builder> {
       private:
-        JavaObjectHandle<Builder> handle_;
+        JavaObjectHandle<IndexedTxModelBuilderTag> handle_;
         std::shared_ptr<TxModelListenerCommon> listener_;
 
-        JavaObjectHandle<Builder> withSourcesImpl(void *graalEventSourceList) const;
-        JavaObjectHandle<Builder> withListenerImpl(const JavaObjectHandle<TxModelListenerTag> &listener) const;
-
       public:
-        Builder(LockExternalConstructionTag tag, JavaObjectHandle<Builder> &&handle);
+        Builder(typename Builder::LockExternalConstructionTag, JavaObjectHandle<IndexedTxModelBuilderTag> &&handle)
+            : handle_(std::move(handle)) {
+        }
 
-        Builder(LockExternalConstructionTag tag, JavaObjectHandle<Builder> &&handle,
-                std::shared_ptr<TxModelListenerCommon> listener);
+        Builder(typename Builder::LockExternalConstructionTag, JavaObjectHandle<IndexedTxModelBuilderTag> &&handle,
+                std::shared_ptr<TxModelListenerCommon> listener)
+            : handle_(std::move(handle)), listener_(std::move(listener)) {
+        }
 
         /**
          * Enables or disables batch processing.
@@ -119,7 +168,10 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
          * @param isBatchProcessing `true` to enable batch processing; `false` otherwise.
          * @return The builder instance.
          */
-        std::shared_ptr<Builder> withBatchProcessing(bool isBatchProcessing) const;
+        std::shared_ptr<Builder> withBatchProcessing(bool isBatchProcessing) const {
+            return RequireMakeShared<Builder>::template createShared(
+                std::move(withBatchProcessingImpl(handle_, isBatchProcessing)));
+        }
 
         /**
          * Enables or disables snapshot processing.
@@ -139,7 +191,10 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
          * @param isSnapshotProcessing `true` to enable snapshot processing; `false` otherwise.
          * @return The builder instance.
          */
-        std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const;
+        std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const {
+            return RequireMakeShared<Builder>::template createShared(
+                std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)));
+        }
 
         /**
          * Sets the @ref DXFeed "feed" for the model being created.
@@ -149,7 +204,9 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
          * @param feed The @ref DXFeed "feed".
          * @return The builder instance.
          */
-        std::shared_ptr<Builder> withFeed(std::shared_ptr<DXFeed> feed) const;
+        std::shared_ptr<Builder> withFeed(const std::shared_ptr<DXFeed> &feed) const {
+            return RequireMakeShared<Builder>::template createShared(std::move(withFeedImpl(handle_, feed)));
+        }
 
         /**
          * Sets the subscription symbol for the model being created.
@@ -158,14 +215,16 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
          * @param symbol The subscription symbol.
          * @return The builder instance.
          */
-        std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const;
+        std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const {
+            return RequireMakeShared<Builder>::template createShared(std::move(withSymbolImpl(handle_, symbol)));
+        }
 
         /**
          * Sets the listener for transaction notifications.
          * The listener cannot be changed or added once the model has been built.
          *
          * ```cpp
-         * auto listener = TxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
+         * auto listener = IndexedTxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
          *     if (isSnapshot) {
          *         std::cout << "Snapshot:" << std::endl;
          *     } else {
@@ -182,14 +241,13 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
          * builder->withListener(listener);
          * ```
          *
-         * @tparam E The type of event (derived from IndexedEvent)
          * @param listener The transaction listener.
          * @return The builder instance.
          */
-        template <Derived<IndexedEvent> E>
-        std::shared_ptr<Builder> withListener(std::shared_ptr<TxModelListener<E>> listener) const {
-            return createShared(std::move(withListenerImpl(listener->getHandle())),
-                                listener->template sharedAs<TxModelListenerCommon>());
+        std::shared_ptr<Builder> withListener(std::shared_ptr<IndexedTxModelListener<E>> listener) const {
+            return RequireMakeShared<Builder>::template createShared(
+                std::move(withListenerImpl(handle_, listener->getHandle())),
+                listener->template sharedAs<TxModelListenerCommon>());
         }
 
         /**
@@ -214,15 +272,14 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
          * });
          * ```
          *
-         * @tparam E The type of event (derived from IndexedEvent)
          * @param onEventsReceived A functional object, lambda, or function to which indexed event data will be passed.
          * @return The builder instance.
          */
-        template <Derived<IndexedEvent> E>
-        std::shared_ptr<Builder> withListener(std::function<void(const IndexedEventSource & /* source */,
-                              const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
-               onEventsReceived) const {
-            return withListener(TxModelListener<E>::create(onEventsReceived));
+        std::shared_ptr<Builder>
+        withListener(std::function<void(const IndexedEventSource & /* source */,
+                                        const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
+                         onEventsReceived) const {
+            return withListener(IndexedTxModelListener<E>::create(onEventsReceived));
         }
 
         /**
@@ -249,7 +306,7 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
         std::shared_ptr<Builder> withSources(EventSourceIt begin, EventSourceIt end) const {
             auto list = EventSourceWrapper::ListUtils::toGraalListUnique(begin, end);
 
-            return createShared(std::move(withSourcesImpl(list.get())));
+            return RequireMakeShared<Builder>::template createShared(std::move(withSourcesImpl(handle_, list.get())));
         }
 
         /**
@@ -294,7 +351,9 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
          * @param sources The specified sources.
          * @return The builder instance.
          */
-        std::shared_ptr<Builder> withSources(std::initializer_list<EventSourceWrapper> sources) const;
+        std::shared_ptr<Builder> withSources(std::initializer_list<EventSourceWrapper> sources) const {
+            return withSources(sources.begin(), sources.end());
+        }
 
         /**
          * Builds an instance of IndexedTxModel based on the provided parameters.
@@ -305,35 +364,43 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
          *
          * @return The created IndexedTxModel.
          */
-        std::shared_ptr<IndexedTxModel> build() const;
+        std::shared_ptr<IndexedTxModel> build() const {
+            return RequireMakeShared<IndexedTxModel>::template createShared(std::move(buildImpl(handle_)), listener_);
+        }
     };
 
   private:
-    JavaObjectHandle<IndexedTxModel> handle_;
+    JavaObjectHandle<IndexedTxModelTag> handle_;
     std::shared_ptr<TxModelListenerCommon> listener_;
 
-    void setSourcesImpl(void *graalEventSourceList) const;
-
   public:
-    IndexedTxModel(LockExternalConstructionTag tag, JavaObjectHandle<IndexedTxModel> &&handle);
+    IndexedTxModel(typename IndexedTxModel::LockExternalConstructionTag,
+                   JavaObjectHandle<IndexedTxModelTag> &&handle)
+        : handle_(std::move(handle)) {
+    }
 
-    IndexedTxModel(LockExternalConstructionTag tag, JavaObjectHandle<IndexedTxModel> &&handle,
-                   std::shared_ptr<TxModelListenerCommon> listener);
+    IndexedTxModel(typename IndexedTxModel::LockExternalConstructionTag,
+                   JavaObjectHandle<IndexedTxModelTag> &&handle, std::shared_ptr<TxModelListenerCommon> listener)
+        : handle_(std::move(handle)), listener_(std::move(listener)) {
+    }
 
     /// Calls @ref IndexedTxModel::close "close" method and destructs this model.
-    ~IndexedTxModel() noexcept override;
+    ~IndexedTxModel() noexcept override {
+        close();
+    }
 
     /**
      * Factory method to create a new builder for this model.
      *
      * ```cpp
-     * auto builder = model->newBuilder(Order::TYPE);
+     * auto builder = model->newBuilder();
      * ```
      *
-     * @param eventType The class type of time series event.
      * @return A new @ref IndexedTxModel::Builder "builder instance.
      */
-    static std::shared_ptr<Builder> newBuilder(const EventTypeEnum &eventType);
+    static std::shared_ptr<Builder> newBuilder() {
+        return RequireMakeShared<Builder>::template createShared(std::move(newBuilderImpl(E::TYPE)));
+    }
 
     /**
      * Returns whether batch processing is enabled.
@@ -341,7 +408,9 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
      *
      * @return `true` if batch processing is enabled; `false` otherwise.
      */
-    bool isBatchProcessing() const;
+    bool isBatchProcessing() const {
+        return isBatchProcessingImpl(handle_);
+    }
 
     /**
      * Returns whether snapshot processing is enabled.
@@ -349,7 +418,9 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
      *
      * @return `true` if snapshot processing is enabled; `false` otherwise.
      */
-    bool isSnapshotProcessing() const;
+    bool isSnapshotProcessing() const {
+        return isSnapshotProcessingImpl(handle_);
+    }
 
     /**
      * Attaches this model to the specified feed.
@@ -358,21 +429,27 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
      *
      * @param feed The feed to attach to.
      */
-    void attach(std::shared_ptr<DXFeed> feed) const;
+    void attach(const std::shared_ptr<DXFeed> &feed) const {
+        attachImpl(handle_, feed);
+    }
 
     /**
      * Detaches this model from the specified feed.
      *
      * @param feed The feed to detach from.
      */
-    void detach(std::shared_ptr<DXFeed> feed) const;
+    void detach(const std::shared_ptr<DXFeed> &feed) const {
+        detachImpl(handle_, feed);
+    }
 
     /**
      * Closes this model and makes it <i>permanently detached</i>.
      *
      * <p>This method clears installed listener.
      */
-    void close() const;
+    void close() const {
+        closeImpl(handle_);
+    }
 
     /**
      * Returns the current set of sources.
@@ -381,7 +458,9 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
      *
      * @return The set of current sources.
      */
-    std::unordered_set<EventSourceWrapper> getSources() const;
+    std::unordered_set<EventSourceWrapper> getSources() const {
+        return getSourcesImpl(handle_);
+    }
 
     /**
      * Sets the sources from which to subscribe for indexed events.
@@ -401,7 +480,7 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
     template <typename EventSourceIt> void setSources(EventSourceIt begin, EventSourceIt end) const {
         auto list = EventSourceWrapper::ListUtils::toGraalListUnique(begin, end);
 
-        setSourcesImpl(list.get());
+        setSourcesImpl(handle_, list.get());
     }
 
     /**
@@ -436,23 +515,31 @@ struct DXFCPP_EXPORT IndexedTxModel final : RequireMakeShared<IndexedTxModel> {
      *
      * @param sources The specified sources.
      */
-    void setSources(std::initializer_list<EventSourceWrapper> sources) const;
+    void setSources(std::initializer_list<EventSourceWrapper> sources) const {
+        setSources(sources.begin(), sources.end());
+    }
 
-    std::string toString() const override;
+    std::string toString() const override {
+        return JavaObject::toString(handle_.get());
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const IndexedTxModel &m) {
         return os << m.toString();
     }
 
-    std::size_t hashCode() const;
+    std::size_t hashCode() const {
+        return JavaObject::hashCode(handle_.get());
+    }
 
-    bool operator==(const IndexedTxModel &other) const noexcept;
+    bool operator==(const IndexedTxModel &other) const {
+        return JavaObject::equals(handle_.get(), other.handle_.get());
+    }
 };
 
 DXFCPP_END_NAMESPACE
 
-template <> struct std::hash<dxfcpp::IndexedTxModel> {
-    std::size_t operator()(const dxfcpp::IndexedTxModel &m) const noexcept {
+template <dxfcpp::Derived<dxfcpp::IndexedEvent> E> struct std::hash<dxfcpp::IndexedTxModel<E>> {
+    std::size_t operator()(const dxfcpp::IndexedTxModel<E> &m) const noexcept {
         return m.hashCode();
     }
 };
