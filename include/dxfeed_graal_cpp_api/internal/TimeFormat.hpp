@@ -11,15 +11,18 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <string>
+#include <functional>
 
 DXFCPP_BEGIN_NAMESPACE
+
+struct StringLikeWrapper;
 
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.
  *
  * Some methods that are not marked `noexcept` may throw exceptions:
  *
- * @throws std::invalid_argument if handle is invalid.
+ * @throws InvalidArgumentException if handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend
  * @throws GraalException if something happened with the GraalVM
  */
@@ -38,17 +41,25 @@ struct DXFCPP_EXPORT TimeFormat {
     const static TimeFormat GMT;
 
   private:
-    JavaObjectHandle<TimeFormat> handle_;
+    mutable JavaObjectHandle<TimeFormat> handle_;
+    mutable std::mutex mtx_{};
+    mutable bool initialized_{};
+    std::function<JavaObjectHandle<TimeFormat>()> initializer_;
+
+    //lazy c-tor
+    explicit TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer);
+
+    void init() const;
 
   public:
-    explicit TimeFormat(void* handle = nullptr);
-    explicit TimeFormat(JavaObjectHandle<TimeFormat>&& handle);
     virtual ~TimeFormat() noexcept = default;
 
     TimeFormat(const TimeFormat &) = delete;
     TimeFormat(TimeFormat &&) noexcept = delete;
     TimeFormat &operator=(const TimeFormat &) = delete;
     TimeFormat &operator=(const TimeFormat &&) noexcept = delete;
+
+    const JavaObjectHandle<TimeFormat> &getHandle() const;
 
     /**
      * Reads Date from String and returns timestamp.
@@ -111,7 +122,7 @@ struct DXFCPP_EXPORT TimeFormat {
      * @param value String value to parse.
      * @return Date's timestamp parsed from <tt>value</tt> or `0` if <tt>value</tt> has wrong format.
      */
-    std::int64_t parse(const std::string& value) const;
+    std::int64_t parse(const StringLikeWrapper &value) const;
 
     /**
      * Converts timestamp into string according to the format

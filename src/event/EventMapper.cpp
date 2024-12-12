@@ -16,6 +16,58 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
+    if (!graalNativeEvent) {
+        throw InvalidArgumentException("EventMapper::fromGraal: The `graalNativeEvent` is nullptr");
+    }
+
+    // TODO: implement other types [EN-8235]
+    switch (auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNativeEvent); e->clazz) {
+    case DXFG_EVENT_QUOTE:
+        return Quote::fromGraal(e);
+    case DXFG_EVENT_PROFILE:
+        return Profile::fromGraal(e);
+    case DXFG_EVENT_SUMMARY:
+        return Summary::fromGraal(e);
+    case DXFG_EVENT_GREEKS:
+        return Greeks::fromGraal(e);
+    case DXFG_EVENT_CANDLE:
+        return Candle::fromGraal(e);
+    case DXFG_EVENT_DAILY_CANDLE:
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+    case DXFG_EVENT_UNDERLYING:
+        return Underlying::fromGraal(e);
+    case DXFG_EVENT_THEO_PRICE:
+        return TheoPrice::fromGraal(e);
+    case DXFG_EVENT_TRADE:
+        return Trade::fromGraal(e);
+    case DXFG_EVENT_TRADE_ETH:
+        return TradeETH::fromGraal(e);
+    case DXFG_EVENT_CONFIGURATION:
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+    case DXFG_EVENT_MESSAGE:
+        return Message::fromGraal(e);
+    case DXFG_EVENT_TIME_AND_SALE:
+        return TimeAndSale::fromGraal(e);
+    case DXFG_EVENT_ORDER_BASE:
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+    case DXFG_EVENT_ORDER:
+        return Order::fromGraal(e);
+    case DXFG_EVENT_ANALYTIC_ORDER:
+        return AnalyticOrder::fromGraal(e);
+    case DXFG_EVENT_OTC_MARKETS_ORDER:
+        return OtcMarketsOrder::fromGraal(e);
+    case DXFG_EVENT_SPREAD_ORDER:
+        return SpreadOrder::fromGraal(e);
+    case DXFG_EVENT_SERIES:
+        return Series::fromGraal(e);
+    case DXFG_EVENT_OPTION_SALE:
+        return OptionSale::fromGraal(e);
+    default:
+        throw InvalidArgumentException("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
+    }
+}
+
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) {
     auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
 
@@ -27,94 +79,101 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
     result.reserve(static_cast<std::size_t>(list->size));
 
     for (std::size_t i = 0; i < static_cast<std::size_t>(list->size); i++) {
-        auto *e = list->elements[i];
-
-        // TODO: implement other types [EN-8235]
-        // TODO: type traits
-        switch (e->clazz) {
-        case DXFG_EVENT_QUOTE:
-            result.emplace_back(Quote::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_PROFILE:
-            result.emplace_back(Profile::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_SUMMARY:
-            result.emplace_back(Summary::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_GREEKS:
-            result.emplace_back(Greeks::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_CANDLE:
-            result.emplace_back(Candle::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_DAILY_CANDLE:
-            break;
-        case DXFG_EVENT_UNDERLYING:
-            result.emplace_back(Underlying::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_THEO_PRICE:
-            result.emplace_back(TheoPrice::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_TRADE:
-            result.emplace_back(Trade::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_TRADE_ETH:
-            result.emplace_back(TradeETH::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_CONFIGURATION:
-            break;
-        case DXFG_EVENT_MESSAGE:
-            result.emplace_back(Message::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_TIME_AND_SALE:
-            result.emplace_back(TimeAndSale::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_ORDER_BASE:
-            break;
-        case DXFG_EVENT_ORDER:
-            result.emplace_back(Order::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_ANALYTIC_ORDER:
-            result.emplace_back(AnalyticOrder::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_OTC_MARKETS_ORDER:
-            result.emplace_back(OtcMarketsOrder::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_SPREAD_ORDER:
-            result.emplace_back(SpreadOrder::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_SERIES:
-            result.emplace_back(Series::fromGraal(e));
-
-            break;
-        case DXFG_EVENT_OPTION_SALE:
-            result.emplace_back(OptionSale::fromGraal(e));
-
-            break;
-
-        default:
-            throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
-        }
+        result.emplace_back(fromGraal(list->elements[i]));
     }
 
     result.shrink_to_fit();
 
     return result;
+}
+
+void EventMapper::freeGraal(void *graalNativeEvent) {
+    if (!graalNativeEvent) {
+        return;
+    }
+
+    // TODO: implement other types [EN-8235]
+    switch (auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNativeEvent); e->clazz) {
+    case DXFG_EVENT_QUOTE:
+        Quote::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_PROFILE:
+        Profile::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_SUMMARY:
+        Summary::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_GREEKS:
+        Greeks::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_CANDLE:
+        Candle::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_DAILY_CANDLE:
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+
+    case DXFG_EVENT_UNDERLYING:
+        Underlying::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_THEO_PRICE:
+        TheoPrice::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_TRADE:
+        Trade::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_TRADE_ETH:
+        TradeETH::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_CONFIGURATION:
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+
+    case DXFG_EVENT_MESSAGE:
+        Message::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_TIME_AND_SALE:
+        TimeAndSale::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_ORDER_BASE:
+        throw InvalidArgumentException("Not emplemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+
+    case DXFG_EVENT_ORDER:
+        Order::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_ANALYTIC_ORDER:
+        AnalyticOrder::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_OTC_MARKETS_ORDER:
+        OtcMarketsOrder::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_SPREAD_ORDER:
+        SpreadOrder::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_SERIES:
+        Series::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_OPTION_SALE:
+        OptionSale::freeGraal(e);
+
+        break;
+    default:
+        throw InvalidArgumentException("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
+    }
 }
 
 void EventMapper::freeGraalList(void *graalList) {
@@ -133,90 +192,7 @@ void EventMapper::freeGraalList(void *graalList) {
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
-            if (list->elements[elementIndex]) {
-                auto *e = list->elements[elementIndex];
-
-                // TODO: implement other types [EN-8235]
-                // TODO: type traits
-                switch (e->clazz) {
-                case DXFG_EVENT_QUOTE:
-                    Quote::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_PROFILE:
-                    Profile::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_SUMMARY:
-                    Summary::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_GREEKS:
-                    Greeks::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_CANDLE:
-                    Candle::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_DAILY_CANDLE:
-                    break;
-                case DXFG_EVENT_UNDERLYING:
-                    Underlying::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_THEO_PRICE:
-                    TheoPrice::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_TRADE:
-                    Trade::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_TRADE_ETH:
-                    TradeETH::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_CONFIGURATION:
-                    break;
-                case DXFG_EVENT_MESSAGE:
-                    Message::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_TIME_AND_SALE:
-                    TimeAndSale::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_ORDER_BASE:
-                    break;
-                case DXFG_EVENT_ORDER:
-                    Order::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_ANALYTIC_ORDER:
-                    AnalyticOrder::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_OTC_MARKETS_ORDER:
-                    OtcMarketsOrder::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_SPREAD_ORDER:
-                    SpreadOrder::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_SERIES:
-                    Series::freeGraal(static_cast<void *>(e));
-
-                    break;
-                case DXFG_EVENT_OPTION_SALE:
-                    OptionSale::freeGraal(static_cast<void *>(e));
-
-                    break;
-                default:
-                    throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
-                }
-            }
+            freeGraal(list->elements[elementIndex]);
         }
 
         delete[] list->elements;
@@ -231,7 +207,9 @@ std::ptrdiff_t EventMapper::calculateGraalListSize(std::ptrdiff_t initSize) noex
 
     if (initSize < 0) {
         return 0;
-    } else if (initSize > std::numeric_limits<SizeType>::max()) {
+    }
+
+    if (initSize > std::numeric_limits<SizeType>::max()) {
         return std::numeric_limits<SizeType>::max();
     }
 
@@ -282,91 +260,7 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
     auto *list = static_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
-        if (list->elements[i]) {
-            auto *e = list->elements[i];
-
-            // TODO: implement other types [EN-8235]
-            // TODO: type traits
-            switch (e->clazz) {
-            case DXFG_EVENT_QUOTE:
-                Quote::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_PROFILE:
-                Profile::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_SUMMARY:
-                Summary::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_GREEKS:
-                Greeks::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_CANDLE:
-                Candle::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_DAILY_CANDLE:
-                break;
-            case DXFG_EVENT_UNDERLYING:
-                Underlying::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_THEO_PRICE:
-                TheoPrice::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_TRADE:
-                Trade::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_TRADE_ETH:
-                TradeETH::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_CONFIGURATION:
-                break;
-            case DXFG_EVENT_MESSAGE:
-                Message::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_TIME_AND_SALE:
-                TimeAndSale::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_ORDER_BASE:
-                break;
-            case DXFG_EVENT_ORDER:
-                Order::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_ANALYTIC_ORDER:
-                AnalyticOrder::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_OTC_MARKETS_ORDER:
-                OtcMarketsOrder::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_SPREAD_ORDER:
-                SpreadOrder::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_SERIES:
-                Series::freeGraal(static_cast<void *>(e));
-
-                break;
-            case DXFG_EVENT_OPTION_SALE:
-                OptionSale::freeGraal(static_cast<void *>(e));
-
-                break;
-
-            default:
-                throw std::invalid_argument("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
-            }
-        }
+        freeGraal(list->elements[i]);
     }
 
     delete[] list->elements;

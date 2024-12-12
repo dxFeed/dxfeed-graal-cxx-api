@@ -16,7 +16,9 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -153,13 +155,6 @@ std::int16_t utf8to16(char in) noexcept {
 
 std::string formatTimeStamp(std::int64_t timestamp) {
     return TimeFormat::DEFAULT.format(timestamp);
-//    if (timestamp == 0) {
-//        return "0";
-//    }
-//
-//    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-//
-//    return fmt::format("{:%Y%m%d-%H%M%S}", tm);
 }
 
 std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
@@ -174,28 +169,10 @@ std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
 
 std::string formatTimeStampWithMillis(std::int64_t timestamp) {
     return TimeFormat::DEFAULT_WITH_MILLIS.format(timestamp);
-//
-//    if (timestamp == 0) {
-//        return "0";
-//    }
-//
-//    auto ms = timestamp % 1000;
-//    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-//
-//    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}", tm, ms);
 }
 
 std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
     return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(timestamp);
-
-//    if (timestamp == 0) {
-//        return "0";
-//    }
-//
-//    auto ms = timestamp % 1000;
-//    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-//
-//    return fmt::format("{:%Y%m%d-%H%M%S}.{:0>3}{:%z}", tm, ms, tm);
 }
 
 char *createCString(const std::string &s) {

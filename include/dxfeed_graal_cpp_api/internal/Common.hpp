@@ -18,11 +18,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <charconv>
 #include <chrono>
 #include <cmath>
-#include <iostream>
-#include <mutex>
-#include <sstream>
 #include <string>
-#include <string_view>
 #include <type_traits>
 #include <utility>
 #include <variant>
@@ -40,6 +36,9 @@ concept EnumConcept = std::is_enum_v<T>;
 template <class From, class To>
 concept ConvertibleTo = std::is_convertible_v<From, To> && requires { static_cast<To>(std::declval<From>()); };
 
+template <class T, class U>
+concept Derived = std::is_base_of_v<U, T>;
+
 namespace detail {
 template <typename T>
 struct RemoveAllPointers
@@ -56,12 +55,12 @@ struct IpfPropertyChangeListener {};
 
 struct InstrumentProfileUpdateListener {};
 
-template <typename... T> constexpr void ignore_unused(const T &...) {
+template <typename... T> constexpr void ignoreUnused(const T &...) {
 }
 
 constexpr inline auto is_constant_evaluated(bool default_value = false) noexcept -> bool {
 #ifdef __cpp_lib_is_constant_evaluated
-    ignore_unused(default_value);
+    ignoreUnused(default_value);
     return std::is_constant_evaluated();
 #else
     return default_value;
@@ -90,6 +89,122 @@ enum class Tristate : std::uint8_t {
     FALSE = 0,
     TRUE = 1,
     NONE = 2,
+};
+
+template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
+    static std::ptrdiff_t calculateSize(std::ptrdiff_t initSize) noexcept {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+
+        if (initSize < 0) {
+            return 0;
+        }
+
+        if (initSize > std::numeric_limits<SizeType>::max()) {
+            return std::numeric_limits<SizeType>::max();
+        }
+
+        return initSize;
+    }
+
+    static void *newList(std::ptrdiff_t size) {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+        using ElementType = std::remove_pointer_t<decltype(ListType::elements)>;
+
+        auto *list = new ListType{static_cast<SizeType>(size), nullptr};
+
+        if (size == 0) {
+            return static_cast<void *>(list);
+        }
+
+        list->elements = new ElementType[size]{nullptr};
+
+        return list;
+    }
+
+    static bool setElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+        using ElementType = std::remove_pointer_t<decltype(ListType::elements)>;
+
+        if (graalList == nullptr || elementIdx < 0 || elementIdx >= std::numeric_limits<SizeType>::max() ||
+            element == nullptr) {
+            return false;
+        }
+
+        static_cast<ListType *>(graalList)->elements[elementIdx] = static_cast<ElementType>(element);
+
+        return true;
+    }
+
+    static bool freeElements(void *graalList, std::ptrdiff_t count) {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+
+        if (graalList == nullptr || count < 0 || count >= std::numeric_limits<SizeType>::max()) {
+            return false;
+        }
+
+        auto *list = static_cast<ListType *>(graalList);
+
+        for (SizeType i = 0; i < count; i++) {
+            if (list->elements[i]) {
+                ElementWrapper::freeGraal(static_cast<void *>(list->elements[i]));
+            }
+        }
+
+        delete[] list->elements;
+        delete list;
+
+        return true;
+    }
+
+    static void freeList(void *graalList) {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+
+        if (graalList == nullptr) {
+            return;
+        }
+
+        auto list = static_cast<ListType *>(graalList);
+
+        if (list->size > 0 && list->elements != nullptr) {
+            for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
+                if (list->elements[elementIndex]) {
+                    ElementWrapper::freeGraal(static_cast<void *>(list->elements[elementIndex]));
+                }
+            }
+
+            delete[] list->elements;
+        }
+
+        delete list;
+    }
+
+    static std::vector<ElementWrapper> fromList(void *graalList) {
+        using ListType = GraalList;
+        using SizeType = decltype(ListType::size);
+
+        if (!graalList) {
+            return {};
+        }
+
+        std::vector<ElementWrapper> result{};
+
+        auto list = static_cast<ListType *>(graalList);
+
+        if (list->size > 0 && list->elements != nullptr) {
+            for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
+                if (list->elements[elementIndex]) {
+                    result.emplace_back(ElementWrapper::fromGraal(static_cast<void *>(list->elements[elementIndex])));
+                }
+            }
+        }
+
+        return result;
+    }
 };
 
 /**
@@ -184,7 +299,16 @@ static constexpr std::int32_t getNanoPartFromNanos(std::int64_t timeNanos) {
 
 namespace time_util {
 /// Number of milliseconds in a second.
-static const std::int64_t SECOND = 1000LL;
+static constexpr std::int64_t SECOND = 1000LL;
+
+/// Number of milliseconds in a minute.
+static constexpr std::int64_t MINUTE = 60LL * SECOND;
+
+/// Number of milliseconds in an hour.
+static constexpr std::int64_t HOUR = 60LL * MINUTE;
+
+/// Number of milliseconds in an day.
+static constexpr std::int64_t DAY = 24LL * HOUR;
 
 /**
  * Returns correct number of milliseconds with proper handling negative values.
@@ -193,7 +317,7 @@ static const std::int64_t SECOND = 1000LL;
  * @param timeMillis The timestamp in milliseconds
  * @return a correct number of milliseconds
  */
-static std::int32_t getMillisFromTime(std::int64_t timeMillis) {
+static constexpr std::int32_t getMillisFromTime(std::int64_t timeMillis) {
     return static_cast<std::int32_t>(math::floorMod(timeMillis, SECOND));
 }
 
@@ -245,7 +369,9 @@ template <Integral T> constexpr static T abs(T a) {
 
 namespace day_util {
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
 static std::int32_t DAY_OF_YEAR[] = {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
 /**
  * Returns yyyymmdd integer in Gregorian calendar for a specified day identifier.
@@ -280,20 +406,7 @@ constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
     return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
 }
 
-static std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {
-    if (month < 1 || month > 12) {
-        throw std::invalid_argument("invalid month " + std::to_string(month));
-    }
-
-    std::int32_t dayOfYear = DAY_OF_YEAR[month] + day - 1;
-
-    if (month > 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-        dayOfYear++;
-    }
-
-    return year * 365 + math_util::div(year - 1, 4) - math_util::div(year - 1, 100) + math_util::div(year - 1, 400) +
-           dayOfYear - 719527;
-}
+std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day);
 
 } // namespace day_util
 
@@ -670,18 +783,20 @@ template <typename T, typename U> T fitToType(const U &size) {
 struct StringLikeWrapper {
     using DataType = std::variant<std::string, std::string_view>;
 
-    DataType data{};
+  private:
+    DataType data_{};
 
-    StringLikeWrapper(std::string_view sv) : data{sv} {
+  public:
+    StringLikeWrapper(std::string_view sv) : data_{sv} {
     }
 
-    StringLikeWrapper(const char *chars) : data{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
+    StringLikeWrapper(const char *chars) : data_{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
     }
 
-    StringLikeWrapper(const std::string &s) : data{s} {
+    StringLikeWrapper(const std::string &s) : data_{s} {
     }
 
-    StringLikeWrapper(std::string &&s) : data{std::move(s)} {
+    StringLikeWrapper(std::string &&s) : data_{std::move(s)} {
     }
 
     template <auto N>
@@ -689,18 +804,68 @@ struct StringLikeWrapper {
     }
 
     operator std::string() const {
-        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
             return {sv->data(), sv->size()};
         } else {
-            return std::get<std::string>(data);
+            return std::get<std::string>(data_);
         }
     }
 
     operator std::string_view() const & {
-        if (auto sv = std::get_if<std::string_view>(&data); sv) {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
             return *sv;
         } else {
-            return std::get<std::string>(data);
+            return std::get<std::string>(data_);
+        }
+    }
+
+    const char *data() const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            return sv->data();
+        } else {
+            return std::get<std::string>(data_).c_str();
+        }
+    }
+
+    const char *c_str() const {
+        return data();
+    }
+
+    bool empty() const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            return sv->empty();
+        } else {
+            return std::get<std::string>(data_).empty();
+        }
+    }
+
+    std::size_t size() const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            return sv->size();
+        } else {
+            return std::get<std::string>(data_).size();
+        }
+    }
+
+    std::size_t length() const {
+        return size();
+    }
+
+    bool ends_with(const StringLikeWrapper &sw) const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            return sv->ends_with(sw);
+        } else {
+            return std::get<std::string>(data_).ends_with(sw);
+        }
+    }
+
+    std::string substr(std::string::size_type pos = 0, std::string::size_type count = std::string::npos) const {
+        if (auto sv = std::get_if<std::string_view>(&data_); sv) {
+            auto sv2 = sv->substr(pos, count);
+
+            return {sv2.data(), sv2.size()};
+        } else {
+            return std::get<std::string>(data_).substr(pos, count);
         }
     }
 
@@ -731,6 +896,7 @@ struct StringLikeWrapper {
     }
 };
 
+/// Universal functional object that allows searching std::unordered_map for string-like keys.
 struct StringHash {
     using HashType = std::hash<std::string_view>;
     using is_transparent = void;
@@ -739,8 +905,8 @@ struct StringHash {
         return HashType{}(str);
     }
 
-    std::size_t operator()(std::string_view str) const {
-        return HashType{}(str);
+    std::size_t operator()(std::string_view sw) const {
+        return HashType{}(sw);
     }
 
     std::size_t operator()(std::string const &str) const {
@@ -753,16 +919,48 @@ struct StringHash {
 };
 
 namespace util {
-inline void throwInvalidChar(char c, const std::string &name) {
-    throw std::invalid_argument("Invalid " + name + ": " + encodeChar(c));
-}
+
+void throwInvalidChar(char c, const std::string &name);
 
 inline void checkChar(char c, std::uint32_t mask, const std::string &name) {
     if ((andOp(c, ~mask)) != 0) {
         throwInvalidChar(c, name);
     }
 }
+
 } // namespace util
+
+namespace math {
+
+template <Integral Type, typename ResultType = int> ResultType compare(Type v1, Type v2) {
+    if (v1 < v2) {
+        return -1;
+    }
+
+    if (v2 < v1) {
+        return 1;
+    }
+
+    return 0;
+}
+
+inline int compare(double d1, double d2) {
+    if (std::isnan(d1) || std::isnan(d2)) {
+        return std::isnan(d1) ? (std::isnan(d2) ? 0 : -1) : 1;
+    }
+
+    if (d1 < d2) {
+        return -1;
+    }
+
+    if (d1 > d2) {
+        return 1;
+    }
+
+    return 0;
+}
+
+}
 
 DXFCPP_END_NAMESPACE
 

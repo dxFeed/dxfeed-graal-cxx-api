@@ -72,8 +72,17 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      */
     virtual void *toGraal() const = 0;
 
+    /**
+     * Replaces the contents of the event.
+     *
+     * @param event the event to use as source.
+     */
+    virtual void assign(std::shared_ptr<EventType> event) {
+        ignoreUnused(event);
+    }
+
     ///
-    std::string toString() const noexcept override {
+    std::string toString() const override {
         return "EventType{}";
     }
 
@@ -111,14 +120,14 @@ template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public Eve
      *
      * @return The event symbol.
      */
-    virtual const Symbol &getEventSymbol() const& noexcept = 0;
+    virtual const Symbol &getEventSymbol() const & noexcept = 0;
 
     /**
      * Returns event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
      *
      * @return The event symbol or std::nullopt.
      */
-    virtual const std::optional<Symbol> &getEventSymbolOpt() const& noexcept = 0;
+    virtual const std::optional<Symbol> &getEventSymbolOpt() const & noexcept = 0;
 
     /**
      * Changes event symbol that identifies this event type in @ref DXFeedSubscription "subscription".

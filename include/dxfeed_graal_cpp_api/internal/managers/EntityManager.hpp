@@ -18,17 +18,19 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-template <typename EntityType_> struct EntityManager : private NonCopyable<EntityManager<EntityType_>> {
+template <typename EntityType_, typename EntityIdType_ = EntityType_>
+struct EntityManager : private NonCopyable<EntityManager<EntityType_, EntityIdType_>> {
     using EntityType = EntityType_;
+    using EntityIdType = EntityIdType_;
 
 #if DXFCPP_DEBUG == 1
-    static auto getDebugName() {
-        return std::string("EntityManager<") + typeid(EntityType).name() + ">";
+    static std::string getDebugName() {
+        return typeid(EntityManager<EntityType_, EntityIdType_>).name();
     }
 #endif
 
-    std::unordered_map<Id<EntityType>, std::shared_ptr<EntityType>> entitiesById_;
-    std::unordered_map<std::shared_ptr<EntityType>, Id<EntityType>> idsByEntities_;
+    std::unordered_map<Id<EntityIdType>, std::shared_ptr<EntityType>> entitiesById_;
+    std::unordered_map<std::shared_ptr<EntityType>, Id<EntityIdType>> idsByEntities_;
     std::atomic<std::size_t> lastId_{};
     std::mutex mutex_;
 
@@ -39,7 +41,7 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
     }
 
   public:
-    Id<EntityType> registerEntity(std::shared_ptr<EntityType> entity) {
+    Id<EntityIdType> registerEntity(std::shared_ptr<EntityType> entity) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "::registerEntity(" + entity->toString() + ")");
         }
@@ -50,7 +52,7 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
             return it->second;
         }
 
-        auto id = Id<EntityType>::getNext();
+        auto id = Id<EntityIdType>::getNext();
 
         entitiesById_[id] = entity;
         idsByEntities_.emplace(std::make_pair(entity, id));
@@ -80,7 +82,7 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
         return false;
     }
 
-    bool unregisterEntity(Id<EntityType> id) {
+    bool unregisterEntity(Id<EntityIdType> id) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "::unregisterEntity(id = " + std::to_string(id.getValue()) + ")");
         }
@@ -98,14 +100,14 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
     }
 
     template <typename H> bool unregisterEntity(H *handle) {
-        return unregisterEntity(Id<EntityType>::template from<H>(handle));
+        return unregisterEntity(Id<EntityIdType>::template from<H>(handle));
     }
 
     template <typename H> bool unregisterEntity(const H *handle) {
-        return unregisterEntity(Id<EntityType>::template from<H>(handle));
+        return unregisterEntity(Id<EntityIdType>::template from<H>(handle));
     }
 
-    std::shared_ptr<EntityType> getEntity(Id<EntityType> id) {
+    std::shared_ptr<EntityType> getEntity(Id<EntityIdType> id) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "::getEntity(id = " + std::to_string(id.getValue()) + ")");
         }
@@ -120,28 +122,28 @@ template <typename EntityType_> struct EntityManager : private NonCopyable<Entit
     }
 
     template <typename H> std::shared_ptr<EntityType> getEntity(H *handle) {
-        return getEntity(Id<EntityType>::template from<H>(handle));
+        return getEntity(Id<EntityIdType>::template from<H>(handle));
     }
 
     template <typename H> std::shared_ptr<EntityType> getEntity(const H *handle) {
-        return getEntity(Id<EntityType>::template from<H>(handle));
+        return getEntity(Id<EntityIdType>::template from<H>(handle));
     }
 
-    bool contains(Id<EntityType> id) {
+    bool contains(Id<EntityIdType> id) {
         std::lock_guard lockGuard{mutex_};
 
         return entitiesById_.contains(id);
     }
 
     template <typename H> bool contains(H *handle) {
-        return contains(Id<EntityType>::template from<H>(handle));
+        return contains(Id<EntityIdType>::template from<H>(handle));
     }
 
     template <typename H> bool contains(const H *handle) {
-        return contains(Id<EntityType>::template from<H>(handle));
+        return contains(Id<EntityIdType>::template from<H>(handle));
     }
 
-    std::optional<Id<EntityType>> getId(std::shared_ptr<EntityType> entity) {
+    std::optional<Id<EntityIdType>> getId(std::shared_ptr<EntityType> entity) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "::getId(" + entity->toString() + ")");
         }

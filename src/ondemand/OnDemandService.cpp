@@ -28,7 +28,7 @@ OnDemandService::~OnDemandService() noexcept {
     }
 }
 
-std::shared_ptr<OnDemandService> OnDemandService::getInstance() noexcept {
+std::shared_ptr<OnDemandService> OnDemandService::getInstance() {
     return getInstance(DXEndpoint::getInstance(DXEndpoint::Role::ON_DEMAND_FEED));
 }
 
@@ -39,16 +39,11 @@ std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DX
 
     std::shared_ptr<OnDemandService> onDemandService{new OnDemandService{}};
 
-    if (!endpoint->handle_) {
-        throw std::invalid_argument("The endpoint's handle is invalid");
-    }
-
-    auto id = ApiContext::getInstance()->getManager<OnDemandServiceManager>()->registerEntity(onDemandService);
-    ignore_unused(id);
+    auto id = ApiContext::getInstance()->getManager<EntityManager<OnDemandService>>()->registerEntity(onDemandService);
+    ignoreUnused(id);
 
     onDemandService->endpoint_ = endpoint;
-    onDemandService->handle_ =
-        JavaObjectHandle<OnDemandService>(isolated::ondemand::OnDemandService::getInstance(endpoint->handle_.get()));
+    onDemandService->handle_ = isolated::ondemand::IsolatedOnDemandService::getInstance(endpoint->handle_);
 
     return onDemandService;
 }
@@ -57,92 +52,48 @@ std::shared_ptr<DXEndpoint> OnDemandService::getEndpoint() const noexcept {
     return endpoint_;
 }
 
-bool OnDemandService::isReplaySupported() const noexcept {
-    if (!handle_) {
-        return false;
-    }
-
-    return isolated::ondemand::OnDemandService::isReplaySupported(handle_.get());
+bool OnDemandService::isReplaySupported() const {
+    return isolated::ondemand::IsolatedOnDemandService::isReplaySupported(handle_);
 }
 
-bool OnDemandService::isReplay() const noexcept {
-    if (!handle_) {
-        return false;
-    }
-
-    return isolated::ondemand::OnDemandService::isReplay(handle_.get());
+bool OnDemandService::isReplay() const {
+    return isolated::ondemand::IsolatedOnDemandService::isReplay(handle_);
 }
 
-bool OnDemandService::isClear() const noexcept {
-    if (!handle_) {
-        return false;
-    }
-
-    return isolated::ondemand::OnDemandService::isClear(handle_.get());
+bool OnDemandService::isClear() const {
+    return isolated::ondemand::IsolatedOnDemandService::isClear(handle_);
 }
 
-std::int64_t OnDemandService::getTime() const noexcept {
-    if (!handle_) {
-        return {};
-    }
-
-    return isolated::ondemand::OnDemandService::getTime(handle_.get());
+std::int64_t OnDemandService::getTime() const {
+    return isolated::ondemand::IsolatedOnDemandService::getTime(handle_);
 }
 
-double OnDemandService::getSpeed() const noexcept {
-    if (!handle_) {
-        return {};
-    }
-
-    return isolated::ondemand::OnDemandService::getSpeed(handle_.get());
+double OnDemandService::getSpeed() const {
+    return isolated::ondemand::IsolatedOnDemandService::getSpeed(handle_);
 }
 
-void OnDemandService::replay(std::int64_t time) const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ondemand::OnDemandService::replay(handle_.get(), time);
+void OnDemandService::replay(std::int64_t time) const {
+    isolated::ondemand::IsolatedOnDemandService::replay(handle_, time);
 }
 
-void OnDemandService::replay(std::int64_t time, double speed) const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ondemand::OnDemandService::replay(handle_.get(), time, speed);
+void OnDemandService::replay(std::int64_t time, double speed) const {
+    isolated::ondemand::IsolatedOnDemandService::replay(handle_, time, speed);
 }
 
-void OnDemandService::pause() const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ondemand::OnDemandService::pause(handle_.get());
+void OnDemandService::pause() const {
+    isolated::ondemand::IsolatedOnDemandService::pause(handle_);
 }
 
-void OnDemandService::stopAndResume() const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ondemand::OnDemandService::stopAndResume(handle_.get());
+void OnDemandService::stopAndResume() const {
+    isolated::ondemand::IsolatedOnDemandService::stopAndResume(handle_);
 }
 
-void OnDemandService::stopAndClear() const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ondemand::OnDemandService::stopAndClear(handle_.get());
+void OnDemandService::stopAndClear() const {
+    isolated::ondemand::IsolatedOnDemandService::stopAndClear(handle_);
 }
 
-void OnDemandService::setSpeed(double speed) const noexcept {
-    if (!handle_) {
-        return;
-    }
-
-    isolated::ondemand::OnDemandService::setSpeed(handle_.get(), speed);
+void OnDemandService::setSpeed(double speed) const {
+    isolated::ondemand::IsolatedOnDemandService::setSpeed(handle_, speed);
 }
 
 DXFCPP_END_NAMESPACE

@@ -72,16 +72,6 @@ between the old and new versions.
 Our support team on our [customer portal](https://jira.in.devexperts.com/servicedesk/customer/portal/1/create/122) is
 ready to answer any questions and help with the transition.
 
-#### Sample Mapping
-
-| # | Sample                                                                                            | Old Version                                                                                                     | New Version                                              |
-|:-:|:--------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------|
-| 1 | How to subscribe to `Order`, `SpreadOrder`, `Candle`, `TimeAndSale`, `Greeks`, `Series` snapshots | [SnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample)       | *Q2’2024*, please see [TBD](#future-development) section |
-| 2 | How to subscribe to depth of market                                                               | [PriceLevelBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample)         | *Q2’2024*, please see [TBD](#future-development) section |
-| 3 | How to subscribe to order snapshot with incremental updates                                       | [IncSnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample) | *Q2’2024*, please see [TBD](#future-development) section |
-| 4 | How to get and display the full order book                                                        | [FullOrderBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/FullOrderBookSample)           | *Q2’2024*, please see [TBD](#future-development) section |
-| 5 | How to access and visualize regional market data                                                  | [RegionalBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/RegionalBookSample)             | *Q2’2024*, please see [TBD](#future-development) section |
-
 ### Implementation Details
 
 We use [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) technology and specially
@@ -318,8 +308,7 @@ To familiarize with the dxLink protocol, please click [here](https://demo.dxfeed
 [Tools](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/)
 is a collection of utilities that allow you to subscribe to various market events for the specified symbols. The tools
 can
-be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases) (including self-contained
-versions):
+be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases):
 
 * [Connect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Connect/ConnectTool.hpp)
   connects to the specified address(es) and subscribes to the specified events with the specified symbol
@@ -335,26 +324,83 @@ versions):
 
 ## Samples
 
-- [x] [ConvertTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ConvertTapeFile/src/main.cpp)
-  demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering
-- [x] [DxFeedFileParser](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedFileParser/src/main.cpp)
-  is a simple demonstration of how events are read form a tape file
-- [x] [DxFeedSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedSample/src/main.cpp)
-  is a simple demonstration of how to create multiple event listeners and subscribe to `Quote` and `Trade` events
-- [x] [PrintQuoteEvents](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PrintQuoteEvents/src/main.cpp)
+### API
+
+- [x] [AuthSample](samples/cpp/AuthSample/src/main.cpp)
+  demonstrates how to connect to an endpoint that requires an authentication token,
+  subscribe to market data events, and handle periodic token updates
+- [x] [ConnectSample](samples/cpp/DxFeedConnect/src/main.cpp)
+  demonstrates how to connect to the endpoint and subscribe to various market events
+- [x] [PrintQuoteEventsSample](samples/cpp/PrintQuoteEvents/src/main.cpp)
   is a simple demonstration of how to subscribe to the `Quote` event, using a `DxFeed` instance singleton
   and `dxfeed.properties` file
-- [x] [WriteTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp)
-  is a simple demonstration of how to write events to a tape file
-- [x] [DxFeedIpfConnect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedIpfConnect/src/main.cpp)
+- [x] [QuoteAndTradeSample](samples/cpp/DxFeedSample/src/main.cpp)
+  demonstrates how to create multiple event listeners and subscribe to `Quote` and `Trade` events
+- [x] [ReconnectSample](samples/cpp/ReconnectSample/src/main.cpp)
+  demonstrates how to connect to an endpoint, subscribe to market data events, handle reconnections
+  and re-subscribing
+
+### Candle
+
+- [ ] [CandleSample](samples/cpp/CandleSample/src/main.cpp)
+  demonstrates how to subscribe to `Candle` events
+- [ ] [CandleDataSample](samples/cpp/CandleDataSample/src/main.cpp)
+  demonstrates how to parse response from CandleData service
+- [x] [FetchDailyCandlesSample](samples/cpp/FetchDailyCandles/src/main.cpp)
+  demonstrates how to fetch last N-days of candles for a specified symbol
+
+### Console
+
+- [ ] [LastEventConsoleSample](samples/cpp/LastEventConsoleSample/src/main.cpp)
+  demonstrates how to subscribe to various market events with the dxFeed API, cache them in memory, and
+  take snapshots of these events based on user input
+
+### File
+
+- [x] [ConvertTapeFileSample](samples/cpp/ConvertTapeFile/src/main.cpp)
+  demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering
+- [x] [FileParserSample](samples/cpp/DxFeedFileParser/src/main.cpp)
+  demonstrates how to read events from a tape file
+- [x] [WriteTapeFileSample](samples/cpp/WriteTapeFile/src/main.cpp)
+  demonstrates how to write events to a tape file
+
+### IPF
+
+- [x] [DxFeedIpfConnect](samples/cpp/DxFeedIpfConnect/src/main.cpp)
   is a simple demonstration of how to get Instrument Profiles
-- [x] [DxFeedLiveIpfSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp)
+- [x] [DxFeedLiveIpfSample](samples/cpp/DxFeedLiveIpfSample/src/main.cpp)
   is a simple demonstration of how to get live updates for Instrument Profiles
-- [x] [PublishProfiles](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/PublishProfiles/src/main.cpp) is a simple demonstration of how to publish market events
-- [x] [ScheduleSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp)
-  is a simple demonstration of how to get various scheduling information for instruments
-- [x] [OnDemandSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp)
+- [x] [PublishProfiles](main/samples/cpp/PublishProfiles/src/main.cpp) 
+  is a simple demonstration of how to publish market events
+- [ ] [OptionChainSample](samples/cpp/OptionChainSample/src/main.cpp)
+  demonstrates how to build option chains, and prints quotes for nearby option strikes
+
+### Model
+
+- [x] [IncOrderSnapshotSample](samples/cpp/IncOrderSnapshotSample/src/main.cpp)
+  demonstrates how to subscribe to the Order event and handle snapshots and updates
+- [x] [MultipleMarketDepthSample](samples/cpp/MultipleMarketDepthSample/src/main.cpp)
+  demonstrates how to use the `MarketDepthModel` to manage and display order books for multiple symbols
+
+### Schedule
+
+- [x] [ScheduleSample](samples/cpp/ScheduleSample/src/main.cpp)
+  demonstrates how to get various scheduling information for instruments
+
+### OnDemand
+
+- [x] [OnDemandSample](samples/cpp/OnDemandSample/src/main.cpp)
   a sample that demonstrates how to use the dxFeed on-demand history data replay service API
+
+### UI
+
+- [ ] [MarketDepthModelSample](samples/cpp/MarketDepthModelSample/src/main.cpp)
+  demonstrates how to draw a Market Depth.
+- [ ] [CandleChartSample](samples/cpp/CandleChartSample/src/main.cpp)
+  demonstrates how to draw a Candlestick Chart.
+- [ ] [PriceLevelBookSample](samples/cpp/PriceLevelBookSample/src/main.cpp)
+  demonstrates how to compile a price level book (market by price) that aggregates individual orders
+  (market by order)
 
 ## Current State
 
@@ -491,6 +537,14 @@ versions):
   a set of symbols and event types
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
+- [GetLastEvent](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getLastEvent-E-)
+  returns the last event for the specified event instance
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [GetTimeSeriesPromise](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeed.html#getTimeSeriesPromise-java.lang.Class-java.lang.Object-long-long-)
+  requests time series events for the specified event type, symbol, and time range
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
 
 ### IPF & Schedule
 
@@ -524,4 +578,4 @@ versions):
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
 
-<!-- 2024-04-15 18:30 -->
+<!-- 2024-11-21 20:25 -->

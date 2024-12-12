@@ -28,7 +28,7 @@ namespace isolated::api::IsolatedDXEndpoint {
  * Calls the Graal SDK function `dxfg_DXEndpoint_close` in isolation.
  *
  * @param endpoint The endpoint's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -38,7 +38,7 @@ void /* int32_t */ close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
  * Calls the Graal SDK function `dxfg_DXEndpoint_closeAndAwaitTermination` in isolation.
  *
  * @param endpoint The endpoint's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -47,12 +47,16 @@ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
 
 // dxfg_endpoint_role_t            dxfg_DXEndpoint_getRole(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
 
+// int32_t dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, dxfg_executor_t
+// *executor);
+void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaObjectHandle<dxfcpp::ExecutorTag> &ex);
+
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_user` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @param user The user's name.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -64,7 +68,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
  *
  * @param endpoint The endpoint's handle.
  * @param password The user's password.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -75,7 +79,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
  * Calls the Graal SDK function `dxfg_DXEndpoint_connect` in isolation.
  *
  * @param endpoint The endpoint's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -85,7 +89,7 @@ void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &
  * Calls the Graal SDK function `dxfg_DXEndpoint_reconnect` in isolation.
  *
  * @param endpoint The endpoint's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -95,7 +99,7 @@ void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint>
  * Calls the Graal SDK function `dxfg_DXEndpoint_disconnect` in isolation.
  *
  * @param endpoint The endpoint's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -105,7 +109,7 @@ void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint
  * Calls the Graal SDK function `dxfg_DXEndpoint_disconnectAndClear` in isolation.
  *
  * @param endpoint The endpoint's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -115,7 +119,7 @@ void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
  * Calls the Graal SDK function `dxfg_DXEndpoint_awaitProcessed` in isolation.
  *
  * @param endpoint The endpoint's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -125,7 +129,7 @@ void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndp
  * Calls the Graal SDK function `dxfg_DXEndpoint_awaitNotConnected` in isolation.
  *
  * @param endpoint The endpoint's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -136,7 +140,7 @@ void awaitNotConnected(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXE
  *
  * @param endpoint The endpoint's handle.
  * @return The endpoint's state.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -147,7 +151,7 @@ dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle
  *
  * @param endpoint The endpoint's handle.
  * @param listener The listener's handle.
- * @throws std::invalid_argument if the endpoint handle or listener handle is invalid.
+ * @throws InvalidArgumentException if the endpoint handle or listener handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -161,7 +165,7 @@ void addStateChangeListener(
  *
  * @param endpoint The endpoint's handle.
  * @param listener The listener's handle.
- * @throws std::invalid_argument if the endpoint handle or listener is invalid.
+ * @throws InvalidArgumentException if the endpoint handle or listener is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -175,7 +179,7 @@ void removeStateChangeListener(
  *
  * @param endpoint The endpoint's handle.
  * @return dxFeed Graal SDK DXFeed's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -186,7 +190,7 @@ void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle
  *
  * @param endpoint The endpoint's handle.
  * @return dxFeed Graal SDK DXPublisher's handle.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -201,7 +205,7 @@ getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> 
  *
  * @param endpoint The endpoint's handle.
  * @return A set of event types.
- * @throws std::invalid_argument if endpoint handle is invalid.
+ * @throws InvalidArgumentException if endpoint handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -223,7 +227,7 @@ void * /* dxfg_endpoint_builder_t* */ create();
  * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withRole` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @param role The endpoint's role.
- * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws InvalidArgumentException if DXEndpoint::Builder's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -239,7 +243,7 @@ withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoi
  * @param builder The DXEndpoint::Builder's handle.
  * @param key The endpoint's property key.
  * @param value The endpoint's property value.
- * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws InvalidArgumentException if DXEndpoint::Builder's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -251,7 +255,7 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
  * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withProperties` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @param filePath The file with properties.
- * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws InvalidArgumentException if DXEndpoint::Builder's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -263,7 +267,7 @@ withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DX
  * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_supportsProperty` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @param key The endpoint's property key to check.
- * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws InvalidArgumentException if DXEndpoint::Builder's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -276,7 +280,7 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::
  * @param builder The DXEndpoint::Builder's handle.
  * @return The DXEndpoint's handle.
  *
- * @throws std::invalid_argument if DXEndpoint::Builder's handle is invalid.
+ * @throws InvalidArgumentException if DXEndpoint::Builder's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -293,7 +297,7 @@ namespace StateChangeListener {
  * @param userData User data, which is placed each time as a callback parameter when called from listener.
  * @return The DXEndpointStateChangeListener's handle.
  *
- * @throws std::invalid_argument if userFunc is nullptr.
+ * @throws InvalidArgumentException if userFunc is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */

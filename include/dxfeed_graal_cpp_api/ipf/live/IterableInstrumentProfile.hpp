@@ -37,14 +37,16 @@ class DXFCPP_EXPORT IterableInstrumentProfile final {
      *
      * @return `true` if the iteration has more elements
      */
-    [[nodiscard]] bool hasNext() const noexcept;
+    bool hasNext() const noexcept;
 
     /**
      * Returns the next element in the iteration.
      *
-     * @return the next element in the iteration or std::shared_ptr<InstrumentProfile>{nullptr}
+     * @return the next element in the iteration
+     * @throw InvalidArgumentException
+     * @throw JavaException "NoSuchElementException"
      */
-    [[nodiscard]] std::shared_ptr<InstrumentProfile> next() const;
+    std::shared_ptr<InstrumentProfile> next() const;
 };
 
 DXFCPP_END_NAMESPACE

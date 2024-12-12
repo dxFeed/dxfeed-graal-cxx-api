@@ -47,6 +47,28 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
   public:
     /**
      * Creates time-series subscription symbol with a specified event symbol and subscription time.
+     *
+     * ```cpp
+     * auto subscription = DXFeed::getInstance()->createSubscription({Candle::TYPE, Quote::TYPE});
+     *
+     * subscription->addEventListener([](const auto &events) {
+     *     for (const auto &e : events) {
+     *         if (const auto &q = e->template sharedAs<Quote>()) {
+     *             std::cout << q << std::endl;
+     *         } else if (const auto &c = e->template sharedAs<Candle>()) {
+     *             std::cout << c << std::endl;
+     *         }
+     *     }
+     * });
+     *
+     * auto fromTime = dxfcpp::now();
+     *
+     * subscription->addSymbols(
+     *     {symbol,
+     *      TimeSeriesSubscriptionSymbol(
+     *          CandleSymbol::valueOf(symbol, CandlePeriod::valueOf(1, CandleType::MINUTE)).toString(), fromTime)});
+     * ```
+     *
      * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
      * @param fromTime the subscription time.
      */
@@ -84,6 +106,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
      */
     static void freeGraal(void *graalNative);
 
@@ -93,7 +116,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      */
     static TimeSeriesSubscriptionSymbol fromGraal(void *graalNative);
 
@@ -102,7 +125,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      *
      * @return string representation of this time-series subscription symbol.
      */
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 
     bool operator==(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) const noexcept;
 

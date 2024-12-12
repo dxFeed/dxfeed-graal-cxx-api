@@ -34,7 +34,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandleSession::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandleSession::toString()
  */
-struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     /**
      * All trading sessions are used to build candles.
      */
@@ -78,7 +78,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
      * Returns session filter that corresponds to this session attribute.
      * @return session filter that corresponds to this session attribute.
      */
-    const SessionFilter &getSessionFilter() const noexcept {
+    const SessionFilter &getSessionFilter() const& noexcept {
         return *sessionFilter_;
     }
 
@@ -113,14 +113,11 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
      *
      * @param s The string representation of candle session attribute.
      * @return The candle session attribute (reference).
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException if argument is empty or invalid
      */
     static std::reference_wrapper<const CandleSession> parse(const dxfcpp::StringLikeWrapper &s) {
-        auto sw = s.operator std::string_view();
-        auto n = sw.length();
-
-        if (n == 0) {
-            throw std::invalid_argument("Missing candle session");
+        if (s.empty()) {
+            throw InvalidArgumentException("Missing candle session");
         }
 
         auto found = BY_STRING.find(s);
@@ -132,12 +129,12 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
         for (const auto &sessionRef : VALUES) {
             const auto &sessionStr = sessionRef.get().toString();
 
-            if (sessionStr.length() >= n && iEquals(sessionStr.substr(0, n), s)) {
+            if (sessionStr.length() >= s.length() && iEquals(sessionStr.substr(0, s.length()), s)) {
                 return sessionRef;
             }
         }
 
-        throw std::invalid_argument("Unknown candle session: " + s);
+        throw InvalidArgumentException("Unknown candle session: " + s);
     }
 
     /**
@@ -169,7 +166,7 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
         try {
             auto other = parse(a.value());
 
-            if (other == DEFAULT) {
+            if (other.get() == DEFAULT) {
                 return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
             }
 
@@ -177,6 +174,8 @@ struct DXFCPP_EXPORT CandleSession : public CandleSymbolAttribute {
                 return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.get().toString());
             }
 
+            return symbol;
+        } catch (const InvalidArgumentException &) {
             return symbol;
         } catch (const std::invalid_argument &) {
             return symbol;

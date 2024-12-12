@@ -18,199 +18,330 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-void InstrumentProfile::fillData(void *graalNative) noexcept {
-    if (graalNative == nullptr) {
-        return;
-    }
-
-    auto graalInstrumentProfile = static_cast<dxfg_instrument_profile_t *>(graalNative);
-
-    data_ = {
-        .type = dxfcpp::toString(graalInstrumentProfile->type),
-        .symbol = dxfcpp::toString(graalInstrumentProfile->symbol),
-        .description = dxfcpp::toString(graalInstrumentProfile->description),
-        .localSymbol = dxfcpp::toString(graalInstrumentProfile->local_symbol),
-        .localDescription = dxfcpp::toString(graalInstrumentProfile->local_description),
-        .country = dxfcpp::toString(graalInstrumentProfile->country),
-        .opol = dxfcpp::toString(graalInstrumentProfile->opol),
-        .exchangeData = dxfcpp::toString(graalInstrumentProfile->exchange_data),
-        .exchanges = dxfcpp::toString(graalInstrumentProfile->exchanges),
-        .currency = dxfcpp::toString(graalInstrumentProfile->currency),
-        .baseCurrency = dxfcpp::toString(graalInstrumentProfile->base_currency),
-        .cfi = dxfcpp::toString(graalInstrumentProfile->cfi),
-        .isin = dxfcpp::toString(graalInstrumentProfile->isin),
-        .sedol = dxfcpp::toString(graalInstrumentProfile->sedol),
-        .cusip = dxfcpp::toString(graalInstrumentProfile->cusip),
-        .icb = graalInstrumentProfile->icb,
-        .sic = graalInstrumentProfile->sic,
-        .multiplier = graalInstrumentProfile->multiplier,
-        .product = dxfcpp::toString(graalInstrumentProfile->product),
-        .underlying = dxfcpp::toString(graalInstrumentProfile->underlying),
-        .spc = graalInstrumentProfile->spc,
-        .additionalUnderlyings = dxfcpp::toString(graalInstrumentProfile->additional_underlyings),
-        .mmy = dxfcpp::toString(graalInstrumentProfile->mmy),
-        .expiration = graalInstrumentProfile->expiration,
-        .lastTrade = graalInstrumentProfile->last_trade,
-        .strike = graalInstrumentProfile->strike,
-        .optionType = dxfcpp::toString(graalInstrumentProfile->option_type),
-        .expirationStyle = dxfcpp::toString(graalInstrumentProfile->expiration_style),
-        .settlementStyle = dxfcpp::toString(graalInstrumentProfile->settlement_style),
-        .priceIncrements = dxfcpp::toString(graalInstrumentProfile->price_increments),
-        .tradingHours = dxfcpp::toString(graalInstrumentProfile->trading_hours),
-        .rawCustomFields =
-            [](dxfg_string_list *strings) {
-                std::vector<std::string> result{};
-
-                if (!strings || strings->size == 0) {
-                    return result;
-                }
-
-                result.resize(strings->size);
-
-                for (std::int32_t i = 0; i < strings->size; i++) {
-                    result[i] = dxfcpp::toString(strings->elements[i]);
-                }
-
-                return result;
-            }(graalInstrumentProfile->custom_fields),
-        .customFields =
-            [](dxfg_string_list *strings) {
-                std::unordered_map<std::string, std::string> result{};
-
-                if (!strings || strings->size < 2) {
-                    return result;
-                }
-
-                for (std::int32_t i = 0; i < strings->size - 1; i += 2) {
-                    auto key = dxfcpp::toString(strings->elements[i]);
-
-                    if (key.empty()) {
-                        continue;
-                    }
-
-                    result[key] = dxfcpp::toString(strings->elements[i + 1]);
-                }
-
-                return result;
-            }(graalInstrumentProfile->custom_fields),
-    };
+InstrumentProfile::Ptr InstrumentProfile::create() {
+    return createShared(isolated::ipf::IsolatedInstrumentProfile::create());
 }
 
-void InstrumentProfile::fillGraalData(void *graalNative) const {
-    if (graalNative == nullptr) {
-        return;
-    }
-
-    auto graalInstrumentProfile = static_cast<dxfg_instrument_profile_t *>(graalNative);
-
-    graalInstrumentProfile->type = createCString(data_.type);
-    graalInstrumentProfile->symbol = createCString(data_.symbol);
-    graalInstrumentProfile->description = createCString(data_.description);
-    graalInstrumentProfile->local_symbol = createCString(data_.localSymbol);
-    graalInstrumentProfile->local_description = createCString(data_.localDescription);
-    graalInstrumentProfile->country = createCString(data_.country);
-    graalInstrumentProfile->opol = createCString(data_.opol);
-    graalInstrumentProfile->exchange_data = createCString(data_.exchangeData);
-    graalInstrumentProfile->exchanges = createCString(data_.exchanges);
-    graalInstrumentProfile->currency = createCString(data_.currency);
-    graalInstrumentProfile->base_currency = createCString(data_.baseCurrency);
-    graalInstrumentProfile->cfi = createCString(data_.cfi);
-    graalInstrumentProfile->isin = createCString(data_.isin);
-    graalInstrumentProfile->sedol = createCString(data_.sedol);
-    graalInstrumentProfile->cusip = createCString(data_.cusip);
-    graalInstrumentProfile->icb = data_.icb;
-    graalInstrumentProfile->sic = data_.sic;
-    graalInstrumentProfile->multiplier = data_.multiplier;
-    graalInstrumentProfile->product = createCString(data_.product);
-    graalInstrumentProfile->underlying = createCString(data_.underlying);
-    graalInstrumentProfile->spc = data_.spc;
-    graalInstrumentProfile->additional_underlyings = createCString(data_.additionalUnderlyings);
-    graalInstrumentProfile->mmy = createCString(data_.mmy);
-    graalInstrumentProfile->expiration = data_.expiration;
-    graalInstrumentProfile->last_trade = data_.lastTrade;
-    graalInstrumentProfile->strike = data_.strike;
-    graalInstrumentProfile->option_type = createCString(data_.optionType);
-    graalInstrumentProfile->expiration_style = createCString(data_.expirationStyle);
-    graalInstrumentProfile->settlement_style = createCString(data_.settlementStyle);
-    graalInstrumentProfile->price_increments = createCString(data_.priceIncrements);
-    graalInstrumentProfile->trading_hours = createCString(data_.tradingHours);
-
-    if (data_.rawCustomFields.empty()) {
-        graalInstrumentProfile->custom_fields = nullptr;
-    } else {
-        graalInstrumentProfile->custom_fields = new dxfg_string_list{};
-        graalInstrumentProfile->custom_fields->size = static_cast<std::int32_t>(data_.rawCustomFields.size());
-        graalInstrumentProfile->custom_fields->elements = new const char *[data_.rawCustomFields.size()] {
-            nullptr
-        };
-
-        for (std::int32_t i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
-            // TODO: process null-strings. <null>?
-            if (!data_.rawCustomFields[i].empty()) {
-                graalInstrumentProfile->custom_fields->elements[i] = createCString(data_.rawCustomFields[i]);
-            }
-        }
-    }
+InstrumentProfile::Ptr InstrumentProfile::create(Ptr ip) {
+    return createShared(isolated::ipf::IsolatedInstrumentProfile::create(ip->handle_));
 }
 
-void InstrumentProfile::freeGraalData(void *graalNative) noexcept {
-    if (graalNative == nullptr) {
-        return;
-    }
-
-    auto graalInstrumentProfile = static_cast<dxfg_instrument_profile_t *>(graalNative);
-
-    delete[] graalInstrumentProfile->type;
-    delete[] graalInstrumentProfile->symbol;
-    delete[] graalInstrumentProfile->description;
-    delete[] graalInstrumentProfile->local_symbol;
-    delete[] graalInstrumentProfile->local_description;
-    delete[] graalInstrumentProfile->country;
-    delete[] graalInstrumentProfile->opol;
-    delete[] graalInstrumentProfile->exchange_data;
-    delete[] graalInstrumentProfile->exchanges;
-    delete[] graalInstrumentProfile->currency;
-    delete[] graalInstrumentProfile->base_currency;
-    delete[] graalInstrumentProfile->cfi;
-    delete[] graalInstrumentProfile->isin;
-    delete[] graalInstrumentProfile->sedol;
-    delete[] graalInstrumentProfile->cusip;
-    delete[] graalInstrumentProfile->product;
-    delete[] graalInstrumentProfile->underlying;
-    delete[] graalInstrumentProfile->additional_underlyings;
-    delete[] graalInstrumentProfile->mmy;
-    delete[] graalInstrumentProfile->option_type;
-    delete[] graalInstrumentProfile->expiration_style;
-    delete[] graalInstrumentProfile->settlement_style;
-    delete[] graalInstrumentProfile->price_increments;
-    delete[] graalInstrumentProfile->trading_hours;
-
-    if (graalInstrumentProfile->custom_fields) {
-        if (graalInstrumentProfile->custom_fields->elements && graalInstrumentProfile->custom_fields->size > 0) {
-            for (std::int32_t i = 0; i < graalInstrumentProfile->custom_fields->size; i++) {
-                delete[] graalInstrumentProfile->custom_fields->elements[i];
-            }
-
-            delete[] graalInstrumentProfile->custom_fields->elements;
-        }
-
-        delete graalInstrumentProfile->custom_fields;
-    }
+std::string InstrumentProfile::getType() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getType(handle_);
 }
 
-std::shared_ptr<InstrumentProfile> InstrumentProfile::fromGraal(void *graalNative) {
-    if (!graalNative) {
-        throw std::invalid_argument("Unable to create InstrumentProfile. The `graalNative` parameter is nullptr");
-    }
-
-    auto instrumentProfile = std::make_shared<InstrumentProfile>();
-
-    instrumentProfile->fillData(graalNative);
-
-    return instrumentProfile;
+void InstrumentProfile::setType(const StringLikeWrapper &type) const {
+    isolated::ipf::IsolatedInstrumentProfile::setType(handle_, type);
 }
 
-std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList(void *graalList) {
+std::string InstrumentProfile::getSymbol() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getSymbol(handle_);
+}
+
+void InstrumentProfile::setSymbol(const StringLikeWrapper &symbol) const {
+    isolated::ipf::IsolatedInstrumentProfile::setSymbol(handle_, symbol);
+}
+
+std::string InstrumentProfile::getDescription() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getDescription(handle_);
+}
+
+void InstrumentProfile::setDescription(const StringLikeWrapper &description) const {
+    isolated::ipf::IsolatedInstrumentProfile::setDescription(handle_, description);
+}
+
+std::string InstrumentProfile::getLocalSymbol() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getLocalSymbol(handle_);
+}
+
+void InstrumentProfile::setLocalSymbol(const StringLikeWrapper &localSymbol) const {
+    isolated::ipf::IsolatedInstrumentProfile::setLocalSymbol(handle_, localSymbol);
+}
+
+std::string InstrumentProfile::getLocalDescription() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getLocalDescription(handle_);
+}
+
+void InstrumentProfile::setLocalDescription(const StringLikeWrapper &localDescription) const {
+    isolated::ipf::IsolatedInstrumentProfile::setLocalDescription(handle_, localDescription);
+}
+
+std::string InstrumentProfile::getCountry() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getCountry(handle_);
+}
+
+void InstrumentProfile::setCountry(const StringLikeWrapper &country) const {
+    isolated::ipf::IsolatedInstrumentProfile::setCountry(handle_, country);
+}
+
+std::string InstrumentProfile::getOPOL() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getOPOL(handle_);
+}
+
+void InstrumentProfile::setOPOL(const StringLikeWrapper &opol) const {
+    isolated::ipf::IsolatedInstrumentProfile::setOPOL(handle_, opol);
+}
+
+std::string InstrumentProfile::getExchangeData() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getExchangeData(handle_);
+}
+
+void InstrumentProfile::setExchangeData(const StringLikeWrapper &exchangeData) const {
+    isolated::ipf::IsolatedInstrumentProfile::setExchangeData(handle_, exchangeData);
+}
+
+std::string InstrumentProfile::getExchanges() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getExchanges(handle_);
+}
+
+void InstrumentProfile::setExchanges(const StringLikeWrapper &exchanges) const {
+    isolated::ipf::IsolatedInstrumentProfile::setExchanges(handle_, exchanges);
+}
+
+std::string InstrumentProfile::getCurrency() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getCurrency(handle_);
+}
+
+void InstrumentProfile::setCurrency(const StringLikeWrapper &currency) const {
+    isolated::ipf::IsolatedInstrumentProfile::setCurrency(handle_, currency);
+}
+
+std::string InstrumentProfile::getBaseCurrency() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getBaseCurrency(handle_);
+}
+
+void InstrumentProfile::setBaseCurrency(const StringLikeWrapper &baseCurrency) const {
+    isolated::ipf::IsolatedInstrumentProfile::setBaseCurrency(handle_, baseCurrency);
+}
+
+std::string InstrumentProfile::getCFI() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getCFI(handle_);
+}
+
+void InstrumentProfile::setCFI(const StringLikeWrapper &cfi) const {
+    isolated::ipf::IsolatedInstrumentProfile::setCFI(handle_, cfi);
+}
+
+std::string InstrumentProfile::getISIN() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getISIN(handle_);
+}
+
+void InstrumentProfile::setISIN(const StringLikeWrapper &isin) const {
+    isolated::ipf::IsolatedInstrumentProfile::setISIN(handle_, isin);
+}
+
+std::string InstrumentProfile::getSEDOL() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getSEDOL(handle_);
+}
+
+void InstrumentProfile::setSEDOL(const StringLikeWrapper &sedol) const {
+    isolated::ipf::IsolatedInstrumentProfile::setSEDOL(handle_, sedol);
+}
+
+std::string InstrumentProfile::getCUSIP() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getCUSIP(handle_);
+}
+
+void InstrumentProfile::setCUSIP(const StringLikeWrapper &cusip) const {
+    isolated::ipf::IsolatedInstrumentProfile::setCUSIP(handle_, cusip);
+}
+
+std::int32_t InstrumentProfile::getICB() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getICB(handle_);
+}
+
+void InstrumentProfile::setICB(std::int32_t icb) const {
+    isolated::ipf::IsolatedInstrumentProfile::setICB(handle_, icb);
+}
+
+std::int32_t InstrumentProfile::getSIC() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getSIC(handle_);
+}
+
+void InstrumentProfile::setSIC(std::int32_t sic) const {
+    isolated::ipf::IsolatedInstrumentProfile::setSIC(handle_, sic);
+}
+
+double InstrumentProfile::getMultiplier() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getMultiplier(handle_);
+}
+
+void InstrumentProfile::setMultiplier(double multiplier) const {
+    isolated::ipf::IsolatedInstrumentProfile::setMultiplier(handle_, multiplier);
+}
+
+std::string InstrumentProfile::getProduct() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getProduct(handle_);
+}
+
+void InstrumentProfile::setProduct(const StringLikeWrapper &product) const {
+    isolated::ipf::IsolatedInstrumentProfile::setProduct(handle_, product);
+}
+
+std::string InstrumentProfile::getUnderlying() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getUnderlying(handle_);
+}
+
+void InstrumentProfile::setUnderlying(const StringLikeWrapper &underlying) const {
+    isolated::ipf::IsolatedInstrumentProfile::setUnderlying(handle_, underlying);
+}
+
+double InstrumentProfile::getSPC() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getSPC(handle_);
+}
+
+void InstrumentProfile::setSPC(double spc) const {
+    isolated::ipf::IsolatedInstrumentProfile::setSPC(handle_, spc);
+}
+
+std::string InstrumentProfile::getAdditionalUnderlyings() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getAdditionalUnderlyings(handle_);
+}
+
+void InstrumentProfile::setAdditionalUnderlyings(const StringLikeWrapper &additionalUnderlyings) const {
+    isolated::ipf::IsolatedInstrumentProfile::setAdditionalUnderlyings(handle_, additionalUnderlyings);
+}
+
+std::string InstrumentProfile::getMMY() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getMMY(handle_);
+}
+
+void InstrumentProfile::setMMY(const StringLikeWrapper &mmy) const {
+    isolated::ipf::IsolatedInstrumentProfile::setMMY(handle_, mmy);
+}
+
+std::int32_t InstrumentProfile::getExpiration() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getExpiration(handle_);
+}
+
+void InstrumentProfile::setExpiration(std::int32_t expiration) const {
+    isolated::ipf::IsolatedInstrumentProfile::setExpiration(handle_, expiration);
+}
+
+std::int32_t InstrumentProfile::getLastTrade() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getLastTrade(handle_);
+}
+
+void InstrumentProfile::setLastTrade(std::int32_t lastTrade) const {
+    isolated::ipf::IsolatedInstrumentProfile::setLastTrade(handle_, lastTrade);
+}
+
+double InstrumentProfile::getStrike() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getStrike(handle_);
+}
+
+void InstrumentProfile::setStrike(double strike) const {
+    isolated::ipf::IsolatedInstrumentProfile::setStrike(handle_, strike);
+}
+
+std::string InstrumentProfile::getOptionType() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getOptionType(handle_);
+}
+
+void InstrumentProfile::setOptionType(const StringLikeWrapper &optionType) const {
+    isolated::ipf::IsolatedInstrumentProfile::setOptionType(handle_, optionType);
+}
+
+std::string InstrumentProfile::getExpirationStyle() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getExpirationStyle(handle_);
+}
+
+void InstrumentProfile::setExpirationStyle(const StringLikeWrapper &expirationStyle) const {
+    isolated::ipf::IsolatedInstrumentProfile::setExpirationStyle(handle_, expirationStyle);
+}
+
+std::string InstrumentProfile::getSettlementStyle() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getSettlementStyle(handle_);
+}
+
+void InstrumentProfile::setSettlementStyle(const StringLikeWrapper &settlementStyle) const {
+    isolated::ipf::IsolatedInstrumentProfile::setSettlementStyle(handle_, settlementStyle);
+}
+
+std::string InstrumentProfile::getPriceIncrements() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getPriceIncrements(handle_);
+}
+
+void InstrumentProfile::setPriceIncrements(const StringLikeWrapper &priceIncrements) const {
+    isolated::ipf::IsolatedInstrumentProfile::setPriceIncrements(handle_, priceIncrements);
+}
+
+std::string InstrumentProfile::getTradingHours() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getTradingHours(handle_);
+}
+
+void InstrumentProfile::setTradingHours(const StringLikeWrapper &tradingHours) const {
+    isolated::ipf::IsolatedInstrumentProfile::setTradingHours(handle_, tradingHours);
+}
+
+std::string InstrumentProfile::getField(const StringLikeWrapper &name) const {
+    return isolated::ipf::IsolatedInstrumentProfile::getField(handle_, name);
+}
+
+void InstrumentProfile::setField(const StringLikeWrapper &name, const StringLikeWrapper &value) const {
+    isolated::ipf::IsolatedInstrumentProfile::setField(handle_, name, value);
+}
+
+double InstrumentProfile::getNumericField(const StringLikeWrapper &name) const {
+    return isolated::ipf::IsolatedInstrumentProfile::getNumericField(handle_, name);
+}
+
+void InstrumentProfile::setNumericField(const StringLikeWrapper &name, double value) const {
+    isolated::ipf::IsolatedInstrumentProfile::setNumericField(handle_, name, value);
+}
+
+std::int32_t InstrumentProfile::getDateField(const StringLikeWrapper &name) const {
+    return isolated::ipf::IsolatedInstrumentProfile::getDateField(handle_, name);
+}
+
+void InstrumentProfile::setDateField(const StringLikeWrapper &name, std::int32_t value) const {
+    isolated::ipf::IsolatedInstrumentProfile::setDateField(handle_, name, value);
+}
+
+std::vector<std::string> InstrumentProfile::getNonEmptyCustomFieldNames() const {
+    return isolated::ipf::IsolatedInstrumentProfile::getNonEmptyCustomFieldNames(handle_);
+}
+
+std::string InstrumentProfile::toString() const {
+    if (!handle_) {
+        return "InstrumentProfile{<null>}";
+    }
+
+    return isolated::internal::IsolatedObject::toString(handle_.get());
+}
+
+std::size_t InstrumentProfile::hashCode() const {
+    if (!handle_) {
+        return 0;
+    }
+
+    return isolated::internal::IsolatedObject::hashCode(handle_.get());
+}
+
+bool InstrumentProfile::operator==(const InstrumentProfile &other) const {
+    if (!handle_) {
+        return !other.handle_;
+    }
+
+    if (!other.handle_) {
+        return false;
+    }
+
+    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
+}
+
+InstrumentProfile::~InstrumentProfile() noexcept {
+}
+
+InstrumentProfile::InstrumentProfile(LockExternalConstructionTag, JavaObjectHandle<InstrumentProfile> &&handle)
+    : handle_(std::move(handle)) {
+}
+
+InstrumentProfile::Ptr InstrumentProfile::create(JavaObjectHandle<InstrumentProfile> &&handle) {
+    return createShared(std::move(handle));
+}
+
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::List::fromGraal(void *graalList) {
     using ListType = dxfg_instrument_profile_list;
     using SizeType = decltype(ListType::size);
 
@@ -220,7 +351,7 @@ std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList
 
     std::vector<std::shared_ptr<InstrumentProfile>> result{};
 
-    auto list = static_cast<ListType *>(graalList);
+    const auto list = static_cast<ListType *>(graalList);
 
     if (list->size <= 0 || list->elements == nullptr) {
         return result;
@@ -228,31 +359,11 @@ std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::fromGraalList
 
     for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
         if (list->elements[elementIndex]) {
-            result.emplace_back(InstrumentProfile::fromGraal(static_cast<void *>(list->elements[elementIndex])));
+            result.emplace_back(create(JavaObjectHandle<InstrumentProfile>(list->elements[elementIndex])));
         }
     }
 
     return result;
-}
-
-void *InstrumentProfile::toGraal() const {
-    auto *graalInstrumentProfile = new dxfg_instrument_profile_t{};
-
-    fillGraalData(static_cast<void *>(graalInstrumentProfile));
-
-    return static_cast<void *>(graalInstrumentProfile);
-}
-
-void InstrumentProfile::freeGraal(void *graalNative) {
-    if (!graalNative) {
-        return;
-    }
-
-    auto graalInstrumentProfile = static_cast<dxfg_instrument_profile_t *>(graalNative);
-
-    freeGraalData(graalNative);
-
-    delete graalInstrumentProfile;
 }
 
 DXFCPP_END_NAMESPACE

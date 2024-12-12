@@ -19,7 +19,9 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {
 
@@ -133,6 +135,22 @@ struct DumpTool {
 
             System::setProperties(parsedProperties);
 
+            auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(args.types.has_value() ? *args.types : "all");
+
+            if (!unknownTypes.empty()) {
+                auto unknown = elementsToString(unknownTypes.begin(), unknownTypes.end(), "", "");
+
+                throw InvalidArgumentException(
+                    fmt::format("There are unknown event types: {}!\n List of available event types: {}", unknown,
+                                enum_utils::getEventTypeEnumClassNamesList(", ")));
+            }
+
+            if (parsedTypes.empty()) {
+                throw InvalidArgumentException("The resulting list of types is empty!");
+            }
+
+            auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols.has_value() ? *args.symbols : "all");
+
             auto inputEndpoint =
                 DXEndpoint::newBuilder()
                     ->withRole(DXEndpoint::Role::STREAM_FEED)
@@ -141,8 +159,7 @@ struct DumpTool {
                     ->withName(NAME + "Tool-Feed")
                     ->build();
 
-            auto sub = inputEndpoint->getFeed()->createSubscription(
-                !args.types.has_value() ? CmdArgsUtils::parseTypes("all") : CmdArgsUtils::parseTypes(*args.types));
+            auto sub = inputEndpoint->getFeed()->createSubscription(parsedTypes);
 
             if (!args.isQuite) {
                 sub->addEventListener([](auto &&events) {
@@ -173,8 +190,7 @@ struct DumpTool {
                 });
             }
 
-            sub->addSymbols(!args.symbols.has_value() ? CmdArgsUtils::parseSymbols("all")
-                                                      : CmdArgsUtils::parseSymbols(args.symbols.value()));
+            sub->addSymbols(parsedSymbols);
 
             inputEndpoint->connect(args.address);
             inputEndpoint->awaitNotConnected();
@@ -184,12 +200,8 @@ struct DumpTool {
                 outputEndpoint.value()->awaitProcessed();
                 outputEndpoint.value()->closeAndAwaitTermination();
             }
-        } catch (const JavaException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
-        } catch (const GraalException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
+        } catch (const RuntimeException &e) {
+            std::cerr << e << '\n';
         }
     }
 };

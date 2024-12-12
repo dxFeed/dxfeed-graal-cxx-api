@@ -7,6 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
+
 #include "../internal/Common.hpp"
 
 #include <cstdint>
@@ -19,79 +21,24 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+class IterableInstrumentProfile;
+struct NonOwningInstrumentProfileIterator;
+class InstrumentProfileReader;
+class InstrumentProfileCollector;
+struct Schedule;
+
 /**
  * Represents basic profile information about market instrument.
  * Please see <a href="http://www.dxfeed.com/downloads/documentation/dxFeed_Instrument_Profile_Format.pdf">Instrument
  * Profile Format documentation</a> for complete description.
  */
-class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
-    struct Data {
-        std::string type{};
-        std::string symbol{};
-        std::string description{};
-        std::string localSymbol{};
-        std::string localDescription{};
-        std::string country{};
-        std::string opol{};
-        std::string exchangeData{};
-        std::string exchanges{};
-        std::string currency{};
-        std::string baseCurrency{};
-        std::string cfi{};
-        std::string isin{};
-        std::string sedol{};
-        std::string cusip{};
-        std::int32_t icb{};
-        std::int32_t sic{};
-        double multiplier = math::NaN;
-        std::string product{};
-        std::string underlying{};
-        double spc = math::NaN;
-        std::string additionalUnderlyings{};
-        std::string mmy{};
-        int32_t expiration{};
-        int32_t lastTrade{};
-        double strike = math::NaN;
-        std::string optionType{};
-        std::string expirationStyle{};
-        std::string settlementStyle{};
-        std::string priceIncrements{};
-        std::string tradingHours{};
-        std::vector<std::string> rawCustomFields{};
-        std::unordered_map<std::string, std::string> customFields{};
-    };
+struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<InstrumentProfile> {
+    friend IterableInstrumentProfile;
+    friend NonOwningInstrumentProfileIterator;
+    friend InstrumentProfileReader;
+    friend InstrumentProfileCollector;
+    friend Schedule;
 
-    Data data_{};
-
-    void fillData(void *graalNative) noexcept;
-    void fillGraalData(void *graalNative) const;
-    static void freeGraalData(void *graalNative) noexcept;
-
-    /**
-     * Returns custom field value with a specified name.
-     *
-     * @param name The name of custom field.
-     * @return The reference to custom field value with a specified name or std::nullopt
-     */
-    std::optional<std::reference_wrapper<const std::string>> getCustomField(const std::string &name) const noexcept {
-        if (!data_.customFields.contains(name)) {
-            return std::nullopt;
-        }
-
-        return std::cref(data_.customFields.at(name));
-    }
-
-    /**
-     * Changes custom field value with a specified name.
-     *
-     * @param name The name of custom field.
-     * @param value The custom field value.
-     */
-    void setCustomField(const std::string &name, const std::string &value) {
-        data_.customFields[name] = value;
-    }
-
-  public:
     /// The alias to a type of shared pointer to the InstrumentProfile object
     using Ptr = std::shared_ptr<InstrumentProfile>;
 
@@ -99,44 +46,15 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
     using Unique = std::unique_ptr<InstrumentProfile>;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
-     *
-     * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
-     * @throws std::invalid_argument
+     * Creates an instrument profile with default values.
      */
-    static Ptr fromGraal(void *graalNative);
+    static Ptr create();
 
     /**
-     * Creates a vector of objects of the current type and fills it with data from the the dxFeed Graal SDK list of
-     * structures.
-     *
-     * @param graalList The pointer to the dxFeed Graal SDK list of structures.
-     * @return The vector of objects of current type
-     * @throws std::invalid_argument
+     * Creates an instrument profile as a copy of the specified instrument profile.
+     * @param ip an instrument profile to copy.
      */
-    static std::vector<Ptr> fromGraalList(void *graalList);
-
-    /**
-     * Allocates memory for the dxFeed Graal SDK structure.
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity.
-     * Returns the pointer to the filled structure.
-     *
-     * @return The pointer to the filled dxFeed Graal SDK structure
-     */
-    void *toGraal() const;
-
-    /**
-     * Releases the memory occupied by the dxFeed Graal SDK structure.
-     *
-     * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     */
-    static void freeGraal(void *graalNative);
-
-    /**
-     * Creates new instrument profile with default values.
-     */
-    InstrumentProfile() noexcept = default;
+    static Ptr create(Ptr ip);
 
     /**
      * Returns type of instrument.
@@ -146,9 +64,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return type of instrument.
      */
-    const std::string &getType() const & noexcept {
-        return data_.type;
-    }
+    std::string getType() const;
 
     /**
      * Changes type of instrument.
@@ -158,21 +74,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param type The type of instrument.
      */
-    void setType(const std::string &type) noexcept {
-        data_.type = type;
-    }
-
-    /**
-     * Changes type of instrument and returns the current instrument profile.
-     *
-     * @param type The type of instrument.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withType(const std::string &type) noexcept {
-        InstrumentProfile::setType(type);
-
-        return *this;
-    }
+    void setType(const StringLikeWrapper &type) const;
 
     /**
      * Returns identifier of instrument, preferable an international one in Latin alphabet.
@@ -181,9 +83,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The identifier of instrument.
      */
-    const std::string &getSymbol() const & noexcept {
-        return data_.symbol;
-    }
+    std::string getSymbol() const;
 
     /**
      * Changes identifier of instrument, preferable an international one in Latin alphabet.
@@ -192,23 +92,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param symbol The identifier of instrument.
      */
-    void setSymbol(const std::string &symbol) noexcept {
-        data_.symbol = symbol;
-    }
-
-    /**
-     * Changes identifier of instrument, preferable an international one in Latin alphabet.
-     * It is a mandatory field. It may not be empty.
-     * Example: "GOOG", "/YGM9", ".ZYEAD".
-     *
-     * @param symbol The identifier of instrument.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withSymbol(const std::string &symbol) noexcept {
-        InstrumentProfile::setSymbol(symbol);
-
-        return *this;
-    }
+    void setSymbol(const StringLikeWrapper &symbol) const;
 
     /**
      * Returns the description of instrument, preferable an international one in Latin alphabet.
@@ -216,9 +100,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The description of instrument.
      */
-    const std::string &getDescription() const & noexcept {
-        return data_.description;
-    }
+    std::string getDescription() const;
 
     /**
      * Changes description of instrument, preferable an international one in Latin alphabet.
@@ -226,22 +108,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param description The description of instrument.
      */
-    void setDescription(const std::string &description) noexcept {
-        data_.description = description;
-    }
-
-    /**
-     * Changes description of instrument, preferable an international one in Latin alphabet.
-     * Example: "Google Inc.", "Mini Gold Futures,Jun-2009,ETH".
-     *
-     * @param description The description of instrument.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withDescription(const std::string &description) noexcept {
-        InstrumentProfile::setDescription(description);
-
-        return *this;
-    }
+    void setDescription(const StringLikeWrapper &description) const;
 
     /**
      * Returns identifier of instrument in national language.
@@ -249,9 +116,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The identifier of instrument in national language.
      */
-    const std::string &getLocalSymbol() const & noexcept {
-        return data_.localSymbol;
-    }
+    std::string getLocalSymbol() const;
 
     /**
      * Changes identifier of instrument in national language.
@@ -259,22 +124,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param localSymbol The identifier of instrument in national language.
      */
-    void setLocalSymbol(const std::string &localSymbol) noexcept {
-        data_.localSymbol = localSymbol;
-    }
-
-    /**
-     * Changes identifier of instrument in national language.
-     * It shall be empty if same as @ref InstrumentProfile::getSymbol() "symbol".
-     *
-     * @param localSymbol The identifier of instrument in national language.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withLocalSymbol(const std::string &localSymbol) noexcept {
-        InstrumentProfile::setLocalSymbol(localSymbol);
-
-        return *this;
-    }
+    void setLocalSymbol(const StringLikeWrapper &localSymbol) const;
 
     /**
      * Returns description of instrument in national language.
@@ -282,9 +132,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The description of instrument in national language.
      */
-    const std::string &getLocalDescription() const & noexcept {
-        return data_.localDescription;
-    }
+    std::string getLocalDescription() const;
 
     /**
      * Changes description of instrument in national language.
@@ -292,22 +140,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param localDescription The description of instrument in national language.
      */
-    void setLocalDescription(const std::string &localDescription) noexcept {
-        data_.localDescription = localDescription;
-    }
-
-    /**
-     * Changes description of instrument in national language.
-     * It shall be empty if same as @ref InstrumentProfile::getDescription() "description".
-     *
-     * @param localDescription The description of instrument in national language.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withLocalDescription(const std::string &localDescription) noexcept {
-        InstrumentProfile::setLocalDescription(localDescription);
-
-        return *this;
-    }
+    void setLocalDescription(const StringLikeWrapper &localDescription) const;
 
     /**
      * Returns country of origin (incorporation) of corresponding company or parent entity.
@@ -317,9 +150,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The country of origin (incorporation) of corresponding company or parent entity.
      */
-    const std::string &getCountry() const & noexcept {
-        return data_.country;
-    }
+    std::string getCountry() const;
 
     /**
      * Changes country of origin (incorporation) of corresponding company or parent entity.
@@ -329,24 +160,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param country The country of origin (incorporation) of corresponding company or parent entity.
      */
-    void setCountry(const std::string &country) noexcept {
-        data_.country = country;
-    }
-
-    /**
-     * Changes country of origin (incorporation) of corresponding company or parent entity.
-     * It shall use two-letter country code from ISO 3166-1 standard.
-     * See <a href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1 on Wikipedia</a>.
-     * Example: "US", "RU".
-     *
-     * @param country The country of origin (incorporation) of corresponding company or parent entity.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withCountry(const std::string &country) noexcept {
-        InstrumentProfile::setCountry(country);
-
-        return *this;
-    }
+    void setCountry(const StringLikeWrapper &country) const;
 
     /**
      * Returns official Place Of Listing, the organization that have listed this instrument.
@@ -358,9 +172,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The official Place Of Listing, the organization that have listed this instrument.
      */
-    const std::string &getOPOL() const & noexcept {
-        return data_.opol;
-    }
+    std::string getOPOL() const;
 
     /**
      * Changes official Place Of Listing, the organization that have listed this instrument.
@@ -372,26 +184,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param opol The official Place Of Listing, the organization that have listed this instrument.
      */
-    void setOPOL(const std::string &opol) noexcept {
-        data_.opol = opol;
-    }
-
-    /**
-     * Changes official Place Of Listing, the organization that have listed this instrument.
-     * Instruments with multiple listings shall use separate profiles for each listing.
-     * It shall use Market Identifier Code (MIC) from ISO 10383 standard.
-     * See <a href="http://en.wikipedia.org/wiki/ISO_10383">ISO 10383 on Wikipedia</a>
-     * or <a href="http://www.iso15022.org/MIC/homepageMIC.htm">MIC homepage</a>.
-     * Example: "XNAS", "RTSX"
-     *
-     * @param opol The official Place Of Listing, the organization that have listed this instrument.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withOPOL(const std::string &opol) noexcept {
-        InstrumentProfile::setOPOL(opol);
-
-        return *this;
-    }
+    void setOPOL(const StringLikeWrapper &opol) const;
 
     /**
      * Returns exchange-specific data required to properly identify instrument when communicating with exchange.
@@ -399,9 +192,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The exchange-specific data required to properly identify instrument when communicating with exchange.
      */
-    const std::string &getExchangeData() const & noexcept {
-        return data_.exchangeData;
-    }
+    std::string getExchangeData() const;
 
     /**
      * Changes exchange-specific data required to properly identify instrument when communicating with exchange.
@@ -410,23 +201,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      * @param exchangeData The exchange-specific data required to properly identify instrument when communicating with
      * exchange.
      */
-    void setExchangeData(const std::string &exchangeData) noexcept {
-        data_.exchangeData = exchangeData;
-    }
-
-    /**
-     * Changes exchange-specific data required to properly identify instrument when communicating with exchange.
-     * It uses exchange-specific format.
-     *
-     * @param exchangeData The exchange-specific data required to properly identify instrument when communicating with
-     * exchange.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withExchangeData(const std::string &exchangeData) noexcept {
-        InstrumentProfile::setExchangeData(exchangeData);
-
-        return *this;
-    }
+    void setExchangeData(const StringLikeWrapper &exchangeData) const;
 
     /**
      * Returns list of exchanges where instrument is quoted or traded.
@@ -441,9 +216,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The list of exchanges where instrument is quoted or traded.
      */
-    const std::string &getExchanges() const & noexcept {
-        return data_.exchanges;
-    }
+    std::string getExchanges() const;
 
     /**
      * Changes list of exchanges where instrument is quoted or traded.
@@ -458,29 +231,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param exchanges The list of exchanges where instrument is quoted or traded.
      */
-    void setExchanges(const std::string &exchanges) noexcept {
-        data_.exchanges = exchanges;
-    }
-
-    /**
-     * Changes list of exchanges where instrument is quoted or traded.
-     * It shall use the following format:
-     * ```
-     *     <VALUE> ::= <empty> | <LIST>
-     *     <LIST> ::= <MIC> | <MIC> <semicolon>
-     *
-     *     <LIST> the list shall be sorted by MIC.
-     * ```
-     * Example: "ARCX;CBSX ;XNAS;XNYS".
-     *
-     * @param exchanges The list of exchanges where instrument is quoted or traded.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withExchanges(const std::string &exchanges) noexcept {
-        InstrumentProfile::setExchanges(exchanges);
-
-        return *this;
-    }
+    void setExchanges(const StringLikeWrapper &exchanges) const;
 
     /**
      * Returns currency of quotation, pricing and trading.
@@ -490,9 +241,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return Currency of quotation, pricing and trading.
      */
-    const std::string &getCurrency() const & noexcept {
-        return data_.currency;
-    }
+    std::string getCurrency() const;
 
     /**
      * Changes currency of quotation, pricing and trading.
@@ -502,24 +251,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param currency Currency of quotation, pricing and trading.
      */
-    void setCurrency(const std::string &currency) noexcept {
-        data_.currency = currency;
-    }
-
-    /**
-     * Changes currency of quotation, pricing and trading.
-     * It shall use three-letter currency code from ISO 4217 standard.
-     * See <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217 on Wikipedia</a>.
-     * Example: "USD", "RUB".
-     *
-     * @param currency Currency of quotation, pricing and trading.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withCurrency(const std::string &currency) noexcept {
-        InstrumentProfile::setCurrency(currency);
-
-        return *this;
-    }
+    void setCurrency(const StringLikeWrapper &currency) const;
 
     /**
      * Returns base currency of currency pair (FOREX instruments).
@@ -527,9 +259,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The base currency of currency pair (FOREX instruments).
      */
-    const std::string &getBaseCurrency() const & noexcept {
-        return data_.baseCurrency;
-    }
+    std::string getBaseCurrency() const;
 
     /**
      * Changes base currency of currency pair (FOREX instruments).
@@ -537,22 +267,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param baseCurrency The base currency of currency pair (FOREX instruments).
      */
-    void setBaseCurrency(const std::string &baseCurrency) noexcept {
-        data_.baseCurrency = baseCurrency;
-    }
-
-    /**
-     * Changes base currency of currency pair (FOREX instruments).
-     * It shall use three-letter currency code similarly to @ref InstrumentProfile::getCurrency() "currency".
-     *
-     * @param baseCurrency The base currency of currency pair (FOREX instruments).
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withBaseCurrency(const std::string &baseCurrency) noexcept {
-        InstrumentProfile::setBaseCurrency(baseCurrency);
-
-        return *this;
-    }
+    void setBaseCurrency(const StringLikeWrapper &baseCurrency) const;
 
     /**
      * Returns Classification of Financial Instruments code.
@@ -565,9 +280,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return CFI code.
      */
-    const std::string &getCFI() const & noexcept {
-        return data_.cfi;
-    }
+    std::string getCFI() const;
 
     /**
      * Changes Classification of Financial Instruments code.
@@ -580,27 +293,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param cfi CFI code.
      */
-    void setCFI(const std::string &cfi) noexcept {
-        data_.cfi = cfi;
-    }
-
-    /**
-     * Changes Classification of Financial Instruments code.
-     * It is a mandatory field for OPTION instruments as it is the only way to distinguish Call/Put type,
-     * American/European exercise, Cash/Physical delivery.
-     * It shall use six-letter CFI code from ISO 10962 standard.
-     * It is allowed to use 'X' extensively and to omit trailing letters (assumed to be 'X').
-     * See <a href="http://en.wikipedia.org/wiki/ISO_10962">ISO 10962 on Wikipedia</a>.
-     * Example: "ESNTPB", "ESXXXX", "ES" , "OPASPS".
-     *
-     * @param cfi CFI code.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withCFI(const std::string &cfi) noexcept {
-        InstrumentProfile::setCFI(cfi);
-
-        return *this;
-    }
+    void setCFI(const StringLikeWrapper &cfi) const;
 
     /**
      * Returns International Securities Identifying Number.
@@ -611,9 +304,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return International Securities Identifying Number.
      */
-    const std::string &getISIN() const & noexcept {
-        return data_.isin;
-    }
+    std::string getISIN() const;
 
     /**
      * Changes International Securities Identifying Number.
@@ -624,25 +315,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param isin International Securities Identifying Number.
      */
-    void setISIN(const std::string &isin) noexcept {
-        data_.isin = isin;
-    }
-
-    /**
-     * Changes International Securities Identifying Number.
-     * It shall use twelve-letter code from ISO 6166 standard.
-     * See <a href="http://en.wikipedia.org/wiki/ISO_6166">ISO 6166 on Wikipedia</a>
-     * or <a href="http://en.wikipedia.org/wiki/International_Securities_Identifying_Number">ISIN on Wikipedia</a>.
-     * Example: "DE0007100000", "US38259P5089".
-     *
-     * @param isin International Securities Identifying Number.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withISIN(const std::string &isin) noexcept {
-        InstrumentProfile::setISIN(isin);
-
-        return *this;
-    }
+    void setISIN(const StringLikeWrapper &isin) const;
 
     /**
      * Returns Stock Exchange Daily Official List.
@@ -653,9 +326,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return Stock Exchange Daily Official List.
      */
-    const std::string &getSEDOL() const & noexcept {
-        return data_.sedol;
-    }
+    std::string getSEDOL() const;
 
     /**
      * Changes Stock Exchange Daily Official List.
@@ -666,25 +337,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param sedol Stock Exchange Daily Official List.
      */
-    void setSEDOL(const std::string &sedol) noexcept {
-        data_.sedol = sedol;
-    }
-
-    /**
-     * Changes Stock Exchange Daily Official List.
-     * It shall use seven-letter code assigned by London Stock Exchange.
-     * See <a href="http://en.wikipedia.org/wiki/SEDOL">SEDOL on Wikipedia</a> or
-     * <a href="http://www.londonstockexchange.com/en-gb/products/informationproducts/sedol/">SEDOL on LSE</a>.
-     * Example: "2310967", "5766857".
-     *
-     * @param sedol Stock Exchange Daily Official List.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withSEDOL(const std::string &sedol) noexcept {
-        InstrumentProfile::setSEDOL(sedol);
-
-        return *this;
-    }
+    void setSEDOL(const StringLikeWrapper &sedol) const;
 
     /**
      * Returns Committee on Uniform Security Identification Procedures code.
@@ -694,9 +347,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return CUSIP code.
      */
-    const std::string &getCUSIP() const & noexcept {
-        return data_.cusip;
-    }
+    std::string getCUSIP() const;
 
     /**
      * Changes Committee on Uniform Security Identification Procedures code.
@@ -706,24 +357,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param cusip CUSIP code.
      */
-    void setCUSIP(const std::string &cusip) noexcept {
-        data_.cusip = cusip;
-    }
-
-    /**
-     * Changes Committee on Uniform Security Identification Procedures code.
-     * It shall use nine-letter code assigned by CUSIP Services Bureau.
-     * See <a href="http://en.wikipedia.org/wiki/CUSIP">CUSIP on Wikipedia</a>.
-     * Example: "38259P508".
-     *
-     * @param cusip CUSIP code
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withCUSIP(const std::string &cusip) noexcept {
-        InstrumentProfile::setCUSIP(cusip);
-
-        return *this;
-    }
+    void setCUSIP(const StringLikeWrapper &cusip) const;
 
     /**
      * Returns Industry Classification Benchmark.
@@ -734,9 +368,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return Industry Classification Benchmark.
      */
-    std::int32_t getICB() const noexcept {
-        return data_.icb;
-    }
+    std::int32_t getICB() const;
 
     /**
      * Changes Industry Classification Benchmark.
@@ -747,25 +379,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param icb Industry Classification Benchmark.
      */
-    void setICB(std::int32_t icb) noexcept {
-        data_.icb = icb;
-    }
-
-    /**
-     * Changes Industry Classification Benchmark.
-     * It shall use four-digit number from ICB catalog.
-     * See <a href="http://en.wikipedia.org/wiki/Industry_Classification_Benchmark">ICB on Wikipedia</a>
-     * or <a href="http://www.icbenchmark.com/">ICB homepage</a>.
-     * Example: "9535".
-     *
-     * @param icb Industry Classification Benchmark.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withICB(std::int32_t icb) noexcept {
-        InstrumentProfile::setICB(icb);
-
-        return *this;
-    }
+    void setICB(std::int32_t icb) const;
 
     /**
      * Returns Standard Industrial Classification.
@@ -776,9 +390,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return Standard Industrial Classification.
      */
-    std::int32_t getSIC() const noexcept {
-        return data_.sic;
-    }
+    std::int32_t getSIC() const;
 
     /**
      * Changes Standard Industrial Classification.
@@ -789,25 +401,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param sic Standard Industrial Classification.
      */
-    void setSIC(std::int32_t sic) noexcept {
-        data_.sic = sic;
-    }
-
-    /**
-     * Changes Standard Industrial Classification.
-     * It shall use four-digit number from SIC catalog.
-     * See <a href="http://en.wikipedia.org/wiki/Standard_Industrial_Classification">SIC on Wikipedia</a>
-     * or <a href="https://www.osha.gov/pls/imis/sic_manual.html">SIC structure</a>.
-     * Example: "7371".
-     *
-     * @param sic Standard Industrial Classification.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withSIC(std::int32_t sic) noexcept {
-        InstrumentProfile::setSIC(sic);
-
-        return *this;
-    }
+    void setSIC(std::int32_t sic) const;
 
     /**
      * Returns market value multiplier.
@@ -815,9 +409,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The market value multiplier.
      */
-    double getMultiplier() const noexcept {
-        return data_.multiplier;
-    }
+    double getMultiplier() const;
 
     /**
      * Changes market value multiplier.
@@ -825,22 +417,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param multiplier The market value multiplier.
      */
-    void setMultiplier(double multiplier) noexcept {
-        data_.multiplier = multiplier;
-    }
-
-    /**
-     * Changes market value multiplier.
-     * Example: 100, 33.2.
-     *
-     * @param multiplier The market value multiplier.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withMultiplier(double multiplier) noexcept {
-        InstrumentProfile::setMultiplier(multiplier);
-
-        return *this;
-    }
+    void setMultiplier(double multiplier) const;
 
     /**
      * Returns product for futures and options on futures (underlying asset name).
@@ -848,9 +425,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The product for futures and options on futures (underlying asset name).
      */
-    const std::string &getProduct() const & noexcept {
-        return data_.product;
-    }
+    std::string getProduct() const;
 
     /**
      * Changes product for futures and options on futures (underlying asset name).
@@ -858,22 +433,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param product The product for futures and options on futures (underlying asset name).
      */
-    void setProduct(const std::string &product) noexcept {
-        data_.product = product;
-    }
-
-    /**
-     * Changes product for futures and options on futures (underlying asset name).
-     * Example: "/YG".
-     *
-     * @param product The product for futures and options on futures (underlying asset name).
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withProduct(const std::string &product) noexcept {
-        InstrumentProfile::setProduct(product);
-
-        return *this;
-    }
+    void setProduct(const StringLikeWrapper &product) const;
 
     /**
      * Returns primary underlying symbol for options.
@@ -881,9 +441,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The primary underlying symbol for options.
      */
-    const std::string &getUnderlying() const & noexcept {
-        return data_.underlying;
-    }
+    std::string getUnderlying() const;
 
     /**
      * Changes primary underlying symbol for options.
@@ -891,22 +449,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param underlying The primary underlying symbol for options.
      */
-    void setUnderlying(const std::string &underlying) noexcept {
-        data_.underlying = underlying;
-    }
-
-    /**
-     * Changes primary underlying symbol for options.
-     * Example: "C", "/YGM9"
-     *
-     * @param underlying The primary underlying symbol for options.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withUnderlying(const std::string &underlying) noexcept {
-        InstrumentProfile::setUnderlying(underlying);
-
-        return *this;
-    }
+    void setUnderlying(const StringLikeWrapper &underlying) const;
 
     /**
      * Returns shares per contract for options.
@@ -914,9 +457,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return shares per contract for options.
      */
-    double getSPC() const noexcept {
-        return data_.spc;
-    }
+    double getSPC() const;
 
     /**
      * Changes shares per contract for options.
@@ -924,22 +465,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param spc The shares per contract for options.
      */
-    void setSPC(double spc) noexcept {
-        data_.spc = spc;
-    }
-
-    /**
-     * Changes shares per contract for options.
-     * Example: 1, 100.
-     *
-     * @param spc The shares per contract for options.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withSPC(double spc) noexcept {
-        InstrumentProfile::setSPC(spc);
-
-        return *this;
-    }
+    void setSPC(double spc) const;
 
     /**
      * Returns additional underlyings for options, including additional cash.
@@ -954,9 +480,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The additional underlyings for options, including additional cash.
      */
-    const std::string &getAdditionalUnderlyings() const & noexcept {
-        return data_.additionalUnderlyings;
-    }
+    std::string getAdditionalUnderlyings() const;
 
     /**
      * Changes additional underlyings for options, including additional cash.
@@ -971,29 +495,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param additionalUnderlyings The additional underlyings for options, including additional cash.
      */
-    void setAdditionalUnderlyings(const std::string &additionalUnderlyings) noexcept {
-        data_.additionalUnderlyings = additionalUnderlyings;
-    }
-
-    /**
-     * Changes additional underlyings for options, including additional cash.
-     * It shall use following format:
-     * ```
-     *     <VALUE> ::= <empty> | <LIST>
-     *     <LIST> ::= <AU> | <AU> <semicolon> <space> <LIST>
-     *     <AU> ::= <UNDERLYING> <space> <SPC>
-     * the list shall be sorted by <UNDERLYING>.
-     * ```
-     * Example: "SE 50", "FIS 53; US$ 45.46".
-     *
-     * @param additionalUnderlyings The additional underlyings for options, including additional cash.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withAdditionalUnderlyings(const std::string &additionalUnderlyings) noexcept {
-        InstrumentProfile::setAdditionalUnderlyings(additionalUnderlyings);
-
-        return *this;
-    }
+    void setAdditionalUnderlyings(const StringLikeWrapper &additionalUnderlyings) const;
 
     /**
      * Returns maturity month-year as provided for corresponding FIX tag (200).
@@ -1006,9 +508,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The maturity month-year as provided for corresponding FIX tag (200).
      */
-    const std::string &getMMY() const & noexcept {
-        return data_.mmy;
-    }
+    std::string getMMY() const;
 
     /**
      * Changes maturity month-year as provided for corresponding FIX tag (200).
@@ -1021,27 +521,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param mmy The maturity month-year as provided for corresponding FIX tag (200).
      */
-    void setMMY(const std::string &mmy) noexcept {
-        data_.mmy = mmy;
-    }
-
-    /**
-     * Changes maturity month-year as provided for corresponding FIX tag (200).
-     * It can use several different formats depending on data source:
-     * <ul>
-     * <li>YYYYMM – if only year and month are specified
-     * <li>YYYYMMDD – if full date is specified
-     * <li>YYYYMMwN – if week number (within a month) is specified
-     * </ul>
-     *
-     * @param mmy The maturity month-year as provided for corresponding FIX tag (200).
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withMMY(const std::string &mmy) noexcept {
-        InstrumentProfile::setMMY(mmy);
-
-        return *this;
-    }
+    void setMMY(const StringLikeWrapper &mmy) const;
 
     /**
      * Returns day id of expiration.
@@ -1049,9 +529,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The day id of expiration.
      */
-    std::int32_t getExpiration() const noexcept {
-        return data_.expiration;
-    }
+    std::int32_t getExpiration() const;
 
     /**
      * Changes day id of expiration.
@@ -1059,22 +537,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param expiration The day id of expiration.
      */
-    void setExpiration(std::int32_t expiration) noexcept {
-        data_.expiration = expiration;
-    }
-
-    /**
-     * Changes day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
-     *
-     * @param expiration The day id of expiration.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withExpiration(std::int32_t expiration) noexcept {
-        InstrumentProfile::setExpiration(expiration);
-
-        return *this;
-    }
+    void setExpiration(std::int32_t expiration) const;
 
     /**
      * Returns day id of last trading day.
@@ -1082,9 +545,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The day id of last trading day.
      */
-    std::int32_t getLastTrade() const noexcept {
-        return data_.lastTrade;
-    }
+    std::int32_t getLastTrade() const;
 
     /**
      * Changes day id of last trading day.
@@ -1092,22 +553,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param lastTrade The day id of last trading day.
      */
-    void setLastTrade(std::int32_t lastTrade) noexcept {
-        data_.lastTrade = lastTrade;
-    }
-
-    /**
-     * Changes day id of last trading day.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
-     *
-     * @param lastTrade The day id of last trading day.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withLastTrade(std::int32_t lastTrade) noexcept {
-        InstrumentProfile::setLastTrade(lastTrade);
-
-        return *this;
-    }
+    void setLastTrade(std::int32_t lastTrade) const;
 
     /**
      * Returns strike price for options.
@@ -1115,9 +561,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The strike price for options.
      */
-    double getStrike() const noexcept {
-        return data_.strike;
-    }
+    double getStrike() const;
 
     /**
      * Changes strike price for options.
@@ -1125,22 +569,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param strike The strike price for options.
      */
-    void setStrike(double strike) noexcept {
-        data_.strike = strike;
-    }
-
-    /**
-     * Changes strike price for options.
-     * Example: 80, 22.5.
-     *
-     * @param strike The strike price for options
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withStrike(double strike) noexcept {
-        InstrumentProfile::setStrike(strike);
-
-        return *this;
-    }
+    void setStrike(double strike) const;
 
     /**
      * Returns type of option.
@@ -1157,9 +586,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The type of option.
      */
-    const std::string &getOptionType() const & noexcept {
-        return data_.optionType;
-    }
+    std::string getOptionType() const;
 
     /**
      * Changes type of option.
@@ -1176,91 +603,35 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param optionType The type of option.
      */
-    void setOptionType(const std::string &optionType) noexcept {
-        data_.optionType = optionType;
-    }
-
-    /**
-     * Changes type of option.
-     * It shall use one of following values:
-     * <ul>
-     * <li>STAN = Standard Options
-     * <li>LEAP = Long-term Equity AnticiPation Securities
-     * <li>SDO = Special Dated Options
-     * <li>BINY = Binary Options
-     * <li>FLEX = FLexible EXchange Options
-     * <li>VSO = Variable Start Options
-     * <li>RNGE = Range
-     * </ul>
-     *
-     * @param optionType The type of option.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withOptionType(const std::string &optionType) noexcept {
-        InstrumentProfile::setOptionType(optionType);
-
-        return *this;
-    }
+    void setOptionType(const StringLikeWrapper &optionType) const;
 
     /**
      * Returns expiration cycle style, such as "Weeklys", "Quarterlys".
      *
      * @return The expiration cycle style.
      */
-    const std::string &getExpirationStyle() const & noexcept {
-        return data_.expirationStyle;
-    }
+    std::string getExpirationStyle() const;
 
     /**
      * Changes the expiration cycle style, such as "Weeklys", "Quarterlys".
      *
      * @param expirationStyle The expiration cycle style.
      */
-    void setExpirationStyle(const std::string &expirationStyle) noexcept {
-        data_.expirationStyle = expirationStyle;
-    }
-
-    /**
-     * Changes the expiration cycle style, such as "Weeklys", "Quarterlys".
-     *
-     * @param expirationStyle The expiration cycle style.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withExpirationStyle(const std::string &expirationStyle) noexcept {
-        InstrumentProfile::setExpirationStyle(expirationStyle);
-
-        return *this;
-    }
+    void setExpirationStyle(const StringLikeWrapper &expirationStyle) const;
 
     /**
      * Returns settlement price determination style, such as "Open", "Close".
      *
      * @return The settlement price determination style.
      */
-    const std::string &getSettlementStyle() const & noexcept {
-        return data_.settlementStyle;
-    }
+    std::string getSettlementStyle() const;
 
     /**
      * Changes settlement price determination style, such as "Open", "Close".
      *
      * @param settlementStyle The settlement price determination style.
      */
-    void setSettlementStyle(const std::string &settlementStyle) noexcept {
-        data_.settlementStyle = settlementStyle;
-    }
-
-    /**
-     * Changes settlement price determination style, such as "Open", "Close".
-     *
-     * @param settlementStyle The settlement price determination style.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withSettlementStyle(const std::string &settlementStyle) noexcept {
-        InstrumentProfile::setSettlementStyle(settlementStyle);
-
-        return *this;
-    }
+    void setSettlementStyle(const StringLikeWrapper &settlementStyle) const;
 
     /**
      * Returns minimum allowed price increments with corresponding price ranges.
@@ -1275,9 +646,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The minimum allowed price increments with corresponding price ranges.
      */
-    const std::string &getPriceIncrements() const & noexcept {
-        return data_.priceIncrements;
-    }
+    std::string getPriceIncrements() const;
 
     /**
      * Changes minimum allowed price increments with corresponding price ranges.
@@ -1292,29 +661,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param priceIncrements The minimum allowed price increments with corresponding price ranges.
      */
-    void setPriceIncrements(const std::string &priceIncrements) noexcept {
-        data_.priceIncrements = priceIncrements;
-    }
-
-    /**
-     * Changes minimum allowed price increments with corresponding price ranges.
-     * It shall use following format:
-     * ```
-     *     <VALUE> ::= <empty> | <LIST>
-     *     <LIST> ::= <INCREMENT> | <RANGE> <semicolon> <space> <LIST>
-     *     <RANGE> ::= <INCREMENT> <space> <UPPER_LIMIT>
-     * the list shall be sorted by <UPPER_LIMIT>.
-     * ```
-     * Example: "0.25", "0.01 3; 0.05".
-     *
-     * @param priceIncrements The minimum allowed price increments with corresponding price ranges.
-     * @return The current instrument profile.
-     */
-    InstrumentProfile &withPriceIncrements(const std::string &priceIncrements) noexcept {
-        InstrumentProfile::setPriceIncrements(priceIncrements);
-
-        return *this;
-    }
+    void setPriceIncrements(const StringLikeWrapper &priceIncrements) const;
 
     /**
      * Returns trading hours specification.
@@ -1322,9 +669,7 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @return The trading hours specification.
      */
-    const std::string &getTradingHours() const & noexcept {
-        return data_.tradingHours;
-    }
+    std::string getTradingHours() const;
 
     /**
      * Changes trading hours specification.
@@ -1332,24 +677,126 @@ class DXFCPP_EXPORT InstrumentProfile final : public SharedEntity {
      *
      * @param tradingHours The trading hours specification.
      */
-    void setTradingHours(const std::string &tradingHours) noexcept {
-        data_.tradingHours = tradingHours;
-    }
+    void setTradingHours(const StringLikeWrapper &tradingHours) const;
 
     /**
-     * Changes trading hours specification.
-     * See Schedule::getInstance().
+     * Returns field value with a specified name.
      *
-     * @param tradingHours The trading hours specification.
-     * @return The current instrument profile.
+     * @param name name of field.
+     * @return field value.
      */
-    InstrumentProfile &withTradingHours(const std::string &tradingHours) noexcept {
-        InstrumentProfile::setTradingHours(tradingHours);
+    std::string getField(const StringLikeWrapper &name) const;
 
-        return *this;
+    /**
+     * Changes field value with a specified name.
+     *
+     * @param name name of field.
+     * @param value field value.
+     */
+    void setField(const StringLikeWrapper &name, const StringLikeWrapper &value) const;
+
+    /**
+     * Returns numeric field value with a specified name.
+     *
+     * @param name name of field.
+     * @return field value.
+     */
+    double getNumericField(const StringLikeWrapper &name) const;
+
+    /**
+     * Changes numeric field value with a specified name.
+     *
+     * @param name name of field.
+     * @param value field value.
+     */
+    void setNumericField(const StringLikeWrapper &name, double value) const;
+
+    /**
+     * Returns day id value for a date field with a specified name.
+     *
+     * @param name name of field.
+     * @return day id value.
+     */
+    std::int32_t getDateField(const StringLikeWrapper &name) const;
+
+    /**
+     * Changes day id value for a date field with a specified name.
+     *
+     * @param name name of field.
+     * @param value day id value.
+     */
+    void setDateField(const StringLikeWrapper &name, std::int32_t value) const;
+
+    /**
+     * Returns names of non-empty custom fields
+     *
+     * @return names of non-empty custom fields
+     */
+    std::vector<std::string> getNonEmptyCustomFieldNames() const;
+
+    std::string toString() const override;
+
+    friend std::ostream &operator<<(std::ostream &os, const InstrumentProfile &ip) {
+        return os << ip.toString();
     }
+
+    friend std::ostream &operator<<(std::ostream &os, const InstrumentProfile::Ptr &ip) {
+        return os << ip->toString();
+    }
+
+    std::size_t hashCode() const;
+
+    bool operator==(const InstrumentProfile &other) const;
+
+    friend bool operator==(const InstrumentProfile::Ptr &ip1, const InstrumentProfile::Ptr &ip2) {
+        if (ip1.get() == ip2.get()) {
+            return true;
+        }
+
+        return *ip1.get() == *ip2.get();
+    }
+
+    ~InstrumentProfile() noexcept override;
+
+    InstrumentProfile(const InstrumentProfile &) = delete;
+    InstrumentProfile(InstrumentProfile &&) noexcept = delete;
+    InstrumentProfile &operator=(const InstrumentProfile &) = delete;
+    InstrumentProfile &operator=(const InstrumentProfile &&) noexcept = delete;
+
+    explicit InstrumentProfile(LockExternalConstructionTag, JavaObjectHandle<InstrumentProfile> &&handle);
+
+  private:
+    JavaObjectHandle<InstrumentProfile> handle_;
+
+    static Ptr create(JavaObjectHandle<InstrumentProfile> &&handle);
+
+    struct List {
+        /**
+         * Creates a vector of objects of the current type and fills it with data from the the dxFeed Graal SDK list of
+         * structures.
+         *
+         * @param list The pointer to the dxFeed Graal SDK list of structures.
+         * @return The vector of objects of current type
+         * @throws InvalidArgumentException
+         */
+        static std::vector<Ptr> fromGraal(void *list);
+    };
 };
 
 DXFCPP_END_NAMESPACE
+
+template <> struct std::hash<dxfcpp::InstrumentProfile> {
+    std::size_t operator()(const dxfcpp::InstrumentProfile &t) const noexcept {
+        return t.hashCode();
+    }
+};
+
+template <> struct std::hash<dxfcpp::InstrumentProfile::Ptr> {
+    std::size_t operator()(const dxfcpp::InstrumentProfile::Ptr &t) const noexcept {
+        return t->hashCode();
+    }
+};
+
+DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -62,7 +62,7 @@ jobs:
             xcode: '15.0'
             cc: 'clang'
             cxx: 'clang++'
-        buildType: [ Release, Debug ]
+        buildType: [ Release, Debug, RelWithDebInfo ]
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}"
     runs-on: ${{ matrix.config.image }}
@@ -87,6 +87,7 @@ jobs:
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'linux') }}
@@ -96,6 +97,7 @@ jobs:
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'win') }}
@@ -103,6 +105,7 @@ jobs:
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
 
       - name: Build
         if: ${{ !contains(matrix.config.os, 'win') }}

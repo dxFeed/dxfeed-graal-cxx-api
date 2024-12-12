@@ -7,7 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../internal/Common.hpp"
+
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "Entity.hpp"
 
@@ -27,7 +31,8 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     template <typename T> bool is() const noexcept {
         try {
             auto p = dynamic_cast<const T *>(this);
-            (void)(p);
+
+            ignoreUnused(p);
 
             return true;
         } catch (const std::bad_cast &) {
@@ -66,28 +71,57 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
      *
      * @return a string representation
      */
-    virtual std::string toString() const noexcept {
+    virtual std::string toString() const {
         return "SharedEntity{}";
     }
 };
 
-template <typename T>
-struct RequireMakeShared : SharedEntity {
-  protected:
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 
+/**
+ * A helper class needed to construct smart pointers to objects, and does not allow explicit construction of objects.
+ * @tparam T The object type.
+ */
+template <typename T> struct RequireMakeShared : virtual SharedEntity {
+  protected:
     struct LockExternalConstructionTag {
         explicit LockExternalConstructionTag() = default;
     };
 
   public:
-
-    template <typename... Args>
-    static auto createShared(Args&&... args) {
-        static_assert(std::is_convertible_v<T*, RequireMakeShared*>, "Must derive publicly from RequireMakeShared");
+    /**
+     * Creates smart pointer to object.
+     *
+     * @tparam Args Types or arguments.
+     * @param args The arguments.
+     * @return A new smart pointer to object.
+     */
+    template <typename... Args> static auto createShared(Args &&...args) {
+        static_assert(std::is_convertible_v<T *, RequireMakeShared *>, "Must derive publicly from RequireMakeShared");
 
         return std::make_shared<T>(LockExternalConstructionTag{}, std::forward<Args>(args)...);
     }
 };
+
+DXFCXX_DISABLE_GCC_WARNINGS_POP()
+
+template <typename EBase, Derived<EBase> EDerived>
+static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
+    return source->template sharedAs<EDerived>();
+}
+
+template <typename EBase, Derived<EBase> EDerived>
+static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<std::shared_ptr<EBase>> &source) {
+    std::vector<std::shared_ptr<EDerived>> result{};
+
+    result.reserve(source.size());
+
+    for (const auto &e : source) {
+        result.emplace_back(e->template sharedAs<EDerived>());
+    }
+
+    return result;
+}
 
 DXFCPP_END_NAMESPACE
 

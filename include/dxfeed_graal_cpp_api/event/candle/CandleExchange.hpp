@@ -73,7 +73,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
      *
      * @return string representation of this exchange.
      */
-    std::string toString() const noexcept {
+    std::string toString() const {
         return exchangeCode_ == '\0' ? "COMPOSITE" : std::string(1, exchangeCode_);
     }
 

@@ -102,11 +102,11 @@ int main(int argc, char *argv[]) {
         std::this_thread::sleep_for(std::chrono::days(365));
 
         connection->close();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }

@@ -69,11 +69,11 @@ void Series::fillGraalData(void *graalNative) const noexcept {
 
 std::shared_ptr<Series> Series::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw std::invalid_argument("Unable to create Series. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create Series. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SERIES) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to create Series. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SERIES))));
@@ -86,7 +86,7 @@ std::shared_ptr<Series> Series::fromGraal(void *graalNative) {
     return series;
 }
 
-std::string Series::toString() const noexcept {
+std::string Series::toString() const {
     return fmt::format(
         "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
         "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
@@ -115,7 +115,7 @@ void Series::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SERIES) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to free Series's Graal data. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SERIES))));
@@ -126,6 +126,14 @@ void Series::freeGraal(void *graalNative) {
     MarketEvent::freeGraalData(graalNative);
 
     delete graalSeries;
+}
+
+void Series::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<Series>(); other) {
+        data_ = other->data_;
+    }
 }
 
 DXFCPP_END_NAMESPACE

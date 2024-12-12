@@ -21,26 +21,21 @@ DXFCPP_BEGIN_NAMESPACE
 IterableInstrumentProfile::IterableInstrumentProfile(void *handle) noexcept : handle_(handle) {
 }
 
-std::shared_ptr<IterableInstrumentProfile> IterableInstrumentProfile::create(void* handle) noexcept {
+std::shared_ptr<IterableInstrumentProfile> IterableInstrumentProfile::create(void *handle) noexcept {
     return std::shared_ptr<IterableInstrumentProfile>(new IterableInstrumentProfile(handle));
 }
 
-[[nodiscard]] bool IterableInstrumentProfile::hasNext() const noexcept {
+bool IterableInstrumentProfile::hasNext() const noexcept {
     if (!handle_) {
         return false;
     }
 
-    return isolated::ipf::InstrumentProfileIterator::hasNext(handle_.get());
+    return isolated::ipf::live::IsolatedInstrumentProfileIterator::hasNext(handle_.get());
 }
 
-[[nodiscard]] std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const {
-    if (!handle_) {
-        return {};
-    }
-
-    auto graalProfile = isolated::ipf::InstrumentProfileIterator::next(handle_.get());
-    auto result = InstrumentProfile::fromGraal(graalProfile);
-    isolated::ipf::InstrumentProfile::release(graalProfile);
+std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const {
+    auto graalProfile = isolated::ipf::live::IsolatedInstrumentProfileIterator::next(handle_.get());
+    auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
     return result;
 };

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../internal/Conf.hpp"
+#include "../../exceptions/InvalidArgumentException.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -158,7 +159,7 @@ struct DXFCPP_EXPORT CandleType {
      * distinguish it from CandleType::MINUTE that is represented as `"m"`.
      *
      * @return string representation of this candle price type.
-     * @throws std::invalid_argument if the string representation is invalid.
+     * @throws InvalidArgumentException if the string representation is invalid.
      */
     const std::string &toString() const & noexcept {
         return string_;
@@ -171,16 +172,14 @@ struct DXFCPP_EXPORT CandleType {
      *
      * @param s The string representation of candle type.
      * @return A candle type.
+     * @throws InvalidArgumentException if argument is empty or invalid
      */
     static std::reference_wrapper<const CandleType> parse(const dxfcpp::StringLikeWrapper &s) {
-        auto sw = s.operator std::string_view();
-        auto n = sw.length();
-
-        if (n == 0) {
-            throw std::invalid_argument("Missing candle type");
+        if (s.empty()) {
+            throw InvalidArgumentException("Missing candle type");
         }
 
-        auto result = BY_STRING.find(sw);
+        auto result = BY_STRING.find(s);
 
         if (result != BY_STRING.end()) {
             return result->second;
@@ -190,17 +189,17 @@ struct DXFCPP_EXPORT CandleType {
             const auto &name = typeRef.get().getName();
 
             // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc
-            if (name.length() >= n && iEquals(name.substr(0, n), sw)) {
+            if (name.length() >= s.length() && iEquals(name.substr(0, s.length()), s)) {
                 return typeRef;
             }
 
             // Ticks, Minutes, Seconds, etc
-            if (sw.ends_with("s") && iEquals(name, sw.substr(0, n - 1))) {
+            if (s.ends_with("s") && iEquals(name, s.substr(0, s.length() - 1))) {
                 return typeRef;
             }
         }
 
-        throw std::invalid_argument("Unknown candle type: " + s);
+        throw InvalidArgumentException("Unknown candle type: " + s);
     }
 
     bool operator==(const CandleType &candleType) const noexcept {

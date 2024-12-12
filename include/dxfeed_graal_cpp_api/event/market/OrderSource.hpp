@@ -7,17 +7,18 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
 #include <cstdint>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 
-#include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
+
+struct EventSourceWrapper;
 
 /**
  * Identifies source of Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events.
@@ -34,6 +35,7 @@ DXFCPP_BEGIN_NAMESPACE
  * </ul>
  */
 class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
+    friend struct EventSourceWrapper;
 
     static constexpr std::uint32_t PUB_ORDER = 0x0001U;
     static constexpr std::uint32_t PUB_ANALYTIC_ORDER = 0x0002U;
@@ -54,84 +56,19 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     std::uint32_t pubFlags_{};
     bool builtin_{};
 
-    OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept
-        : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {
-    }
+    OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept;
 
-    OrderSource(const std::string &name, std::uint32_t pubFlags) : OrderSource(composeId(name), name, pubFlags) {
-    }
+    OrderSource(const std::string &name, std::uint32_t pubFlags);
 
-    OrderSource(std::int32_t id, const std::string &name) noexcept
-        : IndexedEventSource(id, name), pubFlags_{0}, builtin_{false} {
-    }
+    OrderSource(std::int32_t id, const std::string &name) noexcept;
 
-    static std::int32_t composeId(const std::string &name) {
-        std::int32_t sourceId = 0;
+    static std::int32_t composeId(const std::string &name);
 
-        auto n = name.length();
+    static void checkChar(char c);
 
-        if (n == 0 || n > 4) {
-            throw std::invalid_argument("Source name must contain from 1 to 4 characters");
-        }
+    static std::string decodeName(std::int32_t id);
 
-        for (auto c : name) {
-            checkChar(c);
-            sourceId = orOp(sal(sourceId, 8), c);
-        }
-
-        return sourceId;
-    }
-
-    static void checkChar(char c) {
-        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
-            return;
-        }
-
-        throw std::invalid_argument("Source name must contain only alphanumeric characters");
-    }
-
-    static std::string decodeName(std::int32_t id) {
-        if (id == 0) {
-            throw std::invalid_argument("Source name must contain from 1 to 4 characters");
-        }
-
-        std::string name(4, '\0');
-
-        std::size_t n = 0;
-
-        for (int i = 24; i >= 0; i -= 8) {
-            if (sar(id, i) == 0) { // skip highest contiguous zeros
-                continue;
-            }
-
-            char c = static_cast<char>(andOp(sar(id, i), 0xff));
-
-            checkChar(c);
-            name[n++] = c;
-        }
-
-        return name.substr(0, n);
-    }
-
-    static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType) {
-        if (eventType == EventTypeEnum::ORDER) {
-            return PUB_ORDER;
-        }
-
-        if (eventType == EventTypeEnum::ANALYTIC_ORDER) {
-            return PUB_ANALYTIC_ORDER;
-        }
-
-        if (eventType == EventTypeEnum::OTC_MARKETS_ORDER) {
-            return PUB_OTC_MARKETS_ORDER;
-        }
-
-        if (eventType == EventTypeEnum::SPREAD_ORDER) {
-            return PUB_SPREAD_ORDER;
-        }
-
-        throw std::invalid_argument("Invalid order event type: " + eventType.getName());
-    }
+    static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType);
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -141,6 +78,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
     void *toGraal() const override;
+
+    std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept override;
 
   public:
     /**
@@ -489,15 +428,29 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource arca;
 
     /**
+     * Cboe European Derivatives.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource CEDX;
+
+    /**
+     * Cboe European Derivatives. Record for price level book.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource cedx;
+
+    /**
      * Determines whether specified source identifier refers to special order source.
      * Special order sources are used for wrapping non-order events into order events.
      *
      * @param sourceId the source identifier.
      * @return `true` if it is a special source identifier
      */
-    static bool isSpecialSourceId(std::int32_t sourceId) noexcept {
-        return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE_ASK.id();
-    }
+    static bool isSpecialSourceId(std::int32_t sourceId) noexcept;
 
     /**
      * Returns order source for the specified source identifier.
@@ -505,19 +458,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @param sourceId the source identifier.
      * @return order source.
      */
-    static const OrderSource &valueOf(std::int32_t sourceId) {
-        if (auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
-            return found->second;
-        }
-
-        std::lock_guard lock(MTX_);
-
-        if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
-            return found->second;
-        }
-
-        return USER_SOURCES_.try_emplace(sourceId, OrderSource(sourceId, decodeName(sourceId))).first->second;
-    }
+    static const OrderSource &valueOf(std::int32_t sourceId);
 
     /**
      * Returns order source for the specified source name.
@@ -526,23 +467,15 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @param name the name of the source.
      * @return order source.
      */
-    static const OrderSource &valueOf(const std::string &name) {
-        if (auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
-            return found->second;
-        }
-
-        std::lock_guard lock(MTX_);
-
-        auto sourceId = composeId(name);
-
-        if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
-            return found->second;
-        }
-
-        return USER_SOURCES_.try_emplace(sourceId, OrderSource(sourceId, name)).first->second;
-    }
+    static const OrderSource &valueOf(const std::string &name);
 };
 
 DXFCPP_END_NAMESPACE
+
+template <> struct std::hash<dxfcpp::OrderSource> {
+    std::size_t operator()(const dxfcpp::OrderSource &orderSource) const noexcept {
+        return static_cast<std::size_t>(orderSource.id());
+    }
+};
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

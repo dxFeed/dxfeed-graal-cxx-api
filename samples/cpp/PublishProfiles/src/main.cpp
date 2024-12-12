@@ -5,7 +5,9 @@
 
 #include <string>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
@@ -53,12 +55,10 @@ int main(int argc, char *argv[]) {
                 }));
 
         std::cin.get();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
+
+        return 1;
     }
 
     return 0;

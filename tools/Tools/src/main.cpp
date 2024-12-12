@@ -14,7 +14,9 @@
 
 #include <process/process.hpp>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 template <class... Ts> struct overloaded : Ts... {
     using Ts::operator()...;
@@ -28,6 +30,12 @@ using namespace dxfcpp::literals;
 
 int main(int argc, char *argv[]) {
     try {
+        System::setProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true");
+        // Enable experimental feature.
+        System::setProperty("dxfeed.experimental.dxlink.enable", "true");
+        // Set scheme for dxLink.
+        System::setProperty("scheme", "ext:opt:sysprops,resource:dxlink.xml");
+
         const auto usage = tools::HelpTool::generateToolHelpScreen<tools::Tools>();
 
         std::vector<std::string> args{};
@@ -77,12 +85,8 @@ int main(int argc, char *argv[]) {
 
                         std::cout << tools::Tools::getName() << "\n";
                         T::run(parseResult.result);
-                    } catch (const JavaException &e) {
-                        std::cerr << e.what() << '\n';
-                        std::cerr << e.getStackTrace() << '\n';
-                    } catch (const GraalException &e) {
-                        std::cerr << e.what() << '\n';
-                        std::cerr << e.getStackTrace() << '\n';
+                    } catch (const RuntimeException &e) {
+                        std::cerr << e << '\n';
                     }
                 },
                 tool);
@@ -91,13 +95,9 @@ int main(int argc, char *argv[]) {
         }
 
         std::cout << usage << "\n";
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const std::runtime_error& e) {
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
+    } catch (const std::runtime_error &e) {
         std::cerr << e.what() << '\n';
     } catch (...) {
         std::cerr << "Error!\n";

@@ -49,11 +49,11 @@ void AnalyticOrder::fillGraalData(void *graalNative) const noexcept {
 
 std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw std::invalid_argument("Unable to create AnalyticOrder. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create AnalyticOrder. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to create AnalyticOrder. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER))));
@@ -66,7 +66,7 @@ std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) {
     return analyticOrder;
 }
 
-std::string AnalyticOrder::toString() const noexcept {
+std::string AnalyticOrder::toString() const {
     return fmt::format("AnalyticOrder{{{}, marketMaker={}, icebergPeakSize={}, icebergHiddenSize={}, "
                        "icebergExecutedSize={}, icebergType={}}}",
                        baseFieldsToString(), getMarketMaker(), dxfcpp::toString(getIcebergPeakSize()),
@@ -92,7 +92,7 @@ void AnalyticOrder::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to free AnalyticOrder's Graal data. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_ANALYTIC_ORDER))));
@@ -103,6 +103,14 @@ void AnalyticOrder::freeGraal(void *graalNative) {
     Order::freeGraalData(graalNative);
 
     delete graalAnalyticOrder;
+}
+
+void AnalyticOrder::assign(std::shared_ptr<EventType> event) {
+    Order::assign(event);
+
+    if (const auto other = event->sharedAs<AnalyticOrder>(); other) {
+        analyticOrderData_ = other->analyticOrderData_;
+    }
 }
 
 DXFCPP_END_NAMESPACE

@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../event/IndexedEventSource.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
+#include "../../event/EventTypeEnum.hpp"
 #include "ObservableSubscriptionChangeListener.hpp"
 
 #include <cstdint>
@@ -61,7 +62,7 @@ struct DXFCPP_EXPORT ObservableSubscription {
 
     /**
      * Removes subscription change listener by id. This method does nothing if the listener with the given id was not
-     * installed or was already removed as subscription change listener for this subscription. Otherwise it removes the
+     * installed or was already removed as subscription change listener for this subscription. Otherwise, it removes the
      * corresponding listener and immediately invokes ObservableSubscriptionChangeListener::subscriptionClosed() on the
      * given listener while holding the lock for this subscription.
      *

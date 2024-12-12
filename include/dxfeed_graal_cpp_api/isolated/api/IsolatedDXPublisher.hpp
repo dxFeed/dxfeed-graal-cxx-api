@@ -20,7 +20,7 @@ namespace isolated::api::IsolatedDXPublisher {
  *
  * @param publisher The publisher's handle.
  * @param events Events to be published.
- * @throws std::invalid_argument if publisher handle is invalid or events' pointer is nullptr.
+ * @throws InvalidArgumentException if publisher handle is invalid or events' pointer is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -32,7 +32,7 @@ void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle
  *
  * @param publisher The publisher's handle.
  * @param eventType The event type.
- * @throws std::invalid_argument if publisher handle is invalid.
+ * @throws InvalidArgumentException if publisher handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  * @return The underlying observable subscription's handle.

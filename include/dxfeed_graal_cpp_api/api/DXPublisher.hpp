@@ -213,10 +213,9 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
             Debugger::debug(toString() + "::publishEvents(events = " + elementsToString(begin, end) + ")");
         }
 
-        auto *list = EventMapper::toGraalList(begin, end);
+        auto list = EventMapper::toGraalListUnique(begin, end);
 
-        publishEventsImpl(list);
-        EventMapper::freeGraalList(list);
+        publishEventsImpl(list.get());
     }
 
     /**
@@ -244,7 +243,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      */
     std::shared_ptr<ObservableSubscription> getSubscription(const EventTypeEnum &eventType);
 
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

@@ -7,7 +7,9 @@
 
 #include "../Args/Args.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {
 
@@ -63,6 +65,8 @@ struct QdsTool {
                     properties = parseResult.result;
                     propertiesIsParsed = true;
                     index = parseResult.nextIndex;
+                } else {
+                    qdsArgs.result += " " + args[index++];
                 }
             }
 
@@ -77,7 +81,7 @@ struct QdsTool {
         auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
 
         System::setProperties(parsedProperties);
-        dxfcpp::isolated::Tools::runTool(qdsArgs);
+        dxfcpp::isolated::internal::IsolatedTools::runTool(qdsArgs);
     }
 };
 

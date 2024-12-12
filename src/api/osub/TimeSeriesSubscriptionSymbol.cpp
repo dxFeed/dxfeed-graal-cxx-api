@@ -51,7 +51,7 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
     }
 
     if (graalNative == nullptr) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to create TimeSeriesSubscriptionSymbol. The `graalNative` parameter is nullptr");
     }
 
@@ -60,12 +60,12 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), graalSymbol->from_time};
 }
 
-std::string TimeSeriesSubscriptionSymbol::toString() const noexcept {
+std::string TimeSeriesSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
         return "TimeSeriesSubscriptionSymbol{" + getEventSymbol()->toString() +
                ", fromTime = " + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     } else {
-        return getEventSymbol()->toString() + "{fromTime=" + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
+        return getEventSymbol()->toStringUnderlying() + "{fromTime=" + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     }
 }
 

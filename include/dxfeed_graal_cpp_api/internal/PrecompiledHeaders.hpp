@@ -43,7 +43,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
 #include <utf8.h>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 #include "Common.hpp"
 #include "Handler.hpp"

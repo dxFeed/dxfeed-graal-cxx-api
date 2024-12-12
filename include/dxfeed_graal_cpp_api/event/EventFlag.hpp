@@ -45,7 +45,7 @@ DXFCPP_BEGIN_NAMESPACE
  * It can be retrieved from `eventFlags` with the following piece of code:
  *
  * ```cpp
- * bool txPending = (event-> getEventFlags() & IndexedEvent::TX_PENDING) != 0;
+ * bool txPending = (event->getEventFlags() & IndexedEvent::TX_PENDING) != 0;
  * ```
  *
  * <p>When `txPending` is `true` it means, that an ongoing transaction update that spans multiple events is
@@ -56,13 +56,13 @@ DXFCPP_BEGIN_NAMESPACE
  * corresponding index has to be removed.
  *
  * ```cpp
- * bool removeEvent = (event-> getEventFlags() & IndexedEvent::REMOVE_EVENT) != 0;
+ * bool removeEvent = (event->getEventFlags() & IndexedEvent::REMOVE_EVENT) != 0;
  * ```
  *
  * <p> `SB` (bit 2) &mdash; ::SNAPSHOT_BEGIN is used to indicate when the loading of a snapshot starts.
  *
  * ```cpp
- * bool snapshotBegin = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;
+ * bool snapshotBegin = (event->getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;
  * ```
  *
  * <p> Snapshot load starts on new subscription and the first indexed event that arrives for each non-zero source id
@@ -232,8 +232,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `or` operation with two event flags
      *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag (std::int32_t)
+     * @param eventFlag1 The first event flag
+     * @param eventFlag2 The second event flag (std::int32_t)
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator|(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
@@ -243,8 +243,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `or` operation with two event flags
      *
-     * @param eventType1 The first event flag (std::int32_t)
-     * @param eventType2 The second event flag
+     * @param eventFlag1 The first event flag (std::int32_t)
+     * @param eventFlag2 The second event flag
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator|(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
@@ -254,8 +254,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `and` operation with two event flags
      *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag (std::int32_t)
+     * @param eventFlag1 The first event flag
+     * @param eventFlag2 The second event flag (std::int32_t)
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator&(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
@@ -265,8 +265,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `and` operation with two event flags
      *
-     * @param eventType1 The first event flag (std::int32_t)
-     * @param eventType2 The second event flag
+     * @param eventFlag1 The first event flag (std::int32_t)
+     * @param eventFlag2 The second event flag
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator&(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
@@ -276,8 +276,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `or` operation with two event flags
      *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag (std::uint32_t)
+     * @param eventFlag1 The first event flag
+     * @param eventFlag2 The second event flag (std::uint32_t)
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator|(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
@@ -287,8 +287,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `or` operation with two event flags
      *
-     * @param eventType1 The first event flag (std::uint32_t)
-     * @param eventType2 The second event flag
+     * @param eventFlag1 The first event flag (std::uint32_t)
+     * @param eventFlag2 The second event flag
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator|(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
@@ -298,8 +298,8 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `and` operation with two event flags
      *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag (std::uint32_t)
+     * @param eventFlag1 The first event flag
+     * @param eventFlag2 The second event flag (std::uint32_t)
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
@@ -309,12 +309,77 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Performs a bit `and` operation with two event flags
      *
-     * @param eventType1 The first event flag (std::uint32_t)
-     * @param eventType2 The second event flag
+     * @param eventFlag1 The first event flag (std::uint32_t)
+     * @param eventFlag2 The second event flag
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
         return dxfcpp::andOp(eventFlag1, eventFlag2.getFlag());
+    }
+
+    /**
+     * Determines if the given event marks the beginning of a snapshot.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate the beginning of a snapshot, `false` otherwise.
+     */
+    template <typename Event> static bool isSnapshotBegin(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & SNAPSHOT_BEGIN) != 0;
+    }
+
+    /**
+     * Determines if the given event marks the end of a snapshot.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate the end of a snapshot, `false` otherwise.
+     */
+    template <typename Event> static bool isSnapshotEnd(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & SNAPSHOT_END) != 0;
+    }
+
+    /**
+     * Determines if the given event is marked as a snapshot snip.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate a snapshot snip, `false` otherwise.
+     */
+    template <typename Event> static bool isSnapshotSnip(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & SNAPSHOT_SNIP) != 0;
+    }
+
+    /**
+     * Determines if the given event marks the end of a snapshot or a snapshot snip.
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate the end or snip of a snapshot, `false` otherwise.
+     */
+    template <typename Event> static bool isSnapshotEndOrSnip(const std::shared_ptr<Event> &event) {
+        return isSnapshotEnd(event) || isSnapshotSnip(event);
+    }
+
+    /**
+     * Determines if the given event is in a pending state.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate a pending transaction, `false` otherwise.
+     */
+    template <typename Event> static bool isPending(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & TX_PENDING) != 0;
+    }
+
+    /**
+     * Determines if the given event is marked for removal.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate a remove action, `false` otherwise.
+     */
+    template <typename Event> static bool isRemove(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & REMOVE_EVENT) != 0;
     }
 };
 
@@ -364,9 +429,9 @@ class EventFlagsMask final {
     }
 
     /**
-     * Creates event flags mask by initializer list with flags\
+     * Creates event flags mask by initializer list with flags
      *
-     * @param eventTypes The list with flags
+     * @param eventFlags The list with flags
      */
     EventFlagsMask(std::initializer_list<EventFlag> eventFlags) noexcept
         : EventFlagsMask(eventFlags.begin(), eventFlags.end()) {
@@ -379,6 +444,14 @@ class EventFlagsMask final {
      */
     constexpr std::uint32_t getMask() const noexcept {
         return mask_;
+    }
+
+    /**
+     * @param flag The flag to check.
+     * @return `true` if this mask contains the flag.
+     */
+    bool contains(const EventFlag &flag) const noexcept {
+        return (mask_ & flag.getFlag()) != 0;
     }
 
     /**
@@ -403,19 +476,8 @@ class EventFlagsMask final {
         return EventFlagsMask{eventFlagsMask.mask_ & eventFlag.getFlag()};
     }
 
-    /**
-     * Performs a bit `or` operation with two event flags
-     *
-     * @param eventType1 The first event flag
-     * @param eventType2 The second event flag
-     * @return The result (event flags' mask )
-     */
-    friend EventFlagsMask operator|(const EventFlag &eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return EventFlagsMask{eventFlag1.getFlag() | eventFlag2.getFlag()};
-    }
-
     ///
-    std::string toString() const noexcept {
+    std::string toString() const {
         bool addOrSign = false;
         std::ostringstream result{};
 
@@ -440,5 +502,17 @@ class EventFlagsMask final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/**
+ * Performs a bit `or` operation with two event flags
+ *
+ * @param eventFlag1 The first event flag
+ * @param eventFlag2 The second event flag
+ * @return The result (event flags' mask )
+ */
+inline dxfcpp::EventFlagsMask operator|(const dxfcpp::EventFlag &eventFlag1,
+                                        const dxfcpp::EventFlag &eventFlag2) noexcept {
+    return dxfcpp::EventFlagsMask{eventFlag1.getFlag() | eventFlag2.getFlag()};
+}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

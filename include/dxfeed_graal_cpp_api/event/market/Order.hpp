@@ -121,7 +121,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
 
@@ -138,8 +138,12 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
      */
     static void freeGraal(void *graalNative);
+
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new order event with default values.
     Order() noexcept = default;
@@ -534,7 +538,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

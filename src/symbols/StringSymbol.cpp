@@ -72,7 +72,7 @@ StringSymbol StringSymbol::fromGraal(void *graalNative) {
     }
 
     if (graalNative == nullptr) {
-        throw std::invalid_argument("Unable to create StringSymbol. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create StringSymbol. The `graalNative` parameter is nullptr");
     }
 
     auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);

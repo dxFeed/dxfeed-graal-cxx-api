@@ -1,24 +1,23 @@
 // Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <dxfeed_graal_cpp_api/event/candle/Candle.hpp>
+
+#include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
+#include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
+
 #include <dxfg_api.h>
-
 #include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <cstring>
 #include <memory>
-#include <utf8.h>
 #include <utility>
+#include <cassert>
 
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
-
-const EventTypeEnum &Candle::TYPE = EventTypeEnum::CANDLE;
 
 void Candle::fillData(void *graalNative) {
     if (graalNative == nullptr) {
@@ -82,13 +81,15 @@ void Candle::freeGraalData(void *graalNative) noexcept {
     delete[] graalCandle->event_symbol;
 }
 
+const EventTypeEnum &Candle::TYPE = EventTypeEnum::CANDLE;
+
 std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw std::invalid_argument("Unable to create Candle. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create Candle. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to create Candle. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
@@ -106,12 +107,18 @@ void *Candle::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalCandle =
-        new dxfg_candle_t{};
+    auto *graalCandle = new dxfg_candle_t{};
 
     fillGraalData(static_cast<void *>(graalCandle));
 
     return static_cast<void *>(graalCandle);
+}
+
+void Candle::assign(std::shared_ptr<EventType> event) {
+    if (const auto other = event->sharedAs<Candle>(); other) {
+        eventSymbol_ = other->eventSymbol_;
+        data_ = other->data_;
+    }
 }
 
 void Candle::freeGraal(void *graalNative) {
@@ -120,11 +127,10 @@ void Candle::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to free Candle's Graal data. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
-
     }
 
     auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
@@ -134,7 +140,286 @@ void Candle::freeGraal(void *graalNative) {
     delete graalCandle;
 }
 
-std::string Candle::toString() const noexcept {
+Candle::Candle(CandleSymbol eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
+}
+
+const CandleSymbol &Candle::getEventSymbol() const & noexcept {
+    if (!eventSymbol_) {
+        return CandleSymbol::NUL;
+    }
+
+    return eventSymbol_.value();
+}
+
+const std::optional<CandleSymbol> &Candle::getEventSymbolOpt() const & noexcept {
+    return eventSymbol_;
+}
+
+void Candle::setEventSymbol(const CandleSymbol &eventSymbol) noexcept {
+    eventSymbol_ = eventSymbol;
+}
+
+Candle &Candle::withEventSymbol(const CandleSymbol &eventSymbol) noexcept {
+    Candle::setEventSymbol(eventSymbol);
+
+    return *this;
+}
+
+std::int64_t Candle::getEventTime() const noexcept {
+    return data_.eventTime;
+}
+
+void Candle::setEventTime(std::int64_t eventTime) noexcept {
+    data_.eventTime = eventTime;
+}
+
+Candle &Candle::withEventTime(std::int64_t eventTime) noexcept {
+    Candle::setEventTime(eventTime);
+
+    return *this;
+}
+
+// IndexedEvent methods
+
+std::int32_t Candle::getEventFlags() const noexcept {
+    return data_.eventFlags;
+}
+
+EventFlagsMask Candle::getEventFlagsMask() const noexcept {
+    return EventFlagsMask(data_.eventFlags);
+}
+
+void Candle::setEventFlags(std::int32_t eventFlags) noexcept {
+    data_.eventFlags = eventFlags;
+}
+
+Candle &Candle::withEventFlags(std::int32_t eventFlags) noexcept {
+    Candle::setEventFlags(eventFlags);
+
+    return *this;
+}
+
+void Candle::setEventFlags(const EventFlagsMask &eventFlags) noexcept {
+    data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
+}
+
+Candle &Candle::withEventFlags(const EventFlagsMask &eventFlags) noexcept {
+    Candle::setEventFlags(eventFlags);
+
+    return *this;
+}
+
+void Candle::setIndex(std::int64_t index) {
+    data_.index = index;
+}
+
+Candle &Candle::withIndex(std::int64_t index) noexcept {
+    Candle::setIndex(index);
+
+    return *this;
+}
+
+// TimeSeriesEvent methods
+
+std::int64_t Candle::getIndex() const noexcept {
+    return data_.index;
+}
+
+std::int64_t Candle::getTime() const noexcept {
+    return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+}
+
+// Candle methods
+
+void Candle::setTime(std::int64_t time) noexcept {
+    data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                            sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+                       getSequence());
+}
+
+Candle &Candle::withTime(std::int64_t time) noexcept {
+    Candle::setTime(time);
+
+    return *this;
+}
+
+std::int32_t Candle::getSequence() const noexcept {
+    return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
+}
+
+void Candle::setSequence(std::int32_t sequence) {
+    assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+    if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+        throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
+    }
+
+    data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
+}
+
+Candle &Candle::withSequence(std::int32_t sequence) noexcept {
+    Candle::setSequence(sequence);
+
+    return *this;
+}
+
+std::int64_t Candle::getCount() const noexcept {
+    return data_.count;
+}
+
+void Candle::setCount(std::int64_t count) noexcept {
+    data_.count = count;
+}
+
+Candle &Candle::withCount(std::int64_t count) noexcept {
+    Candle::setCount(count);
+
+    return *this;
+}
+
+double Candle::getOpen() const noexcept {
+    return data_.open;
+}
+
+void Candle::setOpen(double open) noexcept {
+    data_.open = open;
+}
+
+Candle &Candle::withOpen(double open) noexcept {
+    Candle::setOpen(open);
+
+    return *this;
+}
+
+double Candle::getHigh() const noexcept {
+    return data_.high;
+}
+
+void Candle::setHigh(double high) noexcept {
+    data_.high = high;
+}
+
+Candle &Candle::withHigh(double high) noexcept {
+    Candle::setHigh(high);
+
+    return *this;
+}
+
+double Candle::getLow() const noexcept {
+    return data_.low;
+}
+
+void Candle::setLow(double low) noexcept {
+    data_.low = low;
+}
+
+Candle &Candle::withLow(double low) noexcept {
+    Candle::setLow(low);
+
+    return *this;
+}
+
+double Candle::getClose() const noexcept {
+    return data_.close;
+}
+
+void Candle::setClose(double close) noexcept {
+    data_.close = close;
+}
+
+Candle &Candle::withClose(double close) noexcept {
+    Candle::setClose(close);
+
+    return *this;
+}
+
+double Candle::getVolume() const noexcept {
+    return data_.volume;
+}
+
+void Candle::setVolume(double volume) noexcept {
+    data_.volume = volume;
+}
+
+Candle &Candle::withVolume(double volume) noexcept {
+    Candle::setVolume(volume);
+
+    return *this;
+}
+
+double Candle::getVWAP() const noexcept {
+    return data_.vwap;
+}
+
+void Candle::setVWAP(double vwap) noexcept {
+    data_.vwap = vwap;
+}
+
+Candle &Candle::withVWAP(double vwap) noexcept {
+    Candle::setVWAP(vwap);
+
+    return *this;
+}
+
+double Candle::getBidVolume() const noexcept {
+    return data_.bidVolume;
+}
+
+void Candle::setBidVolume(double bidVolume) noexcept {
+    data_.bidVolume = bidVolume;
+}
+
+Candle &Candle::withBidVolume(double bidVolume) noexcept {
+    Candle::setBidVolume(bidVolume);
+
+    return *this;
+}
+
+double Candle::getAskVolume() const noexcept {
+    return data_.askVolume;
+}
+
+void Candle::setAskVolume(double askVolume) noexcept {
+    data_.askVolume = askVolume;
+}
+
+Candle &Candle::withAskVolume(double askVolume) noexcept {
+    Candle::setAskVolume(askVolume);
+
+    return *this;
+}
+
+double Candle::getImpVolatility() const noexcept {
+    return data_.impVolatility;
+}
+
+void Candle::setImpVolatility(double impVolatility) {
+    data_.impVolatility = impVolatility;
+}
+
+Candle &Candle::withImpVolatility(double impVolatility) noexcept {
+    Candle::setImpVolatility(impVolatility);
+
+    return *this;
+}
+
+double Candle::getOpenInterest() const noexcept {
+    return data_.openInterest;
+}
+
+void Candle::setOpenInterest(double openInterest) noexcept {
+    data_.openInterest = openInterest;
+}
+
+Candle &Candle::withOpenInterest(double openInterest) noexcept {
+    Candle::setOpenInterest(openInterest);
+
+    return *this;
+}
+
+// EventType methods
+
+std::string Candle::toString() const {
     return fmt::format(
         "Candle{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, count={}, open={}, high={}, low={}, "
         "close={}, volume={}, vwap={}, bidVolume={}, askVolume={}, impVolatility={}, openInterest={}}}",

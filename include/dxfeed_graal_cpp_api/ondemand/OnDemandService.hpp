@@ -101,7 +101,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * @return on-demand endpoint for the default DXEndpoint instance.
      */
-    static std::shared_ptr<OnDemandService> getInstance() noexcept;
+    static std::shared_ptr<OnDemandService> getInstance();
 
     /**
      * Returns on-demand service for the specified DXEndpoint.
@@ -131,7 +131,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * @return `true` when on-demand historical data replay mode is supported.
      */
-    bool isReplaySupported() const noexcept;
+    bool isReplaySupported() const;
 
     /**
      * Returns `true` when this on-demand historical data replay service is in replay mode.
@@ -140,7 +140,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * @return `true` when this on-demand historical data replay service is in replay mode.
      */
-    bool isReplay() const noexcept;
+    bool isReplay() const;
 
     /**
      * Returns `true` when this on-demand historical data replay service is in clear mode.
@@ -149,7 +149,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * @return `true` when this on-demand historical data replay service is in clear mode.
      */
-    bool isClear() const noexcept;
+    bool isClear() const;
 
     /**
      * Returns current or last on-demand historical data replay time.
@@ -159,7 +159,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * @return current or last on-demand historical data replay time in millis.
      */
-    std::int64_t getTime() const noexcept;
+    std::int64_t getTime() const;
 
     /**
      * Returns on-demand historical data replay speed.
@@ -170,7 +170,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * @return on-demand historical data replay speed.
      */
-    double getSpeed() const noexcept;
+    double getSpeed() const;
 
     /**
      * Turns on-demand historical data replay mode from a specified time with real-time speed.
@@ -184,7 +184,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * @param time time (timestamp in millis) to start replay from.
      */
-    void replay(std::int64_t time) const noexcept;
+    void replay(std::int64_t time) const;
 
     /**
      * Turns on-demand historical data replay mode from a specified time and with a specified speed.
@@ -205,7 +205,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * @param speed speed to start replay with. Use 1 for real-time speed, >1 for faster than real-time speed,
      *              <1 for slower than real-time speed, and 0 for pause.
      */
-    void replay(std::int64_t time, double speed) const noexcept;
+    void replay(std::int64_t time, double speed) const;
 
     /**
      * Pauses on-demand historical data replay and keeps data snapshot.
@@ -222,7 +222,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *     <li>OnDemandService::getSpeed() returns `0`.
      * </ul>
      */
-    void pause() const noexcept;
+    void pause() const;
 
     /**
      * Stops on-demand historical data replay and resumes ordinary data feed.
@@ -242,7 +242,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" do not have an ordinary feed (they are essentially on-demand only)
      * and thus `stopAndResume` method works like @ref OnDemandService::stopAndClear() "stopAndClear" for them.
      */
-    void stopAndResume() const noexcept;
+    void stopAndResume() const;
 
     /**
      * Stops incoming data and clears it without resuming data updates.
@@ -259,7 +259,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * <p>Ordinary data feed can be resumed with OnDemandService::stopAndResume() method and on-demand historical data
      * replay can be continued with @ref OnDemandService::replay() "replay(...)" method.
      */
-    void stopAndClear() const noexcept;
+    void stopAndClear() const;
 
     /**
      * Changes on-demand historical data replay speed while continuing replay at current @ref OnDemandService::getTime() "time".
@@ -268,7 +268,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * @param speed on-demand historical data replay speed.
      */
-    void setSpeed(double speed) const noexcept;
+    void setSpeed(double speed) const;
 };
 
 DXFCPP_END_NAMESPACE

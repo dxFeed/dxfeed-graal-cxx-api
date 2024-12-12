@@ -8,138 +8,95 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-Schedule::Schedule(void *handle) noexcept : handle_(handle) {
+Schedule::Schedule(JavaObjectHandle<Schedule> &&handle) noexcept : handle_(std::move(handle)) {
 }
 
-Schedule::Ptr Schedule::create(void *handle) {
+Schedule::Ptr Schedule::create(JavaObjectHandle<Schedule> &&handle) {
     if (!handle) {
-        throw std::invalid_argument(
-            "Unable to create a Schedule object. The handle is nullptr");
+        throw InvalidArgumentException("Unable to create a Schedule object. The handle is nullptr");
     }
 
-    return std::shared_ptr<Schedule>(new Schedule(handle));
+    return std::shared_ptr<Schedule>(new Schedule(std::move(handle)));
 }
 
 Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        throw std::invalid_argument("The profile is nullptr");
+        throw InvalidArgumentException("The `profile` is nullptr");
     }
 
-    auto graalProfile = profile->toGraal();
-    auto schedule = create(isolated::schedule::Schedule::getInstance(graalProfile));
-    InstrumentProfile::freeGraal(graalProfile);
-
-    return schedule;
+    return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_));
 }
 
-Schedule::Ptr Schedule::getInstance(const std::string &scheduleDefinition) {
-    return create(isolated::schedule::Schedule::getInstance(scheduleDefinition));
+Schedule::Ptr Schedule::getInstance(const StringLikeWrapper &scheduleDefinition) {
+    return create(isolated::schedule::IsolatedSchedule::getInstance(scheduleDefinition));
 }
 
-Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const std::string &venue) {
+Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLikeWrapper &venue) {
     if (!profile) {
-        throw std::invalid_argument("The profile is nullptr");
+        throw InvalidArgumentException("The `profile` is nullptr");
     }
 
-    auto graalProfile = profile->toGraal();
-    auto schedule = create(isolated::schedule::Schedule::getInstance(graalProfile, venue));
-    InstrumentProfile::freeGraal(graalProfile);
-
-    return schedule;
+    return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_, venue));
 }
 
 std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) {
     if (!profile) {
-        throw std::invalid_argument("The profile is nullptr");
+        throw InvalidArgumentException("The profile is nullptr");
     }
 
-    auto graalProfile = profile->toGraal();
-    auto result = isolated::schedule::Schedule::getTradingVenues(graalProfile);
-    InstrumentProfile::freeGraal(graalProfile);
-
-    return result;
+    return isolated::schedule::IsolatedSchedule::getTradingVenues(profile->handle_);
 }
 
-void Schedule::downloadDefaults(const std::string &downloadConfig) noexcept {
-    isolated::schedule::Schedule::downloadDefaults(downloadConfig);
+void Schedule::downloadDefaults(const StringLikeWrapper &downloadConfig) {
+    isolated::schedule::IsolatedSchedule::downloadDefaults(downloadConfig);
 }
 
-bool Schedule::setDefaults(const std::vector<char> &data) noexcept {
-    return isolated::schedule::Schedule::setDefaults(data);
+void Schedule::setDefaults(const std::vector<char> &data) {
+    return isolated::schedule::IsolatedSchedule::setDefaults(data);
 }
 
-Session::Ptr Schedule::getSessionByTime(std::int64_t time) const noexcept {
-    if (!handle_) {
-        return {};
-    }
-
-    return Session::create(isolated::schedule::Schedule::getSessionByTime(handle_.get(), time));
+std::shared_ptr<Session> Schedule::getSessionByTime(std::int64_t time) const {
+    return Session::create(isolated::schedule::IsolatedSchedule::getSessionByTime(handle_, time));
 }
 
-Day::Ptr Schedule::getDayByTime(std::int64_t time) const noexcept {
-    if (!handle_) {
-        return {};
-    }
-
-    return Day::create(isolated::schedule::Schedule::getDayByTime(handle_.get(), time));
+std::shared_ptr<Day> Schedule::getDayByTime(std::int64_t time) const {
+    return Day::create(isolated::schedule::IsolatedSchedule::getDayByTime(handle_, time));
 }
 
-Day::Ptr Schedule::getDayById(std::int32_t dayId) const noexcept {
-    if (!handle_) {
-        return {};
-    }
-
-    return Day::create(isolated::schedule::Schedule::getDayById(handle_.get(), dayId));
+std::shared_ptr<Day> Schedule::getDayById(std::int32_t dayId) const {
+    return Day::create(isolated::schedule::IsolatedSchedule::getDayById(handle_, dayId));
 }
 
-Day::Ptr Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const noexcept {
-    if (!handle_) {
-        return {};
-    }
-
-    return Day::create(isolated::schedule::Schedule::getDayByYearMonthDay(handle_.get(), yearMonthDay));
+std::shared_ptr<Day> Schedule::getDayByYearMonthDay(std::int32_t yearMonthDay) const {
+    return Day::create(isolated::schedule::IsolatedSchedule::getDayByYearMonthDay(handle_, yearMonthDay));
 }
 
-Session::Ptr Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
-        return {};
-    }
-
+std::shared_ptr<Session> Schedule::getNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const {
     return Session::create(
-        isolated::schedule::Schedule::getNearestSessionByTime(handle_.get(), time, filter.handle_.get()));
+        isolated::schedule::IsolatedSchedule::getNearestSessionByTime(handle_, time, filter.getHandle()));
 }
 
-Session::Ptr Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter& filter) const noexcept {
-    if (!handle_ || !filter.handle_) {
+std::shared_ptr<Session> Schedule::findNearestSessionByTime(std::int64_t time, const SessionFilter &filter) const {
+    auto sessionHandle =
+        isolated::schedule::IsolatedSchedule::findNearestSessionByTime(handle_, time, filter.getHandle());
+
+    if (!sessionHandle) {
         return {};
     }
 
-    return Session::create(
-        isolated::schedule::Schedule::findNearestSessionByTime(handle_.get(), time, filter.handle_.get()));
+    return Session::create(std::move(sessionHandle));
 }
 
-std::string Schedule::getName() const noexcept {
-    if (!handle_) {
-        return dxfcpp::String::EMPTY;
-    }
-
-    return isolated::schedule::Schedule::getName(handle_.get());
+std::string Schedule::getName() const {
+    return isolated::schedule::IsolatedSchedule::getName(handle_);
 }
 
-std::string Schedule::getTimeZoneDisplayName() const noexcept {
-    if (!handle_) {
-        return dxfcpp::String::EMPTY;
-    }
-
-    return isolated::schedule::Schedule::getTimeZoneDisplayName(handle_.get());
+std::string Schedule::getTimeZoneDisplayName() const {
+    return isolated::schedule::IsolatedSchedule::getTimeZoneDisplayName(handle_);
 }
 
-std::string Schedule::getTimeZoneId() const noexcept {
-    if (!handle_) {
-        return dxfcpp::String::EMPTY;
-    }
-
-    return isolated::schedule::Schedule::getTimeZoneId(handle_.get());
+std::string Schedule::getTimeZoneId() const {
+    return isolated::schedule::IsolatedSchedule::getTimeZoneId(handle_);
 }
 
 DXFCPP_END_NAMESPACE

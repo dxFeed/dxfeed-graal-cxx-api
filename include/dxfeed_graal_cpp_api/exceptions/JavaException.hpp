@@ -5,7 +5,11 @@
 
 #include "../internal/Conf.hpp"
 
+#include "../internal/Common.hpp"
+
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
+
+#include "RuntimeException.hpp"
 
 #include <limits>
 #include <stdexcept>
@@ -17,7 +21,7 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * A wrapper over the interceptable Java exceptions thrown by the dxFeed Native Graal SDK
  */
-struct DXFCPP_EXPORT JavaException : public std::runtime_error {
+struct DXFCPP_EXPORT JavaException : RuntimeException {
     /**
      * Creates an exception using Java message, className and stack trace. Also uses current stack trace.
      *
@@ -25,7 +29,18 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
      * @param className Java class name.
      * @param stackTrace Java stack trace.
      */
-    JavaException(const std::string &message, const std::string &className, std::string stackTrace);
+    JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
+                  const StringLikeWrapper &stackTrace);
+
+    JavaException(const JavaException& other) noexcept;
+
+    /**
+     * Creates an exception using native (GraalVM) Java exception handle
+     *
+     * @param exceptionHandle The native Java exception handle.
+     * @return An exception.
+     */
+    static JavaException create(void *exceptionHandle);
 
     /// Throws a JavaException if it exists (i.e. intercepted by Graal SDK)
     static void throwIfJavaThreadExceptionExists();
@@ -56,33 +71,29 @@ struct DXFCPP_EXPORT JavaException : public std::runtime_error {
         return v;
     }
 
-    // Legacy
-    template <typename T> static constexpr T *throwIfMinusOne(T *v) {
-        if (dxfcpp::bit_cast<std::int64_t>(v) == -1LL ||
-            dxfcpp::bit_cast<std::int64_t>(v) == 0x00000000FFFFFFFFLL) {
+    template <typename T> static constexpr T throwIfMinusOne(T v) {
+        if (v == T(-1)) {
             throwIfJavaThreadExceptionExists();
         }
 
         return v;
     }
 
-    // Legacy
-    template <typename T> static constexpr const T *throwIfMinusOne(const T *v) {
-        if (dxfcpp::bit_cast<std::int64_t>(v) == -1LL ||
-            dxfcpp::bit_cast<std::int64_t>(v) == 0x00000000FFFFFFFFLL) {
+    template <typename T> static constexpr T throwIfMinusMin(T v) {
+        if (v == std::numeric_limits<T>::min()) {
             throwIfJavaThreadExceptionExists();
         }
 
         return v;
     }
 
-    /**
-     * @return dxFeed Graal CXX API stack trace + Java (GraalVM) exception's stack trace.
-     */
-    const std::string &getStackTrace() const &;
+    template <typename T> static constexpr T throwIfMinusInf(T v) {
+        if (v == -std::numeric_limits<T>::infinity()) {
+            throwIfJavaThreadExceptionExists();
+        }
 
-  private:
-    std::string stackTrace_;
+        return v;
+    }
 };
 
 DXFCPP_END_NAMESPACE

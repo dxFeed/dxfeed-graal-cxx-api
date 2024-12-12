@@ -12,12 +12,16 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct EventSourceWrapper;
+
 /**
  * Source identifier for IndexedEvent.
  *
  * See IndexedEvent::getSource().
  */
 class DXFCPP_EXPORT IndexedEventSource {
+    friend struct EventSourceWrapper;
+
     std::int32_t id_{};
     std::string name_{};
 
@@ -41,15 +45,20 @@ class DXFCPP_EXPORT IndexedEventSource {
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
      */
     static void freeGraal(void *graalNative);
+
+    virtual std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept {
+        return {toGraal(), IndexedEventSource::freeGraal};
+    }
 
     /**
      * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      */
     static IndexedEventSource fromGraal(void *graalNative);
 
@@ -88,7 +97,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      *
      * @return The string representation of the object.
      */
-    std::string toString() const noexcept {
+    std::string toString() const {
         return name_;
     }
 

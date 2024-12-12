@@ -77,7 +77,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      *
      * @return string representation of this price level.
      */
-    std::string toString() const noexcept {
+    std::string toString() const {
         if (math::equals(value_, static_cast<std::int64_t>(value_))) {
             return std::to_string(static_cast<std::int64_t>(value_));
         }
@@ -117,10 +117,11 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      *
      * @param value candle price level value.
      * @return candle price level with the given value and type.
+     * @throws InvalidArgumentException if value is incorrect
      */
     static CandlePriceLevel valueOf(double value) {
         if (std::isinf(value) || (value == 0.0 && std::signbit(value))) {
-            throw std::invalid_argument("Incorrect candle price level: " + dxfcpp::toString(value));
+            throw InvalidArgumentException("Incorrect candle price level: " + dxfcpp::toString(value));
         }
 
         return std::isnan(value) ? DEFAULT : CandlePriceLevel(value);
@@ -164,6 +165,8 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
                 return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.toString());
             }
 
+            return symbol;
+        } catch (const InvalidArgumentException &) {
             return symbol;
         } catch (const std::invalid_argument &) {
             return symbol;

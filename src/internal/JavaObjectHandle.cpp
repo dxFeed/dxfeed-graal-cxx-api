@@ -8,6 +8,18 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+std::string JavaObject::toString(void *handle) {
+    return isolated::internal::IsolatedObject::toString(handle);
+}
+
+std::size_t JavaObject::hashCode(void *handle) {
+    return isolated::internal::IsolatedObject::hashCode(handle);
+}
+
+bool JavaObject::equals(void *objectHandle1, void *objectHandle2) {
+    return isolated::internal::IsolatedObject::equals(objectHandle1, objectHandle2) == 1;
+}
+
 template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
     auto result = runIsolatedOrElse(
         [handle = handle](auto threadHandle) {
@@ -23,10 +35,34 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
             return true;
         },
         false);
-    dxfcpp::ignore_unused(result);
+    dxfcpp::ignoreUnused(result);
 
     if constexpr (Debugger::isDebug) {
-        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " + dxfcpp::toString(result));
+        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                        dxfcpp::toString(result));
+    }
+}
+
+template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexcept {
+    auto result = runIsolatedOrElse(
+        [handle = handle](auto threadHandle) {
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
+            }
+
+            if (handle) {
+                return dxfg_CList_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                            static_cast<dxfg_java_object_handler_list *>(handle)) == 0;
+            }
+
+            return true;
+        },
+        false);
+    dxfcpp::ignoreUnused(result);
+
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                        dxfcpp::toString(result));
     }
 }
 
@@ -39,6 +75,7 @@ template struct JavaObjectHandle<DXPublisher>;
 template struct JavaObjectHandle<DXFeedSubscription>;
 template struct JavaObjectHandle<DXFeedEventListener>;
 
+template struct JavaObjectHandle<InstrumentProfile>;
 template struct JavaObjectHandle<InstrumentProfileReader>;
 template struct JavaObjectHandle<InstrumentProfileCollector>;
 template struct JavaObjectHandle<InstrumentProfileConnection>;
@@ -58,5 +95,24 @@ template struct JavaObjectHandle<TimeFormat>;
 
 template struct JavaObjectHandle<ObservableSubscriptionChangeListener>;
 template struct JavaObjectHandle<DXPublisherObservableSubscription>;
+
+template struct JavaObjectHandle<PromiseImpl>;
+template struct JavaObjectHandleList<PromiseListImpl>;
+template struct JavaObjectHandle<EventPromiseImpl>;
+template struct JavaObjectHandle<EventsPromiseImpl>;
+
+template struct JavaObjectHandle<TimePeriod>;
+
+template struct JavaObjectHandle<AuthToken>;
+
+template struct JavaObjectHandle<TxModelListenerTag>;
+template struct JavaObjectHandle<IndexedTxModelTag>;
+template struct JavaObjectHandle<IndexedTxModelBuilderTag>;
+template struct JavaObjectHandle<TimeSeriesTxModelTag>;
+template struct JavaObjectHandle<TimeSeriesTxModelBuilderTag>;
+
+template struct JavaObjectHandle<ExecutorTag>;
+
+template struct JavaObjectHandle<Logging::ListenerTag>;
 
 DXFCPP_END_NAMESPACE

@@ -13,7 +13,6 @@ using namespace std::literals;
  */
 int main(int argc, char *argv[]) {
     try {
-
         // Determine input and output tapes and specify appropriate configuration parameters.
         std::string inputAddress = argc > 1 ? argv[0] : "file:ConvertTapeFile.in[readAs=stream_data,speed=max]";
         std::string outputAddress = argc > 2 ? argv[1] : "tape:ConvertTapeFile.out[saveAs=stream_data,format=text]";
@@ -70,12 +69,10 @@ int main(int argc, char *argv[]) {
         // Wait until all data is processed and written, and then gracefully close output endpoint.
         outputEndpoint->awaitProcessed();
         outputEndpoint->closeAndAwaitTermination();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
+
+        return 1;
     }
 
     return 0;

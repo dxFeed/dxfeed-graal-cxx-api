@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../executors/InPlaceExecutor.hpp"
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
@@ -178,7 +179,7 @@ struct OnDemandService;
  *
  * Some methods that are not marked `noexcept` may throw exceptions:
  *
- * @throws std::invalid_argument if handle is invalid.
+ * @throws InvalidArgumentException if handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend
  * @throws GraalException if something happened with the GraalVM
  */
@@ -481,11 +482,13 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     // Throws:
     //   - std::bad_alloc if it was not possible to allocate the required amount of memory
-    //   - std::invalid_argument if endpointHandle is nullptr
+    //   - InvalidArgumentException if endpointHandle is nullptr
     //   - JavaException if something happened with the dxFeed API backend
     //   - GraalException if something happened with the GraalVM
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties);
+
+    void executorImpl(const JavaObjectHandle<ExecutorTag> &executor) const;
 
     struct Impl;
 
@@ -509,7 +512,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @ref DXEndpoint::getInstance(Role) "getInstance"(@ref DXEndpoint "DXEndpoint"::@ref DXEndpoint::Role "Role"::@ref
      * DXEndpoint.Role::FEED "FEED").
      * @see DXEndpoint::getInstance(Role)
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -533,7 +536,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * @param role The role of DXEndpoint instance
      * @return The DXEndpoint instance
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -546,7 +549,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Use Builder::build() to build an instance of DXEndpoint when all configuration properties were set.
      *
      * @return the created endpoint builder.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -559,7 +562,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @ref DXEndpoint::newBuilder() "newBuilder()"->@ref Builder::build() "build()"
      *
      * @return the created endpoint.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -573,7 +576,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * @param role the role.
      * @return the created endpoint.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -594,7 +597,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @return the state.
      *
      * @see DXEndpoint
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -602,7 +605,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     /**
      * @return `true` if the endpoint is closed
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -619,19 +622,11 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * <p>Installed listener can be removed by `id` with DXEndpoint::removeStateChangeListener method or by call
      * `::onStateChange() -= id`;
      *
-     * @tparam StateChangeListener The listener type. It can be any callable with signature: `void(State, State)`
      * @param listener The listener to add
      * @return the listener id
      */
-    template <typename StateChangeListener>
-    std::size_t addStateChangeListener(StateChangeListener &&listener) noexcept
-#if __cpp_concepts
-        requires requires {
-            { listener(State{}, State{}) } -> std::same_as<void>;
-        }
-#endif
-    {
-        return onStateChange_ += listener;
+    std::size_t addStateChangeListener(std::function<void(State, State)> listener) noexcept {
+        return onStateChange_ += std::move(listener);
     }
 
     /**
@@ -650,6 +645,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      */
     SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &onStateChange() noexcept;
 
+    template <typename Executor> std::shared_ptr<DXEndpoint> executor(const std::shared_ptr<Executor> &executor) {
+        executorImpl(executor->getHandle());
+
+        return sharedAs<DXEndpoint>();
+    }
+
     /**
      * Changes user name for this endpoint.
      * This method shall be called before @ref DXEndpoint::connect(const std::string&) "connect" together
@@ -658,7 +659,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @param user The user name.
      *
      * @return this DXEndpoint.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -672,7 +673,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @param password The password.
      *
      * @return this DXEndpoint.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -706,7 +707,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @param address The data source address.
      * @return this DXEndpoint.
      *
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException if something happened with the dxFeed API backend or if address string is malformed.
      * @throws GraalException
      */
@@ -728,7 +729,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#reconnect--)
      *
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -744,7 +745,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnect--)
      *
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -760,7 +761,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnectAndClear--)
      *
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -775,7 +776,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#close--)
      *
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -792,7 +793,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitNotConnected--)
      *
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -805,7 +806,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#awaitProcessed--)
      *
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -822,7 +823,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#closeAndAwaitTermination--)
      *
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -833,7 +834,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     /**
      * @return The feed that is associated with this endpoint.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -841,7 +842,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     /**
      * @return The publisher that is associated with this endpoint.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      * @throws JavaException
      * @throws GraalException
      */
@@ -852,7 +853,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Some methods that are not marked `noexcept` may throw exceptions:
      *
-     * @throws std::invalid_argument if handle is invalid.
+     * @throws InvalidArgumentException if handle is invalid.
      * @throws JavaException if something happened with the dxFeed API backend
      * @throws GraalException if something happened with the GraalVM
      */
@@ -880,7 +881,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * or "dxpublisher.properties" for the Role::PUBLISHER role.
          *
          * Non thread-safe.
-         * @throws std::invalid_argument
+         * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
@@ -900,7 +901,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param name The endpoint's name
          *
          * @return `this` endpoint builder.
-         * @throws std::invalid_argument
+         * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
@@ -913,7 +914,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param role The endpoint's role
          *
          * @return `this` endpoint builder.
-         * @throws std::invalid_argument
+         * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
@@ -927,7 +928,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @return `this` endpoint builder.
          *
          * @see ::supportsProperty(const std::string&)
-         * @throws std::invalid_argument
+         * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
@@ -941,7 +942,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @return `this` endpoint builder.
          *
          * @see ::withProperty(const std::string&, const std::string&)
-         * @throws std::invalid_argument
+         * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
@@ -965,7 +966,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @return `true` if the corresponding property key is supported.
          *
          * @see ::withProperty(const std::string&, const std::string&)
-         * @throws std::invalid_argument
+         * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
@@ -975,16 +976,22 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * Builds DXEndpoint instance.
          *
          * @return the created endpoint.
-         * @throws std::invalid_argument
+         * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
         std::shared_ptr<DXEndpoint> build();
     };
 
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE
+
+template <typename OS> OS &operator<<(OS &os, dxfcpp::DXEndpoint::State state) {
+    os << dxfcpp::DXEndpoint::stateToString(state);
+
+    return os;
+}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

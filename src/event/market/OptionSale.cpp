@@ -90,28 +90,28 @@ void OptionSale::freeGraalData(void *graalNative) noexcept {
 
 std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw std::invalid_argument("Unable to create OptionSale. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException("Unable to create OptionSale. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             fmt::format("Unable to create Order. Wrong event class {}! Expected: {}.",
                         std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
                         std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE))));
     }
 
-        auto optionSale = std::make_shared<OptionSale>();
+    auto optionSale = std::make_shared<OptionSale>();
 
-        optionSale->fillData(graalNative);
+    optionSale->fillData(graalNative);
 
-        return optionSale;
+    return optionSale;
 }
 
 void OptionSale::setExchangeCode(char exchangeCode) noexcept {
     data_.exchangeCode = utf8to16(exchangeCode);
 }
 
-std::string OptionSale::toString() const noexcept {
+std::string OptionSale::toString() const {
     return fmt::format(
         "OptionSale{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, timeNanoPart={}, sequence={}, "
         "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
@@ -151,6 +151,14 @@ void OptionSale::freeGraal(void *graalNative) {
     freeGraalData(graalNative);
 
     delete graalOptionSale;
+}
+
+void OptionSale::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<OptionSale>(); other) {
+        data_ = other->data_;
+    }
 }
 
 DXFCPP_END_NAMESPACE

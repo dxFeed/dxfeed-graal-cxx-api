@@ -27,7 +27,6 @@ Where:
 
 int main(int argc, char *argv[]) {
     try {
-
         if (argc < 4) {
             printUsage();
 
@@ -47,7 +46,7 @@ int main(int argc, char *argv[]) {
         auto feed = endpoint->getFeed();
 
         // Subscribe to a specified event and symbol.
-        auto sub = feed->createSubscription(types);
+        auto sub = feed->createSubscription(types.first);
         sub->addEventListener([&eventCounter, &ioMtx](const auto &events) {
             std::lock_guard lock{ioMtx};
 
@@ -68,12 +67,10 @@ int main(int argc, char *argv[]) {
         // Close endpoint when we're done.
         // This method will gracefully close endpoint, waiting while data processing completes.
         endpoint->closeAndAwaitTermination();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
+
+        return 1;
     }
 
     return 0;

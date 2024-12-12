@@ -14,10 +14,14 @@ namespace IsolatedString {
 
 bool release(const char *string) {
     if (!string) {
-        throw std::invalid_argument("Unable to execute function `dxfg_String_release`. The `string` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_String_release`. The `string` is nullptr");
     }
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_String_release, string) == 0;
+}
+
+std::unique_ptr<const char, decltype(&release)> toUnique(const char *string) {
+    return {string, release};
 }
 
 } // namespace IsolatedString
@@ -26,12 +30,16 @@ namespace IsolatedStringList {
 
 bool release(/* dxfg_string_list* */ void *stringList) {
     if (!stringList) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_CList_String_release`. The `stringList` is nullptr");
     }
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_String_release,
                                                   static_cast<dxfg_string_list *>(stringList));
+}
+
+std::unique_ptr<void, decltype(&release)> toUnique(void *stringList) {
+    return {stringList, release};
 }
 
 } // namespace IsolatedStringList

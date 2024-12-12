@@ -107,10 +107,10 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * "all" or "*" will be converted to all types.
      *
      * @param types The comma-separated list of event types.
-     * @return The created set of parsed types.
+     * @return The created pair of set of parsed types and vector unknown types.
      */
-    static std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
-    parseTypes(const std::string &types) noexcept;
+    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
+    parseTypes(const std::string &types);
 
     /**
      * Parses an input string and returns a set of event types.
@@ -118,9 +118,10 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * "all" or "*" will be converted to all types.
      *
      * @param types The comma-separated list of event types.
-     * @return The created set of parsed types.
+     * @return The created pair of set of parsed types and vector unknown types.
      */
-    static std::unordered_set<std::reference_wrapper<const EventTypeEnum>> parseTypes(const char *types) noexcept {
+    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
+    parseTypes(const char *types) {
         return parseTypes(std::string(types));
     }
 
@@ -130,9 +131,10 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * "all" or "*" will be converted to all types.
      *
      * @param types The comma-separated list of event types.
-     * @return The created set of parsed types.
+     * @return The created pair of set of parsed types and vector unknown types.
      */
-    static std::unordered_set<std::reference_wrapper<const EventTypeEnum>> parseTypes(std::string_view types) noexcept {
+    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
+    parseTypes(std::string_view types) {
         return parseTypes(types.data());
     }
 
@@ -142,10 +144,10 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * "all" or "*" will be converted to all types.
      *
      * @param types The comma-separated list of event types.
-     * @return The created set of parsed types.
+     * @return The created pair of set of parsed types and vector unknown types.
      */
-    static std::unordered_set<std::reference_wrapper<const EventTypeEnum>>
-    parseTypes(std::optional<std::string> types) noexcept;
+    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
+    parseTypes(std::optional<std::string> types);
 
     /**
      * Parses the input collection of strings and returns a collection of key-value properties.

@@ -17,9 +17,16 @@ const SessionType SessionType::AFTER_MARKET{SessionTypeEnum::AFTER_MARKET, "AFTE
 SessionFilter::SessionFilter(SessionFilterEnum code, std::string name, std::optional<SessionType> type,
                              std::optional<bool> trading) noexcept
     : code_{code}, name_{std::move(name)}, type_{type}, trading_{trading} {
+}
 
-    handle_ = JavaObjectHandle<SessionFilter>(
-        isolated::schedule::SessionFilter::getInstance(static_cast<std::uint32_t>(code)));
+const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
+    std::lock_guard<std::mutex> lock(mtx_);
+
+    if (!handle_) {
+        handle_ = isolated::schedule::IsolatedSessionFilter::getInstance(static_cast<std::uint32_t>(code_));
+    }
+
+    return handle_;
 }
 
 const SessionFilter SessionFilter::ANY{SessionFilterEnum::ANY, "ANY", std::nullopt, std::nullopt};

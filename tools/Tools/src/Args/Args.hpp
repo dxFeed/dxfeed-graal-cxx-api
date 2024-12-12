@@ -17,19 +17,21 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {
 
-decltype(ranges::views::filter([](const auto &s) {
+inline decltype(ranges::views::filter([](const auto &s) {
     return !s.empty();
 })) filterNonEmpty{};
 
-decltype(ranges::views::transform([](auto &&s) {
+inline decltype(ranges::views::transform([](auto &&s) {
     return s | ranges::to<std::string>();
 })) transformToString{};
 
-decltype(ranges::views::transform([](const std::string &s) {
+inline decltype(ranges::views::transform([](const std::string &s) {
     return trimStr(s);
 })) trim{};
 
@@ -173,7 +175,13 @@ struct NamedUnsignedIntArg : NamedArg {
         if ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
             (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)) {
             try {
-                return ParseResult<std::optional<std::size_t>>::ok(std::stoull(args[index + 1]), index + 2);
+                auto res = std::stoull(args[index + 1]);
+
+                if (res >= std::numeric_limits<std::size_t>::max()) {
+                    return ParseResult<std::optional<std::size_t>>::ok(std::nullopt, index);
+                }
+
+                return ParseResult<std::optional<std::size_t>>::ok(static_cast<std::size_t>(res), index + 2);
             } catch (...) {
                 return ParseResult<std::optional<std::size_t>>::ok(std::nullopt, index);
             }

@@ -9,25 +9,52 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-TimeFormat::TimeFormat(void *handle) : handle_(handle){};
+const TimeFormat TimeFormat::DEFAULT([] {
+    return isolated::internal::IsolatedTimeFormat::getDefault();
+});
 
-TimeFormat::TimeFormat(JavaObjectHandle<TimeFormat> &&handle) : handle_(std::move(handle)){};
+const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS([] {
+    return DEFAULT.getHandle() ? isolated::internal::IsolatedTimeFormat::withMillis(DEFAULT.getHandle())
+                               : JavaObjectHandle<TimeFormat>{nullptr};
+});
 
-const TimeFormat TimeFormat::DEFAULT(isolated::internal::IsolatedTimeFormat::getDefault());
-const TimeFormat
-    TimeFormat::DEFAULT_WITH_MILLIS(DEFAULT.handle_
-                                        ? isolated::internal::IsolatedTimeFormat::withMillis(DEFAULT.handle_)
-                                        : JavaObjectHandle<TimeFormat>{nullptr});
-const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE(
-    DEFAULT_WITH_MILLIS.handle_ ? isolated::internal::IsolatedTimeFormat::withTimeZone(DEFAULT_WITH_MILLIS.handle_)
-                                : JavaObjectHandle<TimeFormat>{nullptr});
-const TimeFormat TimeFormat::GMT(isolated::internal::IsolatedTimeFormat::getGmt());
+const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE([] {
+    return DEFAULT_WITH_MILLIS.getHandle()
+               ? isolated::internal::IsolatedTimeFormat::withTimeZone(DEFAULT_WITH_MILLIS.getHandle())
+               : JavaObjectHandle<TimeFormat>{nullptr};
+});
 
-std::int64_t TimeFormat::parse(const std::string &value) const {
+const TimeFormat TimeFormat::GMT([] {
+    return isolated::internal::IsolatedTimeFormat::getGmt();
+});
+
+TimeFormat::TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer)
+    : initializer_(std::move(initializer)){};
+
+void TimeFormat::init() const {
+    std::lock_guard lock(mtx_);
+
+    if (!initialized_) {
+        handle_ = initializer_();
+        initialized_ = true;
+    }
+}
+
+const JavaObjectHandle<TimeFormat> &TimeFormat::getHandle() const {
+    init();
+
+    return handle_;
+}
+
+std::int64_t TimeFormat::parse(const StringLikeWrapper &value) const {
+    init();
+
     return isolated::internal::IsolatedTimeFormat::parse(handle_, value);
 }
 
 std::string TimeFormat::format(std::int64_t timestamp) const {
+    init();
+
     return isolated::internal::IsolatedTimeFormat::format(handle_, timestamp);
 }
 

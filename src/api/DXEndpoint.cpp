@@ -6,7 +6,6 @@
 #include <dxfeed_graal_c_api/api.h>
 
 #include <dxfeed_graal_cpp_api/api/DXEndpoint.hpp>
-#include <dxfeed_graal_cpp_api/isolated/Isolated.hpp>
 #include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp>
 #include <dxfeed_graal_cpp_api/system/System.hpp>
 
@@ -120,7 +119,7 @@ std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::Im
 std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
                                                const std::unordered_map<std::string, std::string> &properties) {
     if (endpointHandle == nullptr) {
-        throw std::invalid_argument("Unable to create DXEndpoint. The `endpointHandle` is nullptr");
+        throw InvalidArgumentException("Unable to create DXEndpoint. The `endpointHandle` is nullptr");
     }
 
     if constexpr (Debugger::isDebug) {
@@ -140,10 +139,14 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     auto id = ApiContext::getInstance()->getManager<DXEndpointManager>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
-        dxfcpp::bit_cast<void *>(&DXEndpoint::Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
+        dxfcpp::bit_cast<void *>(&Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
     isolated::api::IsolatedDXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
 
     return endpoint;
+}
+
+void DXEndpoint::executorImpl(const JavaObjectHandle<ExecutorTag> &executor) const {
+    isolated::api::IsolatedDXEndpoint::executor(handle_, executor);
 }
 
 DXEndpoint::State DXEndpoint::getState() const {
@@ -359,7 +362,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::st
     return withProperty(NAME_PROPERTY, name);
 }
 
-std::string DXEndpoint::toString() const noexcept {
+std::string DXEndpoint::toString() const {
     return fmt::format("DXEndpoint{{{}}}", handle_.toString());
 }
 
@@ -527,6 +530,10 @@ struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
 
     EndpointWrapper(std::shared_ptr<dxfcpp::DXEndpoint> endpoint, void *userData)
         : endpoint{std::move(endpoint)}, userData{userData}, listeners{} {
+    }
+
+    std::string toString() const noexcept {
+        return "EndpointWrapper{" + endpoint->toString() + "}";
     }
 };
 

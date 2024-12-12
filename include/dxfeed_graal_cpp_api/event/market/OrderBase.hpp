@@ -16,6 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEvent.hpp"
 #include "../IndexedEventSource.hpp"
+#include "../../exceptions/InvalidArgumentException.hpp"
 #include "MarketEvent.hpp"
 #include "OrderAction.hpp"
 #include "OrderSource.hpp"
@@ -165,6 +166,9 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new order event with default values.
     OrderBase() noexcept = default;
 
@@ -234,10 +238,11 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
      *
      * @param index unique per-symbol index of this order.
+     * @throws InvalidArgumentException
      */
     void setIndex(std::int64_t index) override {
         if (index < 0) {
-            throw std::invalid_argument("Negative index: " + std::to_string(index));
+            throw InvalidArgumentException("Negative index: " + std::to_string(index));
         }
 
         orderBaseData_.index = index;
@@ -333,10 +338,11 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @param sequence the sequence.
      *
      * @see OrderBase::getSequence()
+     * @throws InvalidArgumentException
      */
     void setSequence(std::int32_t sequence) {
         if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw std::invalid_argument("Invalid sequence value = " + std::to_string(sequence));
+            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
         }
 
         orderBaseData_.timeSequence = orOp(andOp(orderBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
@@ -602,8 +608,8 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     std::string getExchangeCodeString() const noexcept {
         // TODO: cache [EN-8231]
 
-        return std::string(
-            1ULL, static_cast<char>( // NOLINT(*-return-braced-init-list)
+        return std::string( // NOLINT(*-return-braced-init-list)
+            1ULL, static_cast<char>(
                       static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
     }
 
@@ -669,7 +675,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return string representation of this order event's fields.
      */
-    std::string baseFieldsToString() const noexcept;
+    std::string baseFieldsToString() const;
 };
 
 DXFCPP_END_NAMESPACE

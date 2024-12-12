@@ -56,7 +56,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
 
@@ -73,8 +73,12 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
      */
     static void freeGraal(void *graalNative);
+
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
 
     /**
      * Creates new message with default values.
@@ -208,7 +212,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
         return *this;
     }
 
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

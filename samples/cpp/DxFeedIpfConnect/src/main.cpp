@@ -58,7 +58,6 @@ int main(int argc, char *argv[]) {
     using namespace std::string_literals;
 
     try {
-
         if (argc < 3) {
             printUsage();
 
@@ -68,7 +67,7 @@ int main(int argc, char *argv[]) {
         auto types = CmdArgsUtils::parseTypes(argv[1]);
         auto ipfFile = argv[2];
 
-        auto sub = DXFeed::getInstance()->createSubscription(types);
+        auto sub = DXFeed::getInstance()->createSubscription(types.first);
 
         sub->addEventListener<MarketEvent>([](auto &&events) {
             for (auto &&event : events) {
@@ -79,11 +78,11 @@ int main(int argc, char *argv[]) {
         sub->addSymbols(getSymbols(ipfFile));
 
         std::this_thread::sleep_for(std::chrono::days(365));
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }

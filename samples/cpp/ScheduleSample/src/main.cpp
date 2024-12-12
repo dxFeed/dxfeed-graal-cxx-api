@@ -34,9 +34,7 @@ void updateScheduleDefaults(const std::string &url) {
 
     std::vector<char> buffer(std::istreambuf_iterator<char>{is}, {});
 
-    if (Schedule::setDefaults(buffer)) {
-        std::cout << "Schedule defaults updated successfully" << std::endl;
-    }
+    Schedule::setDefaults(buffer);
 }
 
 std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> loadInstrumentProfiles(const std::string &url) {
@@ -225,11 +223,11 @@ int main(int argc, char *argv[]) {
         printCurrentSession(profile, time);
         printNextTradingSession(profile, time);
         printNearestTradingSession(profile, time);
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
+
+        return 1;
     }
+
+    return 0;
 }

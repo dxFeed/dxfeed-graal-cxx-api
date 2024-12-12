@@ -51,3 +51,5 @@ dist-*/
 CMakeSettings.json
 *.patch
 .vs/**
+.cache/**
+/Folder.DotSettings.user

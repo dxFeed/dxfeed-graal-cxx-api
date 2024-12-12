@@ -14,12 +14,12 @@ namespace isolated::api::IsolatedDXPublisher {
 void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle<dxfcpp::DXPublisher> &publisher,
                                  /* dxfg_event_type_list * */ void *events) {
     if (!publisher) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXPublisher_publishEvents`. The `publisher` handle is invalid");
     }
 
     if (!events) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXPublisher_publishEvents`. The `events` is nullptr");
     }
 
@@ -32,7 +32,7 @@ JavaObjectHandle<DXPublisherObservableSubscription> /* dxfg_observable_subscript
 getSubscription(/* dxfg_publisher_t * */ const JavaObjectHandle<dxfcpp::DXPublisher> &publisher,
                 /* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
     if (!publisher) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXPublisher_getSubscription`. The `publisher` handle is invalid");
     }
 

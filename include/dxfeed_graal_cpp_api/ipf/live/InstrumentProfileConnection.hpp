@@ -102,7 +102,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return new instrument profile connection.
      */
-    static Ptr createConnection(const std::string &address, InstrumentProfileCollector::Ptr collector);
+    static Ptr createConnection(const StringLikeWrapper &address, InstrumentProfileCollector::Ptr collector);
 
     /**
      * Returns the address of this instrument profile connection.
@@ -110,7 +110,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return The address of this instrument profile connection.
      */
-    std::string getAddress() const noexcept;
+    std::string getAddress() const;
 
     /**
      * Returns update period in milliseconds.
@@ -121,7 +121,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return The update period in milliseconds.
      */
-    std::int64_t getUpdatePeriod() const noexcept;
+    std::int64_t getUpdatePeriod() const;
 
     /**
      * Returns update period in milliseconds as chrono::duration
@@ -132,7 +132,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return The update period in milliseconds as chrono::duration.
      */
-    std::chrono::milliseconds getUpdatePeriodAsDuration() const noexcept {
+    std::chrono::milliseconds getUpdatePeriodAsDuration() const {
         return std::chrono::milliseconds(getUpdatePeriod());
     }
 
@@ -142,7 +142,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @param updatePeriod The update period in milliseconds.
      * @see InstrumentProfileConnection::getUpdatePeriod()
      */
-    void setUpdatePeriod(std::int64_t updatePeriod) const noexcept;
+    void setUpdatePeriod(std::int64_t updatePeriod) const;
 
     /**
      * Changes the update period in milliseconds as chrono::duration.
@@ -150,7 +150,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @param updatePeriod The update period in milliseconds as chrono::duration.
      * @see InstrumentProfileConnection::getUpdatePeriod()
      */
-    void setUpdatePeriod(std::chrono::milliseconds updatePeriod) const noexcept {
+    void setUpdatePeriod(std::chrono::milliseconds updatePeriod) const {
         setUpdatePeriod(updatePeriod.count());
     }
 
@@ -159,7 +159,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return The state of this instrument profile connections.
      */
-    State getState() const noexcept;
+    State getState() const;
 
     /**
      * Returns last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
@@ -167,20 +167,20 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return The last modification time (in milliseconds) of instrument profiles or zero if it is unknown.
      */
-    std::int64_t getLastModified() const noexcept;
+    std::int64_t getLastModified() const;
 
     /**
      * Starts this instrument profile connection. This connection's state immediately changes to
      * @ref InstrumentProfileConnection::State::CONNECTING "CONNECTING" and the actual connection establishment proceeds
      * in the background.
      */
-    void start() const noexcept;
+    void start() const;
 
     /**
      * Closes this instrument profile connection. This connection's state immediately changes to
      * @ref InstrumentProfileConnection::State::CLOSED "CLOSED" and the background update procedures are terminated.
      */
-    void close() const noexcept;
+    void close() const;
 
     /**
      * Adds listener that is notified about changes in @ref InstrumentProfileConnection::getState() "state" property.
@@ -193,7 +193,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @return the listener id
      */
     template <typename StateChangeListener>
-    std::size_t addStateChangeListener(StateChangeListener &&listener) noexcept
+    std::size_t addStateChangeListener(StateChangeListener &&listener)
 #if __cpp_concepts
         requires requires {
             { listener(State{}, State{}) } -> std::same_as<void>;
@@ -210,7 +210,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @param listenerId The listener id to remove
      */
-    void removeStateChangeListener(std::size_t listenerId) noexcept {
+    void removeStateChangeListener(std::size_t listenerId) {
         onStateChange_ -= listenerId;
     }
 
@@ -220,7 +220,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return onStateChange handler with `void(State, State)` signature
      */
-    auto &onStateChange() noexcept {
+    auto &onStateChange() {
         return onStateChange_;
     }
 
@@ -231,7 +231,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED "COMPLETED" state was reached and `false`
      *         if the waiting time elapsed before snapshot was fully read.
      */
-    bool waitUntilCompleted(std::int64_t timeout) const noexcept;
+    bool waitUntilCompleted(std::int64_t timeout) const;
 
     /**
      * Synchronously waits for full first snapshot read with the specified timeout.
@@ -240,7 +240,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED "COMPLETED" state was reached and `false`
      *         if the waiting time elapsed before snapshot was fully read.
      */
-    bool waitUntilCompleted(std::chrono::milliseconds timeout) const noexcept {
+    bool waitUntilCompleted(std::chrono::milliseconds timeout) const {
         return waitUntilCompleted(timeout.count());
     }
 };

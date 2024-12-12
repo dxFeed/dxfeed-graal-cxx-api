@@ -15,14 +15,24 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 project(dxFeedGraalCxxApi)
 
-set(DXFCXX_VERSION "v2.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
+include(cmake/ParseVersion.cmake)
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "1.1.16" CACHE STRING "")
-set(FMTLIB_VERSION "10.2.1")
+set(DXFCXX_VERSION "v4.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
+
+dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
+
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "2.1.2" CACHE STRING "")
+set(FMTLIB_VERSION "11.0.2")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
+set(PROCESS_VERSION "3.0.1")
+set(CONSOLE_VERSION "1.0.1")
 set(RANGE_VERSION "0.12")
+set(DOCTEST_VERSION "2.4.11")
+set(CPM_CMAKE_VERSION "v0.40.2")
+
+include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -51,11 +61,14 @@ option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
+option(DXFCXX_USE_DXFG_STUB "Use dxFeed Graal SDK stub" OFF)
+set(DXFG_STUB_REPO "https://github.com/ttldtor/DxFeedGraalNativeSdkStub" CACHE STRING "")
+
 option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
 option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
-option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" ON)
+option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
 
 include(FetchContent)
 
@@ -71,98 +84,99 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
 
-if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
-    FetchContent_Declare(
-            DxFeedGraalNativeSdk
-            URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
-            USES_TERMINAL_DOWNLOAD TRUE
-            GIT_PROGRESS TRUE
-            DOWNLOAD_NO_EXTRACT FALSE
-    )
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
+    add_subdirectory(third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM})
 else ()
-    if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
-        set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
-    endif ()
-
-    if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
-        message(ERROR "Unsupported platform!")
+    if (DXFCXX_USE_DXFG_STUB)
+        FetchContent_Declare(
+                DxFeedGraalNativeSdk
+                GIT_REPOSITORY "${DXFG_STUB_REPO}.git" GIT_TAG "v${DXFEED_GRAAL_NATIVE_SDK_VERSION}"
+                USES_TERMINAL_DOWNLOAD TRUE
+                GIT_PROGRESS TRUE
+                DOWNLOAD_NO_EXTRACT FALSE
+        )
     else ()
-        set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
+        if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+            FetchContent_Declare(
+                    DxFeedGraalNativeSdk
+                    URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+                    USES_TERMINAL_DOWNLOAD TRUE
+                    GIT_PROGRESS TRUE
+                    DOWNLOAD_NO_EXTRACT FALSE
+            )
+        else ()
+            if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
+                set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+            endif ()
+
+            if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
+                message(ERROR "Unsupported platform!")
+            else ()
+                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
+            endif ()
+
+            FetchContent_Declare(
+                    DxFeedGraalNativeSdk
+                    URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
+                    USES_TERMINAL_DOWNLOAD TRUE
+                    GIT_PROGRESS TRUE
+                    DOWNLOAD_NO_EXTRACT FALSE
+            )
+        endif ()
     endif ()
 
-    FetchContent_Declare(
-            DxFeedGraalNativeSdk
-            URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
-            USES_TERMINAL_DOWNLOAD TRUE
-            GIT_PROGRESS TRUE
-            DOWNLOAD_NO_EXTRACT FALSE
-    )
+    FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
+    # DxFeedGraalNativeSdk_SOURCE_DIR
 endif ()
 
-FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
-# DxFeedGraalNativeSdk_SOURCE_DIR
 
-FetchContent_Declare(
-        Process
-        GIT_REPOSITORY "https://github.com/ttldtor/Process.git" GIT_TAG default
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
-)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Process-${PROCESS_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/Process-${PROCESS_VERSION})
+else ()
+    CPMAddPackage("gh:ttldtor/Process#v${PROCESS_VERSION}")
+endif ()
 
-FetchContent_MakeAvailable(Process)
-
-FetchContent_Declare(
-        Console
-        GIT_REPOSITORY "https://github.com/ttldtor/Console.git" GIT_TAG default
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
-)
-
-FetchContent_MakeAvailable(Console)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Console-${CONSOLE_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/Console-${CONSOLE_VERSION})
+else ()
+    CPMAddPackage("gh:ttldtor/Console#v${CONSOLE_VERSION}")
+endif ()
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
 set(FMT_INSTALL OFF)
 
-FetchContent_Declare(
-        fmt
-        URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
-        OVERRIDE_FIND_PACKAGE
-)
-FetchContent_MakeAvailable(fmt)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/fmt-${FMTLIB_VERSION}/CMakeLists.txt")
+    add_subdirectory(third_party/fmt-${FMTLIB_VERSION})
+else ()
+    FetchContent_Declare(
+            fmt
+            URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            DOWNLOAD_NO_EXTRACT FALSE
+            OVERRIDE_FIND_PACKAGE
+    )
+    FetchContent_MakeAvailable(fmt)
+endif ()
 
 #set(BUILD_TZ_LIB ON)
 #set(USE_SYSTEM_TZ_DB ON)
 add_subdirectory(third_party/date-${DATE_VERSION})
 
-set(BOOST_INCLUDE_LIBRARIES stacktrace)
-set(BOOST_ENABLE_CMAKE ON)
+if (DXFCXX_FEATURE_STACKTRACE)
+    set(BOOST_INCLUDE_LIBRARIES stacktrace)
 
-FetchContent_Declare(
-        Boost
-        URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.7z # downloading a zip release speeds up the download
-        USES_TERMINAL_DOWNLOAD TRUE
-        GIT_PROGRESS TRUE
-        DOWNLOAD_NO_EXTRACT FALSE
-        OVERRIDE_FIND_PACKAGE
-)
-FetchContent_MakeAvailable(Boost)
-
-
-#find_package(
-#        Boost
-#        1.84
-#        REQUIRED
-#        stacktrace
-#)
-
-# find_package(utf8cpp)
-# find_package(fmt)
+    CPMAddPackage(
+            NAME Boost
+            VERSION ${BOOST_VERSION}
+            URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.tar.xz
+            OPTIONS "BOOST_ENABLE_CMAKE ON"
+            USES_TERMINAL_DOWNLOAD TRUE
+            GIT_PROGRESS TRUE
+            OVERRIDE_FIND_PACKAGE
+    )
+endif ()
 
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
@@ -185,17 +199,44 @@ set(dxFeedGraalCxxApi_InternalUtilsDebug_Sources
 )
 
 set(dxFeedGraalCxxApi_Exceptions_Sources
+        src/exceptions/RuntimeException.cpp
+        src/exceptions/InvalidArgumentException.cpp
         src/exceptions/GraalException.cpp
         src/exceptions/JavaException.cpp
 )
 
+set(dxFeedGraalCxxApi_Executors_Sources
+        src/executors/InPlaceExecutor.cpp
+)
+
 set(dxFeedGraalCxxApi_Isolated_Sources
+        src/isolated/api/IsolatedDXFeed.cpp
         src/isolated/api/IsolatedDXEndpoint.cpp
+        src/isolated/api/IsolatedDXFeedSubscription.cpp
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
+        src/isolated/auth/IsolatedAuthToken.cpp
+        src/isolated/event/IsolatedEventType.cpp
+        src/isolated/executors/IsolatedInPlaceExecutor.cpp
         src/isolated/internal/IsolatedString.cpp
+        src/isolated/internal/IsolatedObject.cpp
         src/isolated/internal/IsolatedTimeFormat.cpp
+        src/isolated/internal/IsolatedTools.cpp
+        src/isolated/promise/IsolatedPromise.cpp
+        src/isolated/ipf/IsolatedInstrumentProfile.cpp
+        src/isolated/ipf/IsolatedInstrumentProfileReader.cpp
+        src/isolated/ipf/live/IsolatedInstrumentProfileCollector.cpp
+        src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
+        src/isolated/logging/IsolatedLogging.cpp
+        src/isolated/model/IsolatedTxModelListener.cpp
+        src/isolated/model/IsolatedIndexedTxModel.cpp
+        src/isolated/model/IsolatedTimeSeriesTxModel.cpp
+        src/isolated/ondemand/IsolatedOnDemandService.cpp
+        src/isolated/util/IsolatedTimePeriod.cpp
+        src/isolated/schedule/IsolatedDay.cpp
+        src/isolated/schedule/IsolatedSession.cpp
+        src/isolated/schedule/IsolatedSchedule.cpp
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
@@ -213,6 +254,10 @@ set(dxFeedGraalCxxApi_ApiOsub_Sources
         src/api/osub/ObservableSubscriptionChangeListener.cpp
 )
 
+set(dxFeedGraalCxxApi_Auth_Sources
+        src/auth/AuthToken.cpp
+)
+
 set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/InstrumentProfile.cpp
         src/ipf/InstrumentProfileType.cpp
@@ -223,8 +268,24 @@ set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/live/IterableInstrumentProfile.cpp
 )
 
+set(dxFeedGraalCxxApi_Logging_Sources
+        src/logging/Logging.cpp
+)
+
+set(dxFeedGraalCxxApi_Model_Sources
+        src/model/TxModelListener.cpp
+        src/model/IndexedTxModel.cpp
+        src/model/TimeSeriesTxModel.cpp
+        src/model/MarketDepthModel.cpp
+)
+
 set(dxFeedGraalCxxApi_OnDemand_Sources
         src/ondemand/OnDemandService.cpp
+)
+
+set(dxFeedGraalCxxApi_Promise_Sources
+        src/promise/Promise.cpp
+        src/promise/Promises.cpp
 )
 
 set(dxFeedGraalCxxApi_Symbols_Sources
@@ -242,6 +303,7 @@ set(dxFeedGraalCxxApi_Event_Sources
         src/event/EventFlag.cpp
         src/event/IndexedEvent.cpp
         src/event/EventMapper.cpp
+        src/event/EventSourceWrapper.cpp
 )
 
 set(dxFeedGraalCxxApi_EventCandle_Sources
@@ -304,16 +366,25 @@ set(dxFeedGraalCxxApi_Schedule_Sources
         src/schedule/Schedule.cpp
 )
 
+set(dxFeedGraalCxxApi_Util_Sources
+        src/util/TimePeriod.cpp
+)
+
 set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Internal_Sources}
         ${dxFeedGraalCxxApi_InternalUtils_Sources}
         ${dxFeedGraalCxxApi_InternalUtilsDebug_Sources}
         ${dxFeedGraalCxxApi_Isolated_Sources}
         ${dxFeedGraalCxxApi_Exceptions_Sources}
+        ${dxFeedGraalCxxApi_Executors_Sources}
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
+        ${dxFeedGraalCxxApi_Auth_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
+        ${dxFeedGraalCxxApi_Logging_Sources}
+        ${dxFeedGraalCxxApi_Model_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
+        ${dxFeedGraalCxxApi_Promise_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}
         ${dxFeedGraalCxxApi_System_Sources}
         ${dxFeedGraalCxxApi_Event_Sources}
@@ -322,6 +393,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_EventOption_Sources}
         ${dxFeedGraalCxxApi_EventMisc_Sources}
         ${dxFeedGraalCxxApi_Schedule_Sources}
+        ${dxFeedGraalCxxApi_Util_Sources}
 )
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -344,10 +416,24 @@ add_library(${PROJECT_NAME}_static STATIC
         src/api.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED
-        ${dxFeedGraalCxxApi_Sources}
-        src/api.cpp
-)
+if (WIN32)
+    if (MINGW)
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            list(APPEND CMAKE_RC_FLAGS "--use-temp-file")
+        endif ()
+    endif ()
+
+    add_library(${PROJECT_NAME} SHARED
+            ${dxFeedGraalCxxApi_Sources}
+            resources/dxFeedGraalCxxApi.rc
+            src/api.cpp
+    )
+else ()
+    add_library(${PROJECT_NAME} SHARED
+            ${dxFeedGraalCxxApi_Sources}
+            src/api.cpp
+    )
+endif ()
 
 add_library(dxfcxx ALIAS ${PROJECT_NAME})
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
@@ -364,13 +450,21 @@ target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-$
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
-set(DXFCXX_MSVC_COMPILE_OPTIONS "/W2")
+set(DXFCXX_MSVC_COMPILE_OPTIONS "/W4")
 set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS "/PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>")
 set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
 set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
 
 #A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
 set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
+
+# https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
+# https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
+# https://github.com/actions/runner-images/issues/10004
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_definitions(${PROJECT_NAME} PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+    target_compile_definitions(${PROJECT_NAME}_static PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+endif ()
 
 target_compile_options(${PROJECT_NAME}
         PUBLIC
@@ -424,25 +518,12 @@ endif ()
 target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 
-if (TARGET Boost::stacktrace_windbg)
-    message(STATUS "Has Boost::stacktrace_windbg")
-endif ()
-
-if (TARGET Boost::stacktrace_backtrace)
-    message(STATUS "Has Boost::stacktrace_backtrace")
-endif ()
-
-if (TARGET Boost::stacktrace_addr2line)
-    message(STATUS "Has Boost::stacktrace_addr2line")
-endif ()
-
-if (TARGET Boost::stacktrace_basic)
-    message(STATUS "Has Boost::stacktrace_basic")
-endif ()
-
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})
     LinkStacktrace(${PROJECT_NAME}_static)
+
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_FEATURE_STACKTRACE)
 endif ()
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
@@ -456,8 +537,19 @@ add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMM
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
-target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_VERSION="${DXFCXX_VERSION}")
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
+
+target_compile_definitions(${PROJECT_NAME}_static PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
 
 if (DXFCXX_BUILD_UNIT_TESTS)
     include(CTest)
@@ -465,9 +557,11 @@ if (DXFCXX_BUILD_UNIT_TESTS)
 endif ()
 
 if (DXFCXX_BUILD_SAMPLES)
+    add_subdirectory(samples/cpp/AuthSample)
     add_subdirectory(samples/cpp/PrintQuoteEvents)
     add_subdirectory(samples/cpp/PublishProfiles)
     add_subdirectory(samples/cpp/DxFeedSample)
+    add_subdirectory(samples/cpp/FetchDailyCandles)
     add_subdirectory(samples/cpp/WriteTapeFile)
     add_subdirectory(samples/cpp/ConvertTapeFile)
     add_subdirectory(samples/cpp/DxFeedFileParser)
@@ -476,6 +570,9 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/DxFeedLiveIpfSample)
     add_subdirectory(samples/cpp/ScheduleSample)
     add_subdirectory(samples/cpp/OnDemandSample)
+    add_subdirectory(samples/cpp/ReconnectSample)
+    add_subdirectory(samples/cpp/IncOrderSnapshotSample)
+    add_subdirectory(samples/cpp/MultipleMarketDepthSample)
 endif ()
 
 add_subdirectory(docs)
@@ -490,7 +587,7 @@ if (DXFCXX_INSTALL)
     set(CPACK_SOURCE_GENERATOR ZIP)
     set(CPACK_PACKAGE_VENDOR "Devexperts LLC")
     set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-    set(CPACK_PACKAGE_VERSION "${DXFCXX_PACKAGE_VERSION}")
+    set(CPACK_PACKAGE_VERSION "${DXFCXX_VERSION}")
     set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${DXFCXX_VERSION}-${DXFCXX_TARGET_PLATFORM}${DXFCXX_PACKAGE_SUFFIX}")
     include(CPack)
 
@@ -501,5 +598,5 @@ if (DXFCXX_INSTALL)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
     endif ()
 
-    install(FILES "LICENSE" "README.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
+    install(FILES "DEPENDENCIES.md" "LICENSE" "README.md" "ReleaseNotes.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
 endif ()

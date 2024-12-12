@@ -81,6 +81,9 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      */
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
+
     /// Creates new trade event with default values.
     TradeBase() noexcept = default;
 
@@ -192,12 +195,13 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @param sequence the sequence.
      * @see TradeBase::getSequence()
+     * @throws InvalidArgumentException
      */
     void setSequence(std::int32_t sequence) {
         assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
         if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw std::invalid_argument("Invalid sequence value = " + std::to_string(sequence));
+            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
         }
 
         tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
@@ -394,7 +398,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return string representation of this trade event's fields.
      */
-    std::string baseFieldsToString() const noexcept;
+    std::string baseFieldsToString() const;
 };
 
 DXFCPP_END_NAMESPACE

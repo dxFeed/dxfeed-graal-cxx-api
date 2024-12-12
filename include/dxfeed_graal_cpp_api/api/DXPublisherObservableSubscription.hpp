@@ -40,7 +40,7 @@ struct DXFCPP_EXPORT DXPublisherObservableSubscription : RequireMakeShared<DXPub
     std::unordered_set<EventTypeEnum> getEventTypes() override;
     bool containsEventType(const EventTypeEnum &eventType) override;
     std::size_t addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) override;
-    void removeChangeListener(std::size_t id) override;
+    void removeChangeListener(std::size_t changeListenerId) override;
 };
 
 DXFCPP_END_NAMESPACE

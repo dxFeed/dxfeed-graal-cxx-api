@@ -9,14 +9,14 @@ DXFCPP_BEGIN_NAMESPACE
 
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol,
                                                                const IndexedEventSource &source)
-    : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), source_(source) {
+    : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), source_(std::make_unique<IndexedEventSource>(source)) {
 }
 
 const std::unique_ptr<SymbolWrapper> &IndexedEventSubscriptionSymbol::getEventSymbol() const {
     return eventSymbol_;
 }
 
-const IndexedEventSource &IndexedEventSubscriptionSymbol::getSource() const {
+const std::unique_ptr<IndexedEventSource> &IndexedEventSubscriptionSymbol::getSource() const {
     return source_;
 }
 
@@ -24,7 +24,7 @@ void *IndexedEventSubscriptionSymbol::toGraal() const {
     auto *graalSymbol = new dxfg_indexed_event_subscription_symbol_t{
         .supper = {.type = dxfg_symbol_type_t::INDEXED_EVENT_SUBSCRIPTION},
         .symbol = static_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()),
-        .source = static_cast<dxfg_indexed_event_source_t *>(source_.toGraal())};
+        .source = static_cast<dxfg_indexed_event_source_t *>(source_->toGraal())};
 
     return static_cast<void *>(graalSymbol);
 }
@@ -48,7 +48,7 @@ IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *g
     }
 
     if (graalNative == nullptr) {
-        throw std::invalid_argument(
+        throw InvalidArgumentException(
             "Unable to create IndexedEventSubscriptionSymbol. The `graalNative` parameter is nullptr");
     }
 
@@ -57,36 +57,34 @@ IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *g
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), IndexedEventSource::fromGraal(graalSymbol->source)};
 }
 
-std::string IndexedEventSubscriptionSymbol::toString() const noexcept {
+std::string IndexedEventSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
-        return "IndexedEventSubscriptionSymbol{" + eventSymbol_->toString() + ", source = " + source_.toString() + "}";
+        return "IndexedEventSubscriptionSymbol{" + eventSymbol_->toString() + ", source = " + source_->toString() + "}";
     } else {
-        return eventSymbol_->toString() + "{source=" + source_.toString() + "}";
+        return eventSymbol_->toStringUnderlying() + "{source=" + source_->toString() + "}";
     }
 }
 
 bool IndexedEventSubscriptionSymbol::operator==(
     const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
-    return *eventSymbol_ == *indexedEventSubscriptionSymbol.eventSymbol_ &&
-           source_ == indexedEventSubscriptionSymbol.source_;
+    return toString() == indexedEventSubscriptionSymbol.toString();
 }
 
 bool IndexedEventSubscriptionSymbol::operator<(
     const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
-    return *eventSymbol_ < *indexedEventSubscriptionSymbol.eventSymbol_ ||
-           (*eventSymbol_ == *indexedEventSubscriptionSymbol.eventSymbol_ &&
-            source_ < indexedEventSubscriptionSymbol.source_);
+    return toString() < indexedEventSubscriptionSymbol.toString();
 }
+
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(
     const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) {
     eventSymbol_ = std::make_unique<SymbolWrapper>(*indexedEventSubscriptionSymbol.eventSymbol_);
-    source_ = indexedEventSubscriptionSymbol.source_;
+    source_ = std::make_unique<IndexedEventSource>(*indexedEventSubscriptionSymbol.source_);
 }
 
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(
     IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept {
     eventSymbol_ = std::move(indexedEventSubscriptionSymbol.eventSymbol_);
-    source_ = indexedEventSubscriptionSymbol.source_;
+    source_ = std::move(indexedEventSubscriptionSymbol.source_);
 }
 
 IndexedEventSubscriptionSymbol &
@@ -96,7 +94,7 @@ IndexedEventSubscriptionSymbol::operator=(const IndexedEventSubscriptionSymbol &
     }
 
     eventSymbol_ = std::make_unique<SymbolWrapper>(*indexedEventSubscriptionSymbol.eventSymbol_);
-    source_ = indexedEventSubscriptionSymbol.source_;
+    source_ = std::make_unique<IndexedEventSource>(*indexedEventSubscriptionSymbol.source_);
 
     return *this;
 }
@@ -108,7 +106,7 @@ IndexedEventSubscriptionSymbol::operator=(IndexedEventSubscriptionSymbol &&index
     }
 
     eventSymbol_ = std::move(indexedEventSubscriptionSymbol.eventSymbol_);
-    source_ = indexedEventSubscriptionSymbol.source_;
+    source_ = std::move(indexedEventSubscriptionSymbol.source_);
 
     return *this;
 }

@@ -32,7 +32,7 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
     std::shared_ptr<DXPublisher> publisher{new DXPublisher{}};
 
     auto id = ApiContext::getInstance()->getManager<DXPublisherManager>()->registerEntity(publisher);
-    ignore_unused(id);
+    ignoreUnused(id);
 
     publisher->handle_ = JavaObjectHandle<DXPublisher>(handle);
 
@@ -51,7 +51,7 @@ std::shared_ptr<ObservableSubscription> DXPublisher::getSubscription(const Event
     return subscription_;
 }
 
-std::string DXPublisher::toString() const noexcept {
+std::string DXPublisher::toString() const {
     return fmt::format("DXPublisher{{{}}}", handle_.toString());
 }
 

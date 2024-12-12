@@ -33,12 +33,10 @@ int main() {
         // Wait until all data is written, close, and wait until it closes.
         endpoint->awaitProcessed();
         endpoint->closeAndAwaitTermination();
-    } catch (const JavaException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
-    } catch (const GraalException &e) {
-        std::cerr << e.what() << '\n';
-        std::cerr << e.getStackTrace() << '\n';
+    } catch (const RuntimeException &e) {
+        std::cerr << e << '\n';
+
+        return 1;
     }
 
     return 0;

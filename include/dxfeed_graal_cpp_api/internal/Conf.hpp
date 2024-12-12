@@ -23,6 +23,22 @@
 #    endif
 #endif
 
+#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__NVCOMPILER)
+#    ifndef DXFCXX_DO_PRAGMA
+#        define DXFCXX_DO_PRAGMA(x) _Pragma(#x)
+#    endif
+#    ifndef DXFCXX_DISABLE_GCC_WARNINGS_PUSH
+#        define DXFCXX_DISABLE_GCC_WARNINGS_PUSH(...)                                                                  \
+            DXFCXX_DO_PRAGMA(GCC diagnostic push) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#        define DXFCXX_DISABLE_GCC_WARNINGS_POP() DXFCXX_DO_PRAGMA(GCC diagnostic pop)
+#    endif
+#else
+#    ifndef DXFCXX_DISABLE_GCC_WARNINGS_PUSH
+#        define DXFCXX_DISABLE_GCC_WARNINGS_PUSH(warnings)
+#        define DXFCXX_DISABLE_GCC_WARNINGS_POP()
+#    endif
+#endif
+
 #ifdef DXFCPP_EXPORT
 #    error DXFCPP_EXPORT was previously defined
 #endif
@@ -50,7 +66,7 @@
 #ifndef DXFCPP_BEGIN_NAMESPACE
 #    define DXFCPP_BEGIN_NAMESPACE                                                                                     \
         namespace dxfcpp {                                                                                             \
-        inline namespace v2 {
+        inline namespace v3 {
 #    define DXFCPP_END_NAMESPACE                                                                                       \
         }                                                                                                              \
         }
@@ -97,7 +113,9 @@ constexpr bool isUnknownSTL = true;
 #endif
 
 #ifndef DXFCPP_CXX20_CONSTEXPR_STRING
-#    if defined(__cpp_lib_constexpr_string) && ((defined(__GNUC__) && __GNUC__ >= 12) || (defined(__clang_major__) && __clang_major__ >= 15) || (defined(_MSC_VER) && _MSC_VER >= 1929))
+#    if defined(__cpp_lib_constexpr_string) &&                                                                         \
+        ((defined(__GNUC__) && __GNUC__ >= 12) || (defined(__clang_major__) && __clang_major__ >= 15) ||               \
+         (defined(_MSC_VER) && _MSC_VER >= 1929))
 #        define DXFCPP_CXX20_CONSTEXPR_STRING constexpr
 #    else
 #        define DXFCPP_CXX20_CONSTEXPR_STRING

@@ -109,7 +109,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
-     * @throws std::invalid_argument
+     * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
 
@@ -126,8 +126,12 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
+     * @throws InvalidArgumentException
      */
     static void freeGraal(void *graalNative);
+
+    ///
+    void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new theoprice event with default values.
     TheoPrice() noexcept = default;
@@ -226,12 +230,13 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      * Changes @ref ::getSequence() "sequence number" of this event.
      * @param sequence the sequence.
      * @see ::getSequence()
+     * @throws InvalidArgumentException
      */
     void setSequence(std::int32_t sequence) {
         assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
         if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw std::invalid_argument("Invalid value for argument `sequence`: " + std::to_string(sequence));
+            throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
         }
 
         data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
@@ -352,7 +357,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @return a string representation
      */
-    std::string toString() const noexcept override;
+    std::string toString() const override;
 };
 
 DXFCPP_END_NAMESPACE

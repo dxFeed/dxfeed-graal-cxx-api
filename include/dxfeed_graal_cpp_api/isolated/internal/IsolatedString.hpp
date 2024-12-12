@@ -19,11 +19,14 @@ namespace IsolatedString {
  * @param string The pointer to C-string
  * @return `true` if OK.
  *
- * @throws std::invalid_argument if string is nullptr.
+ * @throws InvalidArgumentException if string is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
 bool release(const char *string);
+
+std::unique_ptr<const char, decltype(&release)> toUnique(const char *string);
+
 } // namespace IsolatedString
 
 namespace IsolatedStringList {
@@ -32,11 +35,14 @@ namespace IsolatedStringList {
  * @param stringList The pointer to dxFeed Graal SDK' string list.
  * @return `true` if OK.
  *
- * @throws std::invalid_argument if stringList is nullptr.
+ * @throws InvalidArgumentException if stringList is nullptr.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
 bool release(/* dxfg_string_list* */ void *stringList);
+
+std::unique_ptr<void, decltype(&release)> toUnique(void *stringList);
+
 } // namespace IsolatedStringList
 
 template <typename L> struct NativeStringListWrapper final {

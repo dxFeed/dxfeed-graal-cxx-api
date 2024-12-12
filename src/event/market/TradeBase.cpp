@@ -57,7 +57,15 @@ void TradeBase::fillGraalData(void *graalNative) const noexcept {
     graalTradeBase->flags = tradeBaseData_.flags;
 }
 
-std::string TradeBase::baseFieldsToString() const noexcept {
+void TradeBase::assign(std::shared_ptr<EventType> event) {
+    MarketEvent::assign(event);
+
+    if (const auto other = event->sharedAs<TradeBase>(); other) {
+        tradeBaseData_ = other->tradeBaseData_;
+    }
+}
+
+std::string TradeBase::baseFieldsToString() const {
     return fmt::format("{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, price={}, "
                        "change={}, size={}, day={}, dayVolume={}, dayTurnover={}, "
                        "direction={}, ETH={}",

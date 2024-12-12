@@ -19,7 +19,9 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {
 
@@ -152,14 +154,45 @@ struct ConnectTool {
 
             System::setProperties(parsedProperties);
 
+            auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(args.types);
+
+            if (!unknownTypes.empty()) {
+                auto unknown = elementsToString(unknownTypes.begin(), unknownTypes.end(), "", "");
+
+                throw InvalidArgumentException(
+                    fmt::format("There are unknown event types: {}!\n List of available event types: {}", unknown,
+                                enum_utils::getEventTypeEnumClassNamesList(", ")));
+            }
+
+            if (parsedTypes.empty()) {
+                throw InvalidArgumentException("The resulting list of types is empty!");
+            }
+
+            auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols);
+
+            if (args.fromTime.has_value()) {
+                auto fromTime = TimeFormat::DEFAULT.parse(args.fromTime.value());
+
+                parsedSymbols = parsedSymbols | ranges::views::transform([fromTime](const auto &sw) {
+                                    return TimeSeriesSubscriptionSymbol{sw, fromTime};
+                                }) |
+                                ranges::to<std::unordered_set<SymbolWrapper>>;
+            } else if (args.source.has_value()) {
+                auto source = OrderSource::valueOf(args.source.value());
+
+                parsedSymbols = parsedSymbols | ranges::views::transform([source](const auto &sw) {
+                                    return IndexedEventSubscriptionSymbol{sw, source};
+                                }) |
+                                ranges::to<std::unordered_set<SymbolWrapper>>;
+            }
+
             auto endpoint = DXEndpoint::newBuilder()
                                 ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
                                 ->withProperties(parsedProperties)
                                 ->withName(NAME + "Tool-Feed")
                                 ->build();
 
-            std::shared_ptr<DXFeedSubscription> sub =
-                endpoint->getFeed()->createSubscription(CmdArgsUtils::parseTypes(args.types));
+            std::shared_ptr<DXFeedSubscription> sub = endpoint->getFeed()->createSubscription(parsedTypes);
 
             if (!args.isQuite) {
                 sub->addEventListener([](auto &&events) {
@@ -169,24 +202,6 @@ struct ConnectTool {
 
                     std::cout.flush();
                 });
-            }
-
-            auto symbols = CmdArgsUtils::parseSymbols(args.symbols);
-
-            if (args.fromTime.has_value()) {
-                auto fromTime = TimeFormat::DEFAULT.parse(args.fromTime.value());
-
-                symbols = symbols | ranges::views::transform([fromTime](const auto &sw) {
-                              return TimeSeriesSubscriptionSymbol{sw, fromTime};
-                          }) |
-                          ranges::to<std::unordered_set<SymbolWrapper>>;
-            } else if (args.source.has_value()) {
-                auto source = OrderSource::valueOf(args.source.value());
-
-                symbols = symbols | ranges::views::transform([source](const auto &sw) {
-                              return IndexedEventSubscriptionSymbol{sw, source};
-                          }) |
-                          ranges::to<std::unordered_set<SymbolWrapper>>;
             }
 
             if (args.tape.has_value()) {
@@ -206,15 +221,11 @@ struct ConnectTool {
                 });
             }
 
-            sub->addSymbols(symbols);
+            sub->addSymbols(parsedSymbols);
             endpoint->connect(args.address);
             std::this_thread::sleep_for(std::chrono::days(365));
-        } catch (const JavaException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
-        } catch (const GraalException &e) {
-            std::cerr << e.what() << '\n';
-            std::cerr << e.getStackTrace() << '\n';
+        } catch (const RuntimeException &e) {
+            std::cerr << e << '\n';
         }
     }
 };
