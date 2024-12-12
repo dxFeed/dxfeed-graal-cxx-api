@@ -72,16 +72,6 @@ between the old and new versions.
 Our support team on our [customer portal](https://jira.in.devexperts.com/servicedesk/customer/portal/1/create/122) is
 ready to answer any questions and help with the transition.
 
-#### Sample Mapping
-
-| # | Sample                                                                                            | Old Version                                                                                                     | New Version                                              |
-|:-:|:--------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------|
-| 1 | How to subscribe to `Order`, `SpreadOrder`, `Candle`, `TimeAndSale`, `Greeks`, `Series` snapshots | [SnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/SnapshotConsoleSample)       | *Q2’2024*, please see [TBD](#future-development) section |
-| 2 | How to subscribe to depth of market                                                               | [PriceLevelBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/PriceLevelBookSample)         | *Q2’2024*, please see [TBD](#future-development) section |
-| 3 | How to subscribe to order snapshot with incremental updates                                       | [IncSnapshotConsoleSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/IncSnapshotConsoleSample) | *Q2’2024*, please see [TBD](#future-development) section |
-| 4 | How to get and display the full order book                                                        | [FullOrderBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/FullOrderBookSample)           | *Q2’2024*, please see [TBD](#future-development) section |
-| 5 | How to access and visualize regional market data                                                  | [RegionalBookSample](https://github.com/dxFeed/dxfeed-c-api/tree/master/samples/RegionalBookSample)             | *Q2’2024*, please see [TBD](#future-development) section |
-
 ### Implementation Details
 
 We use [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/) technology and specially
