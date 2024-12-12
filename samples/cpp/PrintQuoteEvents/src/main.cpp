@@ -11,7 +11,7 @@
  * Use default DXFeed instance for that data feed address is defined by "dxfeed.properties" file.
  * The properties file is copied to the build output directory from the project directory.
  */
-int main() {
+int main(int argc, char *argv[]) {
     using namespace dxfcpp;
 
     try {

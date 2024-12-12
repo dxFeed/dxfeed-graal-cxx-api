@@ -346,7 +346,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   and `dxfeed.properties` file
 - [x] [QuoteAndTradeSample](samples/cpp/DxFeedSample/src/main.cpp)
   demonstrates how to create multiple event listeners and subscribe to `Quote` and `Trade` events
-- [ ] [ReconnectSample](samples/cpp/ReconnectSample/src/main.cpp)
+- [x] [ReconnectSample](samples/cpp/ReconnectSample/src/main.cpp)
   demonstrates how to connect to an endpoint, subscribe to market data events, handle reconnections
   and re-subscribing
 

@@ -47,7 +47,7 @@ Examples:
     std::cout << usageString << std::endl;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     try {
         if (argc < 4) {
             printUsage();

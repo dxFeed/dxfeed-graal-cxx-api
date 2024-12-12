@@ -25,7 +25,7 @@ Where:
     std::cout << usageString << std::endl;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     using namespace dxfcpp;
     using namespace std::string_literals;
 

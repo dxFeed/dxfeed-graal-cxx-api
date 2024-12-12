@@ -18,7 +18,7 @@ void fetchAndPrint(const dxfcpp::CandleSymbol &candleSymbol, std::int64_t toTime
 }
 
 // Fetches last 20 days of candles for a specified symbol, prints them, and exits.
-int main() {
+int main(int argc, char *argv[]) {
     static const auto DAYS = 20;
 
     using namespace dxfcpp;

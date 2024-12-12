@@ -570,6 +570,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/DxFeedLiveIpfSample)
     add_subdirectory(samples/cpp/ScheduleSample)
     add_subdirectory(samples/cpp/OnDemandSample)
+    add_subdirectory(samples/cpp/ReconnectSample)
 endif ()
 
 add_subdirectory(docs)

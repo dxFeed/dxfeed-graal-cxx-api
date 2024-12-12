@@ -71,7 +71,7 @@ void testTradeSnapshots(const std::string &symbol) {
  * Creates multiple event listener and subscribe to Quote and Trade events.
  * Use default DXFeed instance for that data feed address is defined by "dxfeed.properties" file.
  */
-int main() {
+int main(int argc, char *argv[]) {
     using namespace dxfcpp;
     using namespace std::string_literals;
 
