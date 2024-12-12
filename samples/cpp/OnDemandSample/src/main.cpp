@@ -11,7 +11,7 @@
  * A sample that uses dxFeed on-demand history data replay service API show Accenture symbol "ACN" drops
  * under $1 on May 6, 2010 "Flashcrash" from 14:47:48 to 14:48:02 EST.
  */
-int main(int /* argc */, char ** /* argv */) {
+int main(int argc, char *argv[]) {
     using namespace dxfcpp;
     using namespace std::literals;
 

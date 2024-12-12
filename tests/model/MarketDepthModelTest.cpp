@@ -51,7 +51,7 @@ class MarketDepthModelTestFixture {
     }
 
     void checkChanged(bool expected) {
-        REQUIRE(expected ? listenerCalls_ > 0 : listenerCalls_ == 0);
+        REQUIRE((expected ? listenerCalls_ > 0 : listenerCalls_ == 0));
 
         listenerCalls_ = 0;
     }
