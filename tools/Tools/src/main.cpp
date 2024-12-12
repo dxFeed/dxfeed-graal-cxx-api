@@ -28,7 +28,7 @@ using namespace std::literals;
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 
-int main(int argc, char *argv[]) {
+int main() {
     try {
         System::setProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true");
         // Enable experimental feature.

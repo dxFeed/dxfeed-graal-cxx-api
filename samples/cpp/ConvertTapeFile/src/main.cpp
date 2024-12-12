@@ -11,7 +11,7 @@ using namespace std::literals;
  * Converts one tape file into another tape file with optional intermediate processing or filtering.
  * This project contains sample tape file ConvertTapeFile.in.
  */
-int main(int argc, char *argv[]) {
+int main() {
     try {
         // Determine input and output tapes and specify appropriate configuration parameters.
         std::string inputAddress = argc > 1 ? argv[0] : "file:ConvertTapeFile.in[readAs=stream_data,speed=max]";

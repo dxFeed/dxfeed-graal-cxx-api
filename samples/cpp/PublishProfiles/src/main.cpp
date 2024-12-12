@@ -17,7 +17,7 @@ using namespace std::literals;
  * Using address like ":7700" it starts a server on a specified port where it provides Profile
  * event for any symbol ending with ":TEST" suffix.
  */
-int main(int argc, char *argv[]) {
+int main() {
     try {
         if (argc < 2) {
             return 0;

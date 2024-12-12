@@ -336,7 +336,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 
 ### API
 
-- [ ] [AuthSample](samples/cpp/AuthSample/src/main.cpp)
+- [x] [AuthSample](samples/cpp/AuthSample/src/main.cpp)
   demonstrates how to connect to an endpoint that requires an authentication token,
   subscribe to market data events, and handle periodic token updates
 - [x] [ConnectSample](samples/cpp/DxFeedConnect/src/main.cpp)

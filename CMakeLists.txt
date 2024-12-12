@@ -557,6 +557,7 @@ if (DXFCXX_BUILD_UNIT_TESTS)
 endif ()
 
 if (DXFCXX_BUILD_SAMPLES)
+    add_subdirectory(samples/cpp/AuthSample)
     add_subdirectory(samples/cpp/PrintQuoteEvents)
     add_subdirectory(samples/cpp/PublishProfiles)
     add_subdirectory(samples/cpp/DxFeedSample)

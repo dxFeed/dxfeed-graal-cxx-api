@@ -25,7 +25,7 @@ Where:
     std::cout << usageString << std::endl;
 }
 
-int main(int argc, char *argv[]) {
+int main() {
     try {
         if (argc < 4) {
             printUsage();

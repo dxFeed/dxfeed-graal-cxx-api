@@ -53,7 +53,7 @@ std::vector<std::string> getSymbols(const std::string &filename) noexcept {
  * This sample demonstrates how to subscribe to available symbols using IPF.
  * Use default DXFeed instance for that data feed address is defined by "dxfeed.properties" file.
  */
-int main(int argc, char *argv[]) {
+int main() {
     using namespace dxfcpp;
     using namespace std::string_literals;
 
