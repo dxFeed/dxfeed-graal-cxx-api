@@ -399,6 +399,10 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     }
 
     using GraalPtr = std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)>;
+
+    friend std::ostream &operator<<(std::ostream &os, const SymbolWrapper &symbolWrapper) {
+        return os << symbolWrapper.toStringUnderlying();
+    }
 };
 
 inline namespace literals {

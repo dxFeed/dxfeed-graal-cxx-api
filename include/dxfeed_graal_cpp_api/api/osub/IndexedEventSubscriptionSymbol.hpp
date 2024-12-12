@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../internal/Conf.hpp"
+#include "dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -38,6 +39,8 @@ struct SymbolWrapper;
  */
 class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     friend SymbolWrapper;
+
+    //struct Impl;
 
     std::unique_ptr<SymbolWrapper> eventSymbol_;
     std::unique_ptr<IndexedEventSource> source_;
@@ -117,11 +120,9 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
 
 DXFCPP_END_NAMESPACE
 
-template <> struct DXFCPP_EXPORT std::hash<dxfcpp::IndexedEventSubscriptionSymbol> {
-    std::size_t
-    operator()(const dxfcpp::IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
-        return std::hash<std::unique_ptr<dxfcpp::SymbolWrapper>>{}(indexedEventSubscriptionSymbol.getEventSymbol()) +
-               std::hash<dxfcpp::IndexedEventSource>{}(*indexedEventSubscriptionSymbol.getSource()) * 31;
+template <> struct std::hash<dxfcpp::IndexedEventSubscriptionSymbol> {
+    std::size_t operator()(const dxfcpp::IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
+        return std::hash<std::string>{}(indexedEventSubscriptionSymbol.toString());
     }
 };
 

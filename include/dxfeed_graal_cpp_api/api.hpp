@@ -20,6 +20,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "internal/StopWatch.hpp"
 #include "internal/Timer.hpp"
 #include "internal/TimeFormat.hpp"
+#include "internal/Handler.hpp"
 
 #include "internal/context/ApiContext.hpp"
 
@@ -49,6 +50,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "model/TxModelListener.hpp"
 #include "model/IndexedTxModel.hpp"
 #include "model/TimeSeriesTxModel.hpp"
+#include "model/MarketDepthModelListener.hpp"
+#include "model/MarketDepthModel.hpp"
 
 #include "exceptions/RuntimeException.hpp"
 #include "exceptions/InvalidArgumentException.hpp"

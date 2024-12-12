@@ -572,6 +572,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/OnDemandSample)
     add_subdirectory(samples/cpp/ReconnectSample)
     add_subdirectory(samples/cpp/IncOrderSnapshotSample)
+    add_subdirectory(samples/cpp/MultipleMarketDepthSample)
 endif ()
 
 add_subdirectory(docs)

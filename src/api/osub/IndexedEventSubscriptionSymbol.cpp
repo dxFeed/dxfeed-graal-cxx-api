@@ -61,22 +61,20 @@ std::string IndexedEventSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
         return "IndexedEventSubscriptionSymbol{" + eventSymbol_->toString() + ", source = " + source_->toString() + "}";
     } else {
-        return eventSymbol_->toString() + "{source=" + source_->toString() + "}";
+        return eventSymbol_->toStringUnderlying() + "{source=" + source_->toString() + "}";
     }
 }
 
 bool IndexedEventSubscriptionSymbol::operator==(
     const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
-    return *eventSymbol_ == *indexedEventSubscriptionSymbol.eventSymbol_ &&
-           source_ == indexedEventSubscriptionSymbol.source_;
+    return toString() == indexedEventSubscriptionSymbol.toString();
 }
 
 bool IndexedEventSubscriptionSymbol::operator<(
     const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
-    return *eventSymbol_ < *indexedEventSubscriptionSymbol.eventSymbol_ ||
-           (*eventSymbol_ == *indexedEventSubscriptionSymbol.eventSymbol_ &&
-            source_ < indexedEventSubscriptionSymbol.source_);
+    return toString() < indexedEventSubscriptionSymbol.toString();
 }
+
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(
     const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) {
     eventSymbol_ = std::make_unique<SymbolWrapper>(*indexedEventSubscriptionSymbol.eventSymbol_);
