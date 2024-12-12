@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventType.hpp"
+#include "../event/TimeSeriesEvent.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/IndexedEventSource.hpp"
 #include "../internal/Handler.hpp"

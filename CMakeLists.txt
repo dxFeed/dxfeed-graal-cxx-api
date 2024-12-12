@@ -571,6 +571,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/ScheduleSample)
     add_subdirectory(samples/cpp/OnDemandSample)
     add_subdirectory(samples/cpp/ReconnectSample)
+    add_subdirectory(samples/cpp/IncOrderSnapshotSample)
 endif ()
 
 add_subdirectory(docs)

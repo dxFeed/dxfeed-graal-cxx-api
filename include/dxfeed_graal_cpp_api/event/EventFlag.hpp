@@ -45,7 +45,7 @@ DXFCPP_BEGIN_NAMESPACE
  * It can be retrieved from `eventFlags` with the following piece of code:
  *
  * ```cpp
- * bool txPending = (event-> getEventFlags() & IndexedEvent::TX_PENDING) != 0;
+ * bool txPending = (event->getEventFlags() & IndexedEvent::TX_PENDING) != 0;
  * ```
  *
  * <p>When `txPending` is `true` it means, that an ongoing transaction update that spans multiple events is
@@ -56,13 +56,13 @@ DXFCPP_BEGIN_NAMESPACE
  * corresponding index has to be removed.
  *
  * ```cpp
- * bool removeEvent = (event-> getEventFlags() & IndexedEvent::REMOVE_EVENT) != 0;
+ * bool removeEvent = (event->getEventFlags() & IndexedEvent::REMOVE_EVENT) != 0;
  * ```
  *
  * <p> `SB` (bit 2) &mdash; ::SNAPSHOT_BEGIN is used to indicate when the loading of a snapshot starts.
  *
  * ```cpp
- * bool snapshotBegin = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;
+ * bool snapshotBegin = (event->getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;
  * ```
  *
  * <p> Snapshot load starts on new subscription and the first indexed event that arrives for each non-zero source id
@@ -315,6 +315,71 @@ class DXFCPP_EXPORT EventFlag final {
      */
     friend std::uint32_t operator&(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
         return dxfcpp::andOp(eventFlag1, eventFlag2.getFlag());
+    }
+
+    /**
+     * Determines if the given event marks the beginning of a snapshot.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate the beginning of a snapshot, `false` otherwise.
+     */
+    template <typename Event> static bool isSnapshotBegin(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & SNAPSHOT_BEGIN) != 0;
+    }
+
+    /**
+     * Determines if the given event marks the end of a snapshot.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate the end of a snapshot, `false` otherwise.
+     */
+    template <typename Event> static bool isSnapshotEnd(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & SNAPSHOT_END) != 0;
+    }
+
+    /**
+     * Determines if the given event is marked as a snapshot snip.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate a snapshot snip, `false` otherwise.
+     */
+    template <typename Event> static bool isSnapshotSnip(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & SNAPSHOT_SNIP) != 0;
+    }
+
+    /**
+     * Determines if the given event marks the end of a snapshot or a snapshot snip.
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate the end or snip of a snapshot, `false` otherwise.
+     */
+    template <typename Event> static bool isSnapshotEndOrSnip(const std::shared_ptr<Event> &event) {
+        return isSnapshotEnd(event) || isSnapshotSnip(event);
+    }
+
+    /**
+     * Determines if the given event is in a pending state.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate a pending transaction, `false` otherwise.
+     */
+    template <typename Event> static bool isPending(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & TX_PENDING) != 0;
+    }
+
+    /**
+     * Determines if the given event is marked for removal.
+     *
+     * @tparam Event The event's type.
+     * @param event The event to be checked.
+     * @return `true` if the event flags indicate a remove action, `false` otherwise.
+     */
+    template <typename Event> static bool isRemove(const std::shared_ptr<Event> &event) {
+        return (event->getEventFlags() & REMOVE_EVENT) != 0;
     }
 };
 

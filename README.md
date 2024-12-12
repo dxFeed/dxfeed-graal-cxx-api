@@ -387,7 +387,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 
 ### Model
 
-- [ ] [IncOrderSnapshotSample](samples/cpp/IncOrderSnapshotSample/src/main.cpp)
+- [x] [IncOrderSnapshotSample](samples/cpp/IncOrderSnapshotSample/src/main.cpp)
   demonstrates how to subscribe to the Order event and handle snapshots and updates
 - [ ] [MultipleMarketDepthSample](samples/cpp/MultipleMarketDepthSample/src/main.cpp)
   demonstrates how to use the `MarketDepthModel` to manage and display order books for multiple symbols
