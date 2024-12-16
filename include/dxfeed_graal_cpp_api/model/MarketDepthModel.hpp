@@ -431,7 +431,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
             isChanged_ = false;
             snapshot_.clear();
 
-            auto limit = isDepthLimitUnbounded() ? std::numeric_limits<std::size_t>::max() : depthLimit_.load();
+            const auto limit = isDepthLimitUnbounded() ? std::numeric_limits<std::size_t>::max() : depthLimit_.load();
             std::size_t i = 0;
 
             for (auto it = orders_.begin(); i < limit && it != orders_.end(); ++it) {
