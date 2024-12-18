@@ -374,13 +374,12 @@ struct DXFCPP_EXPORT IndexedTxModel final : IndexedTxModelImpl, RequireMakeShare
     std::shared_ptr<TxModelListenerCommon> listener_;
 
   public:
-    IndexedTxModel(typename IndexedTxModel::LockExternalConstructionTag,
-                   JavaObjectHandle<IndexedTxModelTag> &&handle)
+    IndexedTxModel(typename IndexedTxModel::LockExternalConstructionTag, JavaObjectHandle<IndexedTxModelTag> &&handle)
         : handle_(std::move(handle)) {
     }
 
-    IndexedTxModel(typename IndexedTxModel::LockExternalConstructionTag,
-                   JavaObjectHandle<IndexedTxModelTag> &&handle, std::shared_ptr<TxModelListenerCommon> listener)
+    IndexedTxModel(typename IndexedTxModel::LockExternalConstructionTag, JavaObjectHandle<IndexedTxModelTag> &&handle,
+                   std::shared_ptr<TxModelListenerCommon> listener)
         : handle_(std::move(handle)), listener_(std::move(listener)) {
     }
 
