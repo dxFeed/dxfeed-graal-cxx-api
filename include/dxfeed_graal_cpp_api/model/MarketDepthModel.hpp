@@ -82,7 +82,7 @@ struct SymbolWrapper;
  *             std::cout << std::format("{0:^15}|{1:^15} || {0:^15}|{1:^15}\n", "Price", "Size");
  *             std::cout << std::format("{:-^66}\n", "");
  *
- *             for (auto buyIt = buy.begin(), sellIt = sell.begin(); buyIt != buy.end() && sellIt != sell.end();) {
+ *             for (auto buyIt = buy.begin(), sellIt = sell.begin(); buyIt != buy.end() || sellIt != sell.end();) {
  *                 std::string row{};
  *                 if (buyIt != buy.end()) {
  *                     row += std::format("{:>14.4f} | {:<14.2f}", (*buyIt)->getPrice(), (*buyIt)->getSize());

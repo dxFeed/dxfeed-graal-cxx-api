@@ -51,4 +51,16 @@ public:
     void setSize(const double Size) {
         size = Size;
     }
+
+    friend bool operator==(const std::shared_ptr<PriceLevel> & pl1, const std::shared_ptr<PriceLevel> & pl2) {
+        if (pl1->getEventSymbol() == std::nullopt || pl2->getEventSymbol() == std::nullopt) {
+            return false;
+        }
+
+        if (pl1->getEventSymbol() != pl2->getEventSymbol()) {
+            return false;
+        }
+
+        return pl1->getSide() == pl2->getSide();
+    }
 };

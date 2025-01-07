@@ -284,7 +284,7 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::
 
                 priceLevels_.erase(it);
 
-                if (!dxfcpp::math::equals(newSize, 0.0) && newSize > 0.0) {
+                if (newSize > 0.0) {
                     existing->setSize(newSize);
                     priceLevels_.emplace(std::make_shared<PriceLevel>(*existing));
                 }

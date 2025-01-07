@@ -18,12 +18,12 @@ using namespace std::literals;
 
 int main(int /*argc*/, char * /*argv*/[]) {
     try {
-        const auto address = "demo.dxfeed.com:7300";
+        const auto address = "mddqa.in.devexperts.com:7400";
 
         // Disable QD logging.
         // Logging::init();
 
-        auto symbol = "AAPL";
+        auto symbol = "IBM";
         auto source = OrderSource::NTV;
 
         auto book =
@@ -31,7 +31,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
                 ->withFeed(DXFeed::getInstance())
                 ->withSymbol(symbol)
                 ->withSource(source)
-                ->withDepthLimit(30)
+                ->withDepthLimit(10)
                 ->withAggregationPeriod(10s)
                 ->withListener([](const std::vector<std::shared_ptr<PriceLevel>> &buyLevels,
                                   const std::vector<std::shared_ptr<PriceLevel>> &sellLevels) {
@@ -45,7 +45,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
                     std::cout << fmt::format("{:-^66}\n", "");
 
                     for (auto buyIt = buyLevels.begin(), sellIt = sellLevels.begin();
-                         buyIt != buyLevels.end() && sellIt != sellLevels.end();) {
+                         buyIt != buyLevels.end() || sellIt != sellLevels.end();) {
                         std::string row{};
                         if (buyIt != buyLevels.end()) {
                             row += fmt::format("{:>14.4f} | {:<14.2f}", (*buyIt)->getPrice(), (*buyIt)->getSize());
