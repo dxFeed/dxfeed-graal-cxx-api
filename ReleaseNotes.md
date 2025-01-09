@@ -1,6 +1,8 @@
+* **\[MDAPI-216]\[C++][Console]** Added PriceLevelBook sample
+
 ## v4.0.0
 
-* **\[MDAPI-38]\[C++]** Add MultipleMarketDepthSample sample
+* **\[MDAPI-38]\[C++]** Added MultipleMarketDepthSample sample
     * Added `MultipleMarketDepthSample` sample.
     * Added `AuthSample` sample.
     * Added `ReconnectSample` sample.
