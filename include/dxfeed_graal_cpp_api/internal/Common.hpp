@@ -233,7 +233,7 @@ static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
 
-static inline bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
+static bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
     if (std::isnan(a) || std::isnan(b)) {
         return false;
     }
@@ -242,7 +242,7 @@ static inline bool equals(double a, double b, double eps = std::numeric_limits<d
 }
 
 template <typename T, typename U>
-static inline bool equals(T a, U b, double eps = std::numeric_limits<double>::epsilon()) {
+static bool equals(T a, U b, double eps = std::numeric_limits<double>::epsilon()) {
     if (std::isnan(static_cast<double>(a)) || std::isnan(static_cast<double>(b))) {
         return false;
     }

@@ -3,7 +3,6 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <chrono>
 #include <mutex>
 #include <random>
 #include <string>

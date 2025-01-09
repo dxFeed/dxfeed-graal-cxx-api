@@ -82,7 +82,7 @@ struct SymbolWrapper;
  *             std::cout << std::format("{0:^15}|{1:^15} || {0:^15}|{1:^15}\n", "Price", "Size");
  *             std::cout << std::format("{:-^66}\n", "");
  *
- *             for (auto buyIt = buy.begin(), sellIt = sell.begin(); buyIt != buy.end() && sellIt != sell.end();) {
+ *             for (auto buyIt = buy.begin(), sellIt = sell.begin(); buyIt != buy.end() || sellIt != sell.end();) {
  *                 std::string row{};
  *                 if (buyIt != buy.end()) {
  *                     row += std::format("{:>14.4f} | {:<14.2f}", (*buyIt)->getPrice(), (*buyIt)->getSize());
@@ -130,8 +130,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
             builder_ = IndexedTxModel<O>::newBuilder();
         }
 
-        ~Builder() override {
-        }
+        ~Builder() override = default;
 
         /**
          * Sets the DXFeed for the model being created.
@@ -179,9 +178,10 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
          * @param onEventsReceived The callback.
          * @return The builder instance.
          */
-        std::shared_ptr<Builder> withListener(std::function<void(const std::vector<std::shared_ptr<O>> & /* buy */,
-                                                                 const std::vector<std::shared_ptr<O>> & /* sell */)>
-                                                  onEventsReceived) {
+        std::shared_ptr<Builder>
+        withListener(std::function<void(const std::vector<std::shared_ptr<O>> & /* buy */,
+                                        const std::vector<std::shared_ptr<O>> & /* sell */)>
+                         onEventsReceived) {
             this->listener_ = MarketDepthModelListener<O>::create(onEventsReceived);
 
             return this->template sharedAs<Builder>();
@@ -431,7 +431,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
             isChanged_ = false;
             snapshot_.clear();
 
-            auto limit = isDepthLimitUnbounded() ? std::numeric_limits<std::size_t>::max() : depthLimit_.load();
+            const auto limit = isDepthLimitUnbounded() ? std::numeric_limits<std::size_t>::max() : depthLimit_.load();
             std::size_t i = 0;
 
             for (auto it = orders_.begin(); i < limit && it != orders_.end(); ++it) {
@@ -514,9 +514,8 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
          * Clears orders from the set by source.
          *
          * @param source The source to clear orders by.
-         * @return `true` if any order was removed.
          */
-        bool clearBySource(const IndexedEventSource &source) {
+        void clearBySource(const IndexedEventSource &source) {
             std::lock_guard lock(mutex_);
 
             std::size_t size = orders_.size();
@@ -527,7 +526,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
                 }
             }
 
-            return orders_.size() != size;
+            isChanged_ = orders_.size() != size;
         }
 
         std::vector<std::shared_ptr<O>> toVector() {
@@ -722,7 +721,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
     }
 
     /**
-     * @return The depth limit of the book.
+     * @return The depth limit of the model.
      */
     std::size_t getDepthLimit() const {
         std::lock_guard guard(mtx_);
@@ -731,7 +730,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
     }
 
     /**
-     * Sets the depth limit of the book.
+     * Sets the depth limit of the model.
      *
      * @param depthLimit The new depth limit value.
      */
@@ -750,7 +749,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
     }
 
     /**
-     * @return The aggregation period of the book.
+     * @return The aggregation period of the model.
      */
     std::int64_t getAggregationPeriod() const {
         std::lock_guard guard(mtx_);

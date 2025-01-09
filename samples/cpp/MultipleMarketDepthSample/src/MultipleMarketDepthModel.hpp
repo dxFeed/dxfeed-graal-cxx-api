@@ -25,6 +25,7 @@ struct MultipleMarketDepthModel : dxfcpp::RequireMakeShared<MultipleMarketDepthM
     /// A builder class for creating instances of MultipleMarketDepthModel.
     struct Builder : dxfcpp::RequireMakeShared<Builder> {
         friend struct MultipleMarketDepthModel;
+
       private:
         std::shared_ptr<typename dxfcpp::MarketDepthModel<O>::Builder> builder_{};
 
