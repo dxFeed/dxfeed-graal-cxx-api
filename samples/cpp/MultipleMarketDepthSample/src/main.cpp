@@ -20,7 +20,7 @@ using namespace dxfcpp::literals;
 using namespace std::literals;
 
 // This sample program demonstrates how to use the MultipleMarketDepthModel
-int main() {
+int main(int /*argc*/, char * /*argv*/[]) {
     try {
         const auto address = "demo.dxfeed.com:7300";
 
@@ -40,12 +40,12 @@ int main() {
             const auto maxCount = std::max(book->buy.size(), book->sell.size());
 
             for (std::size_t i = 0; i < maxCount; i++) {
-                auto buyTable = i < book->buy.size() ? fmt::format("Buy  [Source: {}, Size: {:5}, Price: {:8}]",
+                auto buyTable = i < book->buy.size() ? fmt::format("Buy  [Source: {}, Size: {:8.2f}, Price: {:8.4f}]",
                                                                    book->buy[i]->getSource().toString(),
                                                                    book->buy[i]->getSize(), book->buy[i]->getPrice())
                                                      : "Buy  [None]"s;
                 auto sellTable = i < book->sell.size()
-                                     ? fmt::format("Sell  [Source: {}, Size: {:5}, Price: {:8}]",
+                                     ? fmt::format("Sell  [Source: {}, Size: {:8.2f}, Price: {:8.4f}]",
                                                    book->sell[i]->getSource().toString(), book->sell[i]->getSize(),
                                                    book->sell[i]->getPrice())
                                      : "Sell  [None]"s;

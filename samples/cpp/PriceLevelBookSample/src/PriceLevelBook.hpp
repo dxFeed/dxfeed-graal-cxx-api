@@ -10,7 +10,6 @@
 #include <atomic>
 #include <memory>
 #include <set>
-#include <string>
 #include <unordered_map>
 #include <utility>
 
@@ -92,6 +91,7 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::
          */
         std::shared_ptr<Builder> withSource(const dxfcpp::IndexedEventSource &source) {
             source_ = source;
+            builder_ = builder_->withSources({source});
 
             return this->template sharedAs<Builder>();
         }
@@ -142,13 +142,13 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::
 
     struct BuyLess {
         bool operator()(const std::shared_ptr<PriceLevel> &pl1, const std::shared_ptr<PriceLevel> &pl2) const {
-            return pl1->getPrice() < pl2->getPrice();
+            return pl1->getPrice() > pl2->getPrice();
         }
     };
 
     struct SellLess {
         bool operator()(const std::shared_ptr<PriceLevel> &pl1, const std::shared_ptr<PriceLevel> &pl2) const {
-            return pl1->getPrice() > pl2->getPrice();
+            return pl1->getPrice() < pl2->getPrice();
         }
     };
 

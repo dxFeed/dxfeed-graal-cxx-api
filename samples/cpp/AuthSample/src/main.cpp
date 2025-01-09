@@ -3,7 +3,6 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <chrono>
 #include <mutex>
 #include <random>
 #include <string>
@@ -28,55 +27,6 @@ int main() {
 
         // Disable QD logging.
         // Logging::init();
-
-        auto model =
-            MarketDepthModel<Order>::newBuilder()
-                ->withFeed(DXFeed::getInstance())
-                ->withSources({OrderSource::REGIONAL_ASK, OrderSource::REGIONAL_BID})
-                ->withSymbol("AAPL")
-                ->withAggregationPeriod(10s)
-                ->withDepthLimit(10)
-                ->withListener([](const auto &buy, const auto &sell) {
-                    if (buy.empty() && sell.empty()) {
-                        return;
-                    }
-
-                    std::cout << std::format("{:=^66}\n", "");
-                    std::cout << std::format("{:^31} || {:^31}\n", "ASK", "BID");
-                    std::cout << std::format("{0:^15}|{1:^15} || {0:^15}|{1:^15}\n", "Price", "Size");
-                    std::cout << std::format("{:-^66}\n", "");
-
-                    for (auto buyIt = buy.begin(), sellIt = sell.begin(); buyIt != buy.end() || sellIt != sell.end();) {
-                        std::string row{};
-                        if (buyIt != buy.end()) {
-                            row += std::format("{:>14.4f} | {:<14.2f}", (*buyIt)->getPrice(), (*buyIt)->getSize());
-
-                            ++buyIt;
-                        } else {
-                            row += std::format("{:>14} | {:<14}", "", "");
-                        }
-
-                        row += " || ";
-
-                        if (sellIt != sell.end()) {
-                            row += std::format("{:>14.4f} | {:<14.2f}", (*sellIt)->getPrice(), (*sellIt)->getSize());
-
-                            ++sellIt;
-                        } else {
-                            row += std::format("{:>14} | {:<14}", "", "");
-                        }
-
-                        std::cout << row << std::endl;
-                    }
-
-                    std::cout << std::format("{:=^66}\n", "");
-                })
-                ->build();
-        DXEndpoint::getInstance()->connect("mddqa.in.devexperts.com:7400");
-
-        std::cin.ignore();
-
-        return 0;
 
         auto generateToken = [] {
             std::uniform_int_distribution<std::size_t> lengthDistrib(4u, 9u);

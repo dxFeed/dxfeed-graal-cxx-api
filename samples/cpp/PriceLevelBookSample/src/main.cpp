@@ -18,12 +18,12 @@ using namespace std::literals;
 
 int main(int /*argc*/, char * /*argv*/[]) {
     try {
-        const auto address = "mddqa.in.devexperts.com:7400";
+        const auto address = "demo.dxfeed.com:7300";
 
         // Disable QD logging.
         // Logging::init();
 
-        auto symbol = "IBM";
+        auto symbol = "MSFT";
         auto source = OrderSource::NTV;
 
         auto book =
