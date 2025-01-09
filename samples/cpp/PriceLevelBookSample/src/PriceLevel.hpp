@@ -20,7 +20,7 @@ struct PriceLevel {
     /**
      * Initializes a new default instance.
      */
-    PriceLevel() : eventSource_{}, side_{dxfcpp::Side::UNDEFINED}, price_{}, size_{} {
+    PriceLevel() : eventSource_{dxfcpp::IndexedEventSource::DEFAULT}, side_{dxfcpp::Side::UNDEFINED}, price_{}, size_{} {
     }
 
     /**
