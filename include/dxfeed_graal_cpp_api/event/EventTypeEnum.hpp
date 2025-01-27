@@ -82,6 +82,8 @@ class DXFCPP_EXPORT EventTypeEnum {
     static const EventTypeEnum SERIES;
     static const EventTypeEnum OPTION_SALE;
 
+    static const EventTypeEnum TEXT_MESSAGE;
+
     static const std::vector<std::reference_wrapper<const EventTypeEnum>> ALL;
 
     static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> ALL_BY_NAME;

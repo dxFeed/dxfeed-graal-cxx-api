@@ -1,6 +1,8 @@
 // Copyright (c) 2024 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "dxfeed_graal_cpp_api/event/misc/TextMessage.hpp"
+
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -63,6 +65,8 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
         return Series::fromGraal(e);
     case DXFG_EVENT_OPTION_SALE:
         return OptionSale::fromGraal(e);
+    case DXFG_EVENT_TEXT_MESSAGE:
+        return TextMessage::fromGraal(e);
     default:
         throw InvalidArgumentException("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
     }
@@ -169,6 +173,10 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
         break;
     case DXFG_EVENT_OPTION_SALE:
         OptionSale::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_TEXT_MESSAGE:
+        TextMessage::freeGraal(e);
 
         break;
     default:

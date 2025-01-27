@@ -175,3 +175,53 @@ TEST_CASE_FIXTURE(DataIntegrityTestFixture, "dxFeed :: Test attach & detach sub"
     stop = true;
     t.join();
 }
+
+TEST_CASE_FIXTURE(DataIntegrityTestFixture, "dxFeed :: Test TextMessage") {
+    std::mutex ioMutex{};
+
+    auto println = [&ioMutex](auto s) {
+        std::lock_guard lock{ioMutex};
+        std::cout << s << std::endl;
+    };
+
+    auto sub = DXFeedSubscription::create({TextMessage::TYPE});
+
+    sub->addSymbols("TOKEN");
+
+    sub->addEventListener<TextMessage>([&println](const auto &textMessages) {
+        for (auto &&t : textMessages) {
+            println(fmt::format("sub: {}", t->toString()));
+        }
+    });
+
+    std::atomic<bool> stop{false};
+
+    auto t = std::thread([pub = pub, &stop]() {
+        auto t = std::make_shared<TextMessage>("TOKEN");
+        auto i = 0;
+
+        while (!stop) {
+            t->setTime(t->getTime() + 1000);
+            t->setText(std::to_string(i++));
+
+            pub->publishEvents(t);
+
+            std::this_thread::sleep_for(100ms);
+        }
+    });
+
+    std::this_thread::sleep_for(1ms);
+
+    println("Attach sub");
+    feed->attachSubscription(sub);
+
+    std::this_thread::sleep_for(5s);
+
+    println("Detach sub");
+    feed->detachSubscription(sub);
+
+    std::this_thread::sleep_for(5s);
+
+    stop = true;
+    t.join();
+}
