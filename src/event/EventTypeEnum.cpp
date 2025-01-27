@@ -38,6 +38,7 @@ const EventTypeEnum EventTypeEnum::OTC_MARKETS_ORDER{DXFG_EVENT_OTC_MARKETS_ORDE
 const EventTypeEnum EventTypeEnum::SPREAD_ORDER{DXFG_EVENT_SPREAD_ORDER, "SPREAD_ORDER", "SpreadOrder", false, true};
 const EventTypeEnum EventTypeEnum::SERIES{DXFG_EVENT_SERIES, "SERIES", "Series", false, true};
 const EventTypeEnum EventTypeEnum::OPTION_SALE{DXFG_EVENT_OPTION_SALE, "OPTION_SALE", "OptionSale", false, true};
+const EventTypeEnum EventTypeEnum::TEXT_MESSAGE{DXFG_EVENT_TEXT_MESSAGE, "TEXT_MESSAGE", "TextMessage", false, false, false, false};
 
 const std::vector<std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL{
     std::cref(QUOTE),
@@ -58,6 +59,7 @@ const std::vector<std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::AL
     std::cref(SPREAD_ORDER),
     std::cref(SERIES),
     std::cref(OPTION_SALE),
+    std::cref(TEXT_MESSAGE),
 };
 
 const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_NAME =
