@@ -17,6 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_set>
 
 #include "../../symbols/SymbolWrapper.hpp"
+#include "../../event/EventSourceWrapper.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -150,8 +151,8 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
     parseTypes(std::optional<std::string> types);
 
     /**
-     * Parses the input collection of strings and returns a collection of key-value properties.
-     * The input strings should look like comma-separated: "key=value".
+     * Parses the input string and returns a collection of key-value properties.
+     * The input string should look like comma-separated: "key=value".
      *
      * @param properties The input comma-separated key-value pairs.
      * @return The collection of key-value properties.
@@ -159,19 +160,23 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
     static std::unordered_map<std::string, std::string> parseProperties(const std::string &properties) noexcept;
 
     /**
-     * Parses the input collection of strings and returns a collection of key-value properties.
-     * The input strings should look like comma-separated: "key=value".
+     * Parses the input string and returns a collection of key-value properties.
+     * The input string should look like comma-separated: "key=value".
      *
      * @param properties The input comma-separated key-value pairs.
      * @return The collection of key-value properties.
      */
     static std::unordered_map<std::string, std::string> parseProperties(const char *properties) noexcept {
+        if (properties == nullptr) {
+            return {};
+        }
+
         return parseProperties(std::string(properties));
     }
 
     /**
-     * Parses the input collection of strings and returns a collection of key-value properties.
-     * The input strings should look like comma-separated: "key=value".
+     * Parses the input string and returns a collection of key-value properties.
+     * The input string should look like comma-separated: "key=value".
      *
      * @param properties The input comma-separated key-value pairs.
      * @return The collection of key-value properties.
@@ -181,8 +186,8 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
     }
 
     /**
-     * Parses the input collection of strings and returns a collection of key-value properties.
-     * The input strings should look like comma-separated: "key=value".
+     * Parses the input string and returns a collection of key-value properties.
+     * The input string should look like comma-separated: "key=value".
      *
      * @param properties The input comma-separated key-value pairs.
      * @return The collection of key-value properties.
@@ -194,6 +199,41 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
         }
 
         return {};
+    }
+
+    /**
+     * Parses the input string and returns a wrapped set of event sources (EventSourceWrapper).
+     * The input string should look like comma-separated: "name1,name2".
+     *
+     * @param sources The input source names.
+     * @return The set of sources or wrapped IndexedEventSource::DEFAULT if `sources` is empty.
+     */
+    static std::unordered_set<EventSourceWrapper> parseEventSources(const std::string &sources) noexcept;
+
+    /**
+     * Parses the input string and returns a wrapped set of event sources (EventSourceWrapper).
+     * The input string should look like comma-separated: "name1,name2".
+     *
+     * @param sources The input source names.
+     * @return The set of sources or wrapped IndexedEventSource::DEFAULT if `sources` is empty.
+     */
+    static std::unordered_set<EventSourceWrapper> parseEventSources(const char *sources) noexcept {
+        if (sources == nullptr) {
+            return {EventSourceWrapper{IndexedEventSource::DEFAULT}};
+        }
+
+        return parseEventSources(std::string(sources));
+    }
+
+    /**
+     * Parses the input string and returns a wrapped set of event sources (EventSourceWrapper).
+     * The input string should look like comma-separated: "name1,name2".
+     *
+     * @param sources The input source names.
+     * @return The set of sources or wrapped IndexedEventSource::DEFAULT if `sources` is empty.
+     */
+    static std::unordered_set<EventSourceWrapper> parseEventSources(std::string_view sources) noexcept {
+        return parseEventSources(sources.data());
     }
 };
 

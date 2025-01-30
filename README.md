@@ -382,8 +382,10 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 - [x] [MultipleMarketDepthSample](samples/cpp/MultipleMarketDepthSample/src/main.cpp)
   demonstrates how to use the `MarketDepthModel` to manage and display order books for multiple symbols
 - [x] [PriceLevelBookSample](samples/cpp/PriceLevelBookSample/src/main.cpp)
-    demonstrates how to compile a price level book (market by price) that aggregates individual orders
-    (market by order)
+  demonstrates how to compile a price level book (market by price) that aggregates individual orders
+  (market by order)
+- [x] [MarketDepthModelSample](samples/cpp/MarketDepthModelSample/src/main.cpp)
+  demonstrates how to use the `MarketDepthModel`
 
 ### Schedule
 
