@@ -15,8 +15,7 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
-auto render(const auto& buy, const auto& sell) {
-
+auto render(const auto &buy, const auto &sell) {
 }
 
 int main(int argc, char *argv[]) {
@@ -30,10 +29,10 @@ int main(int argc, char *argv[]) {
 
         auto endpoint = DXEndpoint::create();
         auto model = MarketDepthModel<Order>::newBuilder()
-            ->withFeed(endpoint->getFeed())
-            ->withListener([](const auto& buy, const auto& sell) {
-                                                                                render(buy, sell);
-        })
+                         ->withFeed(endpoint->getFeed())
+                         ->withListener([](const auto &buy, const auto &sell) {
+                             render(buy, sell);
+                         })
                          ->withSources(CmdArgsUtils::parseEventSources(sources))
                          ->withSymbol(symbol)
                          ->withDepthLimit(10)
