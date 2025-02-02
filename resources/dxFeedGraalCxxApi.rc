@@ -25,7 +25,7 @@ BEGIN
             VALUE "FileDescription", "The library provides a common application programming interface (API) to real-time, delayed and historical market data feeds."
             VALUE "FileVersion", DXFCXX_VERSION
             VALUE "InternalName", "dxFeedGraalCxxApi.dll"
-            VALUE "LegalCopyright", "Copyright (C) 2024 Devexperts LLC"
+            VALUE "LegalCopyright", "Copyright (C) 2025 Devexperts LLC"
             VALUE "OriginalFilename", "dxFeedGraalCxxApi.dll"
             VALUE "ProductName", "dxFeed Graal C++/C API"
             VALUE "ProductVersion", DXFCXX_VERSION

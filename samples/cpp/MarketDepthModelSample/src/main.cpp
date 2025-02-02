@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Devexperts LLC.
+// Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxfeed_graal_cpp_api/api.hpp>
@@ -15,7 +15,7 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
-auto render(const auto &buy, const auto &sell) {
+auto render(const auto &buy, const auto &sell, std::size_t depth) {
 }
 
 int main(int argc, char *argv[]) {
@@ -24,18 +24,19 @@ int main(int argc, char *argv[]) {
         auto symbol = "AAPL";
         auto sources = "ntv";
         // auto sources = "AGGREGATE_ASK,AGGREDATE_BID";
+        std::size_t depth = 10u;
 
         std::mutex ioMtx{};
 
         auto endpoint = DXEndpoint::create();
         auto model = MarketDepthModel<Order>::newBuilder()
                          ->withFeed(endpoint->getFeed())
-                         ->withListener([](const auto &buy, const auto &sell) {
-                             render(buy, sell);
+                         ->withListener([&depth](const auto &buy, const auto &sell) {
+                             render(buy, sell, depth);
                          })
                          ->withSources(CmdArgsUtils::parseEventSources(sources))
                          ->withSymbol(symbol)
-                         ->withDepthLimit(10)
+                         ->withDepthLimit(depth)
                          ->withAggregationPeriod(30ms)
                          ->build();
 
