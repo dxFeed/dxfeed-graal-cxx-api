@@ -142,6 +142,12 @@ else ()
     CPMAddPackage("gh:ttldtor/Console#v${CONSOLE_VERSION}")
 endif ()
 
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals/CMakeLists.txt")
+    add_subdirectory(third_party/portals)
+else ()
+    CPMAddPackage("gh:ttldtor/portals#default")
+endif ()
+
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
 set(FMT_INSTALL OFF)
