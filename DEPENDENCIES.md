@@ -14,6 +14,7 @@
 - [Process](https://github.com/ttldtor/Process) v3.0.1 (Tools)
 - [Console](https://github.com/ttldtor/Console) v1.0.1 (Tools)
 - [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) v0.40.2
+- [portals](https://github.com/ttldtor/portals) (Samples)
 
 
 - On Windows:

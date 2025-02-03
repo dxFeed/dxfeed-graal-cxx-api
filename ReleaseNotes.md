@@ -1,3 +1,6 @@
+* **\[MDAPI-214]\[C++][Console]** Added MarketDepthModelSample
+    * Added `MarketDepthModelSample`
+    * Added `CmdArgsUtils::parseEventSources` method.
 * **\[MDAPI-216]\[C++][Console]** Added PriceLevelBook sample
 * **\[MDAPI-76]\[C++]** Implemented TextMessage event
 * Migrated to Graal SDK v2.2.1
