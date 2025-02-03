@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Devexperts LLC.
+# Copyright (c) 2025 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
 #MESSAGE(STATUS "DXFCXX_GRAAL_TARGET_PLATFORM: ${DXFCXX_GRAAL_TARGET_PLATFORM}")

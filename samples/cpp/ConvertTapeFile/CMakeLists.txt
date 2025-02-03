@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Devexperts LLC.
+# Copyright (c) 2025 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
 cmake_minimum_required(VERSION 3.21)

@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Devexperts LLC.
+// Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -235,6 +235,19 @@ std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const
                return std::make_pair(kv[0], kv[1]);
            }) |
            ranges::to<std::unordered_map<std::string, std::string>>();
+}
+
+std::unordered_set<EventSourceWrapper> CmdArgsUtils::parseEventSources(const std::string &sources) noexcept {
+    auto s = trimStr(sources);
+
+    if (s.empty()) {
+        return {EventSourceWrapper{IndexedEventSource::DEFAULT}};
+    }
+
+    return splitAndTrim(s) | filterNonEmpty | ranges::views::transform([](auto &&name) {
+               return EventSourceWrapper{OrderSource::valueOf(name)};
+           }) |
+           ranges::to<std::unordered_set<EventSourceWrapper>>;
 }
 
 DXFCPP_END_NAMESPACE
