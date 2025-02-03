@@ -49,7 +49,7 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
     }
 }
 
-int main(int argc, char *argv[]) {
+int main(int /*argc*/, char */*argv*/[]) {
     ot::VirtualTerminal::enable();
     otp::hideCursor();
 
@@ -63,6 +63,21 @@ int main(int argc, char *argv[]) {
 
         // Disable QD logging.
         Logging::init();
+
+        auto sub = DXFeed::getInstance()->createTimeSeriesSubscription(TimeAndSale::TYPE);
+
+        sub->addEventListener<TimeAndSale>([](const auto& events) {
+            for (const auto& event : events) {
+                std::cout << event->toString() << std::endl;
+            }
+        });
+
+        sub->addSymbols("AAPL");
+        sub->setFromTime(std::chrono::milliseconds(dxfcpp::now()) - std::chrono::days(3));
+
+        std::cin.get();
+
+        return 0;
         std::mutex ioMtx{};
 
         auto endpoint = DXEndpoint::create();

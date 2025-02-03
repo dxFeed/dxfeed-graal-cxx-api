@@ -330,7 +330,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * ```cpp
      * std::vector types{dxfcpp::Quote::TYPE, dxfcpp::Trade::TYPE, dxfcpp::Summary::TYPE};
      *
-     * auto sub = dxfcpp::DXFeedSubscription::create(types.begin(), types.end());
+     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription(types.begin(), types.end());
      * ```
      *
      * ```cpp
@@ -405,6 +405,114 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
         return sub;
     }
+
+
+
+    /**
+     * Creates new subscription for a single event type that is <i>attached</i> to this feed.
+     * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
+     *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(dxfcpp::TimeAndSale::TYPE);
+     * ```
+     *
+     * @param eventType The type of event
+     * @return The new subscription
+     */
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypeEnum &eventType);
+
+    /**
+     * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
+     * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
+     *
+     * Example:
+     * ```cpp
+     * auto eventTypes = {dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE};
+     *
+     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(eventTypes.begin(), eventTypes.end());
+     * ```
+     *
+     * ```cpp
+     * std::vector types{dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE, dxfcpp::Candle::TYPE};
+     *
+     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(types.begin(), types.end());
+     * ```
+     *
+     * ```cpp
+     * std::set types{dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE, dxfcpp::Candle::TYPE};
+     * auto endpoint = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED)->build();
+     * auto sub = endpoint->getFeed()->createTimeSeriesSubscription(eventTypes.begin(), eventTypes.end());
+     *
+     * endpoint->connect("demo.dxfeed.com:7300");
+     * ```
+     *
+     * @tparam EventTypeIt The iterator type of the collection of event types
+     * @param begin The start iterator
+     * @param end The end iterator
+     * @return The new subscription
+     */
+    template <typename EventTypeIt>
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin, EventTypeIt end) {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug("{}::createTimeSeriesSubscription(eventTypes = " + namesToString(begin, end) + ")");
+        }
+
+        auto sub = DXFeedTimeSeriesSubscription::create(begin, end);
+
+        attachSubscription(sub);
+
+        return sub;
+    }
+
+    /**
+     * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
+     * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
+     *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription({dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE});
+     * ```
+     *
+     * @param eventTypes The initializer list of event types
+     * @return The new subscription
+     */
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes);
+
+    /**
+     * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
+     * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
+     *
+     * Example:
+     * ```cpp
+     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(std::unordered_set{dxfcpp::Underlying::TYPE,
+     * dxfcpp::TimeAndSale::TYPE});
+     * ```
+     *
+     * ```cpp
+     * std::vector types = {dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE};
+     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(types);
+     * ```
+     *
+     * @tparam EventTypesCollection The class of the collection of event types
+     * @param eventTypes The collection of event types
+     * @return The new subscription
+     */
+    template <typename EventTypesCollection>
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypesCollection &&eventTypes) {
+        if constexpr (Debugger::isDebug) {
+            Debugger::debug(toString() + "::createTimeSeriesSubscription(eventTypes = " +
+                            namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
+        }
+
+        auto sub = DXFeedTimeSeriesSubscription::create(eventTypes);
+
+        attachSubscription(sub);
+
+        return sub;
+    }
+
+
 
     /**
      * Requests the last event for the specified event type and symbol.

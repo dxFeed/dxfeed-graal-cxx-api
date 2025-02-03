@@ -264,6 +264,13 @@ create(/* dxfg_feed_event_listener_function */ void *userFunc, void *userData);
 
 } // namespace isolated::api::IsolatedDXFeedSubscription
 
+namespace isolated::api::IsolatedDXFeedTimeSeriesSubscription {
+// int32_t dxfg_DXFeedTimeSeriesSubscription_setFromTime(graal_isolatethread_t *thread, dxfg_time_series_subscription_t
+// *sub, int64_t fromTime);
+void setFromTime(const JavaObjectHandle<DXFeedSubscription> &sub, std::int64_t fromTime);
+
+} // namespace isolated::api::IsolatedDXFeedTimeSeriesSubscription
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -106,6 +106,32 @@ std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(std::initializer_
     return sub;
 }
 
+std::shared_ptr<DXFeedTimeSeriesSubscription> DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::createTimeSeriesSubscription(eventType = " + eventType.getName() + ")");
+    }
+
+    auto sub = DXFeedTimeSeriesSubscription::create(eventType);
+
+    attachSubscription(sub);
+
+    return sub;
+}
+
+std::shared_ptr<DXFeedTimeSeriesSubscription>
+DXFeed::createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes) {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::createTimeSeriesSubscription(eventTypes = " +
+                        namesToString(eventTypes.begin(), eventTypes.end()) + ")");
+    }
+
+    auto sub = DXFeedTimeSeriesSubscription::create(eventTypes);
+
+    attachSubscription(sub);
+
+    return sub;
+}
+
 std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeed::create(" + dxfcpp::toString(feedHandle) + ")");

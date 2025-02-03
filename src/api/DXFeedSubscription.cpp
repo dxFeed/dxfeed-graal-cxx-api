@@ -69,18 +69,22 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
     isolated::api::IsolatedDXFeedSubscription::removeSymbols(handle_, graalSymbolList);
 }
 
-DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag)
-    : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
+DXFeedSubscription::DXFeedSubscription() : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
 }
 
-DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag tag, const EventTypeEnum &eventType)
-    : DXFeedSubscription{tag} {
+DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) : DXFeedSubscription() {
+    eventTypes_ = std::unordered_set{eventType};
+    handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
+}
+
+DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag) : DXFeedSubscription() {
+}
+
+DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag, const EventTypeEnum &eventType)
+    : DXFeedSubscription(eventType) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
-
-    eventTypes_ = std::unordered_set{eventType};
-    handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
 }
 
 std::string DXFeedSubscription::toString() const {
@@ -278,6 +282,64 @@ std::int32_t DXFeedSubscription::getEventsBatchLimit() const {
 
 void DXFeedSubscription::setEventsBatchLimit(std::int32_t eventsBatchLimit) const {
     isolated::api::IsolatedDXFeedSubscription::setEventsBatchLimit(handle_, eventsBatchLimit);
+}
+
+DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
+    RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag)
+    : DXFeedSubscription() {
+}
+
+DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
+    RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag, const EventTypeEnum &eventType)
+    : DXFeedSubscription(eventType) {
+}
+
+std::string DXFeedTimeSeriesSubscription::toString() const {
+    return fmt::format("DXFeedTimeSeriesSubscription{{{}}}", handle_.toString());
+}
+
+std::shared_ptr<DXFeedTimeSeriesSubscription> DXFeedTimeSeriesSubscription::create(const EventTypeEnum &eventType) {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("DXFeedTimeSeriesSubscription::create(eventType = " + eventType.getName() + ")");
+    }
+
+    if (!eventType.isTimeSeries()) {
+        throw dxfcpp::InvalidArgumentException("DXFeedTimeSeriesSubscription::create(): event type " +
+                                               eventType.getClassName() + " is not TimeSeries");
+    }
+
+    auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(eventType);
+    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+    dxfcpp::ignoreUnused(id);
+
+    return sub;
+}
+
+std::shared_ptr<DXFeedTimeSeriesSubscription>
+DXFeedTimeSeriesSubscription::create(std::initializer_list<EventTypeEnum> eventTypes) {
+    auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(eventTypes);
+    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+    dxfcpp::ignoreUnused(id);
+
+    return sub;
+}
+
+std::int64_t DXFeedTimeSeriesSubscription::getFromTime() {
+    return fromTime_;
+}
+
+void DXFeedTimeSeriesSubscription::setFromTime(std::int64_t fromTime) {
+    if (fromTime != fromTime_) {
+        fromTime_ = fromTime;
+        isolated::api::IsolatedDXFeedTimeSeriesSubscription::setFromTime(handle_, fromTime);
+    }
+}
+
+void DXFeedTimeSeriesSubscription::setFromTime(std::chrono::milliseconds fromTime) {
+    setFromTime(fromTime.count());
 }
 
 DXFCPP_END_NAMESPACE
