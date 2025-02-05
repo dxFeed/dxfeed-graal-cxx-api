@@ -1,0 +1,15 @@
+# Copyright (c) 2025 ttldtor.
+# SPDX-License-Identifier: BSL-1.0
+BasedOnStyle: Google
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: None
+AllowShortLoopsOnASingleLine: false
+ColumnLimit: 120
+ContinuationIndentWidth: 2
+IndentPPDirectives: AfterHash
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never

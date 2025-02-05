@@ -8,24 +8,26 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../api/DXFeed.hpp"
+#include "../../api/DXFeedSubscription.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXFeed {
 
-/*
+// dxfg_feed_t* dxfg_DXFeed_getInstance(graal_isolatethread_t *thread);
+// dxfg_subscription_t* dxfg_DXFeed_createSubscription(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz);
+// dxfg_subscription_t* dxfg_DXFeed_createSubscription2(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_list_t *eventClazzes);
 
-dxfg_feed_t*                      dxfg_DXFeed_getInstance(graal_isolatethread_t *thread);
-dxfg_subscription_t*              dxfg_DXFeed_createSubscription(graal_isolatethread_t *thread, dxfg_feed_t *feed,
-dxfg_event_clazz_t eventClazz); dxfg_subscription_t*              dxfg_DXFeed_createSubscription2(graal_isolatethread_t
-*thread, dxfg_feed_t *feed, dxfg_event_clazz_list_t *eventClazzes); dxfg_time_series_subscription_t*
-dxfg_DXFeed_createTimeSeriesSubscription(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t
-eventClazz); dxfg_time_series_subscription_t*  dxfg_DXFeed_createTimeSeriesSubscription2(graal_isolatethread_t *thread,
-dxfg_feed_t *feed, dxfg_event_clazz_list_t *eventClazzes); int32_t dxfg_DXFeed_attachSubscription(graal_isolatethread_t
-*thread, dxfg_feed_t *feed, dxfg_subscription_t *sub); int32_t dxfg_DXFeed_detachSubscription(graal_isolatethread_t
-*thread, dxfg_feed_t *feed, dxfg_subscription_t *sub); int32_t
-dxfg_DXFeed_detachSubscriptionAndClear(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_subscription_t *sub);
-*/
+// dxfg_time_series_subscription_t* dxfg_DXFeed_createTimeSeriesSubscription(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz);
+JavaObjectHandle<DXFeedSubscription> createTimeSeriesSubscription(const JavaObjectHandle<DXFeed> &feed, const EventTypeEnum &eventType);
+
+// dxfg_time_series_subscription_t*  dxfg_DXFeed_createTimeSeriesSubscription2(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_list_t *eventClazzes);
+JavaObjectHandle<DXFeedSubscription> createTimeSeriesSubscription(const JavaObjectHandle<DXFeed> &feed, const std::unique_ptr<EventClassList> &eventClassList);
+
+// int32_t dxfg_DXFeed_attachSubscription(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_subscription_t *sub);
+// int32_t dxfg_DXFeed_detachSubscription(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_subscription_t *sub);
+// int32_t dxfg_DXFeed_detachSubscriptionAndClear(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_subscription_t *sub);
+
 
 // dxfg_DXFeed_getLastEventIfSubscribed
 /* dxfg_event_type_t* */ std::shared_ptr<EventType>

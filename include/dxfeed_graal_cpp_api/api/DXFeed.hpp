@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include <xutility>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -141,6 +142,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     std::shared_ptr<EventType> getLastEventIfSubscribedImpl(const EventTypeEnum &eventType,
                                                             const SymbolWrapper &symbol) const;
+
+    JavaObjectHandle<DXFeedSubscription>
+    createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
   protected:
     DXFeed() noexcept : handle_{} {
@@ -406,8 +410,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         return sub;
     }
 
-
-
     /**
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.
      * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
@@ -458,7 +460,19 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
             Debugger::debug("{}::createTimeSeriesSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
-        auto sub = DXFeedTimeSeriesSubscription::create(begin, end);
+        for (EventTypeIt iter = begin; iter != end; ++iter) {
+            if (!iter->isTimeSeries()) {
+                throw dxfcpp::InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
+                                                       iter->getClassName() + " is not TimeSeries");
+            }
+        }
+
+        auto list = EventClassList::create(begin, end);
+        auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(
+            begin, end, std::move(createTimeSeriesSubscriptionHandleFromEventClassList(list)));
+        auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+        dxfcpp::ignoreUnused(id);
 
         attachSubscription(sub);
 
@@ -471,13 +485,15 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription({dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE});
+     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription({dxfcpp::Underlying::TYPE,
+     * dxfcpp::TimeAndSale::TYPE});
      * ```
      *
      * @param eventTypes The initializer list of event types
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes);
+    std::shared_ptr<DXFeedTimeSeriesSubscription>
+    createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes);
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -485,7 +501,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(std::unordered_set{dxfcpp::Underlying::TYPE,
+     * auto sub =
+     * dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(std::unordered_set{dxfcpp::Underlying::TYPE,
      * dxfcpp::TimeAndSale::TYPE});
      * ```
      *
@@ -505,14 +522,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
                             namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
         }
 
-        auto sub = DXFeedTimeSeriesSubscription::create(eventTypes);
-
-        attachSubscription(sub);
-
-        return sub;
+        return createTimeSeriesSubscription(std::begin(eventTypes), std::end(eventTypes));
     }
-
-
 
     /**
      * Requests the last event for the specified event type and symbol.
@@ -573,8 +584,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * }
      * ```
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED"
-     * role (promise completes exceptionally).
+     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
+     * "STREAM_FEED" role (promise completes exceptionally).
      *
      * @tparam E The event type.
      * @tparam SymbolIt The symbols collection's iterator type.
@@ -620,8 +631,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * }
      * ```
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED"
-     * role (promise completes exceptionally).
+     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
+     * "STREAM_FEED" role (promise completes exceptionally).
      *
      * @tparam E The event type.
      * @tparam SymbolsCollection The symbols collection's type.
@@ -663,8 +674,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * }
      * ```
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED"
-     * role (promise completes exceptionally).
+     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
+     * "STREAM_FEED" role (promise completes exceptionally).
      *
      * @tparam E The event type.
      * @param collection The symbols collection.

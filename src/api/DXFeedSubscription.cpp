@@ -12,6 +12,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -77,6 +78,12 @@ DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) : DXFeedS
     handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
 }
 
+DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType, JavaObjectHandle<DXFeedSubscription> &&handle)
+    : DXFeedSubscription() {
+    eventTypes_ = std::unordered_set{eventType};
+    handle_ = std::move(handle);
+}
+
 DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag) : DXFeedSubscription() {
 }
 
@@ -97,7 +104,9 @@ DXFeedSubscription::~DXFeedSubscription() {
         Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
     }
 
-    close();
+    if (handle_) {
+        close();
+    }
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEnum &eventType) {
@@ -290,41 +299,13 @@ DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
 }
 
 DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
-    RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag, const EventTypeEnum &eventType)
-    : DXFeedSubscription(eventType) {
+    RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag, const EventTypeEnum &eventType,
+    JavaObjectHandle<DXFeedSubscription> &&handle)
+    : DXFeedSubscription(eventType, std::move(handle)) {
 }
 
 std::string DXFeedTimeSeriesSubscription::toString() const {
     return fmt::format("DXFeedTimeSeriesSubscription{{{}}}", handle_.toString());
-}
-
-std::shared_ptr<DXFeedTimeSeriesSubscription> DXFeedTimeSeriesSubscription::create(const EventTypeEnum &eventType) {
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXFeedTimeSeriesSubscription::create(eventType = " + eventType.getName() + ")");
-    }
-
-    if (!eventType.isTimeSeries()) {
-        throw dxfcpp::InvalidArgumentException("DXFeedTimeSeriesSubscription::create(): event type " +
-                                               eventType.getClassName() + " is not TimeSeries");
-    }
-
-    auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(eventType);
-    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
-
-    dxfcpp::ignoreUnused(id);
-
-    return sub;
-}
-
-std::shared_ptr<DXFeedTimeSeriesSubscription>
-DXFeedTimeSeriesSubscription::create(std::initializer_list<EventTypeEnum> eventTypes) {
-    auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(eventTypes);
-    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
-
-    dxfcpp::ignoreUnused(id);
-
-    return sub;
 }
 
 std::int64_t DXFeedTimeSeriesSubscription::getFromTime() {

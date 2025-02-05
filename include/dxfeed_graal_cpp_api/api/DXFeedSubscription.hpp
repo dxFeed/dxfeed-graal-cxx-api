@@ -88,11 +88,13 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 
     DXFeedSubscription(const EventTypeEnum &eventType);
 
+    DXFeedSubscription(const EventTypeEnum &eventType, JavaObjectHandle<DXFeedSubscription> &&handle);
+
     template <typename EventTypeIt>
 #if __cpp_concepts
-    requires requires(EventTypeIt iter) {
-        { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
-    }
+        requires requires(EventTypeIt iter) {
+            { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
+        }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) : DXFeedSubscription() {
         if constexpr (Debugger::isDebug) {
@@ -105,6 +107,23 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
 
         handle_ = createSubscriptionHandleFromEventClassList(list);
+    }
+
+    template <typename EventTypeIt>
+#if __cpp_concepts
+        requires requires(EventTypeIt iter) {
+            { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
+        }
+#endif
+    DXFeedSubscription(EventTypeIt begin, EventTypeIt end, JavaObjectHandle<DXFeedSubscription> &&handle)
+        : DXFeedSubscription() {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
+        }
+
+        eventTypes_ = std::unordered_set<EventTypeEnum>{begin, end};
+        handle_ = std::move(handle);
     }
 
   public:
@@ -124,7 +143,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
             { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
         }
 #endif
-    DXFeedSubscription(LockExternalConstructionTag, EventTypeIt begin, EventTypeIt end) : DXFeedSubscription(begin, end) {
+    DXFeedSubscription(LockExternalConstructionTag, EventTypeIt begin, EventTypeIt end)
+        : DXFeedSubscription(begin, end) {
     }
 
     DXFeedSubscription(LockExternalConstructionTag tag, std::initializer_list<EventTypeEnum> eventTypes)
@@ -771,7 +791,7 @@ class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSu
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag lockTag);
 
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag lockTag,
-                                 const EventTypeEnum &eventType);
+                                 const EventTypeEnum &eventType, JavaObjectHandle<DXFeedSubscription> &&handle);
 
     template <typename EventTypeIt>
 #if __cpp_concepts
@@ -780,93 +800,35 @@ class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSu
         }
 #endif
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag,
-                                 EventTypeIt begin, EventTypeIt end)
-        : DXFeedSubscription(begin, end) {
+                                 EventTypeIt begin, EventTypeIt end, JavaObjectHandle<DXFeedSubscription> &&handle)
+        : DXFeedSubscription(begin, end, std::move(handle)) {
     }
 
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag lockTag,
-                                 std::initializer_list<EventTypeEnum> eventTypes)
-        : DXFeedTimeSeriesSubscription(lockTag, eventTypes.begin(), eventTypes.end()) {
+                                 std::initializer_list<EventTypeEnum> eventTypes,
+                                 JavaObjectHandle<DXFeedSubscription> &&handle)
+        : DXFeedTimeSeriesSubscription(lockTag, eventTypes.begin(), eventTypes.end(), std::move(handle)) {
     }
 
     template <typename EventTypesCollection>
     explicit DXFeedTimeSeriesSubscription(
         RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag tag,
-        EventTypesCollection &&eventTypes)
+        EventTypesCollection &&eventTypes, JavaObjectHandle<DXFeedSubscription> &&handle)
 #if __cpp_concepts
         requires requires {
             {
                 DXFeedTimeSeriesSubscription(tag, std::begin(std::forward<EventTypesCollection>(eventTypes)),
-                                             std::end(std::forward<EventTypesCollection>(eventTypes)))
+                                             std::end(std::forward<EventTypesCollection>(eventTypes)),
+                                             std::move(handle))
             };
         }
 #endif
         : DXFeedTimeSeriesSubscription(tag, std::begin(std::forward<EventTypesCollection>(eventTypes)),
-                                       std::end(std::forward<EventTypesCollection>(eventTypes))) {
+                                       std::end(std::forward<EventTypesCollection>(eventTypes)), std::move(handle)) {
     }
 
     ///
     std::string toString() const override;
-
-    /**
-     * Creates <i>detached</i> subscription for a single event type.
-     *
-     * Example:
-     * ```cpp
-     * auto sub = dxfcpp::DXFeedTimeSeriesSubscription::create(dxfcpp::TimeAndSale::TYPE);
-     * ```
-     *
-     * @param eventType the event type.
-     */
-    static std::shared_ptr<DXFeedTimeSeriesSubscription> create(const EventTypeEnum &eventType);
-
-    /**
-     * Creates <i>detached</i> subscription for the given collection of event types.
-     *
-     * Example:
-     * ```cpp
-     * auto eventTypes = {dxfcpp::Greeks::TYPE, dxfcpp::TimeAndSale::TYPE};
-     *
-     * auto sub = dxfcpp::DXFeedSubscription::create(eventTypes.begin(), eventTypes.end());
-     * ```
-     *
-     * ```cpp
-     * std::vector types{dxfcpp::Greeks::TYPE, dxfcpp::TimeAndSale::TYPE, dxfcpp::Candle::TYPE};
-     *
-     * auto sub = dxfcpp::DXFeedSubscription::create(types.begin(), types.end());
-     * ```
-     *
-     * @tparam EventTypeIt The collection's iterator type
-     * @param begin The beginning of the collection of event types.
-     * @param end The end of event type collection.
-     * @return The new <i>detached</i> subscription for the given collection of event types.
-     */
-    template <typename EventTypeIt>
-#if __cpp_concepts
-        requires requires(EventTypeIt iter) {
-            { *iter } -> dxfcpp::ConvertibleTo<EventTypeEnum>;
-        }
-#endif
-    static std::shared_ptr<DXFeedTimeSeriesSubscription> create(EventTypeIt begin, EventTypeIt end) {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedTimeSeriesSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
-        for (EventTypeIt iter = begin; iter != end; ++iter) {
-            if (!iter->isTimeSeries()) {
-                throw dxfcpp::InvalidArgumentException("DXFeedTimeSeriesSubscription::create(): event type " +
-                                                       iter->getClassName() + " is not TimeSeries");
-            }
-        }
-
-        auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(begin, end);
-        auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
-
-        dxfcpp::ignoreUnused(id);
-
-        return sub;
-    }
 
     /**
      * Creates <i>detached</i> subscription for the given collection of event types.
@@ -880,35 +842,6 @@ class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSu
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
     static std::shared_ptr<DXFeedTimeSeriesSubscription> create(std::initializer_list<EventTypeEnum> eventTypes);
-
-    /**
-     * Creates <i>detached</i> subscription for the given collection of event types.
-     *
-     * Example:
-     * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription::create(std::unordered_set{dxfcpp::Underlying::TYPE,
-     * dxfcpp::TimeAndSale::TYPE});
-     * ```
-     *
-     * ```cpp
-     * std::vector types = {dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE};
-     * auto sub = dxfcpp::DXFeedSubscription::create(types);
-     * ```
-     *
-     * @tparam EventTypesCollection The type of the collection of event types
-     * @param eventTypes The event type collection.
-     * @return The new <i>detached</i> subscription for the given collection of event types.
-     */
-    template <typename EventTypesCollection>
-    static std::shared_ptr<DXFeedTimeSeriesSubscription> create(EventTypesCollection &&eventTypes) {
-        auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(
-            std::forward<EventTypesCollection>(eventTypes));
-        auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
-
-        dxfcpp::ignoreUnused(id);
-
-        return sub;
-    }
 
     /**
      * Returns the earliest timestamp from which time-series of events shall be received.
