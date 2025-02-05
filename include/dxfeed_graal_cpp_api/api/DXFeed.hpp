@@ -4,7 +4,6 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
-#include <xutility>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
