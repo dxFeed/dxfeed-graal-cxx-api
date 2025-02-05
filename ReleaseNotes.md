@@ -1,11 +1,14 @@
-* **\[MDAPI-214]\[C++][Console]** Added MarketDepthModelSample
-    * Added `MarketDepthModelSample`
+* **\[MDAPI-36]\[C++]** Implemented DXFeedTimeSeriesSubscription
+    * Added `DXFeedTimeSeriesSubscription` class.
+    * Added `DXFeed::createTimeSeriesSubscription` methods.
+* **\[MDAPI-214]\[C++]\[Console]** Added MarketDepthModelSample
+    * Added `MarketDepthModelSample`.
     * Added `CmdArgsUtils::parseEventSources` method.
-* **\[MDAPI-216]\[C++][Console]** Added PriceLevelBook sample
+* **\[MDAPI-216]\[C++]\[Console]** Added PriceLevelBook sample
 * **\[MDAPI-76]\[C++]** Implemented TextMessage event
 * Migrated to Graal SDK v2.2.1
-* [MDAPI-214][C++][Console] Added MarketDepthModelSample
-    * Added `MarketDepthModelSample`
+* **\[MDAPI-214]\[C++]\[Console]** Added MarketDepthModelSample
+    * Added `MarketDepthModelSample`.
     * Added `CmdArgsUtils::parseEventSources` method.
 
 ## v4.0.0

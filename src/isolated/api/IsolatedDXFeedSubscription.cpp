@@ -98,7 +98,7 @@ void /* int32_t */ setSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle
 
     if (!symbols) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_setSymbols`. The "
-                                    "`symbols` is nullptr");
+                                       "`symbols` is nullptr");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setSymbols,
@@ -115,7 +115,7 @@ void /* int32_t */ addSymbol(/* dxfg_subscription_t * */ const JavaObjectHandle<
 
     if (!symbol) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_addSymbol`. The "
-                                    "`symbol` is nullptr");
+                                       "`symbol` is nullptr");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_addSymbol,
@@ -132,7 +132,7 @@ void /* int32_t */ addSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle
 
     if (!symbols) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_addSymbols`. The "
-                                    "`symbols` is nullptr");
+                                       "`symbols` is nullptr");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_addSymbols,
@@ -149,7 +149,7 @@ void /* int32_t */ removeSymbol(/* dxfg_subscription_t * */ const JavaObjectHand
 
     if (!symbol) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_removeSymbol`. The "
-                                    "`symbol` is nullptr");
+                                       "`symbol` is nullptr");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_removeSymbol,
@@ -166,7 +166,7 @@ void /* int32_t */ removeSymbols(/* dxfg_subscription_t * */ const JavaObjectHan
 
     if (!symbols) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_removeSymbols`. The "
-                                    "`symbols` is nullptr");
+                                       "`symbols` is nullptr");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_removeSymbols,
@@ -194,7 +194,7 @@ getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSu
 
     if (!period) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_setAggregationPeriod`. The "
-                                    "`period` handle is invalid");
+                                       "`period` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setAggregationPeriod,
@@ -212,7 +212,7 @@ addEventListener(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscr
 
     if (!listener) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The "
-                                    "`listener` handle is invalid");
+                                       "`listener` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_addEventListener,
@@ -231,7 +231,7 @@ void /* int32_t */ addChangeListener(
 
     if (!listener) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_addChangeListener`. The "
-                                    "`listener` handle is invalid");
+                                       "`listener` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(
@@ -245,12 +245,12 @@ void /* int32_t */ removeChangeListener(
         &listener) {
     if (!sub) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_removeChangeListener`. "
-                                    "The `sub` handle is invalid");
+                                       "The `sub` handle is invalid");
     }
 
     if (!listener) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_removeChangeListener`. The "
-                                    "`listener` handle is invalid");
+                                       "`listener` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(
@@ -261,7 +261,7 @@ void /* int32_t */ removeChangeListener(
 std::int32_t getEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
     if (!sub) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_getEventsBatchLimit`. "
-                                    "The `sub` handle is invalid");
+                                       "The `sub` handle is invalid");
     }
 
     return runGraalFunctionAndThrowIfMinusOne(dxfg_DXFeedSubscription_getEventsBatchLimit,
@@ -272,7 +272,7 @@ std::int32_t getEventsBatchLimit(/* dxfg_subscription_t * */ const JavaObjectHan
                                        std::int32_t eventsBatchLimit) {
     if (!sub) {
         throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_setEventsBatchLimit`. "
-                                    "The `sub` handle is invalid");
+                                       "The `sub` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_setEventsBatchLimit,
@@ -294,5 +294,18 @@ create(/* dxfg_feed_event_listener_function */ void *userFunc, void *userData) {
 } // namespace DXFeedEventListener
 
 } // namespace isolated::api::IsolatedDXFeedSubscription
+
+// int32_t dxfg_DXFeedTimeSeriesSubscription_setFromTime(graal_isolatethread_t *thread, dxfg_time_series_subscription_t
+// *sub, int64_t fromTime);
+void isolated::api::IsolatedDXFeedTimeSeriesSubscription::setFromTime(const JavaObjectHandle<DXFeedSubscription> &sub,
+                                                                      std::int64_t fromTime) {
+    if (!sub) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedTimeSeriesSubscription_setFromTime`. "
+                                       "The `sub` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedTimeSeriesSubscription_setFromTime,
+                                           static_cast<dxfg_time_series_subscription_t *>(sub.get()), fromTime);
+}
 
 DXFCPP_END_NAMESPACE

@@ -12,6 +12,7 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -69,18 +70,28 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
     isolated::api::IsolatedDXFeedSubscription::removeSymbols(handle_, graalSymbolList);
 }
 
-DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag)
-    : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
+DXFeedSubscription::DXFeedSubscription() : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
 }
 
-DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag tag, const EventTypeEnum &eventType)
-    : DXFeedSubscription{tag} {
+DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) : DXFeedSubscription() {
+    eventTypes_ = std::unordered_set{eventType};
+    handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
+}
+
+DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType, JavaObjectHandle<DXFeedSubscription> &&handle)
+    : DXFeedSubscription() {
+    eventTypes_ = std::unordered_set{eventType};
+    handle_ = std::move(handle);
+}
+
+DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag) : DXFeedSubscription() {
+}
+
+DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag, const EventTypeEnum &eventType)
+    : DXFeedSubscription(eventType) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
-
-    eventTypes_ = std::unordered_set{eventType};
-    handle_ = isolated::api::IsolatedDXFeedSubscription::create(eventType);
 }
 
 std::string DXFeedSubscription::toString() const {
@@ -93,7 +104,9 @@ DXFeedSubscription::~DXFeedSubscription() {
         Debugger::debug("DXFeedSubscription{" + handle_.toString() + "}::~DXFeedSubscription()");
     }
 
-    close();
+    if (handle_) {
+        close();
+    }
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEnum &eventType) {
@@ -278,6 +291,36 @@ std::int32_t DXFeedSubscription::getEventsBatchLimit() const {
 
 void DXFeedSubscription::setEventsBatchLimit(std::int32_t eventsBatchLimit) const {
     isolated::api::IsolatedDXFeedSubscription::setEventsBatchLimit(handle_, eventsBatchLimit);
+}
+
+DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
+    RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag)
+    : DXFeedSubscription() {
+}
+
+DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
+    RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag, const EventTypeEnum &eventType,
+    JavaObjectHandle<DXFeedSubscription> &&handle)
+    : DXFeedSubscription(eventType, std::move(handle)) {
+}
+
+std::string DXFeedTimeSeriesSubscription::toString() const {
+    return fmt::format("DXFeedTimeSeriesSubscription{{{}}}", handle_.toString());
+}
+
+std::int64_t DXFeedTimeSeriesSubscription::getFromTime() {
+    return fromTime_;
+}
+
+void DXFeedTimeSeriesSubscription::setFromTime(std::int64_t fromTime) {
+    if (fromTime != fromTime_) {
+        fromTime_ = fromTime;
+        isolated::api::IsolatedDXFeedTimeSeriesSubscription::setFromTime(handle_, fromTime);
+    }
+}
+
+void DXFeedTimeSeriesSubscription::setFromTime(std::chrono::milliseconds fromTime) {
+    setFromTime(fromTime.count());
 }
 
 DXFCPP_END_NAMESPACE

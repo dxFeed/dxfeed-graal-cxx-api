@@ -11,6 +11,40 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXFeed {
 
+// dxfg_time_series_subscription_t* dxfg_DXFeed_createTimeSeriesSubscription(graal_isolatethread_t *thread, dxfg_feed_t
+// *feed, dxfg_event_clazz_t eventClazz);
+JavaObjectHandle<DXFeedSubscription> createTimeSeriesSubscription(const JavaObjectHandle<DXFeed> &feed,
+                                                                  const EventTypeEnum &eventType) {
+    if (!feed) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeed_createTimeSeriesSubscription`. The `feed` handle is invalid");
+    }
+
+    return JavaObjectHandle<dxfcpp::DXFeedSubscription>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXFeed_createTimeSeriesSubscription, static_cast<dxfg_feed_t *>(feed.get()),
+        dxfcpp::bit_cast<dxfg_event_clazz_t>(eventType.getId())));
+}
+
+// dxfg_time_series_subscription_t*  dxfg_DXFeed_createTimeSeriesSubscription2(graal_isolatethread_t *thread,
+// dxfg_feed_t *feed, dxfg_event_clazz_list_t *eventClazzes);
+JavaObjectHandle<DXFeedSubscription>
+createTimeSeriesSubscription(const JavaObjectHandle<DXFeed> &feed,
+                             const std::unique_ptr<EventClassList> &eventClassList) {
+    if (!feed) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeed_createTimeSeriesSubscription2`. The `feed` handle is invalid");
+    }
+
+    if (!eventClassList) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeed_createTimeSeriesSubscription2`. The `eventClassList` is nullptr");
+    }
+
+    return JavaObjectHandle<DXFeedSubscription>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_DXFeed_createTimeSeriesSubscription2, static_cast<dxfg_feed_t *>(feed.get()),
+        static_cast<dxfg_event_clazz_list_t *>(eventClassList->getHandle())));
+}
+
 // dxfg_DXFeed_getLastEventIfSubscribed
 /* dxfg_event_type_t* */ std::shared_ptr<EventType>
 getLastEventIfSubscribed(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,

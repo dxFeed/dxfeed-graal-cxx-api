@@ -1,6 +1,8 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
+#include "range/v3/range/access.hpp"
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_cpp_api/api.hpp>
@@ -106,6 +108,36 @@ std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(std::initializer_
     return sub;
 }
 
+std::shared_ptr<DXFeedTimeSeriesSubscription> DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::createTimeSeriesSubscription(eventType = " + eventType.getName() + ")");
+    }
+
+    if (!eventType.isTimeSeries()) {
+        throw dxfcpp::InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
+                                               eventType.getClassName() + " is not TimeSeries");
+    }
+
+    auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(
+        eventType, isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, eventType));
+    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+
+    dxfcpp::ignoreUnused(id);
+    attachSubscription(sub);
+
+    return sub;
+}
+
+std::shared_ptr<DXFeedTimeSeriesSubscription>
+DXFeed::createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes) {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug(toString() + "::createTimeSeriesSubscription(eventTypes = " +
+                        namesToString(eventTypes.begin(), eventTypes.end()) + ")");
+    }
+
+    return createTimeSeriesSubscription(eventTypes.begin(), eventTypes.end());
+}
+
 std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXFeed::create(" + dxfcpp::toString(feedHandle) + ")");
@@ -142,6 +174,11 @@ void *DXFeed::getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const Sym
 std::shared_ptr<EventType> DXFeed::getLastEventIfSubscribedImpl(const EventTypeEnum &eventType,
                                                                 const SymbolWrapper &symbol) const {
     return isolated::api::IsolatedDXFeed::getLastEventIfSubscribed(handle_, eventType, symbol);
+}
+
+JavaObjectHandle<DXFeedSubscription>
+DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) {
+    return isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, list);
 }
 
 std::string DXFeed::toString() const {

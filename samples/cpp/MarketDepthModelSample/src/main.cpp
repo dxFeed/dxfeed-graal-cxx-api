@@ -49,7 +49,7 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
     }
 }
 
-int main(int argc, char *argv[]) {
+int main(int /*argc*/, char */*argv*/[]) {
     ot::VirtualTerminal::enable();
     otp::hideCursor();
 
@@ -63,6 +63,7 @@ int main(int argc, char *argv[]) {
 
         // Disable QD logging.
         Logging::init();
+
         std::mutex ioMtx{};
 
         auto endpoint = DXEndpoint::create();
