@@ -65,4 +65,21 @@ void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
     isolated::api::IsolatedDXPublisher::publishEvents(handle_, graalEventsList);
 }
 
+DXPublisher::DXPublisher() noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXPublisher()");
+    }
+
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", 1);
+}
+
+DXPublisher::~DXPublisher() noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXPublisher{" + handle_.toString() + "}::~DXPublisher()");
+    }
+
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", -1);
+}
+
+
 DXFCPP_END_NAMESPACE

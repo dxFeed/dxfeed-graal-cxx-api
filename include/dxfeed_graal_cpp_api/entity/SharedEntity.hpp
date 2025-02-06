@@ -22,6 +22,10 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     /// The alias to a type of shared pointer to the SharedEntity object.
     using Ptr = std::shared_ptr<SharedEntity>;
 
+    SharedEntity();
+
+    ~SharedEntity() noexcept override;
+
     /**
      * Checks that pointer to the current type could be converted to type T*
      * In other words: whether type T belongs to the type hierarchy in which the current type resides.

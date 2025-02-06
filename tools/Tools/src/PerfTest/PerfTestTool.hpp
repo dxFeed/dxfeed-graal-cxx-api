@@ -97,6 +97,8 @@ struct PerfTestTool {
             fmt::print("  Current CPU usage              : {:.2f} %\n", currentCpuUsage * 100.0);
             fmt::print("  Peak CPU usage                 : {:.2f} %\n", peakCpuUsage_ * 100.0);
             fmt::print("  Running time                   : {:%H:%M:%S}\n", runningDiff_.elapsed());
+            std::cout << "----------------------------------------------------\n";
+            fmt::print("{}\n", ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->dump());
 
             timerDiff_.restart();
         }

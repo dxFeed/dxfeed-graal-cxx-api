@@ -78,18 +78,10 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
-    DXPublisher() noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXPublisher()");
-        }
-    }
+    DXPublisher() noexcept;
 
   public:
-    ~DXPublisher() noexcept override {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXPublisher{" + handle_.toString() + "}::~DXPublisher()");
-        }
-    }
+    ~DXPublisher() noexcept override;
 
     /**
      * Returns a default application-wide singleton instance of DXPublisher. Most applications use only a single
