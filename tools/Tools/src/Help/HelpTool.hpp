@@ -12,15 +12,16 @@
 #include "../LatencyTest/LatencyTestTool.hpp"
 #include "../PerfTest/PerfTestTool.hpp"
 #include "../Qds/QdsTool.hpp"
+#include "EventGenTool/EventGenTool.hpp"
 
 #include <chrono>
 #include <cstdint>
 #include <memory>
+#include <set>
 #include <string>
 #include <unordered_map>
 #include <utility>
 #include <variant>
-#include <set>
 #include <vector>
 
 #include <fmt/chrono.h>
@@ -37,8 +38,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_POP()
 namespace dxfcpp::tools {
 
 struct HelpTool {
-    using Tool =
-        std::variant<tools::ConnectTool, tools::DumpTool, tools::HelpTool, tools::LatencyTest, tools::PerfTestTool, tools::QdsTool>;
+    using Tool = std::variant<tools::ConnectTool, tools::DumpTool, tools::HelpTool, tools::LatencyTest,
+                              tools::PerfTestTool, tools::QdsTool, tools::EventGenTool>;
 
     static const std::unordered_map<std::string, std::string> EMBEDDED_ARTICLES;
     static const std::string NAME;
@@ -59,8 +60,8 @@ struct HelpTool {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t) noexcept {
-        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(),
-                           nameFieldSize - 2 * namePadding, "", namePadding, SHORT_DESCRIPTION);
+        return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(), nameFieldSize - 2 * namePadding, "",
+                           namePadding, SHORT_DESCRIPTION);
     }
 
     static const std::unordered_map<std::string, Tool> ALL_TOOLS;
@@ -96,14 +97,14 @@ struct HelpTool {
 
         if (iEquals(args.article, "all")) {
             fmt::print("{0:-^{1}}\n", "", width - 1);
-            for (auto&& name : ALL_NAMES) {
+            for (auto &&name : ALL_NAMES) {
                 std::cout << generateScreen(name) << std::endl;
                 fmt::print("{0:-^{1}}\n", "", width - 1);
             }
         } else if (iEquals(args.article, "contents")) {
             fmt::print("\nHelp articles:\n");
 
-            for (auto&& name : ALL_NAMES) {
+            for (auto &&name : ALL_NAMES) {
                 fmt::print("{:{}}{}\n", "", PADDING, name);
             }
         } else {
@@ -229,7 +230,7 @@ struct HelpTool {
         return result;
     }
 
-    static std::string generateArticleScreen(const std::string &article, const std::string& content) noexcept {
+    static std::string generateArticleScreen(const std::string &article, const std::string &content) noexcept {
         auto [width, height] = org::ttldtor::console::Console::getSize();
         std::string result{};
 
@@ -239,10 +240,10 @@ struct HelpTool {
         return result;
     }
 
-    static std::string generateScreen(const std::string& article) noexcept {
+    static std::string generateScreen(const std::string &article) noexcept {
         std::string screen{};
 
-        for (auto&& [name, tool] : ALL_TOOLS) {
+        for (auto &&[name, tool] : ALL_TOOLS) {
             if (iEquals(article, name)) {
                 screen = std::visit(
                     []<typename Tool>(Tool &&) {

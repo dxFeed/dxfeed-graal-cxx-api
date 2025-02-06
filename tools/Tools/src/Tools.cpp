@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "Tools.hpp"
+#include "EventGenTool/EventGenTool.hpp"
 
 namespace dxfcpp::tools {
 
@@ -76,6 +77,20 @@ const std::vector<std::string> QdsTool::USAGE{
 const std::vector<std::string> QdsTool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> QdsTool::ARGS{QdsArgs{}, PropertiesArg{}, HelpArg{}};
+
+const std::string EventGenTool::NAME{"EventGen"};
+const std::string EventGenTool::SHORT_DESCRIPTION{
+    "Receives subscriptions at a specified address and generates events using symbol-encoded information."};
+const std::string EventGenTool::DESCRIPTION{R"(
+Receives subscriptions at a specified address and generates events using symbol-encoded information.
+Example of symbols:
+- AAPL — generates random AAPL Quote events
+)"};
+const std::vector<std::string> EventGenTool::USAGE{
+    NAME + " <address> [<options>]",
+};
+const std::vector<std::string> EventGenTool::ADDITIONAL_INFO{};
+const std::vector<ArgType> EventGenTool::ARGS{AddressArgRequired{}, PropertiesArg{}, HelpArg{}};
 
 const std::unordered_map<std::string, std::string> HelpTool::EMBEDDED_ARTICLES{
     {"Connect",
@@ -381,6 +396,7 @@ const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::AL
     {ConnectTool::getName(), ConnectTool{}},   {DumpTool::getName(), DumpTool{}},
     {HelpTool::getName(), HelpTool{}},         {LatencyTest::getName(), LatencyTest{}},
     {PerfTestTool::getName(), PerfTestTool{}}, {QdsTool::getName(), QdsTool{}},
+    {EventGenTool::getName(), EventGenTool{}},
 };
 
 const std::vector<std::string> tools::HelpTool::ALL_TOOL_NAMES =

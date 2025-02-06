@@ -5,6 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -42,13 +43,16 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
 std::shared_ptr<ObservableSubscription> DXPublisher::getSubscription(const EventTypeEnum &eventType) {
     std::lock_guard guard{mutex_};
 
-    if (subscription_) {
-        return subscription_;
+    if (subscriptions_.contains(eventType)) {
+        return subscriptions_.at(eventType);
     }
 
-    subscription_ = DXPublisherObservableSubscription::create(isolated::api::IsolatedDXPublisher::getSubscription(handle_, eventType));
+    auto sub = DXPublisherObservableSubscription::create(
+        isolated::api::IsolatedDXPublisher::getSubscription(handle_, eventType));
 
-    return subscription_;
+    subscriptions_.emplace(std::cref(eventType), sub);
+
+    return sub;
 }
 
 std::string DXPublisher::toString() const {
