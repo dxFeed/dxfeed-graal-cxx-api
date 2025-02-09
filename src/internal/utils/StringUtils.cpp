@@ -206,21 +206,21 @@ std::string trimStr(const std::string &s) noexcept {
            ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
 };
 
-inline decltype(ranges::views::filter([](const auto &s) {
-    return !s.empty();
-})) filterNonEmpty{};
+//inline decltype(ranges::views::filter([](const auto &s) {
+//    return !s.empty();
+//})) filterNonEmpty{};
 
 inline decltype(ranges::views::transform([](auto &&s) {
     return s | ranges::to<std::string>();
 })) transformToString{};
 
-inline decltype(ranges::views::transform([](const std::string &s) {
-    return trimStr(s);
-})) trim{};
+//inline decltype(ranges::views::transform([](const std::string &s) {
+//    return trimStr(s);
+//})) trim{};
 
-inline auto splitAndTrim = [](const std::string &s, char sep = ',') noexcept {
-    return s | ranges::views::split(sep) | transformToString | trim;
-};
+//inline auto splitAndTrim = [](const std::string &s, char sep = ',') noexcept {
+//    return s | ranges::views::split(sep) | transformToString | trim;
+//};
 
 inline auto split = [](const std::string &s, char sep = ',') noexcept {
     return s | ranges::views::split(sep) | transformToString;

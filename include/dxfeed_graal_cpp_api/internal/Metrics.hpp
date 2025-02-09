@@ -34,8 +34,7 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         data_[name] = value;
     }
 
-    template <typename T>
-    void addImpl(const std::string &name, T&& value) {
+    template <typename T> void addImpl(const std::string &name, T &&value) {
         if (!data_.contains(name)) {
             setImpl(name, Value{value});
 
@@ -113,10 +112,10 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
 
         return std::visit(Overloads{
                               [](const std::string &s) {
-                                  return std::stoll(s);
+                                  return static_cast<std::int64_t>(std::stoll(s));
                               },
                               [](auto n) {
-                                  return std::int64_t(n);
+                                  return static_cast<std::int64_t>(n);
                               },
                           },
                           data_.at(name));

@@ -12,7 +12,7 @@
 #include "../LatencyTest/LatencyTestTool.hpp"
 #include "../PerfTest/PerfTestTool.hpp"
 #include "../Qds/QdsTool.hpp"
-#include "EventGenTool/EventGenTool.hpp"
+#include "../EventGenTool/EventGenTool.hpp"
 
 #include <chrono>
 #include <cstdint>
