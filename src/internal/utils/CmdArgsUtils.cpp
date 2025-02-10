@@ -146,12 +146,30 @@ std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &
     return parsed | ranges::to<std::unordered_set<SymbolWrapper>>();
 }
 
-std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(std::optional<std::string> symbols) noexcept {
+std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(std::optional<std::string> symbols) {
     if (symbols.has_value()) {
         return parseSymbols(symbols.value());
     }
 
     return {};
+}
+
+std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(const std::string &symbols) {
+    auto trimmedSymbols = trimStr(symbols);
+
+    if (trimmedSymbols.empty()) {
+        return {};
+    }
+
+    auto parsed = isolated::internal::IsolatedTools::parseSymbolsAndSaveOrder(trimmedSymbols);
+
+    for (const auto &symbol : parsed) {
+        if (symbol == "*" || iEquals(symbol, "all")) {
+            return {WildcardSymbol::ALL};
+        }
+    }
+
+    return parsed | ranges::to<std::vector<SymbolWrapper>>();
 }
 
 std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::string &symbols) {
@@ -169,7 +187,7 @@ std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::str
            ranges::to<std::unordered_set<CandleSymbol>>();
 }
 
-std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(std::optional<std::string> symbols) noexcept {
+std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(std::optional<std::string> symbols) {
     if (symbols.has_value()) {
         return parseCandleSymbols(symbols.value());
     }

@@ -25,6 +25,22 @@ parseSymbols(std::string_view symbolList) {
     return result;
 }
 
+std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList) {
+    std::vector<std::string> result{};
+
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
+
+    result.reserve(graalStringList->size);
+
+    for (auto i = 0; i < graalStringList->size; i++) {
+        result.emplace_back(dxfcpp::toString(graalStringList->elements[i]));
+    }
+
+    IsolatedStringList::release(graalStringList);
+
+    return result;
+}
+
 using NativeStringList = NativeStringListWrapper<dxfg_string_list>;
 
 void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {

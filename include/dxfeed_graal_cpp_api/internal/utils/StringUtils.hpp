@@ -295,6 +295,8 @@ DXFCPP_EXPORT std::vector<std::string> splitStr(const std::string &s, char sep =
 
 DXFCPP_EXPORT std::string joinStr(const std::vector<std::string> &v, const std::string &sep = ", ") noexcept;
 
+DXFCPP_EXPORT bool toBool(const std::string &s) noexcept;
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

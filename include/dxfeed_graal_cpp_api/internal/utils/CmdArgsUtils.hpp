@@ -40,7 +40,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(const char *symbols) noexcept {
+    static std::unordered_set<SymbolWrapper> parseSymbols(const char *symbols) {
         return parseSymbols(std::string(symbols));
     }
 
@@ -52,7 +52,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(std::string_view symbols) noexcept {
+    static std::unordered_set<SymbolWrapper> parseSymbols(std::string_view symbols) {
         return parseSymbols(symbols.data());
     }
 
@@ -64,7 +64,17 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(std::optional<std::string> symbols) noexcept;
+    static std::unordered_set<SymbolWrapper> parseSymbols(std::optional<std::string> symbols);
+
+    /**
+     * Parses an input string and returns a vector of symbols in the same order.
+     *
+     * The symbol "all" or "*" can be passed. This will add WildcardSymbol (all symbols).
+     *
+     * @param symbols The coma-separated list of symbols.
+     * @return The created vector of parsed symbols
+     */
+    static std::vector<SymbolWrapper> parseSymbolsAndSaveOrder(const std::string &symbols);
 
     /**
      * Parses an input string and returns a set of candle symbols.
@@ -80,7 +90,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(const char *symbols) noexcept {
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(const char *symbols) {
         return parseCandleSymbols(std::string(symbols));
     }
 
@@ -90,7 +100,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::string_view symbols) noexcept {
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::string_view symbols) {
         return parseCandleSymbols(symbols.data());
     }
 
@@ -100,7 +110,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::optional<std::string> symbols) noexcept;
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::optional<std::string> symbols);
 
     /**
      * Parses an input string and returns a set of event types.

@@ -14,8 +14,8 @@
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
-#include <fmt/std.h>
 #include <fmt/ranges.h>
+#include <fmt/std.h>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
@@ -28,7 +28,7 @@ std::string toString(bool b) noexcept {
 }
 
 std::string toString(const char *chars) noexcept {
-    //TODO: cache [EN-8231]
+    // TODO: cache [EN-8231]
 
     if (chars == nullptr) {
         return dxfcpp::String::NUL;
@@ -38,7 +38,7 @@ std::string toString(const char *chars) noexcept {
 }
 
 std::optional<std::string> toStringOpt(const char *chars) noexcept {
-    //TODO: cache [EN-8231]
+    // TODO: cache [EN-8231]
 
     if (chars == nullptr) {
         return std::nullopt;
@@ -206,21 +206,21 @@ std::string trimStr(const std::string &s) noexcept {
            ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
 };
 
-//inline decltype(ranges::views::filter([](const auto &s) {
-//    return !s.empty();
-//})) filterNonEmpty{};
+// inline decltype(ranges::views::filter([](const auto &s) {
+//     return !s.empty();
+// })) filterNonEmpty{};
 
 inline decltype(ranges::views::transform([](auto &&s) {
     return s | ranges::to<std::string>();
 })) transformToString{};
 
-//inline decltype(ranges::views::transform([](const std::string &s) {
-//    return trimStr(s);
-//})) trim{};
+// inline decltype(ranges::views::transform([](const std::string &s) {
+//     return trimStr(s);
+// })) trim{};
 
-//inline auto splitAndTrim = [](const std::string &s, char sep = ',') noexcept {
-//    return s | ranges::views::split(sep) | transformToString | trim;
-//};
+// inline auto splitAndTrim = [](const std::string &s, char sep = ',') noexcept {
+//     return s | ranges::views::split(sep) | transformToString | trim;
+// };
 
 inline auto split = [](const std::string &s, char sep = ',') noexcept {
     return s | ranges::views::split(sep) | transformToString;
@@ -232,6 +232,10 @@ std::vector<std::string> splitStr(const std::string &s, char sep) noexcept {
 
 std::string joinStr(const std::vector<std::string> &v, const std::string &sep) noexcept {
     return fmt::format("{}", fmt::join(v, sep));
+}
+
+bool toBool(const std::string &s) noexcept {
+    return iEquals(s, "true") || iEquals(s, "yes") || iEquals(s, "y") || iEquals(s, "on");
 }
 
 DXFCPP_END_NAMESPACE

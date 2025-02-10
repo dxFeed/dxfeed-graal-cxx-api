@@ -11,6 +11,7 @@
 #include "Help/HelpTool.hpp"
 #include "LatencyTest/LatencyTestTool.hpp"
 #include "PerfTest/PerfTestTool.hpp"
+#include "PerfTest2/PerfTest2Tool.hpp"
 
 #include <chrono>
 #include <cstdint>

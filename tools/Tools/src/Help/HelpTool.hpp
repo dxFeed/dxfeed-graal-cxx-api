@@ -11,6 +11,7 @@
 #include "../Dump/DumpTool.hpp"
 #include "../LatencyTest/LatencyTestTool.hpp"
 #include "../PerfTest/PerfTestTool.hpp"
+#include "../PerfTest2/PerfTest2Tool.hpp"
 #include "../Qds/QdsTool.hpp"
 #include "../EventGenTool/EventGenTool.hpp"
 
@@ -39,7 +40,7 @@ namespace dxfcpp::tools {
 
 struct HelpTool {
     using Tool = std::variant<tools::ConnectTool, tools::DumpTool, tools::HelpTool, tools::LatencyTest,
-                              tools::PerfTestTool, tools::QdsTool, tools::EventGenTool>;
+                              tools::PerfTestTool, tools::PerfTest2Tool, tools::QdsTool, tools::EventGenTool>;
 
     static const std::unordered_map<std::string, std::string> EMBEDDED_ARTICLES;
     static const std::string NAME;
