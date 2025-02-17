@@ -14,12 +14,7 @@
 #include <utility>
 #include <variant>
 
-#include <process/process.hpp>
-
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
@@ -89,7 +84,7 @@ struct LatencyTest {
         static double calcPercentile(std::vector<std::int64_t> sequence, double excelPercentile) noexcept {
             std::sort(std::begin(sequence), std::end(sequence));
 
-            auto n = ((static_cast<double>(sequence.size()) - 1.0) * excelPercentile) + 1.0;
+            const auto n = (static_cast<double>(sequence.size()) - 1.0) * excelPercentile + 1.0;
 
             if (std::abs(n - 1.0) < std::numeric_limits<double>::epsilon()) {
                 return static_cast<double>(sequence[0]);
@@ -282,7 +277,7 @@ struct LatencyTest {
                 return ParseResult<Args>::help();
             }
 
-            auto parsedAddress = AddressArgRequired::parse(args);
+            auto parsedAddress = AddressArgRequired<>::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
@@ -290,13 +285,13 @@ struct LatencyTest {
 
             index++;
 
-            auto parsedTypes = TypesArg::parse(args);
+            auto parsedTypes = TypesArg<>::parse(args);
 
             if (parsedTypes.result.has_value()) {
                 index++;
             }
 
-            auto parsedSymbols = SymbolsArg::parse(args);
+            auto parsedSymbols = SymbolsArg<>::parse(args);
 
             if (parsedSymbols.result.has_value()) {
                 index++;

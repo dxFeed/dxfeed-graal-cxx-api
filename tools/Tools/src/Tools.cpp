@@ -78,7 +78,7 @@ const std::vector<std::string> PerfTest2Tool::USAGE{
 const std::vector<std::string> PerfTest2Tool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> PerfTest2Tool::ARGS{
-    AddressArgRequired{}, SymbolsArgRequired{}, ForceStreamArg{},
+    AddressArgRequired{}, SymbolsArgRequired<1>{}, ForceStreamArg{},
     DetachListenerArg{},  CPUUsageByCoreArg{}, PropertiesArg{},      HelpArg{}};
 
 const std::string QdsTool::NAME{"Qds"};
@@ -415,7 +415,7 @@ const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::AL
 };
 
 const std::vector<std::string> tools::HelpTool::ALL_TOOL_NAMES =
-    tools::HelpTool::ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
+    ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
 
 const std::set<std::string> HelpTool::ALL_NAMES =
     ranges::views::concat(ALL_ARTICLE_NAMES, ALL_TOOL_NAMES) | ranges::to<std::set>;

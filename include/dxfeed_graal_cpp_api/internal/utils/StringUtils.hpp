@@ -186,6 +186,8 @@ DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp);
 
 DXFCPP_EXPORT std::string formatTimeStampWithTimeZone(std::int64_t timestamp);
 
+DXFCPP_EXPORT std::string formatTimeStampFast(std::int64_t timestamp);
+
 DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
 
 DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);

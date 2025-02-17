@@ -73,7 +73,6 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
 
 DXFeedSubscription::DXFeedSubscription() : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", 1);
-    std::cerr << "+SUB\n";
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) : DXFeedSubscription() {
@@ -112,7 +111,6 @@ DXFeedSubscription::~DXFeedSubscription() {
     }
 
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", -1);
-    std::cerr << "-SUB\n";
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEnum &eventType) {

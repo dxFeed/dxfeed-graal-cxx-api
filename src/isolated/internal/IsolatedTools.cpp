@@ -9,6 +9,11 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+
+void gc() {
+    isolated::runGraalFunction(dxfg_gc);
+}
+
 namespace isolated::internal::IsolatedTools {
 std::unordered_set<std::string> /* dxfg_string_list* */
 parseSymbols(std::string_view symbolList) {

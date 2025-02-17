@@ -168,6 +168,21 @@ std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
     return fmt::format("{:%Y%m%d-%H%M%S%z}", tm);
 }
 
+std::string formatTimeStampFast(std::int64_t timestamp) {
+    if (timestamp <= 0) {
+        return "0";
+    }
+
+    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+    auto dt = fmt::format("{:%Y-%m-%d %H:%M:%S}", tm);
+
+    if (const auto i = dt.find_first_of('.'); i != std::string::npos) {
+        dt = dt.substr(0, i);
+    }
+
+    return fmt::format("{}.{:03d}", dt, timestamp % 1000);
+}
+
 std::string formatTimeStampWithMillis(std::int64_t timestamp) {
     return TimeFormat::DEFAULT_WITH_MILLIS.format(timestamp);
 }

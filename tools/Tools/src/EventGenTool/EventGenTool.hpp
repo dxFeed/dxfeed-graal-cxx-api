@@ -15,20 +15,13 @@
 #include "dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
 
 #include <chrono>
-#include <cstdint>
-#include <deque>
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <thread>
-#include <utility>
 #include <variant>
 #include <vector>
 
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 namespace dxfcpp::tools {
 
@@ -66,7 +59,7 @@ struct EventGenTool {
                 return ParseResult<Args>::help();
             }
 
-            auto parsedAddress = AddressArgRequired::parse(args);
+            const auto parsedAddress = AddressArgRequired<>::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
@@ -76,9 +69,9 @@ struct EventGenTool {
             bool propertiesIsParsed{};
             std::optional<std::string> properties{};
 
-            for (; index < args.size();) {
+            while (index < args.size()) {
                 if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
-                    auto parseResult = PropertiesArg::parse(args, index);
+                    const auto parseResult = PropertiesArg::parse(args, index);
 
                     properties = parseResult.result;
                     propertiesIsParsed = true;
@@ -98,21 +91,21 @@ struct EventGenTool {
 
             System::setProperties(parsedProperties);
 
-            auto endpoint = DXEndpoint::newBuilder()
+            const auto endpoint = DXEndpoint::newBuilder()
                                 ->withRole(DXEndpoint::Role::PUBLISHER)
                                 ->withProperties(parsedProperties)
                                 ->withName(NAME + "Tool")
                                 ->build();
 
             auto pub = endpoint->getPublisher();
-            auto sub = pub->getSubscription(Quote::TYPE);
+            const auto sub = pub->getSubscription(Quote::TYPE);
 
             std::mutex symbolsMutex{};
             std::deque<SymbolWrapper> symbols{};
 
             sub->addChangeListener(
                 ObservableSubscriptionChangeListener::create([&symbolsMutex, &symbols](const auto &symbolsToAdd) {
-                    std::lock_guard<std::mutex> lockGuard(symbolsMutex);
+                    std::lock_guard lockGuard(symbolsMutex);
 
                     symbols.insert(symbols.end(), symbolsToAdd.begin(), symbolsToAdd.end());
                 }));
@@ -121,18 +114,18 @@ struct EventGenTool {
 
             std::atomic<std::size_t> counter = 0;
 
-            auto scheduler = Timer::schedule(
-                [&symbolsMutex, &symbols, &pub, &counter]() {
-                    std::lock_guard<std::mutex> lockGuard(symbolsMutex);
+            const auto scheduler = Timer::schedule(
+                [&symbolsMutex, &symbols, &pub, &counter] {
+                    std::lock_guard lockGuard(symbolsMutex);
 
                     if (symbols.empty()) {
                         return;
                     }
 
-                    auto symbol = symbols.at(counter++ % symbols.size());
-                    auto q = std::make_shared<Quote>(symbol.asStringSymbol());
+                    const auto& symbol = symbols.at(counter++ % symbols.size());
+                    const auto q = std::make_shared<Quote>(symbol.asStringSymbol());
 
-                    auto time = now();
+                    const auto time = now();
                     q->setEventTime(time);
                     q->setBidTime(time);
                     q->setBidPrice(42.0);

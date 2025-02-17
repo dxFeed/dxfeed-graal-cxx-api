@@ -174,7 +174,7 @@ struct PerfTestTool {
                 return ParseResult<Args>::help();
             }
 
-            auto parsedAddress = AddressArgRequired::parse(args);
+            auto parsedAddress = AddressArgRequired<>::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
@@ -182,7 +182,7 @@ struct PerfTestTool {
 
             index++;
 
-            auto parsedTypes = TypesArgRequired::parse(args);
+            auto parsedTypes = TypesArgRequired<>::parse(args);
 
             if (parsedTypes.isError) {
                 return ParseResult<Args>::error(parsedTypes.errorString);
@@ -190,7 +190,7 @@ struct PerfTestTool {
 
             index++;
 
-            auto parsedSymbols = SymbolsArgRequired::parse(args);
+            auto parsedSymbols = SymbolsArgRequired<>::parse(args);
 
             if (parsedSymbols.isError) {
                 return ParseResult<Args>::error(parsedSymbols.errorString);

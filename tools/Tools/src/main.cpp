@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
                             return;
                         }
 
-                        std::cout << tools::Tools::getName() << "\n";
+                        //std::cout << tools::Tools::getName() << "\n";
                         T::run(parseResult.result);
                     } catch (const RuntimeException &e) {
                         std::cerr << e << '\n';

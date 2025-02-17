@@ -47,7 +47,7 @@ struct QdsTool {
                 return ParseResult<Args>::help();
             }
 
-            auto qdsArgs = QdsArgs::parse(args);
+            auto qdsArgs = QdsArgs<>::parse(args);
 
             if (qdsArgs.isError) {
                 return ParseResult<Args>::error(qdsArgs.errorString);
