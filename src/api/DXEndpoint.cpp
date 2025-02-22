@@ -49,7 +49,7 @@ static DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
 }
 
 struct DXEndpoint::Impl {
-    static inline std::mutex MTX{};
+    static std::mutex MTX;
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
@@ -111,6 +111,7 @@ struct DXEndpoint::Impl {
     }
 };
 
+std::mutex DXEndpoint::Impl::MTX{};
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::Impl::INSTANCES{};
 
 std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,

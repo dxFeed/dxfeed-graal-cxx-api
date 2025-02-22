@@ -28,8 +28,16 @@ class TimeSeriesTxModelFixture {
                   std::cout << "Update:" << std::endl;
               }
 
+              std::size_t i = 0;
+
               for (const auto &e : events) {
                   std::cout << "[" << e->getEventFlagsMask().toString() << "]:" << e << std::endl;
+
+                  if (i++ == 10) {
+                      std::cout << "..." << std::endl;
+
+                      break;
+                  }
               }
 
               std::cout << std::endl;
