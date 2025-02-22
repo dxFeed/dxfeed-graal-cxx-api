@@ -27,6 +27,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_POP()
 namespace dxfcpp::tools {
 
 struct PerfTestTool {
+    static inline auto FORMAT_NAME = "PerfTest.format"; // csv, normal
     static const std::string NAME;
     static const std::string SHORT_DESCRIPTION;
     static const std::string DESCRIPTION;
@@ -64,7 +65,10 @@ struct PerfTestTool {
         StopWatch timerDiff_{};
         StopWatch runningDiff_{};
 
-        explicit Diagnostic(bool showCpuUsageByCore) noexcept : showCpuUsageByCore_{showCpuUsageByCore} {
+        const bool dumpCsv_{};
+
+        explicit Diagnostic(bool showCpuUsageByCore, bool dumpCsv) noexcept
+            : showCpuUsageByCore_{showCpuUsageByCore}, dumpCsv_{dumpCsv} {
             timerDiff_.restart();
             runningDiff_.restart();
             cpuStartTime_ = org::ttldtor::process::Process::getTotalProcessorTime();
@@ -86,19 +90,29 @@ struct PerfTestTool {
             auto currentCpuUsage = getCpuUsage();
             peakCpuUsage_ = currentCpuUsage > peakCpuUsage_ ? currentCpuUsage : peakCpuUsage_;
 
-            fmt::print("\n{}\n", Platform::getPlatformInfo());
-            std::cout << "----------------------------------------------------\n";
-            fmt::print("  Rate of events (avg)           : {} (events/s)\n", formatDouble(eventsPerSecond));
-            fmt::print("  Rate of listener calls         : {} (calls/s)\n", formatDouble(listenerCallsPerSecond));
-            fmt::print("  Number of events in call (avg) : {} (events)\n",
-                       formatDouble(eventsPerSecond / listenerCallsPerSecond));
-            fmt::print("  Current memory usage           : {:.3f} (MByte)\n", currentMemoryUsage);
-            fmt::print("  Peak memory usage              : {:.3f} (MByte)\n", peakMemoryUsage_);
-            fmt::print("  Current CPU usage              : {:.2f} %\n", currentCpuUsage * 100.0);
-            fmt::print("  Peak CPU usage                 : {:.2f} %\n", peakCpuUsage_ * 100.0);
-            fmt::print("  Running time                   : {:%H:%M:%S}\n", runningDiff_.elapsed());
-            std::cout << "----------------------------------------------------\n";
-            fmt::print("{}\n", ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->dump());
+            if (dumpCsv_) {
+                fmt::println("{},{},{},{},{:.3f},{:.3f},{:.2f},{:.2f},{:%H:%M:%S},{}", formatTimeStampFast(now()),
+                           formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
+                           formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage, peakMemoryUsage_,
+                           currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
+                           ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event"));
+            } else {
+                fmt::print("\n{}\n", Platform::getPlatformInfo());
+                std::cout << "----------------------------------------------------\n";
+                fmt::print("  Rate of events (avg)           : {} (events/s)\n", formatDouble(eventsPerSecond));
+                fmt::print("  Rate of listener calls         : {} (calls/s)\n", formatDouble(listenerCallsPerSecond));
+                fmt::print("  Number of events in call (avg) : {} (events)\n",
+                           formatDouble(eventsPerSecond / listenerCallsPerSecond));
+                fmt::print("  Current memory usage           : {:.3f} (MByte)\n", currentMemoryUsage);
+                fmt::print("  Peak memory usage              : {:.3f} (MByte)\n", peakMemoryUsage_);
+                fmt::print("  Current CPU usage              : {:.2f} %\n", currentCpuUsage * 100.0);
+                fmt::print("  Peak CPU usage                 : {:.2f} %\n", peakCpuUsage_ * 100.0);
+                fmt::print("  Running time                   : {:%H:%M:%S}\n", runningDiff_.elapsed());
+                std::cout << "----------------------------------------------------\n";
+#if defined(DXFCXX_ENABLE_METRICS)
+                fmt::print("{}\n", ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->dump());
+#endif
+            }
 
             timerDiff_.restart();
         }
@@ -137,8 +151,14 @@ struct PerfTestTool {
         }
 
       public:
-        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore) {
-            auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore));
+        static std::string getCsvHeader() {
+            return "Timestamp,Rate of events (avg) [events/s],Rate of listener calls [calls/s],Number of events in "
+                   "call (avg) [events],Current memory usage [MByte],Peak memory usage [MByte],Current CPU usage "
+                   "[%],Peak CPU usage [%],Running time,Entity.Event";
+        }
+
+        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore, bool dumpCsv) {
+            auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore, dumpCsv));
 
             d->timer_ = Timer::schedule(
                 [self = d] {
@@ -242,7 +262,19 @@ struct PerfTestTool {
 
             auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
 
+            auto dumpCsv = false;
+
+            if (parsedProperties.contains(FORMAT_NAME)) {
+                dumpCsv = iEquals(parsedProperties[FORMAT_NAME], "csv");
+            }
+
+            Logging::init();
+
             System::setProperties(parsedProperties);
+
+            if (dumpCsv) {
+                fmt::println("{}", Diagnostic::getCsvHeader());
+            }
 
             auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(args.types);
 
@@ -269,7 +301,7 @@ struct PerfTestTool {
                     ->build();
 
             auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
-            auto diagnostic = Diagnostic::create(2s, args.showCpuUsageByCore);
+            auto diagnostic = Diagnostic::create(2s, args.showCpuUsageByCore, dumpCsv);
 
             std::atomic<std::size_t> hash{};
 

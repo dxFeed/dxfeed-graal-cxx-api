@@ -186,7 +186,9 @@ DXFeed::DXFeed() noexcept : handle_{} {
         Debugger::debug("DXFeed()");
     }
 
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", 1);
+#endif
 }
 
 DXFeed::~DXFeed() noexcept {
@@ -194,7 +196,9 @@ DXFeed::~DXFeed() noexcept {
         Debugger::debug("DXFeed{" + handle_.toString() + "}::~DXFeed()");
     }
 
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", -1);
+#endif
 }
 
 std::string DXFeed::toString() const {

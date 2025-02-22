@@ -343,7 +343,9 @@ DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept : handle_{}, 
         Debugger::debug("DXEndpoint::Builder::Builder()");
     }
 
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", 1);
+#endif
 }
 
 DXEndpoint::Builder::~Builder() noexcept {
@@ -351,7 +353,9 @@ DXEndpoint::Builder::~Builder() noexcept {
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::~Builder()");
     }
 
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", -1);
+#endif
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::string &name) {
@@ -407,7 +411,9 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag)
         Debugger::debug("DXEndpoint()");
     }
 
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
+#endif
 }
 
 DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name)
@@ -418,7 +424,10 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint>
     }
 
     handle_ = std::move(handle);
+
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
+#endif
 }
 
 DXEndpoint::~DXEndpoint() noexcept {
@@ -426,7 +435,9 @@ DXEndpoint::~DXEndpoint() noexcept {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::~DXEndpoint()");
     }
 
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", -1);
+#endif
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::getInstance() {

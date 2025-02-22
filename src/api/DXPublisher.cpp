@@ -70,7 +70,9 @@ DXPublisher::DXPublisher() noexcept {
         Debugger::debug("DXPublisher()");
     }
 
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", 1);
+#endif
 }
 
 DXPublisher::~DXPublisher() noexcept {
@@ -78,7 +80,9 @@ DXPublisher::~DXPublisher() noexcept {
         Debugger::debug("DXPublisher{" + handle_.toString() + "}::~DXPublisher()");
     }
 
+#if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", -1);
+#endif
 }
 
 

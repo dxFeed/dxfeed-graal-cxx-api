@@ -58,6 +58,9 @@ option(DXFCXX_INSTALL "Prepare install" ON)
 option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
+
+option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
+
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
 
@@ -558,6 +561,11 @@ target_compile_definitions(${PROJECT_NAME}_static PUBLIC
         DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
         DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
 )
+
+if (DXFCXX_ENABLE_METRICS)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_ENABLE_METRICS=1)
+    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_ENABLE_METRICS=1)
+endif ()
 
 if (DXFCXX_BUILD_UNIT_TESTS)
     include(CTest)
