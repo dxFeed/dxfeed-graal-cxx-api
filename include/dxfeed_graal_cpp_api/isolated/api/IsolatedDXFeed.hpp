@@ -35,9 +35,11 @@ getLastEventIfSubscribed(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &fee
                          /* dxfg_event_clazz_t */ const EventTypeEnum &eventType,
                          /* dxfg_symbol_t * */ const SymbolWrapper &symbol);
 
+// dxfg_event_type_list* dxfg_DXFeed_getIndexedEventsIfSubscribed(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, const char *source);
+std::vector<std::shared_ptr<EventType>> getIndexedEventsIfSubscribed(const JavaObjectHandle<DXFeed> &feed, const EventTypeEnum &eventType, const SymbolWrapper &symbol,  const IndexedEventSource& source);
+
 /*
 
-dxfg_event_type_list*             dxfg_DXFeed_getIndexedEventsIfSubscribed(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, const char *source);
 dxfg_event_type_list*             dxfg_DXFeed_getTimeSeriesIfSubscribed(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, int64_t from_time, int64_t to_time);
 // use dxfg_EventType_new to create an empty structure so that java tries to free up memory when replacing subjects
 
