@@ -142,6 +142,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     std::shared_ptr<EventType> getLastEventIfSubscribedImpl(const EventTypeEnum &eventType,
                                                             const SymbolWrapper &symbol) const;
 
+    std::vector<std::shared_ptr<EventType>> getIndexedEventsIfSubscribedImpl(const EventTypeEnum &eventType,
+                                                                             const SymbolWrapper &symbol,
+                                                                             const IndexedEventSource &source) const;
+
     JavaObjectHandle<DXFeedSubscription>
     createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
@@ -729,6 +733,62 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     getIndexedEventsPromise(const SymbolWrapper &symbol, const IndexedEventSource &source) const {
         return std::make_shared<Promise<std::vector<std::shared_ptr<E>>>>(
             getIndexedEventsPromiseImpl(E::TYPE, symbol, source));
+    }
+
+    /**
+     * Returns a vector of indexed events for the specified event type, symbol, and source if there is a subscription
+     * for it. This method works only for event types that implement IndexedEvent interface. This method <b>does not</b>
+     * make any remote calls to the uplink data provider. It just retrieves last received events from the local cache of
+     * this feed. The events are stored in the cache only if there is some attached DXFeedSubscription that is
+     * subscribed to the corresponding event type, symbol, and source. The subscription can also be permanently defined
+     * using DXEndpoint properties. If there is no subscription, then this method returns an empty vector.
+     * Otherwise, it creates a vector of events of the specified `eventType` and returns it.
+     *
+     * The events are ordered by @ref IndexedEvent::getIndex() "index" in the vector.
+     *
+     * <p>If there is a subscription, but the events have not arrived from the uplink data provider,
+     * this method returns an empty vector.
+     *
+     * <p>Use @ref DXFeed::getIndexedEventsPromise() "getIndexedEventsPromise" method
+     * if events need to be requested in the absence of subscription.
+     *
+     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
+     * "STREAM_FEED" role (always returns an empty vector).
+     *
+     * <h3>Event source</h3>
+     *
+     * Use the @ref IndexedEventSource::DEFAULT "DEFAULT" value for `source` with events that do not
+     * have multiple sources (like Series). For events with multiple sources (like Order, AnalyticOrder,
+     * OtcMarketsOrder and SpreadOrder), use an event-specific source class (for example, OrderSource).
+     * This method does not support <em>synthetic</em> sources of orders (orders that are automatically generated from
+     * Quote events).
+     *
+     * <p>This method does not accept an instance of IndexedEventSubscriptionSymbol as a `symbol`.
+     * The later class is designed for use with DXFeedSubscription and to observe source-specific subscription
+     * in @DXPublisher.
+     *
+     * <h3>Event flags and consistent snapshot</h3>
+     *
+     * This method returns a vector of events that are currently in the cache without any wait or delay, and it <b>does
+     * not</b> guarantee that a consistent snapshot of events is returned. See IndexedEvent documentation for details.
+     * The @ref IndexedEvent::getEventFlags() "eventFlags" property of the events in the resulting vector
+     * is always zero regardless. Use @ref DXFeed::getIndexedEventsPromise() "getIndexedEventsPromise" method
+     * if a consistent snapshot of events needs to be requested.
+     *
+     * <p>Note, that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
+     * the latter expects events in a different order and with an appropriate flags set. See documentation on a specific
+     * event class for details on how they should be published.
+     *
+     * @tparam E The type of event.
+     * @param symbol The symbol.
+     * @param source The source.
+     * @return The vector of events or an empty vector if there is no subscription for the specified event
+     * type, symbol, and source.
+     */
+    template <Derived<IndexedEvent> E>
+    std::vector<std::shared_ptr<E>> getIndexedEventsIfSubscribed(const SymbolWrapper &symbol,
+                                                                 const IndexedEventSource &source) {
+        return convertEvents<EventType, E>(getIndexedEventsIfSubscribedImpl(E::TYPE, symbol, source));
     }
 
     /**

@@ -176,6 +176,12 @@ std::shared_ptr<EventType> DXFeed::getLastEventIfSubscribedImpl(const EventTypeE
     return isolated::api::IsolatedDXFeed::getLastEventIfSubscribed(handle_, eventType, symbol);
 }
 
+std::vector<std::shared_ptr<EventType>>
+DXFeed::getIndexedEventsIfSubscribedImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
+                                         const IndexedEventSource &source) const {
+    return isolated::api::IsolatedDXFeed::getIndexedEventsIfSubscribed(handle_, eventType, symbol, source);
+}
+
 JavaObjectHandle<DXFeedSubscription>
 DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) {
     return isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, list);

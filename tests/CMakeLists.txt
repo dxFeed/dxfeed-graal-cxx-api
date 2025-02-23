@@ -22,6 +22,7 @@ set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-${DOCTEST_VERSION} 
 set(DXFC_TEST_SOURCES
         api/CandleSymbolTest.cpp
         api/DataIntegrityTest.cpp
+        api/DXFeedTest.cpp
         api/DXEndpointTest.cpp
         api/DXPublisherTest.cpp
         api/EventsTest.cpp
