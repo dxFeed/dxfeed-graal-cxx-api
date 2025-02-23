@@ -27,7 +27,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_POP()
 namespace dxfcpp::tools {
 
 struct PerfTestTool {
-    static inline auto FORMAT_NAME = "PerfTest.format"; // csv, normal
+    static inline auto FORMAT_NAME = "PerfTest.format";                              // csv, normal
+    static inline auto UNSUBSCRIBE_AFTER_SECONDS_NAME = "PerfTest.unsubscribeAfter"; // (seconds) 60, 180, etc
     static const std::string NAME;
     static const std::string SHORT_DESCRIPTION;
     static const std::string DESCRIPTION;
@@ -92,10 +93,10 @@ struct PerfTestTool {
 
             if (dumpCsv_) {
                 fmt::println("{},{},{},{},{:.3f},{:.3f},{:.2f},{:.2f},{:%H:%M:%S},{}", formatTimeStampFast(now()),
-                           formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
-                           formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage, peakMemoryUsage_,
-                           currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
-                           ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event"));
+                             formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
+                             formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage,
+                             peakMemoryUsage_, currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
+                             ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event"));
             } else {
                 fmt::print("\n{}\n", Platform::getPlatformInfo());
                 std::cout << "----------------------------------------------------\n";
@@ -157,7 +158,8 @@ struct PerfTestTool {
                    "[%],Peak CPU usage [%],Running time,Entity.Event";
         }
 
-        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore, bool dumpCsv) {
+        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore,
+                                                  bool dumpCsv) {
             auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore, dumpCsv));
 
             d->timer_ = Timer::schedule(
@@ -268,6 +270,12 @@ struct PerfTestTool {
                 dumpCsv = iEquals(parsedProperties[FORMAT_NAME], "csv");
             }
 
+            auto unsubscribeAfter = 0;
+
+            if (parsedProperties.contains(UNSUBSCRIBE_AFTER_SECONDS_NAME)) {
+                unsubscribeAfter = std::stoi(parsedProperties[UNSUBSCRIBE_AFTER_SECONDS_NAME]);
+            }
+
             Logging::init();
 
             System::setProperties(parsedProperties);
@@ -318,6 +326,20 @@ struct PerfTestTool {
 
             sub->addSymbols(parsedSymbols);
             endpoint->connect(args.address);
+
+            std::shared_ptr<Timer> unsubscribeTimer{};
+
+            if (unsubscribeAfter > 0) {
+                // ReSharper disable once CppDFAUnusedValue
+                unsubscribeTimer = Timer::runOnce(
+                    [sub, parsedSymbols] {
+                        sub->removeSymbols(parsedSymbols);
+                        gc();
+                        sub->close();
+                    },
+                    std::chrono::seconds(unsubscribeAfter));
+            }
+
             endpoint->awaitNotConnected();
             endpoint->closeAndAwaitTermination();
 
