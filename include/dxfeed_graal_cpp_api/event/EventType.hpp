@@ -32,6 +32,10 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
     /// The alias to a type of shared pointer to the EventType object.
     using Ptr = std::shared_ptr<EventType>;
 
+    EventType();
+
+    ~EventType() noexcept override;
+
     /**
      * Returns time when event was created or zero when time is not available.
      *

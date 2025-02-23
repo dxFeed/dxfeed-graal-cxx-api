@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "Tools.hpp"
+#include "EventGenTool/EventGenTool.hpp"
 
 namespace dxfcpp::tools {
 
@@ -65,6 +66,21 @@ const std::vector<ArgType> PerfTestTool::ARGS{AddressArgRequired{}, TypesArgRequ
                                               PropertiesArg{},      ForceStreamArg{},   CPUUsageByCoreArg{},
                                               DetachListenerArg{},  HelpArg{}};
 
+const std::string PerfTest2Tool::NAME{"PerfTest2"};
+const std::string PerfTest2Tool::SHORT_DESCRIPTION{
+    "Connects to specified address and calculates performance counters."};
+const std::string PerfTest2Tool::DESCRIPTION{R"(
+Connects to the specified address(es) and calculates performance counters (events per second, cpu usage, etc).
+)"};
+const std::vector<std::string> PerfTest2Tool::USAGE{
+    NAME + " <address> <symbols> [<options>]",
+};
+const std::vector<std::string> PerfTest2Tool::ADDITIONAL_INFO{};
+
+const std::vector<ArgType> PerfTest2Tool::ARGS{
+    AddressArgRequired{}, SymbolsArgRequired<1>{}, ForceStreamArg{},
+    DetachListenerArg{},  CPUUsageByCoreArg{}, PropertiesArg{},      HelpArg{}};
+
 const std::string QdsTool::NAME{"Qds"};
 const std::string QdsTool::SHORT_DESCRIPTION{"A collection of tools ported from the Java qds-tools."};
 const std::string QdsTool::DESCRIPTION{R"(
@@ -76,6 +92,20 @@ const std::vector<std::string> QdsTool::USAGE{
 const std::vector<std::string> QdsTool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> QdsTool::ARGS{QdsArgs{}, PropertiesArg{}, HelpArg{}};
+
+const std::string EventGenTool::NAME{"EventGen"};
+const std::string EventGenTool::SHORT_DESCRIPTION{
+    "Receives subscriptions at a specified address and generates events using symbol-encoded information."};
+const std::string EventGenTool::DESCRIPTION{R"(
+Receives subscriptions at a specified address and generates events using symbol-encoded information.
+Example of symbols:
+- AAPL — generates random AAPL Quote events
+)"};
+const std::vector<std::string> EventGenTool::USAGE{
+    NAME + " <address> [<options>]",
+};
+const std::vector<std::string> EventGenTool::ADDITIONAL_INFO{};
+const std::vector<ArgType> EventGenTool::ARGS{AddressArgRequired{}, PropertiesArg{}, HelpArg{}};
 
 const std::unordered_map<std::string, std::string> HelpTool::EMBEDDED_ARTICLES{
     {"Connect",
@@ -380,11 +410,12 @@ const std::vector<std::string> HelpTool::ALL_ARTICLE_NAMES =
 const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::ALL_TOOLS{
     {ConnectTool::getName(), ConnectTool{}},   {DumpTool::getName(), DumpTool{}},
     {HelpTool::getName(), HelpTool{}},         {LatencyTest::getName(), LatencyTest{}},
-    {PerfTestTool::getName(), PerfTestTool{}}, {QdsTool::getName(), QdsTool{}},
+    {PerfTestTool::getName(), PerfTestTool{}}, {PerfTest2Tool::getName(), PerfTest2Tool{}},
+    {QdsTool::getName(), QdsTool{}},           {EventGenTool::getName(), EventGenTool{}},
 };
 
 const std::vector<std::string> tools::HelpTool::ALL_TOOL_NAMES =
-    tools::HelpTool::ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
+    ALL_TOOLS | ranges::views::keys | ranges::to<std::vector<std::string>>();
 
 const std::set<std::string> HelpTool::ALL_NAMES =
     ranges::views::concat(ALL_ARTICLE_NAMES, ALL_TOOL_NAMES) | ranges::to<std::set>;

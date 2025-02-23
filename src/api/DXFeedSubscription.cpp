@@ -13,6 +13,7 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 #include <utility>
+#include "dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -71,6 +72,9 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
 }
 
 DXFeedSubscription::DXFeedSubscription() : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", 1);
+#endif
 }
 
 DXFeedSubscription::DXFeedSubscription(const EventTypeEnum &eventType) : DXFeedSubscription() {
@@ -107,6 +111,10 @@ DXFeedSubscription::~DXFeedSubscription() {
     if (handle_) {
         close();
     }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", -1);
+#endif
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEnum &eventType) {
@@ -296,12 +304,20 @@ void DXFeedSubscription::setEventsBatchLimit(std::int32_t eventsBatchLimit) cons
 DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
     RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag)
     : DXFeedSubscription() {
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
+#endif
 }
 
 DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
     RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag, const EventTypeEnum &eventType,
     JavaObjectHandle<DXFeedSubscription> &&handle)
     : DXFeedSubscription(eventType, std::move(handle)) {
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
+#endif
 }
 
 std::string DXFeedTimeSeriesSubscription::toString() const {
@@ -321,6 +337,18 @@ void DXFeedTimeSeriesSubscription::setFromTime(std::int64_t fromTime) {
 
 void DXFeedTimeSeriesSubscription::setFromTime(std::chrono::milliseconds fromTime) {
     setFromTime(fromTime.count());
+}
+
+DXFeedTimeSeriesSubscription::~DXFeedTimeSeriesSubscription() {
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", -1);
+#endif
+}
+
+void DXFeedTimeSeriesSubscription::registerEntity() {
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
+#endif
 }
 
 DXFCPP_END_NAMESPACE

@@ -5,10 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <chrono>
 #include <cstdint>
-#include <iostream>
-#include <memory>
 #include <utility>
 #include <variant>
 
@@ -40,7 +37,7 @@ inline auto splitAndTrim = [](const std::string &s, char sep = ',') noexcept {
 };
 
 template <typename R> struct ParseResult {
-    static const std::size_t LAST_INDEX{static_cast<std::size_t>(-1)};
+    static constexpr std::size_t LAST_INDEX{static_cast<std::size_t>(-1)};
     R result{};
     std::string errorString{};
     bool isError{};
@@ -104,23 +101,29 @@ struct Arg {
     }
 };
 
-struct PositionalArg : Arg {
-    template <typename A>
+template <std::size_t POSITION = 0> struct PositionalArg : Arg {
+    static constexpr std::size_t getPosition() noexcept {
+        return POSITION;
+    }
+
+    template <typename>
     static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args) noexcept {
-        return ParseResult<std::optional<std::string>>::ok(args.size() > A::POSITION ? std::optional{args[A::POSITION]}
-                                                                                     : std::nullopt);
+        return ParseResult<std::optional<std::string>>::ok(args.size() > POSITION ? std::optional{args[POSITION]}
+                                                                                  : std::nullopt);
     }
 };
 
 struct RequiredMixin {
     template <typename A>
+        requires requires { A::getPosition(); }
     static ParseResult<std::string> defaultParseImpl(const std::vector<std::string> &args) noexcept {
-        return ParseResult<std::string>::ok(args[A::POSITION]);
+        return ParseResult<std::string>::ok(args[A::getPosition()]);
     }
 
     template <typename A, auto parseImpl = defaultParseImpl<A>>
+        requires requires { A::getPosition(); }
     static ParseResult<std::string> parse(const std::vector<std::string> &args) noexcept {
-        if (args.size() > A::POSITION) {
+        if (args.size() > A::getPosition()) {
             return parseImpl(args);
         }
 
@@ -175,7 +178,7 @@ struct NamedUnsignedIntArg : NamedArg {
         if ((!A::SHORT_NAME.empty() && args[index] == "-" + A::SHORT_NAME) ||
             (!A::LONG_NAME.empty() && args[index] == "--" + A::LONG_NAME)) {
             try {
-                auto res = std::stoull(args[index + 1]);
+                const auto res = std::stoull(args[index + 1]);
 
                 if (res >= std::numeric_limits<std::size_t>::max()) {
                     return ParseResult<std::optional<std::size_t>>::ok(std::nullopt, index);
@@ -207,7 +210,7 @@ struct FlagArg : NamedArg {
     }
 };
 
-struct TailArg : PositionalArg, RequiredMixin {
+template <std::size_t POSITION = 0> struct TailArg : PositionalArg<POSITION>, RequiredMixin {
     template <typename A> static ParseResult<std::string> parse(const std::vector<std::string> &args) noexcept {
         return RequiredMixin::parse<A, [](const std::vector<std::string> &args) noexcept {
             return ParseResult<std::string>::ok(args | ranges::views::join(std::string(" ")) | ranges::to<std::string>,
@@ -216,9 +219,8 @@ struct TailArg : PositionalArg, RequiredMixin {
     }
 };
 
-struct AddressArg : PositionalArg {
+template <std::size_t POSITION = 0> struct AddressArg : PositionalArg<POSITION> {
     const static std::string NAME;
-    const static std::size_t POSITION;
     const static std::string HELP_TEXT;
 
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
@@ -236,11 +238,19 @@ struct AddressArg : PositionalArg {
     }
 
     static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args) {
-        return PositionalArg::parse<AddressArg>(args);
+        return PositionalArg<POSITION>::template parse<AddressArg>(args);
     }
 };
 
-struct AddressArgRequired : AddressArg, RequiredMixin {
+template <std::size_t POSITION> const std::string AddressArg<POSITION>::NAME{"address"};
+
+template <std::size_t POSITION>
+const std::string AddressArg<POSITION>::HELP_TEXT{R"(
+The address(es) to connect to retrieve data (see "Help address").
+For Token-Based Authorization, use the following format: "<address>:<port>[login=entitle:<token>]".
+)"};
+
+template <std::size_t POSITION = 0> struct AddressArgRequired : AddressArg<POSITION>, RequiredMixin {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t windowSize) noexcept {
@@ -248,7 +258,7 @@ struct AddressArgRequired : AddressArg, RequiredMixin {
     }
 
     [[nodiscard]] static std::string getFullHelpText() noexcept {
-        return fmt::format("Required. {}", trimStr(HELP_TEXT));
+        return fmt::format("Required. {}", trimStr(AddressArg<POSITION>::HELP_TEXT));
     }
 
     static ParseResult<std::string> parse(const std::vector<std::string> &args) {
@@ -256,9 +266,8 @@ struct AddressArgRequired : AddressArg, RequiredMixin {
     }
 };
 
-struct TypesArg : PositionalArg {
+template <std::size_t POSITION = 1> struct TypesArg : PositionalArg<POSITION> {
     const static std::string NAME;
-    const static std::size_t POSITION;
     const static std::string HELP_TEXT;
 
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
@@ -276,11 +285,19 @@ struct TypesArg : PositionalArg {
     }
 
     static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args) {
-        return PositionalArg::parse<TypesArg>(args);
+        return PositionalArg<POSITION>::template parse<TypesArg>(args);
     }
 };
 
-struct TypesArgRequired : TypesArg, RequiredMixin {
+template <std::size_t POSITION> const std::string TypesArg<POSITION>::NAME{"types"};
+
+template <std::size_t POSITION>
+const std::string TypesArg<POSITION>::HELP_TEXT{R"(
+Comma-separated list of dxfeed event types (e.g. Quote, TimeAndSale).
+Use "all" for all available event types.
+)"};
+
+template <std::size_t POSITION = 1> struct TypesArgRequired : TypesArg<POSITION>, RequiredMixin {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t windowSize) noexcept {
@@ -288,7 +305,7 @@ struct TypesArgRequired : TypesArg, RequiredMixin {
     }
 
     [[nodiscard]] static std::string getFullHelpText() noexcept {
-        return fmt::format("Required. {}", trimStr(HELP_TEXT));
+        return fmt::format("Required. {}", trimStr(TypesArg<POSITION>::HELP_TEXT));
     }
 
     static ParseResult<std::string> parse(const std::vector<std::string> &args) {
@@ -296,9 +313,8 @@ struct TypesArgRequired : TypesArg, RequiredMixin {
     }
 };
 
-struct SymbolsArg : PositionalArg {
+template <std::size_t POSITION = 2> struct SymbolsArg : PositionalArg<POSITION> {
     const static std::string NAME;
-    const static std::size_t POSITION;
     const static std::string HELP_TEXT;
 
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
@@ -316,11 +332,20 @@ struct SymbolsArg : PositionalArg {
     }
 
     static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args) {
-        return PositionalArg::parse<SymbolsArg>(args);
+        return PositionalArg<POSITION>::template parse<SymbolsArg>(args);
     }
 };
 
-struct SymbolsArgRequired : SymbolsArg, RequiredMixin {
+template <std::size_t POSITION> const std::string SymbolsArg<POSITION>::NAME{"symbols"};
+
+template <std::size_t POSITION>
+const std::string SymbolsArg<POSITION>::HELP_TEXT{R"(
+Comma-separated list of symbol names to get events for (e.g. "IBM, AAPL, MSFT").
+Use "all" for wildcard subscription. The "dxfeed.wildcard.enable" property must be set to true to enable wildcard subscription.
+A symbol filter set format can also be used as symbols source, for example: "ipf[https://demo:demo@tools.dxfeed.com/ipf?TYPE=STOCK]"
+)"};
+
+template <std::size_t POSITION = 2> struct SymbolsArgRequired : SymbolsArg<POSITION>, RequiredMixin {
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t windowSize) noexcept {
@@ -328,7 +353,7 @@ struct SymbolsArgRequired : SymbolsArg, RequiredMixin {
     }
 
     [[nodiscard]] static std::string getFullHelpText() noexcept {
-        return fmt::format("Required. {}", trimStr(HELP_TEXT));
+        return fmt::format("Required. {}", trimStr(SymbolsArg<POSITION>::HELP_TEXT));
     }
 
     static ParseResult<std::string> parse(const std::vector<std::string> &args) {
@@ -610,9 +635,8 @@ struct HelpArg : FlagArg {
     }
 };
 
-struct ArticleArgRequired : TailArg {
+template <std::size_t POSITION = 0> struct ArticleArgRequired : TailArg<POSITION> {
     const static std::string NAME;
-    const static std::size_t POSITION;
     const static std::string HELP_TEXT;
 
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
@@ -630,13 +654,19 @@ struct ArticleArgRequired : TailArg {
     }
 
     static ParseResult<std::string> parse(const std::vector<std::string> &args) {
-        return TailArg::parse<ArticleArgRequired>(args);
+        return TailArg<POSITION>::template parse<ArticleArgRequired>(args);
     }
 };
 
-struct QdsArgs : PositionalArg, RequiredMixin {
+template <std::size_t POSITION> const std::string ArticleArgRequired<POSITION>::NAME{"article"};
+
+template <std::size_t POSITION>
+const std::string ArticleArgRequired<POSITION>::HELP_TEXT{R"(
+Help article to show.
+)"};
+
+template <std::size_t POSITION = 0> struct QdsArgs : PositionalArg<POSITION>, RequiredMixin {
     const static std::string NAME;
-    const static std::size_t POSITION;
     const static std::string HELP_TEXT;
 
     [[nodiscard]] static std::string getFullName() noexcept {
@@ -658,10 +688,18 @@ struct QdsArgs : PositionalArg, RequiredMixin {
     }
 };
 
+template <std::size_t POSITION> const std::string QdsArgs<POSITION>::NAME{"qds-args"};
+
+template <std::size_t POSITION>
+const std::string QdsArgs<POSITION>::HELP_TEXT{R"(
+Represents the arguments passed to the qds-tools.
+)"};
+
 using ArgType =
-    std::variant<tools::AddressArg, tools::AddressArgRequired, tools::TypesArg, tools::TypesArgRequired,
-                 tools::SymbolsArg, tools::SymbolsArgRequired, tools::PropertiesArg, tools::FromTimeArg,
-                 tools::SourceArg, tools::TapeArg, tools::QuiteArg, tools::ForceStreamArg, tools::CPUUsageByCoreArg,
-                 tools::DetachListenerArg, tools::IntervalArg, tools::HelpArg, tools::ArticleArgRequired, QdsArgs>;
+    std::variant<tools::AddressArg<>, tools::AddressArgRequired<>, tools::TypesArg<>, tools::TypesArgRequired<>,
+                 tools::SymbolsArg<>, tools::SymbolsArgRequired<>, tools::SymbolsArgRequired<1>, tools::PropertiesArg,
+                 tools::FromTimeArg, tools::SourceArg, tools::TapeArg, tools::QuiteArg, tools::ForceStreamArg,
+                 tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg, tools::HelpArg,
+                 tools::ArticleArgRequired<>, QdsArgs<>>;
 
 } // namespace dxfcpp::tools

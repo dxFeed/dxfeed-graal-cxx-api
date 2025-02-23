@@ -47,6 +47,12 @@ struct RemoveAllPointers
 
 template <typename T> using RemoveAllPointers = typename detail::RemoveAllPointers<T>::type;
 
+template<class... Ts>
+struct Overloads : Ts... { using Ts::operator()...; };
+
+template<class... Ts>
+Overloads(Ts...) -> Overloads<Ts...>;
+
 struct DXFeedEventListener {};
 
 struct DXEndpointStateChangeListener {};

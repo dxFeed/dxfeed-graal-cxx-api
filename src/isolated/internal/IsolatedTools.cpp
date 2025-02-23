@@ -9,6 +9,11 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+
+void gc() {
+    isolated::runGraalFunction(dxfg_gc);
+}
+
 namespace isolated::internal::IsolatedTools {
 std::unordered_set<std::string> /* dxfg_string_list* */
 parseSymbols(std::string_view symbolList) {
@@ -18,6 +23,22 @@ parseSymbols(std::string_view symbolList) {
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
+    }
+
+    IsolatedStringList::release(graalStringList);
+
+    return result;
+}
+
+std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList) {
+    std::vector<std::string> result{};
+
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
+
+    result.reserve(graalStringList->size);
+
+    for (auto i = 0; i < graalStringList->size; i++) {
+        result.emplace_back(dxfcpp::toString(graalStringList->elements[i]));
     }
 
     IsolatedStringList::release(graalStringList);

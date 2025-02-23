@@ -181,6 +181,26 @@ DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_p
     return isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, list);
 }
 
+DXFeed::DXFeed() noexcept : handle_{} {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXFeed()");
+    }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", 1);
+#endif
+}
+
+DXFeed::~DXFeed() noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXFeed{" + handle_.toString() + "}::~DXFeed()");
+    }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", -1);
+#endif
+}
+
 std::string DXFeed::toString() const {
     return fmt::format("DXFeed{{{}}}", handle_.toString());
 }

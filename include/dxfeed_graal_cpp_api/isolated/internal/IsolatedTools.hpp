@@ -25,6 +25,8 @@ namespace isolated::internal::IsolatedTools {
  */
 std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(std::string_view symbolList);
 
+std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList);
+
 /**
  * Calls the Graal SDK function `dxfg_Tools_main` in isolation.
  *

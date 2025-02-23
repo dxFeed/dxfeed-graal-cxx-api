@@ -5,6 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -42,13 +43,16 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
 std::shared_ptr<ObservableSubscription> DXPublisher::getSubscription(const EventTypeEnum &eventType) {
     std::lock_guard guard{mutex_};
 
-    if (subscription_) {
-        return subscription_;
+    if (subscriptions_.contains(eventType)) {
+        return subscriptions_.at(eventType);
     }
 
-    subscription_ = DXPublisherObservableSubscription::create(isolated::api::IsolatedDXPublisher::getSubscription(handle_, eventType));
+    auto sub = DXPublisherObservableSubscription::create(
+        isolated::api::IsolatedDXPublisher::getSubscription(handle_, eventType));
 
-    return subscription_;
+    subscriptions_.emplace(std::cref(eventType), sub);
+
+    return sub;
 }
 
 std::string DXPublisher::toString() const {
@@ -60,5 +64,26 @@ void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
 
     isolated::api::IsolatedDXPublisher::publishEvents(handle_, graalEventsList);
 }
+
+DXPublisher::DXPublisher() noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXPublisher()");
+    }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", 1);
+#endif
+}
+
+DXPublisher::~DXPublisher() noexcept {
+    if constexpr (Debugger::isDebug) {
+        Debugger::debug("DXPublisher{" + handle_.toString() + "}::~DXPublisher()");
+    }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", -1);
+#endif
+}
+
 
 DXFCPP_END_NAMESPACE

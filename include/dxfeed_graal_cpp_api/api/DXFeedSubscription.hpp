@@ -787,11 +787,15 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSubscription>, public DXFeedSubscription {
     std::atomic<std::int64_t> fromTime_{std::numeric_limits<std::int64_t>::max()};
 
+    static void registerEntity();
+
   public:
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag lockTag);
 
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag lockTag,
                                  const EventTypeEnum &eventType, JavaObjectHandle<DXFeedSubscription> &&handle);
+
+    ~DXFeedTimeSeriesSubscription() override;
 
     template <typename EventTypeIt>
 #if __cpp_concepts
@@ -802,6 +806,7 @@ class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSu
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag,
                                  EventTypeIt begin, EventTypeIt end, JavaObjectHandle<DXFeedSubscription> &&handle)
         : DXFeedSubscription(begin, end, std::move(handle)) {
+        registerEntity();
     }
 
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag lockTag,

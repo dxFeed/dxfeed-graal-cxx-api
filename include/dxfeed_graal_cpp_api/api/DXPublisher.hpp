@@ -71,24 +71,17 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
   private:
     mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<DXPublisher> handle_;
-    std::shared_ptr<ObservableSubscription> subscription_{};
+    std::unordered_map<std::reference_wrapper<const dxfcpp::EventTypeEnum>, std::shared_ptr<ObservableSubscription>>
+        subscriptions_{};
 
     static std::shared_ptr<DXPublisher> create(void *handle);
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
   protected:
-    DXPublisher() noexcept {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXPublisher()");
-        }
-    }
+    DXPublisher() noexcept;
 
   public:
-    ~DXPublisher() noexcept override {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXPublisher{" + handle_.toString() + "}::~DXPublisher()");
-        }
-    }
+    ~DXPublisher() noexcept override;
 
     /**
      * Returns a default application-wide singleton instance of DXPublisher. Most applications use only a single
@@ -231,12 +224,12 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * <p> If DXFeedTimeSeriesSubscription is used to subscribe to time-service of the events of this type, then
      * instances of TimeSeriesSubscriptionSymbol class represent the corresponding subscription item.
      *
-     * <p> The resulting observable subscription can generate repeated ObservableSubscriptionChangeListener::onSymbolsAdded_ notifications to
-     * its listeners for the same symbols without the corresponding ObservableSubscriptionChangeListener::onSymbolsRemoved_
-     * notifications in between them. It happens when subscription disappears, cached data is lost, and subscription
-     * reappears again. On each ObservableSubscriptionChangeListener::onSymbolsAdded_
-     * notification data provider shall @ref DXPublisher::publishEvents() "publish" the most recent events for
-     * the corresponding symbols.
+     * <p> The resulting observable subscription can generate repeated
+     * ObservableSubscriptionChangeListener::onSymbolsAdded_ notifications to its listeners for the same symbols without
+     * the corresponding ObservableSubscriptionChangeListener::onSymbolsRemoved_ notifications in between them. It
+     * happens when subscription disappears, cached data is lost, and subscription reappears again. On each
+     * ObservableSubscriptionChangeListener::onSymbolsAdded_ notification data provider shall @ref
+     * DXPublisher::publishEvents() "publish" the most recent events for the corresponding symbols.
      *
      * @param eventType The event type.
      * @return Observable subscription for the specified event type.

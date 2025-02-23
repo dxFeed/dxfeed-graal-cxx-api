@@ -15,9 +15,7 @@
 
 #include <process/process.hpp>
 
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
 #include <fmt/std.h>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
@@ -26,9 +24,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {
 
-struct PerfTestTool {
-    static inline auto FORMAT_NAME = "PerfTest.format";                              // csv, normal
-    static inline auto UNSUBSCRIBE_AFTER_SECONDS_NAME = "PerfTest.unsubscribeAfter"; // (seconds) 60, 180, etc
+struct PerfTest2Tool {
+    static inline auto NUMBER_OF_SYMBOLS_PROPERTY_NAME = "PerfTest2.numberOfSymbols";
+    static inline auto SHUFFLE_NAME = "PerfTest2.shuffle";
+    static inline auto FORMAT_NAME = "PerfTest2.format"; // csv, normal
     static const std::string NAME;
     static const std::string SHORT_DESCRIPTION;
     static const std::string DESCRIPTION;
@@ -93,10 +92,10 @@ struct PerfTestTool {
 
             if (dumpCsv_) {
                 fmt::println("{},{},{},{},{:.3f},{:.3f},{:.2f},{:.2f},{:%H:%M:%S},{}", formatTimeStampFast(now()),
-                             formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
-                             formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage,
-                             peakMemoryUsage_, currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
-                             ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event"));
+                           formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
+                           formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage, peakMemoryUsage_,
+                           currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
+                           ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event"));
             } else {
                 fmt::print("\n{}\n", Platform::getPlatformInfo());
                 std::cout << "----------------------------------------------------\n";
@@ -158,8 +157,7 @@ struct PerfTestTool {
                    "[%],Peak CPU usage [%],Running time,Entity.Event";
         }
 
-        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore,
-                                                  bool dumpCsv) {
+        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore, bool dumpCsv) {
             auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore, dumpCsv));
 
             d->timer_ = Timer::schedule(
@@ -182,7 +180,6 @@ struct PerfTestTool {
 
     struct Args {
         std::string address{};
-        std::string types{};
         std::string symbols{};
         std::optional<std::string> properties{};
         bool forceStream{};
@@ -204,15 +201,7 @@ struct PerfTestTool {
 
             index++;
 
-            auto parsedTypes = TypesArgRequired<>::parse(args);
-
-            if (parsedTypes.isError) {
-                return ParseResult<Args>::error(parsedTypes.errorString);
-            }
-
-            index++;
-
-            auto parsedSymbols = SymbolsArgRequired<>::parse(args);
+            auto parsedSymbols = SymbolsArgRequired<1>::parse(args);
 
             if (parsedSymbols.isError) {
                 return ParseResult<Args>::error(parsedSymbols.errorString);
@@ -234,16 +223,19 @@ struct PerfTestTool {
                     propertiesIsParsed = true;
                     index = parseResult.nextIndex;
                 } else {
+                    // ReSharper disable once CppUsingResultOfAssignmentAsCondition
                     if (!forceStream && (forceStream = ForceStreamArg::parse(args, index).result)) {
                         index++;
                         continue;
                     }
 
+                    // ReSharper disable once CppUsingResultOfAssignmentAsCondition
                     if (!showCpuUsageByCore && (showCpuUsageByCore = CPUUsageByCoreArg::parse(args, index).result)) {
                         index++;
                         continue;
                     }
 
+                    // ReSharper disable once CppUsingResultOfAssignmentAsCondition
                     if (!detachListener && (detachListener = DetachListenerArg::parse(args, index).result)) {
                         index++;
                         continue;
@@ -253,27 +245,35 @@ struct PerfTestTool {
                 }
             }
 
-            return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties,
-                                          forceStream, showCpuUsageByCore, detachListener});
+            return ParseResult<Args>::ok({parsedAddress.result, parsedSymbols.result, properties, forceStream,
+                                          showCpuUsageByCore, detachListener});
         }
     };
 
     static void run(const Args &args) noexcept {
+        std::random_device rd;
+        std::mt19937 gen{rd()};
+
         try {
             using namespace std::literals;
 
             auto parsedProperties = CmdArgsUtils::parseProperties(args.properties);
+            std::size_t numberOfSymbols = 10000; // -p PerfTest2.numberOfSymbols
+
+            if (parsedProperties.contains(NUMBER_OF_SYMBOLS_PROPERTY_NAME)) {
+                numberOfSymbols = std::stoull(parsedProperties[NUMBER_OF_SYMBOLS_PROPERTY_NAME]);
+            }
+
+            auto shuffle = false; // -p PerfTest2.shuffle
+
+            if (parsedProperties.contains(SHUFFLE_NAME)) {
+                shuffle = toBool(parsedProperties[SHUFFLE_NAME]);
+            }
 
             auto dumpCsv = false;
 
             if (parsedProperties.contains(FORMAT_NAME)) {
                 dumpCsv = iEquals(parsedProperties[FORMAT_NAME], "csv");
-            }
-
-            auto unsubscribeAfter = 0;
-
-            if (parsedProperties.contains(UNSUBSCRIBE_AFTER_SECONDS_NAME)) {
-                unsubscribeAfter = std::stoi(parsedProperties[UNSUBSCRIBE_AFTER_SECONDS_NAME]);
             }
 
             Logging::init();
@@ -284,21 +284,15 @@ struct PerfTestTool {
                 fmt::println("{}", Diagnostic::getCsvHeader());
             }
 
-            auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(args.types);
+            auto parsedSymbols = CmdArgsUtils::parseSymbolsAndSaveOrder(args.symbols);
 
-            if (!unknownTypes.empty()) {
-                auto unknown = elementsToString(unknownTypes.begin(), unknownTypes.end(), "", "");
-
-                throw InvalidArgumentException(
-                    fmt::format("There are unknown event types: {}!\n List of available event types: {}", unknown,
-                                enum_utils::getEventTypeEnumClassNamesList(", ")));
+            if (parsedSymbols.size() > numberOfSymbols) {
+                parsedSymbols.resize(numberOfSymbols);
             }
 
-            if (parsedTypes.empty()) {
-                throw InvalidArgumentException("The resulting list of types is empty!");
+            if (shuffle) {
+                ranges::shuffle(parsedSymbols, gen);
             }
-
-            auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols);
 
             auto endpoint =
                 DXEndpoint::newBuilder()
@@ -308,7 +302,11 @@ struct PerfTestTool {
                     ->withName(NAME + "Tool-Feed")
                     ->build();
 
-            auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
+            auto sub = endpoint->getFeed()->createSubscription(
+                //{Trade::TYPE, TradeETH::TYPE, Quote::TYPE, Summary::TYPE, Profile::TYPE, Candle::TYPE});
+                {Trade::TYPE, TradeETH::TYPE, Quote::TYPE, Summary::TYPE, Profile::TYPE});
+            auto sub2 = endpoint->getFeed()->createSubscription({TimeAndSale::TYPE});
+            // auto sub3 = endpoint->getFeed()->createSubscription({Candle::TYPE});
             auto diagnostic = Diagnostic::create(2s, args.showCpuUsageByCore, dumpCsv);
 
             std::atomic<std::size_t> hash{};
@@ -322,22 +320,49 @@ struct PerfTestTool {
                         hash += std::hash<std::shared_ptr<EventType>>{}(e);
                     }
                 });
+
+                sub2->addEventListener([d = diagnostic, &hash](auto &&events) {
+                    d->addListenerCallsCounter(1);
+                    d->addEventsCounter(events.size());
+
+                    for (auto &&e : events) {
+                        hash += std::hash<std::shared_ptr<EventType>>{}(e);
+                    }
+                });
+
+                // sub3->addEventListener([d = diagnostic, &hash](auto &&events) {
+                //     d->addListenerCallsCounter(1);
+                //     d->addEventsCounter(events.size());
+                //
+                //     for (auto &&e : events) {
+                //         hash += std::hash<std::shared_ptr<EventType>>{}(e);
+                //     }
+                // });
             }
 
+            static auto fromTime = (std::chrono::milliseconds(now()) - std::chrono::days(3)).count();
+
             sub->addSymbols(parsedSymbols);
+            sub->addSymbols(parsedSymbols | ranges::views::transform([](auto &&s) {
+                                return TimeSeriesSubscriptionSymbol(
+                                    CandleSymbol::valueOf(s.asStringSymbol(), {CandlePeriod::DAY}).toString(),
+                                    fromTime);
+                            }));
+            sub2->addSymbols(parsedSymbols);
+            // sub3->addSymbols(
+            //     parsedSymbols | ranges::views::transform([](auto &&s) {
+            //         return TimeSeriesSubscriptionSymbol(
+            //             CandleSymbol::valueOf(s.asStringSymbol(), {CandlePeriod::valueOf(1,
+            //             CandleType::MINUTE)}).toString(), fromTime);
+            //     }));
+
             endpoint->connect(args.address);
 
-            std::shared_ptr<Timer> unsubscribeTimer{};
+            while (true) {
+                std::cin.ignore();
 
-            if (unsubscribeAfter > 0) {
-                // ReSharper disable once CppDFAUnusedValue
-                unsubscribeTimer = Timer::runOnce(
-                    [sub, parsedSymbols] {
-                        sub->removeSymbols(parsedSymbols);
-                        gc();
-                        sub->close();
-                    },
-                    std::chrono::seconds(unsubscribeAfter));
+                std::cerr << "============================= GC =============================" << std::endl;
+                gc();
             }
 
             endpoint->awaitNotConnected();

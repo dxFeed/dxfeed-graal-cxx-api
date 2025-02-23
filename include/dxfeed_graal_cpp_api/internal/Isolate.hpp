@@ -280,6 +280,8 @@ auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
                                                     std::forward<Args>(args)...);
 }
 
+DXFCPP_EXPORT void gc();
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -11,6 +11,7 @@
 #include "Help/HelpTool.hpp"
 #include "LatencyTest/LatencyTestTool.hpp"
 #include "PerfTest/PerfTestTool.hpp"
+#include "PerfTest2/PerfTest2Tool.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -37,7 +38,7 @@ struct Tools {
     static const std::string DESCRIPTION;
     static const std::vector<std::string> USAGE;
     static const std::vector<std::string> ADDITIONAL_INFO;
-    static const std::vector<tools::HelpTool::Tool> ARGS;
+    static const std::vector<HelpTool::Tool> ARGS;
 
     [[nodiscard]] static std::string getName() noexcept {
         return "Tools " DXFCXX_VERSION;

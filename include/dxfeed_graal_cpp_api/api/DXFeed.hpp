@@ -146,18 +146,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
   protected:
-    DXFeed() noexcept : handle_{} {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeed()");
-        }
-    }
+    DXFeed() noexcept;
 
   public:
-    ~DXFeed() noexcept override {
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("DXFeed{" + handle_.toString() + "}::~DXFeed()");
-        }
-    }
+    ~DXFeed() noexcept override;
 
     /**
      * Returns a default application-wide singleton instance of feed. Most applications use only a single

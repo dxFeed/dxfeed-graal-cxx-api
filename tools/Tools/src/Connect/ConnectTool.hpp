@@ -7,14 +7,11 @@
 
 #include "../Args/Args.hpp"
 
-#include <chrono>
-#include <cstdint>
 #include <iostream>
 #include <memory>
 #include <utility>
 #include <variant>
 
-#include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
@@ -66,7 +63,7 @@ struct ConnectTool {
                 return ParseResult<Args>::help();
             }
 
-            auto parsedAddress = AddressArgRequired::parse(args);
+            auto parsedAddress = AddressArgRequired<>::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
@@ -74,7 +71,7 @@ struct ConnectTool {
 
             index++;
 
-            auto parsedTypes = TypesArgRequired::parse(args);
+            auto parsedTypes = TypesArgRequired<>::parse(args);
 
             if (parsedTypes.isError) {
                 return ParseResult<Args>::error(parsedTypes.errorString);
@@ -82,7 +79,7 @@ struct ConnectTool {
 
             index++;
 
-            auto parsedSymbols = SymbolsArgRequired::parse(args);
+            auto parsedSymbols = SymbolsArgRequired<>::parse(args);
 
             if (parsedSymbols.isError) {
                 return ParseResult<Args>::error(parsedSymbols.errorString);
@@ -101,7 +98,7 @@ struct ConnectTool {
             bool isQuite{};
             bool forceStream{};
 
-            for (; index < args.size();) {
+            while (index < args.size()) {
                 if (!fromTimeIsParsed && FromTimeArg::canParse(args, index)) {
                     auto parseResult = FromTimeArg::parse(args, index);
 
@@ -127,11 +124,13 @@ struct ConnectTool {
                     tapeIsParsed = true;
                     index = parseResult.nextIndex;
                 } else {
+                    // ReSharper disable once CppUsingResultOfAssignmentAsCondition
                     if (!isQuite && (isQuite = QuiteArg::parse(args, index).result)) {
                         index++;
                         continue;
                     }
 
+                    // ReSharper disable once CppUsingResultOfAssignmentAsCondition
                     if (!forceStream && (forceStream = ForceStreamArg::parse(args, index).result)) {
                         index++;
                         continue;

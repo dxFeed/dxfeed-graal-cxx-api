@@ -63,7 +63,7 @@ struct DumpTool {
                 return ParseResult<Args>::help();
             }
 
-            auto parsedAddress = AddressArgRequired::parse(args);
+            auto parsedAddress = AddressArgRequired<>::parse(args);
 
             if (parsedAddress.isError) {
                 return ParseResult<Args>::error(parsedAddress.errorString);
@@ -78,13 +78,13 @@ struct DumpTool {
                 types = std::nullopt;
                 symbols = std::nullopt;
             } else {
-                auto parsedTypes = TypesArg::parse(args);
+                auto parsedTypes = TypesArg<>::parse(args);
 
                 if (parsedTypes.result.has_value()) {
                     index++;
                 }
 
-                auto parsedSymbols = SymbolsArg::parse(args);
+                auto parsedSymbols = SymbolsArg<>::parse(args);
 
                 if (parsedSymbols.result.has_value()) {
                     index++;
@@ -114,6 +114,7 @@ struct DumpTool {
                     tapeIsParsed = true;
                     index = parseResult.nextIndex;
                 } else {
+                    // ReSharper disable once CppUsingResultOfAssignmentAsCondition
                     if (!isQuite && (isQuite = QuiteArg::parse(args, index).result)) {
                         index++;
                         continue;

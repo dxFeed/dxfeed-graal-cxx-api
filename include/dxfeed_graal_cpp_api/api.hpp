@@ -36,6 +36,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "internal/utils/StringUtils.hpp"
 #include "internal/utils/debug/Debug.hpp"
 
+#include "internal/Metrics.hpp"
+
 #include "util/TimePeriod.hpp"
 
 #include "api/ApiModule.hpp"

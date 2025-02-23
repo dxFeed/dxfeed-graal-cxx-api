@@ -14,8 +14,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <optional>
 #include <string>
 #include <thread>
-#include <vector>
 #include <type_traits>
+#include <vector>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -186,6 +186,8 @@ DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp);
 
 DXFCPP_EXPORT std::string formatTimeStampWithTimeZone(std::int64_t timestamp);
 
+DXFCPP_EXPORT std::string formatTimeStampFast(std::int64_t timestamp);
+
 DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
 
 DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
@@ -290,6 +292,12 @@ DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
 }
 
 DXFCPP_EXPORT std::string trimStr(const std::string &s) noexcept;
+
+DXFCPP_EXPORT std::vector<std::string> splitStr(const std::string &s, char sep = ',') noexcept;
+
+DXFCPP_EXPORT std::string joinStr(const std::vector<std::string> &v, const std::string &sep = ", ") noexcept;
+
+DXFCPP_EXPORT bool toBool(const std::string &s) noexcept;
 
 DXFCPP_END_NAMESPACE
 

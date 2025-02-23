@@ -13,7 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_set>
 
 #include "../Common.hpp"
-
+#include "../Id.hpp"
 #include "../NonCopyable.hpp"
 
 DXFCPP_BEGIN_NAMESPACE

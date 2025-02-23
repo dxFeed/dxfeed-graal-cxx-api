@@ -4,10 +4,7 @@
 #include <dxfg_api.h>
 
 #include <dxfeed_graal_c_api/api.h>
-
-#include <dxfeed_graal_cpp_api/api/DXEndpoint.hpp>
-#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp>
-#include <dxfeed_graal_cpp_api/system/System.hpp>
+#include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <memory>
 #include <string>
@@ -52,7 +49,7 @@ static DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
 }
 
 struct DXEndpoint::Impl {
-    static inline std::mutex MTX{};
+    static std::mutex MTX;
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
@@ -114,6 +111,7 @@ struct DXEndpoint::Impl {
     }
 };
 
+std::mutex DXEndpoint::Impl::MTX{};
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::Impl::INSTANCES{};
 
 std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
@@ -345,12 +343,20 @@ DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept : handle_{}, 
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder::Builder()");
     }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", 1);
+#endif
 }
 
 DXEndpoint::Builder::~Builder() noexcept {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::~Builder()");
     }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", -1);
+#endif
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::string &name) {
@@ -405,6 +411,10 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag)
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint()");
     }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
+#endif
 }
 
 DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name)
@@ -415,12 +425,20 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint>
     }
 
     handle_ = std::move(handle);
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
+#endif
 }
 
 DXEndpoint::~DXEndpoint() noexcept {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::~DXEndpoint()");
     }
+
+#if defined(DXFCXX_ENABLE_METRICS)
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", -1);
+#endif
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::getInstance() {
