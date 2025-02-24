@@ -182,6 +182,13 @@ DXFeed::getIndexedEventsIfSubscribedImpl(const EventTypeEnum &eventType, const S
     return isolated::api::IsolatedDXFeed::getIndexedEventsIfSubscribed(handle_, eventType, symbol, source);
 }
 
+std::vector<std::shared_ptr<EventType>> DXFeed::getTimeSeriesIfSubscribedImpl(const EventTypeEnum &eventType,
+                                                                                    const SymbolWrapper &symbol,
+                                                                                    std::int64_t fromTime,
+                                                                                    std::int64_t toTime) const {
+    return isolated::api::IsolatedDXFeed::getTimeSeriesIfSubscribed(handle_, eventType, symbol, fromTime, toTime);
+}
+
 JavaObjectHandle<DXFeedSubscription>
 DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) {
     return isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, list);
