@@ -97,6 +97,29 @@ std::vector<std::shared_ptr<EventType>> getIndexedEventsIfSubscribed(const JavaO
     return EventMapper::fromGraalList(u.get());
 }
 
+// dxfg_event_type_list*  dxfg_DXFeed_getTimeSeriesIfSubscribed(graal_isolatethread_t *thread, dxfg_feed_t *feed,
+// dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, int64_t from_time, int64_t to_time);
+std::vector<std::shared_ptr<EventType>> getTimeSeriesIfSubscribed(const JavaObjectHandle<DXFeed> &feed,
+                                                                  const EventTypeEnum &eventType,
+                                                                  const SymbolWrapper &symbol, std::int64_t fromTime,
+                                                                  std::int64_t toTime) {
+    if (!feed) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeed_getTimeSeriesIfSubscribed`. The `feed` handle is invalid");
+    }
+
+    auto graalSymbol = symbol.toGraalUnique();
+
+    const auto list = static_cast<void *>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_DXFeed_getTimeSeriesIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
+                                          static_cast<dxfg_event_clazz_t>(eventType.getId()),
+                                          static_cast<dxfg_symbol_t *>(graalSymbol.get()), fromTime, toTime));
+
+    auto u = event::IsolatedEventTypeList::toUnique(list);
+
+    return EventMapper::fromGraalList(u.get());
+}
+
 // dxfg_DXFeed_getLastEvent
 /* int32_t */ std::shared_ptr<EventType> getLastEvent(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
                                                       /* dxfg_event_type_t * */ const StringLikeWrapper &symbolName,

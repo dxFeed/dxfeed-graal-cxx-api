@@ -1,4 +1,5 @@
 * **\[MDAPI-77]\[C++]** Added support for retrieving indexed events from feed
+* **\[MDAPI-78]\[C++]** Added support for retrieving time-series events from feed
 * **\[MDAPI-36]\[C++]** Implemented DXFeedTimeSeriesSubscription
     * Added `DXFeedTimeSeriesSubscription` class.
     * Added `DXFeed::createTimeSeriesSubscription` methods.
