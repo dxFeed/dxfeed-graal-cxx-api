@@ -9,7 +9,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
-#include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../promise/Promise.hpp"
@@ -17,7 +16,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "DXFeedSubscription.hpp"
 
 #include <memory>
-#include <mutex>
 #include <unordered_set>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -304,12 +302,12 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * symbol.
      */
     template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEventIfSubscribed(const SymbolWrapper &symbol) {
-        return getLastEventIfSubscribedImpl(E::TYPE, symbol)->template sharedAs<E>();
+        return getLastEventIfSubscribedImpl(E::TYPE, symbol)->sharedAs<E>();
     }
 
     /**
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
+     * This method creates new DXFeedSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -323,7 +321,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
+     * This method creates new DXFeedSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -354,6 +352,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("{}::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
@@ -366,7 +365,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
+     * This method creates new DXFeedSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -380,7 +379,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes @link DXFeed::attachSubscription.
+     * This method creates new DXFeedSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -400,6 +399,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::createSubscription(eventTypes = " +
                             namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
         }
@@ -413,7 +413,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for a single event type that is <i>attached</i> to this feed.
-     * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
+     * This method creates new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -427,7 +427,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
+     * This method creates new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -458,18 +458,19 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin, EventTypeIt end) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("{}::createTimeSeriesSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
         for (EventTypeIt iter = begin; iter != end; ++iter) {
             if (!iter->isTimeSeries()) {
-                throw dxfcpp::InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
-                                                       iter->getClassName() + " is not TimeSeries");
+                throw InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
+                                               iter->getClassName() + " is not TimeSeries");
             }
         }
 
         auto list = EventClassList::create(begin, end);
-        auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(
+        auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(
             begin, end, std::move(createTimeSeriesSubscriptionHandleFromEventClassList(list)));
         auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
 
@@ -482,7 +483,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
+     * This method creates new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -498,7 +499,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedTimeSeriesSubscription and invokes @link DXFeed::attachSubscription.
+     * This method creates new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -519,6 +520,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypesCollection &&eventTypes) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::createTimeSeriesSubscription(eventTypes = " +
                             namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
         }
@@ -945,8 +947,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param symbol The symbol.
      * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
      * @param toTime The time, inclusive, to request events to (see TimeSeriesEvent::getTime()).
-     *               Use `std::chrono::milliseconds(std::numeric_limits<std::int64_t>::max())` or
-     * `std::chrono::milliseconds(LLONG_MAX)` to retrieve events without an upper limit on time.
+     * Use `std::chrono::milliseconds(std::numeric_limits<std::int64_t>::max())`
+     * or `std::chrono::milliseconds(LLONG_MAX)` to retrieve events without an upper limit on time.
      * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol,
      * and time range.
      */
@@ -957,12 +959,30 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         return getTimeSeriesIfSubscribed<E>(symbol, fromTime.count(), toTime.count());
     }
 
+    /**
+     * Returns time series of events for the specified event type, symbol, and a range of time (without an upper limit
+     * on time) if there is a subscription for it.
+     * @tparam E The type of event.
+     * @param symbol The symbol.
+     * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
+     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol,
+     * and time range.
+     */
     template <Derived<TimeSeriesEvent> E>
     std::vector<std::shared_ptr<E>> getTimeSeriesIfSubscribed(const SymbolWrapper &symbol,
                                                               std::int64_t fromTime) const {
         return getTimeSeriesIfSubscribed<E>(symbol, fromTime, std::numeric_limits<std::int64_t>::max());
     }
 
+    /**
+     * Returns time series of events for the specified event type, symbol, and a range of time (without an upper limit
+     * on time) if there is a subscription for it.
+     * @tparam E The type of event.
+     * @param symbol The symbol.
+     * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
+     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol,
+     * and time range.
+     */
     template <Derived<TimeSeriesEvent> E>
     std::vector<std::shared_ptr<E>> getTimeSeriesIfSubscribed(const SymbolWrapper &symbol,
                                                               std::chrono::milliseconds fromTime) const {
