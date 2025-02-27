@@ -302,6 +302,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * symbol.
      */
     template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEventIfSubscribed(const SymbolWrapper &symbol) {
+        // https://youtrack.jetbrains.com/issue/RSCPP-15139
+        // ReSharper disable once CppRedundantTemplateKeyword
         return getLastEventIfSubscribedImpl(E::TYPE, symbol)->template sharedAs<E>();
     }
 
