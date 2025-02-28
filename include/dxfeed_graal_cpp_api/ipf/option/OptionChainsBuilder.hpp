@@ -279,6 +279,45 @@ template <class T> class OptionChainsBuilder {
     const std::unordered_map<std::string, OptionChain<T>> &getChains() {
         return chains_;
     }
+
+    /**
+     * Builds options chains for all options from the given collections of @ref InstrumentProfile "instrument profiles".
+     *
+     * @tparam Collection The collection type.
+     * @param instruments The collection of instrument profiles.
+     *
+     * @return The builder with all the options from instruments collection.
+     */
+    template <typename Collection, typename Element = std::decay_t<decltype(std::begin(Collection()))>,
+              typename Profile = std::decay_t<decltype(*Element())>>
+    static OptionChainsBuilder<InstrumentProfile> build(const Collection &instruments) {
+        static_assert(std::is_same_v<Element, std::shared_ptr<Profile>>,
+                      "The collection element must be of type `std::shared_ptr<InstrumentProfile>`");
+        OptionChainsBuilder<InstrumentProfile> ocb{};
+
+        for (const std::shared_ptr<InstrumentProfile> &ip : instruments) {
+            if ("OPTION" != ip->getType()) {
+                continue;
+            }
+
+            ocb.setProduct(ip->getProduct());
+            ocb.setUnderlying(ip->getUnderlying());
+            ocb.setExpiration(ip->getExpiration());
+            ocb.setLastTrade(ip->getLastTrade());
+            ocb.setMultiplier(ip->getMultiplier());
+            ocb.setSPC(ip->getSPC());
+            ocb.setAdditionalUnderlyings(ip->getAdditionalUnderlyings());
+            ocb.setMMY(ip->getMMY());
+            ocb.setOptionType(ip->getOptionType());
+            ocb.setExpirationStyle(ip->getExpirationStyle());
+            ocb.setSettlementStyle(ip->getSettlementStyle());
+            ocb.setCFI(ip->getCFI());
+            ocb.setStrike(ip->getStrike());
+            ocb.addOption(ip);
+        }
+
+        return ocb;
+    }
 };
 
 DXFCPP_END_NAMESPACE
