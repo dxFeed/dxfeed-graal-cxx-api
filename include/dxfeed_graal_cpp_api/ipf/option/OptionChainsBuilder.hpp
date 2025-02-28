@@ -32,8 +32,8 @@ template <class T> class OptionChainsBuilder {
     double strike_{};
     std::unordered_map<std::string, OptionChain<T>> chains_{};
 
-    OptionChain<T> &getOrCreateChain(const std::string &symbol) {
-        return *chains_.try_emplace(symbol, OptionChain<T>(symbol)).first;
+    OptionChain<T>& getOrCreateChain(const std::string &symbol) {
+        return chains_.try_emplace(symbol, OptionChain<T>(symbol)).first->second;
     }
 
   public:
@@ -224,7 +224,7 @@ template <class T> class OptionChainsBuilder {
      *
      * @param option The option to add.
      */
-    void addOption(const T &option) {
+    void addOption(std::shared_ptr<T> option) {
         bool isCall = cfi_.starts_with("OC");
 
         if (!isCall && !cfi_.starts_with("OP") /*is not put*/) {
@@ -249,28 +249,6 @@ template <class T> class OptionChainsBuilder {
     }
 
     /**
-     * Adds an option instrument to this builder.
-     *
-     * Option is added to chains for the currently set @ref ::setProduct() "product" and/or
-     * @ref ::setUnderlying() "underlying" to the @ref OptionSeries "series" that corresponding
-     * to all other currently set attributes. This method is safe in the sense that is ignores
-     * illegal state of the builder. It only adds an option when all the following conditions are met:
-     * <ul>
-     *  <li>@ref ::setCFI() "CFI code" is set and starts with either "OC" for call or "OP" for put;
-     *  <li>@ref ::setExpiration() "expiration" is set and is not zero;
-     *  <li>@ref ::setStrike() "strike" is set and is not NaN nor Inf;
-     *  <li>@ref ::setProduct() "product" or @ref ::setUnderlying() "underlying symbol" are set;
-     * </ul>
-     * All the attributes remain set as before after the call to this method, but
-     * @ref ::getChains() "chains" are updated correspondingly.
-     *
-     * @param option The option to add.
-     */
-    void addOption(std::shared_ptr<T> option) {
-        addOption(*option);
-    }
-
-    /**
      * Returns a view of chains created by this builder.
      * It updates as new options are added with @ref ::addOption() "addOption" method.
      *
@@ -291,7 +269,7 @@ template <class T> class OptionChainsBuilder {
     template <typename Collection, typename Element = std::decay_t<decltype(std::begin(Collection()))>,
               typename Profile = std::decay_t<decltype(*Element())>>
     static OptionChainsBuilder<InstrumentProfile> build(const Collection &instruments) {
-        static_assert(std::is_same_v<Element, std::shared_ptr<Profile>>,
+        static_assert(std::is_same_v<Profile, std::shared_ptr<InstrumentProfile>>,
                       "The collection element must be of type `std::shared_ptr<InstrumentProfile>`");
         OptionChainsBuilder<InstrumentProfile> ocb{};
 

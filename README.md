@@ -372,7 +372,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   is a simple demonstration of how to get live updates for Instrument Profiles
 - [x] [PublishProfiles](main/samples/cpp/PublishProfiles/src/main.cpp) 
   is a simple demonstration of how to publish market events
-- [ ] [OptionChainSample](samples/cpp/OptionChainSample/src/main.cpp)
+- [x] [OptionChainSample](samples/cpp/OptionChainSample/src/main.cpp)
   demonstrates how to build option chains, and prints quotes for nearby option strikes
 
 ### Model

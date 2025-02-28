@@ -591,6 +591,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/MultipleMarketDepthSample)
     add_subdirectory(samples/cpp/PriceLevelBookSample)
     add_subdirectory(samples/cpp/MarketDepthModelSample)
+    add_subdirectory(samples/cpp/OptionChainSample)
 endif ()
 
 add_subdirectory(docs)

@@ -25,7 +25,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @tparam T The type of option instrument instances
  */
 template <typename T> class OptionChain final {
-    friend class OptionChainBuilder<T>;
+    friend class OptionChainsBuilder<T>;
 
     std::string symbol_{};
     std::set<OptionSeries<T>> series_{};
@@ -33,18 +33,19 @@ template <typename T> class OptionChain final {
     explicit OptionChain(std::string symbol) : symbol_(std::move(symbol)) {
     }
 
-    void addOption(const OptionSeries<T>& series, bool isCall, double strike, const T& option) {
-        auto& os = series_.find(series);
-
-        if (os == series_.end()) {
-            os = series_.insert(series).first;
-        }
-
-        os->addOption(isCall, strike, option);
-    }
-
     void addOption(const OptionSeries<T>& series, bool isCall, double strike, std::shared_ptr<T> option) {
-        addOption(series, isCall, strike, *option);
+        auto it = series_.find(series);
+
+        if (it == series_.end()) {
+            OptionSeries<T> os(series);
+            os.addOption(isCall, strike, option);
+            series_.insert(os);
+        } else {
+            OptionSeries<T> modifiedSeries = *it;
+            series_.erase(it);
+            modifiedSeries.addOption(isCall, strike, option);
+            series_.insert(modifiedSeries);
+        }
     }
 public:
     /**

@@ -21,7 +21,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-template <typename T> class OptionChainBuilder;
+template <typename T> class OptionChainsBuilder;
 
 /**
  * Series of call and put options with different strike sharing the same attributes of expiration, last trading day,
@@ -32,8 +32,8 @@ template <typename T> class OptionChainBuilder;
  *
  * @tparam T The type of option instrument instances.
  */
-template <typename T> class OptionSeries final : public std::enable_shared_from_this<OptionSeries<T>> {
-    friend class OptionChainBuilder<T>;
+template <typename T> class OptionSeries final {
+    friend class OptionChainsBuilder<T>;
 
     std::int32_t expiration_ = 0;
     std::int32_t lastTrade_ = 0;
@@ -46,8 +46,8 @@ template <typename T> class OptionSeries final : public std::enable_shared_from_
     std::string settlementStyle_{};
     std::string cfi_{};
 
-    std::map<double, T> calls_{};
-    std::map<double, T> puts_{};
+    std::map<double, std::shared_ptr<T>> calls_{};
+    std::map<double, std::shared_ptr<T>> puts_{};
 
     mutable std::vector<double> strikes_{}; // Cached list of strikes
 
@@ -58,31 +58,6 @@ template <typename T> class OptionSeries final : public std::enable_shared_from_
      * @return A default-initialized instance of OptionSeries.
      */
     OptionSeries() = default;
-
-    /**
-     * Copy constructor for the OptionSeries class which creates a new instance by copying
-     * all the attributes of another OptionSeries instance.
-     *
-     * @param other The instance of OptionSeries to copy from.
-     * @return A new instance of OptionSeries with the same attributes as the provided instance.
-     */
-    OptionSeries(const OptionSeries &other)
-        : expiration_(other.expiration_), lastTrade_(other.lastTrade_), multiplier_(other.multiplier_),
-          spc_(other.spc_), additionalUnderlyings_(other.additionalUnderlyings_), mmy_(other.mmy_),
-          optionType_(other.optionType_), expirationStyle_(other.expirationStyle_),
-          settlementStyle_(other.settlementStyle_), cfi_(other.cfi_), calls_(other.calls_), puts_(other.puts_) {
-    }
-
-    /**
-     * Creates a copy of the current OptionSeries instance.
-     *
-     * @return A shared pointer to a newly created OptionSeries instance that is identical to the original.
-     */
-    std::shared_ptr<OptionSeries> clone() const {
-        auto clone = std::make_shared<OptionSeries>(*this);
-
-        return clone;
-    }
 
     /**
      * Returns day id of expiration.
@@ -213,7 +188,7 @@ template <typename T> class OptionSeries final : public std::enable_shared_from_
      *
      * @return A sorted map of all calls from strike to a corresponding option instrument.
      */
-    const std::map<double, T> &getCalls() const {
+    const std::map<double, std::shared_ptr<T>> &getCalls() const {
         return calls_;
     }
 
@@ -222,7 +197,7 @@ template <typename T> class OptionSeries final : public std::enable_shared_from_
      *
      * @return A sorted map of all puts from strike to a corresponding option instrument.
      */
-    const std::map<double, T> &getPuts() const {
+    const std::map<double, std::shared_ptr<T>> &getPuts() const {
         return puts_;
     }
 
@@ -318,9 +293,9 @@ template <typename T> class OptionSeries final : public std::enable_shared_from_
         return cfi_ < other.cfi_;
     }
 
-    void addOption(bool isCall, double strike, const T &option) {
-        if (auto &map = isCall ? calls_ : puts; map.emplace(strike, option).second) {
-            strikes_.clear(); // Clear cached strikes
+    void addOption(bool isCall, double strike, std::shared_ptr<T> option) {
+        if (auto &map = isCall ? calls_ : puts_; map.emplace(strike, option).second) {
+            strikes_.clear();
         }
     }
 

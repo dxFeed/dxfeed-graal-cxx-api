@@ -1,3 +1,8 @@
+* **\[MDAPI-27]\[C++]** Implemented OptionChain
+    * Added `OptionChain` class. 
+    * Added `OptionSeries` class. 
+    * Added `OptionChainsBuilder` class.
+    * Added `OptionChainSample` example.
 * **\[MDAPI-77]\[C++]** Added support for retrieving indexed events from feed
 * **\[MDAPI-78]\[C++]** Added support for retrieving time-series events from feed
 * **\[MDAPI-36]\[C++]** Implemented DXFeedTimeSeriesSubscription
