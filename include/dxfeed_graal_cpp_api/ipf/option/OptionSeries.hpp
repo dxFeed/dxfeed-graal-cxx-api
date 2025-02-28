@@ -11,7 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <algorithm>
 #include <cstdint>
-#include <iostream>
+#include <sstream>
 #include <map>
 #include <memory>
 #include <set>
