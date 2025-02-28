@@ -21,6 +21,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+template <typename T> class OptionChainBuilder;
+
 /**
  * Series of call and put options with different strike sharing the same attributes of expiration, last trading day,
  * spc, multiplies, etc.
@@ -30,7 +32,9 @@ DXFCPP_BEGIN_NAMESPACE
  *
  * @tparam T The type of option instrument instances.
  */
-template <typename T> class OptionSeries : public std::enable_shared_from_this<OptionSeries<T>> {
+template <typename T> class OptionSeries final : public std::enable_shared_from_this<OptionSeries<T>> {
+    friend class OptionChainBuilder<T>;
+
     std::int32_t expiration_ = 0;
     std::int32_t lastTrade_ = 0;
     double multiplier_ = 0.0;
