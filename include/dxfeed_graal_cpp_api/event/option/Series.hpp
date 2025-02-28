@@ -367,8 +367,9 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes day id of expiration.
+     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
      *
-     * @param expiration day id of expiration.
+     * @param expiration The day id of expiration.
      */
     void setExpiration(std::int32_t expiration) noexcept {
         data_.expiration = expiration;

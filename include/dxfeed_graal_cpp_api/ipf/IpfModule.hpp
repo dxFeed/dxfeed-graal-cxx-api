@@ -16,4 +16,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "live/InstrumentProfileCollector.hpp"
 #include "live/InstrumentProfileConnection.hpp"
 
+#include "option/OptionChainsBuilder.hpp"
+
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
