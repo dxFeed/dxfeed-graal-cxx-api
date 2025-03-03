@@ -1,0 +1,36 @@
+# Copyright (c) 2025 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+tab_width = 4
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+max_line_length = 120
+
+[*.{h,c,cpp,hpp}]
+continuation_indent_width = 4
+
+allow_short_blocks_on_single_line = false
+allow_short_functions_on_single_line = false
+allow_short_if_statements_on_single_line = false
+allow_short_lambdas_on_single_line = false
+allow_short_loops_on_single_line = false
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.{md,mdx}]
+trim_trailing_whitespace = false
+
+[*.{cmd,bat}]
+end_of_line = crlf
+
+[*.sh]
+end_of_line = lf
+
+[*.{json,json5,webmanifest}]
+indent_size = 2
