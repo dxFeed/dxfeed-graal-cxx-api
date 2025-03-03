@@ -12,13 +12,19 @@ trim_trailing_whitespace = true
 max_line_length = 120
 
 [*.{h,c,cpp,hpp}]
-continuation_indent_width = 4
-
-allow_short_blocks_on_single_line = false
-allow_short_functions_on_single_line = false
-allow_short_if_statements_on_single_line = false
-allow_short_lambdas_on_single_line = false
-allow_short_loops_on_single_line = false
+cpp_keep_blank_lines_in_declarations = 1
+cpp_remove_blank_lines_near_braces_in_declarations = true
+cpp_remove_blank_lines_near_braces_in_code = true
+cpp_blank_lines_around_class_definition = 1
+cpp_blank_lines_around_function_declaration = 1
+cpp_blank_lines_around_function_declaration = 1
+cpp_blank_lines_around_other_declaration = 0
+cpp_blank_lines_before_access_specifier = 1
+cpp_blank_lines_after_access_specifier = 0
+cpp_brace_style = end_of_line
+cpp_requires_expression_braces = end_of_line
+cpp_simple_block_style = line_break
+cpp_continuous_line_indent = single
 
 [*.{yml,yaml}]
 indent_size = 2
