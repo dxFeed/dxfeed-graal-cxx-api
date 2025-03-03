@@ -39,6 +39,12 @@ concept ConvertibleTo = std::is_convertible_v<From, To> && requires { static_cas
 template <class T, class U>
 concept Derived = std::is_base_of_v<U, T>;
 
+template <class T, class U>
+concept Extends = Derived<T, U>;
+
+template <class T, class U>
+concept BaseOf = Derived<U, T>;
+
 namespace detail {
 template <typename T>
 struct RemoveAllPointers

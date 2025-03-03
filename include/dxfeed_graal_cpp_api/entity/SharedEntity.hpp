@@ -111,6 +111,10 @@ DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
 template <typename EBase, Derived<EBase> EDerived>
 static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
+    if (!source) {
+        return {};
+    }
+
     return source->template sharedAs<EDerived>();
 }
 

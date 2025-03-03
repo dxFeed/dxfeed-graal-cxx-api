@@ -8,6 +8,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <atomic>
 #include <chrono>
 #include <memory>
 #include <vector>
@@ -20,7 +21,7 @@ struct Promises;
 
 struct PromiseImpl {
     protected:
-    void *handle = nullptr;
+    std::atomic<void *> handle = nullptr;
 
     public:
     explicit PromiseImpl(void *handle);
@@ -37,8 +38,8 @@ struct PromiseImpl {
 };
 
 struct VoidPromiseImpl : PromiseImpl {
-    void *handle = nullptr;
-    bool own = true;
+    std::atomic<void *> handle = nullptr;
+    std::atomic<bool> own = true;
 
     explicit VoidPromiseImpl(void *handle, bool own = true);
     ~VoidPromiseImpl();
@@ -46,8 +47,8 @@ struct VoidPromiseImpl : PromiseImpl {
 };
 
 struct EventPromiseImpl : PromiseImpl {
-    void *handle = nullptr;
-    bool own = true;
+    std::atomic<void *> handle = nullptr;
+    std::atomic<bool> own = true;
 
     explicit EventPromiseImpl(void *handle, bool own = true);
     ~EventPromiseImpl();
@@ -55,8 +56,8 @@ struct EventPromiseImpl : PromiseImpl {
 };
 
 struct EventsPromiseImpl : PromiseImpl {
-    void *handle = nullptr;
-    bool own = true;
+    std::atomic<void *> handle = nullptr;
+    std::atomic<bool> own = true;
 
     explicit EventsPromiseImpl(void *handle, bool own = true);
     ~EventsPromiseImpl();
@@ -387,6 +388,18 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
     explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 
+    template <Derived<E> D>
+    explicit Promise(std::shared_ptr<Promise<std::shared_ptr<D>>> other) : impl(other->impl->handle, false) {
+    }
+
+    template <BaseOf<E> B> std::shared_ptr<Promise<std::shared_ptr<B>>> sharedAs(bool transferOwnership = false) {
+        if (transferOwnership) {
+            impl.own = false;
+        }
+
+        return std::make_shared<Promise<std::shared_ptr<B>>>(impl.handle, transferOwnership);
+    }
+
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
     Promise(Promise &&) noexcept = default;
@@ -394,7 +407,7 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
 };
 
 struct PromiseListImpl {
-    void *handle = nullptr;
+    std::atomic<void *> handle = nullptr;
 
     explicit PromiseListImpl(void *handle);
     ~PromiseListImpl();
