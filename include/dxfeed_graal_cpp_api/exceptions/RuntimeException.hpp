@@ -24,15 +24,16 @@ struct DXFCPP_EXPORT RuntimeException : std::runtime_error {
      * @param message The exception's message.
      * @param additionalStackTrace The additional stacktrace that will be concatenated with current stacktrace.
      */
-    explicit RuntimeException(const StringLikeWrapper& message, const StringLikeWrapper& additionalStackTrace = "");
+    explicit RuntimeException(const StringLikeWrapper &message, const StringLikeWrapper &additionalStackTrace = "");
 
-    RuntimeException(const RuntimeException& other) noexcept;
+    RuntimeException(const RuntimeException &other) noexcept;
 
     /**
      * @return The current stacktrace + the additional stacktrace if present.
      */
-    const std::string& getStackTrace() const &;
-private:
+    const std::string &getStackTrace() const &;
+
+    private:
     std::string stackTrace_;
 };
 

@@ -141,7 +141,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return removeAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
     }
 
-  private:
+    private:
     static constexpr char EXCHANGE_SEPARATOR = '&';
     static constexpr char ATTRIBUTES_OPEN = '{';
     static constexpr char ATTRIBUTES_CLOSE = '}';

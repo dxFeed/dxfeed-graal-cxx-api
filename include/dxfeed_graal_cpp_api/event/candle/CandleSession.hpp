@@ -62,7 +62,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     static const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> BY_STRING;
     static const std::vector<std::reference_wrapper<const CandleSession>> VALUES;
 
-  private:
+    private:
     const SessionFilter *sessionFilter_;
     std::string string_;
 
@@ -70,7 +70,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
         : sessionFilter_{&sessionFilter}, string_{string} {
     }
 
-  public:
+    public:
     CandleSession() noexcept = default;
     virtual ~CandleSession() noexcept = default;
 
@@ -78,7 +78,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * Returns session filter that corresponds to this session attribute.
      * @return session filter that corresponds to this session attribute.
      */
-    const SessionFilter &getSessionFilter() const& noexcept {
+    const SessionFilter &getSessionFilter() const & noexcept {
         return *sessionFilter_;
     }
 

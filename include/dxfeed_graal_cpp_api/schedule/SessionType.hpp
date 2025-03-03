@@ -40,7 +40,7 @@ struct DXFCPP_EXPORT SessionType {
     /// After-market session type marks extended trading session after regular trading hours.
     static const SessionType AFTER_MARKET;
 
-  private:
+    private:
     SessionTypeEnum code_{};
     std::string name_{};
     bool trading_{};
@@ -49,7 +49,7 @@ struct DXFCPP_EXPORT SessionType {
         : code_{code}, name_{std::move(name)}, trading_{trading} {
     }
 
-  public:
+    public:
     SessionType() noexcept = default;
     virtual ~SessionType() noexcept = default;
 

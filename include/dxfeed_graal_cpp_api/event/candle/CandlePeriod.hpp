@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../internal/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -59,7 +59,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      */
     static const std::string ATTRIBUTE_KEY; // empty string as attribute key is allowed!
 
-  private:
+    private:
     static const std::int64_t DEFAULT_PERIOD_VALUE = 1LL;
 
     double value_{};
@@ -69,7 +69,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     CandlePeriod(double value, const CandleType &type) noexcept : value_{value}, type_{type}, string_{} {
     }
 
-  public:
+    public:
     CandlePeriod() noexcept = default;
     virtual ~CandlePeriod() noexcept = default;
 
@@ -216,8 +216,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the the candle period attribute.
      */
-    static std::string
-    normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {

@@ -80,7 +80,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the Greeks object
     using Ptr = std::shared_ptr<Greeks>;
 

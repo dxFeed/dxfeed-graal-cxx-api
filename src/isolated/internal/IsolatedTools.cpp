@@ -9,7 +9,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-
 void gc() {
     isolated::runGraalFunction(dxfg_gc);
 }

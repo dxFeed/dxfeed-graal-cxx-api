@@ -21,14 +21,14 @@ struct DXFCPP_EXPORT DXPublisherObservableSubscription : RequireMakeShared<DXPub
                                                          ObservableSubscription {
     static constexpr std::size_t FAKE_LISTENER_ID{static_cast<std::size_t>(-1)};
 
-  private:
+    private:
     inline static std::atomic<std::size_t> lastListenerId_{};
 
     JavaObjectHandle<DXPublisherObservableSubscription> handle_;
     std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> listeners_;
     std::recursive_mutex listenersMutex_{};
 
-  public:
+    public:
     DXPublisherObservableSubscription(LockExternalConstructionTag,
                                       JavaObjectHandle<DXPublisherObservableSubscription> &&handle);
     ~DXPublisherObservableSubscription() override;

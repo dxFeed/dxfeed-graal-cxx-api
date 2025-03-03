@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../internal/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -115,7 +115,7 @@ struct DXFCPP_EXPORT CandleType {
         BY_STRING;
     static const std::vector<std::reference_wrapper<const CandleType>> VALUES;
 
-  private:
+    private:
     std::string name_{};
     std::string string_{};
     std::int64_t periodIntervalMillis_{};
@@ -125,7 +125,7 @@ struct DXFCPP_EXPORT CandleType {
         : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {
     }
 
-  public:
+    public:
     CandleType() noexcept = default;
     virtual ~CandleType() noexcept = default;
 

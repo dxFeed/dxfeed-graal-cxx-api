@@ -31,6 +31,6 @@ void throwInvalidChar(char c, const std::string &name) {
     throw InvalidArgumentException("Invalid " + name + ": " + encodeChar(c));
 }
 
-}
+} // namespace util
 
 DXFCPP_END_NAMESPACE

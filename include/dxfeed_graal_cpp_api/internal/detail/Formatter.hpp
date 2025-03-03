@@ -13,7 +13,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
-#include <fmt/ostream.h>
 
 DXFCPP_BEGIN_NAMESPACE
 

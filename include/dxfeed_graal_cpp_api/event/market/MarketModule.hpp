@@ -8,8 +8,6 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "AnalyticOrder.hpp"
-#include "OtcMarketsPriceType.hpp"
-#include "OtcMarketsOrder.hpp"
 #include "Direction.hpp"
 #include "IcebergType.hpp"
 #include "MarketEvent.hpp"
@@ -19,6 +17,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "OrderAction.hpp"
 #include "OrderBase.hpp"
 #include "OrderSource.hpp"
+#include "OtcMarketsOrder.hpp"
+#include "OtcMarketsPriceType.hpp"
 #include "PriceType.hpp"
 #include "Profile.hpp"
 #include "Quote.hpp"

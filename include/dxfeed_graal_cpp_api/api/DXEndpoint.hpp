@@ -473,7 +473,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     static std::string stateToString(State state);
 
-  private:
+    private:
     JavaObjectHandle<DXEndpoint> handle_;
     Role role_ = Role::FEED;
     std::string name_{};
@@ -494,7 +494,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     std::unique_ptr<Impl> impl_;
 
-  public:
+    public:
     explicit DXEndpoint(LockExternalConstructionTag);
     DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name);
 
@@ -887,7 +887,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          */
         void loadDefaultPropertiesImpl();
 
-      public:
+        public:
         explicit Builder(LockExternalConstructionTag) noexcept;
 
         /// Releases the GraalVM handle

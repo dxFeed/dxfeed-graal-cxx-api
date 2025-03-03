@@ -49,7 +49,7 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
 
     bool operator==(const TxModelListenerCommon &other) const noexcept;
 
-  protected:
+    protected:
     mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<TxModelListenerTag> handle_;
     SimpleHandler<void(const IndexedEventSource & /* source */,

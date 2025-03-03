@@ -154,18 +154,16 @@ struct DXFCPP_EXPORT AuthToken {
     AuthToken &operator=(const AuthToken &) = delete;
     AuthToken &operator=(const AuthToken &&) noexcept = delete;
 
-private:
-
+    private:
     JavaObjectHandle<AuthToken> handle_;
 
-public:
+    public:
+    const JavaObjectHandle<AuthToken> &getHandle() const & {
+        return handle_;
+    }
 
-  const JavaObjectHandle<AuthToken>& getHandle() const& {
-      return handle_;
-  }
-
-private:
-  std::atomic<bool> isNull_;
+    private:
+    std::atomic<bool> isNull_;
 
     explicit AuthToken(JavaObjectHandle<AuthToken> &&handle, bool isNull = false);
 };

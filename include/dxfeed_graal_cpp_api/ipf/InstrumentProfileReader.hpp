@@ -47,7 +47,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
 
     InstrumentProfileReader();
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the InstrumentProfileReader object
     using Ptr = std::shared_ptr<InstrumentProfileReader>;
 

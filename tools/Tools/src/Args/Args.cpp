@@ -75,4 +75,4 @@ const std::string HelpArg::HELP_TEXT{R"(
 Display this help screen.
 )"};
 
-}
+} // namespace dxfcpp::tools

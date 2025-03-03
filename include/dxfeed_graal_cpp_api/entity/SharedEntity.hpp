@@ -87,12 +87,12 @@ DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
  * @tparam T The object type.
  */
 template <typename T> struct RequireMakeShared : virtual SharedEntity {
-  protected:
+    protected:
     struct LockExternalConstructionTag {
         explicit LockExternalConstructionTag() = default;
     };
 
-  public:
+    public:
     /**
      * Creates smart pointer to object.
      *

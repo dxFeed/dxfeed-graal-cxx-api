@@ -7,11 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <concepts>
 #include <cstdint>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
-#include <concepts>
 
 #include "Common.hpp"
 
@@ -22,11 +22,11 @@ template <typename Child, typename Code> struct Enum {
     using ChildType = Child;
     using CodeType = Code;
 
-  private:
+    private:
     const CodeType code_;
     const std::string name_;
 
-  protected:
+    protected:
     template <Integral OtherCodeType> static constexpr CodeType convertToInnerCodeType(OtherCodeType code) noexcept {
         return static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code));
     }
@@ -37,7 +37,7 @@ template <typename Child, typename Code> struct Enum {
 
     static const std::unordered_map<CodeType, std::reference_wrapper<const Child>> ALL;
 
-  public:
+    public:
     /**
      * Returns code that is used in flag bits.
      *

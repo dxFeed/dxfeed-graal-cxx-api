@@ -16,7 +16,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-std::shared_ptr<Promise<void>> Promises::allOfImpl(const std::vector<void*>& handles) {
+std::shared_ptr<Promise<void>> Promises::allOfImpl(const std::vector<void *> &handles) {
     return std::make_shared<Promise<void>>(isolated::promise::IsolatedPromise::allOf(handles));
 }
 

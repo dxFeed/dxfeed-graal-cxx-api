@@ -16,13 +16,13 @@ template <typename T> struct Id {
     using ValueType = std::size_t;
     const static Id UNKNOWN;
 
-  private:
+    private:
     ValueType value_{};
 
     explicit Id(ValueType value) : value_{value} {
     }
 
-  public:
+    public:
     static Id<T> getNext() {
         static std::atomic<ValueType> value{1};
 

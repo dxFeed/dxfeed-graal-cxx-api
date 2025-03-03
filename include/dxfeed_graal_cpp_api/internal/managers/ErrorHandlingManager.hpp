@@ -53,12 +53,12 @@ class DXFCPP_EXPORT ErrorHandlingManager {
 
     ErrorHandlingManager() = default;
 
-  public:
+    public:
     ErrorHandlingManager(const ErrorHandlingManager &) = delete;
     ErrorHandlingManager &operator=(const ErrorHandlingManager &) = delete;
     ~ErrorHandlingManager() = default;
 
-  public:
+    public:
     static std::shared_ptr<ErrorHandlingManager> getInstance() {
         static std::shared_ptr<ErrorHandlingManager> instance{new ErrorHandlingManager};
 

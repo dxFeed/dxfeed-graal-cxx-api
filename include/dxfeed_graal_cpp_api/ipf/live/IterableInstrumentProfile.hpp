@@ -24,14 +24,13 @@ class DXFCPP_EXPORT IterableInstrumentProfile final {
     friend InstrumentProfileCollector;
 
     JavaObjectHandle<IterableInstrumentProfile> handle_;
-    //dxfg_iterable_ip_t *iterable;
+    // dxfg_iterable_ip_t *iterable;
 
-    explicit IterableInstrumentProfile(void* handle = nullptr) noexcept;
+    explicit IterableInstrumentProfile(void *handle = nullptr) noexcept;
 
-    static std::shared_ptr<IterableInstrumentProfile> create(void* handle = nullptr) noexcept;
+    static std::shared_ptr<IterableInstrumentProfile> create(void *handle = nullptr) noexcept;
 
-  public:
-
+    public:
     /**
      * Returns `true` if the iterable has more elements.
      *

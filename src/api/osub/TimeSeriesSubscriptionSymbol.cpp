@@ -65,7 +65,8 @@ std::string TimeSeriesSubscriptionSymbol::toString() const {
         return "TimeSeriesSubscriptionSymbol{" + getEventSymbol()->toString() +
                ", fromTime = " + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     } else {
-        return getEventSymbol()->toStringUnderlying() + "{fromTime=" + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
+        return getEventSymbol()->toStringUnderlying() +
+               "{fromTime=" + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     }
 }
 

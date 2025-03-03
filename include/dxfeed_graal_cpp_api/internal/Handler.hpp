@@ -45,7 +45,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
     using ListenerType = std::function<void(ArgTypes...)>;
     static constexpr std::size_t FAKE_ID{static_cast<std::size_t>(-1)};
 
-  private:
+    private:
     static constexpr unsigned MAIN_FUTURES_DEFAULT_SIZE = 1;
 
     std::recursive_mutex listenersMutex_{};
@@ -76,7 +76,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
             args...);
     }
 
-  public:
+    public:
     /**
      * Creates the new handler by specified size of circular buffer of futures
      *
@@ -259,7 +259,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
     using ListenerType = std::function<void(ArgTypes...)>;
     static constexpr std::size_t FAKE_ID{static_cast<std::size_t>(-1)};
 
-  private:
+    private:
     std::recursive_mutex listenersMutex_{};
     std::unordered_map<std::size_t, ListenerType> listeners_{};
     std::unordered_map<std::size_t, ListenerType> lowPriorityListeners_{};
@@ -283,7 +283,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
             args...);
     }
 
-  public:
+    public:
     /**
      * Creates the new handler
      */

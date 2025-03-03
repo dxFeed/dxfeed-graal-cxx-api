@@ -119,7 +119,7 @@ namespace Builder {
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withSources(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_indexed_event_source_list* sources);
 JavaObjectHandle<IndexedTxModelBuilderTag> withSources(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                      void *sources) {
+                                                       void *sources) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withSources`. The "
                                        "`builder` handle is invalid");
@@ -149,8 +149,8 @@ JavaObjectHandle<IndexedTxModelTag> build(const JavaObjectHandle<IndexedTxModelB
 
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withBatchProcessing(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, int32_t isBatchProcessing);
-JavaObjectHandle<IndexedTxModelBuilderTag> withBatchProcessing(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                              bool isBatchProcessing) {
+JavaObjectHandle<IndexedTxModelBuilderTag>
+withBatchProcessing(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder, bool isBatchProcessing) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_IndexedTxModel_Builder_withBatchProcessing`. The "
@@ -180,7 +180,7 @@ withSnapshotProcessing(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withFeed(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_feed_t* feed);
 JavaObjectHandle<IndexedTxModelBuilderTag> withFeed(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                   const JavaObjectHandle<DXFeed> &feed) {
+                                                    const JavaObjectHandle<DXFeed> &feed) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withFeed`. The "
                                        "`builder` handle is invalid");
@@ -199,7 +199,7 @@ JavaObjectHandle<IndexedTxModelBuilderTag> withFeed(const JavaObjectHandle<Index
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withSymbol(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_symbol_t* symbol);
 JavaObjectHandle<IndexedTxModelBuilderTag> withSymbol(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                     const SymbolWrapper &symbol) {
+                                                      const SymbolWrapper &symbol) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withSymbol`. The "
                                        "`builder` handle is invalid");
@@ -215,7 +215,7 @@ JavaObjectHandle<IndexedTxModelBuilderTag> withSymbol(const JavaObjectHandle<Ind
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withListener(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
 JavaObjectHandle<IndexedTxModelBuilderTag> withListener(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                       const JavaObjectHandle<TxModelListenerTag> &listener) {
+                                                        const JavaObjectHandle<TxModelListenerTag> &listener) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withListener`. The "
                                        "`builder` handle is invalid");
@@ -234,7 +234,7 @@ JavaObjectHandle<IndexedTxModelBuilderTag> withListener(const JavaObjectHandle<I
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withExecutor(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_executor_t* executor);
 JavaObjectHandle<IndexedTxModelBuilderTag> withExecutor(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                       void *executor) {
+                                                        void *executor) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withExecutor`. The "
                                        "`builder` handle is invalid");

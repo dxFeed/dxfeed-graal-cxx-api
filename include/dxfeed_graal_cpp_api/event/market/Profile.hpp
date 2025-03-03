@@ -72,7 +72,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     void fillGraalData(void *graalNative) const noexcept override;
     static void freeGraalData(void *graalNative) noexcept;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the Profile object
     using Ptr = std::shared_ptr<Profile>;
 

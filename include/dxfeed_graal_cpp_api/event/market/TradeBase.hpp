@@ -36,7 +36,7 @@ struct EventMapper;
 class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     friend struct EventMapper;
 
-  protected:
+    protected:
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
@@ -73,7 +73,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /**
      * Maximum allowed sequence value.
      *

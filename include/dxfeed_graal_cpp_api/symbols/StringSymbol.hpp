@@ -21,10 +21,10 @@ DXFCPP_BEGIN_NAMESPACE
  * The current implementation is suboptimal (by memory usage) and will be enhanced.
  */
 struct DXFCPP_EXPORT StringSymbol final {
-  private:
+    private:
     std::string data_;
 
-  public:
+    public:
     StringSymbol(const StringSymbol &stringSymbol) noexcept;
     StringSymbol(StringSymbol &&) noexcept;
     StringSymbol &operator=(const StringSymbol &stringSymbol) noexcept;

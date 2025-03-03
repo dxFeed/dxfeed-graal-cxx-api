@@ -54,7 +54,7 @@ TimePeriod::TimePeriod(std::function<JavaObjectHandle<TimePeriod>()> &&initializ
     : initializer_(std::move(initializer)) {
 }
 
-TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle): handle_(std::move(handle)) {
+TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle) : handle_(std::move(handle)) {
     initialized_ = true;
 }
 

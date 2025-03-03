@@ -33,11 +33,11 @@ struct DXFCPP_EXPORT MarketDepthModelListener final : RequireMakeShared<MarketDe
     using Signature = void(const std::vector<std::shared_ptr<O>> & /* buy */,
                            const std::vector<std::shared_ptr<O>> & /* sell */);
 
-  protected:
+    protected:
     SimpleHandler<Signature> onEventsReceived_{};
     mutable std::recursive_mutex mutex_{};
 
-  public:
+    public:
     /**
      * @return A handler of the listener.
      */

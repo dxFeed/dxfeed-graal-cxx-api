@@ -5,9 +5,9 @@
 
 #include <dxfeed_graal_c_api/api.h>
 
-#include <dxfeed_graal_cpp_api/schedule/Day.hpp>
 #include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
 #include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
+#include <dxfeed_graal_cpp_api/schedule/Day.hpp>
 #include <dxfeed_graal_cpp_api/schedule/Schedule.hpp>
 #include <dxfeed_graal_cpp_api/schedule/Session.hpp>
 #include <dxfeed_graal_cpp_api/schedule/SessionFilter.hpp>

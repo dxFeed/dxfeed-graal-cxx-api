@@ -22,7 +22,7 @@ DXFCPP_BEGIN_NAMESPACE
  * Please see <b>Instrument Profile Format</b> documentation for complete description.
  */
 class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
-  public:
+    public:
     /// The alias to a type of shared pointer to the InstrumentProfileConnection object
     using Ptr = std::shared_ptr<InstrumentProfileConnection>;
 
@@ -60,7 +60,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
         CLOSED
     };
 
-  private:
+    private:
     Id<InstrumentProfileConnection> id_;
     JavaObjectHandle<InstrumentProfileConnection> handle_;
     JavaObjectHandle<IpfPropertyChangeListener> stateChangeListenerHandle_;
@@ -70,7 +70,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
 
     struct Impl;
 
-  public:
+    public:
     static std::string stateToString(State state) noexcept {
         switch (state) {
         case State::NOT_CONNECTED:

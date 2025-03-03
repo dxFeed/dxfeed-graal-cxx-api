@@ -85,5 +85,4 @@ DXPublisher::~DXPublisher() noexcept {
 #endif
 }
 
-
 DXFCPP_END_NAMESPACE

@@ -40,7 +40,7 @@ struct EntityManager : private NonCopyable<EntityManager<EntityType_, EntityIdTy
         }
     }
 
-  public:
+    public:
     Id<EntityIdType> registerEntity(std::shared_ptr<EntityType> entity) {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "::registerEntity(" + entity->toString() + ")");

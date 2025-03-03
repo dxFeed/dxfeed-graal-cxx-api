@@ -765,7 +765,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
 
     explicit InstrumentProfile(LockExternalConstructionTag, JavaObjectHandle<InstrumentProfile> &&handle);
 
-  private:
+    private:
     JavaObjectHandle<InstrumentProfile> handle_;
 
     static Ptr create(JavaObjectHandle<InstrumentProfile> &&handle);

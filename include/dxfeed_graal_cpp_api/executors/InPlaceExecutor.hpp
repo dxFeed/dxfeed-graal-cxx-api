@@ -19,11 +19,11 @@ struct ExecutorTag {};
 
 struct DXFCPP_EXPORT InPlaceExecutor final : RequireMakeShared<InPlaceExecutor> {
 
-  private:
+    private:
     mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<ExecutorTag> handle_{};
 
-  public:
+    public:
     InPlaceExecutor(LockExternalConstructionTag);
 
     ~InPlaceExecutor() override;

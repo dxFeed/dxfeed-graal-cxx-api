@@ -28,7 +28,7 @@ void processAllPendingTasks(const JavaObjectHandle<ExecutorTag> &executor) {
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_ExecutorBaseOnConcurrentLinkedQueue_processAllPendingTasks,
-                                       static_cast<dxfg_executor_t *>(executor.get()));
+                                           static_cast<dxfg_executor_t *>(executor.get()));
 }
 
 } // namespace IsolatedInPlaceExecutor

@@ -15,7 +15,7 @@ DayFilter::DayFilter(DayFilterEnum code, std::string name, std::uint32_t dayOfWe
       trading_{trading} {
 }
 
-const JavaObjectHandle<DayFilter>& DayFilter::getHandle() const& {
+const JavaObjectHandle<DayFilter> &DayFilter::getHandle() const & {
     std::lock_guard<std::mutex> lock(mtx_);
 
     if (!handle_) {

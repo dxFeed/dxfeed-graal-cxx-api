@@ -18,10 +18,10 @@ DXFCPP_BEGIN_NAMESPACE
  * Utility methods to manipulate @ref Promise "promises".
  */
 struct DXFCPP_EXPORT Promises {
-  private:
+    private:
     static std::shared_ptr<Promise<void>> allOfImpl(const std::vector<void *> &handles);
 
-  public:
+    public:
     /**
      * Returns a new promise that completes when all promises from the given collection complete normally or
      * exceptionally. The results of the given promises are not reflected in the returned promise, but may be obtained

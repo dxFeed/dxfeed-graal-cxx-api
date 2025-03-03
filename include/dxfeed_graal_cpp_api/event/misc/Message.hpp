@@ -41,7 +41,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
     void fillGraalData(void *graalNative) const;
     static void freeGraalData(void *graalNative) noexcept;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the Message object
     using Ptr = std::shared_ptr<Message>;
 

@@ -21,7 +21,7 @@ struct EventMapper;
 
 // TODO: implement [EN-8235]
 
-class DXFCPP_EXPORT Configuration {};
+class DXFCPP_EXPORT Configuration{};
 
 DXFCPP_END_NAMESPACE
 

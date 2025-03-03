@@ -7,8 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "CandleSymbolAttribute.hpp"
 #include "../../internal/Common.hpp"
+#include "CandleSymbolAttribute.hpp"
 
 #include <string>
 #include <type_traits>
@@ -59,12 +59,12 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
 
     static const std::vector<std::reference_wrapper<const CandleAlignment>> VALUES;
 
-  private:
+    private:
     std::string string_{};
 
     explicit CandleAlignment(const dxfcpp::StringLikeWrapper &string) noexcept;
 
-  public:
+    public:
     CandleAlignment() noexcept = default;
     virtual ~CandleAlignment() noexcept = default;
 

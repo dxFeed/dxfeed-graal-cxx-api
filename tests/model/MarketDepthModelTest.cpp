@@ -20,7 +20,7 @@ using namespace std::literals;
 using namespace dxfcpp;
 
 class MarketDepthModelTestFixture {
-  protected:
+    protected:
     const char *symbol_ = "INDEX-TEST";
 
     std::shared_ptr<InPlaceExecutor> executor_;
@@ -202,7 +202,7 @@ class MarketDepthModelTestFixture {
             });
     }
 
-  public:
+    public:
     MarketDepthModelTestFixture() {
         executor_ = InPlaceExecutor::create();
         endpoint_ = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);

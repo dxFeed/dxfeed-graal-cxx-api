@@ -26,11 +26,11 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     /// The alias to a type of shared pointer to the MarketEvent object
     using Ptr = std::shared_ptr<MarketEvent>;
 
-  private:
+    private:
     std::optional<std::string> eventSymbol_{};
     std::int64_t eventTime_{};
 
-  protected:
+    protected:
     MarketEvent() noexcept = default;
 
     /**
@@ -45,7 +45,7 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     virtual void fillGraalData(void *graalNative) const noexcept;
     static void freeGraalData(void *graalNative) noexcept;
 
-  public:
+    public:
     ///
     void assign(std::shared_ptr<EventType> event) override {
         if (const auto other = event->sharedAs<MarketEvent>(); other) {

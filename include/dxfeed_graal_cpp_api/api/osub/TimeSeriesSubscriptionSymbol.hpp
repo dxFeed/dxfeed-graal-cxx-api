@@ -44,7 +44,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
                                                          public FilteredSubscriptionSymbol {
     std::int64_t fromTime_{};
 
-  public:
+    public:
     /**
      * Creates time-series subscription symbol with a specified event symbol and subscription time.
      *

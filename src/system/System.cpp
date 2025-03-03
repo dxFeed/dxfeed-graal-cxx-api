@@ -46,8 +46,7 @@ std::string System::getProperty(const std::string &key) {
         [key = key](auto threadHandle) {
             std::string resultString{};
 
-            if (auto result =
-                    dxfg_system_get_property(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str());
+            if (auto result = dxfg_system_get_property(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str());
                 result != nullptr) {
                 resultString = result;
                 dxfg_system_release_property(static_cast<graal_isolatethread_t *>(threadHandle), result);

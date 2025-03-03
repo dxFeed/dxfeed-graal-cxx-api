@@ -57,7 +57,7 @@ namespace Builder {
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withFromTime(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, int64_t fromTime);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withFromTime(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                          std::int64_t fromTime);
+                                                           std::int64_t fromTime);
 
 // dxfg_time_series_tx_model_t* dxfg_TimeSeriesTxModel_Builder_build(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source);
@@ -76,22 +76,22 @@ withSnapshotProcessing(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &buil
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withFeed(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_feed_t* feed);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withFeed(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                      const JavaObjectHandle<DXFeed> &feed);
+                                                       const JavaObjectHandle<DXFeed> &feed);
 
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withSymbol(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_symbol_t* symbol);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withSymbol(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                        const SymbolWrapper &symbol);
+                                                         const SymbolWrapper &symbol);
 
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withListener(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withListener(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                          const JavaObjectHandle<TxModelListenerTag> &listener);
+                                                           const JavaObjectHandle<TxModelListenerTag> &listener);
 
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withExecutor(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_executor_t* executor);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withExecutor(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                          void *executor);
+                                                           void *executor);
 
 } // namespace Builder
 } // namespace isolated::model::IsolatedTimeSeriesTxModel

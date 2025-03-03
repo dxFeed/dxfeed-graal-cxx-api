@@ -34,7 +34,7 @@ struct DXFCPP_EXPORT Session {
     /// The alias to a type of unique pointer to the Session object
     using Unique = std::unique_ptr<Session>;
 
-  private:
+    private:
     JavaObjectHandle<Session> handle_;
 
     explicit Session(JavaObjectHandle<Session> &&handle) noexcept;
@@ -47,7 +47,7 @@ struct DXFCPP_EXPORT Session {
      */
     static Session::Ptr create(JavaObjectHandle<Session> &&handle);
 
-  public:
+    public:
     /**
      * Returns day to which this session belongs.
      *
@@ -141,7 +141,8 @@ struct DXFCPP_EXPORT Session {
      * <pre>session = session->findPrevSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return nearest previous session that is accepted by the filter or `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr})
+     * @return nearest previous session that is accepted by the filter or `Session::Ptr{nullptr}`
+     * (std::shared_ptr<Session>{nullptr})
      */
     Session::Ptr findPrevSession(const SessionFilter &filter) const;
 
@@ -157,7 +158,8 @@ struct DXFCPP_EXPORT Session {
      * <pre>session = session->findNextSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return nearest following session that is accepted by the filter or `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr})
+     * @return nearest following session that is accepted by the filter or `Session::Ptr{nullptr}`
+     * (std::shared_ptr<Session>{nullptr})
      */
     Session::Ptr findNextSession(const SessionFilter &filter) const;
 

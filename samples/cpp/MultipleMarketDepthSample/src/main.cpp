@@ -66,8 +66,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
         DXEndpoint::getInstance()->connect(address);
 
-        std::cout << fmt::format("Press [ENTER] to print {} order book manually.", symbol.toString())
-                  << std::endl;
+        std::cout << fmt::format("Press [ENTER] to print {} order book manually.", symbol.toString()) << std::endl;
 
         while (true) {
             std::cin.ignore();

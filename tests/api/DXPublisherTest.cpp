@@ -17,8 +17,8 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
-//Segfaults appear sporadically on Linux and MacOS.
-//#ifdef _WIN32
+// Segfaults appear sporadically on Linux and MacOS.
+// #ifdef _WIN32
 
 TEST_CASE("DXPublisher::publishEvents") {
     System::setProperty("dxendpoint.eventTime", "true");
@@ -77,4 +77,4 @@ TEST_CASE("DXPublisher::publishEvents") {
     REQUIRE_EQ(quote->toString(), result.back()->toString());
 }
 
-//#endif
+// #endif

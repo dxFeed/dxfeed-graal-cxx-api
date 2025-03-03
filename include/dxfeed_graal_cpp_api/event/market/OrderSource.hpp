@@ -45,11 +45,11 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     static constexpr std::uint32_t FLAGS_SIZE = 5U;
 
-  public:
+    public:
     static const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
         PREDEFINED_SOURCES;
 
-  private:
+    private:
     static inline std::mutex MTX_{};
     static std::unordered_map<std::int32_t, OrderSource> USER_SOURCES_;
 
@@ -81,7 +81,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept override;
 
-  public:
+    public:
     /**
      * Bid side of a composite Quote.
      * It is a <em>synthetic</em> source.

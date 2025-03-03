@@ -67,7 +67,7 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
         static bool freeGraalListElements(void *graalList, std::ptrdiff_t count);
 
-      public:
+        public:
         template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) {
             if constexpr (Debugger::isDebug) {
                 Debugger::debug("SymbolWrapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
@@ -136,10 +136,10 @@ struct DXFCPP_EXPORT SymbolWrapper final {
         static std::vector<SymbolWrapper> fromGraalList(void *graalList);
     };
 
-  private:
+    private:
     DataType data_;
 
-  public:
+    public:
     SymbolWrapper(const SymbolWrapper &) noexcept = default;
     SymbolWrapper(SymbolWrapper &&) noexcept = default;
     SymbolWrapper &operator=(const SymbolWrapper &) noexcept = default;

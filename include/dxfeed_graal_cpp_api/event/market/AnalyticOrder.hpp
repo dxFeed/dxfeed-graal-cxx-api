@@ -61,7 +61,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     static constexpr std::uint32_t ICEBERG_TYPE_MASK = 3U;
     static constexpr std::uint32_t ICEBERG_TYPE_SHIFT = 0U;
 
-  protected:
+    protected:
     struct AnalyticOrderData {
         double icebergPeakSize = math::NaN;
         double icebergHiddenSize = math::NaN;
@@ -74,7 +74,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the AnalyticOrder object
     using Ptr = std::shared_ptr<AnalyticOrder>;
 

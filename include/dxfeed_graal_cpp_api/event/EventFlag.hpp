@@ -103,7 +103,7 @@ class DXFCPP_EXPORT EventFlag final {
     EventFlag(std::uint32_t flag, std::string name) noexcept : flag_{flag}, name_{std::move(name)} {
     }
 
-  public:
+    public:
     /**
      * `0x01` - A bitmask to get transaction pending indicator from the value of @ref ::getEventFlags() "eventFlags"
      * property.
@@ -398,7 +398,7 @@ DXFCPP_BEGIN_NAMESPACE
 class EventFlagsMask final {
     std::uint32_t mask_;
 
-  public:
+    public:
     /**
      * Creates an empty event flags mask
      */

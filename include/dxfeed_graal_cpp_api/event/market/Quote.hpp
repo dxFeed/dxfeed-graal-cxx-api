@@ -58,7 +58,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the Quote object
     using Ptr = std::shared_ptr<Quote>;
 

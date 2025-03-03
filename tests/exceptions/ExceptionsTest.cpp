@@ -19,7 +19,7 @@ using namespace dxfcpp;
 TEST_CASE("JavaException") {
     try {
         throw JavaException("message", "className", "stackTrace");
-    } catch (const JavaException& e) {
+    } catch (const JavaException &e) {
         std::cerr << e.what() << '\n';
         std::cerr << e.getStackTrace() << '\n';
     }
@@ -28,7 +28,7 @@ TEST_CASE("JavaException") {
 TEST_CASE("JavaException::throwException()") {
     try {
         JavaException::throwException();
-    } catch (const JavaException& e) {
+    } catch (const JavaException &e) {
         std::cerr << e.what() << '\n';
         std::cerr << e.getStackTrace() << '\n';
     }

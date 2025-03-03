@@ -39,7 +39,7 @@ void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle
  */
 JavaObjectHandle<DXPublisherObservableSubscription> /* dxfg_observable_subscription_t * */
 getSubscription(/* dxfg_publisher_t * */ const JavaObjectHandle<dxfcpp::DXPublisher> &publisher,
-                                 /* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
+                /* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
 
 } // namespace isolated::api::IsolatedDXPublisher
 

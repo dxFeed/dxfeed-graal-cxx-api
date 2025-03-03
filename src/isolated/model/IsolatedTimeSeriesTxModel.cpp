@@ -116,7 +116,7 @@ namespace Builder {
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withFromTime(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, int64_t fromTime);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withFromTime(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                          std::int64_t fromTime) {
+                                                           std::int64_t fromTime) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withFromTime`. The "
                                        "`builder` handle is invalid");
@@ -172,7 +172,7 @@ withSnapshotProcessing(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &buil
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withFeed(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_feed_t* feed);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withFeed(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                      const JavaObjectHandle<DXFeed> &feed) {
+                                                       const JavaObjectHandle<DXFeed> &feed) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withFeed`. The "
                                        "`builder` handle is invalid");
@@ -191,7 +191,7 @@ JavaObjectHandle<TimeSeriesTxModelBuilderTag> withFeed(const JavaObjectHandle<Ti
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withSymbol(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_symbol_t* symbol);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withSymbol(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                        const SymbolWrapper &symbol) {
+                                                         const SymbolWrapper &symbol) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withSymbol`. The "
                                        "`builder` handle is invalid");
@@ -207,7 +207,7 @@ JavaObjectHandle<TimeSeriesTxModelBuilderTag> withSymbol(const JavaObjectHandle<
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withListener(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withListener(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                          const JavaObjectHandle<TxModelListenerTag> &listener) {
+                                                           const JavaObjectHandle<TxModelListenerTag> &listener) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withListener`. The "
                                        "`builder` handle is invalid");
@@ -226,7 +226,7 @@ JavaObjectHandle<TimeSeriesTxModelBuilderTag> withListener(const JavaObjectHandl
 // dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withExecutor(graal_isolatethread_t* thread,
 // dxfg_time_series_tx_model_builder_t* source, dxfg_executor_t* executor);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withExecutor(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                          void *executor) {
+                                                           void *executor) {
     if (!builder) {
         throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withExecutor`. The "
                                        "`builder` handle is invalid");

@@ -27,7 +27,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModelBuilderTag{};
 
 struct DXFCPP_EXPORT TimeSeriesTxModelImpl {
     struct DXFCPP_EXPORT Builder {
-      protected:
+        protected:
         static JavaObjectHandle<TimeSeriesTxModelBuilderTag>
         withBatchProcessingImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle, bool isBatchProcessing);
 
@@ -52,7 +52,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModelImpl {
         buildImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle);
     };
 
-  protected:
+    protected:
     static JavaObjectHandle<TimeSeriesTxModelBuilderTag> newBuilderImpl(const EventTypeEnum &eventType);
 
     static bool isBatchProcessingImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle);
@@ -139,11 +139,11 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : TimeSeriesTxModelImpl, RequireMak
 
     /// A builder class for creating an instance of TimeSeriesTxModel.
     struct DXFCPP_EXPORT Builder final : TimeSeriesTxModelImpl::Builder, RequireMakeShared<Builder> {
-      private:
+        private:
         JavaObjectHandle<TimeSeriesTxModelBuilderTag> handle_;
         std::shared_ptr<TxModelListenerCommon> listener_;
 
-      public:
+        public:
         Builder(typename Builder::LockExternalConstructionTag, JavaObjectHandle<TimeSeriesTxModelBuilderTag> &&handle)
             : handle_(std::move(handle)) {
         }
@@ -327,11 +327,11 @@ struct DXFCPP_EXPORT TimeSeriesTxModel final : TimeSeriesTxModelImpl, RequireMak
         }
     };
 
-  private:
+    private:
     JavaObjectHandle<TimeSeriesTxModelTag> handle_;
     std::shared_ptr<TxModelListenerCommon> listener_;
 
-  public:
+    public:
     TimeSeriesTxModel(typename TimeSeriesTxModel::LockExternalConstructionTag,
                       JavaObjectHandle<TimeSeriesTxModelTag> &&handle)
         : handle_(std::move(handle)) {

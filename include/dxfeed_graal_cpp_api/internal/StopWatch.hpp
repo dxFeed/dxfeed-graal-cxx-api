@@ -20,13 +20,13 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 struct StopWatch final {
-  private:
+    private:
     mutable std::mutex mutex_{};
     std::chrono::milliseconds elapsed_{};
     std::chrono::steady_clock::time_point startTimeStamp_{};
     std::atomic<bool> isRunning_{};
 
-  public:
+    public:
     StopWatch() noexcept {
         reset();
     }

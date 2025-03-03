@@ -19,10 +19,10 @@ struct JavaException;
 struct Promises;
 
 struct PromiseImpl {
-  protected:
+    protected:
     void *handle = nullptr;
 
-  public:
+    public:
     explicit PromiseImpl(void *handle);
 
     bool isDone() const;
@@ -356,10 +356,10 @@ template <> struct Promise<void> : CommonPromiseMixin<Promise<void>>, VoidPromis
     friend struct VoidPromiseMixin<Promise>;
     friend struct Promises;
 
-  private:
+    private:
     VoidPromiseImpl impl;
 
-  public:
+    public:
     explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 
@@ -380,10 +380,10 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
     friend struct EventPromiseMixin<E, Promise>;
     friend struct Promises;
 
-  private:
+    private:
     EventPromiseImpl impl;
 
-  public:
+    public:
     explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 
@@ -429,12 +429,12 @@ template <typename E> struct PromiseList {
     using reverse_iterator = typename data_type::reverse_iterator;
     using const_reverse_iterator = typename data_type::const_reverse_iterator;
 
-  private:
+    private:
     PromiseListImpl impl;
 
     data_type data_;
 
-  public:
+    public:
     explicit PromiseList(void *handle = nullptr) : impl(handle) {
     }
 
@@ -564,10 +564,10 @@ struct Promise<std::vector<std::shared_ptr<E>>> : CommonPromiseMixin<Promise<std
     friend struct EventsPromiseMixin<E, Promise>;
     friend struct Promises;
 
-  private:
+    private:
     EventsPromiseImpl impl;
 
-  public:
+    public:
     explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 

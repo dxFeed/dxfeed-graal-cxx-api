@@ -20,7 +20,7 @@ class IndexedTxModelFixture {
     std::shared_ptr<DXFeed> dxfeed;
     std::shared_ptr<IndexedTxModelListener<Order>> listener;
 
-  public:
+    public:
     IndexedTxModelFixture()
         : dxfeed(DXEndpoint::getInstance(DXEndpoint::Role::FEED)->connect("demo.dxfeed.com:7300")->getFeed()),
           listener(IndexedTxModelListener<Order>::create([](const auto &, const auto &events, bool isSnapshot) {
@@ -46,7 +46,7 @@ class IndexedTxModelFixture {
           })) {
     }
 
-  protected:
+    protected:
     [[nodiscard]] std::shared_ptr<DXFeed> getDxFeed() const {
         return dxfeed;
     }

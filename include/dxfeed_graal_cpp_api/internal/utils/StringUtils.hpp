@@ -243,7 +243,7 @@ namespace detail {
 class IsIEqual {
     std::locale locale_;
 
-  public:
+    public:
     explicit IsIEqual(const std::locale &locale = std::locale()) : locale_{locale} {
     }
 

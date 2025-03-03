@@ -12,3 +12,6 @@ AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: None
 AllowShortLoopsOnASingleLine: false
+IndentAccessModifiers: false
+AccessModifierOffset: 0
+

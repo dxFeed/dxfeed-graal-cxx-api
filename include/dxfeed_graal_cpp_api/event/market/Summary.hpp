@@ -63,7 +63,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the Summary object
     using Ptr = std::shared_ptr<Summary>;
 

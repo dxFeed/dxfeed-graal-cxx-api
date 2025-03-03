@@ -26,7 +26,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct MetricsManager : private NonCopyable<MetricsManager> {
     using Value = std::variant<std::string, double, std::int64_t>;
 
-  private:
+    private:
     std::mutex mtx_{};
     std::unordered_map<std::string, Value> data_{};
 
@@ -52,7 +52,7 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
                                  data_.at(name)));
     }
 
-  public:
+    public:
     static std::string toString(const Value &value) {
         return std::visit(Overloads{
                               [](const std::string &s) {

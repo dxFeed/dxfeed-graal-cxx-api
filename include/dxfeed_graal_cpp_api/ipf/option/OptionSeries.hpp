@@ -11,10 +11,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <algorithm>
 #include <cstdint>
-#include <sstream>
 #include <map>
 #include <memory>
 #include <set>
+#include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -51,7 +51,7 @@ template <typename T> class OptionSeries final {
 
     mutable std::vector<double> strikes_{}; // Cached list of strikes
 
-  public:
+    public:
     /**
      * Default constructor for the OptionSeries class.
      *

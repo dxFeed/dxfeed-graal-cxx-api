@@ -47,11 +47,11 @@ struct RemoveAllPointers
 
 template <typename T> using RemoveAllPointers = typename detail::RemoveAllPointers<T>::type;
 
-template<class... Ts>
-struct Overloads : Ts... { using Ts::operator()...; };
+template <class... Ts> struct Overloads : Ts... {
+    using Ts::operator()...;
+};
 
-template<class... Ts>
-Overloads(Ts...) -> Overloads<Ts...>;
+template <class... Ts> Overloads(Ts...) -> Overloads<Ts...>;
 
 struct DXFeedEventListener {};
 
@@ -247,8 +247,7 @@ static bool equals(double a, double b, double eps = std::numeric_limits<double>:
     return std::abs(a - b) < eps;
 }
 
-template <typename T, typename U>
-static bool equals(T a, U b, double eps = std::numeric_limits<double>::epsilon()) {
+template <typename T, typename U> static bool equals(T a, U b, double eps = std::numeric_limits<double>::epsilon()) {
     if (std::isnan(static_cast<double>(a)) || std::isnan(static_cast<double>(b))) {
         return false;
     }
@@ -789,10 +788,10 @@ template <typename T, typename U> T fitToType(const U &size) {
 struct StringLikeWrapper {
     using DataType = std::variant<std::string, std::string_view>;
 
-  private:
+    private:
     DataType data_{};
 
-  public:
+    public:
     StringLikeWrapper(std::string_view sv) : data_{sv} {
     }
 
@@ -966,7 +965,7 @@ inline int compare(double d1, double d2) {
     return 0;
 }
 
-}
+} // namespace math
 
 DXFCPP_END_NAMESPACE
 

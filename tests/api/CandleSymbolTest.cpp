@@ -88,7 +88,9 @@ TEST_CASE("Normalization") {
 
 TEST_CASE("Double checks") {
     REQUIRE("AAPL{=15m}" == CandleSymbol::valueOf("AAPL", {CandlePeriod::valueOf(15, CandleType::MINUTE)}).toString());
-    REQUIRE("AAPL{=15m,price=bid}" == CandleSymbol::valueOf("AAPL", {CandlePrice::BID, CandlePeriod::valueOf(15, CandleType::MINUTE)}).toString());
+    REQUIRE(
+        "AAPL{=15m,price=bid}" ==
+        CandleSymbol::valueOf("AAPL", {CandlePrice::BID, CandlePeriod::valueOf(15, CandleType::MINUTE)}).toString());
     REQUIRE("AAPL{=15m}" ==
             CandleSymbol::valueOf("AAPL", std::vector{CandlePeriod::valueOf(15, CandleType::MINUTE)}).toString());
     REQUIRE("AAPL{=15m}" ==
