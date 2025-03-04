@@ -1,3 +1,4 @@
+* **\[MDAPI-30]\[C++]** Added LastEventsConsole sample
 * **\[MDAPI-27]\[C++]** Implemented OptionChain
     * Added `OptionChain` class. 
     * Added `OptionSeries` class. 

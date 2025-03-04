@@ -351,7 +351,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 
 ### Console
 
-- [ ] [LastEventConsoleSample](samples/cpp/LastEventConsoleSample/src/main.cpp)
+- [x] [LastEventConsoleSample](samples/cpp/Console/LastEventConsoleSample/src/main.cpp)
   demonstrates how to subscribe to various market events with the dxFeed API, cache them in memory, and
   take snapshots of these events based on user input
 

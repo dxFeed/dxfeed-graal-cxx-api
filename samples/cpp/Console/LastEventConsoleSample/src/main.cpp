@@ -25,7 +25,7 @@ int main() {
         const auto records = "Quote,Trade,Summary,Profile";
 
         /*
-         * Records for regional-exchange events are derived by appending "&" (ampersand) and the a single-digit
+         * Records for regional-exchange events are derived by appending "&" (ampersand) and a single-digit
          * exchange code. Regexp-like syntax can be used instead of listing them all. For example, the commented
          * line below and to the mix a subscription on regional quotes from all potential exchange codes A-Z
          */
@@ -45,10 +45,10 @@ int main() {
 
         /*
          * There are multiple ways to specify a list of symbols. It is typically taken from IPF file and its
-         * specification consists of an URL to the file which has to contain ".ipf" in order to be recognized.
+         * specification consists of a URL to the file which has to contain ".ipf" in order to be recognized.
          * The string below defines subscription for all symbols that are available on the demo feed.
          */
-        const auto symbols = "http://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip";
+        const auto symbols = "https://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip";
 
         /*
          * Permanent subscription property "dxfeed.qd.subscribe.ticker" can be directly placed into the
@@ -65,7 +65,7 @@ int main() {
          * The actual client code does not need a reference to DXEndpoint, which only contains lifecycle
          * methods like "connect" and "close". The client code needs a reference to DXFeed.
          */
-        auto feed = endpoint->getFeed();
+        const auto feed = endpoint->getFeed();
 
         /*
          * Print a short help.
@@ -82,13 +82,17 @@ int main() {
 
             std::getline(std::cin, symbol);
 
+            if (symbol.empty() || symbol == "exit" || symbol == "quit" || symbol == "q") {
+                return 0;
+            }
+
             /*
              * The first step is to extract promises for all events that we are interested in. This way we
              * can get an event even if we have not previously subscribed for it.
              */
-            auto quotePromise = feed->getLastEventPromise<Quote>(symbol);
-            auto tradePromise = feed->getLastEventPromise<Trade>(symbol);
-            auto summaryPromise = feed->getLastEventPromise<Summary>(symbol);
+            const auto quotePromise = feed->getLastEventPromise<Quote>(symbol);
+            const auto tradePromise = feed->getLastEventPromise<Trade>(symbol);
+            const auto summaryPromise = feed->getLastEventPromise<Summary>(symbol);
 
             /*
              * All promises are put into a list for convenience.
@@ -104,7 +108,7 @@ int main() {
              * "IBM&N" and the attempt to retrieve never completes (will time out), so we don't even try.
              */
             if (!MarketEventSymbols::hasExchangeCode(symbol)) {
-                auto profilePromise = feed->getLastEventPromise<Profile>(symbol);
+                const auto profilePromise = feed->getLastEventPromise<Profile>(symbol);
 
                 promises.push_back(profilePromise->sharedAs<EventType>(true));
             }
@@ -128,18 +132,14 @@ int main() {
              * "<null>" is printed when the event is not available.
              */
             for (const auto &promise : promises) {
-                auto event = promise->getResult();
+                const auto event = promise->getResult();
 
                 std::cout << (!event ? String::NUL : event->toString()) << std::endl;
             }
         }
-
-        std::this_thread::sleep_for(std::chrono::days(365));
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
 
         return 1;
     }
-
-    return 0;
 }

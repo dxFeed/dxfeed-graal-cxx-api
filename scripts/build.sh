@@ -1,5 +1,6 @@
 #!/bin/sh
 CUR_DIR="$(pwd)"
+CPM_SOURCE_CACHE="$CUR_DIR/.cache/CPM"
 DIST_DIR="$(pwd)/dist"
 TAG="$(git describe --tags --abbrev=0)"
 
