@@ -10,8 +10,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "JavaObjectHandle.hpp"
 
 #include <cstdint>
-#include <string>
 #include <functional>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -40,18 +40,18 @@ struct DXFCPP_EXPORT TimeFormat {
      */
     const static TimeFormat GMT;
 
-  private:
+    private:
     mutable JavaObjectHandle<TimeFormat> handle_;
     mutable std::mutex mtx_{};
     mutable bool initialized_{};
     std::function<JavaObjectHandle<TimeFormat>()> initializer_;
 
-    //lazy c-tor
+    // lazy c-tor
     explicit TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer);
 
     void init() const;
 
-  public:
+    public:
     virtual ~TimeFormat() noexcept = default;
 
     TimeFormat(const TimeFormat &) = delete;

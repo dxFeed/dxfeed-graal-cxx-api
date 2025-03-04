@@ -113,7 +113,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     void fillGraalData(void *graalNative) const noexcept override;
     static void freeGraalData(void *graalNative) noexcept;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the TimeAndSale object
     using Ptr = std::shared_ptr<TimeAndSale>;
 

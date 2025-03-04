@@ -83,7 +83,7 @@ using CandleSymbolAttributeVariant =
 struct DXFCPP_EXPORT CandleSymbol {
     static const CandleSymbol NUL;
 
-  private:
+    private:
     std::string symbol_{};
     std::string baseSymbol_{};
     std::optional<CandleExchange> exchange_{};
@@ -165,7 +165,7 @@ struct DXFCPP_EXPORT CandleSymbol {
         initTransientFields();
     }
 
-  public:
+    public:
     /**
      * Returns base market symbol without attributes.
      *

@@ -42,13 +42,13 @@ struct DXFCPP_EXPORT WildcardSymbol final {
      */
     static const WildcardSymbol ALL;
 
-  private:
+    private:
     std::string symbol_;
 
     WildcardSymbol(const std::string &symbol) noexcept : symbol_{symbol} {
     }
 
-  public:
+    public:
     WildcardSymbol(const WildcardSymbol &) noexcept = default;
     WildcardSymbol(WildcardSymbol &&) noexcept = default;
     WildcardSymbol &operator=(const WildcardSymbol &) noexcept = default;

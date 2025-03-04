@@ -40,12 +40,12 @@ struct SymbolWrapper;
 class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     friend SymbolWrapper;
 
-    //struct Impl;
+    // struct Impl;
 
     std::unique_ptr<SymbolWrapper> eventSymbol_;
     std::unique_ptr<IndexedEventSource> source_;
 
-  protected:
+    protected:
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
      * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
@@ -73,7 +73,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
      */
     static IndexedEventSubscriptionSymbol fromGraal(void *graalNative);
 
-  public:
+    public:
     /**
      * Creates indexed event subscription symbol with a specified event symbol and source.
      *
@@ -121,7 +121,8 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
 DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::IndexedEventSubscriptionSymbol> {
-    std::size_t operator()(const dxfcpp::IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
+    std::size_t
+    operator()(const dxfcpp::IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) const noexcept {
         return std::hash<std::string>{}(indexedEventSubscriptionSymbol.toString());
     }
 };

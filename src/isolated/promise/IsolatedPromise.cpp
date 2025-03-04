@@ -120,7 +120,7 @@ bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void *promise, s
     }
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_awaitWithoutException,
-                                                  static_cast<dxfg_promise_t *>(promise), timeoutInMilliseconds) == 1;
+                                                  static_cast<dxfg_promise_t *>(promise), timeoutInMilliseconds) == 0;
 }
 
 void /* int32_t */ cancel(/* dxfg_promise_t * */ void *promise) {

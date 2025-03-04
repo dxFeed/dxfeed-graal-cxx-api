@@ -51,7 +51,7 @@ struct DXFCPP_EXPORT Logging final {
      */
     static std::string levelToString(Level level);
 
-  private:
+    private:
     static SimpleHandler<void(Level, std::int64_t /*timestamp*/, const std::string & /*threadName*/,
                               std::int64_t /*threadId*/, const std::string & /*loggerName*/,
                               const std::string & /*message*/)>
@@ -59,7 +59,7 @@ struct DXFCPP_EXPORT Logging final {
 
     struct Impl;
 
-  public:
+    public:
     /**
      * Initializes logging and sets the logging level.
      *

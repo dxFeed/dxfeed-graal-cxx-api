@@ -102,7 +102,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the TradeETH object
     using Ptr = std::shared_ptr<TradeETH>;
 

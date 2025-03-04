@@ -25,12 +25,11 @@ class DXFCPP_EXPORT IndexedEventSource {
     std::int32_t id_{};
     std::string name_{};
 
-  public:
+    public:
     /**
      * The default source with zero @ref ::id() "identifier" for all events that do not support multiple sources.
      */
     static const IndexedEventSource DEFAULT;
-
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).

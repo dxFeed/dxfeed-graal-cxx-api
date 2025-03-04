@@ -56,7 +56,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
     explicit CandlePriceLevel(double value) noexcept : value_{value} {
     }
 
-  public:
+    public:
     CandlePriceLevel() noexcept = default;
     virtual ~CandlePriceLevel() noexcept = default;
 
@@ -146,8 +146,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the the candle price level attribute.
      */
-    static std::string
-    normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {

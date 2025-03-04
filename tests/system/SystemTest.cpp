@@ -77,7 +77,9 @@ TEST_CASE("Buffer pointer is NULL and buffer size is 0 - OK") {
 TEST_CASE("System properties can be set, as well as get their values. Multi-thread") {
     dxfc_error_code_t errorCode = DXFC_EC_ERROR;
     // TODO: move to jthread on clang
-    std::thread t([&errorCode] { errorCode = dxfc_system_set_property("PropertyName", "123"); });
+    std::thread t([&errorCode] {
+        errorCode = dxfc_system_set_property("PropertyName", "123");
+    });
     t.join();
     REQUIRE(errorCode == DXFC_EC_SUCCESS);
 
@@ -104,7 +106,9 @@ TEST_CASE("If the system property does not exist, then an empty string should be
 TEST_CASE("System properties can be set, as well as get their values. Multi-thread") {
     bool ok = false;
     // TODO: move to jthread on clang
-    std::thread t([&ok] { ok = dxfcpp::System::setProperty("PropertyName", "123"); });
+    std::thread t([&ok] {
+        ok = dxfcpp::System::setProperty("PropertyName", "123");
+    });
     t.join();
     REQUIRE(ok == true);
 

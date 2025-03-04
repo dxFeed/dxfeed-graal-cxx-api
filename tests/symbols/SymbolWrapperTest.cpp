@@ -25,4 +25,3 @@ TEST_CASE("SymbolWrapper::toStringUnderlying should return the result of toStrin
     REQUIRE(SymbolWrapper(c).toString() != c.toString());
     REQUIRE(SymbolWrapper(WildcardSymbol::ALL).toString() != WildcardSymbol::ALL.toString());
 }
-

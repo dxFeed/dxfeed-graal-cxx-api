@@ -30,10 +30,10 @@ struct DXFCPP_EXPORT Schedule {
     /// The alias to a type of unique pointer to the Schedule object
     using Unique = std::unique_ptr<Schedule>;
 
-  private:
+    private:
     JavaObjectHandle<Schedule> handle_;
 
-    explicit Schedule(JavaObjectHandle<Schedule>&& handle) noexcept;
+    explicit Schedule(JavaObjectHandle<Schedule> &&handle) noexcept;
 
     /**
      * Checks the handle, attempts to allocate memory for the pointer and return Schedule::Ptr
@@ -41,9 +41,9 @@ struct DXFCPP_EXPORT Schedule {
      * @param handle The graal Schedule's handle
      * @return The smart pointer for the Schedule object.
      */
-    static Schedule::Ptr create(JavaObjectHandle<Schedule>&& handle);
+    static Schedule::Ptr create(JavaObjectHandle<Schedule> &&handle);
 
-  public:
+    public:
     /**
      * Returns default schedule instance for specified instrument profile.
      *
@@ -147,7 +147,8 @@ struct DXFCPP_EXPORT Schedule {
      *
      * @param yearMonthDay The year, month and day numbers to search for
      * @return The day for specified year, month and day numbers
-     * @throw JavaException "IllegalArgumentException" if specified year, month and day numbers fall outside of valid date range
+     * @throw JavaException "IllegalArgumentException" if specified year, month and day numbers fall outside of valid
+     * date range
      * @see Day#getYearMonthDay()
      */
     std::shared_ptr<Day> getDayByYearMonthDay(std::int32_t yearMonthDay) const;

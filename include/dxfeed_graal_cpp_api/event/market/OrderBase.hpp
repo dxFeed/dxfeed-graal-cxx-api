@@ -12,11 +12,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <string>
 
+#include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEvent.hpp"
 #include "../IndexedEventSource.hpp"
-#include "../../exceptions/InvalidArgumentException.hpp"
 #include "MarketEvent.hpp"
 #include "OrderAction.hpp"
 #include "OrderSource.hpp"
@@ -79,7 +79,7 @@ struct EventMapper;
 class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     friend struct EventMapper;
 
-  protected:
+    protected:
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
@@ -158,7 +158,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /**
      * Maximum allowed sequence value.
      *

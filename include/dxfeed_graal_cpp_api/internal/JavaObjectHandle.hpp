@@ -15,11 +15,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT JavaObject {
-    static std::string toString(void* handle);
+    static std::string toString(void *handle);
 
-    static std::size_t hashCode(void* handle);
+    static std::size_t hashCode(void *handle);
 
-    static bool equals(void* objectHandle1, void* objectHandle2);
+    static bool equals(void *objectHandle1, void *objectHandle2);
 };
 
 template <typename T> struct JavaObjectHandle {
@@ -59,7 +59,7 @@ template <typename T> struct JavaObjectHandle {
         return static_cast<bool>(impl_);
     }
 
-  private:
+    private:
     std::unique_ptr<void, decltype(&deleter)> impl_;
 };
 
@@ -100,7 +100,7 @@ template <typename T> struct JavaObjectHandleList {
         return static_cast<bool>(impl_);
     }
 
-  private:
+    private:
     std::unique_ptr<void, decltype(&deleter)> impl_;
 };
 

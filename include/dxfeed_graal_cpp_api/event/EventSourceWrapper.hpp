@@ -61,7 +61,7 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
         static bool setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept;
         static bool freeGraalListElements(void *graalList, std::ptrdiff_t count);
 
-      public:
+        public:
         template <typename EventSourceIt> static void *toGraalList(EventSourceIt begin, EventSourceIt end) {
             auto size = calculateGraalListSize(std::distance(begin, end));
             // Zero size is needed, for example, to clear the list of event sources.
@@ -127,10 +127,10 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
         static std::vector<EventSourceWrapper> fromGraalList(void *graalList);
     };
 
-  private:
+    private:
     DataType data_;
 
-  public:
+    public:
     EventSourceWrapper(const EventSourceWrapper &) noexcept = default;
     EventSourceWrapper(EventSourceWrapper &&) noexcept = default;
     EventSourceWrapper &operator=(const EventSourceWrapper &) noexcept = default;

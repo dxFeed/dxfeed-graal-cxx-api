@@ -49,7 +49,7 @@ class DXFCPP_EXPORT EventTypeEnum {
           isOnlyIndexed_{isIndexed && !isTimeSeries}, isMarket_{isMarket} {
     }
 
-  public:
+    public:
     using RefSetType =
         std::unordered_set<std::reference_wrapper<const EventTypeEnum>, decltype([](auto &&eventTypeRef) {
                                return static_cast<std::size_t>(eventTypeRef.get().getId());
@@ -208,7 +208,6 @@ inline EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept
 }
 
 } // namespace literals
-
 
 DXFCPP_END_NAMESPACE
 

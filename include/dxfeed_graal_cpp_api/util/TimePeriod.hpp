@@ -89,13 +89,13 @@ struct DXFCPP_EXPORT TimePeriod {
     TimePeriod &operator=(const TimePeriod &) = delete;
     TimePeriod &operator=(const TimePeriod &&) noexcept = delete;
 
-  private:
+    private:
     mutable JavaObjectHandle<TimePeriod> handle_;
     mutable std::mutex mtx_{};
     mutable bool initialized_{};
     std::function<JavaObjectHandle<TimePeriod>()> initializer_;
 
-    //lazy c-tor
+    // lazy c-tor
     explicit TimePeriod(std::function<JavaObjectHandle<TimePeriod>()> &&initializer);
     explicit TimePeriod(JavaObjectHandle<TimePeriod> &&handle);
 

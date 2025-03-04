@@ -59,7 +59,7 @@ struct DXFCPP_EXPORT SessionFilter final {
     /** Accepts any session with type SessionType::AFTER_MARKET. */
     static const SessionFilter AFTER_MARKET;
 
-  protected:
+    protected:
     SessionFilterEnum code_{};
 
     std::string name_{};
@@ -72,7 +72,7 @@ struct DXFCPP_EXPORT SessionFilter final {
     mutable std::mutex mtx_{};
     mutable JavaObjectHandle<SessionFilter> handle_{};
 
-  public:
+    public:
     SessionFilter() noexcept = default;
     virtual ~SessionFilter() noexcept = default;
 
@@ -92,7 +92,8 @@ struct DXFCPP_EXPORT SessionFilter final {
      * @param type required type, std::nullopt if not relevant
      * @param trading required trading flag, std::nullopt if not relevant
      */
-    SessionFilter(SessionFilterEnum code, std::string name, std::optional<SessionType> type, std::optional<bool> trading) noexcept;
+    SessionFilter(SessionFilterEnum code, std::string name, std::optional<SessionType> type,
+                  std::optional<bool> trading) noexcept;
 
     /**
      * Tests whether or not the specified session is an acceptable result.
@@ -120,7 +121,7 @@ struct DXFCPP_EXPORT SessionFilter final {
         return trading_;
     }
 
-    const JavaObjectHandle<SessionFilter>& getHandle() const&;
+    const JavaObjectHandle<SessionFilter> &getHandle() const &;
 };
 
 DXFCPP_END_NAMESPACE

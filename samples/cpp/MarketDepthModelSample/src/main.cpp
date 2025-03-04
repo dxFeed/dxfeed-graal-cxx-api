@@ -49,7 +49,7 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
     }
 }
 
-int main(int /*argc*/, char */*argv*/[]) {
+int main(int /*argc*/, char * /*argv*/[]) {
     ot::VirtualTerminal::enable();
     otp::hideCursor();
 
@@ -57,8 +57,8 @@ int main(int /*argc*/, char */*argv*/[]) {
         auto address = "demo.dxfeed.com:7300";
         auto symbol = "AAPL";
         auto sources = "NTV";
-        //auto sources = "ntv";
-        //auto sources = "AGGREGATE_ASK,AGGREGATE_BID";
+        // auto sources = "ntv";
+        // auto sources = "AGGREGATE_ASK,AGGREGATE_BID";
         std::size_t depth = 19u;
 
         // Disable QD logging.

@@ -123,7 +123,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct TimeSeriesTxModelImpl;
     friend struct IndexedTxModelImpl;
 
-  private:
+    private:
     JavaObjectHandle<DXFeed> handle_;
     static std::shared_ptr<DXFeed> create(void *feedHandle);
 
@@ -152,10 +152,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     JavaObjectHandle<DXFeedSubscription>
     createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
-  protected:
+    protected:
     DXFeed() noexcept;
 
-  public:
+    public:
     ~DXFeed() noexcept override;
 
     /**

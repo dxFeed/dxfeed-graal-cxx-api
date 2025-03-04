@@ -116,7 +116,7 @@ std::size_t PromiseListImpl::getSize(void *handle) {
     return list->size;
 }
 
-void* PromiseListImpl::getElement(void *handle, std::size_t index) {
+void *PromiseListImpl::getElement(void *handle, std::size_t index) {
     if (!handle) {
         return {};
     }

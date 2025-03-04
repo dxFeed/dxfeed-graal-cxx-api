@@ -37,7 +37,8 @@ struct DXEndpoint;
  * @ref DXFeed::getInstance() "DXFeed::getInstance()" method can be acquired with the following code:
  * <pre><tt>
  * @ref DXEndpoint "auto" endpoint = DXEndpoint::getInstance();
- * @ref OnDemandService "auto" onDemand = OnDemandService::@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance"(endpoint);
+ * @ref OnDemandService "auto" onDemand = OnDemandService::@ref
+ * OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance"(endpoint);
  * </tt></pre>
  *
  * This instance can be used for on-demand historical tick data replay only when endpoint is connected to
@@ -54,16 +55,19 @@ struct DXEndpoint;
  * initially when starting replay with a two-argument version of @ref OnDemandService::replay() "replay" method.
  * @ref OnDemandService::pause() "pause" method is the same as @ref OnDemandService::setSpeed() "setSpeed(0)".
  *
- * <p>@ref OnDemandService::stopAndResume() "stopAndResume" method stops data replay and resumes ordinary real-time or delayed data feed
- * that was used before @ref OnDemandService::replay() "replay" method was invoked.
- * Endpoints with a role of
- * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" do not have an ordinary feed (they are essentially on-demand only)
- * and thus @ref OnDemandService::stopAndResume() "stopAndResume" method works like @ref OnDemandService::stopAndClear() "stopAndClear" for them.
+ * <p>@ref OnDemandService::stopAndResume() "stopAndResume" method stops data replay and resumes ordinary real-time or
+ * delayed data feed that was used before @ref OnDemandService::replay() "replay" method was invoked. Endpoints with a
+ * role of
+ * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" do not have an ordinary feed (they are essentially on-demand
+ * only) and thus @ref OnDemandService::stopAndResume() "stopAndResume" method works like @ref
+ * OnDemandService::stopAndClear() "stopAndClear" for them.
  *
  * <h3>State and change notifications</h3>
  *
- * On-demand historical tick data replay state can be queried with @ref OnDemandService::isReplaySupported() "isReplaySupported",
- * @ref OnDemandService::isReplay() "isReplay", @ref OnDemandService::getSpeed() "getSpeed", and @ref OnDemandService::getTime() "getTime" methods.
+ * On-demand historical tick data replay state can be queried with @ref OnDemandService::isReplaySupported()
+ * "isReplaySupported",
+ * @ref OnDemandService::isReplay() "isReplay", @ref OnDemandService::getSpeed() "getSpeed", and @ref
+ * OnDemandService::getTime() "getTime" methods.
  *
  * <h3>Threads and locks</h3>
  *
@@ -76,14 +80,14 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     /// The alias to a type of unique pointer to the OnDemandService object
     using Unique = std::unique_ptr<OnDemandService>;
 
-  private:
+    private:
     JavaObjectHandle<OnDemandService> handle_;
     std::shared_ptr<DXEndpoint> endpoint_{};
 
-  protected:
+    protected:
     OnDemandService() noexcept;
 
-  public:
+    public:
     ~OnDemandService() noexcept override;
 
     /**
@@ -92,12 +96,14 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * not connected to any other real-time or delayed data feed.
      * This method is a shortcut for:
      * <pre><tt>
-     * OnDemandService::@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance"(@ref DXEndpoint "DXEndpoint"::@ref DXEndpoint::getInstance(DXEndpoint::Role) "getInstance"(DXEndpoint::Role::ON_DEMAND_FEED))</tt></pre>
+     * OnDemandService::@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance"(@ref DXEndpoint
+     * "DXEndpoint"::@ref DXEndpoint::getInstance(DXEndpoint::Role)
+     * "getInstance"(DXEndpoint::Role::ON_DEMAND_FEED))</tt></pre>
      *
      * <p>If you need an instance of OnDemandService to seamlessly switch from other real-time or delayed
      * data feed to on-demand historical tick data replay, then use
-     * {@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance(endpoint)" method for a specific `endpoint` that
-     * you are using.
+     * {@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance(endpoint)" method for a specific
+     * `endpoint` that you are using.
      *
      * @return on-demand endpoint for the default DXEndpoint instance.
      */
@@ -136,7 +142,8 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     /**
      * Returns `true` when this on-demand historical data replay service is in replay mode.
      * Replay mode is in effect after invocation of @ref OnDemandService::replay() "replay" method and
-     * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::stopAndClear() "stopAndClear" methods.
+     * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::stopAndClear()
+     * "stopAndClear" methods.
      *
      * @return `true` when this on-demand historical data replay service is in replay mode.
      */
@@ -145,7 +152,8 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     /**
      * Returns `true` when this on-demand historical data replay service is in clear mode.
      * Clear mode is in effect after invocation of @ref OnDemandService::stopAndClear() "stopAndClear"  method and
-     * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::replay() "replay" methods.
+     * before invocation @ref OnDemandService::stopAndResume() "stopAndResume" or @ref OnDemandService::replay()
+     * "replay" methods.
      *
      * @return `true` when this on-demand historical data replay service is in clear mode.
      */
@@ -239,8 +247,9 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * either OnDemandService::pause() to keep data snapshot or OnDemandService::stopAndClear() to clear data.
      *
      * <p>Note, that endpoints with a role of
-     * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" do not have an ordinary feed (they are essentially on-demand only)
-     * and thus `stopAndResume` method works like @ref OnDemandService::stopAndClear() "stopAndClear" for them.
+     * @ref DXEndpoint::Role::ON_DEMAND_FEED "ON_DEMAND_FEED" do not have an ordinary feed (they are essentially
+     * on-demand only) and thus `stopAndResume` method works like @ref OnDemandService::stopAndClear() "stopAndClear"
+     * for them.
      */
     void stopAndResume() const;
 
@@ -262,9 +271,9 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     void stopAndClear() const;
 
     /**
-     * Changes on-demand historical data replay speed while continuing replay at current @ref OnDemandService::getTime() "time".
-     * Speed is measured with respect to the real-time playback speed.
-     * This method can only be called with non-zero speed in @ref OnDemandService::isReplay() "replay mode".
+     * Changes on-demand historical data replay speed while continuing replay at current @ref OnDemandService::getTime()
+     * "time". Speed is measured with respect to the real-time playback speed. This method can only be called with
+     * non-zero speed in @ref OnDemandService::isReplay() "replay mode".
      *
      * @param speed on-demand historical data replay speed.
      */

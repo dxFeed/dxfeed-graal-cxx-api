@@ -22,7 +22,7 @@ struct DXFCPP_EXPORT InvalidArgumentException : RuntimeException {
     explicit InvalidArgumentException(const StringLikeWrapper &message,
                                       const StringLikeWrapper &additionalStackTrace = "");
 
-    InvalidArgumentException(const InvalidArgumentException& other) noexcept;
+    InvalidArgumentException(const InvalidArgumentException &other) noexcept;
 };
 
 DXFCPP_END_NAMESPACE

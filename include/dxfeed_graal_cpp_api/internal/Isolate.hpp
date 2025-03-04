@@ -78,7 +78,7 @@ class Isolate final {
 
     GraalIsolateThreadHandle get() noexcept;
 
-  public:
+    public:
     Isolate(const Isolate &) = delete;
     Isolate &operator=(const Isolate &) = delete;
 

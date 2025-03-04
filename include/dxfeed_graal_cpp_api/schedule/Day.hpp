@@ -47,10 +47,10 @@ struct DXFCPP_EXPORT Day {
     /// The alias to a type of unique pointer to the Day object
     using Unique = std::unique_ptr<Day>;
 
-  private:
+    private:
     JavaObjectHandle<Day> handle_;
 
-    explicit Day(JavaObjectHandle<Day>&& handle) noexcept;
+    explicit Day(JavaObjectHandle<Day> &&handle) noexcept;
 
     /**
      * Checks the handle, attempts to allocate memory for the pointer and return Day::Ptr
@@ -58,9 +58,9 @@ struct DXFCPP_EXPORT Day {
      * @param handle The graal Day's handle
      * @return The smart pointer for the Day object.
      */
-    static Day::Ptr create(JavaObjectHandle<Day>&& handle);
+    static Day::Ptr create(JavaObjectHandle<Day> &&handle);
 
-  public:
+    public:
     /**
      * @return The schedule to which this day belongs.
      */
@@ -199,7 +199,8 @@ struct DXFCPP_EXPORT Day {
      * <pre>auto session = day->findFirstSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The first session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * @return The first session that is accepted by the filter or Session::Ptr{nullptr}
+     * (std::shared_ptr<Session>{nullptr})
      */
     std::shared_ptr<Session> findFirstSession(const SessionFilter &filter) const;
 
@@ -214,7 +215,8 @@ struct DXFCPP_EXPORT Day {
      * <pre>auto session = day->findLastSession(SessionFilter::REGULAR);</pre>
      *
      * @param filter The filter to test sessions
-     * @return The last session that is accepted by the filter or Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
+     * @return The last session that is accepted by the filter or Session::Ptr{nullptr}
+     * (std::shared_ptr<Session>{nullptr})
      */
     std::shared_ptr<Session> findLastSession(const SessionFilter &filter) const;
 
@@ -246,7 +248,8 @@ struct DXFCPP_EXPORT Day {
      * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
      *
      * @param filter The filter to test days
-     * @return The nearest previous day that is accepted by the filter or Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr})
+     * @return The nearest previous day that is accepted by the filter or Day::Ptr{nullptr}
+     * (std::shared_ptr<Day>{nullptr})
      */
     Day::Ptr findPrevDay(const DayFilter &filter) const;
 
@@ -256,7 +259,8 @@ struct DXFCPP_EXPORT Day {
      * within one year this method will return Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr}).
      *
      * @param filter The filter to test days
-     * @return The nearest following day that is accepted by the filter or Day::Ptr{nullptr} (std::shared_ptr<Day>{nullptr})
+     * @return The nearest following day that is accepted by the filter or Day::Ptr{nullptr}
+     * (std::shared_ptr<Day>{nullptr})
      */
     Day::Ptr findNextDay(const DayFilter &filter) const;
 

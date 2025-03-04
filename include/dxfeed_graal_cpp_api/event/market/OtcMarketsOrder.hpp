@@ -141,7 +141,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the OtcMarketsOrder object
     using Ptr = std::shared_ptr<OtcMarketsOrder>;
 

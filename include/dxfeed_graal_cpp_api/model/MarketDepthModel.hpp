@@ -119,13 +119,13 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
     struct DXFCPP_EXPORT Builder final : RequireMakeShared<Builder> {
         friend struct MarketDepthModel;
 
-      private:
+        private:
         std::shared_ptr<typename IndexedTxModel<O>::Builder> builder_{};
         std::shared_ptr<MarketDepthModelListener<O>> listener_{};
         std::size_t depthLimit_{};
         std::int64_t aggregationPeriodMillis_{};
 
-      public:
+        public:
         explicit Builder(RequireMakeShared<Builder>::LockExternalConstructionTag) {
             builder_ = IndexedTxModel<O>::newBuilder();
         }
@@ -178,10 +178,9 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
          * @param onEventsReceived The callback.
          * @return The builder instance.
          */
-        std::shared_ptr<Builder>
-        withListener(std::function<void(const std::vector<std::shared_ptr<O>> & /* buy */,
-                                        const std::vector<std::shared_ptr<O>> & /* sell */)>
-                         onEventsReceived) {
+        std::shared_ptr<Builder> withListener(std::function<void(const std::vector<std::shared_ptr<O>> & /* buy */,
+                                                                 const std::vector<std::shared_ptr<O>> & /* sell */)>
+                                                  onEventsReceived) {
             this->listener_ = MarketDepthModelListener<O>::create(onEventsReceived);
 
             return this->template sharedAs<Builder>();
@@ -396,7 +395,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
      * @tparam Less The comparator type.
      */
     template <typename Less> struct SortedOrderSet {
-      private:
+        private:
         mutable std::recursive_mutex mutex_{};
         std::vector<std::shared_ptr<O>> snapshot_{};
         std::set<std::shared_ptr<O>, Less> orders_{};
@@ -452,7 +451,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
             }
         }
 
-      public:
+        public:
         /// @return A value indicating whether this set has changed.
         bool isChanged() const {
             return isChanged_;
@@ -540,7 +539,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
         }
     };
 
-  private:
+    private:
     mutable std::recursive_mutex mtx_{};
     std::unordered_map<std::int64_t, std::shared_ptr<O>> ordersByIndex_{};
     SortedOrderSet<BuyLess> buyOrders_{};
@@ -697,7 +696,7 @@ template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : Re
         sellOrders_.clearBySource(source);
     }
 
-  public:
+    public:
     MarketDepthModel(typename RequireMakeShared<MarketDepthModel<O>>::LockExternalConstructionTag,
                      const std::shared_ptr<Builder> &builder) {
         depthLimit_ = builder->depthLimit_;

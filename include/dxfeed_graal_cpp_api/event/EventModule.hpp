@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "EventFlag.hpp"
 #include "EventMapper.hpp"
+#include "EventSourceWrapper.hpp"
 #include "EventType.hpp"
 #include "EventTypeEnum.hpp"
 #include "IndexedEvent.hpp"
@@ -19,6 +20,5 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "market/MarketModule.hpp"
 #include "misc/MiscModule.hpp"
 #include "option/OptionModule.hpp"
-#include "EventSourceWrapper.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

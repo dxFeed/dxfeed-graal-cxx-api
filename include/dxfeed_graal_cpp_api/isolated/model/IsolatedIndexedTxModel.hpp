@@ -57,7 +57,7 @@ namespace Builder {
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withSources(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_indexed_event_source_list* sources);
 JavaObjectHandle<IndexedTxModelBuilderTag> withSources(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                      void *sources);
+                                                       void *sources);
 
 // dxfg_indexed_tx_model_t* dxfg_IndexedTxModel_Builder_build(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source);
@@ -65,8 +65,8 @@ JavaObjectHandle<IndexedTxModelTag> build(const JavaObjectHandle<IndexedTxModelB
 
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withBatchProcessing(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, int32_t isBatchProcessing);
-JavaObjectHandle<IndexedTxModelBuilderTag> withBatchProcessing(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                              bool isBatchProcessing);
+JavaObjectHandle<IndexedTxModelBuilderTag>
+withBatchProcessing(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder, bool isBatchProcessing);
 
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withSnapshotProcessing(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, int32_t isSnapshotProcessing);
@@ -76,22 +76,22 @@ withSnapshotProcessing(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withFeed(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_feed_t* feed);
 JavaObjectHandle<IndexedTxModelBuilderTag> withFeed(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                   const JavaObjectHandle<DXFeed> &feed);
+                                                    const JavaObjectHandle<DXFeed> &feed);
 
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withSymbol(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_symbol_t* symbol);
 JavaObjectHandle<IndexedTxModelBuilderTag> withSymbol(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                     const SymbolWrapper &symbol);
+                                                      const SymbolWrapper &symbol);
 
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withListener(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
 JavaObjectHandle<IndexedTxModelBuilderTag> withListener(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                       const JavaObjectHandle<TxModelListenerTag> &listener);
+                                                        const JavaObjectHandle<TxModelListenerTag> &listener);
 
 // dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withExecutor(graal_isolatethread_t* thread,
 // dxfg_indexed_tx_model_builder_t* source, dxfg_executor_t* executor);
 JavaObjectHandle<IndexedTxModelBuilderTag> withExecutor(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
-                                                       void *executor);
+                                                        void *executor);
 
 } // namespace Builder
 } // namespace isolated::model::IsolatedIndexedTxModel

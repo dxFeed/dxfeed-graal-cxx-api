@@ -189,7 +189,8 @@ inline constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum en
     case CEntryPointErrorsEnum::CPU_FEATURE_CHECK_FAILED:
         return "Current target does not support the following CPU features that are required by the image.";
     case CEntryPointErrorsEnum::PAGE_SIZE_CHECK_FAILED:
-        return "Image page size is incompatible with run-time page size. Rebuild image with -H:PageSize=[pagesize] to set appropriately.";
+        return "Image page size is incompatible with run-time page size. Rebuild image with -H:PageSize=[pagesize] to "
+               "set appropriately.";
     case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_CREATE_FAILED:
         return "Creating an in-memory file for the GOT failed.";
     case CEntryPointErrorsEnum::DYNAMIC_METHOD_ADDRESS_RESOLUTION_GOT_FD_RESIZE_FAILED:

@@ -18,9 +18,9 @@ namespace isolated::event {
 namespace IsolatedIndexedEventSource {
 
 // int32_t dxfg_IndexedEventSource_release(graal_isolatethread_t *thread, dxfg_indexed_event_source_t* source);
-void release(void* source);
+void release(void *source);
 
-}
+} // namespace IsolatedIndexedEventSource
 
 namespace IsolatedEventType {
 
@@ -33,7 +33,7 @@ namespace IsolatedEventType {
 
 std::unique_ptr<void, decltype(&release)> toUnique(void *eventType);
 
-} // namespace IsolatetEventType
+} // namespace IsolatedEventType
 
 namespace IsolatedEventTypeList {
 
@@ -42,7 +42,7 @@ namespace IsolatedEventTypeList {
 
 std::unique_ptr<void, decltype(&release)> toUnique(void *eventTypes);
 
-} // namespace IsolatetEventTypeList
+} // namespace IsolatedEventTypeList
 } // namespace isolated::event
 
 DXFCPP_END_NAMESPACE

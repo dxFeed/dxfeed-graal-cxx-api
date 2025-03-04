@@ -88,7 +88,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the Series object
     using Ptr = std::shared_ptr<Series>;
 

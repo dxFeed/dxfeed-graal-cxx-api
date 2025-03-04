@@ -56,7 +56,9 @@ struct DXFeedTestFixture {
 
     std::shared_ptr<Candle> createCandle(std::int64_t time) const {
         return std::make_shared<Candle>(CandleSymbol::valueOf(symbol))
-            ->withTime(time).withClose(42.0).withVolume(1000)
+            ->withTime(time)
+            .withClose(42.0)
+            .withVolume(1000)
             .sharedAs<Candle>();
     }
 

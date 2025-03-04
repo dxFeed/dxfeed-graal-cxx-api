@@ -103,7 +103,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
 
     default:
         throw RuntimeException(fmt::format("Unable to create SymbolWrapper. Unknown symbol type: {}",
-                                             static_cast<int>(static_cast<dxfg_symbol_t *>(graalNative)->type)));
+                                           static_cast<int>(static_cast<dxfg_symbol_t *>(graalNative)->type)));
     }
 }
 

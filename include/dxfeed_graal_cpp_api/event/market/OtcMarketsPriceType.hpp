@@ -17,8 +17,8 @@ DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Type of prices on the OTC Markets.
- * Please see <a href="https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf">OTC Markets Data Display Requirements</a>
- * section "4.2 Quote Price Types" for complete description.
+ * Please see <a href="https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf">OTC
+ * Markets Data Display Requirements</a> section "4.2 Quote Price Types" for complete description.
  */
 struct OtcMarketsPriceType : Enum<OtcMarketsPriceType, std::uint32_t> {
     using Enum::Enum;

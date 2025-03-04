@@ -22,7 +22,8 @@ namespace IsolatedDayFilter {
 
 namespace IsolatedDay {
 
-/* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule> getSchedule(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day);
+/* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule>
+getSchedule(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day);
 
 std::int32_t getDayId(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day);
 
@@ -52,8 +53,8 @@ std::int64_t getResetTime(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> 
 
 /* dxfg_session_list* */ void *getSessions(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day);
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session> getSessionByTime(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
-                                             std::int64_t time);
+/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
+getSessionByTime(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day, std::int64_t time);
 
 /* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
 getFirstSession(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
@@ -71,17 +72,21 @@ findFirstSession(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
 findLastSession(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
                 /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
 
-/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day> getPrevDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
-                                   /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
+/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day>
+getPrevDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
+           /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
 
-/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day> getNextDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
-                                   /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
+/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day>
+getNextDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
+           /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
 
-/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day> findPrevDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
-                                    /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
+/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day>
+findPrevDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
+            /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
 
-/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day> findNextDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
-                                    /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
+/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day>
+findNextDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
+            /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
 
 std::size_t getHashCode(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day);
 

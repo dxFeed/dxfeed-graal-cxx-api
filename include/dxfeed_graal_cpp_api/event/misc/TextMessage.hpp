@@ -32,7 +32,7 @@ struct EventMapper;
 class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     friend struct EventMapper;
 
-  protected:
+    protected:
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;
@@ -46,7 +46,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     void fillGraalData(void *graalNative) const;
     static void freeGraalData(void *graalNative) noexcept;
 
-  public:
+    public:
     /**
      * Maximum allowed sequence value.
      *

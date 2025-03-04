@@ -15,7 +15,7 @@ JavaException::JavaException(const StringLikeWrapper &message, const StringLikeW
                        stackTrace) {
 }
 
-JavaException::JavaException(const JavaException& other) noexcept = default;
+JavaException::JavaException(const JavaException &other) noexcept = default;
 
 JavaException JavaException::create(void *exceptionHandle) {
     if (exceptionHandle == nullptr) {

@@ -21,7 +21,7 @@ using namespace std::literals;
 int main() {
     try {
         const auto address = "demo.dxfeed.com:7300"; // The address of the DxFeed endpoint.
-        const auto symbol = "ETH/USD:GDAX"; // The symbol for which we want to receive quotes.
+        const auto symbol = "ETH/USD:GDAX";          // The symbol for which we want to receive quotes.
 
         // Disable QD logging.
         // Logging::init();

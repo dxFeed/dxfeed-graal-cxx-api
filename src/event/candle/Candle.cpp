@@ -3,17 +3,17 @@
 
 #include <dxfeed_graal_cpp_api/event/candle/Candle.hpp>
 
-#include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
 #include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
 #include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
 
-#include <dxfg_api.h>
 #include <dxfeed_graal_c_api/api.h>
+#include <dxfg_api.h>
 
+#include <cassert>
 #include <memory>
 #include <utility>
-#include <cassert>
 
 #include <fmt/format.h>
 

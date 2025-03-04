@@ -68,7 +68,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
 
     friend struct DXEndpoint;
 
-  private:
+    private:
     mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<DXPublisher> handle_;
     std::unordered_map<std::reference_wrapper<const dxfcpp::EventTypeEnum>, std::shared_ptr<ObservableSubscription>>
@@ -77,10 +77,10 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     static std::shared_ptr<DXPublisher> create(void *handle);
     void publishEventsImpl(void *graalEventsList) const noexcept;
 
-  protected:
+    protected:
     DXPublisher() noexcept;
 
-  public:
+    public:
     ~DXPublisher() noexcept override;
 
     /**

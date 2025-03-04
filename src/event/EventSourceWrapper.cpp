@@ -16,7 +16,7 @@ void *EventSourceWrapper::ListUtils::newGraalList(std::ptrdiff_t size) {
 }
 
 bool EventSourceWrapper::ListUtils::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx,
-                                                                   void *element) noexcept {
+                                                        void *element) noexcept {
     return GraalListUtils<dxfg_indexed_event_source_list, EventSourceWrapper>::setElement(graalList, elementIdx,
                                                                                           element);
 }
@@ -33,8 +33,9 @@ std::vector<EventSourceWrapper> EventSourceWrapper::ListUtils::fromGraalList(voi
     return GraalListUtils<dxfg_indexed_event_source_list, EventSourceWrapper>::fromList(graalList);
 }
 
-template void *EventSourceWrapper::ListUtils::toGraalList<dxfcpp::EventSourceWrapper const *>(
-    dxfcpp::EventSourceWrapper const *, dxfcpp::EventSourceWrapper const *);
+template void *
+EventSourceWrapper::ListUtils::toGraalList<dxfcpp::EventSourceWrapper const *>(dxfcpp::EventSourceWrapper const *,
+                                                                               dxfcpp::EventSourceWrapper const *);
 
 EventSourceWrapper EventSourceWrapper::fromGraal(void *graalNative) {
     switch (static_cast<dxfg_indexed_event_source_t *>(graalNative)->type) {

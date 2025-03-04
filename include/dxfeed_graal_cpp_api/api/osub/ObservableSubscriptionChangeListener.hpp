@@ -7,8 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../symbols/SymbolWrapper.hpp"
 #include "../../entity/SharedEntity.hpp"
+#include "../../symbols/SymbolWrapper.hpp"
 
 #include <memory>
 #include <unordered_set>
@@ -17,7 +17,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<ObservableSubscriptionChangeListener> {
     explicit ObservableSubscriptionChangeListener(LockExternalConstructionTag);
-  ~ObservableSubscriptionChangeListener() noexcept override;
+    ~ObservableSubscriptionChangeListener() noexcept override;
 
     static std::shared_ptr<ObservableSubscriptionChangeListener>
     create(std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded);
@@ -29,7 +29,7 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<Ob
 
     const JavaObjectHandle<ObservableSubscriptionChangeListener> &getHandle() const;
 
-  private:
+    private:
     mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<ObservableSubscriptionChangeListener> handle_;
     SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded_{};

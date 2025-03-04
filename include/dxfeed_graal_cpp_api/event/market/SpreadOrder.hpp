@@ -94,7 +94,7 @@ struct EventMapper;
 class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     friend struct EventMapper;
 
-  protected:
+    protected:
     struct SpreadOrderData {
         std::optional<std::string> spreadSymbol{};
     };
@@ -105,7 +105,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     void fillGraalData(void *graalNative) const noexcept override;
     static void freeGraalData(void *graalNative) noexcept;
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the SpreadOrder object
     using Ptr = std::shared_ptr<SpreadOrder>;
 

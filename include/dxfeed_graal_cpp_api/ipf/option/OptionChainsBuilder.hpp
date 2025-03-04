@@ -32,11 +32,11 @@ template <class T> class OptionChainsBuilder {
     double strike_{};
     std::unordered_map<std::string, OptionChain<T>> chains_{};
 
-    OptionChain<T>& getOrCreateChain(const std::string &symbol) {
+    OptionChain<T> &getOrCreateChain(const std::string &symbol) {
         return chains_.try_emplace(symbol, OptionChain<T>(symbol)).first->second;
     }
 
-  public:
+    public:
     /**
      * Creates new option chains builder.
      */

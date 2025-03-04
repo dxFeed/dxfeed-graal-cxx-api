@@ -183,9 +183,9 @@ DXFeed::getIndexedEventsIfSubscribedImpl(const EventTypeEnum &eventType, const S
 }
 
 std::vector<std::shared_ptr<EventType>> DXFeed::getTimeSeriesIfSubscribedImpl(const EventTypeEnum &eventType,
-                                                                                    const SymbolWrapper &symbol,
-                                                                                    std::int64_t fromTime,
-                                                                                    std::int64_t toTime) const {
+                                                                              const SymbolWrapper &symbol,
+                                                                              std::int64_t fromTime,
+                                                                              std::int64_t toTime) const {
     return isolated::api::IsolatedDXFeed::getTimeSeriesIfSubscribed(handle_, eventType, symbol, fromTime, toTime);
 }
 

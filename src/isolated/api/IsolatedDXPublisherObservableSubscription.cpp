@@ -72,8 +72,9 @@ void /* int32_t */ addChangeListener(
     }
 
     if (!listener) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_ObservableSubscription_addChangeListener`. The "
-                                    "`listener` handle is invalid");
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_ObservableSubscription_addChangeListener`. The "
+            "`listener` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(
@@ -87,7 +88,7 @@ void /* int32_t */ removeChangeListener(
         &listener) {
     if (!sub) {
         throw InvalidArgumentException("Unable to execute function `dxfg_ObservableSubscription_removeChangeListener`. "
-                                    "The `sub` handle is invalid");
+                                       "The `sub` handle is invalid");
     }
 
     if (!listener) {

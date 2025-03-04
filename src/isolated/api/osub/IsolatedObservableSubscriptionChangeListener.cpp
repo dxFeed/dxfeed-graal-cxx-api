@@ -27,7 +27,7 @@ create(/* dxfg_ObservableSubscriptionChangeListener_function_symbolsAdded */ voi
 
     if (!functionSubscriptionClosed) {
         throw InvalidArgumentException("Unable to create ObservableSubscriptionChangeListener. The "
-                                    "`functionSubscriptionClosed` parameter is nullptr");
+                                       "`functionSubscriptionClosed` parameter is nullptr");
     }
 
     return JavaObjectHandle<dxfcpp::ObservableSubscriptionChangeListener>(runGraalFunctionAndThrowIfNullptr(

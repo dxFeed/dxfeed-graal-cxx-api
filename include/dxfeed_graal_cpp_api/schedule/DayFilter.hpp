@@ -114,7 +114,7 @@ struct DXFCPP_EXPORT DayFilter {
     DayFilter &operator=(const DayFilter &) = delete;
     DayFilter &operator=(const DayFilter &&) noexcept = delete;
 
-  private:
+    private:
     DayFilterEnum code_;
 
     std::string name_;
@@ -122,8 +122,7 @@ struct DXFCPP_EXPORT DayFilter {
     /// Bitwise mask of required days (2 for Monday, 4 for Tuesday, 128 for Sunday), <code>0</code> if not relevant.
     std::uint32_t dayOfWeekMask_;
 
-  public:
-
+    public:
     [[nodiscard]] DayFilterEnum getCode() const {
         return code_;
     }
@@ -148,7 +147,7 @@ struct DXFCPP_EXPORT DayFilter {
         return trading_;
     }
 
-  private:
+    private:
     /// Required holiday flag, Tristate::NONE if not relevant.
     Tristate holiday_;
     /// Required short day flag, Tristate::NONE if not relevant.
@@ -180,9 +179,8 @@ struct DXFCPP_EXPORT DayFilter {
     DayFilter(DayFilterEnum code, std::string name, std::uint32_t dayOfWeekMask, Tristate holiday, Tristate shortDay,
               Tristate trading) noexcept;
 
-public:
-
-    const JavaObjectHandle<DayFilter>& getHandle() const&;
+    public:
+    const JavaObjectHandle<DayFilter> &getHandle() const &;
 };
 
 DXFCPP_END_NAMESPACE

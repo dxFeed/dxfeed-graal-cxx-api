@@ -8,6 +8,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <atomic>
 #include <chrono>
 #include <memory>
 #include <vector>
@@ -19,10 +20,10 @@ struct JavaException;
 struct Promises;
 
 struct PromiseImpl {
-  protected:
-    void *handle = nullptr;
+    protected:
+    std::atomic<void *> handle = nullptr;
 
-  public:
+    public:
     explicit PromiseImpl(void *handle);
 
     bool isDone() const;
@@ -37,8 +38,8 @@ struct PromiseImpl {
 };
 
 struct VoidPromiseImpl : PromiseImpl {
-    void *handle = nullptr;
-    bool own = true;
+    std::atomic<void *> handle = nullptr;
+    std::atomic<bool> own = true;
 
     explicit VoidPromiseImpl(void *handle, bool own = true);
     ~VoidPromiseImpl();
@@ -46,8 +47,8 @@ struct VoidPromiseImpl : PromiseImpl {
 };
 
 struct EventPromiseImpl : PromiseImpl {
-    void *handle = nullptr;
-    bool own = true;
+    std::atomic<void *> handle = nullptr;
+    std::atomic<bool> own = true;
 
     explicit EventPromiseImpl(void *handle, bool own = true);
     ~EventPromiseImpl();
@@ -55,8 +56,8 @@ struct EventPromiseImpl : PromiseImpl {
 };
 
 struct EventsPromiseImpl : PromiseImpl {
-    void *handle = nullptr;
-    bool own = true;
+    std::atomic<void *> handle = nullptr;
+    std::atomic<bool> own = true;
 
     explicit EventsPromiseImpl(void *handle, bool own = true);
     ~EventsPromiseImpl();
@@ -356,10 +357,10 @@ template <> struct Promise<void> : CommonPromiseMixin<Promise<void>>, VoidPromis
     friend struct VoidPromiseMixin<Promise>;
     friend struct Promises;
 
-  private:
+    private:
     VoidPromiseImpl impl;
 
-  public:
+    public:
     explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 
@@ -380,11 +381,23 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
     friend struct EventPromiseMixin<E, Promise>;
     friend struct Promises;
 
-  private:
+    private:
     EventPromiseImpl impl;
 
-  public:
+    public:
     explicit Promise(void *handle, bool own = true) : impl(handle, own) {
+    }
+
+    template <Derived<E> D>
+    explicit Promise(std::shared_ptr<Promise<std::shared_ptr<D>>> other) : impl(other->impl->handle, false) {
+    }
+
+    template <BaseOf<E> B> std::shared_ptr<Promise<std::shared_ptr<B>>> sharedAs(bool transferOwnership = false) {
+        if (transferOwnership) {
+            impl.own = false;
+        }
+
+        return std::make_shared<Promise<std::shared_ptr<B>>>(impl.handle, transferOwnership);
     }
 
     Promise(const Promise &) = delete;
@@ -394,7 +407,7 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
 };
 
 struct PromiseListImpl {
-    void *handle = nullptr;
+    std::atomic<void *> handle = nullptr;
 
     explicit PromiseListImpl(void *handle);
     ~PromiseListImpl();
@@ -429,12 +442,12 @@ template <typename E> struct PromiseList {
     using reverse_iterator = typename data_type::reverse_iterator;
     using const_reverse_iterator = typename data_type::const_reverse_iterator;
 
-  private:
+    private:
     PromiseListImpl impl;
 
     data_type data_;
 
-  public:
+    public:
     explicit PromiseList(void *handle = nullptr) : impl(handle) {
     }
 
@@ -564,10 +577,10 @@ struct Promise<std::vector<std::shared_ptr<E>>> : CommonPromiseMixin<Promise<std
     friend struct EventsPromiseMixin<E, Promise>;
     friend struct Promises;
 
-  private:
+    private:
     EventsPromiseImpl impl;
 
-  public:
+    public:
     explicit Promise(void *handle, bool own = true) : impl(handle, own) {
     }
 

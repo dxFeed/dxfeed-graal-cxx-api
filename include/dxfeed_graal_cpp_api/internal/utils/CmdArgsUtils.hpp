@@ -16,8 +16,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_set>
 
-#include "../../symbols/SymbolWrapper.hpp"
 #include "../../event/EventSourceWrapper.hpp"
+#include "../../symbols/SymbolWrapper.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

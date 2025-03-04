@@ -183,14 +183,13 @@ std::string getTimeZoneId(/* dxfg_schedule_t* */ const JavaObjectHandle<dxfcpp::
             "Unable to execute function `dxfg_Schedule_getTimeZone_getID`. The `schedule` handle is invalid");
     }
 
-    const auto string = internal::IsolatedString::toUnique(
-        runGraalFunctionAndThrowIfNullptr(dxfg_Schedule_getTimeZone_getID, static_cast<dxfg_schedule_t *>(schedule.get())));
+    const auto string = internal::IsolatedString::toUnique(runGraalFunctionAndThrowIfNullptr(
+        dxfg_Schedule_getTimeZone_getID, static_cast<dxfg_schedule_t *>(schedule.get())));
 
     auto result = dxfcpp::toString(string.get());
 
     return result;
 }
-
 
 } // namespace IsolatedSchedule
 

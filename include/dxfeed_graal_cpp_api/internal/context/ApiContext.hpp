@@ -33,7 +33,7 @@ class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
                                  AddManagerMixin<DXPublisherManager> {
     ApiContext() noexcept = default;
 
-  public:
+    public:
     static std::shared_ptr<ApiContext> getInstance() noexcept {
         static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new ApiContext{});
 

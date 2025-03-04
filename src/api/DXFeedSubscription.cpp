@@ -8,12 +8,12 @@
 #include <memory>
 #include <typeinfo>
 
+#include "dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp"
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 #include <utility>
-#include "dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -306,7 +306,8 @@ DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
     : DXFeedSubscription() {
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(
+        "Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
 #endif
 }
 
@@ -316,7 +317,8 @@ DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
     : DXFeedSubscription(eventType, std::move(handle)) {
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(
+        "Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
 #endif
 }
 
@@ -341,13 +343,15 @@ void DXFeedTimeSeriesSubscription::setFromTime(std::chrono::milliseconds fromTim
 
 DXFeedTimeSeriesSubscription::~DXFeedTimeSeriesSubscription() {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", -1);
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(
+        "Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", -1);
 #endif
 }
 
 void DXFeedTimeSeriesSubscription::registerEntity() {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
+    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(
+        "Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
 #endif
 }
 

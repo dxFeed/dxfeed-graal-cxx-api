@@ -77,13 +77,13 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
         BY_STRING;
     static const std::vector<std::reference_wrapper<const CandlePrice>> VALUES;
 
-  private:
+    private:
     std::string string_;
 
     explicit CandlePrice(const dxfcpp::StringLikeWrapper &string) noexcept : string_{string} {
     }
 
-  public:
+    public:
     CandlePrice() noexcept = default;
     virtual ~CandlePrice() noexcept = default;
 

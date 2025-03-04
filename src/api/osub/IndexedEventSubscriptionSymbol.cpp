@@ -9,7 +9,8 @@ DXFCPP_BEGIN_NAMESPACE
 
 IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol,
                                                                const IndexedEventSource &source)
-    : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)), source_(std::make_unique<IndexedEventSource>(source)) {
+    : eventSymbol_(std::make_unique<SymbolWrapper>(eventSymbol)),
+      source_(std::make_unique<IndexedEventSource>(source)) {
 }
 
 const std::unique_ptr<SymbolWrapper> &IndexedEventSubscriptionSymbol::getEventSymbol() const {

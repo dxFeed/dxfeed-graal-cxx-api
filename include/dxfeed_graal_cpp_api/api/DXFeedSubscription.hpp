@@ -38,7 +38,7 @@ struct LastingEvent;
  * Subscription for a set of symbols and event types.
  */
 class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscription>, public ObservableSubscription {
-  public:
+    public:
     static constexpr std::size_t FAKE_CHANGE_LISTENER_ID{static_cast<std::size_t>(-1)};
 
     ///
@@ -55,7 +55,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      */
     static const std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
 
-  protected:
+    protected:
     friend struct DXFeed;
 
     inline static std::atomic<std::size_t> lastChangeListenerId_{};
@@ -126,7 +126,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         handle_ = std::move(handle);
     }
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the DXFeedSubscription object
     using Ptr = std::shared_ptr<DXFeedSubscription>;
 
@@ -789,7 +789,7 @@ class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSu
 
     static void registerEntity();
 
-  public:
+    public:
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag lockTag);
 
     DXFeedTimeSeriesSubscription(RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag lockTag,

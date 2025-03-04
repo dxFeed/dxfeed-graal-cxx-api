@@ -26,7 +26,7 @@ namespace isolated::promise::IsolatedPromise {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-bool /* int32_t */ isDone(/* dxfg_promise_t * */ void* promise);
+bool /* int32_t */ isDone(/* dxfg_promise_t * */ void *promise);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_hasResult` in isolation.
@@ -37,7 +37,7 @@ bool /* int32_t */ isDone(/* dxfg_promise_t * */ void* promise);
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-bool /* int32_t */ hasResult(/* dxfg_promise_t * */ void* promise);
+bool /* int32_t */ hasResult(/* dxfg_promise_t * */ void *promise);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_hasException` in isolation.
@@ -48,7 +48,7 @@ bool /* int32_t */ hasResult(/* dxfg_promise_t * */ void* promise);
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-bool /* int32_t */ hasException(/* dxfg_promise_t * */ void* promise);
+bool /* int32_t */ hasException(/* dxfg_promise_t * */ void *promise);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_isCancelled` in isolation.
@@ -59,7 +59,7 @@ bool /* int32_t */ hasException(/* dxfg_promise_t * */ void* promise);
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-bool /* int32_t */ isCancelled(/* dxfg_promise_t * */ void* promise);
+bool /* int32_t */ isCancelled(/* dxfg_promise_t * */ void *promise);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_EventType_getResult` in isolation.
@@ -70,7 +70,7 @@ bool /* int32_t */ isCancelled(/* dxfg_promise_t * */ void* promise);
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_event_t * */ void* promise);
+std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_event_t * */ void *promise);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_List_EventType_getResult` in isolation.
@@ -81,7 +81,8 @@ std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_ev
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-std::vector<std::shared_ptr<EventType>> /* dxfg_event_type_list* */ getResults(/* dxfg_promise_events_t * */ void* promise);
+std::vector<std::shared_ptr<EventType>> /* dxfg_event_type_list* */
+getResults(/* dxfg_promise_events_t * */ void *promise);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_getException` in isolation.
@@ -92,7 +93,7 @@ std::vector<std::shared_ptr<EventType>> /* dxfg_event_type_list* */ getResults(/
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void* promise);
+JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void *promise);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_await` in isolation.
@@ -102,7 +103,7 @@ JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void* 
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ await(/* dxfg_promise_t * */ void* promise);
+void /* int32_t */ await(/* dxfg_promise_t * */ void *promise);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_await2` in isolation.
@@ -113,7 +114,7 @@ void /* int32_t */ await(/* dxfg_promise_t * */ void* promise);
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ await(/* dxfg_promise_t * */ void* promise, std::int32_t timeoutInMilliseconds);
+void /* int32_t */ await(/* dxfg_promise_t * */ void *promise, std::int32_t timeoutInMilliseconds);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_awaitWithoutException` in isolation.
@@ -125,7 +126,7 @@ void /* int32_t */ await(/* dxfg_promise_t * */ void* promise, std::int32_t time
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void* promise, std::int32_t timeoutInMilliseconds);
+bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void *promise, std::int32_t timeoutInMilliseconds);
 
 /**
  * Calls the Graal SDK function `dxfg_Promise_cancel` in isolation.
@@ -135,24 +136,27 @@ bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void* promise, s
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ cancel(/* dxfg_promise_t * */ void* promise);
+void /* int32_t */ cancel(/* dxfg_promise_t * */ void *promise);
 
 /*
 
-int32_t               dxfg_Promise_List_EventType_complete(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_event_type_list* events);
-int32_t               dxfg_Promise_EventType_complete(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_event_type_t* event);
-int32_t               dxfg_Promise_completeExceptionally(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_exception_t* exception);
-int32_t               dxfg_Promise_whenDone(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_promise_handler_function promise_handler_function, void *user_data);
-int32_t               dxfg_Promise_whenDoneAsync(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_promise_handler_function promise_handler_function, void *user_data, dxfg_executor_t* executor);
-dxfg_promise_t*       dxfg_Promise_completed(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_java_object_handler *handler);
-dxfg_promise_t*       dxfg_Promise_failed(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_exception_t* exception);
+int32_t               dxfg_Promise_List_EventType_complete(graal_isolatethread_t *thread, dxfg_promise_t *promise,
+dxfg_event_type_list* events); int32_t               dxfg_Promise_EventType_complete(graal_isolatethread_t *thread,
+dxfg_promise_t *promise, dxfg_event_type_t* event); int32_t dxfg_Promise_completeExceptionally(graal_isolatethread_t
+*thread, dxfg_promise_t *promise, dxfg_exception_t* exception); int32_t dxfg_Promise_whenDone(graal_isolatethread_t
+*thread, dxfg_promise_t *promise, dxfg_promise_handler_function promise_handler_function, void *user_data); int32_t
+dxfg_Promise_whenDoneAsync(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_promise_handler_function
+promise_handler_function, void *user_data, dxfg_executor_t* executor); dxfg_promise_t*
+dxfg_Promise_completed(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_java_object_handler *handler);
+dxfg_promise_t*       dxfg_Promise_failed(graal_isolatethread_t *thread, dxfg_promise_t *promise, dxfg_exception_t*
+exception);
 
 */
 
-//dxfg_promise_t*       dxfg_Promises_allOf(graal_isolatethread_t *thread, dxfg_promise_list *promises);
-void* allOf(const std::vector<void*>& promises);
+// dxfg_promise_t*       dxfg_Promises_allOf(graal_isolatethread_t *thread, dxfg_promise_list *promises);
+void *allOf(const std::vector<void *> &promises);
 
-}
+} // namespace isolated::promise::IsolatedPromise
 
 DXFCPP_END_NAMESPACE
 

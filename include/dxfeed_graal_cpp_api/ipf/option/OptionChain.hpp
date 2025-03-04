@@ -33,7 +33,7 @@ template <typename T> class OptionChain final {
     explicit OptionChain(std::string symbol) : symbol_(std::move(symbol)) {
     }
 
-    void addOption(const OptionSeries<T>& series, bool isCall, double strike, std::shared_ptr<T> option) {
+    void addOption(const OptionSeries<T> &series, bool isCall, double strike, std::shared_ptr<T> option) {
         auto it = series_.find(series);
 
         if (it == series_.end()) {
@@ -47,7 +47,8 @@ template <typename T> class OptionChain final {
             series_.insert(modifiedSeries);
         }
     }
-public:
+
+    public:
     /**
      * Returns symbol (product or underlying) of this option chain.
      *

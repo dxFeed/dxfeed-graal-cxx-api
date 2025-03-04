@@ -27,13 +27,14 @@ class InstrumentProfileConnection;
  * This class is intended to be used with InstrumentProfileConnection as a repository that keeps
  * profiles of all known instruments. See InstrumentProfileConnection for a usage example.
  *
- * <p>As set of instrument profiles stored in this collector can be accessed with @ref InstrumentProfileCollector::view() "view" method.
- * A snapshot plus a live stream of updates can be accessed with
+ * <p>As set of instrument profiles stored in this collector can be accessed with @ref
+ * InstrumentProfileCollector::view() "view" method. A snapshot plus a live stream of updates can be accessed with
  * @ref InstrumentProfileCollector::addUpdateListener() "addUpdateListener" method.
  *
  * <p>Removal of instrument profile is represented by an InstrumentProfile instance with a
  * @ref InstrumentProfile::getType() "type" equal to
- * <code>@ref InstrumentProfileType "InstrumentProfileType"::@ref InstrumentProfileType::REMOVED "REMOVED".@ref InstrumentProfileType::getName() "getName()"</code>.
+ * <code>@ref InstrumentProfileType "InstrumentProfileType"::@ref InstrumentProfileType::REMOVED "REMOVED".@ref
+ * InstrumentProfileType::getName() "getName()"</code>.
  *
  * <p><b>This class is thread-safe.</b>
  */
@@ -62,7 +63,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
         onInstrumentProfilesUpdateHandlers_.erase(listenerId);
     }
 
-  public:
+    public:
     /// The alias to a type of shared pointer to the InstrumentProfileCollector object
     using Ptr = std::shared_ptr<InstrumentProfileCollector>;
 

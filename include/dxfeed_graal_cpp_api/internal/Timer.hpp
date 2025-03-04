@@ -20,13 +20,13 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 struct Timer {
-  private:
+    private:
     std::unique_ptr<std::future<void>> future_;
     std::atomic<bool> isRunning_{};
 
     Timer() noexcept = default;
 
-  public:
+    public:
     void interruptableSleep(std::chrono::milliseconds ms) const {
         const auto MIN_SLEEP = std::chrono::milliseconds(10);
         const auto startTimeStamp = std::chrono::steady_clock::now();

@@ -71,7 +71,7 @@ class DXFCPP_EXPORT InstrumentProfileField {
         : InstrumentProfileField(fieldEnum, name, InstrumentProfileFieldTypeEnum::STRING) {
     }
 
-  public:
+    public:
     const static InstrumentProfileField TYPE;
     const static InstrumentProfileField SYMBOL;
     const static InstrumentProfileField DESCRIPTION;
@@ -108,10 +108,10 @@ class DXFCPP_EXPORT InstrumentProfileField {
         return name_;
     }
 
-  private:
+    private:
     const static std::unordered_map<std::string, std::reference_wrapper<const InstrumentProfileField>> MAP;
 
-  public:
+    public:
     /**
      * Returns cref to field for specified name or std::nullopt if field is not found.
      */

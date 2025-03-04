@@ -50,15 +50,15 @@ std::unordered_set<EventTypeEnum> /* dxfg_event_clazz_list_t* */ getEventTypes(
  */
 bool /* int32_t */ containsEventType(
     /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
-    /* dxfg_event_clazz_t */ const EventTypeEnum & eventType);
+    /* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
 
 /**
  * Calls the Graal SDK function `dxfg_ObservableSubscription_addChangeListener` in isolation.
  *
  * @param sub The subscription's handle.
  * @param listener The listener's handle.
- * @throws InvalidArgumentException if DXPublisherObservableSubscription's or ObservableSubscriptionChangeListener's handle
- * is invalid.
+ * @throws InvalidArgumentException if DXPublisherObservableSubscription's or ObservableSubscriptionChangeListener's
+ * handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
@@ -72,8 +72,8 @@ void /* int32_t */ addChangeListener(
  *
  * @param sub The subscription's handle.
  * @param listener The listener's handle.
- * @throws InvalidArgumentException if DXPublisherObservableSubscription's or ObservableSubscriptionChangeListener's handle
- * is invalid.
+ * @throws InvalidArgumentException if DXPublisherObservableSubscription's or ObservableSubscriptionChangeListener's
+ * handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */

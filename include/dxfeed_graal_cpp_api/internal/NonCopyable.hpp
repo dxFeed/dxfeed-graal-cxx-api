@@ -10,11 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 template <class T> class NonCopyable {
-  public:
+    public:
     NonCopyable(const NonCopyable &) = delete;
     T &operator=(const T &) = delete;
 
-  protected:
+    protected:
     NonCopyable() = default;
     ~NonCopyable() = default;
 };

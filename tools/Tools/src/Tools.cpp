@@ -78,8 +78,8 @@ const std::vector<std::string> PerfTest2Tool::USAGE{
 const std::vector<std::string> PerfTest2Tool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> PerfTest2Tool::ARGS{
-    AddressArgRequired{}, SymbolsArgRequired<1>{}, ForceStreamArg{},
-    DetachListenerArg{},  CPUUsageByCoreArg{}, PropertiesArg{},      HelpArg{}};
+    AddressArgRequired{}, SymbolsArgRequired<1>{}, ForceStreamArg{}, DetachListenerArg{},
+    CPUUsageByCoreArg{},  PropertiesArg{},         HelpArg{}};
 
 const std::string QdsTool::NAME{"Qds"};
 const std::string QdsTool::SHORT_DESCRIPTION{"A collection of tools ported from the Java qds-tools."};

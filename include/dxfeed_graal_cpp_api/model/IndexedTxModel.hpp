@@ -27,7 +27,7 @@ struct DXFCPP_EXPORT IndexedTxModelBuilderTag{};
 
 struct DXFCPP_EXPORT IndexedTxModelImpl {
     struct DXFCPP_EXPORT Builder {
-      protected:
+        protected:
         static JavaObjectHandle<IndexedTxModelBuilderTag>
         withBatchProcessingImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle, bool isBatchProcessing);
 
@@ -50,7 +50,7 @@ struct DXFCPP_EXPORT IndexedTxModelImpl {
         static JavaObjectHandle<IndexedTxModelTag> buildImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle);
     };
 
-  protected:
+    protected:
     static JavaObjectHandle<IndexedTxModelBuilderTag> newBuilderImpl(const EventTypeEnum &eventType);
 
     static bool isBatchProcessingImpl(const JavaObjectHandle<IndexedTxModelTag> &handle);
@@ -138,11 +138,11 @@ struct DXFCPP_EXPORT IndexedTxModel final : IndexedTxModelImpl, RequireMakeShare
      * A builder class for creating an instance of IndexedTxModel.
      */
     struct DXFCPP_EXPORT Builder final : IndexedTxModelImpl::Builder, RequireMakeShared<Builder> {
-      private:
+        private:
         JavaObjectHandle<IndexedTxModelBuilderTag> handle_;
         std::shared_ptr<TxModelListenerCommon> listener_;
 
-      public:
+        public:
         Builder(typename Builder::LockExternalConstructionTag, JavaObjectHandle<IndexedTxModelBuilderTag> &&handle)
             : handle_(std::move(handle)) {
         }
@@ -369,11 +369,11 @@ struct DXFCPP_EXPORT IndexedTxModel final : IndexedTxModelImpl, RequireMakeShare
         }
     };
 
-  private:
+    private:
     JavaObjectHandle<IndexedTxModelTag> handle_;
     std::shared_ptr<TxModelListenerCommon> listener_;
 
-  public:
+    public:
     IndexedTxModel(typename IndexedTxModel::LockExternalConstructionTag, JavaObjectHandle<IndexedTxModelTag> &&handle)
         : handle_(std::move(handle)) {
     }
