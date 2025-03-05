@@ -11,15 +11,15 @@ using namespace dxfcpp::literals;
 using namespace std::literals;
 
 void printUsage() {
-    auto usageString = R"(
+    const auto usageString = R"(
 Usage:
-DxFeedFileParser <file> <type> <symbol>
+FileParserSample <file> <type> <symbol>
 
 Where:
     file    - Is a file name.
     types   - Is comma-separated list of dxfeed event types ()" +
-                       dxfcpp::enum_utils::getEventTypeEnumNamesList() + " or " +
-                       dxfcpp::enum_utils::getEventTypeEnumClassNamesList() + R"().
+                       enum_utils::getEventTypeEnumNamesList() + " or " +
+                       enum_utils::getEventTypeEnumClassNamesList() + R"().
     symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").)";
 
     std::cout << usageString << std::endl;
@@ -33,25 +33,28 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
+        // Disable QD logging.
+        // Logging::init();
+
         std::atomic<std::size_t> eventCounter{};
         std::mutex ioMtx{};
 
         // Parse args.
-        std::string fileName = argv[1];
-        auto types = CmdArgsUtils::parseTypes(argv[2]);
-        auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
+        const std::string fileName = argv[1];
+        auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(argv[2]);
+        const auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
 
         // Create endpoint specifically for file parsing.
-        auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
-        auto feed = endpoint->getFeed();
+        const auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
+        const auto feed = endpoint->getFeed();
 
         // Subscribe to a specified event and symbol.
-        auto sub = feed->createSubscription(types.first);
+        const auto sub = feed->createSubscription(parsedTypes);
         sub->addEventListener([&eventCounter, &ioMtx](const auto &events) {
             std::lock_guard lock{ioMtx};
 
             for (auto &&e : events) {
-                std::cout << (++eventCounter) << ": " << e << "\n";
+                std::cout << ++eventCounter << ": " << e << "\n";
             }
         });
 

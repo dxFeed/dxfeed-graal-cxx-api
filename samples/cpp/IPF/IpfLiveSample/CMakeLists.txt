@@ -11,7 +11,7 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
-project(DxFeedIpfConnect LANGUAGES CXX)
+project(IpfLiveSample LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
@@ -43,14 +43,12 @@ endif ()
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
-        ${CMAKE_CURRENT_SOURCE_DIR}/dxfeed.properties
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
-    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
-    install(FILES "dxfeed.properties" DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
+    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     if (WIN32)
-        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME})
+        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
     endif ()
 endif ()

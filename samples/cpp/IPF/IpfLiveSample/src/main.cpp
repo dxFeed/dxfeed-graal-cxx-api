@@ -14,13 +14,13 @@
 static const std::string DXFEED_IPF_URL = "https://demo:demo@tools.dxfeed.com/ipf";
 
 void printUsage() {
-    auto usageString = R"(
+    const auto usageString = R"(
 Usage:
-DxFeedLiveIpfSample [<ipf-url>]
+IpfLiveSample [<ipf-url>]
 
 Where:
     <ipf-url> - URL for the instruments profiles, default: )" +
-                       DXFEED_IPF_URL;
+                             DXFEED_IPF_URL;
 
     std::cout << usageString << std::endl;
 }
@@ -36,10 +36,10 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
-        std::string url = argc > 1 ? argv[1] : DXFEED_IPF_URL;
-
+        const std::string url = argc > 1 ? argv[1] : DXFEED_IPF_URL;
         auto collector = InstrumentProfileCollector::create();
-        auto connection = InstrumentProfileConnection::createConnection(url, collector);
+        const auto connection = InstrumentProfileConnection::createConnection(url, collector);
+
         // Update period can be used to re-read IPF files, not needed for services supporting IPF "live-update"
         connection->setUpdatePeriod(std::chrono::seconds(60));
 
@@ -82,12 +82,10 @@ int main(int argc, char *argv[]) {
 
             // (2) or access the concurrent view of instrument profiles
             std::unordered_set<std::string> symbols{};
-            auto view = self->view();
+            const auto view = self->view();
 
             while (view->hasNext()) {
-                auto ip = view->next();
-
-                if (ip->getType() != InstrumentProfileType::REMOVED.getName()) {
+                if (const auto ip = view->next(); ip->getType() != InstrumentProfileType::REMOVED.getName()) {
                     symbols.emplace(ip->getSymbol());
                 }
             }
@@ -95,7 +93,7 @@ int main(int argc, char *argv[]) {
             std::cout << "Total number of profiles (2): " + std::to_string(symbols.size()) << std::endl;
 
             std::cout << "Last modified: " +
-                             dxfcpp::TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(self->getLastUpdateTime())
+                             TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(self->getLastUpdateTime())
                       << std::endl;
         });
 

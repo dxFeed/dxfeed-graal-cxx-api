@@ -6,18 +6,18 @@
 #include <iostream>
 
 void printUsage() {
-    auto usageString = R"(
+    const auto usageString = R"(
 Usage:
-DxFeedIpfConnect <type> <ipf-file>
+IpfSample <type> <ipf-file>
 
 Where:
     type     - Is dxfeed event type ()" +
-                       dxfcpp::enum_utils::getMarketEventTypeEnumNamesList() + " or " +
-                       dxfcpp::enum_utils::getMarketEventTypeEnumClassNamesList() + R"().
+                             dxfcpp::enum_utils::getMarketEventTypeEnumNamesList() + " or " +
+                             dxfcpp::enum_utils::getMarketEventTypeEnumClassNamesList() + R"().
     ipf-file - Is name of instrument profiles file.
 
 Examples:
-    DxFeedIpfConnect Quote https://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip
+    IpfSample Quote https://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip
 )";
 
     std::cout << usageString << std::endl;
@@ -26,9 +26,8 @@ Examples:
 std::vector<std::string> getSymbols(const std::string &filename) noexcept {
     std::cout << "Reading instruments from " + filename + "...\n";
 
-    auto profiles = dxfcpp::InstrumentProfileReader::create()->readFromFile(filename);
-
-    auto profileFilter = [](auto &&profile) -> bool {
+    const auto profiles = dxfcpp::InstrumentProfileReader::create()->readFromFile(filename);
+    auto profileFilter = [](const auto &profile) -> bool {
         // This is just a sample, any arbitrary filtering may go here.
         return profile->getType() == "STOCK" &&                           // stocks
                profile->getSIC() / 10 == 357 &&                           // Computer And Office Equipment
@@ -39,7 +38,7 @@ std::vector<std::string> getSymbols(const std::string &filename) noexcept {
 
     std::cout << "Selected symbols are:\n";
 
-    for (auto &&profile : profiles) {
+    for (const auto &profile : profiles) {
         if (profileFilter(profile)) {
             result.push_back(profile->getSymbol());
             std::cout << profile->getSymbol() + " (" + profile->getDescription() + ")\n";
@@ -64,10 +63,9 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
-        auto types = CmdArgsUtils::parseTypes(argv[1]);
-        auto ipfFile = argv[2];
-
-        auto sub = DXFeed::getInstance()->createSubscription(types.first);
+        auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(argv[1]);
+        const auto ipfFile = argv[2];
+        const auto sub = DXFeed::getInstance()->createSubscription(parsedTypes);
 
         sub->addEventListener<MarketEvent>([](auto &&events) {
             for (auto &&event : events) {

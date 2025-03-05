@@ -10,18 +10,21 @@ using namespace std::literals;
 /// Write events to a tape file.
 int main() {
     try {
+        // Disable QD logging.
+        // Logging::init();
+
         // Create an appropriate endpoint.
-        auto endpoint = DXEndpoint::newBuilder()
-                            // Is required for tape connector to be able to receive everything.
-                            ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-                            ->withRole(dxfcpp::DXEndpoint::Role::PUBLISHER)
-                            ->build();
+        const auto endpoint = DXEndpoint::newBuilder()
+                                  // Is required for tape connector to be able to receive everything.
+                                  ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
+                                  ->withRole(DXEndpoint::Role::PUBLISHER)
+                                  ->build();
 
         // Connect to the address, remove [format=text] or change on [format=binary] for binary format
         endpoint->connect("tape:WriteTapeFile.out.txt[format=text]");
 
         // Get publisher.
-        auto pub = endpoint->getPublisher();
+        const auto pub = endpoint->getPublisher();
 
         // Creates new Quote market events.
         auto quote1 = std::make_shared<Quote>("TEST1")->withBidPrice(10.1).withAskPrice(10.2).sharedAs<Quote>();

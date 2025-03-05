@@ -36,6 +36,9 @@ Where:
             return 0;
         }
 
+        // Disable QD logging.
+        // Logging::init();
+
         // Specified instrument name, for example AAPL, IBM, MSFT, etc.
         const auto baseSymbol = argv[1];
         const auto candleSymbol = CandleSymbol::valueOf(baseSymbol, CandlePeriod::DAY);

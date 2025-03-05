@@ -106,7 +106,7 @@ Below is a scheme of this process:
 | 6 | Data is mixed up when creating two subscriptions (regular and time series) for the same market event type. Both regular and time series data go to both subscriptions                                                                                                                                                                              | Each subscription instance receives only the data requested                                                                                                                                                                                                                              |
 | 7 | Each subsequent request for the same symbol set in a subscription instance overwrites the existing one in another subscription instance                                                                                                                                                                                                            | Subscription instances and the data they receive are independent of each other                                                                                                                                                                                                           |
 | 8 | Removing a symbol from one subscription instance caused it to be removed from all others                                                                                                                                                                                                                                                           | Subscription instances and the data they receive are independent of each other                                                                                                                                                                                                           |
-| 9 | Incorrect behavior when reading from a file (if a market event in the file hasn\'t been subscribed to). Reading from a file always occurs at maximum speed. The supported format is binary only                                                                                                                                                    | `endpoint->connect("file:tape.txt[format=text]");` - processing a text file with at it's "real" speed by timestamps<br>`endpoint->connect("file:tape.bin[format=binary,speed=max]");` - processing a binary file with max speed                                                          |
+| 9 | Incorrect behavior when reading from a file (if a market event in the file has not been subscribed to). Reading from a file always occurs at maximum speed. The supported format is binary only                                                                                                                                                    | `endpoint->connect("file:tape.txt[format=text]");` - processing a text file with at it's "real" speed by timestamps<br>`endpoint->connect("file:tape.bin[format=binary,speed=max]");` - processing a binary file with max speed                                                          |
 
 ## Documentation
 
@@ -339,6 +339,8 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 - [x] [PrintQuoteEventsSample](samples/cpp/API/PrintQuoteEventsSample/src/main.cpp)
   is a simple demonstration of how to subscribe to the `Quote` event, using a `DxFeed` instance singleton
   and `dxfeed.properties` file
+- [x] [PublishProfilesSample](samples/cpp/API/PublishProfilesSample/src/main.cpp)
+  is a simple demonstration of how to publish market events
 - [x] [QuoteAndTradeSample](samples/cpp/API/QuoteAndTradeSample/src/main.cpp)
   demonstrates how to create multiple event listeners and subscribe to `Quote` and `Trade` events
 - [x] [ReconnectSample](samples/cpp/API/ReconnectSample/src/main.cpp)
@@ -347,9 +349,9 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 
 ### Candle
 
-- [ ] [CandleSample](samples/cpp/CandleSample/src/main.cpp)
+- [ ] [CandleSample](samples/cpp/Candle/CandleSample/src/main.cpp)
   demonstrates how to subscribe to `Candle` events
-- [ ] [CandleDataSample](samples/cpp/CandleDataSample/src/main.cpp)
+- [ ] [CandleDataSample](samples/cpp/Candle/CandleDataSample/src/main.cpp)
   demonstrates how to parse response from CandleData service
 - [x] [FetchDailyCandlesSample](samples/cpp/Candle/FetchDailyCandlesSample/src/main.cpp)
   demonstrates how to fetch last N-days of candles for a specified symbol
@@ -362,22 +364,20 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 
 ### File
 
-- [x] [ConvertTapeFileSample](samples/cpp/ConvertTapeFile/src/main.cpp)
+- [x] [ConvertTapeFileSample](samples/cpp/File/ConvertTapeFileSample/src/main.cpp)
   demonstrates how to convert one tape file to another tape file with optional intermediate processing or filtering
-- [x] [FileParserSample](samples/cpp/DxFeedFileParser/src/main.cpp)
+- [x] [FileParserSample](samples/cpp/File/FileParserSample/src/main.cpp)
   demonstrates how to read events from a tape file
-- [x] [WriteTapeFileSample](samples/cpp/WriteTapeFile/src/main.cpp)
+- [x] [WriteTapeFileSample](samples/cpp/File/WriteTapeFileSample/src/main.cpp)
   demonstrates how to write events to a tape file
 
 ### IPF
 
-- [x] [DxFeedIpfConnect](samples/cpp/DxFeedIpfConnect/src/main.cpp)
+- [x] [IpfSample](samples/cpp/IPF/IpfSample/src/main.cpp)
   is a simple demonstration of how to get Instrument Profiles
-- [x] [DxFeedLiveIpfSample](samples/cpp/DxFeedLiveIpfSample/src/main.cpp)
+- [x] [IpfLiveSample](samples/cpp/IPF/IpfLiveSample/src/main.cpp)
   is a simple demonstration of how to get live updates for Instrument Profiles
-- [x] [PublishProfiles](main/samples/cpp/PublishProfiles/src/main.cpp) 
-  is a simple demonstration of how to publish market events
-- [x] [OptionChainSample](samples/cpp/OptionChainSample/src/main.cpp)
+- [x] [OptionChainSample](samples/cpp/IPF/OptionChainSample/src/main.cpp)
   demonstrates how to build option chains, and prints quotes for nearby option strikes
 
 ### Model

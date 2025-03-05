@@ -5,10 +5,6 @@
 
 #include <string>
 
-DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
-#include <range/v3/all.hpp>
-DXFCXX_DISABLE_MSC_WARNINGS_POP()
-
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
@@ -24,10 +20,10 @@ int main(int argc, char *argv[]) {
         }
 
         // Parse args.
-        std::string address = argv[1];
+        const std::string address = argv[1];
 
         // Create publisher endpoint and connect it to the specified address
-        auto endpoint = DXEndpoint::create(DXEndpoint::Role::PUBLISHER)->connect(address);
+        const auto endpoint = DXEndpoint::create(DXEndpoint::Role::PUBLISHER)->connect(address);
         auto publisher = endpoint->getPublisher();
 
         // Observe Profile subscriptions and publish profiles for "xxx:TEST" symbols
@@ -39,9 +35,7 @@ int main(int argc, char *argv[]) {
 
                     for (auto &&symbol : symbols) {
                         if (symbol.isStringSymbol()) {
-                            auto s = symbol.asStringSymbol();
-
-                            if (s.size() > 5 && s.rfind(":TEST") == s.size() - 5) {
+                            if (auto s = symbol.asStringSymbol(); s.size() > 5 && s.rfind(":TEST") == s.size() - 5) {
                                 auto profile = std::make_shared<Profile>(s);
 
                                 profile->setDescription("Test symbol");

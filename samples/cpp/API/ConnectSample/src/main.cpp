@@ -40,9 +40,9 @@ Where:
                   123456789 - value-in-milliseconds
 
 Examples:
-    DxFeedConnect demo.dxfeed.com:7300 Quote,Trade MSFT,IBM
-    DxFeedConnect demo.dxfeed.com:7300 TimeAndSale AAPL
-    DxFeedConnect demo.dxfeed.com:7300 Candle AAPL{=d} 20230901Z)";
+    ConnectSample demo.dxfeed.com:7300 Quote,Trade MSFT,IBM
+    ConnectSample demo.dxfeed.com:7300 TimeAndSale AAPL
+    ConnectSample demo.dxfeed.com:7300 Candle AAPL{=d} 20230901Z)";
 
     std::cout << usageString << std::endl;
 }

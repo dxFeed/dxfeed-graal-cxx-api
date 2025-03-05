@@ -35,8 +35,8 @@ Where:
         auto ipfFile = argv[1];
         // Specified instrument name, for example AAPL, IBM, MSFT, etc.
         auto symbol = argv[2];
-        auto strikesNumber = static_cast<std::size_t>(std::stoull(argv[3]));
-        auto monthsNumber = static_cast<std::size_t>(std::stoull(argv[4]));
+        std::size_t strikesNumber = std::stoull(argv[3]);
+        std::size_t monthsNumber = std::stoull(argv[4]);
 
         auto feed = DXFeed::getInstance();
 
@@ -46,7 +46,7 @@ Where:
 
         const auto price = trade->getPrice();
 
-        std::cout << "Price of "s + symbol + " is " + dxfcpp::toString(price) + "\n";
+        std::cout << "Price of "s + symbol + " is " + toString(price) + "\n";
         std::cout << "Reading instruments from "s + ipfFile + "\n";
 
         auto instruments = InstrumentProfileReader::create()->readFromFile(ipfFile);
@@ -75,9 +75,7 @@ Where:
             quotes{};
 
         for (const auto &series : seriesVector) {
-            auto strikes = series.getNStrikesAround(strikesNumber, price);
-
-            for (auto strike : strikes) {
+            for (auto strikes = series.getNStrikesAround(strikesNumber, price); auto strike : strikes) {
                 if (series.getCalls().contains(strike)) {
                     auto call = series.getCalls().at(strike);
 
@@ -94,13 +92,14 @@ Where:
 
         std::vector<std::shared_ptr<Promise<std::shared_ptr<Quote>>>> promises{};
 
-        for (const auto &quote : quotes) {
-            promises.push_back(quote.second);
+        // ReSharper disable once CppUseElementsView
+        for (const auto &[ip, promise] : quotes) {
+            promises.push_back(promise);
         }
 
         // ignore timeout and continue to print retrieved quotes even on timeout
         auto ok = Promises::allOf(promises)->awaitWithoutException(1s);
-        dxfcpp::ignoreUnused(ok);
+        ignoreUnused(ok);
 
         std::cout << "Printing option series ...\n";
 
@@ -109,8 +108,8 @@ Where:
             std::printf("    %10s %10s %10s %10s %10s\n", "C.BID", "C.ASK", "STRIKE", "P.BID", "P.ASK");
 
             for (const auto &strike : series.getNStrikesAround(strikesNumber, price)) {
-                std::shared_ptr<Quote> callQuote = std::make_shared<Quote>();
-                std::shared_ptr<Quote> putQuote = std::make_shared<Quote>();
+                auto callQuote = std::make_shared<Quote>();
+                auto putQuote = std::make_shared<Quote>();
 
                 if (series.getCalls().contains(strike)) {
                     callQuote = quotes.at(series.getCalls().at(strike))->getResult();

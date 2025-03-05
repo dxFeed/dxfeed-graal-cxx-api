@@ -13,12 +13,16 @@ using namespace std::literals;
  */
 int main(int argc, char *argv[]) {
     try {
+        // Disable QD logging.
+        // Logging::init();
+
         // Determine input and output tapes and specify appropriate configuration parameters.
-        std::string inputAddress = argc > 1 ? argv[0] : "file:ConvertTapeFile.in[readAs=stream_data,speed=max]";
-        std::string outputAddress = argc > 2 ? argv[1] : "tape:ConvertTapeFile.out[saveAs=stream_data,format=text]";
+        const std::string inputAddress = argc > 1 ? argv[0] : "file:ConvertTapeFile.in[readAs=stream_data,speed=max]";
+        const std::string outputAddress =
+            argc > 2 ? argv[1] : "tape:ConvertTapeFile.out[saveAs=stream_data,format=text]";
 
         // Create input endpoint configured for tape reading.
-        auto inputEndpoint =
+        const auto inputEndpoint =
             DXEndpoint::newBuilder()
                 ->withRole(DXEndpoint::Role::STREAM_FEED) // Prevents event conflation and loss due to buffer overflow.
                 ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enables wildcard subscription.
@@ -36,7 +40,7 @@ int main(int argc, char *argv[]) {
 
         // Create and link event processor for all types of events.
         // Note: Set of processed event types could be limited if needed.
-        auto sub = inputEndpoint->getFeed()->createSubscription(EventTypeEnum::ALL);
+        const auto sub = inputEndpoint->getFeed()->createSubscription(EventTypeEnum::ALL);
 
         sub->addEventListener([outputEndpoint](auto events) {
             // Here event processing occurs. Events could be modified, removed, or new events added.
@@ -48,7 +52,7 @@ int main(int argc, char *argv[]) {
             //        }
 
             // Publish processed events
-            auto publisher = outputEndpoint->getPublisher();
+            const auto publisher = outputEndpoint->getPublisher();
 
             publisher->publishEvents(events);
         });

@@ -50,6 +50,9 @@ int main() {
          */
         const auto symbols = "https://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip";
 
+        // Disable QD logging.
+        // Logging::init();
+
         /*
          * Permanent subscription property "dxfeed.qd.subscribe.ticker" can be directly placed into the
          * "dxfeed.properties" file and no custom DXEndpoint instance will be needed. Here it is explicitly
