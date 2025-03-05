@@ -3,7 +3,6 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <chrono>
 #include <mutex>
 #include <random>
 #include <string>
@@ -55,7 +54,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
             std::cout << result << std::endl;
         };
 
-        auto model = MultipleMarketDepthModel<Order>::newBuilder()
+        const auto model = MultipleMarketDepthModel<Order>::newBuilder()
                          ->withFeed(DXFeed::getInstance())
                          ->withDepthLimit(10)
                          ->withAggregationPeriod(10s)
@@ -71,12 +70,10 @@ int main(int /*argc*/, char * /*argv*/[]) {
         while (true) {
             std::cin.ignore();
 
-            auto result = model->tryGetBook(symbol);
-
-            if (result.first) {
+            if (auto [ok, book] = model->tryGetBook(symbol); ok) {
                 std::lock_guard lock{ioMutex};
                 std::cout << "=============================Print manually=============================" << std::endl;
-                printBook(symbol, result.second);
+                printBook(symbol, book);
                 std::cout << "========================================================================" << std::endl;
             }
         }

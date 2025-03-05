@@ -35,8 +35,6 @@ endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ../../../third_party/range-v3-0.12/include)
-
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
 
 if (DXFCXX_FEATURE_STACKTRACE)

@@ -4,7 +4,6 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <chrono>
-#include <mutex>
 #include <string>
 
 #include <fmt/format.h>
@@ -24,7 +23,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
         // Logging::init();
 
         auto symbol = "MSFT";
-        auto source = OrderSource::NTV;
+        const auto source = OrderSource::NTV;
 
         auto book =
             PriceLevelBook<Order>::newBuilder()

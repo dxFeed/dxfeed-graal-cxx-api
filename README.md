@@ -382,24 +382,24 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 
 ### Model
 
-- [x] [IncOrderSnapshotSample](samples/cpp/IncOrderSnapshotSample/src/main.cpp)
+- [x] [IncOrderSnapshotSample](samples/cpp/Model/IncOrderSnapshotSample/src/main.cpp)
   demonstrates how to subscribe to the Order event and handle snapshots and updates
-- [x] [MultipleMarketDepthSample](samples/cpp/MultipleMarketDepthSample/src/main.cpp)
+- [x] [MultipleMarketDepthSample](samples/cpp/Model/MultipleMarketDepthSample/src/main.cpp)
   demonstrates how to use the `MarketDepthModel` to manage and display order books for multiple symbols
-- [x] [PriceLevelBookSample](samples/cpp/PriceLevelBookSample/src/main.cpp)
+- [x] [PriceLevelBookSample](samples/cpp/Model/PriceLevelBookSample/src/main.cpp)
   demonstrates how to compile a price level book (market by price) that aggregates individual orders
   (market by order)
-- [x] [MarketDepthModelSample](samples/cpp/MarketDepthModelSample/src/main.cpp)
+- [x] [MarketDepthModelSample](samples/cpp/Model/MarketDepthModelSample/src/main.cpp)
   demonstrates how to use the `MarketDepthModel`
 
 ### Schedule
 
-- [x] [ScheduleSample](samples/cpp/ScheduleSample/src/main.cpp)
+- [x] [ScheduleSample](samples/cpp/Schedule/ScheduleSample/src/main.cpp)
   demonstrates how to get various scheduling information for instruments
 
 ### OnDemand
 
-- [x] [OnDemandSample](samples/cpp/OnDemandSample/src/main.cpp)
+- [x] [OnDemandSample](samples/cpp/OnDemand/OnDemandSample/src/main.cpp)
   a sample that demonstrates how to use the dxFeed on-demand history data replay service API
 
 ### UI

@@ -9,18 +9,19 @@
 
 /// Represents a price level in a price level book.
 struct PriceLevel {
-  private:
+    private:
     std::optional<std::string> eventSymbol_;
     const dxfcpp::IndexedEventSource &eventSource_;
     const dxfcpp::Side &side_;
     double price_;
     double size_;
 
-  public:
+    public:
     /**
      * Initializes a new default instance.
      */
-    PriceLevel() : eventSource_{dxfcpp::IndexedEventSource::DEFAULT}, side_{dxfcpp::Side::UNDEFINED}, price_{}, size_{} {
+    PriceLevel()
+        : eventSource_{dxfcpp::IndexedEventSource::DEFAULT}, side_{dxfcpp::Side::UNDEFINED}, price_{}, size_{} {
     }
 
     /**

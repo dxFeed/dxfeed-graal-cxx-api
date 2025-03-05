@@ -36,6 +36,9 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
+        // Disable QD logging.
+        // Logging::init();
+
         const std::string url = argc > 1 ? argv[1] : DXFEED_IPF_URL;
         auto collector = InstrumentProfileCollector::create();
         const auto connection = InstrumentProfileConnection::createConnection(url, collector);

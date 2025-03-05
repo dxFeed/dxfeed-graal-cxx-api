@@ -20,22 +20,21 @@
  * @tparam O The type of the order.
  */
 template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::RequireMakeShared<PriceLevelBook<O>> {
-    using ListenerSignature =
-        void(const std::vector<std::shared_ptr<PriceLevel>> & /* buy */,
-             const std::vector<std::shared_ptr<PriceLevel>> & /* sell */);
+    using ListenerSignature = void(const std::vector<std::shared_ptr<PriceLevel>> & /* buy */,
+                                   const std::vector<std::shared_ptr<PriceLevel>> & /* sell */);
 
     /// Builder class for constructing instances of PriceLevelBook.
     struct Builder : dxfcpp::RequireMakeShared<Builder> {
         friend struct PriceLevelBook;
 
-      private:
+        private:
         std::shared_ptr<typename dxfcpp::IndexedTxModel<O>::Builder> builder_{};
         dxfcpp::IndexedEventSource source_;
         std::function<ListenerSignature> listener_{};
         std::size_t depthLimit_{};
         std::int64_t aggregationPeriodMillis_{};
 
-      public:
+        public:
         explicit Builder(dxfcpp::RequireMakeShared<Builder>::LockExternalConstructionTag) {
             builder_ = dxfcpp::IndexedTxModel<O>::newBuilder();
             source_ = dxfcpp::IndexedEventSource::DEFAULT;
@@ -158,7 +157,7 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::
      * @tparam Less The comparator type.
      */
     template <typename Less> struct SortedPriceLevelSet {
-      private:
+        private:
         mutable std::recursive_mutex mutex_{};
         std::vector<std::shared_ptr<PriceLevel>> snapshot_{};
         std::set<std::shared_ptr<PriceLevel>, Less> priceLevels_{};
@@ -214,7 +213,7 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::
             }
         }
 
-      public:
+        public:
         /// @return A value indicating whether this set has changed.
         bool isChanged() const {
             return isChanged_;
@@ -328,7 +327,7 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::
         }
     };
 
-private:
+    private:
     mutable std::recursive_mutex mtx_{};
     std::unordered_map<std::int64_t, std::shared_ptr<O>> ordersByIndex_{};
     SortedPriceLevelSet<BuyLess> buyPriceLevels_{};
@@ -346,8 +345,8 @@ private:
         plb->indexedTxModel_ =
             builder->builder_
                 ->withListener([m = plb->weak_from_this()](const dxfcpp::IndexedEventSource &source,
-                                                                        const std::vector<std::shared_ptr<O>> &events,
-                                                                        bool isSnapshot) {
+                                                           const std::vector<std::shared_ptr<O>> &events,
+                                                           bool isSnapshot) {
                     if (const auto model = m.lock()) {
                         model->template sharedAs<PriceLevelBook>()->eventsReceived(source, events, isSnapshot);
                     }
@@ -362,7 +361,7 @@ private:
     }
 
     void eventsReceived(const dxfcpp::IndexedEventSource &source, const std::vector<std::shared_ptr<O>> &events,
-                    bool isSnapshot) {
+                        bool isSnapshot) {
         std::lock_guard guard(mtx_);
 
         if (!update(source, events, isSnapshot)) {
@@ -419,7 +418,8 @@ private:
         return false;
     }
 
-    bool update(const dxfcpp::IndexedEventSource &source, const std::vector<std::shared_ptr<O>> &events, bool isSnapshot) {
+    bool update(const dxfcpp::IndexedEventSource &source, const std::vector<std::shared_ptr<O>> &events,
+                bool isSnapshot) {
         std::lock_guard guard(mtx_);
 
         if (isSnapshot) {
@@ -473,9 +473,9 @@ private:
         sellPriceLevels_.clearBySource(source);
     }
 
-public:
+    public:
     PriceLevelBook(typename dxfcpp::RequireMakeShared<PriceLevelBook>::LockExternalConstructionTag,
-                             const std::shared_ptr<Builder> &builder) {
+                   const std::shared_ptr<Builder> &builder) {
         depthLimit_ = builder->depthLimit_;
         buyPriceLevels_.setDepthLimit(depthLimit_);
         sellPriceLevels_.setDepthLimit(depthLimit_);

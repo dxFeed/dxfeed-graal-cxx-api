@@ -8,7 +8,6 @@
 #include <chrono>
 #include <memory>
 #include <mutex>
-#include <string>
 #include <vector>
 
 using namespace dxfcpp;
@@ -31,20 +30,18 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
     for (std::size_t i = 0; i < depth; i++) {
         if (i < buy.size()) {
             std::cout << otp::moveTo(5 + i, 0) + fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}",
-                                                             dxfcpp::encodeChar(buy[i]->getExchangeCode()),
+                                                             encodeChar(buy[i]->getExchangeCode()),
                                                              buy[i]->getSource().toString(), buy[i]->getMarketMaker(),
-                                                             dxfcpp::toString(buy[i]->getPrice()),
-                                                             dxfcpp::toString(buy[i]->getSize()));
+                                                             toString(buy[i]->getPrice()), toString(buy[i]->getSize()));
         }
 
         std::cout << otp::moveTo(5 + i, 39) + "||";
 
         if (i < sell.size()) {
             std::cout << otp::moveTo(5 + i, 41) +
-                             fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}",
-                                         dxfcpp::encodeChar(sell[i]->getExchangeCode()),
+                             fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}", encodeChar(sell[i]->getExchangeCode()),
                                          sell[i]->getSource().toString(), sell[i]->getMarketMaker(),
-                                         dxfcpp::toString(sell[i]->getPrice()), dxfcpp::toString(sell[i]->getSize()));
+                                         toString(sell[i]->getPrice()), toString(sell[i]->getSize()));
         }
     }
 }
@@ -54,9 +51,9 @@ int main(int /*argc*/, char * /*argv*/[]) {
     otp::hideCursor();
 
     try {
-        auto address = "demo.dxfeed.com:7300";
+        const auto address = "demo.dxfeed.com:7300";
         auto symbol = "AAPL";
-        auto sources = "NTV";
+        const auto sources = "NTV";
         // auto sources = "ntv";
         // auto sources = "AGGREGATE_ASK,AGGREGATE_BID";
         std::size_t depth = 19u;
@@ -66,11 +63,11 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
         std::mutex ioMtx{};
 
-        auto endpoint = DXEndpoint::create();
+        const auto endpoint = DXEndpoint::create();
         auto model = MarketDepthModel<Order>::newBuilder()
                          ->withFeed(endpoint->getFeed())
                          ->withListener([&depth, &ioMtx](const auto &buy, const auto &sell) {
-                             std::lock_guard<std::mutex> lock(ioMtx);
+                             std::lock_guard lock(ioMtx);
                              render(buy, sell, depth);
                          })
                          ->withSources(CmdArgsUtils::parseEventSources(sources))
@@ -80,7 +77,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
                          ->build();
 
         {
-            std::lock_guard<std::mutex> lock(ioMtx);
+            std::lock_guard lock(ioMtx);
             drawHeader();
         }
 

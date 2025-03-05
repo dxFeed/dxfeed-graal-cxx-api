@@ -63,6 +63,9 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
+        // Disable QD logging.
+        // Logging::init();
+
         auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(argv[1]);
         const auto ipfFile = argv[2];
         const auto sub = DXFeed::getInstance()->createSubscription(parsedTypes);

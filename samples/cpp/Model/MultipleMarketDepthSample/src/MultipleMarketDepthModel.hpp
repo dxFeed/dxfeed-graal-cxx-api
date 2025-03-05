@@ -26,12 +26,12 @@ struct MultipleMarketDepthModel : dxfcpp::RequireMakeShared<MultipleMarketDepthM
     struct Builder : dxfcpp::RequireMakeShared<Builder> {
         friend struct MultipleMarketDepthModel;
 
-      private:
+        private:
         std::shared_ptr<typename dxfcpp::MarketDepthModel<O>::Builder> builder_{};
 
         std::function<ListenerSignature> listener_{};
 
-      public:
+        public:
         Builder(dxfcpp::RequireMakeShared<Builder>::LockExternalConstructionTag) {
             builder_ = dxfcpp::MarketDepthModel<O>::newBuilder();
         }
@@ -109,7 +109,7 @@ struct MultipleMarketDepthModel : dxfcpp::RequireMakeShared<MultipleMarketDepthM
         }
     };
 
-  private:
+    private:
     mutable std::recursive_mutex mutex{};
 
     std::unordered_map<dxfcpp::IndexedEventSubscriptionSymbol, std::shared_ptr<dxfcpp::MarketDepthModel<O>>> models_{};
@@ -151,7 +151,7 @@ struct MultipleMarketDepthModel : dxfcpp::RequireMakeShared<MultipleMarketDepthM
             ->build();
     }
 
-  public:
+    public:
     MultipleMarketDepthModel(typename dxfcpp::RequireMakeShared<MultipleMarketDepthModel>::LockExternalConstructionTag,
                              const std::shared_ptr<Builder> &builder) {
         builder_ = builder->builder_;

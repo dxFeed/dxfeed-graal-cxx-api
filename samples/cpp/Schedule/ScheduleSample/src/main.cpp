@@ -32,7 +32,7 @@ void updateScheduleDefaults(const std::string &url) {
         return;
     }
 
-    std::vector<char> buffer(std::istreambuf_iterator<char>{is}, {});
+    const std::vector buffer(std::istreambuf_iterator{is}, {});
 
     Schedule::setDefaults(buffer);
 }
@@ -76,7 +76,7 @@ void checkAllSchedules(auto &&profiles) {
     }
 
     std::cout << "Checked " << profiles.size() << " instrument profiles: " << successes << " successes, "
-              << (profiles.size() - successes) << " failures" << std::endl;
+              << profiles.size() - successes << " failures" << std::endl;
 }
 
 void printNext5Holidays(auto &&profile, auto time) {
@@ -196,6 +196,9 @@ int main(int argc, char *argv[]) {
 
             return 1;
         }
+
+        // Disable QD logging.
+        // Logging::init();
 
         updateScheduleDefaults(argv[1]);
 
