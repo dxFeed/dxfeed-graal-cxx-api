@@ -322,21 +322,26 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 * [Qds](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Qds/QdsTool.hpp)
   collection of tools ported from the Java qds-tools
 
+On macOS, it might be required to remove the quarantine attribute to run certain tools:
+```shell
+sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
+```
+
 ## Samples
 
 ### API
 
-- [x] [AuthSample](samples/cpp/AuthSample/src/main.cpp)
+- [x] [AuthSample](samples/cpp/API/AuthSample/src/main.cpp)
   demonstrates how to connect to an endpoint that requires an authentication token,
   subscribe to market data events, and handle periodic token updates
-- [x] [ConnectSample](samples/cpp/DxFeedConnect/src/main.cpp)
+- [x] [ConnectSample](samples/cpp/API/ConnectSample/src/main.cpp)
   demonstrates how to connect to the endpoint and subscribe to various market events
-- [x] [PrintQuoteEventsSample](samples/cpp/PrintQuoteEvents/src/main.cpp)
+- [x] [PrintQuoteEventsSample](samples/cpp/API/PrintQuoteEventsSample/src/main.cpp)
   is a simple demonstration of how to subscribe to the `Quote` event, using a `DxFeed` instance singleton
   and `dxfeed.properties` file
-- [x] [QuoteAndTradeSample](samples/cpp/DxFeedSample/src/main.cpp)
+- [x] [QuoteAndTradeSample](samples/cpp/API/QuoteAndTradeSample/src/main.cpp)
   demonstrates how to create multiple event listeners and subscribe to `Quote` and `Trade` events
-- [x] [ReconnectSample](samples/cpp/ReconnectSample/src/main.cpp)
+- [x] [ReconnectSample](samples/cpp/API/ReconnectSample/src/main.cpp)
   demonstrates how to connect to an endpoint, subscribe to market data events, handle reconnections
   and re-subscribing
 
@@ -346,7 +351,7 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   demonstrates how to subscribe to `Candle` events
 - [ ] [CandleDataSample](samples/cpp/CandleDataSample/src/main.cpp)
   demonstrates how to parse response from CandleData service
-- [x] [FetchDailyCandlesSample](samples/cpp/FetchDailyCandles/src/main.cpp)
+- [x] [FetchDailyCandlesSample](samples/cpp/Candle/FetchDailyCandlesSample/src/main.cpp)
   demonstrates how to fetch last N-days of candles for a specified symbol
 
 ### Console
@@ -406,6 +411,11 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
 - [ ] [PriceLevelBookSample](samples/cpp/UI/PriceLevelBookSample/src/main.cpp)
   demonstrates how to compile a price level book (market by price) that aggregates individual orders
   (market by order)
+
+On macOS, it might be required to remove the quarantine attribute to run certain samples:
+```shell
+sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
+```
 
 ## Current State
 

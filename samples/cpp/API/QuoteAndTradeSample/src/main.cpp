@@ -13,7 +13,7 @@ using namespace std::literals;
 void testQuoteListener(const std::string &symbol) {
     // Creates a subscription attached to a default DXFeed with a Quote event type.
     // The endpoint address to use is stored in the "dxfeed.properties" file.
-    auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
+    const auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
 
     // Listener must be attached before symbols are added.
     // Filtered by quotes
@@ -30,7 +30,7 @@ void testQuoteListener(const std::string &symbol) {
 void testQuoteAndTradeListener(const std::string &symbol) {
     // Creates a subscription attached to a default DXFeed with a Quote and Trade event types.
     // The endpoint address to use is stored in the "dxfeed.properties" file.
-    auto subscription = DXFeed::getInstance()->createSubscription({Quote::TYPE, Trade::TYPE});
+    const auto subscription = DXFeed::getInstance()->createSubscription({Quote::TYPE, Trade::TYPE});
 
     // Listener must be attached before symbols are added.
     subscription->addEventListener([](const auto &events) {
@@ -55,15 +55,16 @@ void testQuoteAndTradeListener(const std::string &symbol) {
     subscription->addSymbols(symbol);
 }
 
-void testTradeSnapshots(const std::string &symbol) {
-    auto feed = DXFeed::getInstance();
-    auto sub = feed->createSubscription(Trade::TYPE);
+[[noreturn]] inline void testTradeSnapshots(const std::string &symbol) {
+    const auto feed = DXFeed::getInstance();
+    const auto sub = feed->createSubscription(Trade::TYPE);
 
     sub->addSymbols(symbol);
 
+    // ReSharper disable once CppDFAEndlessLoop
     while (true) {
         std::cout << "LAST: " + feed->getLastEvent(std::make_shared<Trade>(symbol))->toString() + "\n";
-        std::this_thread::sleep_for(1000ms);
+        std::this_thread::sleep_for(1s);
     }
 }
 
@@ -79,7 +80,7 @@ int main(int argc, char *argv[]) {
         if (argc < 2) {
             std::cout << R"(
 Usage:
-DxFeedSample <symbol>
+QuoteAndTradeSample <symbol>
 
 Where:
     symbol - Is security symbol (e.g. IBM, AAPL, SPX etc.)
@@ -88,7 +89,10 @@ Where:
         }
 
         // Specified instrument name, for example AAPL, IBM, MSFT, etc.
-        auto symbol = argv[1];
+        const auto symbol = argv[1];
+
+        // Disable QD logging.
+        // Logging::init();
 
         testQuoteListener(symbol);
         testQuoteAndTradeListener(symbol);
@@ -98,6 +102,4 @@ Where:
 
         return 1;
     }
-
-    return 0;
 }

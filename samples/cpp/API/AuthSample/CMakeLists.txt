@@ -11,7 +11,7 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif ()
 
-project(DxFeedConnect LANGUAGES CXX)
+project(AuthSample LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
@@ -35,9 +35,7 @@ endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ../../../third_party/range-v3-0.12/include)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
 
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})

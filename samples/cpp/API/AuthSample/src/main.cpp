@@ -3,7 +3,6 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <mutex>
 #include <random>
 #include <string>
 
@@ -51,14 +50,14 @@ int main() {
         // Set up a timer to periodically update the token and reconnect every 10 seconds.
         // The first connection will be made immediately.
         // After reconnection, all existing subscriptions will be re-subscribed automatically.
-        auto updateTokenTimer = dxfcpp::Timer::schedule(
+        auto updateTokenTimer = Timer::schedule(
             [address, &generateToken] {
                 DXEndpoint::getInstance()->connect(fmt::format("{}[login=entitle:{}]", address, generateToken()));
             },
             0, 10s);
 
         // Create a subscription for Quote events.
-        auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
+        const auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
 
         subscription->addEventListener<Quote>([](const auto &quotes) {
             // Event listener that prints each received event.

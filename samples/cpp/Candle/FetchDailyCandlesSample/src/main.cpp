@@ -8,9 +8,9 @@
 
 void fetchAndPrint(const dxfcpp::CandleSymbol &candleSymbol, std::int64_t toTime, std::int64_t fromTime) {
     // Use default DXFeed instance for that data feed address is defined by dxfeed.properties file
-    auto result = dxfcpp::DXFeed::getInstance()
-                      ->getTimeSeriesPromise<dxfcpp::Candle>(candleSymbol, fromTime, toTime)
-                      ->await(std::chrono::seconds(5));
+    const auto result = dxfcpp::DXFeed::getInstance()
+                            ->getTimeSeriesPromise<dxfcpp::Candle>(candleSymbol, fromTime, toTime)
+                            ->await(std::chrono::seconds(5));
 
     for (const auto &candle : result) {
         std::cout << candle->toString() << "\n";
@@ -19,7 +19,7 @@ void fetchAndPrint(const dxfcpp::CandleSymbol &candleSymbol, std::int64_t toTime
 
 // Fetches last 20 days of candles for a specified symbol, prints them, and exits.
 int main(int argc, char *argv[]) {
-    static const auto DAYS = 20;
+    static constexpr auto DAYS = 20;
 
     using namespace dxfcpp;
     using namespace std::string_literals;
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
         if (argc < 2) {
             std::cout << R"(
 Usage:
-FetchDailyCandles <baseSymbol>
+FetchDailyCandlesSample <baseSymbol>
 
 Where:
     baseSymbol - Is security symbol (e.g. IBM, AAPL, SPX etc.)
@@ -37,11 +37,10 @@ Where:
         }
 
         // Specified instrument name, for example AAPL, IBM, MSFT, etc.
-        auto baseSymbol = argv[1];
-
-        auto candleSymbol = CandleSymbol::valueOf(baseSymbol, CandlePeriod::DAY);
-        auto toTime = dxfcpp::now();
-        auto fromTime = (std::chrono::milliseconds(toTime) - std::chrono::days(DAYS)).count();
+        const auto baseSymbol = argv[1];
+        const auto candleSymbol = CandleSymbol::valueOf(baseSymbol, CandlePeriod::DAY);
+        const auto toTime = now();
+        const auto fromTime = (std::chrono::milliseconds(toTime) - std::chrono::days(DAYS)).count();
 
         std::cout << "Fetching last " << DAYS << " days of candles for " << baseSymbol << "\n";
 

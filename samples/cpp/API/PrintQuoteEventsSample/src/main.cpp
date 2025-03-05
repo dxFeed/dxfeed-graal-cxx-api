@@ -18,9 +18,12 @@ int main(int argc, char *argv[]) {
         // Specified instrument name, for example AAPL, IBM, MSFT, etc.
         auto symbol = argc > 1 ? argv[1] : "AAPL";
 
+        // Disable QD logging.
+        // Logging::init();
+
         // Creates a subscription attached to a default DXFeed with a Quote event type.
         // The endpoint address to use is stored in the "dxfeed.properties" file.
-        auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
+        const auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
 
         // Listener must be attached before symbols are added.
         subscription->addEventListener([](const auto &events) {

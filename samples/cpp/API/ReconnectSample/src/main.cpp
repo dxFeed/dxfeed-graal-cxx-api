@@ -3,10 +3,6 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <chrono>
-#include <mutex>
-#include <string>
-
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
@@ -27,7 +23,7 @@ int main() {
         // Logging::init();
 
         // Create new endpoint and add a listener for state changes.
-        auto endpoint = DXEndpoint::create();
+        const auto endpoint = DXEndpoint::create();
 
         endpoint->addStateChangeListener([](DXEndpoint::State oldState, DXEndpoint::State newState) {
             std::cout << fmt::format("Connection state changed: {}->{}", DXEndpoint::stateToString(oldState),
@@ -39,7 +35,7 @@ int main() {
         endpoint->connect(address);
 
         // Create a subscription for Quote events.
-        auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
+        const auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
 
         subscription->addEventListener<Quote>([](const auto &quotes) {
             // Event listener that prints each received event.

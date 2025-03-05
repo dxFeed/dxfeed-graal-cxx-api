@@ -16,17 +16,17 @@ using namespace dxfcpp::literals;
 using namespace std::literals;
 
 void printUsage() {
-    auto usageString = R"(
+    const auto usageString = R"(
 Usage:
-DxFeedConnect <address> <types> <symbols> [<time>]
+ConnectSample <address> <types> <symbols> [<time>]
 
 Where:
     address - The address to connect to retrieve data (remote host or local tape file).
               To pass an authorization token, add to the address: "[login=entitle:<token>]",
               e.g.: demo.dxfeed.com:7300[login=entitle:<token>]
     types   - Is comma-separated list of dxfeed event types ()" +
-                       dxfcpp::enum_utils::getEventTypeEnumNamesList() + " or " +
-                       dxfcpp::enum_utils::getEventTypeEnumClassNamesList() + R"().
+                             enum_utils::getEventTypeEnumNamesList() + " or " +
+                             enum_utils::getEventTypeEnumClassNamesList() + R"().
     symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").
               for Candle event specify symbol with aggregation like in "AAPL{=d}"
     time    - Is from-time for history subscription in standard formats.
@@ -55,11 +55,14 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
+        // Disable QD logging.
+        // Logging::init();
+
         std::mutex ioMtx{};
 
         // Parse args.
-        std::string address = argv[1];
-        auto types = CmdArgsUtils::parseTypes(argv[2]);
+        const std::string address = argv[1];
+        auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(argv[2]);
         auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
         auto time = -1LL;
 
@@ -68,10 +71,10 @@ int main(int argc, char *argv[]) {
         }
 
         // Create an endpoint and connect to specified address.
-        auto endpoint = DXEndpoint::create()->connect(address);
+        const auto endpoint = DXEndpoint::create()->connect(address);
 
         // Create a subscription with specified types attached to feed.
-        auto sub = endpoint->getFeed()->createSubscription(types.first);
+        const auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
 
         // Add an event listener.
         sub->addEventListener([&ioMtx](const auto &events) {
