@@ -341,6 +341,8 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
   and `dxfeed.properties` file
 - [x] [PublishProfilesSample](samples/cpp/API/PublishProfilesSample/src/main.cpp)
   is a simple demonstration of how to publish market events
+- [x] [RequestProfileSample](samples/cpp/API/RequestProfileSample/src/main.cpp)
+  using address like "localhost:7700" and a symbol list "A:TEST" it connects to the running PublishProfilesSample, prints symbol profile event, and exits.
 - [x] [QuoteAndTradeSample](samples/cpp/API/QuoteAndTradeSample/src/main.cpp)
   demonstrates how to create multiple event listeners and subscribe to `Quote` and `Trade` events
 - [x] [ReconnectSample](samples/cpp/API/ReconnectSample/src/main.cpp)

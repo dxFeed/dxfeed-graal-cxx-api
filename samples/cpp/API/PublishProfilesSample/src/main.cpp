@@ -19,6 +19,9 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
+        // Disable QD logging.
+        // Logging::init();
+
         // Parse args.
         const std::string address = argv[1];
 

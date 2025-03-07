@@ -32,7 +32,7 @@ void updateScheduleDefaults(const std::string &url) {
         return;
     }
 
-    const std::vector buffer(std::istreambuf_iterator{is}, {});
+    const std::vector<char> buffer(std::istreambuf_iterator<char>{is}, {});
 
     Schedule::setDefaults(buffer);
 }
