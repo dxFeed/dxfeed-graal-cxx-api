@@ -1,3 +1,5 @@
+## v4.1.0 
+
 * **\[MDAPI-35]\[C++]** Added RequestProfileSample example
 * **\[MDAPI-30]\[C++]** Added LastEventsConsoleSample sample
 * **\[MDAPI-27]\[C++]** Implemented OptionChain
