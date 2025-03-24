@@ -66,7 +66,6 @@ jobs:
         sanitizers: [ NO_SAN, ASAN, UBSAN ]
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
-    if: ${{ !(contains(matrix.config.os, 'win') && contains(matrix.sanitizers, 'UBSAN')) }}
     runs-on: ${{ matrix.config.image }}
 
     steps:
