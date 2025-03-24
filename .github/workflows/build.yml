@@ -43,12 +43,12 @@ jobs:
             cores: 4
             cc: 'gcc-12'
             cxx: 'g++-12'
-#          - name: ubuntu-22.04-gcc-9
-#            image: ubuntu-22.04
-#            os: linux
-#            cores: 4
-#            cc: 'gcc-9'
-#            cxx: 'g++-9'
+          #          - name: ubuntu-22.04-gcc-9
+          #            image: ubuntu-22.04
+          #            os: linux
+          #            cores: 4
+          #            cc: 'gcc-9'
+          #            cxx: 'g++-9'
           - name: ubuntu-22.04-gcc-11
             image: ubuntu-22.04
             os: linux
@@ -63,9 +63,9 @@ jobs:
             cc: 'clang'
             cxx: 'clang++'
         buildType: [ Release, Debug, RelWithDebInfo ]
-        sanitizers: [ NO_SAN, ASAN, UBSAN]
+        sanitizers: [ NO_SAN, ASAN, UBSAN ]
 
-    name: "${{ matrix.config.name }}-${{matrix.buildType}}"
+    name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
     runs-on: ${{ matrix.config.image }}
 
     steps:
@@ -123,5 +123,6 @@ jobs:
           /p:CL_MPCount=${{matrix.config.cores}}
 
       - name: Test
+        if: ${{ ! cancelled() }}
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{matrix.buildType}} --extra-verbose
