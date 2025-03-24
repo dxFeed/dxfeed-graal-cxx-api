@@ -69,7 +69,6 @@ set(DXFG_STUB_REPO "https://github.com/ttldtor/DxFeedGraalNativeSdkStub" CACHE S
 
 option(DXFCXX_ENABLE_ASAN "Enable address, address sanitizer" OFF)
 option(DXFCXX_ENABLE_UBSAN "Enable address, UB sanitizer" OFF)
-option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
 option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)

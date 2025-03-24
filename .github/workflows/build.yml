@@ -66,6 +66,7 @@ jobs:
         sanitizers: [ NO_SAN, ASAN, UBSAN ]
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
+    if: ${{ !(contains(matrix.config.os, 'win') && contains(matrix.sanitizers, 'UBSAN')) }}
     runs-on: ${{ matrix.config.image }}
 
     steps:
@@ -126,4 +127,4 @@ jobs:
         if: ${{ ! cancelled() }}
         continue-on-error: true
         working-directory: ${{github.workspace}}/build
-        run: ctest -C ${{matrix.buildType}} --extra-verbose --output-on-failure --parallel ${{matrix.config.cores}}
+        run: ctest -C ${{matrix.buildType}} --parallel ${{matrix.config.cores}}
