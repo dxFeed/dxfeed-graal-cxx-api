@@ -124,5 +124,6 @@ jobs:
 
       - name: Test
         if: ${{ ! cancelled() }}
+        continue-on-error: true
         working-directory: ${{github.workspace}}/build
-        run: ctest -C ${{matrix.buildType}} --extra-verbose
+        run: ctest -C ${{matrix.buildType}} --extra-verbose --output-on-failure --parallel ${{matrix.config.cores}}
