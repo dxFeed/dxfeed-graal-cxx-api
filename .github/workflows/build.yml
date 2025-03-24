@@ -88,6 +88,7 @@ jobs:
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
+          -DDXFCXX_ENABLE_ASAN_UBSAN=ON
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'linux') }}
@@ -98,6 +99,7 @@ jobs:
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
+          -DDXFCXX_ENABLE_ASAN_UBSAN=ON
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'win') }}

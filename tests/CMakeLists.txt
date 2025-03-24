@@ -53,6 +53,10 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         LinkStacktrace(${DXFC_TEST_BASENAME})
     endif ()
 
+    if (DXFCXX_ENABLE_ASAN_UBSAN)
+        LinkAsanUbsan(${DXFC_TEST_BASENAME})
+    endif ()
+
     set_target_properties(${DXFC_TEST_BASENAME} PROPERTIES
             CXX_STANDARD 20
             CMAKE_C_STANDARD 11

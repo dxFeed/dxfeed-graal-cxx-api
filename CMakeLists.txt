@@ -86,6 +86,7 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
+include(cmake/LinkAsanUbsan.cmake)
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
     add_subdirectory(third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM})
@@ -538,9 +539,7 @@ if (DXFCXX_FEATURE_STACKTRACE)
 endif ()
 
 if (DXFCXX_ENABLE_ASAN_UBSAN)
-    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
-    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
-    target_link_libraries(${PROJECT_NAME} PUBLIC asan ubsan)
+    LinkAsanUbsan(${PROJECT_NAME})
 endif ()
 
 add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
