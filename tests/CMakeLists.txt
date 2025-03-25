@@ -45,7 +45,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     set(DXFC_TEST_BASENAME dxFeedGraalCxxApi_${DXFC_TEST_BASENAME})
     #    message("${DXFC_TEST_BASENAME}: ${DXFC_TEST_SOURCE}")
 
-    add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE})
+    add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp)
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
     target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
 
