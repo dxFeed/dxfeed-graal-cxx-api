@@ -67,8 +67,8 @@ set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/
 option(DXFCXX_USE_DXFG_STUB "Use dxFeed Graal SDK stub" OFF)
 set(DXFG_STUB_REPO "https://github.com/ttldtor/DxFeedGraalNativeSdkStub" CACHE STRING "")
 
-option(DXFCXX_ENABLE_ASAN_UBSAN "Enable address, UB sanitizers etc" OFF)
-option(DXFCXX_ENABLE_VS_ASAN "Enable VS address sanitizer" OFF)
+option(DXFCXX_ENABLE_ASAN "Enable address, address sanitizer" OFF)
+option(DXFCXX_ENABLE_UBSAN "Enable address, UB sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
 option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
@@ -86,6 +86,7 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
+include(cmake/LinkAsanUbsan.cmake)
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
     add_subdirectory(third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM})
@@ -537,10 +538,10 @@ if (DXFCXX_FEATURE_STACKTRACE)
     target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_FEATURE_STACKTRACE)
 endif ()
 
-if (DXFCXX_ENABLE_ASAN_UBSAN)
-    target_compile_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
-    target_link_options(${PROJECT_NAME} PRIVATE "-fsanitize=address" "-fsanitize=undefined")
-    target_link_libraries(${PROJECT_NAME} PUBLIC asan ubsan)
+if (DXFCXX_ENABLE_ASAN)
+    LinkAsan(${PROJECT_NAME})
+elseif (DXFCXX_ENABLE_UBSAN)
+    LinkUbsan(${PROJECT_NAME})
 endif ()
 
 add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
