@@ -13,9 +13,10 @@ DXFCPP_BEGIN_NAMESPACE
 
 class DXFCPP_EXPORT ApiContext {
     ApiContext() noexcept = default;
-    ~ApiContext() noexcept = default;
 
     public:
+    ~ApiContext() noexcept = default;
+
     static std::shared_ptr<ApiContext> getInstance() noexcept {
         static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new ApiContext{});
 
