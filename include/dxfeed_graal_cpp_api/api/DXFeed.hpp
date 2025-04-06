@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../internal/managers/EntityManager.hpp"
 #include "../promise/Promise.hpp"
 
 #include "DXFeedSubscription.hpp"
@@ -474,7 +475,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         auto list = EventClassList::create(begin, end);
         auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(
             begin, end, std::move(createTimeSeriesSubscriptionHandleFromEventClassList(list)));
-        auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+        auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
         dxfcpp::ignoreUnused(id);
 

@@ -20,7 +20,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct DXFeedSubscription::Impl {
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
         auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
-        auto sub = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getEntity(id);
+        auto sub = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id);
 
         if (sub) {
             auto &&events = EventMapper::fromGraalList(static_cast<void *>(graalNativeEvents));
@@ -46,8 +46,8 @@ bool DXFeedSubscription::tryToSetEventListenerHandle() {
     std::lock_guard lock{eventListenerMutex_};
 
     if (!eventListenerHandle_) {
-        auto idOpt =
-            ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->getId(sharedAs<DXFeedSubscription>());
+        auto idOpt = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getId(
+            sharedAs<DXFeedSubscription>());
 
         if (!idOpt) {
             return false;
@@ -124,7 +124,7 @@ std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEn
     }
 
     auto sub = createShared(eventType);
-    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
     dxfcpp::ignoreUnused(id);
 
@@ -133,7 +133,7 @@ std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEn
 
 std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(std::initializer_list<EventTypeEnum> eventTypes) {
     auto sub = createShared(eventTypes);
-    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
     dxfcpp::ignoreUnused(id);
 

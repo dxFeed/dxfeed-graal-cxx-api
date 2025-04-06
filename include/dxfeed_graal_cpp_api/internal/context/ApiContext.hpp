@@ -9,29 +9,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 
-#include "../managers/DXEndpointManager.hpp"
-#include "../managers/DXFeedManager.hpp"
-#include "../managers/DXFeedSubscriptionManager.hpp"
-#include "../managers/DXPublisherManager.hpp"
-
 DXFCPP_BEGIN_NAMESPACE
 
-template <typename Manager> struct AddManagerMixin {
-    mutable std::shared_ptr<Manager> manager_;
-
-    AddManagerMixin() noexcept : manager_{std::make_shared<Manager>()} {
-    }
-
-    std::shared_ptr<Manager> getManager() const noexcept {
-        return manager_;
-    }
-};
-
-class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
-                                 AddManagerMixin<DXFeedSubscriptionManager>,
-                                 AddManagerMixin<DXFeedManager>,
-                                 AddManagerMixin<DXPublisherManager> {
+class DXFCPP_EXPORT ApiContext {
     ApiContext() noexcept = default;
+    ~ApiContext() noexcept = default;
 
     public:
     static std::shared_ptr<ApiContext> getInstance() noexcept {
@@ -41,13 +23,9 @@ class DXFCPP_EXPORT ApiContext : AddManagerMixin<DXEndpointManager>,
     }
 
     template <typename Manager> std::shared_ptr<Manager> getManager() const noexcept {
-        if constexpr (std::is_base_of_v<AddManagerMixin<Manager>, ApiContext>) {
-            return AddManagerMixin<Manager>::getManager();
-        } else {
-            static std::shared_ptr<Manager> instance = std::shared_ptr<Manager>(new Manager{});
+        static std::shared_ptr<Manager> instance = std::shared_ptr<Manager>(new Manager{});
 
-            return instance;
-        }
+        return instance;
     }
 };
 

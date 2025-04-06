@@ -55,7 +55,7 @@ struct DXEndpoint::Impl {
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                  dxfg_endpoint_state_t newState, void *userData) {
         auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
-        auto endpoint = ApiContext::getInstance()->getManager<DXEndpointManager>()->getEntity(id);
+        auto endpoint = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
             Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
@@ -67,7 +67,7 @@ struct DXEndpoint::Impl {
 
             if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
                 // TODO: fix endpoint lifetime
-                // ApiContext::getInstance()->getManager<DXEndpointManager>()->unregisterEntity(id);
+                // ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->unregisterEntity(id);
             }
         }
     };
@@ -128,13 +128,13 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
     auto name = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
 
     if (name.empty()) {
-        std::size_t id = ApiContext::getInstance()->getManager<DXEndpointManager>()->getLastId();
+        std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId();
 
         name = fmt::format("qdcxx{}", (id <= 1) ? "" : fmt::format("-{}", id));
     }
 
     auto endpoint = DXEndpoint::createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, name);
-    auto id = ApiContext::getInstance()->getManager<DXEndpointManager>()->registerEntity(endpoint);
+    auto id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));

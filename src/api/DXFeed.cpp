@@ -120,7 +120,7 @@ std::shared_ptr<DXFeedTimeSeriesSubscription> DXFeed::createTimeSeriesSubscripti
 
     auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(
         eventType, isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, eventType));
-    auto id = ApiContext::getInstance()->getManager<DXFeedSubscriptionManager>()->registerEntity(sub);
+    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
     dxfcpp::ignoreUnused(id);
     attachSubscription(sub);
@@ -145,7 +145,7 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
 
     std::shared_ptr<DXFeed> feed{new DXFeed{}};
 
-    auto id = ApiContext::getInstance()->getManager<DXFeedManager>()->registerEntity(feed);
+    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeed>>()->registerEntity(feed);
     ignoreUnused(id);
 
     feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);

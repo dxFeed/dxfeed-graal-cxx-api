@@ -32,7 +32,7 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
 
     std::shared_ptr<DXPublisher> publisher{new DXPublisher{}};
 
-    auto id = ApiContext::getInstance()->getManager<DXPublisherManager>()->registerEntity(publisher);
+    auto id = ApiContext::getInstance()->getManager<EntityManager<DXPublisher>>()->registerEntity(publisher);
     ignoreUnused(id);
 
     publisher->handle_ = JavaObjectHandle<DXPublisher>(handle);
