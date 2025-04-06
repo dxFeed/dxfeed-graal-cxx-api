@@ -527,8 +527,8 @@ if (DXFCXX_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
 endif ()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
-target_link_libraries(${PROJECT_NAME}_static PUBLIC DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+target_link_libraries(${PROJECT_NAME} PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+target_link_libraries(${PROJECT_NAME}_static PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
 
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})

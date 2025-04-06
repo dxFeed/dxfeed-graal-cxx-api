@@ -15,6 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Handler.hpp"
 #include "../internal/Id.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../internal/managers/EntityManager.hpp"
 #include "../internal/context/ApiContext.hpp"
 
 #include <functional>

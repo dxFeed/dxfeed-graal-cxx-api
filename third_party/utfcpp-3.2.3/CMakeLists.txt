@@ -1,4 +1,6 @@
-cmake_minimum_required (VERSION 3.0.2)
+#  CMake Error at third_party/utfcpp-3.2.3/CMakeLists.txt:1 (cmake_minimum_required):
+#  Compatibility with CMake < 3.5 has been removed from CMake.
+cmake_minimum_required (VERSION 3.5)
 project (utf8cpp VERSION 3.2.2 LANGUAGES CXX)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
