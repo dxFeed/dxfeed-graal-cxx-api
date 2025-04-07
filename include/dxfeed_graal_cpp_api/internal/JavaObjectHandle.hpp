@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "utils/StringUtils.hpp"
+#include "utils/debug/Debug.hpp"
 
 #include <memory>
 #include <string>

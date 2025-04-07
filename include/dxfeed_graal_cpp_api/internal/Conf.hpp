@@ -30,11 +30,13 @@
 #    ifndef DXFCXX_DISABLE_GCC_WARNINGS_PUSH
 #        define DXFCXX_DISABLE_GCC_WARNINGS_PUSH(...)                                                                  \
             DXFCXX_DO_PRAGMA(GCC diagnostic push) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#        define DXFCXX_DISABLE_GCC_WARNINGS(...) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
 #        define DXFCXX_DISABLE_GCC_WARNINGS_POP() DXFCXX_DO_PRAGMA(GCC diagnostic pop)
 #    endif
 #else
 #    ifndef DXFCXX_DISABLE_GCC_WARNINGS_PUSH
 #        define DXFCXX_DISABLE_GCC_WARNINGS_PUSH(warnings)
+#        define DXFCXX_DISABLE_GCC_WARNINGS(warnings)
 #        define DXFCXX_DISABLE_GCC_WARNINGS_POP()
 #    endif
 #endif
