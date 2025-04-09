@@ -19,7 +19,7 @@ struct EventType;
 struct JavaException;
 struct Promises;
 
-struct PromiseImpl {
+struct DXFCPP_EXPORT PromiseImpl {
     protected:
     std::atomic<void *> handle = nullptr;
 
@@ -37,7 +37,7 @@ struct PromiseImpl {
     void cancel() const;
 };
 
-struct VoidPromiseImpl : PromiseImpl {
+struct DXFCPP_EXPORT VoidPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
@@ -46,7 +46,7 @@ struct VoidPromiseImpl : PromiseImpl {
     void getResult() const;
 };
 
-struct EventPromiseImpl : PromiseImpl {
+struct DXFCPP_EXPORT EventPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
@@ -55,7 +55,7 @@ struct EventPromiseImpl : PromiseImpl {
     std::shared_ptr<EventType> getResult() const;
 };
 
-struct EventsPromiseImpl : PromiseImpl {
+struct DXFCPP_EXPORT EventsPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
@@ -406,7 +406,7 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
     Promise &operator=(Promise &&) noexcept = delete;
 };
 
-struct PromiseListImpl {
+struct DXFCPP_EXPORT PromiseListImpl {
     std::atomic<void *> handle = nullptr;
 
     explicit PromiseListImpl(void *handle);
