@@ -47,7 +47,14 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp)
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
-    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
+
+    if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
+        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx fmt::fmt-header-only)
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCPP_USE_DLLS)
+    else ()
+        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
+    endif ()
+
 
     if (DXFCXX_FEATURE_STACKTRACE)
         LinkStacktrace(${DXFC_TEST_BASENAME})
@@ -68,5 +75,12 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     add_test(NAME ${DXFC_TEST_BASENAME} COMMAND ${DXFC_TEST_BASENAME})
 
     add_custom_command(TARGET ${DXFC_TEST_BASENAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${DXFC_TEST_BASENAME}>)
+            $<TARGET_FILE:dxfcxx::graal>
+            $<TARGET_FILE_DIR:${DXFC_TEST_BASENAME}>)
+
+    if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
+        add_custom_command(TARGET ${DXFC_TEST_BASENAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_FILE:dxfcxx>
+                $<TARGET_FILE_DIR:${DXFC_TEST_BASENAME}>)
+    endif ()
 endforeach ()

@@ -16,6 +16,28 @@ extern "C" {
 
 #define DXFC_OUT
 
+#ifndef DXFCPP_EXPORT
+#    if defined(DXFCPP_USE_DLLS) && defined(_MSC_VER)
+#        if defined(LIBDXFCPP_EXPORTS)
+#            define DXFCPP_EXPORT __declspec(dllexport)
+#            define DXFCPP_EXPORT_TEMPLATE_DECLARE
+#            define DXFCPP_EXPORT_TEMPLATE_DEFINE __declspec(dllexport)
+#        else
+#            define DXFCPP_EXPORT __declspec(dllimport)
+#            define DXFCPP_EXPORT_TEMPLATE_DECLARE
+#            define DXFCPP_EXPORT_TEMPLATE_DEFINE __declspec(dllimport)
+#        endif // defined(LIBDXFCPP_EXPORTS)
+#    elif defined(DXFCPP_USE_DLLS) && defined(LIBDXFCPP_EXPORTS)
+#        define DXFCPP_EXPORT __attribute__((visibility("default")))
+#        define DXFCPP_EXPORT_TEMPLATE_DECLARE __attribute__((visibility("default")))
+#        define DXFCPP_EXPORT_TEMPLATE_DEFINE
+#    else
+#        define DXFCPP_EXPORT
+#        define DXFCPP_EXPORT_TEMPLATE_DECLARE
+#        define DXFCPP_EXPORT_TEMPLATE_DEFINE
+#    endif
+#endif
+
 /**
  * @file
  * @brief dxFeed Native C API enums, structs and functions declarations
@@ -45,7 +67,7 @@ typedef enum dxfc_error_code_t {
  * @param value The value of the system property (UTF-8 string).
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value);
 
 /**
  * Gets the system property indicated by the specified key.
@@ -59,7 +81,7 @@ dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value);
  * @param buffer_size The buffer's size.
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_system_get_property(const char *key, DXFC_OUT char *buffer, size_t buffer_size);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_system_get_property(const char *key, DXFC_OUT char *buffer, size_t buffer_size);
 
 /**
  * Represents the role of endpoint that was specified during its @ref dxfc_dxendpoint_create() "creation".
@@ -201,7 +223,7 @@ typedef void *dxfc_dxpublisher_t;
  * @param[out] builder The created endpoint's builder.
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t *builder);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t *builder);
 
 /**
  * Sets role for the created dxFeed endpoint.
@@ -211,7 +233,8 @@ dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t
  * @param role The endpoint's role
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t builder, dxfc_dxendpoint_role_t role);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t builder,
+                                                                  dxfc_dxendpoint_role_t role);
 
 /**
  * Changes name that is used to distinguish multiple endpoints
@@ -221,7 +244,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t bu
  * @param name The endpoint's name
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t builder, const char *name);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t builder, const char *name);
 
 /**
  * Sets the specified property. Unsupported properties are ignored.
@@ -231,8 +254,8 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t bu
  * @param value The endpoint's property value
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_t builder, const char *key,
-                                                        const char *value);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_t builder,
+                                                                      const char *key, const char *value);
 
 /**
  * Sets all supported properties from the provided properties object.
@@ -242,8 +265,9 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_
  * @param size The size of the endpoint's properties
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builder_t builder,
-                                                          const dxfc_dxendpoint_property_t **properties, size_t size);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builder_t builder,
+                                                                        const dxfc_dxendpoint_property_t **properties,
+                                                                        size_t size);
 
 /**
  * Checks if a property is supported
@@ -253,8 +277,8 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builde
  * @param[out] supports `1` if the corresponding property key is supported.
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_builder_t builder, const char *key,
-                                                            DXFC_OUT int *supports);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_builder_t builder,
+                                                                          const char *key, DXFC_OUT int *supports);
 
 /**
  * Builds the new dxFeed endpoint instance.
@@ -264,8 +288,8 @@ dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_buil
  * @param[out] endpoint The created endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builder, void *user_data,
-                                                DXFC_OUT dxfc_dxendpoint_t *endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builder, void *user_data,
+                                                              DXFC_OUT dxfc_dxendpoint_t *endpoint);
 
 /**
  * Removes a builder from the registry.
@@ -273,7 +297,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builde
  * @param builder The endpoint's builder
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_builder_free(dxfc_dxendpoint_builder_t builder);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_free(dxfc_dxendpoint_builder_t builder);
 
 /**
  * Returns a default application-wide singleton instance of dxFeed endpoint with a @ref DXFC_DXENDPOINT_ROLE_FEED "FEED"
@@ -292,7 +316,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_free(dxfc_dxendpoint_builder_t builder
  * @param[out] endpoint The created endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_get_instance(void *user_data, DXFC_OUT dxfc_dxendpoint_t *endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_get_instance(void *user_data, DXFC_OUT dxfc_dxendpoint_t *endpoint);
 
 /**
  * Returns a default application-wide singleton instance of DXEndpoint for a specific role.
@@ -315,8 +339,8 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance(void *user_data, DXFC_OUT dxfc_dx
  * @param[out] endpoint The created endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, void *user_data,
-                                                DXFC_OUT dxfc_dxendpoint_t *endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, void *user_data,
+                                                              DXFC_OUT dxfc_dxendpoint_t *endpoint);
 
 /**
  * Creates an endpoint with @ref DXFC_DXENDPOINT_ROLE_FEED "FEED" role.
@@ -334,7 +358,7 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, voi
  * @param[out] endpoint The created endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_create(void *user_data, DXFC_OUT dxfc_dxendpoint_t *endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_create(void *user_data, DXFC_OUT dxfc_dxendpoint_t *endpoint);
 
 /**
  * Creates an endpoint with a specified role.
@@ -353,8 +377,8 @@ dxfc_error_code_t dxfc_dxendpoint_create(void *user_data, DXFC_OUT dxfc_dxendpoi
  * @param[out] endpoint The created endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *user_data,
-                                          DXFC_OUT dxfc_dxendpoint_t *endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *user_data,
+                                                        DXFC_OUT dxfc_dxendpoint_t *endpoint);
 
 /**
  * Closes this endpoint. All network connection are terminated as with dxfc_dxendpoint_disconnect() function and no
@@ -366,7 +390,7 @@ dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *use
  * @param endpoint The dxFeed endpoint to close
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpoint);
 
 /**
  * Closes this endpoint and wait until all pending data processing tasks are completed.
@@ -380,7 +404,7 @@ dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpoint);
  * @param endpoint The dxFeed endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_close_and_await_termination(dxfc_dxendpoint_t endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_close_and_await_termination(dxfc_dxendpoint_t endpoint);
 
 /**
  * Returns the role of this endpoint.
@@ -389,18 +413,19 @@ dxfc_error_code_t dxfc_dxendpoint_close_and_await_termination(dxfc_dxendpoint_t 
  * @param[out] role The role of this endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_get_role(dxfc_dxendpoint_t endpoint, DXFC_OUT dxfc_dxendpoint_role_t *role);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_get_role(dxfc_dxendpoint_t endpoint,
+                                                         DXFC_OUT dxfc_dxendpoint_role_t *role);
 
 /**
- * Changes user name for this endpoint.
+ * Changes username for this endpoint.
  * This function shall be called before @ref dxfc_dxendpoint_connect() "connect" together
  * with @ref dxfc_dxendpoint_password() "password" to configure service access credentials.
  *
  * @param endpoint The dxFeed endpoint
- * @param user The user name
+ * @param user The username
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpoint, const char *user);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpoint, const char *user);
 
 /**
  * Changes password for this endpoint.
@@ -411,7 +436,7 @@ dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpoint, const char *u
  * @param password The user password
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpoint, const char *password);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpoint, const char *password);
 
 /**
  * Connects to the specified remote address. Previously established connections are closed if
@@ -442,7 +467,7 @@ dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpoint, const cha
  * @param address The data source address
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpoint, const char *address);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpoint, const char *address);
 
 /**
  * Terminates all established network connections and initiates connecting again with the same address.
@@ -461,7 +486,7 @@ dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpoint, const char
  * @param endpoint The dxFeed endpoint to reconnect
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_reconnect(dxfc_dxendpoint_t endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_reconnect(dxfc_dxendpoint_t endpoint);
 
 /**
  * Terminates all remote network connections.
@@ -475,7 +500,7 @@ dxfc_error_code_t dxfc_dxendpoint_reconnect(dxfc_dxendpoint_t endpoint);
  * @param endpoint The dxFeed endpoint to disconnect
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_disconnect(dxfc_dxendpoint_t endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_disconnect(dxfc_dxendpoint_t endpoint);
 
 /**
  * Terminates all remote network connections and clears stored data.
@@ -489,7 +514,7 @@ dxfc_error_code_t dxfc_dxendpoint_disconnect(dxfc_dxendpoint_t endpoint);
  * @param endpoint The dxFeed endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_disconnect_and_clear(dxfc_dxendpoint_t endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_disconnect_and_clear(dxfc_dxendpoint_t endpoint);
 
 /**
  * Waits until this endpoint stops processing data (becomes quiescent).
@@ -499,7 +524,7 @@ dxfc_error_code_t dxfc_dxendpoint_disconnect_and_clear(dxfc_dxendpoint_t endpoin
  * @param endpoint The dxFeed endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_await_processed(dxfc_dxendpoint_t endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_await_processed(dxfc_dxendpoint_t endpoint);
 
 /**
  * Waits while this endpoint @ref dxfc_dxendpoint_get_state() "state" becomes @ref DXFC_DXENDPOINT_STATE_NOT_CONNECTED
@@ -514,7 +539,7 @@ dxfc_error_code_t dxfc_dxendpoint_await_processed(dxfc_dxendpoint_t endpoint);
  * @param endpoint The dxFeed endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_await_not_connected(dxfc_dxendpoint_t endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_await_not_connected(dxfc_dxendpoint_t endpoint);
 
 /**
  * Returns the state of this endpoint.
@@ -523,7 +548,8 @@ dxfc_error_code_t dxfc_dxendpoint_await_not_connected(dxfc_dxendpoint_t endpoint
  * @param[out] state The state of this endpoint
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_get_state(dxfc_dxendpoint_t endpoint, DXFC_OUT dxfc_dxendpoint_state_t *state);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_get_state(dxfc_dxendpoint_t endpoint,
+                                                          DXFC_OUT dxfc_dxendpoint_state_t *state);
 
 /**
  * Adds listener that is notified about changes in @ref dxfc_dxendpoint_get_state() "state" property.
@@ -534,8 +560,8 @@ dxfc_error_code_t dxfc_dxendpoint_get_state(dxfc_dxendpoint_t endpoint, DXFC_OUT
  * @param listener The listener to add
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t endpoint,
-                                                            dxfc_dxendpoint_state_change_listener listener);
+DXFCPP_EXPORT dxfc_error_code_t
+dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t endpoint, dxfc_dxendpoint_state_change_listener listener);
 
 /**
  * Removes listener that is notified about changes in @ref dxfc_dxendpoint_get_state() "state" property.
@@ -545,8 +571,8 @@ dxfc_error_code_t dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t en
  * @param listener The listener to remove
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_remove_state_change_listener(dxfc_dxendpoint_t endpoint,
-                                                               dxfc_dxendpoint_state_change_listener listener);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_remove_state_change_listener(
+    dxfc_dxendpoint_t endpoint, dxfc_dxendpoint_state_change_listener listener);
 
 /**
  *
@@ -554,7 +580,7 @@ dxfc_error_code_t dxfc_dxendpoint_remove_state_change_listener(dxfc_dxendpoint_t
  * @param[out] feed
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_get_feed(dxfc_dxendpoint_t endpoint, DXFC_OUT dxfc_dxfeed_t *feed);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_get_feed(dxfc_dxendpoint_t endpoint, DXFC_OUT dxfc_dxfeed_t *feed);
 
 /**
  *
@@ -562,14 +588,15 @@ dxfc_error_code_t dxfc_dxendpoint_get_feed(dxfc_dxendpoint_t endpoint, DXFC_OUT 
  * @param[out] publisher
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_get_publisher(dxfc_dxendpoint_t endpoint, DXFC_OUT dxfc_dxpublisher_t *publisher);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_get_publisher(dxfc_dxendpoint_t endpoint,
+                                                              DXFC_OUT dxfc_dxpublisher_t *publisher);
 
 /**
  * Removes the dxFeed endpoint from the registry.
  * @param endpoint The dxFeed endpoint to remove
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-dxfc_error_code_t dxfc_dxendpoint_free(dxfc_dxendpoint_t endpoint);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_free(dxfc_dxendpoint_t endpoint);
 
 #ifdef __cplusplus
 }

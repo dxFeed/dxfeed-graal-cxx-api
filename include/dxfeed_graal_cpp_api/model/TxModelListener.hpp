@@ -68,7 +68,7 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
  * The listener for receiving indexed events with the specified type from the IndexedTxModel.
  */
 template <Derived<IndexedEvent> E>
-struct DXFCPP_EXPORT IndexedTxModelListener final : TxModelListenerCommon,
+struct /* DXFCPP_EXPORT */ IndexedTxModelListener final : TxModelListenerCommon,
                                                     RequireMakeShared<IndexedTxModelListener<E>> {
     IndexedTxModelListener(RequireMakeShared<IndexedTxModelListener<E>>::LockExternalConstructionTag) {};
 
@@ -142,7 +142,7 @@ struct DXFCPP_EXPORT IndexedTxModelListener final : TxModelListenerCommon,
  * The listener for receiving time series events with the specified type from the TimeSeriesTxModel.
  */
 template <Derived<TimeSeriesEvent> E>
-struct DXFCPP_EXPORT TimeSeriesTxModelListener final : TxModelListenerCommon,
+struct /* DXFCPP_EXPORT */ TimeSeriesTxModelListener final : TxModelListenerCommon,
                                                        RequireMakeShared<TimeSeriesTxModelListener<E>> {
     TimeSeriesTxModelListener(RequireMakeShared<TimeSeriesTxModelListener<E>>::LockExternalConstructionTag) {};
 

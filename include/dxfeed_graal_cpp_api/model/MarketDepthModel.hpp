@@ -114,9 +114,9 @@ struct SymbolWrapper;
  *
  * @tparam O The type of order derived from OrderBase.
  */
-template <Derived<OrderBase> O> struct DXFCPP_EXPORT MarketDepthModel final : RequireMakeShared<MarketDepthModel<O>> {
+template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel final : RequireMakeShared<MarketDepthModel<O>> {
 
-    struct DXFCPP_EXPORT Builder final : RequireMakeShared<Builder> {
+    struct /* DXFCPP_EXPORT */ Builder final : RequireMakeShared<Builder> {
         friend struct MarketDepthModel;
 
         private:
