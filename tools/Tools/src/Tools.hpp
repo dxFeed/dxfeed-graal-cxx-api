@@ -12,6 +12,7 @@
 #include "LatencyTest/LatencyTestTool.hpp"
 #include "PerfTest/PerfTestTool.hpp"
 #include "PerfTest2/PerfTest2Tool.hpp"
+#include "Qds/QdsTool.hpp"
 
 #include <chrono>
 #include <cstdint>
