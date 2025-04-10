@@ -124,7 +124,6 @@ jobs:
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON         
           -DDXFCXX_LINK_STATIC_RUNTIME=ON
-          -DXFCXX_NODEFAULTLIB_LIBCMT=ON
 
       - name: Build
         if: ${{ !contains(matrix.config.os, 'win') }}

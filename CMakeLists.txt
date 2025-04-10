@@ -63,7 +63,7 @@ option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PRO
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 
 option(DXFCXX_LINK_STATIC_RUNTIME "Compile and link with -MT/-MTd or equivalent flag(s) to use a multi-threaded statically-linked runtime library. Visual Studio only." OFF)
-option(DXFCXX_NODEFAULTLIB_LIBCMT "Ignore libcmt/libcmtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." OFF)
+option(DXFCXX_NODEFAULTLIB_LIBCMT "Ignore libcmt/libcmtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." ${DXFCXX_LINK_STATIC_RUNTIME})
 
 option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
