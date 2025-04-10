@@ -146,6 +146,19 @@ else ()
     CPMAddPackage("gh:ttldtor/Process#v${PROCESS_VERSION}")
 endif ()
 
+if (DXFCXX_LINK_STATIC_RUNTIME)
+    set_target_properties(process PROPERTIES
+            MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+    )
+
+    if (DXFCXX_NODEFAULTLIB_LIBCMT)
+        target_link_options(process PRIVATE
+                "/NODEFAULTLIB:LIBCMT"
+                "/NODEFAULTLIB:LIBCMTD"
+        )
+    endif ()
+endif ()
+
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Console-${CONSOLE_VERSION}/CMakeLists.txt")
     add_subdirectory(third_party/Console-${CONSOLE_VERSION})
 else ()

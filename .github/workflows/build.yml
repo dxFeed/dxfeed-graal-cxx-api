@@ -122,7 +122,7 @@ jobs:
           cmake -B ${{github.workspace}}/build-mt
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
-          -DDXFCXX_FEATURE_STACKTRACE=ON         
+          -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_LINK_STATIC_RUNTIME=ON
 
       - name: Build
