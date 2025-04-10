@@ -1,3 +1,5 @@
+## v4.2.0 
+
 * **\[MDAPI-249]\[C++]** Transitive dependencies are hidden.
 * Fixed a segfault related to linking features: added a default constructor for `ApiContext`.
 * **\[MDAPI-246]\[С++]** Added an ability to build the project with statically linked runtime libraries with Visual
