@@ -1,10 +1,27 @@
-## v4.1.0 
+* **\[MDAPI-249]\[C++]** Transitive dependencies are hidden.
+* Fixed a segfault related to linking features: added a default constructor for `ApiContext`.
+* **\[MDAPI-246]\[С++]** Added an ability to build the project with statically linked runtime libraries with Visual
+  Studio.
+* Fixed dynamic linking under Windows. These classes and functions are affected:
+    * `PromiseImpl`, `VoidPromiseImpl`, `EventPromiseImpl`, `EventsPromiseImpl`, `PromiseListImpl`
+    * `isolated::internal::IsolatedTools::parseSymbols`, `isolated::internal::IsolatedTools::parseSymbolsAndSaveOrder`,
+      `isolated::internal::IsolatedTools::runTool`
+    * All C-API functions.
+* Added the ability to enable dynamic linking of tests using the CMake parameter `DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS`
+* Added the ability to enable dynamic linking of samples using the CMake parameter `DXFCXX_DYNAMICALLY_LINK_SAMPLES`
+* Added the ability to enable dynamic linking of tools using the CMake parameter `DXFCXX_DYNAMICALLY_LINK_TOOLS`
+* Added the ability to statically link Windows runtime libraries (for Visual Studio) using the
+  `DXFCXX_LINK_STATIC_RUNTIME` parameter
+* Added the ability to ignore the libcmt/libcmtd library when statically linking Windows runtime libraries using the
+  `DXFCXX_NODEFAULTLIB_LIBCMT` parameter (works only when the `DXFCXX_LINK_STATIC_RUNTIME` parameter is enabled)
+
+## v4.1.0
 
 * **\[MDAPI-35]\[C++]** Added RequestProfileSample example
 * **\[MDAPI-30]\[C++]** Added LastEventsConsoleSample sample
 * **\[MDAPI-27]\[C++]** Implemented OptionChain
-    * Added `OptionChain` class. 
-    * Added `OptionSeries` class. 
+    * Added `OptionChain` class.
+    * Added `OptionSeries` class.
     * Added `OptionChainsBuilder` class.
     * Added `OptionChainSample` example.
 * **\[MDAPI-77]\[C++]** Added support for retrieving indexed events from feed
