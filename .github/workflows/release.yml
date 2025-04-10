@@ -374,7 +374,6 @@ jobs:
             ${{github.workspace}}/*.zip          
 
       - name: Upload docs as gh pages artifact
-        id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
           path: ${{github.workspace}}/docs/html
