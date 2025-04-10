@@ -17,6 +17,7 @@
 * Added preparation of library releases for Windows, linked statically with runtime libraries (with parameters: `/MT`,
   `/MTd`, `/NODEFAULTLIB:LIBCMT`, `/NODEFAULTLIB:LIBCMTD`). The names of these artifacts end with `-static-mt`, for
   example `dxFeedGraalCxxApi-v4.2.0-rc1-x86_64-windows-Release-static-mt.zip`
+* **\[MDAPI-248]\[C++]** Now documentation is automatically collected and published on GitHub Pages and released.
 
 ## v4.1.0
 
