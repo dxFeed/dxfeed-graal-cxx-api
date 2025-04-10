@@ -41,27 +41,49 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} PRIVATE ../../third_party/range-v3-0.12/include)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only)
+if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process console::console fmt::fmt-header-only)
+else ()
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only)
+
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+        if (DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${PROJECT_NAME} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+            )
+        endif ()
+    endif ()
+endif ()
 
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})
+endif ()
+
+if (DXFCXX_ENABLE_ASAN)
+    LinkAsan(${PROJECT_NAME})
+elseif (DXFCXX_ENABLE_UBSAN)
+    LinkUbsan(${PROJECT_NAME})
 endif ()
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
-#target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process console::console fmt::fmt-header-only)
-#target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
-#add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-#        $<TARGET_FILE:dxfcxx::graal>
-#        $<TARGET_FILE:dxfcxx>
-#        $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:dxfcxx>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+endif ()
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_TOOLS)
     install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     if (WIN32)
         install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+        if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
+            install(FILES $<TARGET_FILE:dxfcxx> DESTINATION ${CMAKE_INSTALL_BINDIR})
+        endif ()
     endif ()
 endif ()

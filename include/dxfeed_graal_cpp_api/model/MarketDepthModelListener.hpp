@@ -26,7 +26,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @tparam O The type of order derived from OrderBase.
  */
 template <Derived<OrderBase> O>
-struct DXFCPP_EXPORT MarketDepthModelListener final : RequireMakeShared<MarketDepthModelListener<O>> {
+struct /* DXFCPP_EXPORT */ MarketDepthModelListener final : RequireMakeShared<MarketDepthModelListener<O>> {
     /**
      * The listener's callback (and handler) signature.
      */

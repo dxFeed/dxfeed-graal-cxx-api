@@ -96,6 +96,12 @@ jobs:
           ls
           mkdir ${{github.workspace}}/build-${{matrix.buildType}}
 
+      - name: Prepare build [Lib][Win with static with MT]
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: |
+          ls
+          mkdir ${{github.workspace}}/build-${{matrix.buildType}}-mt
+
       - name: Prepare build [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         run: |
@@ -117,6 +123,22 @@ jobs:
           -DDXFCXX_INSTALL_TOOLS=OFF
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
+
+      - name: Configure CMake [Lib][Win with static with MT]
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          cmake -B ${{github.workspace}}/build-${{matrix.buildType}}-mt
+          -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}"
+          -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}-static-mt"
+          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_INSTALL_SAMPLES=OFF
+          -DDXFCXX_INSTALL_TOOLS=OFF
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
+          -DDXFCXX_LINK_STATIC_RUNTIME=ON
 
       - name: Configure CMake [Samples][Tools]
         if: ${{ contains(matrix.config.os, 'windows') && !contains(matrix.buildType, 'Deb') }}
@@ -249,6 +271,14 @@ jobs:
           --
           /p:CL_MPCount=${{matrix.config.cores}}
 
+      - name: Build [Lib][Win with static with MT]
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          cmake --build ${{github.workspace}}/build-${{matrix.buildType}}-mt
+          --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
+          --
+          /p:CL_MPCount=${{matrix.config.cores}}
+
       - name: Build [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') && !contains(matrix.config.os, 'win') }}
         run: |
@@ -274,6 +304,11 @@ jobs:
         working-directory: "${{github.workspace}}/build-${{matrix.buildType}}"
         run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
+      - name: Pack [Lib][Win with static with MT]
+        if: ${{ contains(matrix.config.os, 'win') }}
+        working-directory: "${{github.workspace}}/build-${{matrix.buildType}}-mt"
+        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
+
       - name: Pack [Samples]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         working-directory: ${{github.workspace}}/build-Samples
@@ -289,6 +324,13 @@ jobs:
         with:
           name: artifacts-lib-${{matrix.config.name}}-${{matrix.buildType}}
           path: build-${{matrix.buildType}}/*.zip
+
+      - name: Upload [Lib][Win with static with MT]
+        if: ${{ contains(matrix.config.os, 'win') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-lib-${{matrix.config.name}}-${{matrix.buildType}}-mt
+          path: build-${{matrix.buildType}}-mt/*.zip
 
       - name: Upload [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') }}

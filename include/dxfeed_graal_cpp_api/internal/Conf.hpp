@@ -30,37 +30,37 @@
 #    ifndef DXFCXX_DISABLE_GCC_WARNINGS_PUSH
 #        define DXFCXX_DISABLE_GCC_WARNINGS_PUSH(...)                                                                  \
             DXFCXX_DO_PRAGMA(GCC diagnostic push) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#        define DXFCXX_DISABLE_GCC_WARNINGS(...) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
 #        define DXFCXX_DISABLE_GCC_WARNINGS_POP() DXFCXX_DO_PRAGMA(GCC diagnostic pop)
 #    endif
 #else
 #    ifndef DXFCXX_DISABLE_GCC_WARNINGS_PUSH
 #        define DXFCXX_DISABLE_GCC_WARNINGS_PUSH(warnings)
+#        define DXFCXX_DISABLE_GCC_WARNINGS(warnings)
 #        define DXFCXX_DISABLE_GCC_WARNINGS_POP()
 #    endif
 #endif
 
-#ifdef DXFCPP_EXPORT
-#    error DXFCPP_EXPORT was previously defined
-#endif
-
-#if defined(DXFCPP_USE_DLLS) && defined(_MSC_VER)
-#    if defined(LIBDXFCPP_EXPORTS)
-#        define DXFCPP_EXPORT __declspec(dllexport)
-#        define DXFCPP_EXPORT_TEMPLATE_DECLARE
-#        define DXFCPP_EXPORT_TEMPLATE_DEFINE __declspec(dllexport)
+#ifndef DXFCPP_EXPORT
+#    if defined(DXFCPP_USE_DLLS) && defined(_MSC_VER)
+#        if defined(LIBDXFCPP_EXPORTS)
+#            define DXFCPP_EXPORT __declspec(dllexport)
+#            define DXFCPP_EXPORT_TEMPLATE_DECLARE
+#            define DXFCPP_EXPORT_TEMPLATE_DEFINE __declspec(dllexport)
+#        else
+#            define DXFCPP_EXPORT __declspec(dllimport)
+#            define DXFCPP_EXPORT_TEMPLATE_DECLARE
+#            define DXFCPP_EXPORT_TEMPLATE_DEFINE __declspec(dllimport)
+#        endif // defined(LIBDXFCPP_EXPORTS)
+#    elif defined(DXFCPP_USE_DLLS) && defined(LIBDXFCPP_EXPORTS)
+#        define DXFCPP_EXPORT __attribute__((visibility("default")))
+#        define DXFCPP_EXPORT_TEMPLATE_DECLARE __attribute__((visibility("default")))
+#        define DXFCPP_EXPORT_TEMPLATE_DEFINE
 #    else
-#        define DXFCPP_EXPORT __declspec(dllimport)
+#        define DXFCPP_EXPORT
 #        define DXFCPP_EXPORT_TEMPLATE_DECLARE
-#        define DXFCPP_EXPORT_TEMPLATE_DEFINE __declspec(dllimport)
-#    endif // defined(LIBDXFCPP_EXPORTS)
-#elif defined(DXFCPP_USE_DLLS) && defined(LIBDXFCPP_EXPORTS)
-#    define DXFCPP_EXPORT __attribute__((visibility("default")))
-#    define DXFCPP_EXPORT_TEMPLATE_DECLARE __attribute__((visibility("default")))
-#    define DXFCPP_EXPORT_TEMPLATE_DEFINE
-#else
-#    define DXFCPP_EXPORT
-#    define DXFCPP_EXPORT_TEMPLATE_DECLARE
-#    define DXFCPP_EXPORT_TEMPLATE_DEFINE
+#        define DXFCPP_EXPORT_TEMPLATE_DEFINE
+#    endif
 #endif
 
 #ifndef DXFCPP_BEGIN_NAMESPACE

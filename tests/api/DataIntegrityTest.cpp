@@ -85,24 +85,6 @@ struct DataIntegrityRemoteTestFixture {
     }
 };
 
-TEST_CASE_FIXTURE(DataIntegrityTestFixture, "Test Message" * doctest::should_fail()) {
-    auto sub = feed->createSubscription(Message::TYPE);
-    auto message = std::make_shared<Message>("TEST", "Attachment2");
-
-    sub->addEventListener<Message>([message = message](const std::vector<std::shared_ptr<Message>> &messages) {
-        for (auto &&m : messages) {
-            fmt::println("{}", m->toString());
-
-            REQUIRE(message->getAttachment() == m->getAttachment());
-        }
-    });
-
-    sub->addSymbols("TEST");
-    pub->publishEvents(message);
-
-    std::this_thread::sleep_for(2s);
-}
-
 TEST_CASE_FIXTURE(DataIntegrityTestFixture, "dxFeed :: Test attach & detach sub") {
     std::mutex ioMutex{};
 

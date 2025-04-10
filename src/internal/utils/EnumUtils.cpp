@@ -18,9 +18,10 @@
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
+DXFCXX_DISABLE_GCC_WARNINGS("-Wmaybe-uninitialized")
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
-DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 using namespace std::literals;
 
@@ -54,3 +55,5 @@ std::string getMarketEventTypeEnumClassNamesList(std::string separator) noexcept
 } // namespace enum_utils
 
 DXFCPP_END_NAMESPACE
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
+DXFCXX_DISABLE_GCC_WARNINGS_POP()

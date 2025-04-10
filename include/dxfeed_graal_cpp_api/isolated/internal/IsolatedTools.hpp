@@ -23,9 +23,9 @@ namespace isolated::internal::IsolatedTools {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(std::string_view symbolList);
+DXFCPP_EXPORT std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(std::string_view symbolList);
 
-std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList);
+DXFCPP_EXPORT std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList);
 
 /**
  * Calls the Graal SDK function `dxfg_Tools_main` in isolation.
@@ -34,7 +34,7 @@ std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::s
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string> &args);
+DXFCPP_EXPORT void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string> &args);
 
 } // namespace isolated::internal::IsolatedTools
 

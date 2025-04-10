@@ -135,10 +135,10 @@ struct DXFCPP_EXPORT TimeSeriesTxModelImpl {
  * @tparam E The type of event (derived from TimeSeriesEvent)
  */
 template <Derived<TimeSeriesEvent> E>
-struct DXFCPP_EXPORT TimeSeriesTxModel final : TimeSeriesTxModelImpl, RequireMakeShared<TimeSeriesTxModel<E>> {
+struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, RequireMakeShared<TimeSeriesTxModel<E>> {
 
     /// A builder class for creating an instance of TimeSeriesTxModel.
-    struct DXFCPP_EXPORT Builder final : TimeSeriesTxModelImpl::Builder, RequireMakeShared<Builder> {
+    struct /* DXFCPP_EXPORT */ Builder final : TimeSeriesTxModelImpl::Builder, RequireMakeShared<Builder> {
         private:
         JavaObjectHandle<TimeSeriesTxModelBuilderTag> handle_;
         std::shared_ptr<TxModelListenerCommon> listener_;

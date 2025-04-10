@@ -17,7 +17,7 @@ project(dxFeedGraalCxxApi)
 
 include(cmake/ParseVersion.cmake)
 
-set(DXFCXX_VERSION "v4.1.0" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v4.2.0-rc1" CACHE STRING "The dxFeed Graal CXX API package version")
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
@@ -51,13 +51,19 @@ if (NOT DEFINED DXFCXX_IS_ROOT_PROJECT)
 endif ()
 
 option(DXFCXX_BUILD_UNIT_TESTS "Build tests" ${DXFCXX_IS_ROOT_PROJECT})
+option(DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS "Dynamically link unit tests" OFF)
 option(DXFCXX_BUILD_SAMPLES "Build samples" ${DXFCXX_IS_ROOT_PROJECT})
+option(DXFCXX_DYNAMICALLY_LINK_SAMPLES "Dynamically link samples" OFF)
 option(DXFCXX_BUILD_TOOLS "Build tools" ${DXFCXX_IS_ROOT_PROJECT})
+option(DXFCXX_DYNAMICALLY_LINK_TOOLS "Dynamically link tools" OFF)
 option(DXFCXX_BUILD_DOC "Build documentation" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL "Prepare install" ON)
 option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
+
+option(DXFCXX_LINK_STATIC_RUNTIME "Compile and link with -MT/-MTd or equivalent flag(s) to use a multi-threaded statically-linked runtime library. Visual Studio only." OFF)
+option(DXFCXX_NODEFAULTLIB_LIBCMT "Ignore libcmt/libcmtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." ${DXFCXX_LINK_STATIC_RUNTIME})
 
 option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
@@ -138,6 +144,19 @@ if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Process-${PROCESS_VERSION}/C
     add_subdirectory(third_party/Process-${PROCESS_VERSION})
 else ()
     CPMAddPackage("gh:ttldtor/Process#v${PROCESS_VERSION}")
+endif ()
+
+if (DXFCXX_LINK_STATIC_RUNTIME)
+    set_target_properties(process PROPERTIES
+            MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+    )
+
+    if (DXFCXX_NODEFAULTLIB_LIBCMT)
+        target_link_options(process PRIVATE
+                "/NODEFAULTLIB:LIBCMT"
+                "/NODEFAULTLIB:LIBCMTD"
+        )
+    endif ()
 endif ()
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Console-${CONSOLE_VERSION}/CMakeLists.txt")
@@ -450,7 +469,22 @@ add_library(dxfcxx ALIAS ${PROJECT_NAME})
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
 add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    if (DXFCXX_LINK_STATIC_RUNTIME)
+        set_target_properties(${PROJECT_NAME}_static PROPERTIES
+                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+        )
+
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
+            target_link_options(${PROJECT_NAME}_static PRIVATE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+            )
+        endif ()
+    endif ()
+endif ()
+
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE

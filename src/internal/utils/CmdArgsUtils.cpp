@@ -26,6 +26,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
 #include <fmt/ostream.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
+DXFCXX_DISABLE_GCC_WARNINGS("-Wmaybe-uninitialized")
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
@@ -36,8 +38,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 DXFCPP_BEGIN_NAMESPACE
 
-auto getUtcOffset() {
-    const std::time_t epochPlus11H = 60 * 60 * 11;
+inline auto getUtcOffset() {
+    constexpr std::time_t epochPlus11H = 60 * 60 * 11;
     const int localTime = localtime(&epochPlus11H)->tm_hour * 60 + localtime(&epochPlus11H)->tm_min;
     const int gmTime = gmtime(&epochPlus11H)->tm_hour * 60 + gmtime(&epochPlus11H)->tm_min;
     const int tzDiff = localTime - gmTime;
@@ -45,15 +47,15 @@ auto getUtcOffset() {
     return tzDiff * 60 * 1000;
 }
 
-decltype(ranges::views::filter([](const auto &s) {
+inline auto filterNonEmpty = ranges::views::filter([](const auto &s) {
     return !s.empty();
-})) filterNonEmpty{};
+});
 
-decltype(ranges::views::transform([](auto &&s) {
+inline auto transformToString = ranges::views::transform([](auto &&s) {
     return s | ranges::to<std::string>();
-})) transformToString{};
+});
 
-auto splitAndTrim = [](auto &&symbols, char sep = ',') noexcept {
+inline auto splitAndTrim = [](auto &&symbols, char sep = ',') noexcept {
     decltype(ranges::views::transform([](const std::string &s) {
         return trimStr(s);
     })) trim{};
@@ -61,7 +63,7 @@ auto splitAndTrim = [](auto &&symbols, char sep = ',') noexcept {
     return symbols | ranges::views::split(sep) | filterNonEmpty | transformToString | trim;
 };
 
-auto toUpper = [](auto &&s) {
+inline auto toUpper = [](auto &&s) {
     auto locale = std::locale{};
 
     return s | ranges::views::transform([&locale](auto c) {
@@ -271,3 +273,4 @@ std::unordered_set<EventSourceWrapper> CmdArgsUtils::parseEventSources(const std
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
+DXFCXX_DISABLE_GCC_WARNINGS_POP()

@@ -17,9 +17,10 @@
 #include <fmt/ranges.h>
 #include <fmt/std.h>
 
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
+DXFCXX_DISABLE_GCC_WARNINGS("-Wmaybe-uninitialized")
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 #include <range/v3/all.hpp>
-DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -221,21 +222,9 @@ std::string trimStr(const std::string &s) noexcept {
            ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
 };
 
-// inline decltype(ranges::views::filter([](const auto &s) {
-//     return !s.empty();
-// })) filterNonEmpty{};
-
-inline decltype(ranges::views::transform([](auto &&s) {
+inline auto transformToString = ranges::views::transform([](auto &&s) {
     return s | ranges::to<std::string>();
-})) transformToString{};
-
-// inline decltype(ranges::views::transform([](const std::string &s) {
-//     return trimStr(s);
-// })) trim{};
-
-// inline auto splitAndTrim = [](const std::string &s, char sep = ',') noexcept {
-//     return s | ranges::views::split(sep) | transformToString | trim;
-// };
+});
 
 inline auto split = [](const std::string &s, char sep = ',') noexcept {
     return s | ranges::views::split(sep) | transformToString;
@@ -254,3 +243,5 @@ bool toBool(const std::string &s) noexcept {
 }
 
 DXFCPP_END_NAMESPACE
+DXFCXX_DISABLE_MSC_WARNINGS_POP()
+DXFCXX_DISABLE_GCC_WARNINGS_POP()

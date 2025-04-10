@@ -78,7 +78,13 @@ jobs:
       - name: Prepare build
         run: |
           ls
-          mkdir ${{github.workspace}}/build    
+          mkdir ${{github.workspace}}/build
+
+      - name: Prepare build (Win MT)
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: |
+          ls
+          mkdir ${{github.workspace}}/build-mt   
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'mac') }}
@@ -110,6 +116,15 @@ jobs:
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
+      - name: Configure CMake (Win MT)
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          cmake -B ${{github.workspace}}/build-mt
+          -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
+          -DDXFCXX_LINK_STATIC_RUNTIME=ON
+
       - name: Build
         if: ${{ !contains(matrix.config.os, 'win') }}
         run: >
@@ -121,6 +136,13 @@ jobs:
           cmake --build ${{github.workspace}}/build --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
           --
           /p:CL_MPCount=${{matrix.config.cores}}
+
+      - name: Build (Win MT)
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          cmake --build ${{github.workspace}}/build-mt --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
+          --
+          /p:CL_MPCount=${{matrix.config.cores}}          
 
       - name: Test
         if: ${{ ! cancelled() }}

@@ -132,12 +132,12 @@ struct DXFCPP_EXPORT IndexedTxModelImpl {
  * @tparam E The type of event (derived from IndexedEvent)
  */
 template <Derived<IndexedEvent> E>
-struct DXFCPP_EXPORT IndexedTxModel final : IndexedTxModelImpl, RequireMakeShared<IndexedTxModel<E>> {
+struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMakeShared<IndexedTxModel<E>> {
 
     /**
      * A builder class for creating an instance of IndexedTxModel.
      */
-    struct DXFCPP_EXPORT Builder final : IndexedTxModelImpl::Builder, RequireMakeShared<Builder> {
+    struct /* DXFCPP_EXPORT */ Builder final : IndexedTxModelImpl::Builder, RequireMakeShared<Builder> {
         private:
         JavaObjectHandle<IndexedTxModelBuilderTag> handle_;
         std::shared_ptr<TxModelListenerCommon> listener_;
