@@ -353,6 +353,10 @@ jobs:
             image: ubuntu-24.04
     runs-on: ${{ matrix.config.image }}
     steps:
+      - name: Install Doxygen
+        run: |
+          sudo apt-get install -y doxygen
+
       - uses: actions/checkout@v4
         with:
           ref: ${{needs.get_version.outputs.tag_name}}
@@ -365,10 +369,11 @@ jobs:
         run: |
           ls ${{github.workspace}}
 
-      - uses: mattnotmitt/doxygen-action@v1.12.0
-        with:
-          doxyfile-path: "${{github.workspace}}/docs/Doxyfile"
-          working-directory: "${{github.workspace}}/docs"
+      - name: Run Doxygen
+        run: |
+          cd "${{github.workspace}}/docs"
+          doxygen ./Doxyfile
+          cd ..
 
       - name: Pack
         run: |
