@@ -53,8 +53,15 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
-    endif ()
 
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+            if (DXFCXX_LINK_STATIC_RUNTIME)
+                set_target_properties(${DXFC_TEST_BASENAME} PROPERTIES
+                        MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+                )
+            endif ()
+        endif ()
+    endif ()
 
     if (DXFCXX_FEATURE_STACKTRACE)
         LinkStacktrace(${DXFC_TEST_BASENAME})

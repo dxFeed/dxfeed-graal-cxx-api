@@ -55,12 +55,15 @@ option(DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS "Dynamically link unit tests" OFF)
 option(DXFCXX_BUILD_SAMPLES "Build samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_DYNAMICALLY_LINK_SAMPLES "Dynamically link samples" OFF)
 option(DXFCXX_BUILD_TOOLS "Build tools" ${DXFCXX_IS_ROOT_PROJECT})
-option(DXFCXX_DYNAMICALLY_LINK_TOOLS "Dynamically link tools" ON)
+option(DXFCXX_DYNAMICALLY_LINK_TOOLS "Dynamically link tools" OFF)
 option(DXFCXX_BUILD_DOC "Build documentation" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL "Prepare install" ON)
 option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
+
+option(DXFCXX_LINK_STATIC_RUNTIME "Compile and link with -MT/-MTd or equivalent flag(s) to use a multi-threaded statically-linked runtime library. Visual Studio only." OFF)
+option(DXFCXX_NODEFAULTLIB_LIBCMT "Ignore libcmt/libcmtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." OFF)
 
 option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
@@ -453,7 +456,22 @@ add_library(dxfcxx ALIAS ${PROJECT_NAME})
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
 add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    if (DXFCXX_LINK_STATIC_RUNTIME)
+        set_target_properties(${PROJECT_NAME}_static PROPERTIES
+                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+        )
+
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
+            target_link_options(${PROJECT_NAME}_static PRIVATE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+            )
+        endif ()
+    endif ()
+endif ()
+
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE

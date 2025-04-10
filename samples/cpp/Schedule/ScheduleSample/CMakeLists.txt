@@ -40,6 +40,14 @@ if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
+
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        if (DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${PROJECT_NAME} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+            )
+        endif ()
+    endif ()
 endif ()
 
 if (DXFCXX_FEATURE_STACKTRACE)
