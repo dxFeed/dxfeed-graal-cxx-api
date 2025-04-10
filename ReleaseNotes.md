@@ -14,6 +14,9 @@
   `DXFCXX_LINK_STATIC_RUNTIME` parameter
 * Added the ability to ignore the libcmt/libcmtd library when statically linking Windows runtime libraries using the
   `DXFCXX_NODEFAULTLIB_LIBCMT` parameter (works only when the `DXFCXX_LINK_STATIC_RUNTIME` parameter is enabled)
+* Added preparation of library releases for Windows, linked statically with runtime libraries (with parameters: `/MT`,
+  `/MTd`, `/NODEFAULTLIB:LIBCMT`, `/NODEFAULTLIB:LIBCMTD`). The names of these artifacts end with `-static-mt`, for
+  example `dxFeedGraalCxxApi-v4.2.0-rc1-x86_64-windows-Release-static-mt.zip`
 
 ## v4.1.0
 
