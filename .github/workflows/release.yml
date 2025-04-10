@@ -20,6 +20,11 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  actions: read
+  pages: write
+  id-token: write
+
 jobs:
   get_version:
     name: Get Version
@@ -355,7 +360,16 @@ jobs:
     steps:
       - name: Install Doxygen
         run: |
-          sudo apt-get install -y doxygen
+          mkdir dox
+          cd dox          
+          wget https://github.com/doxygen/doxygen/releases/download/Release_1_13_2/doxygen-1.13.2.src.tar.gz
+          tar -xf doxygen-1.13.2.src.tar.gz
+          cd doxygen-1.13.2
+          sudo make
+          sudo make install
+          doxygen --version
+          cd ..
+          cd ..
 
       - uses: actions/checkout@v4
         with:
