@@ -357,26 +357,35 @@ jobs:
         with:
           ref: ${{needs.get_version.outputs.tag_name}}
 
+      - name: Check 0
+        run: |
+          ls
+
+      - name: Check
+        run: |
+          ls ${{github.workspace}}
+
       - uses: mattnotmitt/doxygen-action@v1.12.0
         with:
-          doxyfile-path: 'docs/Doxyfile'
-          working-directory: 'docs'
+          doxyfile-path: "${{github.workspace}}/docs/Doxyfile"
+          working-directory: "${{github.workspace}}/docs"
 
       - name: Pack
         run: |
-          zip -r dxFeedGraalCxxApi-${{needs.get_version.outputs.version}}.zip docs/html
+          cd "${{github.workspace}}/docs/html"
+          zip -r ../dxFeedGraalCxxApi-${{needs.get_version.outputs.version}}.zip .
 
       - name: Upload Docs
         uses: actions/upload-artifact@v4
         with:
           name: artifacts-docs
           path: |
-            *.zip
+            ${{github.workspace}}/docs/*.zip
 
       - name: Upload docs as gh pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./docs/html
+          path: ${{github.workspace}}/docs/html
 
       - name: Deploy to GitHub Pages
         id: deployment
@@ -396,10 +405,10 @@ jobs:
         with:
           ref: ${{needs.get_version.outputs.tag_name}}
 
-#      - uses: mattnotmitt/doxygen-action@v1.12.0
-#        with:
-#          doxyfile-path: './docs/Doxyfile'
-#          working-directory: '${{github.workspace}}/docs'
+      #      - uses: mattnotmitt/doxygen-action@v1.12.0
+      #        with:
+      #          doxyfile-path: './docs/Doxyfile'
+      #          working-directory: '${{github.workspace}}/docs'
 
       - name: Prepare build [Full Source Bundle]
         run: |
