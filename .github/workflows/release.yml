@@ -362,8 +362,8 @@ jobs:
         run: |
           mkdir dox
           cd dox          
-          wget https://github.com/doxygen/doxygen/releases/download/Release_1_13_2/doxygen-1.13.2.src.tar.gz
-          tar -xf doxygen-1.13.2.src.tar.gz
+          wget https://github.com/doxygen/doxygen/releases/download/Release_1_13_2/doxygen-1.13.2.linux.bin.tar.gz
+          tar -xf doxygen-1.13.2.linux.bin.tar.gz
           cd doxygen-1.13.2
           sudo make
           sudo make install
