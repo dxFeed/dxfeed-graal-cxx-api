@@ -86,6 +86,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{needs.get_version.outputs.tag_name}}
 
       - name: Select Xcode version
         if: ${{ contains(matrix.config.os, 'macos') }}
@@ -341,6 +343,46 @@ jobs:
             build-Samples/*.zip
             build-Tools/*.zip
 
+  build_docs_and_upload_and_deploy_gh_pages:
+    name: "${{ matrix.config.name }}: Build Docs & Upload"
+    needs: [ get_version ]
+    strategy:
+      matrix:
+        config:
+          - name: ubuntu-24.04
+            image: ubuntu-24.04
+    runs-on: ${{ matrix.config.image }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{needs.get_version.outputs.tag_name}}
+
+      - uses: mattnotmitt/doxygen-action@v1.12.0
+        with:
+          doxyfile-path: './docs/Doxyfile'
+          working-directory: '${{github.workspace}}/docs'
+
+      - name: Pack
+        run: |
+          zip -r dxFeedGraalCxxApi-${{needs.get_version.outputs.version}}.zip ${{github.workspace}}/docs/html
+
+      - name: Upload Docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-docs
+          path: |
+            ${{github.workspace}}/*.zip          
+
+      - name: Upload docs as gh pages artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{github.workspace}}/docs/html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
   build_full_src_bundle_and_upload:
     name: "${{ matrix.config.name }}: Build Full Source Bundle & Upload"
     needs: [ get_version ]
@@ -349,13 +391,16 @@ jobs:
         config:
           - name: win-vs2022
             image: windows-latest
-            os: windows
-            cores: 4
-            cc: 'cl'
-            cxx: 'cl'
     runs-on: ${{ matrix.config.image }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{needs.get_version.outputs.tag_name}}
+
+      - uses: mattnotmitt/doxygen-action@v1.12.0
+        with:
+          doxyfile-path: './docs/Doxyfile'
+          working-directory: '${{github.workspace}}/docs'
 
       - name: Prepare build [Full Source Bundle]
         run: |
@@ -378,7 +423,7 @@ jobs:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}
     runs-on: ubuntu-latest
     name: Publish Release
-    needs: [ get_version, build_package_and_upload, build_full_src_bundle_and_upload ]
+    needs: [ get_version, build_package_and_upload, build_full_src_bundle_and_upload, build_docs_and_upload_and_deploy_gh_pages ]
     permissions:
       contents: write
     steps:
