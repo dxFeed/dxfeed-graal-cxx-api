@@ -15,6 +15,8 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 project(dxFeedGraalCxxApi)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 include(cmake/ParseVersion.cmake)
 
 set(DXFCXX_VERSION "v4.2.0" CACHE STRING "The dxFeed Graal CXX API package version")
@@ -146,16 +148,19 @@ else ()
     CPMAddPackage("gh:ttldtor/Process#v${PROCESS_VERSION}")
 endif ()
 
-if (DXFCXX_LINK_STATIC_RUNTIME)
-    set_target_properties(process PROPERTIES
-            MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
-    )
-
-    if (DXFCXX_NODEFAULTLIB_LIBCMT)
-        target_link_options(process PRIVATE
-                "/NODEFAULTLIB:LIBCMT"
-                "/NODEFAULTLIB:LIBCMTD"
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    if (DXFCXX_LINK_STATIC_RUNTIME)
+        set_target_properties(process PROPERTIES
+                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
         )
+
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
+            target_link_options(process PRIVATE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+                    "/VERBOSE"
+            )
+        endif ()
     endif ()
 endif ()
 
@@ -165,10 +170,42 @@ else ()
     CPMAddPackage("gh:ttldtor/Console#v${CONSOLE_VERSION}")
 endif ()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    if (DXFCXX_LINK_STATIC_RUNTIME)
+        set_target_properties(console PROPERTIES
+                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+        )
+
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
+            target_link_options(console PRIVATE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+                    "/VERBOSE"
+            )
+        endif ()
+    endif ()
+endif ()
+
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals/CMakeLists.txt")
     add_subdirectory(third_party/portals)
 else ()
     CPMAddPackage("gh:ttldtor/portals#default")
+endif ()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    if (DXFCXX_LINK_STATIC_RUNTIME)
+        set_target_properties(portals PROPERTIES
+                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+        )
+
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
+            target_link_options(portals PRIVATE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+                    "/VERBOSE"
+            )
+        endif ()
+    endif ()
 endif ()
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
@@ -446,7 +483,7 @@ endif ()
 
 # fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
 set(DXFCXX_MSVC_COMPILE_OPTIONS /W4 /bigobj /utf-8)
-set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS /PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>)
+set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS /PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}> /VERBOSE)
 set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
 set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
 
@@ -546,7 +583,7 @@ add_library(dxfcxx::objects ALIAS ${PROJECT_NAME}_objects)
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
 add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
     set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
     if (DXFCXX_LINK_STATIC_RUNTIME)
         set_target_properties(${PROJECT_NAME}_static PROPERTIES
@@ -557,6 +594,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
             target_link_options(${PROJECT_NAME}_static PRIVATE
                     "/NODEFAULTLIB:LIBCMT"
                     "/NODEFAULTLIB:LIBCMTD"
+                    "/VERBOSE"
             )
         endif ()
     endif ()

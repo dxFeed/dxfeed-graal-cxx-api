@@ -13,6 +13,8 @@ endif ()
 
 project(IncOrderSnapshotSample LANGUAGES CXX)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 11)
 set(CXX_EXTENSIONS OFF)
@@ -43,7 +45,7 @@ if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
 
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
         if (DXFCXX_LINK_STATIC_RUNTIME)
             set_target_properties(${PROJECT_NAME} PROPERTIES
                     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
