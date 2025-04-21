@@ -424,7 +424,10 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_EventMisc_Sources}
         ${dxFeedGraalCxxApi_Schedule_Sources}
         ${dxFeedGraalCxxApi_Util_Sources}
+        src/api.cpp
 )
+
+add_library(${PROJECT_NAME}_objects OBJECT ${dxFeedGraalCxxApi_Sources})
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_MACOSX_RPATH ON)
@@ -441,9 +444,36 @@ elseif (UNIX)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
 endif ()
 
+# fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
+set(DXFCXX_MSVC_COMPILE_OPTIONS /W4 /bigobj /utf-8)
+set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS /PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>)
+set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
+set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
+
+#A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
+set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
+
+target_include_directories(${PROJECT_NAME}_objects PUBLIC include)
+target_include_directories(${PROJECT_NAME}_objects PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
+target_compile_definitions(${PROJECT_NAME}_objects PRIVATE
+        FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
+
+target_compile_options(${PROJECT_NAME}_objects
+        PRIVATE
+        $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+)
+
+if (DXFCXX_USE_PRECOMPILED_HEADERS)
+    target_precompile_headers(${PROJECT_NAME}_objects PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
+endif ()
+
+target_link_libraries(${PROJECT_NAME}_objects PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+
 add_library(${PROJECT_NAME}_static STATIC
-        ${dxFeedGraalCxxApi_Sources}
-        src/api.cpp
+        $<TARGET_OBJECTS:${PROJECT_NAME}_objects>
 )
 
 if (WIN32)
@@ -454,18 +484,65 @@ if (WIN32)
     endif ()
 
     add_library(${PROJECT_NAME} SHARED
-            ${dxFeedGraalCxxApi_Sources}
+            $<TARGET_OBJECTS:${PROJECT_NAME}_objects>
             resources/dxFeedGraalCxxApi.rc
-            src/api.cpp
     )
 else ()
     add_library(${PROJECT_NAME} SHARED
-            ${dxFeedGraalCxxApi_Sources}
-            src/api.cpp
+            $<TARGET_OBJECTS:${PROJECT_NAME}_objects>
     )
 endif ()
 
+# https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
+# https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
+# https://github.com/actions/runner-images/issues/10004
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_definitions(${PROJECT_NAME}_objects PRIVATE _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+    target_compile_definitions(${PROJECT_NAME}_static PRIVATE _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+endif ()
+
+if (DXFCXX_FEATURE_STACKTRACE)
+    LinkStacktrace(${PROJECT_NAME}_objects)
+
+    target_compile_definitions(${PROJECT_NAME}_objects PRIVATE DXFCXX_FEATURE_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_FEATURE_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME}_static PRIVATE DXFCXX_FEATURE_STACKTRACE)
+endif ()
+
+target_compile_definitions(${PROJECT_NAME}_objects PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
+
+target_compile_definitions(${PROJECT_NAME}_static PUBLIC
+        DXFCXX_VERSION="${DXFCXX_VERSION}"
+        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
+        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
+        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+)
+
+if (DXFCXX_ENABLE_METRICS)
+    target_compile_definitions(${PROJECT_NAME}_objects PRIVATE DXFCXX_ENABLE_METRICS=1)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_ENABLE_METRICS=1)
+    target_compile_definitions(${PROJECT_NAME}_static PRIVATE DXFCXX_ENABLE_METRICS=1)
+endif ()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+target_link_libraries(${PROJECT_NAME}_static PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
+
+
 add_library(dxfcxx ALIAS ${PROJECT_NAME})
+add_library(dxfcxx::objects ALIAS ${PROJECT_NAME}_objects)
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
 add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
@@ -485,6 +562,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     endif ()
 endif ()
 
+
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
@@ -495,25 +573,8 @@ target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-$
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
-# fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
-set(DXFCXX_MSVC_COMPILE_OPTIONS /W4 /bigobj /utf-8)
-set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS /PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>)
-set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
-set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
-
-#A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
-set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
-
-# https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
-# https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
-# https://github.com/actions/runner-images/issues/10004
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_definitions(${PROJECT_NAME} PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
-    target_compile_definitions(${PROJECT_NAME}_static PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
-endif ()
-
 target_compile_options(${PROJECT_NAME}
-        PUBLIC
+        PRIVATE
         $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
         $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
         $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
@@ -521,7 +582,7 @@ target_compile_options(${PROJECT_NAME}
 )
 
 target_link_options(${PROJECT_NAME}
-        PUBLIC
+        PRIVATE
         $<$<AND:$<COMPILE_LANG_AND_ID:CXX,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
         $<$<AND:$<COMPILE_LANG_AND_ID:C,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
         $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
@@ -530,7 +591,7 @@ target_link_options(${PROJECT_NAME}
 
 if (MINGW)
     target_link_options(${PROJECT_NAME}
-            PUBLIC
+            PRIVATE
             $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${DXFCXX_MINGW_DEBUG_LINK_OPTIONS}>
     )
 endif ()
@@ -544,32 +605,16 @@ target_compile_options(${PROJECT_NAME}_static
 )
 
 target_link_options(${PROJECT_NAME}_static
-        PUBLIC
+        PRIVATE
         $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
         $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
 )
 
 if (MINGW)
     target_link_options(${PROJECT_NAME}_static
-            PUBLIC
+            PRIVATE
             $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${DXFCXX_MINGW_DEBUG_LINK_OPTIONS}>
     )
-endif ()
-
-if (DXFCXX_USE_PRECOMPILED_HEADERS)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
-    target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
-endif ()
-
-target_link_libraries(${PROJECT_NAME} PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
-target_link_libraries(${PROJECT_NAME}_static PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date)
-
-if (DXFCXX_FEATURE_STACKTRACE)
-    LinkStacktrace(${PROJECT_NAME})
-    LinkStacktrace(${PROJECT_NAME}_static)
-
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)
-    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_FEATURE_STACKTRACE)
 endif ()
 
 if (DXFCXX_ENABLE_ASAN)
@@ -582,25 +627,6 @@ add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMM
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}_static>)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
-
-target_compile_definitions(${PROJECT_NAME} PUBLIC
-        DXFCXX_VERSION="${DXFCXX_VERSION}"
-        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
-        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
-        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
-)
-
-target_compile_definitions(${PROJECT_NAME}_static PUBLIC
-        DXFCXX_VERSION="${DXFCXX_VERSION}"
-        DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
-        DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
-        DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
-)
-
-if (DXFCXX_ENABLE_METRICS)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_ENABLE_METRICS=1)
-    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_ENABLE_METRICS=1)
-endif ()
 
 if (DXFCXX_BUILD_UNIT_TESTS)
     include(CTest)
