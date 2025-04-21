@@ -8,7 +8,7 @@ function(LinkAsan targetName)
             target_link_options(${targetName} PRIVATE "-fsanitize=address")
         else ()
             target_compile_options(${targetName} PRIVATE "/fsanitize=address")
-            target_link_options(${targetName} PRIVATE "/fsanitize=address")
+            # target_link_options(${targetName} PRIVATE "/fsanitize=address")
 
             target_compile_definitions(${targetName}
                     PUBLIC
