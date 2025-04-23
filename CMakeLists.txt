@@ -65,7 +65,7 @@ option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PRO
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 
 option(DXFCXX_LINK_STATIC_RUNTIME "Compile and link with -MT/-MTd or equivalent flag(s) to use a multi-threaded statically-linked runtime library. Visual Studio only." OFF)
-option(DXFCXX_NODEFAULTLIB "Ignore libcmt/libcmtd/msvcrt/msvcrtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." ${DXFCXX_LINK_STATIC_RUNTIME})
+option(DXFCXX_NODEFAULTLIB_LIBCMT "Ignore libcmt/libcmtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." ${DXFCXX_LINK_STATIC_RUNTIME})
 
 option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
@@ -154,13 +154,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
                 MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
         )
 
-        if (DXFCXX_NODEFAULTLIB)
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
             target_link_options(process PRIVATE
-                    /NODEFAULTLIB:libcmt
-                    /NODEFAULTLIB:libcmtd
-                    /NODEFAULTLIB:msvcrt
-                    /NODEFAULTLIB:msvcrtd
-                    /VERBOSE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+                    "/VERBOSE"
             )
         endif ()
     endif ()
@@ -178,13 +176,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
                 MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
         )
 
-        if (DXFCXX_NODEFAULTLIB)
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
             target_link_options(console PRIVATE
-                    /NODEFAULTLIB:libcmt
-                    /NODEFAULTLIB:libcmtd
-                    /NODEFAULTLIB:msvcrt
-                    /NODEFAULTLIB:msvcrtd
-                    /VERBOSE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+                    "/VERBOSE"
             )
         endif ()
     endif ()
@@ -202,13 +198,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
                 MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
         )
 
-        if (DXFCXX_NODEFAULTLIB)
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
             target_link_options(portals PRIVATE
-                    /NODEFAULTLIB:libcmt
-                    /NODEFAULTLIB:libcmtd
-                    /NODEFAULTLIB:msvcrt
-                    /NODEFAULTLIB:msvcrtd
-                    /VERBOSE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+                    "/VERBOSE"
             )
         endif ()
     endif ()
@@ -596,13 +590,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
                 MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
         )
 
-        if (DXFCXX_NODEFAULTLIB)
+        if (DXFCXX_NODEFAULTLIB_LIBCMT)
             target_link_options(${PROJECT_NAME}_static PRIVATE
-                    /NODEFAULTLIB:libcmt
-                    /NODEFAULTLIB:libcmtd
-                    /NODEFAULTLIB:msvcrt
-                    /NODEFAULTLIB:msvcrtd
-                    /VERBOSE
+                    "/NODEFAULTLIB:LIBCMT"
+                    "/NODEFAULTLIB:LIBCMTD"
+                    "/VERBOSE"
             )
         endif ()
     endif ()
