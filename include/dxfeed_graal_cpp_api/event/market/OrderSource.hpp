@@ -42,8 +42,9 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static constexpr std::uint32_t PUB_OTC_MARKETS_ORDER = 0x0004;
     static constexpr std::uint32_t PUB_SPREAD_ORDER = 0x0008U;
     static constexpr std::uint32_t FULL_ORDER_BOOK = 0x0010U;
+    static constexpr std::uint32_t PUB_NUAM_ORDER  = 0x0020U;
 
-    static constexpr std::uint32_t FLAGS_SIZE = 5U;
+    static constexpr std::uint32_t FLAGS_SIZE = 6U;
 
     public:
     static const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
@@ -150,8 +151,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * It is a <em>synthetic</em> and <em>unitary</em> source, that represents both bid and ask side.
      * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
      * The subscription on regional Quote event is observed when this source is subscribed to.
-     * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a source),
-     * instead of OrderSource::REGIONAL_ASK and OrderSource::REGIONAL_BID, set the system property
+     * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a
+     * source), instead of OrderSource::REGIONAL_ASK and OrderSource::REGIONAL_BID, set the system property
      * <b>`dxscheme.unitaryOrderSource`</b> to `true`.
      */
     static const OrderSource REGIONAL;
@@ -160,8 +161,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * Aggregate order book (futures depth and NASDAQ Level II).
      * It is a <em>aggregate</em> and <em>unitary</em> source, that represents both bid and ask side.
      * This source cannot be directly published via dxFeed API, but otherwise it is fully operational.
-     * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a source),
-     * instead of OrderSource::AGGREGATE_ASK and OrderSource::AGGREGATE_BID, set the system property
+     * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a
+     * source), instead of OrderSource::AGGREGATE_ASK and OrderSource::AGGREGATE_BID, set the system property
      * <b>`dxscheme.unitaryOrderSource`</b> to `true`.
      */
     static const OrderSource AGGREGATE;
@@ -447,6 +448,13 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource OCEA;
 
     /**
+     * Blue Ocean Technologies Alternative Trading System. Record for price level book.
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource ocea;
+
+    /**
      * Pink Sheets. Record for price level book.
      * Pink sheets are listings for stocks that trade over-the-counter (OTC).
      *
@@ -486,6 +494,54 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * observed via DXPublisher.
      */
     static const OrderSource cedx;
+
+    /**
+     * IG CFDs Gate.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource IGC;
+
+    /**
+     * IG CFDs Gate. Record for price level book.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource igc;
+
+    /**
+     * EDX Exchange.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource EDX;
+
+    /**
+     * EDX Exchange. Record for price level book.
+     *
+     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource edx;
+
+    /**
+     * Nuam Exchange Gate.
+     *
+     * Order and NuamOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
+     * subscription can be observed via DXPublisher.
+     */
+    static const OrderSource NUAM;
+
+    /**
+     * Nuam Exchange Gate. Record for price level book.
+     *
+     * Order and NuamOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
+     * subscription can be observed via DXPublisher.
+     */
+    static const OrderSource nuam;
 
     /**
      * Determines whether specified source identifier refers to special order source.

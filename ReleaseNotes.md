@@ -6,6 +6,10 @@
       It controls whether a single or unitary source is used when subscribing to all sources. It is set to 'false' by default.
       All separate sources, such as `COMPOSITE_ASK`, `COMPOSITE_BID`, `REGIONAL_ASK`, `REGIONAL_BID`, `AGGREGATE_ASK` and `AGGREGATE_BID` have been
       declared deprecated.
+    * Added new Order source for BlueOcean ATS: ocea.
+    * Added new Order sources for IG CFDs Gate: IGC, igc.
+    * Added new Order sources for EDX Gate: EDX, edx.
+    * Added new Order sources for Nuam Exchange Gate: NUAM, nuam.
 
 ## v4.2.0 
 
