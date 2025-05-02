@@ -14,9 +14,12 @@ const OrderSource OrderSource::REGIONAL_BID(3, "REGIONAL_BID", 0);
 const OrderSource OrderSource::REGIONAL_ASK(4, "REGIONAL_ASK", 0);
 const OrderSource OrderSource::AGGREGATE_BID(5, "AGGREGATE_BID", 0);
 const OrderSource OrderSource::AGGREGATE_ASK(6, "AGGREGATE_ASK", 0);
+const OrderSource OrderSource::COMPOSITE(7, "COMPOSITE", 0);
+const OrderSource OrderSource::REGIONAL(8, "REGIONAL", 0);
+const OrderSource OrderSource::AGGREGATE(9, "AGGREGATE", 0);
 const OrderSource OrderSource::DEFAULT(0, "DEFAULT",
                                        PUB_ORDER | PUB_ANALYTIC_ORDER | PUB_OTC_MARKETS_ORDER | PUB_SPREAD_ORDER |
-                                           FULL_ORDER_BOOK);
+                                           FULL_ORDER_BOOK | PUB_NUAM_ORDER);
 
 const OrderSource OrderSource::NTV("NTV", PUB_ORDER | FULL_ORDER_BOOK);
 const OrderSource OrderSource::ntv("ntv", PUB_ORDER);
@@ -52,11 +55,18 @@ const OrderSource OrderSource::iex("iex", PUB_ORDER);
 const OrderSource OrderSource::MEMX("MEMX", PUB_ORDER);
 const OrderSource OrderSource::memx("memx", PUB_ORDER);
 const OrderSource OrderSource::OCEA("OCEA", PUB_ORDER);
+const OrderSource OrderSource::ocea("ocea", PUB_ORDER);
 const OrderSource OrderSource::pink("pink", PUB_ORDER | PUB_OTC_MARKETS_ORDER);
 const OrderSource OrderSource::ARCA("ARCA", PUB_ORDER);
 const OrderSource OrderSource::arca("arca", PUB_ORDER);
 const OrderSource OrderSource::CEDX("CEDX", PUB_ORDER);
 const OrderSource OrderSource::cedx("cedx", PUB_ORDER);
+const OrderSource OrderSource::IGC("IGC", PUB_ORDER);
+const OrderSource OrderSource::igc("igc", PUB_ORDER);
+const OrderSource OrderSource::EDX("EDX", PUB_ORDER);
+const OrderSource OrderSource::edx("edx", PUB_ORDER);
+const OrderSource OrderSource::NUAM("NUAM", PUB_ORDER | FULL_ORDER_BOOK | PUB_NUAM_ORDER);
+const OrderSource OrderSource::nuam("nuam", PUB_ORDER | PUB_NUAM_ORDER);
 
 const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
     OrderSource::PREDEFINED_SOURCES =
@@ -71,13 +81,14 @@ const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference
 
             return result;
         }({//
-           COMPOSITE_BID, COMPOSITE_ASK, REGIONAL_BID, REGIONAL_ASK, AGGREGATE_BID, AGGREGATE_ASK,
+           COMPOSITE_BID, COMPOSITE_ASK, REGIONAL_BID, REGIONAL_ASK, AGGREGATE_BID, AGGREGATE_ASK, COMPOSITE, REGIONAL,
+           AGGREGATE,
            //
            DEFAULT,
            //
            NTV, ntv, NFX, ESPD, XNFI, ICE, ISE, DEA, DEX, dex, BYX, BZX, bzx, BATE, CHIX, CEUX, BXTR, IST, BI20, ABE,
-           FAIR, GLBX, glbx, ERIS, XEUR, xeur, CFE, C2OX, SMFE, smfe, iex, MEMX, memx, OCEA, pink, ARCA, arca, CEDX,
-           cedx});
+           FAIR, GLBX, glbx, ERIS, XEUR, xeur, CFE, C2OX, SMFE, smfe, iex, MEMX, memx, OCEA, ocea, pink, ARCA, arca,
+           CEDX, cedx, IGC, igc, EDX, edx, NUAM, nuam});
 
 std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 
@@ -158,6 +169,11 @@ std::uint32_t OrderSource::getEventTypeMask(const EventTypeEnum &eventType) {
         return PUB_SPREAD_ORDER;
     }
 
+    // TODO: MDAPI-243, MDAPI-256
+    // if (eventType == EventTypeEnum::NUAM_ORDER) {
+    //     return PUB_NUAM_ORDER;
+    // }
+
     throw InvalidArgumentException("Invalid order event type: " + eventType.getName());
 }
 
@@ -172,7 +188,7 @@ std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> OrderSource::toG
 }
 
 bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
-    return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE_ASK.id();
+    return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE.id();
 }
 
 const OrderSource &OrderSource::valueOf(std::int32_t sourceId) {

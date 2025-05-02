@@ -21,7 +21,7 @@ set(DXFCXX_VERSION "v4.2.0" CACHE STRING "The dxFeed Graal CXX API package versi
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "2.2.1" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "2.5.0" CACHE STRING "")
 set(FMTLIB_VERSION "11.0.2")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -63,7 +63,7 @@ option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PRO
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 
 option(DXFCXX_LINK_STATIC_RUNTIME "Compile and link with -MT/-MTd or equivalent flag(s) to use a multi-threaded statically-linked runtime library. Visual Studio only." OFF)
-option(DXFCXX_NODEFAULTLIB_LIBCMT "Ignore libcmt/libcmtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." ${DXFCXX_LINK_STATIC_RUNTIME})
+option(DXFCXX_NODEFAULTLIB "Ignore libcmt/libcmtd/msvcrt/msvcrtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." ${DXFCXX_LINK_STATIC_RUNTIME})
 
 option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
@@ -93,6 +93,7 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
 include(cmake/LinkAsanUbsan.cmake)
+include(cmake/SetupStaticRuntimeMSVC.cmake)
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
     add_subdirectory(third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM})
@@ -146,17 +147,8 @@ else ()
     CPMAddPackage("gh:ttldtor/Process#v${PROCESS_VERSION}")
 endif ()
 
-if (DXFCXX_LINK_STATIC_RUNTIME)
-    set_target_properties(process PROPERTIES
-            MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
-    )
-
-    if (DXFCXX_NODEFAULTLIB_LIBCMT)
-        target_link_options(process PRIVATE
-                "/NODEFAULTLIB:LIBCMT"
-                "/NODEFAULTLIB:LIBCMTD"
-        )
-    endif ()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    SetupStaticRuntimeMSVC(process ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Console-${CONSOLE_VERSION}/CMakeLists.txt")
@@ -165,10 +157,18 @@ else ()
     CPMAddPackage("gh:ttldtor/Console#v${CONSOLE_VERSION}")
 endif ()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    SetupStaticRuntimeMSVC(console ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
+endif ()
+
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals/CMakeLists.txt")
     add_subdirectory(third_party/portals)
 else ()
     CPMAddPackage("gh:ttldtor/portals#default")
+endif ()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    SetupStaticRuntimeMSVC(portals ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
@@ -187,6 +187,10 @@ else ()
             OVERRIDE_FIND_PACKAGE
     )
     FetchContent_MakeAvailable(fmt)
+endif ()
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    SetupStaticRuntimeMSVC(fmt ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
 #set(BUILD_TZ_LIB ON)
@@ -469,20 +473,9 @@ add_library(dxfcxx ALIAS ${PROJECT_NAME})
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
 add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set_target_properties(${PROJECT_NAME} PROPERTIES CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-    if (DXFCXX_LINK_STATIC_RUNTIME)
-        set_target_properties(${PROJECT_NAME}_static PROPERTIES
-                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
-        )
-
-        if (DXFCXX_NODEFAULTLIB_LIBCMT)
-            target_link_options(${PROJECT_NAME}_static PRIVATE
-                    "/NODEFAULTLIB:LIBCMT"
-                    "/NODEFAULTLIB:LIBCMTD"
-            )
-        endif ()
-    endif ()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
+    # set_target_properties(${PROJECT_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    SetupStaticRuntimeMSVC(${PROJECT_NAME}_static ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
