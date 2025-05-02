@@ -5,7 +5,7 @@
 
 This package provides access to [dxFeed market data](https://dxfeed.com/market-data/).
 The library is built as a language-specific wrapper over
-the [dxFeed Graal Native](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-api/) library,
+the [dxFeed Graal Native](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/) library,
 which was compiled with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/)
 and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) (our flagman API).
 
