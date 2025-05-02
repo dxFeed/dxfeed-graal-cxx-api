@@ -1,3 +1,12 @@
+## v4.3.0
+
+* Renamed `DXFCXX_NODEFAULTLIB_LIBCMT` to `DXFCXX_NODEFAULTLIB` CMake project option for clearer purposes and added support for additional libraries in `/NODEFAULTLIB` configuration.
+* **\[MDAPI-254]\[C++]** Migrated to Graal SDK v2.5.0
+    * Added `AGGREGATE`, `COMPOSITE`, `REGIONAL` OrderSource. The new system property `dxscheme.unitaryOrderSource=true|false` has been added.
+      It controls whether a single or unitary source is used when subscribing to all sources. It is set to 'false' by default.
+      All separate sources, such as `COMPOSITE_ASK`, `COMPOSITE_BID`, `REGIONAL_ASK`, `REGIONAL_BID`, `AGGREGATE_ASK` and `AGGREGATE_BID` have been
+      declared deprecated.
+
 ## v4.2.0 
 
 * **\[MDAPI-249]\[C++]** Transitive dependencies are hidden.

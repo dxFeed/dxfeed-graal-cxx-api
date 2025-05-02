@@ -85,42 +85,86 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bid side of a composite Quote.
      * It is a <em>synthetic</em> source.
+     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
      * The subscription on composite Quote event is observed when this source is subscribed to.
+     * @deprecated Use the OrderSource::COMPOSITE source.
      */
     static const OrderSource COMPOSITE_BID;
 
     /**
      * Ask side of a composite Quote.
-     * It is a <em>synthetic</em> source.
+     * It is a <em>synthetic</em> and <em>separate</em> source.
+     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
      * The subscription on composite Quote event is observed when this source is subscribed to.
+     * @deprecated Use the OrderSource::COMPOSITE source.
      */
     static const OrderSource COMPOSITE_ASK;
 
     /**
      * Bid side of a regional Quote.
-     * It is a <em>synthetic</em> source.
+     * It is a <em>synthetic</em> and <em>separate</em> source.
+     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
      * The subscription on regional Quote event is observed when this source is subscribed to.
+     * @deprecated Use the OrderSource::REGIONAL source.
      */
     static const OrderSource REGIONAL_BID;
 
     /**
      * Ask side of a regional Quote.
-     * It is a <em>synthetic</em> source.
+     * It is a <em>synthetic</em> and <em>separate</em> source.
+     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
      * The subscription on regional Quote event is observed when this source is subscribed to.
+     * @deprecated Use the OrderSource::REGIONAL source.
      */
     static const OrderSource REGIONAL_ASK;
 
     /**
      * Bid side of an aggregate order book (futures depth and NASDAQ Level II).
+     * It is a <em>aggregate</em> and <em>separate</em> source.
      * This source cannot be directly published via dxFeed API, but otherwise it is fully operational.
+     * @deprecated Use the OrderSource::AGGREGATE source.
      */
     static const OrderSource AGGREGATE_BID;
 
     /**
      * Ask side of an aggregate order book (futures depth and NASDAQ Level II).
+     * It is a <em>aggregate</em> and <em>separate</em> source.
      * This source cannot be directly published via dxFeed API, but otherwise it is fully operational.
+     * @deprecated Use the OrderSource::AGGREGATE source.
      */
     static const OrderSource AGGREGATE_ASK;
+
+    /**
+     * Composite Quote.
+     * It is a <em>synthetic</em> and <em>unitary</em> source, that represents both bid and ask side.
+     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
+     * The subscription on composite Quote event is observed when this source is subscribed to.
+     * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a
+     * source), instead of OrderSource::COMPOSITE_ASK and OrderSource::COMPOSITE_BID, set the system property
+     * <b>`dxscheme.unitaryOrderSource`</b> to `true`.
+     */
+    static const OrderSource COMPOSITE;
+
+    /**
+     * Regional Quote.
+     * It is a <em>synthetic</em> and <em>unitary</em> source, that represents both bid and ask side.
+     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
+     * The subscription on regional Quote event is observed when this source is subscribed to.
+     * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a source),
+     * instead of OrderSource::REGIONAL_ASK and OrderSource::REGIONAL_BID, set the system property
+     * <b>`dxscheme.unitaryOrderSource`</b> to `true`.
+     */
+    static const OrderSource REGIONAL;
+
+    /**
+     * Aggregate order book (futures depth and NASDAQ Level II).
+     * It is a <em>aggregate</em> and <em>unitary</em> source, that represents both bid and ask side.
+     * This source cannot be directly published via dxFeed API, but otherwise it is fully operational.
+     * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a source),
+     * instead of OrderSource::AGGREGATE_ASK and OrderSource::AGGREGATE_BID, set the system property
+     * <b>`dxscheme.unitaryOrderSource`</b> to `true`.
+     */
+    static const OrderSource AGGREGATE;
 
     /**
      * Default source for publishing custom order books.

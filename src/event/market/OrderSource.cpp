@@ -14,6 +14,9 @@ const OrderSource OrderSource::REGIONAL_BID(3, "REGIONAL_BID", 0);
 const OrderSource OrderSource::REGIONAL_ASK(4, "REGIONAL_ASK", 0);
 const OrderSource OrderSource::AGGREGATE_BID(5, "AGGREGATE_BID", 0);
 const OrderSource OrderSource::AGGREGATE_ASK(6, "AGGREGATE_ASK", 0);
+const OrderSource OrderSource::COMPOSITE(7, "COMPOSITE", 0);
+const OrderSource OrderSource::REGIONAL(8, "REGIONAL", 0);
+const OrderSource OrderSource::AGGREGATE(9, "AGGREGATE", 0);
 const OrderSource OrderSource::DEFAULT(0, "DEFAULT",
                                        PUB_ORDER | PUB_ANALYTIC_ORDER | PUB_OTC_MARKETS_ORDER | PUB_SPREAD_ORDER |
                                            FULL_ORDER_BOOK);
@@ -71,7 +74,7 @@ const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference
 
             return result;
         }({//
-           COMPOSITE_BID, COMPOSITE_ASK, REGIONAL_BID, REGIONAL_ASK, AGGREGATE_BID, AGGREGATE_ASK,
+           COMPOSITE_BID, COMPOSITE_ASK, REGIONAL_BID, REGIONAL_ASK, AGGREGATE_BID, AGGREGATE_ASK, COMPOSITE, REGIONAL, AGGREGATE,
            //
            DEFAULT,
            //
@@ -172,7 +175,7 @@ std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> OrderSource::toG
 }
 
 bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
-    return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE_ASK.id();
+    return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE.id();
 }
 
 const OrderSource &OrderSource::valueOf(std::int32_t sourceId) {
