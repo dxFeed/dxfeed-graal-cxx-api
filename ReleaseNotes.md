@@ -10,6 +10,9 @@
     * Added new Order sources for IG CFDs Gate: IGC, igc.
     * Added new Order sources for EDX Gate: EDX, edx.
     * Added new Order sources for Nuam Exchange Gate: NUAM, nuam.
+* Added the ability to automatically generate the DXEndpoint name.
+  If the user does not explicitly specify the endpoint name, it will be generated using the template `qdcxx{Id}`,  
+  where `{Id}` will be an empty string for the first instance of the endpoint and "-2", "-3", etc. for subsequent instances.
 
 ## v4.2.0 
 

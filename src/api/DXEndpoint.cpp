@@ -125,16 +125,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint:
                         ", role = " + roleToString(role) + ", properties[" + std::to_string(properties.size()) + "])");
     }
 
-    auto name = properties.contains(NAME_PROPERTY) ? properties.at(NAME_PROPERTY) : std::string{};
-
-    if (name.empty()) {
-        std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId();
-
-        name = fmt::format("qdcxx{}", (id <= 1) ? "" : fmt::format("-{}", id));
-    }
-
-    auto endpoint = DXEndpoint::createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, name);
-    auto id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->registerEntity(endpoint);
+    auto endpoint =
+        DXEndpoint::createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY));
+    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
@@ -335,6 +328,16 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     }
 
     loadDefaultPropertiesImpl();
+
+    if (auto name = properties_.contains(NAME_PROPERTY) ? properties_.at(NAME_PROPERTY) : std::string{}; name.empty()) {
+        std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId();
+
+        name = fmt::format("qdcxx{}", (id <= 1) ? "" : fmt::format("-{}", id));
+
+        const auto newBuilder = withProperty(NAME_PROPERTY, name);
+
+        return newBuilder->build();
+    }
 
     return DXEndpoint::create(isolated::api::IsolatedDXEndpoint::Builder::build(handle_), role_, properties_);
 }
