@@ -79,6 +79,12 @@ jobs:
             cores: 4
             cc: 'gcc-14'
             cxx: 'g++-14'
+          - name: ubuntu-24.04-arm-gcc-14
+            image: ubuntu-24.04-arm
+            os: linux
+            cores: 4
+            cc: 'gcc-14'
+            cxx: 'g++-14'
           - name: macos-14-xcode-15
             image: macos-14
             os: macos
