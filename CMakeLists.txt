@@ -291,6 +291,10 @@ set(dxFeedGraalCxxApi_Auth_Sources
         src/auth/AuthToken.cpp
 )
 
+set(dxFeedGraalCxxApi_CandleWebService_Sources
+        src/candlewebservice/HistoryEndpoint.cpp
+)
+
 set(dxFeedGraalCxxApi_Ipf_Sources
         src/ipf/InstrumentProfile.cpp
         src/ipf/InstrumentProfileType.cpp
@@ -414,6 +418,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Auth_Sources}
+        ${dxFeedGraalCxxApi_CandleWebService_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
         ${dxFeedGraalCxxApi_Logging_Sources}
         ${dxFeedGraalCxxApi_Model_Sources}

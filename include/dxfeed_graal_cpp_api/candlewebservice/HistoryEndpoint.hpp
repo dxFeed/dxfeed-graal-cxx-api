@@ -13,6 +13,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../event/EventType.hpp"
+#include "../event/EventTypeEnum.hpp"
+#include "../symbols/SymbolWrapper.hpp"
 
 #include <memory>
 #include <mutex>
