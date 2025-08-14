@@ -38,9 +38,9 @@ TEST_CASE("Candle Periods") {
     REQUIRE(CandlePeriodOpt{CandlePeriod::valueOf(5, CandleType::MINUTE)} == CandlePeriod::parse("5m"));
     REQUIRE(CandlePeriodOpt{CandlePeriod::valueOf(5, CandleType::MINUTE)} == CandlePeriod::parse("5m"));
 
-    std::unordered_set set = std::unordered_set<CandlePeriod>{};
+    auto set = std::unordered_set<CandlePeriod>{};
 
-    for (double val = 0; val <= 5; val += 0.25) {
+    for (double val = 0; val < 5; val += 0.25) {
         for (const auto &candleTypeRef : CandleType::VALUES) {
             const auto &type = candleTypeRef.get();
 
