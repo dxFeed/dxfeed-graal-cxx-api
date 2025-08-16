@@ -1,12 +1,10 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <fmt/format.h>
 #include <string>
-#include <thread>
-#include <unordered_map>
 #include <vector>
 
-#include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <doctest.h>
@@ -40,7 +38,9 @@ TEST_CASE("Candle Periods") {
 
     auto set = std::unordered_set<CandlePeriod>{};
 
-    for (double val = 0; val < 5; val += 0.25) {
+    double val = 0.0;
+
+    for (auto i = 0; i < 20; i++) {
         for (const auto &candleTypeRef : CandleType::VALUES) {
             const auto &type = candleTypeRef.get();
 
@@ -52,7 +52,7 @@ TEST_CASE("Candle Periods") {
 
             REQUIRE(CandlePeriodOpt{p} == CandlePeriod::parse(s1));
 
-            auto s2 = std::to_string(val) + type.getName();
+            auto s2 = fmt::format("{}{}", std::to_string(val), type.getName());
 
             INFO("val = ", val, ", type.getName() = ", type.getName(), ", type.toString() = ", type.toString(),
                  ", p.toString() = ", p.toString(), ", s2 = ", s2,
@@ -60,6 +60,8 @@ TEST_CASE("Candle Periods") {
 
             REQUIRE(CandlePeriodOpt{p} == CandlePeriod::parse(s2));
         }
+
+        val += 0.25;
     }
 }
 
