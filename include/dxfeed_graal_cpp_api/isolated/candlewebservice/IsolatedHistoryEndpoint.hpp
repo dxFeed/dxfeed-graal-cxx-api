@@ -30,7 +30,16 @@ void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, con
 // int32_t dxfg_HistoryEndpoint_Builder_withAuthToken(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *authToken);
 void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &authToken);
 
+// int32_t dxfg_HistoryEndpoint_Builder_withCompression(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, dxfg_history_endpoint_compression_t compression, DXFG_OUT dxfg_history_endpoint_builder_t **newBuilder);
+void withCompression(const JavaObjectHandle<HistoryEndpoint::Builder> &builder,
+  HistoryEndpoint::Compression compression);
 
+// int32_t dxfg_HistoryEndpoint_Builder_withFormat(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, dxfg_history_endpoint_format_t format, DXFG_OUT dxfg_history_endpoint_builder_t **newBuilder);
+void withFormat(const JavaObjectHandle<HistoryEndpoint::Builder> &builder,
+  HistoryEndpoint::Format format);
+
+// int32_t dxfg_HistoryEndpoint_Builder_build(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, DXFG_OUT dxfg_history_endpoint_t **endpoint);
+JavaObjectHandle<HistoryEndpoint> build(const JavaObjectHandle<HistoryEndpoint::Builder> &builder);
 
 } // namespace Builder
 

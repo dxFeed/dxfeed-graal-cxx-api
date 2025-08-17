@@ -5,6 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfeed_graal_cpp_api/isolated/candlewebservice/IsolatedHistoryEndpoint.hpp>
+#include <dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -12,37 +13,120 @@ namespace isolated::candlewebservice::IsolatedHistoryEndpoint {
 
 namespace Builder {
 
-// int32_t dxfg_HistoryEndpoint_Builder_withAddress(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *address);
-void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &address) {}
+void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &address) {
+    if (!builder) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_HistoryEndpoint_Builder_withAddress`. The `builder` handle is invalid");
+    }
 
-// int32_t dxfg_HistoryEndpoint_Builder_withUserName(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *userName);
-void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &userName) {}
-
-// int32_t dxfg_HistoryEndpoint_Builder_withPassword(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *password);
-void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &password) {}
-
-// int32_t dxfg_HistoryEndpoint_Builder_withAuthToken(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *authToken);
-void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &authToken) {}
-
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withAddress,
+                                           static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
+                                           address.c_str());
 }
 
-// int32_t dxfg_HistoryEndpoint_newBuilder(graal_isolatethread_t *thread, DXFG_OUT dxfg_history_endpoint_builder_t
-// **builder);
+void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &userName) {
+    if (!builder) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_HistoryEndpoint_Builder_withUserName`. The `builder` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withUserName,
+                                           static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
+                                           userName.c_str());
+}
+
+void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &password) {
+    if (!builder) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_HistoryEndpoint_Builder_withPassword`. The `builder` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withPassword,
+                                           static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
+                                           password.c_str());
+}
+
+void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &authToken) {
+    if (!builder) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_HistoryEndpoint_Builder_withAuthToken`. The `builder` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withAuthToken,
+                                           static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
+                                           authToken.c_str());
+}
+
+void withCompression(const JavaObjectHandle<HistoryEndpoint::Builder> &builder,
+                     HistoryEndpoint::Compression compression) {
+    if (!builder) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_HistoryEndpoint_Builder_withCompression`. The "
+                                       "`builder` handle is invalid");
+    }
+
+    dxfg_history_endpoint_builder_t *newBuilder{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withCompression,
+                                           static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
+                                           static_cast<dxfg_history_endpoint_compression_t>(compression), &newBuilder);
+
+    const JavaObjectHandle<HistoryEndpoint::Builder> raii{&newBuilder->handler};
+    ignoreUnused(raii);
+}
+
+void withFormat(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, HistoryEndpoint::Format format) {
+    if (!builder) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_HistoryEndpoint_Builder_withFormat`. The `builder` handle is invalid");
+    }
+
+    dxfg_history_endpoint_builder_t *newBuilder{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withFormat,
+                                           static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
+                                           static_cast<dxfg_history_endpoint_format_t>(format), &newBuilder);
+
+    const JavaObjectHandle<HistoryEndpoint::Builder> raii{&newBuilder->handler};
+    ignoreUnused(raii);
+}
+
+JavaObjectHandle<HistoryEndpoint> build(const JavaObjectHandle<HistoryEndpoint::Builder> &builder) {
+    if (!builder) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_HistoryEndpoint_Builder_build`. The `builder` handle is invalid");
+    }
+
+    dxfg_history_endpoint_t *endpoint{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_build,
+                                           static_cast<dxfg_history_endpoint_builder_t *>(builder.get()), &endpoint);
+
+    return JavaObjectHandle<HistoryEndpoint>{&endpoint->handler};
+}
+
+} // namespace Builder
+
 JavaObjectHandle<HistoryEndpoint::Builder> newBuilder() {
-    dxfg_history_endpoint_builder_t* builder{};
+    dxfg_history_endpoint_builder_t *builder{};
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_newBuilder, &builder);
 
     return JavaObjectHandle<HistoryEndpoint::Builder>{&builder->handler};
 }
 
-// int32_t dxfg_HistoryEndpoint_getTimeSeries(graal_isolatethread_t *thread, dxfg_history_endpoint_t *endpoint,
-// dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, int64_t fromTime, int64_t toTime, DXFG_OUT dxfg_event_type_list
-// **events);
 std::vector<std::shared_ptr<EventType>> getTimeSeries(const JavaObjectHandle<HistoryEndpoint> &endpoint,
                                                       const EventTypeEnum &eventType, const SymbolWrapper &symbol,
                                                       std::int64_t fromTime, std::int64_t toTime) {
-    return {};
+    dxfg_event_type_list *events{};
+
+    runGraalFunctionAndThrowIfLessThanZero(
+        dxfg_HistoryEndpoint_getTimeSeries, static_cast<dxfg_history_endpoint_t *>(endpoint.get()),
+        static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(symbol.toGraalUnique().get()),
+        fromTime, toTime, &events);
+
+    const auto u = event::IsolatedEventTypeList::toUnique(events);
+
+    return EventMapper::fromGraalList(u.get());
 }
 
 } // namespace isolated::candlewebservice::IsolatedHistoryEndpoint
