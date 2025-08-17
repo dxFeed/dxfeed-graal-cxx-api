@@ -77,6 +77,9 @@ struct DXFCPP_EXPORT HistoryEndpoint final : public dxfcpp::RequireMakeShared<Hi
 
         public:
 
+        explicit Builder(RequireMakeShared<Builder>::LockExternalConstructionTag, JavaObjectHandle<Builder> &&handle);
+        ~Builder() override = default;
+
         std::shared_ptr<Builder> withAddress(const std::string &address);
         std::shared_ptr<Builder> withUserName(const std::string &userName);
         std::shared_ptr<Builder> withPassword(const std::string &password);

@@ -249,6 +249,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
+        src/isolated/candlewebservice/IsolatedHistoryEndpoint.cpp
         src/isolated/auth/IsolatedAuthToken.cpp
         src/isolated/event/IsolatedEventType.cpp
         src/isolated/executors/IsolatedInPlaceExecutor.cpp
