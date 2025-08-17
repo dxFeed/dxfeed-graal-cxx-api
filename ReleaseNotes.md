@@ -1,5 +1,7 @@
 ## v4.3.0
 
+* **\[MDAPI-253]\[C++]** Implemented HistoryEndpoint
+    * Added `HistoryEndpoint` class.
 * Renamed `DXFCXX_NODEFAULTLIB_LIBCMT` to `DXFCXX_NODEFAULTLIB` CMake project option for clearer purposes and added support for additional libraries in `/NODEFAULTLIB` configuration.
 * **\[MDAPI-254]\[C++]** Migrated to Graal SDK v2.5.0
     * Added `AGGREGATE`, `COMPOSITE`, `REGIONAL` OrderSource. The new system property `dxscheme.unitaryOrderSource=true|false` has been added.
