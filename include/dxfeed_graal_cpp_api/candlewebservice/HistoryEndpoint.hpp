@@ -26,6 +26,28 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * Represents an endpoint for accessing historical data, supporting configurable parameters such as compression and data
  * format. This class provides functionality to retrieve and process time-series data using a flexible API.
+ *
+ * ```cpp
+ * const auto candleDataUrl = "https://tools.dxfeed.com/candledata";
+ * const auto user = "*****";
+ * const auto password = "*****";
+ * const auto start = TimeFormat::DEFAULT.parse("20221201-000000");
+ * const auto stop = TimeFormat::DEFAULT.parse("20230101-000000");
+ * const auto builder = HistoryEndpoint::newBuilder()
+ *         ->withAddress(candleDataUrl)
+ *         ->withUserName(user)
+ *         ->withPassword(password);
+ * const auto endpoint = builder->build();
+ * auto res = endpoint->getTimeSeries<Candle>("AAPL{=d}", start, stop);
+ *
+ * fmt::print("Received candle count: {}\n", res.size());
+ * const auto resTns= builder->build()->getTimeSeries<TimeAndSale>(
+ *         "AAPL",
+ *         TimeFormat::DEFAULT.parse("20240201-120000"),
+ *         TimeFormat::DEFAULT.parse("20240201-130000"));
+ *
+ * fmt::print("Received tns count: {}\n", resTns.size());
+ * ```
  */
 struct DXFCPP_EXPORT HistoryEndpoint final : public dxfcpp::RequireMakeShared<HistoryEndpoint> {
     /// The alias to a type of shared pointer to the HistoryEndpoint object
