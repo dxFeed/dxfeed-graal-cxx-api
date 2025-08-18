@@ -64,14 +64,9 @@ void withCompression(const JavaObjectHandle<HistoryEndpoint::Builder> &builder,
                                        "`builder` handle is invalid");
     }
 
-    dxfg_history_endpoint_builder_t *newBuilder{};
-
     runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withCompression,
                                            static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
-                                           static_cast<dxfg_history_endpoint_compression_t>(compression), &newBuilder);
-
-    const JavaObjectHandle<HistoryEndpoint::Builder> raii{&newBuilder->handler};
-    ignoreUnused(raii);
+                                           static_cast<dxfg_history_endpoint_compression_t>(compression));
 }
 
 void withFormat(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, HistoryEndpoint::Format format) {
@@ -80,14 +75,9 @@ void withFormat(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, Histo
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withFormat`. The `builder` handle is invalid");
     }
 
-    dxfg_history_endpoint_builder_t *newBuilder{};
-
     runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withFormat,
                                            static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
-                                           static_cast<dxfg_history_endpoint_format_t>(format), &newBuilder);
-
-    const JavaObjectHandle<HistoryEndpoint::Builder> raii{&newBuilder->handler};
-    ignoreUnused(raii);
+                                           static_cast<dxfg_history_endpoint_format_t>(format));
 }
 
 JavaObjectHandle<HistoryEndpoint> build(const JavaObjectHandle<HistoryEndpoint::Builder> &builder) {

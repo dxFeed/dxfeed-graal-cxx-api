@@ -3,7 +3,7 @@
   "date": "3.0.1",
   "doctest": "2.4.11",
   "fmt": "11.0.2",
-  "graal-native-sdk": "2.5.0",
+  "graal-native-sdk": "2.6.2",
   "Process": "3.0.1",
   "range-v3": "0.12",
   "untfcpp": "3.2.3",
