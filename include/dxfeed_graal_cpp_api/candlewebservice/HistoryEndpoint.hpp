@@ -10,16 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"
-#include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
-#include "../internal/Handler.hpp"
-#include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 
 #include <memory>
-#include <mutex>
-#include <unordered_set>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -40,16 +35,16 @@ DXFCPP_BEGIN_NAMESPACE
  * const auto endpoint = builder->build();
  * auto res = endpoint->getTimeSeries<Candle>("AAPL{=d}", start, stop);
  *
- * fmt::print("Received candle count: {}\n", res.size());
+ * std::cout << "Received candle count: " << res.size() << std::endl;
  * const auto resTns= builder->build()->getTimeSeries<TimeAndSale>(
- *         "AAPL",
- *         TimeFormat::DEFAULT.parse("20240201-120000"),
- *         TimeFormat::DEFAULT.parse("20240201-130000"));
+ *         "AAPL&Q",
+ *         TimeFormat::DEFAULT.parse("20250818-120000"),
+ *         TimeFormat::DEFAULT.parse("20250819-130000"));
  *
- * fmt::print("Received tns count: {}\n", resTns.size());
+ * std::cout << "Received tns count: " << resTns.size() << std::endl;
  * ```
  */
-struct DXFCPP_EXPORT HistoryEndpoint final : public dxfcpp::RequireMakeShared<HistoryEndpoint> {
+struct DXFCPP_EXPORT HistoryEndpoint final : RequireMakeShared<HistoryEndpoint> {
     /// The alias to a type of shared pointer to the HistoryEndpoint object
     using Ptr = std::shared_ptr<HistoryEndpoint>;
 
@@ -119,58 +114,58 @@ struct DXFCPP_EXPORT HistoryEndpoint final : public dxfcpp::RequireMakeShared<Hi
         /**
          * Specifies the address for the target endpoint.
          *
-         * @param address the address of the endpoint to be set
-         * @return the Builder instance with the updated address value
+         * @param address The address of the endpoint to be set.
+         * @return The Builder instance with the updated address value.
          */
         std::shared_ptr<Builder> withAddress(const std::string &address);
 
         /**
          * Sets the username for the target endpoint.
          *
-         * @param userName the username to be set for the endpoint
-         * @return the Builder instance with the updated username value
+         * @param userName The username to be set for the endpoint.
+         * @return The Builder instance with the updated username value.
          */
         std::shared_ptr<Builder> withUserName(const std::string &userName);
 
         /**
          * Sets the password for the target endpoint.
          *
-         * @param password the password to be set for the endpoint
-         * @return the Builder instance with the updated password value
+         * @param password The password to be set for the endpoint.
+         * @return The Builder instance with the updated password value.
          */
         std::shared_ptr<Builder> withPassword(const std::string &password);
 
         /**
          * Sets the authentication token for the target endpoint.
          *
-         * @param authToken the authentication token to be used for access
-         * @return the Builder instance with the updated authentication token value
+         * @param authToken The authentication token to be used for access.
+         * @return The Builder instance with the updated authentication token value.
          */
         std::shared_ptr<Builder> withAuthToken(const std::string &authToken);
 
         /**
          * Sets the compression type to be used for data transmission or storage.
          *
-         * @param compression the compression type to be applied, represented by the {@link Compression} enum
-         * @return the Builder instance with the updated compression value
+         * @param compression The compression type to be applied, represented by the Compression enum.
+         * @return The Builder instance with the updated compression value.
          */
         std::shared_ptr<Builder> withCompression(Compression compression);
 
         /**
          * Sets the format to be used for data handling.
          *
-         * @param format the format type to be applied, represented by the {@link Format} enum
-         * @return the Builder instance with the updated format value
+         * @param format The format type to be applied, represented by the Format enum.
+         * @return The Builder instance with the updated format value.
          */
         std::shared_ptr<Builder> withFormat(Format format);
 
         /**
-         * Builds and returns a configured instance of {@code HistoryEndpoint}.
+         * Builds and returns a configured instance of HistoryEndpoint.
          * <p>
-         * This method uses the values set in the {@code Builder} instance, such as address, username, password,
-         * compression, format, and authentication token, to create a new {@code HistoryEndpoint} object.
+         * This method uses the values set in the Builder instance, such as address, username, password,
+         * compression, format, and authentication token, to create a new HistoryEndpoint object.
          *
-         * @return a new instance of {@code HistoryEndpoint} configured with the provided settings
+         * @return A new instance of HistoryEndpoint configured with the provided settings
          */
         std::shared_ptr<HistoryEndpoint> build();
     };
@@ -178,11 +173,11 @@ struct DXFCPP_EXPORT HistoryEndpoint final : public dxfcpp::RequireMakeShared<Hi
     /**
      * Retrieves a list of time series events for a specific type of event and symbol within the given time range.
      *
-     * @tparam E the subclass of {@link TimeSeriesEvent} that specifies the type of event to retrieve
-     * @param symbol the identifier of the symbol for which the time series data is requested
-     * @param from the start timestamp for the time series query, in milliseconds since epoch
-     * @param to the end timestamp for the time series query, in milliseconds since epoch
-     * @return a list of events of the specified type and symbol within the given time range
+     * @tparam E The subclass of TimeSeriesEvent that specifies the type of event to retrieve.
+     * @param symbol The identifier of the symbol for which the time series data is requested.
+     * @param from The start timestamp for the time series query, in milliseconds since epoch.
+     * @param to The end timestamp for the time series query, in milliseconds since epoch.
+     * @return A list of events of the specified type and symbol within the given time range.
      */
     template <Derived<TimeSeriesEvent> E>
     std::vector<std::shared_ptr<E>> getTimeSeries(const SymbolWrapper &symbol, std::int64_t from, std::int64_t to) {
@@ -190,14 +185,14 @@ struct DXFCPP_EXPORT HistoryEndpoint final : public dxfcpp::RequireMakeShared<Hi
     }
 
     /**
-     * Creates a new instance of {@link HistoryEndpoint.Builder} with default configurations. The default settings
+     * Creates a new instance of HistoryEndpoint::Builder with default configurations. The default settings
      * include:
      * <ul>
-     *     <li>{@link Compression#ZIP} as the compression type.
-     *     <li>{@link Format#BINARY} as the data format.
+     *     <li>Compression::ZIP as the compression type.
+     *     <li>Format::BINARY as the data format.
      * </ul>
      *
-     * @return a new {@link HistoryEndpoint.Builder} instance with preset default values
+     * @return A new HistoryEndpoint::Builder instance with preset default values.
      */
     static std::shared_ptr<Builder> newBuilder();
 };

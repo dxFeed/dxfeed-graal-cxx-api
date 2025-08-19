@@ -14,34 +14,6 @@ using namespace dxfcpp;
 using stringOpt = std::optional<std::string>;
 using CandlePeriodOpt = std::optional<CandlePeriod>;
 
-// TEST_CASE("CWS") {
-//     auto candleDataUrl = "https://tools.dxfeed.com/candledata";
-//     auto user = "******";
-//     auto password = "******";
-//     auto start = TimeFormat::DEFAULT.parse("20221201-000000");
-//     auto stop = TimeFormat::DEFAULT.parse("20230101-000000");
-//
-//     auto builder = HistoryEndpoint::newBuilder()
-//             ->withAddress(candleDataUrl)
-//             ->withUserName(user)
-//             ->withPassword(password);
-//     auto endpoint = builder->build();
-//
-//     auto res = endpoint->getTimeSeries<Candle>(
-//             "AAPL{=d}",
-//             start,
-//             stop);
-//
-//     fmt::print("Received candle count: {}\n", res.size());
-//
-//     auto resTns= builder->build()->getTimeSeries<TimeAndSale>(
-//             "AAPL",
-//             TimeFormat::DEFAULT.parse("20240201-120000"),
-//             TimeFormat::DEFAULT.parse("20240201-130000"));
-//
-//     fmt::print("Received tns count: {}\n", resTns.size());
-// }
-
 TEST_CASE("Candle Periods") {
     REQUIRE(CandlePeriodOpt{CandlePeriod::DAY} == CandlePeriod::parse("DAY"));
     REQUIRE(CandlePeriodOpt{CandlePeriod::DAY} == CandlePeriod::parse("1DAY"));
