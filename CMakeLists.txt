@@ -21,7 +21,7 @@ set(DXFCXX_VERSION "v4.2.1" CACHE STRING "The dxFeed Graal CXX API package versi
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "2.5.0" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "2.6.2" CACHE STRING "")
 set(FMTLIB_VERSION "11.0.2")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -249,6 +249,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
+        src/isolated/candlewebservice/IsolatedHistoryEndpoint.cpp
         src/isolated/auth/IsolatedAuthToken.cpp
         src/isolated/event/IsolatedEventType.cpp
         src/isolated/executors/IsolatedInPlaceExecutor.cpp
@@ -289,6 +290,10 @@ set(dxFeedGraalCxxApi_ApiOsub_Sources
 
 set(dxFeedGraalCxxApi_Auth_Sources
         src/auth/AuthToken.cpp
+)
+
+set(dxFeedGraalCxxApi_CandleWebService_Sources
+        src/candlewebservice/HistoryEndpoint.cpp
 )
 
 set(dxFeedGraalCxxApi_Ipf_Sources
@@ -414,6 +419,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Api_Sources}
         ${dxFeedGraalCxxApi_ApiOsub_Sources}
         ${dxFeedGraalCxxApi_Auth_Sources}
+        ${dxFeedGraalCxxApi_CandleWebService_Sources}
         ${dxFeedGraalCxxApi_Ipf_Sources}
         ${dxFeedGraalCxxApi_Logging_Sources}
         ${dxFeedGraalCxxApi_Model_Sources}

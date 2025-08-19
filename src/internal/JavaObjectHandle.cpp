@@ -115,4 +115,7 @@ template struct JavaObjectHandle<ExecutorTag>;
 
 template struct JavaObjectHandle<Logging::ListenerTag>;
 
+template struct JavaObjectHandle<HistoryEndpoint>;
+template struct JavaObjectHandle<HistoryEndpoint::Builder>;
+
 DXFCPP_END_NAMESPACE

@@ -58,6 +58,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
 #include "executors/InPlaceExecutor.hpp"
 
+#include "candlewebservice/HistoryEndpoint.hpp"
+
 #include "isolated/api/IsolatedDXEndpoint.hpp"
 #include "isolated/api/IsolatedDXFeed.hpp"
 #include "isolated/api/IsolatedDXFeedSubscription.hpp"
@@ -65,6 +67,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/api/IsolatedDXPublisherObservableSubscription.hpp"
 #include "isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
 #include "isolated/auth/IsolatedAuthToken.hpp"
+#include "isolated/candlewebservice/IsolatedHistoryEndpoint.hpp"
 #include "isolated/event/IsolatedEventType.hpp"
 #include "isolated/executors/IsolatedInPlaceExecutor.hpp"
 #include "isolated/internal/IsolatedObject.hpp"

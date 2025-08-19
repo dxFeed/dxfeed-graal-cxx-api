@@ -72,15 +72,15 @@
         }
 #endif
 
-#ifdef __has_include
-#    if __has_include(<ciso646> )
-#        include <ciso646>
-#    elif __has_include(<iso646.h>)
-#        include <iso646.h>
-#    endif
-#else
-#    include <ciso646>
-#endif
+// #ifdef __has_include
+// #    if __has_include(<ciso646> )
+// #        include <ciso646>
+// #    elif __has_include(<iso646.h>)
+// #        include <iso646.h>
+// #    endif
+// #else
+// #    include <ciso646>
+// #endif
 
 DXFCPP_BEGIN_NAMESPACE
 
