@@ -153,7 +153,7 @@ Only x64 versions are supported.
 
 ### Linux
 
-Only x64 versions are prebuilt.
+x64 and aarch64 (arm64) versions are prebuilt.
 
 #### libc compatibility
 
