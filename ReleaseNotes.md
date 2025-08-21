@@ -1,5 +1,6 @@
 ## v4.3.0
 
+* **\[MDAPI-108]\[С++]** Added CandleWebService API sample.
 * **\[MDAPI-253]\[C++]** Implemented HistoryEndpoint
     * Added `HistoryEndpoint` class.
     * Migrated to Graal SDK v2.6.2
