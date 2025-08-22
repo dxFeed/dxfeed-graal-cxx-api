@@ -366,7 +366,12 @@ template <> struct Promise<void> : CommonPromiseMixin<Promise<void>>, VoidPromis
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
-    Promise(Promise &&) noexcept = delete;
+
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+        other.impl.handle = nullptr;
+        other.impl.own = false;
+    }
+
     Promise &operator=(Promise &&) noexcept = delete;
 };
 
@@ -402,7 +407,12 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
-    Promise(Promise &&) noexcept = default;
+
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+        other.impl.handle = nullptr;
+        other.impl.own = false;
+    }
+
     Promise &operator=(Promise &&) noexcept = delete;
 };
 
@@ -459,6 +469,8 @@ template <typename E> struct PromiseList {
         std::vector<Promise<std::shared_ptr<E>>> result{};
         auto size = PromiseListImpl::getSize(handle);
         auto promiseList = std::make_shared<PromiseList<E>>(handle);
+
+        promiseList->data_.reserve(size);
 
         for (std::size_t elementIndex = 0; elementIndex < size; elementIndex++) {
             if (auto element = PromiseListImpl::getElement(handle, elementIndex)) {
@@ -586,7 +598,12 @@ struct Promise<std::vector<std::shared_ptr<E>>> : CommonPromiseMixin<Promise<std
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
-    Promise(Promise &&) noexcept = delete;
+
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+        other.impl.handle = nullptr;
+        other.impl.own = false;
+    }
+
     Promise &operator=(Promise &&) noexcept = delete;
 };
 
