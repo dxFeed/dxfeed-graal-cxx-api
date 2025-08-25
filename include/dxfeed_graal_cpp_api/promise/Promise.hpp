@@ -71,7 +71,7 @@ struct DXFCPP_EXPORT EventsPromiseImpl : PromiseImpl {
  */
 template <typename P> struct CommonPromiseMixin {
     /**
-     * Returns `true` when computation has completed normally, or exceptionally, or was cancelled.
+     * Returns `true` when a computation has completed normally, or exceptionally, or was canceled.
      *
      * @return `true` when computation has completed.
      */
@@ -90,9 +90,9 @@ template <typename P> struct CommonPromiseMixin {
     }
 
     /**
-     * Returns `true` when computation has completed exceptionally or was cancelled.
+     * Returns `true` when a computation has completed exceptionally or was canceled.
      * Use ::getException() method to get the exceptional outcome of the computation.
-     * @return `true` when computation has completed exceptionally or was cancelled.
+     * @return `true` when computation has completed exceptionally or was canceled.
      */
     bool hasException() const {
         return static_cast<const P *>(this)->impl.hasException();
@@ -109,8 +109,8 @@ template <typename P> struct CommonPromiseMixin {
     }
 
     /**
-     * Returns exceptional outcome of computation. If computation has no ::hasException() exception,
-     * then this method returns an exception with a message "null". If computation has completed exceptionally or was
+     * Returns exceptional outcome of computation. If the computation has no ::hasException() exception,
+     * then this method returns an exception with a message "null". If a computation has completed exceptionally or was
      * cancelled, then the result of this method is not an exception with a message "null". If computation was @ref
      * ::isCancelled() "cancelled", then this method returns "an instance of CancellationException".
      *
@@ -123,10 +123,10 @@ template <typename P> struct CommonPromiseMixin {
 
     /**
      * Wait for computation to complete or timeout or throw an exception in case of exceptional completion.
-     * If the wait is interrupted, then the computation is @ref ::cancel() "cancelled",
+     * If the wait is interrupted, then the computation is @ref ::cancel() "canceled",
      * the interruption flag on the current thread is set, and "CancellationException" is thrown.
      *
-     * <p>If the wait times out, then the computation is @ref ::cancel() "cancelled" and this method returns `false`.
+     * <p>If the wait times are out, then the computation is @ref ::cancel() "canceled" and this method returns `false`.
      * Use this method in the code that shall continue normal execution in case of timeout.
      *
      * @param timeoutInMilliseconds The timeout.
@@ -140,10 +140,10 @@ template <typename P> struct CommonPromiseMixin {
 
     /**
      * Wait for computation to complete or timeout or throw an exception in case of exceptional completion.
-     * If the wait is interrupted, then the computation is @ref ::cancel() "cancelled",
+     * If the wait is interrupted, then the computation is @ref ::cancel() "canceled",
      * the interruption flag on the current thread is set, and "CancellationException" is thrown.
      *
-     * <p>If the wait times out, then the computation is @ref ::cancel() "cancelled" and this method returns `false`.
+     * <p>If the wait times are out, then the computation is @ref ::cancel() "canceled" and this method returns `false`.
      * Use this method in the code that shall continue normal execution in case of timeout.
      *
      * @param timeoutInMilliseconds The timeout.
@@ -157,7 +157,7 @@ template <typename P> struct CommonPromiseMixin {
     }
 
     /**
-     * Cancels computation. This method does nothing if computation has already @ref ::isDone() "completed".
+     * This method cancels computation. This method does nothing if the computation has already @ref ::isDone() "completed".
      *
      * <p>If cancelled, then ::getException() will return "CancellationException",
      * @ref ::isDone() "isDone", @ref ::isCancelled() "isCancelled", and @ref ::hasException() "hasException" will
@@ -186,9 +186,9 @@ template <typename P> struct VoidPromiseMixin {
     }
 
     /**
-     * Wait for computation to complete and return its result or throw an exception in case of exceptional completion.
+     * Wait for the computation to complete and return its result or throw an exception in case of exceptional completion.
      * @return result of computation.
-     * @throws CancellationException if computation was cancelled.
+     * @throws CancellationException if computation was canceled.
      * @throws PromiseException if computation has completed exceptionally.
      */
     void await() const {
@@ -198,12 +198,12 @@ template <typename P> struct VoidPromiseMixin {
     }
 
     /**
-     * Wait for computation to complete or timeout and return its result or throw an exception in case of exceptional
+     * Wait for the computation to complete or timeout and return its result or throw an exception in case of exceptional
      * completion or timeout.
      *
      * @param timeoutInMilliseconds The timeout.
      * @return The result of computation.
-     * @throws CancellationException if computation was cancelled or timed out.
+     * @throws CancellationException if computation was canceled or timed out.
      * @throws PromiseException if computation has completed exceptionally.
      */
     void await(std::int32_t timeoutInMilliseconds) const & {
@@ -213,7 +213,7 @@ template <typename P> struct VoidPromiseMixin {
     }
 
     /**
-     * Wait for computation to complete or timeout and return its result or throw an exception in case of exceptional
+     * Wait for the computation to complete or timeout and return its result or throw an exception in case of exceptional
      * completion or timeout.
      *
      * @param timeoutInMilliseconds The timeout.
@@ -235,7 +235,7 @@ template <typename P> struct VoidPromiseMixin {
  */
 template <typename E, typename P> struct EventPromiseMixin {
     /**
-     * Returns result of computation. If computation has no @ref CommonPromiseMixin::hasResult() "result", then
+     * Returns result of computation. If the computation has no @ref CommonPromiseMixin::hasResult() "result", then
      * this method returns `std::shared_ptr<E>(nullptr)`.
      *
      * @return The result of computation.
@@ -246,9 +246,9 @@ template <typename E, typename P> struct EventPromiseMixin {
     }
 
     /**
-     * Wait for computation to complete and return its result or throw an exception in case of exceptional completion.
+     * Wait for the computation to complete and return its result or throw an exception in case of exceptional completion.
      * @return result of computation.
-     * @throws CancellationException if computation was cancelled.
+     * @throws CancellationException if computation was canceled.
      * @throws PromiseException if computation has completed exceptionally.
      */
     std::shared_ptr<E> await() const {
@@ -263,7 +263,7 @@ template <typename E, typename P> struct EventPromiseMixin {
      *
      * @param timeoutInMilliseconds The timeout.
      * @return The result of computation.
-     * @throws CancellationException if computation was cancelled or timed out.
+     * @throws CancellationException if computation was canceled or timed out.
      * @throws PromiseException if computation has completed exceptionally.
      */
     std::shared_ptr<E> await(std::int32_t timeoutInMilliseconds) const & {
@@ -366,7 +366,12 @@ template <> struct Promise<void> : CommonPromiseMixin<Promise<void>>, VoidPromis
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
-    Promise(Promise &&) noexcept = delete;
+
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+        other.impl.handle = nullptr;
+        other.impl.own = false;
+    }
+
     Promise &operator=(Promise &&) noexcept = delete;
 };
 
@@ -402,7 +407,12 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
-    Promise(Promise &&) noexcept = default;
+
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+        other.impl.handle = nullptr;
+        other.impl.own = false;
+    }
+
     Promise &operator=(Promise &&) noexcept = delete;
 };
 
@@ -459,6 +469,8 @@ template <typename E> struct PromiseList {
         std::vector<Promise<std::shared_ptr<E>>> result{};
         auto size = PromiseListImpl::getSize(handle);
         auto promiseList = std::make_shared<PromiseList<E>>(handle);
+
+        promiseList->data_.reserve(size);
 
         for (std::size_t elementIndex = 0; elementIndex < size; elementIndex++) {
             if (auto element = PromiseListImpl::getElement(handle, elementIndex)) {
@@ -586,7 +598,12 @@ struct Promise<std::vector<std::shared_ptr<E>>> : CommonPromiseMixin<Promise<std
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
-    Promise(Promise &&) noexcept = delete;
+
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+        other.impl.handle = nullptr;
+        other.impl.own = false;
+    }
+
     Promise &operator=(Promise &&) noexcept = delete;
 };
 
