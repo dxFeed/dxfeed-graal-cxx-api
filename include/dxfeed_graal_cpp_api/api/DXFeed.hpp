@@ -52,7 +52,7 @@ struct TimeSeriesTxModelImpl;
  *
  * <h4>Subscribe for single event type</h4>
  *
- * The following code creates listener that prints mid price for each quote
+ * The following code creates listener that prints mid-price for each quote
  * and subscribes for quotes on SPDR S&P 500 ETF symbol:
  * <pre><tt>
  * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription()
@@ -174,8 +174,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * corresponding subscription is already attached to this feed.
      *
      * <p> This feed publishes data to the attached subscription.
-     * Application can attach event listener via DXFeedSubscription::addEventListener to get notified about data changes
-     * and can change its data subscription via DXFeedSubscription methods.
+     * Application can attach an event listener via DXFeedSubscription::addEventListener to get notified about data
+     * changes and can change its data subscription via DXFeedSubscription methods.
      *
      * <h3>Implementation notes</h3>
      *
@@ -213,9 +213,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Returns the last event for the specified event instance.
-     * This method works only for event types that implement LastingEvent marker interface.
+     * This method works only for event types that implement the LastingEvent marker interface.
      * This method <b>does not</b> make any remote calls to the uplink data provider.
-     * It just retrieves last received event from the local cache of this feed.
+     * It just retrieves the last received event from the local cache of this feed.
      * The events are stored in the cache only if there is some attached DXFeedSubscription that is subscribed to the
      * corresponding symbol and event type.
      * WildcardSymbol::ALL subscription does not count for that purpose.
@@ -235,7 +235,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method returns `std::shared_ptr<E>(nullptr)` when
      * there is no subscription.
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with
+     * <p>Note that this method does not work when DXEndpoint was created with
      * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (never fills in the event).
      *
      * @tparam E The type of event.
@@ -372,7 +372,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
+     * auto sub = endpoint->getFeed()->createSubscription({dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE});
      * ```
      *
      * @param eventTypes The initializer list of event types
@@ -382,17 +383,19 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes DXFeed::attachSubscription().
+     * This method creates a new DXFeedSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription(std::unordered_set{dxfcpp::Quote::TYPE,
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
+     * auto sub = endpoint->getFeed()->createSubscription(std::unordered_set{dxfcpp::Quote::TYPE,
      * dxfcpp::TimeAndSale::TYPE});
      * ```
      *
      * ```cpp
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
      * std::vector types = {dxfcpp::Quote::TYPE, dxfcpp::TimeAndSale::TYPE};
-     * auto sub = dxfcpp::DXFeed::getInstance()->createSubscription(types);
+     * auto sub = endpoint->getFeed()->createSubscription(types);
      * ```
      *
      * @tparam EventTypesCollection The class of the collection of event types
@@ -400,11 +403,13 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypesCollection>
-    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypesCollection &&eventTypes) {
+    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypesCollection &eventTypes) {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::createSubscription(eventTypes = " +
-                            namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
+            auto begin = std::begin(eventTypes);
+            auto end = std::end(eventTypes);
+
+            Debugger::debug(toString() + "::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
         }
 
         auto sub = DXFeedSubscription::create(eventTypes);
@@ -415,12 +420,13 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
-     * Creates new subscription for a single event type that is <i>attached</i> to this feed.
-     * This method creates new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
+     * Creates a new subscription for a single event type that is <i>attached</i> to this feed.
+     * This method creates a new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(dxfcpp::TimeAndSale::TYPE);
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
+     * auto sub = endpoint->getFeed()->createTimeSeriesSubscription(dxfcpp::TimeAndSale::TYPE);
      * ```
      *
      * @param eventType The type of event
@@ -434,9 +440,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * Example:
      * ```cpp
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
      * auto eventTypes = {dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE};
-     *
-     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(eventTypes.begin(), eventTypes.end());
+     * auto sub = endpoint->getFeed()->createTimeSeriesSubscription(eventTypes.begin(), eventTypes.end());
      * ```
      *
      * ```cpp
@@ -486,11 +492,12 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
+     * This method creates a new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
-     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription({dxfcpp::Underlying::TYPE,
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
+     * auto sub = endpoint->getFeed()->createTimeSeriesSubscription({dxfcpp::Underlying::TYPE,
      * dxfcpp::TimeAndSale::TYPE});
      * ```
      *
@@ -502,18 +509,20 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
-     * This method creates new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
+     * This method creates a new DXFeedTimeSeriesSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
      * auto sub =
-     * dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(std::unordered_set{dxfcpp::Underlying::TYPE,
-     * dxfcpp::TimeAndSale::TYPE});
+     *     endpoint->getFeed()->createTimeSeriesSubscription(std::unordered_set{dxfcpp::Underlying::TYPE,
+     *                                                                          dxfcpp::TimeAndSale::TYPE});
      * ```
      *
      * ```cpp
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
      * std::vector types = {dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE};
-     * auto sub = dxfcpp::DXFeed::getInstance()->createTimeSeriesSubscription(types);
+     * auto sub = endpoint->getFeed()->createTimeSeriesSubscription(types);
      * ```
      *
      * @tparam EventTypesCollection The class of the collection of event types
@@ -521,33 +530,40 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypesCollection>
-    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypesCollection &&eventTypes) {
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypesCollection &eventTypes) {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::createTimeSeriesSubscription(eventTypes = " +
-                            namesToString(std::begin(eventTypes), std::end(eventTypes)) + ")");
+            auto dbgBegin = std::begin(eventTypes);
+            auto dbgEnd = std::end(eventTypes);
+
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(toString() +
+                            "::createTimeSeriesSubscription(eventTypes = " + namesToString(dbgBegin, dbgEnd) + ")");
         }
 
-        return createTimeSeriesSubscription(std::begin(eventTypes), std::end(eventTypes));
+        auto begin = std::begin(eventTypes);
+        auto end = std::end(eventTypes);
+
+        return createTimeSeriesSubscription(begin, end);
     }
 
     /**
      * Requests the last event for the specified event type and symbol.
      * This method works only for event types that implement LastingEvent marker "interface".
-     * This method requests the data from the uplink data provider, creates new event of the specified event type,
+     * This method requests the data from the uplink data provider, creates a new event of the specified event type
      * and completes the resulting promise with this event.
      *
-     * <p>The promise is cancelled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
-     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc),
+     * <p>The promise is canceled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc.),
      * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
-     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * Use Promise::await() method to specify timeout while waiting for a promise to complete.
      * If the event is permanently not available (not supported), then the promise completes exceptionally with
      * JavaException "IllegalArgumentException".
      *
      * <p>There is a bulk version of this method that works much faster for a single event type and multiple symbols.
-     * See getLastEventsPromises() .
+     * See getLastEventsPromises().
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
+     * <p>Note that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
      *
      * @tparam E The type of event.
@@ -563,14 +579,14 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * Requests the last events for the specified event type and a collection of symbols.
      * This method works only for event types that implement LastingEvent marker "interface".
      * This method requests the data from the the uplink data provider,
-     * creates new events of the specified evet type, and completes the resulting promises with these events.
+     * creates new events of the specified evet type and completes the resulting promises with these events.
      *
      * <p>This is a bulk version of DXFeed::getLastEventPromise() method.
      *
-     * <p>The promise is cancelled when the the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
-     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc),
+     * <p>The promise is canceled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc.),
      * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
-     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * Use Promise::await() method to specify timeout while waiting for a promise to complete.
      * If the event is permanently not available (not supported), then the promise
      * completes exceptionally with JavaException "IllegalArgumentException".
      *
@@ -578,15 +594,18 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * events) and wait with a single timeout for all of them:
      *
      * ```cpp
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
      * std::vector<dxfcpp::SymbolWrapper> symbols{"AAPL&Q", "IBM&Q"};
-     * auto promises = DXFeed::getInstance()->getLastEventsPromises<Quote>(symbols.begin(), symbols.end());
+     * auto promises = endpoint->getFeed()->getLastEventsPromises<Quote>(symbols.begin(), symbols.end());
      *
      * // combine the list of promises into one with Promises utility method and wait
-     * Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
+     * dxfcpp::Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
      *
      * // now iterate the promises to retrieve results
      * for (const auto& promise : *promises) {
-     *     doSomethingWith(promise->getResult()); // InvalidArgumentException if result is nullptr
+     *     auto quote = promise.getResult(); // InvalidArgumentException if result is nullptr
+     *     doSomethingWith(quote);
+     *     // std::cout << quote->toString() << std::endl;
      * }
      * ```
      *
@@ -609,15 +628,15 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     /**
      * Requests the last events for the specified event type and a collection of symbols.
      * This method works only for event types that implement LastingEvent marker "interface".
-     * This method requests the data from the the uplink data provider,
-     * creates new events of the specified evet type, and completes the resulting promises with these events.
+     * This method requests the data from the uplink data provider,
+     * creates new events of the specified evet type and completes the resulting promises with these events.
      *
      * <p>This is a bulk version of DXFeed::getLastEventPromise() method.
      *
-     * <p>The promise is cancelled when the the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
-     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc),
+     * <p>The promise is cancelled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc.),
      * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
-     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * Use Promise::await() method to specify timeout while waiting for a promise to complete.
      * If the event is permanently not available (not supported), then the promise
      * completes exceptionally with JavaException "IllegalArgumentException".
      *
@@ -625,15 +644,16 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * events) and wait with a single timeout for all of them:
      *
      * ```cpp
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
      * std::vector<dxfcpp::SymbolWrapper> symbols{"AAPL&Q", "IBM&Q"};
-     * auto promises = DXFeed::getInstance()->getLastEventsPromises<Quote>(symbols);
+     * auto promises = endpoint->getFeed()->getLastEventsPromises<Quote>(symbols);
      *
      * // combine the list of promises into one with Promises utility method and wait
-     * Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
+     * dxfcpp::Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
      *
      * // now iterate the promises to retrieve results
      * for (const auto& promise : *promises) {
-     *     doSomethingWith(promise->getResult()); // InvalidArgumentException if result is nullptr
+     *     doSomethingWith(promise.getResult()); // InvalidArgumentException if result is nullptr
      * }
      * ```
      *
@@ -641,27 +661,30 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * "STREAM_FEED" role (promise completes exceptionally).
      *
      * @tparam E The event type.
-     * @tparam SymbolsCollection The symbols collection's type.
-     * @param collection The symbols collection.
-     * @return The list of promises for the result of the requests, one item in list per symbol.
+     * @tparam SymbolsCollection The symbol collection's type.
+     * @param collection The symbol collection.
+     * @return The list of promises for the result of the requests, one item in the list per symbol.
      */
     template <Derived<LastingEvent> E, ConvertibleToSymbolWrapperCollection SymbolsCollection>
-    std::shared_ptr<PromiseList<E>> getLastEventsPromises(SymbolsCollection &&collection) const {
-        return getLastEventsPromises<E>(std::begin(collection), std::end(collection));
+    std::shared_ptr<PromiseList<E>> getLastEventsPromises(const SymbolsCollection &collection) const {
+        auto begin = std::begin(collection);
+        auto end = std::end(collection);
+
+        return getLastEventsPromises<E>(begin, end);
     }
 
     /**
      * Requests the last events for the specified event type and a collection of symbols.
      * This method works only for event types that implement LastingEvent marker "interface".
-     * This method requests the data from the the uplink data provider,
-     * creates new events of the specified evet type, and completes the resulting promises with these events.
+     * This method requests the data from the uplink data provider,
+     * creates new events of the specified event type and completes the resulting promises with these events.
      *
      * <p>This is a bulk version of DXFeed::getLastEventPromise() method.
      *
-     * <p>The promise is cancelled when the the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
-     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc),
+     * <p>The promise is canceled when the underlying DXEndpoint is @ref DXEndpoint::close() "closed".
+     * If the event is not available for any transient reason (no subscription, no connection to uplink, etc.),
      * then the resulting promise completes when the issue is resolved, which may involve an arbitrarily long wait.
-     * Use Promise::await() method to specify timeout while waiting for promise to complete.
+     * Use Promise::await() method to specify timeout while waiting for a promise to complete.
      * If the event is permanently not available (not supported), then the promise
      * completes exceptionally with JavaException "IllegalArgumentException".
      *
@@ -669,14 +692,15 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * events) and wait with a single timeout for all of them:
      *
      * ```cpp
-     * auto promises = DXFeed::getInstance()->getLastEventsPromises<Quote>({"AAPL&Q", "IBM&Q"});
+     * const auto endpoint = dxfcpp::DXEndpoint::create()->connect(address);
+     * auto promises = endpoint->getFeed()->getLastEventsPromises<Quote>({"AAPL&Q", "IBM&Q"});
      *
      * // combine the list of promises into one with Promises utility method and wait
-     * Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
+     * dxfcpp::Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(timeout));
      *
      * // now iterate the promises to retrieve results
      * for (const auto& promise : *promises) {
-     *     doSomethingWith(promise->getResult()); // InvalidArgumentException if result is nullptr
+     *     doSomethingWith(promise.getResult()); // InvalidArgumentException if result is nullptr
      * }
      * ```
      *
@@ -684,7 +708,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * "STREAM_FEED" role (promise completes exceptionally).
      *
      * @tparam E The event type.
-     * @param collection The symbols collection.
+     * @param collection The symbol collection.
      * @return The list of promises for the result of the requests, one item in list per symbol.
      */
     template <Derived<LastingEvent> E>
@@ -693,10 +717,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
-     * Requests a container of indexed events for the specified event type, symbol, and source.
+     * Requests a container of indexed events for the specified event type, symbol and source.
      * This method works only for event types that implement IndexedEvent "interface".
      * This method requests the data from the uplink data provider, creates a container of events of the specified
-     * event type `E`, and completes the resulting promise with this container. The events are ordered by @ref
+     * event type `E` and completes the resulting promise with this container. The events are ordered by @ref
      * IndexedEvent::getIndex() "index" in the container.
      *
      * <p> This method is designed for retrieval of a snapshot only.
@@ -709,10 +733,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * If the events are permanently not available (not supported), then the promise
      * completes exceptionally with JavaException "IllegalArgumentException".
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with
+     * <p>Note that this method does not work when DXEndpoint was created with
      * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (promise completes exceptionally).
      *
-     * <h3>Event source</h3>
+     * <h3>Event source.</h3>
      *
      * Use the @ref IndexedEventSource::DEFAULT "DEFAULT" value for `source` with events that do not
      * have multiple sources (like Series). For events with multiple sources (like Order,
@@ -730,7 +754,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * the data feed. The @ref IndexedEvent::getEventFlags() "eventFlags" property of the events in the resulting vector
      * is always zero.
      *
-     * <p>Note, that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
+     * <p>Note that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
      * the latter expects events in a different order and with an appropriate flags set. See documentation on a specific
      * event class for details on how they should be published.
      *
@@ -747,11 +771,11 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
-     * Returns a vector of indexed events for the specified event type, symbol, and source if there is a subscription
+     * Returns a vector of indexed events for the specified event type, symbol and source if there is a subscription
      * for it. This method works only for event types that implement IndexedEvent interface. This method <b>does not</b>
      * make any remote calls to the uplink data provider. It just retrieves last received events from the local cache of
      * this feed. The events are stored in the cache only if there is some attached DXFeedSubscription that is
-     * subscribed to the corresponding event type, symbol, and source. The subscription can also be permanently defined
+     * subscribed to the corresponding event type, symbol and source. The subscription can also be permanently defined
      * using DXEndpoint properties. If there is no subscription, then this method returns an empty vector.
      * Otherwise, it creates a vector of events of the specified event type `E` and returns it.
      *
@@ -763,10 +787,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Use @ref DXFeed::getIndexedEventsPromise() "getIndexedEventsPromise" method
      * if events need to be requested in the absence of subscription.
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
+     * <p>Note that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (always returns an empty vector).
      *
-     * <h3>Event source</h3>
+     * <h3>Event source.</h3>
      *
      * Use the @ref IndexedEventSource::DEFAULT "DEFAULT" value for `source` with events that do not
      * have multiple sources (like Series). For events with multiple sources (like Order, AnalyticOrder,
@@ -786,7 +810,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * is always zero regardless. Use @ref DXFeed::getIndexedEventsPromise() "getIndexedEventsPromise" method
      * if a consistent snapshot of events needs to be requested.
      *
-     * <p>Note, that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
+     * <p>Note that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
      * the latter expects events in a different order and with an appropriate flags set. See documentation on a specific
      * event class for details on how they should be published.
      *
@@ -794,7 +818,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param symbol The symbol.
      * @param source The source.
      * @return The vector of events or an empty vector if there is no subscription for the specified event
-     * type, symbol, and source.
+     * type, symbol and source.
      */
     template <Derived<IndexedEvent> E>
     std::vector<std::shared_ptr<E>> getIndexedEventsIfSubscribed(const SymbolWrapper &symbol,
@@ -803,11 +827,11 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
-     * Requests time series of events for the specified event type, symbol, and a range of time.
+     * Requests time series of events for the specified event type, symbol and a range of time.
      *
      * This method works only for event types that implement TimeSeriesEvent "interface".
      * This method requests the data from the uplink data provider, creates a vector of events of the specified
-     * event type `E`, and completes the resulting promise with this container.
+     * event type `E` and completes the resulting promise with this container.
      *
      * The events are ordered by @ref TimeSeriesEvent::getTime() "time" in the container.
      *
@@ -838,7 +862,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * the data feed. The @ref IndexedEvent::getEventFlags() "eventFlags" property of the events in the resulting
      * container is always zero.
      *
-     * <p>Note, that the resulting container <em>should not</em> be used with DXPublisher::publishEvents() method,
+     * <p>Note that the resulting container <em>should not</em> be used with DXPublisher::publishEvents() method,
      * because the latter expects events in a different order and with an appropriate flags set. See documentation on a
      * specific event class for details on how they should be published.
      *
@@ -858,10 +882,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
-     * Returns time series of events for the specified event type, symbol, and a range of time if there is a
+     * Returns time series of events for the specified event type, symbol and a range of time if there is a
      * subscription for it. This method <b>does not</b> make any remote calls to the uplink data provider. It just
      * retrieves last received events from the local cache of this feed. The events are stored in the cache only if
-     * there is some attached DXFeedSubscription that is subscribed to the corresponding event type, symbol, and time.
+     * there is some attached DXFeedSubscription that is subscribed to the corresponding event type, symbol and time.
      * The subscription can also be permanently defined using DXEndpoint properties.
      * If there is no subscription, then this method returns an empty vector.
      * Otherwise, it creates a vector of events of the specified event type `E` and returns it.
@@ -874,7 +898,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Use @ref DXFeed::getTimeSeriesPromise() "getTimeSeriesPromise" method
      * if events need to be requested in the absence of subscription.
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with
+     * <p>Note that this method does not work when DXEndpoint was created with
      * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (always returns an empty vector).
      *
      * <p>This method does not accept an instance of TimeSeriesSubscriptionSymbol as a `symbol`.
@@ -883,15 +907,15 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <h3>Event flags and consistent snapshot</h3>
      *
-     * This method returns a vector of events that are currently in the cache without any wait or delay
+     * This method returns a vector of events that are currently in the cache without any wait or delay,
      * and it <b>does not</b> guarantee that a consistent snapshot of events is returned.
      * See IndexedEvent documentation for details.
      * The @ref IndexedEvent::getEventFlags() "eventFlags" property of the events in the resulting vector
      * is always zero regardless. Use @ref DXFeed::getTimeSeriesPromise() "getTimeSeriesPromise" method
      * if a consistent snapshot of events needs to be requested.
      *
-     * <p>Note, that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
-     * the later expects events in a different order and with an appropriate flags set. See documentation on a specific
+     * <p>Note that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
+     * the latter expects events in a different order and with an appropriate flags set. See documentation on a specific
      * event class for details on how they should be published.
      *
      * @tparam E The type of event.
@@ -900,7 +924,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param toTime The time, inclusive, to request events to (see TimeSeriesEvent::getTime()).
      *               Use `std::numeric_limits<std::int64_t>::max()` or `LLONG_MAX` macro to retrieve events without an
      *               upper limit on time.
-     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol,
+     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol
      * and time range.
      */
     template <Derived<TimeSeriesEvent> E>
@@ -910,10 +934,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
-     * Returns time series of events for the specified event type, symbol, and a range of time if there is a
+     * Returns time series of events for the specified event type, symbol and a range of time if there is a
      * subscription for it. This method <b>does not</b> make any remote calls to the uplink data provider. It just
      * retrieves last received events from the local cache of this feed. The events are stored in the cache only if
-     * there is some attached DXFeedSubscription that is subscribed to the corresponding event type, symbol, and time.
+     * there is some attached DXFeedSubscription that is subscribed to the corresponding event type, symbol and time.
      * The subscription can also be permanently defined using DXEndpoint properties.
      * If there is no subscription, then this method returns an empty vector.
      * Otherwise, it creates a vector of events of the specified event type `E` and returns it.
@@ -926,7 +950,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Use @ref DXFeed::getTimeSeriesPromise() "getTimeSeriesPromise" method
      * if events need to be requested in the absence of subscription.
      *
-     * <p>Note, that this method does not work when DXEndpoint was created with
+     * <p>Note that this method does not work when DXEndpoint was created with
      * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role (always returns an empty vector).
      *
      * <p>This method does not accept an instance of TimeSeriesSubscriptionSymbol as a `symbol`.
@@ -935,15 +959,15 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <h3>Event flags and consistent snapshot</h3>
      *
-     * This method returns a vector of events that are currently in the cache without any wait or delay
+     * This method returns a vector of events that are currently in the cache without any wait or delay,
      * and it <b>does not</b> guarantee that a consistent snapshot of events is returned.
      * See IndexedEvent documentation for details.
      * The @ref IndexedEvent::getEventFlags() "eventFlags" property of the events in the resulting vector
      * is always zero regardless. Use @ref DXFeed::getTimeSeriesPromise() "getTimeSeriesPromise" method
      * if a consistent snapshot of events needs to be requested.
      *
-     * <p>Note, that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
-     * the later expects events in a different order and with an appropriate flags set. See documentation on a specific
+     * <p>Note that the resulting vector <em>should not</em> be used with DXPublisher::publishEvents() method, because
+     * the latter expects events in a different order and with an appropriate flags set. See documentation on a specific
      * event class for details on how they should be published.
      *
      * @tparam E The type of event.
@@ -952,7 +976,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param toTime The time, inclusive, to request events to (see TimeSeriesEvent::getTime()).
      * Use `std::chrono::milliseconds(std::numeric_limits<std::int64_t>::max())`
      * or `std::chrono::milliseconds(LLONG_MAX)` to retrieve events without an upper limit on time.
-     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol,
+     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol
      * and time range.
      */
     template <Derived<TimeSeriesEvent> E>
@@ -963,12 +987,12 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
-     * Returns time series of events for the specified event type, symbol, and a range of time (without an upper limit
+     * Returns time series of events for the specified event type, symbol and a range of time (without an upper limit
      * on time) if there is a subscription for it.
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
-     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol,
+     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol
      * and time range.
      */
     template <Derived<TimeSeriesEvent> E>
@@ -978,12 +1002,12 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     }
 
     /**
-     * Returns time series of events for the specified event type, symbol, and a range of time (without an upper limit
+     * Returns time series of events for the specified event type, symbol and a range of time (without an upper limit
      * on time) if there is a subscription for it.
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
-     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol,
+     * @return the vector of events or an empty vector if there is no subscription for the specified event type, symbol
      * and time range.
      */
     template <Derived<TimeSeriesEvent> E>

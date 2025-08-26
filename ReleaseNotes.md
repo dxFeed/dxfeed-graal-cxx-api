@@ -1,3 +1,10 @@
+## v4.3.1
+
+* **\[MDAPI-275]\[C++]** Fixed compilation of code using `DXFeed::getLastEventsPromises()` method.
+    * Added unit-tests for `DXFeed::getLastEventsPromises()` method.
+    * Fixed documentation for `DXFeed::getLastEventsPromises()` method.
+    * Added `testQuotePromises` function to the `QuoteAndTradeSample` to demonstrate how to use `DXFeed::getLastEventsPromises()`. 
+
 ## v4.3.0
 
 * **\[MDAPI-108]\[С++]** Added CandleWebService API sample.
