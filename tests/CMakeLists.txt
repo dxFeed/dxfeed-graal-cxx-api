@@ -33,6 +33,7 @@ set(DXFC_TEST_SOURCES
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp
         model/MarketDepthModelTest.cpp
+        promise/PromisesTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp)

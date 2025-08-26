@@ -15,7 +15,28 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 /**
- * Utility methods to manipulate @ref Promise "promises".
+ * @class Promises
+ *
+ * @brief A class that represents a promise-based implementation often used for
+ * handling asynchronous operations.
+ *
+ * This class provides a framework for handling asynchronous tasks by
+ * encapsulating the eventual success (resolution) or failure (rejection)
+ * of an operation. It enables chaining of asynchronous operations using
+ * methods like then, catch, and finally.
+ *
+ * The Promises class is designed to streamline the processing of
+ * asynchronous workflows, reducing callback nesting and improving
+ * readability and maintainability of asynchronous code.
+ *
+ * The functionality includes:
+ * - Resolving and rejecting a promise.
+ * - Attaching callbacks to handle resolved or rejected states.
+ * - Chaining operations to execute subsequent tasks in sequence.
+ *
+ * The Promises class follows the native promise behavior in programming
+ * languages like JavaScript to facilitate deferred computation and eventual
+ * state handling.
  */
 struct DXFCPP_EXPORT Promises {
     private:
@@ -26,33 +47,75 @@ struct DXFCPP_EXPORT Promises {
      * Returns a new promise that completes when all promises from the given collection complete normally or
      * exceptionally. The results of the given promises are not reflected in the returned promise, but may be obtained
      * by inspecting them individually. If no promises are provided, returns a promise completed with the value `void`.
-     * When the resulting promise completes for any reason (is canceled, for example)
-     * then all of the promises from the given array are canceled.
+     * When the resulting promise completes for any reason (is canceled, for example),
+     * then all the promises from the given array are canceled.
      *
-     * @tparam Collection The collection type. For example: PromiseList<LastingEvent> (i.e.
+     * @tparam Collection The collection type. For example, PromiseList<LastingEvent> (i.e.
      * std::vector<Promise<std::shared_ptr<LastingEvent>>>) or
      * std::vector<std::shared_ptr<Promise<std::shared_ptr<LastingEvent>>>>.
      * @param collection The collection of promises or collection of pointer-like of promises
      * @return A new promise that completes when all promises from the given array complete.
      */
     template <typename Collection> static std::shared_ptr<Promise<void>> allOf(Collection &&collection) {
-        std::vector<void *> handles{};
+        using ElemRef = decltype(*begin(collection));
+        using Elem = std::remove_cvref_t<ElemRef>;
 
+        // Determine whether elements are pointer-like or value-like exactly once.
+        constexpr bool hasPtrHandle = requires(const Elem &x) { x->impl.handle; };
+        constexpr bool hasValHandle = requires(const Elem &x) { x.impl.handle; };
+
+        static_assert(hasPtrHandle || hasValHandle,
+                      "Promises::allOf: Collection element must be Promise-like with impl.handle accessible via "
+                      "either e->impl.handle (pointer-like) or e.impl.handle (value-like).");
+
+        std::vector<void *> handles{};
         handles.reserve(std::size(collection));
 
-        for (const auto &e : collection) {
-            if constexpr (requires { e->impl.handle; }) { // std::shared_ptr<Promise<std::shared_ptr<Event>>
+        if constexpr (hasPtrHandle) {
+            for (const auto &e : collection) {
                 handles.emplace_back(e->impl.handle);
-            } else if constexpr (requires {
-                                     e.impl.handle;
-                                 }) { // Promise<std::shared_ptr<Event> (PromiseList<Event> etc)
+            }
+        } else { // hasValHandle
+            for (const auto &e : collection) {
                 handles.emplace_back(e.impl.handle);
             }
         }
 
-        handles.shrink_to_fit();
-
         return allOfImpl(handles);
+    }
+
+    /**
+     * Returns a new promise that completes when all promises from the given collection complete normally or
+     * exceptionally. The results of the given promises are not reflected in the returned promise, but may be obtained
+     * by inspecting them individually. If no promises are provided, returns a promise completed with the value `void`.
+     * When the resulting promise completes for any reason (is canceled, for example),
+     * then all the promises from the given array are canceled.
+     *
+     * @tparam Collection The collection type. For example, PromiseList<LastingEvent> (i.e.
+     * std::vector<Promise<std::shared_ptr<LastingEvent>>>) or
+     * std::vector<std::shared_ptr<Promise<std::shared_ptr<LastingEvent>>>>.
+     * @param collection The smart pointer to the collection of promises or collection of pointer-like of promises
+     * @return A new promise that completes when all promises from the given array complete.
+     */
+    template <typename Collection> static std::shared_ptr<Promise<void>> allOf(std::shared_ptr<Collection> collection) {
+        return allOf(*collection);
+    }
+
+    /**
+     * Returns a new promise that completes when all promises from the given collection complete normally or
+     * exceptionally. The results of the given promises are not reflected in the returned promise, but may be obtained
+     * by inspecting them individually. If no promises are provided, returns a promise completed with the value `void`.
+     * When the resulting promise completes for any reason (is canceled, for example),
+     * then all the promises from the given array are canceled.
+     *
+     * @tparam Collection The collection type. For example, PromiseList<LastingEvent> (i.e.
+     * std::vector<Promise<std::shared_ptr<LastingEvent>>>) or
+     * std::vector<std::shared_ptr<Promise<std::shared_ptr<LastingEvent>>>>.
+     * @param collection The smart pointer to the collection of promises or collection of pointer-like of promises
+     * @return A new promise that completes when all promises from the given array complete.
+     */
+    template <typename Collection> static std::shared_ptr<Promise<void>> allOf(std::unique_ptr<Collection> collection) {
+        return allOf(*collection);
     }
 };
 

@@ -6,6 +6,7 @@
 #include <chrono>
 #include <iostream>
 #include <memory>
+#include <format>
 
 using namespace dxfcpp;
 using namespace std::literals;
@@ -27,8 +28,25 @@ void testQuoteListener(const std::string &symbol) {
     subscription->addSymbols(symbol);
 }
 
+void testQuotePromises(const std::string &symbol) {
+    // Creates a subscription attached to a default DXFeed with a Quote event type.
+    // The endpoint address to use is stored in the "dxfeed.properties" file.
+
+    const auto promises = DXFeed::getInstance()->getLastEventsPromises<Quote>({symbol});
+
+    // combine the list of promises into one with Promises utility method and wait
+    Promises::allOf(*promises)->awaitWithoutException(std::chrono::seconds(5s));
+
+    // now iterate the promises to retrieve results
+    for (const auto &promise : *promises) {
+        const auto quote = promise.getResult();
+
+        std::cout << std::format("TQP: Mid = {}\n", std::to_string((quote->getBidPrice() + quote->getAskPrice()) / 2));
+    }
+}
+
 void testQuoteAndTradeListener(const std::string &symbol) {
-    // Creates a subscription attached to a default DXFeed with a Quote and Trade event types.
+    // Creates a subscription attached to a default DXFeed with Quote and Trade event types.
     // The endpoint address to use is stored in the "dxfeed.properties" file.
     const auto subscription = DXFeed::getInstance()->createSubscription({Quote::TYPE, Trade::TYPE});
 
@@ -95,6 +113,7 @@ Where:
         // Logging::init();
 
         testQuoteListener(symbol);
+        testQuotePromises(symbol);
         testQuoteAndTradeListener(symbol);
         testTradeSnapshots(symbol);
     } catch (const RuntimeException &e) {
