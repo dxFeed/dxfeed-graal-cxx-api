@@ -6,7 +6,6 @@
 #include <chrono>
 #include <iostream>
 #include <memory>
-#include <format>
 
 using namespace dxfcpp;
 using namespace std::literals;
@@ -39,9 +38,9 @@ void testQuotePromises(const std::string &symbol) {
 
     // now iterate the promises to retrieve results
     for (const auto &promise : *promises) {
-        const auto quote = promise.getResult();
+        const auto q = promise.getResult();
 
-        std::cout << std::format("TQP: Mid = {}\n", std::to_string((quote->getBidPrice() + quote->getAskPrice()) / 2));
+        std::cout << "Mid = " + std::to_string((q->getBidPrice() + q->getAskPrice()) / 2) + "\n";
     }
 }
 
