@@ -50,13 +50,13 @@ struct DXFCPP_EXPORT Promises {
      * When the resulting promise completes for any reason (is canceled, for example),
      * then all the promises from the given array are canceled.
      *
-     * @tparam Collection The collection type. For example, PromiseList<LastingEvent> (i.e.
+     * @tparam Collection The collection type. For example, PromiseList<LastingEvent> (i.e.,
      * std::vector<Promise<std::shared_ptr<LastingEvent>>>) or
      * std::vector<std::shared_ptr<Promise<std::shared_ptr<LastingEvent>>>>.
-     * @param collection The collection of promises or collection of pointer-like of promises
+     * @param collection The collection of promises or collection of pointer-likes of promises
      * @return A new promise that completes when all promises from the given array complete.
      */
-    template <typename Collection> static std::shared_ptr<Promise<void>> allOf(Collection &&collection) {
+    template <typename Collection> static std::shared_ptr<Promise<void>> allOf(const Collection &collection) {
         using ElemRef = decltype(*begin(collection));
         using Elem = std::remove_cvref_t<ElemRef>;
 
@@ -91,10 +91,10 @@ struct DXFCPP_EXPORT Promises {
      * When the resulting promise completes for any reason (is canceled, for example),
      * then all the promises from the given array are canceled.
      *
-     * @tparam Collection The collection type. For example, PromiseList<LastingEvent> (i.e.
+     * @tparam Collection The collection type. For example, PromiseList<LastingEvent> (i.e.,
      * std::vector<Promise<std::shared_ptr<LastingEvent>>>) or
      * std::vector<std::shared_ptr<Promise<std::shared_ptr<LastingEvent>>>>.
-     * @param collection The smart pointer to the collection of promises or collection of pointer-like of promises
+     * @param collection The smart pointer to the collection of promises or collection of pointer-likes of promises
      * @return A new promise that completes when all promises from the given array complete.
      */
     template <typename Collection> static std::shared_ptr<Promise<void>> allOf(std::shared_ptr<Collection> collection) {
@@ -111,7 +111,7 @@ struct DXFCPP_EXPORT Promises {
      * @tparam Collection The collection type. For example, PromiseList<LastingEvent> (i.e.
      * std::vector<Promise<std::shared_ptr<LastingEvent>>>) or
      * std::vector<std::shared_ptr<Promise<std::shared_ptr<LastingEvent>>>>.
-     * @param collection The smart pointer to the collection of promises or collection of pointer-like of promises
+     * @param collection The smart pointer to the collection of promises or collection of pointer-likes of promises
      * @return A new promise that completes when all promises from the given array complete.
      */
     template <typename Collection> static std::shared_ptr<Promise<void>> allOf(std::unique_ptr<Collection> collection) {
