@@ -1,3 +1,7 @@
+## v4.4.0
+
+* **\[MDAPI-262]\[C++]\[Linux]** Shared libraries now compiled with `noexecstack` flag.
+
 ## v4.3.1
 
 * **\[MDAPI-275]\[C++]** Fixed compilation of code using `DXFeed::getLastEventsPromises()` method.
