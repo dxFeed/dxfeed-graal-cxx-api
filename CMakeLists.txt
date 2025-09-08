@@ -511,20 +511,25 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_definitions(${PROJECT_NAME}_static PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
 endif ()
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS ${DXFCXX_GCC_LIKE_COMPILE_OPTIONS} "-Wa,--noexecstack")
+    set(DXFCXX_GCC_LIKE_LINK_OPTIONS ${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack")
+endif ()
+
 target_compile_options(${PROJECT_NAME}
         PUBLIC
         $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
         $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS} "-Wa,--noexecstack">
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS} "-Wa,--noexecstack">
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
 )
 
 target_link_options(${PROJECT_NAME}
         PUBLIC
         $<$<AND:$<COMPILE_LANG_AND_ID:CXX,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
         $<$<AND:$<COMPILE_LANG_AND_ID:C,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack">
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack">
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
 )
 
 if (MINGW)
