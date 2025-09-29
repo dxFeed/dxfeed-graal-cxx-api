@@ -1,6 +1,7 @@
 ## v4.4.0
 
 * **\[MDAPI-262]\[C++]\[Linux]** Shared libraries now compiled with `noexecstack` flag.
+* **\[MDAPI-238]\[С++]** Added the ability to set Java System properties.
 
 ## v4.3.1
 

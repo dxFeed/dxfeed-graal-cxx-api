@@ -20,4 +20,5 @@
    SPDX-License-Identifier: MIT
 10. portals - https://github.com/ttldtor/portals/blob/default/LICENSE.txt  
     SPDX-License-Identifier: BSL-1.0
-   
+11. inipp - https://github.com/mcmtroffaes/inipp/blob/develop/LICENSE.txt  
+    SPDX-License-Identifier: MIT
