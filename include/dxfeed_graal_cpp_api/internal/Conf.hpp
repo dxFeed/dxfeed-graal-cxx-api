@@ -3,6 +3,15 @@
 
 #pragma once
 
+#ifdef _WIN32
+    #ifndef NOMINMAX
+        #define NOMINMAX
+    #endif
+    #ifndef WIN32_LEAN_AND_MEAN
+        #define WIN32_LEAN_AND_MEAN
+    #endif
+#endif
+
 #ifdef _WINNT_
 #    error Please, include windows.h or winnt.h after dxFeed Graal CXX API headers
 #endif

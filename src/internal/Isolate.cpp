@@ -7,6 +7,42 @@
 
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 
+#include <config/config.hpp>
+
+#include <cstdlib>
+
+#ifdef NO_ERROR
+#    undef NO_ERROR
+#endif
+
+#ifdef _WIN32
+std::optional<std::string> getEnvironmentVariable(const std::string &name) {
+    std::size_t requiredSize = 0;
+
+    getenv_s(&requiredSize, nullptr, 0, name.c_str());
+
+    if (requiredSize == 0) {
+        return std::nullopt;
+    }
+
+    std::string buffer(requiredSize, '\0');
+
+    if (getenv_s(&requiredSize, buffer.data(), requiredSize, name.c_str()) != 0) {
+        return std::nullopt;
+    }
+
+    buffer.resize(requiredSize - 1);
+
+    return buffer;
+}
+#else
+std::optional<std::string> getEnvironmentVariable(const std::string &name) {
+    const char *value = std::getenv(name.c_str());
+
+    return value ? std::optional<std::string>(value) : std::nullopt;
+}
+#endif
+
 DXFCPP_BEGIN_NAMESPACE
 
 CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
@@ -132,6 +168,35 @@ GraalIsolateThreadHandle Isolate::get() noexcept {
     }
 
     return static_cast<void *>(graal_get_current_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_)));
+}
+
+void Isolate::init(Isolate &isolate) noexcept {
+    namespace otc = org::ttldtor::config;
+    static auto ENV_PREFIX = "DXFEED_";
+    static auto DXFEED_SYSTEM_PROPERTIES = "dxfeed.system.properties";
+
+    if constexpr (Debugger::traceIsolates) {
+        Debugger::trace("init()");
+    }
+
+    const auto propsFile = [] {
+        const auto fileNameEnv = std::string(ENV_PREFIX) + DXFEED_SYSTEM_PROPERTIES;
+
+        return getEnvironmentVariable(fileNameEnv).value_or(std::string(DXFEED_SYSTEM_PROPERTIES));
+    }();
+
+    otc::Config config{};
+
+    config.addSource(otc::IniSource(propsFile));
+    config.addSource(otc::EnvSource(ENV_PREFIX));
+
+    for (auto &&[k, v] : config) {
+        isolate.runIsolated([key = k, value = v](auto threadHandle) {
+            return static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(
+                       static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
+                   CEntryPointErrorsEnum::NO_ERROR;
+        });
+    }
 }
 
 DXFCPP_END_NAMESPACE

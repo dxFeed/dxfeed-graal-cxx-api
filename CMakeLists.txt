@@ -31,7 +31,7 @@ set(CONSOLE_VERSION "1.0.1")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
 set(CPM_CMAKE_VERSION "v0.40.2")
-set(INIPP_VERSION "1.0.13")
+set(CONFIG_VERSION "1.0.0")
 
 include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 
@@ -212,7 +212,7 @@ if (DXFCXX_FEATURE_STACKTRACE)
     )
 endif ()
 
-add_subdirectory(third_party/inipp-${INIPP_VERSION})
+add_subdirectory(third_party/config-${CONFIG_VERSION})
 
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
@@ -568,8 +568,8 @@ if (DXFCXX_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
 endif ()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date inipp)
-target_link_libraries(${PROJECT_NAME}_static PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date inipp)
+target_link_libraries(${PROJECT_NAME} PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config)
+target_link_libraries(${PROJECT_NAME}_static PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config)
 
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})

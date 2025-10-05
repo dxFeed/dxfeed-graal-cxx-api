@@ -78,6 +78,8 @@ class Isolate final {
 
     GraalIsolateThreadHandle get() noexcept;
 
+    static void init(Isolate &isolate) noexcept;
+
     public:
     Isolate(const Isolate &) = delete;
     Isolate &operator=(const Isolate &) = delete;
@@ -88,6 +90,11 @@ class Isolate final {
         }
 
         static Isolate instance{};
+        static std::once_flag flag{};
+
+        std::call_once(flag, []() {
+            init(instance);
+        });
 
         if constexpr (Debugger::traceIsolates) {
             Debugger::trace("Isolate::getInstance() -> " + instance.toString());

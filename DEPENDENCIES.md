@@ -15,7 +15,7 @@
 - [Console](https://github.com/ttldtor/Console) v1.0.1 (Tools)
 - [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) v0.40.2
 - [portals](https://github.com/ttldtor/portals) (Samples)
-- [inipp](https://github.com/mcmtroffaes/inipp) v1.0.13
+- [config](https://github.com/ttldtor/config) v1.0.0
 
 
 - On Windows:
