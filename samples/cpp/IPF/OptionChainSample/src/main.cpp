@@ -25,6 +25,8 @@ Where:
     <symbol>         - the product or underlying symbol
     <strikes-number> - a number of strikes to print for each series
     <months-number>  - a number of months to print
+Example:
+    OptionChainSample http://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip IBM 10 3
 )";
             return 0;
         }
@@ -40,7 +42,7 @@ Where:
 
         auto feed = DXFeed::getInstance();
 
-        // subscribe to trade to learn instrument last price
+        // subscribe to trade to learn an instrument last price
         std::cout << "Waiting for price of "s + symbol + " ...\n";
         const auto trade = feed->getLastEventPromise<Trade>(symbol)->await(1s);
 

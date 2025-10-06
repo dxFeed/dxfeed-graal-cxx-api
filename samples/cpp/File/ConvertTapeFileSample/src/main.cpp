@@ -9,7 +9,7 @@ using namespace std::literals;
 
 /**
  * Converts one tape file into another tape file with optional intermediate processing or filtering.
- * This project contains sample tape file ConvertTapeFile.in.
+ * This project contains a sample tape file `ConvertTapeFile.in`.
  */
 int main(int argc, char *argv[]) {
     try {
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         const std::string outputAddress =
             argc > 2 ? argv[1] : "tape:ConvertTapeFile.out[saveAs=stream_data,format=text]";
 
-        // Create input endpoint configured for tape reading.
+        // Create an input endpoint configured for tape reading.
         const auto inputEndpoint =
             DXEndpoint::newBuilder()
                 ->withRole(DXEndpoint::Role::STREAM_FEED) // Prevents event conflation and loss due to buffer overflow.
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
                 ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true")  // Use provided event times.
                 ->build();
 
-        // Create output endpoint configured for tape writing.
+        // Create an output endpoint configured for tape writing.
         auto outputEndpoint =
             DXEndpoint::newBuilder()
                 ->withRole(
@@ -66,11 +66,11 @@ int main(int argc, char *argv[]) {
         // Connect input endpoint and start input tape reading AFTER starting output tape writing.
         inputEndpoint->connect(inputAddress);
 
-        // Wait until all data is read and processed, and then gracefully close input endpoint.
+        // Wait until all data is read and processed, and then gracefully close the input endpoint.
         inputEndpoint->awaitNotConnected();
         inputEndpoint->closeAndAwaitTermination();
 
-        // Wait until all data is processed and written, and then gracefully close output endpoint.
+        // Wait until all data is processed and written, and then gracefully close the output endpoint.
         outputEndpoint->awaitProcessed();
         outputEndpoint->closeAndAwaitTermination();
     } catch (const RuntimeException &e) {

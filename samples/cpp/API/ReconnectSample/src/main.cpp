@@ -22,7 +22,7 @@ int main() {
         // Disable QD logging.
         // Logging::init();
 
-        // Create new endpoint and add a listener for state changes.
+        // Create a new endpoint and add a listener for state changes.
         const auto endpoint = DXEndpoint::create();
 
         endpoint->addStateChangeListener([](DXEndpoint::State oldState, DXEndpoint::State newState) {

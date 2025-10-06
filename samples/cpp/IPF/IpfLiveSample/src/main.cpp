@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
 
         connection->start();
 
-        // We can wait until we get first full snapshot of instrument profiles
+        // We can wait until we get the first full snapshot of instrument profiles
         connection->waitUntilCompleted(std::chrono::seconds(10));
 
         // Data model to keep all instrument profiles mapped by their ticker symbol
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
         collector->addUpdateListener([&profiles, &mutex, self = collector](auto &&instruments) {
             std::cout << "\nInstrument Profiles:" << std::endl;
             // We can observe REMOVED elements - need to add necessary filtering
-            // See javadoc for InstrumentProfileCollector for more details
+            // See documentation for `InstrumentProfileCollector` for more details
 
             // (1) We can either process instrument profile updates manually
             for (auto &&profile : instruments) {
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
                     // Profile was removed - remove it from our data model
                     profiles.erase(profile->getSymbol());
                 } else {
-                    // Profile was updated - collector only notifies us if profile was changed
+                    // Profile was updated - collector only notifies us if the profile was changed
                     profiles[profile->getSymbol()] = profile;
                 }
             }

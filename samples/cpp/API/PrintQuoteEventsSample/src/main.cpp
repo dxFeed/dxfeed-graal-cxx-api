@@ -6,9 +6,8 @@
 #include <iostream>
 
 /*
- * A simple sample that shows how to subscribe to quotes for one instrument,
- * and print all received quotes to the console.
- * Use default DXFeed instance for that data feed address is defined by "dxfeed.properties" file.
+ * A simple sample that shows how to subscribe to quotes for one instrument and print all received quotes to the
+ * console. Use the default DXFeed instance for that data feed address is defined by "dxfeed.system.properties" file.
  * The properties file is copied to the build output directory from the project directory.
  */
 int main(int argc, char *argv[]) {
@@ -22,7 +21,7 @@ int main(int argc, char *argv[]) {
         // Logging::init();
 
         // Creates a subscription attached to a default DXFeed with a Quote event type.
-        // The endpoint address to use is stored in the "dxfeed.properties" file.
+        // The endpoint address to use is stored in the "dxfeed.system.properties" file.
         const auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);
 
         // Listener must be attached before symbols are added.

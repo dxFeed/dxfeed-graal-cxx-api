@@ -47,22 +47,26 @@ DXFCPP_BEGIN_NAMESPACE
 
 CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
     if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::detach()");
     }
 
     // OK if nothing is attached.
     if (!handle) {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::detach(): !handle => Not attached");
         }
 
         return CEntryPointErrorsEnum::NO_ERROR;
     }
 
-    auto result = static_cast<CEntryPointErrorsEnum>(graal_detach_thread(static_cast<graal_isolatethread_t *>(handle)));
+    const auto result =
+        static_cast<CEntryPointErrorsEnum>(graal_detach_thread(static_cast<graal_isolatethread_t *>(handle)));
 
     if (result == CEntryPointErrorsEnum::NO_ERROR) {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::detach(): result == CEntryPointErrorsEnum::NO_ERROR => Detached");
         }
 
@@ -74,22 +78,25 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
 
 CEntryPointErrorsEnum Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate() noexcept {
     if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate()");
     }
 
     if (!handle) {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate(): !handle => Not attached");
         }
 
         return CEntryPointErrorsEnum::NO_ERROR;
     }
 
-    auto result = static_cast<CEntryPointErrorsEnum>(
+    const auto result = static_cast<CEntryPointErrorsEnum>(
         graal_detach_all_threads_and_tear_down_isolate(static_cast<graal_isolatethread_t *>(handle)));
 
     if (result == CEntryPointErrorsEnum::NO_ERROR) {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() +
                             "::detachAllThreadsAndTearDownIsolate(): CEntryPointErrorsEnum::NO_ERROR => All "
                             "threads have been detached. The isolate has been teared down.");
@@ -103,33 +110,38 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate
 
 Isolate::Isolate() noexcept : mtx_{} {
     if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("Isolate::Isolate()");
     }
 
     graal_isolate_t *graalIsolateHandle{};
     graal_isolatethread_t *graalIsolateThreadHandle{};
 
-    if (static_cast<CEntryPointErrorsEnum>(graal_create_isolate(
-            nullptr, &graalIsolateHandle, &graalIsolateThreadHandle)) == CEntryPointErrorsEnum::NO_ERROR) {
+    if (const auto result = static_cast<CEntryPointErrorsEnum>(
+            graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle));
+        result == CEntryPointErrorsEnum::NO_ERROR) {
 
         handle_ = graalIsolateHandle;
         currentIsolateThread_.handle = graalIsolateThreadHandle;
     }
 
     if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("Isolate::Isolate() -> " + std::string("Isolate{") + dxfcpp::toString(handle_) +
                         ", current = " + currentIsolateThread_.toString() + "}");
     }
 }
 
-CEntryPointErrorsEnum Isolate::attach() noexcept {
+CEntryPointErrorsEnum Isolate::attach() const noexcept {
     if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::attach()");
     }
 
     // We will not re-attach.
     if (!currentIsolateThread_.handle) {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::attach(): !currentIsolateThread_.handle => Needs to be attached.");
         }
 
@@ -140,6 +152,7 @@ CEntryPointErrorsEnum Isolate::attach() noexcept {
             result != CEntryPointErrorsEnum::NO_ERROR) {
 
             if constexpr (Debugger::traceIsolates) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::trace(toString() + "::attach(): result != CEntryPointErrorsEnum::NO_ERROR [" +
                                 std::to_string(static_cast<std::underlying_type_t<CEntryPointErrorsEnum>>(result)) +
                                 "] " + CEntryPointErrorsEnumToStr(result));
@@ -151,10 +164,12 @@ CEntryPointErrorsEnum Isolate::attach() noexcept {
         currentIsolateThread_.handle = newIsolateThreadHandle;
 
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::attach(): Attached: " + currentIsolateThread_.toString());
         }
     } else {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::attach(): Cached: " + currentIsolateThread_.toString());
         }
     }
@@ -164,9 +179,11 @@ CEntryPointErrorsEnum Isolate::attach() noexcept {
 
 GraalIsolateThreadHandle Isolate::get() noexcept {
     if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::get()");
     }
 
+    // ReSharper disable once CppRedundantCastExpression
     return static_cast<void *>(graal_get_current_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_)));
 }
 
@@ -176,6 +193,7 @@ void Isolate::init(Isolate &isolate) noexcept {
     static auto DXFEED_SYSTEM_PROPERTIES = "dxfeed.system.properties";
 
     if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("init()");
     }
 

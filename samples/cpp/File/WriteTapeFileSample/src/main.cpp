@@ -23,7 +23,7 @@ int main() {
         // Connect to the address, remove [format=text] or change on [format=binary] for binary format
         endpoint->connect("tape:WriteTapeFile.out.txt[format=text]");
 
-        // Get publisher.
+        // Get a publisher.
         const auto pub = endpoint->getPublisher();
 
         // Creates new Quote market events.
