@@ -31,7 +31,7 @@ set(CONSOLE_VERSION "1.0.1")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
 set(CPM_CMAKE_VERSION "v0.40.2")
-set(CONFIG_VERSION "1.0.0")
+set(CONFIG_VERSION "1.0.3")
 
 include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 

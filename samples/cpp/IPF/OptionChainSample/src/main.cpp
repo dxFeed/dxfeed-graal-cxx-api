@@ -25,8 +25,8 @@ Where:
     <symbol>         - the product or underlying symbol
     <strikes-number> - a number of strikes to print for each series
     <months-number>  - a number of months to print
-Example:
-    OptionChainSample http://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip IBM 10 3
+Examples:
+    OptionChainSample "https://demo:demo@tools.dxfeed.com/ipf" AAPL 5 5
 )";
             return 0;
         }
@@ -100,7 +100,7 @@ Example:
         }
 
         // ignore timeout and continue to print retrieved quotes even on timeout
-        auto ok = Promises::allOf(promises)->awaitWithoutException(1s);
+        auto ok = Promises::allOf(promises)->awaitWithoutException(10s);
         ignoreUnused(ok);
 
         std::cout << "Printing option series ...\n";
@@ -114,11 +114,15 @@ Example:
                 auto putQuote = std::make_shared<Quote>();
 
                 if (series.getCalls().contains(strike)) {
-                    callQuote = quotes.at(series.getCalls().at(strike))->getResult();
+                    if (auto newCallQuote = quotes.at(series.getCalls().at(strike))->getResult()) {
+                        callQuote = newCallQuote;
+                    }
                 }
 
                 if (series.getPuts().contains(strike)) {
-                    putQuote = quotes.at(series.getPuts().at(strike))->getResult();
+                    if (auto newPutQuote = quotes.at(series.getPuts().at(strike))->getResult()) {
+                        putQuote = newPutQuote;
+                    }
                 }
 
                 std::printf("    %10.3f %10.3f %10.3f %10.3f %10.3f\n", callQuote->getBidPrice(),

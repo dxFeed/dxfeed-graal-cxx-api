@@ -16,27 +16,57 @@
 #include <string_view>
 #include <vector>
 
+#if defined(_MSC_VER)
+#  ifndef OTC_CONFIG_DISABLE_MSC_WARNINGS_PUSH
+#    define OTC_CONFIG_DISABLE_MSC_WARNINGS_PUSH(...) __pragma(warning(push)) __pragma(warning(disable : __VA_ARGS__))
+#    define OTC_CONFIG_DISABLE_MSC_WARNINGS_POP() __pragma(warning(pop))
+#  endif
+#else
+#  ifndef OTC_CONFIG_DISABLE_MSC_WARNINGS_PUSH
+#    define OTC_CONFIG_DISABLE_MSC_WARNINGS_PUSH(warnings)
+#    define OTC_CONFIG_DISABLE_MSC_WARNINGS_POP()
+#  endif
+#endif
+
+#if defined(__GNUC__) && !defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__NVCOMPILER)
+#  ifndef OTC_CONFIG_DO_PRAGMA
+#    define OTC_CONFIG_DO_PRAGMA(x) _Pragma(#x)
+#  endif
+#  ifndef OTC_CONFIG_DISABLE_GCC_WARNINGS_PUSH
+#    define OTC_CONFIG_DISABLE_GCC_WARNINGS_PUSH(...) \
+      OTC_CONFIG_DO_PRAGMA(GCC diagnostic push) OTC_CONFIG_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#    define OTC_CONFIG_DISABLE_GCC_WARNINGS(...) OTC_CONFIG_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#    define OTC_CONFIG_DISABLE_GCC_WARNINGS_POP() OTC_CONFIG_DO_PRAGMA(GCC diagnostic pop)
+#  endif
+#else
+#  ifndef OTC_CONFIG_DISABLE_GCC_WARNINGS_PUSH
+#    define OTC_CONFIG_DISABLE_GCC_WARNINGS_PUSH(warnings)
+#    define OTC_CONFIG_DISABLE_GCC_WARNINGS(warnings)
+#    define OTC_CONFIG_DISABLE_GCC_WARNINGS_POP()
+#  endif
+#endif
+
 #if defined(__has_include)
 #  if __has_include(<filesystem>)
 #    include <filesystem>
 #    if defined(__cpp_lib_filesystem)
-#      define CONFIG_HAS_FILESYSTEM 1
+#      define OTC_CONFIG_HAS_FILESYSTEM 1
 namespace fs = std::filesystem;
 #    elif defined(__cpp_lib_experimental_filesystem)
 #      include <experimental/filesystem>
-#      define CONFIG_HAS_FILESYSTEM 1
+#      define OTC_CONFIG_HAS_FILESYSTEM 1
 namespace fs = std::experimental::filesystem;
 #    else
-#      define CONFIG_HAS_FILESYSTEM 0
+#      define OTC_CONFIG_HAS_FILESYSTEM 0
 #    endif
 #  else
-#    define CONFIG_HAS_FILESYSTEM 0
+#    define OTC_CONFIG_HAS_FILESYSTEM 0
 #  endif
 #else
-#  define CONFIG_HAS_FILESYSTEM 0
+#  define OTC_CONFIG_HAS_FILESYSTEM 0
 #endif
 
-#if CONFIG_HAS_FILESYSTEM == 0
+#if OTC_CONFIG_HAS_FILESYSTEM == 0
 #  ifdef _WIN32
 #    include <windows.h>
 #  endif
@@ -50,7 +80,7 @@ namespace detail {
 
 template <class CharT>
 std::basic_ifstream<CharT> openInputFile(const std::string& path) {
-#if CONFIG_HAS_FILESYSTEM
+#if OTC_CONFIG_HAS_FILESYSTEM
   return std::basic_ifstream<CharT>(fs::path(path));
 #elif defined(_WIN32)
   const int wlen = MultiByteToWideChar(CP_UTF8, 0, path.c_str(), -1, nullptr, 0);
@@ -70,7 +100,7 @@ std::basic_ifstream<CharT> openInputFile(const std::string& path) {
 
 template <class CharT>
 std::basic_ofstream<CharT> openOutputFile(const std::string& path) {
-#if CONFIG_HAS_FILESYSTEM
+#if OTC_CONFIG_HAS_FILESYSTEM
   return std::basic_ofstream<CharT>(fs::path(path));
 #elif defined(_WIN32)
   int wlen = MultiByteToWideChar(CP_UTF8, 0, path.c_str(), -1, nullptr, 0);
@@ -252,7 +282,7 @@ class Ini {
       section.insert(defaults.begin(), defaults.end());
     }
   }
-
+  OTC_CONFIG_DISABLE_MSC_WARNINGS_PUSH(4456)
   void stripTrailingComments() {
     for (auto& [_, section] : sections) {
       for (auto& [_, value] : section) {
@@ -261,6 +291,7 @@ class Ini {
       }
     }
   }
+  OTC_CONFIG_DISABLE_MSC_WARNINGS_POP()
 
   void clear() {
     sections.clear();

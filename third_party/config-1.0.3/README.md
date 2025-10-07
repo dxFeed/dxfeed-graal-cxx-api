@@ -17,7 +17,7 @@ include(FetchContent)
 FetchContent_Declare(
         config
         GIT_REPOSITORY https://github.com/ttldtor/config.git
-        GIT_TAG v1.0.0
+        GIT_TAG v1.0.3
 )
 FetchContent_MakeAvailable(config)
 
@@ -34,6 +34,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE config)
 
 using namespace org::ttldtor::config;
 
+// set MY_PREFIX_user=test
+
 int main() {
   Config config{};
 
@@ -42,16 +44,21 @@ user=demo
 password=demo
   ")"));
 
-  for (auto& [key, value] : config) {
+  for (const auto& [key, value] : config) {
     std::cout << key << " = " << value << '\n';
   }
+  
+// user = demo
+// password = demo  
 
-  // set MY_PREFIX_user=test
   config.addSource(EnvSource("MY_PREFIX_"));
 
-  for (auto& [key, value] : config) {
+  for (const auto& [key, value] : config) {
     std::cout << key << " = " << value << '\n';
   }
+  
+// user = test
+// password = demo  
 
   return 0;
 }

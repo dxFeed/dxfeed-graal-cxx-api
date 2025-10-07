@@ -68,9 +68,9 @@ jobs:
         run: |
           mkdir dox
           cd dox          
-          wget https://github.com/doxygen/doxygen/releases/download/Release_1_13_2/doxygen-1.13.2.linux.bin.tar.gz
-          tar -xf doxygen-1.13.2.linux.bin.tar.gz
-          cd doxygen-1.13.2
+          wget https://github.com/doxygen/doxygen/releases/download/Release_1_14_0/doxygen-1.14.0.linux.bin.tar.gz
+          tar -xf doxygen-1.14.0.linux.bin.tar.gz
+          cd doxygen-1.14.0
           sudo make
           sudo make install
           doxygen --version
@@ -93,7 +93,6 @@ jobs:
         run: |
           cd "${{github.workspace}}/docs"
           ( cat ./Doxyfile ; echo "PROJECT_NUMBER=${{needs.get_version.outputs.version}}" ) | doxygen -
-          doxygen ./Doxyfile
           cd ..
 
       - name: Pack
@@ -141,9 +140,9 @@ jobs:
         with:
           files: |
             artifacts/*.zip
-#            artifacts/build-Samples/*.zip
-#            artifacts/build-Tools/*.zip
-#            artifacts/build-bundle/*.zip
+          #            artifacts/build-Samples/*.zip
+          #            artifacts/build-Tools/*.zip
+          #            artifacts/build-bundle/*.zip
           prerelease: >
             ${{ contains(needs.get_version.outputs.version, 'alpha')
             || contains(needs.get_version.outputs.version, 'beta') 
