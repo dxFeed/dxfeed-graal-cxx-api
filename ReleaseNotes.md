@@ -2,6 +2,27 @@
 
 * **\[MDAPI-262]\[C++]\[Linux]** Shared libraries now compiled with `noexecstack` flag.
 * **\[MDAPI-238]\[С++]** Added the ability to set Java System properties.
+    - The sources of system properties are:
+        - Environment Variables.
+            - All keys must start with the prefix `DXFEED_`, e.g. `DXFEED_log.file=log.txt`, `DXFEED_dxscheme.bat=millis`, etc.
+            - This allows overriding a property without changing the files, in fact it is analogous to `java -Dkey=value -jar app.jar`.
+            - In operating systems such as Linux and macOS, you can pass properties in the following ways:  
+              `env DXFEED_key1=value1 DXFEED_key2=value2 ./app`
+            - In Windows, properties can be passed using the following syntax:  
+              `set DXFEED_key1=value1 && set DXFEED_key2=value2 && app.exe`,
+              but be careful, this will set environment variables globally for the open terminal, to avoid setting properties globally, you can use the following method:  
+              `cmd /v/c "set DXFEED_key1=value1 && set DXFEED_key2=value2 && app.exe"`
+        - `dxfeed.system.properties`
+            - This file follows the `java.properties` or `INI` format and is generally compatible if you don't go into detail.
+            - The path to this file can be specified by setting the environment variable `DXFEED_dxfeed.system.properties`.
+            - By default, this file is searched for in the current runtime directory.
+    - Priority and Overrides:
+        - The configuration sources are applied in the following order, with each successive source overwriting values from the previous one:
+            - `dxfeed.system.properties`
+            - Environment Variables
+            - Direct calls to `System::setProperty` in source code, in the order in which they were called.
+
+            This order ensures that the most specific configuration settings are applied last, allowing for effective overrides and precise control over system properties.
 
 ## v4.3.1
 
