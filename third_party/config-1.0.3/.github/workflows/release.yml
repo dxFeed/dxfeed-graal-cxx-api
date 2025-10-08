@@ -1,0 +1,153 @@
+# Copyright (c) 2025 ttldtor.
+# SPDX-License-Identifier: BSL-1.0
+
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish The Release'
+        default: true
+        required: true
+        type: boolean
+      use_latest_tag:
+        description: 'Try To Use The Latest Git Tag'
+        default: false
+        required: true
+        type: boolean
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  actions: read
+  pages: write
+  id-token: write
+
+jobs:
+  get_version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+      tag_name: ${{ steps.set_version.outputs.tag_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          fetch-tags: 'true'
+          fetch-depth: '0'
+          show-progress: 'true'
+      - id: get_latest_tag
+        run: |
+          echo "tag=$(git describe --abbrev=0 --tags)" >> $GITHUB_OUTPUT
+
+      - id: set_version
+        run: |
+          if [[ "${{ !inputs.use_latest_tag && startsWith(github.ref, 'refs/tags/') }}" == "true" ]]
+          then
+            echo "version=${{github.ref_name}}" >> $GITHUB_OUTPUT
+            echo "tag_name=${{github.ref}}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ steps.get_latest_tag.outputs.tag }}" >> $GITHUB_OUTPUT
+            echo "tag_name=${{ format('refs/tags/{0}', steps.get_latest_tag.outputs.tag) }}" >> $GITHUB_OUTPUT            
+          fi
+
+  build_docs_and_upload_and_deploy_gh_pages:
+    name: "${{ matrix.config.name }}: Build Docs & Upload"
+    needs: [ get_version ]
+    strategy:
+      matrix:
+        config:
+          - name: ubuntu-24.04
+            image: ubuntu-24.04
+    runs-on: ${{ matrix.config.image }}
+    steps:
+      - name: Install Doxygen
+        run: |
+          mkdir dox
+          cd dox          
+          wget https://github.com/doxygen/doxygen/releases/download/Release_1_14_0/doxygen-1.14.0.linux.bin.tar.gz
+          tar -xf doxygen-1.14.0.linux.bin.tar.gz
+          cd doxygen-1.14.0
+          sudo make
+          sudo make install
+          doxygen --version
+          cd ..
+          cd ..
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{needs.get_version.outputs.tag_name}}
+
+      - name: Check 0
+        run: |
+          ls
+
+      - name: Check
+        run: |
+          ls ${{github.workspace}}
+
+      - name: Run Doxygen
+        run: |
+          cd "${{github.workspace}}/docs"
+          ( cat ./Doxyfile ; echo "PROJECT_NUMBER=${{needs.get_version.outputs.version}}" ) | doxygen -
+          cd ..
+
+      - name: Pack
+        run: |
+          cd "${{github.workspace}}/docs/html"
+          zip -r ../org_ttldtor_config-${{needs.get_version.outputs.version}}-docs.zip .
+
+      - name: Upload Docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-docs
+          path: |
+            ${{github.workspace}}/docs/*.zip
+
+      - name: Upload docs as gh pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{github.workspace}}/docs/html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  publish_release:
+    if: ${{ inputs.publish || contains(github.event_name, 'push')}}
+    runs-on: ubuntu-latest
+    name: Publish Release
+    needs: [ get_version, build_docs_and_upload_and_deploy_gh_pages ]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: artifacts-*
+          merge-multiple: true
+      - name: 'Echo download path'
+        run: echo ${{steps.download.outputs.download-path}}
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - uses: softprops/action-gh-release@4634c16e79c963813287e889244c50009e7f0981
+        with:
+          files: |
+            artifacts/*.zip
+          #            artifacts/build-Samples/*.zip
+          #            artifacts/build-Tools/*.zip
+          #            artifacts/build-bundle/*.zip
+          prerelease: >
+            ${{ contains(needs.get_version.outputs.version, 'alpha')
+            || contains(needs.get_version.outputs.version, 'beta') 
+            || contains(needs.get_version.outputs.version, 'pre') 
+            || contains(needs.get_version.outputs.version, 'rc') }}
+          tag_name: ${{ needs.get_version.outputs.tag_name }}
+          name: ${{ needs.get_version.outputs.version }}
+          draft: ${{ contains(needs.get_version.outputs.version, 'draft') }}

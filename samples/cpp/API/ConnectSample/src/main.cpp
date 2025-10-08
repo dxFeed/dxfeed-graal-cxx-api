@@ -70,10 +70,10 @@ int main(int argc, char *argv[]) {
             time = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[4]);
         }
 
-        // Create an endpoint and connect to specified address.
+        // Create an endpoint and connect to a specified address.
         const auto endpoint = DXEndpoint::create()->connect(address);
 
-        // Create a subscription with specified types attached to feed.
+        // Create a subscription with specified types attached to the feed.
         const auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
 
         // Add an event listener.

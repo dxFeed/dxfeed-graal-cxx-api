@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
         auto [parsedTypes, unknownTypes] = CmdArgsUtils::parseTypes(argv[2]);
         const auto symbols = CmdArgsUtils::parseSymbols(argv[3]);
 
-        // Create endpoint specifically for file parsing.
+        // Create an endpoint specifically for file parsing.
         const auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
         const auto feed = endpoint->getFeed();
 
@@ -61,14 +61,14 @@ int main(int argc, char *argv[]) {
         // Add symbols.
         sub->addSymbols(symbols);
 
-        // Connect endpoint to a file.
+        // Connect an endpoint to a file.
         endpoint->connect("file:" + fileName + "[speed=max]");
 
-        // Wait until file is completely parsed.
+        // Wait until a file is completely parsed.
         endpoint->awaitNotConnected();
 
-        // Close endpoint when we're done.
-        // This method will gracefully close endpoint, waiting while data processing completes.
+        // Close the endpoint when we're done.
+        // This method will gracefully close the endpoint, waiting while data processing completes.
         endpoint->closeAndAwaitTermination();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';

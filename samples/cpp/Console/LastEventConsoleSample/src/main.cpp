@@ -7,8 +7,8 @@
 
 /**
  * This sample demonstrates a way to subscribe to the big world of symbols with dxFeed API, so that the events are
- * updated and cached in memory of this process, and then take snapshots of those events from memory whenever
- * they are needed. This example repeatedly reads symbol name from the console and prints a snapshot of its last
+ * updated and cached in memory of this process and then take snapshots of those events from memory whenever
+ * they are needed. This example repeatedly reads the symbol name from the console and prints a snapshot of its last
  * quote, trade, summary, and profile events.
  */
 int main() {
@@ -31,21 +31,21 @@ int main() {
          */
         // auto records = "Quote,Trade,Summary,Profile,Quote&[A-Z]";
         /*
-         * There is an important trade-off between a resource consumption and speed of access to the last events.
+         * There is an important trade-off between resource consumption and speed of access to the last events.
          * The whole world of stocks and options from all the exchanges is very large and will consume gigabytes
-         * of memory to cache. Moreover, this cache has to be constantly kept up-to-date which consumes a lot of
-         * network and CPU.
+         * of memory to cache. Moreover, this cache has to be constantly kept uptodate, which consumes a lot of
+         * networks and CPU.
          *
-         * A particular application's uses cases has to be studied to figure out what is option for this particular
-         * application. If some events are known be rarely needed and a small delay while access them can be
+         * A particular application's use cases have to be studied to figure out what is an option for this particular
+         * application. If some events are known to be rarely needed and a small delay while access to them can be
          * tolerated, then it is not worth configuring a permanent subscription for them. The code in this
-         * sample works using DXFeed::getLastEventPromise method that will request event from upstream data provider
-         * if it is not present in local in-memory cache.
+         * sample works using `DXFeed::getLastEventPromise()` method that will request an event from the upstream data provider
+         * if it is not present in the local in-memory cache.
          */
 
         /*
-         * There are multiple ways to specify a list of symbols. It is typically taken from IPF file and its
-         * specification consists of a URL to the file which has to contain ".ipf" in order to be recognized.
+         * There are multiple ways to specify a list of symbols. It is typically taken from an IPF file, and its
+         * specification consists of a URL to the file which has to contain ".ipf" to be recognized.
          * The string below defines subscription for all symbols that are available on the demo feed.
          */
         const auto symbols = "https://dxfeed.s3.amazonaws.com/masterdata/ipf/demo/mux-demo.ipf.zip";
@@ -55,9 +55,9 @@ int main() {
 
         /*
          * Permanent subscription property "dxfeed.qd.subscribe.ticker" can be directly placed into the
-         * "dxfeed.properties" file and no custom DXEndpoint instance will be needed. Here it is explicitly
-         * specified using a DXFeedEndpoint::Builder class. Note, that we don't use "connect" method on DXEndpoint.
-         * It is assumed by this sample that "dxfeed.address" property is specified in "dxfeed.properties" and
+         * "dxfeed.system.properties" file, and no custom DXEndpoint instance will be needed. Here it is explicitly
+         * specified using a DXFeedEndpoint::Builder class. Note that we don't use `DXEndpoint::connect()` method.
+         * It is assumed by this sample that the ` dxfeed.address ` property is specified in "dxfeed.system.properties" and
          * connection is automatically established to that address.
          * Alternatively, "dxfeed.address" can also be specified in the builder.
          */
@@ -77,7 +77,7 @@ int main() {
 
         while (true) {
             /*
-             * User of this sample application can type symbols on the console. Symbol like "IBM" corresponds
+             * User of this sample application can type symbols in the console. Symbol like "IBM" corresponds
              * to the stock. Symbol like "IBM&N" corresponds to the information from a specific exchange.
              * See the dxFeed Symbol guide at http://www.dxfeed.com/downloads/documentation/dxFeed_Symbol_Guide.pdf
              */
@@ -119,9 +119,9 @@ int main() {
             /*
              * If the events are available in the in-memory cache, then the promises will be completed immediately.
              * Otherwise, a request to the upstream data provider is sent. Below we combine promises using
-             * Promises utility class from DXFeed API in order to wait for at most 1 second for all the
+             * Promises utility class from DXFeed API to wait for at most 1 second for all the
              * promises to complete. The last event promise never completes exceptionally, and we don't
-             * have to specially process a case of timeout, so "awaitWithoutException" is used to continue
+             * have to especially process a case of timeout, so "awaitWithoutException" is used to continue
              * normal execution even on timeout. This sample prints a special message in the case of timeout.
              */
             if (!Promises::allOf(promises)->awaitWithoutException(1s)) {
@@ -130,7 +130,7 @@ int main() {
 
             /*
              * The combination above is used only to ensure a common wait of 1 second. Promises to individual events
-             * are completed independently and the corresponding events can be accessed even if some events were not
+             * are completed independently, and the corresponding events can be accessed even if some events were not
              * available for any reason and the wait above had timed out. This sample just prints all results.
              * "<null>" is printed when the event is not available.
              */

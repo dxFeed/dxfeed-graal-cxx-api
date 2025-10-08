@@ -18,7 +18,7 @@ using namespace std::literals;
 std::random_device rd;  // a seed source for the random number engine
 std::mt19937 gen(rd()); // mersenne_twister_engine seeded with rd()
 
-// Demonstrates how to connect to endpoint requires authentication token, subscribe to market data events, and handle
+// Demonstrates how to connect to an endpoint requires authentication token, subscribe to market data events, and handle
 // periodic token updates.
 int main() {
     try {

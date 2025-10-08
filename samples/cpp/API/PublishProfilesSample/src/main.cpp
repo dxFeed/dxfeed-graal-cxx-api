@@ -10,8 +10,8 @@ using namespace dxfcpp::literals;
 using namespace std::literals;
 
 /*
- * Using address like ":7700" it starts a server on a specified port where it provides Profile
- * event for any symbol ending with ":TEST" suffix.
+ * Using address like ":7700" it starts a server on a specified port where it provides a ` Profile ` event for any
+ * symbol ending with ":TEST" suffix.
  */
 int main(int argc, char *argv[]) {
     try {
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
         // Parse args.
         const std::string address = argv[1];
 
-        // Create publisher endpoint and connect it to the specified address
+        // Create a publisher endpoint and connect it to the specified address
         const auto endpoint = DXEndpoint::create(DXEndpoint::Role::PUBLISHER)->connect(address);
         auto publisher = endpoint->getPublisher();
 

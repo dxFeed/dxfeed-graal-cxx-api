@@ -13,7 +13,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "utils/StringUtils.hpp"
 
 #include <functional>
-#include <iostream>
 #include <mutex>
 #include <thread>
 #include <variant>
@@ -39,6 +38,7 @@ class Isolate final {
             this->idx = Id<IsolateThread>::getNext().getValue();
 
             if constexpr (Debugger::traceIsolates) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::trace("IsolateThread{" + dxfcpp::toString(handle) + ", tid = " + dxfcpp::toString(tid) +
                                 ", idx = " + std::to_string(idx) + "}()");
             }
@@ -56,6 +56,7 @@ class Isolate final {
 
         ~IsolateThread() noexcept {
             if constexpr (Debugger::traceIsolates) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::trace(toString() + "::~()");
             }
 
@@ -74,9 +75,11 @@ class Isolate final {
 
     Isolate() noexcept;
 
-    CEntryPointErrorsEnum attach() noexcept;
+    CEntryPointErrorsEnum attach() const noexcept;
 
     GraalIsolateThreadHandle get() noexcept;
+
+    static void init(Isolate &isolate) noexcept;
 
     public:
     Isolate(const Isolate &) = delete;
@@ -84,12 +87,19 @@ class Isolate final {
 
     static Isolate &getInstance() noexcept {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace("Isolate::getInstance()");
         }
 
         static Isolate instance{};
+        static std::once_flag flag{};
+
+        std::call_once(flag, []() {
+            init(instance);
+        });
 
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace("Isolate::getInstance() -> " + instance.toString());
         }
 
@@ -100,6 +110,7 @@ class Isolate final {
     auto runIsolated(F &&f)
         -> std::variant<CEntryPointErrorsEnum, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
         }
 
@@ -110,6 +121,7 @@ class Isolate final {
 
         if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
             if constexpr (Debugger::traceIsolates) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
                                 "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
                                 CEntryPointErrorsEnumToStr(result));
@@ -125,6 +137,7 @@ class Isolate final {
 
     template <typename F> auto runIsolatedThrow(F &&f) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle> {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() + ")");
         }
 
@@ -133,8 +146,9 @@ class Isolate final {
             return std::invoke(std::forward<F>(f), currentThreadHandle);
         }
 
-        if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
+        if (const auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
             if constexpr (Debugger::traceIsolates) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() +
                                 "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
                                 CEntryPointErrorsEnumToStr(result));
@@ -151,6 +165,7 @@ class Isolate final {
         -> std::variant<CEntryPointErrorsEnum,
                         std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...>> {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
         }
 
@@ -162,6 +177,7 @@ class Isolate final {
 
         if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
             if constexpr (Debugger::traceIsolates) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
                                 "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
                                 CEntryPointErrorsEnumToStr(result));
@@ -180,6 +196,7 @@ class Isolate final {
     auto runIsolatedThrow(F &&f, Arg &&arg, Args &&...args)
         -> std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...> {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() + ")");
         }
 
@@ -189,8 +206,9 @@ class Isolate final {
                                std::forward<Args>(args)...);
         }
 
-        if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
+        if (const auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
             if constexpr (Debugger::traceIsolates) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() +
                                 "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
                                 CEntryPointErrorsEnumToStr(result));
@@ -209,10 +227,10 @@ class Isolate final {
 #endif
     auto runIsolatedOrElse(F &&f, R defaultValue) {
         return std::visit(
-            [defaultValue =
+            [dv =
                  std::move(defaultValue)]<typename T>(T &&arg) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle> {
                 if constexpr (std::is_same_v<T, CEntryPointErrorsEnum>) {
-                    return defaultValue;
+                    return dv;
                 } else {
                     return arg;
                 }
@@ -226,10 +244,10 @@ class Isolate final {
 #endif
     auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
         return std::visit(
-            [defaultValue = std::move(defaultValue)]<typename T>(
+            [dv = std::move(defaultValue)]<typename T>(
                 T &&arg) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...> {
                 if constexpr (std::is_same_v<T, CEntryPointErrorsEnum>) {
-                    return defaultValue;
+                    return dv;
                 } else {
                     return arg;
                 }
@@ -240,6 +258,7 @@ class Isolate final {
 
     ~Isolate() {
         if constexpr (Debugger::traceIsolates) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace("~Isolate()");
         }
     }
