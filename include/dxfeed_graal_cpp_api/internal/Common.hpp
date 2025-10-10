@@ -27,6 +27,16 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+namespace detail {
+template <typename, template <class...> class> struct IsInstanceImpl : std::false_type {};
+
+template <template <class...> class C, typename... Ts> struct IsInstanceImpl<C<Ts...>, C> : std::true_type {};
+} // namespace detail
+
+template <typename T, template <class...> class C> constexpr bool isInstanceOf = detail::IsInstanceImpl<T, C>::value;
+template <typename T, template <class...> class C>
+concept InstanceOf = isInstanceOf<T, C>;
+
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 

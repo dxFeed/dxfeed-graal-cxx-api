@@ -38,8 +38,15 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
 #include "api/ApiModule.hpp"
 #include "auth/AuthToken.hpp"
+#include "candlewebservice/HistoryEndpoint.hpp"
 #include "entity/EntityModule.hpp"
 #include "event/EventModule.hpp"
+#include "exceptions/GraalException.hpp"
+#include "exceptions/InvalidArgumentException.hpp"
+#include "exceptions/JavaException.hpp"
+#include "exceptions/RuntimeException.hpp"
+#include "executors/InPlaceExecutor.hpp"
+#include "glossary/GlossaryModule.hpp"
 #include "ipf/IpfModule.hpp"
 #include "model/IndexedTxModel.hpp"
 #include "model/MarketDepthModel.hpp"
@@ -51,15 +58,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "symbols/SymbolWrapper.hpp"
 #include "system/System.hpp"
 
-#include "exceptions/GraalException.hpp"
-#include "exceptions/InvalidArgumentException.hpp"
-#include "exceptions/JavaException.hpp"
-#include "exceptions/RuntimeException.hpp"
-
-#include "executors/InPlaceExecutor.hpp"
-
-#include "candlewebservice/HistoryEndpoint.hpp"
-
 #include "isolated/api/IsolatedDXEndpoint.hpp"
 #include "isolated/api/IsolatedDXFeed.hpp"
 #include "isolated/api/IsolatedDXFeedSubscription.hpp"
@@ -70,6 +68,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "isolated/candlewebservice/IsolatedHistoryEndpoint.hpp"
 #include "isolated/event/IsolatedEventType.hpp"
 #include "isolated/executors/IsolatedInPlaceExecutor.hpp"
+#include "isolated/glossary/IsolatedAdditionalUnderlyings.hpp"
+#include "isolated/glossary/IsolatedCFI.hpp"
+#include "isolated/glossary/IsolatedPriceIncrements.hpp"
 #include "isolated/internal/IsolatedObject.hpp"
 #include "isolated/internal/IsolatedString.hpp"
 #include "isolated/internal/IsolatedTimeFormat.hpp"

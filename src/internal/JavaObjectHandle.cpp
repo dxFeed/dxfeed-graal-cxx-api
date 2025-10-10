@@ -118,4 +118,10 @@ template struct JavaObjectHandle<Logging::ListenerTag>;
 template struct JavaObjectHandle<HistoryEndpoint>;
 template struct JavaObjectHandle<HistoryEndpoint::Builder>;
 
+template struct JavaObjectHandle<AdditionalUnderlyings>;
+template struct JavaObjectHandle<CFI>;
+template struct JavaObjectHandle<CFI::Attribute>;
+template struct JavaObjectHandle<CFI::Value>;
+template struct JavaObjectHandle<PriceIncrements>;
+
 DXFCPP_END_NAMESPACE
