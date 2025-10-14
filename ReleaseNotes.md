@@ -1,35 +1,49 @@
-## v4.4.0
+## v5.0.0
 
 * **\[MDAPI-262]\[C++]\[Linux]** Shared libraries now compiled with `noexecstack` flag.
 * **\[MDAPI-238]\[С++]** Added the ability to set Java System properties.
     - The sources of system properties are:
         - Environment Variables.
-            - All keys must start with the prefix `DXFEED_`, e.g. `DXFEED_log.file=log.txt`, `DXFEED_dxscheme.bat=millis`, etc.
-            - This allows overriding a property without changing the files, in fact it is analogous to `java -Dkey=value -jar app.jar`.
+            - All keys must start with the prefix `DXFEED_`, e.g. `DXFEED_log.file=log.txt`,
+              `DXFEED_dxscheme.bat=millis`, etc.
+            - This allows overriding a property without changing the files, in fact it is analogous to
+              `java -Dkey=value -jar app.jar`.
             - In operating systems such as Linux and macOS, you can pass properties in the following ways:  
               `env DXFEED_key1=value1 DXFEED_key2=value2 ./app`
             - In Windows, properties can be passed using the following syntax:  
               `set DXFEED_key1=value1 && set DXFEED_key2=value2 && app.exe`,
-              but be careful, this will set environment variables globally for the open terminal, to avoid setting properties globally, you can use the following method:  
+              but be careful, this will set environment variables globally for the open terminal, to avoid setting
+              properties globally, you can use the following method:
               `cmd /v/c "set DXFEED_key1=value1 && set DXFEED_key2=value2 && app.exe"`
         - `dxfeed.system.properties`
-            - This file follows the `java.properties` or `INI` format and is generally compatible if you don't go into detail.
-            - The path to this file can be specified by setting the environment variable `DXFEED_dxfeed.system.properties`.
+            - This file follows the `java.properties` or `INI` format and is generally compatible if you don't go into
+              detail.
+            - The path to this file can be specified by setting the environment variable
+              `DXFEED_dxfeed.system.properties`.
             - By default, this file is searched for in the current runtime directory.
     - Priority and Overrides:
-        - The configuration sources are applied in the following order, with each successive source overwriting values from the previous one:
+        - The configuration sources are applied in the following order, with each successive source overwriting values
+          from the previous one:
             - `dxfeed.system.properties`
             - Environment Variables
             - Direct calls to `System::setProperty` in source code, in the order in which they were called.
 
-            This order ensures that the most specific configuration settings are applied last, allowing for effective overrides and precise control over system properties.
+          This order ensures that the most specific configuration settings are applied last, allowing for effective
+          overrides and precise control over system properties.
+* **\[MDAPI-178]\[C++]** Added com.dxfeed.glossary package
+    * Added `AdditionUnderlyings` class.
+    * Added `CFI` class.
+    * Added `PriceIncrements` class.
+* **\[BREAKING]** The `Day::getHashCode` method renamed to `Day::hashCode`.
+* **\[BREAKING]** The `Session::getHashCode` method renamed to `Session::hashCode`.
 
 ## v4.3.1
 
 * **\[MDAPI-275]\[C++]** Fixed compilation of code using `DXFeed::getLastEventsPromises()` method.
     * Added unit-tests for `DXFeed::getLastEventsPromises()` method.
     * Fixed documentation for `DXFeed::getLastEventsPromises()` method.
-    * Added `testQuotePromises` function to the `QuoteAndTradeSample` to demonstrate how to use `DXFeed::getLastEventsPromises()`. 
+    * Added `testQuotePromises` function to the `QuoteAndTradeSample` to demonstrate how to use
+      `DXFeed::getLastEventsPromises()`.
 
 ## v4.3.0
 
@@ -37,11 +51,15 @@
 * **\[MDAPI-253]\[C++]** Implemented HistoryEndpoint
     * Added `HistoryEndpoint` class.
     * Migrated to Graal SDK v2.6.2
-* Renamed `DXFCXX_NODEFAULTLIB_LIBCMT` to `DXFCXX_NODEFAULTLIB` CMake project option for clearer purposes and added support for additional libraries in `/NODEFAULTLIB` configuration.
+* Renamed `DXFCXX_NODEFAULTLIB_LIBCMT` to `DXFCXX_NODEFAULTLIB` CMake project option for clearer purposes and added
+  support for additional libraries in `/NODEFAULTLIB` configuration.
 * **\[MDAPI-254]\[C++]** Migrated to Graal SDK v2.5.0
-    * Added `AGGREGATE`, `COMPOSITE`, `REGIONAL` OrderSource. The new system property `dxscheme.unitaryOrderSource=true|false` has been added.
-      It controls whether a single or unitary source is used when subscribing to all sources. It is set to 'false' by default.
-      All separate sources, such as `COMPOSITE_ASK`, `COMPOSITE_BID`, `REGIONAL_ASK`, `REGIONAL_BID`, `AGGREGATE_ASK` and `AGGREGATE_BID` have been
+    * Added `AGGREGATE`, `COMPOSITE`, `REGIONAL` OrderSource. The new system property
+      `dxscheme.unitaryOrderSource=true|false` has been added.
+      It controls whether a single or unitary source is used when subscribing to all sources. It is set to 'false' by
+      default.
+      All separate sources, such as `COMPOSITE_ASK`, `COMPOSITE_BID`, `REGIONAL_ASK`, `REGIONAL_BID`, `AGGREGATE_ASK`
+      and `AGGREGATE_BID` have been
       declared deprecated.
     * Added new Order source for BlueOcean ATS: ocea.
     * Added new Order sources for IG CFDs Gate: IGC, igc.
@@ -49,9 +67,10 @@
     * Added new Order sources for Nuam Exchange Gate: NUAM, nuam.
 * Added the ability to automatically generate the DXEndpoint name.
   If the user does not explicitly specify the endpoint name, it will be generated using the template `qdcxx{Id}`,  
-  where `{Id}` will be an empty string for the first instance of the endpoint and "-2", "-3", etc. for subsequent instances.
+  where `{Id}` will be an empty string for the first instance of the endpoint and "-2", "-3", etc. for subsequent
+  instances.
 
-## v4.2.0 
+## v4.2.0
 
 * **\[MDAPI-249]\[C++]** Transitive dependencies are hidden.
 * Fixed a segfault related to linking features: added a default constructor for `ApiContext`.
@@ -136,7 +155,7 @@
 
 ## v3.0.0
 
-* **\[MDAPI-37]\[C++]** Retrieve latest events from feed.
+* **\[MDAPI-37]\[C++]** Retrieve the latest events from the feed.
     * Added `SymbolWrapper::toStringUnderlying` method that returns a string representation of the underlying symbol
       object.
     * Added `EventType::assign`. All `EventType` successors can populate their fields using `EventType` successors of

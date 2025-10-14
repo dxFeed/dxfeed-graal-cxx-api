@@ -13,7 +13,16 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct DXFCPP_EXPORT AdditionalUnderlyings : public RequireMakeShared<AdditionalUnderlyings> {
+/**
+ * Represents a set of additional underlyings for a given option. Each additional underlying
+ * has an associated parameter called SPC (shares per contract) that specifies how many shares
+ * of additional underlying are delivered during settlement of the option. In cases when
+ * the option delivers additional cash, the SPC specifies an amount of how much cash is delivered.
+ *
+ * See AdditionalUnderlyings::getText() and AdditionalUnderlyings::getMap() for details about used formats and
+ * representations.
+ */
+struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderlyings> {
     /// The alias to a type of shared pointer to the AdditionalUnderlyings object
     using Ptr = std::shared_ptr<AdditionalUnderlyings>;
 
@@ -64,7 +73,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : public RequireMakeShared<Additional
     /**
      * @return A hash code value for this object.
      */
-    std::size_t getHashCode() const;
+    std::size_t hashCode() const noexcept;
 
     /**
      * Returns a string representation of the current object.

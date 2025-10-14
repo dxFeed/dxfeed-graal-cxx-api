@@ -285,7 +285,7 @@ struct DXFCPP_EXPORT Day {
     /**
      * @return A hash code value for this object.
      */
-    std::size_t getHashCode() const;
+    std::size_t hashCode() const noexcept;
 
     /**
      * Returns a string representation of the current object.
@@ -298,8 +298,8 @@ struct DXFCPP_EXPORT Day {
 DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Day> {
-    std::size_t operator()(const dxfcpp::Day &day) const {
-        return day.getHashCode();
+    std::size_t operator()(const dxfcpp::Day &day) const noexcept {
+        return day.hashCode();
     }
 };
 

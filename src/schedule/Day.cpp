@@ -174,8 +174,12 @@ bool Day::operator==(const Day &other) const {
     return isolated::schedule::IsolatedDay::equals(handle_, other.handle_);
 }
 
-std::size_t Day::getHashCode() const {
-    return isolated::schedule::IsolatedDay::getHashCode(handle_);
+std::size_t Day::hashCode() const noexcept {
+    try {
+        return isolated::schedule::IsolatedDay::hashCode(handle_);
+    } catch (...) {
+        return 0;
+    }
 }
 
 std::string Day::toString() const {

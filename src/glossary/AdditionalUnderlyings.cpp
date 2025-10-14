@@ -39,7 +39,7 @@ double AdditionalUnderlyings::getSPC(const StringLikeWrapper &symbol) const {
 bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const {
     return TODO_IMPLEMENT_ME;
 }
-std::size_t AdditionalUnderlyings::getHashCode() const {
+std::size_t AdditionalUnderlyings::hashCode() const {
     return TODO_IMPLEMENT_ME;
 }
 std::string AdditionalUnderlyings::toString() const {
