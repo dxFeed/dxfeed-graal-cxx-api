@@ -30,6 +30,7 @@ set(DXFC_TEST_SOURCES
         api/OrderSourceTest.cpp
         event/EventsTest.cpp
         exceptions/ExceptionsTest.cpp
+        glossary/AdditionalUnderlyingsTest.cpp
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp
         model/MarketDepthModelTest.cpp

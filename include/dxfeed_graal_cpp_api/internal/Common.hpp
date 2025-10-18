@@ -55,6 +55,18 @@ concept Extends = Derived<T, U>;
 template <class T, class U>
 concept BaseOf = Derived<U, T>;
 
+template <typename T>
+concept PairLike = requires(T t) {
+    t.first;
+    t.second;
+};
+
+template <typename T>
+concept MapLike = requires(T t) {
+    { std::begin(t) } -> std::input_iterator;
+    { std::end(t) } -> std::sentinel_for<decltype(std::begin(t))>;
+} && PairLike<std::remove_cvref_t<decltype(*std::begin(std::declval<T &>()))>>;
+
 namespace detail {
 template <typename T>
 struct RemoveAllPointers

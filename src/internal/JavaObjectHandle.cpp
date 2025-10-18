@@ -24,6 +24,7 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
     auto result = runIsolatedOrElse(
         [handle = handle](auto threadHandle) {
             if constexpr (Debugger::isDebug) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
             }
 
@@ -38,6 +39,7 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
     dxfcpp::ignoreUnused(result);
 
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
                         dxfcpp::toString(result));
     }
@@ -47,6 +49,7 @@ template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexce
     auto result = runIsolatedOrElse(
         [handle = handle](auto threadHandle) {
             if constexpr (Debugger::isDebug) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
             }
 
@@ -61,6 +64,7 @@ template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexce
     dxfcpp::ignoreUnused(result);
 
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
                         dxfcpp::toString(result));
     }

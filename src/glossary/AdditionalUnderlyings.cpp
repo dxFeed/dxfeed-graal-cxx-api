@@ -8,39 +8,61 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-inline AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
-                                                    JavaObjectHandle<AdditionalUnderlyings> &&handle) noexcept
+void AdditionalUnderlyings::init() const {
+    std::lock_guard lock(mtx_);
+
+    if (!initialized_) {
+        handle_ = initializer_();
+        initialized_ = true;
+    }
+}
+
+JavaObjectHandle<AdditionalUnderlyings>
+AdditionalUnderlyings::valueOfImpl(const std::vector<std::pair<const char *, double>> &mapLikeEntries) {
+    return isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(mapLikeEntries);
+}
+
+const AdditionalUnderlyings::Ptr AdditionalUnderlyings::EMPTY(createShared([] {
+    return isolated::glossary::IsolatedAdditionalUnderlyings::EMPTY();
+}));
+
+AdditionalUnderlyings::AdditionalUnderlyings(
+    LockExternalConstructionTag, std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer)
+    : initializer_(std::move(initializer)) {
+}
+
+AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
+                                                    JavaObjectHandle<AdditionalUnderlyings> &&handle)
     : handle_(std::move(handle)) {
+    initialized_ = true;
 }
 
 AdditionalUnderlyings::~AdditionalUnderlyings() noexcept {
 }
+
 AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const StringLikeWrapper &value) {
-    return TODO_IMPLEMENT_ME;
+    return createShared(isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(value));
 }
-AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const std::unordered_map<std::string, double> &map) {
-    return TODO_IMPLEMENT_ME;
-}
-AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const std::map<std::string, double> &map) {
-    return TODO_IMPLEMENT_ME;
-}
+
 double AdditionalUnderlyings::getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol) {
-    return TODO_IMPLEMENT_ME;
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(text, symbol);
 }
+
 std::string AdditionalUnderlyings::getText() const {
-    return TODO_IMPLEMENT_ME;
+    return {};
 }
+
 std::unordered_map<std::string, double> AdditionalUnderlyings::getMap() const {
-    return TODO_IMPLEMENT_ME;
+    return {};
 }
 double AdditionalUnderlyings::getSPC(const StringLikeWrapper &symbol) const {
-    return TODO_IMPLEMENT_ME;
+    return {};
 }
 bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const {
-    return TODO_IMPLEMENT_ME;
+    return {};
 }
-std::size_t AdditionalUnderlyings::hashCode() const {
-    return TODO_IMPLEMENT_ME;
+std::size_t AdditionalUnderlyings::hashCode() const noexcept {
+    return {};
 }
 std::string AdditionalUnderlyings::toString() const {
     return RequireMakeShared<AdditionalUnderlyings>::toString();

@@ -1,0 +1,22 @@
+// Copyright (c) 2025 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
+
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+
+#include <dxfeed_graal_c_api/api.h>
+#include <dxfeed_graal_cpp_api/api.hpp>
+
+#include <doctest.h>
+
+using namespace std::literals;
+using namespace dxfcpp;
+
+TEST_CASE("AdditionalUnderlyings") {
+    auto au1 = AdditionalUnderlyings::valueOf(std::vector<std::pair<std::string, double>>());
+    auto au2 = AdditionalUnderlyings::valueOf(std::map<std::string, double>());
+    auto au3 = AdditionalUnderlyings::valueOf(std::map<StringLikeWrapper, double>());
+    auto au4 = AdditionalUnderlyings::valueOf(std::map<const char*, double>());
+}

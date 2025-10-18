@@ -30,19 +30,70 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     using Unique = std::unique_ptr<AdditionalUnderlyings>;
 
     private:
-    JavaObjectHandle<AdditionalUnderlyings> handle_;
+    mutable JavaObjectHandle<AdditionalUnderlyings> handle_;
+    mutable std::mutex mtx_{};
+    mutable bool initialized_{};
+    std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer_;
 
-    explicit AdditionalUnderlyings(LockExternalConstructionTag,
-                                   JavaObjectHandle<AdditionalUnderlyings> &&handle) noexcept;
+    void init() const;
+
+    static JavaObjectHandle<AdditionalUnderlyings>
+    valueOfImpl(const std::vector<std::pair<const char *, double>> &mapLikeEntries);
 
     public:
+    static const Ptr EMPTY;
+
+    // lazy c-tor
+    AdditionalUnderlyings(LockExternalConstructionTag,
+                          std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer);
+
+    AdditionalUnderlyings(LockExternalConstructionTag, JavaObjectHandle<AdditionalUnderlyings> &&handle);
+
     ~AdditionalUnderlyings() noexcept override;
 
     static Ptr valueOf(const StringLikeWrapper &value);
 
-    static Ptr valueOf(const std::unordered_map<std::string, double> &map);
+    template <typename MapLikeType>
+    static Ptr valueOf(const MapLikeType &map) {
+        static_assert(MapLike<MapLikeType>,
+                      "AdditionalUnderlyings::valueOf(): argument must be a map-like container "
+                      "(e.g. std::map, std::unordered_map, QMap, or std::vector<std::pair<...>>)");
 
-    static Ptr valueOf(const std::map<std::string, double> &map);
+        using Elem = std::remove_cvref_t<decltype(*std::begin(map))>;
+        using KeyType = std::remove_cvref_t<decltype(std::declval<Elem>().first)>;
+
+        std::vector<std::pair<const char *, double>> mapLikeEntries{};
+        mapLikeEntries.reserve(map.size());
+
+        // using KeyType = std::decay_t<decltype(std::declval<std::decay_t<decltype(*std::begin(map))>>().first)>;
+
+        if constexpr (std::is_convertible_v<KeyType, std::string_view>) {
+            for (const auto &[key, value] : map) {
+                mapLikeEntries.emplace_back(std::string_view(key).data(), static_cast<double>(value));
+            }
+
+            return createShared(valueOfImpl(mapLikeEntries));
+        } else if constexpr (requires { KeyType{}.toStdString(); }) {
+            // QMap<QString, double>
+
+            std::vector<std::string> keyStorage;
+            keyStorage.reserve(map.size());
+
+            for (const auto &[key, value] : map) {
+                keyStorage.emplace_back(key.toStdString());
+                mapLikeEntries.emplace_back(keyStorage.back().c_str(), static_cast<double>(value));
+            }
+
+            return createShared(valueOfImpl(mapLikeEntries));
+        } else {
+            static_assert(
+                std::is_convertible_v<KeyType, std::string_view> || requires { KeyType{}.toStdString(); },
+                "AdditionalUnderlyings::valueOf(): unsupported key type — must be convertible to std::string_view or "
+                "provide .toStdString()");
+        }
+
+        return EMPTY;
+    }
 
     static double getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol);
 
