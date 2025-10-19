@@ -744,7 +744,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
         return os << ip->toString();
     }
 
-    std::size_t hashCode() const;
+    std::size_t hashCode() const noexcept;
 
     bool operator==(const InstrumentProfile &other) const;
 

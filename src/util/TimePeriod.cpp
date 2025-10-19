@@ -33,18 +33,24 @@ TimePeriod TimePeriod::valueOf(const StringLikeWrapper &value) {
 }
 
 std::int64_t TimePeriod::getTime() const {
+    std::lock_guard lock(mtx_);
+
     init();
 
     return isolated::util::IsolatedTimePeriod::getTime(handle_);
 }
 
 std::int32_t TimePeriod::getSeconds() const {
+    std::lock_guard lock(mtx_);
+
     init();
 
     return isolated::util::IsolatedTimePeriod::getSeconds(handle_);
 }
 
 std::int64_t TimePeriod::getNanos() const {
+    std::lock_guard lock(mtx_);
+
     init();
 
     return isolated::util::IsolatedTimePeriod::getNanos(handle_);
@@ -59,8 +65,6 @@ TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle) : handle_(std::mov
 }
 
 void TimePeriod::init() const {
-    std::lock_guard lock(mtx_);
-
     if (!initialized_) {
         handle_ = initializer_();
         initialized_ = true;

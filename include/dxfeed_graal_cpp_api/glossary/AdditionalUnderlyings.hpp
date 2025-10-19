@@ -53,45 +53,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
 
     static Ptr valueOf(const StringLikeWrapper &value);
 
-    template <typename MapLikeType>
-    static Ptr valueOf(const MapLikeType &map) {
-        static_assert(MapLike<MapLikeType>,
-                      "AdditionalUnderlyings::valueOf(): argument must be a map-like container "
-                      "(e.g. std::map, std::unordered_map, QMap, or std::vector<std::pair<K, V>>)");
-
-        using Elem = std::remove_cvref_t<decltype(*std::begin(map))>;
-        using KeyType = std::remove_cvref_t<decltype(std::declval<Elem>().first)>;
-
-        std::vector<std::pair<const char *, double>> mapLikeEntries{};
-        mapLikeEntries.reserve(map.size());
-
-        if constexpr (std::is_convertible_v<KeyType, std::string_view>) {
-            for (const auto &[key, value] : map) {
-                mapLikeEntries.emplace_back(std::string_view(key).data(), static_cast<double>(value));
-            }
-
-            return createShared(valueOfImpl(mapLikeEntries));
-        } else if constexpr (requires { KeyType{}.toStdString(); }) {
-            // QMap<QString, double>
-
-            std::vector<std::string> keyStorage;
-            keyStorage.reserve(map.size());
-
-            for (const auto &[key, value] : map) {
-                keyStorage.emplace_back(key.toStdString());
-                mapLikeEntries.emplace_back(keyStorage.back().c_str(), static_cast<double>(value));
-            }
-
-            return createShared(valueOfImpl(mapLikeEntries));
-        } else {
-            static_assert(
-                std::is_convertible_v<KeyType, std::string_view> || requires { KeyType{}.toStdString(); },
-                "AdditionalUnderlyings::valueOf(): unsupported key type — must be convertible to std::string_view or "
-                "provide .toStdString()");
-        }
-
-        return EMPTY;
-    }
+    template <typename MapLikeType> static Ptr valueOf(const MapLikeType &map);
 
     static double getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol);
 
@@ -129,7 +91,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      *
      * @return A string representation
      */
-    std::string toString() const;
+    std::string toString() const override;
 
     friend std::ostream &operator<<(std::ostream &os, const AdditionalUnderlyings &au) {
         return os << au.toString();
@@ -140,4 +102,48 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     }
 };
 
+template <typename MapLikeType> AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map) {
+    static_assert(MapLike<MapLikeType>, "AdditionalUnderlyings::valueOf(): argument must be a map-like container "
+                                        "(e.g. std::map, std::unordered_map, QMap, or std::vector<std::pair<K, V>>)");
+
+    using Elem = std::remove_cvref_t<decltype(*std::begin(map))>;
+    using KeyType = std::remove_cvref_t<decltype(std::declval<Elem>().first)>;
+
+    std::vector<std::pair<const char *, double>> mapLikeEntries{};
+    mapLikeEntries.reserve(map.size());
+
+    if constexpr (std::is_convertible_v<KeyType, std::string_view>) {
+        for (const auto &[key, value] : map) {
+            mapLikeEntries.emplace_back(std::string_view(key).data(), static_cast<double>(value));
+        }
+
+        return createShared(valueOfImpl(mapLikeEntries));
+    } else if constexpr (requires { KeyType{}.toStdString(); }) {
+        // QMap<QString, double>
+
+        std::vector<std::string> keyStorage;
+        keyStorage.reserve(map.size());
+
+        for (const auto &[key, value] : map) {
+            keyStorage.emplace_back(key.toStdString());
+            mapLikeEntries.emplace_back(keyStorage.back().c_str(), static_cast<double>(value));
+        }
+
+        return createShared(valueOfImpl(mapLikeEntries));
+    } else {
+        static_assert(
+            std::is_convertible_v<KeyType, std::string_view> || requires { KeyType{}.toStdString(); },
+            "AdditionalUnderlyings::valueOf(): unsupported key type — must be convertible to std::string_view or "
+            "provide .toStdString()");
+    }
+
+    return EMPTY;
+}
+
 DXFCPP_END_NAMESPACE
+
+template <> struct std::hash<dxfcpp::AdditionalUnderlyings> {
+    std::size_t operator()(const dxfcpp::AdditionalUnderlyings &au) const noexcept {
+        return au.hashCode();
+    }
+};

@@ -48,7 +48,8 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<cons
     return JavaObjectHandle<AdditionalUnderlyings>{isolatedAdditionalUnderlyings};
 }
 
-// int32_t dxfg_AdditionalUnderlyings_getSPC(graal_isolatethread_t *thread, const char *text, const char *symbol, DXFG_OUT double *spc);
+// int32_t dxfg_AdditionalUnderlyings_getSPC(graal_isolatethread_t *thread, const char *text, const char *symbol,
+// DXFG_OUT double *spc);
 double getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol) {
     double spc{};
 
@@ -57,19 +58,71 @@ double getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol) {
     return spc;
 }
 
-// int32_t dxfg_AdditionalUnderlyings_getText(graal_isolatethread_t *thread, dxfg_additional_underlyings_t *additionalUnderlyings, DXFG_OUT char **text);
-std::string getText(const JavaObjectHandle<AdditionalUnderlyings>& additionalUnderlyings) {
+// int32_t dxfg_AdditionalUnderlyings_getText(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
+// *additionalUnderlyings, DXFG_OUT char **text);
+std::string getText(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings) {
     if (!additionalUnderlyings) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_AdditionalUnderlyings_getText`. The `additionalUnderlyings` handle is invalid");
+        throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getText`. The "
+                                       "`additionalUnderlyings` handle is invalid");
     }
 
-    char* text{};
+    char *text{};
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getText, static_cast<dxfg_additional_underlyings_t*>(additionalUnderlyings.get()), &text);
+    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getText,
+                                       static_cast<dxfg_additional_underlyings_t *>(additionalUnderlyings.get()),
+                                       &text);
 
     auto uText = internal::IsolatedString::toUnique(text);
     auto result = dxfcpp::toString(uText.get());
+
+    return result;
+}
+
+// int32_t dxfg_AdditionalUnderlyings_getMap(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
+// *additionalUnderlyings, DXFG_OUT dxfg_string_to_double_map_entry_t **mapEntries, DXFG_OUT int32_t *size);
+std::unordered_map<std::string, double> getMap(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings) {
+    if (!additionalUnderlyings) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getMap`. The "
+                                       "`additionalUnderlyings` handle is invalid");
+    }
+
+    std::unordered_map<std::string, double> result{};
+
+    dxfg_string_to_double_map_entry_t *mapEntries{};
+    std::int32_t size{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_AdditionalUnderlyings_getMap,
+                                           static_cast<dxfg_additional_underlyings_t *>(additionalUnderlyings.get()),
+                                           &mapEntries, &size);
+
+    if (mapEntries == nullptr) {
+        return result;
+    }
+
+    result.reserve(size);
+
+    for (std::int32_t i = 0; i < size; i++) {
+        result[dxfcpp::toString(mapEntries[i].key)] = mapEntries[i].value;
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_free_string_to_double_map_entries, mapEntries, size);
+
+    return result;
+}
+
+// int32_t dxfg_AdditionalUnderlyings_getSPC2(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
+// *additionalUnderlyings, const char *symbol, DXFG_OUT double *spc);
+double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, const StringLikeWrapper &symbol) {
+    if (!additionalUnderlyings) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getSPC2`. The "
+                                       "`additionalUnderlyings` handle is invalid");
+    }
+
+    double result{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_AdditionalUnderlyings_getSPC2,
+                                           static_cast<dxfg_additional_underlyings_t *>(additionalUnderlyings.get()),
+                                           symbol.c_str(), &result);
 
     return result;
 }

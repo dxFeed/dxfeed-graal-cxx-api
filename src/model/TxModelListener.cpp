@@ -52,15 +52,15 @@ const JavaObjectHandle<TxModelListenerTag> &TxModelListenerCommon::getHandle() c
 }
 
 std::string TxModelListenerCommon::toString() const {
-    return isolated::internal::IsolatedObject::toString(handle_.get());
+    return JavaObject::toString(handle_.get());
 }
 
-std::size_t TxModelListenerCommon::hashCode() const {
-    return isolated::internal::IsolatedObject::hashCode(handle_.get());
+std::size_t TxModelListenerCommon::hashCode() const noexcept {
+    return JavaObject::hashCode(handle_.get());
 }
 
-bool TxModelListenerCommon::operator==(const TxModelListenerCommon &other) const noexcept {
-    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
+bool TxModelListenerCommon::operator==(const TxModelListenerCommon &other) const {
+    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
 }
 
 void TxModelListenerCommon::createHandle(Id<TxModelListenerTag> id) {

@@ -103,18 +103,18 @@ std::string AuthToken::toString() const {
         return "AuthToken{<null>}";
     }
 
-    return isolated::internal::IsolatedObject::toString(handle_.get());
+    return JavaObject::toString(handle_.get());
 }
 
-std::size_t AuthToken::hashCode() const {
+std::size_t AuthToken::hashCode() const noexcept {
     if (isNull_) {
         return 0;
     }
 
-    return isolated::internal::IsolatedObject::hashCode(handle_.get());
+    return JavaObject::hashCode(handle_.get());
 }
 
-bool AuthToken::operator==(const AuthToken &other) const noexcept {
+bool AuthToken::operator==(const AuthToken &other) const {
     if (isNull_) {
         return other.isNull_;
     }
@@ -123,7 +123,7 @@ bool AuthToken::operator==(const AuthToken &other) const noexcept {
         return false;
     }
 
-    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
 }
 
 AuthToken::AuthToken(JavaObjectHandle<AuthToken> &&handle, bool isNull) : handle_(std::move(handle)), isNull_(isNull) {

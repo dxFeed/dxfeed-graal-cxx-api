@@ -12,8 +12,12 @@ std::string JavaObject::toString(void *handle) {
     return isolated::internal::IsolatedObject::toString(handle);
 }
 
-std::size_t JavaObject::hashCode(void *handle) {
-    return isolated::internal::IsolatedObject::hashCode(handle);
+std::size_t JavaObject::hashCode(void *handle) noexcept {
+    try {
+        return isolated::internal::IsolatedObject::hashCode(handle);
+    } catch (...) {
+        return 0;
+    }
 }
 
 bool JavaObject::equals(void *objectHandle1, void *objectHandle2) {

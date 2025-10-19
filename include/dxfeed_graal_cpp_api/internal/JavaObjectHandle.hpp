@@ -18,7 +18,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct DXFCPP_EXPORT JavaObject {
     static std::string toString(void *handle);
 
-    static std::size_t hashCode(void *handle);
+    static std::size_t hashCode(void *handle) noexcept;
 
     static bool equals(void *objectHandle1, void *objectHandle2);
 };

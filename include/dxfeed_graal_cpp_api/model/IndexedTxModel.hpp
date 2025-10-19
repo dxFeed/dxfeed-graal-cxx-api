@@ -526,7 +526,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
         return os << m.toString();
     }
 
-    std::size_t hashCode() const {
+    std::size_t hashCode() const noexcept {
         return JavaObject::hashCode(handle_.get());
     }
 

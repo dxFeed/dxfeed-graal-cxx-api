@@ -307,15 +307,15 @@ std::string InstrumentProfile::toString() const {
         return "InstrumentProfile{<null>}";
     }
 
-    return isolated::internal::IsolatedObject::toString(handle_.get());
+    return JavaObject::toString(handle_.get());
 }
 
-std::size_t InstrumentProfile::hashCode() const {
+std::size_t InstrumentProfile::hashCode() const noexcept {
     if (!handle_) {
         return 0;
     }
 
-    return isolated::internal::IsolatedObject::hashCode(handle_.get());
+    return JavaObject::hashCode(handle_.get());
 }
 
 bool InstrumentProfile::operator==(const InstrumentProfile &other) const {
@@ -327,7 +327,7 @@ bool InstrumentProfile::operator==(const InstrumentProfile &other) const {
         return false;
     }
 
-    return isolated::internal::IsolatedObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
 }
 
 InstrumentProfile::~InstrumentProfile() noexcept {
