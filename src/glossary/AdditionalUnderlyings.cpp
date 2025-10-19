@@ -38,8 +38,8 @@ AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
 AdditionalUnderlyings::~AdditionalUnderlyings() noexcept {
 }
 
-AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const StringLikeWrapper &value) {
-    return createShared(isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(value));
+AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const StringLikeWrapper &text) {
+    return createShared(isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(text));
 }
 
 double AdditionalUnderlyings::getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol) {
