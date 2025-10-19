@@ -125,6 +125,32 @@ enum class Tristate : std::uint8_t {
     NONE = 2,
 };
 
+#define DXFCPP_MACRO_CONCAT(a, b) DXFCPP_MACRO_CONCAT_INNER(a, b)
+#define DXFCPP_MACRO_CONCAT_INNER(a, b) a##b
+#define DXFCPP_MACRO_UNIQUE_NAME(base) DXFCPP_MACRO_CONCAT(base, __LINE__)
+
+namespace detail {
+template <typename Func> struct OnScopeExit {
+    Func func;
+
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    OnScopeExit(const Func &f) : func(static_cast<Func &&>(f)) { // NOLINT(*-explicit-constructor)
+    }
+
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    OnScopeExit(Func &&f) : func(f) { // NOLINT(*-explicit-constructor)
+    }
+
+    OnScopeExit(const OnScopeExit &) = delete;
+
+    ~OnScopeExit() {
+        func();
+    }
+};
+} // namespace detail
+
+#define DXFCPP_FINALLY(...) detail::OnScopeExit DXFCPP_MACRO_UNIQUE_NAME(ose__) = __VA_ARGS__
+
 template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
     static std::ptrdiff_t calculateSize(std::ptrdiff_t initSize) noexcept {
         using ListType = GraalList;

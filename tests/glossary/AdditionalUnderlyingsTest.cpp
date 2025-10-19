@@ -27,4 +27,12 @@ TEST_CASE("AdditionalUnderlyings") {
     for (const auto & [key, value] : au5->getMap()) {
         std::cout << "  " << key << " -> " << value << std::endl;
     }
+
+    auto cfi1 = CFI::valueOf("OPEFPS");
+
+    auto values = cfi1->decipher();
+
+    for (const auto &value : values) {
+        std::cout << value << " |-> " << value->getDescription() << std::endl;
+    }
 }
