@@ -248,6 +248,10 @@ char CFI::Value::getCodeChar() const {
     return utf16to8(code);
 }
 
+std::string CFI::Value::getName() const {
+    return isolated::glossary::IsolatedCFI::IsolatedValue::getName(handle_);
+}
+
 std::string CFI::Value::getDescription() const {
     return isolated::glossary::IsolatedCFI::IsolatedValue::getDescription(handle_);
 }
