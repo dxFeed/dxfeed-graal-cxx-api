@@ -194,9 +194,9 @@ AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map
             std::is_convertible_v<KeyType, std::string_view> || requires { KeyType{}.toStdString(); },
             "AdditionalUnderlyings::valueOf(): unsupported key type — must be convertible to std::string_view or "
             "provide .toStdString()");
-    }
 
-    return EMPTY;
+        return {};
+    }
 }
 
 DXFCPP_END_NAMESPACE
