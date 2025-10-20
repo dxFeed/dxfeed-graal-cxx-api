@@ -34,6 +34,7 @@
     * Added `AdditionUnderlyings` class.
     * Added `CFI` class.
     * Added `PriceIncrements` class.
+    * Added `RoundingMode` enum.
 * **\[BREAKING]** The `Day::getHashCode` method renamed to `Day::hashCode`.
 * **\[BREAKING]** The `Session::getHashCode` method renamed to `Session::hashCode`.
 

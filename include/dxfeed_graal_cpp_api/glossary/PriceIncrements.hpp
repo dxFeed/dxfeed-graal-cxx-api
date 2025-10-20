@@ -13,7 +13,7 @@ DXFCPP_BEGIN_NAMESPACE
  * Specifies a <i>rounding behavior</i> for numerical operations capable of discarding precision. Each rounding mode
  * indicates how the least significant returned digit of a rounded result is to be calculated. If fewer digits are
  * returned than the digits needed to represent the exact numerical result, the discarded digits will be referred to
- * as the <i>discarded fraction</i> regardless the digits' contribution to the value of the number. In other words,
+ * as the <i>discarded fraction</i> regardless of the digits' contribution to the value of the number. In other words,
  * considered as a numerical value, the discarded fraction could have an absolute value greater than one.
  *
  * https://docs.oracle.com/en/java/javase/22/docs/api/java.base/java/math/RoundingMode.html
@@ -265,6 +265,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * See PriceIncrements::getText() for format specification.
      *
      * @param text The textual representation.
+     * @return The price increments instance.
      * @throws JavaException("IllegalArgumentException") if text uses wrong format or contains invalid values.
      */
     static Ptr valueOf(const StringLikeWrapper &text);
@@ -272,15 +273,19 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
     /**
      * Returns an instance of price increments for a specified single increment.
      *
-     * @throws IllegalArgumentException if increment uses invalid value
+     * @param increment The increment.
+     * @return The price increments instance.
+     * @throws JavaException("IllegalArgumentException") if increment uses invalid value
      */
     static Ptr valueOf(double increment);
 
     /**
      * Returns an instance of price increments for specified internal representation.
-     * See {@link #getPriceIncrements} for details about internal representation.
+     * See PriceIncrements::getPriceIncrements() for details about internal representation.
      *
-     * @throws IllegalArgumentException if data contains invalid values
+     * @param increments The increments.
+     * @return The price increments instance.
+     * @throws JavaException("IllegalArgumentException") if data contains invalid values
      */
     static Ptr valueOf(const std::vector<double> &increments);
 
@@ -291,105 +296,141 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * LIST ::= INCREMENT | RANGE "; " LIST
      * RANGE ::= INCREMENT " " UPPER_LIMIT
      * </pre>
-     * Where INCREMENT is a price increment in the given price range and UPPER_LIMIT is the upper bound of that range.
-     * All ranges are listed in the ascending order of upper limits and the last range is considered to extend toward
-     * infinity and is therefore specified without upper limit. All increments and limits are finite positive numbers.
-     * The case with empty text is a special stub used for {@link #EMPTY} value, it uses sole increment with value 0.
+     * Where `INCREMENT` is a price increment in the given price range and `UPPER_LIMIT` is the upper bound of that
+     * range. All ranges are listed in the ascending order of upper limits, and the last range is considered to extend
+     * toward infinity and is therefore specified without upper limit. All increments and limits are finite positive
+     * numbers. The case with empty text is a special stub used for PriceIncrements::EMPTY value, it uses a sole
+     * increment with value 0.
+     *
+     * @return The textual representation.
      */
     std::string getText() const;
 
     /**
      * Returns internal representation of price increments as a single array of double values.
-     * This array specifies all numbers from textual representation (see {@link #getText}) in the same order.
-     * Therefore numbers at even positions are increments and numbers at odd positions are upper limits.
-     * The array always has odd length - the infinite upper limit of last range is always omitted and
-     * the first increment (for price range adjacent to 0) is always included even for {@link #EMPTY} value.
+     * This array specifies all numbers from textual representation (see PriceIncrements::getText()) in the same order.
+     * Therefore, numbers at even positions are increments and numbers at odd positions are upper limits.
+     * The array always has an odd length - the infinite upper limit of the last range is always omitted, and
+     * the first increment (for price range adjacent to 0) is always included even for PriceIncrements::EMPTY value.
+     *
+     * @return The internal representation of price increments.
      */
     std::vector<double> getPriceIncrements() const;
 
     /**
-     * Returns first price increment (for price range adjacent to 0), usually the smallest one.
-     * Returns 0 for {@link #EMPTY} price increments.
+     * Returns the first price increment (for price range adjacent to 0), usually the smallest one.
+     * Returns 0 for PriceIncrements::EMPTY price increments.
+     *
+     * @return The first price increment.
      */
     double getPriceIncrement() const;
 
     /**
      * Returns price increment which shall be applied to the specified price.
-     * If price is Not-a-Number (NaN) then first price increment is returned.
-     * If price is a breakpoint between two ranges then minimum of upward and downward increments is returned.
-     * This method is equivalent to calling {@link #getPriceIncrement(double, int) getPriceIncrement(price, 0)}.
+     * If the price is Not-a-Number (`NaN`), then the first price increment is returned.
+     * If price is a breakpoint between two ranges, then a minimum of upward and downward increments is returned.
+     * This method is equivalent to calling @ref PriceIncrements::getPriceIncrement(double, int) "PriceIncrements::getPriceIncrement(price, 0)".
+     *
+     * @param price The price.
+     * @return The price increment.
      */
     double getPriceIncrement(double price) const;
 
     /**
      * Returns price increment which shall be applied to the specified price in the specified direction.
-     * If price is Not-a-Number (NaN) then first price increment is returned.
-     * If price is a breakpoint between two ranges and direction is 0 then minimum of upward and downward increments is
-     * returned.
+     * If the price is Not-a-Number (`NaN`), then the first price increment is returned.
+     * If the price is a breakpoint between two ranges and a direction is 0, then a minimum of upward and downward
+     * increments is returned.
+     *
+     * @param price The price.
+     * @param direction The direction.
+     * @return The price increment.
      */
     double getPriceIncrement(double price, std::int32_t direction) const;
 
     /**
      * Returns first price precision (for price range adjacent to 0), usually the largest one.
-     * Returns 0 for {@link #EMPTY} price increments.
+     * Returns 0 for PriceIncrements::EMPTY price increments.
+     *
+     * @return The first price precision.
      */
     std::int32_t getPricePrecision() const;
 
     /**
-     * Returns price precision for the price range which contains specified price.
+     * Returns price precision for the price range which contains a specified price.
      * Price precision is a number of decimal digits after decimal point that are needed
      * to represent all valid prices in the given price range.
      * This method returns price precision in the interval [0, 18] inclusive.
-     * If price is Not-a-Number (NaN) then first price precision is returned.
-     * If price is a breakpoint between two ranges then precision of lower range is returned.
+     * If the price is Not-a-Number (`NaN`), then the first price precision is returned.
+     * If the price is a breakpoint between two ranges, then precision of the lower range is returned.
+     *
+     * @param price The price.
+     * @return The price precision.
      */
     std::int32_t getPricePrecision(double price) const;
 
     /**
      * Returns specified price rounded to nearest valid value.
-     * If price is Not-a-Number (NaN) then NaN is returned.
-     * If appropriate price increment is 0 then specified price is returned as is.
-     * This method is equivalent to calling {@link #roundPrice(double, int) roundPrice(price, 0)}.
+     * If the price is Not-a-Number (`NaN`), then NaN is returned.
+     * If the appropriate price increment is 0, then the specified price is returned as is.
+     * This method is equivalent to calling @ref PriceIncrements::roundPrice(double, int) "PriceIncrements::roundPrice(price, 0)".
+     *
+     * @param price The price to round.
+     * @return The rounded price.
      */
     double roundPrice(double price) const;
 
     /**
-     * Returns specified price rounded in the specified direction to nearest value
-     * that is valid according to price increment rules.
-     * If price is Not-a-Number (NaN) then NaN is returned.
-     * If appropriate price increment is 0 then specified price is returned as is.
-     * If direction is 0 then price is rounded to nearest valid value.
+     * Returns specified price rounded in the specified direction to the nearest value
+     * that is valid, according to price increment rules.
+     * If the price is Not-a-Number (`NaN`), then NaN is returned.
+     * If the appropriate price increment is 0, then the specified price is returned as is.
+     * If a direction is 0, then the price is rounded to the nearest valid value.
+     *
+     * @param price The price to round.
+     * @param direction The direction.
+     * @return The rounded price.
      */
     double roundPrice(double price, std::int32_t direction) const;
 
     /**
      * Returns specified price rounded according to specified rounding mode to nearest value
-     * that is valid according to price increment rules.
-     * If price is Not-a-Number (NaN) then NaN is returned.
-     * If appropriate price increment is 0 then specified price is returned as is.
+     * that is valid, according to price increment rules.
+     * If the price is Not-a-Number (`NaN`), then NaN is returned.
+     * If the appropriate price increment is 0, then the specified price is returned as is.
+     *
+     * @param price The price to round.
+     * @param roundingMode The rounding mode.
+     * @return The rounded price.
      */
     double roundPrice(double price, RoundingMode roundingMode) const;
 
     /**
      * Returns specified price incremented in the specified direction
-     * by appropriate increment and then rounded to nearest valid value.
-     * If price is Not-a-Number (NaN) then NaN is returned.
-     * If appropriate price increment is 0 then specified price is returned as is.
-     * This method is equivalent to calling {@link #incrementPrice(double, int, double) incrementPrice(price, direction,
-     * 0)}.
+     * by appropriate increment and then rounded to the nearest valid value.
+     * If the price is Not-a-Number (`NaN`), then NaN is returned.
+     * If the appropriate price increment is 0, then the specified price is returned as is.
+     * This method is equivalent to calling @ref PriceIncrements::incrementPrice(double, int, double) "PriceIncrements::incrementPrice(price, direction, 0)".
      *
-     * @throws IllegalArgumentException if direction is 0
+     * @param price The price to increment.
+     * @param direction The direction.
+     * @return The new price.
+     * @throws JavaException("IllegalArgumentException") if the direction is 0
      */
     double incrementPrice(double price, std::int32_t direction) const;
 
     /**
      * Returns specified price incremented in the specified direction by the maximum of
-     * specified step and appropriate increment, and then rounded to nearest valid value.
-     * If price is Not-a-Number (NaN) then NaN is returned.
-     * If both step and appropriate price increment are 0 then specified price is returned as is.
-     * Note that step must be positive even for negative directions.
+     * a specified step and appropriate increment, and then rounded to the nearest valid value.
+     * If the price is Not-a-Number (`NaN`), then NaN is returned.
+     * If both step and appropriate price increment are 0, then the specified price is returned as is.
+     * Note that a step must be positive even for negative directions.
      *
-     * @throws IllegalArgumentException if direction is 0 or step uses invalid value
+     * @param price The price to increment.
+     * @param direction The direction.
+     * @param step The step.
+     * @return The new price.
+     * @throws JavaException("IllegalArgumentException") if the direction is 0, or the step uses an invalid value
      */
     double incrementPrice(double price, std::int32_t direction, double step) const;
 

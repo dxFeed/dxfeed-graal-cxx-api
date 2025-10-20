@@ -68,6 +68,14 @@ double PriceIncrements::getPriceIncrement() const {
     return isolated::glossary::IsolatedPriceIncrements::getPriceIncrement(handle_);
 }
 
+double PriceIncrements::getPriceIncrement(double price) const {
+    std::lock_guard lock(mtx_);
+
+    init();
+
+    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrement(handle_, price);
+}
+
 double PriceIncrements::getPriceIncrement(double price, std::int32_t direction) const {
     std::lock_guard lock(mtx_);
 
