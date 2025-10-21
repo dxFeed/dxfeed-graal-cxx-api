@@ -39,7 +39,7 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<cons
     graalMapEntries.reserve(mapLikeEntries.size());
 
     for (const auto &[key, value] : mapLikeEntries) {
-        graalMapEntries.emplace_back(key, value);
+        graalMapEntries.push_back(dxfg_string_to_double_map_entry_t{key, value});
     }
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf2, graalMapEntries.data(),
