@@ -44,6 +44,10 @@ PriceIncrements::Ptr PriceIncrements::valueOf(const std::vector<double> &increme
     return createShared(isolated::glossary::IsolatedPriceIncrements::valueOf(increments));
 }
 
+PriceIncrements::Ptr PriceIncrements::valueOf(std::initializer_list<double> increments) {
+    return createShared(isolated::glossary::IsolatedPriceIncrements::valueOf(increments));
+}
+
 std::string PriceIncrements::getText() const {
     std::lock_guard lock(mtx_);
 

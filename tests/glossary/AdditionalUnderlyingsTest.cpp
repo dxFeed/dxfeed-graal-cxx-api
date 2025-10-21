@@ -14,7 +14,7 @@
 using namespace std::literals;
 using namespace dxfcpp;
 
-TEST_CASE("AdditionalUnderlyings") {
+TEST_CASE("AdditionalUnderlyings + CFI") {
     auto au1 = AdditionalUnderlyings::valueOf(std::vector<std::pair<std::string, double>>());
     auto au2 = AdditionalUnderlyings::valueOf(std::map<std::string, double>());
     auto au3 = AdditionalUnderlyings::valueOf(std::map<StringLikeWrapper, double>());

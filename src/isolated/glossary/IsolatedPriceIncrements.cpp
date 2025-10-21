@@ -85,7 +85,7 @@ std::vector<double> getPriceIncrements(const JavaObjectHandle<PriceIncrements> &
     runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_getPriceIncrements,
                                    static_cast<dxfg_price_increments_t *>(priceIncrements.get()), &increments, &size);
 
-    if (increments != nullptr) {
+    if (increments == nullptr) {
         return {};
     }
 

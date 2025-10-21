@@ -290,6 +290,16 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
     static Ptr valueOf(const std::vector<double> &increments);
 
     /**
+     * Returns an instance of price increments for specified internal representation.
+     * See PriceIncrements::getPriceIncrements() for details about internal representation.
+     *
+     * @param increments The increments.
+     * @return The price increments instance.
+     * @throws JavaException("IllegalArgumentException") if data contains invalid values
+     */
+    static Ptr valueOf(std::initializer_list<double> increments);
+
+    /**
      * Returns textual representation of price increments in the format:
      * <pre>
      * TEXT ::= "" | LIST
