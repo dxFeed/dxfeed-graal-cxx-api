@@ -3,17 +3,14 @@
 
 #pragma once
 
-#include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/utils/StringUtils.hpp"
-#include "../market/MarketEventSymbols.hpp"
-#include "CandleSymbolAttribute.hpp"
 
 #include <string>
-#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -130,7 +127,7 @@ struct DXFCPP_EXPORT CandleType {
     virtual ~CandleType() noexcept = default;
 
     /**
-     * Returns candle type period in milliseconds as closely as possible.
+     * Returns a candle type period in milliseconds as closely as possible.
      * Certain types like CandleType::SECOND and CandleType::DAY span a specific number of milliseconds.
      * CandleType::MONTH, CandleType::OPTEXP and CandleType::YEAR are approximate. Candle type period of
      * CandleType::TICK, CandleType::VOLUME, CandleType::PRICE, CandleType::PRICE_MOMENTUM and CandleType::PRICE_RENKO
@@ -153,7 +150,7 @@ struct DXFCPP_EXPORT CandleType {
 
     /**
      * Returns string representation of this candle type.
-     * The string representation of candle type is the shortest unique prefix of the lower case string that corresponds
+     * The string representation of a candle type is the shortest unique prefix of the lower case string that corresponds
      * to its @ref CandleType::getName() "name".
      * For example, CandleType::TICK is represented as `"t"`, while CandleType::MONTH is represented as `"mo"` to
      * distinguish it from CandleType::MINUTE that is represented as `"m"`.
@@ -166,13 +163,13 @@ struct DXFCPP_EXPORT CandleType {
     }
 
     /**
-     * Parses string representation of candle type into object.
-     * Any string that that is a prefix of candle type CandleType::getName() can be parsed
-     * (including the one that was returned by CandleType::toString()) and case is ignored for parsing.
+     * Parses string representation of a candle type into an object.
+     * Any string that is a prefix of candle type CandleType::getName() can be parsed
+     * (including the one that was returned by CandleType::toString()) and a case is ignored for parsing.
      *
-     * @param s The string representation of candle type.
+     * @param s The string representation of a candle type.
      * @return A candle type.
-     * @throws InvalidArgumentException if argument is empty or invalid
+     * @throws InvalidArgumentException if the argument is empty or invalid
      */
     static std::reference_wrapper<const CandleType> parse(const dxfcpp::StringLikeWrapper &s) {
         if (s.empty()) {
@@ -193,7 +190,7 @@ struct DXFCPP_EXPORT CandleType {
                 return typeRef;
             }
 
-            // Ticks, Minutes, Seconds, etc
+            // Ticks, Minutes, Seconds, etc.
             if (s.ends_with("s") && iEquals(name, s.substr(0, s.length() - 1))) {
                 return typeRef;
             }
