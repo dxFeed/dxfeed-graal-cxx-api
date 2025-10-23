@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../schedule/SessionFilter.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
+#include "dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 
 #include <string>
 #include <type_traits>
@@ -63,7 +64,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     static const std::vector<std::reference_wrapper<const CandleSession>> VALUES;
 
     private:
-    const SessionFilter *sessionFilter_;
+    const SessionFilter *sessionFilter_{};
     std::string string_;
 
     CandleSession(const SessionFilter &sessionFilter, const dxfcpp::StringLikeWrapper &string) noexcept
