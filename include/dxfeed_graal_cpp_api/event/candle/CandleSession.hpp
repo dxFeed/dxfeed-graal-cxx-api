@@ -47,7 +47,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     static const CandleSession REGULAR;
 
     /**
-     * Default trading session is CandleSession::ANY.
+     * The default trading session is CandleSession::ANY.
      */
     static const CandleSession DEFAULT;
 
@@ -76,8 +76,8 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     virtual ~CandleSession() noexcept = default;
 
     /**
-     * Returns session filter that corresponds to this session attribute.
-     * @return session filter that corresponds to this session attribute.
+     * Returns a session filter that corresponds to this session attribute.
+     * @return The session filter that corresponds to this session attribute.
      */
     const SessionFilter &getSessionFilter() const & noexcept {
         return *sessionFilter_;
@@ -95,7 +95,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
 
     /**
      * Returns string representation of this candle session attribute.
-     * The string representation of candle session attribute is a lower case string that corresponds to its
+     * The string representation of the candle session attribute is a lower case string that corresponds to its
      * @ref CandleSession::name() "name". For example, CandleSession::ANY is represented as "any".
      *
      * @return string representation of this candle session attribute.
@@ -109,12 +109,12 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     }
 
     /**
-     * Parses string representation of candle session attribute into object.
-     * Any string that was returned by CandleSession::toString() can be parsed and case is ignored for parsing.
+     * Parses string representation of the candle session attribute into an object.
+     * Any string returned by CandleSession::toString() can be parsed, and a case is ignored for parsing.
      *
-     * @param s The string representation of candle session attribute.
+     * @param s The string representation of the candle session attribute.
      * @return The candle session attribute (reference).
-     * @throws InvalidArgumentException if argument is empty or invalid
+     * @throws InvalidArgumentException if the argument is empty or invalid
      */
     static std::reference_wrapper<const CandleSession> parse(const dxfcpp::StringLikeWrapper &s) {
         if (s.empty()) {
@@ -140,10 +140,10 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
 
     /**
      * Returns candle session attribute of the given candle symbol string.
-     * The result is CandleSession::DEFAULT if the symbol does not have candle session attribute.
+     * The result is CandleSession::DEFAULT if the symbol does not have a candle session attribute.
      *
      * @param symbol The candle symbol string.
-     * @return candle session attribute of the given candle symbol string.
+     * @return The candle session attribute of the given candle symbol string.
      */
     static std::reference_wrapper<const CandleSession> getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
         auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
@@ -155,7 +155,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * Returns candle symbol string with the normalized representation of the candle session attribute.
      *
      * @param symbol candle symbol string.
-     * @return candle symbol string with the normalized representation of the the candle session attribute.
+     * @return The candle symbol string with the normalized representation of the candle session attribute.
      */
     static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) noexcept {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
