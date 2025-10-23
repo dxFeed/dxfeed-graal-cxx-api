@@ -27,6 +27,16 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+namespace detail {
+template <typename, template <class...> class> struct IsInstanceImpl : std::false_type {};
+
+template <template <class...> class C, typename... Ts> struct IsInstanceImpl<C<Ts...>, C> : std::true_type {};
+} // namespace detail
+
+template <typename T, template <class...> class C> constexpr bool isInstanceOf = detail::IsInstanceImpl<T, C>::value;
+template <typename T, template <class...> class C>
+concept InstanceOf = isInstanceOf<T, C>;
+
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 
@@ -44,6 +54,18 @@ concept Extends = Derived<T, U>;
 
 template <class T, class U>
 concept BaseOf = Derived<U, T>;
+
+template <typename T>
+concept PairLike = requires(T t) {
+    t.first;
+    t.second;
+};
+
+template <typename T>
+concept MapLike = requires(T t) {
+    { std::begin(t) } -> std::input_iterator;
+    { std::end(t) } -> std::sentinel_for<decltype(std::begin(t))>;
+} && PairLike<std::remove_cvref_t<decltype(*std::begin(std::declval<T &>()))>>;
 
 namespace detail {
 template <typename T>
@@ -102,6 +124,32 @@ enum class Tristate : std::uint8_t {
     TRUE = 1,
     NONE = 2,
 };
+
+#define DXFCPP_MACRO_CONCAT(a, b) DXFCPP_MACRO_CONCAT_INNER(a, b)
+#define DXFCPP_MACRO_CONCAT_INNER(a, b) a##b
+#define DXFCPP_MACRO_UNIQUE_NAME(base) DXFCPP_MACRO_CONCAT(base, __LINE__)
+
+namespace detail {
+template <typename Func> struct OnScopeExit {
+    Func func;
+
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    OnScopeExit(const Func &f) : func(static_cast<Func &&>(f)) { // NOLINT(*-explicit-constructor)
+    }
+
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    OnScopeExit(Func &&f) : func(f) { // NOLINT(*-explicit-constructor)
+    }
+
+    OnScopeExit(const OnScopeExit &) = delete;
+
+    ~OnScopeExit() {
+        func();
+    }
+};
+} // namespace detail
+
+#define DXFCPP_FINALLY(...) detail::OnScopeExit DXFCPP_MACRO_UNIQUE_NAME(ose__) = __VA_ARGS__
 
 template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
     static std::ptrdiff_t calculateSize(std::ptrdiff_t initSize) noexcept {

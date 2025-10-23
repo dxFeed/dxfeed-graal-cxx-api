@@ -52,7 +52,7 @@ findPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &s
 findNextSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
                 /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
 
-std::size_t getHashCode(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+std::size_t hashCode(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
 bool equals(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
             /* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &otherSession);

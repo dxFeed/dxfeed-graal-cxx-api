@@ -184,7 +184,7 @@ struct DXFCPP_EXPORT Session {
     /**
      * @return A hash code value for this object.
      */
-    std::size_t getHashCode() const;
+    std::size_t hashCode() const noexcept;
 
     /**
      * Returns a string representation of the current object.
@@ -197,8 +197,8 @@ struct DXFCPP_EXPORT Session {
 DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Session> {
-    std::size_t operator()(const dxfcpp::Session &session) const {
-        return session.getHashCode();
+    std::size_t operator()(const dxfcpp::Session &session) const noexcept {
+        return session.hashCode();
     }
 };
 

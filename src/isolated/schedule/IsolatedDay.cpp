@@ -303,10 +303,10 @@ findNextDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
         dxfg_Day_findNextDay, static_cast<dxfg_day_t *>(day.get()), static_cast<dxfg_day_filter_t *>(filter.get()))};
 }
 
-std::size_t getHashCode(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day) {
+std::size_t hashCode(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day) {
     if (!day) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Day_getHashCode`. The `day` handle is invalid");
+            "Unable to execute function `dxfg_Day_hashCode`. The `day` handle is invalid");
     }
 
     return static_cast<std::size_t>(

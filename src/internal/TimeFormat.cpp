@@ -32,8 +32,6 @@ TimeFormat::TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializ
     : initializer_(std::move(initializer)) {};
 
 void TimeFormat::init() const {
-    std::lock_guard lock(mtx_);
-
     if (!initialized_) {
         handle_ = initializer_();
         initialized_ = true;
@@ -41,18 +39,24 @@ void TimeFormat::init() const {
 }
 
 const JavaObjectHandle<TimeFormat> &TimeFormat::getHandle() const {
+    std::lock_guard lock(mtx_);
+
     init();
 
     return handle_;
 }
 
 std::int64_t TimeFormat::parse(const StringLikeWrapper &value) const {
+    std::lock_guard lock(mtx_);
+
     init();
 
     return isolated::internal::IsolatedTimeFormat::parse(handle_, value);
 }
 
 std::string TimeFormat::format(std::int64_t timestamp) const {
+    std::lock_guard lock(mtx_);
+
     init();
 
     return isolated::internal::IsolatedTimeFormat::format(handle_, timestamp);

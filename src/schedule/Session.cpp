@@ -100,8 +100,12 @@ bool Session::operator==(const Session &other) const {
     return isolated::schedule::IsolatedSession::equals(handle_, other.handle_);
 }
 
-std::size_t Session::getHashCode() const {
-    return isolated::schedule::IsolatedSession::getHashCode(handle_);
+std::size_t Session::hashCode() const noexcept {
+    try {
+        return isolated::schedule::IsolatedSession::hashCode(handle_);
+    } catch (...) {
+        return 0;
+    }
 }
 
 std::string Session::toString() const {

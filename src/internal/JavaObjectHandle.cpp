@@ -12,8 +12,12 @@ std::string JavaObject::toString(void *handle) {
     return isolated::internal::IsolatedObject::toString(handle);
 }
 
-std::size_t JavaObject::hashCode(void *handle) {
-    return isolated::internal::IsolatedObject::hashCode(handle);
+std::size_t JavaObject::hashCode(void *handle) noexcept {
+    try {
+        return isolated::internal::IsolatedObject::hashCode(handle);
+    } catch (...) {
+        return 0;
+    }
 }
 
 bool JavaObject::equals(void *objectHandle1, void *objectHandle2) {
@@ -24,6 +28,7 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
     auto result = runIsolatedOrElse(
         [handle = handle](auto threadHandle) {
             if constexpr (Debugger::isDebug) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
             }
 
@@ -38,6 +43,7 @@ template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
     dxfcpp::ignoreUnused(result);
 
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
                         dxfcpp::toString(result));
     }
@@ -47,6 +53,7 @@ template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexce
     auto result = runIsolatedOrElse(
         [handle = handle](auto threadHandle) {
             if constexpr (Debugger::isDebug) {
+                // ReSharper disable once CppDFAUnreachableCode
                 Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
             }
 
@@ -61,6 +68,7 @@ template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexce
     dxfcpp::ignoreUnused(result);
 
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
                         dxfcpp::toString(result));
     }
@@ -117,5 +125,11 @@ template struct JavaObjectHandle<Logging::ListenerTag>;
 
 template struct JavaObjectHandle<HistoryEndpoint>;
 template struct JavaObjectHandle<HistoryEndpoint::Builder>;
+
+template struct JavaObjectHandle<AdditionalUnderlyings>;
+template struct JavaObjectHandle<CFI>;
+template struct JavaObjectHandle<CFI::Attribute>;
+template struct JavaObjectHandle<CFI::Value>;
+template struct JavaObjectHandle<PriceIncrements>;
 
 DXFCPP_END_NAMESPACE

@@ -143,9 +143,9 @@ struct DXFCPP_EXPORT AuthToken {
         return os << t.toString();
     }
 
-    std::size_t hashCode() const;
+    std::size_t hashCode() const noexcept;
 
-    bool operator==(const AuthToken &other) const noexcept;
+    bool operator==(const AuthToken &other) const;
 
     virtual ~AuthToken() noexcept = default;
 

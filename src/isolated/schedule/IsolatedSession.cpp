@@ -161,10 +161,10 @@ findNextSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &s
                                           static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
-std::size_t getHashCode(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+std::size_t hashCode(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Session_getHashCode`. The `session` handle is invalid");
+            "Unable to execute function `dxfg_Session_hashCode`. The `session` handle is invalid");
     }
 
     return static_cast<std::size_t>(

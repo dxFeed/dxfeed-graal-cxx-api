@@ -15,8 +15,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Handler.hpp"
 #include "../internal/Id.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "../internal/managers/EntityManager.hpp"
 #include "../internal/context/ApiContext.hpp"
+#include "../internal/managers/EntityManager.hpp"
 
 #include <functional>
 #include <memory>
@@ -46,9 +46,9 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
         return os << l.toString();
     }
 
-    std::size_t hashCode() const;
+    std::size_t hashCode() const noexcept;
 
-    bool operator==(const TxModelListenerCommon &other) const noexcept;
+    bool operator==(const TxModelListenerCommon &other) const;
 
     protected:
     mutable std::recursive_mutex mutex_{};
@@ -69,7 +69,7 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
  */
 template <Derived<IndexedEvent> E>
 struct /* DXFCPP_EXPORT */ IndexedTxModelListener final : TxModelListenerCommon,
-                                                    RequireMakeShared<IndexedTxModelListener<E>> {
+                                                          RequireMakeShared<IndexedTxModelListener<E>> {
     IndexedTxModelListener(RequireMakeShared<IndexedTxModelListener<E>>::LockExternalConstructionTag) {};
 
     ~IndexedTxModelListener() noexcept override {
@@ -133,7 +133,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModelListener final : TxModelListenerCommon,
         return os << l.toString();
     }
 
-    bool operator==(const IndexedTxModelListener<E> &other) const noexcept {
+    bool operator==(const IndexedTxModelListener<E> &other) const {
         return TxModelListenerCommon::operator==(other);
     }
 };
@@ -143,7 +143,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModelListener final : TxModelListenerCommon,
  */
 template <Derived<TimeSeriesEvent> E>
 struct /* DXFCPP_EXPORT */ TimeSeriesTxModelListener final : TxModelListenerCommon,
-                                                       RequireMakeShared<TimeSeriesTxModelListener<E>> {
+                                                             RequireMakeShared<TimeSeriesTxModelListener<E>> {
     TimeSeriesTxModelListener(RequireMakeShared<TimeSeriesTxModelListener<E>>::LockExternalConstructionTag) {};
 
     ~TimeSeriesTxModelListener() noexcept override {
@@ -208,7 +208,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModelListener final : TxModelListenerComm
         return os << l.toString();
     }
 
-    bool operator==(const TimeSeriesTxModelListener<E> &other) const noexcept {
+    bool operator==(const TimeSeriesTxModelListener<E> &other) const {
         return TxModelListenerCommon::operator==(other);
     }
 };

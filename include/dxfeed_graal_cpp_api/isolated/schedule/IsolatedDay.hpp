@@ -88,7 +88,7 @@ findPrevDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
 findNextDay(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
             /* dxfg_day_filter_t* */ const JavaObjectHandle<dxfcpp::DayFilter> &filter);
 
-std::size_t getHashCode(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day);
+std::size_t hashCode(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day);
 
 bool equals(/* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &day,
             /* dxfg_day_t* */ const JavaObjectHandle<dxfcpp::Day> &otherDay);

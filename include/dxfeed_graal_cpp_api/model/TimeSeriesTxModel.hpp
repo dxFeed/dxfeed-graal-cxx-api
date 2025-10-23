@@ -447,11 +447,11 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
         return os << m.toString();
     }
 
-    std::size_t hashCode() const {
+    std::size_t hashCode() const noexcept {
         return JavaObject::hashCode(handle_.get());
     }
 
-    bool operator==(const TimeSeriesTxModel &other) const noexcept {
+    bool operator==(const TimeSeriesTxModel &other) const {
         return JavaObject::equals(handle_.get(), other.handle_.get());
     }
 };
