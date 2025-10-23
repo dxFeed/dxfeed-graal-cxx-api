@@ -42,18 +42,8 @@ bool CandleAlignment::operator==(const CandleAlignment &candleAlignment) const n
     return string_ == candleAlignment.string_;
 }
 
-/**
- * Parses string representation of candle alignment into object.
- * Any string that was returned by CandleAlignment::toString() can be parsed and case is ignored for parsing.
- *
- * @param s The string representation of candle alignment.
- * @return The candle alignment (reference)
- * @throws InvalidArgumentException if the string representation is invalid.
- */
 std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const dxfcpp::StringLikeWrapper &s) {
-    auto found = BY_STRING.find(s);
-
-    if (found != BY_STRING.end()) {
+    if (auto found = BY_STRING.find(s); found != BY_STRING.end()) {
         return found->second;
     }
 
@@ -68,13 +58,6 @@ std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const dxfcp
     throw InvalidArgumentException("Unknown candle alignment: " + s);
 }
 
-/**
- * Returns candle alignment of the given candle symbol string.
- * The result is CandleAlignment::DEFAULT if the symbol does not have candle alignment attribute.
- *
- * @param symbol The candle symbol string.
- * @return candle alignment of the given candle symbol string.
- */
 std::reference_wrapper<const CandleAlignment>
 CandleAlignment::getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
     auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
@@ -82,12 +65,6 @@ CandleAlignment::getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) 
     return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
 }
 
-/**
- * Returns candle symbol string with the normalized representation of the candle alignment attribute.
- *
- * @param symbol The candle symbol string.
- * @return candle symbol string with the normalized representation of the the candle alignment attribute.
- */
 std::string CandleAlignment::normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
     auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 

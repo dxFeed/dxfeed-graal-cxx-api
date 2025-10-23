@@ -8,7 +8,6 @@
 #include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
 #include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
 
-#include <dxfeed_graal_c_api/api.h>
 #include <dxfg_api.h>
 
 #include <cassert>
@@ -104,6 +103,7 @@ std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
 
 void *Candle::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::toGraal()");
     }
 
