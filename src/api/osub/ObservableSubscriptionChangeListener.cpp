@@ -100,7 +100,7 @@ std::shared_ptr<ObservableSubscriptionChangeListener> ObservableSubscriptionChan
     return listener;
 }
 
-const JavaObjectHandle<ObservableSubscriptionChangeListener> &ObservableSubscriptionChangeListener::getHandle() const {
+const JavaObjectHandle<ObservableSubscriptionChangeListener> &ObservableSubscriptionChangeListener::getHandle(Key) const {
     std::lock_guard guard{mutex_};
 
     return handle_;

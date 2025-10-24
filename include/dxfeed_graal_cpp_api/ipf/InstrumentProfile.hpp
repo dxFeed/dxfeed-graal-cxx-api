@@ -772,7 +772,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
 
     struct List {
         /**
-         * Creates a vector of objects of the current type and fills it with data from the the dxFeed Graal SDK list of
+         * Creates a vector of objects of the current type and fills it with data from the dxFeed Graal SDK list of
          * structures.
          *
          * @param list The pointer to the dxFeed Graal SDK list of structures.

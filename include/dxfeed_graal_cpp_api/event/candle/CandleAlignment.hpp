@@ -110,7 +110,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * Returns candle symbol string with the normalized representation of the candle alignment attribute.
      *
      * @param symbol The candle symbol string.
-     * @return candle symbol string with the normalized representation of the the candle alignment attribute.
+     * @return candle symbol string with the normalized representation of the candle alignment attribute.
      */
     static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol);
 };

@@ -43,7 +43,7 @@ struct OnDemandService;
  *
  * <h3>Endpoint role</h3>
  *
- * Each endpoint has a role that is specified on its creation and cannot be changed afterwards.
+ * Each endpoint has a role that is specified on its creation and cannot be changed afterward.
  * The default factory method DXEndpoint::create() creates an endpoint with a @ref Role::FEED "FEED" role.
  * Endpoints with other roles are created with DXEndpoint::create(Role) factory method. Endpoint role is
  * represented by @ref Role "DXEndpoint::Role" enumeration.
@@ -54,24 +54,23 @@ struct OnDemandService;
  *   delayed data processing (<b>this is a default role</b>).
  *   DXEndpoint::getFeed() method returns a feed object that subscribes to this remote data feed provider and receives
  * events from it. When event processing threads cannot keep up (don't have enough CPU time), data is dynamically
- * conflated to minimize latency between received events and their processing time. For example:
+ * conflated to minimize latency between received events and their processing time. For example,
  *   - <b>`DXEndpoint::create()->connect("demo.dxfeed.com:7300")->getFeed()`</b> returns a demo feed from dxFeed with
  *     sample market quotes.
- *   - <b>`DXEndpoint::create()->connect("localhost:7400")->getFeed()`</b> returns a feed that is connected to a
- *     publisher that is running on the same host. See example below.
+ *   - <b>`DXEndpoint::create()->connect("localhost:7400")->getFeed()`</b> returns a feed connected to a
+ *     publisher that is running on the same host. See the example below.
  *   - <b>`DXEndpoint::create()->connect("file:demo-sample.data")->getFeed()`</b> returns a feed that is connected to
  *     a "demo-sample.data" file and plays back it as if it was received in real time.
  *
- *   This endpoint is automatically connected to the configured data feed as explained in default properties section.
+ *   This endpoint is automatically connected to the configured data feed, as explained in the default properties section.
  * - @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" is similar to @ref Role::FEED "FEED", but it is designed to be used with
- *   OnDemandService for historical data replay only. It is configured with default properties, but is not connected
- *   automatically to the data provider until @ref OnDemandService::replay(std::int64_t,double)
- * "OnDemandService::replay" method is invoked.
+ *   OnDemandService for historical data replay only. It is configured with default properties but is not connected
+ *   automatically to the data provider until @ref OnDemandService::replay(std::int64_t,double) "OnDemandService::replay" method is invoked.
  * - @ref Role::STREAM_FEED "STREAM_FEED" is similar to @ref Role::FEED "FEED" and also connects to the remote data
  *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
  *   object that subscribes to the data from the opened files and receives events from them. Events from the files are
- *   not conflated and are processed as fast as possible. Note, that in this role, DXFeed::getLastEvent() method does
- * not work and time-series subscription is not supported. For example:
+ *   not conflated and are processed as fast as possible. Note that in this role, the DXFeed::getLastEvent () method does
+ * not work and time-series subscription is not supported. For example,
  *   ```cpp
  *   auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
  *   auto feed = endpoint->getFeed();
@@ -84,19 +83,19 @@ struct OnDemandService;
  *   data subscribers are processing it.
  * - @ref Role::PUBLISHER "PUBLISHER" connects to the remote publisher hub (also known as multiplexor) or creates a
  *   publisher on the local host. DXEndpoint::getPublisher() method returns a publisher object that publishes events to
- * all connected feeds. For example:
- * <b>`DXEndpoint->create(DXEndpoint::Role::PUBLISHER)->connect(":7400")->getPublisher()`</b> returns a publisher that
- * is waiting for connections on TCP/IP port 7400. The published events will be delivered to all feeds that are
- * connected to this publisher. This endpoint is automatically connected to the configured data feed as explained in
- * default properties section.
- * - @ref Role::LOCAL_HUB "LOCAL_HUB" creates a local hub without ability to establish network connections.
+ * all connected feeds. For example,
+ * <b>`DXEndpoint->create(DXEndpoint::Role::PUBLISHER)->connect(":7400")->getPublisher()`</b> returns a publisher
+ * waiting for connections on TCP/IP port 7400. The published events will be delivered to all feeds that are
+ * connected to this publisher. This endpoint is automatically connected to the configured data feed, as explained in
+ * the default properties section.
+ * - @ref Role::LOCAL_HUB "LOCAL_HUB" creates a local hub without the ability to establish network connections.
  *   Events that are published via @ref DXEndpoint::getPublisher() "publisher" are delivered to local @ref
  * DXEndpoint::getFeed() "feed" only.
  *
  * <h3>Endpoint state</h3>
  *
- * Each endpoint has a state that can be retrieved with DXEndpoint::getState() method.
- * When endpoint is created with any role and default address is not specified in default properties, then it is not
+ * Each endpoint has a state that can be retrieved with the DXEndpoint::getState () method.
+ * When an endpoint is created with any role and the default address is not specified in default properties, then it is not
  * connected to any remote endpoint.
  * Its state is @ref State::NOT_CONNECTED "NOT_CONNECTED".
  *
@@ -107,14 +106,14 @@ struct OnDemandService;
  * When the actual connection to the remote endpoint is established, the endpoint state becomes
  * @ref State::CONNECTED "CONNECTED".
  *
- * Network connections can temporarily break and return endpoint back into @ref State::CONNECTING "CONNECTING" state.
- * File connections can be completed and return endpoint into @ref State::NOT_CONNECTED "NOT_CONNECTED" state.
+ * Network connections can temporarily break and return endpoint back into the @ref State::CONNECTING "CONNECTING" state.
+ * File connections can be completed and return endpoint into the @ref State::NOT_CONNECTED "NOT_CONNECTED" state.
  *
- * Connection to the remote endpoint can be terminated with DXEndpoint::disconnect() method.
+ * Connection to the remote endpoint can be terminated with the DXEndpoint::disconnect() method.
  * The endpoint state becomes @ref State::NOT_CONNECTED "NOT_CONNECTED".
  *
  * Endpoint can be closed with DXEndpoint::close() method. The endpoint state becomes @ref State::CLOSED "CLOSED". This
- * is a final state. All connection are terminated and all internal resources that are held by this endpoint are freed.
+ * is a final state. All connections are terminated and all internal resources that are held by this endpoint are freed.
  * No further connections can be initiated.
  *
  * <h3>Event times</h3>
@@ -122,16 +121,15 @@ struct OnDemandService;
  * The EventType::getEventTime() on received events is available only when the endpoint is created with
  * DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY property and the data source has embedded event times. This is typically
  * true only for data events that are read from historical tape files (see above) and from OnDemandService. Events that
- * are coming from a network connections do not have an embedded event time information and event time is not available
+ * are coming from network connections do not have embedded event time information, and event time is not available
  * for them anyway.
  *
  * <h3><a name="defaultPropertiesSection">Default properties</a></h3>
  *
- * Default properties are loaded from "dxfeed.properties" or "dxpublisher.properties" file depending on
- * the @ref Role "role" of created endpoint. "dxfeed.properties" is used for
- * @ref Role::FEED "FEED" and @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED",
- * "dxpublisher.properties" is used for @ref Role::PUBLISHER "PUBLISHER"}.
- * @ref Role::STREAM_FEED "STREAM_FEED" and @ref Role::LOCAL_HUB "LOCAL_HUB" do not support properties file.
+ * Default properties are loaded from the "dxfeed.properties" or "dxpublisher.properties" file depending on
+ * the @ref Role "role" of the created endpoint. "dxfeed.properties" is used for @ref Role::FEED "FEED" and
+ * @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED", "dxpublisher.properties" is used for @ref Role::PUBLISHER "PUBLISHER".
+ * @ref Role::STREAM_FEED "STREAM_FEED" and @ref Role::LOCAL_HUB "LOCAL_HUB" do not support the properties file.
  *
  * The location of this file can be specified using
  * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"(::DXFEED_PROPERTIES_PROPERTY, path)
@@ -141,23 +139,17 @@ struct OnDemandService;
  * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty" method, then the file path is taken
  * from a system property with the corresponding name.
  *
- * When the path to the above properties file is not provided, then a resource named "dxfeed.properties" or
- * "dxpublisher.properties" is loaded from classpath. When classpath is set to "." (current directory),
- * it means that the corresponding file can be placed into the current directory with any need to specify additional
- * properties.
- *
  * Defaults for individual properties can be also provided using system properties when they are not specified
- * in the configuration file. System properties override configuration loaded from classpath resource, but don't
- * override configuration from the user-specified configuration file.
+ * in the configuration file.
  *
- * The DXEndpoint::NAME_PROPERTY is the exception from the above rule. It is never loaded from system properties.
- * It can be only specified in configuration file or programmatically. There is a convenience
+ * The DXEndpoint::NAME_PROPERTY is the exception to the above rule. It is never loaded from system properties.
+ * It can be only specified in the configuration file or programmatically. There is a convenience
  * @ref Builder::withName(const std::string&) "Builder.withName" method for it. It is recommended to assign short and
  * meaningful endpoint names when multiple endpoints are used in the same process (one GraalVM Isolate for now).
  * The name of the endpoint shall describe its role in the particular application.
  *
- * Note, that individual properties that are programmatically set using @ref Builder::withProperty(const std::string&,
- * const std::string&) "withProperty" method always take precedence.
+ * Note that individual properties that are programmatically set using @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"
+ * method always take precedence.
  *
  * @ref Role::FEED "FEED" and @ref Role::PUBLISHER "PUBLISHER" automatically establish connection on creation
  * when the corresponding DXEndpoint::DXFEED_ADDRESS_PROPERTY or DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY is specified.
@@ -166,9 +158,9 @@ struct OnDemandService;
  *
  * Endpoint properties can define permanent subscription for specific sets of symbols and event types in
  * the data feed, so that DXFeed methods like @ref DXFeed::getLastEventIfSubscribed "getLastEventIfSubscribed",
- * @ref DXFeed::getIndexedEventsIfSubscribed "getIndexedEventsIfSubscribed", and
+ * @ref DXFeed::getIndexedEventsIfSubscribed "getIndexedEventsIfSubscribed" and
  * @ref DXFeed::getTimeSeriesIfSubscribed "getTimeSeriesIfSubscribed" can be used without a need to create a
- * separate DXFeedSubscription object. Please, contact dxFeed support for details
+ * separate DXFeedSubscription object. Please contact dxFeed support for details
  * on the required configuration.
  *
  * <h3>Threads and locks</h3>
@@ -179,7 +171,7 @@ struct OnDemandService;
  *
  * Some methods that are not marked `noexcept` may throw exceptions:
  *
- * @throws InvalidArgumentException if handle is invalid.
+ * @throws InvalidArgumentException if the entity's handle is invalid.
  * @throws JavaException if something happened with the dxFeed API backend
  * @throws GraalException if something happened with the GraalVM
  */
@@ -198,14 +190,14 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Defines property for endpoint name that is used to distinguish multiple endpoints
      * in the same process in logs and in other diagnostic means.
      * Use Builder::withProperty(const std::string&, const std::string&) method.
-     * This property is also changed by Builder::withName(const std::string&) method.
+     * This property is also changed by the Builder::withName(const std::string&) method.
      */
     static const std::string NAME_PROPERTY;
 
     /**
      * `"dxfeed.properties"`
      *
-     * Defines path to a file with properties for an endpoint with role @ref Role::FEED "FEED" or
+     * Defines a path to a file with properties for an endpoint with role @ref Role::FEED "FEED" or
      * @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
      * By default, properties a loaded from a path resource named "dxfeed.properties".
      *
@@ -218,11 +210,11 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Defines default connection address for an endpoint with role @ref Role::FEED "FEED"
      * or @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
-     * Connection is established to this address by role @ref Role::FEED "FEED" as soon as endpoint is created, while
+     * Connection is established to this address by role @ref Role::FEED "FEED" as soon as the endpoint is created, while
      * role @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" waits until OnDemandService::(std::int64_t,double) is invoked
      * before connecting.
      *
-     * By default, without this property, connection is not established until @ref DXEndpoint::connect(const
+     * By default, without this property, a connection is not established until @ref DXEndpoint::connect(const
      * std::string&) "connect(address)" is invoked.
      *
      * Credentials for access to premium services may be configured with
@@ -235,7 +227,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxfeed.user"`
      *
-     * Defines default user name for an endpoint with role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
+     * Defines default username for an endpoint with role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
      * "ON_DEMAND_FEED".
      *
      * @see DXEndpoint::user(const std::string&)
@@ -264,9 +256,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxfeed.aggregationPeriod"`
      *
-     * Defines data aggregation period an endpoint with role @ref Role::FEED "FEED" that
+     * Defines a data aggregation period for an endpoint with role @ref Role::FEED "FEED" that
      * limits the rate of data notifications. For example, setting the value of this property
-     * to "0.1s" limits notification to once every 100ms (at most 10 per second).
+     * to "0.1s" limits notification to once every "100ms" (at most 10 per second).
      * @see Builder::withProperty(const std::string&, const std::string&)
      */
     static const std::string DXFEED_AGGREGATION_PERIOD_PROPERTY;
@@ -274,7 +266,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxfeed.wildcard.enable"`
      *
-     * Set this property to `true` to turns on wildcard support.
+     * Set this property to `true` to turn on wildcard support.
      * By default, the endpoint does not support wildcards. This property is needed for
      * WildcardSymbol support and for the use of "tape:..." address in DXPublisher.
      */
@@ -283,8 +275,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxpublisher.properties"`
      *
-     * Defines path to a file with properties for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
-     * By default, properties a loaded from a classpath resource named "dxpublisher.properties".
+     * Defines a path to a file with properties for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
+     * By default, properties are loaded from a classpath resource named "dxpublisher.properties".
      * @see Builder::withProperty(const std::string&, const std::string&)
      */
     static const std::string DXPUBLISHER_PROPERTIES_PROPERTY;
@@ -293,8 +285,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * `"dxpublisher.address"`
      *
      * Defines default connection address for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
-     * Connection is established to this address as soon as endpoint is created.
-     * By default, connection is not established until DXEndpoint::connect(const std::string&) is invoked.
+     * Connection is established to this address as soon as an endpoint is created.
+     * By default, the connection is not established until DXEndpoint::connect(const std::string&) is invoked.
      * @see Builder::withProperty(const std::string&, const std::string&)
      */
     static const std::string DXPUBLISHER_ADDRESS_PROPERTY;
@@ -317,7 +309,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * The event time is available only when the corresponding DXEndpoint is created with this property and
      * the data source has embedded event times. This is typically true only for data events
      * that are read from historical tape files and from OnDemandService.
-     * Events that are coming from a network connections do not have an embedded event time information and
+     * Events that are coming from network connections do not have embedded event time information and
      * event time is not available for them anyway.
      *
      * Use this property if you need to work with historical data coming from files
@@ -328,13 +320,13 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxendpoint.storeEverything"`
      *
-     * Set this property to  to store all @ref LastingEvent "lasting" and @ref IndexedEvent "indexed" events even when
+     * Set this property to store all @ref LastingEvent "lasting" and @ref IndexedEvent "indexed" events even when
      * there is no subscription on them. By default, the endpoint stores only events from subscriptions. It works in
      * the same way both for DXFeed and DXPublisher.
      *
      * Use this property with extreme care,
-     * since API does not currently provide any means to remove those events from the storage and there might
-     * be an effective memory leak if the spaces of symbols on which events are published grows without bound.
+     * since API does not currently provide any means to remove those events from the storage, and there might
+     * be an effective memory leak if the spaces of symbols on which events are published grow without a bound.
      */
     static const std::string DXENDPOINT_STORE_EVERYTHING_PROPERTY;
 
@@ -361,8 +353,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxscheme.enabled."`
      *
-     * Defines whether a specified field from the scheme should be enabled instead of it's default behaviour.
-     * Use it according to following format:<br>
+     * Defines whether a specified field from the scheme should be enabled instead of its default behavior.
+     * Use it according to the following format:
      * <b>`dxscheme.enabled.<field_property_name>=<event_name_mask_glob>`</b>
      *
      * For example, <b>`dxscheme.enabled.TimeNanoPart=Trade`</b> enables `NanoTimePart` internal field
@@ -373,7 +365,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     static const std::string DXSCHEME_ENABLED_PROPERTY_PREFIX;
 
     /**
-     * Represents the role of endpoint that was specified during its @ref DXEndpoint::create() "creation".
+     * Represents the role of an endpoint that was specified during its @ref DXEndpoint::create() "creation".
      *
      * @see DXEndpoint
      */
@@ -381,20 +373,20 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         /**
          * `FEED` endpoint connects to the remote data feed provider and is optimized for real-time or
          * delayed data processing (<b>this is a default role</b>). DXEndpoint::getFeed() method
-         * returns feed object that subscribes to the remote data feed provider and receives events from it.
+         * returns the feed object that subscribes to the remote data feed provider and receives events from it.
          * When event processing threads cannot keep up (don't have enough CPU time), data is dynamically conflated to
          * minimize latency between received events and their processing time.
          *
-         * This endpoint is automatically connected to the configured data feed as explained in
-         * <a href="#defaultPropertiesSection">default properties section</a>.
+         * This endpoint is automatically connected to the configured data feed, as explained in
+         * <a href="#defaultPropertiesSection">the default properties section</a>.
          */
         FEED,
 
         /**
          * `ON_DEMAND_FEED` endpoint is similar to DXEndpoint::FEED, but it is designed to be used with OnDemandService
          * for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default
-         * properties</a>, but is not connected automatically to the data provider until @ref
-         * OnDemandService::(std::int64_t,double) "OnDemandService.replay" method is invoked.
+         * properties</a>, but is not connected automatically to the data provider until @ref OnDemandService::(std::int64_t,double) "OnDemandService.replay"
+         * method is invoked.
          *
          * `ON_DEMAND_FEED` endpoint cannot be connected to an ordinary data feed at all.
          * OnDemandService::stopAndResume() will have a similar effect to OnDemandService::stopAndClear().
@@ -408,7 +400,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method
          * returns feed object that subscribes to the data from the opened files and receives events from them.
          * Events from the files are not conflated, are not skipped, and are processed as fast as possible.
-         * Note, that in this role, DXFeed::getLastEvent method does not work.
+         * Note that in this role, the DXFeed::getLastEvent method does not work.
          */
         STREAM_FEED,
 
@@ -416,11 +408,11 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * `PUBLISHER` endpoint connects to the remote publisher hub (also known as multiplexor) or
          * creates a publisher on the local host. DXEndpoint#getPublisher() method returns
          * a publisher object that publishes events to all connected feeds.
-         * Note, that in this role, DXFeed::getLastEvent method does not work and
+         * Note that in this role, the DXFeed::getLastEvent method does not work and
          * time-series subscription is not supported.
          *
-         * This endpoint is automatically connected to the configured data feed as explained in
-         * <a href="#defaultPropertiesSection">default properties section</a>.
+         * This endpoint is automatically connected to the configured data feed, as explained in
+         * <a href="#defaultPropertiesSection">the default properties section</a>.
          */
         PUBLISHER,
 
@@ -428,13 +420,13 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * `STREAM_PUBLISHER` endpoint is similar to DXEndpoint::PUBLISHER and also connects to the remote publisher
          * hub, but is designed for bulk publishing of data. DXEndpoint::getPublisher() method returns a
          * publisher object that publishes events to all connected feeds. Published events are not conflated, are not
-         * skipped, and are processed as fast as possible. Note, that in this role, DXFeed::getLastEvent method
+         * skipped, and are processed as fast as possible. Note that in this role, the DXFeed::getLastEvent method
          * does not work and time-series subscription is not supported.
          */
         STREAM_PUBLISHER,
 
         /**
-         * `LOCAL_HUB` endpoint is a local hub without ability to establish network connections.
+         * `LOCAL_HUB` endpoint is a local hub without the ability to establish network connections.
          * Events that are published via @ref DXEndpoint::getPublisher() "publisher" are delivered to local
          * @ref DXEndpoint::getFeed() "feed" only.
          */
@@ -456,12 +448,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
         /**
          * The @ref DXEndpoint::connect(const std::string&) "connect" method was called to establish connection to
-         * remove endpoint, but connection is not actually established yet or was lost.
+         * remove endpoint, but the connection is not established yet or was lost.
          */
         CONNECTING,
 
         /**
-         * The connection to remote endpoint is established.
+         * The connection to the remote endpoint is established.
          */
         CONNECTED,
 
@@ -503,9 +495,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Returns a default application-wide singleton instance of DXEndpoint with a @ref Role::FEED "FEED" role.
      * Most applications use only a single data-source and should rely on this method to get one.
-     * This method creates an endpoint on the first use with a default
-     * configuration as explained in
-     * <a href="#defaultPropertiesSection">default properties section</a> of DXEndpoint class documentation.
+     * This method creates an endpoint on the first use with a default configuration, as explained in
+     * <a href="#defaultPropertiesSection">the default properties section</a> of DXEndpoint class documentation.
      * You can provide configuration via system properties as explained there.
      *
      * This is a shortcut to
@@ -521,9 +512,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Returns a default application-wide singleton instance of DXEndpoint for a specific role.
      * Most applications use only a single data-source and should rely on this method to get one.
-     * This method creates an endpoint with the corresponding role on the first use with a default
-     * configuration as explained in
-     * <a href="#defaultPropertiesSection">default properties section</a> of DXEndpoint class documentation.
+     * This method creates an endpoint with the corresponding role on the first use with a default configuration, as explained in
+     * <a href="#defaultPropertiesSection">the default properties section</a> of DXEndpoint class documentation.
      * You can provide configuration via system properties as explained there.
      *
      * The configuration does not have to include an address. You can use @ref DXEndpoint::connect(const std::string&)
@@ -545,7 +535,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     class Builder;
 
     /**
-     * Creates new Builder instance.
+     * Creates a new Builder instance.
      * Use Builder::build() to build an instance of DXEndpoint when all configuration properties were set.
      *
      * @return the created endpoint builder.
@@ -617,7 +607,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     const std::string &getName() const & noexcept;
 
     /**
-     * Adds listener that is notified about changes in @ref DXEndpoint::getState() "state" property.
+     * Adds a listener notified about changes in @ref DXEndpoint::getState() "state" property.
      *
      * <p>Installed listener can be removed by `id` with DXEndpoint::removeStateChangeListener method or by call
      * `::onStateChange() -= id`;
@@ -630,8 +620,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     }
 
     /**
-     * Removes listener that is notified about changes in @ref DXEndpoint::getState() "state" property.
-     * It removes the listener that was previously installed with DXEndpoint::addStateChangeListener method.
+     * Removes a listener notified about changes in @ref DXEndpoint::getState() "state" property.
+     * It removes the listener previously installed with DXEndpoint::addStateChangeListener method.
      *
      * @param listenerId The listener id to remove
      */
@@ -652,11 +642,11 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     }
 
     /**
-     * Changes user name for this endpoint.
-     * This method shall be called before @ref DXEndpoint::connect(const std::string&) "connect" together
+     * Changes username for this endpoint.
+     * This method shall be called before @ref DXEndpoint::connect(const std::string&) "connect"
      * with @ref DXEndpoint::password(const std::string&) "password" to configure service access credentials.
      *
-     * @param user The user name.
+     * @param user The username.
      *
      * @return this DXEndpoint.
      * @throws InvalidArgumentException
@@ -667,7 +657,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     /**
      * Changes password for this endpoint.
-     * This method shall be called before @ref DXEndpoint::connect(const std::string&) "connect" together
+     * This method shall be called before @ref DXEndpoint::connect(const std::string&) "connect"
      * with @ref DXEndpoint::user(const std::string&) "user" to configure service access credentials.
      *
      * @param password The password.
@@ -682,7 +672,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Connects to the specified remote address. Previously established connections are closed if
      * the new address is different from the old one.
-     * This method does nothing if address does not change or if this endpoint is @ref State::CLOSED "CLOSED".
+     * This method does nothing if the address does not change or if this endpoint is @ref State::CLOSED "CLOSED".
      * The endpoint @ref DXEndpoint::getState() "state" immediately becomes @ref State::CONNECTING "CONNECTING"
      * otherwise.
      *
@@ -697,7 +687,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * <p>For premium services access credentials must be configured before invocation of `connect` method
      * using @ref ::user(const std::string&) "user" and @ref ::password(const std::string&) "password" methods.
      *
-     * <p> <b>This method does not wait until connection actually gets established</b>. The actual connection
+     * <p> <b>This method does not wait until the connection actually gets established</b>. The actual connection
      * establishment happens asynchronously after the invocation of this method. However, this method waits until
      * notification about state transition from State::NOT_CONNECTED to State::CONNECTING gets processed by all
      * listeners.
@@ -708,7 +698,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @return this DXEndpoint.
      *
      * @throws InvalidArgumentException
-     * @throws JavaException if something happened with the dxFeed API backend or if address string is malformed.
+     * @throws JavaException if something happened with the dxFeed API backend or if the address string is malformed.
      * @throws GraalException
      */
     std::shared_ptr<DXEndpoint> connect(const std::string &address);
@@ -716,15 +706,15 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Terminates all established network connections and initiates connecting again with the same address.
      *
-     * <p>The effect of the method is alike to invoking ::disconnect() and ::connect(const std::string&)
+     * <p>The effect of the method is alike to invoking :disconnect() and :connect(const std::string&)
      * with the current address, but internal resources used for connections may be reused by implementation.
-     * TCP connections with multiple target addresses will try switch to an alternative address, configured
+     * TCP connections with multiple target addresses will try to switch to an alternative address, configured
      * reconnect timeouts will apply.
      *
-     * <p><b>Note:</b> The method will not connect endpoint that was not initially connected with
-     * ::connect(const std::string&) method or was disconnected with ::disconnect() method.
+     * <p><b>Note:</b> The method will not connect an endpoint that was not initially connected with
+     * :connect(const std::string&) method or was disconnected with ::disconnect() method.
      *
-     * <p>The method initiates a short-path way for reconnecting, so whether observers will have a chance to see
+     * <p>The method initiates a short-pathway for reconnecting, so whether observers will have a chance to see
      * an intermediate state State#NOT_CONNECTED depends on the implementation.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#reconnect--)
@@ -757,7 +747,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * The endpoint @ref ::getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
      *
      * <p>This method does not release all resources that are associated with this endpoint.
-     * Use close() method to release all resources.
+     * Use the close() method to release all resources.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#disconnectAndClear--)
      *
@@ -768,7 +758,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     void disconnectAndClear();
 
     /**
-     * Closes this endpoint. All network connection are terminated as with ::disconnect() method and no further
+     * Closes this endpoint. All network connections are terminated as with the ::disconnect() method, and no further
      * connections can be established.
      *
      * The endpoint @ref ::getState() "state" immediately becomes @ref State::CLOSED "CLOSED".
@@ -784,8 +774,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     /**
      * Waits while this endpoint @ref ::getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
-     * @ref State::CLOSED "CLOSED". It is a signal that any files that were opened with
-     * @ref connect(const std::string&) "connect(\"file:...\")" method were finished reading, but not necessary were
+     * @ref State::CLOSED "CLOSED". It is a signal that any files opened with the
+     * @ref connect(const std::string&) "connect(\"file:...\")" method were finished reading, but not necessarily were
      * completely processed by the corresponding subscription listeners. Use closeAndAwaitTermination() after this
      * method returns to make sure that all processing has completed.
      *
@@ -814,10 +804,10 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     /**
      * Closes this endpoint and wait until all pending data processing tasks are completed.
-     * This  method performs the same actions as close ::close(), but also awaits
+     * This  method performs the same actions as ::close(), but also awaits
      * termination of all outstanding data processing tasks. It is designed to be used
      * with @ref Role::STREAM_FEED "STREAM_FEED" role after ::awaitNotConnected() method returns
-     * to make sure that file was completely processed.
+     * to make sure that the file was completely processed.
      *
      * <p><b>This method is blocking.</b>
      *
@@ -853,7 +843,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Some methods that are not marked `noexcept` may throw exceptions:
      *
-     * @throws InvalidArgumentException if handle is invalid.
+     * @throws InvalidArgumentException if the handle is invalid.
      * @throws JavaException if something happened with the dxFeed API backend
      * @throws GraalException if something happened with the GraalVM
      */
@@ -871,16 +861,16 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         static std::shared_ptr<Builder> create();
 
         /**
-         * Tries to load the default properties file for Role::FEED, Role::ON_DEMAND_FEED or Role::PUBLISHER role.
+         * Tries to load the default properties file for Role::FEED, Role::ON_DEMAND_FEED, or Role::PUBLISHER role.
          *
          * The default properties file is loaded only if there are no system properties or user properties set with the
-         * same key and the file itself exists and is readable.
+         * same key, and the file itself exists and is readable.
          *
          * This file must be in the <a href="https://en.wikipedia.org/wiki/.properties">Java properties file format</a>.
          * File be named "dxfeed.properties" for Role::FEED and Role::ON_DEMAND_FEED roles
          * or "dxpublisher.properties" for the Role::PUBLISHER role.
          *
-         * Non thread-safe.
+         * Not thread-safe.
          * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
@@ -894,7 +884,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         ~Builder() noexcept override;
 
         /**
-         * Changes name that is used to distinguish multiple endpoints
+         * Changes the name used to distinguish multiple endpoints
          * in the same process (GraalVM Isolate) in logs and in other diagnostic means.
          * This is a shortcut for @ref ::withProperty "withProperty"(::NAME_PROPERTY, `name`)
          *
@@ -909,7 +899,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
         /**
          * Sets role for the created DXEndpoint.
-         * Default role is @ref Role::FEED "FEED".
+         * The default role is @ref Role::FEED "FEED".
          *
          * @param role The endpoint's role
          *
@@ -937,7 +927,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         /**
          * Sets all supported properties from the provided properties object.
          *
-         * @tparam Properties The properties' type (std::map, std::unordered_map etc)
+         * @tparam Properties The properties' type (std::map, std::unordered_map etc.)
          * @param properties The endpoint's properties
          * @return `this` endpoint builder.
          *

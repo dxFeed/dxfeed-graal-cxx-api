@@ -23,18 +23,18 @@ DXFCPP_BEGIN_NAMESPACE
 struct DXFCPP_EXPORT WildcardSymbol final {
     /**
      * Symbol prefix that is reserved for wildcard subscriptions.
-     * Any subscription starting with "*" is ignored with the exception of WildcardSymbol subscription.
+     * Any subscription starting with "*" is ignored except the WildcardSymbol subscription.
      */
     static const std::string RESERVED_PREFIX;
 
     /**
      * Represents [wildcard] subscription to all events of the specific event type.
      *
-     * <p><b>NOTE:</b> Wildcard subscription can create extremely high network and CPU load for certain kinds of
-     * high-frequency events like quotes. It requires a special arrangement on the side of upstream data provider and
-     * is disabled by default in upstream feed configuration. Make that sure you have adequate resources and understand
+     * <p><b>NOTE:</b> Wildcard subscription can create an extremely high network and CPU load for certain kinds of
+     * high-frequency events like quotes. It requires a special arrangement on the side of the upstream data provider and
+     * is disabled by default in upstream feed configuration. Make sure you have adequate resources and understand
      * the impact before using it. It can be used for low-frequency events only (like Forex quotes), because each
-     * instance of DXFeedSubscription processes events in a single thread and there is no provision to load-balance
+     * instance of DXFeedSubscription processes events in a single thread, and there is no provision to load-balance
      * wildcard subscription amongst multiple threads. Contact your data provider for the corresponding configuration
      * arrangement if needed.
      *
@@ -78,10 +78,10 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     static void freeGraal(void *graalNative);
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static const WildcardSymbol &fromGraal(void *graalNative);
