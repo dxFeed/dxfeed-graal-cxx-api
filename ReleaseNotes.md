@@ -37,6 +37,8 @@
     * Added `RoundingMode` enum.
 * **\[BREAKING]** The `Day::getHashCode` method renamed to `Day::hashCode`.
 * **\[BREAKING]** The `Session::getHashCode` method renamed to `Session::hashCode`.
+* **\[BREAKING]** The `DXEndpoint::getEventTypes()` method now can throw exceptions.
+* Fixed the naming of endpoints.
 
 ## v4.3.1
 

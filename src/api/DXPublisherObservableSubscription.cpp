@@ -37,7 +37,8 @@ bool DXPublisherObservableSubscription::containsEventType(const EventTypeEnum &e
 
 std::size_t
 DXPublisherObservableSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
-    isolated::api::IsolatedDXPublisherObservableSubscription::addChangeListener(handle_, listener->getHandle());
+    isolated::api::IsolatedDXPublisherObservableSubscription::addChangeListener(
+        handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
     std::lock_guard guard{listenersMutex_};
 
@@ -62,7 +63,8 @@ void DXPublisherObservableSubscription::removeChangeListener(std::size_t changeL
     if (auto found = listeners_.find(changeListenerId); found != listeners_.end()) {
         auto listener = found->second;
 
-        isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(handle_, listener->getHandle());
+        isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(
+            handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
         listeners_.erase(found);
     }

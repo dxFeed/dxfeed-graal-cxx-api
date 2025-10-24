@@ -24,7 +24,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct EventMapper;
 
 /**
- * Theo price is a snapshot of the theoretical option price computation that is
+ * Theo price is a snapshot of theoretical option price computation that is
  * periodically performed by <a href="http://www.devexperts.com/en/products/price.html">dxPrice</a>
  * model-free computation.
  * It represents the most recent information that is available about the corresponding
@@ -105,7 +105,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.
@@ -279,38 +279,38 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     }
 
     /**
-     * Returns delta of the theoretical price.
-     * Delta is the first derivative of the theoretical price by the underlying price.
+     * Returns delta of theoretical price.
+     * Delta is the first derivative of theoretical price by the underlying price.
      *
-     * @return delta of the theoretical price.
+     * @return delta of theoretical price.
      */
     double getDelta() const noexcept {
         return data_.delta;
     }
 
     /**
-     * Changes delta of the theoretical price.
+     * Changes delta of theoretical price.
      *
-     * @param delta delta of the theoretical price.
+     * @param delta delta of theoretical price.
      */
     void setDelta(double delta) noexcept {
         data_.delta = delta;
     }
 
     /**
-     * Returns gamma of the theoretical price.
-     * Gamma is the second derivative of the theoretical price by the underlying price.
+     * Returns gamma of theoretical price.
+     * Gamma is the second derivative of theoretical price by the underlying price.
      *
-     * @return gamma of the theoretical price.
+     * @return gamma of theoretical price.
      */
     double getGamma() const noexcept {
         return data_.gamma;
     }
 
     /**
-     * Changes gamma of the theoretical price.
+     * Changes gamma of theoretical price.
      *
-     * @param gamma gamma of the theoretical price.
+     * @param gamma gamma of theoretical price.
      */
     void setGamma(double gamma) noexcept {
         data_.gamma = gamma;

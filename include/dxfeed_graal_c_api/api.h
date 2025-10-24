@@ -84,13 +84,13 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_system_set_property(const char *key, const 
 DXFCPP_EXPORT dxfc_error_code_t dxfc_system_get_property(const char *key, DXFC_OUT char *buffer, size_t buffer_size);
 
 /**
- * Represents the role of endpoint that was specified during its @ref dxfc_dxendpoint_create() "creation".
+ * Represents the role of an endpoint that was specified during its @ref dxfc_dxendpoint_create() "creation".
  */
 typedef enum dxfc_dxendpoint_role_t {
     /**
      * `FEED` endpoint connects to the remote data feed provider and is optimized for real-time or
      * delayed data processing (<b>this is a default role</b>). dxfc_dxendpoint_get_feed() function
-     * returns feed object that subscribes to the remote data feed provider and receives events from it.
+     * returns a feed object that subscribes to the remote data feed provider and receives events from it.
      * When event processing threads cannot keep up (don't have enough CPU time), data is dynamically conflated to
      * minimize latency between received events and their processing time.
      *
@@ -108,10 +108,10 @@ typedef enum dxfc_dxendpoint_role_t {
 
     /**
      * `STREAM_FEED` endpoint is similar to ::DXFC_DXENDPOINT_ROLE_FEED and also connects to the remote data feed
-     * provider, but is designed for bulk parsing of data from files. dxfc_dxendpoint_get_feed() function returns feed
+     * provider, but is designed for bulk parsing of data from files. dxfc_dxendpoint_get_feed() function returns a feed
      * object that subscribes to the data from the opened files and receives events from them. Events from the files are
-     * not conflated, are not skipped, and are processed as fast as possible. Note, that in this role,
-     * dxfc_dxfeed_get_last_event() function does not work.
+     * not conflated, are not skipped, and are processed as fast as possible. Note that in this role,
+     * the dxfc_dxfeed_get_last_event () function does not work.
      */
     DXFC_DXENDPOINT_ROLE_STREAM_FEED = 2,
 
@@ -119,7 +119,7 @@ typedef enum dxfc_dxendpoint_role_t {
      * `PUBLISHER` endpoint connects to the remote publisher hub (also known as multiplexor) or
      * creates a publisher on the local host. dxfc_dxendpoint_get_publisher() function returns
      * a publisher object that publishes events to all connected feeds.
-     * Note, that in this role, dxfc_dxfeed_get_last_event() function does not work and
+     * Note that in this role, the dxfc_dxfeed_get_last_event () function does not work, and
      * time-series subscription is not supported.
      *
      * This endpoint is automatically connected to the configured data feed.
@@ -130,13 +130,13 @@ typedef enum dxfc_dxendpoint_role_t {
      * `STREAM_PUBLISHER` endpoint is similar to ::DXFC_DXENDPOINT_ROLE_PUBLISHER and also connects to the remote
      * publisher hub, but is designed for bulk publishing of data. dxfc_dxendpoint_get_publisher() function returns a
      * publisher object that publishes events to all connected feeds. Published events are not conflated, are not
-     * skipped, and are processed as fast as possible. Note, that in this role, dxfc_dxfeed_get_last_event() function
-     * does not work and time-series subscription is not supported.
+     * skipped, and are processed as fast as possible. Note that in this role, the dxfc_dxfeed_get_last_event () function does not work,
+     *  and time-series subscription is not supported.
      */
     DXFC_DXENDPOINT_ROLE_STREAM_PUBLISHER = 4,
 
     /**
-     * `LOCAL_HUB` endpoint is a local hub without ability to establish network connections.
+     * `LOCAL_HUB` endpoint is a local hub without the ability to establish network connections.
      * Events that are published via @ref dxfc_dxendpoint_get_publisher() "publisher" are delivered to local
      * @ref dxfc_dxendpoint_get_feed() "feed" only.
      */
@@ -154,12 +154,12 @@ typedef enum dxfc_dxendpoint_state_t {
 
     /**
      * The @ref dxfc_dxendpoint_connect() "connect" function was called to establish connection to
-     * remove endpoint, but connection is not actually established yet or was lost.
+     * remove endpoint, but the connection is not established yet or was lost.
      */
     DXFC_DXENDPOINT_STATE_CONNECTING = 1,
 
     /**
-     * The connection to remote endpoint is established.
+     * The connection to the remote endpoint is established.
      */
     DXFC_DXENDPOINT_STATE_CONNECTED = 2,
 
@@ -217,7 +217,7 @@ typedef void *dxfc_dxfeed_t;
 typedef void *dxfc_dxpublisher_t;
 
 /**
- * Creates new dxFeed endpoint's builder instance.
+ * Creates a new dxFeed endpoint's builder instance.
  * Use dxfc_dxendpoint_builder_build to build an instance of dxFeed endpoint when all configuration properties were set.
  *
  * @param[out] builder The created endpoint's builder.
@@ -237,14 +237,14 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoin
                                                                   dxfc_dxendpoint_role_t role);
 
 /**
- * Changes name that is used to distinguish multiple endpoints
+ * Changes the name used to distinguish multiple endpoints
  * in the same process (GraalVM Isolate) in logs and in other diagnostic means.
  *
- * @param builder The endpoint's builder
+ * @param builderHandle The endpoint's builder
  * @param name The endpoint's name
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t builder, const char *name);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t builderHandle, const char *name);
 
 /**
  * Sets the specified property. Unsupported properties are ignored.
@@ -381,7 +381,7 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t r
                                                         DXFC_OUT dxfc_dxendpoint_t *endpoint);
 
 /**
- * Closes this endpoint. All network connection are terminated as with dxfc_dxendpoint_disconnect() function and no
+ * Closes this endpoint. All network connections are terminated as with the dxfc_dxendpoint_disconnect () function, and no
  * further connections can be established.
  *
  * The endpoint @ref dxfc_dxendpoint_get_state() "state" immediately becomes @ref DXFC_DXENDPOINT_STATE_CLOSED "CLOSED".
@@ -394,10 +394,10 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpoint
 
 /**
  * Closes this endpoint and wait until all pending data processing tasks are completed.
- * This function performs the same actions as dxfc_dxendpoint_close(), but also awaits
+ * This function performs the same actions as dxfc_dxendpoint_close() but also awaits
  * termination of all outstanding data processing tasks. It is designed to be used
- * with @ref DXFC_DXENDPOINT_ROLE_STREAM_FEED "STREAM_FEED" role after dxfc_dxendpoint_await_not_connected() function
- * returns to make sure that file was completely processed.
+ * with @ref DXFC_DXENDPOINT_ROLE_STREAM_FEED "STREAM_FEED" role after the dxfc_dxendpoint_await_not_connected () function
+ * returns to make sure that the file was completely processed.
  *
  * <p><b>This function is blocking.</b>
  *
@@ -418,7 +418,7 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_get_role(dxfc_dxendpoint_t endpo
 
 /**
  * Changes username for this endpoint.
- * This function shall be called before @ref dxfc_dxendpoint_connect() "connect" together
+ * This function shall be called before @ref dxfc_dxendpoint_connect() "connect"
  * with @ref dxfc_dxendpoint_password() "password" to configure service access credentials.
  *
  * @param endpoint The dxFeed endpoint
@@ -429,7 +429,7 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpoint,
 
 /**
  * Changes password for this endpoint.
- * This function shall be called before @ref dxfc_dxendpoint_connect() "connect" together
+ * This function shall be called before @ref dxfc_dxendpoint_connect() "connect"
  * with @ref dxfc_dxendpoint_user() "user" to configure service access credentials.
  *
  * @param endpoint The dxFeed endpoint
@@ -441,7 +441,7 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpo
 /**
  * Connects to the specified remote address. Previously established connections are closed if
  * the new address is different from the old one.
- * This function does nothing if address does not change or if this endpoint is @ref DXFC_DXENDPOINT_STATE_CLOSED
+ * This function does nothing if the address does not change or if this endpoint is @ref DXFC_DXENDPOINT_STATE_CLOSED
  * "CLOSED". The endpoint @ref dxfc_dxendpoint_get_state() "state" immediately becomes @ref
  * DXFC_DXENDPOINT_STATE_CONNECTING "CONNECTING" otherwise.
  *
@@ -453,10 +453,10 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpo
  * * `:port` to listen for a TCP/IP connection with a plain socket connector (good for up to a
  * few hundred of connections).
  *
- * <p>For premium services access credentials must be configured before invocation of `connect` function
+ * <p>For premium services access credentials must be configured before invocation of the ` connect ` function
  * using @ref dxfc_dxendpoint_user() "user" and @ref dxfc_dxendpoint_password() "password" functions.
  *
- * <p> <b>This function does not wait until connection actually gets established</b>. The actual connection
+ * <p> <b>This function does not wait until the connection actually gets established</b>. The actual connection
  * establishment happens asynchronously after the invocation of this function. However, this function waits until
  * notification about state transition from DXFC_DXENDPOINT_STATE_NOT_CONNECTED to DXFC_DXENDPOINT_STATE_CONNECTING gets
  * processed by all listeners.
@@ -474,13 +474,13 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpoi
  *
  * <p>The effect of the function is alike to invoking dxfc_dxendpoint_disconnect() and dxfc_dxendpoint_connect()
  * with the current address, but internal resources used for connections may be reused by implementation.
- * TCP connections with multiple target addresses will try switch to an alternative address, configured
+ * TCP connections with multiple target addresses will try to switch to an alternative address, configured
  * reconnect timeouts will apply.
  *
- * <p><b>Note:</b> The function will not connect endpoint that was not initially connected with
+ * <p><b>Note:</b> The function will not connect an endpoint that was not initially connected with
  * dxfc_dxendpoint_connect() function or was disconnected with dxfc_dxendpoint_disconnect() function.
  *
- * <p>The function initiates a short-path way for reconnecting, so whether observers will have a chance to see
+ * <p>The function initiates a short-pathway for reconnecting, so whether observers will have a chance to see
  * an intermediate state DXFC_DXENDPOINT_STATE_NOT_CONNECTED depends on the implementation.
  *
  * @param endpoint The dxFeed endpoint to reconnect
@@ -529,9 +529,9 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_await_processed(dxfc_dxendpoint_
 /**
  * Waits while this endpoint @ref dxfc_dxendpoint_get_state() "state" becomes @ref DXFC_DXENDPOINT_STATE_NOT_CONNECTED
  * "NOT_CONNECTED" or
- * @ref DXFC_DXENDPOINT_STATE_CLOSED "CLOSED". It is a signal that any files that were opened with
+ * @ref DXFC_DXENDPOINT_STATE_CLOSED "CLOSED". It is a signal that any files opened with
  * @ref dxfc_dxendpoint_connect() "dxfc_dxendpoint_connect(endpoint, \"file:...\")" function were finished reading, but
- * not necessary were completely processed by the corresponding subscription listeners. Use
+ * not necessarily were completely processed by the corresponding subscription listeners. Use
  * dxfc_dxendpoint_and_await_termination() after this function returns to make sure that all processing has completed.
  *
  * <p><b>This function is blocking.</b>
@@ -552,7 +552,7 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_get_state(dxfc_dxendpoint_t endp
                                                           DXFC_OUT dxfc_dxendpoint_state_t *state);
 
 /**
- * Adds listener that is notified about changes in @ref dxfc_dxendpoint_get_state() "state" property.
+ * Adds a listener notified about changes in @ref dxfc_dxendpoint_get_state() "state" property.
  *
  * <p>Installed listener can be removed by dxfc_dxendpoint_remove_state_change_listener() function.
  *
@@ -564,8 +564,8 @@ DXFCPP_EXPORT dxfc_error_code_t
 dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t endpoint, dxfc_dxendpoint_state_change_listener listener);
 
 /**
- * Removes listener that is notified about changes in @ref dxfc_dxendpoint_get_state() "state" property.
- * It removes the listener that was previously installed with dxfc_dxendpoint_add_state_change_listener() function.
+ * Removes a listener notified about changes in @ref dxfc_dxendpoint_get_state() "state" property.
+ * It removes the listener previously installed with the dxfc_dxendpoint_add_state_change_listener () function.
  *
  * @param endpoint The dxFeed endpoint
  * @param listener The listener to remove

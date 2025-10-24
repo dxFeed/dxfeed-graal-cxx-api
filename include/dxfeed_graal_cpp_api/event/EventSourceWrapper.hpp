@@ -165,7 +165,7 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
     }
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
      * @return The object of current type.

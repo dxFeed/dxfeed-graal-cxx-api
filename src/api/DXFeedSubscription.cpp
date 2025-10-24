@@ -262,7 +262,8 @@ DXFeedSubscription::OnEventHandler &DXFeedSubscription::onEvent() {
 }
 
 std::size_t DXFeedSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
-    isolated::api::IsolatedDXFeedSubscription::addChangeListener(handle_, listener->getHandle());
+    isolated::api::IsolatedDXFeedSubscription::addChangeListener(
+        handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
     std::lock_guard guard{changeListenersMutex_};
 
@@ -287,7 +288,8 @@ void DXFeedSubscription::removeChangeListener(std::size_t changeListenerId) {
     if (auto found = changeListeners_.find(changeListenerId); found != changeListeners_.end()) {
         auto listener = found->second;
 
-        isolated::api::IsolatedDXFeedSubscription::removeChangeListener(handle_, listener->getHandle());
+        isolated::api::IsolatedDXFeedSubscription::removeChangeListener(
+            handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
         changeListeners_.erase(found);
     }
