@@ -125,7 +125,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct IndexedTxModelImpl;
 
     private:
-    JavaObjectHandle<DXFeed> handle_;
+    JavaObjectHandle<DXFeed> handle_{};
     static std::shared_ptr<DXFeed> create(void *feedHandle);
 
     void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
@@ -151,7 +151,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
                                                                           std::int64_t toTime) const;
 
     JavaObjectHandle<DXFeedSubscription>
-    createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
+    createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) const;
 
     protected:
     DXFeed() noexcept;
@@ -185,7 +185,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeedSubscription
      */
-    void attachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
+    void attachSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) const;
 
     /**
      * Detaches the given subscription from this feed. This method does nothing if the
@@ -199,7 +199,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeedSubscription
      */
-    void detachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
+    void detachSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) const;
 
     /**
      * Detaches the given subscription from this feed and clears data delivered to this subscription
@@ -209,7 +209,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeed::detachSubscription()
      */
-    void detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription);
+    void detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription> &subscription) const;
 
     /**
      * Returns the last event for the specified event instance.
@@ -322,7 +322,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param eventType The type of event
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypeEnum &eventType);
+    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypeEnum &eventType) const;
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -381,7 +381,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param eventTypes The initializer list of event types
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes);
+    std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes) const;
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -434,7 +434,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param eventType The type of event
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypeEnum &eventType);
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypeEnum &eventType) const;
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.

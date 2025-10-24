@@ -836,19 +836,6 @@ class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSu
     std::string toString() const override;
 
     /**
-     * Creates <i>detached</i> subscription for the given collection of event types.
-     *
-     * Example:
-     * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription::create({dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE});
-     * ```
-     *
-     * @param eventTypes The event type collection.
-     * @return The new <i>detached</i> subscription for the given collection of event types.
-     */
-    static std::shared_ptr<DXFeedTimeSeriesSubscription> create(std::initializer_list<EventTypeEnum> eventTypes);
-
-    /**
      * Returns the earliest timestamp from which time-series of events shall be received.
      * The timestamp is in milliseconds from midnight, January 1, 1970 UTC.
      *

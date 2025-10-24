@@ -240,11 +240,11 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoin
  * Changes the name used to distinguish multiple endpoints
  * in the same process (GraalVM Isolate) in logs and in other diagnostic means.
  *
- * @param builder The endpoint's builder
+ * @param builderHandle The endpoint's builder
  * @param name The endpoint's name
  * @return DXFC_EC_SUCCESS - if the operation was successful; otherwise - DXFC_EC_ERROR.
  */
-DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t builder, const char *name);
+DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t builderHandle, const char *name);
 
 /**
  * Sets the specified property. Unsupported properties are ignored.

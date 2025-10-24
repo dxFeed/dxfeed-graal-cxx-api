@@ -39,7 +39,7 @@ void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaOb
             "Unable to execute function `dxfg_DXEndpoint_executor`. The `endpoint` handle is invalid");
     }
 
-    if (!endpoint) {
+    if (!ex) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_executor`. The `ex` handle is invalid");
     }

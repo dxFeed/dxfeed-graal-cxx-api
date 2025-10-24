@@ -8,21 +8,16 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../executors/InPlaceExecutor.hpp"
-#include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
-#include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "DXFeed.hpp"
 #include "DXPublisher.hpp"
 
-#include <filesystem>
-#include <iostream>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
-#include <variant>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -65,7 +60,7 @@ struct OnDemandService;
  *   This endpoint is automatically connected to the configured data feed, as explained in the default properties section.
  * - @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" is similar to @ref Role::FEED "FEED", but it is designed to be used with
  *   OnDemandService for historical data replay only. It is configured with default properties but is not connected
- *   automatically to the data provider until @ref OnDemandService::replay(std::int64_t,double) "OnDemandService::replay" method is invoked.
+ *   automatically to the data provider until the @ref OnDemandService::replay(std::int64_t, double) "OnDemandService::replay" method is invoked.
  * - @ref Role::STREAM_FEED "STREAM_FEED" is similar to @ref Role::FEED "FEED" and also connects to the remote data
  *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
  *   object that subscribes to the data from the opened files and receives events from them. Events from the files are
@@ -75,7 +70,7 @@ struct OnDemandService;
  *   auto endpoint = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
  *   auto feed = endpoint->getFeed();
  *   ```
- *   creates a feed that is ready to read data from file as soon as the following code is invoked:
+ *   creates a feed that is ready to read data from the file as soon as the following code is invoked:
  *   ```cpp
  *   endpoint->connect("file:demo-sample.data[speed=max]");
  *   ```
@@ -197,9 +192,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxfeed.properties"`
      *
-     * Defines a path to a file with properties for an endpoint with role @ref Role::FEED "FEED" or
+     * Defines a path to a file with properties for an endpoint with the role @ref Role::FEED "FEED" or
      * @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
-     * By default, properties a loaded from a path resource named "dxfeed.properties".
+     * By default, properties are loaded from a path resource named "dxfeed.properties".
      *
      * @see Builder::withProperty(const std::string&, const std::string&)
      */
@@ -208,10 +203,10 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxfeed.address"`
      *
-     * Defines default connection address for an endpoint with role @ref Role::FEED "FEED"
+     * Defines default connection address for an endpoint with the role @ref Role::FEED "FEED"
      * or @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
-     * Connection is established to this address by role @ref Role::FEED "FEED" as soon as the endpoint is created, while
-     * role @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" waits until OnDemandService::(std::int64_t,double) is invoked
+     * Connection is established to this address by the role @ref Role::FEED "FEED" as soon as the endpoint is created, while
+     * the role @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" waits until OnDemandService::(std::int64_t, double) is invoked
      * before connecting.
      *
      * By default, without this property, a connection is not established until @ref DXEndpoint::connect(const
@@ -227,7 +222,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxfeed.user"`
      *
-     * Defines default username for an endpoint with role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
+     * Defines default username for an endpoint with the role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
      * "ON_DEMAND_FEED".
      *
      * @see DXEndpoint::user(const std::string&)
@@ -247,7 +242,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxfeed.threadPoolSize"`
      *
-     * Defines thread pool size for an endpoint with role @ref Role::FEED "FEED".
+     * Defines thread pool size for an endpoint with the role @ref Role::FEED "FEED".
      * By default, the thread pool size is equal to the number of available processors.
      * @see Builder::withProperty(const std::string&, const std::string&)
      */
@@ -256,7 +251,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxfeed.aggregationPeriod"`
      *
-     * Defines a data aggregation period for an endpoint with role @ref Role::FEED "FEED" that
+     * Defines a data aggregation period for an endpoint with the role @ref Role::FEED "FEED" that
      * limits the rate of data notifications. For example, setting the value of this property
      * to "0.1s" limits notification to once every "100ms" (at most 10 per second).
      * @see Builder::withProperty(const std::string&, const std::string&)
@@ -275,7 +270,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxpublisher.properties"`
      *
-     * Defines a path to a file with properties for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
+     * Defines a path to a file with properties for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * By default, properties are loaded from a classpath resource named "dxpublisher.properties".
      * @see Builder::withProperty(const std::string&, const std::string&)
      */
@@ -284,7 +279,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxpublisher.address"`
      *
-     * Defines default connection address for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
+     * Defines default connection address for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * Connection is established to this address as soon as an endpoint is created.
      * By default, the connection is not established until DXEndpoint::connect(const std::string&) is invoked.
      * @see Builder::withProperty(const std::string&, const std::string&)
@@ -294,7 +289,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * `"dxpublisher.threadPoolSize"`
      *
-     * Defines thread pool size for an endpoint with role @ref Role::PUBLISHER "PUBLISHER".
+     * Defines thread pool size for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * By default, the thread pool size is equal to the number of available processors.
      * @see Builder#withProperty(const std::string&, const std::string&)
      */
@@ -309,11 +304,11 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * The event time is available only when the corresponding DXEndpoint is created with this property and
      * the data source has embedded event times. This is typically true only for data events
      * that are read from historical tape files and from OnDemandService.
-     * Events that are coming from network connections do not have embedded event time information and
+     * Events that are coming from network connections do not have embedded event time information, and
      * event time is not available for them anyway.
      *
      * Use this property if you need to work with historical data coming from files
-     * or from OnDemandService or writing data with times to file via DXPublisher using "tape:..." address.
+     * or from OnDemandService or writing data with times to file via DXPublisher using a "tape:..." address.
      */
     static const std::string DXENDPOINT_EVENT_TIME_PROPERTY;
 
@@ -384,8 +379,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
         /**
          * `ON_DEMAND_FEED` endpoint is similar to DXEndpoint::FEED, but it is designed to be used with OnDemandService
-         * for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default
-         * properties</a>, but is not connected automatically to the data provider until @ref OnDemandService::(std::int64_t,double) "OnDemandService.replay"
+         * for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default properties</a>,
+         * but is not connected automatically to the data provider until @ref OnDemandService::(std::int64_t,double) "OnDemandService.replay"
          * method is invoked.
          *
          * `ON_DEMAND_FEED` endpoint cannot be connected to an ordinary data feed at all.
@@ -466,10 +461,10 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     static std::string stateToString(State state);
 
     private:
-    JavaObjectHandle<DXEndpoint> handle_;
+    JavaObjectHandle<DXEndpoint> handle_{};
     Role role_ = Role::FEED;
     std::string name_{};
-    JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_;
+    JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_{};
     SimpleHandler<void(State, State)> onStateChange_{};
 
     // Throws:
@@ -723,7 +718,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    void reconnect();
+    void reconnect() const;
 
     /**
      * Terminates all remote network connections.
@@ -739,7 +734,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    void disconnect();
+    void disconnect() const;
 
     /**
      * Terminates all remote network connections and clears stored data.
@@ -755,7 +750,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    void disconnectAndClear();
+    void disconnectAndClear() const;
 
     /**
      * Closes this endpoint. All network connections are terminated as with the ::disconnect() method, and no further
@@ -770,7 +765,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    void close();
+    void close() const;
 
     /**
      * Waits while this endpoint @ref ::getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
@@ -787,7 +782,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    void awaitNotConnected();
+    void awaitNotConnected() const;
 
     /**
      * Waits until this endpoint stops processing data (becomes quiescent).
@@ -800,7 +795,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    void awaitProcessed();
+    void awaitProcessed() const;
 
     /**
      * Closes this endpoint and wait until all pending data processing tasks are completed.
@@ -817,10 +812,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    void closeAndAwaitTermination();
+    void closeAndAwaitTermination() const;
 
-    // TODO: implement [EN-8234]
-    std::unordered_set<EventTypeEnum> getEventTypes() noexcept;
+    std::unordered_set<EventTypeEnum> getEventTypes() const;
 
     /**
      * @return The feed that is associated with this endpoint.
@@ -828,7 +822,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    std::shared_ptr<DXFeed> getFeed();
+    std::shared_ptr<DXFeed> getFeed() const;
 
     /**
      * @return The publisher that is associated with this endpoint.
@@ -836,7 +830,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    std::shared_ptr<DXPublisher> getPublisher();
+    std::shared_ptr<DXPublisher> getPublisher() const;
 
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.
@@ -850,9 +844,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     class DXFCPP_EXPORT Builder : public RequireMakeShared<Builder> {
         friend DXEndpoint;
 
-        JavaObjectHandle<Builder> handle_;
+        JavaObjectHandle<Builder> handle_{};
         Role role_ = Role::FEED;
-        std::unordered_map<std::string, std::string> properties_;
+        std::unordered_map<std::string, std::string> properties_{};
 
         // Throws:
         //   - std::bad_alloc if it was not possible to allocate the required amount of memory
@@ -927,7 +921,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         /**
          * Sets all supported properties from the provided properties object.
          *
-         * @tparam Properties The properties' type (std::map, std::unordered_map etc.)
+         * @tparam Properties The properties' type (std::map, std::unordered_map, etc.)
          * @param properties The endpoint's properties
          * @return `this` endpoint builder.
          *
@@ -960,7 +954,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @throws JavaException
          * @throws GraalException
          */
-        bool supportsProperty(const std::string &key);
+        bool supportsProperty(const std::string &key) const;
 
         /**
          * Builds DXEndpoint instance.

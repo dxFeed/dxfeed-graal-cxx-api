@@ -18,6 +18,7 @@ int64_t TimeSeriesSubscriptionSymbol::getFromTime() const {
 
 void *TimeSeriesSubscriptionSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("TimeSeriesSubscriptionSymbol::toGraal()");
     }
 
@@ -31,6 +32,7 @@ void *TimeSeriesSubscriptionSymbol::toGraal() const {
 
 void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("TimeSeriesSubscriptionSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
@@ -47,6 +49,7 @@ void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) {
 
 TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("TimeSeriesSubscriptionSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
@@ -62,6 +65,7 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
 
 std::string TimeSeriesSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         return "TimeSeriesSubscriptionSymbol{" + getEventSymbol()->toString() +
                ", fromTime = " + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     } else {
