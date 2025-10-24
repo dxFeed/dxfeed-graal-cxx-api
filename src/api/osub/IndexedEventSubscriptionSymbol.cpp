@@ -1,9 +1,10 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
+#include "dxfeed_graal_cpp_api/api/osub/IndexedEventSubscriptionSymbol.hpp"
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -45,6 +46,7 @@ void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) {
 
 IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("IndexedEventSubscriptionSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
@@ -60,6 +62,7 @@ IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *g
 
 std::string IndexedEventSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         return "IndexedEventSubscriptionSymbol{" + eventSymbol_->toString() + ", source = " + source_->toString() + "}";
     } else {
         return eventSymbol_->toStringUnderlying() + "{source=" + source_->toString() + "}";
