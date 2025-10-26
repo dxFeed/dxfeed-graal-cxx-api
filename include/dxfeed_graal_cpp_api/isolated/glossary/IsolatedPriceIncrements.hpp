@@ -15,7 +15,7 @@ namespace isolated::glossary::IsolatedPriceIncrements {
 JavaObjectHandle<PriceIncrements> EMPTY();
 
 // int32_t dxfg_PriceIncrements_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT dxfg_price_increments_t **priceIncrements);
-JavaObjectHandle<PriceIncrements> valueOf(const StringLikeWrapper &text);
+JavaObjectHandle<PriceIncrements> valueOf(const StringLike &text);
 
 // int32_t dxfg_PriceIncrements_valueOf2(graal_isolatethread_t *thread, double increment, DXFG_OUT dxfg_price_increments_t **priceIncrements);
 JavaObjectHandle<PriceIncrements> valueOf(double increment);

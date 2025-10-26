@@ -30,7 +30,7 @@ CFI::CFI(LockExternalConstructionTag, JavaObjectHandle<CFI> &&handle) : handle_(
 CFI::~CFI() noexcept {
 }
 
-CFI::Ptr CFI::valueOf(const StringLikeWrapper &code) {
+CFI::Ptr CFI::valueOf(const StringLike &code) {
     return createShared(isolated::glossary::IsolatedCFI::valueOf(code));
 }
 

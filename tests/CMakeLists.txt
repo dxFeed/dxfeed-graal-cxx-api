@@ -14,10 +14,22 @@ endif ()
 project(dxFeedGraalCXXAPITests LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CXX_EXTENSIONS OFF)
+set(C_EXTENSIONS OFF)
 
 set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-${DOCTEST_VERSION} ../third_party/range-v3-${RANGE_VERSION}/include)
+
+if (DXFCXX_BUILD_BENCHMARKS)
+    FetchContent_Declare(
+            nanobench
+            GIT_REPOSITORY https://github.com/martinus/nanobench.git
+            GIT_TAG v4.1.0
+            GIT_SHALLOW TRUE)
+    FetchContent_MakeAvailable(nanobench)
+endif ()
 
 set(DXFC_TEST_SOURCES
         api/CandleSymbolTest.cpp
@@ -41,6 +53,10 @@ set(DXFC_TEST_SOURCES
         system/SystemTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
+if (DXFCXX_BUILD_BENCHMARKS)
+    list(APPEND DXFC_TEST_SOURCES bench/StringLikeBench.cpp)
+endif ()
+
 foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     string(REPLACE ".cpp" "" DXFC_TEST_BASENAME "${DXFC_TEST_SOURCE}")
     string(REPLACE "/" "_" DXFC_TEST_BASENAME "${DXFC_TEST_BASENAME}")
@@ -50,12 +66,17 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp)
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only)
+
+    if (DXFC_TEST_BASENAME MATCHES "Bench$")
+        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE nanobench)
+    endif ()
 
     if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
-        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx fmt::fmt-header-only)
+        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx)
         target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCPP_USE_DLLS)
     else ()
-        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
+        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static)
 
         if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
             if (DXFCXX_LINK_STATIC_RUNTIME)

@@ -46,7 +46,7 @@ const JavaObjectHandle<TimeFormat> &TimeFormat::getHandle() const {
     return handle_;
 }
 
-std::int64_t TimeFormat::parse(const StringLikeWrapper &value) const {
+std::int64_t TimeFormat::parse(const StringLike &value) const {
     std::lock_guard lock(mtx_);
 
     init();

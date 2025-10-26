@@ -18,19 +18,19 @@ DXFCPP_BEGIN_NAMESPACE
 
 const AuthToken AuthToken::NULL_TOKEN(JavaObjectHandle<AuthToken>(), true);
 
-AuthToken AuthToken::valueOf(const StringLikeWrapper &string) {
+AuthToken AuthToken::valueOf(const StringLike &string) {
     return AuthToken(isolated::auth::IsolatedAuthToken::valueOf(string));
 }
 
-AuthToken AuthToken::createBasicToken(const StringLikeWrapper &userPassword) {
+AuthToken AuthToken::createBasicToken(const StringLike &userPassword) {
     return AuthToken(isolated::auth::IsolatedAuthToken::createBasicToken(userPassword));
 }
 
-AuthToken AuthToken::createBasicToken(const StringLikeWrapper &user, const StringLikeWrapper &password) {
+AuthToken AuthToken::createBasicToken(const StringLike &user, const StringLike &password) {
     return AuthToken(isolated::auth::IsolatedAuthToken::createBasicToken(user, password));
 }
 
-AuthToken AuthToken::createBasicTokenOrNull(const StringLikeWrapper &user, const StringLikeWrapper &password) {
+AuthToken AuthToken::createBasicTokenOrNull(const StringLike &user, const StringLike &password) {
     auto handle = isolated::auth::IsolatedAuthToken::createBasicTokenOrNull(user, password);
 
     if (!handle) {
@@ -40,11 +40,11 @@ AuthToken AuthToken::createBasicTokenOrNull(const StringLikeWrapper &user, const
     return AuthToken(std::move(handle));
 }
 
-AuthToken AuthToken::createBearerToken(const StringLikeWrapper &token) {
+AuthToken AuthToken::createBearerToken(const StringLike &token) {
     return AuthToken(isolated::auth::IsolatedAuthToken::createBearerToken(token));
 }
 
-AuthToken AuthToken::createBearerTokenOrNull(const StringLikeWrapper &token) {
+AuthToken AuthToken::createBearerTokenOrNull(const StringLike &token) {
     auto handle = isolated::auth::IsolatedAuthToken::createBearerTokenOrNull(token);
 
     if (!handle) {
@@ -54,7 +54,7 @@ AuthToken AuthToken::createBearerTokenOrNull(const StringLikeWrapper &token) {
     return AuthToken(std::move(handle));
 }
 
-AuthToken AuthToken::createCustomToken(const StringLikeWrapper &scheme, const StringLikeWrapper &value) {
+AuthToken AuthToken::createCustomToken(const StringLike &scheme, const StringLike &value) {
     return AuthToken(isolated::auth::IsolatedAuthToken::createCustomToken(scheme, value));
 }
 

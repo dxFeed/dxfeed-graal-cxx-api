@@ -24,14 +24,14 @@ getInstance(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<dxfcpp::Inst
         dxfg_Schedule_getInstance, static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()))};
 }
 
-/* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule> getInstance(const StringLikeWrapper &scheduleDefinition) {
+/* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule> getInstance(const StringLike &scheduleDefinition) {
     return JavaObjectHandle<dxfcpp::Schedule>{
         runGraalFunctionAndThrowIfNullptr(dxfg_Schedule_getInstance2, scheduleDefinition.c_str())};
 }
 
 /* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule>
 getInstance(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &instrumentProfile,
-            const StringLikeWrapper &venue) {
+            const StringLike &venue) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Schedule_getInstance3`. The `instrumentProfile` handle is invalid");
@@ -60,7 +60,7 @@ std::vector<std::string> getTradingVenues(
     return result;
 }
 
-void downloadDefaults(const StringLikeWrapper &downloadConfig) {
+void downloadDefaults(const StringLike &downloadConfig) {
     runGraalFunctionAndThrowIfMinusOne(dxfg_Schedule_downloadDefaults, downloadConfig.c_str());
 }
 

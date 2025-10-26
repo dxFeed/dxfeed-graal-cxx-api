@@ -46,7 +46,7 @@ getType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 // dxfg_InstrumentProfile_setType
 /* int32_t */ void
 setType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-        const StringLikeWrapper &value) {
+        const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setType`. The `instrumentProfile` handle is invalid");
@@ -75,7 +75,7 @@ getSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProf
 // dxfg_InstrumentProfile_setSymbol
 /* std::int32_t */ void
 setSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-          const StringLikeWrapper &value) {
+          const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setSymbol`. The `instrumentProfile` handle is invalid");
@@ -104,7 +104,7 @@ getDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrumen
 // dxfg_InstrumentProfile_setDescription
 /* std::int32_t */ void
 setDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-               const StringLikeWrapper &value) {
+               const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setDescription`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -133,7 +133,7 @@ getLocalSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrumen
 // dxfg_InstrumentProfile_setLocalSymbol
 /* std::int32_t */ void
 setLocalSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-               const StringLikeWrapper &value) {
+               const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setLocalSymbol`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -162,7 +162,7 @@ getLocalDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Inst
 // dxfg_InstrumentProfile_setLocalDescription
 /* std::int32_t */ void
 setLocalDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                    const StringLikeWrapper &value) {
+                    const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setLocalDescription`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -191,7 +191,7 @@ getCountry(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPro
 // dxfg_InstrumentProfile_setCountry
 /* std::int32_t */ void
 setCountry(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-           const StringLikeWrapper &value) {
+           const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setCountry`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -220,7 +220,7 @@ getOPOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 // dxfg_InstrumentProfile_setOPOL
 /* std::int32_t */ void
 setOPOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-        const StringLikeWrapper &value) {
+        const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setOPOL`. The `instrumentProfile` handle is invalid");
@@ -249,7 +249,7 @@ getExchangeData(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 // dxfg_InstrumentProfile_setExchangeData
 /* std::int32_t */ void
 setExchangeData(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                const StringLikeWrapper &value) {
+                const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setExchangeData`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -278,7 +278,7 @@ getExchanges(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentP
 // dxfg_InstrumentProfile_setExchanges
 /* std::int32_t */ void
 setExchanges(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-             const StringLikeWrapper &value) {
+             const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setExchanges`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -307,7 +307,7 @@ getCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPr
 // dxfg_InstrumentProfile_setCurrency
 /* std::int32_t */ void
 setCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-            const StringLikeWrapper &value) {
+            const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setCurrency`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -336,7 +336,7 @@ getBaseCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 // dxfg_InstrumentProfile_setBaseCurrency
 /* std::int32_t */ void
 setBaseCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                const StringLikeWrapper &value) {
+                const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setBaseCurrency`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -365,7 +365,7 @@ getCFI(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile
 // dxfg_InstrumentProfile_setCFI
 /* std::int32_t */ void
 setCFI(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-       const StringLikeWrapper &value) {
+       const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setCFI`. The `instrumentProfile` handle is invalid");
@@ -394,7 +394,7 @@ getISIN(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 // dxfg_InstrumentProfile_setISIN
 /* std::int32_t */ void
 setISIN(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-        const StringLikeWrapper &value) {
+        const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setISIN`. The `instrumentProfile` handle is invalid");
@@ -423,7 +423,7 @@ getSEDOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 // dxfg_InstrumentProfile_setSEDOL
 /* std::int32_t */ void
 setSEDOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-         const StringLikeWrapper &value) {
+         const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setSEDOL`. The `instrumentProfile` handle is invalid");
@@ -452,7 +452,7 @@ getCUSIP(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 // dxfg_InstrumentProfile_setCUSIP
 /* std::int32_t */ void
 setCUSIP(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-         const StringLikeWrapper &value) {
+         const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setCUSIP`. The `instrumentProfile` handle is invalid");
@@ -553,7 +553,7 @@ getProduct(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPro
 // dxfg_InstrumentProfile_setProduct
 /* std::int32_t */ void
 setProduct(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-           const StringLikeWrapper &value) {
+           const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setProduct`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -582,7 +582,7 @@ getUnderlying(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrument
 // dxfg_InstrumentProfile_setUnderlying
 /* std::int32_t */ void
 setUnderlying(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-              const StringLikeWrapper &value) {
+              const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setUnderlying`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -635,7 +635,7 @@ setSPC(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile
 // dxfg_InstrumentProfile_setAdditionalUnderlyings
 /* std::int32_t */ void
 setAdditionalUnderlyings(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                         const StringLikeWrapper &value) {
+                         const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setAdditionalUnderlyings`. "
                                        "The `instrumentProfile` handle is invalid");
@@ -664,7 +664,7 @@ getMMY(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile
 // dxfg_InstrumentProfile_setMMY
 /* std::int32_t */ void
 setMMY(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-       const StringLikeWrapper &value) {
+       const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setMMY`. The `instrumentProfile` handle is invalid");
@@ -766,7 +766,7 @@ getOptionType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrument
 // dxfg_InstrumentProfile_setOptionType
 /* std::int32_t */ void
 setOptionType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-              const StringLikeWrapper &value) {
+              const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setOptionType`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -795,7 +795,7 @@ getExpirationStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 // dxfg_InstrumentProfile_setExpirationStyle
 /* std::int32_t */ void
 setExpirationStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                   const StringLikeWrapper &value) {
+                   const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setExpirationStyle`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -824,7 +824,7 @@ getSettlementStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 // dxfg_InstrumentProfile_setSettlementStyle
 /* std::int32_t */ void
 setSettlementStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                   const StringLikeWrapper &value) {
+                   const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setSettlementStyle`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -853,7 +853,7 @@ getPriceIncrements(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 // dxfg_InstrumentProfile_setPriceIncrements
 /* std::int32_t */ void
 setPriceIncrements(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                   const StringLikeWrapper &value) {
+                   const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setPriceIncrements`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -882,7 +882,7 @@ getTradingHours(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 // dxfg_InstrumentProfile_setTradingHours
 /* std::int32_t */ void
 setTradingHours(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                const StringLikeWrapper &value) {
+                const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setTradingHours`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -896,7 +896,7 @@ setTradingHours(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 // dxfg_InstrumentProfile_getField
 /* const char* */ std::string
 getField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-         const StringLikeWrapper &name) {
+         const StringLike &name) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_getField`. The `instrumentProfile` handle is invalid");
@@ -913,7 +913,7 @@ getField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 // dxfg_InstrumentProfile_setField
 /* std::int32_t */ void
 setField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-         const StringLikeWrapper &name, const StringLikeWrapper &value) {
+         const StringLike &name, const StringLike &value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfile_setField`. The `instrumentProfile` handle is invalid");
@@ -926,7 +926,7 @@ setField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 
 // dxfg_InstrumentProfile_getNumericField
 double getNumericField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                       const StringLikeWrapper &name) {
+                       const StringLike &name) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_getNumericField`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -940,7 +940,7 @@ double getNumericField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<I
 // dxfg_InstrumentProfile_setNumericField
 /* std::int32_t */ void
 setNumericField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                const StringLikeWrapper &name, double value) {
+                const StringLike &name, double value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setNumericField`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -953,7 +953,7 @@ setNumericField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 
 // dxfg_InstrumentProfile_getDateField
 std::int32_t getDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                          const StringLikeWrapper &name) {
+                          const StringLike &name) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_getDateField`. The "
                                        "`instrumentProfile` handle is invalid");
@@ -967,7 +967,7 @@ std::int32_t getDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandl
 // dxfg_InstrumentProfile_setDateField
 /* std::int32_t */ void
 setDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-             const StringLikeWrapper &name, std::int32_t value) {
+             const StringLike &name, std::int32_t value) {
     if (!instrumentProfile) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setNumericField`. The "
                                        "`instrumentProfile` handle is invalid");

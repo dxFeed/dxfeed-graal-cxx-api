@@ -1,13 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
 #include <dxfg_api.h>
-
-// #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include "dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "dxfeed_graal_cpp_api/api/DXFeed.hpp"
+
+#include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
 
 #include <memory>
 #include <string>
@@ -116,11 +115,12 @@ std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(std::initializer_
 std::shared_ptr<DXFeedTimeSeriesSubscription>
 DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::createTimeSeriesSubscription(eventType = " + eventType.getName() + ")");
     }
 
     if (!eventType.isTimeSeries()) {
-        throw dxfcpp::InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
+        throw InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
                                                eventType.getClassName() + " is not TimeSeries");
     }
 
@@ -153,10 +153,10 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
 
     std::shared_ptr<DXFeed> feed{new DXFeed{}};
 
-    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeed>>()->registerEntity(feed);
+    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeed>>()->registerEntity(feed);
     ignoreUnused(id);
 
-    feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
+    feed->handle_ = std::move(JavaObjectHandle<DXFeed>(feedHandle));
 
     return feed;
 }

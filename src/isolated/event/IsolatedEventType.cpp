@@ -27,7 +27,7 @@ void release(void *source) {
 namespace IsolatedEventType {
 
 // dxfg_EventType_new
-/* dxfg_event_type_t* */ void *create(const StringLikeWrapper &symbolName,
+/* dxfg_event_type_t* */ void *create(const StringLike &symbolName,
                                       /* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
         dxfg_EventType_new, symbolName.c_str(), static_cast<dxfg_event_clazz_t>(eventType.getId())));

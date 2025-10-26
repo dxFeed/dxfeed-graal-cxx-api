@@ -9,8 +9,8 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-JavaException::JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
-                             const StringLikeWrapper &stackTrace)
+JavaException::JavaException(const StringLike &message, const StringLike &className,
+                             const StringLike &stackTrace)
     : RuntimeException(fmt::format("Java exception of type '{}' was thrown. {}", className.c_str(), message.c_str()),
                        stackTrace) {
 }

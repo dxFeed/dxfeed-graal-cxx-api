@@ -29,8 +29,8 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
      * @param className Java class name.
      * @param stackTrace Java stack trace.
      */
-    JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
-                  const StringLikeWrapper &stackTrace);
+    JavaException(const StringLike &message, const StringLike &className,
+                  const StringLike &stackTrace);
 
     JavaException(const JavaException &other) noexcept;
 

@@ -15,7 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct StringLikeWrapper;
+struct StringLike;
 
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.
@@ -122,7 +122,7 @@ struct DXFCPP_EXPORT TimeFormat {
      * @param value String value to parse.
      * @return Date's timestamp parsed from <tt>value</tt> or `0` if <tt>value</tt> has wrong format.
      */
-    std::int64_t parse(const StringLikeWrapper &value) const;
+    std::int64_t parse(const StringLike &value) const;
 
     /**
      * Converts timestamp into string according to the format

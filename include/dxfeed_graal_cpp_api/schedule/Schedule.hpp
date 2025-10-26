@@ -12,7 +12,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct InstrumentProfile;
 struct Day;
 struct Session;
-struct StringLikeWrapper;
+struct StringLike;
 
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
@@ -58,7 +58,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param scheduleDefinition The schedule definition of requested schedule
      * @return The default schedule instance for specified schedule definition
      */
-    static Schedule::Ptr getInstance(const StringLikeWrapper &scheduleDefinition);
+    static Schedule::Ptr getInstance(const StringLike &scheduleDefinition);
 
     /**
      * Returns schedule instance for specified instrument profile and trading venue.
@@ -67,7 +67,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param venue The trading venue those schedule is requested
      * @return The schedule instance for specified instrument profile and trading venue
      */
-    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLikeWrapper &venue);
+    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLike &venue);
 
     /**
      * Returns trading venues for specified instrument profile.
@@ -88,7 +88,7 @@ struct DXFCPP_EXPORT Schedule {
      *
      * @param downloadConfig download config
      */
-    static void downloadDefaults(const StringLikeWrapper &downloadConfig);
+    static void downloadDefaults(const StringLike &downloadConfig);
 
     /**
      * Sets shared defaults that are used by individual schedule instances.

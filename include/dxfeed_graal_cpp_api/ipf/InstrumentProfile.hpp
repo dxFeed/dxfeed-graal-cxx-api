@@ -74,7 +74,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param type The type of instrument.
      */
-    void setType(const StringLikeWrapper &type) const;
+    void setType(const StringLike &type) const;
 
     /**
      * Returns identifier of instrument, preferable an international one in Latin alphabet.
@@ -92,7 +92,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param symbol The identifier of instrument.
      */
-    void setSymbol(const StringLikeWrapper &symbol) const;
+    void setSymbol(const StringLike &symbol) const;
 
     /**
      * Returns the description of instrument, preferable an international one in Latin alphabet.
@@ -108,7 +108,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param description The description of instrument.
      */
-    void setDescription(const StringLikeWrapper &description) const;
+    void setDescription(const StringLike &description) const;
 
     /**
      * Returns identifier of instrument in national language.
@@ -124,7 +124,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param localSymbol The identifier of instrument in national language.
      */
-    void setLocalSymbol(const StringLikeWrapper &localSymbol) const;
+    void setLocalSymbol(const StringLike &localSymbol) const;
 
     /**
      * Returns description of instrument in national language.
@@ -140,7 +140,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param localDescription The description of instrument in national language.
      */
-    void setLocalDescription(const StringLikeWrapper &localDescription) const;
+    void setLocalDescription(const StringLike &localDescription) const;
 
     /**
      * Returns country of origin (incorporation) of corresponding company or parent entity.
@@ -160,7 +160,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param country The country of origin (incorporation) of corresponding company or parent entity.
      */
-    void setCountry(const StringLikeWrapper &country) const;
+    void setCountry(const StringLike &country) const;
 
     /**
      * Returns official Place Of Listing, the organization that have listed this instrument.
@@ -184,7 +184,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param opol The official Place Of Listing, the organization that have listed this instrument.
      */
-    void setOPOL(const StringLikeWrapper &opol) const;
+    void setOPOL(const StringLike &opol) const;
 
     /**
      * Returns exchange-specific data required to properly identify instrument when communicating with exchange.
@@ -201,7 +201,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param exchangeData The exchange-specific data required to properly identify instrument when communicating with
      * exchange.
      */
-    void setExchangeData(const StringLikeWrapper &exchangeData) const;
+    void setExchangeData(const StringLike &exchangeData) const;
 
     /**
      * Returns list of exchanges where instrument is quoted or traded.
@@ -231,7 +231,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param exchanges The list of exchanges where instrument is quoted or traded.
      */
-    void setExchanges(const StringLikeWrapper &exchanges) const;
+    void setExchanges(const StringLike &exchanges) const;
 
     /**
      * Returns currency of quotation, pricing and trading.
@@ -251,7 +251,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param currency Currency of quotation, pricing and trading.
      */
-    void setCurrency(const StringLikeWrapper &currency) const;
+    void setCurrency(const StringLike &currency) const;
 
     /**
      * Returns base currency of currency pair (FOREX instruments).
@@ -267,7 +267,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param baseCurrency The base currency of currency pair (FOREX instruments).
      */
-    void setBaseCurrency(const StringLikeWrapper &baseCurrency) const;
+    void setBaseCurrency(const StringLike &baseCurrency) const;
 
     /**
      * Returns Classification of Financial Instruments code.
@@ -293,7 +293,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param cfi CFI code.
      */
-    void setCFI(const StringLikeWrapper &cfi) const;
+    void setCFI(const StringLike &cfi) const;
 
     /**
      * Returns International Securities Identifying Number.
@@ -315,7 +315,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param isin International Securities Identifying Number.
      */
-    void setISIN(const StringLikeWrapper &isin) const;
+    void setISIN(const StringLike &isin) const;
 
     /**
      * Returns Stock Exchange Daily Official List.
@@ -337,7 +337,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param sedol Stock Exchange Daily Official List.
      */
-    void setSEDOL(const StringLikeWrapper &sedol) const;
+    void setSEDOL(const StringLike &sedol) const;
 
     /**
      * Returns Committee on Uniform Security Identification Procedures code.
@@ -357,7 +357,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param cusip CUSIP code.
      */
-    void setCUSIP(const StringLikeWrapper &cusip) const;
+    void setCUSIP(const StringLike &cusip) const;
 
     /**
      * Returns Industry Classification Benchmark.
@@ -433,7 +433,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param product The product for futures and options on futures (underlying asset name).
      */
-    void setProduct(const StringLikeWrapper &product) const;
+    void setProduct(const StringLike &product) const;
 
     /**
      * Returns primary underlying symbol for options.
@@ -449,7 +449,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param underlying The primary underlying symbol for options.
      */
-    void setUnderlying(const StringLikeWrapper &underlying) const;
+    void setUnderlying(const StringLike &underlying) const;
 
     /**
      * Returns shares per contract for options.
@@ -495,7 +495,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param additionalUnderlyings The additional underlyings for options, including additional cash.
      */
-    void setAdditionalUnderlyings(const StringLikeWrapper &additionalUnderlyings) const;
+    void setAdditionalUnderlyings(const StringLike &additionalUnderlyings) const;
 
     /**
      * Returns maturity month-year as provided for corresponding FIX tag (200).
@@ -521,7 +521,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param mmy The maturity month-year as provided for corresponding FIX tag (200).
      */
-    void setMMY(const StringLikeWrapper &mmy) const;
+    void setMMY(const StringLike &mmy) const;
 
     /**
      * Returns day id of expiration.
@@ -603,7 +603,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param optionType The type of option.
      */
-    void setOptionType(const StringLikeWrapper &optionType) const;
+    void setOptionType(const StringLike &optionType) const;
 
     /**
      * Returns expiration cycle style, such as "Weeklys", "Quarterlys".
@@ -617,7 +617,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param expirationStyle The expiration cycle style.
      */
-    void setExpirationStyle(const StringLikeWrapper &expirationStyle) const;
+    void setExpirationStyle(const StringLike &expirationStyle) const;
 
     /**
      * Returns settlement price determination style, such as "Open", "Close".
@@ -631,7 +631,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param settlementStyle The settlement price determination style.
      */
-    void setSettlementStyle(const StringLikeWrapper &settlementStyle) const;
+    void setSettlementStyle(const StringLike &settlementStyle) const;
 
     /**
      * Returns minimum allowed price increments with corresponding price ranges.
@@ -661,7 +661,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param priceIncrements The minimum allowed price increments with corresponding price ranges.
      */
-    void setPriceIncrements(const StringLikeWrapper &priceIncrements) const;
+    void setPriceIncrements(const StringLike &priceIncrements) const;
 
     /**
      * Returns trading hours specification.
@@ -677,7 +677,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      *
      * @param tradingHours The trading hours specification.
      */
-    void setTradingHours(const StringLikeWrapper &tradingHours) const;
+    void setTradingHours(const StringLike &tradingHours) const;
 
     /**
      * Returns field value with a specified name.
@@ -685,7 +685,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @return field value.
      */
-    std::string getField(const StringLikeWrapper &name) const;
+    std::string getField(const StringLike &name) const;
 
     /**
      * Changes field value with a specified name.
@@ -693,7 +693,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @param value field value.
      */
-    void setField(const StringLikeWrapper &name, const StringLikeWrapper &value) const;
+    void setField(const StringLike &name, const StringLike &value) const;
 
     /**
      * Returns numeric field value with a specified name.
@@ -701,7 +701,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @return field value.
      */
-    double getNumericField(const StringLikeWrapper &name) const;
+    double getNumericField(const StringLike &name) const;
 
     /**
      * Changes numeric field value with a specified name.
@@ -709,7 +709,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @param value field value.
      */
-    void setNumericField(const StringLikeWrapper &name, double value) const;
+    void setNumericField(const StringLike &name, double value) const;
 
     /**
      * Returns day id value for a date field with a specified name.
@@ -717,7 +717,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @return day id value.
      */
-    std::int32_t getDateField(const StringLikeWrapper &name) const;
+    std::int32_t getDateField(const StringLike &name) const;
 
     /**
      * Changes day id value for a date field with a specified name.
@@ -725,7 +725,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
      * @param name name of field.
      * @param value day id value.
      */
-    void setDateField(const StringLikeWrapper &name, std::int32_t value) const;
+    void setDateField(const StringLike &name, std::int32_t value) const;
 
     /**
      * Returns names of non-empty custom fields

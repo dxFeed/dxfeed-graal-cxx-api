@@ -39,12 +39,12 @@ bool InstrumentProfileReader::wasComplete() const {
     return isolated::ipf::IsolatedInstrumentProfileReader::wasComplete(handle_);
 }
 
-std::string InstrumentProfileReader::resolveSourceURL(const StringLikeWrapper &address) {
+std::string InstrumentProfileReader::resolveSourceURL(const StringLike &address) {
     return isolated::ipf::IsolatedInstrumentProfileReader::resolveSourceURL(address);
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>>
-InstrumentProfileReader::readFromFile(const StringLikeWrapper &address) const {
+InstrumentProfileReader::readFromFile(const StringLike &address) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
         isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address));
     auto result = InstrumentProfile::List::fromGraal(list.get());
@@ -53,8 +53,8 @@ InstrumentProfileReader::readFromFile(const StringLikeWrapper &address) const {
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>>
-InstrumentProfileReader::readFromFile(const StringLikeWrapper &address, const StringLikeWrapper &user,
-                                      const StringLikeWrapper &password) const {
+InstrumentProfileReader::readFromFile(const StringLike &address, const StringLike &user,
+                                      const StringLike &password) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
         isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, user, password));
     auto result = InstrumentProfile::List::fromGraal(list.get());
@@ -62,7 +62,7 @@ InstrumentProfileReader::readFromFile(const StringLikeWrapper &address, const St
     return result;
 }
 
-std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(const StringLikeWrapper &address,
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(const StringLike &address,
                                                                                       const AuthToken &token) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
         isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, token.getHandle()));

@@ -268,7 +268,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * @return The price increments instance.
      * @throws JavaException("IllegalArgumentException") if text uses wrong format or contains invalid values.
      */
-    static Ptr valueOf(const StringLikeWrapper &text);
+    static Ptr valueOf(const StringLike &text);
 
     /**
      * Returns an instance of price increments for a specified single increment.

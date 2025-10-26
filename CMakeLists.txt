@@ -52,6 +52,7 @@ if (NOT DEFINED DXFCXX_IS_ROOT_PROJECT)
 endif ()
 
 option(DXFCXX_BUILD_UNIT_TESTS "Build tests" ${DXFCXX_IS_ROOT_PROJECT})
+option(DXFCXX_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS "Dynamically link unit tests" OFF)
 option(DXFCXX_BUILD_SAMPLES "Build samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_DYNAMICALLY_LINK_SAMPLES "Dynamically link samples" OFF)

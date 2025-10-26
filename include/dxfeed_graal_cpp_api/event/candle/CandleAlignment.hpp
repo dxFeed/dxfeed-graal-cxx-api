@@ -62,7 +62,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
     private:
     std::string string_{};
 
-    explicit CandleAlignment(const dxfcpp::StringLikeWrapper &string) noexcept;
+    explicit CandleAlignment(const dxfcpp::StringLike &string) noexcept;
 
     public:
     CandleAlignment() noexcept = default;
@@ -74,7 +74,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this candle alignment set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override;
+    std::string changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const override;
 
     /**
      * Returns string representation of this candle alignment.
@@ -95,7 +95,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @return The candle alignment (reference)
      * @throws InvalidArgumentException if the string representation is invalid.
      */
-    static std::reference_wrapper<const CandleAlignment> parse(const dxfcpp::StringLikeWrapper &s);
+    static std::reference_wrapper<const CandleAlignment> parse(const dxfcpp::StringLike &s);
 
     /**
      * Returns candle alignment of the given candle symbol string.
@@ -104,7 +104,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle alignment of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol);
+    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(const dxfcpp::StringLike &symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle alignment attribute.
@@ -112,7 +112,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle symbol string with the normalized representation of the candle alignment attribute.
      */
-    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol);
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol);
 };
 
 DXFCPP_END_NAMESPACE

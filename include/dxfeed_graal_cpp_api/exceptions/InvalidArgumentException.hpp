@@ -19,8 +19,8 @@ DXFCPP_BEGIN_NAMESPACE
  * Thrown to indicate that a method has been passed an illegal or inappropriate argument.
  */
 struct DXFCPP_EXPORT InvalidArgumentException : RuntimeException {
-    explicit InvalidArgumentException(const StringLikeWrapper &message,
-                                      const StringLikeWrapper &additionalStackTrace = "");
+    explicit InvalidArgumentException(const StringLike &message,
+                                      const StringLike &additionalStackTrace = "");
 
     InvalidArgumentException(const InvalidArgumentException &other) noexcept;
 };

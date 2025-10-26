@@ -28,7 +28,7 @@ TimePeriod TimePeriod::valueOf(std::int64_t value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
 }
 
-TimePeriod TimePeriod::valueOf(const StringLikeWrapper &value) {
+TimePeriod TimePeriod::valueOf(const StringLike &value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
 }
 

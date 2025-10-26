@@ -27,11 +27,11 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) 
     return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_));
 }
 
-Schedule::Ptr Schedule::getInstance(const StringLikeWrapper &scheduleDefinition) {
+Schedule::Ptr Schedule::getInstance(const StringLike &scheduleDefinition) {
     return create(isolated::schedule::IsolatedSchedule::getInstance(scheduleDefinition));
 }
 
-Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLikeWrapper &venue) {
+Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLike &venue) {
     if (!profile) {
         throw InvalidArgumentException("The `profile` is nullptr");
     }
@@ -47,7 +47,7 @@ std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentPr
     return isolated::schedule::IsolatedSchedule::getTradingVenues(profile->handle_);
 }
 
-void Schedule::downloadDefaults(const StringLikeWrapper &downloadConfig) {
+void Schedule::downloadDefaults(const StringLike &downloadConfig) {
     isolated::schedule::IsolatedSchedule::downloadDefaults(downloadConfig);
 }
 

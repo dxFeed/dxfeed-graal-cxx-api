@@ -26,10 +26,10 @@ const std::vector<std::reference_wrapper<const CandleAlignment>> CandleAlignment
     std::cref(CandleAlignment::SESSION),
 };
 
-CandleAlignment::CandleAlignment(const dxfcpp::StringLikeWrapper &string) noexcept : string_{string} {
+CandleAlignment::CandleAlignment(const dxfcpp::StringLike &string) noexcept : string_{string} {
 }
 
-std::string CandleAlignment::changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const {
+std::string CandleAlignment::changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const {
     return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                             : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
 }
@@ -42,7 +42,7 @@ bool CandleAlignment::operator==(const CandleAlignment &candleAlignment) const n
     return string_ == candleAlignment.string_;
 }
 
-std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const dxfcpp::StringLikeWrapper &s) {
+std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const dxfcpp::StringLike &s) {
     if (auto found = BY_STRING.find(s); found != BY_STRING.end()) {
         return found->second;
     }
@@ -59,13 +59,13 @@ std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const dxfcp
 }
 
 std::reference_wrapper<const CandleAlignment>
-CandleAlignment::getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+CandleAlignment::getAttributeForSymbol(const dxfcpp::StringLike &symbol) {
     auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
     return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
 }
 
-std::string CandleAlignment::normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+std::string CandleAlignment::normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol) {
     auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
     if (!a) {

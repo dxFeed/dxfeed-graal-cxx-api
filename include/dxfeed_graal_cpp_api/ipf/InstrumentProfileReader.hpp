@@ -76,7 +76,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * Converts a specified string address specification into an URL that will be read by
      * InstrumentProfileReader::readFromFile() method.
      */
-    static std::string resolveSourceURL(const StringLikeWrapper &address);
+    static std::string resolveSourceURL(const StringLike &address);
 
     /**
      * Reads and returns instrument profiles from specified file.
@@ -93,7 +93,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param address URL of file to read from
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLikeWrapper &address) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address) const;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified basic user and password
@@ -113,9 +113,9 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param password the password
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLikeWrapper &address,
-                                                                 const StringLikeWrapper &user,
-                                                                 const StringLikeWrapper &password) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address,
+                                                                 const StringLike &user,
+                                                                 const StringLike &password) const;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified token credentials.
@@ -136,7 +136,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * Profile Format
      * @throws JavaException("IOException") If an I/O error occurs
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLikeWrapper &address,
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address,
                                                                  const AuthToken &token) const;
 };
 

@@ -17,7 +17,139 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <vector>
 
+#if !defined(_LIBCPP_VERSION)
+#    include <charconv>
+#endif
+
 DXFCPP_BEGIN_NAMESPACE
+
+/// A lightweight wrapper around strings or string-like inputs.
+/// Stores either a view or an owned string but always exposes a valid view.
+struct StringLike {
+    std::string owned_;
+    std::string_view view_;
+
+    StringLike() = default;
+
+    StringLike(const char *s) : owned_(s ? s : ""), view_(owned_) {
+    }
+
+    StringLike(std::string_view sv) : view_(sv) {
+    }
+
+    StringLike(const std::string &s) : owned_(s), view_(owned_) {
+    }
+
+    StringLike(std::string &&s) noexcept : owned_(std::move(s)), view_(owned_) {
+    }
+
+    template <std::size_t N> StringLike(const char (&arr)[N]) : view_(arr, N - 1) {
+    }
+
+    operator std::string_view() const noexcept {
+        return view_;
+    }
+    operator std::string() const {
+        return std::string(view_);
+    }
+
+    const char *data() const noexcept {
+        return view_.data();
+    }
+    const char *c_str() const {
+        return owned_.empty() ? std::string(view_).c_str() : owned_.c_str();
+    }
+
+    auto begin() const noexcept {
+        return view_.begin();
+    }
+    auto end() const noexcept {
+        return view_.end();
+    }
+    auto cbegin() const noexcept {
+        return view_.cbegin();
+    }
+    auto cend() const noexcept {
+        return view_.cend();
+    }
+
+    bool empty() const noexcept {
+        return view_.empty();
+    }
+    std::size_t size() const noexcept {
+        return view_.size();
+    }
+    std::size_t length() const noexcept {
+        return view_.size();
+    }
+
+    bool ends_with(const StringLike &other) const noexcept {
+#if __cpp_lib_ends_with >= 201907L
+        return view_.ends_with(other.view_);
+#else
+        auto sv = other.view_;
+        return sv.size() <= view_.size() && view_.compare(view_.size() - sv.size(), sv.size(), sv) == 0;
+#endif
+    }
+
+    std::string substr(std::size_t pos = 0, std::size_t count = std::string::npos) const {
+        auto sv2 = view_.substr(pos, count);
+        return std::string(sv2);
+    }
+
+    bool operator==(const StringLike &other) const noexcept {
+        return view_ == other.view_;
+    }
+
+    friend std::string operator+(const StringLike &a, const StringLike &b) {
+        std::string result;
+        result.reserve(a.size() + b.size());
+        result.append(a.view_);
+        result.append(b.view_);
+        return result;
+    }
+
+    explicit operator double() const {
+        double result{};
+#if defined(_LIBCPP_VERSION)
+        result = std::stod(std::string(view_));
+#else
+        auto [ptr, ec] = std::from_chars(view_.data(), view_.data() + view_.size(), result);
+        if (ec != std::errc{})
+            throw std::invalid_argument("StringLike: cannot convert to double");
+#endif
+        return result;
+    }
+};
+
+DXFCPP_END_NAMESPACE
+
+template <> struct DXFCPP_EXPORT std::hash<dxfcpp::StringLike> {
+    std::size_t operator()(const dxfcpp::StringLike &sl) const noexcept {
+        return std::hash<std::string_view>{}(std::string_view(sl));
+    }
+};
+
+DXFCPP_BEGIN_NAMESPACE
+
+/// Universal functional object that allows searching std::unordered_map for string-like keys.
+struct StringHash {
+    using HashType = std::hash<std::string_view>;
+    using is_transparent = void;
+
+    std::size_t operator()(const char *str) const {
+        return HashType{}(str);
+    }
+    std::size_t operator()(std::string_view sv) const {
+        return HashType{}(sv);
+    }
+    std::size_t operator()(const std::string &str) const {
+        return HashType{}(str);
+    }
+    std::size_t operator()(const StringLike &s) const {
+        return HashType{}(s);
+    }
+};
 
 struct DXFCPP_EXPORT String {
     inline static const std::string EMPTY{};
@@ -192,9 +324,16 @@ DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
 
 DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
 
-DXFCPP_EXPORT char *createCString(const std::string &s);
+DXFCPP_EXPORT char *createCString(const StringLike &s);
 
-DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s);
+template <typename S>
+char *createCString(const std::optional<S> &s) {
+    if (!s) {
+        return nullptr;
+    }
+
+    return createCString(s.value());
+}
 
 template <typename It>
     requires requires { std::is_same_v<std::decay_t<decltype(It {} -> getName())>, std::string>; }
@@ -268,19 +407,13 @@ inline bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
     return (secondIt == std::end(second)) && (firstIt == std::end(first));
 }
 
-DXFCPP_EXPORT inline bool iEquals(const std::string &first, const std::string &second) noexcept {
+DXFCPP_EXPORT inline bool iEquals(const StringLike &first, const StringLike &second) noexcept {
     const std::locale &locale = std::locale();
 
     return equals(first, second, detail::IsIEqual(locale));
 }
 
-DXFCPP_EXPORT inline bool iEquals(std::string_view first, std::string_view second) noexcept {
-    const std::locale &locale = std::locale();
-
-    return equals(first, second, detail::IsIEqual(locale));
-}
-
-DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
+DXFCPP_EXPORT inline std::size_t icHash(const StringLike &s) noexcept {
     const std::locale &locale = std::locale();
     std::string result{};
 
@@ -291,13 +424,13 @@ DXFCPP_EXPORT inline std::size_t icHash(const std::string &s) noexcept {
     return std::hash<std::string>()(result);
 }
 
-DXFCPP_EXPORT std::string trimStr(const std::string &s) noexcept;
+DXFCPP_EXPORT std::string trimStr(const StringLike &s) noexcept;
 
-DXFCPP_EXPORT std::vector<std::string> splitStr(const std::string &s, char sep = ',') noexcept;
+DXFCPP_EXPORT std::vector<std::string> splitStr(const StringLike &s, char sep = ',') noexcept;
 
-DXFCPP_EXPORT std::string joinStr(const std::vector<std::string> &v, const std::string &sep = ", ") noexcept;
+DXFCPP_EXPORT std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep = ", ") noexcept;
 
-DXFCPP_EXPORT bool toBool(const std::string &s) noexcept;
+DXFCPP_EXPORT bool toBool(const StringLike &s) noexcept;
 
 DXFCPP_END_NAMESPACE
 

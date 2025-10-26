@@ -13,7 +13,7 @@ namespace isolated::candlewebservice::IsolatedHistoryEndpoint {
 
 namespace Builder {
 
-void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &address) {
+void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &address) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withAddress`. The `builder` handle is invalid");
@@ -24,7 +24,7 @@ void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, cons
                                            address.c_str());
 }
 
-void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &userName) {
+void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &userName) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withUserName`. The `builder` handle is invalid");
@@ -35,7 +35,7 @@ void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, con
                                            userName.c_str());
 }
 
-void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &password) {
+void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &password) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withPassword`. The `builder` handle is invalid");
@@ -46,7 +46,7 @@ void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, con
                                            password.c_str());
 }
 
-void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &authToken) {
+void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &authToken) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withAuthToken`. The `builder` handle is invalid");

@@ -32,7 +32,7 @@ PriceIncrements::PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<P
 PriceIncrements::~PriceIncrements() noexcept {
 }
 
-PriceIncrements::Ptr PriceIncrements::valueOf(const StringLikeWrapper &text) {
+PriceIncrements::Ptr PriceIncrements::valueOf(const StringLike &text) {
     return createShared(isolated::glossary::IsolatedPriceIncrements::valueOf(text));
 }
 

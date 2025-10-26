@@ -62,7 +62,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this exchange set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override {
+    std::string changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const override {
         return MarketEventSymbols::changeExchangeCode(symbol, exchangeCode_);
     }
 
@@ -98,7 +98,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return exchange attribute object of the given candle symbol string.
      */
-    static CandleExchange getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static CandleExchange getAttributeForSymbol(const dxfcpp::StringLike &symbol) {
         return valueOf(MarketEventSymbols::getExchangeCode(symbol));
     }
 };

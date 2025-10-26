@@ -64,7 +64,7 @@ InstrumentProfileConnection::InstrumentProfileConnection() noexcept
 }
 
 InstrumentProfileConnection::Ptr
-InstrumentProfileConnection::createConnection(const StringLikeWrapper &address,
+InstrumentProfileConnection::createConnection(const StringLike &address,
                                               InstrumentProfileCollector::Ptr collector) {
     std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 

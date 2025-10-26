@@ -21,7 +21,7 @@ JavaObjectHandle<CFI> EMPTY() {
 }
 
 // int32_t dxfg_CFI_valueOf(graal_isolatethread_t *thread, const char *code, DXFG_OUT dxfg_cfi_t **cfi);
-JavaObjectHandle<CFI> valueOf(const StringLikeWrapper &code) {
+JavaObjectHandle<CFI> valueOf(const StringLike &code) {
     dxfg_cfi_t *isolatedCfi{};
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_valueOf, code.c_str(), &isolatedCfi);

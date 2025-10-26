@@ -95,7 +95,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price level set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override {
+    std::string changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const override {
         return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                                 : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
     }
@@ -108,7 +108,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param s string representation of candle price level.
      * @return candle price level.
      */
-    static CandlePriceLevel parse(const dxfcpp::StringLikeWrapper &s) {
+    static CandlePriceLevel parse(const dxfcpp::StringLike &s) {
         return valueOf(std::stod(s));
     }
 
@@ -134,7 +134,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle price level of the given candle symbol string.
      */
-    static CandlePriceLevel getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static CandlePriceLevel getAttributeForSymbol(const dxfcpp::StringLike &symbol) {
         auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         return !stringOpt ? DEFAULT : parse(stringOpt.value());
@@ -146,7 +146,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle price level attribute.
      */
-    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {

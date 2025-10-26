@@ -38,11 +38,11 @@ AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
 AdditionalUnderlyings::~AdditionalUnderlyings() noexcept {
 }
 
-AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const StringLikeWrapper &text) {
+AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const StringLike &text) {
     return createShared(isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(text));
 }
 
-double AdditionalUnderlyings::getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol) {
+double AdditionalUnderlyings::getSPC(const StringLike &text, const StringLike &symbol) {
     return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(text, symbol);
 }
 
@@ -62,7 +62,7 @@ std::unordered_map<std::string, double> AdditionalUnderlyings::getMap() const {
     return isolated::glossary::IsolatedAdditionalUnderlyings::getMap(handle_);
 }
 
-double AdditionalUnderlyings::getSPC(const StringLikeWrapper &symbol) const {
+double AdditionalUnderlyings::getSPC(const StringLike &symbol) const {
     std::lock_guard lock(mtx_);
 
     init();

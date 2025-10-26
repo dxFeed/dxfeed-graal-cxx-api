@@ -3,26 +3,26 @@
 
 #include <dxfg_api.h>
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+// #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <memory>
-#include <typeinfo>
 
 #include "dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp"
-#include <fmt/chrono.h>
+#include "dxfeed_graal_cpp_api/api/DXFeed.hpp"
+#include "dxfeed_graal_cpp_api/event/EventMapper.hpp"
+#include "dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
+
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeedSubscription::Impl {
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
-        auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
-        auto sub = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id);
+        const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
 
-        if (sub) {
+        if (auto sub = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id)) {
             auto &&events = EventMapper::fromGraalList(static_cast<void *>(graalNativeEvents));
 
             sub->onEvent_(events);
@@ -46,7 +46,7 @@ bool DXFeedSubscription::tryToSetEventListenerHandle() {
     std::lock_guard lock{eventListenerMutex_};
 
     if (!eventListenerHandle_) {
-        auto idOpt = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getId(
+        const auto idOpt = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getId(
             sharedAs<DXFeedSubscription>());
 
         if (!idOpt) {
@@ -71,7 +71,7 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
     isolated::api::IsolatedDXFeedSubscription::removeSymbols(handle_, graalSymbolList);
 }
 
-DXFeedSubscription::DXFeedSubscription() : impl_(std::make_unique<DXFeedSubscription::Impl>()) {
+DXFeedSubscription::DXFeedSubscription() : impl_(std::make_unique<Impl>()) {
 #if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", 1);
 #endif
@@ -94,6 +94,7 @@ DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag) : DXFeedSubs
 DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag, const EventTypeEnum &eventType)
     : DXFeedSubscription(eventType) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXFeedSubscription(eventType = " + eventType.getName() + ")");
     }
 }
@@ -124,24 +125,25 @@ std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEn
     }
 
     auto sub = createShared(eventType);
-    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
+    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
-    dxfcpp::ignoreUnused(id);
+    ignoreUnused(id);
 
     return sub;
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(std::initializer_list<EventTypeEnum> eventTypes) {
     auto sub = createShared(eventTypes);
-    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
+    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
-    dxfcpp::ignoreUnused(id);
+    ignoreUnused(id);
 
     return sub;
 }
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::attach(feed = " + feed->toString() + ")");
     }
 
@@ -150,6 +152,7 @@ void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) {
 
 void DXFeedSubscription::detach(std::shared_ptr<DXFeed> feed) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::detach(feed = " + feed->toString() + ")");
     }
 
@@ -219,7 +222,7 @@ void DXFeedSubscription::addSymbols(const SymbolWrapper &symbolWrapper) const {
         Debugger::debug(toString() + "::addSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
     }
 
-    auto graal = symbolWrapper.toGraalUnique();
+    const auto graal = symbolWrapper.toGraalUnique();
 
     isolated::api::IsolatedDXFeedSubscription::addSymbol(handle_, graal.get());
 }
@@ -234,7 +237,7 @@ void DXFeedSubscription::removeSymbols(const SymbolWrapper &symbolWrapper) const
         Debugger::debug(toString() + "::removeSymbols(symbolWrapper = " + toStringAny(symbolWrapper) + ")");
     }
 
-    auto graal = symbolWrapper.toGraalUnique();
+    const auto graal = symbolWrapper.toGraalUnique();
 
     isolated::api::IsolatedDXFeedSubscription::removeSymbol(handle_, graal.get());
 }
@@ -304,8 +307,7 @@ void DXFeedSubscription::setEventsBatchLimit(std::int32_t eventsBatchLimit) cons
 }
 
 DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
-    RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag)
-    : DXFeedSubscription() {
+    RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag) {
 
 #if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(

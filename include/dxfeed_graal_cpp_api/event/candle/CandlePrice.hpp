@@ -80,7 +80,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
     private:
     std::string string_;
 
-    explicit CandlePrice(const dxfcpp::StringLikeWrapper &string) noexcept : string_{string} {
+    explicit CandlePrice(const dxfcpp::StringLike &string) noexcept : string_{string} {
     }
 
     public:
@@ -92,7 +92,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price type set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override {
+    std::string changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const override {
         return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                                 : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
     }
@@ -120,7 +120,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      * @return The candle price type (reference).
      * @throws InvalidArgumentException if argument is empty or invalid
      */
-    static std::reference_wrapper<const CandlePrice> parse(const dxfcpp::StringLikeWrapper &s) {
+    static std::reference_wrapper<const CandlePrice> parse(const dxfcpp::StringLike &s) {
         if (s.empty()) {
             throw InvalidArgumentException("Missing candle price");
         }
@@ -150,7 +150,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      * @return candle price type of the given candle symbol string.
      */
     static std::reference_wrapper<const CandlePrice>
-    getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) noexcept {
+    getAttributeForSymbol(const dxfcpp::StringLike &symbol) noexcept {
         auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
@@ -162,7 +162,7 @@ struct DXFCPP_EXPORT CandlePrice : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle price type attribute.
      */
-    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {

@@ -59,7 +59,7 @@ struct DXFCPP_EXPORT TimePeriod {
      * @param value The string representation
      * @return TimePeriod represented with a given string.
      */
-    static TimePeriod valueOf(const StringLikeWrapper &value);
+    static TimePeriod valueOf(const StringLike &value);
 
     /**
      * Returns value in milliseconds.

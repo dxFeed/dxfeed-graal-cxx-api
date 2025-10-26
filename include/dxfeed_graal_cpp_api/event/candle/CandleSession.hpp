@@ -67,7 +67,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     const SessionFilter *sessionFilter_{};
     std::string string_;
 
-    CandleSession(const SessionFilter &sessionFilter, const dxfcpp::StringLikeWrapper &string) noexcept
+    CandleSession(const SessionFilter &sessionFilter, const dxfcpp::StringLike &string) noexcept
         : sessionFilter_{&sessionFilter}, string_{string} {
     }
 
@@ -88,7 +88,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this session attribute set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override {
+    std::string changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const override {
         return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                                 : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
     }
@@ -116,7 +116,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * @return The candle session attribute (reference).
      * @throws InvalidArgumentException if the argument is empty or invalid
      */
-    static std::reference_wrapper<const CandleSession> parse(const dxfcpp::StringLikeWrapper &s) {
+    static std::reference_wrapper<const CandleSession> parse(const dxfcpp::StringLike &s) {
         if (s.empty()) {
             throw InvalidArgumentException("Missing candle session");
         }
@@ -145,7 +145,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return The candle session attribute of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandleSession> getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static std::reference_wrapper<const CandleSession> getAttributeForSymbol(const dxfcpp::StringLike &symbol) {
         auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
@@ -157,7 +157,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return The candle symbol string with the normalized representation of the candle session attribute.
      */
-    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) noexcept {
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol) noexcept {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {

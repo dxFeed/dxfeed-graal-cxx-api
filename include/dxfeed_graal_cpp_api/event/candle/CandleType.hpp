@@ -117,7 +117,7 @@ struct DXFCPP_EXPORT CandleType {
     std::string string_{};
     std::int64_t periodIntervalMillis_{};
 
-    CandleType(const dxfcpp::StringLikeWrapper &name, const dxfcpp::StringLikeWrapper &string,
+    CandleType(const dxfcpp::StringLike &name, const dxfcpp::StringLike &string,
                std::int64_t periodIntervalMillis) noexcept
         : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {
     }
@@ -171,7 +171,7 @@ struct DXFCPP_EXPORT CandleType {
      * @return A candle type.
      * @throws InvalidArgumentException if the argument is empty or invalid
      */
-    static std::reference_wrapper<const CandleType> parse(const dxfcpp::StringLikeWrapper &s) {
+    static std::reference_wrapper<const CandleType> parse(const dxfcpp::StringLike &s) {
         if (s.empty()) {
             throw InvalidArgumentException("Missing candle type");
         }

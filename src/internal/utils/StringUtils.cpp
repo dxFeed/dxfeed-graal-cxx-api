@@ -192,28 +192,21 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
     return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(timestamp);
 }
 
-char *createCString(const std::string &s) {
+char *createCString(const StringLike &s) {
     if (s == dxfcpp::String::NUL) {
         return nullptr;
     }
 
     char *cString = new char[s.size() + 1];
 
-    std::copy(s.begin(), s.end(), cString);
+    auto sw = std::string_view(s);
+    std::copy(sw.begin(), sw.end(), cString);
     cString[s.size()] = '\0';
 
     return cString;
 }
 
-DXFCPP_EXPORT char *createCString(const std::optional<std::string> &s) {
-    if (!s) {
-        return nullptr;
-    }
-
-    return createCString(s.value());
-}
-
-std::string trimStr(const std::string &s) noexcept {
+std::string trimStr(const StringLike &s) noexcept {
     auto trimPredicate = [](auto c) {
         return c == ' ' || c == '\t' || c == '\v' || c == '\r' || c == '\n';
     };
@@ -230,15 +223,15 @@ inline auto split = [](const std::string &s, char sep = ',') noexcept {
     return s | ranges::views::split(sep) | transformToString;
 };
 
-std::vector<std::string> splitStr(const std::string &s, char sep) noexcept {
+std::vector<std::string> splitStr(const StringLike &s, char sep) noexcept {
     return split(s, sep) | ranges::to<std::vector<std::string>>();
 }
 
-std::string joinStr(const std::vector<std::string> &v, const std::string &sep) noexcept {
-    return fmt::format("{}", fmt::join(v, sep));
+std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep) noexcept {
+    return fmt::format("{}", fmt::join(v, std::string_view(sep)));
 }
 
-bool toBool(const std::string &s) noexcept {
+bool toBool(const StringLike &s) noexcept {
     return iEquals(s, "true") || iEquals(s, "yes") || iEquals(s, "y") || iEquals(s, "on");
 }
 

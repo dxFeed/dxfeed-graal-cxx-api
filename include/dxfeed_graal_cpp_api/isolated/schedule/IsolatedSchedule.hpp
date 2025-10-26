@@ -18,16 +18,16 @@ namespace IsolatedSchedule {
 /* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule>
 getInstance(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &instrumentProfile);
 
-/* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule> getInstance(const StringLikeWrapper &scheduleDefinition);
+/* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule> getInstance(const StringLike &scheduleDefinition);
 
 /* dxfg_schedule_t* */ JavaObjectHandle<dxfcpp::Schedule>
 getInstance(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &instrumentProfile,
-            const StringLikeWrapper &venue);
+            const StringLike &venue);
 
 std::vector<std::string>
 getTradingVenues(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &instrumentProfile);
 
-void downloadDefaults(const StringLikeWrapper &downloadConfig);
+void downloadDefaults(const StringLike &downloadConfig);
 
 void setDefaults(const std::vector<char> &data);
 

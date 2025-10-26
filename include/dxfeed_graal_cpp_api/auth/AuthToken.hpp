@@ -42,7 +42,7 @@ struct DXFCPP_EXPORT AuthToken {
      * format does not comply with RFC2617
      * @see ::toString()
      */
-    static AuthToken valueOf(const StringLikeWrapper &string);
+    static AuthToken valueOf(const StringLike &string);
 
     /**
      * Constructs an AuthToken with the specified username and password per RFC2617.
@@ -53,7 +53,7 @@ struct DXFCPP_EXPORT AuthToken {
      * @return The constructed AuthToken.
      * @throws JavaException("InvalidFormatException") if the userPassword is malformed
      */
-    static AuthToken createBasicToken(const StringLikeWrapper &userPassword);
+    static AuthToken createBasicToken(const StringLike &userPassword);
 
     /**
      * Constructs an AuthToken with the specified username and password per RFC2617.
@@ -63,7 +63,7 @@ struct DXFCPP_EXPORT AuthToken {
      * @param password The password.
      * @return The constructed AuthToken.
      */
-    static AuthToken createBasicToken(const StringLikeWrapper &user, const StringLikeWrapper &password);
+    static AuthToken createBasicToken(const StringLike &user, const StringLike &password);
 
     /**
      * Constructs an AuthToken with the specified username and password per RFC2617.
@@ -73,7 +73,7 @@ struct DXFCPP_EXPORT AuthToken {
      * @param password the password
      * @return the constructed AuthToken or AuthToken::NULL_TOKEN
      */
-    static AuthToken createBasicTokenOrNull(const StringLikeWrapper &user, const StringLikeWrapper &password);
+    static AuthToken createBasicTokenOrNull(const StringLike &user, const StringLike &password);
 
     /**
      * Constructs an AuthToken with the specified bearer token per RFC6750.
@@ -82,7 +82,7 @@ struct DXFCPP_EXPORT AuthToken {
      * @return the constructed AuthToken
      * @throws JavaException("InvalidFormatException") if the token is empty
      */
-    static AuthToken createBearerToken(const StringLikeWrapper &token);
+    static AuthToken createBearerToken(const StringLike &token);
 
     /**
      * Constructs an AuthToken with the specified bearer token per RFC6750.
@@ -90,7 +90,7 @@ struct DXFCPP_EXPORT AuthToken {
      * @param token the access token
      * @return the constructed AuthToken or AuthToken::NULL_TOKEN.
      */
-    static AuthToken createBearerTokenOrNull(const StringLikeWrapper &token);
+    static AuthToken createBearerTokenOrNull(const StringLike &token);
 
     /**
      * Constructs an AuthToken with a custom scheme and value.
@@ -100,7 +100,7 @@ struct DXFCPP_EXPORT AuthToken {
      * @return the constructed AuthToken
      * @throws JavaException("InvalidFormatException") if the scheme or value is empty
      */
-    static AuthToken createCustomToken(const StringLikeWrapper &scheme, const StringLikeWrapper &value);
+    static AuthToken createCustomToken(const StringLike &scheme, const StringLike &value);
 
     /**
      * Returns the HTTP authorization header value.

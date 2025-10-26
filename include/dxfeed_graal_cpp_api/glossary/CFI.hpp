@@ -51,7 +51,7 @@ struct DXFCPP_EXPORT CFI : RequireMakeShared<CFI> {
      * @return The CFI.
      * @throws JavaException("IllegalArgumentException") if the `code` is invalid.
      */
-    static Ptr valueOf(const StringLikeWrapper &code);
+    static Ptr valueOf(const StringLike &code);
 
     /**
      * Returns an instance of CFI for a specified integer representation of CFI code.

@@ -16,7 +16,7 @@ namespace isolated::ipf::live {
 namespace IsolatedInstrumentProfileConnection {
 
 /* dxfg_ipf_connection_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
-createConnection(const StringLikeWrapper &address,
+createConnection(const StringLike &address,
                  /* dxfg_ipf_collector_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileCollector>
                      &instrumentProfileCollector) {
     if (!instrumentProfileCollector) {

@@ -19,16 +19,16 @@ namespace isolated::candlewebservice::IsolatedHistoryEndpoint {
 namespace Builder {
 
 // int32_t dxfg_HistoryEndpoint_Builder_withAddress(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *address);
-void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &address);
+void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &address);
 
 // int32_t dxfg_HistoryEndpoint_Builder_withUserName(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *userName);
-void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &userName);
+void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &userName);
 
 // int32_t dxfg_HistoryEndpoint_Builder_withPassword(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *password);
-void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &password);
+void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &password);
 
 // int32_t dxfg_HistoryEndpoint_Builder_withAuthToken(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, const char *authToken);
-void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLikeWrapper &authToken);
+void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &authToken);
 
 // int32_t dxfg_HistoryEndpoint_Builder_withCompression(graal_isolatethread_t *thread, dxfg_history_endpoint_builder_t *builder, dxfg_history_endpoint_compression_t compression, DXFG_OUT dxfg_history_endpoint_builder_t **newBuilder);
 void withCompression(const JavaObjectHandle<HistoryEndpoint::Builder> &builder,

@@ -91,7 +91,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this aggregation period set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const override {
+    std::string changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const override {
         return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                                 : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
     }
@@ -149,7 +149,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * @param s The string representation of an aggregation period.
      * @return The aggregation period.
      */
-    static CandlePeriod parse(const dxfcpp::StringLikeWrapper &s) {
+    static CandlePeriod parse(const dxfcpp::StringLike &s) {
         if (s == CandleType::DAY.toString()) {
             return DAY;
         }
@@ -201,7 +201,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle period of the given candle symbol string
      */
-    static CandlePeriod getAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) noexcept {
+    static CandlePeriod getAttributeForSymbol(const dxfcpp::StringLike &symbol) noexcept {
         const auto string = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         return !string ? DEFAULT : parse(string.value());
@@ -213,7 +213,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle period attribute.
      */
-    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) {
+    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {

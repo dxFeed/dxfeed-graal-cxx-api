@@ -68,7 +68,7 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
 }
 #endif
 
-RuntimeException::RuntimeException(const StringLikeWrapper &message, const StringLikeWrapper &additionalStackTrace)
+RuntimeException::RuntimeException(const StringLike &message, const StringLike &additionalStackTrace)
     : std::runtime_error(message.c_str()),
 #ifdef DXFCXX_FEATURE_STACKTRACE
       stackTrace_(additionalStackTrace.empty() ? stackTraceToString(boost::stacktrace::stacktrace())
