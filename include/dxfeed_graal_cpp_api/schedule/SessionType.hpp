@@ -45,8 +45,8 @@ struct DXFCPP_EXPORT SessionType {
     std::string name_{};
     bool trading_{};
 
-    SessionType(SessionTypeEnum code, std::string name, bool trading) noexcept
-        : code_{code}, name_{std::move(name)}, trading_{trading} {
+    SessionType(SessionTypeEnum code, const StringLike & name, bool trading) noexcept
+        : code_{code}, name_{name}, trading_{trading} {
     }
 
     public:

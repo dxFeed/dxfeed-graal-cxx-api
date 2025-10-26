@@ -61,13 +61,13 @@ class DXFCPP_EXPORT InstrumentProfileField {
     InstrumentProfileFieldTypeEnum typeEnum_;
     bool numericField_;
 
-    InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, std::string name,
+    InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike& name,
                            InstrumentProfileFieldTypeEnum typeEnum) noexcept
-        : fieldEnum_{fieldEnum}, name_{std::move(name)}, typeEnum_{typeEnum},
+        : fieldEnum_{fieldEnum}, name_{name}, typeEnum_{typeEnum},
           numericField_{typeEnum != InstrumentProfileFieldTypeEnum::STRING} {
     }
 
-    explicit InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const std::string &name) noexcept
+    explicit InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike &name) noexcept
         : InstrumentProfileField(fieldEnum, name, InstrumentProfileFieldTypeEnum::STRING) {
     }
 
@@ -115,7 +115,7 @@ class DXFCPP_EXPORT InstrumentProfileField {
     /**
      * Returns cref to field for specified name or std::nullopt if field is not found.
      */
-    static std::optional<std::reference_wrapper<const InstrumentProfileField>> find(const std::string &name) noexcept {
+    static std::optional<std::reference_wrapper<const InstrumentProfileField>> find(const StringLike &name) noexcept {
         if (MAP.contains(name)) {
             return MAP.at(name);
         }

@@ -82,17 +82,17 @@ struct DXFCPP_EXPORT SessionFilter final {
     SessionFilter &operator=(const SessionFilter &&) noexcept = delete;
 
     /**
-     * Creates filter with specified type and trading flag conditions.
+     * Creates a filter with specified type and trading flag conditions.
      * <p>
      * Both parameters specify what value corresponding attributes should have.
-     * If some parameter is std::nullopt then corresponding attribute is ignored (any value is accepted).
+     * If some parameter is `std::nullopt` then corresponding attribute is ignored (any value is accepted).
      *
      * @param code The enum code
      * @param name The enum name
-     * @param type required type, std::nullopt if not relevant
-     * @param trading required trading flag, std::nullopt if not relevant
+     * @param type required type, `std::nullopt` if not relevant
+     * @param trading required trading flag, `std::nullopt` if not relevant
      */
-    SessionFilter(SessionFilterEnum code, std::string name, std::optional<SessionType> type,
+    SessionFilter(SessionFilterEnum code, const StringLike &name, std::optional<SessionType> type,
                   std::optional<bool> trading) noexcept;
 
     /**

@@ -15,7 +15,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-bool System::setProperty(const std::string &key, const std::string &value) {
+bool System::setProperty(const StringLike &key, const StringLike &value) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "')");
@@ -36,7 +36,7 @@ bool System::setProperty(const std::string &key, const std::string &value) {
     return result;
 }
 
-std::string System::getProperty(const std::string &key) {
+std::string System::getProperty(const StringLike &key) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         Debugger::debug("System::getProperty(key = " + key + ")");

@@ -1,15 +1,15 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/schedule/SessionType.hpp"
-#include "dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
 #include "dxfeed_graal_cpp_api/event/candle/CandleSession.hpp"
+#include "dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
+#include "dxfeed_graal_cpp_api/schedule/SessionType.hpp"
 
 #include "dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp"
 
-#include <string>
-#include <optional>
 #include <mutex>
+#include <optional>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -18,9 +18,9 @@ const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARK
 const SessionType SessionType::REGULAR{SessionTypeEnum::REGULAR, "REGULAR", true};
 const SessionType SessionType::AFTER_MARKET{SessionTypeEnum::AFTER_MARKET, "AFTER_MARKET", true};
 
-SessionFilter::SessionFilter(SessionFilterEnum code, std::string name, std::optional<SessionType> type,
+SessionFilter::SessionFilter(SessionFilterEnum code, const StringLike &name, std::optional<SessionType> type,
                              std::optional<bool> trading) noexcept
-    : code_{code}, name_{std::move(name)}, type_{type}, trading_{trading} {
+    : code_{code}, name_{name}, type_{type}, trading_{trading} {
 }
 
 const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {

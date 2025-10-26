@@ -62,7 +62,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     static Ptr create();
 
     /**
-     * Returns last modification time (in milliseconds) from last InstrumentProfileReader::readFromFile() operation
+     * Returns the last modification time (in milliseconds) from the last InstrumentProfileReader::readFromFile() operation
      * or zero if it is unknown.
      */
     std::int64_t getLastModified() const;

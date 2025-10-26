@@ -9,9 +9,9 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-DayFilter::DayFilter(DayFilterEnum code, std::string name, std::uint32_t dayOfWeekMask, Tristate holiday,
+DayFilter::DayFilter(DayFilterEnum code, const StringLike & name, std::uint32_t dayOfWeekMask, Tristate holiday,
                      Tristate shortDay, Tristate trading) noexcept
-    : code_{code}, name_{std::move(name)}, dayOfWeekMask_{dayOfWeekMask}, holiday_{holiday}, shortDay_{shortDay},
+    : code_{code}, name_{name}, dayOfWeekMask_{dayOfWeekMask}, holiday_{holiday}, shortDay_{shortDay},
       trading_{trading} {
 }
 
