@@ -31,8 +31,7 @@ struct OnDemandService;
  * that are available with DXEndpoint::getInstance() and DXEndpoint::getInstance(Role) methods as well as
  * factory methods DXEndpoint::create() and DXEndpoint::create(Role), and a number of configuration methods. Advanced
  * properties can be configured using
- * @ref DXEndpoint::newBuilder() "newBuilder()".@ref DXEndpoint::Builder::withProperty(const std::string&, const
- * std::string&) "withProperty(key, value)".@ref DXEndpoint::Builder::build() "build()".
+ * @ref DXEndpoint::newBuilder() "newBuilder()".@ref DXEndpoint::Builder::withProperty(const StringLike&, const StringLike&) "withProperty(key, value)".@ref DXEndpoint::Builder::build() "build()".
  *
  * See DXFeed for details on how to subscribe to symbols and receive events.
  *
@@ -43,7 +42,7 @@ struct OnDemandService;
  * Endpoints with other roles are created with DXEndpoint::create(Role) factory method. Endpoint role is
  * represented by @ref Role "DXEndpoint::Role" enumeration.
  *
- * Endpoint role defines the behavior of its @ref DXEndpoint::connect(const std::string&) "connect" method:
+ * Endpoint role defines the behavior of its @ref DXEndpoint::connect(const StringLike&) "connect" method:
  *
  * - @ref Role::FEED "FEED" connects to the remote data feed provider and is optimized for real-time or
  *   delayed data processing (<b>this is a default role</b>).
@@ -95,7 +94,7 @@ struct OnDemandService;
  * Its state is @ref State::NOT_CONNECTED "NOT_CONNECTED".
  *
  * @ref Role::FEED "Feed" and @ref Role::PUBLISHER "publisher" endpoints can connect to remote endpoints of the opposite
- * role. Connection is initiated by @ref DXEndpoint::connect(const std::string&) "connect" method.
+ * role. Connection is initiated by @ref DXEndpoint::connect(const StringLike&) "connect" method.
  * The endpoint state becomes @ref State::CONNECTING "CONNECTING".
  *
  * When the actual connection to the remote endpoint is established, the endpoint state becomes
@@ -127,11 +126,11 @@ struct OnDemandService;
  * @ref Role::STREAM_FEED "STREAM_FEED" and @ref Role::LOCAL_HUB "LOCAL_HUB" do not support the properties file.
  *
  * The location of this file can be specified using
- * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"(::DXFEED_PROPERTIES_PROPERTY, path)
+ * @ref Builder::withProperty(const StringLike&, const StringLike&) "withProperty"(::DXFEED_PROPERTIES_PROPERTY, path)
  * or
- * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"(::DXPUBLISHER_PROPERTIES_PROPERTY,
+ * @ref Builder::withProperty(const StringLike&, const StringLike&) "withProperty"(::DXPUBLISHER_PROPERTIES_PROPERTY,
  * path) correspondingly. When the location of this file is not explicitly specified using
- * @ref Builder::withProperty(const std::string&, const std::string&) "withProperty" method, then the file path is taken
+ * @ref Builder::withProperty(const StringLike&, const StringLike&) "withProperty" method, then the file path is taken
  * from a system property with the corresponding name.
  *
  * Defaults for individual properties can be also provided using system properties when they are not specified
@@ -139,11 +138,11 @@ struct OnDemandService;
  *
  * The DXEndpoint::NAME_PROPERTY is the exception to the above rule. It is never loaded from system properties.
  * It can be only specified in the configuration file or programmatically. There is a convenience
- * @ref Builder::withName(const std::string&) "Builder.withName" method for it. It is recommended to assign short and
+ * @ref Builder::withName(const StringLike&) "Builder.withName" method for it. It is recommended to assign short and
  * meaningful endpoint names when multiple endpoints are used in the same process (one GraalVM Isolate for now).
  * The name of the endpoint shall describe its role in the particular application.
  *
- * Note that individual properties that are programmatically set using @ref Builder::withProperty(const std::string&, const std::string&) "withProperty"
+ * Note that individual properties that are programmatically set using @ref Builder::withProperty(const StringLike&, const StringLike&) "withProperty"
  * method always take precedence.
  *
  * @ref Role::FEED "FEED" and @ref Role::PUBLISHER "PUBLISHER" automatically establish connection on creation
@@ -184,8 +183,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Defines property for endpoint name that is used to distinguish multiple endpoints
      * in the same process in logs and in other diagnostic means.
-     * Use Builder::withProperty(const std::string&, const std::string&) method.
-     * This property is also changed by the Builder::withName(const std::string&) method.
+     * Use Builder::withProperty(const StringLike&, const StringLike&) method.
+     * This property is also changed by the Builder::withName(const StringLike&) method.
      */
     static const std::string NAME_PROPERTY;
 
@@ -196,7 +195,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
      * By default, properties are loaded from a path resource named "dxfeed.properties".
      *
-     * @see Builder::withProperty(const std::string&, const std::string&)
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
     static const std::string DXFEED_PROPERTIES_PROPERTY;
 
@@ -209,13 +208,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * the role @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" waits until OnDemandService::(std::int64_t, double) is invoked
      * before connecting.
      *
-     * By default, without this property, a connection is not established until @ref DXEndpoint::connect(const
-     * std::string&) "connect(address)" is invoked.
+     * By default, without this property, a connection is not established until @ref DXEndpoint::connect(const StringLike&) "connect(address)" is invoked.
      *
      * Credentials for access to premium services may be configured with
      * DXEndpoint::DXFEED_USER_PROPERTY and DXEndpoint::DXFEED_PASSWORD_PROPERTY.
      *
-     * @see Builder::withProperty(const std::string&, const std::string&)
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
     static const std::string DXFEED_ADDRESS_PROPERTY;
 
@@ -225,7 +223,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Defines default username for an endpoint with the role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
      * "ON_DEMAND_FEED".
      *
-     * @see DXEndpoint::user(const std::string&)
+     * @see DXEndpoint::user(const StringLike&)
      */
     static const std::string DXFEED_USER_PROPERTY;
 
@@ -235,7 +233,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Defines default password for an endpoint with role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
      * "ON_DEMAND_FEED".
      *
-     * @see DXEndpoint::password(const std::string&)
+     * @see DXEndpoint::password(const StringLike&)
      */
     static const std::string DXFEED_PASSWORD_PROPERTY;
 
@@ -244,7 +242,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Defines thread pool size for an endpoint with the role @ref Role::FEED "FEED".
      * By default, the thread pool size is equal to the number of available processors.
-     * @see Builder::withProperty(const std::string&, const std::string&)
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
     static const std::string DXFEED_THREAD_POOL_SIZE_PROPERTY;
 
@@ -254,7 +252,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Defines a data aggregation period for an endpoint with the role @ref Role::FEED "FEED" that
      * limits the rate of data notifications. For example, setting the value of this property
      * to "0.1s" limits notification to once every "100ms" (at most 10 per second).
-     * @see Builder::withProperty(const std::string&, const std::string&)
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
     static const std::string DXFEED_AGGREGATION_PERIOD_PROPERTY;
 
@@ -272,7 +270,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Defines a path to a file with properties for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * By default, properties are loaded from a classpath resource named "dxpublisher.properties".
-     * @see Builder::withProperty(const std::string&, const std::string&)
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
     static const std::string DXPUBLISHER_PROPERTIES_PROPERTY;
 
@@ -281,8 +279,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Defines default connection address for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * Connection is established to this address as soon as an endpoint is created.
-     * By default, the connection is not established until DXEndpoint::connect(const std::string&) is invoked.
-     * @see Builder::withProperty(const std::string&, const std::string&)
+     * By default, the connection is not established until DXEndpoint::connect(const StringLike&) is invoked.
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
     static const std::string DXPUBLISHER_ADDRESS_PROPERTY;
 
@@ -291,7 +289,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Defines thread pool size for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * By default, the thread pool size is equal to the number of available processors.
-     * @see Builder#withProperty(const std::string&, const std::string&)
+     * @see Builder#withProperty(const StringLike&, const StringLike&)
      */
     static const std::string DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY;
 
@@ -442,7 +440,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         NOT_CONNECTED,
 
         /**
-         * The @ref DXEndpoint::connect(const std::string&) "connect" method was called to establish connection to
+         * The @ref DXEndpoint::connect(const StringLike&) "connect" method was called to establish connection to
          * remove endpoint, but the connection is not established yet or was lost.
          */
         CONNECTING,
@@ -511,7 +509,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * <a href="#defaultPropertiesSection">the default properties section</a> of DXEndpoint class documentation.
      * You can provide configuration via system properties as explained there.
      *
-     * The configuration does not have to include an address. You can use @ref DXEndpoint::connect(const std::string&)
+     * The configuration does not have to include an address. You can use @ref DXEndpoint::connect(const StringLike&)
      * "connect(address)" and DXEndpoint::disconnect() methods on the instance that is returned by this method to
      * programmatically establish and tear-down connection to a user-provided address.
      *
@@ -638,8 +636,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     /**
      * Changes username for this endpoint.
-     * This method shall be called before @ref DXEndpoint::connect(const std::string&) "connect"
-     * with @ref DXEndpoint::password(const std::string&) "password" to configure service access credentials.
+     * This method shall be called before @ref DXEndpoint::connect(const StringLike&) "connect"
+     * with @ref DXEndpoint::password(const StringLike&) "password" to configure service access credentials.
      *
      * @param user The username.
      *
@@ -648,12 +646,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    std::shared_ptr<DXEndpoint> user(const std::string &user);
+    std::shared_ptr<DXEndpoint> user(const StringLike &user);
 
     /**
      * Changes password for this endpoint.
-     * This method shall be called before @ref DXEndpoint::connect(const std::string&) "connect"
-     * with @ref DXEndpoint::user(const std::string&) "user" to configure service access credentials.
+     * This method shall be called before @ref DXEndpoint::connect(const StringLike&) "connect"
+     * with @ref DXEndpoint::user(const StringLike&) "user" to configure service access credentials.
      *
      * @param password The password.
      *
@@ -662,7 +660,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException
      * @throws GraalException
      */
-    std::shared_ptr<DXEndpoint> password(const std::string &password);
+    std::shared_ptr<DXEndpoint> password(const StringLike&password);
 
     /**
      * Connects to the specified remote address. Previously established connections are closed if
@@ -680,7 +678,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * few hundred of connections).
      *
      * <p>For premium services access credentials must be configured before invocation of `connect` method
-     * using @ref ::user(const std::string&) "user" and @ref ::password(const std::string&) "password" methods.
+     * using @ref ::user(const StringLike&) "user" and @ref ::password(const StringLike&) "password" methods.
      *
      * <p> <b>This method does not wait until the connection actually gets established</b>. The actual connection
      * establishment happens asynchronously after the invocation of this method. However, this method waits until
@@ -696,18 +694,18 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws JavaException if something happened with the dxFeed API backend or if the address string is malformed.
      * @throws GraalException
      */
-    std::shared_ptr<DXEndpoint> connect(const std::string &address);
+    std::shared_ptr<DXEndpoint> connect(const StringLike&address);
 
     /**
      * Terminates all established network connections and initiates connecting again with the same address.
      *
-     * <p>The effect of the method is alike to invoking :disconnect() and :connect(const std::string&)
+     * <p>The effect of the method is alike to invoking :disconnect() and :connect(const StringLike&)
      * with the current address, but internal resources used for connections may be reused by implementation.
      * TCP connections with multiple target addresses will try to switch to an alternative address, configured
      * reconnect timeouts will apply.
      *
      * <p><b>Note:</b> The method will not connect an endpoint that was not initially connected with
-     * :connect(const std::string&) method or was disconnected with ::disconnect() method.
+     * :connect(const StringLike&) method or was disconnected with ::disconnect() method.
      *
      * <p>The method initiates a short-pathway for reconnecting, so whether observers will have a chance to see
      * an intermediate state State#NOT_CONNECTED depends on the implementation.
@@ -770,7 +768,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Waits while this endpoint @ref ::getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
      * @ref State::CLOSED "CLOSED". It is a signal that any files opened with the
-     * @ref connect(const std::string&) "connect(\"file:...\")" method were finished reading, but not necessarily were
+     * @ref connect(const StringLike&) "connect(\"file:...\")" method were finished reading, but not necessarily were
      * completely processed by the corresponding subscription listeners. Use closeAndAwaitTermination() after this
      * method returns to make sure that all processing has completed.
      *
@@ -889,7 +887,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @throws JavaException
          * @throws GraalException
          */
-        std::shared_ptr<Builder> withName(const std::string &name);
+        std::shared_ptr<Builder> withName(const StringLike&name);
 
         /**
          * Sets role for the created DXEndpoint.
@@ -911,12 +909,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param value The endpoint's property value
          * @return `this` endpoint builder.
          *
-         * @see ::supportsProperty(const std::string&)
+         * @see ::supportsProperty(const StringLike&)
          * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
-        std::shared_ptr<Builder> withProperty(const std::string &key, const std::string &value);
+        std::shared_ptr<Builder> withProperty(const StringLike&key, const StringLike&value);
 
         /**
          * Sets all supported properties from the provided properties object.
@@ -925,7 +923,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param properties The endpoint's properties
          * @return `this` endpoint builder.
          *
-         * @see ::withProperty(const std::string&, const std::string&)
+         * @see ::withProperty(const StringLike&, const StringLike&)
          * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
@@ -949,12 +947,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param key The property's key to be checked for support
          * @return `true` if the corresponding property key is supported.
          *
-         * @see ::withProperty(const std::string&, const std::string&)
+         * @see ::withProperty(const StringLike&, const StringLike&)
          * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
-        bool supportsProperty(const std::string &key) const;
+        bool supportsProperty(const StringLike&key) const;
 
         /**
          * Builds DXEndpoint instance.

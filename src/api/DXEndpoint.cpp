@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/system/System.hpp"
 #include "dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+#include "dxfeed_graal_cpp_api/system/System.hpp"
 
 #include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
 
@@ -129,8 +129,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, Role role,
                         ", role = " + roleToString(role) + ", properties[" + std::to_string(properties.size()) + "])");
     }
 
-    auto endpoint =
-        createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY));
+    auto endpoint = createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY));
     const auto id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
@@ -148,21 +147,21 @@ DXEndpoint::State DXEndpoint::getState() const {
     return isolated::api::IsolatedDXEndpoint::getState(handle_);
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
+std::shared_ptr<DXEndpoint> DXEndpoint::user(const StringLike &user) {
     // TODO: check invalid utf-8 [EN-8233]
     isolated::api::IsolatedDXEndpoint::user(handle_, user);
 
     return sharedAs<DXEndpoint>();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
+std::shared_ptr<DXEndpoint> DXEndpoint::password(const StringLike &password) {
     // TODO: check invalid utf-8 [EN-8233]
     isolated::api::IsolatedDXEndpoint::password(handle_, password);
 
     return sharedAs<DXEndpoint>();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
+std::shared_ptr<DXEndpoint> DXEndpoint::connect(const StringLike &address) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -314,8 +313,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(Role role) {
     return sharedAs<Builder>();
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
-                                                                       const std::string &value) {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const StringLike &key, const StringLike &value) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -330,7 +328,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
     return sharedAs<Builder>();
 }
 
-bool DXEndpoint::Builder::supportsProperty(const std::string &key) const {
+bool DXEndpoint::Builder::supportsProperty(const StringLike &key) const {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -383,7 +381,7 @@ DXEndpoint::Builder::~Builder() noexcept {
 #endif
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::string &name) {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const StringLike &name) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -431,8 +429,7 @@ std::string DXEndpoint::stateToString(State state) {
     return "";
 }
 
-DXEndpoint::DXEndpoint(LockExternalConstructionTag)
-    : role_{}, impl_(std::make_unique<Impl>()) {
+DXEndpoint::DXEndpoint(LockExternalConstructionTag) : role_{}, impl_(std::make_unique<Impl>()) {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint()");
@@ -444,8 +441,7 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag)
 }
 
 DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name)
-    : role_{role}, name_{std::move(name)},
-      impl_(std::make_unique<DXEndpoint::Impl>()) {
+    : role_{role}, name_{std::move(name)}, impl_(std::make_unique<DXEndpoint::Impl>()) {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint()");
@@ -794,7 +790,8 @@ dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builde
         return DXFC_EC_ERROR;
     }
 
-    const auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -828,7 +825,8 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance(void *userData, DXFC_OUT dxfc_dxe
         return DXFC_EC_ERROR;
     }
 
-    const auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -851,7 +849,8 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, voi
         return DXFC_EC_ERROR;
     }
 
-    const auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -873,7 +872,8 @@ dxfc_error_code_t dxfc_dxendpoint_create(void *userData, DXFC_OUT dxfc_dxendpoin
         return DXFC_EC_ERROR;
     }
 
-    const auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -896,7 +896,8 @@ dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *use
         return DXFC_EC_ERROR;
     }
 
-    const auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;

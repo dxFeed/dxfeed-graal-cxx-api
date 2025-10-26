@@ -49,7 +49,7 @@ void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaOb
 }
 
 void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                        std::string_view user) {
+                        const StringLike& user) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_user`. The `endpoint` handle is invalid");
@@ -60,7 +60,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
 }
 
 void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                            std::string_view password) {
+                            const StringLike& password) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_password`. The `endpoint` handle is invalid");
@@ -70,7 +70,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
                                            password.data());
 }
 
-void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, std::string_view address) {
+void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const StringLike& address) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_connect`. The `endpoint` handle is invalid");
@@ -263,7 +263,7 @@ withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoi
 // dxfg_DXEndpoint_Builder_withProperty
 void /* int32_t */
 withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-             std::string_view key, std::string_view value) {
+             const StringLike& key, const StringLike& value) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_Builder_withProperty`. The `builder` handle is invalid");
@@ -277,7 +277,7 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
 // dxfg_DXEndpoint_Builder_withProperties
 void /* int32_t */
 withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-               std::string_view filePath) {
+               const StringLike& filePath) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_Builder_withProperties`. The `builder` handle is invalid");
@@ -290,7 +290,7 @@ withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DX
 // dxfg_DXEndpoint_Builder_supportsProperty
 bool /* int32_t */
 supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-                 std::string_view key) {
+                 const StringLike& key) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_Builder_supportsProperty`. The `builder` handle is invalid");
