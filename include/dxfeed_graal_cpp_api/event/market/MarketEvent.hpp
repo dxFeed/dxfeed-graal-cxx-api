@@ -19,8 +19,7 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * Base class for all market events. All market events are POCO that
  * extend this class. Market event classes are simple beans with setter and getter methods for their
- * properties and minimal business logic. All market events have `eventSymbol` property that is
- * defined by this class.
+ * properties and minimal business logic. All market events have `eventSymbol` property defined by this class.
  */
 struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     /// The alias to a type of shared pointer to the MarketEvent object
@@ -38,7 +37,7 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit MarketEvent(std::string eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
+    explicit MarketEvent(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
     }
 
     virtual void fillData(void *graalNative) noexcept;
@@ -55,7 +54,7 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     }
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
@@ -68,7 +67,7 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     }
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or `std::nullopt`.
      */
@@ -84,6 +83,16 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
     void setEventSymbol(const std::string &eventSymbol) noexcept override {
         // TODO: check invalid utf-8 [EN-8233]
         eventSymbol_ = eventSymbol;
+    }
+
+    /**
+     * Changes symbol of this event.
+     *
+     * @param eventSymbol The symbol of this event.
+     */
+    void setEventSymbol(const StringLike &eventSymbol) noexcept {
+        // TODO: check invalid utf-8 [EN-8233]
+        eventSymbol_ = std::string(eventSymbol);
     }
 
     ///

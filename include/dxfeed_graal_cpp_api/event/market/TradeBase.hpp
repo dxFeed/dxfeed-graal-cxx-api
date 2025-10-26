@@ -88,11 +88,11 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     TradeBase() noexcept = default;
 
     /**
-     * Creates new trade event with the specified event symbol.
+     * Creates a new trade event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TradeBase(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit TradeBase(const StringLike& eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     /**

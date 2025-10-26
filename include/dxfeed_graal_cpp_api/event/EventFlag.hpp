@@ -438,7 +438,7 @@ class EventFlagsMask final {
     }
 
     /**
-     * Returns an integer representation of event mask
+     * Returns an integer representation of an event mask
      *
      * @return an integer representation
      */

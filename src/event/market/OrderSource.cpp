@@ -92,19 +92,19 @@ const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference
 
 std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 
-OrderSource::OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept
-    : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {
+OrderSource::OrderSource(std::int32_t id, const StringLike &name, std::uint32_t pubFlags) noexcept
+    : IndexedEventSource(id, name), pubFlags_{pubFlags}, builtin_{true} {
 }
 
-OrderSource::OrderSource(const std::string &name, std::uint32_t pubFlags)
+OrderSource::OrderSource(const StringLike &name, std::uint32_t pubFlags)
     : OrderSource(composeId(name), name, pubFlags) {
 }
 
-OrderSource::OrderSource(std::int32_t id, const std::string &name) noexcept
+OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept
     : IndexedEventSource(id, name), pubFlags_{0}, builtin_{false} {
 }
 
-std::int32_t OrderSource::composeId(const std::string &name) {
+std::int32_t OrderSource::composeId(const StringLike &name) {
     std::int32_t sourceId = 0;
 
     auto n = name.length();
@@ -192,29 +192,29 @@ bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
 }
 
 const OrderSource &OrderSource::valueOf(std::int32_t sourceId) {
-    if (auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
+    if (const auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
         return found->second;
     }
 
     std::lock_guard lock(MTX_);
 
-    if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
+    if (const auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
         return found->second;
     }
 
     return USER_SOURCES_.try_emplace(sourceId, OrderSource(sourceId, decodeName(sourceId))).first->second;
 }
 
-const OrderSource &OrderSource::valueOf(const std::string &name) {
-    if (auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
+const OrderSource &OrderSource::valueOf(const StringLike &name) {
+    if (const auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
         return found->second;
     }
 
     std::lock_guard lock(MTX_);
 
-    auto sourceId = composeId(name);
+    const auto sourceId = composeId(name);
 
-    if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
+    if (const auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
         return found->second;
     }
 

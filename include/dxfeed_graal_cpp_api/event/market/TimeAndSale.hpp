@@ -29,7 +29,7 @@ class OptionSale;
 /**
  * Time and Sale represents a trade or other market event with price, like market open/close price, etc.
  * Time and Sales are intended to provide information about trades <b>in a continuous time slice</b>
- * (unlike Trade events which are supposed to provide snapshot about the <b>current last</b> trade).
+ * (unlike Trade events which are supposed to provide a snapshot about the <b>current last</b> trade).
  *
  * <p> Time and Sale events have unique @ref TimeAndSale::getIndex() "index" which can be used for later
  * correction/cancellation processing.
@@ -42,7 +42,7 @@ class OptionSale;
  * @ref TimeAndSale::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * <p> Regular subscription via DXFeedSubscription produces a stream of time and
- * sale events as they happen and their @ref TimeAndSale::getEventFlags() "eventFlags" are always zero.
+ * sale events as they happen, and their @ref TimeAndSale::getEventFlags() "eventFlags" are always zero.
  *
  * Publishing of time and sales events follows the general rules explained in TimeSeriesEvent class
  * documentation.
@@ -69,7 +69,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     static constexpr std::uint32_t TTE_MASK = 0xFFU;
     static constexpr std::uint32_t TTE_SHIFT = 8U;
 
-    // SIDE values are taken from Side enum.
+    // SIDE values are taken from the Side enum.
     static constexpr std::uint32_t SIDE_MASK = 3U;
     static constexpr std::uint32_t SIDE_SHIFT = 5U;
 
@@ -77,7 +77,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     static constexpr std::uint32_t ETH = 1U << 3U;
     static constexpr std::uint32_t VALID_TICK = 1U << 2U;
 
-    // TYPE values are taken from TimeAndSaleType enum.
+    // TYPE values are taken from the TimeAndSaleType enum.
     static constexpr std::uint32_t TYPE_MASK = 3U;
     static constexpr std::uint32_t TYPE_SHIFT = 0;
 
@@ -134,7 +134,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -163,11 +163,11 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     TimeAndSale() noexcept = default;
 
     /**
-     * Creates new time and sale event with the specified event symbol.
+     * Creates a new time and sale event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TimeAndSale(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit TimeAndSale(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     ///
@@ -196,9 +196,9 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     }
 
     /**
-     * Returns unique per-symbol index of this event.
+     * Returns a unique per-symbol index of this event.
      * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
-     * Changing either time or sequence changes event index.
+     * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
      */
@@ -207,7 +207,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     }
 
     /**
-     * Changes unique per-symbol index of this event.
+     * Changes the unique per-symbol index of this event.
      * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
@@ -221,7 +221,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     }
 
     /**
-     * Returns timestamp of the event in milliseconds.
+     * Returns the timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
@@ -230,7 +230,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     }
 
     /**
-     * Changes timestamp of the event in milliseconds.
+     * Changes the timestamp of the event in milliseconds.
      *
      * @param time timestamp of the event in milliseconds.
      * @see ::getTime()
@@ -446,8 +446,8 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param exchangeSaleConditions sale conditions.
      */
-    void setExchangeSaleConditions(std::string exchangeSaleConditions) noexcept {
-        data_.exchangeSaleConditions = std::move(exchangeSaleConditions);
+    void setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept {
+        data_.exchangeSaleConditions = std::string(exchangeSaleConditions);
     }
 
     /**
@@ -618,8 +618,8 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param buyer buyer of this time and sale event.
      */
-    void setBuyer(std::string buyer) noexcept {
-        data_.buyer = std::move(buyer);
+    void setBuyer(const StringLike &buyer) noexcept {
+        data_.buyer = std::string(buyer);
     }
 
     /**
@@ -649,8 +649,8 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param seller seller of this time and sale event.
      */
-    void setSeller(std::string seller) noexcept {
-        data_.seller = std::move(seller);
+    void setSeller(const StringLike &seller) noexcept {
+        data_.seller = std::string(seller);
     }
 
     /**

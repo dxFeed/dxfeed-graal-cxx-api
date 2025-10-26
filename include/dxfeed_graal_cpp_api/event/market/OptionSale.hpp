@@ -106,7 +106,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -135,22 +135,22 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     OptionSale() noexcept = default;
 
     /**
-     * Creates new option sale event with the specified event symbol.
+     * Creates a new option sale event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OptionSale(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit OptionSale(const StringLike& eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     // MarketEvent methods
 
     /**
-     * Changes event's symbol and returns the current option sale.
+     * Changes an event's symbol and returns the current option sale.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current option sale.
      */
-    OptionSale &withEventSymbol(const std::string &eventSymbol) noexcept {
+    OptionSale &withEventSymbol(const StringLike &eventSymbol) noexcept {
         MarketEvent::setEventSymbol(eventSymbol);
 
         return *this;
@@ -222,9 +222,9 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns unique per-symbol index of this event.
+     * Returns a unique per-symbol index of this event.
      * The index is composed of @ref OptionSale::getTime() "time" and @ref OptionSale::getSequence() "sequence".
-     * Changing either time or sequence changes event index.
+     * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
      */
@@ -233,7 +233,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes unique per-symbol index of this event.
+     * Changes the unique per-symbol index of this event.
      * The index is composed of @ref OptionSale::getTime() "time" and @ref OptionSale::getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
@@ -262,7 +262,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     // OptionSale methods
 
     /**
-     * Returns time and sequence of this event packaged into single long value.
+     * Returns time and sequence of this event packaged into a single long value.
      *
      * @return time and sequence of this event.
      */
@@ -320,7 +320,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes timestamp of the event in milliseconds.
+     * Changes the timestamp of the event in milliseconds.
      * Returns the current option sale.
      *
      * @param time timestamp of the event in milliseconds.
@@ -354,7 +354,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes time of this option sale and returns it.
+     * Changes the time of this option sale and returns it.
      * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
      *
      * @param timeNanos The time of this option sale in nanoseconds.
@@ -533,7 +533,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns size of this option sale event.
+     * Returns the size of this option sale event.
      *
      * @return size of this option sale event.
      */
@@ -542,7 +542,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes size of this option sale event.
+     * Changes the size of this option sale event.
      *
      * @param size size of this option sale event.
      */
@@ -578,8 +578,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes price of this time and sale event.the current ask price on the market when this option sale event had
-     * occurred.
+     * Changes the current ask price on the market when this option sale event had occurred.
      *
      * @param askPrice the current ask price on the market when this option sale event had occurred.
      */
@@ -616,8 +615,8 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @param exchangeSaleConditions sale conditions.
      */
-    void setExchangeSaleConditions(std::string exchangeSaleConditions) noexcept {
-        data_.exchangeSaleConditions = std::move(exchangeSaleConditions);
+    void setExchangeSaleConditions(const StringLike& exchangeSaleConditions) noexcept {
+        data_.exchangeSaleConditions = std::string(exchangeSaleConditions);
     }
 
     /**
@@ -642,7 +641,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns aggressor side of this option sale event.
+     * Returns the aggressor side of this option sale event.
      *
      * @return aggressor side of this option sale event.
      */
@@ -699,7 +698,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns whether this event represents a valid intraday tick.
-     * Note, that a correction for a previously distributed valid tick represents a new valid tick itself,
+     * Note that a correction for a previously distributed valid tick represents a new valid tick itself,
      * but a cancellation of a previous valid tick does not.
      *
      * @return `true` if this event represents a valid intraday tick.
@@ -719,7 +718,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns type of this option sale event.
+     * Returns the type of this option sale event.
      *
      * @return type of this option sale event.
      */
@@ -728,7 +727,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes type of this option sale event.
+     * Changes the type of this option sale event.
      *
      * @param type type of this option sale event.
      */
@@ -738,7 +737,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns whether this is a new event (not cancellation or correction).
-     * It is `true` for newly created option sale event.
+     * It is `true` for a newly created option sale event.
      *
      * @return `true` if this is a new event (not cancellation or correction).
      */
@@ -748,7 +747,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns whether this is a correction of a previous event.
-     * It is `false` for newly created option sale event.
+     * It is `false` for a newly created option sale event.
      *
      * @return `true` if this is a correction of a previous event
      */
@@ -758,7 +757,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns whether this is a cancellation of a previous event.
-     * It is `false` for newly created option sale event.
+     * It is `false` for a newly created option sale event.
      * @return `true` if this is a cancellation of a previous event
      */
     bool isCancel() const noexcept {
@@ -766,7 +765,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns underlying price at the time of this option sale event.
+     * Returns the underlying price at the time of this option sale event.
      *
      * @return underlying price at the time of this option sale event.
      */
@@ -836,7 +835,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     /**
      * Returns option symbol of this event.
      *
-     * @return option symbol of this event or std::nullopt
+     * @return option symbol of this event or `std::nullopt`
      */
     const std::optional<std::string> &getOptionSymbolOpt() const & noexcept {
         return data_.optionSymbol;
@@ -847,8 +846,8 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @param optionSymbol option symbol of this event.
      */
-    void setOptionSymbol(std::string optionSymbol) noexcept {
-        data_.optionSymbol = std::move(optionSymbol);
+    void setOptionSymbol(const StringLike& optionSymbol) noexcept {
+        data_.optionSymbol = std::string(optionSymbol);
     }
 
     /**

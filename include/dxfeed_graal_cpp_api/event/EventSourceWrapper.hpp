@@ -168,9 +168,9 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
-     * @throws RuntimeException if event source type is unknown
+     * @throws RuntimeException if an event source type is unknown
      */
     static EventSourceWrapper fromGraal(void *graalNative);
 
@@ -244,7 +244,7 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
     }
 
     /**
-     * @return IndexedEventSource (optional) or std::nullopt if current EventSourceWrapper doesn't hold
+     * @return IndexedEventSource (optional) or `std::nullopt` if the current EventSourceWrapper doesn't hold
      * IndexedEventSource.
      */
     std::optional<IndexedEventSource> asIndexedEventSource() const noexcept {
@@ -253,7 +253,7 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
     }
 
     /**
-     * @return OrderSource (optional) or std::nullopt if current EventSourceWrapper doesn't hold
+     * @return OrderSource (optional) or `std::nullopt` if the current EventSourceWrapper doesn't hold
      * OrderSource.
      */
     std::optional<OrderSource> asOrderSource() const noexcept {

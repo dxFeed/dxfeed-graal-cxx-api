@@ -32,7 +32,8 @@ template <typename Child, typename Code> struct Enum {
     }
 
     template <Integral OtherCodeType>
-    Enum(OtherCodeType code, std::string name) noexcept : code_{convertToInnerCodeType(code)}, name_{std::move(name)} {
+    Enum(OtherCodeType code, const StringLike &name) noexcept
+        : code_{convertToInnerCodeType(code)}, name_{name} {
     }
 
     static const std::unordered_map<CodeType, std::reference_wrapper<const Child>> ALL;

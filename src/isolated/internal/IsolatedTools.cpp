@@ -15,7 +15,7 @@ void gc() {
 
 namespace isolated::internal::IsolatedTools {
 std::unordered_set<std::string> /* dxfg_string_list* */
-parseSymbols(std::string_view symbolList) {
+parseSymbols(const StringLike& symbolList) {
     std::unordered_set<std::string> result{};
 
     auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
@@ -29,7 +29,7 @@ parseSymbols(std::string_view symbolList) {
     return result;
 }
 
-std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList) {
+std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(const StringLike& symbolList) {
     std::vector<std::string> result{};
 
     auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());

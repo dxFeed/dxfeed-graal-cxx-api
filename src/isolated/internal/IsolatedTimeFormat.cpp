@@ -44,7 +44,7 @@ withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> 
 }
 
 std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
-                   std::string_view value) {
+                   const StringLike& value) {
     if (!timeFormat) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_TimeFormat_parse`. The `timeFormat` handle is invalid");

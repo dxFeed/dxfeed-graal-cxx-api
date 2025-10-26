@@ -21,7 +21,7 @@ namespace isolated::util::IsolatedTimePeriod {
     return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_valueOf, value));
 }
 
-/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(std::string_view value) {
+/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(const StringLike& value) {
     return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_valueOf2, value.data()));
 }
 

@@ -32,7 +32,7 @@ struct EventMapper;
  *
  * The Trade event defines last trade @ref Trade::getPrice() "price" as officially defined
  * by the corresponding exchange for its <b>regular trading hours</b> (RTH).
- * It also include an official exchange @ref Trade::getDayVolume() "dayVolume" and @ref Trade::getDayTurnover()
+ * It also includes an official exchange @ref Trade::getDayVolume() "dayVolume" and @ref Trade::getDayTurnover()
  * "dayTurnover" <b>for the whole trading day</b> identified by @ref Trade::getDayId() "dayId". So, Trade event captures
  * all the official numbers that are typically reported by exchange.
  *
@@ -48,9 +48,9 @@ struct EventMapper;
  *
  * <h3>Volume and Turnover</h3>
  *
- * <p>The volume and turnover are included into the Trade event instead
- * of Summary event, because both volume and turnover typically update with each trade.
- * The @ref Trade::getDayId() "dayId" field identifies current trading day for which volume and turnover statistics are
+ * <p>The volume and turnover are included in the Trade event instead
+ * of the Summary event, because both volume and turnover typically update with each trade.
+ * The @ref Trade::getDayId() "dayId" field identifies the current trading day for which volume and turnover statistics are
  * computed. This solution avoids generation of multiple events on each trade during regular trading hours. Summary
  * event is generated during the trading day only when new highs or lows are reached or other properties change.
  *
@@ -91,7 +91,7 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -120,11 +120,11 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
     Trade() noexcept = default;
 
     /**
-     * Creates new trade event with the specified event symbol.
+     * Creates a new trade event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Trade(std::string eventSymbol) noexcept : TradeBase(std::move(eventSymbol)) {
+    explicit Trade(const StringLike& eventSymbol) noexcept : TradeBase(eventSymbol) {
     }
 
     /**

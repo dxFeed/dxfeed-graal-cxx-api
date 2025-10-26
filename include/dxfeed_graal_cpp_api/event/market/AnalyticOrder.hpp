@@ -30,15 +30,15 @@ struct EventMapper;
  * The collection of analytic order events of a symbol represents the most recent analytic information
  * that is available about orders on the market at any given moment of time.
  *
- * <p> Analytic order is similar to a regular Order. In addition this event has few additional properties:
+ * <p> Analytic order is similar to a regular Order. In addition, this event has few additional properties:
  * <ul>
  *     <li>@ref AnalyticOrder::getIcebergPeakSize() "icebergPeakSize" - the size of the peak, i.e. the visible part of
  * the iceberg, that is being continually refilled until the order is fully traded or cancelled; <li>@ref
- * AnalyticOrder::getIcebergHiddenSize() "icebergHiddenSize" - the prediction of current hidden size of the iceberg, as
+ * AnalyticOrder::getIcebergHiddenSize() "icebergHiddenSize" - the prediction of the current hidden size of the iceberg, as
  * inferred by the model; <li>@ref AnalyticOrder::getIcebergExecutedSize() "icebergExecutedSize" - the executed size of
- * the iceberg order. For IcebergType::SYNTHETIC type represents total executed size of all orders composing current
- * iceberg; <li>AnalyticOrder::getIcebergType() - type of the iceberg, either native (exchange-managed) or synthetic
- * (managed outside of the exchange).
+ * the iceberg order. For IcebergType::SYNTHETIC type represents the total executed size of all orders composing the
+ * current iceberg; <li>AnalyticOrder::getIcebergType() - type of the iceberg, either native (exchange-managed) or
+ * synthetic (managed outside the exchange).
  * </ul>
  *
  * <h3>Implementation details</h3>
@@ -88,7 +88,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -117,27 +117,27 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     AnalyticOrder() noexcept = default;
 
     /**
-     * Creates new analytic order event with the specified event symbol.
+     * Creates a new analytic order event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit AnalyticOrder(std::string eventSymbol) noexcept : Order(std::move(eventSymbol)) {
+    explicit AnalyticOrder(const StringLike &eventSymbol) noexcept : Order(eventSymbol) {
     }
 
     // MarketEvent methods
 
     /**
-     * Changes event's symbol and returns the current analytic order.
+     * Changes an event's symbol and returns the current analytic order.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventSymbol(const std::string &eventSymbol) noexcept override {
+    AnalyticOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override {
         return dynamic_cast<AnalyticOrder &>(Order::withEventSymbol(eventSymbol));
     }
 
     /**
-     * Changes event's creation time and returns the current analytic order.
+     * Changes the event's creation time and returns the current analytic order.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
@@ -150,8 +150,8 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     // OrderBase methods
 
     /**
-     * Changes event's source and returns the current analytic order.
-     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
+     * Changes an event's source and returns the current analytic order.
+     * This method changes the highest bits of the @ref OrderBase::getIndex() "index" of this event.
      *
      * @param source source of this event.
      * @return The current analytic order.
@@ -183,9 +183,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes unique per-symbol index of this analytic order and returns it. Note, that this method also changes
-     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
-     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
+     * Changes the unique per-symbol index of this analytic order and returns it. Note that this method also changes
+     * @ref OrderBase::getSource() "source", whose id occupies the highest bits of index.
+     * Use OrderBase::setSource() after invocation of this method to set the desired value of a source.
      *
      * @param index unique per-symbol index of this analytic order.
      * @return The current analytic order.
@@ -240,7 +240,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes action of this analytic order and returns it.
+     * Changes the action of this analytic order and returns it.
      *
      * @param action The side of this analytic order.
      * @return The current analytic order.
@@ -250,7 +250,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes time of the last action and returns current analytic order.
+     * Changes time of the last action and returns the current analytic order.
      *
      * @param actionTime The last order action time.
      * @return The current analytic order.
@@ -315,7 +315,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes number of individual orders in this aggregate order.
+     * Changes the number of individual orders in this aggregate order.
      * Returns the current analytic order.
      *
      * @param count The number of individual orders in this aggregate order.
@@ -392,7 +392,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes scope of this analytic order.
+     * Changes the scope of this analytic order.
      * Returns the current analytic order.
      *
      * @param scope The scope of this analytic order.
@@ -408,11 +408,11 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * Changes market maker or other aggregate identifier of this analytic order.
      * Returns the current analytic order.
      *
-     * @param marketMaker The market maker or other aggregate identifier of this analytic order.
+     * @param marketMaker The market maker or another aggregate identifier of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withMarketMaker(std::string marketMaker) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withMarketMaker(std::move(marketMaker)));
+    AnalyticOrder &withMarketMaker(const StringLike &marketMaker) noexcept {
+        return dynamic_cast<AnalyticOrder &>(Order::withMarketMaker(marketMaker));
     }
 
     // AnalyticOrder methods
@@ -480,7 +480,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     /**
      * Returns iceberg executed size of this analytic order.
      *
-     * @return iceberg executed size of this analytic order.
+     * @return The iceberg executed size of this analytic order.
      */
 
     double getIcebergExecutedSize() const noexcept {
@@ -488,9 +488,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     }
 
     /**
-     * Changes iceberg executed size of this analytic order.
+     * Changes the iceberg executed size of this analytic order.
      *
-     * @param icebergExecutedSize iceberg executed size of this analytic order.
+     * @param icebergExecutedSize The iceberg executed size of this analytic order.
      */
     void setIcebergExecutedSize(double icebergExecutedSize) noexcept {
         analyticOrderData_.icebergExecutedSize = icebergExecutedSize;

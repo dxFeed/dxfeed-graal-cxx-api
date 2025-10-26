@@ -36,7 +36,7 @@ struct DXFCPP_EXPORT AuthToken {
     /**
      * Constructs an AuthToken from the specified string.
      *
-     * @param string The string (or c-string or string view) with space-separated scheme and value.
+     * @param string The string (or c-string or string view) with a space-separated scheme and value.
      * @return The constructed AuthToken.
      * @throws JavaException("InvalidFormatException") if the string is malformed, or if the scheme is "Basic" but the
      * format does not comply with RFC2617
@@ -67,7 +67,7 @@ struct DXFCPP_EXPORT AuthToken {
 
     /**
      * Constructs an AuthToken with the specified username and password per RFC2617.
-     * If both the username and password are empty returns AuthToken::NULL_TOKEN.
+     * If both the username and password are empty, returns AuthToken::NULL_TOKEN.
      *
      * @param user the username
      * @param password the password

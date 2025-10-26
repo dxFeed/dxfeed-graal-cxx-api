@@ -455,7 +455,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
      * If no sources have been set, an empty set is returned, indicating that all possible sources have been subscribed
      * to.
      *
-     * @return The set of current sources.
+     * @return The set of the current sources.
      */
     std::unordered_set<EventSourceWrapper> getSources() const {
         return getSourcesImpl(handle_);

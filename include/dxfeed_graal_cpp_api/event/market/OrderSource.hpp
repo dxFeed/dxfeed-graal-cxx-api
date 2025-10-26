@@ -21,17 +21,17 @@ DXFCPP_BEGIN_NAMESPACE
 struct EventSourceWrapper;
 
 /**
- * Identifies source of Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events.
+ * Identifies a source of Order, AnalyticOrder, OtcMarketsOrder, and SpreadOrder events.
  * There are the following kinds of order sources:
  * <ul>
  * <li><em>Synthetic</em> sources OrderSource::COMPOSITE_BID, OrderSource::COMPOSITE_ASK,
  *     OrderSource::REGIONAL_BID, and OrderSource::REGIONAL_ASK are provided for convenience of a consolidated
  *     order book and are automatically generated based on the corresponding Quote events.
  * <li><em>Aggregate</em> sources OrderSource::AGGREGATE_BID and OrderSource::AGGREGATE_ASK provide
- *     futures depth (aggregated by price level) and NASDAQ Level II (top of book for each market maker).
- *     These source cannot be directly published to via dxFeed API.
- * <li><em>Publishable</em> sources OrderSource::DEFAULT, OrderSource::NTV, OrderSource::ISE etc
- *     support full range of dxFeed API features.
+ *     futures depth (aggregated by price level) and NASDAQ Level II (top of the book for each market maker).
+ *     This source cannot be directly published to via dxFeed API.
+ * <li><em>Publishable</em> sources OrderSource::DEFAULT, OrderSource::NTV, OrderSource::ISE etc.
+ *     support a full range of dxFeed API features.
  * </ul>
  */
 class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
@@ -57,13 +57,13 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     std::uint32_t pubFlags_{};
     bool builtin_{};
 
-    OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept;
+    OrderSource(std::int32_t id, const StringLike& name, std::uint32_t pubFlags) noexcept;
 
-    OrderSource(const std::string &name, std::uint32_t pubFlags);
+    OrderSource(const StringLike &name, std::uint32_t pubFlags);
 
-    OrderSource(std::int32_t id, const std::string &name) noexcept;
+    OrderSource(std::int32_t id, const StringLike &name) noexcept;
 
-    static std::int32_t composeId(const std::string &name);
+    static std::int32_t composeId(const StringLike &name);
 
     static void checkChar(char c);
 
@@ -86,8 +86,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bid side of a composite Quote.
      * It is a <em>synthetic</em> source.
-     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
-     * The subscription on composite Quote event is observed when this source is subscribed to.
+     * It cannot be used with the DXFeed::getIndexedEventsPromise method, and it cannot be published directly to.
+     * The subscription on the composite Quote event is observed when this source is subscribed to.
      * @deprecated Use the OrderSource::COMPOSITE source.
      */
     static const OrderSource COMPOSITE_BID;
@@ -95,8 +95,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Ask side of a composite Quote.
      * It is a <em>synthetic</em> and <em>separate</em> source.
-     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
-     * The subscription on composite Quote event is observed when this source is subscribed to.
+     * It cannot be used with the DXFeed::getIndexedEventsPromise method, and it cannot be published directly to.
+     * The subscription on the composite Quote event is observed when this source is subscribed to.
      * @deprecated Use the OrderSource::COMPOSITE source.
      */
     static const OrderSource COMPOSITE_ASK;
@@ -104,8 +104,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bid side of a regional Quote.
      * It is a <em>synthetic</em> and <em>separate</em> source.
-     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
-     * The subscription on regional Quote event is observed when this source is subscribed to.
+     * It cannot be used with the DXFeed::getIndexedEventsPromise method, and it cannot be published directly to.
+     * The subscription on the regional Quote event is observed when this source is subscribed to.
      * @deprecated Use the OrderSource::REGIONAL source.
      */
     static const OrderSource REGIONAL_BID;
@@ -113,15 +113,15 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Ask side of a regional Quote.
      * It is a <em>synthetic</em> and <em>separate</em> source.
-     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
-     * The subscription on regional Quote event is observed when this source is subscribed to.
+     * It cannot be used with the DXFeed::getIndexedEventsPromise method, and it cannot be published directly to.
+     * The subscription on a regional Quote event is observed when this source is subscribed to.
      * @deprecated Use the OrderSource::REGIONAL source.
      */
     static const OrderSource REGIONAL_ASK;
 
     /**
      * Bid side of an aggregate order book (futures depth and NASDAQ Level II).
-     * It is a <em>aggregate</em> and <em>separate</em> source.
+     * It is an <em>aggregate</em> and <em>separate</em> source.
      * This source cannot be directly published via dxFeed API, but otherwise it is fully operational.
      * @deprecated Use the OrderSource::AGGREGATE source.
      */
@@ -137,9 +137,9 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     /**
      * Composite Quote.
-     * It is a <em>synthetic</em> and <em>unitary</em> source, that represents both bid and ask side.
-     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
-     * The subscription on composite Quote event is observed when this source is subscribed to.
+     * It is a <em>synthetic</em> and <em>unitary</em> source that represents both bid and ask side.
+     * It cannot be used with the DXFeed::getIndexedEventsPromise method, and it cannot be published directly to.
+     * The subscription on the composite Quote event is observed when this source is subscribed to.
      * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a
      * source), instead of OrderSource::COMPOSITE_ASK and OrderSource::COMPOSITE_BID, set the system property
      * <b>`dxscheme.unitaryOrderSource`</b> to `true`.
@@ -148,9 +148,9 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     /**
      * Regional Quote.
-     * It is a <em>synthetic</em> and <em>unitary</em> source, that represents both bid and ask side.
-     * It cannot be used with DXFeed::getIndexedEventsPromise method and it cannot be published directly to.
-     * The subscription on regional Quote event is observed when this source is subscribed to.
+     * It is a <em>synthetic</em> and <em>unitary</em> source that represents both bid and ask side.
+     * It cannot be used with the DXFeed::getIndexedEventsPromise method, and it cannot be published directly to.
+     * The subscription on a regional Quote event is observed when this source is subscribed to.
      * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a
      * source), instead of OrderSource::REGIONAL_ASK and OrderSource::REGIONAL_BID, set the system property
      * <b>`dxscheme.unitaryOrderSource`</b> to `true`.
@@ -159,7 +159,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     /**
      * Aggregate order book (futures depth and NASDAQ Level II).
-     * It is a <em>aggregate</em> and <em>unitary</em> source, that represents both bid and ask side.
+     * It is an <em>aggregate</em> and <em>unitary</em> source that represents both bid and ask side.
      * This source cannot be directly published via dxFeed API, but otherwise it is fully operational.
      * To use this source when subscribing to all sources (e.g., when subscribing to an order without specifying a
      * source), instead of OrderSource::AGGREGATE_ASK and OrderSource::AGGREGATE_BID, set the system property
@@ -169,7 +169,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     /**
      * Default source for publishing custom order books.
-     * Order, AnalyticOrder, OtcMarketsOrder and SpreadOrder events are @ref ::isPublishable() "publishable"
+     * Order, AnalyticOrder, OtcMarketsOrder, and SpreadOrder events are @ref ::isPublishable() "publishable"
      * on this source and the corresponding subscription can be observed via DXPublisher.
      */
     static const OrderSource DEFAULT;
@@ -183,7 +183,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource NTV;
 
     /**
-     * NASDAQ Total View. Record for price level book.
+     * NASDAQ Total View. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -247,7 +247,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource DEX;
 
     /**
-     * Direct-Edge EDGX Exchange. Record for price level book.
+     * Direct-Edge EDGX Exchange. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -272,7 +272,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource BZX;
 
     /**
-     * Bats BZX Exchange. Record for price level book.
+     * Bats BZX Exchange. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -320,7 +320,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource IST;
 
     /**
-     * Borsa Istanbul Exchange. Record for particular top 20 order book.
+     * Borsa Istanbul Exchange. Record for a particular top 20 order book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -352,7 +352,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource GLBX;
 
     /**
-     * CME Globex. Record for price level book.
+     * CME Globex. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -376,7 +376,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource XEUR;
 
     /**
-     * Eurex Exchange. Record for price level book.
+     * Eurex Exchange. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -408,7 +408,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource SMFE;
 
     /**
-     * Small Exchange. Record for price level book.
+     * Small Exchange. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -416,7 +416,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource smfe;
 
     /**
-     * Investors exchange. Record for price level book.
+     * Investors exchange. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -432,7 +432,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource MEMX;
 
     /**
-     * Members Exchange. Record for price level book.
+     * Members Exchange. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -448,14 +448,14 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource OCEA;
 
     /**
-     * Blue Ocean Technologies Alternative Trading System. Record for price level book.
+     * Blue Ocean Technologies Alternative Trading System. Record for a price level book.
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource ocea;
 
     /**
-     * Pink Sheets. Record for price level book.
+     * Pink Sheets. Record for a price level book.
      * Pink sheets are listings for stocks that trade over-the-counter (OTC).
      *
      * Order and OtcMarketsOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
@@ -472,7 +472,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource ARCA;
 
     /**
-     * NYSE Arca traded securities. Record for price level book.
+     * NYSE Arca traded securities. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -488,7 +488,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource CEDX;
 
     /**
-     * Cboe European Derivatives. Record for price level book.
+     * Cboe European Derivatives. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -504,7 +504,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource IGC;
 
     /**
-     * IG CFDs Gate. Record for price level book.
+     * IG CFDs Gate. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -520,7 +520,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource EDX;
 
     /**
-     * EDX Exchange. Record for price level book.
+     * EDX Exchange. Record for a price level book.
      *
      * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
@@ -536,7 +536,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource NUAM;
 
     /**
-     * Nuam Exchange Gate. Record for price level book.
+     * Nuam Exchange Gate. Record for a price level book.
      *
      * Order and NuamOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
      * subscription can be observed via DXPublisher.
@@ -544,7 +544,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static const OrderSource nuam;
 
     /**
-     * Determines whether specified source identifier refers to special order source.
+     * Determines whether the specified source identifier refers to a special order source.
      * Special order sources are used for wrapping non-order events into order events.
      *
      * @param sourceId the source identifier.
@@ -562,12 +562,12 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     /**
      * Returns order source for the specified source name.
-     * The name must be either predefined, or contain at most 4 alphanumeric characters.
+     * The name must be either predefined or contain at most 4 alphanumeric characters.
      *
      * @param name the name of the source.
      * @return order source.
      */
-    static const OrderSource &valueOf(const std::string &name);
+    static const OrderSource &valueOf(const StringLike &name);
 };
 
 DXFCPP_END_NAMESPACE

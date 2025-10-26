@@ -29,23 +29,23 @@ struct EventMapper;
 
 /**
  * Base class for common fields of Order, AnalyticOrder and SpreadOrder events.
- * Order events represent a snapshot for a full available market depth for a symbol.
+ * Order events represent a snapshot of a full available market depth for a symbol.
  * The collection of order events of a symbol represents the most recent information that is
  * available about orders on the market at any given moment of time.
  *
  * <p>Order event represents market depth for a <b>specific symbol</b>.
  *
- * <p>AnalyticOrder event represents market depth for a <b>specific symbol</b> extended with an analytic
- * information, for example, whether particular order represent an iceberg or not.
+ * <p>AnalyticOrder event represents market depth for a <b>specific symbol</b> extended with analytic
+ * information, for example, whether a particular order represents an iceberg or not.
  *
  * <p>SpreadOrder event represents market depth for
  *    <b>all spreads on a given underlying symbol</b>.
  *
  * <p> Order events arrive from
  * multiple sources for the same market symbol and are distinguished by their
- * @ref OrderBase::getIndex "index". Index is a unique per symbol identifier of the event.
+ * @ref OrderBase::getIndex "index". Index is a unique per-symbol identifier of the event.
  * It is unique across all the sources of depth information for the symbol.
- * The event with @ref OrderBase::getSize() "size" either `0` or `NaN` is a signal to remove previously received order
+ * The event with @ref OrderBase::getSize() "size" either `0` or `NaN` is a signal to remove a previously received order
  * for the corresponding index.
  * The method @ref OrderBase::hasSize() "hasSize" is a convenient method to test for size presence.
  *
@@ -57,7 +57,7 @@ struct EventMapper;
  * The logic behind this property is detailed in IndexedEvent class documentation.
  *
  * <p> The event @ref OrderBase::getSource() "source" identifier for an order is a part of the unique event @ref
- * OrderBase::getIndex() "index". It occupies highest bits of the @ref OrderBase::getIndex() "index" (index is
+ * OrderBase::getIndex() "index". It occupies the highest bits of the @ref OrderBase::getIndex() "index" (index is
  * not-negative). The lowest bits of
  * @ref OrderBase::getIndex() "index" contain source-specific event index which is always zero in
  * an event that is marked with EventFlag::SNAPSHOT_END bit in @ref OrderBase::getEventFlags() "eventFlags".
@@ -95,7 +95,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * +--------+--------+--------+----+----+----+----+
      */
 
-    // ACTION values are taken from OrderAction enum.
+    // ACTION values are taken from the OrderAction enum.
     static constexpr std::uint32_t ACTION_MASK = 0x0FU;
     static constexpr std::uint32_t ACTION_SHIFT = 11U;
 
@@ -103,17 +103,17 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     static constexpr std::uint32_t EXCHANGE_MASK = 0x7FU;
     static constexpr std::uint32_t EXCHANGE_SHIFT = 4U;
 
-    // SIDE values are taken from Side enum.
+    // SIDE values are taken from the Side enum.
     static constexpr std::uint32_t SIDE_MASK = 3U;
     static constexpr std::uint32_t SIDE_SHIFT = 2U;
 
-    // SCOPE values are taken from Scope enum.
+    // SCOPE values are taken from the Scope enum.
     static constexpr std::uint32_t SCOPE_MASK = 3U;
     static constexpr std::uint32_t SCOPE_SHIFT = 0;
 
     /*
-     * Index field contains source identifier, optional exchange code and low-end index (virtual id or MMID).
-     * Index field has 2 formats depending on whether source is "special" (see OrderSource.isSpecialSourceId()).
+     * The index field contains source identifier, optional exchange code and low-end index (virtual id or MMID).
+     * The index field has 2 formats depending on whether a source is "special" (see OrderSource.isSpecialSourceId()).
      * Note: both formats are IMPLEMENTATION DETAILS, they are subject to change without notice.
      *   63..48   47..32   31..16   15..0
      * +--------+--------+--------+--------+
@@ -173,11 +173,11 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     OrderBase() noexcept = default;
 
     /**
-     * Creates new order event with the specified event symbol.
+     * Creates a new order event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OrderBase(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit OrderBase(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     /**
@@ -198,16 +198,17 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes source of this event.
-     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
+     * This method changes the highest bits of the @ref OrderBase::getIndex() "index" of this event.
      *
      * @param source source of this event.
      */
     void setSource(const OrderSource &source) noexcept {
-        auto shift = OrderSource::isSpecialSourceId(source.id()) ? SPECIAL_SOURCE_ID_SHIFT : NONSPECIAL_SOURCE_ID_SHIFT;
-        std::int64_t mask = OrderSource::isSpecialSourceId(
-                                static_cast<std::int32_t>(sar(orderBaseData_.index, SPECIAL_SOURCE_ID_SHIFT)))
-                                ? ~sal(std::int64_t{-1}, SPECIAL_SOURCE_ID_SHIFT)
-                                : ~sal(std::int64_t{-1}, NONSPECIAL_SOURCE_ID_SHIFT);
+        const auto shift =
+            OrderSource::isSpecialSourceId(source.id()) ? SPECIAL_SOURCE_ID_SHIFT : NONSPECIAL_SOURCE_ID_SHIFT;
+        const std::int64_t mask = OrderSource::isSpecialSourceId(
+                                      static_cast<std::int32_t>(sar(orderBaseData_.index, SPECIAL_SOURCE_ID_SHIFT)))
+                                      ? ~sal(std::int64_t{-1}, SPECIAL_SOURCE_ID_SHIFT)
+                                      : ~sal(std::int64_t{-1}, NONSPECIAL_SOURCE_ID_SHIFT);
         orderBaseData_.index =
             andOp(sal(static_cast<std::int64_t>(source.id()), shift), andOp(orderBaseData_.index, mask));
     }
@@ -233,9 +234,9 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes unique per-symbol index of this order. Note, that this method also changes
-     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
-     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
+     * Changes the unique per-symbol index of this order. Note that this method also changes
+     * @ref OrderBase::getSource() "source", whose id occupies the highest bits of index.
+     * Use OrderBase::setSource() after invocation of this method to set the desired value of a source.
      *
      * @param index unique per-symbol index of this order.
      * @throws InvalidArgumentException
@@ -249,7 +250,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns unique per-symbol index of this order. Index is non-negative.
+     * Returns a unique per-symbol index of this order. Index is non-negative.
      *
      * @return unique per-symbol index of this order.
      */
@@ -258,7 +259,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns time and sequence of this order packaged into single long value.
+     * Returns time and sequence of this order packaged into a single long value.
      * This method is intended for efficient order time priority comparison.
      *
      * @return time and sequence of this order.
@@ -409,7 +410,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns order ID if available. Some actions (OrderAction::TRADE, OrderAction::BUST) have no order ID since they
-     * are not related to any order in Order book.
+     * are not related to any order in the Order book.
      * <p>This field is a part of the FOB support.
      *
      * @return order ID or 0 if not available.
@@ -516,7 +517,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns number of individual orders in this aggregate order.
+     * Returns the number of individual orders in this aggregate order.
      *
      * @return number of individual orders in this aggregate order.
      */
@@ -525,7 +526,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes number of individual orders in this aggregate order.
+     * Changes the number of individual orders in this aggregate order.
      *
      * @param count number of individual orders in this aggregate order.
      */

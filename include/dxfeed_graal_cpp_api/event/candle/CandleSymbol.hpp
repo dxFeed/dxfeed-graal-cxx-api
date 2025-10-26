@@ -93,16 +93,19 @@ struct DXFCPP_EXPORT CandleSymbol {
     std::optional<CandleAlignment> alignment_{};
     std::optional<CandlePriceLevel> priceLevel_{};
 
-    static std::string changeAttribute(std::string symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
+    static std::string changeAttribute(const StringLike &symbol,
+                                       const CandleSymbolAttributeVariant &attribute) noexcept {
         return std::visit(
-            [symbol = std::move(symbol)](auto &&a) {
+            [&symbol](auto &&a) {
                 return a.changeAttributeForSymbol(symbol);
             },
             attribute);
     }
 
     template <typename AttributeIt>
-    static std::string changeAttributes(std::string symbol, AttributeIt begin, AttributeIt end) noexcept {
+    static std::string changeAttributes(const StringLike &s, AttributeIt begin, AttributeIt end) noexcept {
+        auto symbol = std::string(s);
+
         for (auto it = begin; it != end; ++it) {
             symbol = changeAttribute(symbol, *it);
         }
@@ -110,8 +113,8 @@ struct DXFCPP_EXPORT CandleSymbol {
         return symbol;
     }
 
-    static std::string normalize(std::string symbol) noexcept {
-        symbol = CandlePrice::normalizeAttributeForSymbol(symbol);
+    static std::string normalize(const StringLike &s) noexcept {
+        auto symbol = CandlePrice::normalizeAttributeForSymbol(s);
         symbol = CandleSession::normalizeAttributeForSymbol(symbol);
         symbol = CandlePeriod::normalizeAttributeForSymbol(symbol);
         symbol = CandleAlignment::normalizeAttributeForSymbol(symbol);
@@ -148,19 +151,19 @@ struct DXFCPP_EXPORT CandleSymbol {
         }
     }
 
-    explicit CandleSymbol(std::string symbol) noexcept : symbol_{normalize(std::move(symbol))} {
+    explicit CandleSymbol(const StringLike &symbol) noexcept : symbol_{normalize(symbol)} {
         initTransientFields();
     }
 
-    CandleSymbol(std::string symbol, const CandleSymbolAttributeVariant &attribute) noexcept
-        : symbol_{normalize(changeAttribute(std::move(symbol), attribute))} {
+    CandleSymbol(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept
+        : symbol_{normalize(changeAttribute(symbol, attribute))} {
         // TODO: check attributes
         initTransientFields();
     }
 
     template <typename CandleSymbolAttributeIt>
-    CandleSymbol(std::string symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end) noexcept
-        : symbol_{normalize(changeAttributes(std::move(symbol), begin, end))} {
+    CandleSymbol(const StringLike &symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end) noexcept
+        : symbol_{normalize(changeAttributes(symbol, begin, end))} {
         // TODO: check attributes
         initTransientFields();
     }
@@ -185,7 +188,7 @@ struct DXFCPP_EXPORT CandleSymbol {
     }
 
     /**
-     * Returns price type attribute of this symbol.
+     * Returns the price type attribute of this symbol.
      *
      * @return price type attribute of this symbol.
      */
@@ -194,7 +197,7 @@ struct DXFCPP_EXPORT CandleSymbol {
     }
 
     /**
-     * Returns session attribute of this symbol.
+     * Returns the session attribute of this symbol.
      *
      * @return session attribute of this symbol.
      */
@@ -203,7 +206,7 @@ struct DXFCPP_EXPORT CandleSymbol {
     }
 
     /**
-     * Returns aggregation period of this symbol.
+     * Returns the aggregation period of this symbol.
      *
      * @return aggregation period of this symbol.
      */
@@ -221,7 +224,7 @@ struct DXFCPP_EXPORT CandleSymbol {
     }
 
     /**
-     * Returns price level attribute of this symbol.
+     * Returns the price level attribute of this symbol.
      *
      * @return price level attribute of this symbol.
      */
@@ -231,8 +234,8 @@ struct DXFCPP_EXPORT CandleSymbol {
 
     /**
      * Returns string representation of this symbol.
-     * The string representation can be transformed back into symbol object
-     * using CandleSymbol::valueOf() method.
+     * The string representation can be transformed back into a symbol object
+     * using the CandleSymbol::valueOf() method.
      *
      * @return string representation of this symbol.
      */
@@ -277,7 +280,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static CandleSymbol fromGraal(void *graalNative);
@@ -288,8 +291,8 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param symbol The string symbol.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(std::string symbol) noexcept {
-        return CandleSymbol{std::move(symbol)};
+    static CandleSymbol valueOf(const StringLike &symbol) noexcept {
+        return CandleSymbol{symbol};
     }
 
     /**
@@ -299,8 +302,8 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param attribute The attribute to set.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(std::string symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
-        return {std::move(symbol), attribute};
+    static CandleSymbol valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
+        return CandleSymbol{symbol, attribute};
     }
 
     /**
@@ -308,14 +311,14 @@ struct DXFCPP_EXPORT CandleSymbol {
      *
      * @tparam CandleSymbolAttributeIt The attribute iterator type.
      * @param symbol The string symbol.
-     * @param begin The beginning of collection of an attributes.
-     * @param end The end of collection of an attributes.
+     * @param begin The beginning of the collection of attributes.
+     * @param end The end of the collection of attributes.
      * @return
      */
     template <typename CandleSymbolAttributeIt>
-    static CandleSymbol valueOf(std::string symbol, CandleSymbolAttributeIt begin,
+    static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributeIt begin,
                                 CandleSymbolAttributeIt end) noexcept {
-        return {std::move(symbol), begin, end};
+        return CandleSymbol{symbol, begin, end};
     }
 
     /**
@@ -326,9 +329,9 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param attributes More attributes to set.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(std::string symbol,
+    static CandleSymbol valueOf(const StringLike &symbol,
                                 std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept {
-        return valueOf(std::move(symbol), attributes.begin(), attributes.end());
+        return valueOf(symbol, attributes.begin(), attributes.end());
     }
 
     /**
@@ -344,8 +347,8 @@ struct DXFCPP_EXPORT CandleSymbol {
             { std::begin(attributes) };
             { std::end(attributes) };
         }
-    static CandleSymbol valueOf(std::string symbol, CandleSymbolAttributesCollection &&attributes) noexcept {
-        return valueOf(std::move(symbol), std::begin(attributes), std::end(attributes));
+    static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributesCollection &&attributes) noexcept {
+        return valueOf(symbol, std::begin(attributes), std::end(attributes));
     }
 };
 

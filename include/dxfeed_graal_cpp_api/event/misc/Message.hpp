@@ -21,10 +21,10 @@ DXFCPP_BEGIN_NAMESPACE
 struct EventMapper;
 
 /**
- * Message event with application-specific attachment. Messages are never conflated and are delivered to
+ * Message event with an application-specific attachment. Messages are never conflated and are delivered to
  * all connected subscribers. There is no built-in persistence for messages. They are lost when subscribers
  * are not connected to the message publisher, so they shall be only used for notification purposes in
- * addition to persistence mechanism.
+ * addition to a persistence mechanism.
  *
  * <h3>Implementation details</h3>
  *
@@ -55,7 +55,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -81,28 +81,28 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
     void assign(std::shared_ptr<EventType> event) override;
 
     /**
-     * Creates new message with default values.
+     * Creates a new message with default values.
      */
     Message() noexcept = default;
 
     /**
-     * Creates new message with the specified event symbol.
+     * Creates a new message with the specified event symbol.
      * @param eventSymbol event symbol.
      */
-    explicit Message(std::string eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
+    explicit Message(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
     }
 
     /**
-     * Creates new message with the specified event symbol and attachment.
+     * Creates a new message with the specified event symbol and attachment.
      * @param eventSymbol event symbol.
      * @param attachment attachment.
      */
-    Message(std::string eventSymbol, std::string attachment) noexcept
-        : eventSymbol_{std::move(eventSymbol)}, attachment_{std::move(attachment)} {
+    Message(const StringLike &eventSymbol, const StringLike &attachment) noexcept
+        : eventSymbol_{eventSymbol}, attachment_{attachment} {
     }
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
@@ -115,7 +115,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
     }
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or `std::nullopt`.
      */
@@ -134,12 +134,22 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
     }
 
     /**
-     * Changes event's symbol and returns the current message.
+     * Changes symbol of this event.
+     *
+     * @param eventSymbol The symbol of this event.
+     */
+    void setEventSymbol(const StringLike &eventSymbol) noexcept {
+        // TODO: check invalid utf-8 [EN-8233]
+        eventSymbol_ = std::string(eventSymbol);
+    }
+
+    /**
+     * Changes an event's symbol and returns the current message.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current message.
      */
-    Message &withEventSymbol(const std::string &eventSymbol) noexcept {
+    Message &withEventSymbol(const StringLike &eventSymbol) noexcept {
         Message::setEventSymbol(eventSymbol);
 
         return *this;
@@ -195,19 +205,19 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      *
      * @param attachment attachment.
      */
-    void setAttachment(std::string attachment) {
-        attachment_ = std::move(attachment);
+    void setAttachment(const StringLike &attachment) {
+        attachment_ = std::string(attachment);
     }
 
     /**
-     * Changes attachment. and returns the current message.
+     * Changes attachment and returns the current message.
      *
      * @param attachment attachment.
      *
      * @return The current message.
      */
-    Message &withAttachment(std::string attachment) noexcept {
-        Message::setAttachment(std::move(attachment));
+    Message &withAttachment(const StringLike &attachment) noexcept {
+        Message::setAttachment(attachment);
 
         return *this;
     }

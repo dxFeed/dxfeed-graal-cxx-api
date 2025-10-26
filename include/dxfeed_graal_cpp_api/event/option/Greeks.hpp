@@ -94,7 +94,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -130,11 +130,11 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     Greeks() noexcept = default;
 
     /**
-     * Creates new greeks event with the specified event symbol.
+     * Creates a new greeks event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Greeks(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit Greeks(const StringLike & eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     ///
@@ -163,9 +163,9 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     }
 
     /**
-     * Returns unique per-symbol index of this event.
+     * Returns a unique per-symbol index of this event.
      * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
-     * Changing either time or sequence changes event index.
+     * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
      */
@@ -174,7 +174,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     }
 
     /**
-     * Changes unique per-symbol index of this event.
+     * Changes the unique per-symbol index of this event.
      * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
@@ -188,7 +188,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     }
 
     /**
-     * Returns timestamp of the event in milliseconds.
+     * Returns the timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
@@ -197,7 +197,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     }
 
     /**
-     * Changes timestamp of the event in milliseconds.
+     * Changes the timestamp of the event in milliseconds.
      *
      * @param time timestamp of the event in milliseconds.
      * @see ::getTime()

@@ -94,11 +94,11 @@ template <typename T> struct RequireMakeShared : virtual SharedEntity {
 
     public:
     /**
-     * Creates smart pointer to object.
+     * Creates a smart pointer to an object.
      *
      * @tparam Args Types or arguments.
      * @param args The arguments.
-     * @return A new smart pointer to object.
+     * @return A new smart pointer to an object.
      */
     template <typename... Args> static auto createShared(Args &&...args) {
         static_assert(std::is_convertible_v<T *, RequireMakeShared *>, "Must derive publicly from RequireMakeShared");

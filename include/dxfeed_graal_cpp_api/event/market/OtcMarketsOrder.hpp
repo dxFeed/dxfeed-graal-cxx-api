@@ -155,7 +155,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -188,18 +188,18 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OtcMarketsOrder(std::string eventSymbol) noexcept : Order(std::move(eventSymbol)) {
+    explicit OtcMarketsOrder(const StringLike& eventSymbol) noexcept : Order(eventSymbol) {
     }
 
     // MarketEvent methods
 
     /**
-     * Changes event's symbol and returns the current OTC Markets order.
+     * Changes the event's symbol and returns the current OTC Markets order.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withEventSymbol(const std::string &eventSymbol) noexcept override {
+    OtcMarketsOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override {
         return dynamic_cast<OtcMarketsOrder &>(Order::withEventSymbol(eventSymbol));
     }
 
@@ -475,11 +475,11 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * Changes market maker or other aggregate identifier of this OTC Markets order.
      * Returns the current OTC Markets order.
      *
-     * @param marketMaker The market maker or other aggregate identifier of this OTC Markets order.
+     * @param marketMaker The market maker or another aggregate identifier of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withMarketMaker(std::string marketMaker) noexcept {
-        return dynamic_cast<OtcMarketsOrder &>(Order::withMarketMaker(std::move(marketMaker)));
+    OtcMarketsOrder &withMarketMaker(const StringLike& marketMaker) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withMarketMaker(marketMaker));
     }
 
     // OtcMarketsOrder methods

@@ -79,7 +79,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -104,24 +104,24 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     ///
     void assign(std::shared_ptr<EventType> event) override;
 
-    /// Creates new quote event with default values.
+    /// Creates a new quote event with default values.
     Quote() noexcept = default;
 
     /**
-     * Creates new quote event with the specified event symbol.
+     * Creates a new quote event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Quote(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit Quote(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     /**
-     * Changes event's symbol and returns the current quote.
+     * Changes an event's symbol and returns the current quote.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current quote.
      */
-    Quote &withEventSymbol(const std::string &eventSymbol) noexcept {
+    Quote &withEventSymbol(const StringLike &eventSymbol) noexcept {
         MarketEvent::setEventSymbol(eventSymbol);
 
         return *this;
@@ -141,7 +141,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     }
 
     /**
-     * Returns sequence number of this quote to distinguish quotes that have the same @ref Quote::getTime() "time". This
+     * Returns a sequence number of this quote to distinguish quotes that have the same @ref Quote::getTime() "time". This
      * sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to
      * Quote::MAX_SEQUENCE.
      *

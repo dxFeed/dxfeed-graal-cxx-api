@@ -27,13 +27,13 @@ struct EventMapper;
  * The collection of order events of a symbol represents the most recent information
  * that is available about orders on the market at any given moment of time.
  * Order events give information on several levels of details, called scopes - see Scope.
- * Scope of an order is available via @ref Order::getScope "scope" property.
+ * Scope of an order is available via the @ref Order::getScope "scope" property.
  *
  * <p> Order events arrive from
  * multiple sources for the same market symbol and are distinguished by their @ref Order::getIndex "index". Index is a
- * unique per symbol identifier of the event.
+ * unique per-symbol identifier of the event.
  * It is unique across all the sources of depth information for the symbol.
- * The event with @ref Order::getSize() "size" either `0` or `NaN` is a signal to remove previously received order for
+ * The event with @ref Order::getSize() "size" either `0` or `NaN` is a signal to remove a previously received order for
  * the corresponding index. The method Order::hasSize() is a convenient method to test for size presence.
  *
  * <p> Events from finer-grained Scope of detail give more information and include events
@@ -47,28 +47,28 @@ struct EventMapper;
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
  * The corresponding information is carried in @ref Order::getEventFlags() "eventFlags" property.
  *
- * <p> See `Event Flags` section of OrderBase class documentation for details.
+ * <p> See the `Event Flags` section of OrderBase class documentation for details.
  *
  * <p> The composite quotes with Scope::COMPOSITE and regional quotes with Scope::REGIONAL come
- * individually from different venues and are not related to each other in any transactional way. The result of
+ * individually from different venues and are not related to each other in any transactional way. The result of the
  * Order::getEventFlags method for them is always zero.
  *
  * <h3>Publishing order books</h3>
  *
- * When publishing an order event with DXPublisher::publishEvents() method, least significant 32 bits of
+ * When publishing an order event with the DXPublisher::publishEvents() method, the least significant 32 bits of
  * order @ref Order::getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()`
- * inclusive. Use Order::setSource() method after Order::setIndex() to properly include source identifier into the
+ * inclusive. Use the Order::setSource() method after Order::setIndex() to properly include the source identifier in the
  * index.
  *
  * A snapshot has to be published in the <em>descending</em> order of @ref Order::getIndex() "index", starting with
  * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref Order::getEventFlags()
  * "eventFlags", and finishing the snapshot with an event that has zero 32 least significant bits of index.
  * EventFlag::SNAPSHOT_END bit in @ref Order::getEventFlags() "eventFlags" is optional during publishing.
- * It will be properly set on receiving end anyway.
+ * It will be properly set on the receiving end anyway.
  *
  * <h3>Limitations</h3>
  *
- * This event type cannot be used with DXFeed::getLastEvent() method.
+ * This event type cannot be used with the DXFeed::getLastEvent() method.
  *
  * <h3><a name="fobSection">Full Order Book Support</a></h3>
  *
@@ -120,7 +120,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -149,29 +149,29 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order() noexcept = default;
 
     /**
-     * Creates new order event with the specified event symbol.
+     * Creates a new order event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Order(std::string eventSymbol) noexcept : OrderBase(std::move(eventSymbol)) {
+    explicit Order(const StringLike &eventSymbol) noexcept : OrderBase(eventSymbol) {
     }
 
     // MarketEvent methods
 
     /**
-     * Changes event's symbol and returns the current order.
+     * Changes an event's symbol and returns the current order.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current order.
      */
-    virtual Order &withEventSymbol(const std::string &eventSymbol) noexcept {
+    virtual Order &withEventSymbol(const StringLike &eventSymbol) noexcept {
         MarketEvent::setEventSymbol(eventSymbol);
 
         return *this;
     }
 
     /**
-     * Changes event's creation time and returns the current order.
+     * Changes the event's creation time and returns the current order.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
@@ -186,8 +186,8 @@ class DXFCPP_EXPORT Order : public OrderBase {
     // OrderBase methods
 
     /**
-     * Changes event's source and returns the current order.
-     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
+     * Changes an event's source and returns the current order.
+     * This method changes the highest bits of the @ref OrderBase::getIndex() "index" of this event.
      *
      * @param source source of this event.
      * @return The current order.
@@ -225,9 +225,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
     }
 
     /**
-     * Changes unique per-symbol index of this order and returns it. Note, that this method also changes
-     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
-     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
+     * Changes the unique per-symbol index of this order and returns it. Note that this method also changes
+     * @ref OrderBase::getSource() "source", whose id occupies the highest bits of index.
+     * Use OrderBase::setSource() after invocation of this method to set the desired value of a source.
      *
      * @param index unique per-symbol index of this order.
      * @return The current order.
@@ -292,7 +292,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     }
 
     /**
-     * Changes action of this order and returns it.
+     * Changes the action of this order and returns it.
      *
      * @param action The side of this order.
      * @return The current order.
@@ -304,7 +304,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     }
 
     /**
-     * Changes time of the last action and returns current order.
+     * Changes time of the last action and returns the current order.
      *
      * @param actionTime The last order action time.
      * @return The current order.
@@ -381,7 +381,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     }
 
     /**
-     * Changes number of individual orders in this aggregate order.
+     * Changes the number of individual orders in this aggregate order.
      * Returns the current order.
      *
      * @param count The number of individual orders in this aggregate order.
@@ -514,21 +514,21 @@ class DXFCPP_EXPORT Order : public OrderBase {
     /**
      * Changes market maker or other aggregate identifier of this order.
      *
-     * @param marketMaker market maker or other aggregate identifier of this order.
+     * @param marketMaker market maker or the other aggregate identifier of this order.
      */
-    void setMarketMaker(std::string marketMaker) noexcept {
-        orderData_.marketMaker = std::move(marketMaker);
+    void setMarketMaker(const StringLike &marketMaker) noexcept {
+        orderData_.marketMaker = std::string(marketMaker);
     }
 
     /**
      * Changes market maker or other aggregate identifier of this order.
      * Returns the current order.
      *
-     * @param marketMaker The market maker or other aggregate identifier of this order.
+     * @param marketMaker The market maker or the other aggregate identifier of this order.
      * @return The current order.
      */
-    Order &withMarketMaker(std::string marketMaker) noexcept {
-        setMarketMaker(std::move(marketMaker));
+    Order &withMarketMaker(const StringLike &marketMaker) noexcept {
+        setMarketMaker(marketMaker);
 
         return *this;
     }

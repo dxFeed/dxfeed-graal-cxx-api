@@ -109,7 +109,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -138,20 +138,20 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     Series() noexcept = default;
 
     /**
-     * Creates new series event with the specified event symbol.
+     * Creates a new series event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Series(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit Series(const StringLike & eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     /**
-     * Changes event's symbol and returns the current series.
+     * Changes an event's symbol and returns the current series.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current series.
      */
-    Series &withEventSymbol(const std::string &eventSymbol) noexcept {
+    Series &withEventSymbol(const StringLike &eventSymbol) noexcept {
         MarketEvent::setEventSymbol(eventSymbol);
 
         return *this;
@@ -222,9 +222,9 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns unique per-symbol index of this event.
+     * Returns a unique per-symbol index of this event.
      * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
-     * Changing either time or sequence changes event index.
+     * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
      */
@@ -233,7 +233,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes unique per-symbol index of this event.
+     * Changes the unique per-symbol index of this event.
      *
      * @param index the event index.
      * @see Series::getIndex()
@@ -243,7 +243,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Changes unique per-symbol index of this series and returns it.
+     * Changes the unique per-symbol index of this series and returns it.
      *
      * @param index unique per-symbol index of this series.
      * @return The current series.
@@ -255,7 +255,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     }
 
     /**
-     * Returns time and sequence of this event packaged into single long value.
+     * Returns time and sequence of this event packaged into a single long value.
      *
      * @return time and sequence of this event.
      */

@@ -18,7 +18,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 /**
- * Candle alignment attribute of CandleSymbol defines how candle are aligned with respect to time.
+ * Candle alignment attribute of CandleSymbol defines how candles are aligned with respect to time.
  *
  * <h3>Implementation details</h3>
  *

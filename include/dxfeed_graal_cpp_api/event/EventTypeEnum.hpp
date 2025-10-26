@@ -42,9 +42,9 @@ class DXFCPP_EXPORT EventTypeEnum {
     // A flag that indicates that the current enum element is characterizing the Market event.
     const bool isMarket_;
 
-    EventTypeEnum(std::uint32_t id, std::string name, std::string className, bool isLasting, bool isIndexed = false,
+    EventTypeEnum(std::uint32_t id, const StringLike & name, const StringLike & className, bool isLasting, bool isIndexed = false,
                   bool isTimeSeries = false, bool isMarket = true) noexcept
-        : id_{id}, name_{std::move(name)}, className_{std::move(className)}, isLasting_{isLasting},
+        : id_{id}, name_{std::string(name)}, className_{std::string(className)}, isLasting_{isLasting},
           isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries},
           isOnlyIndexed_{isIndexed && !isTimeSeries}, isMarket_{isMarket} {
     }
