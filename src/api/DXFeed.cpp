@@ -12,8 +12,6 @@
 #include <string>
 #include <utility>
 
-#include <fmt/format.h>
-
 DXFCPP_BEGIN_NAMESPACE
 
 std::shared_ptr<DXFeed> DXFeed::getInstance() {
@@ -121,7 +119,7 @@ DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) const {
 
     if (!eventType.isTimeSeries()) {
         throw InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
-                                               eventType.getClassName() + " is not TimeSeries");
+                                       eventType.getClassName() + " is not TimeSeries");
     }
 
     auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(
@@ -225,7 +223,7 @@ DXFeed::~DXFeed() noexcept {
 }
 
 std::string DXFeed::toString() const {
-    return fmt::format("DXFeed{{{}}}", handle_.toString());
+    return std::string("DXFeed{") + handle_.toString() + "}";
 }
 
 DXFCPP_END_NAMESPACE

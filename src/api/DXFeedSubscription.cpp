@@ -1,20 +1,18 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
-
-// #include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <memory>
-
 #include "dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp"
 #include "dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
 
-#include <fmt/format.h>
+#include <dxfg_api.h>
+
+#include <memory>
 #include <utility>
+
+#include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -22,7 +20,7 @@ struct DXFeedSubscription::Impl {
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
         const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
 
-        if (auto sub = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id)) {
+        if (const auto sub = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id)) {
             auto &&events = EventMapper::fromGraalList(static_cast<void *>(graalNativeEvents));
 
             sub->onEvent_(events);

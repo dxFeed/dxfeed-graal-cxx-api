@@ -14,8 +14,6 @@
 #include <string>
 #include <utility>
 
-#include <fmt/format.h>
-
 DXFCPP_BEGIN_NAMESPACE
 
 const std::string DXEndpoint::NAME_PROPERTY = "name";
@@ -347,9 +345,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     loadDefaultPropertiesImpl();
 
     if (auto name = properties_.contains(NAME_PROPERTY) ? properties_.at(NAME_PROPERTY) : std::string{}; name.empty()) {
-        std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId() + 1;
+        const std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId() + 1;
 
-        name = fmt::format("qdcxx{}", (id <= 1) ? "" : fmt::format("-{}", id));
+        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY : std::string("-") + std::to_string(id));
 
         const auto newBuilder = withProperty(NAME_PROPERTY, name);
 
@@ -392,7 +390,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const StringL
 }
 
 std::string DXEndpoint::toString() const {
-    return fmt::format("DXEndpoint{{{}}}", handle_.toString());
+    return std::string("DXEndpoint{") + handle_.toString() + "}";
 }
 
 std::string DXEndpoint::roleToString(Role role) {
