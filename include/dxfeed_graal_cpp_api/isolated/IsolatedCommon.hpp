@@ -10,8 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../exceptions/JavaException.hpp"
 #include "../internal/Isolate.hpp"
 
-struct __graal_isolatethread_t;
-typedef struct __graal_isolatethread_t graal_isolatethread_t;
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
