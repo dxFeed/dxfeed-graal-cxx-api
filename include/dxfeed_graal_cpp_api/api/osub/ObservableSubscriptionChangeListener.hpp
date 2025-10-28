@@ -56,7 +56,7 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<Ob
 
     private:
     mutable std::recursive_mutex mutex_{};
-    JavaObjectHandle<ObservableSubscriptionChangeListener> handle_;
+    JavaObjectHandle<ObservableSubscriptionChangeListener> handle_{};
     SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded_{};
     SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved_{};
     SimpleHandler<void()> onSubscriptionClosed_{};

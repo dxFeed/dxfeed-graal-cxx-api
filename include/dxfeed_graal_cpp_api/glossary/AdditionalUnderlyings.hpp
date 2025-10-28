@@ -3,8 +3,11 @@
 
 #pragma once
 
-#include "../internal/Common.hpp"
 #include "../internal/Conf.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include <dxfeed_graal_cpp_api/entity/SharedEntity.hpp>
 
@@ -207,3 +210,5 @@ template <> struct std::hash<dxfcpp::AdditionalUnderlyings> {
         return au.hashCode();
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

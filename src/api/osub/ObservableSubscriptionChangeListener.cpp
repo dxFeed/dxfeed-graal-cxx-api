@@ -18,8 +18,8 @@ struct ObservableSubscriptionChangeListener::Impl {
             return;
         }
 
-        auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
-        auto listener =
+        const auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
+        const auto listener =
             ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->getEntity(id);
 
         if (!listener) {
@@ -35,8 +35,8 @@ struct ObservableSubscriptionChangeListener::Impl {
             return;
         }
 
-        auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
-        auto listener =
+        const auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
+        const auto listener =
             ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->getEntity(id);
 
         if (!listener) {
@@ -48,8 +48,8 @@ struct ObservableSubscriptionChangeListener::Impl {
     }
 
     static void onSubscriptionClosed(graal_isolatethread_t * /* thread */, void *userData) {
-        auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
-        auto listener =
+        const auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
+        const auto listener =
             ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->getEntity(id);
 
         if (!listener) {
@@ -61,7 +61,7 @@ struct ObservableSubscriptionChangeListener::Impl {
 };
 
 ObservableSubscriptionChangeListener::ObservableSubscriptionChangeListener(LockExternalConstructionTag)
-    : handle_{}, impl_{std::make_unique<ObservableSubscriptionChangeListener::Impl>()} {
+    : impl_{std::make_unique<Impl>()} {
 }
 
 ObservableSubscriptionChangeListener::~ObservableSubscriptionChangeListener() noexcept {
@@ -69,15 +69,15 @@ ObservableSubscriptionChangeListener::~ObservableSubscriptionChangeListener() no
 
 std::shared_ptr<ObservableSubscriptionChangeListener> ObservableSubscriptionChangeListener::create(
     std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded) {
-    auto listener = ObservableSubscriptionChangeListener::createShared();
-    auto id =
+    auto listener = createShared();
+    const auto id =
         ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->registerEntity(
             listener);
 
     listener->handle_ = isolated::api::IsolatedObservableSubscriptionChangeListener::create(
-        dxfcpp::bit_cast<void *>(&ObservableSubscriptionChangeListener::Impl::onSymbolsAdded),
-        dxfcpp::bit_cast<void *>(&ObservableSubscriptionChangeListener::Impl::onSymbolsRemoved),
-        dxfcpp::bit_cast<void *>(&ObservableSubscriptionChangeListener::Impl::onSubscriptionClosed),
+        dxfcpp::bit_cast<void *>(&Impl::onSymbolsAdded),
+        dxfcpp::bit_cast<void *>(&Impl::onSymbolsRemoved),
+        dxfcpp::bit_cast<void *>(&Impl::onSubscriptionClosed),
         dxfcpp::bit_cast<void *>(id.getValue()));
     listener->onSymbolsAdded_ += std::move(onSymbolsAdded);
 
@@ -88,15 +88,15 @@ std::shared_ptr<ObservableSubscriptionChangeListener> ObservableSubscriptionChan
     std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded,
     std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved,
     std::function<void()> onSubscriptionClosed) {
-    auto listener = ObservableSubscriptionChangeListener::createShared();
-    auto id =
+    auto listener = createShared();
+    const auto id =
         ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->registerEntity(
             listener);
 
     listener->handle_ = isolated::api::IsolatedObservableSubscriptionChangeListener::create(
-        dxfcpp::bit_cast<void *>(&ObservableSubscriptionChangeListener::Impl::onSymbolsAdded),
-        dxfcpp::bit_cast<void *>(&ObservableSubscriptionChangeListener::Impl::onSymbolsRemoved),
-        dxfcpp::bit_cast<void *>(&ObservableSubscriptionChangeListener::Impl::onSubscriptionClosed),
+        dxfcpp::bit_cast<void *>(&Impl::onSymbolsAdded),
+        dxfcpp::bit_cast<void *>(&Impl::onSymbolsRemoved),
+        dxfcpp::bit_cast<void *>(&Impl::onSubscriptionClosed),
         dxfcpp::bit_cast<void *>(id.getValue()));
     listener->onSymbolsAdded_ += std::move(onSymbolsAdded);
     listener->onSymbolsRemoved_ += std::move(onSymbolsRemoved);
