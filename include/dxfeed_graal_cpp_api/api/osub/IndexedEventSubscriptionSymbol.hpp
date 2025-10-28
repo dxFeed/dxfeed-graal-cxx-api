@@ -4,16 +4,13 @@
 #pragma once
 
 #include "../../internal/Conf.hpp"
-#include <dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../event/IndexedEventSource.hpp"
-#include "../../symbols/SymbolWrapper.hpp"
 
 #include <cstdint>
 #include <memory>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
