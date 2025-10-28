@@ -13,7 +13,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-#include "dxfeed_graal_cpp_api/auth/AuthToken.hpp"
+#include <dxfeed_graal_cpp_api/auth/AuthToken.hpp>
+#include <dxfeed_graal_cpp_api/event/TimeSeriesEvent.hpp>
 
 #include <memory>
 
@@ -178,7 +179,7 @@ struct DXFCPP_EXPORT HistoryEndpoint final : RequireMakeShared<HistoryEndpoint> 
          *
          * @return A new instance of HistoryEndpoint configured with the provided settings
          */
-        std::shared_ptr<HistoryEndpoint> build();
+        std::shared_ptr<HistoryEndpoint> build() const;
     };
 
     /**

@@ -5,6 +5,7 @@
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/isolated/glossary/IsolatedCFI.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 

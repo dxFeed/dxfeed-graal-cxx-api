@@ -8,13 +8,13 @@
 #include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
 #include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
 
+#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
+
 #include <dxfg_api.h>
 
 #include <cassert>
 #include <memory>
 #include <utility>
-
-#include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -23,7 +23,7 @@ void Candle::fillData(void *graalNative) {
         return;
     }
 
-    auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+    const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     setEventSymbol(CandleSymbol::valueOf(dxfcpp::toString(graalCandle->event_symbol)));
 
@@ -52,7 +52,7 @@ void Candle::fillGraalData(void *graalNative) const {
 
     auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
-    graalCandle->event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_CANDLE;
+    graalCandle->event_type.clazz = DXFG_EVENT_CANDLE;
     graalCandle->event_symbol = createCString(eventSymbol_.value_or(CandleSymbol::NUL).toString());
     graalCandle->event_time = data_.eventTime;
     graalCandle->event_flags = data_.eventFlags;
@@ -75,7 +75,7 @@ void Candle::freeGraalData(void *graalNative) noexcept {
         return;
     }
 
-    auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+    const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     delete[] graalCandle->event_symbol;
 }
@@ -87,11 +87,10 @@ std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Candle. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to create Candle. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
+        throw InvalidArgumentException(std::string("Unable to create Candle. Wrong event class ") +
+                                       isolated::toString(static_cast<dxfg_event_type_t *>(graalNative)->clazz).data() +
+                                       "! Expected: " + isolated::toString(DXFG_EVENT_CANDLE).data());
     }
 
     auto candle = std::make_shared<Candle>();
@@ -109,9 +108,9 @@ void *Candle::toGraal() const {
 
     auto *graalCandle = new dxfg_candle_t{};
 
-    fillGraalData(static_cast<void *>(graalCandle));
+    fillGraalData(graalCandle);
 
-    return static_cast<void *>(graalCandle);
+    return graalCandle;
 }
 
 void Candle::assign(std::shared_ptr<EventType> event) {
@@ -126,14 +125,13 @@ void Candle::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_CANDLE) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to free Candle's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_CANDLE))));
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
+        throw InvalidArgumentException(std::string("Unable to free Candle's Graal data. Wrong event class ") +
+                                       isolated::toString(static_cast<dxfg_event_type_t *>(graalNative)->clazz).data() +
+                                       "! Expected: " + isolated::toString(DXFG_EVENT_CANDLE).data());
     }
 
-    auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+    const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -238,7 +236,7 @@ void Candle::setTime(std::int64_t time) noexcept {
 }
 
 Candle &Candle::withTime(std::int64_t time) noexcept {
-    Candle::setTime(time);
+    setTime(time);
 
     return *this;
 }
@@ -258,7 +256,7 @@ void Candle::setSequence(std::int32_t sequence) {
 }
 
 Candle &Candle::withSequence(std::int32_t sequence) noexcept {
-    Candle::setSequence(sequence);
+    setSequence(sequence);
 
     return *this;
 }
@@ -272,7 +270,7 @@ void Candle::setCount(std::int64_t count) noexcept {
 }
 
 Candle &Candle::withCount(std::int64_t count) noexcept {
-    Candle::setCount(count);
+    setCount(count);
 
     return *this;
 }
@@ -286,7 +284,7 @@ void Candle::setOpen(double open) noexcept {
 }
 
 Candle &Candle::withOpen(double open) noexcept {
-    Candle::setOpen(open);
+    setOpen(open);
 
     return *this;
 }
@@ -300,7 +298,7 @@ void Candle::setHigh(double high) noexcept {
 }
 
 Candle &Candle::withHigh(double high) noexcept {
-    Candle::setHigh(high);
+    setHigh(high);
 
     return *this;
 }
@@ -328,7 +326,7 @@ void Candle::setClose(double close) noexcept {
 }
 
 Candle &Candle::withClose(double close) noexcept {
-    Candle::setClose(close);
+    setClose(close);
 
     return *this;
 }
@@ -356,7 +354,7 @@ void Candle::setVWAP(double vwap) noexcept {
 }
 
 Candle &Candle::withVWAP(double vwap) noexcept {
-    Candle::setVWAP(vwap);
+    setVWAP(vwap);
 
     return *this;
 }
@@ -370,7 +368,7 @@ void Candle::setBidVolume(double bidVolume) noexcept {
 }
 
 Candle &Candle::withBidVolume(double bidVolume) noexcept {
-    Candle::setBidVolume(bidVolume);
+    setBidVolume(bidVolume);
 
     return *this;
 }
@@ -384,7 +382,7 @@ void Candle::setAskVolume(double askVolume) noexcept {
 }
 
 Candle &Candle::withAskVolume(double askVolume) noexcept {
-    Candle::setAskVolume(askVolume);
+    setAskVolume(askVolume);
 
     return *this;
 }
@@ -398,7 +396,7 @@ void Candle::setImpVolatility(double impVolatility) {
 }
 
 Candle &Candle::withImpVolatility(double impVolatility) noexcept {
-    Candle::setImpVolatility(impVolatility);
+    setImpVolatility(impVolatility);
 
     return *this;
 }
@@ -412,7 +410,7 @@ void Candle::setOpenInterest(double openInterest) noexcept {
 }
 
 Candle &Candle::withOpenInterest(double openInterest) noexcept {
-    Candle::setOpenInterest(openInterest);
+    setOpenInterest(openInterest);
 
     return *this;
 }

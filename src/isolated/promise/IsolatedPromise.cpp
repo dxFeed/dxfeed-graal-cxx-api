@@ -6,6 +6,7 @@
 #include <dxfeed_graal_cpp_api/event/EventMapper.hpp>
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfeed_graal_cpp_api/isolated/promise/IsolatedPromise.hpp>
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 

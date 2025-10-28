@@ -32,21 +32,6 @@ const std::string DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY = "dxendpoint
 const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
 const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
 
-static DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
-    switch (state) {
-    case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
-        return DXEndpoint::State::NOT_CONNECTED;
-    case DXFG_ENDPOINT_STATE_CONNECTING:
-        return DXEndpoint::State::CONNECTING;
-    case DXFG_ENDPOINT_STATE_CONNECTED:
-        return DXEndpoint::State::CONNECTED;
-    case DXFG_ENDPOINT_STATE_CLOSED:
-        return DXEndpoint::State::CLOSED;
-    }
-
-    return DXEndpoint::State::NOT_CONNECTED;
-}
-
 struct DXEndpoint::Impl {
     static std::mutex MTX;
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
@@ -63,7 +48,8 @@ struct DXEndpoint::Impl {
         }
 
         if (endpoint) {
-            endpoint->onStateChange_(graalStateToState(oldState), graalStateToState(newState));
+            endpoint->onStateChange_(isolated::api::IsolatedDXEndpoint::graalStateToState(oldState),
+                                     isolated::api::IsolatedDXEndpoint::graalStateToState(newState));
 
             if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
                 // TODO: fix endpoint lifetime

@@ -4,6 +4,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
 

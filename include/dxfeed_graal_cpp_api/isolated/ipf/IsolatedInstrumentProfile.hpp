@@ -6,6 +6,7 @@
 #include "../../internal/Conf.hpp"
 
 #include "../../ipf/InstrumentProfile.hpp"
+#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
 
 #include <cstdint>
 #include <string>

@@ -7,6 +7,8 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <cstring>
+#include <dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfile.hpp>
+#include <dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfileReader.hpp>
 #include <memory>
 #include <utf8.h>
 #include <utility>

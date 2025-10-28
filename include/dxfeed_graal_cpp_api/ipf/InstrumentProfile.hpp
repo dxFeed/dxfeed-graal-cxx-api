@@ -4,6 +4,8 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include <dxfeed_graal_cpp_api/entity/SharedEntity.hpp>
+#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 

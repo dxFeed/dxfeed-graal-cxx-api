@@ -12,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Handler.hpp"
 #include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include <dxfeed_graal_cpp_api/entity/SharedEntity.hpp>
 
 #include <memory>
 #include <mutex>

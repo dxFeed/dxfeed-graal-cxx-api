@@ -6,6 +6,7 @@
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfeed_graal_cpp_api/isolated/candlewebservice/IsolatedHistoryEndpoint.hpp>
 #include <dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp>
+#include <dxfeed_graal_cpp_api/event/EventMapper.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 

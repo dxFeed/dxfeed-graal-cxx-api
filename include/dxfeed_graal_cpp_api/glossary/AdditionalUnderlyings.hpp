@@ -6,6 +6,7 @@
 #include "../internal/Common.hpp"
 #include "../internal/Conf.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include <dxfeed_graal_cpp_api/entity/SharedEntity.hpp>
 
 #include <map>
 #include <string>

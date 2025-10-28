@@ -5,6 +5,9 @@
 
 #include "../internal/Conf.hpp"
 
+#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
+#include <dxfeed_graal_cpp_api/schedule/SessionFilter.hpp>
+
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
@@ -48,24 +51,24 @@ struct DXFCPP_EXPORT Schedule {
      * Returns default schedule instance for specified instrument profile.
      *
      * @param profile The instrument profile those schedule is requested
-     * @return The default schedule instance for specified instrument profile
+     * @return The default schedule instance for a specified instrument profile
      */
     static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile);
 
     /**
      * Returns default schedule instance for specified schedule definition.
      *
-     * @param scheduleDefinition The schedule definition of requested schedule
+     * @param scheduleDefinition The schedule definition of the requested schedule
      * @return The default schedule instance for specified schedule definition
      */
     static Schedule::Ptr getInstance(const StringLike &scheduleDefinition);
 
     /**
-     * Returns schedule instance for specified instrument profile and trading venue.
+     * Returns schedule instance for a specified instrument profile and trading venue.
      *
      * @param profile The instrument profile those schedule is requested
      * @param venue The trading venue those schedule is requested
-     * @return The schedule instance for specified instrument profile and trading venue
+     * @return The schedule instance for a specified instrument profile and trading venue
      */
     static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLike &venue);
 
@@ -73,17 +76,17 @@ struct DXFCPP_EXPORT Schedule {
      * Returns trading venues for specified instrument profile.
      *
      * @param profile The instrument profile those trading venues are requested
-     * @return trading venues for specified instrument profile
+     * @return trading venues for a specified instrument profile
      */
     static std::vector<std::string> getTradingVenues(std::shared_ptr<InstrumentProfile> profile);
 
     /**
-     * Downloads defaults using specified download config and optionally start periodic download.
+     * Downloads defaults using a specified download config and optionally start periodic download.
      * The specified config can be one of the following:<ul>
      * <li>"" - stop periodic download
      * <li>URL   - download once from specified URL and stop periodic download
      * <li>URL,period   - start periodic download from specified URL
-     * <li>"auto"   - start periodic download from default location
+     * <li>"auto"   - start periodic download from the default location
      * </ul>
      *
      * @param downloadConfig download config
@@ -100,36 +103,36 @@ struct DXFCPP_EXPORT Schedule {
     /**
      * Returns session that contains specified time.
      * This method will throw JavaException "IllegalArgumentException" if specified time
-     * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     * falls outside of the valid date range from 0001-01-02 to 9999-12-30.
      *
      * @param time the time to search for
      * @return session that contains specified time or `Session::Ptr{nullptr}` if specified time
      * falls outside of valid date range from 0001-01-02 to 9999-12-30.
      *
-     * @throw JavaException "IllegalArgumentException" if specified time falls outside of valid date range
+     * @throw JavaException "IllegalArgumentException" if specified time falls outside of the valid date range
      * @throw JavaException "NoSuchElementException" if no such session was found within this day
      */
     std::shared_ptr<Session> getSessionByTime(std::int64_t time) const;
 
     /**
-     * Returns day that contains specified time.
-     * This method will throw JavaException "IllegalArgumentException" if specified time falls outside of valid date
+     * Returns day that contains a specified time.
+     * This method will throw JavaException "IllegalArgumentException" if specified time falls outside of the valid date
      * range from 0001-01-02 to 9999-12-30.
      *
      * @param time The time to search for
-     * @return The day that contains specified time
-     * @throw JavaException "IllegalArgumentException" if specified time falls outside of valid date range
+     * @return The day that contains a specified time
+     * @throw JavaException "IllegalArgumentException" if specified time falls outside of the valid date range
      */
     std::shared_ptr<Day> getDayByTime(std::int64_t time) const;
 
     /**
      * Returns day for specified day identifier.
-     * This method will throw JavaException "IllegalArgumentException" if specified day identifier
-     * falls outside of valid date range from 0001-01-02 to 9999-12-30.
+     * This method will throw JavaException "IllegalArgumentException" if the specified day identifier
+     * falls outside of the valid date range from 0001-01-02 to 9999-12-30.
      *
      * @param dayId The day identifier to search for
-     * @return The day for specified day identifier
-     * @throw JavaException "IllegalArgumentException" if specified day identifier falls outside of valid date range
+     * @return The day for a specified day identifier
+     * @throw JavaException "IllegalArgumentException" if the specified day identifier falls outside of the valid date range
      * @see Day::getDayId()
      */
     std::shared_ptr<Day> getDayById(std::int32_t dayId) const;

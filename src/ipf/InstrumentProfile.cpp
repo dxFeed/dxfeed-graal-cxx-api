@@ -6,15 +6,9 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <cstring>
+#include <dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfile.hpp>
 #include <memory>
-#include <utf8.h>
 #include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 

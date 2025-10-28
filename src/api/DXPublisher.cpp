@@ -16,6 +16,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 std::shared_ptr<DXPublisher> DXPublisher::getInstance() {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXPublisher::getInstance()");
     }
 
@@ -24,6 +25,7 @@ std::shared_ptr<DXPublisher> DXPublisher::getInstance() {
 
 std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXPublisher::create(" + dxfcpp::toString(handle) + ")");
     }
 
@@ -64,6 +66,7 @@ void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
 
 DXPublisher::DXPublisher() noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXPublisher()");
     }
 
@@ -74,6 +77,7 @@ DXPublisher::DXPublisher() noexcept {
 
 DXPublisher::~DXPublisher() noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXPublisher{" + handle_.toString() + "}::~DXPublisher()");
     }
 

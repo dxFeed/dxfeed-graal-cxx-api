@@ -6,6 +6,8 @@
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
 #include <dxfeed_graal_cpp_api/isolated/model/IsolatedIndexedTxModel.hpp>
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include <dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 

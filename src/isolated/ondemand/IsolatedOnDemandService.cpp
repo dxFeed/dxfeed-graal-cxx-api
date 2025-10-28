@@ -5,6 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfeed_graal_cpp_api/isolated/ondemand/IsolatedOnDemandService.hpp>
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 

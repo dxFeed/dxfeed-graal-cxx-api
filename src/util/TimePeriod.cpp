@@ -5,6 +5,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp>
 #include <memory>
 #include <string>
 #include <utility>

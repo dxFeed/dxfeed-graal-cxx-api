@@ -4,14 +4,9 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <dxfeed_graal_cpp_api/isolated/candlewebservice/IsolatedHistoryEndpoint.hpp>
 #include <memory>
-#include <string>
 #include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -21,12 +16,12 @@ std::vector<std::shared_ptr<EventType>> HistoryEndpoint::getTimeSeriesImpl(const
     return isolated::candlewebservice::IsolatedHistoryEndpoint::getTimeSeries(handle_, eventType, symbol, from, to);
 }
 
-HistoryEndpoint::HistoryEndpoint(RequireMakeShared<HistoryEndpoint>::LockExternalConstructionTag,
+HistoryEndpoint::HistoryEndpoint(LockExternalConstructionTag,
                                  JavaObjectHandle<HistoryEndpoint> &&handle)
     : handle_(std::move(handle)) {
 }
 
-HistoryEndpoint::Builder::Builder(RequireMakeShared<Builder>::LockExternalConstructionTag,
+HistoryEndpoint::Builder::Builder(LockExternalConstructionTag,
                                   JavaObjectHandle<Builder> &&handle)
     : handle_(std::move(handle)) {
 }
@@ -67,19 +62,19 @@ std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withFormat(F
     return this->sharedAs<Builder>();
 }
 
-std::shared_ptr<HistoryEndpoint> HistoryEndpoint::Builder::build() {
-    auto endpoint = RequireMakeShared<HistoryEndpoint>::template createShared(
+std::shared_ptr<HistoryEndpoint> HistoryEndpoint::Builder::build() const {
+    auto endpoint = HistoryEndpoint::createShared(
         isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::build(handle_));
-    auto id = ApiContext::getInstance()->getManager<EntityManager<HistoryEndpoint>>()->registerEntity(endpoint);
+    const auto id = ApiContext::getInstance()->getManager<EntityManager<HistoryEndpoint>>()->registerEntity(endpoint);
     ignoreUnused(id);
 
     return endpoint;
 }
 
 std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::newBuilder() {
-    auto builder = RequireMakeShared<HistoryEndpoint::Builder>::template createShared(
+    auto builder = Builder::createShared(
         isolated::candlewebservice::IsolatedHistoryEndpoint::newBuilder());
-    auto id = ApiContext::getInstance()->getManager<EntityManager<HistoryEndpoint::Builder>>()->registerEntity(builder);
+    const auto id = ApiContext::getInstance()->getManager<EntityManager<Builder>>()->registerEntity(builder);
     ignoreUnused(id);
 
     return builder;
