@@ -1,19 +1,16 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include <dxfeed_graal_cpp_api/api/DXEndpoint.hpp>
+#include <dxfeed_graal_cpp_api/api/DXPublisher.hpp>
+#include <dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp>
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisher.hpp>
 
 #include <functional>
 #include <memory>
 #include <string>
 #include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -56,7 +53,7 @@ std::shared_ptr<ObservableSubscription> DXPublisher::getSubscription(const Event
 }
 
 std::string DXPublisher::toString() const {
-    return fmt::format("DXPublisher{{{}}}", handle_.toString());
+    return std::string("DXPublisher{") + handle_.toString() + "}";
 }
 
 void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {

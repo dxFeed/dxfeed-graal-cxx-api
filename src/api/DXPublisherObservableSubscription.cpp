@@ -1,7 +1,11 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp>
+#include <dxfeed_graal_cpp_api/internal/context/ApiContext.hpp>
+#include <dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp>
+
+#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisherObservableSubscription.hpp>
 
 #include <memory>
 
@@ -60,8 +64,8 @@ void DXPublisherObservableSubscription::removeChangeListener(std::size_t changeL
         return;
     }
 
-    if (auto found = listeners_.find(changeListenerId); found != listeners_.end()) {
-        auto listener = found->second;
+    if (const auto found = listeners_.find(changeListenerId); found != listeners_.end()) {
+        const auto listener = found->second;
 
         isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(
             handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
