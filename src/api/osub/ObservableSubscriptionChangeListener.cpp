@@ -1,12 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
+#include <dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp>
 
-#include "dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include <dxfeed_graal_cpp_api/internal/context/ApiContext.hpp>
+#include <dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp>
 
-#include "dxfeed_graal_cpp_api/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
+#include <dxfeed_graal_cpp_api/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp>
 
 #include <dxfg_api.h>
 

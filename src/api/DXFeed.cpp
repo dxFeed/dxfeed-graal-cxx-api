@@ -3,10 +3,10 @@
 
 #include <dxfg_api.h>
 
-#include "dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
-#include "dxfeed_graal_cpp_api/api/DXFeed.hpp"
+#include <dxfeed_graal_cpp_api/api/DXEndpoint.hpp>
+#include <dxfeed_graal_cpp_api/api/DXFeed.hpp>
 
-#include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
+#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp>
 
 #include <memory>
 #include <string>

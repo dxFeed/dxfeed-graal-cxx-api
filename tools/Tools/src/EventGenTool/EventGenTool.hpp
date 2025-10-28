@@ -7,12 +7,12 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include "../Args/Args.hpp"
-#include "dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
-#include "dxfeed_graal_cpp_api/api/DXFeed.hpp"
-#include "dxfeed_graal_cpp_api/api/DXPublisher.hpp"
-#include "dxfeed_graal_cpp_api/internal/Common.hpp"
-#include "dxfeed_graal_cpp_api/internal/Timer.hpp"
-#include "dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
+#include <dxfeed_graal_cpp_api/api/DXEndpoint.hpp>
+#include <dxfeed_graal_cpp_api/api/DXFeed.hpp>
+#include <dxfeed_graal_cpp_api/api/DXPublisher.hpp>
+#include <dxfeed_graal_cpp_api/internal/Common.hpp>
+#include <dxfeed_graal_cpp_api/internal/Timer.hpp>
+#include <dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp>
 
 #include <chrono>
 #include <iostream>

@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <memory>
 
-#include "dxfeed_graal_cpp_api/event/market/Quote.hpp"
+#include <dxfeed_graal_cpp_api/event/market/Quote.hpp>
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>

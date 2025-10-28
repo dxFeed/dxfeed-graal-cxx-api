@@ -1,8 +1,8 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/event/candle/CandlePeriod.hpp"
-#include "dxfeed_graal_cpp_api/event/candle/CandleType.hpp"
+#include <dxfeed_graal_cpp_api/event/candle/CandlePeriod.hpp>
+#include <dxfeed_graal_cpp_api/event/candle/CandleType.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 

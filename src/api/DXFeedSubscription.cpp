@@ -1,11 +1,11 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp"
-#include "dxfeed_graal_cpp_api/api/DXFeed.hpp"
-#include "dxfeed_graal_cpp_api/event/EventMapper.hpp"
-#include "dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
-#include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
+#include <dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp>
+#include <dxfeed_graal_cpp_api/api/DXFeed.hpp>
+#include <dxfeed_graal_cpp_api/event/EventMapper.hpp>
+#include <dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp>
+#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp>
 
 #include <dxfg_api.h>
 

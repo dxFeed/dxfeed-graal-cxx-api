@@ -4,7 +4,7 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
-#include "dxfeed_graal_cpp_api/internal/Handler.hpp"
+#include <dxfeed_graal_cpp_api/internal/Handler.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 

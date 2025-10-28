@@ -6,7 +6,7 @@
 #include "../../internal/Conf.hpp"
 
 #include "../../logging/Logging.hpp"
-#include "dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
 
 #include <cstdint>
 #include <string>
