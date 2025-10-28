@@ -8,14 +8,10 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../event/EventTypeEnum.hpp"
-#include "../../event/IndexedEventSource.hpp"
-#include "../../symbols/SymbolWrapper.hpp"
 #include "ObservableSubscriptionChangeListener.hpp"
 
-#include <cstdint>
 #include <memory>
 #include <unordered_set>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 

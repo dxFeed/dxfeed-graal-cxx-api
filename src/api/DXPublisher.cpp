@@ -4,9 +4,7 @@
 #include <dxfeed_graal_cpp_api/api/DXEndpoint.hpp>
 #include <dxfeed_graal_cpp_api/api/DXPublisher.hpp>
 #include <dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp>
-
 #include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisher.hpp>
-
 #include <functional>
 #include <memory>
 #include <string>

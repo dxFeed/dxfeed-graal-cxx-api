@@ -1,25 +1,25 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <dxfeed_graal_cpp_api/event/candle/CandleSymbol.hpp>
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
 void *CandleSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("CandleSymbol::toGraal()");
     }
 
     auto *graalSymbol = new dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_)};
 
-    return static_cast<void *>(graalSymbol);
+    return graalSymbol;
 }
 
 void CandleSymbol::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("CandleSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
@@ -35,6 +35,7 @@ void CandleSymbol::freeGraal(void *graalNative) {
 
 CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("CandleSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
@@ -42,7 +43,7 @@ CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
         return {};
     }
 
-    auto *graalSymbol = static_cast<dxfg_candle_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_candle_symbol_t *>(graalNative);
 
     return CandleSymbol{graalSymbol->symbol};
 }

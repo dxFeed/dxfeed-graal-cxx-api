@@ -1,10 +1,7 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/event/candle/CandlePrice.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -17,18 +14,17 @@ const CandlePrice CandlePrice::DEFAULT = LAST;
 
 const std::string CandlePrice::ATTRIBUTE_KEY{"price"};
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>, dxfcpp::StringHash, std::equal_to<>>
+const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>, StringHash, std::equal_to<>>
     CandlePrice::BY_STRING{
-        {CandlePrice::LAST.toString(), std::cref(CandlePrice::LAST)},
-        {CandlePrice::BID.toString(), std::cref(CandlePrice::BID)},
-        {CandlePrice::ASK.toString(), std::cref(CandlePrice::ASK)},
-        {CandlePrice::MARK.toString(), std::cref(CandlePrice::MARK)},
-        {CandlePrice::SETTLEMENT.toString(), std::cref(CandlePrice::SETTLEMENT)},
+        {LAST.toString(), std::cref(LAST)},
+        {BID.toString(), std::cref(BID)},
+        {ASK.toString(), std::cref(ASK)},
+        {MARK.toString(), std::cref(MARK)},
+        {SETTLEMENT.toString(), std::cref(SETTLEMENT)},
     };
 
 const std::vector<std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES{
-    std::cref(CandlePrice::LAST), std::cref(CandlePrice::BID),        std::cref(CandlePrice::ASK),
-    std::cref(CandlePrice::MARK), std::cref(CandlePrice::SETTLEMENT),
+    std::cref(LAST), std::cref(BID), std::cref(ASK), std::cref(MARK), std::cref(SETTLEMENT),
 };
 
 DXFCPP_END_NAMESPACE

@@ -10,7 +10,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -93,6 +92,7 @@ struct DXFCPP_EXPORT WildcardSymbol final {
      */
     std::string toString() const {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             return "WildcardSymbol{" + symbol_ + "}";
         } else {
             return symbol_;

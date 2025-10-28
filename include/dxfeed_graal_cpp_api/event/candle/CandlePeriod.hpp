@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
 #include "CandleType.hpp"
-
 #include <string>
 
 DXFCPP_BEGIN_NAMESPACE

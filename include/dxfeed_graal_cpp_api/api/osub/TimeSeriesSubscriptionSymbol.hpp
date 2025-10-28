@@ -7,12 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../symbols/SymbolWrapper.hpp"
 #include "../FilteredSubscriptionSymbol.hpp"
 
 #include <cstdint>
 #include <memory>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 

@@ -20,29 +20,27 @@ const CandleType CandleType::PRICE("PRICE", "p", 0LL);
 const CandleType CandleType::PRICE_MOMENTUM("PRICE_MOMENTUM", "pm", 0LL);
 const CandleType CandleType::PRICE_RENKO("PRICE_RENKO", "pr", 0LL);
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, dxfcpp::StringHash, std::equal_to<>>
+const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash, std::equal_to<>>
     CandleType::BY_STRING{
-        {CandleType::TICK.toString(), std::cref(CandleType::TICK)},
-        {CandleType::SECOND.toString(), std::cref(CandleType::SECOND)},
-        {CandleType::MINUTE.toString(), std::cref(CandleType::MINUTE)},
-        {CandleType::HOUR.toString(), std::cref(CandleType::HOUR)},
-        {CandleType::DAY.toString(), std::cref(CandleType::DAY)},
-        {CandleType::WEEK.toString(), std::cref(CandleType::WEEK)},
-        {CandleType::MONTH.toString(), std::cref(CandleType::MONTH)},
-        {CandleType::OPTEXP.toString(), std::cref(CandleType::OPTEXP)},
-        {CandleType::YEAR.toString(), std::cref(CandleType::YEAR)},
-        {CandleType::VOLUME.toString(), std::cref(CandleType::VOLUME)},
-        {CandleType::PRICE.toString(), std::cref(CandleType::PRICE)},
-        {CandleType::PRICE_MOMENTUM.toString(), std::cref(CandleType::PRICE_MOMENTUM)},
-        {CandleType::PRICE_RENKO.toString(), std::cref(CandleType::PRICE_RENKO)},
+        {TICK.toString(), std::cref(TICK)},
+        {SECOND.toString(), std::cref(SECOND)},
+        {MINUTE.toString(), std::cref(MINUTE)},
+        {HOUR.toString(), std::cref(HOUR)},
+        {DAY.toString(), std::cref(DAY)},
+        {WEEK.toString(), std::cref(WEEK)},
+        {MONTH.toString(), std::cref(MONTH)},
+        {OPTEXP.toString(), std::cref(OPTEXP)},
+        {YEAR.toString(), std::cref(YEAR)},
+        {VOLUME.toString(), std::cref(VOLUME)},
+        {PRICE.toString(), std::cref(PRICE)},
+        {PRICE_MOMENTUM.toString(), std::cref(PRICE_MOMENTUM)},
+        {PRICE_RENKO.toString(), std::cref(PRICE_RENKO)},
     };
 
 const std::vector<std::reference_wrapper<const CandleType>> CandleType::VALUES{
-    std::cref(CandleType::TICK),        std::cref(CandleType::SECOND), std::cref(CandleType::MINUTE),
-    std::cref(CandleType::HOUR),        std::cref(CandleType::DAY),    std::cref(CandleType::WEEK),
-    std::cref(CandleType::MONTH),       std::cref(CandleType::OPTEXP), std::cref(CandleType::YEAR),
-    std::cref(CandleType::VOLUME),      std::cref(CandleType::PRICE),  std::cref(CandleType::PRICE_MOMENTUM),
-    std::cref(CandleType::PRICE_RENKO),
+    std::cref(TICK),  std::cref(SECOND),         std::cref(MINUTE),      std::cref(HOUR), std::cref(DAY),
+    std::cref(WEEK),  std::cref(MONTH),          std::cref(OPTEXP),      std::cref(YEAR), std::cref(VOLUME),
+    std::cref(PRICE), std::cref(PRICE_MOMENTUM), std::cref(PRICE_RENKO),
 };
 
 const CandlePeriod CandlePeriod::TICK{1, CandleType::TICK};

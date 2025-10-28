@@ -3,7 +3,6 @@
 
 #include <dxfeed_graal_cpp_api/auth/AuthToken.hpp>
 #include <dxfeed_graal_cpp_api/isolated/auth/IsolatedAuthToken.hpp>
-
 #include <string>
 #include <utility>
 

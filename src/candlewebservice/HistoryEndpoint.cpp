@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
+#include <dxfeed_graal_cpp_api/internal/context/ApiContext.hpp>
+#include <dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp>
 #include <dxfeed_graal_cpp_api/isolated/candlewebservice/IsolatedHistoryEndpoint.hpp>
 #include <memory>
 #include <utility>

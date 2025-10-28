@@ -2,11 +2,9 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxfeed_graal_cpp_api/event/candle/CandleSession.hpp>
+#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp>
 #include <dxfeed_graal_cpp_api/schedule/SessionFilter.hpp>
 #include <dxfeed_graal_cpp_api/schedule/SessionType.hpp>
-
-#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp>
-
 #include <mutex>
 #include <optional>
 #include <string>
@@ -24,7 +22,7 @@ SessionFilter::SessionFilter(SessionFilterEnum code, const StringLike &name, std
 }
 
 const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
-    std::lock_guard<std::mutex> lock(mtx_);
+    std::lock_guard lock(mtx_);
 
     if (!handle_) {
         handle_ = isolated::schedule::IsolatedSessionFilter::getInstance(static_cast<std::uint32_t>(code_));
@@ -51,13 +49,13 @@ const CandleSession CandleSession::DEFAULT = ANY;
 const std::string CandleSession::ATTRIBUTE_KEY = "tho";
 
 const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> CandleSession::BY_STRING{
-    {CandleSession::ANY.toString(), std::cref(CandleSession::ANY)},
-    {CandleSession::REGULAR.toString(), std::cref(CandleSession::REGULAR)},
+    {ANY.toString(), std::cref(ANY)},
+    {REGULAR.toString(), std::cref(REGULAR)},
 };
 
 const std::vector<std::reference_wrapper<const CandleSession>> CandleSession::VALUES{
-    std::cref(CandleSession::ANY),
-    std::cref(CandleSession::REGULAR),
+    std::cref(ANY),
+    std::cref(REGULAR),
 };
 
 DXFCPP_END_NAMESPACE

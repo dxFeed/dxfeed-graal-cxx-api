@@ -9,7 +9,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
 #include "CandleSymbolAttribute.hpp"
-
 #include <string>
 #include <type_traits>
 #include <unordered_map>
@@ -29,9 +28,9 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandleAlignment::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandleAlignment::toString()
  */
-struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
     /**
-     * Align candles on midnight.
+     * Align candles at midnight.
      */
     static const CandleAlignment MIDNIGHT;
 
@@ -53,7 +52,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      */
     static const std::string ATTRIBUTE_KEY;
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, dxfcpp::StringHash,
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash,
                                     std::equal_to<>>
         BY_STRING;
 
@@ -62,7 +61,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
     private:
     std::string string_{};
 
-    explicit CandleAlignment(const dxfcpp::StringLike &string) noexcept;
+    explicit CandleAlignment(const StringLike &string) noexcept;
 
     public:
     CandleAlignment() noexcept = default;
@@ -74,7 +73,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this candle alignment set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
 
     /**
      * Returns string representation of this candle alignment.
@@ -88,23 +87,23 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
     bool operator==(const CandleAlignment &candleAlignment) const noexcept;
 
     /**
-     * Parses string representation of candle alignment into object.
-     * Any string that was returned by CandleAlignment::toString() can be parsed and case is ignored for parsing.
+     * Parses string representation of candle alignment into an object.
+     * Any string returned by CandleAlignment::toString() can be parsed and a case is ignored for parsing.
      *
      * @param s The string representation of candle alignment.
      * @return The candle alignment (reference)
      * @throws InvalidArgumentException if the string representation is invalid.
      */
-    static std::reference_wrapper<const CandleAlignment> parse(const dxfcpp::StringLike &s);
+    static std::reference_wrapper<const CandleAlignment> parse(const StringLike &s);
 
     /**
      * Returns candle alignment of the given candle symbol string.
-     * The result is CandleAlignment::DEFAULT if the symbol does not have candle alignment attribute.
+     * The result is CandleAlignment::DEFAULT if the symbol does not have a candle alignment attribute.
      *
      * @param symbol The candle symbol string.
      * @return candle alignment of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(const dxfcpp::StringLike &symbol);
+    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(const StringLike &symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle alignment attribute.
@@ -112,7 +111,7 @@ struct DXFCPP_EXPORT CandleAlignment : public CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle symbol string with the normalized representation of the candle alignment attribute.
      */
-    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
 };
 
 DXFCPP_END_NAMESPACE

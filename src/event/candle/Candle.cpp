@@ -1,18 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/event/candle/Candle.hpp>
-
+#include <cassert>
 #include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
+#include <dxfeed_graal_cpp_api/event/candle/Candle.hpp>
 #include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
 #include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
 #include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
-
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-
 #include <dxfg_api.h>
-
-#include <cassert>
 #include <memory>
 #include <utility>
 
@@ -50,7 +46,7 @@ void Candle::fillGraalData(void *graalNative) const {
         return;
     }
 
-    auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+    const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     graalCandle->event_type.clazz = DXFG_EVENT_CANDLE;
     graalCandle->event_symbol = createCString(eventSymbol_.value_or(CandleSymbol::NUL).toString());

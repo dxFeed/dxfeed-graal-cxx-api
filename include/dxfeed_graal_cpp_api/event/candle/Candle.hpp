@@ -7,16 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cstdint>
-#include <memory>
-#include <string>
-
 #include "../../internal/Common.hpp"
-
 #include "../EventType.hpp"
 #include "../LastingEvent.hpp"
 #include "../TimeSeriesEvent.hpp"
 #include "CandleSymbol.hpp"
+#include <cstdint>
+#include <memory>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -260,7 +258,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     // Candle methods
 
     /**
-     * Changes timestamp of the event in milliseconds.
+     * Changes the timestamp of the event in milliseconds.
      *
      * @param time timestamp of the event in milliseconds.
      * @see Candle::getTime()

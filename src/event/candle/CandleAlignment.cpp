@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxfeed_graal_cpp_api/event/candle/CandleAlignment.hpp>
-
 #include <dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp>
 #include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
 #include <dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp>
@@ -14,22 +13,21 @@ const CandleAlignment CandleAlignment::SESSION{"s"};
 const CandleAlignment CandleAlignment::DEFAULT = MIDNIGHT;
 const std::string CandleAlignment::ATTRIBUTE_KEY{"a"};
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, dxfcpp::StringHash,
-                         std::equal_to<>>
+const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash, std::equal_to<>>
     CandleAlignment::BY_STRING{
-        {CandleAlignment::MIDNIGHT.toString(), std::cref(CandleAlignment::MIDNIGHT)},
-        {CandleAlignment::SESSION.toString(), std::cref(CandleAlignment::SESSION)},
+        {MIDNIGHT.toString(), std::cref(MIDNIGHT)},
+        {SESSION.toString(), std::cref(SESSION)},
     };
 
 const std::vector<std::reference_wrapper<const CandleAlignment>> CandleAlignment::VALUES{
-    std::cref(CandleAlignment::MIDNIGHT),
-    std::cref(CandleAlignment::SESSION),
+    std::cref(MIDNIGHT),
+    std::cref(SESSION),
 };
 
-CandleAlignment::CandleAlignment(const dxfcpp::StringLike &string) noexcept : string_{string} {
+CandleAlignment::CandleAlignment(const StringLike &string) noexcept : string_{string} {
 }
 
-std::string CandleAlignment::changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const {
+std::string CandleAlignment::changeAttributeForSymbol(const StringLike &symbol) const {
     return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                             : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
 }
@@ -42,8 +40,8 @@ bool CandleAlignment::operator==(const CandleAlignment &candleAlignment) const n
     return string_ == candleAlignment.string_;
 }
 
-std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const dxfcpp::StringLike &s) {
-    if (auto found = BY_STRING.find(s); found != BY_STRING.end()) {
+std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const StringLike &s) {
+    if (const auto found = BY_STRING.find(s); found != BY_STRING.end()) {
         return found->second;
     }
 
@@ -58,22 +56,21 @@ std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const dxfcp
     throw InvalidArgumentException("Unknown candle alignment: " + s);
 }
 
-std::reference_wrapper<const CandleAlignment>
-CandleAlignment::getAttributeForSymbol(const dxfcpp::StringLike &symbol) {
-    auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+std::reference_wrapper<const CandleAlignment> CandleAlignment::getAttributeForSymbol(const StringLike &symbol) {
+    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
     return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
 }
 
-std::string CandleAlignment::normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol) {
-    auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbol) {
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
     if (!a) {
         return symbol;
     }
 
     try {
-        auto other = parse(a.value());
+        const auto other = parse(a.value());
 
         if (other.get() == DEFAULT) {
             return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);

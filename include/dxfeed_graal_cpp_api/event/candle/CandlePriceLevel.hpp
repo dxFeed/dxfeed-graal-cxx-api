@@ -10,20 +10,20 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../internal/utils/StringUtils.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
 
 #include <string>
 #include <type_traits>
-#include <unordered_map>
 
 DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Candle price level attribute of CandleSymbol defines how candles shall be aggregated in respect to
- * price interval. The negative or infinite values of price interval are treated as exceptional.
+ * a price interval. The negative or infinite values of a price interval are treated as exceptional.
  * <ul>
  * <li>Price interval may be equal to zero. It means every unique price creates a particular candle
  * to aggregate all events with this price for the chosen CandlePeriod.
- * <li>Non-zero price level creates sequence of intervals starting from 0:
+ * <li>Non-zero price level creates a sequence of intervals starting from 0:
  * ...,[-pl;0),[0;pl),[pl;2*pl),...,[n*pl,n*pl+pl). Events aggregated by chosen CandlePeriod and price
  * intervals.
  * </ul>
@@ -95,20 +95,20 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price level set.
      */
-    std::string changeAttributeForSymbol(const dxfcpp::StringLike &symbol) const override {
+    std::string changeAttributeForSymbol(const StringLike &symbol) const override {
         return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                                 : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
     }
 
     /**
-     * Parses string representation of candle price level into object.
+     * Parses string representation of candle price level into an object.
      * Any string that was returned by CandlePriceLevel::toString() can be parsed
-     * and case is ignored for parsing.
+     * and a case is ignored for parsing.
      *
      * @param s string representation of candle price level.
      * @return candle price level.
      */
-    static CandlePriceLevel parse(const dxfcpp::StringLike &s) {
+    static CandlePriceLevel parse(const StringLike &s) {
         return valueOf(std::stod(s));
     }
 
@@ -129,12 +129,12 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
 
     /**
      * Returns candle price level of the given candle symbol string.
-     * The result is CandlePriceLevel::DEFAULT if the symbol does not have candle price level attribute.
+     * The result is CandlePriceLevel::DEFAULT if the symbol does not have a candle price level attribute.
      *
      * @param symbol candle symbol string.
      * @return candle price level of the given candle symbol string.
      */
-    static CandlePriceLevel getAttributeForSymbol(const dxfcpp::StringLike &symbol) {
+    static CandlePriceLevel getAttributeForSymbol(const StringLike &symbol) {
         auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         return !stringOpt ? DEFAULT : parse(stringOpt.value());
@@ -146,7 +146,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle price level attribute.
      */
-    static std::string normalizeAttributeForSymbol(const dxfcpp::StringLike &symbol) {
+    static std::string normalizeAttributeForSymbol(const StringLike &symbol) {
         auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
         if (!a) {
@@ -154,7 +154,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
         }
 
         try {
-            auto other = parse(a.value());
+            const auto other = parse(a.value());
 
             if (other == DEFAULT) {
                 return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);

@@ -4,9 +4,7 @@
 #include <dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp>
 #include <dxfeed_graal_cpp_api/internal/context/ApiContext.hpp>
 #include <dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp>
-
 #include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisherObservableSubscription.hpp>
-
 #include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
