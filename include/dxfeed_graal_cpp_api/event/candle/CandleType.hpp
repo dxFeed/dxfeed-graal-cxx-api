@@ -107,7 +107,7 @@ struct DXFCPP_EXPORT CandleType {
      */
     static const CandleType PRICE_RENKO;
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, dxfcpp::StringHash,
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash,
                                     std::equal_to<>>
         BY_STRING;
     static const std::vector<std::reference_wrapper<const CandleType>> VALUES;
@@ -117,10 +117,8 @@ struct DXFCPP_EXPORT CandleType {
     std::string string_{};
     std::int64_t periodIntervalMillis_{};
 
-    CandleType(const dxfcpp::StringLike &name, const dxfcpp::StringLike &string,
-               std::int64_t periodIntervalMillis) noexcept
-        : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {
-    }
+    CandleType(const StringLike &name, const StringLike &string,
+               std::int64_t periodIntervalMillis) noexcept;
 
     public:
     CandleType() noexcept = default;
@@ -135,32 +133,26 @@ struct DXFCPP_EXPORT CandleType {
      *
      * @return aggregation period in milliseconds.
      */
-    std::int64_t getPeriodIntervalMillis() const noexcept {
-        return periodIntervalMillis_;
-    }
+    std::int64_t getPeriodIntervalMillis() const noexcept;
 
     /**
      * Returns a name of this candle type
      *
      * @return A name of this candle type
      */
-    const std::string &getName() const & noexcept {
-        return name_;
-    }
+    const std::string &getName() const & noexcept;
 
     /**
      * Returns string representation of this candle type.
-     * The string representation of a candle type is the shortest unique prefix of the lower case string that corresponds
-     * to its @ref CandleType::getName() "name".
-     * For example, CandleType::TICK is represented as `"t"`, while CandleType::MONTH is represented as `"mo"` to
-     * distinguish it from CandleType::MINUTE that is represented as `"m"`.
+     * The string representation of a candle type is the shortest unique prefix of the lower case string that
+     * corresponds to its @ref CandleType::getName() "name". For example, CandleType::TICK is represented as `"t"`,
+     * while CandleType::MONTH is represented as `"mo"` to distinguish it from CandleType::MINUTE that is represented as
+     * `"m"`.
      *
      * @return string representation of this candle price type.
      * @throws InvalidArgumentException if the string representation is invalid.
      */
-    const std::string &toString() const & noexcept {
-        return string_;
-    }
+    const std::string &toString() const & noexcept;
 
     /**
      * Parses string representation of a candle type into an object.
@@ -171,38 +163,57 @@ struct DXFCPP_EXPORT CandleType {
      * @return A candle type.
      * @throws InvalidArgumentException if the argument is empty or invalid
      */
-    static std::reference_wrapper<const CandleType> parse(const dxfcpp::StringLike &s) {
-        if (s.empty()) {
-            throw InvalidArgumentException("Missing candle type");
-        }
+    static std::reference_wrapper<const CandleType> parse(const StringLike &s);
 
-        auto result = BY_STRING.find(s);
-
-        if (result != BY_STRING.end()) {
-            return result->second;
-        }
-
-        for (const auto &typeRef : VALUES) {
-            const auto &name = typeRef.get().getName();
-
-            // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc
-            if (name.length() >= s.length() && iEquals(name.substr(0, s.length()), s)) {
-                return typeRef;
-            }
-
-            // Ticks, Minutes, Seconds, etc.
-            if (s.ends_with("s") && iEquals(name, s.substr(0, s.length() - 1))) {
-                return typeRef;
-            }
-        }
-
-        throw InvalidArgumentException("Unknown candle type: " + s);
-    }
-
-    bool operator==(const CandleType &candleType) const noexcept {
-        return string_ == candleType.string_;
-    }
+    bool operator==(const CandleType &candleType) const noexcept;
 };
+
+inline CandleType::CandleType(const StringLike &name, const StringLike &string,
+                              std::int64_t periodIntervalMillis) noexcept
+    : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {
+}
+
+inline std::int64_t CandleType::getPeriodIntervalMillis() const noexcept {
+    return periodIntervalMillis_;
+}
+
+inline const std::string &CandleType::getName() const & noexcept {
+    return name_;
+}
+
+inline const std::string &CandleType::toString() const & noexcept {
+    return string_;
+}
+
+inline std::reference_wrapper<const CandleType> CandleType::parse(const StringLike &s) {
+    if (s.empty()) {
+        throw InvalidArgumentException("Missing candle type");
+    }
+
+    if (const auto result = BY_STRING.find(s); result != BY_STRING.end()) {
+        return result->second;
+    }
+
+    for (const auto &typeRef : VALUES) {
+        const auto &name = typeRef.get().getName();
+
+        // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc
+        if (name.length() >= s.length() && iEquals(name.substr(0, s.length()), s)) {
+            return typeRef;
+        }
+
+        // Ticks, Minutes, Seconds, etc.
+        if (s.ends_with("s") && iEquals(name, s.substr(0, s.length() - 1))) {
+            return typeRef;
+        }
+    }
+
+    throw InvalidArgumentException("Unknown candle type: " + s);
+}
+
+inline bool CandleType::operator==(const CandleType &candleType) const noexcept {
+    return string_ == candleType.string_;
+}
 
 DXFCPP_END_NAMESPACE
 

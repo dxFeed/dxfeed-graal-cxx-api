@@ -293,7 +293,7 @@ static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
 
-static bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
+inline bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
     if (std::isnan(a) || std::isnan(b)) {
         return false;
     }

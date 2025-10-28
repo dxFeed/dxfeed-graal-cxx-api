@@ -114,8 +114,7 @@ struct StringLike {
 #if defined(_LIBCPP_VERSION)
         result = std::stod(std::string(view_));
 #else
-        auto [ptr, ec] = std::from_chars(view_.data(), view_.data() + view_.size(), result);
-        if (ec != std::errc{})
+        if (auto [ptr, ec] = std::from_chars(view_.data(), view_.data() + view_.size(), result); ec != std::errc{})
             throw std::invalid_argument("StringLike: cannot convert to double");
 #endif
         return result;
@@ -326,8 +325,7 @@ DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t tim
 
 DXFCPP_EXPORT char *createCString(const StringLike &s);
 
-template <typename S>
-char *createCString(const std::optional<S> &s) {
+template <typename S> char *createCString(const std::optional<S> &s) {
     if (!s) {
         return nullptr;
     }

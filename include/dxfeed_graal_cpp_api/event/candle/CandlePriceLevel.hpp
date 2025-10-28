@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../market/MarketEventSymbols.hpp"
 #include "CandleSymbolAttribute.hpp"
 #include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
-
 #include <string>
 #include <type_traits>
 
@@ -37,7 +36,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
  */
-struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
     /**
      * Default price level corresponds to `NaN (std::numeric_limits<double>::quiet_NaN())`
      */
@@ -51,10 +50,10 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      */
     static const std::string ATTRIBUTE_KEY;
 
+    private:
     double value_{};
 
-    explicit CandlePriceLevel(double value) noexcept : value_{value} {
-    }
+    explicit CandlePriceLevel(double value) noexcept;
 
     public:
     CandlePriceLevel() noexcept = default;
@@ -66,28 +65,18 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      *
      * @return price level value.
      */
-    double getValue() const noexcept {
-        return value_;
-    }
+    double getValue() const noexcept;
 
     /**
      * Returns string representation of this price level.
      * The string representation is composed of value.
-     * This string representation can be converted back into object with CandlePriceLevel::parse() method.
+     * This string representation can be converted back into an object with the CandlePriceLevel::parse() method.
      *
      * @return string representation of this price level.
      */
-    std::string toString() const {
-        if (math::equals(value_, static_cast<std::int64_t>(value_))) {
-            return std::to_string(static_cast<std::int64_t>(value_));
-        }
+    std::string toString() const;
 
-        return std::to_string(value_);
-    }
-
-    bool operator==(const CandlePriceLevel &candlePriceLevel) const noexcept {
-        return math::equals(value_, candlePriceLevel.getValue());
-    }
+    bool operator==(const CandlePriceLevel &candlePriceLevel) const noexcept;
 
     /**
      * Returns candle event symbol string with this candle price level set.
@@ -95,22 +84,17 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price level set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override {
-        return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
-                                : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
-    }
+    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
 
     /**
      * Parses string representation of candle price level into an object.
-     * Any string that was returned by CandlePriceLevel::toString() can be parsed
+     * Any string returned by CandlePriceLevel::toString() can be parsed,
      * and a case is ignored for parsing.
      *
      * @param s string representation of candle price level.
      * @return candle price level.
      */
-    static CandlePriceLevel parse(const StringLike &s) {
-        return valueOf(std::stod(s));
-    }
+    static CandlePriceLevel parse(const StringLike &s);
 
     /**
      * Returns candle price level with the given value.
@@ -119,13 +103,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @return candle price level with the given value and type.
      * @throws InvalidArgumentException if value is incorrect
      */
-    static CandlePriceLevel valueOf(double value) {
-        if (std::isinf(value) || (value == 0.0 && std::signbit(value))) {
-            throw InvalidArgumentException("Incorrect candle price level: " + dxfcpp::toString(value));
-        }
-
-        return std::isnan(value) ? DEFAULT : CandlePriceLevel(value);
-    }
+    static CandlePriceLevel valueOf(double value);
 
     /**
      * Returns candle price level of the given candle symbol string.
@@ -134,11 +112,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle price level of the given candle symbol string.
      */
-    static CandlePriceLevel getAttributeForSymbol(const StringLike &symbol) {
-        auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
-
-        return !stringOpt ? DEFAULT : parse(stringOpt.value());
-    }
+    static CandlePriceLevel getAttributeForSymbol(const StringLike &symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle price level attribute.
@@ -146,31 +120,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle price level attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol) {
-        auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
-
-        if (!a) {
-            return symbol;
-        }
-
-        try {
-            const auto other = parse(a.value());
-
-            if (other == DEFAULT) {
-                return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
-            }
-
-            if (a.value() != other.toString()) {
-                return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.toString());
-            }
-
-            return symbol;
-        } catch (const InvalidArgumentException &) {
-            return symbol;
-        } catch (const std::invalid_argument &) {
-            return symbol;
-        }
-    }
+    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
 };
 
 DXFCPP_END_NAMESPACE

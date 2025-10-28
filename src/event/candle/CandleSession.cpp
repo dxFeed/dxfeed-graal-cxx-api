@@ -58,4 +58,75 @@ const std::vector<std::reference_wrapper<const CandleSession>> CandleSession::VA
     std::cref(REGULAR),
 };
 
+CandleSession::CandleSession(const SessionFilter &sessionFilter, const dxfcpp::StringLike &string) noexcept
+    : sessionFilter_{&sessionFilter}, string_{string} {
+}
+
+const SessionFilter &CandleSession::getSessionFilter() const & noexcept {
+    return *sessionFilter_;
+}
+
+std::string CandleSession::changeAttributeForSymbol(const StringLike &symbol) const {
+    return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
+                            : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
+}
+
+const std::string &CandleSession::toString() const & noexcept {
+    return string_;
+}
+
+bool CandleSession::operator==(const CandleSession &candleSession) const noexcept {
+    return *sessionFilter_ == candleSession.getSessionFilter() && string_ == candleSession.toString();
+}
+
+std::reference_wrapper<const CandleSession> CandleSession::parse(const StringLike &s) {
+    if (s.empty()) {
+        throw InvalidArgumentException("Missing candle session");
+    }
+
+    if (const auto found = BY_STRING.find(s); found != BY_STRING.end()) {
+        return found->second;
+    }
+
+    for (const auto &sessionRef : VALUES) {
+        if (const auto &sessionStr = sessionRef.get().toString();
+            sessionStr.length() >= s.length() && iEquals(sessionStr.substr(0, s.length()), s)) {
+            return sessionRef;
+        }
+    }
+
+    throw InvalidArgumentException("Unknown candle session: " + s);
+}
+
+std::reference_wrapper<const CandleSession> CandleSession::getAttributeForSymbol(const StringLike &symbol) {
+    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+
+    return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
+}
+
+std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol) noexcept {
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+
+    if (!a) {
+        return symbol;
+    }
+
+    try {
+        const auto other = parse(a.value());
+
+        if (other.get() == DEFAULT) {
+            return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+        }
+
+        if (a.value() != other.get().toString()) {
+            return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.get().toString());
+        }
+
+        return symbol;
+    } catch (const InvalidArgumentException &) {
+        return symbol;
+    } catch (const std::invalid_argument &) {
+        return symbol;
+    }
+}
 DXFCPP_END_NAMESPACE
