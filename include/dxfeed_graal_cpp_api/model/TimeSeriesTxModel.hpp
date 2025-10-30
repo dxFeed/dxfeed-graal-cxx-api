@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/TimeSeriesEvent.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-#include "TxModelListener.hpp"
+#include "./TxModelListener.hpp"
 
 #include <chrono>
 #include <memory>

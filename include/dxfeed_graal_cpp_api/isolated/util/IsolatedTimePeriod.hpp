@@ -5,13 +5,11 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <cstdint>
-#include <string>
-#include <string_view>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../util/TimePeriod.hpp"
+
+#include <cstdint>
 
 DXFCPP_BEGIN_NAMESPACE
 

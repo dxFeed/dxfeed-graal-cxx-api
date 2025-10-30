@@ -4,10 +4,11 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
-#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
-#include <dxfeed_graal_cpp_api/schedule/SessionFilter.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../internal/JavaObjectHandle.hpp"
+#include "./SessionFilter.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

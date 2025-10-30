@@ -3,10 +3,11 @@
 
 #pragma once
 
-#include "../exceptions/JavaException.hpp"
 #include "../internal/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../exceptions/JavaException.hpp"
 
 #include <atomic>
 #include <chrono>

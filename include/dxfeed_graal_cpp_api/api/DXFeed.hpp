@@ -13,8 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 #include "../internal/managers/EntityManager.hpp"
 #include "../promise/Promise.hpp"
-
-#include "DXFeedSubscription.hpp"
+#include "./DXFeedSubscription.hpp"
 
 #include <memory>
 #include <unordered_set>

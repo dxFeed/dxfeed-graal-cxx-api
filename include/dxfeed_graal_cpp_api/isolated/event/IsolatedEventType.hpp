@@ -5,11 +5,11 @@
 
 #include "../../internal/Conf.hpp"
 
-#include "../../internal/Common.hpp"
-
-#include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../../event/EventTypeEnum.hpp"
+#include "../../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

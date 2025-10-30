@@ -8,7 +8,6 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
-#include <string_view>
 
 #include "../../internal/TimeFormat.hpp"
 

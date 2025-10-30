@@ -11,8 +11,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "DXFeed.hpp"
-#include "DXPublisher.hpp"
+#include "./DXFeed.hpp"
+#include "./DXPublisher.hpp"
 
 #include <string>
 #include <type_traits>

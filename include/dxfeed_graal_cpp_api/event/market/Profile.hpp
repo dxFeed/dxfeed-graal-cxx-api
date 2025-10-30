@@ -7,24 +7,24 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
+#include "../LastingEvent.hpp"
+#include "./MarketEvent.hpp"
+#include "./ShortSaleRestriction.hpp"
+#include "./TradingStatus.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <string>
-
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-#include "../LastingEvent.hpp"
-#include "MarketEvent.hpp"
-#include "ShortSaleRestriction.hpp"
-#include "TradingStatus.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
 /**
- * Profile information snapshot that contains security instrument description.
+ * Profile information snapshot that contains a security instrument description.
  * It represents the most recent information that is available about the traded security
  * on the market at any given moment of time.
  */

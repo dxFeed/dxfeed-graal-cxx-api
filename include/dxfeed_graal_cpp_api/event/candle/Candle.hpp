@@ -11,7 +11,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../EventType.hpp"
 #include "../LastingEvent.hpp"
 #include "../TimeSeriesEvent.hpp"
-#include "CandleSymbol.hpp"
+#include "./CandleSymbol.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>

@@ -9,8 +9,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../entity/SharedEntity.hpp"
 #include "../internal/Common.hpp"
-#include "IndexedEventSource.hpp"
-#include "market/OrderSource.hpp"
+#include "./IndexedEventSource.hpp"
+#include "./market/OrderSource.hpp"
 
 #include <memory>
 #include <optional>

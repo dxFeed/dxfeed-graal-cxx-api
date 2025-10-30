@@ -7,14 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../internal/Common.hpp"
+
 #include <algorithm>
 #include <cstdint>
 #include <numeric>
 #include <sstream>
 #include <string>
 #include <utility>
-
-#include "../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

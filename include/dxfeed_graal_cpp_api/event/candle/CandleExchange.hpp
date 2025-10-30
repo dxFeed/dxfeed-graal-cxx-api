@@ -9,7 +9,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/utils/StringUtils.hpp"
 #include "../market/MarketEventSymbols.hpp"
-#include "CandleSymbolAttribute.hpp"
+#include "./CandleSymbolAttribute.hpp"
+
 #include <string>
 #include <type_traits>
 

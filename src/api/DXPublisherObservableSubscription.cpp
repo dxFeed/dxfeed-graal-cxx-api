@@ -1,10 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp>
-#include <dxfeed_graal_cpp_api/internal/context/ApiContext.hpp>
-#include <dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp>
-#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisherObservableSubscription.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisherObservableSubscription.hpp"
+
 #include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -18,7 +21,7 @@ DXPublisherObservableSubscription::~DXPublisherObservableSubscription() = defaul
 
 std::shared_ptr<DXPublisherObservableSubscription>
 DXPublisherObservableSubscription::create(JavaObjectHandle<DXPublisherObservableSubscription> &&handle) {
-    auto sub = DXPublisherObservableSubscription::createShared(std::move(handle));
+    auto sub = createShared(std::move(handle));
 
     ApiContext::getInstance()->getManager<EntityManager<DXPublisherObservableSubscription>>()->registerEntity(sub);
 

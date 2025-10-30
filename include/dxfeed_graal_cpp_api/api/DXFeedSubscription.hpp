@@ -7,21 +7,18 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp>
-#include "osub/ObservableSubscription.hpp"
-
-#include "../internal/EventClassList.hpp"
-#include "../internal/context/ApiContext.hpp"
-
 #include "../entity/EntityModule.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"
 #include "../internal/Common.hpp"
+#include "../internal/EventClassList.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../internal/context/ApiContext.hpp"
+#include "../internal/managers/EntityManager.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-
 #include "../util/TimePeriod.hpp"
+#include "./osub/ObservableSubscription.hpp"
 
 #include <concepts>
 #include <memory>

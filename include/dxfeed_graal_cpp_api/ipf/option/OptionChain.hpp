@@ -8,8 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
-#include "OptionSeries.hpp"
-
+#include "./OptionSeries.hpp"
 #include <set>
 #include <string>
 

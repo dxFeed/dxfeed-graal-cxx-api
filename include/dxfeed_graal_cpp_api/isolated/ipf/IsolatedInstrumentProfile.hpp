@@ -5,14 +5,14 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../../internal/JavaObjectHandle.hpp"
 #include "../../ipf/InstrumentProfile.hpp"
-#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
 
 #include <cstdint>
 #include <string>
 #include <vector>
-
-DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 

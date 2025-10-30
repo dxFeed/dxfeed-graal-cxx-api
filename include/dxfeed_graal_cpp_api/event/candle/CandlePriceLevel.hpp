@@ -7,10 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/utils/StringUtils.hpp"
 #include "../market/MarketEventSymbols.hpp"
-#include "CandleSymbolAttribute.hpp"
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include "./CandleSymbolAttribute.hpp"
+
 #include <string>
 #include <type_traits>
 

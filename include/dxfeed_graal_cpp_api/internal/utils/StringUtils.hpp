@@ -7,7 +7,6 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cstddef>
 #include <cstdint>
 #include <iterator>
 #include <locale>

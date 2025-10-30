@@ -7,17 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
+#include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
+#include "./Order.hpp"
+#include "./OtcMarketsPriceType.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <utility>
-
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-
-#include "Order.hpp"
-#include "OtcMarketsPriceType.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

@@ -7,14 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../EventTypeEnum.hpp"
+#include "../IndexedEventSource.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <unordered_map>
-
-#include "../EventTypeEnum.hpp"
-#include "../IndexedEventSource.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

@@ -8,8 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
 #include "../internal/CEntryPointErrors.hpp"
-
-#include "RuntimeException.hpp"
+#include "./RuntimeException.hpp"
 
 #include <stdexcept>
 #include <string>

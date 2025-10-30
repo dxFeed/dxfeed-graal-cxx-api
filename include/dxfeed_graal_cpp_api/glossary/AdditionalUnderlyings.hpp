@@ -7,11 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../entity/SharedEntity.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include <dxfeed_graal_cpp_api/entity/SharedEntity.hpp>
 
-#include <map>
 #include <string>
 #include <unordered_map>
 

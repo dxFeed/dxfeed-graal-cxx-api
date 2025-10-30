@@ -5,20 +5,18 @@
 
 #include "../internal/Conf.hpp"
 
-#include <set>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/market/Order.hpp"
 #include "../event/market/OrderBase.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 #include "../internal/Timer.hpp"
-#include "IndexedTxModel.hpp"
-#include "MarketDepthModelListener.hpp"
+#include "./IndexedTxModel.hpp"
+#include "./MarketDepthModelListener.hpp"
 
 #include <memory>
+#include <set>
 #include <unordered_set>
 #include <utility>
 

@@ -8,12 +8,11 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/Common.hpp"
+#include "./Entity.hpp"
 
 #include <memory>
 #include <string>
 #include <vector>
-
-#include "Entity.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

@@ -5,9 +5,9 @@
 
 #include "../internal/Conf.hpp"
 
-#include "../internal/Common.hpp"
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
+
+#include "../internal/Common.hpp"
 
 #include <stdexcept>
 #include <string>

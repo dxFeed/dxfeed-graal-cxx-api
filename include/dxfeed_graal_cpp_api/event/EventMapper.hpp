@@ -7,10 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "./EventType.hpp"
+
 #include <memory>
 #include <vector>
-
-#include "EventType.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -23,6 +23,7 @@ struct DXFCPP_EXPORT EventMapper {
 
     template <typename EventIt> static void *toGraalList(EventIt begin, EventIt end) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("EventMapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
         }
 

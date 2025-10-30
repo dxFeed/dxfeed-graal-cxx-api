@@ -10,12 +10,15 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../entity/EntityModule.hpp"
 #include "../event/EventTypeEnum.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "osub/ObservableSubscription.hpp"
+#include "./osub/ObservableSubscription.hpp"
 
 #include <memory>
+#include <mutex>
 #include <unordered_set>
 
 DXFCPP_BEGIN_NAMESPACE
+
+struct ObservableSubscriptionChangeListener;
 
 struct DXFCPP_EXPORT DXPublisherObservableSubscription : RequireMakeShared<DXPublisherObservableSubscription>,
                                                          ObservableSubscription {

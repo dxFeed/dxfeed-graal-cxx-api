@@ -7,11 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/Common.hpp"
-#include "../internal/Id.hpp"
+#include "../entity/SharedEntity.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
-#include "../entity/SharedEntity.hpp"
+#include <mutex>
 
 DXFCPP_BEGIN_NAMESPACE
 

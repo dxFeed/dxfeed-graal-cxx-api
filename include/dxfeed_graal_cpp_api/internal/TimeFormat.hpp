@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "JavaObjectHandle.hpp"
+#include "./JavaObjectHandle.hpp"
 
 #include <cstdint>
 #include <functional>

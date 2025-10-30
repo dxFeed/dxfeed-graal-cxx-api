@@ -1,15 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <vector>
-
+#include <doctest.h>
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <doctest.h>
+#include <iostream>
+#include <string>
+#include <thread>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
@@ -165,8 +163,6 @@ TEST_CASE("DXEndpoint::getFeed and getPublisher") {
     REQUIRE(DXFeed::getInstance() == feed);
     REQUIRE(DXPublisher::getInstance() == publisher);
 }
-
-#include <thread>
 
 TEST_CASE("Test DXEndpoint + multi-thread setProperty") {
     std::thread t{[] {

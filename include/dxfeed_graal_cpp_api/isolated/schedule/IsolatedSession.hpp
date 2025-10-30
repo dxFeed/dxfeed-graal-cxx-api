@@ -5,9 +5,9 @@
 
 #include "../../internal/Conf.hpp"
 
-#include "../../schedule/Session.hpp"
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../../schedule/Session.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

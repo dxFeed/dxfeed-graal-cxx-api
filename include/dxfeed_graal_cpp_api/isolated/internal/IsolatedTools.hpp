@@ -8,7 +8,6 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <string>
-#include <string_view>
 #include <unordered_set>
 
 DXFCPP_BEGIN_NAMESPACE

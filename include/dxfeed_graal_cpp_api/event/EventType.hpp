@@ -7,11 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../entity/EntityModule.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
-
-#include "../entity/EntityModule.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

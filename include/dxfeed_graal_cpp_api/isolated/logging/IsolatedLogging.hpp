@@ -5,14 +5,10 @@
 
 #include "../../internal/Conf.hpp"
 
-#include "../../logging/Logging.hpp"
-#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
-
-#include <cstdint>
-#include <string>
-#include <vector>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../../internal/JavaObjectHandle.hpp"
+#include "../../logging/Logging.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

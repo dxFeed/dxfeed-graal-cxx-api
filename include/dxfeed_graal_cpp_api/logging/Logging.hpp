@@ -4,11 +4,11 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
-#include <dxfeed_graal_cpp_api/internal/Handler.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/Common.hpp"
+#include "../internal/Handler.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

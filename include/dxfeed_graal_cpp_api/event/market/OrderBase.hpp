@@ -7,21 +7,19 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
+#include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../internal/Common.hpp"
+#include "../IndexedEvent.hpp"
+#include "../IndexedEventSource.hpp"
+#include "./MarketEvent.hpp"
+#include "./OrderAction.hpp"
+#include "./OrderSource.hpp"
+#include "./Scope.hpp"
+#include "./Side.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
-
-#include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-#include "../IndexedEvent.hpp"
-#include "../IndexedEventSource.hpp"
-#include "MarketEvent.hpp"
-#include "OrderAction.hpp"
-#include "OrderSource.hpp"
-#include "Scope.hpp"
-#include "Side.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

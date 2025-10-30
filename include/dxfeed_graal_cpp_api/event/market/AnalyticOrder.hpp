@@ -9,8 +9,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
-#include "IcebergType.hpp"
-#include "Order.hpp"
+#include "./IcebergType.hpp"
+#include "./Order.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>

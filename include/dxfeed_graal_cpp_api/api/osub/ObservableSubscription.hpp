@@ -7,13 +7,13 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../event/EventTypeEnum.hpp"
-#include "ObservableSubscriptionChangeListener.hpp"
-
 #include <memory>
 #include <unordered_set>
 
 DXFCPP_BEGIN_NAMESPACE
+
+class EventTypeEnum;
+struct ObservableSubscriptionChangeListener;
 
 /**
  * Observable set of subscription symbols.

@@ -7,13 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <compare>
 #include <cstdint>
-#include <functional>
-#include <string>
-#include <unordered_map>
-
-#include "Common.hpp"
 
 #ifdef NO_ERROR
 #    undef NO_ERROR

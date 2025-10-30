@@ -5,14 +5,13 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <cstdint>
-#include <string>
-#include <string_view>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../auth/AuthToken.hpp"
 #include "../../ipf/InstrumentProfileReader.hpp"
+
+#include <cstdint>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 

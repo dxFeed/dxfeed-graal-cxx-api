@@ -7,14 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../auth/AuthToken.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"
+#include "../event/TimeSeriesEvent.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-#include <dxfeed_graal_cpp_api/auth/AuthToken.hpp>
-#include <dxfeed_graal_cpp_api/event/TimeSeriesEvent.hpp>
 
 #include <memory>
 

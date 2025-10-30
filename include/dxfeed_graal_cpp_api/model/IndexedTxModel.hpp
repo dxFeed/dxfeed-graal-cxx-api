@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/IndexedEvent.hpp"
 #include "../event/market/OrderSource.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "TxModelListener.hpp"
+#include "./TxModelListener.hpp"
 
 #include <memory>
 #include <unordered_set>

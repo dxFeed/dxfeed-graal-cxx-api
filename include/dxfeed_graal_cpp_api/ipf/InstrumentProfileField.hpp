@@ -9,13 +9,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/Common.hpp"
 
-#include <cstdint>
 #include <optional>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
-#include <utility>
-#include <vector>
 
 DXFCPP_BEGIN_NAMESPACE
 

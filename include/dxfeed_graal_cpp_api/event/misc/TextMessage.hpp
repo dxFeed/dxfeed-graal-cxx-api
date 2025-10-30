@@ -7,13 +7,13 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cstdint>
-#include <string>
-
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Common.hpp"
 #include "../EventType.hpp"
 #include "../EventTypeEnum.hpp"
+
+#include <cstdint>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 

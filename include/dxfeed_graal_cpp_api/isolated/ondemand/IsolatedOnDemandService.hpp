@@ -5,9 +5,9 @@
 
 #include "../../internal/Conf.hpp"
 
-#include "../../ondemand/OnDemandService.hpp"
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../../ondemand/OnDemandService.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
-#include "utils/StringUtils.hpp"
+#include "./utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 

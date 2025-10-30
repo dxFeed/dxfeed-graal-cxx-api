@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
@@ -50,8 +50,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
-#include "Common.hpp"
-#include "Handler.hpp"
-#include "Id.hpp"
+#include "./Common.hpp"
+#include "./Handler.hpp"
+#include "./Id.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

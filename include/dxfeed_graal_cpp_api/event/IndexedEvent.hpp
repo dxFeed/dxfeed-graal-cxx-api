@@ -7,11 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "./EventFlag.hpp"
+#include "./IndexedEventSource.hpp"
+
 #include <cstdint>
 #include <memory>
-
-#include "EventFlag.hpp"
-#include "IndexedEventSource.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

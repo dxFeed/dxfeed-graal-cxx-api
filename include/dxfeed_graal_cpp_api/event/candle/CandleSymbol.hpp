@@ -7,12 +7,12 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "CandleAlignment.hpp"
-#include "CandleExchange.hpp"
-#include "CandlePeriod.hpp"
-#include "CandlePrice.hpp"
-#include "CandlePriceLevel.hpp"
-#include "CandleSession.hpp"
+#include "./CandleAlignment.hpp"
+#include "./CandleExchange.hpp"
+#include "./CandlePeriod.hpp"
+#include "./CandlePrice.hpp"
+#include "./CandlePriceLevel.hpp"
+#include "./CandleSession.hpp"
 
 #include <cstdint>
 #include <memory>

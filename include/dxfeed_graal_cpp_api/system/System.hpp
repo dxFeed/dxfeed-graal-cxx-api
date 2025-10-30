@@ -7,14 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
-#include "../internal/Isolate.hpp"
 
-#include <iostream>
 #include <string>
-#include <type_traits>
-#include <variant>
 
 DXFCPP_BEGIN_NAMESPACE
 /**

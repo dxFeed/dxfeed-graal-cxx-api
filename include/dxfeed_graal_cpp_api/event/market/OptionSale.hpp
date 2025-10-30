@@ -7,19 +7,19 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cstdint>
-#include <memory>
-#include <optional>
-#include <string>
-
+#include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEvent.hpp"
 #include "../IndexedEventSource.hpp"
-#include "MarketEvent.hpp"
-#include "Side.hpp"
-#include "TimeAndSaleType.hpp"
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include "./MarketEvent.hpp"
+#include "./Side.hpp"
+#include "./TimeAndSaleType.hpp"
+
+#include <cstdint>
+#include <memory>
+#include <optional>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 

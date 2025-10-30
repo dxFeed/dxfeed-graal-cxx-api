@@ -5,16 +5,12 @@
 
 #include "../internal/Conf.hpp"
 
-#include "../internal/Common.hpp"
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include "RuntimeException.hpp"
+#include "../internal/Common.hpp"
+#include "./RuntimeException.hpp"
 
 #include <limits>
-#include <stdexcept>
-#include <string>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 

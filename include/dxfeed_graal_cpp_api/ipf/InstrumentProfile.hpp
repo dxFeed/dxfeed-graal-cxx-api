@@ -4,21 +4,19 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
-#include <dxfeed_graal_cpp_api/entity/SharedEntity.hpp>
-#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 
+#include "../entity/SharedEntity.hpp"
 #include "../internal/Common.hpp"
+#include "../internal/JavaObjectHandle.hpp"
 
 #include <cstdint>
 #include <optional>
 #include <string>
 #include <type_traits>
-#include <unordered_map>
-#include <utility>
 #include <vector>
 
 DXFCPP_BEGIN_NAMESPACE

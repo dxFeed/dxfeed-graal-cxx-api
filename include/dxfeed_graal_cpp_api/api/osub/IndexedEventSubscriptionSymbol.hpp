@@ -37,8 +37,6 @@ struct SymbolWrapper;
 class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     friend SymbolWrapper;
 
-    // struct Impl;
-
     std::unique_ptr<SymbolWrapper> eventSymbol_;
     std::unique_ptr<IndexedEventSource> source_;
 

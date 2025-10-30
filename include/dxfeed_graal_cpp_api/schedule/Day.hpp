@@ -5,9 +5,9 @@
 
 #include "../internal/Conf.hpp"
 
-#include "../internal/JavaObjectHandle.hpp"
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../internal/JavaObjectHandle.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

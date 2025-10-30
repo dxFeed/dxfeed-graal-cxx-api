@@ -1,13 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <chrono>
 #include <dxfeed_graal_cpp_api/api.hpp>
 #include <fmt/format.h>
-#include <portals.hpp>
-
-#include <chrono>
+#include <iostream>
 #include <memory>
 #include <mutex>
+#include <portals.hpp>
 #include <vector>
 
 using namespace dxfcpp;
