@@ -89,6 +89,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     if (DXFCXX_FEATURE_STACKTRACE)
         LinkStacktrace(${DXFC_TEST_BASENAME})
+        target_compile_definitions(${DXFC_TEST_BASENAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)
     endif ()
 
     if (DXFCXX_ENABLE_ASAN)

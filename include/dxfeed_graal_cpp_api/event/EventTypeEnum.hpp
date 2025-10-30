@@ -196,7 +196,6 @@ inline namespace literals {
  * String literal that helps to construct EventTypeEnum from a char array.
  *
  * @param eventTypeString The event type name's char array
- * @param length The char array's length
  * @return EventTypeEnum built on char array
  */
 inline EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept {
@@ -213,13 +212,13 @@ DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::EventTypeEnum> {
     std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept {
-        return static_cast<std::size_t>(eventType.getId());
+        return eventType.getId();
     }
 };
 
 template <> struct DXFCPP_EXPORT std::hash<std::reference_wrapper<const dxfcpp::EventTypeEnum>> {
     std::size_t operator()(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventType) const noexcept {
-        return static_cast<std::size_t>(eventType.get().getId());
+        return eventType.get().getId();
     }
 };
 

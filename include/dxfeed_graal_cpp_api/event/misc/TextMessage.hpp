@@ -153,17 +153,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const std::string &eventSymbol) noexcept override {
-        // TODO: check invalid utf-8 [EN-8233]
-        eventSymbol_ = eventSymbol;
-    }
-
-    /**
-     * Changes symbol of this event.
-     *
-     * @param eventSymbol The symbol of this event.
-     */
-    void setEventSymbol(const StringLike &eventSymbol) noexcept {
+    void setEventSymbol(const StringLike &eventSymbol) noexcept override {
         // TODO: check invalid utf-8 [EN-8233]
         eventSymbol_ = std::string(eventSymbol);
     }

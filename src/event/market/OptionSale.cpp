@@ -1,20 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
-
+#include <cstring>
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <cstring>
-#include <memory>
-#include <utf8.h>
-#include <utility>
-
-#include <fmt/chrono.h>
+#include <dxfg_api.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include <memory>
+#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -39,12 +32,12 @@ void OptionSale::fillData(void *graalNative) noexcept {
         .size = graalOptionSale->size,
         .bidPrice = graalOptionSale->bid_price,
         .askPrice = graalOptionSale->ask_price,
-        .exchangeSaleConditions = dxfcpp::toStringOpt(graalOptionSale->exchange_sale_conditions),
+        .exchangeSaleConditions = toStringOpt(graalOptionSale->exchange_sale_conditions),
         .flags = graalOptionSale->flags,
         .underlyingPrice = graalOptionSale->underlying_price,
         .volatility = graalOptionSale->volatility,
         .delta = graalOptionSale->delta,
-        .optionSymbol = dxfcpp::toStringOpt(graalOptionSale->option_symbol),
+        .optionSymbol = toStringOpt(graalOptionSale->option_symbol),
     };
 }
 
@@ -57,7 +50,7 @@ void OptionSale::fillGraalData(void *graalNative) const noexcept {
 
     auto graalOptionSale = static_cast<dxfg_option_sale_t *>(graalNative);
 
-    graalOptionSale->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE;
+    graalOptionSale->market_event.event_type.clazz = DXFG_EVENT_OPTION_SALE;
     graalOptionSale->event_flags = data_.eventFlags;
     graalOptionSale->index = data_.index;
     graalOptionSale->time_sequence = data_.timeSequence;
@@ -93,11 +86,11 @@ std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create OptionSale. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OPTION_SALE) {
         throw InvalidArgumentException(
             fmt::format("Unable to create Order. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE))));
+                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_OPTION_SALE)));
     }
 
     auto optionSale = std::make_shared<OptionSale>();
@@ -132,9 +125,9 @@ void *OptionSale::toGraal() const {
 
     auto *graalOptionSale = new dxfg_option_sale_t{};
 
-    fillGraalData(static_cast<void *>(graalOptionSale));
+    fillGraalData(graalOptionSale);
 
-    return static_cast<void *>(graalOptionSale);
+    return graalOptionSale;
 }
 
 void OptionSale::freeGraal(void *graalNative) {
@@ -142,7 +135,7 @@ void OptionSale::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_OPTION_SALE) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OPTION_SALE) {
         return;
     }
 

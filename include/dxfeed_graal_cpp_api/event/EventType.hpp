@@ -113,7 +113,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
  *
  * @tparam Symbol The type od symbol
  */
-template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public EventType {
+template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : EventType {
     /// The alias to a type of shared pointer to the EventTypeWithSymbol's child object.
     using Ptr = std::shared_ptr<EventTypeWithSymbol<Symbol>>;
 
@@ -139,6 +139,35 @@ template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public Eve
      * @param eventSymbol event symbol.
      */
     virtual void setEventSymbol(const Symbol &eventSymbol) noexcept = 0;
+};
+
+/// Concrete implementation of a event for std::string.
+template<> struct EventTypeWithSymbol<std::string> : EventType {
+    /// The alias to a type of shared pointer to the EventTypeWithSymbol's child object.
+    using Ptr = std::shared_ptr<EventTypeWithSymbol<std::string>>;
+
+    using SymbolType = std::string;
+
+    /**
+     * Returns the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @return The event symbol.
+     */
+    virtual const std::string &getEventSymbol() const & noexcept = 0;
+
+    /**
+     * Returns the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @return The event symbol or std::nullopt.
+     */
+    virtual const std::optional<std::string> &getEventSymbolOpt() const & noexcept = 0;
+
+    /**
+     * Changes the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @param eventSymbol event symbol.
+     */
+    virtual void setEventSymbol(const StringLike &eventSymbol) noexcept = 0;
 };
 
 DXFCPP_END_NAMESPACE

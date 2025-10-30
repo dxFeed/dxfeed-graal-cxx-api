@@ -8,6 +8,7 @@
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfg_api.h>
 #include <memory>
+#include <format>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -270,7 +271,7 @@ AnalyticOrder &AnalyticOrder::withIcebergType(const IcebergType &icebergType) no
 }
 
 std::string AnalyticOrder::toString() const {
-    return fmt::format("AnalyticOrder{{{}, marketMaker={}, icebergPeakSize={}, icebergHiddenSize={}, "
+    return std::format("AnalyticOrder{{{}, marketMaker={}, icebergPeakSize={}, icebergHiddenSize={}, "
                        "icebergExecutedSize={}, icebergType={}}}",
                        baseFieldsToString(), getMarketMaker(), dxfcpp::toString(getIcebergPeakSize()),
                        dxfcpp::toString(getIcebergHiddenSize()), dxfcpp::toString(getIcebergExecutedSize()),
