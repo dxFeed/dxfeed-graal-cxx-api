@@ -7,8 +7,8 @@
 #include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfg_api.h>
+#include <fmt/format.h>
 #include <memory>
-#include <format>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -53,9 +53,9 @@ std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) {
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
         const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
 
-        throw InvalidArgumentException(std::string("Unable to create AnalyticOrder. Wrong event class ") +
-                                       isolated::toString(eventType).data() + "(" + std::to_string(eventType) +
-                                       ")! Expected: " + isolated::toString(DXFG_EVENT_ANALYTIC_ORDER).data());
+        throw InvalidArgumentException(fmt::format(
+            "Unable to create AnalyticOrder. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
+            std::to_string(eventType), isolated::toString(DXFG_EVENT_ANALYTIC_ORDER)));
     }
 
     auto analyticOrder = std::make_shared<AnalyticOrder>();
@@ -86,9 +86,9 @@ void AnalyticOrder::freeGraal(void *graalNative) {
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
         const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
 
-        throw InvalidArgumentException(std::string("Unable to free AnalyticOrder's Graal data. Wrong event class ") +
-                                       isolated::toString(eventType).data() + "(" + std::to_string(eventType) +
-                                       ")! Expected: " + isolated::toString(DXFG_EVENT_ANALYTIC_ORDER).data());
+        throw InvalidArgumentException(fmt::format(
+            "Unable to free AnalyticOrder's Graal data. Wrong event class {}({})! Expected: {}",
+            isolated::toString(eventType), std::to_string(eventType), isolated::toString(DXFG_EVENT_ANALYTIC_ORDER)));
     }
 
     const auto graalAnalyticOrder = static_cast<dxfg_analytic_order_t *>(graalNative);

@@ -9,6 +9,7 @@
 #include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
 #include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfg_api.h>
+#include <fmt/format.h>
 #include <memory>
 #include <utility>
 
@@ -86,9 +87,9 @@ std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
         const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
 
-        throw InvalidArgumentException(std::string("Unable to create Candle. Wrong event class ") +
-                                       isolated::toString(eventType).data() + "(" + std::to_string(eventType) +
-                                       ")! Expected: " + isolated::toString(DXFG_EVENT_CANDLE).data());
+        throw InvalidArgumentException(fmt::format("Unable to create Candle. Wrong event class {}({})! Expected: {}",
+                                                   isolated::toString(eventType), std::to_string(eventType),
+                                                   isolated::toString(DXFG_EVENT_CANDLE)));
     }
 
     auto candle = std::make_shared<Candle>();
@@ -126,9 +127,9 @@ void Candle::freeGraal(void *graalNative) {
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
         const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
 
-        throw InvalidArgumentException(std::string("Unable to free Candle's Graal data. Wrong event class ") +
-                                       isolated::toString(eventType).data() + "(" + std::to_string(eventType) +
-                                       ")! Expected: " + isolated::toString(DXFG_EVENT_CANDLE).data());
+        throw InvalidArgumentException(fmt::format(
+            "Unable to free Candle's Graal data. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
+            std::to_string(eventType), isolated::toString(DXFG_EVENT_CANDLE)));
     }
 
     const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
