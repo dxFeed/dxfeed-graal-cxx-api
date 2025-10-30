@@ -271,7 +271,7 @@ AnalyticOrder &AnalyticOrder::withIcebergType(const IcebergType &icebergType) no
 }
 
 std::string AnalyticOrder::toString() const {
-    return std::format("AnalyticOrder{{{}, marketMaker={}, icebergPeakSize={}, icebergHiddenSize={}, "
+    return fmt::format("AnalyticOrder{{{}, marketMaker={}, icebergPeakSize={}, icebergHiddenSize={}, "
                        "icebergExecutedSize={}, icebergType={}}}",
                        baseFieldsToString(), getMarketMaker(), dxfcpp::toString(getIcebergPeakSize()),
                        dxfcpp::toString(getIcebergHiddenSize()), dxfcpp::toString(getIcebergExecutedSize()),

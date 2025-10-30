@@ -20,6 +20,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "MarketEvent.hpp"
 #include "Side.hpp"
 #include "TimeAndSaleType.hpp"
+#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
