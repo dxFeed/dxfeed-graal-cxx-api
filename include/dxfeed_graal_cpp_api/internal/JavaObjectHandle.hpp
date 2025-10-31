@@ -54,8 +54,11 @@ template <typename T> struct JavaObjectHandle final {
         }
     }
 
+    using Impl = std::unique_ptr<void, decltype(&deleter)>;
+
     explicit JavaObjectHandle(void *handle = nullptr) noexcept
-        : impl_{std::unique_ptr<void, decltype(&deleter)>::pointer(handle), &deleter} {
+        // ReSharper disable once CppRedundantTypenameKeyword
+        : impl_{typename Impl::pointer(handle), &deleter} {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
@@ -94,7 +97,7 @@ template <typename T> struct JavaObjectHandle final {
     }
 
     private:
-    std::unique_ptr<void, decltype(&deleter)> impl_;
+    Impl impl_;
 };
 
 template <typename T> struct JavaObjectHandleList final {
@@ -126,8 +129,11 @@ template <typename T> struct JavaObjectHandleList final {
         }
     }
 
+    using Impl = std::unique_ptr<void, decltype(&deleter)>;
+
     explicit JavaObjectHandleList(void *handle = nullptr) noexcept
-        : impl_{std::unique_ptr<void, decltype(&deleter)>::pointer(handle), &deleter} {
+        // ReSharper disable once CppRedundantTypenameKeyword
+        : impl_{typename Impl::pointer(handle), &deleter} {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
@@ -166,7 +172,7 @@ template <typename T> struct JavaObjectHandleList final {
     }
 
     private:
-    std::unique_ptr<void, decltype(&deleter)> impl_;
+    Impl impl_;
 };
 
 DXFCPP_END_NAMESPACE
