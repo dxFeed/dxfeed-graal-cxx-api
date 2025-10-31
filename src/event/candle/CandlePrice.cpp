@@ -1,7 +1,10 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/event/candle/CandlePrice.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/event/candle/CandlePrice.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/resources/Strings.hpp"
+
+#include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -45,7 +48,7 @@ bool CandlePrice::operator==(const CandlePrice &candlePrice) const noexcept {
 
 std::reference_wrapper<const CandlePrice> CandlePrice::parse(const StringLike &s) {
     if (s.empty()) {
-        throw InvalidArgumentException("Missing candle price");
+        throw InvalidArgumentException(fmt::format(ires::Strings::Events::MISSING_CANDLE_, "price"));
     }
 
     if (const auto found = BY_STRING.find(s); found != BY_STRING.end()) {
@@ -59,7 +62,7 @@ std::reference_wrapper<const CandlePrice> CandlePrice::parse(const StringLike &s
         }
     }
 
-    throw InvalidArgumentException("Unknown candle price: " + s);
+    throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "price", s.toStringView()));
 }
 
 std::reference_wrapper<const CandlePrice> CandlePrice::getAttributeForSymbol(const StringLike &symbol) noexcept {

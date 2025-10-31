@@ -1,10 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/event/candle/CandleAlignment.hpp>
-#include <dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp>
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
-#include <dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleAlignment.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/resources/Strings.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
+
+#include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -46,14 +49,12 @@ std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const Strin
     }
 
     for (const auto &alignmentRef : VALUES) {
-        const auto &alignmentStr = alignmentRef.get().toString();
-
-        if (iEquals(alignmentStr, s)) {
+        if (const auto &alignmentStr = alignmentRef.get().toString(); iEquals(alignmentStr, s)) {
             return alignmentRef;
         }
     }
 
-    throw InvalidArgumentException("Unknown candle alignment: " + s);
+    throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "alignment", s.toStringView()));
 }
 
 std::reference_wrapper<const CandleAlignment> CandleAlignment::getAttributeForSymbol(const StringLike &symbol) {

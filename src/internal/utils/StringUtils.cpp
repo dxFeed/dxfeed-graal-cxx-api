@@ -228,7 +228,7 @@ std::vector<std::string> splitStr(const StringLike &s, char sep) noexcept {
 }
 
 std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep) noexcept {
-    return fmt::format("{}", fmt::join(v, std::string_view(sep)));
+    return fmt::format("{}", fmt::join(v, sep.toStringView()));
 }
 
 bool toBool(const StringLike &s) noexcept {

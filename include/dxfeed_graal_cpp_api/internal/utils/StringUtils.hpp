@@ -30,24 +30,32 @@ struct StringLike {
 
     StringLike() = default;
 
+    // ReSharper disable once CppNonExplicitConvertingConstructor
     StringLike(const char *s) : owned_(s ? s : ""), view_(owned_) {
     }
 
+    // ReSharper disable once CppNonExplicitConvertingConstructor
     StringLike(std::string_view sv) : view_(sv) {
     }
 
+    // ReSharper disable once CppNonExplicitConvertingConstructor
     StringLike(const std::string &s) : owned_(s), view_(owned_) {
     }
 
+    // ReSharper disable once CppNonExplicitConvertingConstructor
     StringLike(std::string &&s) noexcept : owned_(std::move(s)), view_(owned_) {
     }
 
+    // ReSharper disable once CppNonExplicitConvertingConstructor
     template <std::size_t N> StringLike(const char (&arr)[N]) : view_(arr, N - 1) {
     }
 
+    // ReSharper disable once CppNonExplicitConversionOperator
     operator std::string_view() const noexcept {
         return view_;
     }
+
+    // ReSharper disable once CppNonExplicitConversionOperator
     operator std::string() const {
         return std::string(view_);
     }
@@ -55,6 +63,7 @@ struct StringLike {
     const char *data() const noexcept {
         return view_.data();
     }
+
     const char *c_str() const {
         return owned_.empty() ? std::string(view_).c_str() : owned_.c_str();
     }
@@ -62,12 +71,15 @@ struct StringLike {
     auto begin() const noexcept {
         return view_.begin();
     }
+
     auto end() const noexcept {
         return view_.end();
     }
+
     auto cbegin() const noexcept {
         return view_.cbegin();
     }
+
     auto cend() const noexcept {
         return view_.cend();
     }
@@ -86,13 +98,15 @@ struct StringLike {
 #if __cpp_lib_ends_with >= 201907L
         return view_.ends_with(other.view_);
 #else
-        auto sv = other.view_;
+        const auto sv = other.view_;
+
         return sv.size() <= view_.size() && view_.compare(view_.size() - sv.size(), sv.size(), sv) == 0;
 #endif
     }
 
     std::string substr(std::size_t pos = 0, std::size_t count = std::string::npos) const {
-        auto sv2 = view_.substr(pos, count);
+        const auto sv2 = view_.substr(pos, count);
+
         return std::string(sv2);
     }
 
@@ -102,9 +116,11 @@ struct StringLike {
 
     friend std::string operator+(const StringLike &a, const StringLike &b) {
         std::string result;
+
         result.reserve(a.size() + b.size());
         result.append(a.view_);
         result.append(b.view_);
+
         return result;
     }
 
@@ -118,6 +134,22 @@ struct StringLike {
 #endif
         return result;
     }
+
+    std::string toString() const noexcept {
+        return std::string(view_);
+    }
+
+    std::string_view toStringView() const noexcept {
+        return view_;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const StringLike &sl) {
+        return os << sl.view_;
+    }
+
+    // friend std::string_view format_as(const StringLike &sl) {
+    //     return sl.view_;
+    // }
 };
 
 DXFCPP_END_NAMESPACE
@@ -154,17 +186,17 @@ struct DXFCPP_EXPORT String {
     inline static const std::string NUL{"<null>"};
 };
 
-DXFCPP_EXPORT std::string toString(bool b) noexcept;
+DXFCPP_EXPORT std::string toString(bool b) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string toString(const char *chars) noexcept;
+DXFCPP_EXPORT std::string toString(const char *chars) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::optional<std::string> toStringOpt(const char *chars) noexcept;
+DXFCPP_EXPORT std::optional<std::string> toStringOpt(const char *chars) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string toString(std::thread::id theadId);
+DXFCPP_EXPORT std::string toString(std::thread::id theadId); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string toString(void *ptr);
+DXFCPP_EXPORT std::string toString(void *ptr); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string toString(double d);
+DXFCPP_EXPORT std::string toString(double d); // NOLINT(*-redundant-declaration)
 
 // template <typename T> std::string toStringAny(T &&t);
 
@@ -278,7 +310,7 @@ toStringAny(T &&) {
  * @param in The UTF16 char
  * @return ASCII char
  */
-DXFCPP_EXPORT char utf16to8(std::int16_t in) noexcept;
+DXFCPP_EXPORT char utf16to8(std::int16_t in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * Converts UTF16 char to UTF8 string
@@ -286,7 +318,7 @@ DXFCPP_EXPORT char utf16to8(std::int16_t in) noexcept;
  * @param in The UTF16 char
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string utf16toUtf8String(std::int16_t in) noexcept;
+DXFCPP_EXPORT std::string utf16toUtf8String(std::int16_t in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * Converts UTF16 string to UTF8 string
@@ -294,7 +326,7 @@ DXFCPP_EXPORT std::string utf16toUtf8String(std::int16_t in) noexcept;
  * @param in The UTF16 string
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string &in) noexcept;
+DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string &in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * Converts vector of UTF16 chars to UTF8 string
@@ -302,7 +334,7 @@ DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string &in) noexcept;
  * @param in The UTF16 string
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept;
+DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * Tries to convert ASCII (part of UTF8) char to UTF16 char.
@@ -310,19 +342,19 @@ DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t> &in)
  * @param in The ASCII char
  * @return The UTF16 char
  */
-DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept;
+DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStampWithTimeZone(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStampWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStampFast(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStampFast(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp);
+DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT char *createCString(const StringLike &s);
+DXFCPP_EXPORT char *createCString(const StringLike &s); // NOLINT(*-redundant-declaration)
 
 template <typename S> char *createCString(const std::optional<S> &s) {
     if (!s) {
@@ -337,7 +369,7 @@ template <typename It>
 std::string namesToString(It begin, It end) {
     std::string result{"["};
 
-    for (auto it = begin; it != end; it++) {
+    for (auto it = begin; it != end; ++it) {
         result += String::EMPTY + "'" + it->getName() + "'" + (std::next(it) == end ? "" : ", ");
     }
 
@@ -349,7 +381,7 @@ template <typename It>
 std::string namesToString(It begin, It end) {
     std::string result{"["};
 
-    for (auto it = begin; it != end; it++) {
+    for (auto it = begin; it != end; ++it) {
         result += String::EMPTY + "'" + it->get().getName() + "'" + (std::next(it) == end ? "" : ", ");
     }
 
@@ -361,14 +393,14 @@ std::string elementsToString(It begin, It end, const std::string &prefix = "[", 
                              const std::string &separator = ", ") {
     std::string result{prefix};
 
-    for (auto it = begin; it != end; it++) {
+    for (auto it = begin; it != end; ++it) {
         result += String::EMPTY + toStringAny(*it) + (std::next(it) == end ? "" : separator);
     }
 
     return result + postfix;
 }
 
-DXFCPP_EXPORT std::string encodeChar(std::int16_t c);
+DXFCPP_EXPORT std::string encodeChar(std::int16_t c); // NOLINT(*-redundant-declaration)
 
 inline std::string encodeChar(char c) {
     return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c)));
@@ -391,7 +423,7 @@ class IsIEqual {
 } // namespace detail
 
 template <typename Range1, typename Range2, typename Predicate>
-inline bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
+bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
     auto firstIt = std::begin(first);
     auto secondIt = std::begin(second);
 
@@ -405,13 +437,13 @@ inline bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
 }
 
 DXFCPP_EXPORT inline bool iEquals(const StringLike &first, const StringLike &second) noexcept {
-    const std::locale &locale = std::locale();
+    const auto &locale = std::locale();
 
     return equals(first, second, detail::IsIEqual(locale));
 }
 
 DXFCPP_EXPORT inline std::size_t icHash(const StringLike &s) noexcept {
-    const std::locale &locale = std::locale();
+    const auto &locale = std::locale();
     std::string result{};
 
     for (auto c : s) {
@@ -421,13 +453,13 @@ DXFCPP_EXPORT inline std::size_t icHash(const StringLike &s) noexcept {
     return std::hash<std::string>()(result);
 }
 
-DXFCPP_EXPORT std::string trimStr(const StringLike &s) noexcept;
+DXFCPP_EXPORT std::string trimStr(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
 
 DXFCPP_EXPORT std::vector<std::string> splitStr(const StringLike &s, char sep = ',') noexcept;
 
 DXFCPP_EXPORT std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep = ", ") noexcept;
 
-DXFCPP_EXPORT bool toBool(const StringLike &s) noexcept;
+DXFCPP_EXPORT bool toBool(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
 
 DXFCPP_END_NAMESPACE
 
