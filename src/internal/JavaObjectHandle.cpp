@@ -25,56 +25,6 @@ bool JavaObject::equals(void *objectHandle1, void *objectHandle2) {
     return isolated::internal::IsolatedObject::equals(objectHandle1, objectHandle2) == 1;
 }
 
-template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
-    auto result = runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            if constexpr (Debugger::isDebug) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
-            }
-
-            if (handle) {
-                return dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                      static_cast<dxfg_java_object_handler *>(handle)) == 0;
-            }
-
-            return true;
-        },
-        false);
-    dxfcpp::ignoreUnused(result);
-
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
-                        dxfcpp::toString(result));
-    }
-}
-
-template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexcept {
-    auto result = runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            if constexpr (Debugger::isDebug) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
-            }
-
-            if (handle) {
-                return dxfg_CList_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                            static_cast<dxfg_java_object_handler_list *>(handle)) == 0;
-            }
-
-            return true;
-        },
-        false);
-    dxfcpp::ignoreUnused(result);
-
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
-                        dxfcpp::toString(result));
-    }
-}
-
 template struct JavaObjectHandle<DXEndpoint>;
 template struct JavaObjectHandle<DXEndpoint::Builder>;
 template struct JavaObjectHandle<DXEndpointStateChangeListener>;

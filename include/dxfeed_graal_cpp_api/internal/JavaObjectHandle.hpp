@@ -10,6 +10,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./utils/StringUtils.hpp"
 #include "./utils/debug/Debug.hpp"
 
+#include "../isolated/internal/IsolatedObject.hpp"
+
 #include <memory>
 #include <string>
 
@@ -23,7 +25,7 @@ struct DXFCPP_EXPORT JavaObject {
     static bool equals(void *objectHandle1, void *objectHandle2);
 };
 
-template <typename T> struct JavaObjectHandle {
+template <typename T> struct JavaObjectHandle final {
 #if DXFCPP_DEBUG == 1
     static std::string getDebugName() {
         return typeid(JavaObjectHandle<T>).name();
@@ -32,7 +34,25 @@ template <typename T> struct JavaObjectHandle {
 
     using Type = T;
 
-    static DXFCPP_EXPORT void deleter(void *handle) noexcept;
+    static DXFCPP_EXPORT void deleter(void *handle) noexcept {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
+        }
+
+        if (!handle) {
+            return;
+        }
+
+        const auto result = isolated::internal::IsolatedObject::release(handle);
+        ignoreUnused(result);
+
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                            dxfcpp::toString(result));
+        }
+    }
 
     explicit JavaObjectHandle(void *handle = nullptr) noexcept
         : impl_{std::unique_ptr<void, decltype(&deleter)>::pointer(handle), &deleter} {
@@ -55,13 +75,14 @@ template <typename T> struct JavaObjectHandle {
         return *this;
     }
 
-    virtual ~JavaObjectHandle() noexcept = default;
+    ~JavaObjectHandle() noexcept = default;
 
     [[nodiscard]] std::string toString() const {
-        if (impl_)
+        if (impl_) {
             return dxfcpp::toString(impl_.get());
-        else
-            return "nullptr";
+        }
+
+        return "nullptr";
     }
 
     [[nodiscard]] void *get() const noexcept {
@@ -76,7 +97,7 @@ template <typename T> struct JavaObjectHandle {
     std::unique_ptr<void, decltype(&deleter)> impl_;
 };
 
-template <typename T> struct JavaObjectHandleList {
+template <typename T> struct JavaObjectHandleList final {
 #if DXFCPP_DEBUG == 1
     static auto getDebugName() {
         return std::string("JavaObjectHandleList<") + typeid(T).name() + ">";
@@ -85,10 +106,30 @@ template <typename T> struct JavaObjectHandleList {
 
     using Type = T;
 
-    static DXFCPP_EXPORT void deleter(void *handle) noexcept;
+    static DXFCPP_EXPORT void deleter(void *handle) noexcept {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
+        }
+
+        if (!handle) {
+            return;
+        }
+
+        const auto result = isolated::internal::IsolatedObject::List::release(handle);
+        ignoreUnused(result);
+
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                            dxfcpp::toString(result));
+        }
+    }
+
     explicit JavaObjectHandleList(void *handle = nullptr) noexcept
         : impl_{std::unique_ptr<void, decltype(&deleter)>::pointer(handle), &deleter} {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
         }
     }
@@ -106,13 +147,14 @@ template <typename T> struct JavaObjectHandleList {
         return *this;
     }
 
-    virtual ~JavaObjectHandleList() noexcept = default;
+    ~JavaObjectHandleList() noexcept = default;
 
     [[nodiscard]] std::string toString() const {
-        if (impl_)
+        if (impl_) {
             return dxfcpp::toString(impl_.get());
-        else
-            return "nullptr";
+        }
+
+        return "nullptr";
     }
 
     [[nodiscard]] void *get() const noexcept {
