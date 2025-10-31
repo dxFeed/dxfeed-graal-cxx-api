@@ -25,8 +25,8 @@ DXFCPP_BEGIN_NAMESPACE
 /// A lightweight wrapper around strings or string-like inputs.
 /// Stores either a view or an owned string but always exposes a valid view.
 struct StringLike {
-    std::string owned_;
-    std::string_view view_;
+    mutable std::string owned_;
+    mutable std::string_view view_;
 
     StringLike() = default;
 
@@ -65,7 +65,12 @@ struct StringLike {
     }
 
     const char *c_str() const {
-        return owned_.empty() ? std::string(view_).c_str() : owned_.c_str();
+        if (owned_.empty() && !view_.empty()) {
+            owned_ = std::string(view_);
+            view_ = owned_;
+        }
+
+        return owned_.c_str();
     }
 
     auto begin() const noexcept {
@@ -334,7 +339,8 @@ DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string &in) noexcept; 
  * @param in The UTF16 string
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_EXPORT std::string
+utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * Tries to convert ASCII (part of UTF8) char to UTF16 char.
@@ -352,7 +358,8 @@ DXFCPP_EXPORT std::string formatTimeStampFast(std::int64_t timestamp); // NOLINT
 
 DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
+DXFCPP_EXPORT std::string
+formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
 DXFCPP_EXPORT char *createCString(const StringLike &s); // NOLINT(*-redundant-declaration)
 
