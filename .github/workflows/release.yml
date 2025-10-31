@@ -66,11 +66,11 @@ jobs:
             cores: 4
             cc: 'cl'
             cxx: 'cl'
-          - name: macos-13-xcode-15
-            image: macos-13
+          - name: macos-15-intel-xcode-16-4
+            image: macos-15-intel
             os: macos
             cores: 4
-            xcode: '15.0'
+            xcode: '16.4'
             cc: 'clang'
             cxx: 'clang++'
           - name: ubuntu-24.04-gcc-14
@@ -85,11 +85,11 @@ jobs:
             cores: 4
             cc: 'gcc-14'
             cxx: 'g++-14'
-          - name: macos-14-xcode-15
-            image: macos-14
+          - name: macos-15-xcode-16-4
+            image: macos-15
             os: macos
             cores: 3
-            xcode: '15.0'
+            xcode: '16.4'
             cc: 'clang'
             cxx: 'clang++'
         buildType: [ Release, Debug, RelWithDebInfo ]

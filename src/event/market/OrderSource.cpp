@@ -1,10 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/event/market/OrderSource.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+
+#include <dxfg_api.h>
+#include <type_traits>
+#include <unordered_map>
+#include <variant>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -100,8 +104,7 @@ OrderSource::OrderSource(const StringLike &name, std::uint32_t pubFlags)
     : OrderSource(composeId(name), name, pubFlags) {
 }
 
-OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept
-    : IndexedEventSource(id, name), pubFlags_{0}, builtin_{false} {
+OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : IndexedEventSource(id, name) {
 }
 
 std::int32_t OrderSource::composeId(const StringLike &name) {
