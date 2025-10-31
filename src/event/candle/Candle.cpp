@@ -1,13 +1,15 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../../include/dxfeed_graal_cpp_api/event/candle/Candle.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/EventTypeEnum.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/resources/Strings.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+
 #include <cassert>
-#include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
-#include <dxfeed_graal_cpp_api/event/candle/Candle.hpp>
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
-#include <dxfeed_graal_cpp_api/internal/TimeFormat.hpp>
-#include <dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp>
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 #include <dxfg_api.h>
 #include <fmt/format.h>
 #include <memory>
@@ -81,13 +83,13 @@ const EventTypeEnum &Candle::TYPE = EventTypeEnum::CANDLE;
 
 std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
     if (!graalNative) {
-        throw InvalidArgumentException("Unable to create Candle. The `graalNative` parameter is nullptr");
+        throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNABLE_TO_CREATE, "Candle", "graalNative"));
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
         const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
 
-        throw InvalidArgumentException(fmt::format("Unable to create Candle. Wrong event class {}({})! Expected: {}",
+        throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNABLE_TO_CREATE2, "Candle",
                                                    isolated::toString(eventType), std::to_string(eventType),
                                                    isolated::toString(DXFG_EVENT_CANDLE)));
     }
@@ -127,9 +129,9 @@ void Candle::freeGraal(void *graalNative) {
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
         const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
 
-        throw InvalidArgumentException(fmt::format(
-            "Unable to free Candle's Graal data. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
-            std::to_string(eventType), isolated::toString(DXFG_EVENT_CANDLE)));
+        throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNABLE_TO_FREE, "Candle",
+                                                   isolated::toString(eventType), std::to_string(eventType),
+                                                   isolated::toString(DXFG_EVENT_CANDLE)));
     }
 
     const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
@@ -250,7 +252,8 @@ void Candle::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
     if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-        throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
+        throw InvalidArgumentException(
+            fmt::format(ires::Strings::Events::INVALID_VALUE_FOR_ARG, "sequence", std::to_string(sequence)));
     }
 
     data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
@@ -313,7 +316,7 @@ void Candle::setLow(double low) noexcept {
 }
 
 Candle &Candle::withLow(double low) noexcept {
-    Candle::setLow(low);
+    setLow(low);
 
     return *this;
 }
@@ -341,7 +344,7 @@ void Candle::setVolume(double volume) noexcept {
 }
 
 Candle &Candle::withVolume(double volume) noexcept {
-    Candle::setVolume(volume);
+    setVolume(volume);
 
     return *this;
 }
