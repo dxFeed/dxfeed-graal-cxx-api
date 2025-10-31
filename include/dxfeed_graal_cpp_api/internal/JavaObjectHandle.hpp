@@ -33,16 +33,28 @@ template <typename T> struct JavaObjectHandle {
     using Type = T;
 
     static DXFCPP_EXPORT void deleter(void *handle) noexcept;
-    explicit JavaObjectHandle(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
+
+    explicit JavaObjectHandle(void *handle = nullptr) noexcept
+        : impl_{std::unique_ptr<void, decltype(&deleter)>::pointer(handle), &deleter} {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
         }
     }
 
     JavaObjectHandle(const JavaObjectHandle &) = delete;
-    JavaObjectHandle(JavaObjectHandle &&) noexcept = default;
+
+    JavaObjectHandle(JavaObjectHandle &&other) noexcept : impl_{std::move(other.impl_)} {
+    }
+
     JavaObjectHandle &operator=(const JavaObjectHandle &) = delete;
-    JavaObjectHandle &operator=(JavaObjectHandle &&) noexcept = default;
+
+    JavaObjectHandle &operator=(JavaObjectHandle &&other) noexcept {
+        impl_ = std::move(other.impl_);
+
+        return *this;
+    }
+
     virtual ~JavaObjectHandle() noexcept = default;
 
     [[nodiscard]] std::string toString() const {
@@ -74,16 +86,26 @@ template <typename T> struct JavaObjectHandleList {
     using Type = T;
 
     static DXFCPP_EXPORT void deleter(void *handle) noexcept;
-    explicit JavaObjectHandleList(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
+    explicit JavaObjectHandleList(void *handle = nullptr) noexcept
+        : impl_{std::unique_ptr<void, decltype(&deleter)>::pointer(handle), &deleter} {
         if constexpr (Debugger::isDebug) {
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
         }
     }
 
     JavaObjectHandleList(const JavaObjectHandleList &) = delete;
-    JavaObjectHandleList(JavaObjectHandleList &&) noexcept = default;
+
+    JavaObjectHandleList(JavaObjectHandleList &&other) noexcept : impl_{std::move(other.impl_)} {
+    }
+
     JavaObjectHandleList &operator=(const JavaObjectHandleList &) = delete;
-    JavaObjectHandleList &operator=(JavaObjectHandleList &&) noexcept = default;
+
+    JavaObjectHandleList &operator=(JavaObjectHandleList &&other) noexcept {
+        impl_ = std::move(other.impl_);
+
+        return *this;
+    }
+
     virtual ~JavaObjectHandleList() noexcept = default;
 
     [[nodiscard]] std::string toString() const {
