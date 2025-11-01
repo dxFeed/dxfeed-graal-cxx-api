@@ -225,15 +225,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      * @see ::getSequence()
      * @throws InvalidArgumentException
      */
-    void setSequence(std::int32_t sequence) {
-        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
-        }
-
-        data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Returns option market price.

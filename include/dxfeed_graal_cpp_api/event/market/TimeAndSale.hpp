@@ -326,7 +326,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     std::string getExchangeCodeString() const noexcept {
         // TODO: cache [EN-8231]
 
-        return dxfcpp::utf16toUtf8String(data_.exchangeCode);
+        return utf16toUtf8String(data_.exchangeCode);
     }
 
     /**
@@ -426,7 +426,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      */
     const std::string &getExchangeSaleConditions() const & noexcept {
         if (!data_.exchangeSaleConditions) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return data_.exchangeSaleConditions.value();
@@ -599,7 +599,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      */
     const std::string &getBuyer() const & noexcept {
         if (!data_.buyer) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return data_.buyer.value();
@@ -630,7 +630,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      */
     const std::string &getSeller() const & noexcept {
         if (!data_.seller) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return data_.seller.value();

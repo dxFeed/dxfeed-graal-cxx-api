@@ -122,16 +122,16 @@ class DXFCPP_EXPORT EventTypeEnum {
         return id_ == eventTypeEnum.id_;
     }
 
-    bool operator==(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum) const noexcept {
+    bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept {
         return id_ == eventTypeEnum.get().id_;
     }
 
-    friend bool operator==(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
-                           const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum2) noexcept {
+    friend bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                           const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept {
         return eventTypeEnum1.get().id_ == eventTypeEnum2.get().id_;
     }
 
-    friend bool operator==(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
+    friend bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
                            const EventTypeEnum &eventTypeEnum2) noexcept {
         return eventTypeEnum1.get().id_ == eventTypeEnum2.id_;
     }
@@ -140,16 +140,16 @@ class DXFCPP_EXPORT EventTypeEnum {
         return id_ < eventTypeEnum.id_;
     }
 
-    bool operator<(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum) const noexcept {
+    bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept {
         return id_ < eventTypeEnum.get().id_;
     }
 
-    friend bool operator<(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
-                          const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum2) noexcept {
+    friend bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                          const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept {
         return eventTypeEnum1.get().id_ < eventTypeEnum2.get().id_;
     }
 
-    friend bool operator<(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
+    friend bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
                           const EventTypeEnum &eventTypeEnum2) noexcept {
         return eventTypeEnum1.get().id_ < eventTypeEnum2.id_;
     }

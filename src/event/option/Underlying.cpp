@@ -1,20 +1,15 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../../include/dxfeed_graal_cpp_api/event/option/Underlying.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <cstring>
-#include <memory>
-#include <utf8.h>
-#include <utility>
-
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -48,9 +43,9 @@ void Underlying::fillGraalData(void *graalNative) const noexcept {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
+    const auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
 
-    graalUnderlying->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_UNDERLYING;
+    graalUnderlying->market_event.event_type.clazz = DXFG_EVENT_UNDERLYING;
     graalUnderlying->event_flags = data_.eventFlags;
     graalUnderlying->index = data_.index;
     graalUnderlying->volatility = data_.volatility;
@@ -66,11 +61,10 @@ std::shared_ptr<Underlying> Underlying::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Underlying. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_UNDERLYING) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to create Underlying. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_UNDERLYING))));
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
+        throw InvalidArgumentException(fmt::format("Unable to create Underlying. Wrong event class {}! Expected: {}.",
+                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                                                   std::to_string(DXFG_EVENT_UNDERLYING)));
     }
 
     auto underlying = std::make_shared<Underlying>();
@@ -93,14 +87,15 @@ std::string Underlying::toString() const {
 
 void *Underlying::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::toGraal()");
     }
 
     auto *graalUnderlying = new dxfg_underlying_t{};
 
-    fillGraalData(static_cast<void *>(graalUnderlying));
+    fillGraalData(graalUnderlying);
 
-    return static_cast<void *>(graalUnderlying);
+    return graalUnderlying;
 }
 
 void Underlying::freeGraal(void *graalNative) {
@@ -108,16 +103,16 @@ void Underlying::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_UNDERLYING) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
         throw InvalidArgumentException(
             fmt::format("Unable to free Underlying's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_UNDERLYING))));
+                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_UNDERLYING)));
     }
 
-    auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
+    const auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
 
-    MarketEvent::freeGraalData(graalNative);
+    freeGraalData(graalNative);
 
     delete graalUnderlying;
 }
@@ -128,6 +123,16 @@ void Underlying::assign(std::shared_ptr<EventType> event) {
     if (const auto other = event->sharedAs<Underlying>(); other) {
         data_ = other->data_;
     }
+}
+
+void Underlying::setSequence(std::int32_t sequence) {
+    assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+    if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+        throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
+    }
+
+    data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
 }
 
 DXFCPP_END_NAMESPACE

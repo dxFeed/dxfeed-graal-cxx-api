@@ -307,7 +307,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @return The current series.
      */
     Series &withTime(std::int64_t time) noexcept {
-        Series::setTime(time);
+        setTime(time);
 
         return *this;
     }
@@ -330,15 +330,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @see Series::getSequence()
      * @throws InvalidArgumentException
      */
-    void setSequence(std::int32_t sequence) {
-        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
-        }
-
-        data_.timeSequence = orOp(andOp(data_.timeSequence, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Changes @ref Series::getSequence() "sequence number" of this series.
@@ -349,7 +341,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @see Series::getSequence()
      */
     Series &withSequence(std::int32_t sequence) noexcept {
-        Series::setSequence(sequence);
+        setSequence(sequence);
 
         return *this;
     }

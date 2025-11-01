@@ -42,7 +42,7 @@ concept ConvertibleToEventSourceWrapperCollection =
     } &&
     (
         requires(Collection c) {
-            { *std::begin(c) } -> dxfcpp::ConvertibleTo<EventSourceWrapper>;
+            { *std::begin(c) } -> ConvertibleTo<EventSourceWrapper>;
         } ||
         requires(Collection c) {
             { *std::begin(c) } -> ConvertibleToEventSourceWrapper;
@@ -102,7 +102,7 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
         }
 
         static void *toGraalList(std::initializer_list<EventSourceWrapper> collection) {
-            return ListUtils::toGraalList(collection.begin(), collection.end());
+            return toGraalList(collection.begin(), collection.end());
         }
 
         static void freeGraalList(void *graalList);

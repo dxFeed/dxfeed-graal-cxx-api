@@ -1,12 +1,9 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../include/dxfeed_graal_cpp_api/event/IndexedEventSource.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -15,7 +12,7 @@ const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
 void *IndexedEventSource::toGraal() const {
     auto *graalSource = new dxfg_indexed_event_source_t{INDEXED_EVENT_SOURCE, id_, createCString(name_)};
 
-    return static_cast<void *>(graalSource);
+    return graalSource;
 }
 
 void IndexedEventSource::freeGraal(void *graalNative) {
@@ -23,7 +20,7 @@ void IndexedEventSource::freeGraal(void *graalNative) {
         return;
     }
 
-    auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
+    const auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
 
     delete[] graalSource->name;
     delete graalSource;

@@ -1,9 +1,9 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../include/dxfeed_graal_cpp_api/event/EventTypeEnum.hpp"
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -72,7 +72,7 @@ const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum
         }
 
         return result;
-    }(EventTypeEnum::ALL);
+    }(ALL);
 
 const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_CLASS_NAME =
     [](auto types) {
@@ -83,7 +83,7 @@ const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum
         }
 
         return result;
-    }(EventTypeEnum::ALL);
+    }(ALL);
 
 const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL_BY_ID =
     [](auto types) {
@@ -94,6 +94,6 @@ const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEn
         }
 
         return result;
-    }(EventTypeEnum::ALL);
+    }(ALL);
 
 DXFCPP_END_NAMESPACE

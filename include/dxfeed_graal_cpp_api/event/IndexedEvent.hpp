@@ -39,6 +39,8 @@ DXFCPP_BEGIN_NAMESPACE
  * See also the <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
  */
 struct DXFCPP_EXPORT IndexedEvent {
+    virtual ~IndexedEvent() = default;
+
     /// The alias to a type of shared pointer to the IndexedEvent object
     using Ptr = std::shared_ptr<IndexedEvent>;
 

@@ -133,7 +133,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      */
     const std::string &getEventSymbol() const & noexcept override {
         if (!eventSymbol_) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return eventSymbol_.value();
@@ -245,7 +245,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @return The current message.
      */
     TextMessage &withTime(std::int64_t time) noexcept {
-        TextMessage::setTime(time);
+        setTime(time);
 
         return *this;
     }
@@ -284,7 +284,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @throws InvalidArgumentException if a sequence is below zero or above #MAX_SEQUENCE.
      */
     TextMessage &withSequence(std::int32_t sequence) noexcept {
-        TextMessage::setSequence(sequence);
+        setSequence(sequence);
 
         return *this;
     }
@@ -316,7 +316,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @return The current message.
      */
     TextMessage &withText(const StringLike & text) noexcept {
-        TextMessage::setText(text);
+        setText(text);
 
         return *this;
     }

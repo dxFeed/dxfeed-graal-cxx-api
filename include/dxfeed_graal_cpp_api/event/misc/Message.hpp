@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
+#include "../EventType.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -106,7 +107,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      */
     const std::string &getEventSymbol() const & noexcept override {
         if (!eventSymbol_) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return eventSymbol_.value();
@@ -173,7 +174,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      */
     const std::string &getAttachment() const & {
         if (!attachment_) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return attachment_.value();
@@ -205,7 +206,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      * @return The current message.
      */
     Message &withAttachment(const StringLike &attachment) noexcept {
-        Message::setAttachment(attachment);
+        setAttachment(attachment);
 
         return *this;
     }

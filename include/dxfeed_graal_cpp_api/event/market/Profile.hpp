@@ -129,7 +129,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      */
     const std::string &getDescription() const & noexcept {
         if (!data_.description) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return data_.description.value();
@@ -214,7 +214,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      */
     const std::string &getStatusReason() const & noexcept {
         if (!data_.statusReason) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return data_.statusReason.value();

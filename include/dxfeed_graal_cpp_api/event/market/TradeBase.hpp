@@ -216,7 +216,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     std::string getExchangeCodeString() const noexcept {
         // TODO: cache [EN-8231]
 
-        return dxfcpp::utf16toUtf8String(tradeBaseData_.exchangeCode);
+        return utf16toUtf8String(tradeBaseData_.exchangeCode);
     }
 
     /**

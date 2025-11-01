@@ -186,7 +186,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withSource(const OrderSource &source) noexcept {
-        OrderBase::setSource(source);
+        setSource(source);
 
         return *this;
     }
@@ -239,7 +239,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withTime(std::int64_t time) noexcept {
-        OrderBase::setTime(time);
+        setTime(time);
 
         return *this;
     }
@@ -252,7 +252,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        OrderBase::setTimeNanoPart(timeNanoPart);
+        setTimeNanoPart(timeNanoPart);
 
         return *this;
     }
@@ -266,7 +266,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @see OrderBase::getSequence()
      */
     SpreadOrder &withSequence(std::int32_t sequence) noexcept {
-        OrderBase::setSequence(sequence);
+        setSequence(sequence);
 
         return *this;
     }
@@ -279,7 +279,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withTimeNanos(std::int64_t timeNanos) noexcept {
-        OrderBase::setTimeNanos(timeNanos);
+        setTimeNanos(timeNanos);
 
         return *this;
     }
@@ -291,7 +291,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withAction(const OrderAction &action) noexcept {
-        OrderBase::setAction(action);
+        setAction(action);
 
         return *this;
     }
@@ -303,7 +303,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withActionTime(std::int64_t actionTime) noexcept {
-        OrderBase::setActionTime(actionTime);
+        setActionTime(actionTime);
 
         return *this;
     }
@@ -316,7 +316,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withOrderId(std::int64_t orderId) noexcept {
-        OrderBase::setOrderId(orderId);
+        setOrderId(orderId);
 
         return *this;
     }
@@ -329,7 +329,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept {
-        OrderBase::setAuxOrderId(auxOrderId);
+        setAuxOrderId(auxOrderId);
 
         return *this;
     }
@@ -342,7 +342,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withPrice(double price) noexcept {
-        OrderBase::setPrice(price);
+        setPrice(price);
 
         return *this;
     }
@@ -355,7 +355,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withSize(double size) noexcept {
-        OrderBase::setSize(size);
+        setSize(size);
 
         return *this;
     }
@@ -368,7 +368,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withExecutedSize(double executedSize) noexcept {
-        OrderBase::setExecutedSize(executedSize);
+        setExecutedSize(executedSize);
 
         return *this;
     }
@@ -381,7 +381,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withCount(std::int64_t count) noexcept {
-        OrderBase::setCount(count);
+        setCount(count);
 
         return *this;
     }
@@ -394,7 +394,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withTradeId(std::int64_t tradeId) noexcept {
-        OrderBase::setTradeId(tradeId);
+        setTradeId(tradeId);
 
         return *this;
     }
@@ -407,7 +407,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withTradePrice(double tradePrice) noexcept {
-        OrderBase::setTradePrice(tradePrice);
+        setTradePrice(tradePrice);
 
         return *this;
     }
@@ -420,7 +420,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withTradeSize(double tradeSize) noexcept {
-        OrderBase::setTradeSize(tradeSize);
+        setTradeSize(tradeSize);
 
         return *this;
     }
@@ -433,7 +433,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withExchangeCode(char exchangeCode) noexcept {
-        OrderBase::setExchangeCode(exchangeCode);
+        setExchangeCode(exchangeCode);
 
         return *this;
     }
@@ -446,7 +446,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withExchangeCode(std::int16_t exchangeCode) noexcept {
-        OrderBase::setExchangeCode(exchangeCode);
+        setExchangeCode(exchangeCode);
 
         return *this;
     }
@@ -459,7 +459,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withOrderSide(const Side &side) noexcept {
-        OrderBase::setOrderSide(side);
+        setOrderSide(side);
 
         return *this;
     }
@@ -472,7 +472,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withScope(const Scope &scope) noexcept {
-        OrderBase::setScope(scope);
+        setScope(scope);
 
         return *this;
     }
@@ -484,7 +484,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      */
     const std::string &getSpreadSymbol() const & noexcept {
         if (!spreadOrderData_.spreadSymbol) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return spreadOrderData_.spreadSymbol.value();

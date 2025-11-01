@@ -49,7 +49,7 @@ class DXFCPP_EXPORT IndexedEventSource {
     static void freeGraal(void *graalNative);
 
     virtual std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept {
-        return {toGraal(), IndexedEventSource::freeGraal};
+        return {toGraal(), freeGraal};
     }
 
     /**
