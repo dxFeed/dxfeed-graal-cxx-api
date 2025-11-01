@@ -1,20 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../../include/dxfeed_graal_cpp_api/event/market/Summary.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <cstring>
-#include <memory>
-#include <utf8.h>
-#include <utility>
-
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -27,7 +21,7 @@ void Summary::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
+    const auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
 
     data_ = {
         .dayId = graalSummary->day_id,
@@ -50,9 +44,9 @@ void Summary::fillGraalData(void *graalNative) const noexcept {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
+    const auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
 
-    graalSummary->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_SUMMARY;
+    graalSummary->market_event.event_type.clazz = DXFG_EVENT_SUMMARY;
     graalSummary->day_id = data_.dayId;
     graalSummary->day_open_price = data_.dayOpenPrice;
     graalSummary->day_high_price = data_.dayHighPrice;
@@ -70,11 +64,10 @@ std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Summary. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SUMMARY) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to create Summary. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SUMMARY))));
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SUMMARY) {
+        throw InvalidArgumentException(fmt::format("Unable to create Summary. Wrong event class {}! Expected: {}.",
+                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                                                   std::to_string(DXFG_EVENT_SUMMARY)));
     }
 
     auto summary = std::make_shared<Summary>();
@@ -99,14 +92,15 @@ std::string Summary::toString() const {
 
 void *Summary::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::toGraal()");
     }
 
     auto *graalSummary = new dxfg_summary_t{};
 
-    fillGraalData(static_cast<void *>(graalSummary));
+    fillGraalData(graalSummary);
 
-    return static_cast<void *>(graalSummary);
+    return graalSummary;
 }
 
 void Summary::freeGraal(void *graalNative) {
@@ -114,16 +108,15 @@ void Summary::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_SUMMARY) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to free Summary's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_SUMMARY))));
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SUMMARY) {
+        throw InvalidArgumentException(fmt::format(
+            "Unable to free Summary's Graal data. Wrong event class {}! Expected: {}.",
+            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_SUMMARY)));
     }
 
-    auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
+    const auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
 
-    MarketEvent::freeGraalData(graalNative);
+    freeGraalData(graalNative);
 
     delete graalSummary;
 }

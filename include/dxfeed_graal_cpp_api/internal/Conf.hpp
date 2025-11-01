@@ -50,6 +50,24 @@
 #    endif
 #endif
 
+#if !defined(_MSC_VER) && defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__NVCOMPILER)
+#    ifndef DXFCXX_DO_PRAGMA
+#        define DXFCXX_DO_PRAGMA(x) _Pragma(#x)
+#    endif
+#    ifndef DXFCXX_DISABLE_CLANG_WARNINGS_PUSH
+#        define DXFCXX_DISABLE_CLANG_WARNINGS_PUSH(...)                                                                  \
+            DXFCXX_DO_PRAGMA(GCC diagnostic push) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#        define DXFCXX_DISABLE_CLANG_WARNINGS(...) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#        define DXFCXX_DISABLE_CLANG_WARNINGS_POP() DXFCXX_DO_PRAGMA(GCC diagnostic pop)
+#    endif
+#else
+#    ifndef DXFCXX_DISABLE_CLANG_WARNINGS_PUSH
+#        define DXFCXX_DISABLE_CLANG_WARNINGS_PUSH(warnings)
+#        define DXFCXX_DISABLE_CLANG_WARNINGS(warnings)
+#        define DXFCXX_DISABLE_CLANG_WARNINGS_POP()
+#    endif
+#endif
+
 #ifndef DXFCPP_EXPORT
 #    if defined(DXFCPP_USE_DLLS) && defined(_MSC_VER)
 #        if defined(LIBDXFCPP_EXPORTS)

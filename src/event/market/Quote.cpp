@@ -58,7 +58,7 @@ void Quote::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
 
     data_ = {
         .timeMillisSequence = graalQuote->time_millis_sequence,
@@ -81,7 +81,7 @@ void Quote::fillGraalData(void *graalNative) const noexcept {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
 
     graalQuote->market_event.event_type.clazz = DXFG_EVENT_QUOTE;
     graalQuote->time_millis_sequence = data_.timeMillisSequence;
@@ -151,7 +151,7 @@ void Quote::freeGraal(void *graalNative) {
                         std::to_string(DXFG_EVENT_QUOTE)));
     }
 
-    auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
 
     freeGraalData(graalNative);
 

@@ -17,7 +17,7 @@ void OrderBase::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
+    const auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
 
     orderBaseData_ = {
         .eventFlags = graalOrderBase->event_flags,
@@ -45,7 +45,7 @@ void OrderBase::fillGraalData(void *graalNative) const noexcept {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
+    const auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
 
     graalOrderBase->event_flags = orderBaseData_.eventFlags;
     graalOrderBase->index = orderBaseData_.index;

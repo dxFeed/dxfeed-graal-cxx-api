@@ -117,7 +117,7 @@ DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) const {
     }
 
     if (!eventType.isTimeSeries()) {
-        throw InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
+        throw InvalidArgumentException("Event type " +
                                        eventType.getClassName() + " is not TimeSeries");
     }
 
@@ -153,7 +153,7 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeed>>()->registerEntity(feed);
     ignoreUnused(id);
 
-    feed->handle_ = std::move(JavaObjectHandle<DXFeed>(feedHandle));
+    feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
 
     return feed;
 }

@@ -22,7 +22,7 @@ void Profile::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
+    const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
 
     data_ = {
         .description = toStringOpt(graalProfile->description),
@@ -51,7 +51,7 @@ void Profile::fillGraalData(void *graalNative) const noexcept {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
+    const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
 
     graalProfile->market_event.event_type.clazz = DXFG_EVENT_PROFILE;
     graalProfile->description = createCString(data_.description);
@@ -79,7 +79,7 @@ void Profile::freeGraalData(void *graalNative) noexcept {
 
     MarketEvent::freeGraalData(graalNative);
 
-    auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
+    const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
 
     delete[] graalProfile->description;
     delete[] graalProfile->status_reason;
@@ -122,6 +122,7 @@ std::string Profile::toString() const {
 
 void *Profile::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::toGraal()");
     }
 
@@ -144,7 +145,7 @@ void Profile::freeGraal(void *graalNative) {
                         std::to_string(DXFG_EVENT_PROFILE)));
     }
 
-    auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
+    const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
 
     freeGraalData(graalNative);
 

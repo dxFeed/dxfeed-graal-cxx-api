@@ -20,7 +20,7 @@ void Order::fillData(void *graalNative) noexcept {
 
     OrderBase::fillData(graalNative);
 
-    auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
 
     orderData_ = {.marketMaker = toStringOpt(graalOrder->market_maker)};
 }
@@ -32,7 +32,7 @@ void Order::fillGraalData(void *graalNative) const noexcept {
 
     OrderBase::fillGraalData(graalNative);
 
-    auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
 
     graalOrder->order_base.market_event.event_type.clazz = DXFG_EVENT_ORDER;
     graalOrder->market_maker = createCString(orderData_.marketMaker);
@@ -45,7 +45,7 @@ void Order::freeGraalData(void *graalNative) noexcept {
 
     MarketEvent::freeGraalData(graalNative);
 
-    auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
 
     delete[] graalOrder->market_maker;
 }
@@ -94,7 +94,7 @@ void Order::freeGraal(void *graalNative) {
             std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_ORDER)));
     }
 
-    auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
 
     freeGraalData(graalNative);
 

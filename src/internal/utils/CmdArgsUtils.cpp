@@ -17,7 +17,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
 DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
 DXFCXX_DISABLE_GCC_WARNINGS("-Wmaybe-uninitialized")
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 #if !defined(__cpp_lib_chrono) || (__cpp_lib_chrono < 201907L)

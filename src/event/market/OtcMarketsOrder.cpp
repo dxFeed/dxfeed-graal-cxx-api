@@ -19,7 +19,7 @@ void OtcMarketsOrder::fillData(void *graalNative) noexcept {
 
     Order::fillData(graalNative);
 
-    auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
 
     otcMarketsOrderData_ = {
         .quoteAccessPayment = graalOtcMarketsOrder->quote_access_payment,
@@ -34,7 +34,7 @@ void OtcMarketsOrder::fillGraalData(void *graalNative) const noexcept {
 
     Order::fillGraalData(graalNative);
 
-    auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
 
     graalOtcMarketsOrder->order_base.order_base.market_event.event_type.clazz =
         DXFG_EVENT_OTC_MARKETS_ORDER;
@@ -93,7 +93,7 @@ void OtcMarketsOrder::freeGraal(void *graalNative) {
                         std::to_string(DXFG_EVENT_OTC_MARKETS_ORDER)));
     }
 
-    auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
 
     freeGraalData(graalNative);
 

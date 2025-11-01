@@ -10,7 +10,10 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
+DXFCXX_DISABLE_CLANG_WARNINGS("-Wdeprecated-literal-operator")
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 #include <doctest.h>

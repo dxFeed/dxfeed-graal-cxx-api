@@ -110,13 +110,13 @@ OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : Ind
 std::int32_t OrderSource::composeId(const StringLike &name) {
     std::int32_t sourceId = 0;
 
-    auto n = name.length();
+    const auto n = name.length();
 
     if (n == 0 || n > 4) {
         throw InvalidArgumentException("Source name must contain from 1 to 4 characters");
     }
 
-    for (auto c : name) {
+    for (const auto c : name) {
         checkChar(c);
         sourceId = orOp(sal(sourceId, 8), c);
     }
@@ -146,7 +146,7 @@ std::string OrderSource::decodeName(std::int32_t id) {
             continue;
         }
 
-        char c = static_cast<char>(andOp(sar(id, i), 0xff));
+        const char c = static_cast<char>(andOp(sar(id, i), 0xff));
 
         checkChar(c);
         name[n++] = c;
@@ -183,11 +183,11 @@ std::uint32_t OrderSource::getEventTypeMask(const EventTypeEnum &eventType) {
 void *OrderSource::toGraal() const {
     auto *graalSource = new dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
 
-    return static_cast<void *>(graalSource);
+    return graalSource;
 }
 
 std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> OrderSource::toGraalUnique() const noexcept {
-    return {toGraal(), IndexedEventSource::freeGraal};
+    return {toGraal(), freeGraal};
 }
 
 bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {

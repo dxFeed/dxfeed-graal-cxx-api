@@ -18,6 +18,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct Direction;
 struct EventMapper;
 
 /**
@@ -196,15 +197,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @see TradeBase::getSequence()
      * @throws InvalidArgumentException
      */
-    void setSequence(std::int32_t sequence) {
-        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
-        }
-
-        tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Returns exchange code of the last trade.
@@ -342,18 +335,14 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return tick direction of the last trade.
      */
-    const Direction &getTickDirection() const & noexcept {
-        return Direction::valueOf(getBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT));
-    }
+    const Direction &getTickDirection() const & noexcept;
 
     /**
      * Changes tick direction of the last trade.
      *
      * @param direction tick direction of the last trade.
      */
-    void setTickDirection(const Direction &direction) noexcept {
-        tradeBaseData_.flags = setBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT, direction.getCode());
-    }
+    void setTickDirection(const Direction &direction) noexcept;
 
     /**
      * Returns whether last trade was in extended trading hours.
