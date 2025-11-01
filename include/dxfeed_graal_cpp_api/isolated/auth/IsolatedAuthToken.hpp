@@ -7,11 +7,13 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../auth/AuthToken.hpp"
+#include "../../internal/JavaObjectHandle.hpp"
 
 #include <string>
 
 DXFCPP_BEGIN_NAMESPACE
+
+struct AuthToken;
 
 namespace isolated::auth::IsolatedAuthToken {
 

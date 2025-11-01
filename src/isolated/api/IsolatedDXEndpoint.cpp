@@ -1,17 +1,20 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXEndpoint {
 
 void /* int32_t */
-close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+close(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_close`. The `endpoint` handle is invalid");
@@ -21,7 +24,7 @@ close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoin
 }
 
 void /* int32_t */
-closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_closeAndAwaitTermination`. The `endpoint` handle is invalid");
@@ -33,7 +36,7 @@ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
 
 // int32_t dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, dxfg_executor_t
 // *executor);
-void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaObjectHandle<dxfcpp::ExecutorTag> &ex) {
+void executor(const JavaObjectHandle<DXEndpoint> &endpoint, const JavaObjectHandle<ExecutorTag> &ex) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_executor`. The `endpoint` handle is invalid");
@@ -48,7 +51,7 @@ void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaOb
                                            static_cast<dxfg_executor_t *>(ex.get()));
 }
 
-void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint,
                         const StringLike& user) {
     if (!endpoint) {
         throw InvalidArgumentException(
@@ -59,7 +62,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
                                            user.data());
 }
 
-void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint,
                             const StringLike& password) {
     if (!endpoint) {
         throw InvalidArgumentException(
@@ -70,7 +73,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
                                            password.data());
 }
 
-void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const StringLike& address) {
+void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint, const StringLike& address) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_connect`. The `endpoint` handle is invalid");
@@ -80,7 +83,7 @@ void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &
                                            address.data());
 }
 
-void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_reconnect`. The `endpoint` handle is invalid");
@@ -89,7 +92,7 @@ void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint>
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_reconnect, static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_disconnect`. The `endpoint` handle is invalid");
@@ -98,7 +101,7 @@ void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_disconnect, static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_disconnectAndClear`. The `endpoint` handle is invalid");
@@ -108,7 +111,7 @@ void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
                                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_awaitProcessed`. The `endpoint` handle is invalid");
@@ -118,7 +121,7 @@ void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndp
                                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-void awaitNotConnected(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+void awaitNotConnected(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_awaitNotConnected`. The `endpoint` handle is invalid");
@@ -128,7 +131,7 @@ void awaitNotConnected(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXE
                                            static_cast<dxfg_endpoint_t *>(endpoint.get()));
 }
 
-dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException("Unable to get state. The `endpoint` handle is invalid");
     }
@@ -138,8 +141,8 @@ dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle
 }
 
 void addStateChangeListener(
-    /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-    /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
+    /* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint,
+    /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<DXEndpointStateChangeListener>
         &listener) {
 
     if (!endpoint) {
@@ -156,8 +159,8 @@ void addStateChangeListener(
 }
 
 void removeStateChangeListener(
-    /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-    /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
+    /* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint,
+    /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<DXEndpointStateChangeListener>
         &listener) {
 
     if (!endpoint) {
@@ -175,7 +178,7 @@ void removeStateChangeListener(
                                            static_cast<dxfg_endpoint_state_change_listener_t *>(listener.get()));
 }
 
-void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_getFeed`. The `endpoint` handle is invalid");
@@ -186,7 +189,7 @@ void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle
 }
 
 void * /* dxfg_publisher_t* */
-getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_getPublisher`. The `endpoint` handle is invalid");
@@ -197,7 +200,7 @@ getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> 
 }
 
 /* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum>
-getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException("Unable to retrieve event types. The `endpoint` handle is invalid");
     }
@@ -249,8 +252,8 @@ void * /* dxfg_endpoint_builder_t* */ create() {
 }
 
 void /* int32_t */
-withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-         /* dxfg_endpoint_role_t */ dxfcpp::DXEndpoint::Role role) {
+withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
+         /* dxfg_endpoint_role_t */ DXEndpoint::Role role) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_Builder_withRole`. The `builder` handle is invalid");
@@ -262,7 +265,7 @@ withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoi
 
 // dxfg_DXEndpoint_Builder_withProperty
 void /* int32_t */
-withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
              const StringLike& key, const StringLike& value) {
     if (!builder) {
         throw InvalidArgumentException(
@@ -276,7 +279,7 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
 
 // dxfg_DXEndpoint_Builder_withProperties
 void /* int32_t */
-withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
                const StringLike& filePath) {
     if (!builder) {
         throw InvalidArgumentException(
@@ -289,7 +292,7 @@ withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DX
 
 // dxfg_DXEndpoint_Builder_supportsProperty
 bool /* int32_t */
-supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
                  const StringLike& key) {
     if (!builder) {
         throw InvalidArgumentException(
@@ -303,7 +306,7 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::
 
 // dxfg_DXEndpoint_Builder_build
 void * /* dxfg_endpoint_t* */
-build(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder) {
+build(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_Builder_build`. The `builder` handle is invalid");
@@ -316,13 +319,13 @@ build(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint:
 } // namespace Builder
 
 namespace StateChangeListener {
-JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener> create(void *userFunc, void *userData) {
+JavaObjectHandle<DXEndpointStateChangeListener> create(void *userFunc, void *userData) {
     if (!userFunc) {
         throw InvalidArgumentException(
             "Unable to create DXEndpointStateChangeListener. The `userFunc` parameter is nullptr");
     }
 
-    return JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>(runGraalFunctionAndThrowIfNullptr(
+    return JavaObjectHandle<DXEndpointStateChangeListener>(runGraalFunctionAndThrowIfNullptr(
         dxfg_PropertyChangeListener_new, dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc),
         userData));
 }
