@@ -1,21 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
-
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <cstring>
-#include <memory>
 #include <utf8.h>
 #include <utility>
 
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
 #include <fmt/ranges.h>
-#include <fmt/std.h>
 
 DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
 DXFCXX_DISABLE_GCC_WARNINGS("-Wmaybe-uninitialized")
@@ -164,9 +157,10 @@ std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
         return "0";
     }
 
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
+    const auto timeT = static_cast<std::time_t>(timestamp / 1000);
+    const auto tm = std::localtime(&timeT);
 
-    return fmt::format("{:%Y%m%d-%H%M%S%z}", tm);
+    return fmt::format(fmt::runtime("{:%Y%m%d-%H%M%S%z}"), *tm);
 }
 
 std::string formatTimeStampFast(std::int64_t timestamp) {
@@ -174,8 +168,9 @@ std::string formatTimeStampFast(std::int64_t timestamp) {
         return "0";
     }
 
-    auto tm = fmt::localtime(static_cast<std::time_t>(timestamp / 1000));
-    auto dt = fmt::format("{:%Y-%m-%d %H:%M:%S}", tm);
+    const auto timeT = static_cast<std::time_t>(timestamp / 1000);
+    const auto tm = std::localtime(&timeT);
+    auto dt = fmt::format("{:%Y-%m-%d %H:%M:%S}", *tm);
 
     if (const auto i = dt.find_first_of('.'); i != std::string::npos) {
         dt = dt.substr(0, i);

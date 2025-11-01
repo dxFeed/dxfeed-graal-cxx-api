@@ -7,7 +7,7 @@
 - \[opt] [Boost](https://github.com/boostorg/boost) v1.84.0
   - Boost.Stacktrace 1.0
 - [utfcpp](https://github.com/nemtrif/utfcpp) v3.2.3
-- [fmt](https://github.com/fmtlib/fmt) v11.0.2
+- [fmt](https://github.com/fmtlib/fmt) v12.1.0
 - [doctest](https://github.com/doctest/doctest) v2.4.11 (Tests)
 - [range-v3](https://github.com/ericniebler/range-v3) v0.12
 - [date](https://github.com/HowardHinnant/date) v3.0.1
