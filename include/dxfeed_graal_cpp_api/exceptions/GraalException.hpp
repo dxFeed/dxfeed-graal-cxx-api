@@ -24,21 +24,12 @@ struct DXFCPP_EXPORT GraalException : RuntimeException {
      *
      * @param entryPointErrorsEnum The error code returned by GraalVM.
      */
-    GraalException(CEntryPointErrorsEnum entryPointErrorsEnum);
+    explicit GraalException(CEntryPointErrorsEnum entryPointErrorsEnum);
 
     GraalException(const GraalException &other) noexcept;
 
     private:
-    static inline std::string createMessage(CEntryPointErrorsEnum entryPointErrorsEnum) {
-        auto result = CEntryPointErrorsEnumToStr(entryPointErrorsEnum);
-
-        if (!result) {
-            return std::string("Unknown error with error code: ") +
-                   std::to_string(static_cast<std::size_t>(entryPointErrorsEnum));
-        }
-
-        return result;
-    }
+    static std::string createMessage(CEntryPointErrorsEnum entryPointErrorsEnum);
 };
 
 DXFCPP_END_NAMESPACE
