@@ -1,18 +1,20 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#define _CRT_SECURE_NO_WARNINGS // NOLINT(*-reserved-identifier)
 
-#include <utf8.h>
-#include <utility>
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 
 #include <fmt/format.h>
 #include <fmt/ranges.h>
+#include <utf8.h>
+#include <utility>
 
 DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
 DXFCXX_DISABLE_GCC_WARNINGS("-Wmaybe-uninitialized")
-DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702 4996)
 DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
 #include <range/v3/all.hpp>
 DXFCXX_DISABLE_CLANG_WARNINGS_POP()
@@ -27,7 +29,7 @@ std::string toString(const char *chars) noexcept {
     // TODO: cache [EN-8231]
 
     if (chars == nullptr) {
-        return dxfcpp::String::NUL;
+        return String::NUL;
     }
 
     return chars;
@@ -190,7 +192,7 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
 }
 
 char *createCString(const StringLike &s) {
-    if (s == dxfcpp::String::NUL) {
+    if (s == String::NUL) {
         return nullptr;
     }
 

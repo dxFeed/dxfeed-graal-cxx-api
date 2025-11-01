@@ -128,7 +128,7 @@ enum class CEntryPointErrorsEnum : uint32_t {
     UNKNOWN_STACK_BOUNDARIES = 32,
 };
 
-inline constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum enumValue) {
+constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum enumValue) {
     switch (enumValue) {
     case CEntryPointErrorsEnum::NO_ERROR:
         return "No error occurred.";

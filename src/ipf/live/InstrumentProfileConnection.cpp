@@ -1,47 +1,40 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../../include/dxfeed_graal_cpp_api/ipf/live/InstrumentProfileConnection.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <cstring>
-#include <dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp>
 #include <memory>
-#include <utf8.h>
-#include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
-dxfcpp::InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state) {
+InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state) {
     switch (state) {
     case DXFG_IPF_CONNECTION_STATE_NOT_CONNECTED:
-        return dxfcpp::InstrumentProfileConnection::State::NOT_CONNECTED;
+        return InstrumentProfileConnection::State::NOT_CONNECTED;
     case DXFG_IPF_CONNECTION_STATE_CONNECTING:
-        return dxfcpp::InstrumentProfileConnection::State::CONNECTING;
+        return InstrumentProfileConnection::State::CONNECTING;
     case DXFG_IPF_CONNECTION_STATE_CONNECTED:
-        return dxfcpp::InstrumentProfileConnection::State::CONNECTED;
+        return InstrumentProfileConnection::State::CONNECTED;
     case DXFG_IPF_CONNECTION_STATE_COMPLETED:
-        return dxfcpp::InstrumentProfileConnection::State::COMPLETED;
+        return InstrumentProfileConnection::State::COMPLETED;
     case DXFG_IPF_CONNECTION_STATE_CLOSED:
-        return dxfcpp::InstrumentProfileConnection::State::CLOSED;
+        return InstrumentProfileConnection::State::CLOSED;
     }
 
-    return dxfcpp::InstrumentProfileConnection::State::NOT_CONNECTED;
+    return InstrumentProfileConnection::State::NOT_CONNECTED;
 }
 
 struct InstrumentProfileConnection::Impl {
     static void onStateChange(graal_isolatethread_t * /*thread*/, dxfg_ipf_connection_state_t oldState,
                               dxfg_ipf_connection_state_t newState, void *userData) noexcept {
-        auto id = Id<InstrumentProfileConnection>::from(
+        const auto id = Id<InstrumentProfileConnection>::from(
             dxfcpp::bit_cast<Id<InstrumentProfileConnection>::ValueType>(userData));
-        auto connection =
+        const auto connection =
             ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileConnection>>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
@@ -61,7 +54,7 @@ struct InstrumentProfileConnection::Impl {
 };
 
 InstrumentProfileConnection::InstrumentProfileConnection() noexcept
-    : id_{Id<InstrumentProfileConnection>::UNKNOWN}, handle_{}, stateChangeListenerHandle_{}, onStateChange_{} {
+    : id_{Id<InstrumentProfileConnection>::UNKNOWN} {
 }
 
 InstrumentProfileConnection::Ptr
@@ -74,7 +67,7 @@ InstrumentProfileConnection::createConnection(const StringLike &address,
     connection->handle_ =
         isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address, collector->handle_);
     connection->stateChangeListenerHandle_ = isolated::ipf::live::IsolatedIpfPropertyChangeListener::create(
-        dxfcpp::bit_cast<void *>(&InstrumentProfileConnection::Impl::onStateChange),
+        dxfcpp::bit_cast<void *>(&Impl::onStateChange),
         dxfcpp::bit_cast<void *>(connection->id_.getValue()));
 
     isolated::ipf::live::IsolatedInstrumentProfileConnection::addStateChangeListener(

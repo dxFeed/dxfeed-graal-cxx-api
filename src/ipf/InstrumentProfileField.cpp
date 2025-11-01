@@ -1,20 +1,7 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <cstring>
-#include <memory>
-#include <utf8.h>
-#include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfileField.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -69,38 +56,37 @@ const InstrumentProfileField InstrumentProfileField::TRADING_HOURS{InstrumentPro
                                                                    "TRADING_HOURS"};
 
 const std::unordered_map<std::string, std::reference_wrapper<const InstrumentProfileField>> InstrumentProfileField::MAP{
-    {InstrumentProfileField::TYPE.getName(), std::cref(InstrumentProfileField::TYPE)},
-    {InstrumentProfileField::SYMBOL.getName(), std::cref(InstrumentProfileField::SYMBOL)},
-    {InstrumentProfileField::DESCRIPTION.getName(), std::cref(InstrumentProfileField::DESCRIPTION)},
-    {InstrumentProfileField::LOCAL_SYMBOL.getName(), std::cref(InstrumentProfileField::LOCAL_SYMBOL)},
-    {InstrumentProfileField::LOCAL_DESCRIPTION.getName(), std::cref(InstrumentProfileField::LOCAL_DESCRIPTION)},
-    {InstrumentProfileField::COUNTRY.getName(), std::cref(InstrumentProfileField::COUNTRY)},
-    {InstrumentProfileField::OPOL.getName(), std::cref(InstrumentProfileField::OPOL)},
-    {InstrumentProfileField::EXCHANGE_DATA.getName(), std::cref(InstrumentProfileField::EXCHANGE_DATA)},
-    {InstrumentProfileField::EXCHANGES.getName(), std::cref(InstrumentProfileField::EXCHANGES)},
-    {InstrumentProfileField::CURRENCY.getName(), std::cref(InstrumentProfileField::CURRENCY)},
-    {InstrumentProfileField::BASE_CURRENCY.getName(), std::cref(InstrumentProfileField::BASE_CURRENCY)},
-    {InstrumentProfileField::CFI.getName(), std::cref(InstrumentProfileField::CFI)},
-    {InstrumentProfileField::ISIN.getName(), std::cref(InstrumentProfileField::ISIN)},
-    {InstrumentProfileField::SEDOL.getName(), std::cref(InstrumentProfileField::SEDOL)},
-    {InstrumentProfileField::CUSIP.getName(), std::cref(InstrumentProfileField::CUSIP)},
-    {InstrumentProfileField::ICB.getName(), std::cref(InstrumentProfileField::ICB)},
-    {InstrumentProfileField::SIC.getName(), std::cref(InstrumentProfileField::SIC)},
-    {InstrumentProfileField::MULTIPLIER.getName(), std::cref(InstrumentProfileField::MULTIPLIER)},
-    {InstrumentProfileField::PRODUCT.getName(), std::cref(InstrumentProfileField::PRODUCT)},
-    {InstrumentProfileField::UNDERLYING.getName(), std::cref(InstrumentProfileField::UNDERLYING)},
-    {InstrumentProfileField::SPC.getName(), std::cref(InstrumentProfileField::SPC)},
-    {InstrumentProfileField::ADDITIONAL_UNDERLYINGS.getName(),
-     std::cref(InstrumentProfileField::ADDITIONAL_UNDERLYINGS)},
-    {InstrumentProfileField::MMY.getName(), std::cref(InstrumentProfileField::MMY)},
-    {InstrumentProfileField::EXPIRATION.getName(), std::cref(InstrumentProfileField::EXPIRATION)},
-    {InstrumentProfileField::LAST_TRADE.getName(), std::cref(InstrumentProfileField::LAST_TRADE)},
-    {InstrumentProfileField::STRIKE.getName(), std::cref(InstrumentProfileField::STRIKE)},
-    {InstrumentProfileField::OPTION_TYPE.getName(), std::cref(InstrumentProfileField::OPTION_TYPE)},
-    {InstrumentProfileField::EXPIRATION_STYLE.getName(), std::cref(InstrumentProfileField::EXPIRATION_STYLE)},
-    {InstrumentProfileField::SETTLEMENT_STYLE.getName(), std::cref(InstrumentProfileField::SETTLEMENT_STYLE)},
-    {InstrumentProfileField::PRICE_INCREMENTS.getName(), std::cref(InstrumentProfileField::PRICE_INCREMENTS)},
-    {InstrumentProfileField::TRADING_HOURS.getName(), std::cref(InstrumentProfileField::TRADING_HOURS)},
+    {TYPE.getName(), std::cref(TYPE)},
+    {SYMBOL.getName(), std::cref(SYMBOL)},
+    {DESCRIPTION.getName(), std::cref(DESCRIPTION)},
+    {LOCAL_SYMBOL.getName(), std::cref(LOCAL_SYMBOL)},
+    {LOCAL_DESCRIPTION.getName(), std::cref(LOCAL_DESCRIPTION)},
+    {COUNTRY.getName(), std::cref(COUNTRY)},
+    {OPOL.getName(), std::cref(OPOL)},
+    {EXCHANGE_DATA.getName(), std::cref(EXCHANGE_DATA)},
+    {EXCHANGES.getName(), std::cref(EXCHANGES)},
+    {CURRENCY.getName(), std::cref(CURRENCY)},
+    {BASE_CURRENCY.getName(), std::cref(BASE_CURRENCY)},
+    {CFI.getName(), std::cref(CFI)},
+    {ISIN.getName(), std::cref(ISIN)},
+    {SEDOL.getName(), std::cref(SEDOL)},
+    {CUSIP.getName(), std::cref(CUSIP)},
+    {ICB.getName(), std::cref(ICB)},
+    {SIC.getName(), std::cref(SIC)},
+    {MULTIPLIER.getName(), std::cref(MULTIPLIER)},
+    {PRODUCT.getName(), std::cref(PRODUCT)},
+    {UNDERLYING.getName(), std::cref(UNDERLYING)},
+    {SPC.getName(), std::cref(SPC)},
+    {ADDITIONAL_UNDERLYINGS.getName(), std::cref(ADDITIONAL_UNDERLYINGS)},
+    {MMY.getName(), std::cref(MMY)},
+    {EXPIRATION.getName(), std::cref(EXPIRATION)},
+    {LAST_TRADE.getName(), std::cref(LAST_TRADE)},
+    {STRIKE.getName(), std::cref(STRIKE)},
+    {OPTION_TYPE.getName(), std::cref(OPTION_TYPE)},
+    {EXPIRATION_STYLE.getName(), std::cref(EXPIRATION_STYLE)},
+    {SETTLEMENT_STYLE.getName(), std::cref(SETTLEMENT_STYLE)},
+    {PRICE_INCREMENTS.getName(), std::cref(PRICE_INCREMENTS)},
+    {TRADING_HOURS.getName(), std::cref(TRADING_HOURS)},
 };
 
 InstrumentProfileFieldEnum InstrumentProfileField::getFieldEnum() const {

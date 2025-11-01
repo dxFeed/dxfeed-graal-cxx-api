@@ -35,13 +35,13 @@ struct DXFCPP_EXPORT EventClassList {
         return list;
     }
 
-    void set(std::size_t index, std::uint32_t id) noexcept;
+    void set(std::size_t index, std::uint32_t id) const noexcept;
 
     [[nodiscard]] bool isEmpty() const noexcept;
 
     [[nodiscard]] std::size_t size() const noexcept;
 
-    void *getHandle() noexcept;
+    void *getHandle() const noexcept;
 
     ~EventClassList() noexcept;
 

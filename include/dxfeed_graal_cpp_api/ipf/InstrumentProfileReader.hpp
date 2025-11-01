@@ -19,6 +19,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct AuthToken;
+
 /**
  * Reads instrument profiles from the stream using Instrument Profile Format (IPF).
  * Please see <b>Instrument Profile Format</b> documentation for complete description.
@@ -37,7 +39,7 @@ DXFCPP_BEGIN_NAMESPACE
  */
 class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     Id<InstrumentProfileReader> id_;
-    JavaObjectHandle<InstrumentProfileReader> handle_;
+    JavaObjectHandle<InstrumentProfileReader> handle_{};
 
     InstrumentProfileReader();
 

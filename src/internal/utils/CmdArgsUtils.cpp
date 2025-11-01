@@ -1,10 +1,11 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // NOLINT(*-reserved-identifier)
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/CmdArgsUtils.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
 
@@ -30,7 +31,9 @@ DXFCPP_BEGIN_NAMESPACE
 
 inline auto getUtcOffset() {
     constexpr std::time_t epochPlus11H = 60 * 60 * 11;
+    // ReSharper disable CppDeprecatedEntity
     const int localTime = localtime(&epochPlus11H)->tm_hour * 60 + localtime(&epochPlus11H)->tm_min;
+    // ReSharper disable CppDeprecatedEntity
     const int gmTime = gmtime(&epochPlus11H)->tm_hour * 60 + gmtime(&epochPlus11H)->tm_min;
     const int tzDiff = localTime - gmTime;
 
@@ -63,7 +66,7 @@ inline auto toUpper = [](auto &&s) {
 };
 
 std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const StringLike &symbols) {
-    auto trimmedSymbols = trimStr(symbols);
+    const auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -79,7 +82,7 @@ std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const StringLike &s
 }
 
 std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(const StringLike &symbols) {
-    auto trimmedSymbols = trimStr(symbols);
+    const auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -97,7 +100,7 @@ std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(const StringLi
 }
 
 std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const StringLike &symbols) {
-    auto trimmedSymbols = trimStr(symbols);
+    const auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -123,15 +126,13 @@ CmdArgsUtils::parseTypes(const StringLike &types) {
         return {EventTypeEnum::ALL | ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>(), {}};
     }
 
-    auto split = splitAndTrim(trimmedTypes) | filterNonEmpty | ranges::to<std::vector<std::string>>;
+    const auto split = splitAndTrim(trimmedTypes) | filterNonEmpty | ranges::to<std::vector<std::string>>;
 
     std::unordered_set<std::reference_wrapper<const EventTypeEnum>> result;
     std::vector<std::string> unknown;
 
     for (auto t : split) {
-        auto u = toUpper(t);
-
-        if (EventTypeEnum::ALL_BY_NAME.contains(u)) {
+        if (auto u = toUpper(t); EventTypeEnum::ALL_BY_NAME.contains(u)) {
             result.emplace(EventTypeEnum::ALL_BY_NAME.at(u));
         } else if (EventTypeEnum::ALL_BY_CLASS_NAME.contains(t)) {
             result.emplace(EventTypeEnum::ALL_BY_CLASS_NAME.at(t));
