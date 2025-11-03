@@ -9,7 +9,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "./Promise.hpp"
 
-#include <chrono>
 #include <memory>
 #include <vector>
 

@@ -1,11 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
+
+#include "../../include/dxfeed_graal_c_api/api.h"
+#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include <string>
 #include <utf8.h>
 
@@ -18,6 +19,7 @@ DXFCPP_BEGIN_NAMESPACE
 bool System::setProperty(const StringLike &key, const StringLike &value) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "')");
     }
 
@@ -30,6 +32,7 @@ bool System::setProperty(const StringLike &key, const StringLike &value) {
         false);
 
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "') -> " + toString(result));
     }
 
@@ -39,6 +42,7 @@ bool System::setProperty(const StringLike &key, const StringLike &value) {
 std::string System::getProperty(const StringLike &key) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("System::getProperty(key = " + key + ")");
     }
 
@@ -57,6 +61,7 @@ std::string System::getProperty(const StringLike &key) {
         std::string{});
 
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("System::getProperty(key = '" + key + "') -> '" + result + "'");
     }
 
@@ -71,6 +76,7 @@ dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
     return dxfcpp::System::setProperty(key, value) ? DXFC_EC_SUCCESS : DXFC_EC_ERROR;
 }
 
+// ReSharper disable once CppDFAConstantFunctionResult
 dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t bufferSize) {
     auto value = dxfcpp::System::getProperty(key);
 
@@ -85,14 +91,12 @@ dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t
 
         memcpy(buffer, value.c_str(), size);
 
-        auto begin = buffer;
-        auto end = buffer + size;
+        const auto begin = buffer;
+        const auto end = buffer + size;
 
         // Looks for the first invalid UTF-8 character.
-        auto found = utf8::find_invalid(begin, end);
-
         // An invalid character position was found. Trim the result string buffer to this invalid character.
-        if (found != end) {
+        if (const auto found = utf8::find_invalid(begin, end); found != end) {
             *found = '\0';
         }
     }

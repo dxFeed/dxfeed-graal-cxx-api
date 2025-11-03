@@ -3,18 +3,18 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
+#include "../../../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/internal/utils/CmdArgsUtils.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/internal/utils/EnumUtils.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #include "../Args/Args.hpp"
-
+#include <fmt/format.h>
+#include <fmt/std.h>
 #include <iostream>
 #include <memory>
-#include <utility>
 #include <variant>
-
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")

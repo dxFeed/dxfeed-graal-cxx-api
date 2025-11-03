@@ -1,12 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../include/dxfeed_graal_cpp_api/schedule/DayFilter.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedDay.hpp>
-#include <utility>
+#include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedDay.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -17,7 +18,7 @@ DayFilter::DayFilter(DayFilterEnum code, const StringLike & name, std::uint32_t 
 }
 
 const JavaObjectHandle<DayFilter> &DayFilter::getHandle() const & {
-    std::lock_guard<std::mutex> lock(mtx_);
+    std::lock_guard lock(mtx_);
 
     if (!handle_) {
         handle_ = isolated::schedule::IsolatedDayFilter::getInstance(static_cast<std::uint32_t>(code_));

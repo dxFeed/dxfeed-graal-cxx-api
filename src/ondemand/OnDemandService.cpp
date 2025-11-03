@@ -1,23 +1,29 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../include/dxfeed_graal_cpp_api/ondemand/OnDemandService.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/ondemand/IsolatedOnDemandService.hpp>
+#include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/ondemand/IsolatedOnDemandService.hpp"
+
 #include <memory>
 #include <string>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
-OnDemandService::OnDemandService() noexcept : handle_{} {
+OnDemandService::OnDemandService() noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("OnDemandService()");
     }
 }
 
 OnDemandService::~OnDemandService() noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("OnDemandService{" + handle_.toString() + "}::~OnDemandService()");
     }
 }
@@ -28,6 +34,7 @@ std::shared_ptr<OnDemandService> OnDemandService::getInstance() {
 
 std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DXEndpoint> endpoint) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("OnDemandService::getInstance(" + endpoint->toString() + ")");
     }
 

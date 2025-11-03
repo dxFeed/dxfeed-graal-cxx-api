@@ -135,12 +135,12 @@ std::vector<std::shared_ptr<CFI::Value>> CFI::decipher() const {
     init();
 
     auto values = isolated::glossary::IsolatedCFI::decipher(handle_);
-    std::vector<std::shared_ptr<CFI::Value>> result{};
+    std::vector<std::shared_ptr<Value>> result{};
 
     result.reserve(values.size());
 
     for (auto &value : values) {
-        result.emplace_back(CFI::Value::createShared(JavaObjectHandle<CFI::Value>{value}));
+        result.emplace_back(Value::createShared(JavaObjectHandle<Value>{value}));
     }
 
     result.shrink_to_fit();
@@ -202,12 +202,12 @@ std::string CFI::Attribute::getDescription() const {
 
 std::vector<std::shared_ptr<CFI::Value>> CFI::Attribute::getValues() const {
     auto values = isolated::glossary::IsolatedCFI::IsolatedAttribute::getValues(handle_);
-    std::vector<std::shared_ptr<CFI::Value>> result{};
+    std::vector<std::shared_ptr<Value>> result{};
 
     result.reserve(values.size());
 
     for (auto &value : values) {
-        result.emplace_back(CFI::Value::createShared(JavaObjectHandle<CFI::Value>{value}));
+        result.emplace_back(Value::createShared(JavaObjectHandle<Value>{value}));
     }
 
     result.shrink_to_fit();
@@ -227,14 +227,14 @@ std::string CFI::Attribute::toString() const {
     return JavaObject::toString(handle_.get());
 }
 
-CFI::Value::Value(CFI::Value::LockExternalConstructionTag, JavaObjectHandle<Value> &&handle) : handle_(std::move(handle)) {
+CFI::Value::Value(LockExternalConstructionTag, JavaObjectHandle<Value> &&handle) : handle_(std::move(handle)) {
 }
 
 CFI::Value::~Value() noexcept {
 }
 
 CFI::Attribute::Ptr CFI::Value::getAttribute() const {
-    return CFI::Attribute::createShared(isolated::glossary::IsolatedCFI::IsolatedValue::getAttribute(handle_));
+    return Attribute::createShared(isolated::glossary::IsolatedCFI::IsolatedValue::getAttribute(handle_));
 }
 
 std::int16_t CFI::Value::getCode() const {

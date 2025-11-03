@@ -423,7 +423,7 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag) : role_{}, impl_(std::make_u
 }
 
 DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name)
-    : role_{role}, name_{std::move(name)}, impl_(std::make_unique<DXEndpoint::Impl>()) {
+    : role_{role}, name_{std::move(name)}, impl_(std::make_unique<Impl>()) {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint()");
@@ -557,7 +557,7 @@ struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
     void *userData{};
     std::unordered_map<dxfc_dxendpoint_state_change_listener, std::size_t> listeners{};
 
-    EndpointWrapper(std::shared_ptr<dxfcpp::DXEndpoint> endpoint, void *userData)
+    EndpointWrapper(std::shared_ptr<DXEndpoint> endpoint, void *userData)
         : endpoint{std::move(endpoint)}, userData{userData} {
     }
 
@@ -608,7 +608,7 @@ static DXEndpoint::Role cApiRoleToRole(dxfc_dxendpoint_role_t role) {
     return DXEndpoint::Role::FEED;
 }
 
-static dxfc_dxendpoint_role_t roleToCApiRole(dxfcpp::DXEndpoint::Role role) {
+static dxfc_dxendpoint_role_t roleToCApiRole(DXEndpoint::Role role) {
     switch (role) {
     case DXEndpoint::Role::FEED:
         return DXFC_DXENDPOINT_ROLE_FEED;

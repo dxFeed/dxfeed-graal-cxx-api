@@ -1,11 +1,15 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../include/dxfeed_graal_cpp_api/schedule/Schedule.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedSchedule.hpp>
+#include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfile.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSchedule.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/Day.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/Session.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -17,10 +21,11 @@ Schedule::Ptr Schedule::create(JavaObjectHandle<Schedule> &&handle) {
         throw InvalidArgumentException("Unable to create a Schedule object. The handle is nullptr");
     }
 
+    // ReSharper disable once CppDFAMemoryLeak
     return std::shared_ptr<Schedule>(new Schedule(std::move(handle)));
 }
 
-Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile) {
+Schedule::Ptr Schedule::getInstance(const std::shared_ptr<InstrumentProfile> &profile) {
     if (!profile) {
         throw InvalidArgumentException("The `profile` is nullptr");
     }
@@ -32,7 +37,7 @@ Schedule::Ptr Schedule::getInstance(const StringLike &scheduleDefinition) {
     return create(isolated::schedule::IsolatedSchedule::getInstance(scheduleDefinition));
 }
 
-Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLike &venue) {
+Schedule::Ptr Schedule::getInstance(const std::shared_ptr<InstrumentProfile> &profile, const StringLike &venue) {
     if (!profile) {
         throw InvalidArgumentException("The `profile` is nullptr");
     }
@@ -40,7 +45,7 @@ Schedule::Ptr Schedule::getInstance(std::shared_ptr<InstrumentProfile> profile, 
     return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_, venue));
 }
 
-std::vector<std::string> Schedule::getTradingVenues(std::shared_ptr<InstrumentProfile> profile) {
+std::vector<std::string> Schedule::getTradingVenues(const std::shared_ptr<InstrumentProfile> &profile) {
     if (!profile) {
         throw InvalidArgumentException("The profile is nullptr");
     }

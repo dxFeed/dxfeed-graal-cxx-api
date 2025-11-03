@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include "../Args/Args.hpp"
 
 #include <chrono>
@@ -13,15 +11,12 @@
 #include <utility>
 #include <variant>
 #include <vector>
+#include <iostream>
 
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
-#include <range/v3/all.hpp>
 DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 

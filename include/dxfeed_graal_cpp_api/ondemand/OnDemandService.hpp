@@ -76,7 +76,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     using Unique = std::unique_ptr<OnDemandService>;
 
     private:
-    JavaObjectHandle<OnDemandService> handle_;
+    JavaObjectHandle<OnDemandService> handle_{};
     std::shared_ptr<DXEndpoint> endpoint_{};
 
     protected:

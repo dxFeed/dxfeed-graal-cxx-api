@@ -1,16 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_c_api/api.h>
+#include "../../include/dxfeed_graal_cpp_api/schedule/Session.hpp"
 
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
-#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
-#include <dxfeed_graal_cpp_api/schedule/Day.hpp>
-#include <dxfeed_graal_cpp_api/schedule/Session.hpp>
-#include <dxfeed_graal_cpp_api/schedule/SessionFilter.hpp>
-#include <dxfeed_graal_cpp_api/schedule/SessionType.hpp>
-
-#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp>
+#include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/Day.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/SessionType.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -22,6 +20,7 @@ Session::Ptr Session::create(JavaObjectHandle<Session> &&handle) {
         throw InvalidArgumentException("Unable to create a Session object. The handle is invalid");
     }
 
+    // ReSharper disable once CppDFAMemoryLeak
     return std::shared_ptr<Session>(new Session(std::move(handle)));
 }
 

@@ -3,20 +3,16 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
+#include "../../../../include/dxfeed_graal_cpp_api/event/market/Profile.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/event/market/Summary.hpp"
 #include "../Args/Args.hpp"
-
 #include <chrono>
 #include <cstdint>
-#include <memory>
-#include <utility>
-#include <variant>
-
-#include <process/process.hpp>
-
 #include <fmt/format.h>
 #include <fmt/std.h>
+#include <memory>
+#include <process/process.hpp>
+#include <variant>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
@@ -53,7 +49,7 @@ struct PerfTest2Tool {
     }
 
     struct Diagnostic final {
-      private:
+        private:
         bool showCpuUsageByCore_{};
         std::chrono::milliseconds cpuStartTime_{};
         std::atomic<std::size_t> eventsCounter_{};
@@ -94,10 +90,10 @@ struct PerfTest2Tool {
 
             if (dumpCsv_) {
                 fmt::println("{},{},{},{},{:.3f},{:.3f},{:.2f},{:.2f},{:%H:%M:%S},{}", formatTimeStampFast(now()),
-                           formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
-                           formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage, peakMemoryUsage_,
-                           currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
-                           ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event"));
+                             formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
+                             formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage,
+                             peakMemoryUsage_, currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
+                             ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event"));
             } else {
                 fmt::print("\n{}\n", Platform::getPlatformInfo());
                 std::cout << "----------------------------------------------------\n";
@@ -152,14 +148,15 @@ struct PerfTest2Tool {
                     static_cast<double>(!showCpuUsageByCore_ ? std::thread::hardware_concurrency() : 1));
         }
 
-      public:
+        public:
         static std::string getCsvHeader() {
             return "Timestamp,Rate of events (avg) [events/s],Rate of listener calls [calls/s],Number of events in "
                    "call (avg) [events],Current memory usage [MByte],Peak memory usage [MByte],Current CPU usage "
                    "[%],Peak CPU usage [%],Running time,Entity.Event";
         }
 
-        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore, bool dumpCsv) {
+        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod, bool showCpuUsageByCore,
+                                                  bool dumpCsv) {
             auto d = std::shared_ptr<Diagnostic>(new Diagnostic(showCpuUsageByCore, dumpCsv));
 
             d->timer_ = Timer::schedule(
@@ -217,7 +214,7 @@ struct PerfTest2Tool {
             bool showCpuUsageByCore{};
             bool detachListener{};
 
-            for (; index < args.size();) {
+            while (index < args.size()) {
                 if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
                     auto parseResult = PropertiesArg::parse(args, index);
 

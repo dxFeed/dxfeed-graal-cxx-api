@@ -1,12 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/promise/IsolatedPromise.hpp"
 
-#include <dxfeed_graal_cpp_api/event/EventMapper.hpp>
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/promise/IsolatedPromise.hpp>
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -57,7 +59,7 @@ std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_ev
     auto *graalEvent = runGraalFunctionAndThrowIfNullptr(dxfg_Promise_EventType_getResult,
                                                          static_cast<dxfg_promise_event_t *>(promise));
 
-    auto result = dxfcpp::EventMapper::fromGraal(graalEvent);
+    auto result = EventMapper::fromGraal(graalEvent);
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_EventType_release, graalEvent);
 
@@ -74,7 +76,7 @@ getResults(/* dxfg_promise_events_t * */ void *promise) {
     auto *graalEvents = runGraalFunctionAndThrowIfNullptr(dxfg_Promise_List_EventType_getResult,
                                                           static_cast<dxfg_promise_events_t *>(promise));
 
-    auto result = dxfcpp::EventMapper::fromGraalList(graalEvents);
+    auto result = EventMapper::fromGraalList(graalEvents);
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_EventType_release, graalEvents);
 

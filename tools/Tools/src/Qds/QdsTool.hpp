@@ -3,11 +3,10 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include "../Args/Args.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp>
+#include "../../../../include/dxfeed_graal_cpp_api/api.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")

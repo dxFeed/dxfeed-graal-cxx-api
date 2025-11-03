@@ -32,7 +32,7 @@ const WildcardSymbol &WildcardSymbol::fromGraal(void *) {
         Debugger::debug("WildcardSymbol::fromGraal()");
     }
 
-    return WildcardSymbol::ALL;
+    return ALL;
 }
 
 DXFCPP_END_NAMESPACE

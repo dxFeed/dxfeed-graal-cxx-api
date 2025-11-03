@@ -1,19 +1,17 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../include/dxfeed_graal_cpp_api/schedule/Day.hpp"
+
+#include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedDay.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/Schedule.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/Session.hpp"
+#include "../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
-#include <dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp>
-#include <dxfeed_graal_cpp_api/schedule/Day.hpp>
-#include <dxfeed_graal_cpp_api/schedule/Schedule.hpp>
-#include <dxfeed_graal_cpp_api/schedule/Session.hpp>
-#include <dxfeed_graal_cpp_api/schedule/SessionFilter.hpp>
-
-#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedDay.hpp>
-#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -25,6 +23,7 @@ Day::Ptr Day::create(JavaObjectHandle<Day> &&handle) {
         throw InvalidArgumentException("Unable to create a Day object. The handle is invalid");
     }
 
+    // ReSharper disable once CppDFAMemoryLeak
     return std::shared_ptr<Day>(new Day(std::move(handle)));
 }
 
@@ -92,7 +91,7 @@ std::vector<std::shared_ptr<Session>> Day::getSessions() const {
         return {};
     }
 
-    auto *sessionList = dxfcpp::bit_cast<dxfg_session_list *>(graalSessionList.get());
+    const auto *sessionList = dxfcpp::bit_cast<dxfg_session_list *>(graalSessionList.get());
     std::vector<std::shared_ptr<Session>> result;
 
     if (sessionList->size > 0 && sessionList->elements) {

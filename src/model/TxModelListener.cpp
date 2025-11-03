@@ -1,15 +1,17 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
 
-#include <dxfeed_graal_cpp_api/model/TxModelListener.hpp>
+#include "../../include/dxfeed_graal_cpp_api/model/TxModelListener.hpp"
 
-#include <dxfeed_graal_cpp_api/event/EventMapper.hpp>
-#include <dxfeed_graal_cpp_api/internal/Id.hpp>
-#include <dxfeed_graal_cpp_api/internal/context/ApiContext.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp>
-#include <dxfeed_graal_cpp_api/isolated/model/IsolatedTxModelListener.hpp>
+#include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/IndexedEventSource.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Id.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTimeSeriesTxModel.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTxModelListener.hpp"
 
 struct dxfg_indexed_event_source_t;
 struct dxfg_event_type_list;

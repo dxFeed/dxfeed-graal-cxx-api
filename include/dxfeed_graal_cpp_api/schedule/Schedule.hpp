@@ -8,10 +8,12 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/JavaObjectHandle.hpp"
-#include "./SessionFilter.hpp"
+
+#include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
 
+struct SessionFilter;
 struct InstrumentProfile;
 struct Day;
 struct Session;
@@ -53,7 +55,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param profile The instrument profile those schedule is requested
      * @return The default schedule instance for a specified instrument profile
      */
-    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile);
+    static Schedule::Ptr getInstance(const std::shared_ptr<InstrumentProfile> &profile);
 
     /**
      * Returns default schedule instance for specified schedule definition.
@@ -70,7 +72,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param venue The trading venue those schedule is requested
      * @return The schedule instance for a specified instrument profile and trading venue
      */
-    static Schedule::Ptr getInstance(std::shared_ptr<InstrumentProfile> profile, const StringLike &venue);
+    static Schedule::Ptr getInstance(const std::shared_ptr<InstrumentProfile> &profile, const StringLike &venue);
 
     /**
      * Returns trading venues for specified instrument profile.
@@ -78,7 +80,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param profile The instrument profile those trading venues are requested
      * @return trading venues for a specified instrument profile
      */
-    static std::vector<std::string> getTradingVenues(std::shared_ptr<InstrumentProfile> profile);
+    static std::vector<std::string> getTradingVenues(const std::shared_ptr<InstrumentProfile> &profile);
 
     /**
      * Downloads defaults using a specified download config and optionally start periodic download.

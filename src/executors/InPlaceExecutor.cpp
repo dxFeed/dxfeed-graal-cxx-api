@@ -14,7 +14,7 @@ InPlaceExecutor::~InPlaceExecutor() {
 }
 
 std::shared_ptr<InPlaceExecutor> InPlaceExecutor::create() {
-    auto executor = InPlaceExecutor::createShared();
+    auto executor = createShared();
 
     executor->handle_ = isolated::executors::IsolatedInPlaceExecutor::create();
 

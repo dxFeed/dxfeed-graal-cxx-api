@@ -1,15 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/logging/Logging.hpp>
-#include <dxfeed_graal_cpp_api/system/System.hpp>
+#include "../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
+
+#include "../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/logging/IsolatedLogging.hpp"
+#include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp>
-#include <dxfeed_graal_cpp_api/isolated/logging/IsolatedLogging.hpp>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -39,7 +37,7 @@ SimpleHandler<void(Logging::Level, std::int64_t /*timestamp*/, const std::string
     Logging::handler_{};
 
 struct Logging::Impl {
-    static JavaObjectHandle<Logging::ListenerTag> listenerHandle;
+    static JavaObjectHandle<ListenerTag> listenerHandle;
 
     static void onLog(graal_isolatethread_t * /*thread*/, dxfg_logging_level_t level, int64_t timestamp,
                       const char *threadName, int64_t threadId, const char *loggerName, const char *message,

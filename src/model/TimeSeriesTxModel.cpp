@@ -1,15 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/model/TimeSeriesTxModel.hpp>
 
-#include <dxfg_api.h>
+#include "../../include/dxfeed_graal_cpp_api/model/TimeSeriesTxModel.hpp"
 
-#include <dxfeed_graal_cpp_api/api/DXFeed.hpp>
-#include <dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp>
-#include <dxfeed_graal_cpp_api/isolated/model/IsolatedTimeSeriesTxModel.hpp>
-#include <utility>
+#include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTimeSeriesTxModel.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

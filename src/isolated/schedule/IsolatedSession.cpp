@@ -1,12 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
-#include <dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp>
-#include <dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -14,8 +15,8 @@ namespace isolated::schedule {
 
 namespace IsolatedSessionFilter {
 
-/* dxfg_session_filter_t* */ JavaObjectHandle<dxfcpp::SessionFilter> getInstance(std::uint32_t code) {
-    return JavaObjectHandle<dxfcpp::SessionFilter>{runGraalFunctionAndThrowIfNullptr(
+/* dxfg_session_filter_t* */ JavaObjectHandle<SessionFilter> getInstance(std::uint32_t code) {
+    return JavaObjectHandle<SessionFilter>{runGraalFunctionAndThrowIfNullptr(
         dxfg_SessionFilter_getInstance, static_cast<dxfg_session_filter_prepare_t>(code))};
 }
 
@@ -23,18 +24,18 @@ namespace IsolatedSessionFilter {
 
 namespace IsolatedSession {
 
-/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day>
-getDay(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+/* dxfg_day_t* */ JavaObjectHandle<Day>
+getDay(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_getDay`. The `session` handle is invalid");
     }
 
-    return JavaObjectHandle<dxfcpp::Day>{
+    return JavaObjectHandle<Day>{
         runGraalFunctionAndThrowIfNullptr(dxfg_Session_getDay, static_cast<dxfg_session_t *>(session.get()))};
 }
 
-std::int32_t getType(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+std::int32_t getType(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_getType`. The `session` handle is invalid");
@@ -43,7 +44,7 @@ std::int32_t getType(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Sessio
     return runGraalFunctionAndThrowIfMinusOne(dxfg_Session_getType, static_cast<dxfg_session_t *>(session.get()));
 }
 
-bool isTrading(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+bool isTrading(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_isTrading`. The `session` handle is invalid");
@@ -53,7 +54,7 @@ bool isTrading(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &se
            1;
 }
 
-bool isEmpty(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+bool isEmpty(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_isEmpty`. The `session` handle is invalid");
@@ -62,7 +63,7 @@ bool isEmpty(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &sess
     return runGraalFunctionAndThrowIfMinusOne(dxfg_Session_isEmpty, static_cast<dxfg_session_t *>(session.get())) == 1;
 }
 
-std::int64_t getStartTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+std::int64_t getStartTime(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_getStartTime`. The `session` handle is invalid");
@@ -71,7 +72,7 @@ std::int64_t getStartTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::S
     return runGraalFunctionAndThrowIfMinusOne(dxfg_Session_getStartTime, static_cast<dxfg_session_t *>(session.get()));
 }
 
-std::int64_t getEndTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+std::int64_t getEndTime(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_getEndTime`. The `session` handle is invalid");
@@ -80,7 +81,7 @@ std::int64_t getEndTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Ses
     return runGraalFunctionAndThrowIfMinusOne(dxfg_Session_getEndTime, static_cast<dxfg_session_t *>(session.get()));
 }
 
-bool containsTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session, std::int64_t time) {
+bool containsTime(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session, std::int64_t time) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_containsTime`. The `session` handle is invalid");
@@ -90,9 +91,9 @@ bool containsTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> 
                                               time) == 1;
 }
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
-getPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-               /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter) {
+/* dxfg_session_t* */ JavaObjectHandle<Session>
+getPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session,
+               /* dxfg_session_filter_t* */ const JavaObjectHandle<SessionFilter> &filter) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_getPrevSession`. The `session` handle is invalid");
@@ -103,14 +104,14 @@ getPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &se
             "Unable to execute function `dxfg_Session_getPrevSession`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<dxfcpp::Session>{
+    return JavaObjectHandle<Session>{
         runGraalFunctionAndThrowIfNullptr(dxfg_Session_getPrevSession, static_cast<dxfg_session_t *>(session.get()),
                                           static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
-getNextSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-               /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter) {
+/* dxfg_session_t* */ JavaObjectHandle<Session>
+getNextSession(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session,
+               /* dxfg_session_filter_t* */ const JavaObjectHandle<SessionFilter> &filter) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_getNextSession`. The `session` handle is invalid");
@@ -121,14 +122,14 @@ getNextSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &se
             "Unable to execute function `dxfg_Session_getNextSession`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<dxfcpp::Session>{
+    return JavaObjectHandle<Session>{
         runGraalFunctionAndThrowIfNullptr(dxfg_Session_getNextSession, static_cast<dxfg_session_t *>(session.get()),
                                           static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
-findPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-                /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter) {
+/* dxfg_session_t* */ JavaObjectHandle<Session>
+findPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session,
+                /* dxfg_session_filter_t* */ const JavaObjectHandle<SessionFilter> &filter) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_findPrevSession`. The `session` handle is invalid");
@@ -139,14 +140,14 @@ findPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &s
             "Unable to execute function `dxfg_Session_findPrevSession`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<dxfcpp::Session>{
+    return JavaObjectHandle<Session>{
         runGraalFunctionAndThrowIfNullptr(dxfg_Session_findPrevSession, static_cast<dxfg_session_t *>(session.get()),
                                           static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
-findNextSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-                /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter) {
+/* dxfg_session_t* */ JavaObjectHandle<Session>
+findNextSession(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session,
+                /* dxfg_session_filter_t* */ const JavaObjectHandle<SessionFilter> &filter) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_findNextSession`. The `session` handle is invalid");
@@ -157,12 +158,12 @@ findNextSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &s
             "Unable to execute function `dxfg_Session_findNextSession`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<dxfcpp::Session>{
+    return JavaObjectHandle<Session>{
         runGraalFunctionAndThrowIfNullptr(dxfg_Session_findNextSession, static_cast<dxfg_session_t *>(session.get()),
                                           static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
-std::size_t hashCode(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+std::size_t hashCode(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_hashCode`. The `session` handle is invalid");
@@ -172,8 +173,8 @@ std::size_t hashCode(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Sessio
         runGraalFunctionAndThrowIfMinusOne(dxfg_Session_hashCode, static_cast<dxfg_session_t *>(session.get())));
 }
 
-bool equals(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-            /* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &otherSession) {
+bool equals(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session,
+            /* dxfg_session_t* */ const JavaObjectHandle<Session> &otherSession) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_equals`. The `session` handle is invalid");
@@ -192,7 +193,7 @@ bool equals(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &sessi
                                               static_cast<dxfg_session_t *>(otherSession.get())) == 1;
 }
 
-std::string toString(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session) {
+std::string toString(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
     if (!session) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_Session_toString`. The `session` handle is invalid");
@@ -220,8 +221,8 @@ bool release(/* dxfg_session_list* */ void *sessionList) {
                                                   static_cast<dxfg_session_list *>(sessionList));
 }
 
-std::unique_ptr<void, decltype(&IsolatedSessionList::release)> toUnique(/* dxfg_session_list* */ void *sessionList) {
-    return {sessionList, IsolatedSessionList::release};
+std::unique_ptr<void, decltype(&release)> toUnique(/* dxfg_session_list* */ void *sessionList) {
+    return {sessionList, release};
 }
 
 } // namespace IsolatedSessionList

@@ -23,7 +23,7 @@ void *TimeSeriesSubscriptionSymbol::toGraal() const {
     }
 
     auto *graalSymbol =
-        new dxfg_time_series_subscription_symbol_t{.supper = {.type = dxfg_symbol_type_t::TIME_SERIES_SUBSCRIPTION},
+        new dxfg_time_series_subscription_symbol_t{.supper = {.type = TIME_SERIES_SUBSCRIPTION},
                                                    .symbol = static_cast<dxfg_symbol_t *>(getEventSymbol()->toGraal()),
                                                    .from_time = fromTime_};
 
