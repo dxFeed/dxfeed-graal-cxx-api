@@ -71,6 +71,7 @@ option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
+option(DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK "" OFF)
 
 option(DXFCXX_USE_DXFG_STUB "Use dxFeed Graal SDK stub" OFF)
 set(DXFG_STUB_REPO "https://github.com/ttldtor/DxFeedGraalNativeSdkStub" CACHE STRING "")
@@ -125,8 +126,14 @@ else ()
             if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
                 message(ERROR "Unsupported platform!")
             else ()
-                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
+                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM})
             endif ()
+
+            if (DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK)
+                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-debug)
+            endif ()
+
+            set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}.zip)
 
             FetchContent_Declare(
                     DxFeedGraalNativeSdk
