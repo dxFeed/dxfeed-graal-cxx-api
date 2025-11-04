@@ -7,13 +7,12 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../entity/SharedEntity.hpp"
 #include "../../internal/Common.hpp"
 #include "../../internal/Id.hpp"
 #include "../../internal/JavaObjectHandle.hpp"
-
-#include "../../entity/SharedEntity.hpp"
 #include "../InstrumentProfile.hpp"
-#include "IterableInstrumentProfile.hpp"
+#include "./IterableInstrumentProfile.hpp"
 
 #include <unordered_map>
 

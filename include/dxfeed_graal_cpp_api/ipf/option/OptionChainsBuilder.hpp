@@ -8,8 +8,8 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
-#include "OptionChain.hpp"
-#include "OptionSeries.hpp"
+#include "./OptionChain.hpp"
+#include "./OptionSeries.hpp"
 
 #include <unordered_map>
 
@@ -49,8 +49,8 @@ template <class T> class OptionChainsBuilder {
      *
      * @param product The product for futures and options on futures (underlying asset name).
      */
-    void setProduct(const std::string &product) {
-        product_ = product == String::NUL || product.empty() ? String::EMPTY : product;
+    void setProduct(const StringLike &product) {
+        product_ = product == String::NUL || product.empty() ? String::EMPTY : std::string(product);
     }
 
     /**
@@ -60,8 +60,8 @@ template <class T> class OptionChainsBuilder {
      *
      * @param underlying The primary underlying symbol for options.
      */
-    void setUnderlying(const std::string &underlying) {
-        underlying_ = underlying == String::NUL || underlying.empty() ? String::EMPTY : underlying;
+    void setUnderlying(const StringLike &underlying) {
+        underlying_ = underlying == String::NUL || underlying.empty() ? String::EMPTY : std::string(underlying);
     }
 
     /**
@@ -118,10 +118,10 @@ template <class T> class OptionChainsBuilder {
      *
      * @param additionalUnderlyings The additional underlyings for options, including additional cash.
      */
-    void setAdditionalUnderlyings(const std::string &additionalUnderlyings) {
+    void setAdditionalUnderlyings(const StringLike &additionalUnderlyings) {
         series_.additionalUnderlyings_ = additionalUnderlyings == String::NUL || additionalUnderlyings.empty()
                                              ? String::EMPTY
-                                             : additionalUnderlyings;
+                                             : std::string(additionalUnderlyings);
     }
 
     /**
@@ -154,8 +154,8 @@ template <class T> class OptionChainsBuilder {
      *
      * @param optionType The type of option.
      */
-    void setOptionType(const std::string &optionType) {
-        series_.optionType_ = optionType == String::NUL || optionType.empty() ? String::EMPTY : optionType;
+    void setOptionType(const StringLike &optionType) {
+        series_.optionType_ = optionType == String::NUL || optionType.empty() ? String::EMPTY : std::string(optionType);
     }
 
     /**
@@ -163,9 +163,9 @@ template <class T> class OptionChainsBuilder {
      *
      * @param expirationStyle The expiration cycle style.
      */
-    void setExpirationStyle(const std::string &expirationStyle) {
+    void setExpirationStyle(const StringLike &expirationStyle) {
         series_.expirationStyle_ =
-            expirationStyle == String::NUL || expirationStyle.empty() ? String::EMPTY : expirationStyle;
+            expirationStyle == String::NUL || expirationStyle.empty() ? String::EMPTY : std::string(expirationStyle);
     }
 
     /**
@@ -173,9 +173,9 @@ template <class T> class OptionChainsBuilder {
      *
      * @param settlementStyle The settlement price determination style.
      */
-    void setSettlementStyle(const std::string &settlementStyle) {
+    void setSettlementStyle(const StringLike &settlementStyle) {
         series_.settlementStyle_ =
-            settlementStyle == String::NUL || settlementStyle.empty() ? String::EMPTY : settlementStyle;
+            settlementStyle == String::NUL || settlementStyle.empty() ? String::EMPTY : std::string(settlementStyle);
     }
 
     /**
@@ -190,8 +190,8 @@ template <class T> class OptionChainsBuilder {
      *
      * @param cfi CFI code.
      */
-    void setCFI(const std::string &cfi) {
-        cfi_ = cfi == String::NUL || cfi.empty() ? String::EMPTY : cfi;
+    void setCFI(const StringLike &cfi) {
+        cfi_ = cfi == String::NUL || cfi.empty() ? String::EMPTY : std::string(cfi);
         series_.cfi_ = cfi_.size() < 2 ? cfi_ : cfi_[0] + std::string("X") + cfi_.substr(2);
     }
 
@@ -264,7 +264,7 @@ template <class T> class OptionChainsBuilder {
      * @tparam Collection The collection type.
      * @param instruments The collection of instrument profiles.
      *
-     * @return The builder with all the options from instruments collection.
+     * @return The builder with all the options from the instruments collection.
      */
     template <typename Collection, typename Element = std::decay_t<decltype(std::begin(Collection()))>,
               typename Profile = std::decay_t<decltype(*Element())>>

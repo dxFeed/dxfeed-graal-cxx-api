@@ -3,16 +3,16 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "./utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <string>
 #include <type_traits>
 #include <typeinfo>
-
-#include "utils/StringUtils.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

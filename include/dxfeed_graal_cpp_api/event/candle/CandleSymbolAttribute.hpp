@@ -11,19 +11,20 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct StringLikeWrapper;
+struct StringLike;
 
 /**
  * Attribute of the CandleSymbol.
  */
 struct DXFCPP_EXPORT CandleSymbolAttribute {
+    virtual ~CandleSymbolAttribute() = default;
     /**
      * Returns candle event symbol string with this attribute set.
      *
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this attribute set.
      */
-    virtual std::string changeAttributeForSymbol(const dxfcpp::StringLikeWrapper &symbol) const = 0;
+    virtual std::string changeAttributeForSymbol(const StringLike &symbol) const = 0;
 };
 
 DXFCPP_END_NAMESPACE

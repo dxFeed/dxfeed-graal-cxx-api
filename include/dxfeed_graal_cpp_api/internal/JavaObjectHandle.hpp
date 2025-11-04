@@ -3,12 +3,14 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "utils/StringUtils.hpp"
-#include "utils/debug/Debug.hpp"
+#include "./utils/StringUtils.hpp"
+#include "./utils/debug/Debug.hpp"
+
+#include "../isolated/internal/IsolatedObject.hpp"
 
 #include <memory>
 #include <string>
@@ -23,7 +25,7 @@ struct DXFCPP_EXPORT JavaObject {
     static bool equals(void *objectHandle1, void *objectHandle2);
 };
 
-template <typename T> struct JavaObjectHandle {
+template <typename T> struct JavaObjectHandle final {
 #if DXFCPP_DEBUG == 1
     static std::string getDebugName() {
         return typeid(JavaObjectHandle<T>).name();
@@ -32,24 +34,58 @@ template <typename T> struct JavaObjectHandle {
 
     using Type = T;
 
-    static DXFCPP_EXPORT void deleter(void *handle) noexcept;
-    explicit JavaObjectHandle(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
+    static DXFCPP_EXPORT void deleter(void *handle) noexcept {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
+        }
+
+        if (!handle) {
+            return;
+        }
+
+        const auto result = isolated::internal::IsolatedObject::release(handle);
+        ignoreUnused(result);
+
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                            dxfcpp::toString(result));
+        }
+    }
+
+    using Impl = std::unique_ptr<void, decltype(&deleter)>;
+
+    explicit JavaObjectHandle(void *handle = nullptr) noexcept
+        // ReSharper disable once CppRedundantTypenameKeyword
+        : impl_{typename Impl::pointer(handle), &deleter} {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
         }
     }
 
     JavaObjectHandle(const JavaObjectHandle &) = delete;
-    JavaObjectHandle(JavaObjectHandle &&) noexcept = default;
+
+    JavaObjectHandle(JavaObjectHandle &&other) noexcept : impl_{std::move(other.impl_)} {
+    }
+
     JavaObjectHandle &operator=(const JavaObjectHandle &) = delete;
-    JavaObjectHandle &operator=(JavaObjectHandle &&) noexcept = default;
-    virtual ~JavaObjectHandle() noexcept = default;
+
+    JavaObjectHandle &operator=(JavaObjectHandle &&other) noexcept {
+        impl_ = std::move(other.impl_);
+
+        return *this;
+    }
+
+    ~JavaObjectHandle() noexcept = default;
 
     [[nodiscard]] std::string toString() const {
-        if (impl_)
+        if (impl_) {
             return dxfcpp::toString(impl_.get());
-        else
-            return "nullptr";
+        }
+
+        return "nullptr";
     }
 
     [[nodiscard]] void *get() const noexcept {
@@ -61,10 +97,10 @@ template <typename T> struct JavaObjectHandle {
     }
 
     private:
-    std::unique_ptr<void, decltype(&deleter)> impl_;
+    Impl impl_;
 };
 
-template <typename T> struct JavaObjectHandleList {
+template <typename T> struct JavaObjectHandleList final {
 #if DXFCPP_DEBUG == 1
     static auto getDebugName() {
         return std::string("JavaObjectHandleList<") + typeid(T).name() + ">";
@@ -73,24 +109,58 @@ template <typename T> struct JavaObjectHandleList {
 
     using Type = T;
 
-    static DXFCPP_EXPORT void deleter(void *handle) noexcept;
-    explicit JavaObjectHandleList(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
+    static DXFCPP_EXPORT void deleter(void *handle) noexcept {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
+        }
+
+        if (!handle) {
+            return;
+        }
+
+        const auto result = isolated::internal::IsolatedObject::List::release(handle);
+        ignoreUnused(result);
+
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
+            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
+                            dxfcpp::toString(result));
+        }
+    }
+
+    using Impl = std::unique_ptr<void, decltype(&deleter)>;
+
+    explicit JavaObjectHandleList(void *handle = nullptr) noexcept
+        // ReSharper disable once CppRedundantTypenameKeyword
+        : impl_{typename Impl::pointer(handle), &deleter} {
+        if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
         }
     }
 
     JavaObjectHandleList(const JavaObjectHandleList &) = delete;
-    JavaObjectHandleList(JavaObjectHandleList &&) noexcept = default;
+
+    JavaObjectHandleList(JavaObjectHandleList &&other) noexcept : impl_{std::move(other.impl_)} {
+    }
+
     JavaObjectHandleList &operator=(const JavaObjectHandleList &) = delete;
-    JavaObjectHandleList &operator=(JavaObjectHandleList &&) noexcept = default;
-    virtual ~JavaObjectHandleList() noexcept = default;
+
+    JavaObjectHandleList &operator=(JavaObjectHandleList &&other) noexcept {
+        impl_ = std::move(other.impl_);
+
+        return *this;
+    }
+
+    ~JavaObjectHandleList() noexcept = default;
 
     [[nodiscard]] std::string toString() const {
-        if (impl_)
+        if (impl_) {
             return dxfcpp::toString(impl_.get());
-        else
-            return "nullptr";
+        }
+
+        return "nullptr";
     }
 
     [[nodiscard]] void *get() const noexcept {
@@ -102,7 +172,7 @@ template <typename T> struct JavaObjectHandleList {
     }
 
     private:
-    std::unique_ptr<void, decltype(&deleter)> impl_;
+    Impl impl_;
 };
 
 DXFCPP_END_NAMESPACE

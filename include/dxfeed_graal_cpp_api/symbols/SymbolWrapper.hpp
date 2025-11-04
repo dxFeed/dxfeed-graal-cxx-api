@@ -7,19 +7,18 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <concepts>
-#include <cstdint>
-#include <memory>
-#include <optional>
-#include <utility>
-#include <variant>
-
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
 #include "../api/osub/WildcardSymbol.hpp"
 #include "../event/candle/CandleSymbol.hpp"
 #include "../internal/Common.hpp"
-#include "StringSymbol.hpp"
+#include "./StringSymbol.hpp"
+
+#include <cstdint>
+#include <memory>
+#include <optional>
+#include <utility>
+#include <variant>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -239,10 +238,10 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     static void freeGraal(void *graalNative);
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      * @throws RuntimeException if symbol type is unknown
      */

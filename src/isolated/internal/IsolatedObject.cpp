@@ -1,11 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -58,6 +60,32 @@ std::int32_t equals(/* dxfg_java_object_handler* */ void *object, /* dxfg_java_o
 
     return static_cast<std::size_t>(
         runGraalFunctionAndThrowIfMinusMin(dxfg_Object_hashCode, static_cast<dxfg_java_object_handler *>(object)));
+}
+
+bool release(void *handle) {
+    if (!handle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [handle = handle](auto threadHandle) {
+            return dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                  static_cast<dxfg_java_object_handler *>(handle)) == 0;
+        },
+        false);
+}
+
+bool List::release(void *handle) {
+    if (!handle) {
+        return false;
+    }
+
+    return runIsolatedOrElse(
+        [handle = handle](auto threadHandle) {
+            return dxfg_CList_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                        static_cast<dxfg_java_object_handler_list *>(handle)) == 0;
+        },
+        false);
 }
 
 } // namespace IsolatedObject

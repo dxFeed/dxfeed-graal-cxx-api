@@ -1,20 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/ipf/live/IterableInstrumentProfile.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfile.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
 
-#include <cstring>
 #include <memory>
-#include <utf8.h>
-#include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -22,6 +14,7 @@ IterableInstrumentProfile::IterableInstrumentProfile(void *handle) noexcept : ha
 }
 
 std::shared_ptr<IterableInstrumentProfile> IterableInstrumentProfile::create(void *handle) noexcept {
+    // ReSharper disable once CppDFAMemoryLeak
     return std::shared_ptr<IterableInstrumentProfile>(new IterableInstrumentProfile(handle));
 }
 
@@ -34,7 +27,7 @@ bool IterableInstrumentProfile::hasNext() const noexcept {
 }
 
 std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const {
-    auto graalProfile = isolated::ipf::live::IsolatedInstrumentProfileIterator::next(handle_.get());
+    const auto graalProfile = isolated::ipf::live::IsolatedInstrumentProfileIterator::next(handle_.get());
     auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
     return result;

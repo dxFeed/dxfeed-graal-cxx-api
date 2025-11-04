@@ -1,10 +1,9 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../include/dxfeed_graal_cpp_api/glossary/AdditionalUnderlyings.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../include/dxfeed_graal_cpp_api/isolated/glossary/IsolatedAdditionalUnderlyings.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -38,11 +37,11 @@ AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
 AdditionalUnderlyings::~AdditionalUnderlyings() noexcept {
 }
 
-AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const StringLikeWrapper &text) {
+AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const StringLike &text) {
     return createShared(isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(text));
 }
 
-double AdditionalUnderlyings::getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol) {
+double AdditionalUnderlyings::getSPC(const StringLike &text, const StringLike &symbol) {
     return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(text, symbol);
 }
 
@@ -62,7 +61,7 @@ std::unordered_map<std::string, double> AdditionalUnderlyings::getMap() const {
     return isolated::glossary::IsolatedAdditionalUnderlyings::getMap(handle_);
 }
 
-double AdditionalUnderlyings::getSPC(const StringLikeWrapper &symbol) const {
+double AdditionalUnderlyings::getSPC(const StringLike &symbol) const {
     std::lock_guard lock(mtx_);
 
     init();

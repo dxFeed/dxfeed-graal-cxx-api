@@ -7,14 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
-#include "../internal/Isolate.hpp"
 
-#include <iostream>
 #include <string>
-#include <type_traits>
-#include <variant>
 
 DXFCPP_BEGIN_NAMESPACE
 /**
@@ -28,7 +23,7 @@ struct DXFCPP_EXPORT System {
      * @param value The value of the system property (UTF-8 string).
      * @return true if the setting of the JVM system property succeeded.
      */
-    static bool setProperty(const std::string &key, const std::string &value);
+    static bool setProperty(const StringLike &key, const StringLike &value);
 
     /**
      * Sets the JVM system properties to the Properties argument.
@@ -48,7 +43,7 @@ struct DXFCPP_EXPORT System {
      * @param key The name of the system property (UTF-8 string).
      * @return The value of a JVM system property (UTF-8 string), or an empty string.
      */
-    static std::string getProperty(const std::string &key);
+    static std::string getProperty(const StringLike &key);
 };
 
 DXFCPP_END_NAMESPACE

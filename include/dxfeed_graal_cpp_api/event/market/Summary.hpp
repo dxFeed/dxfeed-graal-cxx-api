@@ -7,15 +7,15 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cstdint>
-#include <memory>
-#include <string>
-
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
-#include "MarketEvent.hpp"
-#include "PriceType.hpp"
+#include "./MarketEvent.hpp"
+#include "./PriceType.hpp"
+
+#include <cstdint>
+#include <memory>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -74,10 +74,10 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     static const EventTypeEnum &TYPE;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -102,19 +102,19 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     ///
     void assign(std::shared_ptr<EventType> event) override;
 
-    /// Creates new summary event with default values.
+    /// Creates a new summary event with default values.
     Summary() noexcept = default;
 
     /**
-     * Creates new summary event with the specified event symbol.
+     * Creates a new summary event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Summary(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit Summary(const StringLike& eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     /**
-     * Returns identifier of the day that this summary represents.
+     * Returns the identifier of the day that this summary represents.
      * Identifier of the day is the number of days passed since January 1, 1970.
      *
      * @return identifier of the day that this summary represents.

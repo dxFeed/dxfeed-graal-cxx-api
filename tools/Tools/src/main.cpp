@@ -1,21 +1,16 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include "Connect/ConnectTool.hpp"
 #include "Dump/DumpTool.hpp"
 #include "Help/HelpTool.hpp"
-#include "LatencyTest/LatencyTestTool.hpp"
-#include "PerfTest/PerfTestTool.hpp"
 #include "Tools.hpp"
-
 #include <variant>
 
-#include <process/process.hpp>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 template <class... Ts> struct overloaded : Ts... {

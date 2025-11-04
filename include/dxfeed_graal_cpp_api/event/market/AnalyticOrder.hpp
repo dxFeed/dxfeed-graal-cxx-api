@@ -7,16 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
+#include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
+#include "./IcebergType.hpp"
+#include "./Order.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
-
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-
-#include "IcebergType.hpp"
-#include "Order.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -30,15 +28,15 @@ struct EventMapper;
  * The collection of analytic order events of a symbol represents the most recent analytic information
  * that is available about orders on the market at any given moment of time.
  *
- * <p> Analytic order is similar to a regular Order. In addition this event has few additional properties:
+ * <p> Analytic order is similar to a regular Order. In addition, this event has few additional properties:
  * <ul>
  *     <li>@ref AnalyticOrder::getIcebergPeakSize() "icebergPeakSize" - the size of the peak, i.e. the visible part of
  * the iceberg, that is being continually refilled until the order is fully traded or cancelled; <li>@ref
- * AnalyticOrder::getIcebergHiddenSize() "icebergHiddenSize" - the prediction of current hidden size of the iceberg, as
- * inferred by the model; <li>@ref AnalyticOrder::getIcebergExecutedSize() "icebergExecutedSize" - the executed size of
- * the iceberg order. For IcebergType::SYNTHETIC type represents total executed size of all orders composing current
- * iceberg; <li>AnalyticOrder::getIcebergType() - type of the iceberg, either native (exchange-managed) or synthetic
- * (managed outside of the exchange).
+ * AnalyticOrder::getIcebergHiddenSize() "icebergHiddenSize" - the prediction of the current hidden size of the iceberg,
+ * as inferred by the model; <li>@ref AnalyticOrder::getIcebergExecutedSize() "icebergExecutedSize" - the executed size
+ * of the iceberg order. For IcebergType::SYNTHETIC type represents the total executed size of all orders composing the
+ * current iceberg; <li>AnalyticOrder::getIcebergType() - type of the iceberg, either native (exchange-managed) or
+ * synthetic (managed outside the exchange).
  * </ul>
  *
  * <h3>Implementation details</h3>
@@ -85,10 +83,10 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     static const EventTypeEnum &TYPE;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -117,48 +115,41 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     AnalyticOrder() noexcept = default;
 
     /**
-     * Creates new analytic order event with the specified event symbol.
+     * Creates a new analytic order event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit AnalyticOrder(std::string eventSymbol) noexcept : Order(std::move(eventSymbol)) {
-    }
+    explicit AnalyticOrder(const StringLike &eventSymbol) noexcept;
 
     // MarketEvent methods
 
     /**
-     * Changes event's symbol and returns the current analytic order.
+     * Changes an event's symbol and returns the current analytic order.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventSymbol(const std::string &eventSymbol) noexcept override {
-        return dynamic_cast<AnalyticOrder &>(Order::withEventSymbol(eventSymbol));
-    }
+    AnalyticOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override;
 
     /**
-     * Changes event's creation time and returns the current analytic order.
+     * Changes the event's creation time and returns the current analytic order.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventTime(std::int64_t eventTime) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withEventTime(eventTime));
-    }
+    AnalyticOrder &withEventTime(std::int64_t eventTime) noexcept;
 
     // OrderBase methods
 
     /**
-     * Changes event's source and returns the current analytic order.
-     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
+     * Changes an event's source and returns the current analytic order.
+     * This method changes the highest bits of the @ref OrderBase::getIndex() "index" of this event.
      *
      * @param source source of this event.
      * @return The current analytic order.
      */
-    AnalyticOrder &withSource(const OrderSource &source) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withSource(source));
-    }
+    AnalyticOrder &withSource(const OrderSource &source) noexcept;
 
     /**
      * Changes transactional event flags and returns the current analytic order.
@@ -167,9 +158,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param eventFlags transactional event flags.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventFlags(std::int32_t eventFlags) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withEventFlags(eventFlags));
-    }
+    AnalyticOrder &withEventFlags(std::int32_t eventFlags) noexcept;
 
     /**
      * Changes transactional event flags and returns the current analytic order.
@@ -178,21 +167,17 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param eventFlags transactional event flags' mask.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withEventFlags(eventFlags));
-    }
+    AnalyticOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
 
     /**
-     * Changes unique per-symbol index of this analytic order and returns it. Note, that this method also changes
-     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
-     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
+     * Changes the unique per-symbol index of this analytic order and returns it. Note that this method also changes
+     * @ref OrderBase::getSource() "source", whose id occupies the highest bits of index.
+     * Use OrderBase::setSource() after invocation of this method to set the desired value of a source.
      *
      * @param index unique per-symbol index of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withIndex(std::int64_t index) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withIndex(index));
-    }
+    AnalyticOrder &withIndex(std::int64_t index) noexcept;
 
     /**
      * Changes time of this analytic order and returns it.
@@ -201,9 +186,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param time time of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTime(std::int64_t time) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withTime(time));
-    }
+    AnalyticOrder &withTime(std::int64_t time) noexcept;
 
     /**
      * Changes microseconds and nanoseconds time part of this analytic order.
@@ -212,9 +195,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param timeNanoPart microseconds and nanoseconds time part of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withTimeNanoPart(timeNanoPart));
-    }
+    AnalyticOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Changes @ref OrderBase::getSequence() "sequence number" of this analytic order.
@@ -224,9 +205,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @return The current analytic order.
      * @see OrderBase::getSequence()
      */
-    AnalyticOrder &withSequence(std::int32_t sequence) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withSequence(sequence));
-    }
+    AnalyticOrder &withSequence(std::int32_t sequence) noexcept;
 
     /**
      * Changes time of this analytic order and returns it.
@@ -235,29 +214,23 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param timeNanos The time of this analytic order in nanoseconds.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTimeNanos(std::int64_t timeNanos) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withTimeNanos(timeNanos));
-    }
+    AnalyticOrder &withTimeNanos(std::int64_t timeNanos) noexcept;
 
     /**
-     * Changes action of this analytic order and returns it.
+     * Changes the action of this analytic order and returns it.
      *
      * @param action The side of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withAction(const OrderAction &action) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withAction(action));
-    }
+    AnalyticOrder &withAction(const OrderAction &action) noexcept;
 
     /**
-     * Changes time of the last action and returns current analytic order.
+     * Changes time of the last action and returns the current analytic order.
      *
      * @param actionTime The last order action time.
      * @return The current analytic order.
      */
-    AnalyticOrder &withActionTime(std::int64_t actionTime) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withActionTime(actionTime));
-    }
+    AnalyticOrder &withActionTime(std::int64_t actionTime) noexcept;
 
     /**
      * Changes order ID.
@@ -266,9 +239,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param orderId The order ID.
      * @return The current analytic order.
      */
-    AnalyticOrder &withOrderId(std::int64_t orderId) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withOrderId(orderId));
-    }
+    AnalyticOrder &withOrderId(std::int64_t orderId) noexcept;
 
     /**
      * Changes auxiliary order ID.
@@ -277,9 +248,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param auxOrderId The auxiliary order ID.
      * @return The current analytic order.
      */
-    AnalyticOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withAuxOrderId(auxOrderId));
-    }
+    AnalyticOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept;
 
     /**
      * Changes price of this analytic order.
@@ -288,9 +257,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param price The price of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withPrice(double price) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withPrice(price));
-    }
+    AnalyticOrder &withPrice(double price) noexcept;
 
     /**
      * Changes size of this analytic order.
@@ -299,9 +266,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param size The size of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withSize(double size) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withSize(size));
-    }
+    AnalyticOrder &withSize(double size) noexcept;
 
     /**
      * Changes executed size of this analytic order.
@@ -310,20 +275,16 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param executedSize The executed size of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withExecutedSize(double executedSize) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withExecutedSize(executedSize));
-    }
+    AnalyticOrder &withExecutedSize(double executedSize) noexcept;
 
     /**
-     * Changes number of individual orders in this aggregate order.
+     * Changes the number of individual orders in this aggregate order.
      * Returns the current analytic order.
      *
      * @param count The number of individual orders in this aggregate order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withCount(std::int64_t count) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withCount(count));
-    }
+    AnalyticOrder &withCount(std::int64_t count) noexcept;
 
     /**
      * Changes trade ID.
@@ -332,9 +293,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param tradeId The trade ID.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTradeId(std::int64_t tradeId) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withTradeId(tradeId));
-    }
+    AnalyticOrder &withTradeId(std::int64_t tradeId) noexcept;
 
     /**
      * Changes trade price.
@@ -343,9 +302,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param tradePrice The trade price.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTradePrice(double tradePrice) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withTradePrice(tradePrice));
-    }
+    AnalyticOrder &withTradePrice(double tradePrice) noexcept;
 
     /**
      * Changes trade size.
@@ -354,9 +311,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param tradeSize The trade size.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTradeSize(double tradeSize) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withTradeSize(tradeSize));
-    }
+    AnalyticOrder &withTradeSize(double tradeSize) noexcept;
 
     /**
      * Changes exchange code of this analytic order.
@@ -365,9 +320,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param exchangeCode The exchange code of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withExchangeCode(char exchangeCode) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withExchangeCode(exchangeCode));
-    }
+    AnalyticOrder &withExchangeCode(char exchangeCode) noexcept;
 
     /**
      * Changes exchange code of this analytic order.
@@ -376,9 +329,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param exchangeCode The exchange code of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withExchangeCode(exchangeCode));
-    }
+    AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) noexcept;
 
     /**
      * Changes side of this analytic order.
@@ -387,20 +338,16 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param side The side of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withOrderSide(const Side &side) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withOrderSide(side));
-    }
+    AnalyticOrder &withOrderSide(const Side &side) noexcept;
 
     /**
-     * Changes scope of this analytic order.
+     * Changes the scope of this analytic order.
      * Returns the current analytic order.
      *
      * @param scope The scope of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withScope(const Scope &scope) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withScope(scope));
-    }
+    AnalyticOrder &withScope(const Scope &scope) noexcept;
 
     // Order methods
 
@@ -408,12 +355,10 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * Changes market maker or other aggregate identifier of this analytic order.
      * Returns the current analytic order.
      *
-     * @param marketMaker The market maker or other aggregate identifier of this analytic order.
+     * @param marketMaker The market maker or another aggregate identifier of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withMarketMaker(std::string marketMaker) noexcept {
-        return dynamic_cast<AnalyticOrder &>(Order::withMarketMaker(std::move(marketMaker)));
-    }
+    AnalyticOrder &withMarketMaker(const StringLike &marketMaker) noexcept;
 
     // AnalyticOrder methods
 
@@ -422,18 +367,14 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @return iceberg peak size of this analytic order.
      */
-    double getIcebergPeakSize() const noexcept {
-        return analyticOrderData_.icebergPeakSize;
-    }
+    double getIcebergPeakSize() const noexcept;
 
     /**
      * Changes iceberg peak size of this analytic order.
      *
      * @param icebergPeakSize iceberg peak size of this analytic order.
      */
-    void setIcebergPeakSize(double icebergPeakSize) noexcept {
-        analyticOrderData_.icebergPeakSize = icebergPeakSize;
-    }
+    void setIcebergPeakSize(double icebergPeakSize) noexcept;
 
     /**
      * Changes iceberg peak size and returns the current analytic order.
@@ -441,29 +382,21 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param icebergPeakSize iceberg peak size of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withIcebergPeakSize(double icebergPeakSize) noexcept {
-        setIcebergPeakSize(icebergPeakSize);
-
-        return *this;
-    }
+    AnalyticOrder &withIcebergPeakSize(double icebergPeakSize) noexcept;
 
     /**
      * Returns iceberg hidden size of this analytic order.
      *
      * @return iceberg hidden size of this analytic order.
      */
-    double getIcebergHiddenSize() const noexcept {
-        return analyticOrderData_.icebergHiddenSize;
-    }
+    double getIcebergHiddenSize() const noexcept;
 
     /**
      * Changes iceberg hidden size of this analytic order.
      *
      * @param icebergHiddenSize iceberg hidden size of this analytic order.
      */
-    void setIcebergHiddenSize(double icebergHiddenSize) noexcept {
-        analyticOrderData_.icebergHiddenSize = icebergHiddenSize;
-    }
+    void setIcebergHiddenSize(double icebergHiddenSize) noexcept;
 
     /**
      * Changes iceberg hidden size and returns the current analytic order.
@@ -471,30 +404,21 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param icebergHiddenSize iceberg hidden size of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withIcebergHiddenSize(double icebergHiddenSize) noexcept {
-        setIcebergHiddenSize(icebergHiddenSize);
-
-        return *this;
-    }
+    AnalyticOrder &withIcebergHiddenSize(double icebergHiddenSize) noexcept;
 
     /**
      * Returns iceberg executed size of this analytic order.
      *
-     * @return iceberg executed size of this analytic order.
+     * @return The iceberg executed size of this analytic order.
      */
-
-    double getIcebergExecutedSize() const noexcept {
-        return analyticOrderData_.icebergExecutedSize;
-    }
+    double getIcebergExecutedSize() const noexcept;
 
     /**
-     * Changes iceberg executed size of this analytic order.
+     * Changes the iceberg executed size of this analytic order.
      *
-     * @param icebergExecutedSize iceberg executed size of this analytic order.
+     * @param icebergExecutedSize The iceberg executed size of this analytic order.
      */
-    void setIcebergExecutedSize(double icebergExecutedSize) noexcept {
-        analyticOrderData_.icebergExecutedSize = icebergExecutedSize;
-    }
+    void setIcebergExecutedSize(double icebergExecutedSize) noexcept;
 
     /**
      * Changes iceberg executed size and returns the current analytic order.
@@ -502,42 +426,29 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param icebergExecutedSize iceberg executed size of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withIcebergExecutedSize(double icebergExecutedSize) noexcept {
-        setIcebergExecutedSize(icebergExecutedSize);
-
-        return *this;
-    }
+    AnalyticOrder &withIcebergExecutedSize(double icebergExecutedSize) noexcept;
 
     /**
      * Returns iceberg type of this analytic order.
      *
      * @return iceberg type of this analytic order.
      */
-    const IcebergType &getIcebergType() const & noexcept {
-        return IcebergType::valueOf(getBits(analyticOrderData_.icebergFlags, ICEBERG_TYPE_MASK, ICEBERG_TYPE_SHIFT));
-    }
+    const IcebergType &getIcebergType() const & noexcept;
 
     /**
      * Changes iceberg type of this analytic order.
      *
      * @param icebergType iceberg type of this analytic order.
      */
-    void setIcebergType(const IcebergType &icebergType) noexcept {
-        analyticOrderData_.icebergFlags =
-            setBits(analyticOrderData_.icebergFlags, ICEBERG_TYPE_MASK, ICEBERG_TYPE_SHIFT, icebergType.getCode());
-    }
+    void setIcebergType(const IcebergType &icebergType) noexcept;
 
     /**
-     * Changes iceberg type and returns the current analytic order.
+     * Changes an iceberg type and returns the current analytic order.
      *
      * @param icebergType iceberg type of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withIcebergType(const IcebergType &icebergType) noexcept {
-        setIcebergType(icebergType);
-
-        return *this;
-    }
+    AnalyticOrder &withIcebergType(const IcebergType &icebergType) noexcept;
 
     /**
      * Returns a string representation of the current object.

@@ -7,19 +7,13 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/CEntryPointErrors.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/Handler.hpp"
-#include "../internal/Isolate.hpp"
-#include "../internal/JavaObjectHandle.hpp"
-
-#include "DXFeedSubscription.hpp"
-
 #include "../event/EventMapper.hpp"
+#include "../internal/Common.hpp"
+#include "../internal/JavaObjectHandle.hpp"
+#include "./DXFeedSubscription.hpp"
 
 #include <memory>
 #include <mutex>
-#include <unordered_set>
 
 DXFCPP_BEGIN_NAMESPACE
 

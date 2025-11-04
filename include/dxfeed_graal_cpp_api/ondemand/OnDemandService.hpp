@@ -7,15 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/CEntryPointErrors.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/Handler.hpp"
-#include "../internal/Isolate.hpp"
+#include "../entity/SharedEntity.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
 #include <memory>
-#include <mutex>
-#include <unordered_set>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -81,7 +76,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     using Unique = std::unique_ptr<OnDemandService>;
 
     private:
-    JavaObjectHandle<OnDemandService> handle_;
+    JavaObjectHandle<OnDemandService> handle_{};
     std::shared_ptr<DXEndpoint> endpoint_{};
 
     protected:

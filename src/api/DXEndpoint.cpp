@@ -1,19 +1,16 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+
+#include "../../include/dxfeed_graal_c_api/api.h"
+#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
+#include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include <memory>
 #include <string>
 #include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -33,37 +30,24 @@ const std::string DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY = "dxendpoint
 const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
 const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
 
-static DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) {
-    switch (state) {
-    case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
-        return DXEndpoint::State::NOT_CONNECTED;
-    case DXFG_ENDPOINT_STATE_CONNECTING:
-        return DXEndpoint::State::CONNECTING;
-    case DXFG_ENDPOINT_STATE_CONNECTED:
-        return DXEndpoint::State::CONNECTED;
-    case DXFG_ENDPOINT_STATE_CLOSED:
-        return DXEndpoint::State::CLOSED;
-    }
-
-    return DXEndpoint::State::NOT_CONNECTED;
-}
-
 struct DXEndpoint::Impl {
     static std::mutex MTX;
     static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
 
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                  dxfg_endpoint_state_t newState, void *userData) {
-        auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
-        auto endpoint = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getEntity(id);
+        const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
+        const auto endpoint = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
                             ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr"));
         }
 
         if (endpoint) {
-            endpoint->onStateChange_(graalStateToState(oldState), graalStateToState(newState));
+            endpoint->onStateChange_(isolated::api::IsolatedDXEndpoint::graalStateToState(oldState),
+                                     isolated::api::IsolatedDXEndpoint::graalStateToState(newState));
 
             if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
                 // TODO: fix endpoint lifetime
@@ -72,18 +56,19 @@ struct DXEndpoint::Impl {
         }
     };
 
-    static std::shared_ptr<DXEndpoint> getInstance(DXEndpoint::Role role) noexcept {
+    static std::shared_ptr<DXEndpoint> getInstance(Role role) noexcept {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("DXEndpoint::Impl::getInstance(role = " + roleToString(role) + ")");
         }
 
-        std::lock_guard lock(DXEndpoint::Impl::MTX);
+        std::lock_guard lock(MTX);
 
-        if (DXEndpoint::Impl::INSTANCES.contains(role)) {
-            return DXEndpoint::Impl::INSTANCES[role];
+        if (INSTANCES.contains(role)) {
+            return INSTANCES[role];
         }
 
-        return DXEndpoint::Impl::INSTANCES[role] = DXEndpoint::create(role);
+        return INSTANCES[role] = create(role);
     }
 
     mutable std::mutex mutex_{};
@@ -114,19 +99,19 @@ struct DXEndpoint::Impl {
 std::mutex DXEndpoint::Impl::MTX{};
 std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::Impl::INSTANCES{};
 
-std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, DXEndpoint::Role role,
+std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, Role role,
                                                const std::unordered_map<std::string, std::string> &properties) {
     if (endpointHandle == nullptr) {
         throw InvalidArgumentException("Unable to create DXEndpoint. The `endpointHandle` is nullptr");
     }
 
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::create(handle = " + dxfcpp::toString(endpointHandle) +
                         ", role = " + roleToString(role) + ", properties[" + std::to_string(properties.size()) + "])");
     }
 
-    auto endpoint =
-        DXEndpoint::createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY));
+    auto endpoint = createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY));
     const auto id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
@@ -144,23 +129,24 @@ DXEndpoint::State DXEndpoint::getState() const {
     return isolated::api::IsolatedDXEndpoint::getState(handle_);
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::user(const std::string &user) {
+std::shared_ptr<DXEndpoint> DXEndpoint::user(const StringLike &user) {
     // TODO: check invalid utf-8 [EN-8233]
     isolated::api::IsolatedDXEndpoint::user(handle_, user);
 
     return sharedAs<DXEndpoint>();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::password(const std::string &password) {
+std::shared_ptr<DXEndpoint> DXEndpoint::password(const StringLike &password) {
     // TODO: check invalid utf-8 [EN-8233]
     isolated::api::IsolatedDXEndpoint::password(handle_, password);
 
     return sharedAs<DXEndpoint>();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
+std::shared_ptr<DXEndpoint> DXEndpoint::connect(const StringLike &address) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + address + ")");
     }
 
@@ -169,64 +155,72 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(const std::string &address) {
     return sharedAs<DXEndpoint>();
 }
 
-void DXEndpoint::reconnect() {
+void DXEndpoint::reconnect() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::reconnect()");
     }
 
     isolated::api::IsolatedDXEndpoint::reconnect(handle_);
 }
 
-void DXEndpoint::disconnect() {
+void DXEndpoint::disconnect() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::disconnect()");
     }
 
     isolated::api::IsolatedDXEndpoint::disconnect(handle_);
 }
 
-void DXEndpoint::disconnectAndClear() {
+void DXEndpoint::disconnectAndClear() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::disconnectAndClear()");
     }
 
     isolated::api::IsolatedDXEndpoint::disconnectAndClear(handle_);
 }
 
-void DXEndpoint::awaitNotConnected() {
+void DXEndpoint::awaitNotConnected() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::awaitNotConnected()");
     }
 
     isolated::api::IsolatedDXEndpoint::awaitNotConnected(handle_);
 }
 
-void DXEndpoint::awaitProcessed() {
+void DXEndpoint::awaitProcessed() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::awaitProcessed()");
     }
 
     isolated::api::IsolatedDXEndpoint::awaitProcessed(handle_);
 }
 
-void DXEndpoint::closeAndAwaitTermination() {
+void DXEndpoint::closeAndAwaitTermination() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::closeAndAwaitTermination()");
     }
 
     isolated::api::IsolatedDXEndpoint::closeAndAwaitTermination(handle_);
 }
 
-std::shared_ptr<DXFeed> DXEndpoint::getFeed() {
+std::shared_ptr<DXFeed> DXEndpoint::getFeed() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::getFeed()");
     }
 
     return impl_->getFeed(handle_);
 }
 
-std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() {
+std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::getPublisher()");
     }
 
@@ -235,12 +229,13 @@ std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() {
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder::create()");
     }
 
     auto builder = createShared();
 
-    builder->handle_ = JavaObjectHandle<DXEndpoint::Builder>(isolated::api::IsolatedDXEndpoint::Builder::create());
+    builder->handle_ = JavaObjectHandle<Builder>(isolated::api::IsolatedDXEndpoint::Builder::create());
 
     return builder;
 }
@@ -259,6 +254,7 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
         case Role::STREAM_PUBLISHER:
         case Role::LOCAL_HUB:
             break;
+        default:;
         }
 
         return String::EMPTY;
@@ -275,7 +271,7 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
     }
 
     // If there is no propertiesFileKey in user-set properties,
-    // try load default properties file from current runtime directory if file exist.
+    // try to load the default properties file from the current runtime directory if the file exists.
     if (!properties_.contains(propertiesFileKey) && std::filesystem::exists(propertiesFileKey)) {
         if (!handle_) {
             return;
@@ -286,8 +282,9 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
     }
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::Role role) {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(Role role) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withRole(role = " + roleToString(role) + ")");
     }
 
@@ -295,13 +292,13 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(DXEndpoint::R
 
     isolated::api::IsolatedDXEndpoint::Builder::withRole(handle_, role);
 
-    return sharedAs<DXEndpoint::Builder>();
+    return sharedAs<Builder>();
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std::string &key,
-                                                                       const std::string &value) {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const StringLike &key, const StringLike &value) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperty(key = " + key +
                         ", value = " + value + ")");
     }
@@ -310,12 +307,13 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const std
 
     isolated::api::IsolatedDXEndpoint::Builder::withProperty(handle_, key, value);
 
-    return sharedAs<DXEndpoint::Builder>();
+    return sharedAs<Builder>();
 }
 
-bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
+bool DXEndpoint::Builder::supportsProperty(const StringLike &key) const {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::supportsProperty(key = " + key + ")");
     }
 
@@ -324,15 +322,16 @@ bool DXEndpoint::Builder::supportsProperty(const std::string &key) {
 
 std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::build()");
     }
 
     loadDefaultPropertiesImpl();
 
     if (auto name = properties_.contains(NAME_PROPERTY) ? properties_.at(NAME_PROPERTY) : std::string{}; name.empty()) {
-        std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId();
+        const std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId() + 1;
 
-        name = fmt::format("qdcxx{}", (id <= 1) ? "" : fmt::format("-{}", id));
+        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY : std::string("-") + std::to_string(id));
 
         const auto newBuilder = withProperty(NAME_PROPERTY, name);
 
@@ -342,8 +341,9 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     return DXEndpoint::create(isolated::api::IsolatedDXEndpoint::Builder::build(handle_), role_, properties_);
 }
 
-DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept : handle_{}, properties_{} {
+DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder::Builder()");
     }
 
@@ -354,6 +354,7 @@ DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept : handle_{}, 
 
 DXEndpoint::Builder::~Builder() noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::~Builder()");
     }
 
@@ -362,9 +363,10 @@ DXEndpoint::Builder::~Builder() noexcept {
 #endif
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::string &name) {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const StringLike &name) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");
     }
 
@@ -372,10 +374,10 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const std::st
 }
 
 std::string DXEndpoint::toString() const {
-    return fmt::format("DXEndpoint{{{}}}", handle_.toString());
+    return std::string("DXEndpoint{") + handle_.toString() + "}";
 }
 
-std::string DXEndpoint::roleToString(DXEndpoint::Role role) {
+std::string DXEndpoint::roleToString(Role role) {
     switch (role) {
     case Role::FEED:
         return "FEED";
@@ -394,7 +396,7 @@ std::string DXEndpoint::roleToString(DXEndpoint::Role role) {
     return "";
 }
 
-std::string DXEndpoint::stateToString(DXEndpoint::State state) {
+std::string DXEndpoint::stateToString(State state) {
     switch (state) {
     case State::NOT_CONNECTED:
         return "NOT_CONNECTED";
@@ -409,9 +411,9 @@ std::string DXEndpoint::stateToString(DXEndpoint::State state) {
     return "";
 }
 
-DXEndpoint::DXEndpoint(LockExternalConstructionTag)
-    : handle_{}, role_{}, stateChangeListenerHandle_{}, onStateChange_{}, impl_(std::make_unique<DXEndpoint::Impl>()) {
+DXEndpoint::DXEndpoint(LockExternalConstructionTag) : role_{}, impl_(std::make_unique<Impl>()) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint()");
     }
 
@@ -421,9 +423,9 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag)
 }
 
 DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint> &&handle, Role role, std::string name)
-    : role_{role}, name_{std::move(name)}, stateChangeListenerHandle_{}, onStateChange_{},
-      impl_(std::make_unique<DXEndpoint::Impl>()) {
+    : role_{role}, name_{std::move(name)}, impl_(std::make_unique<Impl>()) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint()");
     }
 
@@ -436,6 +438,7 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint>
 
 DXEndpoint::~DXEndpoint() noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::~DXEndpoint()");
     }
 
@@ -446,14 +449,16 @@ DXEndpoint::~DXEndpoint() noexcept {
 
 std::shared_ptr<DXEndpoint> DXEndpoint::getInstance() {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::getInstance()");
     }
 
     return getInstance(Role::FEED);
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::getInstance(DXEndpoint::Role role) {
+std::shared_ptr<DXEndpoint> DXEndpoint::getInstance(Role role) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::getInstance(role = " + roleToString(role) + ")");
     }
 
@@ -462,22 +467,25 @@ std::shared_ptr<DXEndpoint> DXEndpoint::getInstance(DXEndpoint::Role role) {
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::newBuilder() {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::newBuilder()");
     }
 
-    return DXEndpoint::Builder::create();
+    return Builder::create();
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::create() {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::create()");
     }
 
     return newBuilder()->build();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::create(DXEndpoint::Role role) {
+std::shared_ptr<DXEndpoint> DXEndpoint::create(Role role) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::create(role = " + roleToString(role) + ")");
     }
 
@@ -504,19 +512,17 @@ SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &DXEndpoint::onStateCh
     return onStateChange_;
 }
 
-void DXEndpoint::close() {
+void DXEndpoint::close() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::close()");
     }
 
     isolated::api::IsolatedDXEndpoint::close(handle_);
 }
 
-std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() noexcept {
-    // TODO: implement [EN-8234]. Types must be different for STREAM and non-STREAM
-
-    return {EventTypeEnum::ALL.begin(), EventTypeEnum::ALL.end()};
-    // return isolated::api::IsolatedDXEndpoint::getEventTypes(handle_);
+std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() const {
+    return isolated::api::IsolatedDXEndpoint::getEventTypes(handle_);
 }
 
 struct BuilderHandle {};
@@ -526,7 +532,7 @@ static std::shared_ptr<DXEndpoint::Builder> get(BuilderHandle *handle) {
     return ApiContext::getInstance()->getManager<EntityManager<DXEndpoint::Builder>>()->getEntity(handle);
 }
 
-static BuilderHandle *add(std::shared_ptr<DXEndpoint::Builder> builder) noexcept {
+static BuilderHandle *add(const std::shared_ptr<DXEndpoint::Builder> &builder) noexcept {
     return dxfcpp::bit_cast<BuilderHandle *>(ApiContext::getInstance()
                                                  ->getManager<EntityManager<DXEndpoint::Builder>>()
                                                  ->registerEntity(builder)
@@ -534,7 +540,9 @@ static BuilderHandle *add(std::shared_ptr<DXEndpoint::Builder> builder) noexcept
 }
 
 static bool remove(BuilderHandle *handle) {
+    // ReSharper disable once CppDFAConstantConditions
     if (!handle) {
+        // ReSharper disable once CppDFAUnreachableCode
         return false;
     }
 
@@ -545,12 +553,12 @@ static bool remove(BuilderHandle *handle) {
 struct EndpointWrapperHandle {};
 
 struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
-    std::shared_ptr<dxfcpp::DXEndpoint> endpoint{};
+    std::shared_ptr<DXEndpoint> endpoint{};
     void *userData{};
     std::unordered_map<dxfc_dxendpoint_state_change_listener, std::size_t> listeners{};
 
-    EndpointWrapper(std::shared_ptr<dxfcpp::DXEndpoint> endpoint, void *userData)
-        : endpoint{std::move(endpoint)}, userData{userData}, listeners{} {
+    EndpointWrapper(std::shared_ptr<DXEndpoint> endpoint, void *userData)
+        : endpoint{std::move(endpoint)}, userData{userData} {
     }
 
     std::string toString() const noexcept {
@@ -563,7 +571,7 @@ static std::shared_ptr<EndpointWrapper> get(EndpointWrapperHandle *handle) {
     return ApiContext::getInstance()->getManager<EntityManager<EndpointWrapper>>()->getEntity(handle);
 }
 
-static EndpointWrapperHandle *add(std::shared_ptr<EndpointWrapper> endpointWrapper) noexcept {
+static EndpointWrapperHandle *add(const std::shared_ptr<EndpointWrapper> &endpointWrapper) noexcept {
     return dxfcpp::bit_cast<EndpointWrapperHandle *>(ApiContext::getInstance()
                                                          ->getManager<EntityManager<EndpointWrapper>>()
                                                          ->registerEntity(endpointWrapper)
@@ -571,7 +579,9 @@ static EndpointWrapperHandle *add(std::shared_ptr<EndpointWrapper> endpointWrapp
 }
 
 static bool remove(EndpointWrapperHandle *handle) {
+    // ReSharper disable once CppDFAConstantConditions
     if (!handle) {
+        // ReSharper disable once CppDFAUnreachableCode
         return false;
     }
 
@@ -579,26 +589,26 @@ static bool remove(EndpointWrapperHandle *handle) {
 }
 }; // namespace EndpointWrapperRegistry
 
-static dxfcpp::DXEndpoint::Role cApiRoleToRole(dxfc_dxendpoint_role_t role) {
+static DXEndpoint::Role cApiRoleToRole(dxfc_dxendpoint_role_t role) {
     switch (role) {
     case DXFC_DXENDPOINT_ROLE_FEED:
-        return dxfcpp::DXEndpoint::Role::FEED;
+        return DXEndpoint::Role::FEED;
     case DXFC_DXENDPOINT_ROLE_ON_DEMAND_FEED:
-        return dxfcpp::DXEndpoint::Role::ON_DEMAND_FEED;
+        return DXEndpoint::Role::ON_DEMAND_FEED;
     case DXFC_DXENDPOINT_ROLE_STREAM_FEED:
-        return dxfcpp::DXEndpoint::Role::STREAM_FEED;
+        return DXEndpoint::Role::STREAM_FEED;
     case DXFC_DXENDPOINT_ROLE_PUBLISHER:
-        return dxfcpp::DXEndpoint::Role::PUBLISHER;
+        return DXEndpoint::Role::PUBLISHER;
     case DXFC_DXENDPOINT_ROLE_STREAM_PUBLISHER:
-        return dxfcpp::DXEndpoint::Role::STREAM_PUBLISHER;
+        return DXEndpoint::Role::STREAM_PUBLISHER;
     case DXFC_DXENDPOINT_ROLE_LOCAL_HUB:
-        return dxfcpp::DXEndpoint::Role::LOCAL_HUB;
+        return DXEndpoint::Role::LOCAL_HUB;
     }
 
-    return dxfcpp::DXEndpoint::Role::FEED;
+    return DXEndpoint::Role::FEED;
 }
 
-static dxfc_dxendpoint_role_t roleToCApiRole(dxfcpp::DXEndpoint::Role role) {
+static dxfc_dxendpoint_role_t roleToCApiRole(DXEndpoint::Role role) {
     switch (role) {
     case DXEndpoint::Role::FEED:
         return DXFC_DXENDPOINT_ROLE_FEED;
@@ -617,7 +627,7 @@ static dxfc_dxendpoint_role_t roleToCApiRole(dxfcpp::DXEndpoint::Role role) {
     return DXFC_DXENDPOINT_ROLE_FEED;
 }
 
-static dxfc_dxendpoint_state_t stateToCApiState(dxfcpp::DXEndpoint::State state) {
+static dxfc_dxendpoint_state_t stateToCApiState(DXEndpoint::State state) {
     switch (state) {
     case DXEndpoint::State::NOT_CONNECTED:
         return DXFC_DXENDPOINT_STATE_NOT_CONNECTED;
@@ -639,7 +649,7 @@ dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
+    const auto result = dxfcpp::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -656,7 +666,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t bu
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    const auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -672,7 +682,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t bu
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    const auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -689,7 +699,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    const auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -706,7 +716,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builde
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    const auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -733,7 +743,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_buil
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    const auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -750,7 +760,7 @@ dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builde
         return DXFC_EC_ERROR;
     }
 
-    auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
+    const auto builder = dxfcpp::BuilderRegistry::get(static_cast<dxfcpp::BuilderHandle *>(builderHandle));
 
     if (!builder) {
         return DXFC_EC_ERROR;
@@ -762,7 +772,8 @@ dxfc_error_code_t dxfc_dxendpoint_builder_build(dxfc_dxendpoint_builder_t builde
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -796,7 +807,8 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance(void *userData, DXFC_OUT dxfc_dxe
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -819,7 +831,8 @@ dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, voi
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -841,7 +854,8 @@ dxfc_error_code_t dxfc_dxendpoint_create(void *userData, DXFC_OUT dxfc_dxendpoin
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -864,7 +878,8 @@ dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *use
         return DXFC_EC_ERROR;
     }
 
-    auto result = dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+    const auto result =
+        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
 
     if (!result) {
         return DXFC_EC_ERROR;
@@ -880,7 +895,7 @@ dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpointHandle) {
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -897,7 +912,7 @@ dxfc_error_code_t dxfc_dxendpoint_close_and_await_termination(dxfc_dxendpoint_t 
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -914,7 +929,7 @@ dxfc_error_code_t dxfc_dxendpoint_get_role(dxfc_dxendpoint_t endpointHandle, DXF
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -931,7 +946,7 @@ dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpointHandle, const c
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -948,7 +963,7 @@ dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpointHandle, con
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -999,7 +1014,7 @@ dxfc_error_code_t dxfc_dxendpoint_disconnect(dxfc_dxendpoint_t endpointHandle) {
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -1016,7 +1031,7 @@ dxfc_error_code_t dxfc_dxendpoint_disconnect_and_clear(dxfc_dxendpoint_t endpoin
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -1033,7 +1048,7 @@ dxfc_error_code_t dxfc_dxendpoint_await_processed(dxfc_dxendpoint_t endpointHand
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -1050,7 +1065,7 @@ dxfc_error_code_t dxfc_dxendpoint_await_not_connected(dxfc_dxendpoint_t endpoint
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -1067,7 +1082,7 @@ dxfc_error_code_t dxfc_dxendpoint_get_state(dxfc_dxendpoint_t endpointHandle, DX
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -1085,7 +1100,7 @@ dxfc_error_code_t dxfc_dxendpoint_add_state_change_listener(dxfc_dxendpoint_t en
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {
@@ -1111,7 +1126,7 @@ dxfc_error_code_t dxfc_dxendpoint_remove_state_change_listener(dxfc_dxendpoint_t
         return DXFC_EC_ERROR;
     }
 
-    auto endpointWrapper =
+    const auto endpointWrapper =
         dxfcpp::EndpointWrapperRegistry::get(static_cast<dxfcpp::EndpointWrapperHandle *>(endpointHandle));
 
     if (!endpointWrapper) {

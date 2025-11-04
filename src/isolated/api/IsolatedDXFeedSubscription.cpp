@@ -1,17 +1,20 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXFeedSubscription {
 JavaObjectHandle<DXFeedSubscription> /* dxfg_subscription_t* */
 create(/* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
-    return JavaObjectHandle<dxfcpp::DXFeedSubscription>(runGraalFunctionAndThrowIfNullptr(
+    return JavaObjectHandle<DXFeedSubscription>(runGraalFunctionAndThrowIfNullptr(
         dxfg_DXFeedSubscription_new, dxfcpp::bit_cast<dxfg_event_clazz_t>(eventType.getId())));
 }
 
@@ -65,7 +68,7 @@ getSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription
     dxfg_symbol_list *list = runGraalFunctionAndThrowIfNullptr(dxfg_DXFeedSubscription_getSymbols,
                                                                static_cast<dxfg_subscription_t *>(sub.get()));
 
-    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(list);
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_symbol_release, list);
 
@@ -82,7 +85,7 @@ getDecoratedSymbols(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSub
     dxfg_symbol_list *list = runGraalFunctionAndThrowIfNullptr(dxfg_DXFeedSubscription_getDecoratedSymbols,
                                                                static_cast<dxfg_subscription_t *>(sub.get()));
 
-    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(static_cast<void *>(list));
+    auto result = SymbolWrapper::SymbolListUtils::fromGraalList(list);
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_symbol_release, list);
 

@@ -5,13 +5,10 @@
 
 #include "../internal/Conf.hpp"
 
-#include "../internal/Common.hpp"
-#include "RuntimeException.hpp"
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include <stdexcept>
-#include <string>
+#include "../internal/Common.hpp"
+#include "./RuntimeException.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -19,8 +16,8 @@ DXFCPP_BEGIN_NAMESPACE
  * Thrown to indicate that a method has been passed an illegal or inappropriate argument.
  */
 struct DXFCPP_EXPORT InvalidArgumentException : RuntimeException {
-    explicit InvalidArgumentException(const StringLikeWrapper &message,
-                                      const StringLikeWrapper &additionalStackTrace = "");
+    explicit InvalidArgumentException(const StringLike &message,
+                                      const StringLike &additionalStackTrace = "");
 
     InvalidArgumentException(const InvalidArgumentException &other) noexcept;
 };

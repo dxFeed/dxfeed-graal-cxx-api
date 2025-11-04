@@ -7,13 +7,12 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "CandleAlignment.hpp"
-#include "CandleExchange.hpp"
-#include "CandlePeriod.hpp"
-#include "CandlePrice.hpp"
-#include "CandlePriceLevel.hpp"
-#include "CandleSession.hpp"
-#include "CandleSymbolAttribute.hpp"
+#include "./CandleAlignment.hpp"
+#include "./CandleExchange.hpp"
+#include "./CandlePeriod.hpp"
+#include "./CandlePrice.hpp"
+#include "./CandlePriceLevel.hpp"
+#include "./CandleSession.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -49,9 +48,9 @@ using CandleSymbolAttributeVariant =
  *     specified, followed by a @ref CandlePeriod::getType() "type" string which is defined by one of the CandleType
  *     values and can be abbreviated to first letters. For example, a daily candle of "IBM" base symbol can be
  *     specified as "IBM{=d}" and 15 minute candle on it as "IBM{=15m}". The shortest possible abbreviation for
- *     CandleType::MONTH is "mo", so the monthly candle can be specified as "IBM{=mo}". When period is not specified,
- *     then the CandlePeriod::TICK aggregation period is assumed as default. Note, that tick aggregation may not be
- *     available on the demo system which is limited to a subset of symbols and aggregation periods.
+ *     CandleType::MONTH is "mo", so the monthly candle can be specified as "IBM{=mo}". When a period is not specified,
+ *     then the CandlePeriod::TICK aggregation period is assumed as default. Note that tick aggregation may not be
+ *     available on the demo system, which is limited to a subset of symbols and aggregation periods.
  * <li>"price" key corresponds to @ref CandleSymbol::getPrice() "price" &mdash; price type attribute of this symbol.
  *     The CandlePrice defines possible values with CandlePrice::LAST being default.
  *     For legacy backwards-compatibility purposes, most of the price values cannot be abbreviated, so a one-minute
@@ -60,9 +59,9 @@ using CandleSymbolAttributeVariant =
  *     specified with "/ES{=d,price=s}" string.
  * <li>"tho" key with a value of "true" corresponds to @ref CandleSymbol::getSession() "session" set to
  * CandleSession::REGULAR which limits the candle to trading hours only, so a 133 tick candles on "GOOG" base symbol
- * collected over trading hours only can be specified with "GOOG{=133t,tho=true}" string. Note, that the default daily
+ * collected over trading hours only can be specified with "GOOG{=133t,tho=true}" string. Note that the default daily
  * candles for US equities are special for historical reasons and correspond to the way US equity exchange report their
- *     daily summary data. The volume the US equity default daily candle corresponds to the total daily traded volume,
+ *     daily summary data. The volume of the US equity default daily candle corresponds to the total daily traded volume,
  *     while open, high, low, and close correspond to the regular trading hours only.
  * <li>"a" key corresponds to @ref CandleSymbol::getAlignment() "alignment" &mdash; alignment attribute of this symbol.
  *     The CandleAlignment defines possible values with CandleAlignment::MIDNIGHT being default. The alignment values
@@ -93,16 +92,13 @@ struct DXFCPP_EXPORT CandleSymbol {
     std::optional<CandleAlignment> alignment_{};
     std::optional<CandlePriceLevel> priceLevel_{};
 
-    static std::string changeAttribute(std::string symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
-        return std::visit(
-            [symbol = std::move(symbol)](auto &&a) {
-                return a.changeAttributeForSymbol(symbol);
-            },
-            attribute);
-    }
+    static std::string changeAttribute(const StringLike &symbol,
+                                       const CandleSymbolAttributeVariant &attribute) noexcept;
 
     template <typename AttributeIt>
-    static std::string changeAttributes(std::string symbol, AttributeIt begin, AttributeIt end) noexcept {
+    static std::string changeAttributes(const StringLike &s, AttributeIt begin, AttributeIt end) noexcept {
+        auto symbol = std::string(s);
+
         for (auto it = begin; it != end; ++it) {
             symbol = changeAttribute(symbol, *it);
         }
@@ -110,58 +106,17 @@ struct DXFCPP_EXPORT CandleSymbol {
         return symbol;
     }
 
-    static std::string normalize(std::string symbol) noexcept {
-        symbol = CandlePrice::normalizeAttributeForSymbol(symbol);
-        symbol = CandleSession::normalizeAttributeForSymbol(symbol);
-        symbol = CandlePeriod::normalizeAttributeForSymbol(symbol);
-        symbol = CandleAlignment::normalizeAttributeForSymbol(symbol);
-        symbol = CandlePriceLevel::normalizeAttributeForSymbol(symbol);
+    static std::string normalize(const StringLike &s) noexcept;
 
-        return symbol;
-    }
+    void initTransientFields(bool force = false) noexcept;
 
-    void initTransientFields(bool force = false) noexcept {
-        baseSymbol_ = MarketEventSymbols::getBaseSymbol(symbol_);
+    explicit CandleSymbol(const StringLike &symbol) noexcept;
 
-        if (!exchange_ || force) {
-            exchange_.emplace(CandleExchange::getAttributeForSymbol(symbol_));
-        }
-
-        if (!price_ || force) {
-            price_ = CandlePrice::getAttributeForSymbol(symbol_);
-        }
-
-        if (!session_ || force) {
-            session_ = CandleSession::getAttributeForSymbol(symbol_);
-        }
-
-        if (!period_ || force) {
-            period_ = CandlePeriod::getAttributeForSymbol(symbol_);
-        }
-
-        if (!alignment_ || force) {
-            alignment_ = CandleAlignment::getAttributeForSymbol(symbol_);
-        }
-
-        if (!priceLevel_ || force) {
-            priceLevel_ = CandlePriceLevel::getAttributeForSymbol(symbol_);
-        }
-    }
-
-    explicit CandleSymbol(std::string symbol) noexcept : symbol_{normalize(std::move(symbol))} {
-        initTransientFields();
-    }
-
-    CandleSymbol(std::string symbol, const CandleSymbolAttributeVariant &attribute) noexcept
-        : symbol_{normalize(changeAttribute(std::move(symbol), attribute))} {
-        // TODO: check attributes
-        initTransientFields();
-    }
+    CandleSymbol(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept;
 
     template <typename CandleSymbolAttributeIt>
-    CandleSymbol(std::string symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end) noexcept
-        : symbol_{normalize(changeAttributes(std::move(symbol), begin, end))} {
-        // TODO: check attributes
+    CandleSymbol(const StringLike &symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end) noexcept
+        : symbol_{normalize(changeAttributes(symbol, begin, end))} {
         initTransientFields();
     }
 
@@ -171,82 +126,62 @@ struct DXFCPP_EXPORT CandleSymbol {
      *
      * @return base market symbol without attributes.
      */
-    const std::string &getBaseSymbol() const & noexcept {
-        return baseSymbol_;
-    }
+    const std::string &getBaseSymbol() const & noexcept;
 
     /**
      * Returns exchange attribute of this symbol.
      *
      * @return exchange attribute of this symbol.
      */
-    const std::optional<CandleExchange> &getExchange() const & noexcept {
-        return exchange_;
-    }
+    const std::optional<CandleExchange> &getExchange() const & noexcept;
 
     /**
-     * Returns price type attribute of this symbol.
+     * Returns the price type attribute of this symbol.
      *
      * @return price type attribute of this symbol.
      */
-    const std::optional<CandlePrice> &getPrice() const & noexcept {
-        return price_;
-    }
+    const std::optional<CandlePrice> &getPrice() const & noexcept;
 
     /**
-     * Returns session attribute of this symbol.
+     * Returns the session attribute of this symbol.
      *
      * @return session attribute of this symbol.
      */
-    const std::optional<CandleSession> &getSession() const & noexcept {
-        return session_;
-    }
+    const std::optional<CandleSession> &getSession() const & noexcept;
 
     /**
-     * Returns aggregation period of this symbol.
+     * Returns the aggregation period of this symbol.
      *
      * @return aggregation period of this symbol.
      */
-    const std::optional<CandlePeriod> &getPeriod() const & noexcept {
-        return period_;
-    }
+    const std::optional<CandlePeriod> &getPeriod() const & noexcept;
 
     /**
      * Returns alignment attribute of this symbol.
      *
      * @return alignment attribute of this symbol.
      */
-    const std::optional<CandleAlignment> &getAlignment() const & noexcept {
-        return alignment_;
-    }
+    const std::optional<CandleAlignment> &getAlignment() const & noexcept;
 
     /**
-     * Returns price level attribute of this symbol.
+     * Returns the price level attribute of this symbol.
      *
      * @return price level attribute of this symbol.
      */
-    const std::optional<CandlePriceLevel> &getPriceLevel() const & noexcept {
-        return priceLevel_;
-    }
+    const std::optional<CandlePriceLevel> &getPriceLevel() const & noexcept;
 
     /**
      * Returns string representation of this symbol.
-     * The string representation can be transformed back into symbol object
-     * using CandleSymbol::valueOf() method.
+     * The string representation can be transformed back into a symbol object
+     * using the CandleSymbol::valueOf() method.
      *
      * @return string representation of this symbol.
      */
-    const std::string &toString() const & noexcept {
-        return symbol_;
-    }
+    const std::string &toString() const & noexcept;
 
-    bool operator==(const CandleSymbol &candleSymbol) const noexcept {
-        return symbol_ == candleSymbol.symbol_;
-    }
+    bool operator==(const CandleSymbol &candleSymbol) const noexcept;
 
-    bool operator<(const CandleSymbol &candleSymbol) const noexcept {
-        return symbol_ < candleSymbol.symbol_;
-    }
+    bool operator<(const CandleSymbol &candleSymbol) const noexcept;
 
     CandleSymbol(const CandleSymbol &candleSymbol) noexcept;
     CandleSymbol(CandleSymbol &&candleSymbol) noexcept;
@@ -274,10 +209,10 @@ struct DXFCPP_EXPORT CandleSymbol {
     static void freeGraal(void *graalNative);
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static CandleSymbol fromGraal(void *graalNative);
@@ -288,9 +223,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param symbol The string symbol.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(std::string symbol) noexcept {
-        return CandleSymbol{std::move(symbol)};
-    }
+    static CandleSymbol valueOf(const StringLike &symbol) noexcept;
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attribute set.
@@ -299,23 +232,21 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param attribute The attribute to set.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(std::string symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
-        return {std::move(symbol), attribute};
-    }
+    static CandleSymbol valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept;
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attribute set (iterators).
      *
      * @tparam CandleSymbolAttributeIt The attribute iterator type.
      * @param symbol The string symbol.
-     * @param begin The beginning of collection of an attributes.
-     * @param end The end of collection of an attributes.
+     * @param begin The beginning of the collection of attributes.
+     * @param end The end of the collection of attributes.
      * @return
      */
     template <typename CandleSymbolAttributeIt>
-    static CandleSymbol valueOf(std::string symbol, CandleSymbolAttributeIt begin,
+    static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributeIt begin,
                                 CandleSymbolAttributeIt end) noexcept {
-        return {std::move(symbol), begin, end};
+        return CandleSymbol{symbol, begin, end};
     }
 
     /**
@@ -326,10 +257,8 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param attributes More attributes to set.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(std::string symbol,
-                                std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept {
-        return valueOf(std::move(symbol), attributes.begin(), attributes.end());
-    }
+    static CandleSymbol valueOf(const StringLike &symbol,
+                                std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept;
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attributes set.
@@ -344,8 +273,8 @@ struct DXFCPP_EXPORT CandleSymbol {
             { std::begin(attributes) };
             { std::end(attributes) };
         }
-    static CandleSymbol valueOf(std::string symbol, CandleSymbolAttributesCollection &&attributes) noexcept {
-        return valueOf(std::move(symbol), std::begin(attributes), std::end(attributes));
+    static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributesCollection &&attributes) noexcept {
+        return valueOf(symbol, std::begin(attributes), std::end(attributes));
     }
 };
 

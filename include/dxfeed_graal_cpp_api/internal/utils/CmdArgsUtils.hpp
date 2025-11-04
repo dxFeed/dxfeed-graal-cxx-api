@@ -7,17 +7,15 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../event/EventSourceWrapper.hpp"
 #include "../../event/EventTypeEnum.hpp"
+#include "../../symbols/SymbolWrapper.hpp"
 
-#include <cstddef>
 #include <cstdint>
 #include <optional>
 #include <string>
 #include <type_traits>
 #include <unordered_set>
-
-#include "../../event/EventSourceWrapper.hpp"
-#include "../../symbols/SymbolWrapper.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -30,19 +28,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(const std::string &symbols);
-
-    /**
-     * Parses an input string and returns a set of symbols.
-     *
-     * The symbol "all" or "*" can be passed. This will add WildcardSymbol (all symbols)..
-     *
-     * @param symbols The coma-separated list of symbols.
-     * @return The created set of parsed symbols
-     */
-    static std::unordered_set<SymbolWrapper> parseSymbols(const char *symbols) {
-        return parseSymbols(std::string(symbols));
-    }
+    static std::unordered_set<SymbolWrapper> parseSymbols(const StringLike &symbols);
 
     /**
      * Parses an input string and returns a set of symbols.
@@ -52,20 +38,14 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(std::string_view symbols) {
-        return parseSymbols(symbols.data());
+    template <typename S>
+    static std::unordered_set<SymbolWrapper> parseSymbols(const std::optional<S> &symbols) {
+        if (symbols.has_value()) {
+            return parseSymbols(symbols.value());
+        }
+
+        return {};
     }
-
-    /**
-     * Parses an input string and returns a set of symbols.
-     *
-     * The symbol "all" or "*" can be passed. This will add WildcardSymbol (all symbols).
-     *
-     * @param symbols The coma-separated list of symbols.
-     * @return The created set of parsed symbols
-     */
-    static std::unordered_set<SymbolWrapper> parseSymbols(std::optional<std::string> symbols);
-
     /**
      * Parses an input string and returns a vector of symbols in the same order.
      *
@@ -74,7 +54,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created vector of parsed symbols
      */
-    static std::vector<SymbolWrapper> parseSymbolsAndSaveOrder(const std::string &symbols);
+    static std::vector<SymbolWrapper> parseSymbolsAndSaveOrder(const StringLike &symbols);
 
     /**
      * Parses an input string and returns a set of candle symbols.
@@ -82,7 +62,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(const std::string &symbols);
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(const StringLike &symbols);
 
     /**
      * Parses an input string and returns a set of candle symbols.
@@ -90,99 +70,51 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(const char *symbols) {
-        return parseCandleSymbols(std::string(symbols));
-    }
-
-    /**
-     * Parses an input string and returns a set of candle symbols.
-     *
-     * @param symbols The coma-separated list of symbols.
-     * @return The created set of parsed candle symbols
-     */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::string_view symbols) {
-        return parseCandleSymbols(symbols.data());
-    }
-
-    /**
-     * Parses an input string and returns a set of candle symbols.
-     *
-     * @param symbols The coma-separated list of symbols.
-     * @return The created set of parsed candle symbols
-     */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(std::optional<std::string> symbols);
-
-    /**
-     * Parses an input string and returns a set of event types.
-     *
-     * "all" or "*" will be converted to all types.
-     *
-     * @param types The comma-separated list of event types.
-     * @return The created pair of set of parsed types and vector unknown types.
-     */
-    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
-    parseTypes(const std::string &types);
-
-    /**
-     * Parses an input string and returns a set of event types.
-     *
-     * "all" or "*" will be converted to all types.
-     *
-     * @param types The comma-separated list of event types.
-     * @return The created pair of set of parsed types and vector unknown types.
-     */
-    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
-    parseTypes(const char *types) {
-        return parseTypes(std::string(types));
-    }
-
-    /**
-     * Parses an input string and returns a set of event types.
-     *
-     * "all" or "*" will be converted to all types.
-     *
-     * @param types The comma-separated list of event types.
-     * @return The created pair of set of parsed types and vector unknown types.
-     */
-    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
-    parseTypes(std::string_view types) {
-        return parseTypes(types.data());
-    }
-
-    /**
-     * Parses an input string and returns a set of event types.
-     *
-     * "all" or "*" will be converted to all types.
-     *
-     * @param types The comma-separated list of event types.
-     * @return The created pair of set of parsed types and vector unknown types.
-     */
-    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
-    parseTypes(std::optional<std::string> types);
-
-    /**
-     * Parses the input string and returns a collection of key-value properties.
-     * The input string should look like comma-separated: "key=value".
-     *
-     * @param properties The input comma-separated key-value pairs.
-     * @return The collection of key-value properties.
-     */
-    static std::unordered_map<std::string, std::string> parseProperties(const std::string &properties) noexcept;
-
-    /**
-     * Parses the input string and returns a collection of key-value properties.
-     * The input string should look like comma-separated: "key=value".
-     *
-     * @param properties The input comma-separated key-value pairs.
-     * @return The collection of key-value properties.
-     */
-    static std::unordered_map<std::string, std::string> parseProperties(const char *properties) noexcept {
-        if (properties == nullptr) {
-            return {};
+    template <typename S>
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(const std::optional<S> &symbols) {
+        if (symbols.has_value()) {
+            return parseCandleSymbols(symbols.value());
         }
 
-        return parseProperties(std::string(properties));
+        return {};
     }
+
+    /**
+     * Parses an input string and returns a set of event types.
+     *
+     * "all" or "*" will be converted to all types.
+     *
+     * @param types The comma-separated list of event types.
+     * @return The created pair: set of parsed types and vector unknown types.
+     */
+    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
+    parseTypes(const StringLike &types);
+
+    /**
+     * Parses an input string and returns a set of event types.
+     *
+     * "all" or "*" will be converted to all types.
+     *
+     * @param types The comma-separated list of event types.
+     * @return The created pair of set of parsed types and vector unknown types.
+     */
+    template <typename S>
+    static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
+    parseTypes(const std::optional<S> &types) {
+        if (types.has_value()) {
+            return parseTypes(types.value());
+        }
+
+        return {};
+    }
+    /**
+     * Parses the input string and returns a collection of key-value properties.
+     * The input string should look like comma-separated: "key=value".
+     *
+     * @param properties The input comma-separated key-value pairs.
+     * @return The collection of key-value properties.
+     */
+    static std::unordered_map<std::string, std::string> parseProperties(const StringLike &properties) noexcept;
 
     /**
      * Parses the input string and returns a collection of key-value properties.
@@ -191,19 +123,9 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param properties The input comma-separated key-value pairs.
      * @return The collection of key-value properties.
      */
-    static std::unordered_map<std::string, std::string> parseProperties(std::string_view properties) noexcept {
-        return parseProperties(properties.data());
-    }
-
-    /**
-     * Parses the input string and returns a collection of key-value properties.
-     * The input string should look like comma-separated: "key=value".
-     *
-     * @param properties The input comma-separated key-value pairs.
-     * @return The collection of key-value properties.
-     */
+    template <typename S>
     static std::unordered_map<std::string, std::string>
-    parseProperties(std::optional<std::string> properties) noexcept {
+    parseProperties(const std::optional<S>& properties) noexcept {
         if (properties.has_value()) {
             return parseProperties(properties.value());
         }
@@ -218,33 +140,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param sources The input source names.
      * @return The set of sources or wrapped IndexedEventSource::DEFAULT if `sources` is empty.
      */
-    static std::unordered_set<EventSourceWrapper> parseEventSources(const std::string &sources) noexcept;
-
-    /**
-     * Parses the input string and returns a wrapped set of event sources (EventSourceWrapper).
-     * The input string should look like comma-separated: "name1,name2".
-     *
-     * @param sources The input source names.
-     * @return The set of sources or wrapped IndexedEventSource::DEFAULT if `sources` is empty.
-     */
-    static std::unordered_set<EventSourceWrapper> parseEventSources(const char *sources) noexcept {
-        if (sources == nullptr) {
-            return {EventSourceWrapper{IndexedEventSource::DEFAULT}};
-        }
-
-        return parseEventSources(std::string(sources));
-    }
-
-    /**
-     * Parses the input string and returns a wrapped set of event sources (EventSourceWrapper).
-     * The input string should look like comma-separated: "name1,name2".
-     *
-     * @param sources The input source names.
-     * @return The set of sources or wrapped IndexedEventSource::DEFAULT if `sources` is empty.
-     */
-    static std::unordered_set<EventSourceWrapper> parseEventSources(std::string_view sources) noexcept {
-        return parseEventSources(sources.data());
-    }
+    static std::unordered_set<EventSourceWrapper> parseEventSources(const StringLike &sources) noexcept;
 };
 
 DXFCPP_END_NAMESPACE

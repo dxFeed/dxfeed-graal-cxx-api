@@ -3,32 +3,23 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
+#include "../../../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
 #include "../Args/Args.hpp"
-
 #include <chrono>
 #include <cstdint>
+#include <fmt/format.h>
+#include <fmt/std.h>
 #include <memory>
+#include <process/process.hpp>
 #include <utility>
 #include <variant>
-
-#include <process/process.hpp>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
-
-DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
-#include <range/v3/all.hpp>
-DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {
 
 struct PerfTestTool {
     static inline auto FORMAT_NAME = "PerfTest.format";                              // csv, normal
-    static inline auto UNSUBSCRIBE_AFTER_SECONDS_NAME = "PerfTest.unsubscribeAfter"; // (seconds) 60, 180, etc
+    static inline auto UNSUBSCRIBE_AFTER_SECONDS_NAME = "PerfTest.unsubscribeAfter"; // (seconds) 60, 180, etc.
     static const std::string NAME;
     static const std::string SHORT_DESCRIPTION;
     static const std::string DESCRIPTION;
@@ -52,7 +43,7 @@ struct PerfTestTool {
     }
 
     struct Diagnostic final {
-      private:
+        private:
         bool showCpuUsageByCore_{};
         std::chrono::milliseconds cpuStartTime_{};
         std::atomic<std::size_t> eventsCounter_{};
@@ -151,7 +142,7 @@ struct PerfTestTool {
                     static_cast<double>(!showCpuUsageByCore_ ? std::thread::hardware_concurrency() : 1));
         }
 
-      public:
+        public:
         static std::string getCsvHeader() {
             return "Timestamp,Rate of events (avg) [events/s],Rate of listener calls [calls/s],Number of events in "
                    "call (avg) [events],Current memory usage [MByte],Peak memory usage [MByte],Current CPU usage "
@@ -226,7 +217,7 @@ struct PerfTestTool {
             bool showCpuUsageByCore{};
             bool detachListener{};
 
-            for (; index < args.size();) {
+            while (index < args.size()) {
                 if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
                     auto parseResult = PropertiesArg::parse(args, index);
 
@@ -234,17 +225,17 @@ struct PerfTestTool {
                     propertiesIsParsed = true;
                     index = parseResult.nextIndex;
                 } else {
-                    if (!forceStream && (forceStream = ForceStreamArg::parse(args, index).result)) {
+                    if (!forceStream && ((forceStream = ForceStreamArg::parse(args, index).result))) {
                         index++;
                         continue;
                     }
 
-                    if (!showCpuUsageByCore && (showCpuUsageByCore = CPUUsageByCoreArg::parse(args, index).result)) {
+                    if (!showCpuUsageByCore && ((showCpuUsageByCore = CPUUsageByCoreArg::parse(args, index).result))) {
                         index++;
                         continue;
                     }
 
-                    if (!detachListener && (detachListener = DetachListenerArg::parse(args, index).result)) {
+                    if (!detachListener && ((detachListener = DetachListenerArg::parse(args, index).result))) {
                         index++;
                         continue;
                     }
@@ -327,6 +318,7 @@ struct PerfTestTool {
             sub->addSymbols(parsedSymbols);
             endpoint->connect(args.address);
 
+            // ReSharper disable once CppEntityAssignedButNoRead
             std::shared_ptr<Timer> unsubscribeTimer{};
 
             if (unsubscribeAfter > 0) {

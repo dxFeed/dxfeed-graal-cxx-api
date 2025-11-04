@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/Common.hpp"
+#include "../internal/JavaObjectHandle.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -159,7 +160,7 @@ struct DXFCPP_EXPORT DayFilter {
     mutable JavaObjectHandle<DayFilter> handle_;
 
     /**
-     * Creates filter with specified conditions.
+     * Creates a filter with specified conditions.
      * <p>
      * The <code>dayOfWeekMask</code> is a bitwise mask with individual bits for each day of week.
      * For the day of week number N the N'th bit is used - the Day will be accepted if corresponding bit is set.
@@ -176,8 +177,8 @@ struct DXFCPP_EXPORT DayFilter {
      * @param shortDay The required short day flag, Tristate::NONE if not relevant
      * @param trading The required trading flag, Tristate::NONE if not relevant
      */
-    DayFilter(DayFilterEnum code, std::string name, std::uint32_t dayOfWeekMask, Tristate holiday, Tristate shortDay,
-              Tristate trading) noexcept;
+    DayFilter(DayFilterEnum code, const StringLike &name, std::uint32_t dayOfWeekMask, Tristate holiday,
+              Tristate shortDay, Tristate trading) noexcept;
 
     public:
     const JavaObjectHandle<DayFilter> &getHandle() const &;

@@ -1,20 +1,32 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/event/misc/TextMessage.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/candle/Candle.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/AnalyticOrder.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/OptionSale.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/Order.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/OtcMarketsOrder.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/Profile.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/Quote.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/SpreadOrder.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/Summary.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/TimeAndSale.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/Trade.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/market/TradeETH.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/misc/Message.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/misc/TextMessage.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/option/Greeks.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/option/Series.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/option/TheoPrice.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/option/Underlying.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <cstring>
-#include <memory>
-#include <utf8.h>
-#include <utility>
-
-#include <fmt/core.h>
-#include <fmt/format.h>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -36,7 +48,7 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_CANDLE:
         return Candle::fromGraal(e);
     case DXFG_EVENT_DAILY_CANDLE:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
     case DXFG_EVENT_UNDERLYING:
         return Underlying::fromGraal(e);
     case DXFG_EVENT_THEO_PRICE:
@@ -46,13 +58,13 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_TRADE_ETH:
         return TradeETH::fromGraal(e);
     case DXFG_EVENT_CONFIGURATION:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
     case DXFG_EVENT_MESSAGE:
         return Message::fromGraal(e);
     case DXFG_EVENT_TIME_AND_SALE:
         return TimeAndSale::fromGraal(e);
     case DXFG_EVENT_ORDER_BASE:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
     case DXFG_EVENT_ORDER:
         return Order::fromGraal(e);
     case DXFG_EVENT_ANALYTIC_ORDER:
@@ -68,12 +80,12 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_TEXT_MESSAGE:
         return TextMessage::fromGraal(e);
     default:
-        throw InvalidArgumentException("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Unknown event type: " + std::to_string(e->clazz));
     }
 }
 
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) {
-    auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
+    const auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
 
     if (list->size <= 0) {
         return {};
@@ -119,7 +131,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_DAILY_CANDLE:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
 
     case DXFG_EVENT_UNDERLYING:
         Underlying::freeGraal(e);
@@ -138,7 +150,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_CONFIGURATION:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
 
     case DXFG_EVENT_MESSAGE:
         Message::freeGraal(e);
@@ -149,7 +161,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_ORDER_BASE:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
 
     case DXFG_EVENT_ORDER:
         Order::freeGraal(e);
@@ -180,12 +192,13 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     default:
-        throw InvalidArgumentException("Unknown event type: " + std::to_string(static_cast<int>(e->clazz)));
+        throw InvalidArgumentException("Unknown event type: " + std::to_string(e->clazz));
     }
 }
 
 void EventMapper::freeGraalList(void *graalList) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("EventMapper::freeGraalList(graalList = " + toStringAny(graalList) + ")");
     }
 
@@ -196,7 +209,7 @@ void EventMapper::freeGraalList(void *graalList) {
         return;
     }
 
-    auto list = static_cast<ListType *>(graalList);
+    const auto list = static_cast<ListType *>(graalList);
 
     if (list->size > 0 && list->elements != nullptr) {
         for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
@@ -232,7 +245,7 @@ void *EventMapper::newGraalList(std::ptrdiff_t size) {
     auto *list = new ListType{static_cast<SizeType>(size), nullptr};
 
     if (size == 0) {
-        return static_cast<void *>(list);
+        return list;
     }
 
     list->elements = new ElementType *[size] {
@@ -265,7 +278,7 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
         return false;
     }
 
-    auto *list = static_cast<ListType *>(graalList);
+    const auto *list = static_cast<ListType *>(graalList);
 
     for (SizeType i = 0; i < count; i++) {
         freeGraal(list->elements[i]);

@@ -5,6 +5,10 @@
 
 #include "../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "AdditionalUnderlyings.hpp"
 #include "CFI.hpp"
 #include "PriceIncrements.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -1,35 +1,26 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // NOLINT(*-reserved-identifier)
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/CmdArgsUtils.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
 
-#include <chrono>
-#include <cstring>
 #include <ctime>
 #include <locale>
-#include <memory>
-#include <sstream>
 #include <string>
-#include <utf8.h>
 #include <utility>
 #include <vector>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
 DXFCXX_DISABLE_GCC_WARNINGS("-Wmaybe-uninitialized")
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 #if !defined(__cpp_lib_chrono) || (__cpp_lib_chrono < 201907L)
@@ -40,7 +31,9 @@ DXFCPP_BEGIN_NAMESPACE
 
 inline auto getUtcOffset() {
     constexpr std::time_t epochPlus11H = 60 * 60 * 11;
+    // ReSharper disable CppDeprecatedEntity
     const int localTime = localtime(&epochPlus11H)->tm_hour * 60 + localtime(&epochPlus11H)->tm_min;
+    // ReSharper disable CppDeprecatedEntity
     const int gmTime = gmtime(&epochPlus11H)->tm_hour * 60 + gmtime(&epochPlus11H)->tm_min;
     const int tzDiff = localTime - gmTime;
 
@@ -72,68 +65,8 @@ inline auto toUpper = [](auto &&s) {
            ranges::to<std::string>();
 };
 
-std::unordered_set<std::string> parseStringSymbols(const std::string &symbols) noexcept {
-    auto trimmedSymbols = trimStr(symbols);
-
-    if (trimmedSymbols.empty()) {
-        return {};
-    }
-
-    std::unordered_set<std::string> result{};
-
-    auto addSymbol = [&result](auto &&symbol) {
-        auto trim = trimStr(symbol);
-
-        if (!trim.empty()) {
-            result.emplace(trim);
-        }
-    };
-
-    std::string symbol{};
-    // Count of encountered parentheses of any type.
-    auto parentheses = 0ULL;
-
-    for (auto c : symbols) {
-        switch (c) {
-        case '{':
-        case '(':
-        case '[':
-            ++parentheses;
-            symbol += c;
-            break;
-        case '}':
-        case ')':
-        case ']':
-            if (parentheses > 0) {
-                --parentheses;
-            }
-
-            symbol += c;
-            break;
-        case ',':
-            if (parentheses == 0) {
-                // Not in parentheses -- comma is a symbol list separator.
-                addSymbol(symbol);
-
-                symbol.clear();
-            } else {
-                symbol += c;
-            }
-
-            break;
-        default:
-            symbol += c;
-            break;
-        }
-    }
-
-    addSymbol(symbol);
-
-    return result;
-}
-
-std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &symbols) {
-    auto trimmedSymbols = trimStr(symbols);
+std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const StringLike &symbols) {
+    const auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -148,16 +81,8 @@ std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const std::string &
     return parsed | ranges::to<std::unordered_set<SymbolWrapper>>();
 }
 
-std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(std::optional<std::string> symbols) {
-    if (symbols.has_value()) {
-        return parseSymbols(symbols.value());
-    }
-
-    return {};
-}
-
-std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(const std::string &symbols) {
-    auto trimmedSymbols = trimStr(symbols);
+std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(const StringLike &symbols) {
+    const auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -174,8 +99,8 @@ std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(const std::str
     return parsed | ranges::to<std::vector<SymbolWrapper>>();
 }
 
-std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::string &symbols) {
-    auto trimmedSymbols = trimStr(symbols);
+std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const StringLike &symbols) {
+    const auto trimmedSymbols = trimStr(symbols);
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -189,16 +114,8 @@ std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const std::str
            ranges::to<std::unordered_set<CandleSymbol>>();
 }
 
-std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(std::optional<std::string> symbols) {
-    if (symbols.has_value()) {
-        return parseCandleSymbols(symbols.value());
-    }
-
-    return {};
-}
-
 std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
-CmdArgsUtils::parseTypes(const std::string &types) {
+CmdArgsUtils::parseTypes(const StringLike &types) {
     auto trimmedTypes = trimStr(types);
 
     if (trimmedTypes.empty()) {
@@ -209,15 +126,13 @@ CmdArgsUtils::parseTypes(const std::string &types) {
         return {EventTypeEnum::ALL | ranges::to<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>>(), {}};
     }
 
-    auto split = splitAndTrim(trimmedTypes) | filterNonEmpty | ranges::to<std::vector<std::string>>;
+    const auto split = splitAndTrim(trimmedTypes) | filterNonEmpty | ranges::to<std::vector<std::string>>;
 
     std::unordered_set<std::reference_wrapper<const EventTypeEnum>> result;
     std::vector<std::string> unknown;
 
     for (auto t : split) {
-        auto u = toUpper(t);
-
-        if (EventTypeEnum::ALL_BY_NAME.contains(u)) {
+        if (auto u = toUpper(t); EventTypeEnum::ALL_BY_NAME.contains(u)) {
             result.emplace(EventTypeEnum::ALL_BY_NAME.at(u));
         } else if (EventTypeEnum::ALL_BY_CLASS_NAME.contains(t)) {
             result.emplace(EventTypeEnum::ALL_BY_CLASS_NAME.at(t));
@@ -229,16 +144,7 @@ CmdArgsUtils::parseTypes(const std::string &types) {
     return {result, unknown};
 }
 
-std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
-CmdArgsUtils::parseTypes(std::optional<std::string> types) {
-    if (types.has_value()) {
-        return parseTypes(types.value());
-    }
-
-    return {};
-}
-
-std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const std::string &properties) noexcept {
+std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const StringLike &properties) noexcept {
     auto p = trimStr(properties);
 
     if (p.empty()) {
@@ -257,7 +163,7 @@ std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const
            ranges::to<std::unordered_map<std::string, std::string>>();
 }
 
-std::unordered_set<EventSourceWrapper> CmdArgsUtils::parseEventSources(const std::string &sources) noexcept {
+std::unordered_set<EventSourceWrapper> CmdArgsUtils::parseEventSources(const StringLike &sources) noexcept {
     auto s = trimStr(sources);
 
     if (s.empty()) {

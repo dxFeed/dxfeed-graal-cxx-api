@@ -7,17 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
+#include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
+#include "./Order.hpp"
+#include "./OtcMarketsPriceType.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <utility>
-
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-
-#include "Order.hpp"
-#include "OtcMarketsPriceType.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -152,10 +149,10 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     static const EventTypeEnum &TYPE;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -188,18 +185,18 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OtcMarketsOrder(std::string eventSymbol) noexcept : Order(std::move(eventSymbol)) {
+    explicit OtcMarketsOrder(const StringLike& eventSymbol) noexcept : Order(eventSymbol) {
     }
 
     // MarketEvent methods
 
     /**
-     * Changes event's symbol and returns the current OTC Markets order.
+     * Changes the event's symbol and returns the current OTC Markets order.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withEventSymbol(const std::string &eventSymbol) noexcept override {
+    OtcMarketsOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override {
         return dynamic_cast<OtcMarketsOrder &>(Order::withEventSymbol(eventSymbol));
     }
 
@@ -475,11 +472,11 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * Changes market maker or other aggregate identifier of this OTC Markets order.
      * Returns the current OTC Markets order.
      *
-     * @param marketMaker The market maker or other aggregate identifier of this OTC Markets order.
+     * @param marketMaker The market maker or another aggregate identifier of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withMarketMaker(std::string marketMaker) noexcept {
-        return dynamic_cast<OtcMarketsOrder &>(Order::withMarketMaker(std::move(marketMaker)));
+    OtcMarketsOrder &withMarketMaker(const StringLike& marketMaker) noexcept {
+        return dynamic_cast<OtcMarketsOrder &>(Order::withMarketMaker(marketMaker));
     }
 
     // OtcMarketsOrder methods
@@ -525,7 +522,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @return `true` if this event is available for business within the operating hours of the OTC Link system.
      */
     bool isOpen() const noexcept {
-        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, OPEN) != 0;
+        return andOp(otcMarketsOrderData_.otcMarketsFlags, OPEN) != 0;
     }
 
     /**
@@ -534,8 +531,8 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param open `true` if this event is available for business within the operating hours of the OTC Link system.
      */
     void setOpen(bool open) noexcept {
-        otcMarketsOrderData_.otcMarketsFlags = open ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, OPEN)
-                                                    : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~OPEN);
+        otcMarketsOrderData_.otcMarketsFlags = open ? orOp(otcMarketsOrderData_.otcMarketsFlags, OPEN)
+                                                    : andOp(otcMarketsOrderData_.otcMarketsFlags, ~OPEN);
     }
 
     /**
@@ -557,7 +554,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @return `true` if this event is unsolicited.
      */
     bool isUnsolicited() const noexcept {
-        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, UNSOLICITED) != 0;
+        return andOp(otcMarketsOrderData_.otcMarketsFlags, UNSOLICITED) != 0;
     }
 
     /**
@@ -567,8 +564,8 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      */
     void setUnsolicited(bool unsolicited) noexcept {
         otcMarketsOrderData_.otcMarketsFlags = unsolicited
-                                                   ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, UNSOLICITED)
-                                                   : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~UNSOLICITED);
+                                                   ? orOp(otcMarketsOrderData_.otcMarketsFlags, UNSOLICITED)
+                                                   : andOp(otcMarketsOrderData_.otcMarketsFlags, ~UNSOLICITED);
     }
 
     /**
@@ -623,7 +620,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @return `true` if this event should NOT be considered for the inside price.
      */
     bool isSaturated() const noexcept {
-        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, SATURATED) != 0;
+        return andOp(otcMarketsOrderData_.otcMarketsFlags, SATURATED) != 0;
     }
 
     /**
@@ -633,8 +630,8 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      */
     void setSaturated(bool saturated) noexcept {
         otcMarketsOrderData_.otcMarketsFlags = saturated
-                                                   ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, SATURATED)
-                                                   : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~SATURATED);
+                                                   ? orOp(otcMarketsOrderData_.otcMarketsFlags, SATURATED)
+                                                   : andOp(otcMarketsOrderData_.otcMarketsFlags, ~SATURATED);
     }
 
     /**
@@ -657,7 +654,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @return `true` if this event is in 'AutoEx' mode.
      */
     bool isAutoExecution() const noexcept {
-        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, AUTO_EXECUTION) != 0;
+        return andOp(otcMarketsOrderData_.otcMarketsFlags, AUTO_EXECUTION) != 0;
     }
 
     /**
@@ -667,8 +664,8 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      */
     void setAutoExecution(bool autoExecution) noexcept {
         otcMarketsOrderData_.otcMarketsFlags =
-            autoExecution ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, AUTO_EXECUTION)
-                          : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~AUTO_EXECUTION);
+            autoExecution ? orOp(otcMarketsOrderData_.otcMarketsFlags, AUTO_EXECUTION)
+                          : andOp(otcMarketsOrderData_.otcMarketsFlags, ~AUTO_EXECUTION);
     }
 
     /**
@@ -693,7 +690,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @return `true` if this event represents a NMS conditional.
      */
     bool isNmsConditional() const noexcept {
-        return dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, NMS_CONDITIONAL) != 0;
+        return andOp(otcMarketsOrderData_.otcMarketsFlags, NMS_CONDITIONAL) != 0;
     }
 
     /**
@@ -703,8 +700,8 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      */
     void setNmsConditional(bool nmsConditional) noexcept {
         otcMarketsOrderData_.otcMarketsFlags =
-            nmsConditional ? dxfcpp::orOp(otcMarketsOrderData_.otcMarketsFlags, NMS_CONDITIONAL)
-                           : dxfcpp::andOp(otcMarketsOrderData_.otcMarketsFlags, ~NMS_CONDITIONAL);
+            nmsConditional ? orOp(otcMarketsOrderData_.otcMarketsFlags, NMS_CONDITIONAL)
+                           : andOp(otcMarketsOrderData_.otcMarketsFlags, ~NMS_CONDITIONAL);
     }
 
     /**

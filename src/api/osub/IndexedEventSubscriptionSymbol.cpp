@@ -1,9 +1,11 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/api/osub/IndexedEventSubscriptionSymbol.hpp"
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -23,11 +25,11 @@ const std::unique_ptr<IndexedEventSource> &IndexedEventSubscriptionSymbol::getSo
 
 void *IndexedEventSubscriptionSymbol::toGraal() const {
     auto *graalSymbol = new dxfg_indexed_event_subscription_symbol_t{
-        .supper = {.type = dxfg_symbol_type_t::INDEXED_EVENT_SUBSCRIPTION},
+        .supper = {.type = INDEXED_EVENT_SUBSCRIPTION},
         .symbol = static_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()),
         .source = static_cast<dxfg_indexed_event_source_t *>(source_->toGraal())};
 
-    return static_cast<void *>(graalSymbol);
+    return graalSymbol;
 }
 
 void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) {
@@ -35,7 +37,7 @@ void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) {
         return;
     }
 
-    auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
 
     SymbolWrapper::freeGraal(graalSymbol->symbol);
     IndexedEventSource::freeGraal(graalSymbol->source);
@@ -45,6 +47,7 @@ void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) {
 
 IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("IndexedEventSubscriptionSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
@@ -53,13 +56,14 @@ IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *g
             "Unable to create IndexedEventSubscriptionSymbol. The `graalNative` parameter is nullptr");
     }
 
-    auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
 
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), IndexedEventSource::fromGraal(graalSymbol->source)};
 }
 
 std::string IndexedEventSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         return "IndexedEventSubscriptionSymbol{" + eventSymbol_->toString() + ", source = " + source_->toString() + "}";
     } else {
         return eventSymbol_->toStringUnderlying() + "{source=" + source_->toString() + "}";

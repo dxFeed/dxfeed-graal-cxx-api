@@ -1,10 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/event/market/OrderSource.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+
+#include <dxfg_api.h>
+#include <type_traits>
+#include <unordered_map>
+#include <variant>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -92,28 +96,27 @@ const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference
 
 std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
 
-OrderSource::OrderSource(std::int32_t id, std::string name, std::uint32_t pubFlags) noexcept
-    : IndexedEventSource(id, std::move(name)), pubFlags_{pubFlags}, builtin_{true} {
+OrderSource::OrderSource(std::int32_t id, const StringLike &name, std::uint32_t pubFlags) noexcept
+    : IndexedEventSource(id, name), pubFlags_{pubFlags}, builtin_{true} {
 }
 
-OrderSource::OrderSource(const std::string &name, std::uint32_t pubFlags)
+OrderSource::OrderSource(const StringLike &name, std::uint32_t pubFlags)
     : OrderSource(composeId(name), name, pubFlags) {
 }
 
-OrderSource::OrderSource(std::int32_t id, const std::string &name) noexcept
-    : IndexedEventSource(id, name), pubFlags_{0}, builtin_{false} {
+OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : IndexedEventSource(id, name) {
 }
 
-std::int32_t OrderSource::composeId(const std::string &name) {
+std::int32_t OrderSource::composeId(const StringLike &name) {
     std::int32_t sourceId = 0;
 
-    auto n = name.length();
+    const auto n = name.length();
 
     if (n == 0 || n > 4) {
         throw InvalidArgumentException("Source name must contain from 1 to 4 characters");
     }
 
-    for (auto c : name) {
+    for (const auto c : name) {
         checkChar(c);
         sourceId = orOp(sal(sourceId, 8), c);
     }
@@ -143,7 +146,7 @@ std::string OrderSource::decodeName(std::int32_t id) {
             continue;
         }
 
-        char c = static_cast<char>(andOp(sar(id, i), 0xff));
+        const char c = static_cast<char>(andOp(sar(id, i), 0xff));
 
         checkChar(c);
         name[n++] = c;
@@ -180,11 +183,11 @@ std::uint32_t OrderSource::getEventTypeMask(const EventTypeEnum &eventType) {
 void *OrderSource::toGraal() const {
     auto *graalSource = new dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
 
-    return static_cast<void *>(graalSource);
+    return graalSource;
 }
 
 std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> OrderSource::toGraalUnique() const noexcept {
-    return {toGraal(), IndexedEventSource::freeGraal};
+    return {toGraal(), freeGraal};
 }
 
 bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
@@ -192,29 +195,29 @@ bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
 }
 
 const OrderSource &OrderSource::valueOf(std::int32_t sourceId) {
-    if (auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
+    if (const auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
         return found->second;
     }
 
     std::lock_guard lock(MTX_);
 
-    if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
+    if (const auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
         return found->second;
     }
 
     return USER_SOURCES_.try_emplace(sourceId, OrderSource(sourceId, decodeName(sourceId))).first->second;
 }
 
-const OrderSource &OrderSource::valueOf(const std::string &name) {
-    if (auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
+const OrderSource &OrderSource::valueOf(const StringLike &name) {
+    if (const auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
         return found->second;
     }
 
     std::lock_guard lock(MTX_);
 
-    auto sourceId = composeId(name);
+    const auto sourceId = composeId(name);
 
-    if (auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
+    if (const auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
         return found->second;
     }
 

@@ -42,9 +42,9 @@ class DXFCPP_EXPORT EventTypeEnum {
     // A flag that indicates that the current enum element is characterizing the Market event.
     const bool isMarket_;
 
-    EventTypeEnum(std::uint32_t id, std::string name, std::string className, bool isLasting, bool isIndexed = false,
+    EventTypeEnum(std::uint32_t id, const StringLike & name, const StringLike & className, bool isLasting, bool isIndexed = false,
                   bool isTimeSeries = false, bool isMarket = true) noexcept
-        : id_{id}, name_{std::move(name)}, className_{std::move(className)}, isLasting_{isLasting},
+        : id_{id}, name_{std::string(name)}, className_{std::string(className)}, isLasting_{isLasting},
           isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries},
           isOnlyIndexed_{isIndexed && !isTimeSeries}, isMarket_{isMarket} {
     }
@@ -122,16 +122,16 @@ class DXFCPP_EXPORT EventTypeEnum {
         return id_ == eventTypeEnum.id_;
     }
 
-    bool operator==(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum) const noexcept {
+    bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept {
         return id_ == eventTypeEnum.get().id_;
     }
 
-    friend bool operator==(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
-                           const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum2) noexcept {
+    friend bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                           const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept {
         return eventTypeEnum1.get().id_ == eventTypeEnum2.get().id_;
     }
 
-    friend bool operator==(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
+    friend bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
                            const EventTypeEnum &eventTypeEnum2) noexcept {
         return eventTypeEnum1.get().id_ == eventTypeEnum2.id_;
     }
@@ -140,16 +140,16 @@ class DXFCPP_EXPORT EventTypeEnum {
         return id_ < eventTypeEnum.id_;
     }
 
-    bool operator<(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum) const noexcept {
+    bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept {
         return id_ < eventTypeEnum.get().id_;
     }
 
-    friend bool operator<(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
-                          const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum2) noexcept {
+    friend bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                          const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept {
         return eventTypeEnum1.get().id_ < eventTypeEnum2.get().id_;
     }
 
-    friend bool operator<(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventTypeEnum1,
+    friend bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
                           const EventTypeEnum &eventTypeEnum2) noexcept {
         return eventTypeEnum1.get().id_ < eventTypeEnum2.id_;
     }
@@ -196,7 +196,6 @@ inline namespace literals {
  * String literal that helps to construct EventTypeEnum from a char array.
  *
  * @param eventTypeString The event type name's char array
- * @param length The char array's length
  * @return EventTypeEnum built on char array
  */
 inline EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept {
@@ -213,13 +212,13 @@ DXFCPP_END_NAMESPACE
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::EventTypeEnum> {
     std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept {
-        return static_cast<std::size_t>(eventType.getId());
+        return eventType.getId();
     }
 };
 
 template <> struct DXFCPP_EXPORT std::hash<std::reference_wrapper<const dxfcpp::EventTypeEnum>> {
     std::size_t operator()(const std::reference_wrapper<const dxfcpp::EventTypeEnum> &eventType) const noexcept {
-        return static_cast<std::size_t>(eventType.get().getId());
+        return eventType.get().getId();
     }
 };
 

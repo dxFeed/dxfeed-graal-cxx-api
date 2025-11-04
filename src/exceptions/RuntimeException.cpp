@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../include/dxfeed_graal_cpp_api/exceptions/RuntimeException.hpp"
 
 #ifdef DXFCXX_FEATURE_STACKTRACE
 #    include <boost/stacktrace.hpp>
@@ -28,15 +28,11 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
         std::string what;
         std::size_t whereStart = 0;
 
-        auto foundIn = frameString.find(" in ");
-
-        if (foundIn != std::string::npos) {
+        if (const auto foundIn = frameString.find(" in "); foundIn != std::string::npos) {
             what = frameString.substr(0, foundIn);
             whereStart = foundIn + 4;
         } else {
-            auto foundAt = frameString.find(" at ");
-
-            if (foundAt != std::string::npos) {
+            if (const auto foundAt = frameString.find(" at "); foundAt != std::string::npos) {
                 what = frameString.substr(0, foundAt);
                 whereStart = foundIn + 4;
             } else {
@@ -52,10 +48,10 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
             continue;
         }
 
-        auto foundLastSep = frameString.find_last_of("\\/");
         std::string where;
 
-        if (foundLastSep != std::string::npos && foundLastSep < frameString.size() - 1) {
+        if (const auto foundLastSep = frameString.find_last_of("\\/");
+            foundLastSep != std::string::npos && foundLastSep < frameString.size() - 1) {
             where = frameString.substr(foundLastSep + 1);
         } else {
             where = frameString.substr(whereStart);
@@ -68,7 +64,7 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
 }
 #endif
 
-RuntimeException::RuntimeException(const StringLikeWrapper &message, const StringLikeWrapper &additionalStackTrace)
+RuntimeException::RuntimeException(const StringLike &message, const StringLike &additionalStackTrace)
     : std::runtime_error(message.c_str()),
 #ifdef DXFCXX_FEATURE_STACKTRACE
       stackTrace_(additionalStackTrace.empty() ? stackTraceToString(boost::stacktrace::stacktrace())

@@ -7,16 +7,15 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cstdint>
-#include <memory>
-#include <string>
-
 #include "../../internal/Common.hpp"
-
 #include "../EventType.hpp"
 #include "../LastingEvent.hpp"
 #include "../TimeSeriesEvent.hpp"
-#include "CandleSymbol.hpp"
+#include "./CandleSymbol.hpp"
+
+#include <cstdint>
+#include <memory>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -25,16 +24,16 @@ struct EventMapper;
 
 /**
  * Candle event with open, high, low, close prices and other information for a specific period.
- * Candles are build with a specified CandlePeriod using a specified CandlePrice type with a data taken from the
+ * Candles are built with a specified CandlePeriod using a specified CandlePrice type with data taken from the
  * specified CandleExchange from the specified CandleSession with further details of aggregation provided by
  * CandleAlignment.
  *
  * <p> Event symbol of the candle is represented with CandleSymbol class.
  * Since the `Candle is a time-series event, it is typically subscribed to using DXFeedTimeSeriesSubscription class
- * that handles the necessarily wrapping of the symbol into TimeSeriesSubscriptionSymbol to specify a subscription
+ * that handles the necessary wrapping of the symbol into TimeSeriesSubscriptionSymbol to specify a subscription
  * time range.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="eventFlagsSection">Event flags, transactions, and snapshots</a></h3>
  *
  * Some candle sources provide a consistent view of the set of known candles.
  * The corresponding information is carried in @ref Candle::getEventFlags() "eventFlags" property.
@@ -43,7 +42,7 @@ struct EventMapper;
  * property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * <p>TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents a list
- * current of time-series events order by their @ref Candle::getTime() "time".
+ * current of time-series events ordered by their @ref Candle::getTime() "time".
  * It relies on the code of AbstractIndexedEventModel to handle this logic.
  * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
@@ -55,7 +54,7 @@ struct EventMapper;
  *
  * This event is implemented on top of QDS record `TradeHistory` for tick candles with CandlePeriod::TICK,
  * records `Trade.<period>` for a certain set of popular periods, and QDS record `Candle` for arbitrary custom
- * periods, with a set of `Candle{<attributes>}` records for a popular combinations of custom candle symbol attributes
+ * periods, with a set of `Candle{<attributes>}` records for popular combinations of custom candle symbol attributes
  * like CandlePrice for an efficient support of bid-ask charting.
  */
 class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
@@ -120,10 +119,10 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -149,12 +148,12 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     static void freeGraal(void *graalNative);
 
     /**
-     * Creates new candle with default values.
+     * Creates a new candle with default values.
      */
     Candle() noexcept = default;
 
     /**
-     * Creates new candle with the specified candle event symbol.
+     * Creates a new candle with the specified candle event symbol.
      * @param eventSymbol candle event symbol.
      */
     explicit Candle(CandleSymbol eventSymbol) noexcept;
@@ -162,14 +161,14 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     // EventType methods
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or dxfcpp::CandleSymbol::NUL (`dxfcpp::CandleSymbol{"<null>"}`)
      */
     const CandleSymbol &getEventSymbol() const & noexcept override;
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or `std::nullopt`.
      */
@@ -179,7 +178,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     void setEventSymbol(const CandleSymbol &eventSymbol) noexcept override;
 
     /**
-     * Changes event's symbol and returns the current candle.
+     * Changes an event's symbol and returns the current candle.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current candle.
@@ -237,7 +236,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     void setIndex(std::int64_t index) override;
 
     /**
-     * Changes unique per-symbol index of this event.
+     * Changes the unique per-symbol index of this event.
      * Returns the current candle.
      *
      * @param index unique per-symbol index of this candle.
@@ -251,7 +250,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     std::int64_t getIndex() const noexcept override;
 
     /**
-     * Returns timestamp of the event in milliseconds.
+     * Returns the timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
@@ -260,7 +259,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     // Candle methods
 
     /**
-     * Changes timestamp of the event in milliseconds.
+     * Changes the timestamp of the event in milliseconds.
      *
      * @param time timestamp of the event in milliseconds.
      * @see Candle::getTime()
@@ -268,7 +267,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     void setTime(std::int64_t time) noexcept;
 
     /**
-     * Changes timestamp of the event in milliseconds.
+     * Changes the timestamp of the event in milliseconds.
      * Returns the current candle.
      *
      * @param time timestamp of the event in milliseconds.
@@ -290,7 +289,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      *
      * @param sequence the sequence.
      * @see Candle::getSequence()
-     * @throws InvalidArgumentException if sequence is below zero or above ::MAX_SEQUENCE.
+     * @throws InvalidArgumentException if the sequence is below zero or above ::MAX_SEQUENCE.
      */
     void setSequence(std::int32_t sequence);
 
@@ -476,13 +475,13 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
 
     /**
      * Returns ask volume in this candle.
-     * @return Ask volume in this candle.
+     * @return The ask volume in this candle.
      */
     double getAskVolume() const noexcept;
 
     /**
      * Changes ask volume in this candle.
-     * @param askVolume Ask volume in this candle.
+     * @param askVolume The ask volume in this candle.
      */
     void setAskVolume(double askVolume) noexcept;
 
@@ -490,7 +489,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * Changes ask volume in this candle.
      * Returns the current candle.
      *
-     * @param askVolume Ask volume in this candle.
+     * @param askVolume The ask volume in this candle.
      * @return The current candle.
      */
     Candle &withAskVolume(double askVolume) noexcept;
@@ -502,7 +501,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     double getImpVolatility() const noexcept;
 
     /**
-     * Changes the implied volatility.
+     * Changes implied volatility.
      * @param impVolatility The implied volatility.
      */
     void setImpVolatility(double impVolatility);

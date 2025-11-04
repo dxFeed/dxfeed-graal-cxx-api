@@ -1,23 +1,25 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
-#include <dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp>
+#include "../../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
-dxfcpp::InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state);
+InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state);
 
 namespace isolated::ipf::live {
 
 namespace IsolatedInstrumentProfileConnection {
 
-/* dxfg_ipf_connection_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
-createConnection(const StringLikeWrapper &address,
-                 /* dxfg_ipf_collector_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileCollector>
+/* dxfg_ipf_connection_t* */ JavaObjectHandle<InstrumentProfileConnection>
+createConnection(const StringLike &address,
+                 /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector>
                      &instrumentProfileCollector) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
@@ -25,12 +27,12 @@ createConnection(const StringLikeWrapper &address,
             "`instrumentProfileCollector` handle is invalid");
     }
 
-    return JavaObjectHandle<dxfcpp::InstrumentProfileConnection>{
+    return JavaObjectHandle<InstrumentProfileConnection>{
         runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileConnection_createConnection, address.c_str(),
                                           static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get()))};
 }
 
-std::string getAddress(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+std::string getAddress(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
                            &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileConnection_getAddress`. The "
@@ -43,12 +45,12 @@ std::string getAddress(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfc
 
     auto result = dxfcpp::toString(address);
 
-    isolated::internal::IsolatedString::release(address);
+    internal::IsolatedString::release(address);
 
     return result;
 }
 
-std::int64_t getUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+std::int64_t getUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
                                  &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException(
@@ -60,7 +62,7 @@ std::int64_t getUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandl
                                               static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get()));
 }
 
-bool setUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+bool setUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
                          &instrumentProfileConnection,
                      std::int64_t updatePeriod) {
     if (!instrumentProfileConnection) {
@@ -74,8 +76,8 @@ bool setUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp
                                               updatePeriod) == 0;
 }
 
-dxfcpp::InstrumentProfileConnection::State
-getState(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+InstrumentProfileConnection::State
+getState(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
              &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileConnection_getState`. The "
@@ -87,7 +89,7 @@ getState(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::Instrument
                                            static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get())));
 }
 
-std::int64_t getLastModified(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+std::int64_t getLastModified(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
                                  &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException(
@@ -99,7 +101,7 @@ std::int64_t getLastModified(/* dxfg_ipf_connection_t * */ const JavaObjectHandl
                                               static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get()));
 }
 
-bool start(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+bool start(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
                &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileConnection_start`. The "
@@ -111,7 +113,7 @@ bool start(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::Instrume
                static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get())) == 0;
 }
 
-bool close(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+bool close(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
                &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileConnection_close`. The "
@@ -124,9 +126,9 @@ bool close(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::Instrume
 }
 
 bool addStateChangeListener(
-    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
         &instrumentProfileConnection,
-    /* dxfg_ipf_connection_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::IpfPropertyChangeListener>
+    /* dxfg_ipf_connection_state_change_listener_t * */ const JavaObjectHandle<IpfPropertyChangeListener>
         &listener) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException(
@@ -146,7 +148,7 @@ bool addStateChangeListener(
                static_cast<dxfg_ipf_connection_state_change_listener_t *>(listener.get())) == 0;
 }
 
-bool waitUntilCompleted(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+bool waitUntilCompleted(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
                             &instrumentProfileConnection,
                         std::int64_t timeoutInMs) {
     if (!instrumentProfileConnection) {
@@ -164,14 +166,14 @@ bool waitUntilCompleted(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxf
 
 namespace IsolatedIpfPropertyChangeListener {
 
-/* dxfg_ipf_connection_state_change_listener_t* */ JavaObjectHandle<dxfcpp::IpfPropertyChangeListener>
+/* dxfg_ipf_connection_state_change_listener_t* */ JavaObjectHandle<IpfPropertyChangeListener>
 create(/* dxfg_ipf_connection_state_change_listener_func */ void *userFunc, void *userData) {
     if (!userFunc) {
         throw InvalidArgumentException("Unable to execute function `dxfg_IpfPropertyChangeListener_new`. The "
                                        "`userFunc` is nullptr");
     }
 
-    return JavaObjectHandle<dxfcpp::IpfPropertyChangeListener>{runGraalFunctionAndThrowIfNullptr(
+    return JavaObjectHandle<IpfPropertyChangeListener>{runGraalFunctionAndThrowIfNullptr(
         dxfg_IpfPropertyChangeListener_new, dxfcpp::bit_cast<dxfg_ipf_connection_state_change_listener_func>(userFunc),
         userData)};
 }

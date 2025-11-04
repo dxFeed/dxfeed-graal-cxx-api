@@ -7,9 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <unordered_set>
-
 #include "../../api/DXPublisherObservableSubscription.hpp"
+
+#include <unordered_set>
 
 DXFCPP_BEGIN_NAMESPACE
 

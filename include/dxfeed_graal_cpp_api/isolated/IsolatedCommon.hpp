@@ -10,28 +10,63 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../exceptions/JavaException.hpp"
 #include "../internal/Isolate.hpp"
 
-#include "../api/DXEndpoint.hpp"
-
-struct __graal_isolatethread_t;
-typedef struct __graal_isolatethread_t graal_isolatethread_t;
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
 
-inline constexpr dxfcpp::DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) noexcept {
-    switch (state) {
-    case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
-        return dxfcpp::DXEndpoint::State::NOT_CONNECTED;
-    case DXFG_ENDPOINT_STATE_CONNECTING:
-        return dxfcpp::DXEndpoint::State::CONNECTING;
-    case DXFG_ENDPOINT_STATE_CONNECTED:
-        return dxfcpp::DXEndpoint::State::CONNECTED;
-    case DXFG_ENDPOINT_STATE_CLOSED:
-        return dxfcpp::DXEndpoint::State::CLOSED;
+inline std::string_view toString(dxfg_event_clazz_t eventClazz) {
+    switch (eventClazz) {
+    case DXFG_EVENT_QUOTE:
+        return "DXFG_EVENT_QUOTE";
+    case DXFG_EVENT_PROFILE:
+        return "DXFG_EVENT_PROFILE";
+    case DXFG_EVENT_SUMMARY:
+        return "DXFG_EVENT_SUMMARY";
+    case DXFG_EVENT_GREEKS:
+        return "DXFG_EVENT_GREEKS";
+    case DXFG_EVENT_CANDLE:
+        return "DXFG_EVENT_CANDLE";
+    case DXFG_EVENT_DAILY_CANDLE:
+        return "DXFG_EVENT_DAILY_CANDLE";
+    case DXFG_EVENT_UNDERLYING:
+        return "DXFG_EVENT_UNDERLYING";
+    case DXFG_EVENT_THEO_PRICE:
+        return "DXFG_EVENT_THEO_PRICE";
+    case DXFG_EVENT_TRADE:
+        return "DXFG_EVENT_TRADE";
+    case DXFG_EVENT_TRADE_ETH:
+        return "DXFG_EVENT_TRADE_ETH";
+    case DXFG_EVENT_CONFIGURATION:
+        return "DXFG_EVENT_CONFIGURATION";
+    case DXFG_EVENT_MESSAGE:
+        return "DXFG_EVENT_MESSAGE";
+    case DXFG_EVENT_TIME_AND_SALE:
+        return "DXFG_EVENT_TIME_AND_SALE";
+    case DXFG_EVENT_ORDER_BASE:
+        return "DXFG_EVENT_ORDER_BASE";
+    case DXFG_EVENT_ORDER:
+        return "DXFG_EVENT_ORDER";
+    case DXFG_EVENT_ANALYTIC_ORDER:
+        return "DXFG_EVENT_ANALYTIC_ORDER";
+    case DXFG_EVENT_OTC_MARKETS_ORDER:
+        return "DXFG_EVENT_OTC_MARKETS_ORDER";
+    case DXFG_EVENT_SPREAD_ORDER:
+        return "DXFG_EVENT_SPREAD_ORDER";
+    case DXFG_EVENT_SERIES:
+        return "DXFG_EVENT_SERIES";
+    case DXFG_EVENT_OPTION_SALE:
+        return "DXFG_EVENT_OPTION_SALE";
+    case DXFG_EVENT_TEXT_MESSAGE:
+        return "DXFG_EVENT_TEXT_MESSAGE";
+    case DXFG_EVENT_MARKET_MAKER:
+        return "DXFG_EVENT_MARKET_MAKER";
+    case DXFG_EVENT_TEXT_CONFIGURATION:
+        return "DXFG_EVENT_TEXT_CONFIGURATION";
+    default:
+        return "UNKNOWN";
     }
-
-    return dxfcpp::DXEndpoint::State::NOT_CONNECTED;
 }
 
 constexpr auto throwIfNullptr = [](auto v) {

@@ -8,7 +8,6 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
-#include <string_view>
 
 #include "../../internal/TimeFormat.hpp"
 
@@ -25,7 +24,7 @@ withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat
 /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
 withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat);
 std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
-                   std::string_view value);
+                   const StringLike& value);
 std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
                    std::int64_t value);
 

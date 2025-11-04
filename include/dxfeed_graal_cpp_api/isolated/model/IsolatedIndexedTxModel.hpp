@@ -5,14 +5,10 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../model/IndexedTxModel.hpp"
 #include "../../model/TxModelListener.hpp"
-
-#include <cstdint>
-#include <type_traits>
-#include <unordered_set>
-
-DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 

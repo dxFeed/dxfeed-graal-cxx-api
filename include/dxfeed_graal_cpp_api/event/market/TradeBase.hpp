@@ -7,18 +7,18 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../internal/Common.hpp"
+#include "../LastingEvent.hpp"
+#include "./MarketEvent.hpp"
+
 #include <cassert>
 #include <cstdint>
 #include <memory>
 #include <string>
 
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-#include "../LastingEvent.hpp"
-#include "MarketEvent.hpp"
-
 DXFCPP_BEGIN_NAMESPACE
 
+struct Direction;
 struct EventMapper;
 
 /**
@@ -88,11 +88,11 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     TradeBase() noexcept = default;
 
     /**
-     * Creates new trade event with the specified event symbol.
+     * Creates a new trade event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TradeBase(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit TradeBase(const StringLike& eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     /**
@@ -197,15 +197,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @see TradeBase::getSequence()
      * @throws InvalidArgumentException
      */
-    void setSequence(std::int32_t sequence) {
-        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
-        }
-
-        tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Returns exchange code of the last trade.
@@ -224,7 +216,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     std::string getExchangeCodeString() const noexcept {
         // TODO: cache [EN-8231]
 
-        return dxfcpp::utf16toUtf8String(tradeBaseData_.exchangeCode);
+        return utf16toUtf8String(tradeBaseData_.exchangeCode);
     }
 
     /**
@@ -343,18 +335,14 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return tick direction of the last trade.
      */
-    const Direction &getTickDirection() const & noexcept {
-        return Direction::valueOf(getBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT));
-    }
+    const Direction &getTickDirection() const & noexcept;
 
     /**
      * Changes tick direction of the last trade.
      *
      * @param direction tick direction of the last trade.
      */
-    void setTickDirection(const Direction &direction) noexcept {
-        tradeBaseData_.flags = setBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT, direction.getCode());
-    }
+    void setTickDirection(const Direction &direction) noexcept;
 
     /**
      * Returns whether last trade was in extended trading hours.

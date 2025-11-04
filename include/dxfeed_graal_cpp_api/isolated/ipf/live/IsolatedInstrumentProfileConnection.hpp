@@ -5,14 +5,13 @@
 
 #include "../../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../../ipf/live/InstrumentProfileCollector.hpp"
 #include "../../../ipf/live/InstrumentProfileConnection.hpp"
 
 #include <cstdint>
 #include <string>
-#include <vector>
-
-DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -20,7 +19,7 @@ namespace isolated::ipf::live {
 namespace IsolatedInstrumentProfileConnection {
 
 /* dxfg_ipf_connection_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileConnection> createConnection(
-    const StringLikeWrapper &address,
+    const StringLike &address,
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileCollector> &instrumentProfileCollector);
 
 std::string getAddress(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>

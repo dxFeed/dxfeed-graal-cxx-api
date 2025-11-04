@@ -7,13 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../internal/Enum.hpp"
+
 #include <cstdint>
-#include <string>
 #include <type_traits>
 #include <unordered_map>
-
-#include "../../internal/Common.hpp"
-#include "../../internal/Enum.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

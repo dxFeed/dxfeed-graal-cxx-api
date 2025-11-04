@@ -7,12 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../symbols/SymbolWrapper.hpp"
 #include "../FilteredSubscriptionSymbol.hpp"
 
 #include <cstdint>
 #include <memory>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -37,7 +35,7 @@ class IndexedEventSubscriptionSymbol;
  *
  * This is a FilteredSubscriptionSymbol.
  * Time-series subscription symbols are compared based on their @ref TimeSeriesSubscriptionSymbol::getEventSymbol()
- * "eventSymbol" only. It means, that a set of time-series subscription symbols can contain at most one time-series
+ * "eventSymbol" only. It means that a set of time-series subscription symbols can contain at most one time-series
  * subscription for each event symbol.
  */
 class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubscriptionSymbol,
@@ -46,7 +44,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
 
     public:
     /**
-     * Creates time-series subscription symbol with a specified event symbol and subscription time.
+     * Creates a time-series subscription symbol with a specified event symbol and subscription time.
      *
      * ```cpp
      * auto subscription = DXFeed::getInstance()->createSubscription({Candle::TYPE, Quote::TYPE});
@@ -69,7 +67,7 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
      *          CandleSymbol::valueOf(symbol, CandlePeriod::valueOf(1, CandleType::MINUTE)).toString(), fromTime)});
      * ```
      *
-     * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
+     * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc.).
      * @param fromTime the subscription time.
      */
     TimeSeriesSubscriptionSymbol(const SymbolWrapper &eventSymbol, std::int64_t fromTime);
@@ -111,11 +109,11 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
     static void freeGraal(void *graalNative);
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure (recursively
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure (recursively
      * if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static TimeSeriesSubscriptionSymbol fromGraal(void *graalNative);

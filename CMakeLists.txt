@@ -22,7 +22,7 @@ set(DXFCXX_VERSION "v4.3.1" CACHE STRING "The dxFeed Graal CXX API package versi
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "2.6.2" CACHE STRING "")
-set(FMTLIB_VERSION "11.0.2")
+set(FMTLIB_VERSION "12.1.0")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
@@ -52,6 +52,7 @@ if (NOT DEFINED DXFCXX_IS_ROOT_PROJECT)
 endif ()
 
 option(DXFCXX_BUILD_UNIT_TESTS "Build tests" ${DXFCXX_IS_ROOT_PROJECT})
+option(DXFCXX_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS "Dynamically link unit tests" OFF)
 option(DXFCXX_BUILD_SAMPLES "Build samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_DYNAMICALLY_LINK_SAMPLES "Dynamically link samples" OFF)
@@ -70,6 +71,7 @@ option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
+option(DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK "" OFF)
 
 option(DXFCXX_USE_DXFG_STUB "Use dxFeed Graal SDK stub" OFF)
 set(DXFG_STUB_REPO "https://github.com/ttldtor/DxFeedGraalNativeSdkStub" CACHE STRING "")
@@ -124,8 +126,14 @@ else ()
             if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
                 message(ERROR "Unsupported platform!")
             else ()
-                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM}.zip)
+                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM})
             endif ()
+
+            if (DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK)
+                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-debug)
+            endif ()
+
+            set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}.zip)
 
             FetchContent_Declare(
                     DxFeedGraalNativeSdk

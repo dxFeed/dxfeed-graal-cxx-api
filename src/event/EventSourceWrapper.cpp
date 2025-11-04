@@ -3,7 +3,7 @@
 
 #include <dxfg_api.h>
 
-#include <dxfeed_graal_cpp_api/event/EventSourceWrapper.hpp>
+#include "../../include/dxfeed_graal_cpp_api/event/EventSourceWrapper.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -34,8 +34,8 @@ std::vector<EventSourceWrapper> EventSourceWrapper::ListUtils::fromGraalList(voi
 }
 
 template void *
-EventSourceWrapper::ListUtils::toGraalList<dxfcpp::EventSourceWrapper const *>(dxfcpp::EventSourceWrapper const *,
-                                                                               dxfcpp::EventSourceWrapper const *);
+EventSourceWrapper::ListUtils::toGraalList<EventSourceWrapper const *>(EventSourceWrapper const *,
+                                                                               EventSourceWrapper const *);
 
 EventSourceWrapper EventSourceWrapper::fromGraal(void *graalNative) {
     switch (static_cast<dxfg_indexed_event_source_t *>(graalNative)->type) {

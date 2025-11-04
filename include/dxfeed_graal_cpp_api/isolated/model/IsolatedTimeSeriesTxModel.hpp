@@ -5,14 +5,12 @@
 
 #include "../../internal/Conf.hpp"
 
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
 #include "../../model/TimeSeriesTxModel.hpp"
 #include "../../model/TxModelListener.hpp"
 
 #include <cstdint>
-#include <string>
-#include <vector>
-
-DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 

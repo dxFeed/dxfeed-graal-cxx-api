@@ -7,13 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../internal/Enum.hpp"
+
 #include <cstdint>
-#include <string>
 #include <type_traits>
 #include <unordered_map>
-
-#include "../../internal/Common.hpp"
-#include "../../internal/Enum.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -24,18 +22,18 @@ struct Scope : Enum<Scope, std::uint32_t> {
     using Enum::Enum;
 
     /**
-     * Represents best bid or best offer for the whole market.
+     * Represents the best bid or the best offer for the whole market.
      */
     static const DXFCPP_EXPORT Scope COMPOSITE;
 
     /**
-     * Represents best bid or best offer for a given exchange code.
+     * Represents the best bid or the best offer for a given exchange code.
      */
     static const DXFCPP_EXPORT Scope REGIONAL;
 
     /**
      * Represents aggregate information for a given price level or
-     * best bid or best offer for a given market maker.
+     * best bid or the best offer for a given market maker.
      */
     static const DXFCPP_EXPORT Scope AGGREGATE;
 

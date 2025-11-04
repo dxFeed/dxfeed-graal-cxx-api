@@ -1,7 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../include/dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp"
+
+#include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisherObservableSubscription.hpp"
 
 #include <memory>
 
@@ -16,7 +21,7 @@ DXPublisherObservableSubscription::~DXPublisherObservableSubscription() = defaul
 
 std::shared_ptr<DXPublisherObservableSubscription>
 DXPublisherObservableSubscription::create(JavaObjectHandle<DXPublisherObservableSubscription> &&handle) {
-    auto sub = DXPublisherObservableSubscription::createShared(std::move(handle));
+    auto sub = createShared(std::move(handle));
 
     ApiContext::getInstance()->getManager<EntityManager<DXPublisherObservableSubscription>>()->registerEntity(sub);
 
@@ -37,7 +42,8 @@ bool DXPublisherObservableSubscription::containsEventType(const EventTypeEnum &e
 
 std::size_t
 DXPublisherObservableSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
-    isolated::api::IsolatedDXPublisherObservableSubscription::addChangeListener(handle_, listener->getHandle());
+    isolated::api::IsolatedDXPublisherObservableSubscription::addChangeListener(
+        handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
     std::lock_guard guard{listenersMutex_};
 
@@ -59,10 +65,11 @@ void DXPublisherObservableSubscription::removeChangeListener(std::size_t changeL
         return;
     }
 
-    if (auto found = listeners_.find(changeListenerId); found != listeners_.end()) {
-        auto listener = found->second;
+    if (const auto found = listeners_.find(changeListenerId); found != listeners_.end()) {
+        const auto listener = found->second;
 
-        isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(handle_, listener->getHandle());
+        isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(
+            handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
         listeners_.erase(found);
     }

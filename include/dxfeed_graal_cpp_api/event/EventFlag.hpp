@@ -7,14 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../internal/Common.hpp"
+
 #include <algorithm>
 #include <cstdint>
 #include <numeric>
 #include <sstream>
 #include <string>
 #include <utility>
-
-#include "../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -237,7 +237,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator|(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
-        return static_cast<std::int32_t>(dxfcpp::orOp(eventFlag1.getFlag(), eventFlag2));
+        return static_cast<std::int32_t>(orOp(eventFlag1.getFlag(), eventFlag2));
     }
 
     /**
@@ -248,7 +248,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator|(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return dxfcpp::orOp(eventFlag1, eventFlag2.getFlag());
+        return orOp(eventFlag1, eventFlag2.getFlag());
     }
 
     /**
@@ -259,7 +259,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator&(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
-        return static_cast<std::int32_t>(dxfcpp::andOp(eventFlag1.getFlag(), eventFlag2));
+        return static_cast<std::int32_t>(andOp(eventFlag1.getFlag(), eventFlag2));
     }
 
     /**
@@ -270,7 +270,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator&(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return dxfcpp::andOp(eventFlag1, eventFlag2.getFlag());
+        return andOp(eventFlag1, eventFlag2.getFlag());
     }
 
     /**
@@ -292,7 +292,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator|(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return dxfcpp::orOp(eventFlag1, eventFlag2.getFlag());
+        return orOp(eventFlag1, eventFlag2.getFlag());
     }
 
     /**
@@ -303,7 +303,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
-        return static_cast<std::int32_t>(dxfcpp::andOp(eventFlag1.getFlag(), eventFlag2));
+        return static_cast<std::int32_t>(andOp(eventFlag1.getFlag(), eventFlag2));
     }
 
     /**
@@ -314,7 +314,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return dxfcpp::andOp(eventFlag1, eventFlag2.getFlag());
+        return andOp(eventFlag1, eventFlag2.getFlag());
     }
 
     /**
@@ -438,7 +438,7 @@ class EventFlagsMask final {
     }
 
     /**
-     * Returns an integer representation of event mask
+     * Returns an integer representation of an event mask
      *
      * @return an integer representation
      */

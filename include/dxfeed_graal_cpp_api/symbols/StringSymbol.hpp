@@ -8,7 +8,6 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
-#include <memory>
 #include <utility>
 #include <variant>
 
@@ -37,8 +36,10 @@ struct DXFCPP_EXPORT StringSymbol final {
      *
      * @param chars The array of chars
      */
-    StringSymbol(const char *chars) noexcept : StringSymbol() {
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    StringSymbol(const char *chars) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("StringSymbol(chars = " + toStringAny(chars) + ")");
         }
 
@@ -50,16 +51,20 @@ struct DXFCPP_EXPORT StringSymbol final {
      *
      * @param stringView The string view
      */
-    StringSymbol(std::string_view stringView) noexcept : StringSymbol() {
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    StringSymbol(std::string_view stringView) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("StringSymbol(stringView = " + toStringAny(stringView) + ")");
         }
 
         data_ = std::string(stringView);
     }
 
-    StringSymbol(std::string string) noexcept : StringSymbol() {
+    // ReSharper disable once CppNonExplicitConvertingConstructor
+    StringSymbol(std::string string) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("StringSymbol(string = " + toStringAny(string) + ")");
         }
 
@@ -73,7 +78,7 @@ struct DXFCPP_EXPORT StringSymbol final {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    void *toGraal() const;
+    void *toGraal() const; // NOLINT(*-use-nodiscard)
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
@@ -84,10 +89,10 @@ struct DXFCPP_EXPORT StringSymbol final {
     static void freeGraal(void *graalNative);
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static StringSymbol fromGraal(void *graalNative);
@@ -97,15 +102,16 @@ struct DXFCPP_EXPORT StringSymbol final {
      *
      * @return a string representation
      */
-    std::string toString() const {
+    std::string toString() const { // NOLINT(*-use-nodiscard)
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             return "StringSymbol{" + data_ + "}";
         } else {
             return data_;
         }
     }
 
-    const std::string &getData() const;
+    const std::string &getData() const; // NOLINT(*-use-nodiscard)
 
     bool operator==(const StringSymbol &stringSymbol) const {
         return getData() == stringSymbol.getData();

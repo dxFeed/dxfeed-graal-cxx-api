@@ -7,13 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <compare>
 #include <cstdint>
-#include <functional>
-#include <string>
-#include <unordered_map>
-
-#include "Common.hpp"
 
 #ifdef NO_ERROR
 #    undef NO_ERROR
@@ -134,7 +128,7 @@ enum class CEntryPointErrorsEnum : uint32_t {
     UNKNOWN_STACK_BOUNDARIES = 32,
 };
 
-inline constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum enumValue) {
+constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum enumValue) {
     switch (enumValue) {
     case CEntryPointErrorsEnum::NO_ERROR:
         return "No error occurred.";

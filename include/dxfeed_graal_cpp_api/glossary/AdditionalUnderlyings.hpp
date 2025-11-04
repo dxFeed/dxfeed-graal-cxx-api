@@ -3,11 +3,14 @@
 
 #pragma once
 
-#include "../internal/Common.hpp"
 #include "../internal/Conf.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../entity/SharedEntity.hpp"
+#include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
-#include <map>
 #include <string>
 #include <unordered_map>
 
@@ -61,7 +64,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param text The textual representation.
      * @throws JavaException("IllegalArgumentException") if text uses wrong format or contains invalid values.
      */
-    static Ptr valueOf(const StringLikeWrapper &text);
+    static Ptr valueOf(const StringLike &text);
 
     /**
      * Returns an instance of additional underlyings for specified internal representation.
@@ -75,7 +78,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @throws JavaException("IllegalArgumentException") if data contains invalid values.
      */
     template <typename MapLikeType>
-        requires(!std::convertible_to<MapLikeType, StringLikeWrapper>)
+        requires(!std::convertible_to<MapLikeType, StringLike>)
     static Ptr valueOf(const MapLikeType &map);
 
     /**
@@ -87,7 +90,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param symbol The underlying symbol.
      * @return SPC by the text and symbol.
      */
-    static double getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol);
+    static double getSPC(const StringLike &text, const StringLike &symbol);
 
     /**
      * Returns textual representation of additional underlyings in the format:
@@ -118,7 +121,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param symbol The underlying symbol.
      * @return The SPC for the symbol.
      */
-    double getSPC(const StringLikeWrapper &symbol) const;
+    double getSPC(const StringLike &symbol) const;
 
     /**
      * Returns `true` if this object is equal to `other` object
@@ -160,7 +163,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
 };
 
 template <typename MapLikeType>
-    requires(!std::convertible_to<MapLikeType, StringLikeWrapper>)
+    requires(!std::convertible_to<MapLikeType, StringLike>)
 AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map) {
     static_assert(MapLike<MapLikeType>, "AdditionalUnderlyings::valueOf(): argument must be a map-like container "
                                         "(e.g. std::map, std::unordered_map, QMap, or std::vector<std::pair<K, V>>)");
@@ -206,3 +209,5 @@ template <> struct std::hash<dxfcpp::AdditionalUnderlyings> {
         return au.hashCode();
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

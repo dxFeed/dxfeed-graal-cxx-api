@@ -1,17 +1,19 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisher.hpp"
 
-#include <dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp>
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisher.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXPublisher {
 
-void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle<dxfcpp::DXPublisher> &publisher,
+void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle<DXPublisher> &publisher,
                                  /* dxfg_event_type_list * */ void *events) {
     if (!publisher) {
         throw InvalidArgumentException(
@@ -29,7 +31,7 @@ void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle
 }
 
 JavaObjectHandle<DXPublisherObservableSubscription> /* dxfg_observable_subscription_t * */
-getSubscription(/* dxfg_publisher_t * */ const JavaObjectHandle<dxfcpp::DXPublisher> &publisher,
+getSubscription(/* dxfg_publisher_t * */ const JavaObjectHandle<DXPublisher> &publisher,
                 /* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
     if (!publisher) {
         throw InvalidArgumentException(

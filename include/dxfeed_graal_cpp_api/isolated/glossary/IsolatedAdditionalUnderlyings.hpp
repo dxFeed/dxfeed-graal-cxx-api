@@ -15,7 +15,7 @@ JavaObjectHandle<AdditionalUnderlyings> EMPTY();
 
 // int32_t dxfg_AdditionalUnderlyings_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT
 // dxfg_additional_underlyings_t **additionalUnderlyings);
-JavaObjectHandle<AdditionalUnderlyings> valueOf(const StringLikeWrapper &value);
+JavaObjectHandle<AdditionalUnderlyings> valueOf(const StringLike &value);
 
 // int32_t dxfg_AdditionalUnderlyings_valueOf2(graal_isolatethread_t *thread, const dxfg_string_to_double_map_entry_t
 // *mapEntries, int32_t size, DXFG_OUT dxfg_additional_underlyings_t **additionalUnderlyings);
@@ -23,7 +23,7 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<cons
 
 // int32_t dxfg_AdditionalUnderlyings_getSPC(graal_isolatethread_t *thread, const char *text, const char *symbol,
 // DXFG_OUT double *spc);
-double getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol);
+double getSPC(const StringLike &text, const StringLike &symbol);
 
 // int32_t dxfg_AdditionalUnderlyings_getText(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
 // *additionalUnderlyings, DXFG_OUT char **text);
@@ -35,7 +35,7 @@ std::unordered_map<std::string, double> getMap(const JavaObjectHandle<Additional
 
 // int32_t dxfg_AdditionalUnderlyings_getSPC2(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
 // *additionalUnderlyings, const char *symbol, DXFG_OUT double *spc);
-double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, const StringLikeWrapper &symbol);
+double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, const StringLike &symbol);
 
 } // namespace isolated::glossary::IsolatedAdditionalUnderlyings
 

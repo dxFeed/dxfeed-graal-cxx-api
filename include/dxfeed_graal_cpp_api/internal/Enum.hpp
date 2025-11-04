@@ -3,17 +3,16 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <concepts>
+#include "./Common.hpp"
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
-
-#include "Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -32,7 +31,8 @@ template <typename Child, typename Code> struct Enum {
     }
 
     template <Integral OtherCodeType>
-    Enum(OtherCodeType code, std::string name) noexcept : code_{convertToInnerCodeType(code)}, name_{std::move(name)} {
+    Enum(OtherCodeType code, const StringLike &name) noexcept
+        : code_{convertToInnerCodeType(code)}, name_{name} {
     }
 
     static const std::unordered_map<CodeType, std::reference_wrapper<const Child>> ALL;

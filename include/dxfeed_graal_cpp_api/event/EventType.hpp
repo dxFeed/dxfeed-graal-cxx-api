@@ -7,24 +7,24 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../entity/EntityModule.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
-
-#include "../entity/EntityModule.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Marks all event types that can be received via dxFeed API.
  * Events are considered instantaneous, non-persistent, and unconflateable
- * (each event is individually delivered) unless they implement one of interfaces
+ * (each event is individually delivered) unless they implement one of the interfaces
  * defined in this package to further refine their meaning.
  *
  * <p>Event types are POCO (plain old cpp objects, not POD) that follow bean naming convention with
  * getters and setters for their properties.
- * All event types are serializable, because they are transferred over network from publishers to
- * data feed consumers. However, they are using custom serialization format for this purpose.
+ * All event types are serializable because they are transferred over network from publishers to
+ * data feed consumers. However, they are using a custom serialization format for this purpose.
  *
  * @see DXFeed
  */
@@ -37,16 +37,16 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
     ~EventType() noexcept override;
 
     /**
-     * Returns time when event was created or zero when time is not available.
+     * Returns time when an event was created or zero when time is not available.
      *
      * <p>This event time is available only when the corresponding DXEndpoint is created
      * with @ref DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY "DXENDPOINT_EVENT_TIME_PROPERTY" and
      * the data source has embedded event times. This is typically true only for data events
      * that are read from historical tape files and from OnDemandService.
-     * Events that are coming from a network connections do not have an embedded event time information and
+     * Events that are coming from network connections do not have an embedded event time information, and
      * this method will return zero for them, meaning that event was received just now.
      *
-     * Default implementation returns 0.
+     * The default implementation returns 0.
      *
      * @return The difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC or zero when time is not available.
@@ -58,7 +58,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
     /**
      * Changes event creation time.
      *
-     * Default implementation does nothing.
+     * The default implementation does nothing.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
@@ -79,7 +79,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
     /**
      * Replaces the contents of the event.
      *
-     * @param event the event to use as source.
+     * @param event the event to use as a source.
      */
     virtual void assign(std::shared_ptr<EventType> event) {
         ignoreUnused(event);
@@ -113,32 +113,61 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
  *
  * @tparam Symbol The type od symbol
  */
-template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : public EventType {
+template <typename Symbol> struct DXFCPP_EXPORT EventTypeWithSymbol : EventType {
     /// The alias to a type of shared pointer to the EventTypeWithSymbol's child object.
     using Ptr = std::shared_ptr<EventTypeWithSymbol<Symbol>>;
 
     using SymbolType = Symbol;
 
     /**
-     * Returns event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     * Returns the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
      *
      * @return The event symbol.
      */
     virtual const Symbol &getEventSymbol() const & noexcept = 0;
 
     /**
-     * Returns event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     * Returns the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
      *
      * @return The event symbol or std::nullopt.
      */
     virtual const std::optional<Symbol> &getEventSymbolOpt() const & noexcept = 0;
 
     /**
-     * Changes event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     * Changes the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
      *
      * @param eventSymbol event symbol.
      */
     virtual void setEventSymbol(const Symbol &eventSymbol) noexcept = 0;
+};
+
+/// Concrete implementation of a event for std::string.
+template<> struct EventTypeWithSymbol<std::string> : EventType {
+    /// The alias to a type of shared pointer to the EventTypeWithSymbol's child object.
+    using Ptr = std::shared_ptr<EventTypeWithSymbol<std::string>>;
+
+    using SymbolType = std::string;
+
+    /**
+     * Returns the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @return The event symbol.
+     */
+    virtual const std::string &getEventSymbol() const & noexcept = 0;
+
+    /**
+     * Returns the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @return The event symbol or std::nullopt.
+     */
+    virtual const std::optional<std::string> &getEventSymbolOpt() const & noexcept = 0;
+
+    /**
+     * Changes the event symbol that identifies this event type in @ref DXFeedSubscription "subscription".
+     *
+     * @param eventSymbol event symbol.
+     */
+    virtual void setEventSymbol(const StringLike &eventSymbol) noexcept = 0;
 };
 
 DXFCPP_END_NAMESPACE

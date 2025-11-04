@@ -3,32 +3,13 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include "Args/Args.hpp"
-#include "Connect/ConnectTool.hpp"
-#include "Dump/DumpTool.hpp"
 #include "Help/HelpTool.hpp"
-#include "LatencyTest/LatencyTestTool.hpp"
-#include "PerfTest/PerfTestTool.hpp"
-#include "PerfTest2/PerfTest2Tool.hpp"
-#include "Qds/QdsTool.hpp"
-
-#include <chrono>
-#include <cstdint>
-#include <memory>
-#include <utility>
 #include <variant>
-
-#include <process/process.hpp>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
 #include <fmt/std.h>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
-#include <range/v3/all.hpp>
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {

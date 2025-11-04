@@ -7,24 +7,24 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
+#include "../LastingEvent.hpp"
+#include "./MarketEvent.hpp"
+#include "./ShortSaleRestriction.hpp"
+#include "./TradingStatus.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <string>
-
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-#include "../LastingEvent.hpp"
-#include "MarketEvent.hpp"
-#include "ShortSaleRestriction.hpp"
-#include "TradingStatus.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
 /**
- * Profile information snapshot that contains security instrument description.
+ * Profile information snapshot that contains a security instrument description.
  * It represents the most recent information that is available about the traded security
  * on the market at any given moment of time.
  */
@@ -83,10 +83,10 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     static const EventTypeEnum &TYPE;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -111,15 +111,15 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     ///
     void assign(std::shared_ptr<EventType> event) override;
 
-    /// Creates new profile event with default values.
+    /// Creates a new profile event with default values.
     Profile() noexcept = default;
 
     /**
-     * Creates new profile event with the specified event symbol.
+     * Creates a new profile event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Profile(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit Profile(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     /**
@@ -129,7 +129,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      */
     const std::string &getDescription() const & noexcept {
         if (!data_.description) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return data_.description.value();
@@ -149,8 +149,8 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @param description description of the security instrument.
      */
-    void setDescription(std::string description) noexcept {
-        data_.description = std::move(description);
+    void setDescription(const StringLike &description) noexcept {
+        data_.description = std::string(description);
     }
 
     /**
@@ -208,20 +208,20 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     }
 
     /**
-     * Returns description of the reason that trading was halted.
+     * Returns a description of the reason that trading was halted.
      *
      * @return description of the reason that trading was halted or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getStatusReason() const & noexcept {
         if (!data_.statusReason) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return data_.statusReason.value();
     }
 
     /**
-     * Returns description of the reason that trading was halted.
+     * Returns a description of the reason that trading was halted.
      *
      * @return description of the reason that trading was halted or std::nullopt.
      */
@@ -234,8 +234,8 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @param statusReason description of the reason that trading was halted.
      */
-    void setStatusReason(std::string statusReason) noexcept {
-        data_.statusReason = std::move(statusReason);
+    void setStatusReason(const StringLike &statusReason) noexcept {
+        data_.statusReason = std::string(statusReason);
     }
 
     /**

@@ -7,6 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../internal/JavaObjectHandle.hpp"
+#include "./SessionFilter.hpp"
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct Day;

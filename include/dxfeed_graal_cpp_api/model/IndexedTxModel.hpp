@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/IndexedEvent.hpp"
 #include "../event/market/OrderSource.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "TxModelListener.hpp"
+#include "./TxModelListener.hpp"
 
 #include <memory>
 #include <unordered_set>
@@ -169,8 +169,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withBatchProcessing(bool isBatchProcessing) const {
-            return RequireMakeShared<Builder>::template createShared(
-                std::move(withBatchProcessingImpl(handle_, isBatchProcessing)));
+            return this->createShared(std::move(withBatchProcessingImpl(handle_, isBatchProcessing)));
         }
 
         /**
@@ -192,8 +191,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const {
-            return RequireMakeShared<Builder>::template createShared(
-                std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)));
+            return this->createShared(std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)));
         }
 
         /**
@@ -205,7 +203,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withFeed(const std::shared_ptr<DXFeed> &feed) const {
-            return RequireMakeShared<Builder>::template createShared(std::move(withFeedImpl(handle_, feed)));
+            return this->createShared(std::move(withFeedImpl(handle_, feed)));
         }
 
         /**
@@ -216,7 +214,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const {
-            return RequireMakeShared<Builder>::template createShared(std::move(withSymbolImpl(handle_, symbol)));
+            return this->createShared(std::move(withSymbolImpl(handle_, symbol)));
         }
 
         /**
@@ -245,9 +243,8 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withListener(std::shared_ptr<IndexedTxModelListener<E>> listener) const {
-            return RequireMakeShared<Builder>::template createShared(
-                std::move(withListenerImpl(handle_, listener->getHandle())),
-                listener->template sharedAs<TxModelListenerCommon>());
+            return this->createShared(std::move(withListenerImpl(handle_, listener->getHandle())),
+                                      listener->template sharedAs<TxModelListenerCommon>());
         }
 
         /**
@@ -306,7 +303,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
         std::shared_ptr<Builder> withSources(EventSourceIt begin, EventSourceIt end) const {
             auto list = EventSourceWrapper::ListUtils::toGraalListUnique(begin, end);
 
-            return RequireMakeShared<Builder>::template createShared(std::move(withSourcesImpl(handle_, list.get())));
+            return this->createShared(std::move(withSourcesImpl(handle_, list.get())));
         }
 
         /**
@@ -365,7 +362,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The created IndexedTxModel.
          */
         std::shared_ptr<IndexedTxModel> build() const {
-            return RequireMakeShared<IndexedTxModel>::template createShared(std::move(buildImpl(handle_)), listener_);
+            return IndexedTxModel::createShared(std::move(buildImpl(handle_)), listener_);
         }
     };
 
@@ -398,7 +395,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
      * @return A new @ref IndexedTxModel::Builder "builder instance.
      */
     static std::shared_ptr<Builder> newBuilder() {
-        return RequireMakeShared<Builder>::template createShared(std::move(newBuilderImpl(E::TYPE)));
+        return Builder::createShared(std::move(newBuilderImpl(E::TYPE)));
     }
 
     /**
@@ -455,7 +452,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
      * If no sources have been set, an empty set is returned, indicating that all possible sources have been subscribed
      * to.
      *
-     * @return The set of current sources.
+     * @return The set of the current sources.
      */
     std::unordered_set<EventSourceWrapper> getSources() const {
         return getSourcesImpl(handle_);

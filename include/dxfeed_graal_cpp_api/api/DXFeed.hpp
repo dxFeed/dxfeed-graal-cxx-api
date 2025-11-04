@@ -13,8 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 #include "../internal/managers/EntityManager.hpp"
 #include "../promise/Promise.hpp"
-
-#include "DXFeedSubscription.hpp"
+#include "./DXFeedSubscription.hpp"
 
 #include <memory>
 #include <unordered_set>
@@ -68,9 +67,9 @@ struct TimeSeriesTxModelImpl;
  * sub->@ref DXFeedSubscription::addSymbols() "addSymbols"("SPY");</tt></pre>
  *
  * Note, that order of calls is important here. By attaching listeners first and then setting
- * subscription we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols() for
+ * a subscription, we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols() for
  * details. If a set of symbols is changed first, then @ref DXFeedSubscription::addEventListener()
- * "sub->addEventListener" raises an IllegalStateException in JVM to protected from hard-to-catch bugs with potentially
+ * "sub->addEventListener" raises an IllegalStateException in JVM to protect from hard-to-catch bugs with potentially
  * missed events.
  *
  * <h4>Subscribe for multiple event types</h4>
@@ -125,7 +124,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct IndexedTxModelImpl;
 
     private:
-    JavaObjectHandle<DXFeed> handle_;
+    JavaObjectHandle<DXFeed> handle_{};
     static std::shared_ptr<DXFeed> create(void *feedHandle);
 
     void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
@@ -151,7 +150,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
                                                                           std::int64_t toTime) const;
 
     JavaObjectHandle<DXFeedSubscription>
-    createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
+    createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) const;
 
     protected:
     DXFeed() noexcept;
@@ -185,7 +184,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeedSubscription
      */
-    void attachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
+    void attachSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) const;
 
     /**
      * Detaches the given subscription from this feed. This method does nothing if the
@@ -199,7 +198,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeedSubscription
      */
-    void detachSubscription(std::shared_ptr<DXFeedSubscription> subscription);
+    void detachSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) const;
 
     /**
      * Detaches the given subscription from this feed and clears data delivered to this subscription
@@ -209,7 +208,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param subscription The subscription.
      * @see DXFeed::detachSubscription()
      */
-    void detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription);
+    void detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription> &subscription) const;
 
     /**
      * Returns the last event for the specified event instance.
@@ -226,7 +225,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p> This method fills in the values for the last event into the `event argument.
      * If the last event is not available for any reason (no subscription, no connection to uplink, etc.)
      * then the event object is not changed.
-     * This method always returns the same `event` instance that is passed to it as an argument.
+     * This method always returns the same `event` instance passed to it as an argument.
      *
      * <p>This method provides no way to distinguish a case when there is no subscription from the case when
      * there is a subscription, but the event data have not arrived yet. It is recommended to use
@@ -278,9 +277,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Returns the last event for the specified event type and symbol if there is a subscription for it.
-     * This method works only for event types that implement LastingEvent marker interface.
+     * This method works only for event types that implement the LastingEvent marker interface.
      * This method <b>does not</b> make any remote calls to the uplink data provider.
-     * It just retrieves last received event from the local cache of this feed.
+     * It just retrieves the last received event from the local cache of this feed.
      * The events are stored in the cache only if there is some attached DXFeedSubscription that is subscribed to the
      * corresponding event type and symbol.
      * The subscription can also be permanently defined using DXEndpoint properties.
@@ -288,13 +287,13 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * If there is no subscription, then this method returns `std::shared_ptr<E>(nullptr)`.
      *
      * <p>If there is a subscription, but the event has not arrived from the uplink data provider,
-     * this method returns an non-initialized event object: its @ref EventType#getEventSymbol() "eventSymbol"
+     * this method returns a non-initialized event object: its @ref EventType#getEventSymbol() "eventSymbol"
      * property is set to the requested symbol, but all the other properties have their default values.
      *
      * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the
      * absence of subscription.
      *
-     * <p>Note, that this method does not work when DXEndpoint} was created with @ref DXEndpoint::Role::STREAM_FEED
+     * <p>Note that this method does not work when DXEndpoint} was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (always returns `std::shared_ptr<E>(nullptr)`).
      *
      * @tparam E The type of event.
@@ -304,13 +303,15 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      */
     template <Derived<LastingEvent> E> std::shared_ptr<E> getLastEventIfSubscribed(const SymbolWrapper &symbol) {
         // https://youtrack.jetbrains.com/issue/RSCPP-15139
+        // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67965
+        // https://bugs.llvm.org/show_bug.cgi?id=25179
         // ReSharper disable once CppRedundantTemplateKeyword
         return getLastEventIfSubscribedImpl(E::TYPE, symbol)->template sharedAs<E>();
     }
 
     /**
-     * Creates new subscription for a single event type that is <i>attached</i> to this feed.
-     * This method creates new DXFeedSubscription and invokes DXFeed::attachSubscription().
+     * Creates a new subscription for a single event type that is <i>attached</i> to this feed.
+     * This method creates a new DXFeedSubscription and invokes DXFeed::attachSubscription().
      *
      * Example:
      * ```cpp
@@ -320,7 +321,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param eventType The type of event
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypeEnum &eventType);
+    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypeEnum &eventType) const;
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -379,7 +380,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param eventTypes The initializer list of event types
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes);
+    std::shared_ptr<DXFeedSubscription> createSubscription(std::initializer_list<EventTypeEnum> eventTypes) const;
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -432,7 +433,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @param eventType The type of event
      * @return The new subscription
      */
-    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypeEnum &eventType);
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypeEnum &eventType) const;
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -578,7 +579,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     /**
      * Requests the last events for the specified event type and a collection of symbols.
      * This method works only for event types that implement LastingEvent marker "interface".
-     * This method requests the data from the the uplink data provider,
+     * This method requests the data from the uplink data provider,
      * creates new events of the specified evet type and completes the resulting promises with these events.
      *
      * <p>This is a bulk version of DXFeed::getLastEventPromise() method.

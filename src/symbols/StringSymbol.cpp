@@ -1,12 +1,11 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../include/dxfeed_graal_cpp_api/symbols/StringSymbol.hpp"
+
+#include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -43,16 +42,18 @@ StringSymbol::~StringSymbol() noexcept = default;
 
 void *StringSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("StringSymbol::toGraal()");
     }
 
     auto *graalSymbol = new dxfg_string_symbol_t{{STRING}, createCString(data_)};
 
-    return static_cast<void *>(graalSymbol);
+    return graalSymbol;
 }
 
 void StringSymbol::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("StringSymbol::freeGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
@@ -68,6 +69,7 @@ void StringSymbol::freeGraal(void *graalNative) {
 
 StringSymbol StringSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("StringSymbol::fromGraal(graalNative = " + toStringAny(graalNative) + ")");
     }
 
@@ -75,7 +77,7 @@ StringSymbol StringSymbol::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create StringSymbol. The `graalNative` parameter is nullptr");
     }
 
-    auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
 
     return {dxfcpp::toString(graalSymbol->symbol)};
 }

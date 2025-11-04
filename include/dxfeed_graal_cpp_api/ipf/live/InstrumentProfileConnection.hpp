@@ -7,12 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../entity/SharedEntity.hpp"
 #include "../../internal/Common.hpp"
 #include "../../internal/Id.hpp"
 #include "../../internal/JavaObjectHandle.hpp"
-
-#include "../../entity/SharedEntity.hpp"
-#include "InstrumentProfileCollector.hpp"
+#include "./InstrumentProfileCollector.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -62,8 +61,8 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
 
     private:
     Id<InstrumentProfileConnection> id_;
-    JavaObjectHandle<InstrumentProfileConnection> handle_;
-    JavaObjectHandle<IpfPropertyChangeListener> stateChangeListenerHandle_;
+    JavaObjectHandle<InstrumentProfileConnection> handle_{};
+    JavaObjectHandle<IpfPropertyChangeListener> stateChangeListenerHandle_{};
     SimpleHandler<void(State, State)> onStateChange_{};
 
     InstrumentProfileConnection() noexcept;
@@ -102,7 +101,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return new instrument profile connection.
      */
-    static Ptr createConnection(const StringLikeWrapper &address, InstrumentProfileCollector::Ptr collector);
+    static Ptr createConnection(const StringLike &address, InstrumentProfileCollector::Ptr collector);
 
     /**
      * Returns the address of this instrument profile connection.

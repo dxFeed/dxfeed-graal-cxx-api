@@ -7,16 +7,14 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
+#include "../../internal/Common.hpp"
+#include "../EventTypeEnum.hpp"
+#include "./OrderBase.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <string>
-
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-
-#include "OrderBase.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -27,13 +25,13 @@ struct EventMapper;
  * The collection of order events of a symbol represents the most recent information
  * that is available about orders on the market at any given moment of time.
  * Order events give information on several levels of details, called scopes - see Scope.
- * Scope of an order is available via @ref Order::getScope "scope" property.
+ * Scope of an order is available via the @ref Order::getScope "scope" property.
  *
  * <p> Order events arrive from
  * multiple sources for the same market symbol and are distinguished by their @ref Order::getIndex "index". Index is a
- * unique per symbol identifier of the event.
+ * unique per-symbol identifier of the event.
  * It is unique across all the sources of depth information for the symbol.
- * The event with @ref Order::getSize() "size" either `0` or `NaN` is a signal to remove previously received order for
+ * The event with @ref Order::getSize() "size" either `0` or `NaN` is a signal to remove a previously received order for
  * the corresponding index. The method Order::hasSize() is a convenient method to test for size presence.
  *
  * <p> Events from finer-grained Scope of detail give more information and include events
@@ -47,28 +45,28 @@ struct EventMapper;
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
  * The corresponding information is carried in @ref Order::getEventFlags() "eventFlags" property.
  *
- * <p> See `Event Flags` section of OrderBase class documentation for details.
+ * <p> See the `Event Flags` section of OrderBase class documentation for details.
  *
  * <p> The composite quotes with Scope::COMPOSITE and regional quotes with Scope::REGIONAL come
- * individually from different venues and are not related to each other in any transactional way. The result of
+ * individually from different venues and are not related to each other in any transactional way. The result of the
  * Order::getEventFlags method for them is always zero.
  *
  * <h3>Publishing order books</h3>
  *
- * When publishing an order event with DXPublisher::publishEvents() method, least significant 32 bits of
+ * When publishing an order event with the DXPublisher::publishEvents() method, the least significant 32 bits of
  * order @ref Order::getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()`
- * inclusive. Use Order::setSource() method after Order::setIndex() to properly include source identifier into the
+ * inclusive. Use the Order::setSource() method after Order::setIndex() to properly include the source identifier in the
  * index.
  *
  * A snapshot has to be published in the <em>descending</em> order of @ref Order::getIndex() "index", starting with
  * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref Order::getEventFlags()
  * "eventFlags", and finishing the snapshot with an event that has zero 32 least significant bits of index.
  * EventFlag::SNAPSHOT_END bit in @ref Order::getEventFlags() "eventFlags" is optional during publishing.
- * It will be properly set on receiving end anyway.
+ * It will be properly set on the receiving end anyway.
  *
  * <h3>Limitations</h3>
  *
- * This event type cannot be used with DXFeed::getLastEvent() method.
+ * This event type cannot be used with the DXFeed::getLastEvent() method.
  *
  * <h3><a name="fobSection">Full Order Book Support</a></h3>
  *
@@ -117,10 +115,10 @@ class DXFCPP_EXPORT Order : public OrderBase {
     static const EventTypeEnum &TYPE;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -149,54 +147,41 @@ class DXFCPP_EXPORT Order : public OrderBase {
     Order() noexcept = default;
 
     /**
-     * Creates new order event with the specified event symbol.
+     * Creates a new order event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Order(std::string eventSymbol) noexcept : OrderBase(std::move(eventSymbol)) {
-    }
+    explicit Order(const StringLike &eventSymbol) noexcept;
 
     // MarketEvent methods
 
     /**
-     * Changes event's symbol and returns the current order.
+     * Changes an event's symbol and returns the current order.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current order.
      */
-    virtual Order &withEventSymbol(const std::string &eventSymbol) noexcept {
-        MarketEvent::setEventSymbol(eventSymbol);
-
-        return *this;
-    }
+    virtual Order &withEventSymbol(const StringLike &eventSymbol) noexcept;
 
     /**
-     * Changes event's creation time and returns the current order.
+     * Changes the event's creation time and returns the current order.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
      * @return The current order.
      */
-    Order &withEventTime(std::int64_t eventTime) noexcept {
-        MarketEvent::setEventTime(eventTime);
-
-        return *this;
-    }
+    Order &withEventTime(std::int64_t eventTime) noexcept;
 
     // OrderBase methods
 
     /**
-     * Changes event's source and returns the current order.
-     * This method changes highest bits of the @ref OrderBase::getIndex() "index" of this event.
+     * Changes an event's source and returns the current order.
+     * This method changes the highest bits of the @ref OrderBase::getIndex() "index" of this event.
      *
      * @param source source of this event.
      * @return The current order.
      */
-    Order &withSource(const OrderSource &source) noexcept {
-        OrderBase::setSource(source);
-
-        return *this;
-    }
+    Order &withSource(const OrderSource &source) noexcept;
 
     /**
      * Changes transactional event flags and returns the current order.
@@ -205,11 +190,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param eventFlags transactional event flags.
      * @return The current order.
      */
-    Order &withEventFlags(std::int32_t eventFlags) noexcept {
-        OrderBase::setEventFlags(eventFlags);
-
-        return *this;
-    }
+    Order &withEventFlags(std::int32_t eventFlags) noexcept;
 
     /**
      * Changes transactional event flags and returns the current order.
@@ -218,25 +199,17 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param eventFlags transactional event flags' mask.
      * @return The current order.
      */
-    Order &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
-        OrderBase::setEventFlags(eventFlags);
-
-        return *this;
-    }
+    Order &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
 
     /**
-     * Changes unique per-symbol index of this order and returns it. Note, that this method also changes
-     * @ref OrderBase::getSource() "source", whose id occupies highest bits of index.
-     * Use OrderBase::setSource() after invocation of this method to set the desired value of source.
+     * Changes the unique per-symbol index of this order and returns it. Note that this method also changes
+     * @ref OrderBase::getSource() "source", whose id occupies the highest bits of index.
+     * Use OrderBase::setSource() after invocation of this method to set the desired value of a source.
      *
      * @param index unique per-symbol index of this order.
      * @return The current order.
      */
-    Order &withIndex(std::int64_t index) noexcept {
-        OrderBase::setIndex(index);
-
-        return *this;
-    }
+    Order &withIndex(std::int64_t index) noexcept;
 
     /**
      * Changes time of this order and returns it.
@@ -245,11 +218,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param time time of this order.
      * @return The current order.
      */
-    Order &withTime(std::int64_t time) noexcept {
-        OrderBase::setTime(time);
-
-        return *this;
-    }
+    Order &withTime(std::int64_t time) noexcept;
 
     /**
      * Changes microseconds and nanoseconds time part of this order.
@@ -258,11 +227,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param timeNanoPart microseconds and nanoseconds time part of this order.
      * @return The current order.
      */
-    Order &withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        OrderBase::setTimeNanoPart(timeNanoPart);
-
-        return *this;
-    }
+    Order &withTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Changes @ref OrderBase::getSequence() "sequence number" of this order.
@@ -272,11 +237,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @return The current order.
      * @see OrderBase::getSequence()
      */
-    Order &withSequence(std::int32_t sequence) noexcept {
-        OrderBase::setSequence(sequence);
-
-        return *this;
-    }
+    Order &withSequence(std::int32_t sequence) noexcept;
 
     /**
      * Changes time of this order and returns it.
@@ -285,35 +246,23 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param timeNanos The time of this order in nanoseconds.
      * @return The current order.
      */
-    Order &withTimeNanos(std::int64_t timeNanos) noexcept {
-        OrderBase::setTimeNanos(timeNanos);
-
-        return *this;
-    }
+    Order &withTimeNanos(std::int64_t timeNanos) noexcept;
 
     /**
-     * Changes action of this order and returns it.
+     * Changes the action of this order and returns it.
      *
      * @param action The side of this order.
      * @return The current order.
      */
-    Order &withAction(const OrderAction &action) noexcept {
-        OrderBase::setAction(action);
-
-        return *this;
-    }
+    Order &withAction(const OrderAction &action) noexcept;
 
     /**
-     * Changes time of the last action and returns current order.
+     * Changes time of the last action and returns the current order.
      *
      * @param actionTime The last order action time.
      * @return The current order.
      */
-    Order &withActionTime(std::int64_t actionTime) noexcept {
-        OrderBase::setActionTime(actionTime);
-
-        return *this;
-    }
+    Order &withActionTime(std::int64_t actionTime) noexcept;
 
     /**
      * Changes order ID.
@@ -322,11 +271,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param orderId The order ID.
      * @return The current order.
      */
-    Order &withOrderId(std::int64_t orderId) noexcept {
-        OrderBase::setOrderId(orderId);
-
-        return *this;
-    }
+    Order &withOrderId(std::int64_t orderId) noexcept;
 
     /**
      * Changes auxiliary order ID.
@@ -335,11 +280,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param auxOrderId The auxiliary order ID.
      * @return The current order.
      */
-    Order &withAuxOrderId(std::int64_t auxOrderId) noexcept {
-        OrderBase::setAuxOrderId(auxOrderId);
-
-        return *this;
-    }
+    Order &withAuxOrderId(std::int64_t auxOrderId) noexcept;
 
     /**
      * Changes price of this order.
@@ -348,11 +289,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param price The price of this order.
      * @return The current order.
      */
-    Order &withPrice(double price) noexcept {
-        OrderBase::setPrice(price);
-
-        return *this;
-    }
+    Order &withPrice(double price) noexcept;
 
     /**
      * Changes size of this order.
@@ -361,11 +298,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param size The size of this order.
      * @return The current order.
      */
-    Order &withSize(double size) noexcept {
-        OrderBase::setSize(size);
-
-        return *this;
-    }
+    Order &withSize(double size) noexcept;
 
     /**
      * Changes executed size of this order.
@@ -374,24 +307,16 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param executedSize The executed size of this order.
      * @return The current order.
      */
-    Order &withExecutedSize(double executedSize) noexcept {
-        OrderBase::setExecutedSize(executedSize);
-
-        return *this;
-    }
+    Order &withExecutedSize(double executedSize) noexcept;
 
     /**
-     * Changes number of individual orders in this aggregate order.
+     * Changes the number of individual orders in this aggregate order.
      * Returns the current order.
      *
      * @param count The number of individual orders in this aggregate order.
      * @return The current order.
      */
-    Order &withCount(std::int64_t count) noexcept {
-        OrderBase::setCount(count);
-
-        return *this;
-    }
+    Order &withCount(std::int64_t count) noexcept;
 
     /**
      * Changes trade ID.
@@ -400,11 +325,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param tradeId The trade ID.
      * @return The current order.
      */
-    Order &withTradeId(std::int64_t tradeId) noexcept {
-        OrderBase::setTradeId(tradeId);
-
-        return *this;
-    }
+    Order &withTradeId(std::int64_t tradeId) noexcept;
 
     /**
      * Changes trade price.
@@ -413,11 +334,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param tradePrice The trade price.
      * @return The current order.
      */
-    Order &withTradePrice(double tradePrice) noexcept {
-        OrderBase::setTradePrice(tradePrice);
-
-        return *this;
-    }
+    Order &withTradePrice(double tradePrice) noexcept;
 
     /**
      * Changes trade size.
@@ -426,11 +343,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param tradeSize The trade size.
      * @return The current order.
      */
-    Order &withTradeSize(double tradeSize) noexcept {
-        OrderBase::setTradeSize(tradeSize);
-
-        return *this;
-    }
+    Order &withTradeSize(double tradeSize) noexcept;
 
     /**
      * Changes exchange code of this order.
@@ -439,11 +352,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param exchangeCode The exchange code of this order.
      * @return The current order.
      */
-    Order &withExchangeCode(char exchangeCode) noexcept {
-        OrderBase::setExchangeCode(exchangeCode);
-
-        return *this;
-    }
+    Order &withExchangeCode(char exchangeCode) noexcept;
 
     /**
      * Changes exchange code of this order.
@@ -452,11 +361,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param exchangeCode The exchange code of this order.
      * @return The current order.
      */
-    Order &withExchangeCode(std::int16_t exchangeCode) noexcept {
-        OrderBase::setExchangeCode(exchangeCode);
-
-        return *this;
-    }
+    Order &withExchangeCode(std::int16_t exchangeCode) noexcept;
 
     /**
      * Changes side of this order.
@@ -465,11 +370,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param side The side of this order.
      * @return The current order.
      */
-    Order &withOrderSide(const Side &side) noexcept {
-        OrderBase::setOrderSide(side);
-
-        return *this;
-    }
+    Order &withOrderSide(const Side &side) noexcept;
 
     /**
      * Changes scope of this order.
@@ -478,11 +379,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param scope The scope of this order.
      * @return The current order.
      */
-    Order &withScope(const Scope &scope) noexcept {
-        OrderBase::setScope(scope);
-
-        return *this;
-    }
+    Order &withScope(const Scope &scope) noexcept;
 
     // Order methods
 
@@ -493,13 +390,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @return market maker or other aggregate identifier of this order or dxfcpp::String::NUL
      * (`std::string{"<null>"}`).
      */
-    const std::string &getMarketMaker() const & noexcept {
-        if (!orderData_.marketMaker) {
-            return dxfcpp::String::NUL;
-        }
-
-        return orderData_.marketMaker.value();
-    }
+    const std::string &getMarketMaker() const & noexcept;
 
     /**
      * Returns market maker or other aggregate identifier of this order.
@@ -507,31 +398,23 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @return market maker or other aggregate identifier of this order or `std::nullopt`.
      */
-    const std::optional<std::string> &getMarketMakerOpt() const & noexcept {
-        return orderData_.marketMaker;
-    }
+    const std::optional<std::string> &getMarketMakerOpt() const & noexcept;
 
     /**
      * Changes market maker or other aggregate identifier of this order.
      *
-     * @param marketMaker market maker or other aggregate identifier of this order.
+     * @param marketMaker market maker or the other aggregate identifier of this order.
      */
-    void setMarketMaker(std::string marketMaker) noexcept {
-        orderData_.marketMaker = std::move(marketMaker);
-    }
+    void setMarketMaker(const StringLike &marketMaker) noexcept;
 
     /**
      * Changes market maker or other aggregate identifier of this order.
      * Returns the current order.
      *
-     * @param marketMaker The market maker or other aggregate identifier of this order.
+     * @param marketMaker The market maker or the other aggregate identifier of this order.
      * @return The current order.
      */
-    Order &withMarketMaker(std::string marketMaker) noexcept {
-        setMarketMaker(std::move(marketMaker));
-
-        return *this;
-    }
+    Order &withMarketMaker(const StringLike &marketMaker) noexcept;
 
     /**
      * Returns a string representation of the current object.

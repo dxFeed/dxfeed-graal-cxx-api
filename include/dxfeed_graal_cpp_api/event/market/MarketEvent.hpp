@@ -7,22 +7,21 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../EventType.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <string>
-
-#include "../EventType.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Base class for all market events. All market events are POCO that
  * extend this class. Market event classes are simple beans with setter and getter methods for their
- * properties and minimal business logic. All market events have `eventSymbol` property that is
- * defined by this class.
+ * properties and minimal business logic. All market events have `eventSymbol` property defined by this class.
  */
-struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
+struct DXFCPP_EXPORT MarketEvent : EventTypeWithSymbol<std::string> {
     /// The alias to a type of shared pointer to the MarketEvent object
     using Ptr = std::shared_ptr<MarketEvent>;
 
@@ -38,8 +37,7 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit MarketEvent(std::string eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
-    }
+    explicit MarketEvent(const StringLike &eventSymbol) noexcept;
 
     virtual void fillData(void *graalNative) noexcept;
     virtual void fillGraalData(void *graalNative) const noexcept;
@@ -47,54 +45,34 @@ struct DXFCPP_EXPORT MarketEvent : public EventTypeWithSymbol<std::string> {
 
     public:
     ///
-    void assign(std::shared_ptr<EventType> event) override {
-        if (const auto other = event->sharedAs<MarketEvent>(); other) {
-            eventSymbol_ = other->eventSymbol_;
-            eventTime_ = other->eventTime_;
-        }
-    }
+    void assign(std::shared_ptr<EventType> event) override;
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
-    const std::string &getEventSymbol() const & noexcept override {
-        if (!eventSymbol_) {
-            return dxfcpp::String::NUL;
-        }
-
-        return eventSymbol_.value();
-    }
+    const std::string &getEventSymbol() const & noexcept override;
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or `std::nullopt`.
      */
-    const std::optional<std::string> &getEventSymbolOpt() const & noexcept override {
-        return eventSymbol_;
-    }
+    const std::optional<std::string> &getEventSymbolOpt() const & noexcept override;
 
     /**
      * Changes symbol of this event.
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const std::string &eventSymbol) noexcept override {
-        // TODO: check invalid utf-8 [EN-8233]
-        eventSymbol_ = eventSymbol;
-    }
+    void setEventSymbol(const StringLike &eventSymbol) noexcept override;
 
     ///
-    std::int64_t getEventTime() const noexcept override {
-        return eventTime_;
-    }
+    std::int64_t getEventTime() const noexcept override;
 
     ///
-    void setEventTime(std::int64_t eventTime) noexcept override {
-        eventTime_ = eventTime;
-    }
+    void setEventTime(std::int64_t eventTime) noexcept override;
 };
 
 DXFCPP_END_NAMESPACE

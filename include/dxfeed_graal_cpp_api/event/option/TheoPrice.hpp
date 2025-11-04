@@ -7,11 +7,6 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
-#include <cstdint>
-#include <memory>
-#include <string>
-
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
@@ -19,12 +14,17 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../TimeSeriesEvent.hpp"
 #include "../market/MarketEvent.hpp"
 
+#include <cassert>
+#include <cstdint>
+#include <memory>
+#include <string>
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
 
 /**
- * Theo price is a snapshot of the theoretical option price computation that is
+ * Theo price is a snapshot of theoretical option price computation that is
  * periodically performed by <a href="http://www.devexperts.com/en/products/price.html">dxPrice</a>
  * model-free computation.
  * It represents the most recent information that is available about the corresponding
@@ -105,10 +105,10 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     static constexpr std::uint32_t MAX_SEQUENCE = (1U << 22U) - 1U;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -137,11 +137,11 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     TheoPrice() noexcept = default;
 
     /**
-     * Creates new theoprice event with the specified event symbol.
+     * Creates a new theoprice event with the specified event symbol.
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TheoPrice(std::string eventSymbol) noexcept : MarketEvent(std::move(eventSymbol)) {
+    explicit TheoPrice(const StringLike & eventSymbol) noexcept : MarketEvent(eventSymbol) {
     }
 
     ///
@@ -170,9 +170,9 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     }
 
     /**
-     * Returns unique per-symbol index of this event.
+     * Returns a unique per-symbol index of this event.
      * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
-     * Changing either time or sequence changes event index.
+     * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
      */
@@ -181,7 +181,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     }
 
     /**
-     * Changes unique per-symbol index of this event.
+     * Changes the unique per-symbol index of this event.
      * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
@@ -195,7 +195,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     }
 
     /**
-     * Returns timestamp of the event in milliseconds.
+     * Returns the timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
@@ -204,7 +204,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     }
 
     /**
-     * Changes timestamp of the event in milliseconds.
+     * Changes the timestamp of the event in milliseconds.
      *
      * @param time timestamp of the event in milliseconds.
      * @see ::getTime()
@@ -232,15 +232,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      * @see ::getSequence()
      * @throws InvalidArgumentException
      */
-    void setSequence(std::int32_t sequence) {
-        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
-        }
-
-        data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Returns theoretical option price.
@@ -279,38 +271,38 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
     }
 
     /**
-     * Returns delta of the theoretical price.
-     * Delta is the first derivative of the theoretical price by the underlying price.
+     * Returns delta of theoretical price.
+     * Delta is the first derivative of theoretical price by the underlying price.
      *
-     * @return delta of the theoretical price.
+     * @return delta of theoretical price.
      */
     double getDelta() const noexcept {
         return data_.delta;
     }
 
     /**
-     * Changes delta of the theoretical price.
+     * Changes delta of theoretical price.
      *
-     * @param delta delta of the theoretical price.
+     * @param delta delta of theoretical price.
      */
     void setDelta(double delta) noexcept {
         data_.delta = delta;
     }
 
     /**
-     * Returns gamma of the theoretical price.
-     * Gamma is the second derivative of the theoretical price by the underlying price.
+     * Returns gamma of theoretical price.
+     * Gamma is the second derivative of theoretical price by the underlying price.
      *
-     * @return gamma of the theoretical price.
+     * @return gamma of theoretical price.
      */
     double getGamma() const noexcept {
         return data_.gamma;
     }
 
     /**
-     * Changes gamma of the theoretical price.
+     * Changes gamma of theoretical price.
      *
-     * @param gamma gamma of the theoretical price.
+     * @param gamma gamma of theoretical price.
      */
     void setGamma(double gamma) noexcept {
         data_.gamma = gamma;

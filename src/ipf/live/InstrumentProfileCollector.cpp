@@ -1,20 +1,16 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/ipf/live/InstrumentProfileCollector.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
 
 #include <cstring>
+#include <dxfg_api.h>
 #include <memory>
-#include <utf8.h>
 #include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -34,7 +30,7 @@ struct NonOwningInstrumentProfileIterator {
             return {};
         }
 
-        auto graalProfile = isolated::ipf::live::IsolatedInstrumentProfileIterator::next(iterable);
+        const auto graalProfile = isolated::ipf::live::IsolatedInstrumentProfileIterator::next(iterable);
         auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
         return result;
@@ -58,10 +54,10 @@ struct NonOwningInstrumentProfileIterator {
 struct InstrumentProfileCollector::Impl {
     static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
                                            void *userData) {
-        auto [collectorId, listenerId] = dxfcpp::unpack(dxfcpp::bit_cast<std::size_t>(userData));
+        auto [collectorId, listenerId] = unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
-        auto id = Id<InstrumentProfileCollector>::from(collectorId);
-        auto collector =
+        const auto id = Id<InstrumentProfileCollector>::from(collectorId);
+        const auto collector =
             ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileCollector>>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
@@ -82,7 +78,7 @@ struct InstrumentProfileCollector::Impl {
 };
 
 InstrumentProfileCollector::InstrumentProfileCollector() : id_{Id<InstrumentProfileCollector>::UNKNOWN} {
-    handle_ = dxfcpp::isolated::ipf::live::IsolatedInstrumentProfileCollector::create();
+    handle_ = isolated::ipf::live::IsolatedInstrumentProfileCollector::create();
 }
 
 void InstrumentProfileCollector::addListenerHandle(std::size_t id) {
@@ -92,8 +88,8 @@ void InstrumentProfileCollector::addListenerHandle(std::size_t id) {
 
     listenerHandles_.emplace(
         id, isolated::ipf::live::IsolatedInstrumentProfileUpdateListener::create(
-                dxfcpp::bit_cast<void *>(&InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate),
-                dxfcpp::bit_cast<void *>(dxfcpp::pack(id_.getValue(), id))));
+                dxfcpp::bit_cast<void *>(&Impl::onInstrumentProfilesUpdate),
+                dxfcpp::bit_cast<void *>(pack(id_.getValue(), id))));
 
     if (!listenerHandles_[id]) {
         return;
@@ -125,7 +121,7 @@ InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
                        return idAndHandler.first;
                    });
 
-    for (auto id : listenerIds) {
+    for (const auto id : listenerIds) {
         removeUpdateListenerImpl(id);
     }
 }
@@ -144,7 +140,7 @@ std::int64_t InstrumentProfileCollector::getLastUpdateTime() const {
         return 0;
     }
 
-    return dxfcpp::isolated::ipf::live::IsolatedInstrumentProfileCollector::getLastUpdateTime(handle_);
+    return isolated::ipf::live::IsolatedInstrumentProfileCollector::getLastUpdateTime(handle_);
 }
 
 void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const {
@@ -160,7 +156,7 @@ std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() co
         return {};
     }
 
-    auto iterable = dxfcpp::isolated::ipf::live::IsolatedInstrumentProfileCollector::view(handle_);
+    const auto iterable = isolated::ipf::live::IsolatedInstrumentProfileCollector::view(handle_);
 
     return IterableInstrumentProfile::create(iterable);
 }

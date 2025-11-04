@@ -15,8 +15,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 /**
- * Action enum for the Full Order Book (FOB) Orders. Action describes business meaning of the Order event:
- * whether order was added or replaced, partially or fully executed, etc.
+ * Action enum for the Full Order Book (FOB) Orders. Action describes the business meaning of the Order event:
+ * whether an order was added or replaced, partially or fully executed, etc.
  */
 struct OrderAction : Enum<OrderAction, std::uint32_t> {
     using Enum::Enum;
@@ -25,7 +25,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * Default enum value for orders that do not support "Full Order Book" and for backward compatibility -
      * action must be derived from other Order fields.
      *
-     * <p>All Full Order Book related fields for this action will be empty.
+     * <p>All Full Order Book-related fields for this action will be empty.
      */
     static const DXFCPP_EXPORT OrderAction UNDEFINED;
 
@@ -42,7 +42,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
     static const DXFCPP_EXPORT OrderAction NEW;
 
     /**
-     * Order is modified and price-time-priority is not maintained (i.e. order has re-entered Order Book).
+     * Order is modified, and price-time-priority is not maintained (i.e. order has re-entered Order Book).
      * Order @ref Order::getEventSymbol() "symbol" and @ref Order::getOrderSide() "side" will remain the same.
      *
      * <p>Full Order Book fields:
@@ -54,8 +54,8 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
     static const DXFCPP_EXPORT OrderAction REPLACE;
 
     /**
-     * Order is modified without changing its price-time-priority (usually due to partial cancel by user).
-     * Order's @ref Order::getSize() "size" will contain new updated size.
+     * Order is modified without changing its price-time-priority (usually due to partial cancel by the user).
+     * Order's @ref Order::getSize() "size" will contain a new updated size.
      *
      * <p>Full Order Book fields:
      * <ul>
@@ -80,7 +80,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
 
     /**
      * Size is changed (usually reduced) due to partial order execution.
-     * Order's @ref Order::getSize() "size" will be updated to show current outstanding size.
+     * Order's @ref Order::getSize() "size" will be updated to show the current outstanding size.
      *
      * <p>Full Order Book fields:
      * <ul>
@@ -94,8 +94,8 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
     static const DXFCPP_EXPORT OrderAction PARTIAL;
 
     /**
-     * Order is fully executed and removed from Order Book.
-     * Order's {@ref Order#getSize() size} will be equals to 0.
+     * Order is fully executed and removed from the Order Book.
+     * Order's {@ref Order#getSize() size} will be equal to 0.
      *
      * <p>Full Order Book fields:
      * <ul>

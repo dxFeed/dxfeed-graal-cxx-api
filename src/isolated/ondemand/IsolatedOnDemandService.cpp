@@ -1,10 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/ondemand/IsolatedOnDemandService.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/ondemand/IsolatedOnDemandService.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -12,18 +15,18 @@ namespace isolated::ondemand {
 
 namespace IsolatedOnDemandService {
 
-/* dxfg_on_demand_service_t* */ JavaObjectHandle<dxfcpp::OnDemandService>
-getInstance(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint) {
+/* dxfg_on_demand_service_t* */ JavaObjectHandle<OnDemandService>
+getInstance(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_getInstance2`. The `endpoint` handle is invalid");
     }
 
-    return JavaObjectHandle<dxfcpp::OnDemandService>{runGraalFunctionAndThrowIfNullptr(
+    return JavaObjectHandle<OnDemandService>{runGraalFunctionAndThrowIfNullptr(
         dxfg_OnDemandService_getInstance2, static_cast<dxfg_endpoint_t *>(endpoint.get()))};
 }
 
-bool isReplaySupported(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service) {
+bool isReplaySupported(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_isReplaySupported`. The `service` handle is invalid");
@@ -33,7 +36,7 @@ bool isReplaySupported(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<d
                                               static_cast<dxfg_on_demand_service_t *>(service.get())) == 1;
 }
 
-bool isReplay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service) {
+bool isReplay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_isReplay`. The `service` handle is invalid");
@@ -43,7 +46,7 @@ bool isReplay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::On
                                               static_cast<dxfg_on_demand_service_t *>(service.get())) == 1;
 }
 
-bool isClear(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service) {
+bool isClear(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_isClear`. The `service` handle is invalid");
@@ -53,7 +56,7 @@ bool isClear(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnD
                                               static_cast<dxfg_on_demand_service_t *>(service.get())) == 1;
 }
 
-std::int64_t getTime(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service) {
+std::int64_t getTime(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_getTime`. The `service` handle is invalid");
@@ -63,7 +66,7 @@ std::int64_t getTime(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxf
                                               static_cast<dxfg_on_demand_service_t *>(service.get()));
 }
 
-double getSpeed(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service) {
+double getSpeed(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_getSpeed`. The `service` handle is invalid");
@@ -73,7 +76,7 @@ double getSpeed(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::
                                               static_cast<dxfg_on_demand_service_t *>(service.get()));
 }
 
-bool replay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service,
+bool replay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service,
             std::int64_t time) {
     if (!service) {
         throw InvalidArgumentException(
@@ -84,7 +87,7 @@ bool replay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDe
                                               static_cast<dxfg_on_demand_service_t *>(service.get()), time) == 0;
 }
 
-bool replay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service,
+bool replay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service,
             std::int64_t time, double speed) {
     if (!service) {
         throw InvalidArgumentException(
@@ -95,7 +98,7 @@ bool replay(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDe
                                               static_cast<dxfg_on_demand_service_t *>(service.get()), time, speed) == 0;
 }
 
-bool pause(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service) {
+bool pause(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_pause`. The `service` handle is invalid");
@@ -105,7 +108,7 @@ bool pause(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDem
                                               static_cast<dxfg_on_demand_service_t *>(service.get())) == 0;
 }
 
-bool stopAndResume(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service) {
+bool stopAndResume(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_stopAndResume`. The `service` handle is invalid");
@@ -115,7 +118,7 @@ bool stopAndResume(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcp
                                               static_cast<dxfg_on_demand_service_t *>(service.get())) == 0;
 }
 
-bool stopAndClear(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service) {
+bool stopAndClear(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_stopAndClear`. The `service` handle is invalid");
@@ -125,7 +128,7 @@ bool stopAndClear(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp
                                               static_cast<dxfg_on_demand_service_t *>(service.get())) == 0;
 }
 
-bool setSpeed(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<dxfcpp::OnDemandService> &service, double speed) {
+bool setSpeed(/* dxfg_on_demand_service_t * */ const JavaObjectHandle<OnDemandService> &service, double speed) {
     if (!service) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_OnDemandService_setSpeed`. The `service` handle is invalid");

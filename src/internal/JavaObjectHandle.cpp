@@ -1,12 +1,40 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+#include "../../include/dxfeed_graal_cpp_api/candlewebservice/HistoryEndpoint.hpp"
+#include "../../include/dxfeed_graal_cpp_api/glossary/CFI.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp"
+#include "../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
+
+struct PriceIncrements;
+struct CFI;
+struct AdditionalUnderlyings;
+struct HistoryEndpoint;
+struct TimeSeriesTxModelBuilderTag;
+struct TimeSeriesTxModelTag;
+struct IndexedTxModelBuilderTag;
+struct IndexedTxModelTag;
+struct TxModelListenerTag;
+struct AuthToken;
+struct DXPublisherObservableSubscription;
+struct TimeFormat;
+struct DayFilter;
+struct Session;
+struct Day;
+struct Schedule;
+class IterableInstrumentProfile;
+class InstrumentProfileConnection;
+class InstrumentProfileCollector;
+class InstrumentProfileReader;
+struct InstrumentProfile;
+class DXFeedSubscription;
+struct DXFeed;
+struct DXPublisher;
 
 std::string JavaObject::toString(void *handle) {
     return isolated::internal::IsolatedObject::toString(handle);
@@ -22,56 +50,6 @@ std::size_t JavaObject::hashCode(void *handle) noexcept {
 
 bool JavaObject::equals(void *objectHandle1, void *objectHandle2) {
     return isolated::internal::IsolatedObject::equals(objectHandle1, objectHandle2) == 1;
-}
-
-template <typename T> void JavaObjectHandle<T>::deleter(void *handle) noexcept {
-    auto result = runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            if constexpr (Debugger::isDebug) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
-            }
-
-            if (handle) {
-                return dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                      static_cast<dxfg_java_object_handler *>(handle)) == 0;
-            }
-
-            return true;
-        },
-        false);
-    dxfcpp::ignoreUnused(result);
-
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
-                        dxfcpp::toString(result));
-    }
-}
-
-template <typename T> void JavaObjectHandleList<T>::deleter(void *handle) noexcept {
-    auto result = runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            if constexpr (Debugger::isDebug) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
-            }
-
-            if (handle) {
-                return dxfg_CList_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                            static_cast<dxfg_java_object_handler_list *>(handle)) == 0;
-            }
-
-            return true;
-        },
-        false);
-    dxfcpp::ignoreUnused(result);
-
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
-                        dxfcpp::toString(result));
-    }
 }
 
 template struct JavaObjectHandle<DXEndpoint>;

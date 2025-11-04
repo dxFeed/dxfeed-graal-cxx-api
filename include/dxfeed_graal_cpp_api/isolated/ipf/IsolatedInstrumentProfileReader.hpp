@@ -5,14 +5,13 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <cstdint>
-#include <string>
-#include <string_view>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../auth/AuthToken.hpp"
 #include "../../ipf/InstrumentProfileReader.hpp"
+
+#include <cstdint>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -27,18 +26,18 @@ bool wasComplete(
 
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLikeWrapper &address);
+             const StringLike &address);
 
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLikeWrapper &address, const StringLikeWrapper &user, const StringLikeWrapper &password);
+             const StringLike &address, const StringLike &user, const StringLike &password);
 
 /// dxfg_InstrumentProfileReader_readFromFile3
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLikeWrapper &address, const JavaObjectHandle<AuthToken> &token);
+             const StringLike &address, const JavaObjectHandle<AuthToken> &token);
 
-std::string resolveSourceURL(const StringLikeWrapper &address);
+std::string resolveSourceURL(const StringLike &address);
 } // namespace isolated::ipf::IsolatedInstrumentProfileReader
 
 DXFCPP_END_NAMESPACE

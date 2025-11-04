@@ -1,19 +1,15 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/event/market/Quote.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 
 #include <cstdint>
-#include <memory>
-
-#include "dxfeed_graal_cpp_api/event/market/Quote.hpp"
-#include <fmt/chrono.h>
+#include <dxfg_api.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -62,7 +58,7 @@ void Quote::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
 
     data_ = {
         .timeMillisSequence = graalQuote->time_millis_sequence,
@@ -85,9 +81,9 @@ void Quote::fillGraalData(void *graalNative) const noexcept {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
 
-    graalQuote->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_QUOTE;
+    graalQuote->market_event.event_type.clazz = DXFG_EVENT_QUOTE;
     graalQuote->time_millis_sequence = data_.timeMillisSequence;
     graalQuote->time_nano_part = data_.timeNanoPart;
     graalQuote->bid_time = data_.bidTime;
@@ -119,8 +115,8 @@ std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
         throw InvalidArgumentException(
             fmt::format("Unable to create Quote. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_QUOTE))));
+                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_QUOTE)));
     }
 
     auto quote = std::make_shared<Quote>();
@@ -132,14 +128,15 @@ std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
 
 void *Quote::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::toGraal()");
     }
 
     auto *graalQuote = new dxfg_quote_t{};
 
-    fillGraalData(static_cast<void *>(graalQuote));
+    fillGraalData(graalQuote);
 
-    return static_cast<void *>(graalQuote);
+    return graalQuote;
 }
 
 void Quote::freeGraal(void *graalNative) {
@@ -147,16 +144,16 @@ void Quote::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_QUOTE) {
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
         throw InvalidArgumentException(
             fmt::format("Unable to free Quote's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_QUOTE))));
+                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_QUOTE)));
     }
 
-    auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
 
-    MarketEvent::freeGraalData(graalNative);
+    freeGraalData(graalNative);
 
     delete graalQuote;
 }
@@ -167,6 +164,16 @@ void Quote::assign(std::shared_ptr<EventType> event) {
     if (const auto other = event->sharedAs<Quote>(); other) {
         data_ = other->data_;
     }
+}
+
+void Quote::setSequence(std::int32_t sequence) {
+    assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+    if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+        throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
+    }
+
+    data_.timeMillisSequence = orOp(andOp(data_.timeMillisSequence, ~MAX_SEQUENCE), sequence);
 }
 
 DXFCPP_END_NAMESPACE

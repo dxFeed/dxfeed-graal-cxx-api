@@ -3,21 +3,19 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "Common.hpp"
-#include "NonCopyable.hpp"
-#include "utils/StringUtils.hpp"
+#include "./Common.hpp"
+#include "./NonCopyable.hpp"
+#include "./utils/StringUtils.hpp"
 
-#include <atomic>
 #include <cstdint>
 #include <map>
 #include <mutex>
 #include <optional>
 #include <string>
-#include <type_traits>
 #include <unordered_map>
 #include <variant>
 

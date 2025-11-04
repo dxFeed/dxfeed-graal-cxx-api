@@ -1,19 +1,36 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <string>
-#include <thread>
-#include <unordered_map>
-#include <vector>
-
+#include <doctest.h>
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <doctest.h>
+#include <iostream>
+#include <string>
+#include <thread>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
+
+TEST_CASE("DXRNDP") {
+    auto e1 = DXEndpoint::getInstance(DXEndpoint::Role::FEED);
+    auto e2 = DXEndpoint::getInstance(DXEndpoint::Role::LOCAL_HUB);
+    auto e3 = DXEndpoint::getInstance(DXEndpoint::Role::ON_DEMAND_FEED);
+    auto e4 = DXEndpoint::getInstance(DXEndpoint::Role::PUBLISHER);
+    auto e5 = DXEndpoint::getInstance(DXEndpoint::Role::STREAM_FEED);
+    auto e6 = DXEndpoint::getInstance(DXEndpoint::Role::STREAM_PUBLISHER);
+
+    for (auto e : {e1, e2, e3, e4, e5, e6}) {
+        std::cout << e->toString() << " - " << DXEndpoint::roleToString(e->getRole()) << "\n";
+
+        for (auto et: e->getEventTypes()) {
+            std::cout << et.getName() << ", ";
+        }
+
+        std::cout << "\n\n";
+    }
+}
 
 TEST_CASE("DXEndpoint::Builder") {
     auto builder = dxfcpp::DXEndpoint::newBuilder()->withRole(dxfcpp::DXEndpoint::Role::FEED);
@@ -146,8 +163,6 @@ TEST_CASE("DXEndpoint::getFeed and getPublisher") {
     REQUIRE(DXFeed::getInstance() == feed);
     REQUIRE(DXPublisher::getInstance() == publisher);
 }
-
-#include <thread>
 
 TEST_CASE("Test DXEndpoint + multi-thread setProperty") {
     std::thread t{[] {

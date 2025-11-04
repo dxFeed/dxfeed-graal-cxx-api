@@ -4,12 +4,12 @@
 #pragma once
 
 #ifdef _WIN32
-    #ifndef NOMINMAX
-        #define NOMINMAX
-    #endif
-    #ifndef WIN32_LEAN_AND_MEAN
-        #define WIN32_LEAN_AND_MEAN
-    #endif
+#    ifndef NOMINMAX
+#        define NOMINMAX
+#    endif
+#    ifndef WIN32_LEAN_AND_MEAN
+#        define WIN32_LEAN_AND_MEAN
+#    endif
 #endif
 
 #ifdef _WINNT_
@@ -47,6 +47,24 @@
 #        define DXFCXX_DISABLE_GCC_WARNINGS_PUSH(warnings)
 #        define DXFCXX_DISABLE_GCC_WARNINGS(warnings)
 #        define DXFCXX_DISABLE_GCC_WARNINGS_POP()
+#    endif
+#endif
+
+#if !defined(_MSC_VER) && defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__NVCOMPILER)
+#    ifndef DXFCXX_DO_PRAGMA
+#        define DXFCXX_DO_PRAGMA(x) _Pragma(#x)
+#    endif
+#    ifndef DXFCXX_DISABLE_CLANG_WARNINGS_PUSH
+#        define DXFCXX_DISABLE_CLANG_WARNINGS_PUSH(...)                                                                  \
+            DXFCXX_DO_PRAGMA(GCC diagnostic push) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#        define DXFCXX_DISABLE_CLANG_WARNINGS(...) DXFCXX_DO_PRAGMA(GCC diagnostic ignored __VA_ARGS__)
+#        define DXFCXX_DISABLE_CLANG_WARNINGS_POP() DXFCXX_DO_PRAGMA(GCC diagnostic pop)
+#    endif
+#else
+#    ifndef DXFCXX_DISABLE_CLANG_WARNINGS_PUSH
+#        define DXFCXX_DISABLE_CLANG_WARNINGS_PUSH(warnings)
+#        define DXFCXX_DISABLE_CLANG_WARNINGS(warnings)
+#        define DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 #    endif
 #endif
 

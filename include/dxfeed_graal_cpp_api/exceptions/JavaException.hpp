@@ -5,16 +5,12 @@
 
 #include "../internal/Conf.hpp"
 
-#include "../internal/Common.hpp"
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include "RuntimeException.hpp"
+#include "../internal/Common.hpp"
+#include "./RuntimeException.hpp"
 
 #include <limits>
-#include <stdexcept>
-#include <string>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -29,8 +25,8 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
      * @param className Java class name.
      * @param stackTrace Java stack trace.
      */
-    JavaException(const StringLikeWrapper &message, const StringLikeWrapper &className,
-                  const StringLikeWrapper &stackTrace);
+    JavaException(const StringLike &message, const StringLike &className,
+                  const StringLike &stackTrace);
 
     JavaException(const JavaException &other) noexcept;
 

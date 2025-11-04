@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -24,7 +24,7 @@ template <typename T> struct Id {
 
     public:
     static Id<T> getNext() {
-        static std::atomic<ValueType> value{1};
+        static std::atomic<ValueType> value(1);
 
         return Id<T>{value++};
     }

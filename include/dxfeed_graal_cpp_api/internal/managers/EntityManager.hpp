@@ -7,14 +7,13 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <memory>
-#include <optional>
-#include <unordered_map>
-#include <unordered_set>
-
 #include "../Common.hpp"
 #include "../Id.hpp"
 #include "../NonCopyable.hpp"
+
+#include <memory>
+#include <optional>
+#include <unordered_map>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -31,7 +30,7 @@ struct EntityManager : private NonCopyable<EntityManager<EntityType_, EntityIdTy
 
     std::unordered_map<Id<EntityIdType>, std::shared_ptr<EntityType>> entitiesById_;
     std::unordered_map<std::shared_ptr<EntityType>, Id<EntityIdType>> idsByEntities_;
-    std::atomic<std::size_t> lastId_{};
+    std::size_t lastId_{0};
     std::mutex mutex_;
 
     EntityManager() : entitiesById_{}, idsByEntities_{}, mutex_{} {
@@ -62,6 +61,8 @@ struct EntityManager : private NonCopyable<EntityManager<EntityType_, EntityIdTy
     }
 
     std::size_t getLastId() {
+        std::lock_guard lockGuard{mutex_};
+
         return lastId_;
     }
 

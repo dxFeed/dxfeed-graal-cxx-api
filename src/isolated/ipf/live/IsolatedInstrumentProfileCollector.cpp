@@ -1,10 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp>
+#include "../../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -30,7 +32,7 @@ std::int64_t getLastUpdateTime(
 
 bool updateInstrumentProfile(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_instrument_profile_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &ip) {
+    /* dxfg_instrument_profile_t * */ const JavaObjectHandle<InstrumentProfile> &ip) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileCollector_updateInstrumentProfile`. The "
@@ -61,7 +63,7 @@ view(/* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollect
 
 bool addUpdateListener(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener) {
+    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<InstrumentProfileUpdateListener> &listener) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileCollector_addUpdateListener`. The "
@@ -81,7 +83,7 @@ bool addUpdateListener(
 
 bool removeUpdateListener(
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener) {
+    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<InstrumentProfileUpdateListener> &listener) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileCollector_removeUpdateListener`. The "
@@ -103,14 +105,14 @@ bool removeUpdateListener(
 
 namespace IsolatedInstrumentProfileUpdateListener {
 
-/* dxfg_ipf_update_listener_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener>
+/* dxfg_ipf_update_listener_t* */ JavaObjectHandle<InstrumentProfileUpdateListener>
 create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData) {
     if (!userFunc) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileUpdateListener_new`. The "
                                        "`userFunc` is nullptr");
     }
 
-    return JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener>{
+    return JavaObjectHandle<InstrumentProfileUpdateListener>{
         runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileUpdateListener_new,
                                           dxfcpp::bit_cast<dxfg_ipf_update_listener_function>(userFunc), userData)};
 }

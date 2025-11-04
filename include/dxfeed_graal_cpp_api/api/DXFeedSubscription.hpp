@@ -4,22 +4,21 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
-#include "osub/ObservableSubscription.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
-
-#include "../internal/EventClassList.hpp"
-#include "../internal/context/ApiContext.hpp"
 
 #include "../entity/EntityModule.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"
 #include "../internal/Common.hpp"
+#include "../internal/EventClassList.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../internal/context/ApiContext.hpp"
+#include "../internal/managers/EntityManager.hpp"
 #include "../symbols/SymbolWrapper.hpp"
-
 #include "../util/TimePeriod.hpp"
+#include "./osub/ObservableSubscription.hpp"
 
 #include <concepts>
 #include <memory>
@@ -44,14 +43,14 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     ///
     using OnEventHandler = SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)>;
 
-    // These constants are linked with same ones in RecordBuffer - POOLED_CAPACITY and UNLIMITED_CAPACITY.
+    // These constants are linked with the same ones in RecordBuffer - POOLED_CAPACITY and UNLIMITED_CAPACITY.
     /**
-     * The optimal events' batch limit for single notification in OnEventHandler.
+     * The optimal events' batch limit for a single notification in OnEventHandler.
      */
     static const std::int32_t OPTIMAL_BATCH_LIMIT = 0;
 
     /**
-     * The maximum events' batch limit for single notification in OnEventHandler.
+     * The maximum events' batch limit for a single notification in OnEventHandler.
      */
     static const std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
 
@@ -171,7 +170,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     ~DXFeedSubscription() override;
 
     /**
-     * Creates <i>detached</i> subscription for a single event type.
+     * Creates a <i>detached</i> subscription for a single event type.
      *
      * Example:
      * ```cpp
@@ -183,7 +182,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     static std::shared_ptr<DXFeedSubscription> create(const EventTypeEnum &eventType);
 
     /**
-     * Creates <i>detached</i> subscription for the given collection of event types.
+     * Creates a <i>detached</i> subscription for the given collection of event types.
      *
      * Example:
      * ```cpp
@@ -199,8 +198,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * ```
      *
      * @tparam EventTypeIt The collection's iterator type
-     * @param begin The beginning of the collection of event types.
-     * @param end The end of event type collection.
+     * @param begin The beginning of the event type collection.
+     * @param end The end of an event type collection.
      * @return The new <i>detached</i> subscription for the given collection of event types.
      */
     template <typename EventTypeIt>
@@ -224,7 +223,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     }
 
     /**
-     * Creates <i>detached</i> subscription for the given collection of event types.
+     * Creates a <i>detached</i> subscription for the given collection of event types.
      *
      * Example:
      * ```cpp
@@ -237,7 +236,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     static std::shared_ptr<DXFeedSubscription> create(std::initializer_list<EventTypeEnum> eventTypes);
 
     /**
-     * Creates <i>detached</i> subscription for the given collection of event types.
+     * Creates a <i>detached</i> subscription for the given collection of event types.
      *
      * Example:
      * ```cpp
@@ -319,9 +318,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     void clear() const;
 
     /**
-     * Returns a set of subscribed symbols (depending on the actual implementation of subscription).
+     * Returns a set of subscribed symbols (depending on the actual implementation of the subscription).
      *
-     * The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
+     * The resulting set is maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
      * weakly consistent view of the set.
      *
      * @return A set of subscribed symbols.
@@ -329,9 +328,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     std::vector<SymbolWrapper> getSymbols() const;
 
     /**
-     * Returns a set of decorated symbols (depending on the actual implementation of subscription).
+     * Returns a set of decorated symbols (depending on the actual implementation of the subscription).
      *
-     * The resulting set maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
+     * The resulting set is maybe either a snapshot of the set of the subscribed symbols at the time of invocation or a
      * weakly consistent view of the set.
      *
      * @return A set of decorated subscribed symbols.
@@ -350,8 +349,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * ```
      *
      * @tparam SymbolIt The collection's iterator type
-     * @param begin The beginning of the collection of symbols.
-     * @param end The end of symbol collection.
+     * @param begin The beginning of the symbol collection.
+     * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
@@ -375,8 +374,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * sub->setSymbols(v);
      * ```
      *
-     * @tparam SymbolsCollection The symbols collection's type
-     * @param collection The symbols collection
+     * @tparam SymbolsCollection The symbol collection's type
+     * @param collection The symbol collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
     void setSymbols(SymbolsCollection &&collection) const {
@@ -392,7 +391,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * sub->setSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
      * ```
      *
-     * @param collection The symbols collection
+     * @param collection The symbol collection
      */
     void setSymbols(std::initializer_list<SymbolWrapper> collection) const;
 
@@ -400,7 +399,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * Adds the specified symbol to the set of subscribed symbols.
      * This is a convenience method to subscribe to one symbol at a time that has a return fast-path for a case when
      * the symbol is already in the set.
-     * When subscribing to multiple symbols at once it is preferable to use @ref DXFeedSubscription::addSymbols(const
+     * When subscribing to multiple symbols at once, it is preferable to use @ref DXFeedSubscription::addSymbols(const
      * SymbolsCollection &collection) "addSymbols(symbols)" method.
      *
      * Example:
@@ -425,8 +424,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * ```
      *
      * @tparam SymbolIt The collection's iterator type
-     * @param begin The beginning of the collection of symbols.
-     * @param end The end of symbol collection.
+     * @param begin The beginning of the symbol collection.
+     * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
@@ -450,8 +449,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * sub->addSymbols(v);
      * ```
      *
-     * @tparam SymbolsCollection The symbols collection's type
-     * @param collection The symbols collection
+     * @tparam SymbolsCollection The symbol collection's type
+     * @param collection The symbol collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
     void addSymbols(const SymbolsCollection &collection) const {
@@ -466,13 +465,13 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * sub->addSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
      * ```
      *
-     * @param collection The symbols collection
+     * @param collection The symbol collection
      */
     void addSymbols(std::initializer_list<SymbolWrapper> collection) const;
 
     /**
      * Removes the specified symbol from the set of subscribed symbols.
-     * To conveniently remove one or few symbols you can use @ref DXFeedSubscription::removeSymbols(const
+     * To conveniently remove one or few symbols, you can use @ref DXFeedSubscription::removeSymbols(const
      * SymbolsCollection &collection) "removeSymbols(symbols)" method.
      *
      * Example:
@@ -497,8 +496,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * ```
      *
      * @tparam SymbolIt The collection's iterator type
-     * @param begin The beginning of the collection of symbols.
-     * @param end The end of symbol collection.
+     * @param begin The beginning of the symbol collection.
+     * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
         if constexpr (Debugger::isDebug) {
@@ -522,8 +521,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * sub->removeSymbols(v);
      * ```
      *
-     * @tparam SymbolsCollection The symbols collection's type
-     * @param collection The symbols collection
+     * @tparam SymbolsCollection The symbol collection's type
+     * @param collection The symbol collection
      */
     template <ConvertibleToSymbolWrapperCollection SymbolsCollection>
     void removeSymbols(SymbolsCollection &&collection) const {
@@ -538,7 +537,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * sub->removeSymbols({"AAPL", "IBM"sv, "TSLA"s, "GOOG"_s});
      * ```
      *
-     * @param collection The symbols collection
+     * @param collection The symbol collection
      */
     void removeSymbols(std::initializer_list<SymbolWrapper> collection) const;
 
@@ -588,7 +587,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 
     /**
      * Adds listener for events.
-     * Event lister can be added only when subscription is not producing any events.
+     * Event lister can be added only when the subscription is not producing any events.
      * The subscription must be either empty
      * (its set of @ref DXFeedSubscription::getSymbols() "symbols" is empty or not @ref DXFeedSubscription::attach()
      * "attached" to any feed (its set of change listeners is empty).
@@ -634,7 +633,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 
     /**
      * Adds typed listener for events.
-     * Event lister can be added only when subscription is not producing any events.
+     * Event lister can be added only when the subscription is not producing any events.
      * The subscription must be either empty
      * (its set of @ref DXFeedSubscription::getSymbols() "symbols" is empty or not @ref DXFeedSubscription::attach()
      * "attached" to any feed (its set of change listeners is empty).
@@ -768,7 +767,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
  * @ref DXFeedSubscription::getSymbols() "getSymbols" method returns original (undecorated) symbols, any installed
  * ObservableSubscriptionChangeListener will see decorated ones.
  *
- * <p> Only events that implement TimeSeriesEvent interface can be subscribed to with DXFeedTimeSeriesSubscription.
+ * <p> Only events that implement the TimeSeriesEvent interface can be subscribed to with DXFeedTimeSeriesSubscription.
  *
  * <h3>From time</h3>
  *
@@ -834,19 +833,6 @@ class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSu
 
     ///
     std::string toString() const override;
-
-    /**
-     * Creates <i>detached</i> subscription for the given collection of event types.
-     *
-     * Example:
-     * ```cpp
-     * auto sub = dxfcpp::DXFeedSubscription::create({dxfcpp::Underlying::TYPE, dxfcpp::TimeAndSale::TYPE});
-     * ```
-     *
-     * @param eventTypes The event type collection.
-     * @return The new <i>detached</i> subscription for the given collection of event types.
-     */
-    static std::shared_ptr<DXFeedTimeSeriesSubscription> create(std::initializer_list<EventTypeEnum> eventTypes);
 
     /**
      * Returns the earliest timestamp from which time-series of events shall be received.

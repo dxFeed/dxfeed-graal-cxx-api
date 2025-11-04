@@ -15,7 +15,7 @@ namespace isolated::glossary::IsolatedCFI {
 JavaObjectHandle<CFI> EMPTY();
 
 // int32_t dxfg_CFI_valueOf(graal_isolatethread_t *thread, const char *code, DXFG_OUT dxfg_cfi_t **cfi);
-JavaObjectHandle<CFI> valueOf(const StringLikeWrapper &code);
+JavaObjectHandle<CFI> valueOf(const StringLike &code);
 
 // int32_t dxfg_CFI_valueOf2(graal_isolatethread_t *thread, int32_t intCode, DXFG_OUT dxfg_cfi_t **cfi);
 JavaObjectHandle<CFI> valueOf(std::int32_t intCode);

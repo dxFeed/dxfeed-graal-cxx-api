@@ -7,9 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "Greeks.hpp"
-#include "Series.hpp"
-#include "TheoPrice.hpp"
-#include "Underlying.hpp"
+#include "./Greeks.hpp"
+#include "./Series.hpp"
+#include "./TheoPrice.hpp"
+#include "./Underlying.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

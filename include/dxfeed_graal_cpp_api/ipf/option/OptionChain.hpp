@@ -8,8 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
-#include "OptionSeries.hpp"
-
+#include "./OptionSeries.hpp"
 #include <set>
 #include <string>
 
@@ -30,7 +29,7 @@ template <typename T> class OptionChain final {
     std::string symbol_{};
     std::set<OptionSeries<T>> series_{};
 
-    explicit OptionChain(std::string symbol) : symbol_(std::move(symbol)) {
+    explicit OptionChain(const StringLike& symbol) : symbol_(symbol) {
     }
 
     void addOption(const OptionSeries<T> &series, bool isCall, double strike, std::shared_ptr<T> option) {

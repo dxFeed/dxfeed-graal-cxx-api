@@ -3,8 +3,12 @@
 
 #pragma once
 
-#include "../internal/Common.hpp"
 #include "../internal/Conf.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../entity/SharedEntity.hpp"
+#include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
@@ -268,7 +272,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * @return The price increments instance.
      * @throws JavaException("IllegalArgumentException") if text uses wrong format or contains invalid values.
      */
-    static Ptr valueOf(const StringLikeWrapper &text);
+    static Ptr valueOf(const StringLike &text);
 
     /**
      * Returns an instance of price increments for a specified single increment.
@@ -490,3 +494,5 @@ template <> struct std::hash<dxfcpp::PriceIncrements> {
         return p.hashCode();
     }
 };
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

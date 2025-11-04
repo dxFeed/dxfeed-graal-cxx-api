@@ -4,11 +4,11 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
-#include "dxfeed_graal_cpp_api/internal/Handler.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/Common.hpp"
+#include "../internal/Handler.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -88,7 +88,7 @@ struct DXFCPP_EXPORT Logging final {
      * @param logFile The logging file.
      * @param logLevel The logging level.
      */
-    static void init(const std::string &logFile, Level logLevel = Level::INFO);
+    static void init(const StringLike &logFile, Level logLevel = Level::INFO);
 
     /**
      * Initializes logging, sets the path to the file for logging, to the file for outputting errors and warnings, and
@@ -109,7 +109,7 @@ struct DXFCPP_EXPORT Logging final {
      * @param logLevel The logging level.
      * @param errFileLevel The err file logging level.
      */
-    static void init(const std::string &logFile, const std::string &errFile, Level logLevel = Level::INFO,
+    static void init(const StringLike &logFile, const StringLike &errFile, Level logLevel = Level::INFO,
                      Level errFileLevel = Level::WARN);
 };
 

@@ -1,18 +1,11 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../include/dxfeed_graal_cpp_api/util/TimePeriod.hpp"
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
 
-#include <memory>
-#include <string>
 #include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -28,7 +21,7 @@ TimePeriod TimePeriod::valueOf(std::int64_t value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
 }
 
-TimePeriod TimePeriod::valueOf(const StringLikeWrapper &value) {
+TimePeriod TimePeriod::valueOf(const StringLike &value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
 }
 

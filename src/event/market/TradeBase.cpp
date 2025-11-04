@@ -1,15 +1,15 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../../include/dxfeed_graal_cpp_api/event/market/TradeBase.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/event/market/Direction.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -20,7 +20,7 @@ void TradeBase::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalTradeBase = static_cast<dxfg_trade_base_t *>(graalNative);
+    const auto graalTradeBase = static_cast<dxfg_trade_base_t *>(graalNative);
 
     tradeBaseData_ = {
         .timeSequence = graalTradeBase->time_sequence,
@@ -43,7 +43,7 @@ void TradeBase::fillGraalData(void *graalNative) const noexcept {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalTradeBase = static_cast<dxfg_trade_base_t *>(graalNative);
+    const auto graalTradeBase = static_cast<dxfg_trade_base_t *>(graalNative);
 
     graalTradeBase->time_sequence = tradeBaseData_.timeSequence;
     graalTradeBase->time_nano_part = tradeBaseData_.timeNanoPart;
@@ -63,6 +63,24 @@ void TradeBase::assign(std::shared_ptr<EventType> event) {
     if (const auto other = event->sharedAs<TradeBase>(); other) {
         tradeBaseData_ = other->tradeBaseData_;
     }
+}
+
+void TradeBase::setSequence(std::int32_t sequence) {
+    assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+    if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+        throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
+    }
+
+    tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
+}
+
+const Direction &TradeBase::getTickDirection() const & noexcept {
+    return Direction::valueOf(getBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT));
+}
+
+void TradeBase::setTickDirection(const Direction &direction) noexcept {
+    tradeBaseData_.flags = setBits(tradeBaseData_.flags, DIRECTION_MASK, DIRECTION_SHIFT, direction.getCode());
 }
 
 std::string TradeBase::baseFieldsToString() const {

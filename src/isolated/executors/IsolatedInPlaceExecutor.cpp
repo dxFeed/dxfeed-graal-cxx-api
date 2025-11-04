@@ -1,10 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/executors/IsolatedInPlaceExecutor.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/executors/IsolatedInPlaceExecutor.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -14,7 +16,7 @@ namespace IsolatedInPlaceExecutor {
 
 // dxfg_executor_t *dxfg_ExecutorBaseOnConcurrentLinkedQueue_new(graal_isolatethread_t *thread);
 JavaObjectHandle<ExecutorTag> create() {
-    return JavaObjectHandle<dxfcpp::ExecutorTag>{
+    return JavaObjectHandle<ExecutorTag>{
         runGraalFunctionAndThrowIfNullptr(dxfg_ExecutorBaseOnConcurrentLinkedQueue_new)};
 }
 

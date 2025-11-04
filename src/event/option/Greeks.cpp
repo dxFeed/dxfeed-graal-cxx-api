@@ -1,20 +1,15 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../../include/dxfeed_graal_cpp_api/event/option/Greeks.hpp"
+
+#include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
-
-#include <cstring>
-#include <memory>
-#include <utf8.h>
-#include <utility>
-
-#include <fmt/chrono.h>
 #include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -27,7 +22,7 @@ void Greeks::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
+    const auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalGreeks->event_flags,
@@ -49,9 +44,9 @@ void Greeks::fillGraalData(void *graalNative) const noexcept {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
+    const auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
 
-    graalGreeks->market_event.event_type.clazz = dxfg_event_clazz_t::DXFG_EVENT_GREEKS;
+    graalGreeks->market_event.event_type.clazz = DXFG_EVENT_GREEKS;
     graalGreeks->event_flags = data_.eventFlags;
     graalGreeks->index = data_.index;
     graalGreeks->price = data_.price;
@@ -68,11 +63,10 @@ std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Greeks. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_GREEKS) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to create Greeks. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_GREEKS))));
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_GREEKS) {
+        throw InvalidArgumentException(fmt::format("Unable to create Greeks. Wrong event class {}! Expected: {}.",
+                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                                                   std::to_string(DXFG_EVENT_GREEKS)));
     }
 
     auto greeks = std::make_shared<Greeks>();
@@ -95,14 +89,15 @@ std::string Greeks::toString() const {
 
 void *Greeks::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::toGraal()");
     }
 
     auto *graalGreeks = new dxfg_greeks_t{};
 
-    fillGraalData(static_cast<void *>(graalGreeks));
+    fillGraalData(graalGreeks);
 
-    return static_cast<void *>(graalGreeks);
+    return graalGreeks;
 }
 
 void Greeks::freeGraal(void *graalNative) {
@@ -110,16 +105,15 @@ void Greeks::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != dxfg_event_clazz_t::DXFG_EVENT_GREEKS) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to free Greeks's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<int>(static_cast<dxfg_event_type_t *>(graalNative)->clazz)),
-                        std::to_string(static_cast<int>(dxfg_event_clazz_t::DXFG_EVENT_GREEKS))));
+    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_GREEKS) {
+        throw InvalidArgumentException(fmt::format(
+            "Unable to free Greeks's Graal data. Wrong event class {}! Expected: {}.",
+            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_GREEKS)));
     }
 
     auto graalGreeks = static_cast<dxfg_greeks_t *>(graalNative);
 
-    MarketEvent::freeGraalData(graalNative);
+    freeGraalData(graalNative);
 
     delete graalGreeks;
 }
@@ -130,6 +124,16 @@ void Greeks::assign(std::shared_ptr<EventType> event) {
     if (const auto other = event->sharedAs<Greeks>(); other) {
         data_ = other->data_;
     }
+}
+
+void Greeks::setSequence(std::int32_t sequence) {
+    assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
+
+    if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+        throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
+    }
+
+    data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
 }
 
 DXFCPP_END_NAMESPACE

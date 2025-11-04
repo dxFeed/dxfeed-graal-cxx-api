@@ -1,10 +1,10 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_c_api/api.h"
+#include "../../../include/dxfeed_graal_cpp_api/api.hpp"
 
-#include <dxfeed_graal_c_api/api.h>
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -18,11 +18,12 @@ int64_t TimeSeriesSubscriptionSymbol::getFromTime() const {
 
 void *TimeSeriesSubscriptionSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("TimeSeriesSubscriptionSymbol::toGraal()");
     }
 
     auto *graalSymbol =
-        new dxfg_time_series_subscription_symbol_t{.supper = {.type = dxfg_symbol_type_t::TIME_SERIES_SUBSCRIPTION},
+        new dxfg_time_series_subscription_symbol_t{.supper = {.type = TIME_SERIES_SUBSCRIPTION},
                                                    .symbol = static_cast<dxfg_symbol_t *>(getEventSymbol()->toGraal()),
                                                    .from_time = fromTime_};
 
@@ -31,6 +32,7 @@ void *TimeSeriesSubscriptionSymbol::toGraal() const {
 
 void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("TimeSeriesSubscriptionSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
@@ -47,6 +49,7 @@ void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) {
 
 TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("TimeSeriesSubscriptionSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
     }
 
@@ -62,6 +65,7 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
 
 std::string TimeSeriesSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         return "TimeSeriesSubscriptionSymbol{" + getEventSymbol()->toString() +
                ", fromTime = " + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     } else {

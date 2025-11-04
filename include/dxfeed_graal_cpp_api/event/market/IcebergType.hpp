@@ -7,7 +7,6 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
 #include "../../internal/Enum.hpp"
 
 #include <cstdint>
@@ -15,7 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 /**
- * Type of an iceberg order.
+ * Type of iceberg order.
  */
 struct IcebergType : Enum<IcebergType, std::uint32_t> {
     using Enum::Enum;
@@ -26,12 +25,12 @@ struct IcebergType : Enum<IcebergType, std::uint32_t> {
     static const DXFCPP_EXPORT IcebergType UNDEFINED;
 
     /**
-     * Represents native (exchange-managed) iceberg type.
+     * Represents a native (exchange-managed) iceberg type.
      */
     static const DXFCPP_EXPORT IcebergType NATIVE;
 
     /**
-     * Represents synthetic (managed outside of the exchange) iceberg type
+     * Represents synthetic (managed outside the exchange) iceberg type
      */
     static const DXFCPP_EXPORT IcebergType SYNTHETIC;
 };

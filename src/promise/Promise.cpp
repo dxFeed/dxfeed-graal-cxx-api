@@ -1,18 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include "../../include/dxfeed_graal_cpp_api/promise/Promise.hpp"
+
+#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/promise/IsolatedPromise.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include <memory>
-#include <string>
-#include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -124,7 +119,7 @@ void *PromiseListImpl::getElement(void *handle, std::size_t index) {
     using ListType = dxfg_java_object_handler_list;
     auto list = static_cast<ListType *>(handle);
 
-    return static_cast<void *>(list->elements[index]);
+    return list->elements[index];
 }
 
 DXFCPP_END_NAMESPACE

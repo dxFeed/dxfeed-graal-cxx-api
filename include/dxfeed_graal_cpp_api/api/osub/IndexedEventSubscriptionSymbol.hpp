@@ -4,16 +4,13 @@
 #pragma once
 
 #include "../../internal/Conf.hpp"
-#include "dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../event/IndexedEventSource.hpp"
-#include "../../symbols/SymbolWrapper.hpp"
 
 #include <cstdint>
 #include <memory>
-#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -21,7 +18,7 @@ class IndexedEventSource;
 struct SymbolWrapper;
 
 /**
- * Represents subscription to a specific source of indexed events.
+ * Represents a subscription to a specific source of indexed events.
  * This is symbol is observed by ObservableSubscriptionChangeListener
  * methods @ref ObservableSubscriptionChangeListener::symbolsAdded() "symbolsAdded"
  * and @ref ObservableSubscriptionChangeListener::symbolsRemoved() "symbolsRemoved"
@@ -39,8 +36,6 @@ struct SymbolWrapper;
  */
 class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     friend SymbolWrapper;
-
-    // struct Impl;
 
     std::unique_ptr<SymbolWrapper> eventSymbol_;
     std::unique_ptr<IndexedEventSource> source_;
@@ -64,20 +59,20 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     static void freeGraal(void *graalNative);
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure (recursively
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure (recursively
      * if necessary).
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static IndexedEventSubscriptionSymbol fromGraal(void *graalNative);
 
     public:
     /**
-     * Creates indexed event subscription symbol with a specified event symbol and source.
+     * Creates an indexed event subscription symbol with a specified event symbol and source.
      *
-     * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
+     * @param eventSymbol the wrapped event symbol (CandleSymbol, WildcardSymbol, etc.).
      * @param source the source.
      */
     IndexedEventSubscriptionSymbol(const SymbolWrapper &eventSymbol, const IndexedEventSource &source);
@@ -93,7 +88,7 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     virtual ~IndexedEventSubscriptionSymbol() noexcept = default;
 
     /**
-     * Returns the wrapped event symbol (CandleSymbol, WildcardSymbol, etc).
+     * Returns the wrapped event symbol (CandleSymbol, WildcardSymbol, etc.).
      *
      * @return the wrapped event symbol.
      */

@@ -1,11 +1,13 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/glossary/IsolatedAdditionalUnderlyings.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/glossary/IsolatedAdditionalUnderlyings.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -21,7 +23,7 @@ JavaObjectHandle<AdditionalUnderlyings> EMPTY() {
 
 // int32_t dxfg_AdditionalUnderlyings_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT
 // dxfg_additional_underlyings_t **additionalUnderlyings);
-JavaObjectHandle<AdditionalUnderlyings> valueOf(const StringLikeWrapper &value) {
+JavaObjectHandle<AdditionalUnderlyings> valueOf(const StringLike &value) {
     dxfg_additional_underlyings_t *isolatedAdditionalUnderlyings{};
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf, value.c_str(),
@@ -50,7 +52,7 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<cons
 
 // int32_t dxfg_AdditionalUnderlyings_getSPC(graal_isolatethread_t *thread, const char *text, const char *symbol,
 // DXFG_OUT double *spc);
-double getSPC(const StringLikeWrapper &text, const StringLikeWrapper &symbol) {
+double getSPC(const StringLike &text, const StringLike &symbol) {
     double spc{};
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getSPC, text.c_str(), symbol.c_str(), &spc);
@@ -112,7 +114,7 @@ std::unordered_map<std::string, double> getMap(const JavaObjectHandle<Additional
 
 // int32_t dxfg_AdditionalUnderlyings_getSPC2(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
 // *additionalUnderlyings, const char *symbol, DXFG_OUT double *spc);
-double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, const StringLikeWrapper &symbol) {
+double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, const StringLike &symbol) {
     if (!additionalUnderlyings) {
         throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getSPC2`. The "
                                        "`additionalUnderlyings` handle is invalid");

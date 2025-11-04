@@ -3,19 +3,16 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include "../Args/Args.hpp"
-
 #include "../Connect/ConnectTool.hpp"
 #include "../Dump/DumpTool.hpp"
+#include "../EventGenTool/EventGenTool.hpp"
 #include "../LatencyTest/LatencyTestTool.hpp"
 #include "../PerfTest/PerfTestTool.hpp"
 #include "../PerfTest2/PerfTest2Tool.hpp"
 #include "../Qds/QdsTool.hpp"
-#include "../EventGenTool/EventGenTool.hpp"
-
 #include <chrono>
+#include <fmt/format.h>
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -23,10 +20,10 @@
 #include <variant>
 #include <vector>
 
-#include <fmt/format.h>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 #include <console/console.hpp>

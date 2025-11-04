@@ -7,23 +7,19 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../entity/SharedEntity.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Id.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-
-#include "../entity/SharedEntity.hpp"
-
-#include "InstrumentProfile.hpp"
+#include "./InstrumentProfile.hpp"
 
 #include <cstdint>
-#include <optional>
 #include <string>
-#include <type_traits>
-#include <unordered_map>
-#include <utility>
 #include <vector>
 
 DXFCPP_BEGIN_NAMESPACE
+
+struct AuthToken;
 
 /**
  * Reads instrument profiles from the stream using Instrument Profile Format (IPF).
@@ -43,7 +39,7 @@ DXFCPP_BEGIN_NAMESPACE
  */
 class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     Id<InstrumentProfileReader> id_;
-    JavaObjectHandle<InstrumentProfileReader> handle_;
+    JavaObjectHandle<InstrumentProfileReader> handle_{};
 
     InstrumentProfileReader();
 
@@ -62,7 +58,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
     static Ptr create();
 
     /**
-     * Returns last modification time (in milliseconds) from last InstrumentProfileReader::readFromFile() operation
+     * Returns the last modification time (in milliseconds) from the last InstrumentProfileReader::readFromFile() operation
      * or zero if it is unknown.
      */
     std::int64_t getLastModified() const;
@@ -76,7 +72,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * Converts a specified string address specification into an URL that will be read by
      * InstrumentProfileReader::readFromFile() method.
      */
-    static std::string resolveSourceURL(const StringLikeWrapper &address);
+    static std::string resolveSourceURL(const StringLike &address);
 
     /**
      * Reads and returns instrument profiles from specified file.
@@ -93,7 +89,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param address URL of file to read from
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLikeWrapper &address) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address) const;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified basic user and password
@@ -113,9 +109,9 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * @param password the password
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLikeWrapper &address,
-                                                                 const StringLikeWrapper &user,
-                                                                 const StringLikeWrapper &password) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address,
+                                                                 const StringLike &user,
+                                                                 const StringLike &password) const;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified token credentials.
@@ -136,7 +132,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * Profile Format
      * @throws JavaException("IOException") If an I/O error occurs
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLikeWrapper &address,
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address,
                                                                  const AuthToken &token) const;
 };
 

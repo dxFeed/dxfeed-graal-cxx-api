@@ -3,19 +3,22 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../../../include/dxfeed_graal_cpp_api/internal/Conf.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
 
 #include <cstdint>
-#include <utility>
-#include <variant>
-
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include <utility>
+#include <variant>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
+DXFCXX_DISABLE_CLANG_WARNINGS("-Wdeprecated-literal-operator")
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {

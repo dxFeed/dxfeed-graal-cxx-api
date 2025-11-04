@@ -1,10 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -21,7 +23,7 @@ namespace isolated::util::IsolatedTimePeriod {
     return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_valueOf, value));
 }
 
-/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(std::string_view value) {
+/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(const StringLike& value) {
     return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_valueOf2, value.data()));
 }
 

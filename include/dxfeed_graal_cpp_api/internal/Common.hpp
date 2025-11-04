@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "Conf.hpp"
+#include "./Conf.hpp"
 
-#include "utils/StringUtils.hpp"
+#include "./utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -293,7 +293,7 @@ static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
 
-static bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
+inline bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
     if (std::isnan(a) || std::isnan(b)) {
         return false;
     }
@@ -839,27 +839,27 @@ template <typename T, typename U> T fitToType(const U &size) {
  * A simple wrapper around strings or something similar to strings to reduce the amount of code for methods that take
  * strings as input.
  */
-struct StringLikeWrapper {
+struct StringLikeWrapperOld {
     using DataType = std::variant<std::string, std::string_view>;
 
     private:
     DataType data_{};
 
     public:
-    StringLikeWrapper(std::string_view sv) : data_{sv} {
+    StringLikeWrapperOld(std::string_view sv) : data_{sv} {
     }
 
-    StringLikeWrapper(const char *chars) : data_{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
+    StringLikeWrapperOld(const char *chars) : data_{chars == nullptr ? std::string_view{} : std::string_view{chars}} {
     }
 
-    StringLikeWrapper(const std::string &s) : data_{s} {
+    StringLikeWrapperOld(const std::string &s) : data_{s} {
     }
 
-    StringLikeWrapper(std::string &&s) : data_{std::move(s)} {
+    StringLikeWrapperOld(std::string &&s) : data_{std::move(s)} {
     }
 
     template <auto N>
-    StringLikeWrapper(const char (&chars)[N]) : StringLikeWrapper{std::string_view{chars, chars + N}} {
+    StringLikeWrapperOld(const char (&chars)[N]) : StringLikeWrapperOld{std::string_view{chars, chars + N}} {
     }
 
     operator std::string() const {
@@ -910,7 +910,7 @@ struct StringLikeWrapper {
         return size();
     }
 
-    bool ends_with(const StringLikeWrapper &sw) const {
+    bool ends_with(const StringLikeWrapperOld &sw) const {
         if (auto sv = std::get_if<std::string_view>(&data_); sv) {
             return sv->ends_with(sw);
         } else {
@@ -928,11 +928,11 @@ struct StringLikeWrapper {
         }
     }
 
-    bool operator==(const StringLikeWrapper &sw) const {
+    bool operator==(const StringLikeWrapperOld &sw) const {
         return sw.operator std::string_view() == this->operator std::string_view();
     }
 
-    friend std::string operator+(const StringLikeWrapper &sw1, const StringLikeWrapper &sw2) {
+    friend std::string operator+(const StringLikeWrapperOld &sw1, const StringLikeWrapperOld &sw2) {
         return sw1.operator std::string() + sw2.operator std::string();
     }
 
@@ -956,7 +956,7 @@ struct StringLikeWrapper {
 };
 
 /// Universal functional object that allows searching std::unordered_map for string-like keys.
-struct StringHash {
+struct StringHashOld {
     using HashType = std::hash<std::string_view>;
     using is_transparent = void;
 
@@ -972,7 +972,7 @@ struct StringHash {
         return HashType{}(str);
     }
 
-    std::size_t operator()(const StringLikeWrapper &sw) const {
+    std::size_t operator()(const StringLikeWrapperOld &sw) const {
         return HashType{}(sw);
     }
 };

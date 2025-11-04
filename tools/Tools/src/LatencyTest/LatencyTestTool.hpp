@@ -3,21 +3,25 @@
 
 #pragma once
 
-#include <dxfeed_graal_cpp_api/api.hpp>
-
+#include "../../../../include/dxfeed_graal_cpp_api/event/market/Quote.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/event/market/TimeAndSale.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/event/market/Trade.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/event/market/TradeETH.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/internal/Platform.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/internal/StopWatch.hpp"
 #include "../Args/Args.hpp"
-
 #include <chrono>
 #include <cstdint>
+#include <fmt/format.h>
 #include <list>
 #include <memory>
 #include <utility>
 #include <variant>
 
-#include <fmt/format.h>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
 #include <range/v3/all.hpp>
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 
 namespace dxfcpp::tools {
@@ -46,7 +50,7 @@ struct LatencyTest {
     }
 
     struct Diagnostic final {
-      private:
+        private:
         std::atomic<std::size_t> eventsCounter_{};
         std::atomic<std::size_t> listenerCallsCounter_{};
 
@@ -81,7 +85,9 @@ struct LatencyTest {
             return fmt::format("{:.2f}", value);
         }
 
+        // ReSharper disable once CppDFAConstantParameter
         static double calcPercentile(std::vector<std::int64_t> sequence, double excelPercentile) noexcept {
+            // ReSharper disable once CppUseRangeAlgorithm
             std::sort(std::begin(sequence), std::end(sequence));
 
             const auto n = (static_cast<double>(sequence.size()) - 1.0) * excelPercentile + 1.0;
@@ -199,8 +205,9 @@ struct LatencyTest {
                    static_cast<double>(std::chrono::duration_cast<std::chrono::seconds>(timerDiff_.elapsed()).count());
         }
 
-      public:
+        public:
         static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod) noexcept {
+            // ReSharper disable once CppDFAMemoryLeak
             auto d = std::shared_ptr<Diagnostic>(new Diagnostic(measurementPeriod));
 
             d->timer_ = Timer::schedule(
@@ -303,7 +310,7 @@ struct LatencyTest {
             std::optional<std::size_t> interval{};
             bool forceStream{};
 
-            for (; index < args.size();) {
+            while (index < args.size()) {
                 if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
                     auto parseResult = PropertiesArg::parse(args, index);
 

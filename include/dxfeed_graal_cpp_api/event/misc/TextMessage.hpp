@@ -7,13 +7,13 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cstdint>
-#include <string>
-
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Common.hpp"
 #include "../EventType.hpp"
 #include "../EventTypeEnum.hpp"
+
+#include <cstdint>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -23,7 +23,7 @@ struct EventMapper;
  * Message event with text payload. Messages are never conflated and are delivered to
  * all connected subscribers. There is no built-in persistence for messages. They are lost when subscribers
  * are not connected to the message publisher, so they shall be only used for notification purposes in
- * addition to persistence mechanism.
+ * addition to a persistence mechanism.
  *
  * <h3>Implementation details</h3>
  *
@@ -64,10 +64,10 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     static const EventTypeEnum &TYPE;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);
@@ -93,54 +93,54 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     void assign(std::shared_ptr<EventType> event) override;
 
     /**
-     * Creates new message with default values.
+     * Creates a new message with default values.
      */
     TextMessage() noexcept = default;
 
     /**
-     * Creates new message with the specified event symbol.
+     * Creates a new message with the specified event symbol.
      * @param eventSymbol event symbol.
      */
-    explicit TextMessage(std::string eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
+    explicit TextMessage(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
     }
 
     /**
-     * Creates new message with the specified event symbol and text.
+     * Creates a new message with the specified event symbol and text.
      *
      * @param eventSymbol event symbol.
      * @param text text.
      */
-    TextMessage(std::string eventSymbol, std::string text) noexcept
-        : eventSymbol_{std::move(eventSymbol)}, text_{std::move(text)} {
+    TextMessage(const StringLike &eventSymbol, const StringLike &text) noexcept
+        : eventSymbol_{eventSymbol}, text_{text} {
     }
 
     /**
-     * Creates new message with the specified event symbol, time and text.
+     * Creates a new message with the specified event symbol, time and text.
      * @param eventSymbol event symbol.
      * @param time time.
      * @param text text.
      */
-    TextMessage(std::string eventSymbol, std::int64_t time, std::string text) noexcept
-        : eventSymbol_{std::move(eventSymbol)}, text_{std::move(text)} {
+    TextMessage(const StringLike &eventSymbol, std::int64_t time, const StringLike &text) noexcept
+        : eventSymbol_{eventSymbol}, text_{text} {
 
         setTime(time);
     }
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
     const std::string &getEventSymbol() const & noexcept override {
         if (!eventSymbol_) {
-            return dxfcpp::String::NUL;
+            return String::NUL;
         }
 
         return eventSymbol_.value();
     }
 
     /**
-     * Returns symbol of this event.
+     * Returns a symbol of this event.
      *
      * @return symbol of this event or `std::nullopt`.
      */
@@ -153,18 +153,18 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const std::string &eventSymbol) noexcept override {
+    void setEventSymbol(const StringLike &eventSymbol) noexcept override {
         // TODO: check invalid utf-8 [EN-8233]
-        eventSymbol_ = eventSymbol;
+        eventSymbol_ = std::string(eventSymbol);
     }
 
     /**
-     * Changes event's symbol and returns the current message.
+     * Changes an event's symbol and returns the current message.
      *
      * @param eventSymbol The symbol of this event.
      * @return The current message.
      */
-    TextMessage &withEventSymbol(const std::string &eventSymbol) noexcept {
+    TextMessage &withEventSymbol(const StringLike &eventSymbol) noexcept {
         TextMessage::setEventSymbol(eventSymbol);
 
         return *this;
@@ -194,16 +194,16 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     }
 
     /**
-     * Returns time and sequence of text message packaged into single long value.
+     * Returns time and sequence of a text message packaged into a single long value.
      *
-     * @return time and sequence of text message.
+     * @return time and sequence of a text message.
      */
     std::int64_t getTimeSequence() const noexcept {
         return timeSequence_;
     }
 
     /**
-     * Changes time and sequence of text message.
+     * Changes time and sequence of a text message.
      * <b>Do not use this method directly.</b>
      * Change @ref #setTime() "time" and/or @ref #setSequence() "sequence".
      *
@@ -245,13 +245,13 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @return The current message.
      */
     TextMessage &withTime(std::int64_t time) noexcept {
-        TextMessage::setTime(time);
+        setTime(time);
 
         return *this;
     }
 
     /**
-     * Returns sequence number of the text message to distinguish messages that have the same @ref #getTime() "time".
+     * Returns the sequence number of the text message to distinguish messages that have the same @ref #getTime() "time".
      * This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to
      * #MAX_SEQUENCE.
      *
@@ -265,7 +265,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * Changes ::getSequence() sequence number of the text message.
      *
      * @param sequence the sequence.
-     * @throws InvalidArgumentException if sequence is below zero or above #MAX_SEQUENCE.
+     * @throws InvalidArgumentException if a sequence is below zero or above #MAX_SEQUENCE.
      * @see #getSequence()
      */
     void setSequence(std::int32_t sequence) {
@@ -277,14 +277,14 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     }
 
     /**
-     * Changes event's sequence number and returns the current message.
+     * Changes an event's sequence number and returns the current message.
      *
      * @param sequence the sequence.
      * @return The current message.
-     * @throws InvalidArgumentException if sequence is below zero or above #MAX_SEQUENCE.
+     * @throws InvalidArgumentException if a sequence is below zero or above #MAX_SEQUENCE.
      */
     TextMessage &withSequence(std::int32_t sequence) noexcept {
-        TextMessage::setSequence(sequence);
+        setSequence(sequence);
 
         return *this;
     }
@@ -303,9 +303,9 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @param text text.
      */
-    void setText(std::string text) {
+    void setText(const StringLike & text) {
         // TODO: check invalid utf-8 [EN-8233]
-        text_ = std::move(text);
+        text_ = std::string(text);
     }
 
     /**
@@ -315,8 +315,8 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @return The current message.
      */
-    TextMessage &withText(std::string text) noexcept {
-        TextMessage::setText(std::move(text));
+    TextMessage &withText(const StringLike & text) noexcept {
+        setText(text);
 
         return *this;
     }

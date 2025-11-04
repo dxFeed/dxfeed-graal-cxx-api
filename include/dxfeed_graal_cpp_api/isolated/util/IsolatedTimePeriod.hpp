@@ -5,13 +5,11 @@
 
 #include "../../internal/Conf.hpp"
 
-#include <cstdint>
-#include <string>
-#include <string_view>
-
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../util/TimePeriod.hpp"
+
+#include <cstdint>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -32,7 +30,7 @@ int64_t                     dxfg_TimePeriod_getNanos(graal_isolatethread_t *thre
 /* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> ZERO();
 /* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> UNLIMITED();
 /* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(std::int64_t value);
-/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(std::string_view value);
+/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(const StringLike& value);
 std::int64_t getTime(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod);
 std::int32_t getSeconds(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod);
 std::int64_t getNanos(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod);

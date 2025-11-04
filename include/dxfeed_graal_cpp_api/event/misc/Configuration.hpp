@@ -7,14 +7,6 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
-#include <cstdint>
-#include <memory>
-#include <string>
-
-#include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
-
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;

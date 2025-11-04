@@ -1,11 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include <dxfg_api.h>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp"
 
-#include <dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp>
-#include <dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp>
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
+
+#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -15,7 +16,7 @@ void gc() {
 
 namespace isolated::internal::IsolatedTools {
 std::unordered_set<std::string> /* dxfg_string_list* */
-parseSymbols(std::string_view symbolList) {
+parseSymbols(const StringLike& symbolList) {
     std::unordered_set<std::string> result{};
 
     auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
@@ -29,7 +30,7 @@ parseSymbols(std::string_view symbolList) {
     return result;
 }
 
-std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList) {
+std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(const StringLike& symbolList) {
     std::vector<std::string> result{};
 
     auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());

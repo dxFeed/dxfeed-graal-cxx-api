@@ -18,16 +18,16 @@ DXFCPP_BEGIN_NAMESPACE
  * <h3>Regional symbols</h3>
  *
  * Regional symbol subscription receives events only from a designated exchange, marketplace, or venue
- * instead of receiving composite events from all venues (by default). Regional symbol is composed from a
+ * instead of receiving composite events from all venues (by default). Regional symbol is composed of a
  * <i>base symbol</i>, ampersand character ('&amp;'), and an exchange code character. For example,
  * <ul>
  * <li>"SPY" is the symbol for composite events for SPDR S&amp;P 500 ETF from all exchanges,
- * <li>"SPY&amp;N" is the symbol for event for SPDR S&amp;P 500 ETF that originate only from NYSE marketplace.
+ * <li>"SPY&amp;N" is the symbol for event for SPDR S&amp;P 500 ETF that originates only from the NYSE marketplace.
  * </ul>
  *
  * <h3>Symbol attributes</h3>
  *
- * Market event symbols can have a number of attributes attached to then in curly braces
+ * Market event symbols can have a number of attributes attached to them in curly braces
  * with `<key>=<value>` paris separated by commas. For example,
  * <ul>
  * <li>"SPY{price=bid}" is the market symbol "SPY" with an attribute key "price" set to value "bid".
@@ -38,12 +38,12 @@ DXFCPP_BEGIN_NAMESPACE
  */
 struct DXFCPP_EXPORT MarketEventSymbols {
     /**
-     * Returns `true` is the specified symbol has the exchange code specification.
+     * Returns `true` if the specified symbol has the exchange code specification.
      *
      * @param symbol The symbol.
-     * @return `true` is the specified symbol has the exchange code specification.
+     * @return `true` if the specified symbol has the exchange code specification.
      */
-    static bool hasExchangeCode(const std::string &symbol) noexcept {
+    static bool hasExchangeCode(const StringLike &symbol) noexcept {
         return hasExchangeCodeInternal(symbol, getLengthWithoutAttributesInternal(symbol));
     }
 
@@ -53,19 +53,19 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol The symbol.
      * @return exchange code of the specified symbol or `'\0'` if none is defined.
      */
-    static char getExchangeCode(const std::string &symbol) noexcept {
-        return hasExchangeCode(symbol) ? symbol[getLengthWithoutAttributesInternal(symbol) - 1] : '\0';
+    static char getExchangeCode(const StringLike &symbol) noexcept {
+        return hasExchangeCode(symbol) ? std::string_view(symbol)[getLengthWithoutAttributesInternal(symbol) - 1]
+                                       : '\0';
     }
 
     /**
-     * Changes exchange code of the specified symbol or removes it if new exchange code is `'\0'`.
+     * Changes exchange code of the specified symbol or removes it if the new exchange code is `'\0'`.
      *
      * @param symbol The old symbol.
      * @param exchangeCode The new exchange code.
      * @return new symbol with the changed exchange code.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string changeExchangeCode(const std::string &symbol,
-                                                                        char exchangeCode) noexcept {
+    static std::string changeExchangeCode(const StringLike &symbol, char exchangeCode) noexcept {
         auto i = getLengthWithoutAttributesInternal(symbol);
         auto result = exchangeCode == '\0' ? getBaseSymbolInternal(symbol, i)
                                            : getBaseSymbolInternal(symbol, i) + EXCHANGE_SEPARATOR + exchangeCode;
@@ -78,7 +78,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol symbol.
      * @return base symbol without exchange code and attributes.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string getBaseSymbol(const std::string &symbol) noexcept {
+    static std::string getBaseSymbol(const StringLike &symbol) noexcept {
         return getBaseSymbolInternal(symbol, getLengthWithoutAttributesInternal(symbol));
     }
 
@@ -88,44 +88,44 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param baseSymbol new base symbol.
      * @return new symbol with new base symbol and old symbol's exchange code and attributes.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string changeBaseSymbol(const std::string &symbol,
-                                                                      const std::string &baseSymbol) noexcept {
-        auto i = getLengthWithoutAttributesInternal(symbol);
+    static std::string changeBaseSymbol(const StringLike &symbol, const StringLike &baseSymbol) noexcept {
+        const auto i = getLengthWithoutAttributesInternal(symbol);
 
-        return hasExchangeCodeInternal(symbol, i) ? baseSymbol + EXCHANGE_SEPARATOR + symbol[i - 1] + symbol.substr(i)
-               : i == symbol.length()             ? baseSymbol
-                                                  : baseSymbol + symbol.substr(i);
+        return hasExchangeCodeInternal(symbol, i)
+                   ? std::string(baseSymbol) + EXCHANGE_SEPARATOR + std::string_view(symbol)[i - 1] + symbol.substr(i)
+               : i == symbol.length() ? std::string(baseSymbol)
+                                      : std::string(baseSymbol) + symbol.substr(i);
     }
 
     /**
      * Returns value of the attribute with the specified key.
-     * The result is std::nullopt if attribute with the specified key is not found.
+     * The result is `std::nullopt` if the attribute with the specified key is not found.
      *
      * @param symbol symbol.
      * @param key attribute key.
-     * @return value of the attribute with the specified key | std::nullopt if attribute with the specified key is not
-     * found.
+     * @return value of the attribute with the specified key | `std::nullopt` if the attribute with the specified key is
+     * not found.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string>
-    getAttributeStringByKey(const std::string &symbol, const std::string &key) noexcept {
+    static std::optional<std::string> getAttributeStringByKey(const StringLike &symbol,
+                                                              const StringLike &key) noexcept {
         return getAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
     }
 
     /**
-     * Changes value of one attribute value while leaving exchange code and other attributes intact.
+     * Changes the value of one attribute value while leaving exchange code and other attributes intact.
      *
      * @param symbol old symbol.
      * @param key attribute key.
      * @param value attribute value.
      *
-     * @return new symbol with key attribute with the specified value and everything else from the old symbol.
+     * @return new symbol with a key attribute with the specified value and everything else from the old symbol.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
-    changeAttributeStringByKey(const std::string &symbol, const std::string &key, const std::string &value) noexcept {
+    static std::string changeAttributeStringByKey(const StringLike &symbol, const StringLike &key,
+                                                  const StringLike &value) noexcept {
         auto i = getLengthWithoutAttributesInternal(symbol);
 
         if (i == symbol.length())
-            return symbol + ATTRIBUTES_OPEN + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_CLOSE;
+            return std::string(symbol) + ATTRIBUTES_OPEN + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_CLOSE;
         return addAttributeInternal(symbol, i, key, value);
     }
 
@@ -136,8 +136,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param key attribute key.
      * @return new symbol without the specified key and everything else from the old symbol.
      */
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string removeAttributeStringByKey(const std::string &symbol,
-                                                                                const std::string &key) noexcept {
+    static std::string removeAttributeStringByKey(const StringLike &symbol, const StringLike &key) noexcept {
         return removeAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
     }
 
@@ -152,12 +151,11 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return length >= 2 && symbol[length - 2] == EXCHANGE_SEPARATOR;
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string getBaseSymbolInternal(const std::string &symbol,
-                                                                           std::size_t length) noexcept {
+    static std::string getBaseSymbolInternal(const std::string &symbol, std::size_t length) noexcept {
         return hasExchangeCodeInternal(symbol, length) ? symbol.substr(0, length - 2) : symbol.substr(0, length);
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING bool hasAttributesInternal(const std::string &symbol) noexcept {
+    static bool hasAttributesInternal(const std::string &symbol) noexcept {
         if (symbol.length() >= 3 /* ATTRIBUTES_OPEN + ATTRIBUTES_CLOSE + ATTRIBUTE */ &&
             symbol[symbol.length() - 1] == ATTRIBUTES_CLOSE) {
             auto attributesOpenPos = symbol.find_last_of(ATTRIBUTES_OPEN, symbol.length() - 2);
@@ -168,13 +166,11 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return false;
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::size_t
-    getLengthWithoutAttributesInternal(const std::string &symbol) noexcept {
+    static std::size_t getLengthWithoutAttributesInternal(const std::string &symbol) noexcept {
         return hasAttributesInternal(symbol) ? symbol.find_last_of(ATTRIBUTES_OPEN) : symbol.length();
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string> getKeyInternal(const std::string &symbol,
-                                                                                   std::size_t i) noexcept {
+    static std::optional<std::string> getKeyInternal(const std::string &symbol, std::size_t i) noexcept {
         try {
             if (auto found = symbol.find_first_of(ATTRIBUTE_VALUE, i); found != std::string::npos) {
                 return symbol.substr(i, found - i);
@@ -186,23 +182,21 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         }
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::size_t getNextKeyInternal(const std::string &symbol,
-                                                                        std::size_t i) noexcept {
+    static std::size_t getNextKeyInternal(const std::string &symbol, std::size_t i) noexcept {
         auto valuePos = symbol.find_first_of(ATTRIBUTE_VALUE, i) + 1;
         auto separatorPos = symbol.find_first_of(ATTRIBUTES_SEPARATOR, valuePos);
 
         return separatorPos == std::string::npos ? symbol.length() : separatorPos + 1;
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string getValueInternal(const std::string &symbol, std::size_t i,
-                                                                      std::size_t j) {
+    static std::string getValueInternal(const std::string &symbol, std::size_t i, std::size_t j) {
         auto valueOffset = symbol.find_first_of(ATTRIBUTE_VALUE, i) + 1;
 
         return symbol.substr(valueOffset, j - 1 - valueOffset);
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
-    dropKeyAndValueInternal(const std::string &symbol, std::size_t length, std::size_t i, std::size_t j) noexcept {
+    static std::string dropKeyAndValueInternal(const std::string &symbol, std::size_t length, std::size_t i,
+                                               std::size_t j) noexcept {
         try {
             if (j == symbol.length()) {
                 if (i == length + 1) {
@@ -218,7 +212,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         }
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::optional<std::string>
+    static std::optional<std::string>
     getAttributeInternal(const std::string &symbol, std::size_t lengthWithoutAttributes, const std::string &key) {
         if (lengthWithoutAttributes == symbol.length()) {
             return std::nullopt;
@@ -245,8 +239,8 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return std::nullopt;
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string
-    removeAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes, const std::string &key) noexcept {
+    static std::string removeAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes,
+                                               const std::string &key) noexcept {
         if (lengthWithoutAttributes == symbol.length()) {
             return symbol;
         }
@@ -272,10 +266,8 @@ struct DXFCPP_EXPORT MarketEventSymbols {
         return symbol;
     }
 
-    static DXFCPP_CXX20_CONSTEXPR_STRING std::string addAttributeInternal(std::string symbol,
-                                                                          std::size_t lengthWithoutAttributes,
-                                                                          const std::string &key,
-                                                                          const std::string &value) {
+    static std::string addAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes,
+                                            const std::string &key, const std::string &value) {
         if (lengthWithoutAttributes == symbol.length()) {
             return symbol + ATTRIBUTES_OPEN + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_CLOSE;
         }

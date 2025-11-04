@@ -16,9 +16,11 @@
    SPDX-License-Identifier: BSL-1.0
 8. Console - https://github.com/ttldtor/Console/blob/default/LICENSE  
    SPDX-License-Identifier: BSL-1.0
-9. CPM.cmake - https://github.com/cpm-cmake/CPM.cmake/blob/master/LICENSE
+9. CPM.cmake - https://github.com/cpm-cmake/CPM.cmake/blob/master/LICENSE  
    SPDX-License-Identifier: MIT
 10. portals - https://github.com/ttldtor/portals/blob/default/LICENSE.txt  
     SPDX-License-Identifier: BSL-1.0
 11. config - https://github.com/ttldtor/config/blob/default/LICENSE.txt  
     SPDX-License-Identifier: BSL-1.0
+12. nanobench - https://github.com/martinus/nanobench/blob/master/LICENSE  
+    SPDX-License-Identifier: MIT

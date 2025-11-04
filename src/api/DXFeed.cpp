@@ -1,33 +1,30 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
-#include "range/v3/range/access.hpp"
+#include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
+
+#include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
+
 #include <dxfg_api.h>
-
-#include <dxfeed_graal_cpp_api/api.hpp>
-
 #include <memory>
 #include <string>
 #include <utility>
-
-#include <fmt/chrono.h>
-#include <fmt/format.h>
-#include <fmt/ostream.h>
-#include <fmt/std.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 std::shared_ptr<DXFeed> DXFeed::getInstance() {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXFeed::getInstance()");
     }
 
     return DXEndpoint::getInstance()->getFeed();
 }
 
-void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription) {
+void DXFeed::attachSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::attachSubscription(" + subscription->toString() + ")");
     }
 
@@ -45,8 +42,9 @@ void DXFeed::attachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 }
 
-void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription) {
+void DXFeed::detachSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::detachSubscription(" + subscription->toString() + ")");
     }
 
@@ -64,8 +62,9 @@ void DXFeed::detachSubscription(std::shared_ptr<DXFeedSubscription> subscription
     }
 }
 
-void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subscription) {
+void DXFeed::detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription> &subscription) const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::detachSubscriptionAndClear(" + subscription->toString() + ")");
     }
 
@@ -83,8 +82,9 @@ void DXFeed::detachSubscriptionAndClear(std::shared_ptr<DXFeedSubscription> subs
     }
 }
 
-std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) {
+std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::createSubscription(eventType = " + eventType.getName() + ")");
     }
 
@@ -95,8 +95,9 @@ std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEn
     return sub;
 }
 
-std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) {
+std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(std::initializer_list<EventTypeEnum> eventTypes) const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::createSubscription(eventTypes = " +
                         namesToString(eventTypes.begin(), eventTypes.end()) + ")");
     }
@@ -108,21 +109,23 @@ std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(std::initializer_
     return sub;
 }
 
-std::shared_ptr<DXFeedTimeSeriesSubscription> DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) {
+std::shared_ptr<DXFeedTimeSeriesSubscription>
+DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) const {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::createTimeSeriesSubscription(eventType = " + eventType.getName() + ")");
     }
 
     if (!eventType.isTimeSeries()) {
-        throw dxfcpp::InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
-                                               eventType.getClassName() + " is not TimeSeries");
+        throw InvalidArgumentException("Event type " +
+                                       eventType.getClassName() + " is not TimeSeries");
     }
 
-    auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::template createShared(
+    auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(
         eventType, isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, eventType));
-    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
+    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
-    dxfcpp::ignoreUnused(id);
+    ignoreUnused(id);
     attachSubscription(sub);
 
     return sub;
@@ -131,6 +134,7 @@ std::shared_ptr<DXFeedTimeSeriesSubscription> DXFeed::createTimeSeriesSubscripti
 std::shared_ptr<DXFeedTimeSeriesSubscription>
 DXFeed::createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::createTimeSeriesSubscription(eventTypes = " +
                         namesToString(eventTypes.begin(), eventTypes.end()) + ")");
     }
@@ -140,12 +144,13 @@ DXFeed::createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventT
 
 std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXFeed::create(" + dxfcpp::toString(feedHandle) + ")");
     }
 
     std::shared_ptr<DXFeed> feed{new DXFeed{}};
 
-    auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeed>>()->registerEntity(feed);
+    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeed>>()->registerEntity(feed);
     ignoreUnused(id);
 
     feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
@@ -190,12 +195,13 @@ std::vector<std::shared_ptr<EventType>> DXFeed::getTimeSeriesIfSubscribedImpl(co
 }
 
 JavaObjectHandle<DXFeedSubscription>
-DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) {
+DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list) const {
     return isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, list);
 }
 
-DXFeed::DXFeed() noexcept : handle_{} {
+DXFeed::DXFeed() noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXFeed()");
     }
 
@@ -206,6 +212,7 @@ DXFeed::DXFeed() noexcept : handle_{} {
 
 DXFeed::~DXFeed() noexcept {
     if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXFeed{" + handle_.toString() + "}::~DXFeed()");
     }
 
@@ -215,7 +222,7 @@ DXFeed::~DXFeed() noexcept {
 }
 
 std::string DXFeed::toString() const {
-    return fmt::format("DXFeed{{{}}}", handle_.toString());
+    return std::string("DXFeed{") + handle_.toString() + "}";
 }
 
 DXFCPP_END_NAMESPACE

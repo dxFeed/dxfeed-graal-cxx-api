@@ -5,11 +5,11 @@
 
 #include "../../internal/Conf.hpp"
 
-#include "../../internal/Common.hpp"
-
-#include <dxfeed_graal_cpp_api/event/EventTypeEnum.hpp>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../../event/EventTypeEnum.hpp"
+#include "../../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -25,7 +25,7 @@ void release(void *source);
 namespace IsolatedEventType {
 
 // dxfg_EventType_new
-/* dxfg_event_type_t* */ void *create(const StringLikeWrapper &symbolName,
+/* dxfg_event_type_t* */ void *create(const StringLike &symbolName,
                                       /* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
 
 // dxfg_EventType_release

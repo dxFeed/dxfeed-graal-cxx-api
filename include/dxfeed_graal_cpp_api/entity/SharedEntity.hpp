@@ -8,16 +8,15 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/Common.hpp"
+#include "./Entity.hpp"
 
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "Entity.hpp"
-
 DXFCPP_BEGIN_NAMESPACE
 
-/// Base abstract "shared entity" class. Has some helpers for dynamic polymorphism
+/// A base abstract "shared entity" class. Has some helpers for dynamic polymorphism
 struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> {
     /// The alias to a type of shared pointer to the SharedEntity object.
     using Ptr = std::shared_ptr<SharedEntity>;
@@ -27,10 +26,10 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     ~SharedEntity() noexcept override;
 
     /**
-     * Checks that pointer to the current type could be converted to type T*
+     * Checks that the pointer to the current type could be converted to type T*
      * In other words: whether type T belongs to the type hierarchy in which the current type resides.
      * @tparam T The type to check
-     * @return true if type belongs to the type hierarchy in which the current type resides.
+     * @return true if the type belongs to the type hierarchy in which the current type resides.
      */
     template <typename T> bool is() const noexcept {
         try {
@@ -83,7 +82,7 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
 DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 
 /**
- * A helper class needed to construct smart pointers to objects, and does not allow explicit construction of objects.
+ * A helper class needed to construct smart pointers to objects and does not allow explicit construction of objects.
  * @tparam T The object type.
  */
 template <typename T> struct RequireMakeShared : virtual SharedEntity {
@@ -94,11 +93,11 @@ template <typename T> struct RequireMakeShared : virtual SharedEntity {
 
     public:
     /**
-     * Creates smart pointer to object.
+     * Creates a smart pointer to an object.
      *
      * @tparam Args Types or arguments.
      * @param args The arguments.
-     * @return A new smart pointer to object.
+     * @return A new smart pointer to an object.
      */
     template <typename... Args> static auto createShared(Args &&...args) {
         static_assert(std::is_convertible_v<T *, RequireMakeShared *>, "Must derive publicly from RequireMakeShared");

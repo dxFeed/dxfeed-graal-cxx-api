@@ -7,16 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include <cassert>
-#include <cstdint>
-#include <memory>
-#include <string>
-
 #include "../../internal/Common.hpp"
 #include "../EventTypeEnum.hpp"
-#include "../LastingEvent.hpp"
-#include "MarketEvent.hpp"
-#include "TradeBase.hpp"
+#include "./TradeBase.hpp"
+#include <memory>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -32,27 +27,27 @@ struct EventMapper;
  *
  * <h3>Trading sessions</h3>
  *
- * The TradeETH event defines last trade @ref TradeETH::getPrice() "price" as officially defined
+ * The TradeETH event defines the last trade TradeETH::getPrice @ref () "price" as officially defined
  * by the corresponding exchange for its <b>extended trading hours</b> (ETH).
  * It also includes @ref TradeETH::getDayVolume() "dayVolume" and @ref ::getDayTurnover() "dayTurnover"
  * <b>for the extended trading hours only</b> of the trading day identified by @ref TradeETH::getDayId "dayId".
- * This event is not defined for symbols that has no concept of ETH.
+ * This event is not defined for symbols that have no concept of ETH.
  *
  * <p>When the first trade of <b>regular trading hours</b> (RTH) happens, then TradeETH event is generated
- * with @ref TradeETH::isExtendedTradingHours() "extendedTradingHours" property set to `false`. Afterwards, during RTH,
- * TradeETH event is not updated and retains information about the last trade, volume and turnover of the pre market
+ * with @ref TradeETH::isExtendedTradingHours() "extendedTradingHours" property set to `false`. Afterward, during RTH,
+ * TradeETH event is not updated and retains information about the last trade, volume and turnover of the pre-market
  * trading session.
  *
  * <p>When the first trade of <b>extended trading hours</b> (ETH) happens, then TradeETH event is generated
  * with @ref TradeETH::isExtendedTradingHours() "extendedTradingHours" property set to `true`. Afterwards, during ETH,
- * TradeETH event is updated on each trade with the last trade information from post market trading session
- * and total volume and turnover of the pre and post market trading session (excluding the volume and turnover of a
+ * TradeETH event is updated on each trade with the last trade information from post-market trading session
+ * and total volume and turnover of the pre- and post-market trading session (excluding the volume and turnover of a
  * regular trading session).
  *
- * Note, that during pre- and post-market sessions, Trade event also updates, but only its
+ * Note that during pre- and post-market sessions, Trade event also updates, but only its
  * @ref Trade::getDayVolume() "dayVolume" and @ref Trade::getDayTurnover() "dayTurnover" properties change
  * to reflect the overall official volume and turnover as reported by exchanges.
- * During post market trading session, exchanges may correct their official RTH last trading price, which results
+ * During post-market trading session, exchanges may correct their official RTH last trading price, which results
  * in the update to Trade event.
  *
  * <h3>Volume and Turnover</h3>
@@ -113,10 +108,10 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
     static const EventTypeEnum &TYPE;
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static Ptr fromGraal(void *graalNative);

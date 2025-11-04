@@ -49,14 +49,14 @@ class DXFCPP_EXPORT IndexedEventSource {
     static void freeGraal(void *graalNative);
 
     virtual std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept {
-        return {toGraal(), IndexedEventSource::freeGraal};
+        return {toGraal(), freeGraal};
     }
 
     /**
-     * Creates an object of the current type and fills it with data from the the dxFeed Graal SDK structure.
+     * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
      *
      * @param graalNative The pointer to the dxFeed Graal SDK structure.
-     * @return The object of current type.
+     * @return The object of the current type.
      * @throws InvalidArgumentException
      */
     static IndexedEventSource fromGraal(void *graalNative);
@@ -70,7 +70,8 @@ class DXFCPP_EXPORT IndexedEventSource {
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(std::int32_t id, std::string name) noexcept : id_{id}, name_{std::move(name)} {
+    IndexedEventSource(std::int32_t id, const StringLike &name) noexcept
+        : id_{id}, name_{name} {
     }
 
     /**
