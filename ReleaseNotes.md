@@ -38,12 +38,15 @@
 * **\[BREAKING]** The `Day::getHashCode` method renamed to `Day::hashCode`.
 * **\[BREAKING]** The `Session::getHashCode` method renamed to `Session::hashCode`.
 * **\[BREAKING]** The `DXEndpoint::getEventTypes()` method now can throw exceptions.
-* **\[BREAKING]** Most of the input string arguments in class methods have been replaced with a `StringLike` wrapper for unification.
+* **\[BREAKING]** Most of the input string arguments in class methods have been replaced with a `StringLike` wrapper for
+  unification.
 * Fixed the naming of endpoints.
 * Project build has been speeded up.
 * The project has been migrated to fmtlib v12.1.0.
-* Added the ability to link with the debug version of the dxFeed Graal Native SDK on Linux x86_64 and Windows x86_64.
+* **\[Linux]\[Windows]\[x64]** Added the ability to link with the debug version of the dxFeed Graal Native SDK on Linux x86_64 and Windows x86_64.
   This linking can be enabled using the `DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK` option.
+* **\[MacOS]\[BREAKING]** We're now building the project on MacOS using Xcode 16.4.
+  You can build the project yourself from source code using earlier versions.
 
 ## v4.3.1
 
