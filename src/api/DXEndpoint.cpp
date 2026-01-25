@@ -6,6 +6,9 @@
 #include "../../include/dxfeed_graal_c_api/api.h"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
+#if defined(DXFCXX_ENABLE_METRICS)
+#    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#endif
 
 #include <dxfg_api.h>
 #include <memory>

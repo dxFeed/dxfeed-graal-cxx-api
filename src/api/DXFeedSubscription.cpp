@@ -8,6 +8,10 @@
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
+#if defined(DXFCXX_ENABLE_METRICS)
+#    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#endif
+#include "../../include/dxfeed_graal_cpp_api/internal/StopWatch.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -18,10 +22,23 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeedSubscription::Impl {
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
+#if defined(DXFCXX_ENABLE_METRICS)
+        StopWatch sw{};
+#endif
+
         const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
 
-        if (const auto sub = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id)) {
+        if (const auto sub =
+                ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id)) {
+#if defined(DXFCXX_ENABLE_METRICS)
+            sw.start();
+#endif
             auto &&events = EventMapper::fromGraalList(static_cast<void *>(graalNativeEvents));
+#if defined(DXFCXX_ENABLE_METRICS)
+            sw.stop();
+
+
+#endif
 
             sub->onEvent_(events);
         }

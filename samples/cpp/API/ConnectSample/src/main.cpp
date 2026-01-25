@@ -60,6 +60,9 @@ int main(int argc, char *argv[]) {
         // Disable QD logging.
         // Logging::init();
 
+        System::setProperty("monitoring.stat", "5s");
+        Logging::init("dx_trace.log", "dx_trace.err");
+
         std::mutex ioMtx{};
 
         // Parse args.
