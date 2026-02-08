@@ -17,7 +17,7 @@ struct StopWatch final {
     mutable std::mutex mutex_{};
     std::chrono::milliseconds elapsed_{};
     std::chrono::steady_clock::time_point startTimeStamp_{};
-    std::chrono::steady_clock::time_point elapsedInTimePoints_{};
+    std::chrono::nanoseconds elapsedInNanos_{};
     std::atomic<bool> isRunning_{};
 
     public:
@@ -41,7 +41,7 @@ struct StopWatch final {
             const auto elapsedThisPeriod = endTimestamp - startTimeStamp_;
 
             elapsed_ += std::chrono::duration_cast<std::chrono::milliseconds>(elapsedThisPeriod);
-            elapsedInTimePoints_ += elapsedThisPeriod;
+            elapsedInNanos_ += elapsedThisPeriod;
             isRunning_ = false;
         }
     }
@@ -50,7 +50,7 @@ struct StopWatch final {
         std::lock_guard lock{mutex_};
 
         elapsed_ = std::chrono::milliseconds::zero();
-        elapsedInTimePoints_ = std::chrono::steady_clock::time_point{};
+        elapsedInNanos_ = std::chrono::nanoseconds::zero();
         isRunning_ = false;
         startTimeStamp_ = std::chrono::steady_clock::time_point{};
     }
@@ -59,7 +59,7 @@ struct StopWatch final {
         std::lock_guard lock{mutex_};
 
         elapsed_ = std::chrono::milliseconds::zero();
-        elapsedInTimePoints_ = std::chrono::steady_clock::time_point{};
+        elapsedInNanos_ = std::chrono::nanoseconds::zero();
         isRunning_ = true;
         startTimeStamp_ = std::chrono::steady_clock::now();
     }
@@ -83,10 +83,10 @@ struct StopWatch final {
         return elapsed;
     }
 
-    std::chrono::steady_clock::time_point elapsedInTimePoints() const noexcept {
+    std::chrono::nanoseconds elapsedInNanos() const noexcept {
         std::lock_guard lock{mutex_};
 
-        auto elapsed = elapsedInTimePoints_;
+        auto elapsed = elapsedInNanos_;
 
         if (isRunning_) {
             const auto currentTimestamp = std::chrono::steady_clock::now();

@@ -37,6 +37,18 @@ struct DXFeedSubscription::Impl {
 #if defined(DXFCXX_ENABLE_METRICS)
             sw.stop();
 
+            const auto elapsed = sw.elapsedInNanos().count();
+            const auto perEvent = events.empty() ? static_cast<double>(elapsed)
+                                                 : static_cast<double>(elapsed) / static_cast<double>(events.size());
+            const auto metricsManager = ApiContext::getInstance()->getManager<MetricsManager>();
+
+            metricsManager->set("DXFeedSubscription.EventsSerialization.TotalNanos", elapsed);
+            metricsManager->set("DXFeedSubscription.EventsSerialization.PerEventNanos", perEvent);
+
+            metricsManager->set(std::format("DXFeedSubscription.{}.EventsSerialization.TotalNanos", id.getValue()),
+                                elapsed);
+            metricsManager->set(std::format("DXFeedSubscription.{}.EventsSerialization.PerEventNanos", id.getValue()),
+                                perEvent);
 
 #endif
 
