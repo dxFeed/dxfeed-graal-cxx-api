@@ -74,7 +74,7 @@ std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const StringLike &s
 
     auto parsed = isolated::internal::IsolatedTools::parseSymbols(trimmedSymbols);
 
-    if (parsed.contains("*") || parsed.contains("all") || parsed.contains("All") || parsed.contains("ALL")) {
+    if (parsed.contains("*") || parsed.contains("all")) {
         return {WildcardSymbol::ALL};
     }
 

@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../system/System.hpp"
 #include "./Common.hpp"
 #include "./NonCopyable.hpp"
 #include "./utils/StringUtils.hpp"
@@ -22,11 +23,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 struct MetricsManager : private NonCopyable<MetricsManager> {
+    static constexpr auto METRICS_GROUPS_PROPERTY_NAME = "MetricsManager.Dump.MetricsGroups";
+
     template <typename T> struct Stats {
         std::uint64_t count{1};
         T value{};
         T minValue{std::numeric_limits<T>::max()};
         T maxValue{std::numeric_limits<T>::min()};
+        T avgValue{};
     };
 
     using Value = std::variant<std::string, Stats<double>, Stats<std::int64_t>>;
@@ -34,21 +38,25 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
     private:
     std::mutex mtx_{};
     std::unordered_map<std::string, Value> data_{};
+    std::optional<std::unordered_set<std::string>> groupsToDump_{std::nullopt};
 
     void setImpl(const std::string &name, const std::string &value) {
         data_[name] = value;
     }
 
     template <typename T> void recalculateStatsImpl(Stats<T> &stats, T value) {
-        ++stats.count;
         stats.value = value;
         stats.minValue = std::min(stats.minValue, value);
         stats.maxValue = std::max(stats.maxValue, value);
+        stats.avgValue = static_cast<T>((static_cast<double>(stats.avgValue) * static_cast<double>(stats.count) +
+                                         static_cast<double>(stats.value)) /
+                                        (static_cast<double>(stats.count) + 1.0));
+        ++stats.count;
     }
 
     void setImpl(const std::string &name, double value) {
         if (!data_.contains(name)) {
-            data_[name] = Value{Stats{1, value, value, value}};
+            data_[name] = Value{Stats{1, value, value, value, value}};
 
             return;
         }
@@ -60,7 +68,7 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
 
     template <Integral T> void setImpl(const std::string &name, T value) {
         if (!data_.contains(name)) {
-            data_[name] = Value{Stats<std::int64_t>{1, value, value, value}};
+            data_[name] = Value{Stats<std::int64_t>{1, value, value, value, value}};
 
             return;
         }
@@ -80,10 +88,10 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         }
 
         if (std::holds_alternative<Stats<double>>(data_.at(name))) {
-            auto &[count, value, minValue, maxValue] = std::get<Stats<double>>(data_.at(name));
+            auto &[count, value, minValue, maxValue, avgValue] = std::get<Stats<double>>(data_.at(name));
 
             return Stats{count, static_cast<std::int64_t>(value), static_cast<std::int64_t>(minValue),
-                         static_cast<std::int64_t>(maxValue)};
+                         static_cast<std::int64_t>(maxValue), static_cast<std::int64_t>(avgValue)};
         }
 
         if (std::holds_alternative<std::string>(data_.at(name))) {
@@ -105,10 +113,10 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         }
 
         if (std::holds_alternative<Stats<std::int64_t>>(data_.at(name))) {
-            auto &[count, value, minValue, maxValue] = std::get<Stats<std::int64_t>>(data_.at(name));
+            auto &[count, value, minValue, maxValue, avgValue] = std::get<Stats<std::int64_t>>(data_.at(name));
 
             return Stats{count, static_cast<double>(value), static_cast<double>(minValue),
-                         static_cast<double>(maxValue)};
+                         static_cast<double>(maxValue), static_cast<double>(avgValue)};
         }
 
         if (std::holds_alternative<std::string>(data_.at(name))) {
@@ -127,12 +135,13 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
 
         if (compact) {
             ss << key + ": {Count = " << stats.count << ", Value = " << stats.value << ", Min = " << stats.minValue
-               << ", Max = " << stats.maxValue << '}';
+               << ", Max = " << stats.maxValue << ", Avg = " << stats.avgValue << '}';
         } else {
             ss << key + ".Count: " << stats.count << '\n';
             ss << key + ".Value: " << stats.value << '\n';
             ss << key + ".Min: " << stats.minValue << '\n';
             ss << key + ".Max: " << stats.maxValue << '\n';
+            ss << key + ".Avg: " << stats.avgValue << '\n';
         }
 
         return ss.str();
@@ -213,6 +222,19 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
     std::string dump() {
         std::lock_guard<std::mutex> lockGuard{mtx_};
 
+        if (!groupsToDump_) {
+            const auto groupsString = System::getProperty(METRICS_GROUPS_PROPERTY_NAME);
+            std::unordered_set<std::string> groups{};
+
+            if (!groupsString.empty()) {
+                for (auto group : splitStr(groupsString, ',')) {
+                    groups.insert(group);
+                }
+            }
+
+            groupsToDump_ = groups;
+        }
+
         if (data_.empty()) {
             return String::EMPTY;
         }
@@ -221,7 +243,11 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         std::string result{};
 
         for (const auto &[key, value] : records) {
-            result += toString(key, value, false);
+            auto group = key.substr(0, key.find_first_of('.'));
+
+            if (groupsToDump_ && groupsToDump_->contains(group)) {
+                result += toString(key, value, false);
+            }
         }
 
         return result.substr(0, result.size() - 1);

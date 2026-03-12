@@ -291,6 +291,8 @@ struct PerfTestTool {
 
             auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols);
 
+            std::cout << "Parsed symbols: " << parsedSymbols.size() << std::endl;
+
             auto endpoint =
                 DXEndpoint::newBuilder()
                     ->withRole(args.forceStream ? DXEndpoint::Role::STREAM_FEED : DXEndpoint::Role::FEED)
