@@ -42,17 +42,30 @@ struct DXFeedSubscription::Impl {
                                                  : static_cast<double>(elapsed) / static_cast<double>(events.size());
             const auto metricsManager = ApiContext::getInstance()->getManager<MetricsManager>();
 
-            metricsManager->set("DXFeedSubscription.EventsSerialization.TotalNanos", elapsed);
-            metricsManager->set("DXFeedSubscription.EventsSerialization.PerEventNanos", perEvent);
+            metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Batch(ns)", elapsed);
+            metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Event(ns)", perEvent);
 
-            metricsManager->set(std::format("DXFeedSubscription.{}.EventsSerialization.TotalNanos", id.getValue()),
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Batch(ns)", id.getValue()),
                                 elapsed);
-            metricsManager->set(std::format("DXFeedSubscription.{}.EventsSerialization.PerEventNanos", id.getValue()),
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Event(ns)", id.getValue()),
                                 perEvent);
 
 #endif
 
+#if defined(DXFCXX_ENABLE_METRICS)
+            sw.restart();
+#endif
             sub->onEvent_(events);
+#if defined(DXFCXX_ENABLE_METRICS)
+            sw.stop();
+
+            const auto elapsed2 = sw.elapsedInNanos().count();
+
+            metricsManager->set("DXFCXX.Sub.onEvents.handler.Batch(ns)", elapsed2);
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.handler.Batch(ns)", id.getValue()), elapsed2);
+            metricsManager->set("DXFCXX.Sub.onEvents.total.Batch(ns)", elapsed + elapsed2);
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.total.Batch(ns)", id.getValue()), elapsed + elapsed2);
+#endif
         }
     }
 };

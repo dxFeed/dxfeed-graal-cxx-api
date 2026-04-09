@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../isolated/metrics/IsolatedMetrics.hpp"
 #include "../system/System.hpp"
 #include "./Common.hpp"
 #include "./NonCopyable.hpp"
@@ -164,7 +165,7 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
     }
 
     std::optional<Value> get(const std::string &name) {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         if (!data_.contains(name)) {
             return std::nullopt;
@@ -174,7 +175,7 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
     }
 
     std::string getAsString(const std::string &name) {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         if (!data_.contains(name)) {
             return String::EMPTY;
@@ -184,43 +185,43 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
     }
 
     Stats<double> getAsDouble(const std::string &name) {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         return getAsDoubleImpl(name);
     }
 
     Stats<std::int64_t> getAsI64(const std::string &name) {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         return getAsI64Impl(name);
     }
 
     template <typename T> void set(const std::string &name, const T &value) {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         setImpl(name, value);
     }
 
     void inc(const std::string &name) {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         setImpl(name, getAsI64Impl(name).value + 1);
     }
 
     template <Integral T> void add(const std::string &name, T value) {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         setImpl(name, getAsI64Impl(name).value + value);
     }
 
     void add(const std::string &name, double value) {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         setImpl(name, getAsDoubleImpl(name).value + value);
     }
 
     std::string dump() {
-        std::lock_guard<std::mutex> lockGuard{mtx_};
+        std::lock_guard lockGuard{mtx_};
 
         if (!groupsToDump_) {
             const auto groupsString = System::getProperty(METRICS_GROUPS_PROPERTY_NAME);
@@ -239,18 +240,28 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
             return String::EMPTY;
         }
 
-        std::map<std::string, Value> records{data_.begin(), data_.end()};
+        std::map records{data_.begin(), data_.end()};
         std::string result{};
 
         for (const auto &[key, value] : records) {
             auto group = key.substr(0, key.find_first_of('.'));
 
-            if (groupsToDump_ && groupsToDump_->contains(group)) {
+            if (!groupsToDump_ || groupsToDump_->contains(group)) {
                 result += toString(key, value, false);
             }
         }
 
-        return result.substr(0, result.size() - 1);
+        const auto dxfgMetrics = isolated::metrics::IsolatedMetrics::dump();
+
+        result += dxfgMetrics;
+
+        if (!result.empty()) {
+            if (dxfgMetrics.empty()) {
+                return result.substr(0, result.size() - 1);
+            }
+        }
+
+        return result;
     }
 };
 
