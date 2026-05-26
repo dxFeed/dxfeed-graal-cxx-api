@@ -67,7 +67,7 @@ option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT
 option(DXFCXX_LINK_STATIC_RUNTIME "Compile and link with -MT/-MTd or equivalent flag(s) to use a multi-threaded statically-linked runtime library. Visual Studio only." OFF)
 option(DXFCXX_NODEFAULTLIB "Ignore libcmt/libcmtd/msvcrt/msvcrtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." ${DXFCXX_LINK_STATIC_RUNTIME})
 
-option(DXFCXX_ENABLE_METRICS "Enable metrics collection" ON)
+option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
 set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
