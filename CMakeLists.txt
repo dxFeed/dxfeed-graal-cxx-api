@@ -76,6 +76,8 @@ option(DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK "" OFF)
 option(DXFCXX_USE_DXFG_STUB "Use dxFeed Graal SDK stub" OFF)
 set(DXFG_STUB_REPO "https://github.com/ttldtor/DxFeedGraalNativeSdkStub" CACHE STRING "")
 
+set(DXFG_LOCAL_ARCHIVE_PATH "" CACHE STRING "")
+
 option(DXFCXX_ENABLE_ASAN "Enable address, address sanitizer" OFF)
 option(DXFCXX_ENABLE_UBSAN "Enable address, UB sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
@@ -101,47 +103,53 @@ include(cmake/SetupStaticRuntimeMSVC.cmake)
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
     add_subdirectory(third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM})
 else ()
-    if (DXFCXX_USE_DXFG_STUB)
-        FetchContent_Declare(
-                DxFeedGraalNativeSdk
-                GIT_REPOSITORY "${DXFG_STUB_REPO}.git" GIT_TAG "v${DXFEED_GRAAL_NATIVE_SDK_VERSION}"
-                USES_TERMINAL_DOWNLOAD TRUE
-                GIT_PROGRESS TRUE
-                DOWNLOAD_NO_EXTRACT FALSE
+    if (NOT DXFG_LOCAL_ARCHIVE_PATH STREQUAL "")
+        FetchContent_Declare(DxFeedGraalNativeSdk
+                URL "${DXFG_LOCAL_ARCHIVE_PATH}"
         )
     else ()
-        if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+        if (DXFCXX_USE_DXFG_STUB)
             FetchContent_Declare(
                     DxFeedGraalNativeSdk
-                    URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+                    GIT_REPOSITORY "${DXFG_STUB_REPO}.git" GIT_TAG "v${DXFEED_GRAAL_NATIVE_SDK_VERSION}"
                     USES_TERMINAL_DOWNLOAD TRUE
                     GIT_PROGRESS TRUE
                     DOWNLOAD_NO_EXTRACT FALSE
             )
         else ()
-            if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
-                set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
-            endif ()
-
-            if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
-                message(ERROR "Unsupported platform!")
+            if (DEFINED ENV{DXFEED_GRAAL_NATIVE_SDK_URL})
+                FetchContent_Declare(
+                        DxFeedGraalNativeSdk
+                        URL $ENV{DXFEED_GRAAL_NATIVE_SDK_URL}
+                        USES_TERMINAL_DOWNLOAD TRUE
+                        GIT_PROGRESS TRUE
+                        DOWNLOAD_NO_EXTRACT FALSE
+                )
             else ()
-                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM})
+                if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
+                    set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+                endif ()
+
+                if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")
+                    message(ERROR "Unsupported platform!")
+                else ()
+                    set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM})
+                endif ()
+
+                if (DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK)
+                    set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-debug)
+                endif ()
+
+                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}.zip)
+
+                FetchContent_Declare(
+                        DxFeedGraalNativeSdk
+                        URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
+                        USES_TERMINAL_DOWNLOAD TRUE
+                        GIT_PROGRESS TRUE
+                        DOWNLOAD_NO_EXTRACT FALSE
+                )
             endif ()
-
-            if (DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK)
-                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-debug)
-            endif ()
-
-            set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}.zip)
-
-            FetchContent_Declare(
-                    DxFeedGraalNativeSdk
-                    URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
-                    USES_TERMINAL_DOWNLOAD TRUE
-                    GIT_PROGRESS TRUE
-                    DOWNLOAD_NO_EXTRACT FALSE
-            )
         endif ()
     endif ()
 
@@ -283,6 +291,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/ipf/live/IsolatedInstrumentProfileCollector.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
         src/isolated/logging/IsolatedLogging.cpp
+        src/isolated/metrics/IsolatedMetrics.cpp
         src/isolated/model/IsolatedTxModelListener.cpp
         src/isolated/model/IsolatedIndexedTxModel.cpp
         src/isolated/model/IsolatedTimeSeriesTxModel.cpp

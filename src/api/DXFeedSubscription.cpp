@@ -8,6 +8,10 @@
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
+#if defined(DXFCXX_ENABLE_METRICS)
+#    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#endif
+#include "../../include/dxfeed_graal_cpp_api/internal/StopWatch.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -18,12 +22,50 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeedSubscription::Impl {
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
+#if defined(DXFCXX_ENABLE_METRICS)
+        StopWatch sw{};
+#endif
+
         const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
 
-        if (const auto sub = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id)) {
+        if (const auto sub =
+                ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id)) {
+#if defined(DXFCXX_ENABLE_METRICS)
+            sw.start();
+#endif
             auto &&events = EventMapper::fromGraalList(static_cast<void *>(graalNativeEvents));
+#if defined(DXFCXX_ENABLE_METRICS)
+            sw.stop();
 
+            const auto elapsed = sw.elapsedInNanos().count();
+            const auto perEvent = events.empty() ? static_cast<double>(elapsed)
+                                                 : static_cast<double>(elapsed) / static_cast<double>(events.size());
+            const auto metricsManager = ApiContext::getInstance()->getManager<MetricsManager>();
+
+            metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Batch(ns)", elapsed);
+            metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Event(ns)", perEvent);
+
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Batch(ns)", id.getValue()),
+                                elapsed);
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Event(ns)", id.getValue()),
+                                perEvent);
+
+#endif
+
+#if defined(DXFCXX_ENABLE_METRICS)
+            sw.restart();
+#endif
             sub->onEvent_(events);
+#if defined(DXFCXX_ENABLE_METRICS)
+            sw.stop();
+
+            const auto elapsed2 = sw.elapsedInNanos().count();
+
+            metricsManager->set("DXFCXX.Sub.onEvents.handler.Batch(ns)", elapsed2);
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.handler.Batch(ns)", id.getValue()), elapsed2);
+            metricsManager->set("DXFCXX.Sub.onEvents.total.Batch(ns)", elapsed + elapsed2);
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.total.Batch(ns)", id.getValue()), elapsed + elapsed2);
+#endif
         }
     }
 };

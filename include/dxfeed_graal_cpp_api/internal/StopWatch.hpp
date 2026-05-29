@@ -17,6 +17,7 @@ struct StopWatch final {
     mutable std::mutex mutex_{};
     std::chrono::milliseconds elapsed_{};
     std::chrono::steady_clock::time_point startTimeStamp_{};
+    std::chrono::nanoseconds elapsedInNanos_{};
     std::atomic<bool> isRunning_{};
 
     public:
@@ -34,11 +35,13 @@ struct StopWatch final {
 
     void stop() noexcept {
         if (isRunning_) {
-            auto endTimestamp = std::chrono::steady_clock::now();
+            const auto endTimestamp = std::chrono::steady_clock::now();
 
             std::lock_guard lock{mutex_};
-            auto elapsedThisPeriod = endTimestamp - startTimeStamp_;
+            const auto elapsedThisPeriod = endTimestamp - startTimeStamp_;
+
             elapsed_ += std::chrono::duration_cast<std::chrono::milliseconds>(elapsedThisPeriod);
+            elapsedInNanos_ += elapsedThisPeriod;
             isRunning_ = false;
         }
     }
@@ -47,6 +50,7 @@ struct StopWatch final {
         std::lock_guard lock{mutex_};
 
         elapsed_ = std::chrono::milliseconds::zero();
+        elapsedInNanos_ = std::chrono::nanoseconds::zero();
         isRunning_ = false;
         startTimeStamp_ = std::chrono::steady_clock::time_point{};
     }
@@ -55,6 +59,7 @@ struct StopWatch final {
         std::lock_guard lock{mutex_};
 
         elapsed_ = std::chrono::milliseconds::zero();
+        elapsedInNanos_ = std::chrono::nanoseconds::zero();
         isRunning_ = true;
         startTimeStamp_ = std::chrono::steady_clock::now();
     }
@@ -69,10 +74,25 @@ struct StopWatch final {
         auto elapsed = elapsed_;
 
         if (isRunning_) {
-            auto currentTimestamp = std::chrono::steady_clock::now();
-            auto elapsedUntilNow = currentTimestamp - startTimeStamp_;
+            const auto currentTimestamp = std::chrono::steady_clock::now();
+            const auto elapsedUntilNow = currentTimestamp - startTimeStamp_;
 
             elapsed += std::chrono::duration_cast<std::chrono::milliseconds>(elapsedUntilNow);
+        }
+
+        return elapsed;
+    }
+
+    std::chrono::nanoseconds elapsedInNanos() const noexcept {
+        std::lock_guard lock{mutex_};
+
+        auto elapsed = elapsedInNanos_;
+
+        if (isRunning_) {
+            const auto currentTimestamp = std::chrono::steady_clock::now();
+            const auto elapsedUntilNow = currentTimestamp - startTimeStamp_;
+
+            elapsed += elapsedUntilNow;
         }
 
         return elapsed;

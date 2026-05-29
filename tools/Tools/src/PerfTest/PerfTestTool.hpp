@@ -87,7 +87,7 @@ struct PerfTestTool {
                              formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
                              formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage,
                              peakMemoryUsage_, currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
-                             ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event"));
+                             ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event").value);
             } else {
                 fmt::print("\n{}\n", Platform::getPlatformInfo());
                 std::cout << "----------------------------------------------------\n";
@@ -290,6 +290,8 @@ struct PerfTestTool {
             }
 
             auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols);
+
+            std::cout << "Parsed symbols: " << parsedSymbols.size() << std::endl;
 
             auto endpoint =
                 DXEndpoint::newBuilder()

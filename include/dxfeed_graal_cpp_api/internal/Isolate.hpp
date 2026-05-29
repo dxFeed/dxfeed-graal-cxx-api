@@ -34,16 +34,7 @@ class Isolate final {
         std::thread::id tid{};
         std::size_t idx{};
 
-        explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr) noexcept
-            : handle{handle}, tid{std::this_thread::get_id()} {
-            this->idx = Id<IsolateThread>::getNext().getValue();
-
-            if constexpr (Debugger::traceIsolates) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::trace("IsolateThread{" + dxfcpp::toString(handle) + ", tid = " + dxfcpp::toString(tid) +
-                                ", idx = " + std::to_string(idx) + "}()");
-            }
-        }
+        explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr) noexcept;
 
         IsolateThread(const IsolateThread &) = delete;
         IsolateThread(IsolateThread &&) = default;
@@ -55,19 +46,9 @@ class Isolate final {
 
         CEntryPointErrorsEnum detachAllThreadsAndTearDownIsolate() noexcept;
 
-        ~IsolateThread() noexcept {
-            if constexpr (Debugger::traceIsolates) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::trace(toString() + "::~()");
-            }
+        ~IsolateThread() noexcept;
 
-            // detach();
-        }
-
-        std::string toString() const {
-            return std::string("IsolateThread{") + dxfcpp::toString(handle) + ", tid = " + dxfcpp::toString(tid) +
-                   ", idx = " + std::to_string(idx) + "}";
-        }
+        std::string toString() const;
     };
 
     mutable std::recursive_mutex mtx_{};
@@ -86,26 +67,7 @@ class Isolate final {
     Isolate(const Isolate &) = delete;
     Isolate &operator=(const Isolate &) = delete;
 
-    static Isolate &getInstance() noexcept {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace("Isolate::getInstance()");
-        }
-
-        static Isolate instance{};
-        static std::once_flag flag{};
-
-        std::call_once(flag, []() {
-            init(instance);
-        });
-
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace("Isolate::getInstance() -> " + instance.toString());
-        }
-
-        return instance;
-    }
+    static Isolate &getInstance() noexcept;
 
     template <typename F>
     auto runIsolated(F &&f)
@@ -257,17 +219,9 @@ class Isolate final {
                                                std::forward<Args>(args)...));
     }
 
-    ~Isolate() {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace("~Isolate()");
-        }
-    }
+    ~Isolate();
 
-    std::string toString() const {
-        return std::string("Isolate{") + dxfcpp::toString(handle_) + ", current = " + currentIsolateThread_.toString() +
-               "}";
-    }
+    std::string toString() const;
 };
 
 template <typename F> auto runIsolated(F &&f) {

@@ -10,6 +10,8 @@
 #include <string>
 #include <utility>
 
+#include <fmt/format.h>
+
 #ifdef NO_ERROR
 #    undef NO_ERROR
 #endif
@@ -43,6 +45,17 @@ std::optional<std::string> getEnvironmentVariable(const std::string &name) {
 #endif
 
 DXFCPP_BEGIN_NAMESPACE
+
+Isolate::IsolateThread::IsolateThread(GraalIsolateThreadHandle handle) noexcept
+    : handle{handle}, tid{std::this_thread::get_id()} {
+    this->idx = Id<IsolateThread>::getNext().getValue();
+
+    if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::trace("IsolateThread{" + dxfcpp::toString(handle) + ", tid = " + dxfcpp::toString(tid) +
+                        ", idx = " + std::to_string(idx) + "}()");
+    }
+}
 
 CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
     if constexpr (Debugger::traceIsolates) {
@@ -105,6 +118,22 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate
     }
 
     return result;
+}
+
+Isolate::IsolateThread::~IsolateThread() noexcept {
+    if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::trace(toString() + "::~()");
+    }
+
+    // detach();
+}
+
+std::string Isolate::IsolateThread::toString() const {
+    return fmt::format("IsolateThread{{{}, tid = {}, idx = {}}}",
+                       dxfcpp::toString(handle),
+                       dxfcpp::toString(tid),
+                       idx);
 }
 
 Isolate::Isolate() noexcept {
@@ -214,6 +243,38 @@ void Isolate::init(Isolate &isolate) noexcept {
                    CEntryPointErrorsEnum::NO_ERROR;
         });
     }
+}
+
+Isolate &Isolate::getInstance() noexcept {
+    if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::trace("Isolate::getInstance()");
+    }
+
+    static Isolate instance{};
+    static std::once_flag flag{};
+
+    std::call_once(flag, []() {
+        init(instance);
+    });
+
+    if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::trace("Isolate::getInstance() -> " + instance.toString());
+    }
+
+    return instance;
+}
+
+Isolate::~Isolate() {
+    if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::trace("~Isolate()");
+    }
+}
+
+std::string Isolate::toString() const {
+    return fmt::format("Isolate{{{}, current = {}}}", dxfcpp::toString(handle_), currentIsolateThread_.toString());
 }
 
 DXFCPP_END_NAMESPACE
