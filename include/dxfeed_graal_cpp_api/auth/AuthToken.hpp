@@ -147,7 +147,7 @@ struct DXFCPP_EXPORT AuthToken {
 
     bool operator==(const AuthToken &other) const;
 
-    virtual ~AuthToken() noexcept = default;
+    virtual ~AuthToken() noexcept;
 
     AuthToken(const AuthToken &) = delete;
     AuthToken(AuthToken &&) noexcept = delete;

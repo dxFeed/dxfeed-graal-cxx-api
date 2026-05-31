@@ -5,11 +5,12 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-InvalidArgumentException::InvalidArgumentException(const StringLike &message,
-                                                   const StringLike &additionalStackTrace)
+InvalidArgumentException::InvalidArgumentException(const StringLike &message, const StringLike &additionalStackTrace)
     : RuntimeException(message, additionalStackTrace) {
 }
 
-InvalidArgumentException::InvalidArgumentException(const InvalidArgumentException &other) noexcept = default;
+InvalidArgumentException::InvalidArgumentException(const InvalidArgumentException &other) noexcept
+    : RuntimeException(other) {
+}
 
 DXFCPP_END_NAMESPACE

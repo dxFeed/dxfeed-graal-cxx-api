@@ -22,7 +22,7 @@ struct DXFCPP_EXPORT RuntimeException : std::runtime_error {
      * Constructs a runtime exception.
      *
      * @param message The exception's message.
-     * @param additionalStackTrace The additional stacktrace that will be concatenated with current stacktrace.
+     * @param additionalStackTrace The additional stacktrace that will be concatenated with the current stacktrace.
      */
     explicit RuntimeException(const StringLike &message, const StringLike &additionalStackTrace = "");
 

@@ -80,9 +80,9 @@ class DXFCPP_EXPORT TimeSeriesSubscriptionSymbol final : public IndexedEventSubs
 
     TimeSeriesSubscriptionSymbol &operator=(TimeSeriesSubscriptionSymbol &&timeSeriesSubscriptionSymbol) noexcept;
 
-    TimeSeriesSubscriptionSymbol() noexcept = default;
+    TimeSeriesSubscriptionSymbol() noexcept;
 
-    ~TimeSeriesSubscriptionSymbol() noexcept override = default;
+    ~TimeSeriesSubscriptionSymbol() noexcept override;
 
     /**
      * Returns the subscription time.

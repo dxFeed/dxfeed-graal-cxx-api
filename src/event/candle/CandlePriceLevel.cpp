@@ -12,6 +12,12 @@ const std::string CandlePriceLevel::ATTRIBUTE_KEY{"pl"};
 CandlePriceLevel::CandlePriceLevel(double value) noexcept : value_{value} {
 }
 
+CandlePriceLevel::CandlePriceLevel() noexcept {
+}
+
+CandlePriceLevel::~CandlePriceLevel() noexcept {
+}
+
 double CandlePriceLevel::getValue() const noexcept {
     return value_;
 }

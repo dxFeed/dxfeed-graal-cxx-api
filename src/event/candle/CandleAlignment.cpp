@@ -30,6 +30,12 @@ const std::vector<std::reference_wrapper<const CandleAlignment>> CandleAlignment
 CandleAlignment::CandleAlignment(const StringLike &string) noexcept : string_{string} {
 }
 
+CandleAlignment::CandleAlignment() noexcept {
+}
+
+CandleAlignment::~CandleAlignment() noexcept {
+}
+
 std::string CandleAlignment::changeAttributeForSymbol(const StringLike &symbol) const {
     return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                             : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());

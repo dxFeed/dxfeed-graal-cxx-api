@@ -143,7 +143,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates a new spread order event with default values.
-    SpreadOrder() noexcept = default;
+    SpreadOrder() noexcept;
 
     /**
      * Creates a new spread order event with the specified event symbol.

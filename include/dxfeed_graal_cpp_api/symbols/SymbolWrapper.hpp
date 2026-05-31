@@ -139,12 +139,12 @@ struct DXFCPP_EXPORT SymbolWrapper final {
     DataType data_;
 
     public:
-    SymbolWrapper(const SymbolWrapper &) noexcept = default;
-    SymbolWrapper(SymbolWrapper &&) noexcept = default;
-    SymbolWrapper &operator=(const SymbolWrapper &) noexcept = default;
-    SymbolWrapper &operator=(SymbolWrapper &&) noexcept = default;
-    SymbolWrapper() noexcept = default;
-    ~SymbolWrapper() noexcept = default;
+    SymbolWrapper(const SymbolWrapper &) noexcept;
+    SymbolWrapper(SymbolWrapper &&) noexcept;
+    SymbolWrapper &operator=(const SymbolWrapper &) noexcept;
+    SymbolWrapper &operator=(SymbolWrapper &&) noexcept;
+    SymbolWrapper() noexcept;
+    ~SymbolWrapper() noexcept;
 
     /**
      * Constructor for any wrapped symbol.

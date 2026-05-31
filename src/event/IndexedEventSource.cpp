@@ -36,4 +36,10 @@ IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) {
     return {graalSource->id, graalSource->name};
 }
 
+IndexedEventSource::IndexedEventSource() noexcept {
+}
+
+IndexedEventSource::~IndexedEventSource() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

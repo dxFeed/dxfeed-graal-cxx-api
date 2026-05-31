@@ -131,7 +131,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new option sale event with default values.
-    OptionSale() noexcept = default;
+    OptionSale() noexcept;
 
     /**
      * Creates a new option sale event with the specified event symbol.

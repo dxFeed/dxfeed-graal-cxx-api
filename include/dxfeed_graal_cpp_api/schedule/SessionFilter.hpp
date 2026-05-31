@@ -73,8 +73,8 @@ struct DXFCPP_EXPORT SessionFilter final {
     mutable JavaObjectHandle<SessionFilter> handle_{};
 
     public:
-    SessionFilter() noexcept = default;
-    virtual ~SessionFilter() noexcept = default;
+    SessionFilter() noexcept;
+    ~SessionFilter() noexcept;
 
     SessionFilter(const SessionFilter &) = delete;
     SessionFilter(SessionFilter &&) noexcept = delete;

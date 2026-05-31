@@ -105,7 +105,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates a new quote event with default values.
-    Quote() noexcept = default;
+    Quote() noexcept;
 
     /**
      * Creates a new quote event with the specified event symbol.

@@ -108,4 +108,7 @@ void OtcMarketsOrder::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+OtcMarketsOrder::OtcMarketsOrder() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

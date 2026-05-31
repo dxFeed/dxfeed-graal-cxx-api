@@ -49,6 +49,9 @@ std::int64_t TimePeriod::getNanos() const {
     return isolated::util::IsolatedTimePeriod::getNanos(handle_);
 }
 
+TimePeriod::~TimePeriod() noexcept {
+}
+
 TimePeriod::TimePeriod(std::function<JavaObjectHandle<TimePeriod>()> &&initializer)
     : initializer_(std::move(initializer)) {
 }

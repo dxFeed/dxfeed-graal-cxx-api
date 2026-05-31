@@ -18,6 +18,42 @@ const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARK
 const SessionType SessionType::REGULAR{SessionTypeEnum::REGULAR, "REGULAR", true};
 const SessionType SessionType::AFTER_MARKET{SessionTypeEnum::AFTER_MARKET, "AFTER_MARKET", true};
 
+SessionType::SessionType(SessionTypeEnum code, const StringLike &name, bool trading) noexcept
+    : code_{code}, name_{name}, trading_{trading} {
+}
+
+SessionType::SessionType() noexcept {
+}
+
+SessionType::~SessionType() noexcept {
+}
+
+SessionTypeEnum SessionType::getCode() const noexcept {
+    return code_;
+}
+
+const std::string &SessionType::getName() const & noexcept {
+    return name_;
+}
+
+bool SessionType::isTrading() const noexcept {
+    return trading_;
+}
+
+const std::string &SessionType::toString() const & noexcept {
+    return name_;
+}
+
+bool SessionType::operator==(const SessionType &sessionType) const noexcept {
+    return code_ == sessionType.getCode();
+}
+
+SessionFilter::SessionFilter() noexcept {
+}
+
+SessionFilter::~SessionFilter() noexcept {
+}
+
 SessionFilter::SessionFilter(SessionFilterEnum code, const StringLike &name, std::optional<SessionType> type,
                              std::optional<bool> trading) noexcept
     : code_{code}, name_{name}, type_{type}, trading_{trading} {
@@ -62,6 +98,12 @@ const std::vector<std::reference_wrapper<const CandleSession>> CandleSession::VA
 
 CandleSession::CandleSession(const SessionFilter &sessionFilter, const StringLike &string) noexcept
     : sessionFilter_{&sessionFilter}, string_{string} {
+}
+
+CandleSession::CandleSession() noexcept {
+}
+
+CandleSession::~CandleSession() noexcept {
 }
 
 const SessionFilter &CandleSession::getSessionFilter() const & noexcept {

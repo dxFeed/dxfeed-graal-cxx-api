@@ -88,7 +88,7 @@ DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 template <typename T> struct RequireMakeShared : virtual SharedEntity {
     protected:
     struct LockExternalConstructionTag {
-        explicit LockExternalConstructionTag() = default;
+        explicit LockExternalConstructionTag() {}
     };
 
     public:

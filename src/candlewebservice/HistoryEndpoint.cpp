@@ -24,9 +24,15 @@ HistoryEndpoint::HistoryEndpoint(LockExternalConstructionTag,
     : handle_(std::move(handle)) {
 }
 
+HistoryEndpoint::~HistoryEndpoint() {
+}
+
 HistoryEndpoint::Builder::Builder(LockExternalConstructionTag,
                                   JavaObjectHandle<Builder> &&handle)
     : handle_(std::move(handle)) {
+}
+
+HistoryEndpoint::Builder::~Builder() {
 }
 
 std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAddress(const StringLike &address) {

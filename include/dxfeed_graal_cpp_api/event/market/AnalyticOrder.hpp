@@ -112,7 +112,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new analytic order event with default values.
-    AnalyticOrder() noexcept = default;
+    AnalyticOrder() noexcept;
 
     /**
      * Creates a new analytic order event with the specified event symbol.

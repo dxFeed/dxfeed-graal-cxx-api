@@ -141,6 +141,9 @@ void Candle::freeGraal(void *graalNative) {
     delete graalCandle;
 }
 
+Candle::Candle() noexcept {
+}
+
 Candle::Candle(CandleSymbol eventSymbol) noexcept : eventSymbol_{std::move(eventSymbol)} {
 }
 

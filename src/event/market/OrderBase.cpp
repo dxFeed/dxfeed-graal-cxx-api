@@ -72,6 +72,9 @@ void OrderBase::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+OrderBase::OrderBase() noexcept {
+}
+
 std::string OrderBase::baseFieldsToString() const {
     return fmt::format(
         "{}, eventTime={}, source={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, "

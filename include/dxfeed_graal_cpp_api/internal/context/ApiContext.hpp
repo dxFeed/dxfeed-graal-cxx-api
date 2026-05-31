@@ -12,10 +12,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 class DXFCPP_EXPORT ApiContext {
-    ApiContext() noexcept = default;
+    ApiContext() noexcept {};
 
     public:
-    ~ApiContext() noexcept = default;
+    ~ApiContext() noexcept {};
 
     static std::shared_ptr<ApiContext> getInstance() noexcept {
         static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new ApiContext{});

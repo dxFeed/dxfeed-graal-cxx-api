@@ -28,7 +28,7 @@ struct StringLike {
     mutable std::string owned_;
     mutable std::string_view view_;
 
-    StringLike() = default;
+    StringLike() {}
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
     StringLike(const char *s) : owned_(s ? s : ""), view_(owned_) {

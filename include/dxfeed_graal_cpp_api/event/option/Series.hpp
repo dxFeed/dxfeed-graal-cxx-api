@@ -135,7 +135,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new series event with default values.
-    Series() noexcept = default;
+    Series() noexcept;
 
     /**
      * Creates a new series event with the specified event symbol.

@@ -17,7 +17,9 @@ struct StringLike;
  * Attribute of the CandleSymbol.
  */
 struct DXFCPP_EXPORT CandleSymbolAttribute {
-    virtual ~CandleSymbolAttribute() = default;
+    virtual ~CandleSymbolAttribute() {
+    }
+
     /**
      * Returns candle event symbol string with this attribute set.
      *

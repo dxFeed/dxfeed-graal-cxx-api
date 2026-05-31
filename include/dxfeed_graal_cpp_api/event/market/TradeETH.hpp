@@ -137,7 +137,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new trade event with default values.
-    TradeETH() noexcept = default;
+    TradeETH() noexcept;
 
     /**
      * Creates new trade event with the specified event symbol.

@@ -103,7 +103,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates a new summary event with default values.
-    Summary() noexcept = default;
+    Summary() noexcept;
 
     /**
      * Creates a new summary event with the specified event symbol.

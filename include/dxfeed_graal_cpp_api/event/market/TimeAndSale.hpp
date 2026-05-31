@@ -161,7 +161,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new time and sale event with default values.
-    TimeAndSale() noexcept = default;
+    TimeAndSale() noexcept;
 
     /**
      * Creates a new time and sale event with the specified event symbol.

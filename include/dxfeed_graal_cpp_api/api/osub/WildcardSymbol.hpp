@@ -30,8 +30,8 @@ struct DXFCPP_EXPORT WildcardSymbol final {
      * Represents [wildcard] subscription to all events of the specific event type.
      *
      * <p><b>NOTE:</b> Wildcard subscription can create an extremely high network and CPU load for certain kinds of
-     * high-frequency events like quotes. It requires a special arrangement on the side of the upstream data provider and
-     * is disabled by default in upstream feed configuration. Make sure you have adequate resources and understand
+     * high-frequency events like quotes. It requires a special arrangement on the side of the upstream data provider
+     * and is disabled by default in upstream feed configuration. Make sure you have adequate resources and understand
      * the impact before using it. It can be used for low-frequency events only (like Forex quotes), because each
      * instance of DXFeedSubscription processes events in a single thread, and there is no provision to load-balance
      * wildcard subscription amongst multiple threads. Contact your data provider for the corresponding configuration
@@ -44,20 +44,17 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     private:
     std::string symbol_;
 
-    WildcardSymbol(const std::string &symbol) noexcept : symbol_{symbol} {
-    }
+    WildcardSymbol(const std::string &symbol) noexcept;
 
     public:
-    WildcardSymbol(const WildcardSymbol &) noexcept = default;
-    WildcardSymbol(WildcardSymbol &&) noexcept = default;
-    WildcardSymbol &operator=(const WildcardSymbol &) noexcept = default;
-    WildcardSymbol &operator=(WildcardSymbol &&) noexcept = default;
-    WildcardSymbol() noexcept = default;
-    ~WildcardSymbol() noexcept = default;
+    WildcardSymbol(const WildcardSymbol &) noexcept;
+    WildcardSymbol(WildcardSymbol &&) noexcept;
+    WildcardSymbol &operator=(const WildcardSymbol &) noexcept;
+    WildcardSymbol &operator=(WildcardSymbol &&) noexcept;
+    WildcardSymbol() noexcept;
+    ~WildcardSymbol() noexcept;
 
-    const std::string &getSymbol() const noexcept {
-        return symbol_;
-    }
+    const std::string &getSymbol() const noexcept;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -90,33 +87,18 @@ struct DXFCPP_EXPORT WildcardSymbol final {
      *
      * @return string representation of this wildcard subscription symbol.
      */
-    std::string toString() const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            return "WildcardSymbol{" + symbol_ + "}";
-        } else {
-            return symbol_;
-        }
-    }
+    std::string toString() const;
 
-    bool operator==(const WildcardSymbol &wildcardSymbol) const {
-        return symbol_ == wildcardSymbol.symbol_;
-    }
+    bool operator==(const WildcardSymbol &wildcardSymbol) const;
 
-    bool operator<(const WildcardSymbol &wildcardSymbol) const {
-        return symbol_ < wildcardSymbol.symbol_;
-    }
+    bool operator<(const WildcardSymbol &wildcardSymbol) const;
 };
 
 inline namespace literals {
 
-inline WildcardSymbol operator""_ws(const char *, size_t) noexcept {
-    return WildcardSymbol::ALL;
-}
+WildcardSymbol operator""_ws(const char *, size_t) noexcept;
 
-inline WildcardSymbol operator""_wcs(const char *, size_t) noexcept {
-    return WildcardSymbol::ALL;
-}
+WildcardSymbol operator""_wcs(const char *, size_t) noexcept;
 
 } // namespace literals
 

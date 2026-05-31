@@ -57,8 +57,9 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
     explicit CandlePriceLevel(double value) noexcept;
 
     public:
-    CandlePriceLevel() noexcept = default;
-    virtual ~CandlePriceLevel() noexcept = default;
+    CandlePriceLevel() noexcept;
+
+    ~CandlePriceLevel() noexcept override;
 
     /**
      * Returns price level value. For example, the value of `1` represents `[0;1), [1;2)` and so on intervals

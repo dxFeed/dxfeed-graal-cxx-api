@@ -128,7 +128,7 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
             builder_ = IndexedTxModel<O>::newBuilder();
         }
 
-        ~Builder() override = default;
+        ~Builder() noexcept override {}
 
         /**
          * Sets the DXFeed for the model being created.

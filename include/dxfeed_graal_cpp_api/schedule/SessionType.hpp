@@ -45,21 +45,15 @@ struct DXFCPP_EXPORT SessionType {
     std::string name_{};
     bool trading_{};
 
-    SessionType(SessionTypeEnum code, const StringLike & name, bool trading) noexcept
-        : code_{code}, name_{name}, trading_{trading} {
-    }
+    SessionType(SessionTypeEnum code, const StringLike &name, bool trading) noexcept;
 
     public:
-    SessionType() noexcept = default;
-    virtual ~SessionType() noexcept = default;
+    SessionType() noexcept;
+    virtual ~SessionType() noexcept;
 
-    SessionTypeEnum getCode() const noexcept {
-        return code_;
-    }
+    SessionTypeEnum getCode() const noexcept;
 
-    const std::string &getName() const & noexcept {
-        return name_;
-    }
+    const std::string &getName() const & noexcept;
 
     /**
      * Returns `true` if trading activity is allowed for this type of session.
@@ -67,17 +61,11 @@ struct DXFCPP_EXPORT SessionType {
      * Some sessions may have zero duration - e.g. indices that post value once a day.
      * Such sessions can be of any appropriate type, trading or non-trading.
      */
-    bool isTrading() const noexcept {
-        return trading_;
-    }
+    bool isTrading() const noexcept;
 
-    const std::string &toString() const & noexcept {
-        return name_;
-    }
+    const std::string &toString() const & noexcept;
 
-    bool operator==(const SessionType &sessionType) const noexcept {
-        return code_ == sessionType.getCode();
-    }
+    bool operator==(const SessionType &sessionType) const noexcept;
 };
 
 DXFCPP_END_NAMESPACE

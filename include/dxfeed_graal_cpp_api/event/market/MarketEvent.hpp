@@ -30,7 +30,7 @@ struct DXFCPP_EXPORT MarketEvent : EventTypeWithSymbol<std::string> {
     std::int64_t eventTime_{};
 
     protected:
-    MarketEvent() noexcept = default;
+    MarketEvent() noexcept;
 
     /**
      * Protected constructor for concrete implementation classes that initializes `eventSymbol` property.

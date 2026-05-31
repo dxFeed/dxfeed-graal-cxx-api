@@ -95,14 +95,13 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     /**
      * Creates a new message with default values.
      */
-    TextMessage() noexcept = default;
+    TextMessage() noexcept;
 
     /**
      * Creates a new message with the specified event symbol.
      * @param eventSymbol event symbol.
      */
-    explicit TextMessage(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
-    }
+    explicit TextMessage(const StringLike &eventSymbol) noexcept;
 
     /**
      * Creates a new message with the specified event symbol and text.
@@ -110,9 +109,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol event symbol.
      * @param text text.
      */
-    TextMessage(const StringLike &eventSymbol, const StringLike &text) noexcept
-        : eventSymbol_{eventSymbol}, text_{text} {
-    }
+    TextMessage(const StringLike &eventSymbol, const StringLike &text) noexcept;
 
     /**
      * Creates a new message with the specified event symbol, time and text.
@@ -120,43 +117,28 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param time time.
      * @param text text.
      */
-    TextMessage(const StringLike &eventSymbol, std::int64_t time, const StringLike &text) noexcept
-        : eventSymbol_{eventSymbol}, text_{text} {
-
-        setTime(time);
-    }
+    TextMessage(const StringLike &eventSymbol, std::int64_t time, const StringLike &text) noexcept;
 
     /**
      * Returns a symbol of this event.
      *
      * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
-    const std::string &getEventSymbol() const & noexcept override {
-        if (!eventSymbol_) {
-            return String::NUL;
-        }
-
-        return eventSymbol_.value();
-    }
+    const std::string &getEventSymbol() const & noexcept override;
 
     /**
      * Returns a symbol of this event.
      *
      * @return symbol of this event or `std::nullopt`.
      */
-    const std::optional<std::string> &getEventSymbolOpt() const & noexcept override {
-        return eventSymbol_;
-    }
+    const std::optional<std::string> &getEventSymbolOpt() const & noexcept override;
 
     /**
      * Changes symbol of this event.
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const StringLike &eventSymbol) noexcept override {
-        // TODO: check invalid utf-8 [EN-8233]
-        eventSymbol_ = std::string(eventSymbol);
-    }
+    void setEventSymbol(const StringLike &eventSymbol) noexcept override;
 
     /**
      * Changes an event's symbol and returns the current message.
@@ -164,21 +146,13 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol The symbol of this event.
      * @return The current message.
      */
-    TextMessage &withEventSymbol(const StringLike &eventSymbol) noexcept {
-        TextMessage::setEventSymbol(eventSymbol);
-
-        return *this;
-    }
+    TextMessage &withEventSymbol(const StringLike &eventSymbol) noexcept;
 
     ///
-    std::int64_t getEventTime() const noexcept override {
-        return eventTime_;
-    }
+    std::int64_t getEventTime() const noexcept override;
 
     ///
-    void setEventTime(std::int64_t eventTime) noexcept override {
-        eventTime_ = eventTime;
-    }
+    void setEventTime(std::int64_t eventTime) noexcept override;
 
     /**
      * Changes event's creation time and returns the current message.
@@ -187,20 +161,14 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * midnight, January 1, 1970 UTC.
      * @return The current message.
      */
-    TextMessage &withEventTime(std::int64_t eventTime) noexcept {
-        TextMessage::setEventTime(eventTime);
-
-        return *this;
-    }
+    TextMessage &withEventTime(std::int64_t eventTime) noexcept;
 
     /**
      * Returns time and sequence of a text message packaged into a single long value.
      *
      * @return time and sequence of a text message.
      */
-    std::int64_t getTimeSequence() const noexcept {
-        return timeSequence_;
-    }
+    std::int64_t getTimeSequence() const noexcept;
 
     /**
      * Changes time and sequence of a text message.
@@ -210,9 +178,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param timeSequence the time and sequence.
      * @see #getTimeSequence()
      */
-    void setTimeSequence(std::int64_t timeSequence) noexcept {
-        timeSequence_ = timeSequence;
-    }
+    void setTimeSequence(std::int64_t timeSequence) noexcept;
 
     /**
      * Returns time of the text message.
@@ -220,10 +186,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @return time of the text message.
      */
-    std::int64_t getTime() const noexcept {
-        return sar(timeSequence_, SECONDS_SHIFT) * 1000 +
-               andOp(sar(timeSequence_, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
-    }
+    std::int64_t getTime() const noexcept;
 
     /**
      * Changes time of the text message.
@@ -231,12 +194,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @param time time of the text message.
      */
-    void setTime(std::int64_t time) noexcept {
-        timeSequence_ =
-            orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-                      sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
-                 getSequence());
-    }
+    void setTime(std::int64_t time) noexcept;
 
     /**
      * Changes time and returns the current message.
@@ -244,22 +202,16 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param time time of the text message.
      * @return The current message.
      */
-    TextMessage &withTime(std::int64_t time) noexcept {
-        setTime(time);
-
-        return *this;
-    }
+    TextMessage &withTime(std::int64_t time) noexcept;
 
     /**
-     * Returns the sequence number of the text message to distinguish messages that have the same @ref #getTime() "time".
-     * This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to
-     * #MAX_SEQUENCE.
+     * Returns the sequence number of the text message to distinguish messages that have the same @ref #getTime()
+     * "time". This sequence number does not have to be unique and does not need to be sequential. Sequence can range
+     * from 0 to #MAX_SEQUENCE.
      *
      * @return sequence of the text message.
      */
-    std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(timeSequence_, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes ::getSequence() sequence number of the text message.
@@ -268,13 +220,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @throws InvalidArgumentException if a sequence is below zero or above #MAX_SEQUENCE.
      * @see #getSequence()
      */
-    void setSequence(std::int32_t sequence) {
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
-        }
-
-        timeSequence_ = orOp(andOp(timeSequence_, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Changes an event's sequence number and returns the current message.
@@ -283,30 +229,21 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @return The current message.
      * @throws InvalidArgumentException if a sequence is below zero or above #MAX_SEQUENCE.
      */
-    TextMessage &withSequence(std::int32_t sequence) noexcept {
-        setSequence(sequence);
-
-        return *this;
-    }
+    TextMessage &withSequence(std::int32_t sequence) noexcept;
 
     /**
      * Returns text.
      *
      * @return text.
      */
-    const std::string &getText() const & {
-        return text_;
-    }
+    const std::string &getText() const &;
 
     /**
      * Changes text.
      *
      * @param text text.
      */
-    void setText(const StringLike & text) {
-        // TODO: check invalid utf-8 [EN-8233]
-        text_ = std::string(text);
-    }
+    void setText(const StringLike & text);
 
     /**
      * Changes text and returns the current message.
@@ -315,11 +252,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @return The current message.
      */
-    TextMessage &withText(const StringLike & text) noexcept {
-        setText(text);
-
-        return *this;
-    }
+    TextMessage &withText(const StringLike & text) noexcept;
 
     std::string toString() const override;
 };

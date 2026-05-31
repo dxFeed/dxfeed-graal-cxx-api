@@ -66,8 +66,8 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     CandlePeriod(double value, const CandleType &type) noexcept;
 
     public:
-    CandlePeriod() noexcept = default;
-    virtual ~CandlePeriod() noexcept = default;
+    CandlePeriod() noexcept;
+    ~CandlePeriod() noexcept override;
 
     /**
      * Returns an aggregation period in milliseconds as closely as possible.

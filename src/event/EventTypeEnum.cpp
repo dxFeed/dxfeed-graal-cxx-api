@@ -7,6 +7,13 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+EventTypeEnum::EventTypeEnum(std::uint32_t id, const StringLike &name, const StringLike &className, bool isLasting,
+                             bool isIndexed, bool isTimeSeries, bool isMarket) noexcept
+    : id_{id}, name_{std::string(name)}, className_{std::string(className)}, isLasting_{isLasting},
+      isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries}, isOnlyIndexed_{isIndexed && !isTimeSeries},
+      isMarket_{isMarket} {
+}
+
 const EventTypeEnum EventTypeEnum::INVALID_EVENT_TYPE{};
 
 const EventTypeEnum EventTypeEnum::QUOTE{DXFG_EVENT_QUOTE, "QUOTE", "Quote", true};
@@ -96,4 +103,85 @@ const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEn
         return result;
     }(ALL);
 
+EventTypeEnum::EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", "Invalid", false} {
+}
+
+EventTypeEnum::~EventTypeEnum() noexcept {
+}
+
+std::uint32_t EventTypeEnum::getId() const noexcept {
+    return id_;
+}
+
+const std::string &EventTypeEnum::getName() const & noexcept {
+    return name_;
+}
+
+const std::string &EventTypeEnum::getClassName() const & noexcept {
+    return className_;
+}
+
+bool EventTypeEnum::operator==(const EventTypeEnum &eventTypeEnum) const noexcept {
+    return id_ == eventTypeEnum.id_;
+}
+
+bool EventTypeEnum::operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept {
+    return id_ == eventTypeEnum.get().id_;
+}
+
+bool EventTypeEnum::operator<(const EventTypeEnum &eventTypeEnum) const noexcept {
+    return id_ < eventTypeEnum.id_;
+}
+
+bool EventTypeEnum::operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept {
+    return id_ < eventTypeEnum.get().id_;
+}
+
+bool EventTypeEnum::isLasting() const noexcept {
+    return isLasting_;
+}
+
+bool EventTypeEnum::isIndexed() const noexcept {
+    return isIndexed_;
+}
+
+bool EventTypeEnum::isTimeSeries() const noexcept {
+    return isTimeSeries_;
+}
+
+bool EventTypeEnum::isOnlyIndexed() const noexcept {
+    return isOnlyIndexed_;
+}
+
+bool EventTypeEnum::isMarket() const noexcept {
+    return isOnlyIndexed_;
+}
+
+EventTypeEnum literals::operator""_et(const char *eventTypeString, size_t) noexcept {
+    if (auto it = EventTypeEnum::ALL_BY_NAME.find(eventTypeString); it != EventTypeEnum::ALL_BY_NAME.end()) {
+        return it->second;
+    }
+
+    return EventTypeEnum::INVALID_EVENT_TYPE;
+}
+
+bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept {
+    return eventTypeEnum1.get().id_ == eventTypeEnum2.get().id_;
+}
+
+bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                const EventTypeEnum &eventTypeEnum2) noexcept {
+    return eventTypeEnum1.get().id_ == eventTypeEnum2.id_;
+}
+
+bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+               const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept {
+    return eventTypeEnum1.get().id_ < eventTypeEnum2.get().id_;
+}
+
+bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+               const EventTypeEnum &eventTypeEnum2) noexcept {
+    return eventTypeEnum1.get().id_ < eventTypeEnum2.id_;
+}
 DXFCPP_END_NAMESPACE

@@ -94,7 +94,7 @@ struct DXFCPP_EXPORT HistoryEndpoint final : RequireMakeShared<HistoryEndpoint> 
     public:
     explicit HistoryEndpoint(RequireMakeShared<HistoryEndpoint>::LockExternalConstructionTag,
                              JavaObjectHandle<HistoryEndpoint> &&handle);
-    ~HistoryEndpoint() override = default;
+    ~HistoryEndpoint() override;
 
     /**
      * Builder is a static inner class that provides a flexible and readable way to construct instances of the
@@ -111,7 +111,7 @@ struct DXFCPP_EXPORT HistoryEndpoint final : RequireMakeShared<HistoryEndpoint> 
 
         public:
         explicit Builder(RequireMakeShared<Builder>::LockExternalConstructionTag, JavaObjectHandle<Builder> &&handle);
-        ~Builder() override = default;
+        ~Builder() override;
 
         /**
          * Specifies the address for the target endpoint.

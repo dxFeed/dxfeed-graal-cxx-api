@@ -121,8 +121,8 @@ struct DXFCPP_EXPORT CandleType {
                std::int64_t periodIntervalMillis) noexcept;
 
     public:
-    CandleType() noexcept = default;
-    virtual ~CandleType() noexcept = default;
+    CandleType() noexcept;
+    virtual ~CandleType() noexcept;
 
     /**
      * Returns a candle type period in milliseconds as closely as possible.

@@ -7,6 +7,9 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+MarketEvent::MarketEvent() noexcept {
+}
+
 MarketEvent::MarketEvent(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
 }
 

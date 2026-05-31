@@ -129,4 +129,7 @@ void Summary::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+Summary::Summary() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

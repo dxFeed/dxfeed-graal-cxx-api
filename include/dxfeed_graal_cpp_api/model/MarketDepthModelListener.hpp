@@ -49,7 +49,7 @@ struct /* DXFCPP_EXPORT */ MarketDepthModelListener final : RequireMakeShared<Ma
 
     explicit MarketDepthModelListener(RequireMakeShared<MarketDepthModelListener<O>>::LockExternalConstructionTag) {};
 
-    ~MarketDepthModelListener() override = default;
+    ~MarketDepthModelListener() noexcept override {};
 
     /**
      * Constructs the new listener from the callback.

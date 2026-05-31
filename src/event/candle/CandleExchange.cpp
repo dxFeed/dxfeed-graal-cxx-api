@@ -12,6 +12,12 @@ const CandleExchange CandleExchange::DEFAULT = COMPOSITE;
 CandleExchange::CandleExchange(char exchangeCode) noexcept : exchangeCode_{exchangeCode} {
 }
 
+CandleExchange::CandleExchange() noexcept {
+}
+
+CandleExchange::~CandleExchange() noexcept {
+}
+
 char CandleExchange::getExchangeCode() const noexcept {
     return exchangeCode_;
 }

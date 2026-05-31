@@ -56,6 +56,9 @@ Isolate::IsolateThread::IsolateThread(GraalIsolateThreadHandle handle) noexcept
                         ", idx = " + std::to_string(idx) + "}()");
     }
 }
+Isolate::IsolateThread::IsolateThread(IsolateThread &&) noexcept = default;
+
+Isolate::IsolateThread &Isolate::IsolateThread::operator=(IsolateThread &&) noexcept = default;
 
 CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
     if constexpr (Debugger::traceIsolates) {

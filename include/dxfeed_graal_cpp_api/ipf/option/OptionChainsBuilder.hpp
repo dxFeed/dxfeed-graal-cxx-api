@@ -40,7 +40,8 @@ template <class T> class OptionChainsBuilder {
     /**
      * Creates new option chains builder.
      */
-    OptionChainsBuilder() = default;
+    OptionChainsBuilder() {
+    }
 
     /**
      * Changes product for futures and options on futures (underlying asset name).

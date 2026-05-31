@@ -166,6 +166,9 @@ void Quote::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+Quote::Quote() noexcept {
+}
+
 void Quote::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 

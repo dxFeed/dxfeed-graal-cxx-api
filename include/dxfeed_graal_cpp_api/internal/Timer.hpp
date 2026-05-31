@@ -19,7 +19,8 @@ struct Timer {
     std::unique_ptr<std::future<void>> future_;
     std::atomic<bool> isRunning_{};
 
-    Timer() noexcept = default;
+    Timer() noexcept {
+    }
 
     public:
     void interruptableSleep(std::chrono::milliseconds ms) const {

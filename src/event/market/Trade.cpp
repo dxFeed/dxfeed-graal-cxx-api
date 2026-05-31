@@ -93,4 +93,7 @@ void Trade::assign(std::shared_ptr<EventType> event) {
     // }
 }
 
+Trade::Trade() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

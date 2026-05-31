@@ -113,4 +113,7 @@ void SpreadOrder::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+SpreadOrder::SpreadOrder() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

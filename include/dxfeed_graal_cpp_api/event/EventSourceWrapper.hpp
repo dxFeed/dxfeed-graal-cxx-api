@@ -131,12 +131,12 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
     DataType data_;
 
     public:
-    EventSourceWrapper(const EventSourceWrapper &) noexcept = default;
-    EventSourceWrapper(EventSourceWrapper &&) noexcept = default;
-    EventSourceWrapper &operator=(const EventSourceWrapper &) noexcept = default;
-    EventSourceWrapper &operator=(EventSourceWrapper &&) noexcept = default;
-    EventSourceWrapper() noexcept = default;
-    ~EventSourceWrapper() noexcept = default;
+    EventSourceWrapper(const EventSourceWrapper &) noexcept;
+    EventSourceWrapper(EventSourceWrapper &&) noexcept;
+    EventSourceWrapper &operator=(const EventSourceWrapper &) noexcept;
+    EventSourceWrapper &operator=(EventSourceWrapper &&) noexcept;
+    EventSourceWrapper() noexcept;
+    ~EventSourceWrapper() noexcept;
 
     /**
      * Constructs a wrapper from IndexedEventSource.

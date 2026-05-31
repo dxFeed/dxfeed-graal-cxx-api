@@ -109,6 +109,9 @@ void Order::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+Order::Order() noexcept {
+}
+
 Order::Order(const StringLike &eventSymbol) noexcept : OrderBase(eventSymbol) {
 }
 

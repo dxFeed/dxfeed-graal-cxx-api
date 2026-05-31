@@ -43,11 +43,7 @@ class DXFCPP_EXPORT EventTypeEnum {
     const bool isMarket_;
 
     EventTypeEnum(std::uint32_t id, const StringLike & name, const StringLike & className, bool isLasting, bool isIndexed = false,
-                  bool isTimeSeries = false, bool isMarket = true) noexcept
-        : id_{id}, name_{std::string(name)}, className_{std::string(className)}, isLasting_{isLasting},
-          isIndexed_{isIndexed || isTimeSeries}, isTimeSeries_{isTimeSeries},
-          isOnlyIndexed_{isIndexed && !isTimeSeries}, isMarket_{isMarket} {
-    }
+                  bool isTimeSeries = false, bool isMarket = true) noexcept;
 
     public:
     using RefSetType =
@@ -92,102 +88,69 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     static const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> ALL_BY_ID;
 
-    EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", "Invalid", false} {
-    }
+    EventTypeEnum() noexcept;
 
-    virtual ~EventTypeEnum() noexcept = default;
+    virtual ~EventTypeEnum() noexcept;
 
     /**
      * @return The dxFeed Graal Native C-API event class id
      */
-    [[nodiscard]] std::uint32_t getId() const noexcept {
-        return id_;
-    }
+    [[nodiscard]] std::uint32_t getId() const noexcept;
 
     /**
      * @return The current enum element name
      */
-    [[nodiscard]] const std::string &getName() const & noexcept {
-        return name_;
-    }
+    [[nodiscard]] const std::string &getName() const & noexcept;
 
     /**
      * @return The current enum element class name
      */
-    [[nodiscard]] const std::string &getClassName() const & noexcept {
-        return className_;
-    }
+    [[nodiscard]] const std::string &getClassName() const & noexcept;
 
-    bool operator==(const EventTypeEnum &eventTypeEnum) const noexcept {
-        return id_ == eventTypeEnum.id_;
-    }
+    bool operator==(const EventTypeEnum &eventTypeEnum) const noexcept;
 
-    bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept {
-        return id_ == eventTypeEnum.get().id_;
-    }
+    bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept;
 
     friend bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
-                           const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept {
-        return eventTypeEnum1.get().id_ == eventTypeEnum2.get().id_;
-    }
+                           const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept;
 
     friend bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
-                           const EventTypeEnum &eventTypeEnum2) noexcept {
-        return eventTypeEnum1.get().id_ == eventTypeEnum2.id_;
-    }
+                           const EventTypeEnum &eventTypeEnum2) noexcept;
 
-    bool operator<(const EventTypeEnum &eventTypeEnum) const noexcept {
-        return id_ < eventTypeEnum.id_;
-    }
+    bool operator<(const EventTypeEnum &eventTypeEnum) const noexcept;
 
-    bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept {
-        return id_ < eventTypeEnum.get().id_;
-    }
+    bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept;
 
     friend bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
-                          const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept {
-        return eventTypeEnum1.get().id_ < eventTypeEnum2.get().id_;
-    }
+                          const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept;
 
     friend bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
-                          const EventTypeEnum &eventTypeEnum2) noexcept {
-        return eventTypeEnum1.get().id_ < eventTypeEnum2.id_;
-    }
+                          const EventTypeEnum &eventTypeEnum2) noexcept;
 
     /**
      * @return `true` if the current enum element is characterizing the Lasting (TICKER) event
      */
-    [[nodiscard]] bool isLasting() const noexcept {
-        return isLasting_;
-    }
+    [[nodiscard]] bool isLasting() const noexcept;
 
     /**
      * @return `true` if the current enum element is characterizing the Indexed event.
      */
-    [[nodiscard]] bool isIndexed() const noexcept {
-        return isIndexed_;
-    }
+    [[nodiscard]] bool isIndexed() const noexcept;
 
     /**
      * @return `true` if the current enum element is characterizing the TimeSeries (HISTORY) event.
      */
-    [[nodiscard]] bool isTimeSeries() const noexcept {
-        return isTimeSeries_;
-    }
+    [[nodiscard]] bool isTimeSeries() const noexcept;
 
     /**
      * @return `true` if the current enum element is characterizing the OnlyIndexed (Indexed, but not TimeSeries) event.
      */
-    [[nodiscard]] bool isOnlyIndexed() const noexcept {
-        return isOnlyIndexed_;
-    }
+    [[nodiscard]] bool isOnlyIndexed() const noexcept;
 
     /**
      * @return `true` if the current enum element is characterizing the Market event.
      */
-    [[nodiscard]] bool isMarket() const noexcept {
-        return isOnlyIndexed_;
-    }
+    [[nodiscard]] bool isMarket() const noexcept;
 };
 
 inline namespace literals {
@@ -196,15 +159,9 @@ inline namespace literals {
  * String literal that helps to construct EventTypeEnum from a char array.
  *
  * @param eventTypeString The event type name's char array
- * @return EventTypeEnum built on char array
+ * @return EventTypeEnum built on the char array
  */
-inline EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept {
-    if (auto it = EventTypeEnum::ALL_BY_NAME.find(eventTypeString); it != EventTypeEnum::ALL_BY_NAME.end()) {
-        return it->second;
-    }
-
-    return EventTypeEnum::INVALID_EVENT_TYPE;
-}
+EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept;
 
 } // namespace literals
 

@@ -154,4 +154,7 @@ void TimeAndSale::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+TimeAndSale::TimeAndSale() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

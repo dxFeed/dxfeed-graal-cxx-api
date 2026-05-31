@@ -5,6 +5,9 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+IndexedEvent::~IndexedEvent() {
+}
+
 const EventFlag IndexedEvent::TX_PENDING = EventFlag::TX_PENDING;
 const EventFlag IndexedEvent::REMOVE_EVENT = EventFlag::REMOVE_EVENT;
 const EventFlag IndexedEvent::SNAPSHOT_BEGIN = EventFlag::SNAPSHOT_BEGIN;

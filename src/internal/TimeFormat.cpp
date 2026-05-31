@@ -36,6 +36,9 @@ void TimeFormat::init() const {
     }
 }
 
+TimeFormat::~TimeFormat() noexcept {
+}
+
 const JavaObjectHandle<TimeFormat> &TimeFormat::getHandle() const {
     std::lock_guard lock(mtx_);
 

@@ -115,6 +115,9 @@ void Message::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+Message::Message() noexcept {
+}
+
 std::string Message::toString() const {
     return fmt::format("Message{{{}, eventTime={}, attachment={}}}", getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL));
