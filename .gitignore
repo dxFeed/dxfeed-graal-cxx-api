@@ -54,3 +54,4 @@ CMakeSettings.json
 .vs/**
 .cache/**
 /Folder.DotSettings.user
+out/
