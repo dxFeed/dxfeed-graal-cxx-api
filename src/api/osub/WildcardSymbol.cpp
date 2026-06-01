@@ -11,6 +11,25 @@ const std::string WildcardSymbol::RESERVED_PREFIX = "*";
 
 const WildcardSymbol WildcardSymbol::ALL{RESERVED_PREFIX};
 
+WildcardSymbol::WildcardSymbol(const std::string &symbol) noexcept : symbol_{symbol} {
+}
+
+WildcardSymbol::WildcardSymbol(const WildcardSymbol &) noexcept = default;
+
+WildcardSymbol::WildcardSymbol(WildcardSymbol &&) noexcept = default;
+
+WildcardSymbol &WildcardSymbol::operator=(const WildcardSymbol &) noexcept = default;
+
+WildcardSymbol &WildcardSymbol::operator=(WildcardSymbol &&) noexcept = default;
+
+WildcardSymbol::WildcardSymbol() noexcept = default;
+
+WildcardSymbol::~WildcardSymbol() noexcept = default;
+
+const std::string &WildcardSymbol::getSymbol() const noexcept {
+    return symbol_;
+}
+
 void *WildcardSymbol::toGraal() const noexcept {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("WildcardSymbol::toGraal()");
@@ -33,6 +52,31 @@ const WildcardSymbol &WildcardSymbol::fromGraal(void *) {
     }
 
     return ALL;
+}
+
+std::string WildcardSymbol::toString() const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        return "WildcardSymbol{" + symbol_ + "}";
+    } else {
+        return symbol_;
+    }
+}
+
+bool WildcardSymbol::operator==(const WildcardSymbol &wildcardSymbol) const {
+    return symbol_ == wildcardSymbol.symbol_;
+}
+
+bool WildcardSymbol::operator<(const WildcardSymbol &wildcardSymbol) const {
+    return symbol_ < wildcardSymbol.symbol_;
+}
+
+WildcardSymbol literals::operator""_ws(const char *, size_t) noexcept {
+    return WildcardSymbol::ALL;
+}
+
+WildcardSymbol literals::operator""_wcs(const char *, size_t) noexcept {
+    return WildcardSymbol::ALL;
 }
 
 DXFCPP_END_NAMESPACE

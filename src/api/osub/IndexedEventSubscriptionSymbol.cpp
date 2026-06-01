@@ -116,4 +116,10 @@ IndexedEventSubscriptionSymbol::operator=(IndexedEventSubscriptionSymbol &&index
     return *this;
 }
 
+IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol() noexcept {
+}
+
+IndexedEventSubscriptionSymbol::~IndexedEventSubscriptionSymbol() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

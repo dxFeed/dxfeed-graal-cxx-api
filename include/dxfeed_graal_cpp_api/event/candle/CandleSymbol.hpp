@@ -187,9 +187,8 @@ struct DXFCPP_EXPORT CandleSymbol {
     CandleSymbol(CandleSymbol &&candleSymbol) noexcept;
     CandleSymbol &operator=(const CandleSymbol &candleSymbol) noexcept;
     CandleSymbol &operator=(CandleSymbol &&candleSymbol) noexcept;
-    CandleSymbol() noexcept = default;
-
-    virtual ~CandleSymbol() = default;
+    CandleSymbol() noexcept;
+    virtual ~CandleSymbol() noexcept;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -287,9 +286,7 @@ inline namespace literals {
  * @param length Tha char array's length
  * @return Wrapped string view built on char array
  */
-inline CandleSymbol operator""_c(const char *string, size_t length) noexcept {
-    return CandleSymbol::valueOf(std::string{string, length});
-}
+CandleSymbol operator""_c(const char *string, size_t length) noexcept;
 
 } // namespace literals
 

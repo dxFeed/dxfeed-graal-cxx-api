@@ -9,7 +9,9 @@ GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum)
     : RuntimeException(createMessage(entryPointErrorsEnum)) {
 }
 
-GraalException::GraalException(const GraalException &other) noexcept = default;
+GraalException::GraalException(const GraalException &other) noexcept : RuntimeException(other) {
+}
+
 std::string GraalException::createMessage(CEntryPointErrorsEnum entryPointErrorsEnum) {
     const auto result = CEntryPointErrorsEnumToStr(entryPointErrorsEnum);
 

@@ -178,7 +178,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new OTC Markets order event with default values.
-    OtcMarketsOrder() noexcept = default;
+    OtcMarketsOrder() noexcept;
 
     /**
      * Creates new OTC Markets order event with the specified event symbol.

@@ -286,7 +286,9 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
     /**
      * Creates the new handler
      */
-    SimpleHandler() noexcept = default;
+    SimpleHandler() noexcept {
+    }
+
     SimpleHandler(const SimpleHandler &) = delete;
 
     SimpleHandler(SimpleHandler &&other) noexcept {

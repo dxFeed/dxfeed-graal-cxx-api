@@ -72,9 +72,9 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
      */
     static const std::string ATTRIBUTE_KEY;
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>, StringHash,
-                                    std::equal_to<>>
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>, StringHash, std::equal_to<>>
         BY_STRING;
+
     static const std::vector<std::reference_wrapper<const CandlePrice>> VALUES;
 
     private:
@@ -83,8 +83,9 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
     explicit CandlePrice(const StringLike &string) noexcept;
 
     public:
-    CandlePrice() noexcept = default;
-    virtual ~CandlePrice() noexcept = default;
+    CandlePrice() noexcept;
+
+    ~CandlePrice() noexcept override;
 
     /**
      * Returns candle event symbol string with this candle price type set.
@@ -121,8 +122,7 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle price type of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandlePrice>
-    getAttributeForSymbol(const StringLike &symbol) noexcept;
+    static std::reference_wrapper<const CandlePrice> getAttributeForSymbol(const StringLike &symbol) noexcept;
 
     /**
      * Returns candle symbol string with the normalized representation of the candle price type attribute.

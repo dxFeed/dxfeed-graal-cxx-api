@@ -65,6 +65,9 @@ void TradeBase::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+TradeBase::TradeBase() noexcept {
+}
+
 void TradeBase::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 

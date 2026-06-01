@@ -126,6 +126,9 @@ void Greeks::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+Greeks::Greeks() noexcept {
+}
+
 void Greeks::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 

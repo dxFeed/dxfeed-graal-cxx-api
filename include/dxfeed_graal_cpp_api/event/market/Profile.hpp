@@ -112,7 +112,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates a new profile event with default values.
-    Profile() noexcept = default;
+    Profile() noexcept;
 
     /**
      * Creates a new profile event with the specified event symbol.

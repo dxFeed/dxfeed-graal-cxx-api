@@ -38,7 +38,9 @@ StringSymbol &StringSymbol::operator=(StringSymbol &&stringSymbol) noexcept {
 StringSymbol::StringSymbol() noexcept {
 }
 
-StringSymbol::~StringSymbol() noexcept = default;
+StringSymbol::~StringSymbol() noexcept {
+
+}
 
 void *StringSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {

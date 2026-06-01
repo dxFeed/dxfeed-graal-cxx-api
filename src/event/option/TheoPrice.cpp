@@ -124,6 +124,9 @@ void TheoPrice::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+TheoPrice::TheoPrice() noexcept {
+}
+
 void TheoPrice::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 

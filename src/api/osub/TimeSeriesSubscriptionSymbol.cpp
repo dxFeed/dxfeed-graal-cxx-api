@@ -119,4 +119,10 @@ TimeSeriesSubscriptionSymbol::operator=(TimeSeriesSubscriptionSymbol &&timeSerie
     return *this;
 }
 
+TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol() noexcept {
+}
+
+TimeSeriesSubscriptionSymbol::~TimeSeriesSubscriptionSymbol() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

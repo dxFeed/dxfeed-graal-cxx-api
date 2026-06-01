@@ -22,7 +22,7 @@ DXFCPP_BEGIN_NAMESPACE
  */
 struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<ObservableSubscriptionChangeListener> {
     class Key {
-        Key() = default;
+        Key() {};
         friend class DXFeedSubscription;
         friend struct DXPublisherObservableSubscription;
     };

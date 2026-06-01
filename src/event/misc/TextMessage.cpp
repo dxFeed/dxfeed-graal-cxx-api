@@ -120,6 +120,116 @@ void TextMessage::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+TextMessage::TextMessage() noexcept {
+}
+
+TextMessage::TextMessage(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+}
+
+TextMessage::TextMessage(const StringLike &eventSymbol, const StringLike &text) noexcept
+    : eventSymbol_{eventSymbol}, text_{text} {
+}
+
+TextMessage::TextMessage(const StringLike &eventSymbol, std::int64_t time, const StringLike &text) noexcept
+    : eventSymbol_{eventSymbol}, text_{text} {
+
+    setTime(time);
+}
+
+const std::string &TextMessage::getEventSymbol() const & noexcept {
+    if (!eventSymbol_) {
+        return String::NUL;
+    }
+
+    return eventSymbol_.value();
+}
+
+const std::optional<std::string> &TextMessage::getEventSymbolOpt() const & noexcept {
+    return eventSymbol_;
+}
+
+void TextMessage::setEventSymbol(const StringLike &eventSymbol) noexcept {
+    // TODO: check invalid utf-8 [EN-8233]
+    eventSymbol_ = std::string(eventSymbol);
+}
+
+TextMessage &TextMessage::withEventSymbol(const StringLike &eventSymbol) noexcept {
+    TextMessage::setEventSymbol(eventSymbol);
+
+    return *this;
+}
+
+std::int64_t TextMessage::getEventTime() const noexcept {
+    return eventTime_;
+}
+
+void TextMessage::setEventTime(std::int64_t eventTime) noexcept {
+    eventTime_ = eventTime;
+}
+
+TextMessage &TextMessage::withEventTime(std::int64_t eventTime) noexcept {
+    TextMessage::setEventTime(eventTime);
+
+    return *this;
+}
+
+std::int64_t TextMessage::getTimeSequence() const noexcept {
+    return timeSequence_;
+}
+
+void TextMessage::setTimeSequence(std::int64_t timeSequence) noexcept {
+    timeSequence_ = timeSequence;
+}
+
+std::int64_t TextMessage::getTime() const noexcept {
+    return sar(timeSequence_, SECONDS_SHIFT) * 1000 + andOp(sar(timeSequence_, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+}
+
+void TextMessage::setTime(std::int64_t time) noexcept {
+    timeSequence_ = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                              sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+                         getSequence());
+}
+
+TextMessage &TextMessage::withTime(std::int64_t time) noexcept {
+    setTime(time);
+
+    return *this;
+}
+
+std::int32_t TextMessage::getSequence() const noexcept {
+    return static_cast<std::int32_t>(andOp(timeSequence_, MAX_SEQUENCE));
+}
+
+void TextMessage::setSequence(std::int32_t sequence) {
+    if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
+        throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
+    }
+
+    timeSequence_ = orOp(andOp(timeSequence_, ~MAX_SEQUENCE), sequence);
+}
+
+TextMessage &TextMessage::withSequence(std::int32_t sequence) noexcept {
+    setSequence(sequence);
+
+    return *this;
+}
+
+const std::string &TextMessage::getText() const & {
+    return text_;
+}
+
+void TextMessage::setText(const StringLike &text) {
+    // TODO: check invalid utf-8 [EN-8233]
+    text_ = std::string(text);
+}
+
+TextMessage &TextMessage::withText(const StringLike &text) noexcept {
+    setText(text);
+
+    return *this;
+}
+
 std::string TextMessage::toString() const {
     return fmt::format("TextMessage{{{}, eventTime={}, time={}, sequence={}, text={}}}", getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()),

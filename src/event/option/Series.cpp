@@ -140,4 +140,7 @@ void Series::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+Series::Series() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

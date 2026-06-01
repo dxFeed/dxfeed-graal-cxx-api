@@ -130,7 +130,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new underlying event with default values.
-    Underlying() noexcept = default;
+    Underlying() noexcept;
 
     /**
      * Creates a new underlying event with the specified event symbol.

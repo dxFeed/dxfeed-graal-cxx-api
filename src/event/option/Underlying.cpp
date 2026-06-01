@@ -125,6 +125,9 @@ void Underlying::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+Underlying::Underlying() noexcept {
+}
+
 void Underlying::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 

@@ -84,8 +84,10 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
     IndexedEventSubscriptionSymbol &operator=(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol);
 
     IndexedEventSubscriptionSymbol &operator=(IndexedEventSubscriptionSymbol &&indexedEventSubscriptionSymbol) noexcept;
-    IndexedEventSubscriptionSymbol() noexcept = default;
-    virtual ~IndexedEventSubscriptionSymbol() noexcept = default;
+
+    IndexedEventSubscriptionSymbol() noexcept;
+
+    virtual ~IndexedEventSubscriptionSymbol() noexcept;
 
     /**
      * Returns the wrapped event symbol (CandleSymbol, WildcardSymbol, etc.).

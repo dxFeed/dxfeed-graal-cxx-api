@@ -30,7 +30,9 @@ void *EventClassList::getHandle() const noexcept {
     return impl_->getHandle();
 }
 
-EventClassList::~EventClassList() noexcept = default;
+EventClassList::~EventClassList() noexcept {
+
+}
 
 std::unique_ptr<EventClassList> EventClassList::create(std::size_t size) {
     auto result = std::unique_ptr<EventClassList>(new EventClassList{});

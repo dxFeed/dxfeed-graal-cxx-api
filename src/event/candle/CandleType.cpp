@@ -13,6 +13,12 @@ CandleType::CandleType(const StringLike &name, const StringLike &string, std::in
     : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {
 }
 
+CandleType::CandleType() noexcept {
+}
+
+CandleType::~CandleType() noexcept {
+}
+
 std::int64_t CandleType::getPeriodIntervalMillis() const noexcept {
     return periodIntervalMillis_;
 }

@@ -57,7 +57,7 @@ template <typename T> class OptionSeries final {
      *
      * @return A default-initialized instance of OptionSeries.
      */
-    OptionSeries() = default;
+    OptionSeries() {};
 
     /**
      * Returns day id of expiration.

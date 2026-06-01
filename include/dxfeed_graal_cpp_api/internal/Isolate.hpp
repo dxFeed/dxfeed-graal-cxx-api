@@ -37,10 +37,10 @@ class Isolate final {
         explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr) noexcept;
 
         IsolateThread(const IsolateThread &) = delete;
-        IsolateThread(IsolateThread &&) = default;
+        IsolateThread(IsolateThread &&) noexcept;
 
         IsolateThread &operator=(const IsolateThread &) = delete;
-        IsolateThread &operator=(IsolateThread &&) = default;
+        IsolateThread &operator=(IsolateThread &&) noexcept;
 
         CEntryPointErrorsEnum detach() noexcept;
 

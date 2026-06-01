@@ -33,6 +33,12 @@ const std::vector<std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES
 CandlePrice::CandlePrice(const StringLike &string) noexcept : string_{string} {
 }
 
+CandlePrice::CandlePrice() noexcept {
+}
+
+CandlePrice::~CandlePrice() noexcept {
+}
+
 std::string CandlePrice::changeAttributeForSymbol(const StringLike &symbol) const {
     return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
                             : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());

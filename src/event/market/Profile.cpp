@@ -160,4 +160,7 @@ void Profile::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+Profile::Profile() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

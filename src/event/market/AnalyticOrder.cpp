@@ -107,6 +107,9 @@ void AnalyticOrder::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+AnalyticOrder::AnalyticOrder() noexcept {
+}
+
 AnalyticOrder::AnalyticOrder(const StringLike &eventSymbol) noexcept : Order(eventSymbol) {
 }
 

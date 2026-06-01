@@ -78,7 +78,7 @@ template <typename T> struct JavaObjectHandle final {
         return *this;
     }
 
-    ~JavaObjectHandle() noexcept = default;
+    ~JavaObjectHandle() noexcept {}
 
     [[nodiscard]] std::string toString() const {
         if (impl_) {
@@ -153,7 +153,7 @@ template <typename T> struct JavaObjectHandleList final {
         return *this;
     }
 
-    ~JavaObjectHandleList() noexcept = default;
+    ~JavaObjectHandleList() noexcept {}
 
     [[nodiscard]] std::string toString() const {
         if (impl_) {

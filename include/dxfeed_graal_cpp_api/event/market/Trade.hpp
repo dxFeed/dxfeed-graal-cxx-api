@@ -113,7 +113,7 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new trade event with default values.
-    Trade() noexcept = default;
+    Trade() noexcept;
 
     /**
      * Creates a new trade event with the specified event symbol.

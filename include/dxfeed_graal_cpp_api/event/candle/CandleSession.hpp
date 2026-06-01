@@ -69,8 +69,9 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     CandleSession(const SessionFilter &sessionFilter, const StringLike &string) noexcept;
 
     public:
-    CandleSession() noexcept = default;
-    virtual ~CandleSession() noexcept = default;
+    CandleSession() noexcept;
+
+    virtual ~CandleSession() noexcept;
 
     /**
      * Returns a session filter that corresponds to this session attribute.

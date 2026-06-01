@@ -17,7 +17,7 @@ DXPublisherObservableSubscription::DXPublisherObservableSubscription(
     : handle_{std::move(handle)} {
 }
 
-DXPublisherObservableSubscription::~DXPublisherObservableSubscription() = default;
+DXPublisherObservableSubscription::~DXPublisherObservableSubscription() {};
 
 std::shared_ptr<DXPublisherObservableSubscription>
 DXPublisherObservableSubscription::create(JavaObjectHandle<DXPublisherObservableSubscription> &&handle) {

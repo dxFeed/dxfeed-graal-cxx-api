@@ -16,7 +16,7 @@ DXFCPP_BEGIN_NAMESPACE
 class DXFeedSubscription;
 
 /**
- * Value class for period of time with support for ISO8601 duration format.
+ * Value class for a period of time with support for ISO8601 duration format.
  */
 struct DXFCPP_EXPORT TimePeriod {
     friend DXFeedSubscription;
@@ -84,7 +84,7 @@ struct DXFCPP_EXPORT TimePeriod {
      */
     std::int64_t getNanos() const;
 
-    virtual ~TimePeriod() noexcept = default;
+    virtual ~TimePeriod() noexcept;
 
     TimePeriod(const TimePeriod &) = delete;
     TimePeriod(TimePeriod &&) noexcept = delete;

@@ -40,7 +40,7 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::
             source_ = dxfcpp::IndexedEventSource::DEFAULT;
         }
 
-        ~Builder() override = default;
+        ~Builder() noexcept override {}
 
         /**
          * Sets the DXFeed for the model being created.

@@ -147,6 +147,9 @@ void OptionSale::assign(std::shared_ptr<EventType> event) {
     }
 }
 
+OptionSale::OptionSale() noexcept {
+}
+
 OptionSale::OptionSale(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
 }
 

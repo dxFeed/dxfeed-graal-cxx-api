@@ -15,8 +15,10 @@ template <class T> class NonCopyable {
     T &operator=(const T &) = delete;
 
     protected:
-    NonCopyable() = default;
-    ~NonCopyable() = default;
+    NonCopyable() {
+    }
+    ~NonCopyable() {
+    }
 };
 
 DXFCPP_END_NAMESPACE

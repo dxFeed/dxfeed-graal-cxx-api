@@ -33,9 +33,17 @@ std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *g
     return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::fromList(graalList);
 }
 
-template void *
-SymbolWrapper::SymbolListUtils::toGraalList<SymbolWrapper const *>(SymbolWrapper const *,
-                                                                           SymbolWrapper const *);
+SymbolWrapper::SymbolWrapper(const SymbolWrapper &) noexcept = default;
+SymbolWrapper::SymbolWrapper(SymbolWrapper &&) noexcept = default;
+SymbolWrapper &SymbolWrapper::operator=(const SymbolWrapper &) noexcept = default;
+SymbolWrapper &SymbolWrapper::operator=(SymbolWrapper &&) noexcept = default;
+SymbolWrapper::SymbolWrapper() noexcept {
+}
+SymbolWrapper::~SymbolWrapper() noexcept {
+}
+
+template void *SymbolWrapper::SymbolListUtils::toGraalList<SymbolWrapper const *>(SymbolWrapper const *,
+                                                                                  SymbolWrapper const *);
 
 void SymbolWrapper::freeGraal(void *graalNative) {
     if constexpr (Debugger::isDebug) {

@@ -82,7 +82,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
     /**
      * Creates a new message with default values.
      */
-    Message() noexcept = default;
+    Message() noexcept;
 
     /**
      * Creates a new message with the specified event symbol.

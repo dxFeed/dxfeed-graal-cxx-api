@@ -6,62 +6,6 @@
 #include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
-
-void *CandleSymbol::toGraal() const {
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("CandleSymbol::toGraal()");
-    }
-
-    auto *graalSymbol = new dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_)};
-
-    return graalSymbol;
-}
-
-void CandleSymbol::freeGraal(void *graalNative) {
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("CandleSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
-    }
-
-    if (graalNative == nullptr) {
-        return;
-    }
-
-    auto *graalSymbol = static_cast<dxfg_candle_symbol_t *>(graalNative);
-
-    delete[] graalSymbol->symbol;
-    delete graalSymbol;
-}
-
-CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("CandleSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
-    }
-
-    if (graalNative == nullptr) {
-        return {};
-    }
-
-    const auto *graalSymbol = static_cast<dxfg_candle_symbol_t *>(graalNative);
-
-    return CandleSymbol{graalSymbol->symbol};
-}
-
-CandleSymbol CandleSymbol::valueOf(const StringLike &symbol) noexcept {
-    return CandleSymbol{symbol};
-}
-
-CandleSymbol CandleSymbol::valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
-    return CandleSymbol{symbol, attribute};
-}
-
-CandleSymbol CandleSymbol::valueOf(const StringLike &symbol,
-                                   std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept {
-    return valueOf(symbol, attributes.begin(), attributes.end());
-}
-
 const CandleSymbol CandleSymbol::NUL{"<null>"};
 
 std::string CandleSymbol::changeAttribute(const StringLike &symbol,
@@ -75,6 +19,7 @@ std::string CandleSymbol::changeAttribute(const StringLike &symbol,
 
 std::string CandleSymbol::normalize(const StringLike &s) noexcept {
     auto symbol = CandlePrice::normalizeAttributeForSymbol(s);
+
     symbol = CandleSession::normalizeAttributeForSymbol(symbol);
     symbol = CandlePeriod::normalizeAttributeForSymbol(symbol);
     symbol = CandleAlignment::normalizeAttributeForSymbol(symbol);
@@ -193,4 +138,68 @@ CandleSymbol &CandleSymbol::operator=(CandleSymbol &&candleSymbol) noexcept {
     return *this;
 }
 
+CandleSymbol::CandleSymbol() noexcept {
+}
+
+CandleSymbol::~CandleSymbol() noexcept {
+}
+
+void *CandleSymbol::toGraal() const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("CandleSymbol::toGraal()");
+    }
+
+    auto *graalSymbol = new dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_)};
+
+    return graalSymbol;
+}
+
+void CandleSymbol::freeGraal(void *graalNative) {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("CandleSymbol::freeGraal(graal = " + toStringAny(graalNative) + ")");
+    }
+
+    if (graalNative == nullptr) {
+        return;
+    }
+
+    const auto *graalSymbol = static_cast<dxfg_candle_symbol_t *>(graalNative);
+
+    delete[] graalSymbol->symbol;
+    delete graalSymbol;
+}
+
+CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("CandleSymbol::fromGraal(graal = " + toStringAny(graalNative) + ")");
+    }
+
+    if (graalNative == nullptr) {
+        return {};
+    }
+
+    const auto *graalSymbol = static_cast<dxfg_candle_symbol_t *>(graalNative);
+
+    return CandleSymbol{graalSymbol->symbol};
+}
+
+CandleSymbol CandleSymbol::valueOf(const StringLike &symbol) noexcept {
+    return CandleSymbol{symbol};
+}
+
+CandleSymbol CandleSymbol::valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
+    return CandleSymbol{symbol, attribute};
+}
+
+CandleSymbol CandleSymbol::valueOf(const StringLike &symbol,
+                                   std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept {
+    return valueOf(symbol, attributes.begin(), attributes.end());
+}
+
+CandleSymbol literals::operator""_c(const char *string, size_t length) noexcept {
+    return CandleSymbol::valueOf(std::string{string, length});
+}
 DXFCPP_END_NAMESPACE

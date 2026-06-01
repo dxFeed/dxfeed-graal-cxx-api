@@ -94,4 +94,7 @@ void TradeETH::assign(std::shared_ptr<EventType> event) {
     // }
 }
 
+TradeETH::TradeETH() noexcept {
+}
+
 DXFCPP_END_NAMESPACE

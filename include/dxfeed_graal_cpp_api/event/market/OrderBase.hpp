@@ -168,7 +168,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new order event with default values.
-    OrderBase() noexcept = default;
+    OrderBase() noexcept;
 
     /**
      * Creates a new order event with the specified event symbol.

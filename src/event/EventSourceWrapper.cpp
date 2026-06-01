@@ -33,9 +33,19 @@ std::vector<EventSourceWrapper> EventSourceWrapper::ListUtils::fromGraalList(voi
     return GraalListUtils<dxfg_indexed_event_source_list, EventSourceWrapper>::fromList(graalList);
 }
 
-template void *
-EventSourceWrapper::ListUtils::toGraalList<EventSourceWrapper const *>(EventSourceWrapper const *,
-                                                                               EventSourceWrapper const *);
+EventSourceWrapper::EventSourceWrapper(const EventSourceWrapper &) noexcept = default;
+EventSourceWrapper::EventSourceWrapper(EventSourceWrapper &&) noexcept = default;
+EventSourceWrapper &EventSourceWrapper::operator=(const EventSourceWrapper &) noexcept = default;
+EventSourceWrapper &EventSourceWrapper::operator=(EventSourceWrapper &&) noexcept = default;
+
+EventSourceWrapper::EventSourceWrapper() noexcept {
+}
+
+EventSourceWrapper::~EventSourceWrapper() noexcept {
+}
+
+template void *EventSourceWrapper::ListUtils::toGraalList<EventSourceWrapper const *>(EventSourceWrapper const *,
+                                                                                      EventSourceWrapper const *);
 
 EventSourceWrapper EventSourceWrapper::fromGraal(void *graalNative) {
     switch (static_cast<dxfg_indexed_event_source_t *>(graalNative)->type) {

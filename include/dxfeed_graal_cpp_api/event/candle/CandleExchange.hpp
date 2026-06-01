@@ -43,8 +43,9 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
     explicit CandleExchange(char exchangeCode) noexcept;
 
     public:
-    CandleExchange() noexcept = default;
-    virtual ~CandleExchange() noexcept = default;
+    CandleExchange() noexcept;
+
+    ~CandleExchange() noexcept override;
 
     /**
      * Returns exchange code. It is `'\0'` for CandleExchange::COMPOSITE exchange.

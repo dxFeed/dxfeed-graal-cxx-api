@@ -144,7 +144,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     void assign(std::shared_ptr<EventType> event) override;
 
     /// Creates new order event with default values.
-    Order() noexcept = default;
+    Order() noexcept;
 
     /**
      * Creates a new order event with the specified event symbol.

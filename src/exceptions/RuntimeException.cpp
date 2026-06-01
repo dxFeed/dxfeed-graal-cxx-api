@@ -76,7 +76,9 @@ RuntimeException::RuntimeException(const StringLike &message, const StringLike &
 {
 }
 
-RuntimeException::RuntimeException(const RuntimeException &other) noexcept = default;
+RuntimeException::RuntimeException(const RuntimeException &other) noexcept
+    : std::runtime_error(other.what()), stackTrace_(other.stackTrace_) {
+}
 
 const std::string &RuntimeException::getStackTrace() const & {
     return stackTrace_;

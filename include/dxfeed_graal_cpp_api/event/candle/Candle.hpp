@@ -150,7 +150,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     /**
      * Creates a new candle with default values.
      */
-    Candle() noexcept = default;
+    Candle() noexcept;
 
     /**
      * Creates a new candle with the specified candle event symbol.

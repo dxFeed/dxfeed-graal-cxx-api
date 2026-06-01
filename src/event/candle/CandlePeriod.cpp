@@ -51,6 +51,12 @@ const std::string CandlePeriod::ATTRIBUTE_KEY{};
 CandlePeriod::CandlePeriod(double value, const CandleType &type) noexcept : value_{value}, type_{type} {
 }
 
+CandlePeriod::CandlePeriod() noexcept {
+}
+
+CandlePeriod::~CandlePeriod() noexcept {
+}
+
 std::int64_t CandlePeriod::getPeriodIntervalMillis() const noexcept {
     return static_cast<std::int64_t>(static_cast<double>(type_.getPeriodIntervalMillis()) * value_);
 }

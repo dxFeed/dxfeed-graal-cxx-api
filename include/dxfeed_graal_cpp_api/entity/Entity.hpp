@@ -12,7 +12,7 @@ DXFCPP_BEGIN_NAMESPACE
 /// Base abstract class for all dxFeed C++ API entities
 struct DXFCPP_EXPORT Entity {
     /// The default virtual d-tor
-    virtual ~Entity() noexcept = default;
+    virtual ~Entity() noexcept {};
 };
 
 DXFCPP_END_NAMESPACE

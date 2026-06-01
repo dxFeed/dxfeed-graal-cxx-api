@@ -52,7 +52,7 @@ struct DXFCPP_EXPORT TimeFormat {
     void init() const;
 
     public:
-    virtual ~TimeFormat() noexcept = default;
+    virtual ~TimeFormat() noexcept;
 
     TimeFormat(const TimeFormat &) = delete;
     TimeFormat(TimeFormat &&) noexcept = delete;

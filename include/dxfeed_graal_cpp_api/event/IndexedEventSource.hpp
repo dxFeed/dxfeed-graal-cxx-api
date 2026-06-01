@@ -61,8 +61,8 @@ class DXFCPP_EXPORT IndexedEventSource {
      */
     static IndexedEventSource fromGraal(void *graalNative);
 
-    IndexedEventSource() noexcept = default;
-    virtual ~IndexedEventSource() noexcept = default;
+    IndexedEventSource() noexcept;
+    virtual ~IndexedEventSource() noexcept;
 
     /**
      * Creates the new IndexedEvent's source by id and name.

@@ -65,8 +65,9 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
     explicit CandleAlignment(const StringLike &string) noexcept;
 
     public:
-    CandleAlignment() noexcept = default;
-    virtual ~CandleAlignment() noexcept = default;
+    CandleAlignment() noexcept;
+
+    ~CandleAlignment() noexcept override;
 
     /**
      * Returns candle event symbol string with this candle alignment set.
