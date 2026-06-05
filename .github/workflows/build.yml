@@ -112,7 +112,7 @@ jobs:
     runs-on: ${{ matrix.config.image }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Select Xcode version
         if: ${{ contains(matrix.config.os, 'macos') }}

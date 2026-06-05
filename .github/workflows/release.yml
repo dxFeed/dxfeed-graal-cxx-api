@@ -33,7 +33,7 @@ jobs:
       version: ${{ steps.set_version.outputs.version }}
       tag_name: ${{ steps.set_version.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: 'true'
           fetch-tags: 'true'
@@ -96,7 +96,7 @@ jobs:
     runs-on: ${{ matrix.config.image }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{needs.get_version.outputs.tag_name}}
 
@@ -377,7 +377,7 @@ jobs:
           cd ..
           cd ..
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{needs.get_version.outputs.tag_name}}
 
@@ -426,7 +426,7 @@ jobs:
             image: windows-latest
     runs-on: ${{ matrix.config.image }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{needs.get_version.outputs.tag_name}}
 
@@ -460,7 +460,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v4
         with:
           path: artifacts
