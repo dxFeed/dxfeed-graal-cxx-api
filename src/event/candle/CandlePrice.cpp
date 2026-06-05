@@ -8,28 +8,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const CandlePrice CandlePrice::LAST{"last"};
-const CandlePrice CandlePrice::BID{"bid"};
-const CandlePrice CandlePrice::ASK{"ask"};
-const CandlePrice CandlePrice::MARK{"mark"};
-const CandlePrice CandlePrice::SETTLEMENT{"s"};
-const CandlePrice CandlePrice::DEFAULT = LAST;
-
-const std::string CandlePrice::ATTRIBUTE_KEY{"price"};
-
-const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>, StringHash, std::equal_to<>>
-    CandlePrice::BY_STRING{
-        {LAST.toString(), std::cref(LAST)},
-        {BID.toString(), std::cref(BID)},
-        {ASK.toString(), std::cref(ASK)},
-        {MARK.toString(), std::cref(MARK)},
-        {SETTLEMENT.toString(), std::cref(SETTLEMENT)},
-    };
-
-const std::vector<std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES{
-    std::cref(LAST), std::cref(BID), std::cref(ASK), std::cref(MARK), std::cref(SETTLEMENT),
-};
-
 CandlePrice::CandlePrice(const StringLike &string) noexcept : string_{string} {
 }
 
@@ -102,4 +80,5 @@ std::string CandlePrice::normalizeAttributeForSymbol(const StringLike &symbol) {
         return symbol;
     }
 }
+
 DXFCPP_END_NAMESPACE
