@@ -29,13 +29,9 @@ namespace IsolatedObject {
         throw InvalidArgumentException("Unable to execute function `dxfg_Object_toString`. The `object` is null");
     }
 
-    auto value =
-        runGraalFunctionAndThrowIfNullptr(dxfg_Object_toString, static_cast<dxfg_java_object_handler *>(object));
-    auto result = dxfcpp::toString(value);
-
-    IsolatedString::release(value);
-
-    return result;
+    const auto value = IsolatedString::toUnique(
+        runGraalFunctionAndThrowIfNullptr(dxfg_Object_toString, static_cast<dxfg_java_object_handler *>(object)));
+    return dxfcpp::toString(value.get());
 }
 
 /// dxfg_Object_equals

@@ -5,10 +5,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const CandlePriceLevel CandlePriceLevel::DEFAULT{math::NaN};
-
-const std::string CandlePriceLevel::ATTRIBUTE_KEY{"pl"};
-
 CandlePriceLevel::CandlePriceLevel(double value) noexcept : value_{value} {
 }
 

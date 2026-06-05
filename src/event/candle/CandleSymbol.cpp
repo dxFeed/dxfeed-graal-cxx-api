@@ -11,6 +11,76 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+const CandleAlignment CandleAlignment::MIDNIGHT{"m"};
+const CandleAlignment CandleAlignment::SESSION{"s"};
+const CandleAlignment CandleAlignment::DEFAULT = MIDNIGHT;
+const std::string CandleAlignment::ATTRIBUTE_KEY{"a"};
+
+const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash, std::equal_to<>>
+    CandleAlignment::BY_STRING{
+            {MIDNIGHT.toString(), std::cref(MIDNIGHT)},
+            {SESSION.toString(), std::cref(SESSION)},
+        };
+
+const std::vector<std::reference_wrapper<const CandleAlignment>> CandleAlignment::VALUES{
+    std::cref(MIDNIGHT),
+    std::cref(SESSION),
+};
+
+//------------
+
+const CandleExchange CandleExchange::COMPOSITE{'\0'};
+
+const CandleExchange CandleExchange::DEFAULT = COMPOSITE;
+
+//------------
+
+const CandleType CandleType::TICK{"TICK", "t", 0LL};
+const CandleType CandleType::SECOND{"SECOND", "s", 1000LL};
+const CandleType CandleType::MINUTE{"MINUTE", "m", 60LL * 1000LL};
+const CandleType CandleType::HOUR{"HOUR", "h", 60LL * 60LL * 1000L};
+const CandleType CandleType::DAY{"DAY", "d", 24LL * 60LL * 60LL * 1000L};
+const CandleType CandleType::WEEK{"WEEK", "w", 7LL * 24LL * 60LL * 60LL * 1000LL};
+const CandleType CandleType::MONTH("MONTH", "mo", 30LL * 24LL * 60LL * 60LL * 1000LL);
+const CandleType CandleType::OPTEXP("OPTEXP", "o", 30LL * 24LL * 60LL * 60LL * 1000LL);
+const CandleType CandleType::YEAR("YEAR", "y", 365LL * 24LL * 60LL * 60LL * 1000LL);
+const CandleType CandleType::VOLUME("VOLUME", "v", 0LL);
+const CandleType CandleType::PRICE("PRICE", "p", 0LL);
+const CandleType CandleType::PRICE_MOMENTUM("PRICE_MOMENTUM", "pm", 0LL);
+const CandleType CandleType::PRICE_RENKO("PRICE_RENKO", "pr", 0LL);
+
+const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash, std::equal_to<>>
+    CandleType::BY_STRING{
+        {TICK.toString(), std::cref(TICK)},
+        {SECOND.toString(), std::cref(SECOND)},
+        {MINUTE.toString(), std::cref(MINUTE)},
+        {HOUR.toString(), std::cref(HOUR)},
+        {DAY.toString(), std::cref(DAY)},
+        {WEEK.toString(), std::cref(WEEK)},
+        {MONTH.toString(), std::cref(MONTH)},
+        {OPTEXP.toString(), std::cref(OPTEXP)},
+        {YEAR.toString(), std::cref(YEAR)},
+        {VOLUME.toString(), std::cref(VOLUME)},
+        {PRICE.toString(), std::cref(PRICE)},
+        {PRICE_MOMENTUM.toString(), std::cref(PRICE_MOMENTUM)},
+        {PRICE_RENKO.toString(), std::cref(PRICE_RENKO)},
+    };
+
+const std::vector<std::reference_wrapper<const CandleType>> CandleType::VALUES{
+    std::cref(TICK),  std::cref(SECOND),         std::cref(MINUTE),      std::cref(HOUR), std::cref(DAY),
+    std::cref(WEEK),  std::cref(MONTH),          std::cref(OPTEXP),      std::cref(YEAR), std::cref(VOLUME),
+    std::cref(PRICE), std::cref(PRICE_MOMENTUM), std::cref(PRICE_RENKO),
+};
+
+//------------
+
+const CandlePeriod CandlePeriod::TICK{1, CandleType::TICK};
+const CandlePeriod CandlePeriod::DAY{1, CandleType::DAY};
+const CandlePeriod CandlePeriod::DEFAULT = TICK;
+const std::string CandlePeriod::ATTRIBUTE_KEY{};
+
+//------------
+
 const CandlePrice CandlePrice::LAST{"last"};
 const CandlePrice CandlePrice::BID{"bid"};
 const CandlePrice CandlePrice::ASK{"ask"};
@@ -31,6 +101,48 @@ const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>,
 
 const std::vector<std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES{
     std::cref(LAST), std::cref(BID), std::cref(ASK), std::cref(MARK), std::cref(SETTLEMENT),
+};
+
+//------------
+
+const CandlePriceLevel CandlePriceLevel::DEFAULT{math::NaN};
+
+const std::string CandlePriceLevel::ATTRIBUTE_KEY{"pl"};
+
+//------------
+
+const SessionType SessionType::NO_TRADING{SessionTypeEnum::NO_TRADING, "NO_TRADING", false};
+const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARKET", true};
+const SessionType SessionType::REGULAR{SessionTypeEnum::REGULAR, "REGULAR", true};
+const SessionType SessionType::AFTER_MARKET{SessionTypeEnum::AFTER_MARKET, "AFTER_MARKET", true};
+
+//------------
+
+const SessionFilter SessionFilter::ANY{SessionFilterEnum::ANY, "ANY", std::nullopt, std::nullopt};
+const SessionFilter SessionFilter::TRADING{SessionFilterEnum::TRADING, "TRADING", std::nullopt, true};
+const SessionFilter SessionFilter::NON_TRADING{SessionFilterEnum::NON_TRADING, "NON_TRADING", std::nullopt, false};
+
+const SessionFilter SessionFilter::NO_TRADING{SessionFilterEnum::NO_TRADING, "NO_TRADING", SessionType::NO_TRADING,
+                                              std::nullopt};
+const SessionFilter SessionFilter::PRE_MARKET{SessionFilterEnum::PRE_MARKET, "PRE_MARKET", SessionType::PRE_MARKET,
+                                              std::nullopt};
+const SessionFilter SessionFilter::REGULAR{SessionFilterEnum::REGULAR, "REGULAR", SessionType::REGULAR, std::nullopt};
+const SessionFilter SessionFilter::AFTER_MARKET{SessionFilterEnum::AFTER_MARKET, "AFTER_MARKET",
+                                                SessionType::AFTER_MARKET, std::nullopt};
+
+const CandleSession CandleSession::ANY{SessionFilter::ANY, "false"};
+const CandleSession CandleSession::REGULAR{SessionFilter::REGULAR, "true"};
+const CandleSession CandleSession::DEFAULT = ANY;
+const std::string CandleSession::ATTRIBUTE_KEY = "tho";
+
+const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> CandleSession::BY_STRING{
+        {ANY.toString(), std::cref(ANY)},
+        {REGULAR.toString(), std::cref(REGULAR)},
+    };
+
+const std::vector<std::reference_wrapper<const CandleSession>> CandleSession::VALUES{
+    std::cref(ANY),
+    std::cref(REGULAR),
 };
 
 //------------
