@@ -135,7 +135,7 @@ DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) const {
 }
 
 std::shared_ptr<DXFeedTimeSeriesSubscription>
-DXFeed::createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes) {
+DXFeed::createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes) const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug(toString() + "::createTimeSeriesSubscription(eventTypes = " +
