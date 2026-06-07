@@ -1,3 +1,17 @@
+## v6.0.0
+
+* **\[MDAPI-405]** Fixed project build errors that occurred when attempting to build a project using clang 19+.
+* **\[MDAPI-406]** Fixed linking errors where some static fields could be uninitialized.
+* Migrated to Graal SDK v3.2.0.
+* **\[BREAKING]** Fixed a sporadic build error where the compiler failed to pick the correct method implementation when only a single event type was specified during subscription creation.
+  These methods are now const:
+  * `template <typename EventTypeIt> std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) const;`
+  * `template <typename EventTypesCollection> std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypesCollection &eventTypes) const;`
+  * `template <typename EventTypeIt> std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin, EventTypeIt end) const;`
+  * `std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes) const;`
+  * `template <typename EventTypesCollection> std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypesCollection &eventTypes) const;`
+* Added the ability to collect and register metrics. Enabled by the DXFCXX_ENABLE_METRICS CMake option. Documentation: TBD. 
+
 ## v5.0.0
 
 * **\[MDAPI-262]\[C++]\[Linux]** Shared libraries now compiled with `noexecstack` flag.

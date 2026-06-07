@@ -13,11 +13,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const SessionType SessionType::NO_TRADING{SessionTypeEnum::NO_TRADING, "NO_TRADING", false};
-const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARKET", true};
-const SessionType SessionType::REGULAR{SessionTypeEnum::REGULAR, "REGULAR", true};
-const SessionType SessionType::AFTER_MARKET{SessionTypeEnum::AFTER_MARKET, "AFTER_MARKET", true};
-
 SessionType::SessionType(SessionTypeEnum code, const StringLike &name, bool trading) noexcept
     : code_{code}, name_{name}, trading_{trading} {
 }
@@ -68,33 +63,6 @@ const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
 
     return handle_;
 }
-
-const SessionFilter SessionFilter::ANY{SessionFilterEnum::ANY, "ANY", std::nullopt, std::nullopt};
-const SessionFilter SessionFilter::TRADING{SessionFilterEnum::TRADING, "TRADING", std::nullopt, true};
-const SessionFilter SessionFilter::NON_TRADING{SessionFilterEnum::NON_TRADING, "NON_TRADING", std::nullopt, false};
-
-const SessionFilter SessionFilter::NO_TRADING{SessionFilterEnum::NO_TRADING, "NO_TRADING", SessionType::NO_TRADING,
-                                              std::nullopt};
-const SessionFilter SessionFilter::PRE_MARKET{SessionFilterEnum::PRE_MARKET, "PRE_MARKET", SessionType::PRE_MARKET,
-                                              std::nullopt};
-const SessionFilter SessionFilter::REGULAR{SessionFilterEnum::REGULAR, "REGULAR", SessionType::REGULAR, std::nullopt};
-const SessionFilter SessionFilter::AFTER_MARKET{SessionFilterEnum::AFTER_MARKET, "AFTER_MARKET",
-                                                SessionType::AFTER_MARKET, std::nullopt};
-
-const CandleSession CandleSession::ANY{SessionFilter::ANY, "false"};
-const CandleSession CandleSession::REGULAR{SessionFilter::REGULAR, "true"};
-const CandleSession CandleSession::DEFAULT = ANY;
-const std::string CandleSession::ATTRIBUTE_KEY = "tho";
-
-const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> CandleSession::BY_STRING{
-    {ANY.toString(), std::cref(ANY)},
-    {REGULAR.toString(), std::cref(REGULAR)},
-};
-
-const std::vector<std::reference_wrapper<const CandleSession>> CandleSession::VALUES{
-    std::cref(ANY),
-    std::cref(REGULAR),
-};
 
 CandleSession::CandleSession(const SessionFilter &sessionFilter, const StringLike &string) noexcept
     : sessionFilter_{&sessionFilter}, string_{string} {

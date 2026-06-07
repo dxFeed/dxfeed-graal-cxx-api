@@ -5,10 +5,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const CandleExchange CandleExchange::COMPOSITE{'\0'};
-
-const CandleExchange CandleExchange::DEFAULT = COMPOSITE;
-
 CandleExchange::CandleExchange(char exchangeCode) noexcept : exchangeCode_{exchangeCode} {
 }
 

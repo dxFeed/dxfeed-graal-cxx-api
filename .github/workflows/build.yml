@@ -12,8 +12,14 @@ jobs:
     strategy:
       matrix:
         config:
-          - name: win-vs2022
-            image: windows-latest
+          - name: win2022-vs2022
+            image: windows-2022
+            os: windows
+            cores: 4
+            cc: 'cl'
+            cxx: 'cl'
+          - name: win2025-vs2026
+            image: windows-2025-vs2026
             os: windows
             cores: 4
             cc: 'cl'
@@ -25,24 +31,66 @@ jobs:
             xcode: '16.4'
             cc: 'clang'
             cxx: 'clang++'
+          - name: ubuntu-24.04-clang-22
+            image: ubuntu-24.04
+            os: linux
+            cores: 4
+            cc: 'clang-22'
+            cxx: 'clang++-22'
+            llvm_version: '22'
+          - name: ubuntu-24.04-clang-21
+            image: ubuntu-24.04
+            os: linux
+            cores: 4
+            cc: 'clang-21'
+            cxx: 'clang++-21'
+            llvm_version: '21'
+#          - name: ubuntu-24.04-clang-20
+#            image: ubuntu-24.04
+#            os: linux
+#            cores: 4
+#            cc: 'clang-20'
+#            cxx: 'clang++-20'
+#            llvm_version: '20'
+#          - name: ubuntu-24.04-clang-19
+#            image: ubuntu-24.04
+#            os: linux
+#            cores: 4
+#            cc: 'clang-19'
+#            cxx: 'clang++-19'
+#            llvm_version: '19'
           - name: ubuntu-24.04-clang-18
             image: ubuntu-24.04
             os: linux
             cores: 4
             cc: 'clang-18'
             cxx: 'clang++-18'
+          - name: ubuntu-24.04-gcc-16
+            image: ubuntu-24.04
+            os: linux
+            cores: 4
+            cc: 'gcc-16'
+            cxx: 'g++-16'
+            gcc_version: '16'
+#          - name: ubuntu-24.04-gcc-15
+#            image: ubuntu-24.04
+#            os: linux
+#            cores: 4
+#            cc: 'gcc-15'
+#            cxx: 'g++-15'
+#            gcc_version: '15'
           - name: ubuntu-24.04-gcc-14
             image: ubuntu-24.04
             os: linux
             cores: 4
             cc: 'gcc-14'
             cxx: 'g++-14'
-          - name: ubuntu-24.04-gcc-12
-            image: ubuntu-24.04
-            os: linux
-            cores: 4
-            cc: 'gcc-12'
-            cxx: 'g++-12'
+#          - name: ubuntu-24.04-gcc-12
+#            image: ubuntu-24.04
+#            os: linux
+#            cores: 4
+#            cc: 'gcc-12'
+#            cxx: 'g++-12'
           - name: ubuntu-22.04-gcc-11
             image: ubuntu-22.04
             os: linux
@@ -56,14 +104,15 @@ jobs:
             xcode: '16.4'
             cc: 'clang'
             cxx: 'clang++'
-        buildType: [ Release, Debug, RelWithDebInfo ]
+#        buildType: [ Release, Debug, RelWithDebInfo ]
+        buildType: [ Release, Debug]
         sanitizers: [ NO_SAN, ASAN, UBSAN ]
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
     runs-on: ${{ matrix.config.image }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Select Xcode version
         if: ${{ contains(matrix.config.os, 'macos') }}
@@ -79,6 +128,21 @@ jobs:
         run: |
           ls
           mkdir ${{github.workspace}}/build-mt   
+
+      - name: Install clang from LLVM apt repo
+        if: ${{ matrix.config.llvm_version != '' && matrix.config.llvm_version != null }}
+        run: |
+          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+          echo "deb https://apt.llvm.org/noble/ llvm-toolchain-noble-${{ matrix.config.llvm_version }} main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          sudo apt-get update
+          sudo apt-get install -y clang-${{ matrix.config.llvm_version }}
+          
+      - name: Install gcc from ubuntu-toolchain-r PPA
+        if: ${{ matrix.config.gcc_version != '' && matrix.config.gcc_version != null }}
+        run: |
+          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install -y gcc-${{ matrix.config.gcc_version }} g++-${{ matrix.config.gcc_version }}
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'mac') }}

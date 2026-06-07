@@ -11,22 +11,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const CandleAlignment CandleAlignment::MIDNIGHT{"m"};
-const CandleAlignment CandleAlignment::SESSION{"s"};
-const CandleAlignment CandleAlignment::DEFAULT = MIDNIGHT;
-const std::string CandleAlignment::ATTRIBUTE_KEY{"a"};
-
-const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash, std::equal_to<>>
-    CandleAlignment::BY_STRING{
-        {MIDNIGHT.toString(), std::cref(MIDNIGHT)},
-        {SESSION.toString(), std::cref(SESSION)},
-    };
-
-const std::vector<std::reference_wrapper<const CandleAlignment>> CandleAlignment::VALUES{
-    std::cref(MIDNIGHT),
-    std::cref(SESSION),
-};
-
 CandleAlignment::CandleAlignment(const StringLike &string) noexcept : string_{string} {
 }
 

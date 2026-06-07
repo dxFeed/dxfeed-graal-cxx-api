@@ -67,8 +67,8 @@ struct TimeSeriesTxModelImpl;
  * sub->@ref DXFeedSubscription::addSymbols() "addSymbols"("SPY");</tt></pre>
  *
  * Note, that order of calls is important here. By attaching listeners first and then setting
- * a subscription, we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols() for
- * details. If a set of symbols is changed first, then @ref DXFeedSubscription::addEventListener()
+ * a subscription, we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols()
+ * for details. If a set of symbols is changed first, then @ref DXFeedSubscription::addEventListener()
  * "sub->addEventListener" raises an IllegalStateException in JVM to protect from hard-to-catch bugs with potentially
  * missed events.
  *
@@ -354,7 +354,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypeIt>
-    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) {
+    std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) const {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("{}::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
@@ -404,7 +404,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypesCollection>
-    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypesCollection &eventTypes) {
+    std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypesCollection &eventTypes) const {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             auto begin = std::begin(eventTypes);
@@ -466,7 +466,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypeIt>
-    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin, EventTypeIt end) {
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin,
+                                                                               EventTypeIt end) const {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("{}::createTimeSeriesSubscription(eventTypes = " + namesToString(begin, end) + ")");
@@ -506,7 +507,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     std::shared_ptr<DXFeedTimeSeriesSubscription>
-    createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes);
+    createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes) const;
 
     /**
      * Creates new subscription for multiple event types that is <i>attached</i> to this feed.
@@ -531,7 +532,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypesCollection>
-    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypesCollection &eventTypes) {
+    std::shared_ptr<DXFeedTimeSeriesSubscription>
+    createTimeSeriesSubscription(const EventTypesCollection &eventTypes) const {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             auto dbgBegin = std::begin(eventTypes);
