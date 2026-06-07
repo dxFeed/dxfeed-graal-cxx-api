@@ -120,8 +120,7 @@ DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) const {
     }
 
     if (!eventType.isTimeSeries()) {
-        throw InvalidArgumentException("Event type " +
-                                       eventType.getClassName() + " is not TimeSeries");
+        throw InvalidArgumentException("Event type " + eventType.getClassName() + " is not TimeSeries");
     }
 
     auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(

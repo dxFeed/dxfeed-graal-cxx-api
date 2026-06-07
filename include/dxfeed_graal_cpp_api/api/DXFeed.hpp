@@ -67,8 +67,8 @@ struct TimeSeriesTxModelImpl;
  * sub->@ref DXFeedSubscription::addSymbols() "addSymbols"("SPY");</tt></pre>
  *
  * Note, that order of calls is important here. By attaching listeners first and then setting
- * a subscription, we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols() for
- * details. If a set of symbols is changed first, then @ref DXFeedSubscription::addEventListener()
+ * a subscription, we ensure that the current quote gets received by the listener. See DXFeedSubscription::addSymbols()
+ * for details. If a set of symbols is changed first, then @ref DXFeedSubscription::addEventListener()
  * "sub->addEventListener" raises an IllegalStateException in JVM to protect from hard-to-catch bugs with potentially
  * missed events.
  *
@@ -466,7 +466,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypeIt>
-    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin, EventTypeIt end) const {
+    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin,
+                                                                               EventTypeIt end) const {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("{}::createTimeSeriesSubscription(eventTypes = " + namesToString(begin, end) + ")");
@@ -531,7 +532,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * @return The new subscription
      */
     template <typename EventTypesCollection>
-    std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypesCollection &eventTypes) const {
+    std::shared_ptr<DXFeedTimeSeriesSubscription>
+    createTimeSeriesSubscription(const EventTypesCollection &eventTypes) const {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             auto dbgBegin = std::begin(eventTypes);
