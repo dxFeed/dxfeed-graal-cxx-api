@@ -21,7 +21,7 @@ set(DXFCXX_VERSION "v5.0.0" CACHE STRING "The dxFeed Graal CXX API package versi
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "2.6.2" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.2.0" CACHE STRING "")
 set(FMTLIB_VERSION "12.1.0")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -83,6 +83,11 @@ option(DXFCXX_ENABLE_UBSAN "Enable address, UB sanitizer" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
 option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
+
+
+option(DXFCXX_TRACING "Enable tracing" OFF)
+option(DXFCXX_LIST_TRACING "Enable list tracing" OFF)
+option(DXFCXX_ISOLATES_TRACING "Enable isolates tracing" OFF)
 
 include(FetchContent)
 
@@ -634,6 +639,21 @@ target_compile_definitions(${PROJECT_NAME}_static PUBLIC
 if (DXFCXX_ENABLE_METRICS)
     target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_ENABLE_METRICS=1)
     target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_ENABLE_METRICS=1)
+endif ()
+
+if (DXFCXX_TRACING)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCPP_DEBUG=1)
+    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCPP_DEBUG=1)
+
+    if (DXFCXX_LIST_TRACING)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCPP_TRACE_LISTS=1)
+        target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCPP_TRACE_LISTS=1)
+    endif ()
+
+    if (DXFCXX_ISOLATES_TRACING)
+        target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCPP_TRACE_ISOLATES=1)
+        target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCPP_TRACE_ISOLATES=1)
+    endif ()
 endif ()
 
 if (DXFCXX_BUILD_UNIT_TESTS)

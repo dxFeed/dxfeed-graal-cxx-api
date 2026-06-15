@@ -45,10 +45,8 @@ struct DXFeedSubscription::Impl {
             metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Batch(ns)", elapsed);
             metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Event(ns)", perEvent);
 
-            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Batch(ns)", id.getValue()),
-                                elapsed);
-            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Event(ns)", id.getValue()),
-                                perEvent);
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Batch(ns)", id.getValue()), elapsed);
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Event(ns)", id.getValue()), perEvent);
 
 #endif
 
@@ -64,7 +62,8 @@ struct DXFeedSubscription::Impl {
             metricsManager->set("DXFCXX.Sub.onEvents.handler.Batch(ns)", elapsed2);
             metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.handler.Batch(ns)", id.getValue()), elapsed2);
             metricsManager->set("DXFCXX.Sub.onEvents.total.Batch(ns)", elapsed + elapsed2);
-            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.total.Batch(ns)", id.getValue()), elapsed + elapsed2);
+            metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.total.Batch(ns)", id.getValue()),
+                                elapsed + elapsed2);
 #endif
         }
     }

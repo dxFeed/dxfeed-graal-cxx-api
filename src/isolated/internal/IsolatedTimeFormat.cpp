@@ -63,13 +63,9 @@ std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<TimeFormat> 
             "Unable to execute function `dxfg_TimeFormat_format`. The `timeFormat` handle is invalid");
     }
 
-    auto format = runGraalFunctionAndThrowIfNullptr(dxfg_TimeFormat_format,
-                                                    static_cast<dxfg_time_format_t *>(timeFormat.get()), value);
-    auto result = dxfcpp::toString(format);
-
-    IsolatedString::release(format);
-
-    return result;
+    const auto format = IsolatedString::toUnique(runGraalFunctionAndThrowIfNullptr(dxfg_TimeFormat_format,
+                                                    static_cast<dxfg_time_format_t *>(timeFormat.get()), value));
+    return dxfcpp::toString(format.get());
 }
 
 } // namespace IsolatedTimeFormat

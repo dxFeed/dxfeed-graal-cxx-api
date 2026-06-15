@@ -86,14 +86,10 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 }
 
 std::string resolveSourceURL(const StringLike &address) {
-    auto resolvedURL =
-        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_resolveSourceURL, address.c_str());
+    const auto resolvedURL =
+        internal::IsolatedString::toUnique(runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_resolveSourceURL, address.c_str()));
 
-    auto result = dxfcpp::toString(resolvedURL);
-
-    internal::IsolatedString::release(resolvedURL);
-
-    return result;
+    return dxfcpp::toString(resolvedURL.get());
 }
 
 } // namespace isolated::ipf::IsolatedInstrumentProfileReader

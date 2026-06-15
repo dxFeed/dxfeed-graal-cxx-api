@@ -92,6 +92,18 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         target_compile_definitions(${DXFC_TEST_BASENAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)
     endif ()
 
+    if (DXFCXX_TRACING)
+        target_compile_definitions(${DXFC_TEST_BASENAME} PUBLIC DXFCPP_DEBUG=1)
+
+        if (DXFCXX_LIST_TRACING)
+            target_compile_definitions(${DXFC_TEST_BASENAME} PUBLIC DXFCPP_TRACE_LISTS=1)
+        endif ()
+
+        if (DXFCXX_ISOLATES_TRACING)
+            target_compile_definitions(${DXFC_TEST_BASENAME} PUBLIC DXFCPP_TRACE_ISOLATES=1)
+        endif ()
+    endif ()
+
     if (DXFCXX_ENABLE_ASAN)
         LinkAsan(${DXFC_TEST_BASENAME})
     elseif (DXFCXX_ENABLE_UBSAN)

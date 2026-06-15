@@ -17,10 +17,9 @@ namespace isolated::ipf::live {
 
 namespace IsolatedInstrumentProfileConnection {
 
-/* dxfg_ipf_connection_t* */ JavaObjectHandle<InstrumentProfileConnection>
-createConnection(const StringLike &address,
-                 /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector>
-                     &instrumentProfileCollector) {
+/* dxfg_ipf_connection_t* */ JavaObjectHandle<InstrumentProfileConnection> createConnection(
+    const StringLike &address,
+    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileConnection_createConnection`. The "
@@ -32,26 +31,22 @@ createConnection(const StringLike &address,
                                           static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get()))};
 }
 
-std::string getAddress(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-                           &instrumentProfileConnection) {
+std::string getAddress(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileConnection_getAddress`. The "
                                        "`instrumentProfileConnection` handle is invalid");
     }
 
-    auto address =
+    const auto address = internal::IsolatedString::toUnique(
         runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileConnection_getAddress,
-                                          static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get()));
+                                          static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get())));
 
-    auto result = dxfcpp::toString(address);
-
-    internal::IsolatedString::release(address);
-
-    return result;
+    return dxfcpp::toString(address.get());
 }
 
-std::int64_t getUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-                                 &instrumentProfileConnection) {
+std::int64_t getUpdatePeriod(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileConnection_getUpdatePeriod`. The "
@@ -62,9 +57,9 @@ std::int64_t getUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandl
                                               static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get()));
 }
 
-bool setUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-                         &instrumentProfileConnection,
-                     std::int64_t updatePeriod) {
+bool setUpdatePeriod(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection,
+    std::int64_t updatePeriod) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileConnection_setUpdatePeriod`. The "
@@ -76,9 +71,8 @@ bool setUpdatePeriod(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<Instru
                                               updatePeriod) == 0;
 }
 
-InstrumentProfileConnection::State
-getState(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-             &instrumentProfileConnection) {
+InstrumentProfileConnection::State getState(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileConnection_getState`. The "
                                        "`instrumentProfileConnection` handle is invalid");
@@ -89,8 +83,8 @@ getState(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileC
                                            static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get())));
 }
 
-std::int64_t getLastModified(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-                                 &instrumentProfileConnection) {
+std::int64_t getLastModified(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileConnection_getLastModified`. The "
@@ -101,8 +95,8 @@ std::int64_t getLastModified(/* dxfg_ipf_connection_t * */ const JavaObjectHandl
                                               static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get()));
 }
 
-bool start(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-               &instrumentProfileConnection) {
+bool start(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileConnection_start`. The "
                                        "`instrumentProfileConnection` handle is invalid");
@@ -113,8 +107,8 @@ bool start(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfil
                static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get())) == 0;
 }
 
-bool close(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-               &instrumentProfileConnection) {
+bool close(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileConnection_close`. The "
                                        "`instrumentProfileConnection` handle is invalid");
@@ -126,10 +120,8 @@ bool close(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfil
 }
 
 bool addStateChangeListener(
-    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-        &instrumentProfileConnection,
-    /* dxfg_ipf_connection_state_change_listener_t * */ const JavaObjectHandle<IpfPropertyChangeListener>
-        &listener) {
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection,
+    /* dxfg_ipf_connection_state_change_listener_t * */ const JavaObjectHandle<IpfPropertyChangeListener> &listener) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileConnection_addStateChangeListener`. The "
@@ -148,9 +140,9 @@ bool addStateChangeListener(
                static_cast<dxfg_ipf_connection_state_change_listener_t *>(listener.get())) == 0;
 }
 
-bool waitUntilCompleted(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection>
-                            &instrumentProfileConnection,
-                        std::int64_t timeoutInMs) {
+bool waitUntilCompleted(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection,
+    std::int64_t timeoutInMs) {
     if (!instrumentProfileConnection) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileConnection_waitUntilCompleted`. The "
