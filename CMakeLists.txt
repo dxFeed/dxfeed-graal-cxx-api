@@ -84,6 +84,11 @@ option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
 option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
 
+# https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
+# https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
+# https://github.com/actions/runner-images/issues/10004
+option(DXFCXX_MSVC_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR "" OFF)
+
 
 option(DXFCXX_TRACING "Enable tracing" OFF)
 option(DXFCXX_LIST_TRACING "Enable list tracing" OFF)
@@ -538,12 +543,14 @@ set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
 #A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
 set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
 
-# https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
-# https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
-# https://github.com/actions/runner-images/issues/10004
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_definitions(${PROJECT_NAME} PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
-    target_compile_definitions(${PROJECT_NAME}_static PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+if (DXFCXX_MSVC_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+    # https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
+    # https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
+    # https://github.com/actions/runner-images/issues/10004
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        target_compile_definitions(${PROJECT_NAME} PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+        target_compile_definitions(${PROJECT_NAME}_static PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+    endif ()
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
