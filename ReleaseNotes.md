@@ -10,7 +10,17 @@
   * `template <typename EventTypeIt> std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin, EventTypeIt end) const;`
   * `std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(std::initializer_list<EventTypeEnum> eventTypes) const;`
   * `template <typename EventTypesCollection> std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(const EventTypesCollection &eventTypes) const;`
-* Added the ability to collect and register metrics. Enabled by the DXFCXX_ENABLE_METRICS CMake option. Documentation: TBD. 
+* Added the ability to collect and register metrics. Enabled by the DXFCXX_ENABLE_METRICS CMake option. Documentation: TBD.
+* Added CMake option `DXFCXX_MSVC_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR`.  
+  This option enables MSVC's `_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR` workaround for compatibility with older VC++ runtime 
+  libraries. It should normally remain disabled and is intended only for environments that experience crashes caused by
+  mixing newer STL headers with older `msvcp140.dll` versions.  
+  See:
+  * https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
+  * https://github.com/microsoft/STL/wiki/VS-2022-Changelog#vs-2022-1710
+  * https://github.com/microsoft/STL/pull/3824
+  * https://github.com/actions/runner-images/issues/10004 
+
 
 ## v5.0.0
 

@@ -85,9 +85,10 @@ option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
 
 # https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
-# https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
+# https://github.com/microsoft/STL/wiki/VS-2022-Changelog#vs-2022-1710
+# https://github.com/microsoft/STL/pull/3824
 # https://github.com/actions/runner-images/issues/10004
-option(DXFCXX_MSVC_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR "" OFF)
+option(DXFCXX_MSVC_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR "Enable _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR workaround for old MSVC runtimes" OFF)
 
 
 option(DXFCXX_TRACING "Enable tracing" OFF)
@@ -543,9 +544,19 @@ set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
 #A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
 set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
 
+add_library(dxfcxx_mingw_debug_link_options_interface INTERFACE)
+
+if (MINGW)
+    target_link_options(dxfcxx_mingw_debug_link_options_interface
+            INTERFACE
+            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${DXFCXX_MINGW_DEBUG_LINK_OPTIONS}>
+    )
+endif ()
+
 if (DXFCXX_MSVC_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
     # https://developercommunity.visualstudio.com/t/Invalid-code-generation-in-release-1940/10678572?sort=newest&viewtype=all
-    # https://github.com/microsoft/STL/wiki/Changelog#vs-2022-1710
+    # https://github.com/microsoft/STL/wiki/VS-2022-Changelog#vs-2022-1710
+    # https://github.com/microsoft/STL/pull/3824
     # https://github.com/actions/runner-images/issues/10004
     if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         target_compile_definitions(${PROJECT_NAME} PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
@@ -574,13 +585,6 @@ target_link_options(${PROJECT_NAME}
         $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
 )
 
-if (MINGW)
-    target_link_options(${PROJECT_NAME}
-            PUBLIC
-            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${DXFCXX_MINGW_DEBUG_LINK_OPTIONS}>
-    )
-endif ()
-
 target_compile_options(${PROJECT_NAME}_static
         PUBLIC
         $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
@@ -595,20 +599,20 @@ target_link_options(${PROJECT_NAME}_static
         $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
 )
 
-if (MINGW)
-    target_link_options(${PROJECT_NAME}_static
-            PUBLIC
-            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${DXFCXX_MINGW_DEBUG_LINK_OPTIONS}>
-    )
-endif ()
-
 if (DXFCXX_USE_PRECOMPILED_HEADERS)
     target_precompile_headers(${PROJECT_NAME} PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
     target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
 endif ()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config)
-target_link_libraries(${PROJECT_NAME}_static PRIVATE DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config)
+target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
+)
+
+target_link_libraries(${PROJECT_NAME}_static
+        PRIVATE
+        DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
+)
 
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})
