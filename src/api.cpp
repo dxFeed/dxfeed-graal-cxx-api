@@ -41,4 +41,21 @@ EventType::~EventType() noexcept {
 #endif
 }
 
+std::int64_t EventType::getEventTime() const noexcept {
+    return 0;
+}
+
+void EventType::setEventTime(std::int64_t eventTime) noexcept {
+    ignoreUnused(eventTime);
+    // The default implementation is empty
+}
+
+void EventType::assign(std::shared_ptr<EventType> event) {
+    ignoreUnused(event);
+}
+
+std::string EventType::toString() const {
+    return "EventType{}";
+}
+
 DXFCPP_END_NAMESPACE
