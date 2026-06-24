@@ -101,8 +101,8 @@ std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) {
 
 std::string TimeAndSale::toString() const {
     return fmt::format("TimeAndSale{{{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
-                       "exchange={}, price={}, size={}, bid={}, "
-                       "ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, validTick={}, type={}{}{}}}",
+                       "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
+                       "validTick={}, type={}{}{}}}",
                        MarketEvent::getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
                        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()),
