@@ -87,6 +87,9 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         endif ()
     endif ()
 
+    # Workaround for mingw + debug
+    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx_mingw_debug_link_options_interface)
+
     if (DXFCXX_FEATURE_STACKTRACE)
         LinkStacktrace(${DXFC_TEST_BASENAME})
         target_compile_definitions(${DXFC_TEST_BASENAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)

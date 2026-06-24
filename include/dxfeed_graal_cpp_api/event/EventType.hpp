@@ -28,7 +28,7 @@ DXFCPP_BEGIN_NAMESPACE
  *
  * @see DXFeed
  */
-struct DXFCPP_EXPORT EventType : public SharedEntity {
+struct DXFCPP_EXPORT EventType : SharedEntity {
     /// The alias to a type of shared pointer to the EventType object.
     using Ptr = std::shared_ptr<EventType>;
 
@@ -51,9 +51,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      * @return The difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC or zero when time is not available.
      */
-    virtual std::int64_t getEventTime() const noexcept {
-        return 0;
-    }
+    virtual std::int64_t getEventTime() const noexcept;
 
     /**
      * Changes event creation time.
@@ -63,9 +61,7 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
      */
-    virtual void setEventTime(std::int64_t /*eventTime*/) noexcept {
-        // The default implementation is empty
-    };
+    virtual void setEventTime(std::int64_t eventTime) noexcept;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -81,14 +77,10 @@ struct DXFCPP_EXPORT EventType : public SharedEntity {
      *
      * @param event the event to use as a source.
      */
-    virtual void assign(std::shared_ptr<EventType> event) {
-        ignoreUnused(event);
-    }
+    virtual void assign(std::shared_ptr<EventType> event);
 
     ///
-    std::string toString() const override {
-        return "EventType{}";
-    }
+    std::string toString() const override;
 
     friend std::ostream &operator<<(std::ostream &os, const EventType &e) {
         return os << e.toString();

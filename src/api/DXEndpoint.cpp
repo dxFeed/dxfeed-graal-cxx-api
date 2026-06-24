@@ -34,8 +34,16 @@ const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
 const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
 
 struct DXEndpoint::Impl {
-    static std::mutex MTX;
-    static std::unordered_map<Role, std::shared_ptr<DXEndpoint>> INSTANCES;
+    struct Registry {
+        std::mutex mutex;
+        std::unordered_map<Role, std::shared_ptr<DXEndpoint>> instances;
+    };
+
+    static Registry& getRegistry() {
+        static Registry registry;
+
+        return registry;
+    }
 
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                  dxfg_endpoint_state_t newState, void *userData) {
@@ -65,13 +73,17 @@ struct DXEndpoint::Impl {
             Debugger::debug("DXEndpoint::Impl::getInstance(role = " + roleToString(role) + ")");
         }
 
-        std::lock_guard lock(MTX);
+        auto &[mutex, instances] = getRegistry();
 
-        if (INSTANCES.contains(role)) {
-            return INSTANCES[role];
+        std::lock_guard lock(mutex);
+
+        auto& instance = instances[role];
+
+        if (!instance) {
+            instance = create(role);
         }
 
-        return INSTANCES[role] = create(role);
+        return instance;
     }
 
     mutable std::mutex mutex_{};
@@ -98,9 +110,6 @@ struct DXEndpoint::Impl {
         return publisher_ = DXPublisher::create(isolated::api::IsolatedDXEndpoint::getPublisher(handle));
     }
 };
-
-std::mutex DXEndpoint::Impl::MTX{};
-std::unordered_map<DXEndpoint::Role, std::shared_ptr<DXEndpoint>> DXEndpoint::Impl::INSTANCES{};
 
 std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, Role role,
                                                const std::unordered_map<std::string, std::string> &properties) {

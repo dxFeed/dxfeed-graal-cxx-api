@@ -78,16 +78,16 @@ std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) {
 }
 
 std::string Summary::toString() const {
-    return fmt::format(
-        "Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
-        "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
-        "prevDayVolume={}, openInterest={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
-        dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()), dxfcpp::toString(getDayLowPrice()),
-        dxfcpp::toString(getDayClosePrice()), getDayClosePriceType().toString(),
-        day_util::getYearMonthDayByDayId(getPrevDayId()), dxfcpp::toString(getPrevDayClosePrice()),
-        getPrevDayClosePriceType().toString(), dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
+    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
+                       "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
+                       "prevDayVolume={}, openInterest={}}}",
+                       MarketEvent::getEventSymbol(),
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+                       day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
+                       dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()),
+                       dxfcpp::toString(getDayClosePrice()), getDayClosePriceType().toString(),
+                       day_util::getYearMonthDayByDayId(getPrevDayId()), dxfcpp::toString(getPrevDayClosePrice()),
+                       getPrevDayClosePriceType().toString(), dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
 }
 
 void *Summary::toGraal() const {
