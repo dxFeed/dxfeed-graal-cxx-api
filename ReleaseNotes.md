@@ -2,6 +2,7 @@
 
 * **\[MDAPI-405]** Fixed project build errors that occurred when attempting to build a project using clang 19+.
 * **\[MDAPI-406]** Fixed linking errors where some static fields could be uninitialized.
+* **\[MDAPI-411]** Fixed the `toString()` method of the Summary event.
 * Migrated to Graal SDK v3.2.0.
 * **\[BREAKING]** Fixed a sporadic build error where the compiler failed to pick the correct method implementation when only a single event type was specified during subscription creation.
   These methods are now const:
