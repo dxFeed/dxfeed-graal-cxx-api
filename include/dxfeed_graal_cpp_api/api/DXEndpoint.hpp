@@ -31,7 +31,7 @@ struct OnDemandService;
  * that are available with DXEndpoint::getInstance() and DXEndpoint::getInstance(Role) methods as well as
  * factory methods DXEndpoint::create() and DXEndpoint::create(Role), and a number of configuration methods. Advanced
  * properties can be configured using
- * @ref DXEndpoint::newBuilder() "newBuilder()".@ref DXEndpoint::Builder::withProperty(const StringLike&, const StringLike&) "withProperty(key, value)".@ref DXEndpoint::Builder::build() "build()".
+ * @ref DXEndpoint::newBuilder() "newBuilder()"->@ref DXEndpoint::Builder::withProperty(const StringLike&, const StringLike&) "withProperty(key, value)"->@ref DXEndpoint::Builder::build() "build()".
  *
  * See DXFeed for details on how to subscribe to symbols and receive events.
  *
@@ -59,7 +59,7 @@ struct OnDemandService;
  *   This endpoint is automatically connected to the configured data feed, as explained in the default properties section.
  * - @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" is similar to @ref Role::FEED "FEED", but it is designed to be used with
  *   OnDemandService for historical data replay only. It is configured with default properties but is not connected
- *   automatically to the data provider until the @ref OnDemandService::replay(std::int64_t, double) "OnDemandService::replay" method is invoked.
+ *   automatically to the data provider until the OnDemandService::replay method is invoked.
  * - @ref Role::STREAM_FEED "STREAM_FEED" is similar to @ref Role::FEED "FEED" and also connects to the remote data
  *   feed provider, but is designed for bulk parsing of data from files. DXEndpoint::getFeed() method returns feed
  *   object that subscribes to the data from the opened files and receives events from them. Events from the files are
@@ -78,7 +78,7 @@ struct OnDemandService;
  * - @ref Role::PUBLISHER "PUBLISHER" connects to the remote publisher hub (also known as multiplexor) or creates a
  *   publisher on the local host. DXEndpoint::getPublisher() method returns a publisher object that publishes events to
  * all connected feeds. For example,
- * <b>`DXEndpoint->create(DXEndpoint::Role::PUBLISHER)->connect(":7400")->getPublisher()`</b> returns a publisher
+ * <b>`DXEndpoint::create(DXEndpoint::Role::PUBLISHER)->connect(":7400")->getPublisher()`</b> returns a publisher
  * waiting for connections on TCP/IP port 7400. The published events will be delivered to all feeds that are
  * connected to this publisher. This endpoint is automatically connected to the configured data feed, as explained in
  * the default properties section.
@@ -88,7 +88,7 @@ struct OnDemandService;
  *
  * <h3>Endpoint state</h3>
  *
- * Each endpoint has a state that can be retrieved with the DXEndpoint::getState () method.
+ * Each endpoint has a state that can be retrieved with the DXEndpoint::getState method.
  * When an endpoint is created with any role and the default address is not specified in default properties, then it is not
  * connected to any remote endpoint.
  * Its state is @ref State::NOT_CONNECTED "NOT_CONNECTED".
