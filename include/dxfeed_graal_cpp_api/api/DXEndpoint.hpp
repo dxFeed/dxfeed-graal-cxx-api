@@ -378,8 +378,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         /**
          * `ON_DEMAND_FEED` endpoint is similar to DXEndpoint::FEED, but it is designed to be used with OnDemandService
          * for historical data replay only. It is configured with <a href="#defaultPropertiesSection">default properties</a>,
-         * but is not connected automatically to the data provider until @ref OnDemandService::(std::int64_t,double) "OnDemandService.replay"
-         * method is invoked.
+         * but is not connected automatically to the data provider until OnDemandService::replay() method is invoked.
          *
          * `ON_DEMAND_FEED` endpoint cannot be connected to an ordinary data feed at all.
          * OnDemandService::stopAndResume() will have a similar effect to OnDemandService::stopAndClear().
@@ -699,13 +698,13 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Terminates all established network connections and initiates connecting again with the same address.
      *
-     * <p>The effect of the method is alike to invoking :disconnect() and :connect(const StringLike&)
+     * <p>The effect of the method is alike to invoking ::disconnect() and ::connect(const StringLike&)
      * with the current address, but internal resources used for connections may be reused by implementation.
      * TCP connections with multiple target addresses will try to switch to an alternative address, configured
      * reconnect timeouts will apply.
      *
      * <p><b>Note:</b> The method will not connect an endpoint that was not initially connected with
-     * :connect(const StringLike&) method or was disconnected with ::disconnect() method.
+     * ::connect(const StringLike&) method or was disconnected with ::disconnect() method.
      *
      * <p>The method initiates a short-pathway for reconnecting, so whether observers will have a chance to see
      * an intermediate state State#NOT_CONNECTED depends on the implementation.

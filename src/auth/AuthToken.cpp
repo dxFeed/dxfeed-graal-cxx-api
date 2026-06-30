@@ -10,6 +10,9 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+const std::string AuthToken::BASIC_SCHEME{"Basic"};
+const std::string AuthToken::BEARER_SCHEME{"Bearer"};
+
 const AuthToken AuthToken::NULL_TOKEN(JavaObjectHandle<AuthToken>(), true);
 
 AuthToken AuthToken::valueOf(const StringLike &string) {
