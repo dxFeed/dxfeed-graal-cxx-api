@@ -13,6 +13,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <string>
 
+/**
+ * \defgroup dxfcpp_auth "Auth" Module
+ * \ingroup dxfcpp_modules
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -172,6 +178,8 @@ struct DXFCPP_EXPORT AuthToken {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::AuthToken> {
     std::size_t operator()(const dxfcpp::AuthToken &t) const noexcept {

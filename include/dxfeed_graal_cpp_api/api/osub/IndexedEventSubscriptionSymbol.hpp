@@ -12,6 +12,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <memory>
 
+/**
+ * \addtogroup dxfcpp_osub
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 class IndexedEventSource;
@@ -116,6 +121,8 @@ class DXFCPP_EXPORT IndexedEventSubscriptionSymbol {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::IndexedEventSubscriptionSymbol> {
     std::size_t

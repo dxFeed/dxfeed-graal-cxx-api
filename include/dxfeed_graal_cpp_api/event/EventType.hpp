@@ -162,6 +162,16 @@ template<> struct EventTypeWithSymbol<std::string> : EventType {
     virtual void setEventSymbol(const StringLike &eventSymbol) noexcept = 0;
 };
 
+template <Derived<EventType> EBase, Derived<EBase> EDerived>
+static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
+    return convertSharedEntity<EBase, EDerived>(source);
+}
+
+template <Derived<EventType> EBase, Derived<EBase> EDerived>
+static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<std::shared_ptr<EBase>> &source) {
+    return convertSharedEntities<EBase, EDerived>(source);
+}
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

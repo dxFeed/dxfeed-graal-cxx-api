@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_osub "Observable Subscription" Module
+ * \ingroup dxfcpp_api
+ */
+
 #include "./IndexedEventSubscriptionSymbol.hpp"
 #include "./ObservableSubscription.hpp"
 #include "./ObservableSubscriptionChangeListener.hpp"

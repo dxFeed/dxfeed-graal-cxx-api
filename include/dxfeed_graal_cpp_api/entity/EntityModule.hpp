@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_entity "Entity" Module
+ * \ingroup dxfcpp_modules
+ */
+
 #include "./Entity.hpp"
 #include "./SharedEntity.hpp"
 

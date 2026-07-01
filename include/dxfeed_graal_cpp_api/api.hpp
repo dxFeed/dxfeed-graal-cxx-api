@@ -7,6 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
+/**
+ * \defgroup dxfcpp_modules dxFeed Graal C++ API Modules
+ */
+
 #include "./api/ApiModule.hpp"
 #include "./auth/AuthToken.hpp"
 #include "./candlewebservice/HistoryEndpoint.hpp"

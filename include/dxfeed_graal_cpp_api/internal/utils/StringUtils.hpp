@@ -186,8 +186,18 @@ struct StringHash {
     }
 };
 
+/**
+ * Common string constants used across the library.
+ *
+ * `EMPTY` represents an empty string value.
+ * `NUL` is a textual placeholder for a missing or null string value
+ * and is intended for logging, debugging, and diagnostic output.
+ */
 struct DXFCPP_EXPORT String {
+    /// Empty string constant: `""`.
     inline static const std::string EMPTY{};
+
+    /// Textual representation of a null / missing string: `"<null>"`.
     inline static const std::string NUL{"<null>"};
 };
 

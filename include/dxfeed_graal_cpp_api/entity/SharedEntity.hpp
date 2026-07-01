@@ -14,6 +14,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <vector>
 
+/**
+ * \addtogroup dxfcpp_entity
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /// A base abstract "shared entity" class. Has some helpers for dynamic polymorphism
@@ -88,7 +93,7 @@ DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 template <typename T> struct RequireMakeShared : virtual SharedEntity {
     protected:
     struct LockExternalConstructionTag {
-        explicit LockExternalConstructionTag() {}
+        explicit LockExternalConstructionTag() {} // NOLINT(*-use-equals-default)
     };
 
     public:
@@ -108,8 +113,8 @@ template <typename T> struct RequireMakeShared : virtual SharedEntity {
 
 DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
-template <typename EBase, Derived<EBase> EDerived>
-static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
+template <Derived<SharedEntity> EBase, Derived<EBase> EDerived>
+static std::shared_ptr<EDerived> convertSharedEntity(const std::shared_ptr<EBase> &source) {
     if (!source) {
         return {};
     }
@@ -117,8 +122,8 @@ static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &sour
     return source->template sharedAs<EDerived>();
 }
 
-template <typename EBase, Derived<EBase> EDerived>
-static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<std::shared_ptr<EBase>> &source) {
+template <Derived<SharedEntity> EBase, Derived<EBase> EDerived>
+static std::vector<std::shared_ptr<EDerived>> convertSharedEntities(const std::vector<std::shared_ptr<EBase>> &source) {
     std::vector<std::shared_ptr<EDerived>> result{};
 
     result.reserve(source.size());
@@ -131,5 +136,7 @@ static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<st
 }
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

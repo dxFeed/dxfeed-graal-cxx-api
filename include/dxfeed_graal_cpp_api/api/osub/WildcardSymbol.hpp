@@ -11,6 +11,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_osub
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -103,6 +108,8 @@ WildcardSymbol operator""_wcs(const char *, size_t) noexcept;
 } // namespace literals
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::WildcardSymbol> {
     std::size_t operator()(const dxfcpp::WildcardSymbol &wildcardSymbol) const noexcept {

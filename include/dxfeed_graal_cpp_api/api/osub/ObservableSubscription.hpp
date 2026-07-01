@@ -10,6 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <unordered_set>
 
+/**
+ * \addtogroup dxfcpp_osub
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 class EventTypeEnum;
@@ -68,5 +73,7 @@ struct DXFCPP_EXPORT ObservableSubscription {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
