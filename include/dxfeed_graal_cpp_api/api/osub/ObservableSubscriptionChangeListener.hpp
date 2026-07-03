@@ -12,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 #include <unordered_set>
+#include <functional>
 
 /**
  * \addtogroup dxfcpp_osub

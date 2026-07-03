@@ -93,7 +93,8 @@ DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 template <typename T> struct RequireMakeShared : virtual SharedEntity {
     protected:
     struct LockExternalConstructionTag {
-        explicit LockExternalConstructionTag() {} // NOLINT(*-use-equals-default)
+        explicit LockExternalConstructionTag() {
+        } // NOLINT(*-use-equals-default)
     };
 
     public:
@@ -113,6 +114,14 @@ template <typename T> struct RequireMakeShared : virtual SharedEntity {
 
 DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
+/**
+ * Converts a shared pointer of a SharedEntity descendant of type EBase to a shared pointer of an EBase descendant.
+ *
+ * @tparam EBase The SharedEntity descendant type.
+ * @tparam EDerived The EBase descendant type.
+ * @param source The source shared pointer.
+ * @return The converted shared pointer.
+ */
 template <Derived<SharedEntity> EBase, Derived<EBase> EDerived>
 static std::shared_ptr<EDerived> convertSharedEntity(const std::shared_ptr<EBase> &source) {
     if (!source) {
@@ -122,6 +131,15 @@ static std::shared_ptr<EDerived> convertSharedEntity(const std::shared_ptr<EBase
     return source->template sharedAs<EDerived>();
 }
 
+/**
+ * Converts a vector of shared pointers to EBase-type SharedEntity descendants into a vector of shared pointers to EBase
+ * descendants.
+ *
+ * @tparam EBase The SharedEntity descendant type.
+ * @tparam EDerived The EBase descendant type.
+ * @param source The source vector of shared pointers.
+ * @return The converted vector of shared pointers.
+ */
 template <Derived<SharedEntity> EBase, Derived<EBase> EDerived>
 static std::vector<std::shared_ptr<EDerived>> convertSharedEntities(const std::vector<std::shared_ptr<EBase>> &source) {
     std::vector<std::shared_ptr<EDerived>> result{};
