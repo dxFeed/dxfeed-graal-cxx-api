@@ -34,7 +34,6 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
  * The key to use with these methods is available via CandlePeriod::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString()
- * "CandlePeriod.toString()"
  */
 struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     /**
