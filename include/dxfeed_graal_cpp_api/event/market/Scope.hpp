@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_map>
 
+/**
+ * \addtogroup dxfcpp_market
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -46,5 +51,7 @@ struct Scope : Enum<Scope, std::uint32_t> {
 template <> const std::unordered_map<Scope::CodeType, std::reference_wrapper<const Scope>> Scope::ParentType::ALL;
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -18,6 +18,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <unordered_set>
 
+/**
+ * \addtogroup dxfcpp_model
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeed;
@@ -453,6 +458,8 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <dxfcpp::Derived<dxfcpp::TimeSeriesEvent> E> struct std::hash<dxfcpp::TimeSeriesTxModel<E>> {
     std::size_t operator()(const dxfcpp::TimeSeriesTxModel<E> &m) const noexcept {

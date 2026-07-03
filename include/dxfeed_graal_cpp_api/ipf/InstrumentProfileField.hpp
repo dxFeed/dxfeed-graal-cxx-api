@@ -14,6 +14,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_map>
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 enum class InstrumentProfileFieldEnum {
@@ -128,5 +133,7 @@ class DXFCPP_EXPORT InstrumentProfileField {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

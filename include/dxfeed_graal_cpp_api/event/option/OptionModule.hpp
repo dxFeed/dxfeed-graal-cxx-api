@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_option "Option" Module
+ * \ingroup dxfcpp_event
+ */
+
 #include "./Greeks.hpp"
 #include "./Series.hpp"
 #include "./TheoPrice.hpp"

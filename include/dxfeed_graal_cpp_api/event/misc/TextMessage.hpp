@@ -15,6 +15,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_misc
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
@@ -258,5 +263,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

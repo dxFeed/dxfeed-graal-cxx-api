@@ -17,6 +17,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <unordered_set>
 
+/**
+ * \defgroup dxfcpp_model "Model" Module
+ * \ingroup dxfcpp_modules
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct SymbolWrapper;
@@ -533,6 +539,8 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <dxfcpp::Derived<dxfcpp::IndexedEvent> E> struct std::hash<dxfcpp::IndexedTxModel<E>> {
     std::size_t operator()(const dxfcpp::IndexedTxModel<E> &m) const noexcept {

@@ -16,6 +16,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <unordered_map>
 
+/**
+ * \addtogroup dxfcpp_market
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventSourceWrapper;
@@ -571,6 +576,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::OrderSource> {
     std::size_t operator()(const dxfcpp::OrderSource &orderSource) const noexcept {

@@ -20,6 +20,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <variant>
 
+/**
+ * \addtogroup dxfcpp_symbols
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -420,6 +425,8 @@ inline SymbolWrapper operator""_sw(const char *string, size_t length) noexcept {
 } // namespace literals
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::SymbolWrapper> {
     std::size_t operator()(const dxfcpp::SymbolWrapper &symbolWrapper) const noexcept {

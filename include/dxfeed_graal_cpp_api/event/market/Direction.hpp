@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_map>
 
+/**
+ * \addtogroup dxfcpp_market
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -60,5 +65,7 @@ template <>
 const std::unordered_map<Direction::CodeType, std::reference_wrapper<const Direction>> Direction::ParentType::ALL;
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

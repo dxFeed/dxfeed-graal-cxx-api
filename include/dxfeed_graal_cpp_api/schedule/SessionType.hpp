@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \addtogroup dxfcpp_schedule
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 enum class SessionTypeEnum : std::uint32_t {
@@ -69,6 +74,8 @@ struct DXFCPP_EXPORT SessionType {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::SessionType> {
     std::size_t operator()(const dxfcpp::SessionType &sessionType) const noexcept {

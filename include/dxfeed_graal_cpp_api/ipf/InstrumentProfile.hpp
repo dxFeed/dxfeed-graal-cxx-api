@@ -19,6 +19,11 @@ DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 #include <type_traits>
 #include <vector>
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 class IterableInstrumentProfile;
@@ -784,6 +789,8 @@ struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<Instrume
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::InstrumentProfile> {
     std::size_t operator()(const dxfcpp::InstrumentProfile &t) const noexcept {

@@ -10,6 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Enum.hpp"
 #include <cstdint>
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -43,5 +48,7 @@ const std::unordered_map<InstrumentProfileType::CodeType, std::reference_wrapper
     InstrumentProfileType::ParentType::ALL;
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

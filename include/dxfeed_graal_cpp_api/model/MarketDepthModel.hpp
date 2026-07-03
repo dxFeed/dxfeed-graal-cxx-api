@@ -20,6 +20,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_set>
 #include <utility>
 
+/**
+ * \addtogroup dxfcpp_model
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeed;
@@ -790,5 +795,7 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

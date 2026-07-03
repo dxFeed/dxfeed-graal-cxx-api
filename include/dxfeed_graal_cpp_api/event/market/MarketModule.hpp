@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_market "Market" Module
+ * \ingroup dxfcpp_event
+ */
+
 #include "./AnalyticOrder.hpp"
 #include "./Direction.hpp"
 #include "./IcebergType.hpp"

@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../internal/JavaObjectHandle.hpp"
 #include "./InstrumentProfileCollector.hpp"
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -245,5 +250,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

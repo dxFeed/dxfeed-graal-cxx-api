@@ -11,6 +11,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 
+/**
+ * \addtogroup dxfcpp_schedule
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct SessionFilter;
@@ -218,5 +223,7 @@ struct DXFCPP_EXPORT Schedule {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

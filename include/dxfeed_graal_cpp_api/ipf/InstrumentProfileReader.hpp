@@ -17,6 +17,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <vector>
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct AuthToken;
@@ -137,5 +142,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

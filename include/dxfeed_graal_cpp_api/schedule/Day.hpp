@@ -9,6 +9,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../internal/JavaObjectHandle.hpp"
 
+/**
+ * \addtogroup dxfcpp_schedule
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct Schedule;
@@ -296,6 +301,8 @@ struct DXFCPP_EXPORT Day {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Day> {
     std::size_t operator()(const dxfcpp::Day &day) const noexcept {

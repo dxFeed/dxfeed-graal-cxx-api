@@ -11,6 +11,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
+/**
+ * \addtogroup dxfcpp_glossary
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -488,6 +493,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::PriceIncrements> {
     std::size_t operator()(const dxfcpp::PriceIncrements &p) const noexcept {

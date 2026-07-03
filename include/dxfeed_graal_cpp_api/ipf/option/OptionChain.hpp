@@ -9,8 +9,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
 #include "./OptionSeries.hpp"
+
 #include <set>
 #include <string>
+
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -68,5 +74,7 @@ template <typename T> class OptionChain final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

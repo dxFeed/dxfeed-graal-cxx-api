@@ -10,6 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 #include "./SessionFilter.hpp"
 
+/**
+ * \addtogroup dxfcpp_schedule
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct Day;
@@ -198,6 +203,8 @@ struct DXFCPP_EXPORT Session {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::Session> {
     std::size_t operator()(const dxfcpp::Session &session) const noexcept {

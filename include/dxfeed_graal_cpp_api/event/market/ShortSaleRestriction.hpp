@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_map>
 
+/**
+ * \addtogroup dxfcpp_market
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -42,5 +47,7 @@ const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<
     ShortSaleRestriction::ParentType::ALL;
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

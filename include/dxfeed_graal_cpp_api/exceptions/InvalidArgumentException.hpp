@@ -10,6 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 #include "../internal/Common.hpp"
 #include "./RuntimeException.hpp"
 
+/**
+ * \addtogroup dxfcpp_exceptions
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -23,5 +28,7 @@ struct DXFCPP_EXPORT InvalidArgumentException : RuntimeException {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

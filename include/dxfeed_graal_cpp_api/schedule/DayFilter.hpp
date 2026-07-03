@@ -10,6 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
+/**
+ * \addtogroup dxfcpp_schedule
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /// Helper enum for DayFilter
@@ -185,5 +190,7 @@ struct DXFCPP_EXPORT DayFilter {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

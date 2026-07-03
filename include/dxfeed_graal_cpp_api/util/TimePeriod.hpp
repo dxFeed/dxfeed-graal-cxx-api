@@ -11,6 +11,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 
+/**
+ * \defgroup dxfcpp_util "Util" Module
+ * \ingroup dxfcpp_modules
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 class DXFeedSubscription;
@@ -105,5 +111,7 @@ struct DXFCPP_EXPORT TimePeriod {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

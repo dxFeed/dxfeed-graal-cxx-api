@@ -14,6 +14,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_candle
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -158,6 +163,8 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::CandlePeriod> {
     std::size_t operator()(const dxfcpp::CandlePeriod &candlePeriod) const noexcept {

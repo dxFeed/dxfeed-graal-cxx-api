@@ -15,6 +15,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_map>
 #include <vector>
 
+/**
+ * \addtogroup dxfcpp_candle
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -117,6 +122,8 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::CandleAlignment> {
     std::size_t operator()(const dxfcpp::CandleAlignment &candleAlignment) const noexcept {

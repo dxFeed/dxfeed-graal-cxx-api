@@ -15,6 +15,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <type_traits>
 
+/**
+ * \addtogroup dxfcpp_candle
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -126,6 +131,8 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::CandlePriceLevel> {
     std::size_t operator()(const dxfcpp::CandlePriceLevel &candlePriceLevel) const noexcept {

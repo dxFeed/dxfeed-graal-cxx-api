@@ -12,6 +12,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 #include <stdexcept>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_exceptions
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -38,6 +43,8 @@ struct DXFCPP_EXPORT RuntimeException : std::runtime_error {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCPP_EXPORT std::ostream &operator<<(std::ostream &os, const dxfcpp::RuntimeException &e);
 

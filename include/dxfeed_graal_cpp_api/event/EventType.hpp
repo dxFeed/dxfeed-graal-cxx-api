@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_event
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -190,5 +195,7 @@ static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<st
 }
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

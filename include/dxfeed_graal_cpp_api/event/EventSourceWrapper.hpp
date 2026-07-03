@@ -18,6 +18,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <unordered_set>
 #include <variant>
 
+/**
+ * \addtogroup dxfcpp_event
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -279,6 +284,8 @@ struct DXFCPP_EXPORT EventSourceWrapper final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::EventSourceWrapper> {
     std::size_t operator()(const dxfcpp::EventSourceWrapper &eventSourceWrapper) const noexcept {
