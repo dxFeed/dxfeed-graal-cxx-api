@@ -55,8 +55,6 @@ struct EventMapper;
  *
  * <p>IndexedEventModel class handles all the snapshot and transaction logic and conveniently represents
  * a list current of events.
- * It relies on the code of AbstractIndexedEventModel to handle this logic.
- * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
  * <h3>Publishing order books</h3>
  *

@@ -43,8 +43,6 @@ struct EventMapper;
  *
  * TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents
  * a list current of time-series events order by their @ref ::getTime() "time".
- * It relies on the code of AbstractIndexedEventModel to handle this logic.
- * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
  * <h3>Publishing Greeks</h3>
  *

@@ -48,8 +48,6 @@ struct EventMapper;
  *
  * <p>TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents a list
  * current of time-series events ordered by their @ref Candle::getTime() "time".
- * It relies on the code of AbstractIndexedEventModel to handle this logic.
- * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
  * <h3>Publishing Candles</h3>
  *
