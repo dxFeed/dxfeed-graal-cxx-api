@@ -52,7 +52,7 @@ struct DXFCPP_EXPORT ObservableSubscription {
     /**
      * Adds subscription change listener. This method does nothing if the subscription is closed.
      * Otherwise, it installs the corresponding listener and immediately
-     * invokes ObservableSubscriptionChangeListener::symbolsAdded() on the given listener while holding the lock for
+     * invokes `ObservableSubscriptionChangeListener::onSymbolsAdded_` on the given listener while holding the lock for
      * this subscription. This way the given listener synchronously receives the existing subscription state and is
      * synchronously notified on all changes in the subscription afterward.
      *
@@ -64,7 +64,7 @@ struct DXFCPP_EXPORT ObservableSubscription {
     /**
      * Removes subscription change listener by id. This method does nothing if the listener with the given id was not
      * installed or was already removed as a subscription change listener for this subscription. Otherwise, it removes the
-     * corresponding listener and immediately invokes ObservableSubscriptionChangeListener::subscriptionClosed() on the
+     * corresponding listener and immediately invokes `ObservableSubscriptionChangeListener::onSubscriptionClosed_` on the
      * given listener while holding the lock for this subscription.
      *
      * @param id The subscription change listener id.

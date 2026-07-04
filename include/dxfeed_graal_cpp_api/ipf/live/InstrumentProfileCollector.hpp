@@ -103,10 +103,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     }
 
     /**
-     * Convenience method to update one instrument profile in this collector. This is a shortcut for:
-     * <pre><tt>
-     *    @ref InstrumentProfileCollector::updateInstrumentProfiles() "updateInstrumentProfiles"({ip}, nullptr);
-     * </tt></pre>
+     * Convenience method to update one instrument profile in this collector.
      *
      * @param ip The instrument profile.
      */

@@ -23,7 +23,7 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * Set of option series for a single product or underlying symbol.
  *
- * <h3>Threads and clocks</h3>
+ * <h3>Threads and locks</h3>
  *
  * This class is <b>NOT</b> thread-safe and cannot be used from multiple threads without external synchronization.
  *

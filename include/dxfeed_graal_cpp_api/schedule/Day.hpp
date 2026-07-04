@@ -167,9 +167,13 @@ struct DXFCPP_EXPORT Day {
      * within this day this method will throw JavaException "NoSuchElementException"
      * <p>
      * To find first trading session of any type use this code:
-     * <pre>Session session = day->getFirstSession(SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = day->getFirstSession(SessionFilter::TRADING);
+     * ```
      * To find first regular trading session use this code:
-     * <pre>Session session = day->getFirstSession(SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = day->getFirstSession(SessionFilter::REGULAR);
+     * ```
      *
      * @param filter The filter to test sessions
      * @return The first session that is accepted by the filter.
@@ -183,9 +187,13 @@ struct DXFCPP_EXPORT Day {
      * within this day this method will throw JavaException "NoSuchElementException"
      * <p>
      * To find last trading session of any type use this code:
-     * <pre>auto session = day->getLastSession(SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = day->getLastSession(SessionFilter::TRADING);
+     * ```
      * To find last regular trading session use this code:
-     * <pre>auto session = day->getLastSession(SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = day->getLastSession(SessionFilter::REGULAR);
+     * ```
      *
      * @param filter The filter to test sessions
      * @return The last session that is accepted by the filter.
@@ -199,9 +207,13 @@ struct DXFCPP_EXPORT Day {
      * within this day this method will return Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
      * <p>
      * To find first trading session of any type use this code:
-     * <pre>auto session = day->findFirstSession(SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = day->findFirstSession(SessionFilter::TRADING);
+     * ```
      * To find first regular trading session use this code:
-     * <pre>auto session = day->findFirstSession(SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = day->findFirstSession(SessionFilter::REGULAR);
+     * ```
      *
      * @param filter The filter to test sessions
      * @return The first session that is accepted by the filter or Session::Ptr{nullptr}
@@ -215,9 +227,13 @@ struct DXFCPP_EXPORT Day {
      * within this day this method will return Session::Ptr{nullptr} (std::shared_ptr<Session>{nullptr})
      * <p>
      * To find last trading session of any type use this code:
-     * <pre>auto session = day->findLastSession(SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = day->findLastSession(SessionFilter::TRADING);
+     * ```
      * To find last regular trading session use this code:
-     * <pre>auto session = day->findLastSession(SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = day->findLastSession(SessionFilter::REGULAR);
+     * ```
      *
      * @param filter The filter to test sessions
      * @return The last session that is accepted by the filter or Session::Ptr{nullptr}
@@ -241,7 +257,7 @@ struct DXFCPP_EXPORT Day {
      * This method looks for appropriate day up to a year in the future. If no such day was found
      * within one year this method will throw JavaException "NoSuchElementException".
      *
-     * @param filter The filter the filter to test days
+     * @param filter The filter to test days
      * @return The nearest following day that is accepted by the filter.
      * @throw JavaException "NoSuchElementException" if no such day was found within one year
      */

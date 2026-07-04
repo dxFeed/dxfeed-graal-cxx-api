@@ -110,9 +110,13 @@ struct DXFCPP_EXPORT Session {
      * within one year this method will throw JavaException "NoSuchElementException".
      * <p>
      * To find previous trading session of any type use this code:
-     * <pre>session = session->getPrevSession(SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = session->getPrevSession(SessionFilter::TRADING);
+     * ```
      * To find previous regular trading session use this code:
-     * <pre>session = session->getPrevSession(SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = session->getPrevSession(SessionFilter::REGULAR);
+     * ```
      *
      * @param filter The filter to test sessions
      * @return The nearest previous session that is accepted by the filter.
@@ -127,9 +131,13 @@ struct DXFCPP_EXPORT Session {
      * within one year this method will throw JavaException "NoSuchElementException".
      * <p>
      * To find following trading session of any type use this code:
-     * <pre>session = session->getNextSession(SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = session->getNextSession(SessionFilter::TRADING);
+     * ```
      * To find following regular trading session use this code:
-     * <pre>session = session->getNextSession(SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = session->getNextSession(SessionFilter::REGULAR);
+     * ```
      *
      * @param filter The filter to test sessions
      * @return The nearest following session that is accepted by the filter.
@@ -144,9 +152,13 @@ struct DXFCPP_EXPORT Session {
      * within one year this method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
      * <p>
      * To find previous trading session of any type use this code:
-     * <pre>session = session->findPrevSession(SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = session->findPrevSession(SessionFilter::TRADING);
+     * ```
      * To find previous regular trading session use this code:
-     * <pre>session = session->findPrevSession(SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = session->findPrevSession(SessionFilter::REGULAR);
+     * ```
      *
      * @param filter The filter to test sessions
      * @return nearest previous session that is accepted by the filter or `Session::Ptr{nullptr}`
@@ -161,9 +173,13 @@ struct DXFCPP_EXPORT Session {
      * within one year this method will return `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
      * <p>
      * To find following trading session of any type use this code:
-     * <pre>session = session->findNextSession(SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = session->findNextSession(SessionFilter::TRADING);
+     * ```
      * To find following regular trading session use this code:
-     * <pre>session = session->findNextSession(SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = session->findNextSession(SessionFilter::REGULAR);
+     * ```
      *
      * @param filter The filter to test sessions
      * @return nearest following session that is accepted by the filter or `Session::Ptr{nullptr}`

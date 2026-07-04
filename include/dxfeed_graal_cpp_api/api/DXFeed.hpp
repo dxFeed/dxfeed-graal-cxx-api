@@ -45,13 +45,13 @@ struct TimeSeriesTxModelImpl;
  *
  * <p>In particular,
  * you can provide a default address to connect and credentials  using
- * "@ref DXEndpoint::DXFEED_ADDRESS_PROPERTY "dxfeed.address"",
- * "@ref DXEndpoint::DXFEED_USER_PROPERTY "dxfeed.user"", and
- * "@ref DXEndpoint::DXFEED_PASSWORD_PROPERTY "dxfeed.password""
+ * @ref DXEndpoint::DXFEED_ADDRESS_PROPERTY "dxfeed.address",
+ * @ref DXEndpoint::DXFEED_USER_PROPERTY "dxfeed.user", and
+ * @ref DXEndpoint::DXFEED_PASSWORD_PROPERTY "dxfeed.password"
  * system properties or by putting them into
- * "@ref DXEndpoint::DXFEED_PROPERTIES_PROPERTY "dxfeed.properties""
- * file in the same directory. dxFeed API samples come with a ready-to-use "<b>dxfeed.properties</b>"
- * file that contains an address of dxFeed demo feed at "<b>demo.dxfeed.com:7300</b>" and
+ * @ref DXEndpoint::DXFEED_PROPERTIES_PROPERTY "dxfeed.properties"
+ * file in the same directory. dxFeed API samples come with a ready-to-use <b>"dxfeed.properties"</b>
+ * file that contains an address of dxFeed demo feed at <b>"demo.dxfeed.com:7300"</b> and
  * demo access credentials.
  *
  * <h4>Subscribe for single event type</h4>
@@ -227,7 +227,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the absence
      * of subscription.
      *
-     * <p> This method fills in the values for the last event into the `event argument.
+     * <p> This method fills in the values for the last event into the `event` argument.
      * If the last event is not available for any reason (no subscription, no connection to uplink, etc.)
      * then the event object is not changed.
      * This method always returns the same `event` instance passed to it as an argument.
