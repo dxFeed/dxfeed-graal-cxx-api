@@ -180,8 +180,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OrderBase(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
-    }
+    explicit OrderBase(const StringLike &eventSymbol) noexcept;
 
     /**
      * Returns source of this event.
@@ -189,15 +188,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return source of this event.
      */
-    const OrderSource &getSource() const & noexcept override {
-        auto sourceId = static_cast<std::int32_t>(sar(orderBaseData_.index, SPECIAL_SOURCE_ID_SHIFT));
-
-        if (!OrderSource::isSpecialSourceId(sourceId)) {
-            sourceId = static_cast<std::int32_t>(sar(orderBaseData_.index, NONSPECIAL_SOURCE_ID_SHIFT));
-        }
-
-        return OrderSource::valueOf(sourceId);
-    }
+    const OrderSource &getSource() const & noexcept override;
 
     /**
      * Changes source of this event.
@@ -205,36 +196,19 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @param source source of this event.
      */
-    void setSource(const OrderSource &source) noexcept {
-        const auto shift =
-            OrderSource::isSpecialSourceId(source.id()) ? SPECIAL_SOURCE_ID_SHIFT : NONSPECIAL_SOURCE_ID_SHIFT;
-        const std::int64_t mask = OrderSource::isSpecialSourceId(
-                                      static_cast<std::int32_t>(sar(orderBaseData_.index, SPECIAL_SOURCE_ID_SHIFT)))
-                                      ? ~sal(std::int64_t{-1}, SPECIAL_SOURCE_ID_SHIFT)
-                                      : ~sal(std::int64_t{-1}, NONSPECIAL_SOURCE_ID_SHIFT);
-        orderBaseData_.index =
-            andOp(sal(static_cast<std::int64_t>(source.id()), shift), andOp(orderBaseData_.index, mask));
-    }
+    void setSource(const OrderSource &source) noexcept;
 
     ///
-    std::int32_t getEventFlags() const noexcept override {
-        return orderBaseData_.eventFlags;
-    }
+    std::int32_t getEventFlags() const noexcept override;
 
     ///
-    EventFlagsMask getEventFlagsMask() const noexcept override {
-        return EventFlagsMask(orderBaseData_.eventFlags);
-    }
+    EventFlagsMask getEventFlagsMask() const noexcept override;
 
     ///
-    void setEventFlags(std::int32_t eventFlags) noexcept override {
-        orderBaseData_.eventFlags = eventFlags;
-    }
+    void setEventFlags(std::int32_t eventFlags) noexcept override;
 
     ///
-    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
-        orderBaseData_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
-    }
+    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override;
 
     /**
      * Changes the unique per-symbol index of this order. Note that this method also changes
@@ -244,22 +218,14 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @param index unique per-symbol index of this order.
      * @throws InvalidArgumentException
      */
-    void setIndex(std::int64_t index) override {
-        if (index < 0) {
-            throw InvalidArgumentException("Negative index: " + std::to_string(index));
-        }
-
-        orderBaseData_.index = index;
-    }
+    void setIndex(std::int64_t index) override;
 
     /**
      * Returns a unique per-symbol index of this order. Index is non-negative.
      *
      * @return unique per-symbol index of this order.
      */
-    std::int64_t getIndex() const noexcept override {
-        return orderBaseData_.index;
-    }
+    std::int64_t getIndex() const noexcept override;
 
     /**
      * Returns time and sequence of this order packaged into a single long value.
@@ -267,9 +233,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return time and sequence of this order.
      */
-    std::int64_t getTimeSequence() const noexcept {
-        return orderBaseData_.timeSequence;
-    }
+    std::int64_t getTimeSequence() const noexcept;
 
     /**
      * Changes time and sequence of this order.
@@ -279,9 +243,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @param timeSequence the time and sequence.
      * @see OrderBase::getTimeSequence()
      */
-    void setTimeSequence(std::int64_t timeSequence) noexcept {
-        orderBaseData_.timeSequence = timeSequence;
-    }
+    void setTimeSequence(std::int64_t timeSequence) noexcept;
 
     /**
      * Returns time of this order.
@@ -289,10 +251,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return time of this order.
      */
-    std::int64_t getTime() const noexcept {
-        return sar(orderBaseData_.timeSequence, SECONDS_SHIFT) * 1000 +
-               andOp(sar(orderBaseData_.timeSequence, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
-    }
+    std::int64_t getTime() const noexcept;
 
     /**
      * Changes time of this order.
@@ -300,30 +259,21 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @param time time of this order.
      */
-    void setTime(std::int64_t time) noexcept {
-        orderBaseData_.timeSequence =
-            orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-                      sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
-                 getSequence());
-    }
+    void setTime(std::int64_t time) noexcept;
 
     /**
      * Changes microseconds and nanoseconds time part of this order.
      *
      * @param timeNanoPart microseconds and nanoseconds time part of this order.
      */
-    void setTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        orderBaseData_.timeNanoPart = timeNanoPart;
-    }
+    void setTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Returns microseconds and nanoseconds time part of this order.
      *
      * @return microseconds and nanoseconds time part of this order.
      */
-    std::int32_t getTimeNanoPart() const noexcept {
-        return orderBaseData_.timeNanoPart;
-    }
+    std::int32_t getTimeNanoPart() const noexcept;
 
     /**
      * Returns sequence number of this order to distinguish orders that have the same @ref OrderBase::getTime() "time".
@@ -332,9 +282,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return sequence of this order.
      */
-    std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(orderBaseData_.timeSequence, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes @ref OrderBase::getSequence() "sequence number" of this order.
@@ -344,13 +292,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * @see OrderBase::getSequence()
      * @throws InvalidArgumentException
      */
-    void setSequence(std::int32_t sequence) {
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
-        }
-
-        orderBaseData_.timeSequence = orOp(andOp(orderBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Returns time of this order in nanoseconds.
@@ -358,9 +300,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return time of this order in nanoseconds
      */
-    std::int64_t getTimeNanos() const noexcept {
-        return time_nanos_util::getNanosFromMillisAndNanoPart(getTime(), orderBaseData_.timeNanoPart);
-    }
+    std::int64_t getTimeNanos() const noexcept;
 
     /**
      * Changes time of this order.
@@ -368,10 +308,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @param timeNanos time of this order in nanoseconds.
      */
-    void setTimeNanos(std::int64_t timeNanos) noexcept {
-        setTime(time_nanos_util::getMillisFromNanos(timeNanos));
-        orderBaseData_.timeNanoPart = time_nanos_util::getNanoPartFromNanos(timeNanos);
-    }
+    void setTimeNanos(std::int64_t timeNanos) noexcept;
 
     /**
      * Returns order action if available, otherwise - OrderAction::UNDEFINED.
@@ -379,18 +316,14 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return order action or OrderAction::UNDEFINED.
      */
-    const OrderAction &getAction() const & noexcept {
-        return OrderAction::valueOf(getBits(orderBaseData_.flags, ACTION_MASK, ACTION_SHIFT));
-    }
+    const OrderAction &getAction() const & noexcept;
 
     /**
      * Changes action of this order.
      *
      * @param action The action of this order.
      */
-    void setAction(const OrderAction &action) noexcept {
-        orderBaseData_.flags = setBits(orderBaseData_.flags, ACTION_MASK, ACTION_SHIFT, action.getCode());
-    }
+    void setAction(const OrderAction &action) noexcept;
 
     /**
      * Returns time of the last @ref getAction() "action".
@@ -398,18 +331,14 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return time of the last order action.
      */
-    std::int64_t getActionTime() const noexcept {
-        return orderBaseData_.actionTime;
-    }
+    std::int64_t getActionTime() const noexcept;
 
     /**
      * Changes time of the last action
      *
      * @param actionTime last order action time.
      */
-    void setActionTime(std::int64_t actionTime) noexcept {
-        orderBaseData_.actionTime = actionTime;
-    }
+    void setActionTime(std::int64_t actionTime) noexcept;
 
     /**
      * Returns order ID if available. Some actions (OrderAction::TRADE, OrderAction::BUST) have no order ID since they
@@ -418,18 +347,14 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return order ID or 0 if not available.
      */
-    std::int64_t getOrderId() const noexcept {
-        return orderBaseData_.orderId;
-    }
+    std::int64_t getOrderId() const noexcept;
 
     /**
      * Changes order ID.
      *
      * @param orderId order ID.
      */
-    void setOrderId(std::int64_t orderId) noexcept {
-        orderBaseData_.orderId = orderId;
-    }
+    void setOrderId(std::int64_t orderId) noexcept;
 
     /**
      * Returns auxiliary order ID if available:
@@ -443,99 +368,77 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return auxiliary order ID or 0 if not available.
      */
-    std::int64_t getAuxOrderId() const noexcept {
-        return orderBaseData_.auxOrderId;
-    }
+    std::int64_t getAuxOrderId() const noexcept;
 
     /**
      * Changes auxiliary order ID.
      *
      * @param auxOrderId auxiliary order ID.
      */
-    void setAuxOrderId(std::int64_t auxOrderId) noexcept {
-        orderBaseData_.auxOrderId = auxOrderId;
-    }
+    void setAuxOrderId(std::int64_t auxOrderId) noexcept;
 
     /**
      * Returns price of this order.
      *
      * @return price of this order.
      */
-    double getPrice() const noexcept {
-        return orderBaseData_.price;
-    }
+    double getPrice() const noexcept;
 
     /**
      * Changes price of this order.
      *
      * @param price price of this order.
      */
-    void setPrice(double price) noexcept {
-        orderBaseData_.price = price;
-    }
+    void setPrice(double price) noexcept;
 
     /**
      * Returns size of this order.
      *
      * @return size of this order.
      */
-    double getSize() const noexcept {
-        return orderBaseData_.size;
-    }
+    double getSize() const noexcept;
 
     /**
      * Changes size of this order.
      *
      * @param size size of this order.
      */
-    void setSize(double size) noexcept {
-        orderBaseData_.size = size;
-    }
+    void setSize(double size) noexcept;
 
     /**
      * Returns `true` if this order has some size (sizeAsDouble is neither `0` nor `NaN`).
      *
      * @return `true` if this order has some size (sizeAsDouble is neither `0` nor `NaN`).
      */
-    bool hasSize() const noexcept {
-        return orderBaseData_.size != 0 && !std::isnan(orderBaseData_.size);
-    }
+    bool hasSize() const noexcept;
 
     /**
      * Returns executed size of this order.
      *
      * @return executed size of this order.
      */
-    double getExecutedSize() const noexcept {
-        return orderBaseData_.executedSize;
-    }
+    double getExecutedSize() const noexcept;
 
     /**
      * Changes executed size of this order.
      *
      * @param executedSize executed size of this order.
      */
-    void setExecutedSize(double executedSize) noexcept {
-        orderBaseData_.executedSize = executedSize;
-    }
+    void setExecutedSize(double executedSize) noexcept;
 
     /**
      * Returns the number of individual orders in this aggregate order.
      *
      * @return number of individual orders in this aggregate order.
      */
-    std::int64_t getCount() const noexcept {
-        return orderBaseData_.count;
-    }
+    std::int64_t getCount() const noexcept;
 
     /**
      * Changes the number of individual orders in this aggregate order.
      *
      * @param count number of individual orders in this aggregate order.
      */
-    void setCount(std::int64_t count) noexcept {
-        orderBaseData_.count = count;
-    }
+    void setCount(std::int64_t count) noexcept;
 
     /**
      * Returns trade (order execution) ID for events containing trade-related action.
@@ -543,18 +446,14 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return trade ID or 0 if not available.
      */
-    std::int64_t getTradeId() const noexcept {
-        return orderBaseData_.tradeId;
-    }
+    std::int64_t getTradeId() const noexcept;
 
     /**
      * Changes trade ID.
      *
      * @param tradeId trade ID.
      */
-    void setTradeId(std::int64_t tradeId) noexcept {
-        orderBaseData_.tradeId = tradeId;
-    }
+    void setTradeId(std::int64_t tradeId) noexcept;
 
     /**
      * Returns trade price for events containing trade-related action.
@@ -562,18 +461,14 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return trade price of this action.
      */
-    double getTradePrice() const noexcept {
-        return orderBaseData_.tradePrice;
-    }
+    double getTradePrice() const noexcept;
 
     /**
      * Changes trade price.
      *
      * @param tradePrice trade price.
      */
-    void setTradePrice(double tradePrice) noexcept {
-        orderBaseData_.tradePrice = tradePrice;
-    }
+    void setTradePrice(double tradePrice) noexcept;
 
     /**
      * Returns trade size for events containing trade-related action.
@@ -581,98 +476,70 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @return trade size.
      */
-    double getTradeSize() const noexcept {
-        return orderBaseData_.tradeSize;
-    }
+    double getTradeSize() const noexcept;
 
     /**
      * Changes trade size.
      *
      * @param tradeSize trade size.
      */
-    void setTradeSize(double tradeSize) noexcept {
-        orderBaseData_.tradeSize = tradeSize;
-    }
+    void setTradeSize(double tradeSize) noexcept;
 
     /**
      * Returns exchange code of this order.
      *
      * @return exchange code of this order.
      */
-    std::int16_t getExchangeCode() const noexcept {
-        return utf8to16(static_cast<char>(
-            static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
-    }
+    std::int16_t getExchangeCode() const noexcept;
 
     /**
      * Returns exchange code of this order as UTF8 string.
      *
      * @return exchange code of this order as UTF8 string.
      */
-    std::string getExchangeCodeString() const noexcept {
-        // TODO: cache [EN-8231]
-
-        return std::string( // NOLINT(*-return-braced-init-list)
-            1ULL, static_cast<char>(
-                      static_cast<unsigned char>(getBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT))));
-    }
+    std::string getExchangeCodeString() const noexcept;
 
     /**
      * Changes exchange code of this order.
      *
      * @param exchangeCode exchange code of this order.
      */
-    void setExchangeCode(char exchangeCode) {
-        util::checkChar(exchangeCode, EXCHANGE_MASK, "exchangeCode");
-
-        orderBaseData_.flags =
-            setBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT, static_cast<unsigned char>(exchangeCode));
-    }
+    void setExchangeCode(char exchangeCode);
 
     /**
      * Changes exchange code of this order.
      *
      * @param exchangeCode exchange code of this order.
      */
-    void setExchangeCode(std::int16_t exchangeCode) noexcept {
-        setExchangeCode(utf16to8(exchangeCode));
-    }
+    void setExchangeCode(std::int16_t exchangeCode) noexcept;
 
     /**
      * Returns side of this order.
      *
      * @return side of this order.
      */
-    const Side &getOrderSide() const & noexcept {
-        return Side::valueOf(getBits(orderBaseData_.flags, SIDE_MASK, SIDE_SHIFT));
-    }
+    const Side &getOrderSide() const & noexcept;
 
     /**
      * Changes side of this order.
      *
      * @param side side of this order.
      */
-    void setOrderSide(const Side &side) noexcept {
-        orderBaseData_.flags = setBits(orderBaseData_.flags, SIDE_MASK, SIDE_SHIFT, side.getCode());
-    }
+    void setOrderSide(const Side &side) noexcept;
 
     /**
      * Returns scope of this order.
      *
      * @return scope of this order.
      */
-    const Scope &getScope() const & noexcept {
-        return Scope::valueOf(getBits(orderBaseData_.flags, SCOPE_MASK, SCOPE_SHIFT));
-    }
+    const Scope &getScope() const & noexcept;
 
     /**
      * Changes scope of this order.
      *
      * @param scope scope of this order.
      */
-    void setScope(const Scope &scope) noexcept {
-        orderBaseData_.flags = setBits(orderBaseData_.flags, SCOPE_MASK, SCOPE_SHIFT, scope.getCode());
-    }
+    void setScope(const Scope &scope) noexcept;
 
     /**
      * Returns string representation of this order event's fields.

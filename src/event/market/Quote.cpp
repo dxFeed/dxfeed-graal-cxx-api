@@ -29,8 +29,64 @@ void Quote::setBidExchangeCode(char bidExchangeCode) noexcept {
     data_.bidExchangeCode = utf8to16(bidExchangeCode);
 }
 
+Quote &Quote::withBidExchangeCode(char bidExchangeCode) noexcept {
+    setBidExchangeCode(bidExchangeCode);
+
+    return *this;
+}
+
 void Quote::setBidExchangeCode(std::int16_t bidExchangeCode) noexcept {
     data_.bidExchangeCode = bidExchangeCode;
+}
+
+Quote &Quote::withBidExchangeCode(std::int16_t bidExchangeCode) noexcept {
+    setBidExchangeCode(bidExchangeCode);
+
+    return *this;
+}
+
+double Quote::getBidPrice() const noexcept {
+    return data_.bidPrice;
+}
+
+void Quote::setBidPrice(double bidPrice) noexcept {
+    data_.bidPrice = bidPrice;
+}
+
+Quote &Quote::withBidPrice(double bidPrice) noexcept {
+    setBidPrice(bidPrice);
+
+    return *this;
+}
+
+double Quote::getBidSize() const noexcept {
+    return data_.bidSize;
+}
+
+void Quote::setBidSize(double bidSize) noexcept {
+    data_.bidSize = bidSize;
+}
+
+Quote &Quote::withBidSize(double bidSize) noexcept {
+    setBidSize(bidSize);
+
+    return *this;
+}
+
+std::int64_t Quote::getAskTime() const noexcept {
+    return data_.askTime;
+}
+
+void Quote::setAskTime(std::int64_t askTime) noexcept {
+    data_.askTime = askTime;
+
+    recomputeTimeMillisPart();
+}
+
+Quote &Quote::withAskTime(std::int64_t askTime) noexcept {
+    setAskTime(askTime);
+
+    return *this;
 }
 
 std::int16_t Quote::getAskExchangeCode() const noexcept {
@@ -47,8 +103,53 @@ void Quote::setAskExchangeCode(char askExchangeCode) noexcept {
     data_.askExchangeCode = utf8to16(askExchangeCode);
 }
 
+Quote &Quote::withAskExchangeCode(char askExchangeCode) noexcept {
+    setAskExchangeCode(askExchangeCode);
+
+    return *this;
+}
+
 void Quote::setAskExchangeCode(std::int16_t askExchangeCode) noexcept {
     data_.askExchangeCode = askExchangeCode;
+}
+
+Quote &Quote::withAskExchangeCode(std::int16_t askExchangeCode) noexcept {
+    setAskExchangeCode(askExchangeCode);
+
+    return *this;
+}
+
+double Quote::getAskPrice() const {
+    return data_.askPrice;
+}
+
+void Quote::setAskPrice(double askPrice) {
+    data_.askPrice = askPrice;
+}
+
+Quote &Quote::withAskPrice(double askPrice) noexcept {
+    setAskPrice(askPrice);
+
+    return *this;
+}
+
+double Quote::getAskSize() const {
+    return data_.askSize;
+}
+
+void Quote::setAskSize(double askSize) {
+    data_.askSize = askSize;
+}
+
+Quote &Quote::withAskSize(double askSize) noexcept {
+    setAskSize(askSize);
+
+    return *this;
+}
+
+void Quote::recomputeTimeMillisPart() noexcept {
+    data_.timeMillisSequence = orOp(
+        sal(time_util::getMillisFromTime(std::max(data_.askTime, data_.bidTime)), MILLISECONDS_SHIFT), getSequence());
 }
 
 void Quote::fillData(void *graalNative) noexcept {
@@ -96,27 +197,15 @@ void Quote::fillGraalData(void *graalNative) const noexcept {
     graalQuote->ask_size = data_.askSize;
 }
 
-std::string Quote::toString() const {
-    return fmt::format(
-        "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
-        "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(), getSequence(),
-        TimeFormat::DEFAULT.format(getBidTime()), encodeChar(getBidExchangeCode()), dxfcpp::toString(getBidPrice()),
-        dxfcpp::toString(getBidSize()), TimeFormat::DEFAULT.format(getAskTime()), encodeChar(getAskExchangeCode()),
-        dxfcpp::toString(getAskPrice()), dxfcpp::toString(getAskSize()));
-}
-
 std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
     if (!graalNative) {
         throw InvalidArgumentException("Unable to create Quote. The `graalNative` parameter is nullptr");
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to create Quote. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                        std::to_string(DXFG_EVENT_QUOTE)));
+        throw InvalidArgumentException(fmt::format("Unable to create Quote. Wrong event class {}! Expected: {}.",
+                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                                                   std::to_string(DXFG_EVENT_QUOTE)));
     }
 
     auto quote = std::make_shared<Quote>();
@@ -145,10 +234,9 @@ void Quote::freeGraal(void *graalNative) {
     }
 
     if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
-        throw InvalidArgumentException(
-            fmt::format("Unable to free Quote's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                        std::to_string(DXFG_EVENT_QUOTE)));
+        throw InvalidArgumentException(fmt::format(
+            "Unable to free Quote's Graal data. Wrong event class {}! Expected: {}.",
+            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_QUOTE)));
     }
 
     const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
@@ -169,6 +257,25 @@ void Quote::assign(std::shared_ptr<EventType> event) {
 Quote::Quote() noexcept {
 }
 
+Quote::Quote(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+}
+
+Quote &Quote::withEventSymbol(const StringLike &eventSymbol) noexcept {
+    MarketEvent::setEventSymbol(eventSymbol);
+
+    return *this;
+}
+
+Quote &Quote::withEventTime(std::int64_t eventTime) noexcept {
+    MarketEvent::setEventTime(eventTime);
+
+    return *this;
+}
+
+std::int32_t Quote::getSequence() const noexcept {
+    return andOp(data_.timeMillisSequence, MAX_SEQUENCE);
+}
+
 void Quote::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
@@ -177,6 +284,62 @@ void Quote::setSequence(std::int32_t sequence) {
     }
 
     data_.timeMillisSequence = orOp(andOp(data_.timeMillisSequence, ~MAX_SEQUENCE), sequence);
+}
+
+Quote &Quote::withSequence(std::int32_t sequence) noexcept {
+    setSequence(sequence);
+
+    return *this;
+}
+
+std::int64_t Quote::getTime() const noexcept {
+    return math::floorDiv(std::max(data_.bidTime, data_.askTime), 1000LL) * 1000LL +
+           shr(data_.timeMillisSequence, MILLISECONDS_SHIFT);
+}
+
+std::int64_t Quote::getTimeNanos() const noexcept {
+    return time_nanos_util::getNanosFromMillisAndNanoPart(getTime(), data_.timeNanoPart);
+}
+
+std::int32_t Quote::getTimeNanoPart() const noexcept {
+    return data_.timeNanoPart;
+}
+
+void Quote::setTimeNanoPart(std::int32_t timeNanoPart) noexcept {
+    data_.timeNanoPart = timeNanoPart;
+}
+
+Quote &Quote::withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
+    setTimeNanoPart(timeNanoPart);
+
+    return *this;
+}
+
+std::int64_t Quote::getBidTime() const noexcept {
+    return data_.bidTime;
+}
+
+void Quote::setBidTime(std::int64_t bidTime) noexcept {
+    data_.bidTime = bidTime;
+
+    recomputeTimeMillisPart();
+}
+
+Quote &Quote::withBidTime(std::int64_t bidTime) noexcept {
+    setBidTime(bidTime);
+
+    return *this;
+}
+
+std::string Quote::toString() const {
+    return fmt::format(
+        "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
+        "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(), getSequence(),
+        TimeFormat::DEFAULT.format(getBidTime()), encodeChar(getBidExchangeCode()), dxfcpp::toString(getBidPrice()),
+        dxfcpp::toString(getBidSize()), TimeFormat::DEFAULT.format(getAskTime()), encodeChar(getAskExchangeCode()),
+        dxfcpp::toString(getAskPrice()), dxfcpp::toString(getAskSize()));
 }
 
 DXFCPP_END_NAMESPACE

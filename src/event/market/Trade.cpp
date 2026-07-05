@@ -52,10 +52,6 @@ std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) {
     return trade;
 }
 
-std::string Trade::toString() const {
-    return fmt::format("Trade{{{}}}", baseFieldsToString());
-}
-
 void *Trade::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
@@ -88,12 +84,16 @@ void Trade::freeGraal(void *graalNative) {
 
 void Trade::assign(std::shared_ptr<EventType> event) {
     TradeBase::assign(event);
-
-    // if (const auto other = event->sharedAs<Trade>(); other) {
-    // }
 }
 
 Trade::Trade() noexcept {
+}
+
+Trade::Trade(const StringLike &eventSymbol) noexcept : TradeBase(eventSymbol) {
+}
+
+std::string Trade::toString() const {
+    return fmt::format("Trade{{{}}}", baseFieldsToString());
 }
 
 DXFCPP_END_NAMESPACE
