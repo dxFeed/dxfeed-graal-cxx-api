@@ -22,6 +22,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <mutex>
 #include <vector>
 
+/**
+ * \addtogroup dxfcpp_model
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 class IndexedEventSource;
@@ -213,6 +218,8 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModelListener final : TxModelListenerComm
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::TxModelListenerCommon> {
     std::size_t operator()(const dxfcpp::TxModelListenerCommon &l) const noexcept {

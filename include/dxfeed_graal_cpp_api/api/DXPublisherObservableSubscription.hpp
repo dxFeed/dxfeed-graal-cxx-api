@@ -16,6 +16,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <mutex>
 #include <unordered_set>
 
+/**
+ * \addtogroup dxfcpp_api
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct ObservableSubscriptionChangeListener;
@@ -47,5 +52,7 @@ struct DXFCPP_EXPORT DXPublisherObservableSubscription : RequireMakeShared<DXPub
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

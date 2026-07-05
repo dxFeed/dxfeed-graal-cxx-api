@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_glossary "Glossary" Module
+ * \ingroup dxfcpp_modules
+ */
+
 #include "AdditionalUnderlyings.hpp"
 #include "CFI.hpp"
 #include "PriceIncrements.hpp"

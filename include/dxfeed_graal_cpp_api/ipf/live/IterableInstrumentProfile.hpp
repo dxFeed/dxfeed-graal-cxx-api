@@ -9,6 +9,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/JavaObjectHandle.hpp"
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct InstrumentProfile;
@@ -46,5 +51,7 @@ class DXFCPP_EXPORT IterableInstrumentProfile final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

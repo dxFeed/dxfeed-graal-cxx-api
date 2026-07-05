@@ -10,6 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_event
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventSourceWrapper;
@@ -111,6 +116,8 @@ class DXFCPP_EXPORT IndexedEventSource {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::IndexedEventSource> {
     std::size_t operator()(const dxfcpp::IndexedEventSource &indexedEventSource) const noexcept {

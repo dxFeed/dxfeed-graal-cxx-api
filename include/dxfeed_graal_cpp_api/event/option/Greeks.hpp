@@ -19,6 +19,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_option
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
@@ -38,8 +43,6 @@ struct EventMapper;
  *
  * TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents
  * a list current of time-series events order by their @ref ::getTime() "time".
- * It relies on the code of AbstractIndexedEventModel to handle this logic.
- * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
  * <h3>Publishing Greeks</h3>
  *
@@ -362,5 +365,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_candle "Candle" Module
+ * \ingroup dxfcpp_event
+ */
+
 #include "./Candle.hpp"
 #include "./CandleAlignment.hpp"
 #include "./CandleExchange.hpp"

@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 
+/**
+ * \addtogroup dxfcpp_model
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -68,5 +73,7 @@ struct /* DXFCPP_EXPORT */ MarketDepthModelListener final : RequireMakeShared<Ma
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

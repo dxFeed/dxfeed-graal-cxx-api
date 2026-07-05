@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_event "Event" Module
+ * \ingroup dxfcpp_modules
+ */
+
 #include "./EventFlag.hpp"
 #include "./EventMapper.hpp"
 #include "./EventSourceWrapper.hpp"

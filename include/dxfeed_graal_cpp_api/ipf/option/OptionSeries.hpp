@@ -19,6 +19,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <vector>
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 template <typename T> class OptionChainsBuilder;
@@ -370,6 +375,8 @@ template <typename T> class OptionSeries final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <typename T> struct std::hash<dxfcpp::OptionSeries<T>> {
     std::size_t operator()(const dxfcpp::OptionSeries<T> &optionSeries) const noexcept {

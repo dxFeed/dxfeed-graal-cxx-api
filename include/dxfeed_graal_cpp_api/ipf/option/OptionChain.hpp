@@ -9,15 +9,21 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
 #include "./OptionSeries.hpp"
+
 #include <set>
 #include <string>
+
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
 
 DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Set of option series for a single product or underlying symbol.
  *
- * <h3>Threads and clocks</h3>
+ * <h3>Threads and locks</h3>
  *
  * This class is <b>NOT</b> thread-safe and cannot be used from multiple threads without external synchronization.
  *
@@ -68,5 +74,7 @@ template <typename T> class OptionChain final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_misc "Misc" Module
+ * \ingroup dxfcpp_event
+ */
+
 #include "./Configuration.hpp"
 #include "./Message.hpp"
 #include "./TextMessage.hpp"

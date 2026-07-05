@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \addtogroup dxfcpp_entity
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /// Base abstract class for all dxFeed C++ API entities
@@ -16,5 +21,7 @@ struct DXFCPP_EXPORT Entity {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

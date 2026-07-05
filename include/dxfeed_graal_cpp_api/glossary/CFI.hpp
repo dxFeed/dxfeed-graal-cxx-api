@@ -11,6 +11,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
+/**
+ * \addtogroup dxfcpp_glossary
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -380,6 +385,8 @@ struct DXFCPP_EXPORT CFI : RequireMakeShared<CFI> {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::CFI> {
     std::size_t operator()(const dxfcpp::CFI &cfi) const noexcept {

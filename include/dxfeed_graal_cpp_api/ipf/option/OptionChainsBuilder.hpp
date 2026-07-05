@@ -13,12 +13,17 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <unordered_map>
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Builder class for a set of option chains grouped by product or underlying symbol.
  *
- * <h3>Threads and clocks</h3>
+ * <h3>Threads and locks</h3>
  *
  * This class is <b>NOT</b> thread-safe and cannot be used from multiple threads without external synchronization.
  *
@@ -67,7 +72,6 @@ template <class T> class OptionChainsBuilder {
 
     /**
      * Changes day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
      *
      * @param expiration The day id of expiration.
      */
@@ -77,7 +81,6 @@ template <class T> class OptionChainsBuilder {
 
     /**
      * Changes day id of last trading day.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
      *
      * @param lastTrade The day id of last trading day.
      */
@@ -300,5 +303,7 @@ template <class T> class OptionChainsBuilder {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -16,6 +16,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <optional>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_market
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
@@ -50,8 +55,6 @@ struct EventMapper;
  *
  * <p>IndexedEventModel class handles all the snapshot and transaction logic and conveniently represents
  * a list current of events.
- * It relies on the code of AbstractIndexedEventModel to handle this logic.
- * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
  *
  * <h3>Publishing order books</h3>
  *
@@ -530,5 +533,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -14,6 +14,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <unordered_map>
 
+/**
+ * \addtogroup dxfcpp_glossary
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -203,6 +208,8 @@ AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map
 }
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::AdditionalUnderlyings> {
     std::size_t operator()(const dxfcpp::AdditionalUnderlyings &au) const noexcept {

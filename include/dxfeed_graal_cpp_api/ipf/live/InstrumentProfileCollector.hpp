@@ -16,6 +16,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <unordered_map>
 
+/**
+ * \addtogroup dxfcpp_ipf
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 class InstrumentProfileConnection;
@@ -98,10 +103,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     }
 
     /**
-     * Convenience method to update one instrument profile in this collector. This is a shortcut for:
-     * <pre><tt>
-     *    @ref InstrumentProfileCollector::updateInstrumentProfiles() "updateInstrumentProfiles"({ip}, nullptr);
-     * </tt></pre>
+     * Convenience method to update one instrument profile in this collector.
      *
      * @param ip The instrument profile.
      */
@@ -197,5 +199,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

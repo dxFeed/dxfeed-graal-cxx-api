@@ -13,6 +13,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <string>
 
+/**
+ * \defgroup dxfcpp_auth "Auth" Module
+ * \ingroup dxfcpp_modules
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -22,15 +28,18 @@ DXFCPP_BEGIN_NAMESPACE
  * <p>An AuthToken consists of the following components:
  * <ul>
  *   <li>Scheme - The authorization scheme (e.g., "Basic" or "Bearer").</li>
- *   <li>Value - The encoded value, which is scheme-dependent (e.g., an access token per RFC6750 or Base64-encoded
- * "user:password" per RFC2617).</li> <li>String representation - A string that combines the scheme and value in the
- * format: [scheme + " " + value].</li>
+ *   <li>Value - The encoded value, which is scheme-dependent (e.g., an access token per RFC6750 or Base64-encoded "user:password" per RFC2617).</li>
+ *   <li>String representation - A string that combines the scheme and value in the format: [scheme + " " + value].</li>
  * </ul>
  */
 struct DXFCPP_EXPORT AuthToken {
+    /// String representation for Basic (`Base64(login:password)`) authorization.
     static const std::string BASIC_SCHEME;
+
+    /// String representation for the Bearer (`token`) authorization.
     static const std::string BEARER_SCHEME;
 
+    /// A stub that is needed to simulate null AuthToken without using std::optional.
     static const AuthToken NULL_TOKEN;
 
     /**
@@ -169,6 +178,8 @@ struct DXFCPP_EXPORT AuthToken {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::AuthToken> {
     std::size_t operator()(const dxfcpp::AuthToken &t) const noexcept {

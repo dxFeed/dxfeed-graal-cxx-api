@@ -15,6 +15,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <type_traits>
 
+/**
+ * \addtogroup dxfcpp_candle
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -24,7 +29,7 @@ DXFCPP_BEGIN_NAMESPACE
  * <li>Price interval may be equal to zero. It means every unique price creates a particular candle
  * to aggregate all events with this price for the chosen CandlePeriod.
  * <li>Non-zero price level creates a sequence of intervals starting from 0:
- * ...,[-pl;0),[0;pl),[pl;2*pl),...,[n*pl,n*pl+pl). Events aggregated by chosen CandlePeriod and price
+ * `..., [-pl; 0), [0; pl), [pl; 2 * pl), ..., [n * pl, n * pl + pl)`. Events aggregated by chosen CandlePeriod and price
  * intervals.
  * </ul>
  *
@@ -126,6 +131,8 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::CandlePriceLevel> {
     std::size_t operator()(const dxfcpp::CandlePriceLevel &candlePriceLevel) const noexcept {

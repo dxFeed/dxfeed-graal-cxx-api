@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_event
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -162,6 +167,35 @@ template<> struct EventTypeWithSymbol<std::string> : EventType {
     virtual void setEventSymbol(const StringLike &eventSymbol) noexcept = 0;
 };
 
+/**
+ * Converts a shared pointer of an EventType descendant of type EBase to a shared pointer of an EBase descendant.
+ *
+ * @tparam EBase The EventType descendant type.
+ * @tparam EDerived The EBase descendant type.
+ * @param source The source shared pointer.
+ * @return The converted shared pointer.
+ */
+template <Derived<EventType> EBase, Derived<EBase> EDerived>
+static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
+    return convertSharedEntity<EBase, EDerived>(source);
+}
+
+/**
+ * Converts a vector of shared pointers to EBase-type EventType descendants into a vector of shared pointers to EBase
+ * descendants.
+ *
+ * @tparam EBase The EventType descendant type.
+ * @tparam EDerived The EBase descendant type.
+ * @param source The source vector of shared pointers.
+ * @return The converted vector of shared pointers.
+ */
+template <Derived<EventType> EBase, Derived<EBase> EDerived>
+static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<std::shared_ptr<EBase>> &source) {
+    return convertSharedEntities<EBase, EDerived>(source);
+}
+
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

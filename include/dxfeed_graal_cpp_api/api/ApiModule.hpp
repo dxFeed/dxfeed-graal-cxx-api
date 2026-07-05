@@ -7,6 +7,12 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_api "API" Module
+ * "Entry point" for using the API.
+ * \ingroup dxfcpp_modules
+ */
+
 #include "./DXEndpoint.hpp"
 #include "./DXFeed.hpp"
 #include "./DXFeedSubscription.hpp"

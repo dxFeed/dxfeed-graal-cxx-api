@@ -14,10 +14,15 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <vector>
 
+/**
+ * \addtogroup dxfcpp_entity
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /// A base abstract "shared entity" class. Has some helpers for dynamic polymorphism
-struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<SharedEntity> {
+struct DXFCPP_EXPORT SharedEntity : Entity, std::enable_shared_from_this<SharedEntity> {
     /// The alias to a type of shared pointer to the SharedEntity object.
     using Ptr = std::shared_ptr<SharedEntity>;
 
@@ -44,29 +49,25 @@ struct DXFCPP_EXPORT SharedEntity : public Entity, std::enable_shared_from_this<
     }
 
     /**
-     * Returns a pointer to the current object wrapped in a smart pointer to type T
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<T>(new T(...))` or
-     * `std::make_shared<T>(...)`
+     * Returns a pointer to the current object wrapped in a smart pointer to type T or std::shared_ptr<T>{nullptr}
+     * if the object is not managed by std::shared_ptr.
      *
      * @tparam T The type to convert to a pointer to
-     * @return a smart pointer to type T
+     * @return a smart pointer to type T or std::shared_ptr<T>{nullptr} if the object is not managed by std::shared_ptr.
      */
     template <typename T> std::shared_ptr<T> sharedAs() noexcept {
-        return std::dynamic_pointer_cast<T>(shared_from_this());
+        return std::dynamic_pointer_cast<T>(weak_from_this().lock());
     }
 
     /**
-     * Returns a pointer to the current object wrapped in a smart pointer to type T
-     *
-     * @warning Please do not use this method unless the object was created with `std::shared_ptr<T>(new T(...))` or
-     * `std::make_shared<T>(...)`
+     * Returns a pointer to the current object wrapped in a smart pointer to type T or std::shared_ptr<T>{nullptr}
+     * if the object is not managed by std::shared_ptr.
      *
      * @tparam T The type to convert to a pointer to
-     * @return a smart pointer to type T
+     * @return a smart pointer to type T or std::shared_ptr<T>{nullptr} if the object is not managed by std::shared_ptr.
      */
     template <typename T> std::shared_ptr<T> sharedAs() const noexcept {
-        return std::dynamic_pointer_cast<T>(shared_from_this());
+        return std::dynamic_pointer_cast<T>(weak_from_this().lock());
     }
 
     /**
@@ -88,7 +89,8 @@ DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 template <typename T> struct RequireMakeShared : virtual SharedEntity {
     protected:
     struct LockExternalConstructionTag {
-        explicit LockExternalConstructionTag() {}
+        explicit LockExternalConstructionTag() {
+        } // NOLINT(*-use-equals-default)
     };
 
     public:
@@ -108,8 +110,16 @@ template <typename T> struct RequireMakeShared : virtual SharedEntity {
 
 DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
-template <typename EBase, Derived<EBase> EDerived>
-static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &source) {
+/**
+ * Converts a shared pointer of a SharedEntity descendant of type EBase to a shared pointer of an EBase descendant.
+ *
+ * @tparam EBase The SharedEntity descendant type.
+ * @tparam EDerived The EBase descendant type.
+ * @param source The source shared pointer.
+ * @return The converted shared pointer.
+ */
+template <Derived<SharedEntity> EBase, Derived<EBase> EDerived>
+static std::shared_ptr<EDerived> convertSharedEntity(const std::shared_ptr<EBase> &source) {
     if (!source) {
         return {};
     }
@@ -117,8 +127,17 @@ static std::shared_ptr<EDerived> convertEvent(const std::shared_ptr<EBase> &sour
     return source->template sharedAs<EDerived>();
 }
 
-template <typename EBase, Derived<EBase> EDerived>
-static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<std::shared_ptr<EBase>> &source) {
+/**
+ * Converts a vector of shared pointers to EBase-type SharedEntity descendants into a vector of shared pointers to EBase
+ * descendants.
+ *
+ * @tparam EBase The SharedEntity descendant type.
+ * @tparam EDerived The EBase descendant type.
+ * @param source The source vector of shared pointers.
+ * @return The converted vector of shared pointers.
+ */
+template <Derived<SharedEntity> EBase, Derived<EBase> EDerived>
+static std::vector<std::shared_ptr<EDerived>> convertSharedEntities(const std::vector<std::shared_ptr<EBase>> &source) {
     std::vector<std::shared_ptr<EDerived>> result{};
 
     result.reserve(source.size());
@@ -131,5 +150,7 @@ static std::vector<std::shared_ptr<EDerived>> convertEvents(const std::vector<st
 }
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

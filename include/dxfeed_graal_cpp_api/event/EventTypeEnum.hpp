@@ -12,6 +12,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_set>
 
+/**
+ * \addtogroup dxfcpp_event
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -166,6 +171,8 @@ EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept;
 } // namespace literals
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::EventTypeEnum> {
     std::size_t operator()(const dxfcpp::EventTypeEnum &eventType) const noexcept {

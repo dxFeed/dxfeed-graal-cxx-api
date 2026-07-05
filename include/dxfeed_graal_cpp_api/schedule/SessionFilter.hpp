@@ -12,6 +12,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <mutex>
 
+/**
+ * \addtogroup dxfcpp_schedule
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 enum class SessionFilterEnum : std::uint32_t {
@@ -125,6 +130,8 @@ struct DXFCPP_EXPORT SessionFilter final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::SessionFilter> {
     std::size_t operator()(const dxfcpp::SessionFilter &sessionFilter) const noexcept {

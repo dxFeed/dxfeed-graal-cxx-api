@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_ipf "Instrument Profile File" Module
+ * \ingroup dxfcpp_modules
+ */
+
 #include "./InstrumentProfile.hpp"
 #include "./InstrumentProfileField.hpp"
 #include "./InstrumentProfileReader.hpp"

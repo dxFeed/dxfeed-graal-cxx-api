@@ -12,6 +12,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 
+/**
+ * \defgroup dxfcpp_ondemand "On Demand" Module
+ * \ingroup dxfcpp_modules
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
@@ -276,5 +282,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

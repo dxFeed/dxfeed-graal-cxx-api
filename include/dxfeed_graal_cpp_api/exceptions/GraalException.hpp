@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 #include <stdexcept>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_exceptions
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -33,5 +38,7 @@ struct DXFCPP_EXPORT GraalException : RuntimeException {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

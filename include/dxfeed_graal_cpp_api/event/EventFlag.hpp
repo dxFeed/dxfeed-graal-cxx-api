@@ -16,6 +16,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <utility>
 
+/**
+ * \addtogroup dxfcpp_event
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -514,5 +519,7 @@ inline dxfcpp::EventFlagsMask operator|(const dxfcpp::EventFlag &eventFlag1,
                                         const dxfcpp::EventFlag &eventFlag2) noexcept {
     return dxfcpp::EventFlagsMask{eventFlag1.getFlag() | eventFlag2.getFlag()};
 }
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

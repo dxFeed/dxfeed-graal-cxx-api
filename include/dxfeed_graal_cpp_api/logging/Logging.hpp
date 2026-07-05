@@ -10,6 +10,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 
+/**
+ * \defgroup dxfcpp_logging "Logging" Module
+ * \ingroup dxfcpp_modules
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -114,5 +120,7 @@ struct DXFCPP_EXPORT Logging final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

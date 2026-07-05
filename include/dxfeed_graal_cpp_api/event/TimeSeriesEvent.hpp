@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <memory>
 
+/**
+ * \addtogroup dxfcpp_event
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -44,9 +49,7 @@ DXFCPP_BEGIN_NAMESPACE
  * to simplify the task of subscribing for time-series events.
  *
  * TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents a list of
- * current time-series events ordered by their @ref TimeSeriesEvent::getTime() "time". It relies on the code
- * of AbstractIndexedEventModel to handle this logic.
- * Use the source code of AbstractIndexedEventModel for clarification on transactions and snapshot logic.
+ * current time-series events ordered by their @ref TimeSeriesEvent::getTime() "time".
  *
  * Classes that implement this interface may also implement LastingEvent interface, which makes it possible to use
  * DXFeed::getLastEvent() method to retrieve the last event for the corresponding symbol.
@@ -134,5 +137,7 @@ struct DXFCPP_EXPORT TimeSeriesEvent : IndexedEvent {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -15,6 +15,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <mutex>
 
+/**
+ * \addtogroup dxfcpp_api
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXEndpoint;
@@ -234,5 +239,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

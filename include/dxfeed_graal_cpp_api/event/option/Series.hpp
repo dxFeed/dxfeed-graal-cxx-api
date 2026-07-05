@@ -18,6 +18,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_option
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
@@ -519,5 +524,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

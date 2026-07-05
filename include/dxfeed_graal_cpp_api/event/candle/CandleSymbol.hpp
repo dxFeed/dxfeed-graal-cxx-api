@@ -20,6 +20,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <variant>
 
+/**
+ * \addtogroup dxfcpp_candle
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -291,6 +296,8 @@ CandleSymbol operator""_c(const char *string, size_t length) noexcept;
 } // namespace literals
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct std::hash<dxfcpp::CandleSymbol> {
     std::size_t operator()(const dxfcpp::CandleSymbol &candleSymbol) const noexcept {

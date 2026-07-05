@@ -12,6 +12,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 #include <unordered_set>
+#include <functional>
+
+/**
+ * \addtogroup dxfcpp_osub
+ * @{
+ */
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -67,5 +73,7 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<Ob
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

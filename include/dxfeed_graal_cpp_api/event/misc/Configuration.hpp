@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \addtogroup dxfcpp_misc
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
@@ -16,5 +21,7 @@ struct EventMapper;
 class DXFCPP_EXPORT Configuration{};
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

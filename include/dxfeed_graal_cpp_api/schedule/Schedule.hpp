@@ -11,6 +11,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 
+/**
+ * \addtogroup dxfcpp_schedule
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct SessionFilter;
@@ -164,9 +169,13 @@ struct DXFCPP_EXPORT Schedule {
      * outside of valid date range from 0001-01-02 to 9999-12-30. If no sessions acceptable by specified filter are
      * found within one year this method this method will throw JavaException "NoSuchElementException".
      * <p> To find nearest trading session of any type use this code:
-     * <pre>session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = schedule->getNearestSessionByTime(time, SessionFilter::TRADING);
+     * ```
      * To find nearest regular trading session use this code:
-     * <pre>session = schedule->getNearestSessionByTime(time, SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = schedule->getNearestSessionByTime(time, SessionFilter::REGULAR);
+     * ```
      *
      * @param time The time to search for
      * @param filter the filter to test sessions
@@ -184,9 +193,13 @@ struct DXFCPP_EXPORT Schedule {
      * `Session::Ptr{nullptr}` (std::shared_ptr<Session>{nullptr}).
      * <p>
      * To find nearest trading session of any type use this code:
-     * <pre>session = schedule->findNearestSessionByTime(time, SessionFilter::TRADING);</pre>
+     * ```cpp
+     * auto session = schedule->findNearestSessionByTime(time, SessionFilter::TRADING);
+     * ```
      * To find nearest regular trading session use this code:
-     * <pre>session = schedule->findNearestSessionByTime(time, SessionFilter::REGULAR);</pre>
+     * ```cpp
+     * auto session = schedule->findNearestSessionByTime(time, SessionFilter::REGULAR);
+     * ```
      *
      * @param time The time to search for
      * @param filter The filter to test sessions
@@ -218,5 +231,7 @@ struct DXFCPP_EXPORT Schedule {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

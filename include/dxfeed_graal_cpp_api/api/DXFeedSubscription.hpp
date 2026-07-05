@@ -25,6 +25,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_set>
 
+/**
+ * \addtogroup dxfcpp_api
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeed;
@@ -860,5 +865,7 @@ class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSu
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

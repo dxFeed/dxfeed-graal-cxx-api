@@ -7,6 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+/**
+ * \defgroup dxfcpp_schedule "Schedule" Module
+ * \ingroup dxfcpp_modules
+ */
+
 #include "./Day.hpp"
 #include "./DayFilter.hpp"
 #include "./Schedule.hpp"

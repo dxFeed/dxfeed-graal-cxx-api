@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <vector>
+#include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
 

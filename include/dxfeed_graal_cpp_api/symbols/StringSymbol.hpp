@@ -11,6 +11,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <variant>
 
+/**
+ * \defgroup dxfcpp_symbols "Symbols" Module
+ * \ingroup dxfcpp_modules
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -147,6 +153,8 @@ inline StringSymbol operator""_s(const char *string, size_t length) noexcept {
 } // namespace literals
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 template <> struct DXFCPP_EXPORT std::hash<dxfcpp::StringSymbol> {
     std::size_t operator()(const dxfcpp::StringSymbol &stringSymbol) const noexcept {

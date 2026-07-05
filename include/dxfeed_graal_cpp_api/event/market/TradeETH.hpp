@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <memory>
 #include <string>
 
+/**
+ * \addtogroup dxfcpp_market
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct EventMapper;
@@ -71,12 +76,11 @@ struct EventMapper;
  * trade price from the given @ref DXFeed "feed" for a given `symbol`, assuming there is a @ref DXFeedSubscription
  * "subscription" for both Trade and TradeETH events for the given `symbol`:
  *
- * <pre><tt>
- *     auto @ref Trade "trade" = feed->@ref DXFeed::getLastEvent() "getLastEvent"(Trade::create(symbol));
- *     auto @ref TradeETH "tradeEth" = feed->@ref DXFeed::getLastEvent() "getLastEvent"(TradeETH::create(symbol));
- *     <b>double</b> extLast = tradeEth->@ref TradeETH::isExtendedTradingHours() "isExtendedTradingHours"() ?
- * tradeEth->@ref TradeETH::getPrice() "getPrice"() : trade->@ref Trade::getPrice() "getPrice"();
- * </tt></pre>
+ * ```cpp
+ * auto trade = feed->getLastEvent(std::make_shared<Trade>(symbol));
+ * auto tradeEth = feed->getLastEvent(std::make_shared<TradeETH>(symbol));
+ * auto extLast = tradeEth->isExtendedTradingHours() ? tradeEth->getPrice() : trade->getPrice();
+ * ```
  *
  * Note, that the above code works correctly for symbols that has no concept of ETH, too, because in this
  * case the DXFeed::getLastEvent() leaves default values in TradeETH
@@ -156,5 +160,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
