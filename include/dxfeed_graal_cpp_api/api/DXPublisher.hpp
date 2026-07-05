@@ -189,9 +189,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      *
      * @param event The event to publish.
      */
-    void publishEvents(std::shared_ptr<EventType> event) noexcept {
-        publishEvents({event});
-    }
+    void publishEvents(std::shared_ptr<EventType> event) noexcept;
 
     /**
      * Publishes events to the corresponding feed.

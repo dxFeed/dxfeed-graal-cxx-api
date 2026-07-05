@@ -403,6 +403,7 @@ set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
         src/event/market/MarketEvent.cpp
+        src/event/market/MarketEventSymbols.cpp
         src/event/market/OptionSale.cpp
         src/event/market/Order.cpp
         src/event/market/OrderAction.cpp

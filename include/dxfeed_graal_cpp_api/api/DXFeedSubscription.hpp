@@ -151,9 +151,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         : DXFeedSubscription(begin, end) {
     }
 
-    DXFeedSubscription(LockExternalConstructionTag tag, std::initializer_list<EventTypeEnum> eventTypes)
-        : DXFeedSubscription(tag, eventTypes.begin(), eventTypes.end()) {
-    }
+    DXFeedSubscription(LockExternalConstructionTag tag, std::initializer_list<EventTypeEnum> eventTypes);
 
     template <typename EventTypesCollection>
     explicit DXFeedSubscription(LockExternalConstructionTag tag, EventTypesCollection &&eventTypes)
@@ -573,9 +571,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      *
      * @param aggregationPeriod the new aggregation period (in millis) for data
      */
-    void setAggregationPeriod(std::chrono::milliseconds aggregationPeriod) const {
-        return setAggregationPeriod(TimePeriod::valueOf(aggregationPeriod));
-    }
+    void setAggregationPeriod(std::chrono::milliseconds aggregationPeriod) const;
 
     /**
      * Sets the aggregation period for data.
@@ -586,9 +582,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      *
      * @param aggregationPeriod the new aggregation period (in millis) for data
      */
-    void setAggregationPeriod(std::int64_t aggregationPeriod) const {
-        return setAggregationPeriod(TimePeriod::valueOf(aggregationPeriod));
-    }
+    void setAggregationPeriod(std::int64_t aggregationPeriod) const;
 
     /**
      * Adds listener for events.
