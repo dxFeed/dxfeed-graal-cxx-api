@@ -76,17 +76,6 @@ std::shared_ptr<Greeks> Greeks::fromGraal(void *graalNative) {
     return greeks;
 }
 
-std::string Greeks::toString() const {
-    return fmt::format(
-        "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
-        "gamma={}, theta={}, rho={}, vega={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
-        dxfcpp::toString(getPrice()), dxfcpp::toString(getVolatility()), dxfcpp::toString(getDelta()),
-        dxfcpp::toString(getGamma()), dxfcpp::toString(getTheta()), dxfcpp::toString(getRho()),
-        dxfcpp::toString(getVega()));
-}
-
 void *Greeks::toGraal() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -129,6 +118,51 @@ void Greeks::assign(std::shared_ptr<EventType> event) {
 Greeks::Greeks() noexcept {
 }
 
+Greeks::Greeks(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+}
+
+const IndexedEventSource &Greeks::getSource() const & noexcept {
+    return IndexedEventSource::DEFAULT;
+}
+
+std::int32_t Greeks::getEventFlags() const noexcept {
+    return data_.eventFlags;
+}
+
+EventFlagsMask Greeks::getEventFlagsMask() const noexcept {
+    return EventFlagsMask(data_.eventFlags);
+}
+
+void Greeks::setEventFlags(std::int32_t eventFlags) noexcept {
+    data_.eventFlags = eventFlags;
+}
+
+void Greeks::setEventFlags(const EventFlagsMask &eventFlags) noexcept {
+    data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
+}
+
+std::int64_t Greeks::getIndex() const noexcept {
+    return data_.index;
+}
+
+void Greeks::setIndex(std::int64_t index) {
+    data_.index = index;
+}
+
+std::int64_t Greeks::getTime() const noexcept {
+    return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+}
+
+void Greeks::setTime(std::int64_t time) noexcept {
+    data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                            sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+                       getSequence());
+}
+
+std::int32_t Greeks::getSequence() const noexcept {
+    return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
+}
+
 void Greeks::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
@@ -137,6 +171,73 @@ void Greeks::setSequence(std::int32_t sequence) {
     }
 
     data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
+}
+
+double Greeks::getPrice() const noexcept {
+    return data_.price;
+}
+
+void Greeks::setPrice(double price) noexcept {
+    data_.price = price;
+}
+
+double Greeks::getVolatility() const noexcept {
+    return data_.volatility;
+}
+
+void Greeks::setVolatility(double volatility) noexcept {
+    data_.volatility = volatility;
+}
+
+double Greeks::getDelta() const noexcept {
+    return data_.delta;
+}
+
+void Greeks::setDelta(double delta) noexcept {
+    data_.delta = delta;
+}
+
+double Greeks::getGamma() const noexcept {
+    return data_.gamma;
+}
+
+void Greeks::setGamma(double gamma) noexcept {
+    data_.gamma = gamma;
+}
+
+double Greeks::getTheta() const noexcept {
+    return data_.theta;
+}
+
+void Greeks::setTheta(double theta) noexcept {
+    data_.theta = theta;
+}
+
+double Greeks::getRho() const noexcept {
+    return data_.rho;
+}
+
+void Greeks::setRho(double rho) noexcept {
+    data_.rho = rho;
+}
+
+double Greeks::getVega() const noexcept {
+    return data_.vega;
+}
+
+void Greeks::setVega(double vega) noexcept {
+    data_.vega = vega;
+}
+
+std::string Greeks::toString() const {
+    return fmt::format(
+        "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
+        "gamma={}, theta={}, rho={}, vega={}}}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
+        dxfcpp::toString(getPrice()), dxfcpp::toString(getVolatility()), dxfcpp::toString(getDelta()),
+        dxfcpp::toString(getGamma()), dxfcpp::toString(getTheta()), dxfcpp::toString(getRho()),
+        dxfcpp::toString(getVega()));
 }
 
 DXFCPP_END_NAMESPACE

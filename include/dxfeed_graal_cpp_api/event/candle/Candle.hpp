@@ -38,7 +38,7 @@ struct EventMapper;
  * that handles the necessary wrapping of the symbol into TimeSeriesSubscriptionSymbol to specify a subscription
  * time range.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions, and snapshots</a></h3>
+ * <h3><a name="eventFlagsSection">Event flags, transactions, and snapshots.</a></h3>
  *
  * Some candle sources provide a consistent view of the set of known candles.
  * The corresponding information is carried in @ref Candle::getEventFlags() "eventFlags" property.

@@ -14,7 +14,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../TimeSeriesEvent.hpp"
 #include "../market/MarketEvent.hpp"
 
-#include <cassert>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -142,33 +141,22 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Underlying(const StringLike & eventSymbol) noexcept : MarketEvent(eventSymbol) {
-    }
+    explicit Underlying(const StringLike & eventSymbol) noexcept;
 
     ///
-    const IndexedEventSource &getSource() const & noexcept override {
-        return IndexedEventSource::DEFAULT;
-    }
+    const IndexedEventSource &getSource() const & noexcept override;
 
     ///
-    std::int32_t getEventFlags() const noexcept override {
-        return data_.eventFlags;
-    }
+    std::int32_t getEventFlags() const noexcept override;
 
     ///
-    EventFlagsMask getEventFlagsMask() const noexcept override {
-        return EventFlagsMask(data_.eventFlags);
-    }
+    EventFlagsMask getEventFlagsMask() const noexcept override;
 
     ///
-    void setEventFlags(std::int32_t eventFlags) noexcept override {
-        data_.eventFlags = eventFlags;
-    }
+    void setEventFlags(std::int32_t eventFlags) noexcept override;
 
     ///
-    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
-        data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
-    }
+    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override;
 
     /**
      * Returns a unique per-symbol index of this event.
@@ -177,9 +165,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      *
      * @return unique index of this event.
      */
-    std::int64_t getIndex() const noexcept override {
-        return data_.index;
-    }
+    std::int64_t getIndex() const noexcept override;
 
     /**
      * Changes the unique per-symbol index of this event.
@@ -191,18 +177,14 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      * @param index the event index.
      * @see ::getIndex()
      */
-    void setIndex(std::int64_t index) override {
-        data_.index = index;
-    }
+    void setIndex(std::int64_t index) override;
 
     /**
      * Returns the timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
-    std::int64_t getTime() const noexcept override {
-        return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
-    }
+    std::int64_t getTime() const noexcept override;
 
     /**
      * Changes the timestamp of the event in milliseconds.
@@ -210,11 +192,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      * @param time timestamp of the event in milliseconds.
      * @see ::getTime()
      */
-    void setTime(std::int64_t time) noexcept {
-        data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-                                sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
-                           getSequence());
-    }
+    void setTime(std::int64_t time) noexcept;
 
     /**
      * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() "time".
@@ -223,9 +201,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
@@ -240,125 +216,91 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      *
      * @return 30-day implied volatility for this underlying based on VIX methodology.
      */
-    double getVolatility() const noexcept {
-        return data_.volatility;
-    }
+    double getVolatility() const noexcept;
 
     /**
      * Changes 30-day implied volatility for this underlying based on VIX methodology.
      *
      * @param volatility 30-day implied volatility for this underlying based on VIX methodology.
      */
-    void setVolatility(double volatility) noexcept {
-        data_.volatility = volatility;
-    }
+    void setVolatility(double volatility) noexcept;
 
     /**
      * Returns front month implied volatility for this underlying based on VIX methodology.
      *
      * @return front month implied volatility for this underlying based on VIX methodology.
      */
-    double getFrontVolatility() const noexcept {
-        return data_.frontVolatility;
-    }
+    double getFrontVolatility() const noexcept;
 
     /**
      * Changes front month implied volatility for this underlying based on VIX methodology.
      *
      * @param frontVolatility front month implied volatility for this underlying based on VIX methodology.
      */
-    void setFrontVolatility(double frontVolatility) noexcept {
-        data_.frontVolatility = frontVolatility;
-    }
+    void setFrontVolatility(double frontVolatility) noexcept;
 
     /**
      * Returns back month implied volatility for this underlying based on VIX methodology.
      *
      * @return back month implied volatility for this underlying based on VIX methodology.
      */
-    double getBackVolatility() const noexcept {
-        return data_.backVolatility;
-    }
+    double getBackVolatility() const noexcept;
 
     /**
      * Changes back month implied volatility for this underlying based on VIX methodology.
      *
      * @param backVolatility back month implied volatility for this underlying based on VIX methodology.
      */
-    void setBackVolatility(double backVolatility) noexcept {
-        data_.backVolatility = backVolatility;
-    }
+    void setBackVolatility(double backVolatility) noexcept;
 
     /**
      * Returns call options traded volume for a day.
      *
      * @return call options traded volume for a day.
      */
-    double getCallVolume() const noexcept {
-        return data_.callVolume;
-    }
+    double getCallVolume() const noexcept;
 
     /**
      * Changes call options traded volume for a day.
      *
      * @param callVolume call options traded volume for a day.
      */
-    void setCallVolume(double callVolume) noexcept {
-        data_.callVolume = callVolume;
-    }
+    void setCallVolume(double callVolume) noexcept;
 
     /**
      * Returns put options traded volume for a day.
      *
      * @return put options traded volume for a day.
      */
-    double getPutVolume() const noexcept {
-        return data_.putVolume;
-    }
+    double getPutVolume() const noexcept;
 
     /**
      * Changes put options traded volume for a day.
      *
      * @param putVolume put options traded volume for a day.
      */
-    void setPutVolume(double putVolume) noexcept {
-        data_.putVolume = putVolume;
-    }
+    void setPutVolume(double putVolume) noexcept;
 
     /**
      * Returns options traded volume for a day.
      *
      * @return options traded volume for a day.
      */
-    double getOptionVolume() const noexcept {
-        if (std::isnan(data_.putVolume)) {
-            return data_.callVolume;
-        }
-
-        if (std::isnan(data_.callVolume)) {
-            return data_.putVolume;
-        }
-
-        return data_.putVolume + data_.callVolume;
-    }
+    double getOptionVolume() const noexcept;
 
     /**
      * Returns ratio of put options traded volume to call options traded volume for a day.
      *
      * @return ratio of put options traded volume to call options traded volume for a day.
      */
-    double getPutCallRatio() const noexcept {
-        return data_.putCallRatio;
-    }
+    double getPutCallRatio() const noexcept;
 
     /**
      * Changes ratio of put options traded volume to call options traded volume for a day.
      *
      * @param putCallRatio ratio of put options traded volume to call options traded volume for a day.
      */
-    void setPutCallRatio(double putCallRatio) noexcept {
-        data_.putCallRatio = putCallRatio;
-    }
+    void setPutCallRatio(double putCallRatio) noexcept;
 
     /**
      * Returns a string representation of the current object.

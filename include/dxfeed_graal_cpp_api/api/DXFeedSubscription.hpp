@@ -554,7 +554,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     /**
      * Sets the aggregation period for data.
      * This method sets a new aggregation period for data, which will only take effect on the next iteration of
-     * data notification. For example, if the current aggregation period is 5 seconds and it is changed
+     * data notification. For example, if the current aggregation period is 5 seconds, and it is changed
      * to 1 second, the next call to the next call to the retrieve method may take up to 5 seconds, after which
      * the new aggregation period will take effect.
      *
@@ -565,7 +565,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     /**
      * Sets the aggregation period for data.
      * This method sets a new aggregation period for data, which will only take effect on the next iteration of
-     * data notification. For example, if the current aggregation period is 5 seconds and it is changed
+     * data notification. For example, if the current aggregation period is 5 seconds, and it is changed
      * to 1 second, the next call to the next call to the retrieve method may take up to 5 seconds, after which
      * the new aggregation period will take effect.
      *
@@ -576,7 +576,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     /**
      * Sets the aggregation period for data.
      * This method sets a new aggregation period for data, which will only take effect on the next iteration of
-     * data notification. For example, if the current aggregation period is 5 seconds and it is changed
+     * data notification. For example, if the current aggregation period is 5 seconds, and it is changed
      * to 1 second, the next call to the next call to the retrieve method may take up to 5 seconds, after which
      * the new aggregation period will take effect.
      *

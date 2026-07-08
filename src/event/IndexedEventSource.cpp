@@ -26,6 +26,10 @@ void IndexedEventSource::freeGraal(void *graalNative) {
     delete graalSource;
 }
 
+std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> IndexedEventSource::toGraalUnique() const noexcept {
+    return {toGraal(), freeGraal};
+}
+
 IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) {
     auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
 
@@ -40,6 +44,29 @@ IndexedEventSource::IndexedEventSource() noexcept {
 }
 
 IndexedEventSource::~IndexedEventSource() noexcept {
+}
+
+IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name) noexcept : id_{id}, name_{name} {
+}
+
+std::int32_t IndexedEventSource::id() const noexcept {
+    return id_;
+}
+
+const std::string &IndexedEventSource::name() const noexcept {
+    return name_;
+}
+
+std::string IndexedEventSource::toString() const {
+    return name_;
+}
+
+bool IndexedEventSource::operator==(const IndexedEventSource &indexedEventSource) const {
+    return id_ == indexedEventSource.id_;
+}
+
+bool IndexedEventSource::operator<(const IndexedEventSource &indexedEventSource) const {
+    return id_ < indexedEventSource.id_;
 }
 
 DXFCPP_END_NAMESPACE

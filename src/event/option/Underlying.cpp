@@ -74,17 +74,6 @@ std::shared_ptr<Underlying> Underlying::fromGraal(void *graalNative) {
     return underlying;
 }
 
-std::string Underlying::toString() const {
-    return fmt::format(
-        "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
-        "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
-        dxfcpp::toString(getVolatility()), dxfcpp::toString(getFrontVolatility()),
-        dxfcpp::toString(getBackVolatility()), dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()),
-        dxfcpp::toString(getPutCallRatio()));
-}
-
 void *Underlying::toGraal() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -128,6 +117,51 @@ void Underlying::assign(std::shared_ptr<EventType> event) {
 Underlying::Underlying() noexcept {
 }
 
+Underlying::Underlying(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+}
+
+const IndexedEventSource &Underlying::getSource() const & noexcept {
+    return IndexedEventSource::DEFAULT;
+}
+
+std::int32_t Underlying::getEventFlags() const noexcept {
+    return data_.eventFlags;
+}
+
+EventFlagsMask Underlying::getEventFlagsMask() const noexcept {
+    return EventFlagsMask(data_.eventFlags);
+}
+
+void Underlying::setEventFlags(std::int32_t eventFlags) noexcept {
+    data_.eventFlags = eventFlags;
+}
+
+void Underlying::setEventFlags(const EventFlagsMask &eventFlags) noexcept {
+    data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
+}
+
+std::int64_t Underlying::getIndex() const noexcept {
+    return data_.index;
+}
+
+void Underlying::setIndex(std::int64_t index) {
+    data_.index = index;
+}
+
+std::int64_t Underlying::getTime() const noexcept {
+    return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+}
+
+void Underlying::setTime(std::int64_t time) noexcept {
+    data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                            sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+                       getSequence());
+}
+
+std::int32_t Underlying::getSequence() const noexcept {
+    return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
+}
+
 void Underlying::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
@@ -136,6 +170,77 @@ void Underlying::setSequence(std::int32_t sequence) {
     }
 
     data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
+}
+
+double Underlying::getVolatility() const noexcept {
+    return data_.volatility;
+}
+
+void Underlying::setVolatility(double volatility) noexcept {
+    data_.volatility = volatility;
+}
+
+double Underlying::getFrontVolatility() const noexcept {
+    return data_.frontVolatility;
+}
+
+void Underlying::setFrontVolatility(double frontVolatility) noexcept {
+    data_.frontVolatility = frontVolatility;
+}
+
+double Underlying::getBackVolatility() const noexcept {
+    return data_.backVolatility;
+}
+
+void Underlying::setBackVolatility(double backVolatility) noexcept {
+    data_.backVolatility = backVolatility;
+}
+
+double Underlying::getCallVolume() const noexcept {
+    return data_.callVolume;
+}
+
+void Underlying::setCallVolume(double callVolume) noexcept {
+    data_.callVolume = callVolume;
+}
+
+double Underlying::getPutVolume() const noexcept {
+    return data_.putVolume;
+}
+
+void Underlying::setPutVolume(double putVolume) noexcept {
+    data_.putVolume = putVolume;
+}
+
+double Underlying::getOptionVolume() const noexcept {
+    if (std::isnan(data_.putVolume)) {
+        return data_.callVolume;
+    }
+
+    if (std::isnan(data_.callVolume)) {
+        return data_.putVolume;
+    }
+
+    return data_.putVolume + data_.callVolume;
+}
+
+double Underlying::getPutCallRatio() const noexcept {
+    return data_.putCallRatio;
+}
+
+void Underlying::setPutCallRatio(double putCallRatio) noexcept {
+    data_.putCallRatio = putCallRatio;
+}
+
+std::string Underlying::toString() const {
+    return fmt::format(
+        "Underlying{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, volatility={}, frontVolatility={}, "
+        "backVolatility={}, callVolume={}, putVolume={}, putCallRatio={}}}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
+        dxfcpp::toString(getVolatility()), dxfcpp::toString(getFrontVolatility()),
+        dxfcpp::toString(getBackVolatility()), dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()),
+        dxfcpp::toString(getPutCallRatio()));
 }
 
 DXFCPP_END_NAMESPACE

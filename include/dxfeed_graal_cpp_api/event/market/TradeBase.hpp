@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../LastingEvent.hpp"
 #include "./MarketEvent.hpp"
 
-#include <cassert>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -27,15 +26,15 @@ struct Direction;
 struct EventMapper;
 
 /**
- * Base class for common fields of Trade} and TradeETH events.
+ * Base class for common fields of Trade and TradeETH events.
  * Trade events represent the most recent information that is available about the last trade on the market at any
  * given moment of time.
  *
  * Trade event represents last trade information for <b>regular trading hours</b> (RTH) with an official volume and
  * turnover <b>for the whole trading day</b> identified by @ref TradeBase::getDayId() "dayId" field.
  *
- * TradeETH event is defined only for symbols (typically stocks and ETFs) with a designated
- * <b>extended trading hours</b> (ETH, pre market and post market trading sessions). It represents last trade price
+ * TradeETH event is defined only for symbols (typically stocks and ETFs) with designated
+ * <b>extended trading hours</b> (ETH, pre-market and post market trading sessions). It represents the last trade price
  * during ETH and also accumulated volume and turnover during ETH for current trading day.
  */
 class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
@@ -97,17 +96,14 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TradeBase(const StringLike& eventSymbol) noexcept : MarketEvent(eventSymbol) {
-    }
+    explicit TradeBase(const StringLike& eventSymbol) noexcept;
 
     /**
-     * Returns time and sequence of last trade packaged into single long value.
+     * Returns time and sequence of the last trade packaged into a single long value.
      *
      * @return time and sequence of last trade.
      */
-    std::int64_t getTimeSequence() const noexcept {
-        return tradeBaseData_.timeSequence;
-    }
+    std::int64_t getTimeSequence() const noexcept;
 
     /**
      * Changes time and sequence of last trade.
@@ -117,9 +113,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @param timeSequence the time and sequence.
      * @see TradeBase::getTimeSequence()
      */
-    void setTimeSequence(std::int64_t timeSequence) noexcept {
-        tradeBaseData_.timeSequence = timeSequence;
-    }
+    void setTimeSequence(std::int64_t timeSequence) noexcept;
 
     /**
      * Returns time of the last trade.
@@ -127,10 +121,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return time of the last trade.
      */
-    std::int64_t getTime() const noexcept {
-        return sar(tradeBaseData_.timeSequence, SECONDS_SHIFT) * 1000 +
-               andOp(sar(tradeBaseData_.timeSequence, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
-    }
+    std::int64_t getTime() const noexcept;
 
     /**
      * Changes time of the last trade.
@@ -138,12 +129,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @param time time of the last trade.
      */
-    void setTime(std::int64_t time) noexcept {
-        tradeBaseData_.timeSequence =
-            orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-                      sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
-                 getSequence());
-    }
+    void setTime(std::int64_t time) noexcept;
 
     /**
      * Returns time of the last trade in nanoseconds.
@@ -151,9 +137,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return time of the last trade in nanoseconds.
      */
-    std::int64_t getTimeNanos() const noexcept {
-        return time_nanos_util::getNanosFromMillisAndNanoPart(getTime(), tradeBaseData_.timeNanoPart);
-    }
+    std::int64_t getTimeNanos() const noexcept;
 
     /**
      * Changes time of the last trade.
@@ -161,28 +145,21 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @param timeNanos time of the last trade in nanoseconds.
      */
-    void setTimeNanos(std::int64_t timeNanos) noexcept {
-        setTime(time_nanos_util::getMillisFromNanos(timeNanos));
-        tradeBaseData_.timeNanoPart = time_nanos_util::getNanoPartFromNanos(timeNanos);
-    }
+    void setTimeNanos(std::int64_t timeNanos) noexcept;
 
     /**
      * Changes microseconds and nanoseconds time part of the last trade.
      *
      * @param timeNanoPart microseconds and nanoseconds time part of the last trade.
      */
-    void setTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        tradeBaseData_.timeNanoPart = timeNanoPart;
-    }
+    void setTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Returns microseconds and nanoseconds time part of the last trade.
      *
      * @return microseconds and nanoseconds time part of the last trade.
      */
-    std::int32_t getTimeNanoPart() const noexcept {
-        return tradeBaseData_.timeNanoPart;
-    }
+    std::int32_t getTimeNanoPart() const noexcept;
 
     /**
      * Returns sequence number of the last trade to distinguish trades that have the same
@@ -191,9 +168,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return sequence of the last trade.
      */
-    std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(tradeBaseData_.timeSequence, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes @ref TradeBase::getSequence() "sequence number" of the last trade.
@@ -209,74 +184,56 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return exchange code of the last trade.
      */
-    std::int16_t getExchangeCode() const noexcept {
-        return tradeBaseData_.exchangeCode;
-    }
+    std::int16_t getExchangeCode() const noexcept;
 
     /**
      * Returns exchange code of last trade as UTF8 string.
      *
      * @return exchange code of last trade as UTF8 string.
      */
-    std::string getExchangeCodeString() const noexcept {
-        // TODO: cache [EN-8231]
-
-        return utf16toUtf8String(tradeBaseData_.exchangeCode);
-    }
+    std::string getExchangeCodeString() const noexcept;
 
     /**
      * Changes exchange code of the last trade.
      *
      * @param exchangeCode exchange code of the last trade.
      */
-    void setExchangeCode(char exchangeCode) noexcept {
-        tradeBaseData_.exchangeCode = utf8to16(exchangeCode);
-    }
+    void setExchangeCode(char exchangeCode) noexcept;
 
     /**
      * Changes exchange code of the last trade.
      *
      * @param exchangeCode exchange code of the last trade.
      */
-    void setExchangeCode(std::int16_t exchangeCode) noexcept {
-        tradeBaseData_.exchangeCode = exchangeCode;
-    }
+    void setExchangeCode(std::int16_t exchangeCode) noexcept;
 
     /**
      * Returns price of the last trade.
      *
      * @return price of the last trade.
      */
-    double getPrice() const noexcept {
-        return tradeBaseData_.price;
-    }
+    double getPrice() const noexcept;
 
     /**
      * Changes price of the last trade.
      *
      * @param price price of the last trade.
      */
-    void setPrice(double price) noexcept {
-        tradeBaseData_.price = price;
-    }
+    void setPrice(double price) noexcept;
 
     /**
      * Returns size of the last trade as floating number with fractions.
      *
      * @return size of the last trade as floating number with fractions.
      */
-    double getSize() const noexcept {
-        return tradeBaseData_.size;
-    }
+    double getSize() const noexcept;
 
     /**
      * Changes size of the last trade as floating number with fractions.
      *
      * @param size size of the last trade as floating number with fractions.
      */
-    void setSize(double size) noexcept {
-        tradeBaseData_.size = size;
-    }
+    void setSize(double size) noexcept;
 
     /**
      * Returns identifier of the current trading day.
@@ -284,9 +241,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return identifier of the current trading day.
      */
-    std::int32_t getDayId() const noexcept {
-        return tradeBaseData_.dayId;
-    }
+    std::int32_t getDayId() const noexcept;
 
     /**
      * Changes identifier of the current trading day.
@@ -294,27 +249,21 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @param dayId identifier of the current trading day.
      */
-    void setDayId(std::int32_t dayId) noexcept {
-        tradeBaseData_.dayId = dayId;
-    }
+    void setDayId(std::int32_t dayId) noexcept;
 
     /**
      * Returns total volume traded for a day as floating number with fractions.
      *
      * @return total volume traded for a day as floating number with fractions.
      */
-    double getDayVolume() const noexcept {
-        return tradeBaseData_.dayVolume;
-    }
+    double getDayVolume() const noexcept;
 
     /**
      * Changes total volume traded for a day as floating number with fractions.
      *
      * @param dayVolume total volume traded for a day as floating number with fractions.
      */
-    void setDayVolume(double dayVolume) noexcept {
-        tradeBaseData_.dayVolume = dayVolume;
-    }
+    void setDayVolume(double dayVolume) noexcept;
 
     /**
      * Returns total turnover traded for a day.
@@ -322,18 +271,14 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return total turnover traded for a day.
      */
-    double getDayTurnover() const noexcept {
-        return tradeBaseData_.dayTurnover;
-    }
+    double getDayTurnover() const noexcept;
 
     /**
      * Changes total turnover traded for a day.
      *
      * @param dayTurnover total turnover traded for a day.
      */
-    void setDayTurnover(double dayTurnover) noexcept {
-        tradeBaseData_.dayTurnover = dayTurnover;
-    }
+    void setDayTurnover(double dayTurnover) noexcept;
 
     /**
      * Returns tick direction of the last trade.
@@ -354,37 +299,28 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @return `true` if last trade was in extended trading hours.
      */
-    bool isExtendedTradingHours() const noexcept {
-        return andOp(tradeBaseData_.flags, ETH) != 0;
-    }
+    bool isExtendedTradingHours() const noexcept;
 
     /**
      * Changes whether last trade was in extended trading hours.
      *
      * @param extendedTradingHours `true` if last trade was in extended trading hours.
      */
-    void setExtendedTradingHours(bool extendedTradingHours) noexcept {
-        tradeBaseData_.flags =
-            extendedTradingHours ? orOp(tradeBaseData_.flags, ETH) : andOp(tradeBaseData_.flags, ~ETH);
-    }
+    void setExtendedTradingHours(bool extendedTradingHours) noexcept;
 
     /**
      * Returns change of the last trade.
      *
      * @return change of the last trade.
      */
-    double getChange() const noexcept {
-        return tradeBaseData_.change;
-    }
+    double getChange() const noexcept;
 
     /**
      * Changes change of the last trade.
      *
      * @param change price of the last trade.
      */
-    void setChange(double change) noexcept {
-        tradeBaseData_.change = change;
-    }
+    void setChange(double change) noexcept;
 
     /**
      * Returns string representation of this trade event's fields.

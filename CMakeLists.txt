@@ -382,6 +382,7 @@ set(dxFeedGraalCxxApi_Event_Sources
         src/event/IndexedEvent.cpp
         src/event/EventMapper.cpp
         src/event/EventSourceWrapper.cpp
+        src/event/TimeSeriesEvent.cpp
 )
 
 set(dxFeedGraalCxxApi_EventCandle_Sources

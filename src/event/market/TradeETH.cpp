@@ -52,10 +52,6 @@ std::shared_ptr<TradeETH> TradeETH::fromGraal(void *graalNative) {
     return tradeEth;
 }
 
-std::string TradeETH::toString() const {
-    return fmt::format("TradeETH{{{}}}", baseFieldsToString());
-}
-
 void *TradeETH::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(toString() + "::toGraal()");
@@ -95,6 +91,13 @@ void TradeETH::assign(std::shared_ptr<EventType> event) {
 }
 
 TradeETH::TradeETH() noexcept {
+}
+
+TradeETH::TradeETH(std::string eventSymbol) noexcept : TradeBase(std::move(eventSymbol)) {
+}
+
+std::string TradeETH::toString() const {
+    return fmt::format("TradeETH{{{}}}", baseFieldsToString());
 }
 
 DXFCPP_END_NAMESPACE

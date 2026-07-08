@@ -44,6 +44,18 @@ EventSourceWrapper::EventSourceWrapper() noexcept {
 EventSourceWrapper::~EventSourceWrapper() noexcept {
 }
 
+EventSourceWrapper::EventSourceWrapper(const IndexedEventSource &data) noexcept { // NOLINT(*-explicit-constructor)
+    data_ = data;
+}
+
+EventSourceWrapper::EventSourceWrapper(const OrderSource &data) noexcept { // NOLINT(*-explicit-constructor)
+    data_ = data;
+}
+
+void EventSourceWrapper::freeGraal(void *graalNative) {
+    IndexedEventSource::freeGraal(graalNative);
+}
+
 template void *EventSourceWrapper::ListUtils::toGraalList<EventSourceWrapper const *>(EventSourceWrapper const *,
                                                                                       EventSourceWrapper const *);
 
@@ -54,6 +66,58 @@ EventSourceWrapper EventSourceWrapper::fromGraal(void *graalNative) {
     default:
         return IndexedEventSource::fromGraal(graalNative);
     }
+}
+
+void *EventSourceWrapper::toGraal() const noexcept {
+    return std::visit(
+        [](const auto &eventSource) {
+            return eventSource.toGraal();
+        },
+        data_);
+}
+
+std::unique_ptr<void, decltype(&EventSourceWrapper::freeGraal)>
+EventSourceWrapper::toGraalUnique() const noexcept { // NOLINT(*-use-nodiscard)
+    return {toGraal(), freeGraal};
+}
+
+std::string EventSourceWrapper::toString() const {
+    return "EventSourceWrapper{" +
+           std::visit(
+               [](const auto &eventSource) {
+                   return toStringAny(eventSource);
+               },
+               data_) +
+           "}";
+}
+
+std::string EventSourceWrapper::toStringUnderlying() const {
+    return std::visit(
+        [](const auto &eventSource) {
+            return toStringAny(eventSource);
+        },
+        data_);
+}
+
+bool EventSourceWrapper::isIndexedEventSource() const noexcept {
+    return std::holds_alternative<IndexedEventSource>(data_);
+}
+
+bool EventSourceWrapper::isOrderSource() const noexcept {
+    return std::holds_alternative<OrderSource>(data_);
+}
+
+std::optional<IndexedEventSource> EventSourceWrapper::asIndexedEventSource() const noexcept {
+    return isIndexedEventSource() ? std::make_optional<IndexedEventSource>(std::get<IndexedEventSource>(data_))
+                                  : std::nullopt;
+}
+
+std::optional<OrderSource> EventSourceWrapper::asOrderSource() const noexcept {
+    return isOrderSource() ? std::make_optional<OrderSource>(std::get<OrderSource>(data_)) : std::nullopt;
+}
+
+const EventSourceWrapper::DataType &EventSourceWrapper::getData() const noexcept {
+    return data_;
 }
 
 DXFCPP_END_NAMESPACE
