@@ -21,7 +21,7 @@ void MetricsManager::setImpl(const std::string &name, double value) {
     }
 }
 
-MetricsManager::Stats<long long> MetricsManager::getAsI64Impl(const std::string &name) {
+MetricsManager::Stats<std::int64_t> MetricsManager::getAsI64Impl(const std::string &name) {
     if (!data_.contains(name)) {
         return {};
     }
@@ -113,7 +113,7 @@ MetricsManager::Stats<double> MetricsManager::getAsDouble(const std::string &nam
     return getAsDoubleImpl(name);
 }
 
-MetricsManager::Stats<long long> MetricsManager::getAsI64(const std::string &name) {
+MetricsManager::Stats<std::int64_t> MetricsManager::getAsI64(const std::string &name) {
     std::lock_guard lockGuard{mtx_};
 
     return getAsI64Impl(name);
