@@ -28,96 +28,53 @@ struct StringLike {
     mutable std::string owned_;
     mutable std::string_view view_;
 
-    StringLike() {}
+    StringLike();
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    StringLike(const char *s) : owned_(s ? s : ""), view_(owned_) {
-    }
+    StringLike(const char *s);
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    StringLike(std::string_view sv) : view_(sv) {
-    }
+    StringLike(std::string_view sv);
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    StringLike(const std::string &s) : owned_(s), view_(owned_) {
-    }
+    StringLike(const std::string &s);
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    StringLike(std::string &&s) noexcept : owned_(std::move(s)), view_(owned_) {
-    }
+    StringLike(std::string &&s) noexcept;
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
     template <std::size_t N> StringLike(const char (&arr)[N]) : view_(arr, N - 1) {
     }
 
     // ReSharper disable once CppNonExplicitConversionOperator
-    operator std::string_view() const noexcept {
-        return view_;
-    }
+    operator std::string_view() const noexcept;
 
     // ReSharper disable once CppNonExplicitConversionOperator
-    operator std::string() const {
-        return std::string(view_);
-    }
+    operator std::string() const;
 
-    const char *data() const noexcept {
-        return view_.data();
-    }
+    const char *data() const noexcept;
 
-    const char *c_str() const {
-        if (owned_.empty() && !view_.empty()) {
-            owned_ = std::string(view_);
-            view_ = owned_;
-        }
+    const char *c_str() const;
 
-        return owned_.c_str();
-    }
+    std::string_view::const_iterator begin() const noexcept;
 
-    auto begin() const noexcept {
-        return view_.begin();
-    }
+    std::string_view::const_iterator end() const noexcept;
 
-    auto end() const noexcept {
-        return view_.end();
-    }
+    std::string_view::const_iterator cbegin() const noexcept;
 
-    auto cbegin() const noexcept {
-        return view_.cbegin();
-    }
+    std::string_view::const_iterator cend() const noexcept;
 
-    auto cend() const noexcept {
-        return view_.cend();
-    }
+    bool empty() const noexcept;
 
-    bool empty() const noexcept {
-        return view_.empty();
-    }
-    std::size_t size() const noexcept {
-        return view_.size();
-    }
-    std::size_t length() const noexcept {
-        return view_.size();
-    }
+    std::size_t size() const noexcept;
 
-    bool ends_with(const StringLike &other) const noexcept {
-#if __cpp_lib_ends_with >= 201907L
-        return view_.ends_with(other.view_);
-#else
-        const auto sv = other.view_;
+    std::size_t length() const noexcept;
 
-        return sv.size() <= view_.size() && view_.compare(view_.size() - sv.size(), sv.size(), sv) == 0;
-#endif
-    }
+    bool ends_with(const StringLike &other) const noexcept;
 
-    std::string substr(std::size_t pos = 0, std::size_t count = std::string::npos) const {
-        const auto sv2 = view_.substr(pos, count);
+    std::string substr(std::size_t pos = 0, std::size_t count = std::string::npos) const;
 
-        return std::string(sv2);
-    }
-
-    bool operator==(const StringLike &other) const noexcept {
-        return view_ == other.view_;
-    }
+    bool operator==(const StringLike &other) const noexcept;
 
     friend std::string operator+(const StringLike &a, const StringLike &b) {
         std::string result;
@@ -129,32 +86,15 @@ struct StringLike {
         return result;
     }
 
-    explicit operator double() const {
-        double result{};
-#if defined(_LIBCPP_VERSION)
-        result = std::stod(std::string(view_));
-#else
-        if (auto [ptr, ec] = std::from_chars(view_.data(), view_.data() + view_.size(), result); ec != std::errc{})
-            throw std::invalid_argument("StringLike: cannot convert to double");
-#endif
-        return result;
-    }
+    explicit operator double() const;
 
-    std::string toString() const noexcept {
-        return std::string(view_);
-    }
+    std::string toString() const noexcept;
 
-    std::string_view toStringView() const noexcept {
-        return view_;
-    }
+    std::string_view toStringView() const noexcept;
 
     friend std::ostream &operator<<(std::ostream &os, const StringLike &sl) {
         return os << sl.view_;
     }
-
-    // friend std::string_view format_as(const StringLike &sl) {
-    //     return sl.view_;
-    // }
 };
 
 DXFCPP_END_NAMESPACE
@@ -172,18 +112,10 @@ struct StringHash {
     using HashType = std::hash<std::string_view>;
     using is_transparent = void;
 
-    std::size_t operator()(const char *str) const {
-        return HashType{}(str);
-    }
-    std::size_t operator()(std::string_view sv) const {
-        return HashType{}(sv);
-    }
-    std::size_t operator()(const std::string &str) const {
-        return HashType{}(str);
-    }
-    std::size_t operator()(const StringLike &s) const {
-        return HashType{}(s);
-    }
+    std::size_t operator()(const char *str) const;
+    std::size_t operator()(std::string_view sv) const;
+    std::size_t operator()(const std::string &str) const;
+    std::size_t operator()(const StringLike &s) const;
 };
 
 /**
@@ -429,8 +361,7 @@ class IsIEqual {
     std::locale locale_;
 
     public:
-    explicit IsIEqual(const std::locale &locale = std::locale()) : locale_{locale} {
-    }
+    explicit IsIEqual(const std::locale &locale = std::locale());
 
     template <typename T, typename U> bool operator()(const T &t, const U &u) const {
         return std::tolower<T>(t, locale_) == std::tolower<U>(u, locale_);

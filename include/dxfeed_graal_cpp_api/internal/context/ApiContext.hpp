@@ -12,18 +12,15 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 class DXFCPP_EXPORT ApiContext {
-    ApiContext() noexcept {};
+    ApiContext() noexcept;
 
     public:
-    ~ApiContext() noexcept {};
+    ~ApiContext() noexcept;
 
-    static std::shared_ptr<ApiContext> getInstance() noexcept {
-        static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new ApiContext{});
-
-        return instance;
-    }
+    static std::shared_ptr<ApiContext> getInstance() noexcept;
 
     template <typename Manager> std::shared_ptr<Manager> getManager() const noexcept {
+        // ReSharper disable once CppSmartPointerVsMakeFunction
         static std::shared_ptr<Manager> instance = std::shared_ptr<Manager>(new Manager{});
 
         return instance;
