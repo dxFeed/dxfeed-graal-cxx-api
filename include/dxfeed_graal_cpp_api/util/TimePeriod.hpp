@@ -47,9 +47,7 @@ struct DXFCPP_EXPORT TimePeriod {
      * @param value value in milliseconds
      * @return TimePeriod with <tt>value</tt> milliseconds.
      */
-    static TimePeriod valueOf(std::chrono::milliseconds value) {
-        return valueOf(value.count());
-    }
+    static TimePeriod valueOf(std::chrono::milliseconds value);
 
     /**
      * Returns TimePeriod represented with a given string.

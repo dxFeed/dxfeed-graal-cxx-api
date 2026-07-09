@@ -5,6 +5,16 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+InstrumentProfileField::InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike &name,
+                                               InstrumentProfileFieldTypeEnum typeEnum) noexcept
+    : fieldEnum_{fieldEnum}, name_{name}, typeEnum_{typeEnum},
+      numericField_{typeEnum != InstrumentProfileFieldTypeEnum::STRING} {
+}
+
+InstrumentProfileField::InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike &name) noexcept
+    : InstrumentProfileField(fieldEnum, name, InstrumentProfileFieldTypeEnum::STRING) {
+}
+
 const InstrumentProfileField InstrumentProfileField::TYPE{InstrumentProfileFieldEnum::TYPE, "TYPE"};
 const InstrumentProfileField InstrumentProfileField::SYMBOL{InstrumentProfileFieldEnum::SYMBOL, "SYMBOL"};
 const InstrumentProfileField InstrumentProfileField::DESCRIPTION{InstrumentProfileFieldEnum::DESCRIPTION,
@@ -55,6 +65,10 @@ const InstrumentProfileField InstrumentProfileField::PRICE_INCREMENTS{Instrument
 const InstrumentProfileField InstrumentProfileField::TRADING_HOURS{InstrumentProfileFieldEnum::TRADING_HOURS,
                                                                    "TRADING_HOURS"};
 
+const std::string &InstrumentProfileField::getName() const & noexcept {
+    return name_;
+}
+
 const std::unordered_map<std::string, std::reference_wrapper<const InstrumentProfileField>> InstrumentProfileField::MAP{
     {TYPE.getName(), std::cref(TYPE)},
     {SYMBOL.getName(), std::cref(SYMBOL)},
@@ -88,6 +102,15 @@ const std::unordered_map<std::string, std::reference_wrapper<const InstrumentPro
     {PRICE_INCREMENTS.getName(), std::cref(PRICE_INCREMENTS)},
     {TRADING_HOURS.getName(), std::cref(TRADING_HOURS)},
 };
+
+std::optional<std::reference_wrapper<const InstrumentProfileField>>
+InstrumentProfileField::find(const StringLike &name) noexcept {
+    if (MAP.contains(name)) {
+        return MAP.at(name);
+    }
+
+    return std::nullopt;
+}
 
 InstrumentProfileFieldEnum InstrumentProfileField::getFieldEnum() const {
     return fieldEnum_;

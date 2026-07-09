@@ -129,29 +129,17 @@ struct DXFCPP_EXPORT DayFilter {
     std::uint32_t dayOfWeekMask_;
 
     public:
-    [[nodiscard]] DayFilterEnum getCode() const {
-        return code_;
-    }
+    [[nodiscard]] DayFilterEnum getCode() const;
 
-    [[nodiscard]] std::string getName() const {
-        return name_;
-    }
+    [[nodiscard]] std::string getName() const;
 
-    [[nodiscard]] std::uint32_t getDayOfWeekMask() const {
-        return dayOfWeekMask_;
-    }
+    [[nodiscard]] std::uint32_t getDayOfWeekMask() const;
 
-    [[nodiscard]] Tristate isHoliday() const {
-        return holiday_;
-    }
+    [[nodiscard]] Tristate isHoliday() const;
 
-    [[nodiscard]] Tristate isShortDay() const {
-        return shortDay_;
-    }
+    [[nodiscard]] Tristate isShortDay() const;
 
-    [[nodiscard]] Tristate isTrading() const {
-        return trading_;
-    }
+    [[nodiscard]] Tristate isTrading() const;
 
     private:
     /// Required holiday flag, Tristate::NONE if not relevant.

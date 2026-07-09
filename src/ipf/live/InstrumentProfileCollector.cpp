@@ -110,6 +110,13 @@ void InstrumentProfileCollector::removeListenerHandle(std::size_t id) {
     isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, listenerHandles_[id]);
 }
 
+void InstrumentProfileCollector::removeUpdateListenerImpl(std::size_t listenerId) {
+    removeListenerHandle(listenerId);
+
+    onInstrumentProfilesUpdateHandlers_[listenerId].remove(listenerId);
+    onInstrumentProfilesUpdateHandlers_.erase(listenerId);
+}
+
 InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
     std::lock_guard guard{listenersMutex_};
 
@@ -143,6 +150,10 @@ std::int64_t InstrumentProfileCollector::getLastUpdateTime() const {
     return isolated::ipf::live::IsolatedInstrumentProfileCollector::getLastUpdateTime(handle_);
 }
 
+std::chrono::milliseconds InstrumentProfileCollector::getLastUpdateTimeAsDuration() const {
+    return std::chrono::milliseconds(getLastUpdateTime());
+}
+
 void InstrumentProfileCollector::updateInstrumentProfile(std::shared_ptr<InstrumentProfile> ip) const {
     if (!handle_) {
         return;
@@ -159,6 +170,14 @@ std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() co
     const auto iterable = isolated::ipf::live::IsolatedInstrumentProfileCollector::view(handle_);
 
     return IterableInstrumentProfile::create(iterable);
+}
+
+void InstrumentProfileCollector::removeUpdateListener(std::size_t listenerId) {
+    std::lock_guard guard{listenersMutex_};
+
+    if (onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
+        removeUpdateListenerImpl(listenerId);
+    }
 }
 
 DXFCPP_END_NAMESPACE

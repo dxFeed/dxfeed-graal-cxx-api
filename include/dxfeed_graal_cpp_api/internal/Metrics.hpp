@@ -24,7 +24,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct MetricsManager : private NonCopyable<MetricsManager> {
+struct DXFCPP_EXPORT MetricsManager : private NonCopyable<MetricsManager> {
     static constexpr auto METRICS_GROUPS_PROPERTY_NAME = "MetricsManager.Dump.MetricsGroups";
 
     template <typename T> struct Stats {

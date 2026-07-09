@@ -249,7 +249,9 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/Common.cpp
         src/internal/Metrics.cpp
         src/internal/Platform.cpp
+        src/internal/StopWatch.cpp
         src/internal/TimeFormat.cpp
+        src/internal/Timer.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources

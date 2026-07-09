@@ -54,6 +54,23 @@ SessionFilter::SessionFilter(SessionFilterEnum code, const StringLike &name, std
     : code_{code}, name_{name}, type_{type}, trading_{trading} {
 }
 
+bool SessionFilter::operator==(const SessionFilter &sessionFilter) const noexcept {
+    return type_ == sessionFilter.type_ && trading_ == sessionFilter.trading_;
+}
+
+std::string SessionFilter::toString() const {
+    return std::string("SessionFilter(") + ((!type_) ? "null" : type_.value().toString()) + ", " +
+           ((!trading_) ? "null" : dxfcpp::toString(trading_.value())) + ")";
+}
+
+const std::optional<SessionType> &SessionFilter::getType() const & noexcept {
+    return type_;
+}
+
+const std::optional<bool> &SessionFilter::getTrading() const & noexcept {
+    return trading_;
+}
+
 const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
     std::lock_guard lock(mtx_);
 

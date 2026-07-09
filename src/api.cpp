@@ -12,8 +12,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-thread_local Isolate::IsolateThread Isolate::currentIsolateThread_{};
-
 ApiContext::ApiContext() noexcept {
 }
 

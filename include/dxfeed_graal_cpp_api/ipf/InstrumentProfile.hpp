@@ -37,7 +37,7 @@ struct Schedule;
  * Please see <a href="http://www.dxfeed.com/downloads/documentation/dxFeed_Instrument_Profile_Format.pdf">Instrument
  * Profile Format documentation</a> for complete description.
  */
-struct DXFCPP_EXPORT InstrumentProfile final : public RequireMakeShared<InstrumentProfile> {
+struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfile> {
     friend IterableInstrumentProfile;
     friend NonOwningInstrumentProfileIterator;
     friend InstrumentProfileReader;

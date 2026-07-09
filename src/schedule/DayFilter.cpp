@@ -82,4 +82,28 @@ const DayFilter DayFilter::WEEK_DAY(DayFilterEnum::WEEK_DAY, "WEEK_DAY", 0x3EU, 
 const DayFilter DayFilter::WEEK_END(DayFilterEnum::WEEK_END, "WEEK_END", 0xC0, Tristate::NONE, Tristate::NONE,
                                     Tristate::NONE);
 
+DayFilterEnum DayFilter::getCode() const {
+    return code_;
+}
+
+std::string DayFilter::getName() const {
+    return name_;
+}
+
+std::uint32_t DayFilter::getDayOfWeekMask() const {
+    return dayOfWeekMask_;
+}
+
+Tristate DayFilter::isHoliday() const {
+    return holiday_;
+}
+
+Tristate DayFilter::isShortDay() const {
+    return shortDay_;
+}
+
+Tristate DayFilter::isTrading() const {
+    return trading_;
+}
+
 DXFCPP_END_NAMESPACE

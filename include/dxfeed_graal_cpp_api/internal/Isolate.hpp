@@ -28,8 +28,10 @@ using GraalIsolateHandle = void *;
 using GraalIsolateThreadHandle = void *;
 using ConstGraalIsolateThreadHandle = const void *;
 
-class Isolate final {
-    struct IsolateThread final {
+/// It's a wrapper around the Graal VM Isolate. It allows calling published Graal (Java) methods in isolation.
+class DXFCPP_EXPORT Isolate final {
+    /// It's a wrapper around the Graal VM Isolate's thread.
+    struct DXFCPP_EXPORT IsolateThread final {
         GraalIsolateThreadHandle handle{};
         std::thread::id tid{};
         std::size_t idx{};
@@ -53,13 +55,13 @@ class Isolate final {
 
     mutable std::recursive_mutex mtx_{};
     ConstGraalIsolateThreadHandle handle_;
-    static thread_local IsolateThread currentIsolateThread_;
+    static IsolateThread &currentIsolateThread() noexcept;
 
     Isolate() noexcept;
 
     CEntryPointErrorsEnum attach() const noexcept;
 
-    GraalIsolateThreadHandle get() noexcept;
+    GraalIsolateThreadHandle get() const noexcept;
 
     static void init(Isolate &isolate) noexcept;
 
@@ -95,7 +97,7 @@ class Isolate final {
             return result;
         }
 
-        return std::invoke(std::forward<F>(f), currentIsolateThread_.handle);
+        return std::invoke(std::forward<F>(f), currentIsolateThread().handle);
     }
 
     template <typename F> auto runIsolatedThrow(F &&f) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle> {
@@ -120,7 +122,7 @@ class Isolate final {
             throw GraalException(result);
         }
 
-        return std::invoke(std::forward<F>(f), currentIsolateThread_.handle);
+        return std::invoke(std::forward<F>(f), currentIsolateThread().handle);
     }
 
     template <typename F, typename Arg, typename... Args>
@@ -151,7 +153,7 @@ class Isolate final {
             return result;
         }
 
-        return std::invoke(std::forward<F>(f), currentIsolateThread_.handle, std::forward<Arg>(arg),
+        return std::invoke(std::forward<F>(f), currentIsolateThread().handle, std::forward<Arg>(arg),
                            std::forward<Args>(args)...);
     }
 
@@ -180,7 +182,7 @@ class Isolate final {
             throw GraalException(result);
         }
 
-        return std::invoke(std::forward<F>(f), currentIsolateThread_.handle, std::forward<Arg>(arg),
+        return std::invoke(std::forward<F>(f), currentIsolateThread().handle, std::forward<Arg>(arg),
                            std::forward<Args>(args)...);
     }
 

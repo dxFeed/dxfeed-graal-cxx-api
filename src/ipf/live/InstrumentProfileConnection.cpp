@@ -57,6 +57,23 @@ InstrumentProfileConnection::InstrumentProfileConnection() noexcept
     : id_{Id<InstrumentProfileConnection>::UNKNOWN} {
 }
 
+std::string InstrumentProfileConnection::stateToString(State state) noexcept {
+    switch (state) {
+    case State::NOT_CONNECTED:
+        return "NOT_CONNECTED";
+    case State::CONNECTING:
+        return "CONNECTING";
+    case State::CONNECTED:
+        return "CONNECTED";
+    case State::COMPLETED:
+        return "COMPLETED";
+    case State::CLOSED:
+        return "CLOSED";
+    }
+
+    return "";
+}
+
 InstrumentProfileConnection::Ptr
 InstrumentProfileConnection::createConnection(const StringLike &address,
                                               InstrumentProfileCollector::Ptr collector) {
@@ -84,8 +101,16 @@ std::int64_t InstrumentProfileConnection::getUpdatePeriod() const {
     return isolated::ipf::live::IsolatedInstrumentProfileConnection::getUpdatePeriod(handle_);
 }
 
+std::chrono::milliseconds InstrumentProfileConnection::getUpdatePeriodAsDuration() const {
+    return std::chrono::milliseconds(getUpdatePeriod());
+}
+
 void InstrumentProfileConnection::setUpdatePeriod(std::int64_t updatePeriod) const {
     isolated::ipf::live::IsolatedInstrumentProfileConnection::setUpdatePeriod(handle_, updatePeriod);
+}
+
+void InstrumentProfileConnection::setUpdatePeriod(std::chrono::milliseconds updatePeriod) const {
+    setUpdatePeriod(updatePeriod.count());
 }
 
 InstrumentProfileConnection::State InstrumentProfileConnection::getState() const {
@@ -104,8 +129,21 @@ void InstrumentProfileConnection::close() const {
     isolated::ipf::live::IsolatedInstrumentProfileConnection::close(handle_);
 }
 
+void InstrumentProfileConnection::removeStateChangeListener(std::size_t listenerId) {
+    onStateChange_ -= listenerId;
+}
+
+SimpleHandler<void(InstrumentProfileConnection::State, InstrumentProfileConnection::State)> &
+InstrumentProfileConnection::onStateChange() {
+    return onStateChange_;
+}
+
 bool InstrumentProfileConnection::waitUntilCompleted(std::int64_t timeout) const {
     return isolated::ipf::live::IsolatedInstrumentProfileConnection::waitUntilCompleted(handle_, timeout);
+}
+
+bool InstrumentProfileConnection::waitUntilCompleted(std::chrono::milliseconds timeout) const {
+    return waitUntilCompleted(timeout.count());
 }
 
 DXFCPP_END_NAMESPACE

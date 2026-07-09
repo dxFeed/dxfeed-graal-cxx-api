@@ -60,12 +60,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     void addListenerHandle(std::size_t id);
     void removeListenerHandle(std::size_t id);
 
-    void removeUpdateListenerImpl(std::size_t listenerId) {
-        removeListenerHandle(listenerId);
-
-        onInstrumentProfilesUpdateHandlers_[listenerId].remove(listenerId);
-        onInstrumentProfilesUpdateHandlers_.erase(listenerId);
-    }
+    void removeUpdateListenerImpl(std::size_t listenerId);
 
     public:
     /// The alias to a type of shared pointer to the InstrumentProfileCollector object
@@ -98,9 +93,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * @return The last modification time (as std::chrono::milliseconds) of instrument profiles or zero if it is
      * unknown.
      */
-    std::chrono::milliseconds getLastUpdateTimeAsDuration() const {
-        return std::chrono::milliseconds(getLastUpdateTime());
-    }
+    std::chrono::milliseconds getLastUpdateTimeAsDuration() const;
 
     /**
      * Convenience method to update one instrument profile in this collector.
@@ -189,13 +182,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      *
      * @param listenerId The listener id
      */
-    void removeUpdateListener(std::size_t listenerId) {
-        std::lock_guard guard{listenersMutex_};
-
-        if (onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
-            removeUpdateListenerImpl(listenerId);
-        }
-    }
+    void removeUpdateListener(std::size_t listenerId);
 };
 
 DXFCPP_END_NAMESPACE
