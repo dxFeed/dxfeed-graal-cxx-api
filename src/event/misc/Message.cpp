@@ -118,6 +118,72 @@ void Message::assign(std::shared_ptr<EventType> event) {
 Message::Message() noexcept {
 }
 
+Message::Message(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+}
+
+Message::Message(const StringLike &eventSymbol, const StringLike &attachment) noexcept
+    : eventSymbol_{eventSymbol}, attachment_{attachment} {
+}
+
+const std::string &Message::getEventSymbol() const & noexcept {
+    if (!eventSymbol_) {
+        return String::NUL;
+    }
+
+    return eventSymbol_.value();
+}
+
+const std::optional<std::string> &Message::getEventSymbolOpt() const & noexcept {
+    return eventSymbol_;
+}
+
+void Message::setEventSymbol(const StringLike &eventSymbol) noexcept {
+    // TODO: check invalid utf-8 [EN-8233]
+    eventSymbol_ = std::string(eventSymbol);
+}
+
+Message &Message::withEventSymbol(const StringLike &eventSymbol) noexcept {
+    Message::setEventSymbol(eventSymbol);
+
+    return *this;
+}
+
+std::int64_t Message::getEventTime() const noexcept {
+    return eventTime_;
+}
+
+void Message::setEventTime(std::int64_t eventTime) noexcept {
+    eventTime_ = eventTime;
+}
+
+Message &Message::withEventTime(std::int64_t eventTime) noexcept {
+    Message::setEventTime(eventTime);
+
+    return *this;
+}
+
+const std::string &Message::getAttachment() const & {
+    if (!attachment_) {
+        return String::NUL;
+    }
+
+    return attachment_.value();
+}
+
+const std::optional<std::string> &Message::getAttachmentOpt() const & noexcept {
+    return attachment_;
+}
+
+void Message::setAttachment(const StringLike &attachment) {
+    attachment_ = std::string(attachment);
+}
+
+Message &Message::withAttachment(const StringLike &attachment) noexcept {
+    setAttachment(attachment);
+
+    return *this;
+}
+
 std::string Message::toString() const {
     return fmt::format("Message{{{}, eventTime={}, attachment={}}}", getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL));

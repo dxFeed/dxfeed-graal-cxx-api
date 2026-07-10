@@ -29,15 +29,11 @@ struct DXFCPP_EXPORT Error {
 
     Error(const Error &) = delete;
     Error &operator=(const Error &) = delete;
-    Error(Error &&) noexcept = default;
-    Error &operator=(Error &&) noexcept = default;
-    ~Error() noexcept {}
-    Error() noexcept {}
-
-    Error(std::size_t causeId, std::size_t groupId, std::string location, std::string message) noexcept
-        : causeId{causeId}, threadId{std::this_thread::get_id()}, groupId{groupId}, location{std::move(location)},
-          message{std::move(message)} {
-    }
+    Error(Error &&) noexcept;
+    Error &operator=(Error &&) noexcept;
+    ~Error() noexcept;
+    Error() noexcept;
+    Error(std::size_t causeId, std::size_t groupId, std::string location, std::string message) noexcept;
 };
 
 // TODO: implement retrieving, grouping methods
@@ -50,37 +46,18 @@ class DXFCPP_EXPORT ErrorHandlingManager {
     std::size_t maxErrorCollectionCapacity_{DEFAULT_ERROR_COLLECTION_CAPACITY};
     std::atomic<std::size_t> nextId{0};
 
-    ErrorHandlingManager() noexcept {};
+    ErrorHandlingManager() noexcept;
 
     public:
     ErrorHandlingManager(const ErrorHandlingManager &) = delete;
     ErrorHandlingManager &operator=(const ErrorHandlingManager &) = delete;
-    ~ErrorHandlingManager() noexcept {}
+    ~ErrorHandlingManager() noexcept;
 
-    public:
-    static std::shared_ptr<ErrorHandlingManager> getInstance() {
-        static std::shared_ptr<ErrorHandlingManager> instance{new ErrorHandlingManager};
+    static std::shared_ptr<ErrorHandlingManager> getInstance();
 
-        return instance;
-    }
+    const Error &registerError(Error error) noexcept;
 
-    const Error &registerError(Error error) noexcept {
-        std::lock_guard lock{errorCollectionMutex_};
-
-        const std::size_t id = nextId++;
-        error.id = id;
-        errorCollection_[id] = std::move(error);
-
-        if (errorCollection_.size() > maxErrorCollectionCapacity_) {
-            errorCollection_.erase(id - maxErrorCollectionCapacity_);
-        }
-
-        return errorCollection_[id];
-    }
-
-    const Error &getLastError() noexcept {
-        return errorCollection_[nextId - 1];
-    }
+    const Error &getLastError() noexcept;
 };
 
 DXFCPP_END_NAMESPACE

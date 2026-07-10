@@ -42,6 +42,11 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
     return publisher;
 }
 
+
+void DXPublisher::publishEvents(std::shared_ptr<EventType> event) noexcept {
+    publishEvents({event});
+}
+
 std::shared_ptr<ObservableSubscription> DXPublisher::getSubscription(const EventTypeEnum &eventType) {
     std::lock_guard guard{mutex_};
 

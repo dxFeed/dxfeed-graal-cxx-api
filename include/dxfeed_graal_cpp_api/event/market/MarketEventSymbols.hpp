@@ -48,9 +48,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol The symbol.
      * @return `true` if the specified symbol has the exchange code specification.
      */
-    static bool hasExchangeCode(const StringLike &symbol) noexcept {
-        return hasExchangeCodeInternal(symbol, getLengthWithoutAttributesInternal(symbol));
-    }
+    static bool hasExchangeCode(const StringLike &symbol) noexcept;
 
     /**
      * Returns exchange code of the specified symbol or `'\0'` if none is defined.
@@ -58,10 +56,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol The symbol.
      * @return exchange code of the specified symbol or `'\0'` if none is defined.
      */
-    static char getExchangeCode(const StringLike &symbol) noexcept {
-        return hasExchangeCode(symbol) ? std::string_view(symbol)[getLengthWithoutAttributesInternal(symbol) - 1]
-                                       : '\0';
-    }
+    static char getExchangeCode(const StringLike &symbol) noexcept;
 
     /**
      * Changes exchange code of the specified symbol or removes it if the new exchange code is `'\0'`.
@@ -70,12 +65,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param exchangeCode The new exchange code.
      * @return new symbol with the changed exchange code.
      */
-    static std::string changeExchangeCode(const StringLike &symbol, char exchangeCode) noexcept {
-        auto i = getLengthWithoutAttributesInternal(symbol);
-        auto result = exchangeCode == '\0' ? getBaseSymbolInternal(symbol, i)
-                                           : getBaseSymbolInternal(symbol, i) + EXCHANGE_SEPARATOR + exchangeCode;
-        return i == symbol.length() ? result : result + symbol.substr(i);
-    }
+    static std::string changeExchangeCode(const StringLike &symbol, char exchangeCode) noexcept;
 
     /**
      * Returns base symbol without exchange code and attributes.
@@ -83,9 +73,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol symbol.
      * @return base symbol without exchange code and attributes.
      */
-    static std::string getBaseSymbol(const StringLike &symbol) noexcept {
-        return getBaseSymbolInternal(symbol, getLengthWithoutAttributesInternal(symbol));
-    }
+    static std::string getBaseSymbol(const StringLike &symbol) noexcept;
 
     /**
      * Changes base symbol while leaving exchange code and attributes intact.
@@ -93,14 +81,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param baseSymbol new base symbol.
      * @return new symbol with new base symbol and old symbol's exchange code and attributes.
      */
-    static std::string changeBaseSymbol(const StringLike &symbol, const StringLike &baseSymbol) noexcept {
-        const auto i = getLengthWithoutAttributesInternal(symbol);
-
-        return hasExchangeCodeInternal(symbol, i)
-                   ? std::string(baseSymbol) + EXCHANGE_SEPARATOR + std::string_view(symbol)[i - 1] + symbol.substr(i)
-               : i == symbol.length() ? std::string(baseSymbol)
-                                      : std::string(baseSymbol) + symbol.substr(i);
-    }
+    static std::string changeBaseSymbol(const StringLike &symbol, const StringLike &baseSymbol) noexcept;
 
     /**
      * Returns value of the attribute with the specified key.
@@ -112,9 +93,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * not found.
      */
     static std::optional<std::string> getAttributeStringByKey(const StringLike &symbol,
-                                                              const StringLike &key) noexcept {
-        return getAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
-    }
+                                                              const StringLike &key) noexcept;
 
     /**
      * Changes the value of one attribute value while leaving exchange code and other attributes intact.
@@ -126,13 +105,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @return new symbol with a key attribute with the specified value and everything else from the old symbol.
      */
     static std::string changeAttributeStringByKey(const StringLike &symbol, const StringLike &key,
-                                                  const StringLike &value) noexcept {
-        auto i = getLengthWithoutAttributesInternal(symbol);
-
-        if (i == symbol.length())
-            return std::string(symbol) + ATTRIBUTES_OPEN + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_CLOSE;
-        return addAttributeInternal(symbol, i, key, value);
-    }
+                                                  const StringLike &value) noexcept;
 
     /**
      * Removes one attribute with the specified key while leaving exchange code and other attributes intact.
@@ -141,9 +114,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param key attribute key.
      * @return new symbol without the specified key and everything else from the old symbol.
      */
-    static std::string removeAttributeStringByKey(const StringLike &symbol, const StringLike &key) noexcept {
-        return removeAttributeInternal(symbol, getLengthWithoutAttributesInternal(symbol), key);
-    }
+    static std::string removeAttributeStringByKey(const StringLike &symbol, const StringLike &key) noexcept;
 
     private:
     static constexpr char EXCHANGE_SEPARATOR = '&';
@@ -152,168 +123,31 @@ struct DXFCPP_EXPORT MarketEventSymbols {
     static constexpr char ATTRIBUTES_SEPARATOR = ',';
     static constexpr char ATTRIBUTE_VALUE = '=';
 
-    static constexpr bool hasExchangeCodeInternal(const std::string &symbol, std::size_t length) noexcept {
-        return length >= 2 && symbol[length - 2] == EXCHANGE_SEPARATOR;
-    }
+    static bool hasExchangeCodeInternal(const std::string &symbol, std::size_t length) noexcept;
 
-    static std::string getBaseSymbolInternal(const std::string &symbol, std::size_t length) noexcept {
-        return hasExchangeCodeInternal(symbol, length) ? symbol.substr(0, length - 2) : symbol.substr(0, length);
-    }
+    static std::string getBaseSymbolInternal(const std::string &symbol, std::size_t length) noexcept;
 
-    static bool hasAttributesInternal(const std::string &symbol) noexcept {
-        if (symbol.length() >= 3 /* ATTRIBUTES_OPEN + ATTRIBUTES_CLOSE + ATTRIBUTE */ &&
-            symbol[symbol.length() - 1] == ATTRIBUTES_CLOSE) {
-            auto attributesOpenPos = symbol.find_last_of(ATTRIBUTES_OPEN, symbol.length() - 2);
+    static bool hasAttributesInternal(const std::string &symbol) noexcept;
 
-            return attributesOpenPos != std::string::npos && attributesOpenPos < symbol.length() - 2;
-        }
+    static std::size_t getLengthWithoutAttributesInternal(const std::string &symbol) noexcept;
 
-        return false;
-    }
+    static std::optional<std::string> getKeyInternal(const std::string &symbol, std::size_t i) noexcept;
 
-    static std::size_t getLengthWithoutAttributesInternal(const std::string &symbol) noexcept {
-        return hasAttributesInternal(symbol) ? symbol.find_last_of(ATTRIBUTES_OPEN) : symbol.length();
-    }
+    static std::size_t getNextKeyInternal(const std::string &symbol, std::size_t i) noexcept;
 
-    static std::optional<std::string> getKeyInternal(const std::string &symbol, std::size_t i) noexcept {
-        try {
-            if (auto found = symbol.find_first_of(ATTRIBUTE_VALUE, i); found != std::string::npos) {
-                return symbol.substr(i, found - i);
-            }
-
-            return std::nullopt;
-        } catch (...) {
-            return std::nullopt;
-        }
-    }
-
-    static std::size_t getNextKeyInternal(const std::string &symbol, std::size_t i) noexcept {
-        auto valuePos = symbol.find_first_of(ATTRIBUTE_VALUE, i) + 1;
-        auto separatorPos = symbol.find_first_of(ATTRIBUTES_SEPARATOR, valuePos);
-
-        return separatorPos == std::string::npos ? symbol.length() : separatorPos + 1;
-    }
-
-    static std::string getValueInternal(const std::string &symbol, std::size_t i, std::size_t j) {
-        auto valueOffset = symbol.find_first_of(ATTRIBUTE_VALUE, i) + 1;
-
-        return symbol.substr(valueOffset, j - 1 - valueOffset);
-    }
+    static std::string getValueInternal(const std::string &symbol, std::size_t i, std::size_t j);
 
     static std::string dropKeyAndValueInternal(const std::string &symbol, std::size_t length, std::size_t i,
-                                               std::size_t j) noexcept {
-        try {
-            if (j == symbol.length()) {
-                if (i == length + 1) {
-                    return symbol.substr(0, length);
-                } else {
-                    return symbol.substr(0, i - 1) + symbol.substr(j - 1);
-                }
-            }
-
-            return symbol.substr(0, i) + symbol.substr(j);
-        } catch (...) {
-            return symbol;
-        }
-    }
+                                               std::size_t j) noexcept;
 
     static std::optional<std::string>
-    getAttributeInternal(const std::string &symbol, std::size_t lengthWithoutAttributes, const std::string &key) {
-        if (lengthWithoutAttributes == symbol.length()) {
-            return std::nullopt;
-        }
-
-        auto i = lengthWithoutAttributes + 1;
-
-        while (i < symbol.length()) {
-            auto currentKey = getKeyInternal(symbol, i);
-
-            if (!currentKey) {
-                break;
-            }
-
-            auto j = getNextKeyInternal(symbol, i);
-
-            if (key == currentKey.value()) {
-                return getValueInternal(symbol, i, j);
-            }
-
-            i = j;
-        }
-
-        return std::nullopt;
-    }
+    getAttributeInternal(const std::string &symbol, std::size_t lengthWithoutAttributes, const std::string &key);
 
     static std::string removeAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes,
-                                               const std::string &key) noexcept {
-        if (lengthWithoutAttributes == symbol.length()) {
-            return symbol;
-        }
-
-        auto i = lengthWithoutAttributes + 1;
-
-        while (i < symbol.length()) {
-            auto currentKey = getKeyInternal(symbol, i);
-
-            if (!currentKey) {
-                break;
-            }
-
-            auto j = getNextKeyInternal(symbol, i);
-
-            if (key == currentKey.value()) {
-                symbol = dropKeyAndValueInternal(symbol, lengthWithoutAttributes, i, j);
-            } else {
-                i = j;
-            }
-        }
-
-        return symbol;
-    }
+                                               const std::string &key) noexcept;
 
     static std::string addAttributeInternal(std::string symbol, std::size_t lengthWithoutAttributes,
-                                            const std::string &key, const std::string &value) {
-        if (lengthWithoutAttributes == symbol.length()) {
-            return symbol + ATTRIBUTES_OPEN + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_CLOSE;
-        }
-
-        auto i = lengthWithoutAttributes + 1;
-        bool added = false;
-
-        while (i < symbol.length()) {
-            auto currentKey = getKeyInternal(symbol, i);
-
-            if (!currentKey) {
-                break;
-            }
-
-            auto j = getNextKeyInternal(symbol, i);
-            auto cmp = currentKey.value().compare(key);
-
-            if (cmp == 0) {
-                if (added) {
-                    // drop, since we've already added this key
-                    symbol = dropKeyAndValueInternal(symbol, lengthWithoutAttributes, i, j);
-                } else {
-                    // replace value
-                    symbol = symbol.substr(0, i) + key + ATTRIBUTE_VALUE + value + symbol.substr(j - 1);
-                    added = true;
-                    i += key.length() + value.length() + 2;
-                }
-            } else if (cmp > 0 && !added) {
-                // insert value here
-                symbol = symbol.substr(0, i) + key + ATTRIBUTE_VALUE + value + ATTRIBUTES_SEPARATOR + symbol.substr(i);
-                added = true;
-                i += key.length() + value.length() + 2;
-            } else {
-                i = j;
-            }
-        }
-
-        return added ? symbol
-                     : symbol.substr(0, i - 1) + ATTRIBUTES_SEPARATOR + key + ATTRIBUTE_VALUE + value +
-                           symbol.substr(i - 1);
-    }
+                                            const std::string &key, const std::string &value);
 };
 
 DXFCPP_END_NAMESPACE

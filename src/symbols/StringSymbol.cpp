@@ -42,6 +42,33 @@ StringSymbol::~StringSymbol() noexcept {
 
 }
 
+StringSymbol::StringSymbol(const char *chars) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("StringSymbol(chars = " + toStringAny(chars) + ")");
+    }
+
+    data_ = std::string(chars);
+}
+
+StringSymbol::StringSymbol(std::string_view stringView) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("StringSymbol(stringView = " + toStringAny(stringView) + ")");
+    }
+
+    data_ = std::string(stringView);
+}
+
+StringSymbol::StringSymbol(std::string string) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("StringSymbol(string = " + toStringAny(string) + ")");
+    }
+
+    data_ = std::move(string);
+}
+
 void *StringSymbol::toGraal() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -84,8 +111,25 @@ StringSymbol StringSymbol::fromGraal(void *graalNative) {
     return {dxfcpp::toString(graalSymbol->symbol)};
 }
 
+std::string StringSymbol::toString() const { // NOLINT(*-use-nodiscard)
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        return "StringSymbol{" + data_ + "}";
+    } else {
+        return data_;
+    }
+}
+
 const std::string &StringSymbol::getData() const {
     return data_;
+}
+
+bool StringSymbol::operator==(const StringSymbol &stringSymbol) const {
+    return getData() == stringSymbol.getData();
+}
+
+bool StringSymbol::operator<(const StringSymbol &stringSymbol) const {
+    return getData() < stringSymbol.getData();
 }
 
 DXFCPP_END_NAMESPACE

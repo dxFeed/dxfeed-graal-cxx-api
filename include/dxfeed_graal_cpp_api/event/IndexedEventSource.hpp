@@ -53,9 +53,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      */
     static void freeGraal(void *graalNative);
 
-    virtual std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept {
-        return {toGraal(), freeGraal};
-    }
+    virtual std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept;
 
     /**
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
@@ -75,44 +73,32 @@ class DXFCPP_EXPORT IndexedEventSource {
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(std::int32_t id, const StringLike &name) noexcept
-        : id_{id}, name_{name} {
-    }
+    IndexedEventSource(std::int32_t id, const StringLike &name) noexcept;
 
     /**
      * Returns the source identifier. Source identifier is non-negative.
      *
      * @return The source identifier.
      */
-    std::int32_t id() const noexcept {
-        return id_;
-    }
+    std::int32_t id() const noexcept;
 
     /**
      * Returns the string representation of the object.
      *
      * @return The string representation of the object.
      */
-    const std::string &name() const noexcept {
-        return name_;
-    }
+    const std::string &name() const noexcept;
 
     /**
      * Returns the string representation of the object.
      *
      * @return The string representation of the object.
      */
-    std::string toString() const {
-        return name_;
-    }
+    std::string toString() const;
 
-    bool operator==(const IndexedEventSource &indexedEventSource) const {
-        return id_ == indexedEventSource.id_;
-    }
+    bool operator==(const IndexedEventSource &indexedEventSource) const;
 
-    auto operator<(const IndexedEventSource &indexedEventSource) const {
-        return id_ < indexedEventSource.id_;
-    }
+    bool operator<(const IndexedEventSource &indexedEventSource) const;
 };
 
 DXFCPP_END_NAMESPACE

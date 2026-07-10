@@ -138,6 +138,10 @@ DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag, const EventT
     }
 }
 
+DXFeedSubscription::DXFeedSubscription(LockExternalConstructionTag tag, std::initializer_list<EventTypeEnum> eventTypes)
+    : DXFeedSubscription(tag, eventTypes.begin(), eventTypes.end()) {
+}
+
 std::string DXFeedSubscription::toString() const {
     return fmt::format("DXFeedSubscription{{{}}}", handle_.toString());
 }
@@ -291,6 +295,14 @@ TimePeriod DXFeedSubscription::getAggregationPeriod() const {
 
 void DXFeedSubscription::setAggregationPeriod(const TimePeriod &aggregationPeriod) const {
     isolated::api::IsolatedDXFeedSubscription::setAggregationPeriod(handle_, aggregationPeriod.handle_);
+}
+
+void DXFeedSubscription::setAggregationPeriod(std::chrono::milliseconds aggregationPeriod) const {
+    return setAggregationPeriod(TimePeriod::valueOf(aggregationPeriod));
+}
+
+void DXFeedSubscription::setAggregationPeriod(std::int64_t aggregationPeriod) const {
+    return setAggregationPeriod(TimePeriod::valueOf(aggregationPeriod));
 }
 
 void DXFeedSubscription::removeEventListener(std::size_t listenerId) {

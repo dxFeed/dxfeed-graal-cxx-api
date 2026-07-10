@@ -153,8 +153,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit SpreadOrder(const StringLike &eventSymbol) noexcept : OrderBase(eventSymbol) {
-    }
+    explicit SpreadOrder(const StringLike &eventSymbol) noexcept;
 
     /**
      * Changes event's symbol and returns the current spread order.
@@ -162,11 +161,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param eventSymbol The symbol of this event.
      * @return The current spread order.
      */
-    SpreadOrder &withEventSymbol(const StringLike &eventSymbol) noexcept {
-        MarketEvent::setEventSymbol(eventSymbol);
-
-        return *this;
-    }
+    SpreadOrder &withEventSymbol(const StringLike &eventSymbol) noexcept;
 
     /**
      * Changes the event's creation time and returns the current spread order.
@@ -175,11 +170,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * midnight, January 1, 1970 UTC.
      * @return The current spread order.
      */
-    SpreadOrder &withEventTime(std::int64_t eventTime) noexcept {
-        MarketEvent::setEventTime(eventTime);
-
-        return *this;
-    }
+    SpreadOrder &withEventTime(std::int64_t eventTime) noexcept;
 
     /**
      * Changes an event's source and returns the current spread order.
@@ -188,11 +179,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param source The source of this event.
      * @return The current spread order.
      */
-    SpreadOrder &withSource(const OrderSource &source) noexcept {
-        setSource(source);
-
-        return *this;
-    }
+    SpreadOrder &withSource(const OrderSource &source) noexcept;
 
     /**
      * Changes transactional event flags and returns the current spread order.
@@ -201,11 +188,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param eventFlags The transactional event flags.
      * @return The current spread order.
      */
-    SpreadOrder &withEventFlags(std::int32_t eventFlags) noexcept {
-        OrderBase::setEventFlags(eventFlags);
-
-        return *this;
-    }
+    SpreadOrder &withEventFlags(std::int32_t eventFlags) noexcept;
 
     /**
      * Changes transactional event flags and returns the current spread order.
@@ -214,11 +197,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param eventFlags The transactional event flags' mask.
      * @return The current spread order.
      */
-    SpreadOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
-        OrderBase::setEventFlags(eventFlags);
-
-        return *this;
-    }
+    SpreadOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
 
     /**
      * Changes the unique per-symbol index of this spread order and returns it. Note that this method also changes
@@ -228,11 +207,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param index The unique per-symbol index of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withIndex(std::int64_t index) noexcept {
-        OrderBase::setIndex(index);
-
-        return *this;
-    }
+    SpreadOrder &withIndex(std::int64_t index) noexcept;
 
     /**
      * Changes time of this spread order and returns it.
@@ -241,11 +216,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param time The time of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withTime(std::int64_t time) noexcept {
-        setTime(time);
-
-        return *this;
-    }
+    SpreadOrder &withTime(std::int64_t time) noexcept;
 
     /**
      * Changes microseconds and nanoseconds time part of this spread order.
@@ -254,11 +225,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param timeNanoPart The microseconds and nanoseconds time part of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        setTimeNanoPart(timeNanoPart);
-
-        return *this;
-    }
+    SpreadOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Changes @ref OrderBase::getSequence() "sequence number" of this spread order.
@@ -268,11 +235,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      * @see OrderBase::getSequence()
      */
-    SpreadOrder &withSequence(std::int32_t sequence) noexcept {
-        setSequence(sequence);
-
-        return *this;
-    }
+    SpreadOrder &withSequence(std::int32_t sequence) noexcept;
 
     /**
      * Changes time of this spread order and returns it.
@@ -281,11 +244,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param timeNanos The time of this order in nanoseconds.
      * @return The current spread order.
      */
-    SpreadOrder &withTimeNanos(std::int64_t timeNanos) noexcept {
-        setTimeNanos(timeNanos);
-
-        return *this;
-    }
+    SpreadOrder &withTimeNanos(std::int64_t timeNanos) noexcept;
 
     /**
      * Changes action of this spread order and returns it.
@@ -293,11 +252,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param action The side of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withAction(const OrderAction &action) noexcept {
-        setAction(action);
-
-        return *this;
-    }
+    SpreadOrder &withAction(const OrderAction &action) noexcept;
 
     /**
      * Changes time of the last action and returns current spread order.
@@ -305,11 +260,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param actionTime The last spread order action time.
      * @return The current spread order.
      */
-    SpreadOrder &withActionTime(std::int64_t actionTime) noexcept {
-        setActionTime(actionTime);
-
-        return *this;
-    }
+    SpreadOrder &withActionTime(std::int64_t actionTime) noexcept;
 
     /**
      * Changes order ID.
@@ -318,11 +269,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param orderId The spread order ID.
      * @return The current spread order.
      */
-    SpreadOrder &withOrderId(std::int64_t orderId) noexcept {
-        setOrderId(orderId);
-
-        return *this;
-    }
+    SpreadOrder &withOrderId(std::int64_t orderId) noexcept;
 
     /**
      * Changes auxiliary spread order ID.
@@ -331,11 +278,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param auxOrderId The auxiliary spread order ID.
      * @return The current spread order.
      */
-    SpreadOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept {
-        setAuxOrderId(auxOrderId);
-
-        return *this;
-    }
+    SpreadOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept;
 
     /**
      * Changes price of this spread order.
@@ -344,11 +287,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param price The price of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withPrice(double price) noexcept {
-        setPrice(price);
-
-        return *this;
-    }
+    SpreadOrder &withPrice(double price) noexcept;
 
     /**
      * Changes size of this spread order.
@@ -357,11 +296,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param size The size of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withSize(double size) noexcept {
-        setSize(size);
-
-        return *this;
-    }
+    SpreadOrder &withSize(double size) noexcept;
 
     /**
      * Changes executed size of this spread order.
@@ -370,11 +305,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param executedSize The executed size of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withExecutedSize(double executedSize) noexcept {
-        setExecutedSize(executedSize);
-
-        return *this;
-    }
+    SpreadOrder &withExecutedSize(double executedSize) noexcept;
 
     /**
      * Changes the number of individual spread orders in this aggregate spread order.
@@ -383,11 +314,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param count The number of individual orders in this aggregate spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withCount(std::int64_t count) noexcept {
-        setCount(count);
-
-        return *this;
-    }
+    SpreadOrder &withCount(std::int64_t count) noexcept;
 
     /**
      * Changes trade ID.
@@ -396,11 +323,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param tradeId The trade ID.
      * @return The current spread order.
      */
-    SpreadOrder &withTradeId(std::int64_t tradeId) noexcept {
-        setTradeId(tradeId);
-
-        return *this;
-    }
+    SpreadOrder &withTradeId(std::int64_t tradeId) noexcept;
 
     /**
      * Changes trade price.
@@ -409,11 +332,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param tradePrice The trade price.
      * @return The current spread order.
      */
-    SpreadOrder &withTradePrice(double tradePrice) noexcept {
-        setTradePrice(tradePrice);
-
-        return *this;
-    }
+    SpreadOrder &withTradePrice(double tradePrice) noexcept;
 
     /**
      * Changes trade size.
@@ -422,11 +341,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param tradeSize The trade size.
      * @return The current spread order.
      */
-    SpreadOrder &withTradeSize(double tradeSize) noexcept {
-        setTradeSize(tradeSize);
-
-        return *this;
-    }
+    SpreadOrder &withTradeSize(double tradeSize) noexcept;
 
     /**
      * Changes exchange code of this spread order.
@@ -435,11 +350,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param exchangeCode The exchange code of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withExchangeCode(char exchangeCode) noexcept {
-        setExchangeCode(exchangeCode);
-
-        return *this;
-    }
+    SpreadOrder &withExchangeCode(char exchangeCode) noexcept;
 
     /**
      * Changes exchange code of this spread order.
@@ -448,11 +359,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param exchangeCode The exchange code of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withExchangeCode(std::int16_t exchangeCode) noexcept {
-        setExchangeCode(exchangeCode);
-
-        return *this;
-    }
+    SpreadOrder &withExchangeCode(std::int16_t exchangeCode) noexcept;
 
     /**
      * Changes side of this spread order.
@@ -461,11 +368,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param side The side of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withOrderSide(const Side &side) noexcept {
-        setOrderSide(side);
-
-        return *this;
-    }
+    SpreadOrder &withOrderSide(const Side &side) noexcept;
 
     /**
      * Changes scope of this spread order.
@@ -474,42 +377,28 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param scope The scope of this spread order.
      * @return The current spread order.
      */
-    SpreadOrder &withScope(const Scope &scope) noexcept {
-        setScope(scope);
-
-        return *this;
-    }
+    SpreadOrder &withScope(const Scope &scope) noexcept;
 
     /**
      * Returns spread symbol of this event.
      *
      * @return spread symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
-    const std::string &getSpreadSymbol() const & noexcept {
-        if (!spreadOrderData_.spreadSymbol) {
-            return String::NUL;
-        }
-
-        return spreadOrderData_.spreadSymbol.value();
-    }
+    const std::string &getSpreadSymbol() const & noexcept;
 
     /**
      * Returns spread symbol of this event.
      *
      * @return spread symbol of this event or std::nullopt
      */
-    const std::optional<std::string> &getSpreadSymbolOpt() const & noexcept {
-        return spreadOrderData_.spreadSymbol;
-    }
+    const std::optional<std::string> &getSpreadSymbolOpt() const & noexcept;
 
     /**
      * Changes spread symbol of this event.
      *
      * @param spreadSymbol spread symbol of this event.
      */
-    void setSpreadSymbol(const StringLike &spreadSymbol) noexcept {
-        spreadOrderData_.spreadSymbol = std::string(spreadSymbol);
-    }
+    void setSpreadSymbol(const StringLike &spreadSymbol) noexcept;
 
     /**
      * Changes spread symbol of this event.
@@ -518,11 +407,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param spreadSymbol spread symbol of this event.
      * @return The current spread order.
      */
-    SpreadOrder &withSpreadSymbol(const StringLike &spreadSymbol) noexcept {
-        setSpreadSymbol(spreadSymbol);
-
-        return *this;
-    }
+    SpreadOrder &withSpreadSymbol(const StringLike &spreadSymbol) noexcept;
 
     /**
      * Returns a string representation of the current object.

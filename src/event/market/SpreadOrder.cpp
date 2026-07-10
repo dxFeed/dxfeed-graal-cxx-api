@@ -69,10 +69,6 @@ std::shared_ptr<SpreadOrder> SpreadOrder::fromGraal(void *graalNative) {
     return spreadOrder;
 }
 
-std::string SpreadOrder::toString() const {
-    return fmt::format("SpreadOrder{{{}, spreadSymbol={}}}", baseFieldsToString(), getSpreadSymbol());
-}
-
 void *SpreadOrder::toGraal() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -114,6 +110,185 @@ void SpreadOrder::assign(std::shared_ptr<EventType> event) {
 }
 
 SpreadOrder::SpreadOrder() noexcept {
+}
+
+SpreadOrder::SpreadOrder(const StringLike &eventSymbol) noexcept : OrderBase(eventSymbol) {
+}
+
+SpreadOrder &SpreadOrder::withEventSymbol(const StringLike &eventSymbol) noexcept {
+    MarketEvent::setEventSymbol(eventSymbol);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withEventTime(std::int64_t eventTime) noexcept {
+    MarketEvent::setEventTime(eventTime);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withSource(const OrderSource &source) noexcept {
+    setSource(source);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withEventFlags(std::int32_t eventFlags) noexcept {
+    OrderBase::setEventFlags(eventFlags);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withEventFlags(const EventFlagsMask &eventFlags) noexcept {
+    OrderBase::setEventFlags(eventFlags);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withIndex(std::int64_t index) noexcept {
+    OrderBase::setIndex(index);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withTime(std::int64_t time) noexcept {
+    setTime(time);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
+    setTimeNanoPart(timeNanoPart);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withSequence(std::int32_t sequence) noexcept {
+    setSequence(sequence);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withTimeNanos(std::int64_t timeNanos) noexcept {
+    setTimeNanos(timeNanos);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withAction(const OrderAction &action) noexcept {
+    setAction(action);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withActionTime(std::int64_t actionTime) noexcept {
+    setActionTime(actionTime);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withOrderId(std::int64_t orderId) noexcept {
+    setOrderId(orderId);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withAuxOrderId(std::int64_t auxOrderId) noexcept {
+    setAuxOrderId(auxOrderId);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withPrice(double price) noexcept {
+    setPrice(price);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withSize(double size) noexcept {
+    setSize(size);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withExecutedSize(double executedSize) noexcept {
+    setExecutedSize(executedSize);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withCount(std::int64_t count) noexcept {
+    setCount(count);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withTradeId(std::int64_t tradeId) noexcept {
+    setTradeId(tradeId);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withTradePrice(double tradePrice) noexcept {
+    setTradePrice(tradePrice);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withTradeSize(double tradeSize) noexcept {
+    setTradeSize(tradeSize);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withExchangeCode(char exchangeCode) noexcept {
+    setExchangeCode(exchangeCode);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withExchangeCode(std::int16_t exchangeCode) noexcept {
+    setExchangeCode(exchangeCode);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withOrderSide(const Side &side) noexcept {
+    setOrderSide(side);
+
+    return *this;
+}
+
+SpreadOrder &SpreadOrder::withScope(const Scope &scope) noexcept {
+    setScope(scope);
+
+    return *this;
+}
+
+const std::string &SpreadOrder::getSpreadSymbol() const & noexcept {
+    if (!spreadOrderData_.spreadSymbol) {
+        return String::NUL;
+    }
+
+    return spreadOrderData_.spreadSymbol.value();
+}
+
+const std::optional<std::string> &SpreadOrder::getSpreadSymbolOpt() const & noexcept {
+    return spreadOrderData_.spreadSymbol;
+}
+
+void SpreadOrder::setSpreadSymbol(const StringLike &spreadSymbol) noexcept {
+    spreadOrderData_.spreadSymbol = std::string(spreadSymbol);
+}
+
+SpreadOrder &SpreadOrder::withSpreadSymbol(const StringLike &spreadSymbol) noexcept {
+    setSpreadSymbol(spreadSymbol);
+
+    return *this;
+}
+
+std::string SpreadOrder::toString() const {
+    return fmt::format("SpreadOrder{{{}, spreadSymbol={}}}", baseFieldsToString(), getSpreadSymbol());
 }
 
 DXFCPP_END_NAMESPACE

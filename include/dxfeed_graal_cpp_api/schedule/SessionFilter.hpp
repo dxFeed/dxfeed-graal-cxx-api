@@ -110,21 +110,13 @@ struct DXFCPP_EXPORT SessionFilter final {
         return (!type_ || type_.value() == session.getType()) && (!trading_ || trading_.value() == session.isTrading());
     }
 
-    bool operator==(const SessionFilter &sessionFilter) const noexcept {
-        return type_ == sessionFilter.type_ && trading_ == sessionFilter.trading_;
-    }
+    bool operator==(const SessionFilter &sessionFilter) const noexcept;
 
-    std::string toString() const {
-        return std::string("SessionFilter(") + ((!type_) ? "null" : type_.value().toString()) + ", " +
-               ((!trading_) ? "null" : dxfcpp::toString(trading_.value())) + ")";
-    }
-    const std::optional<SessionType> &getType() const & noexcept {
-        return type_;
-    }
+    std::string toString() const;
 
-    const std::optional<bool> &getTrading() const & noexcept {
-        return trading_;
-    }
+    const std::optional<SessionType> &getType() const & noexcept;
+
+    const std::optional<bool> &getTrading() const & noexcept;
 
     const JavaObjectHandle<SessionFilter> &getHandle() const &;
 };

@@ -133,10 +133,13 @@ Isolate::IsolateThread::~IsolateThread() noexcept {
 }
 
 std::string Isolate::IsolateThread::toString() const {
-    return fmt::format("IsolateThread{{{}, tid = {}, idx = {}}}",
-                       dxfcpp::toString(handle),
-                       dxfcpp::toString(tid),
-                       idx);
+    return fmt::format("IsolateThread{{{}, tid = {}, idx = {}}}", dxfcpp::toString(handle), dxfcpp::toString(tid), idx);
+}
+
+Isolate::IsolateThread &Isolate::currentIsolateThread() noexcept {
+    thread_local IsolateThread current{};
+
+    return current;
 }
 
 Isolate::Isolate() noexcept {
@@ -153,13 +156,13 @@ Isolate::Isolate() noexcept {
         result == CEntryPointErrorsEnum::NO_ERROR) {
 
         handle_ = graalIsolateHandle;
-        currentIsolateThread_.handle = graalIsolateThreadHandle;
+        currentIsolateThread().handle = graalIsolateThreadHandle;
     }
 
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("Isolate::Isolate() -> " + std::string("Isolate{") + dxfcpp::toString(handle_) +
-                        ", current = " + currentIsolateThread_.toString() + "}");
+                        ", current = " + currentIsolateThread().toString() + "}");
     }
 }
 
@@ -170,10 +173,10 @@ CEntryPointErrorsEnum Isolate::attach() const noexcept {
     }
 
     // We will not re-attach.
-    if (!currentIsolateThread_.handle) {
+    if (!currentIsolateThread().handle) {
         if constexpr (Debugger::traceIsolates) {
             // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::attach(): !currentIsolateThread_.handle => Needs to be attached.");
+            Debugger::trace(toString() + "::attach(): !currentIsolateThread().handle => Needs to be attached.");
         }
 
         graal_isolatethread_t *newIsolateThreadHandle{};
@@ -192,23 +195,23 @@ CEntryPointErrorsEnum Isolate::attach() const noexcept {
             return result;
         }
 
-        currentIsolateThread_.handle = newIsolateThreadHandle;
+        currentIsolateThread().handle = newIsolateThreadHandle;
 
         if constexpr (Debugger::traceIsolates) {
             // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::attach(): Attached: " + currentIsolateThread_.toString());
+            Debugger::trace(toString() + "::attach(): Attached: " + currentIsolateThread().toString());
         }
     } else {
         if constexpr (Debugger::traceIsolates) {
             // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::attach(): Cached: " + currentIsolateThread_.toString());
+            Debugger::trace(toString() + "::attach(): Cached: " + currentIsolateThread().toString());
         }
     }
 
     return CEntryPointErrorsEnum::NO_ERROR;
 }
 
-GraalIsolateThreadHandle Isolate::get() noexcept {
+GraalIsolateThreadHandle Isolate::get() const noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::get()");
@@ -277,7 +280,7 @@ Isolate::~Isolate() {
 }
 
 std::string Isolate::toString() const {
-    return fmt::format("Isolate{{{}, current = {}}}", dxfcpp::toString(handle_), currentIsolateThread_.toString());
+    return fmt::format("Isolate{{{}, current = {}}}", dxfcpp::toString(handle_), currentIsolateThread().toString());
 }
 
 DXFCPP_END_NAMESPACE

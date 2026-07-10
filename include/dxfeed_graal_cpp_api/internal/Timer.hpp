@@ -10,31 +10,21 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <chrono>
 #include <deque>
 #include <future>
-#include <mutex>
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct Timer {
+/// A simple thread-safe timer.
+struct DXFCPP_EXPORT Timer final {
     private:
     std::unique_ptr<std::future<void>> future_;
     std::atomic<bool> isRunning_{};
 
-    Timer() noexcept {
-    }
+    Timer() noexcept;
 
     public:
-    void interruptableSleep(std::chrono::milliseconds ms) const {
-        const auto MIN_SLEEP = std::chrono::milliseconds(10);
-        const auto startTimeStamp = std::chrono::steady_clock::now();
+    void interruptableSleep(std::chrono::milliseconds ms) const;
 
-        while (isRunning_ && std::chrono::steady_clock::now() - startTimeStamp < ms) {
-            std::this_thread::sleep_for(MIN_SLEEP);
-        }
-    }
-
-    void interruptableSleep(std::uint64_t ms) const {
-        interruptableSleep(std::chrono::milliseconds(ms));
-    }
+    void interruptableSleep(std::uint64_t ms) const;
 
     template <typename F, typename Delay, typename Period>
     static std::shared_ptr<Timer> schedule(F &&f, Delay &&delay, Period &&period) {
@@ -77,13 +67,9 @@ struct Timer {
         return t;
     }
 
-    void stop() {
-        isRunning_ = false;
-    }
+    void stop();
 
-    bool isRunning() {
-        return isRunning_;
-    }
+    bool isRunning();
 };
 
 DXFCPP_END_NAMESPACE

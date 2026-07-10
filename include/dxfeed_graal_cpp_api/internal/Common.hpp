@@ -955,28 +955,6 @@ struct StringLikeWrapperOld {
     }
 };
 
-/// Universal functional object that allows searching std::unordered_map for string-like keys.
-struct StringHashOld {
-    using HashType = std::hash<std::string_view>;
-    using is_transparent = void;
-
-    std::size_t operator()(const char *str) const {
-        return HashType{}(str);
-    }
-
-    std::size_t operator()(std::string_view sw) const {
-        return HashType{}(sw);
-    }
-
-    std::size_t operator()(std::string const &str) const {
-        return HashType{}(str);
-    }
-
-    std::size_t operator()(const StringLikeWrapperOld &sw) const {
-        return HashType{}(sw);
-    }
-};
-
 namespace util {
 
 void throwInvalidChar(char c, const std::string &name);

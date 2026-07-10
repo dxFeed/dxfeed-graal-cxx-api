@@ -16,7 +16,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./DXFeedSubscription.hpp"
 
 #include <memory>
-#include <unordered_set>
 
 /**
  * \addtogroup dxfcpp_api
@@ -298,7 +297,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the
      * absence of subscription.
      *
-     * <p>Note that this method does not work when DXEndpoint} was created with @ref DXEndpoint::Role::STREAM_FEED
+     * <p>Note that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (always returns `std::shared_ptr<E>(nullptr)`).
      *
      * @tparam E The type of event.

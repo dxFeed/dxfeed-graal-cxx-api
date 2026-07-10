@@ -11,8 +11,8 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace internal::resources {
 
-struct Strings {
-    struct Events {
+struct DXFCPP_EXPORT Strings {
+    struct DXFCPP_EXPORT Events {
         static constexpr auto UNABLE_TO_CREATE = "Unable to create {}. The `{}` parameter is nullptr";
         static constexpr auto UNABLE_TO_CREATE2 = "Unable to create {}. Wrong event class {}({})! Expected: {}";
         static constexpr auto UNABLE_TO_FREE = "Unable to free {}'s Graal data. Wrong event class {}({})! Expected: {}";

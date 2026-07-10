@@ -90,15 +90,86 @@ void Series::setSequence(std::int32_t sequence) {
     data_.timeSequence = orOp(andOp(data_.timeSequence, ~MAX_SEQUENCE), sequence);
 }
 
-std::string Series::toString() const {
-    return fmt::format(
-        "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
-        "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
-        day_util::getYearMonthDayByDayId(getExpiration()), dxfcpp::toString(getVolatility()),
-        dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()), dxfcpp::toString(getPutCallRatio()),
-        dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
+Series &Series::withSequence(std::int32_t sequence) noexcept {
+    setSequence(sequence);
+
+    return *this;
+}
+
+std::int32_t Series::getExpiration() const noexcept {
+    return data_.expiration;
+}
+
+void Series::setExpiration(std::int32_t expiration) noexcept {
+    data_.expiration = expiration;
+}
+
+double Series::getVolatility() const noexcept {
+    return data_.volatility;
+}
+
+void Series::setVolatility(double volatility) noexcept {
+    data_.volatility = volatility;
+}
+
+double Series::getCallVolume() const noexcept {
+    return data_.callVolume;
+}
+
+void Series::setCallVolume(double callVolume) noexcept {
+    data_.callVolume = callVolume;
+}
+
+double Series::getPutVolume() const noexcept {
+    return data_.putVolume;
+}
+
+void Series::setPutVolume(double putVolume) noexcept {
+    data_.putVolume = putVolume;
+}
+
+double Series::getOptionVolume() const noexcept {
+    if (std::isnan(data_.putVolume)) {
+        return data_.callVolume;
+    }
+
+    if (std::isnan(data_.callVolume)) {
+        return data_.putVolume;
+    }
+
+    return data_.putVolume + data_.callVolume;
+}
+
+double Series::getPutCallRatio() const noexcept {
+    return data_.putCallRatio;
+}
+
+void Series::setPutCallRatio(double putCallRatio) noexcept {
+    data_.putCallRatio = putCallRatio;
+}
+
+double Series::getForwardPrice() const noexcept {
+    return data_.forwardPrice;
+}
+
+void Series::setForwardPrice(double forwardPrice) noexcept {
+    data_.forwardPrice = forwardPrice;
+}
+
+double Series::getDividend() const noexcept {
+    return data_.dividend;
+}
+
+void Series::setDividend(double dividend) noexcept {
+    data_.dividend = dividend;
+}
+
+double Series::getInterest() const noexcept {
+    return data_.interest;
+}
+
+void Series::setInterest(double interest) noexcept {
+    data_.interest = interest;
 }
 
 void *Series::toGraal() const {
@@ -141,6 +212,104 @@ void Series::assign(std::shared_ptr<EventType> event) {
 }
 
 Series::Series() noexcept {
+}
+
+Series::Series(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+}
+
+Series &Series::withEventSymbol(const StringLike &eventSymbol) noexcept {
+    MarketEvent::setEventSymbol(eventSymbol);
+
+    return *this;
+}
+
+Series &Series::withEventTime(std::int64_t eventTime) noexcept {
+    MarketEvent::setEventTime(eventTime);
+
+    return *this;
+}
+
+std::int32_t Series::getEventFlags() const noexcept {
+    return data_.eventFlags;
+}
+
+EventFlagsMask Series::getEventFlagsMask() const noexcept {
+    return EventFlagsMask(data_.eventFlags);
+}
+
+void Series::setEventFlags(std::int32_t eventFlags) noexcept {
+    data_.eventFlags = eventFlags;
+}
+
+void Series::setEventFlags(const EventFlagsMask &eventFlags) noexcept {
+    data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
+}
+
+Series &Series::withEventFlags(std::int32_t eventFlags) noexcept {
+    Series::setEventFlags(eventFlags);
+
+    return *this;
+}
+
+Series &Series::withEventFlags(const EventFlagsMask &eventFlags) noexcept {
+    Series::setEventFlags(eventFlags);
+
+    return *this;
+}
+
+std::int64_t Series::getIndex() const noexcept {
+    return data_.index;
+}
+
+void Series::setIndex(std::int64_t index) {
+    data_.index = index;
+}
+
+Series &Series::withIndex(std::int64_t index) noexcept {
+    Series::setIndex(index);
+
+    return *this;
+}
+
+std::int64_t Series::getTimeSequence() const noexcept {
+    return data_.timeSequence;
+}
+
+void Series::setTimeSequence(std::int64_t timeSequence) noexcept {
+    data_.timeSequence = timeSequence;
+}
+
+std::int64_t Series::getTime() const noexcept {
+    return sar(data_.timeSequence, SECONDS_SHIFT) * 1000 +
+           andOp(sar(data_.timeSequence, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+}
+
+void Series::setTime(std::int64_t time) noexcept {
+    data_.timeSequence =
+        orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                  sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+             getSequence());
+}
+
+Series &Series::withTime(std::int64_t time) noexcept {
+    setTime(time);
+
+    return *this;
+}
+
+std::int32_t Series::getSequence() const noexcept {
+    return static_cast<std::int32_t>(andOp(data_.timeSequence, MAX_SEQUENCE));
+}
+
+std::string Series::toString() const {
+    return fmt::format(
+        "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
+        "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
+        day_util::getYearMonthDayByDayId(getExpiration()), dxfcpp::toString(getVolatility()),
+        dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()), dxfcpp::toString(getPutCallRatio()),
+        dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
 DXFCPP_END_NAMESPACE

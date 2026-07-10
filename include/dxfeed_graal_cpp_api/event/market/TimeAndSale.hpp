@@ -173,33 +173,22 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TimeAndSale(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
-    }
+    explicit TimeAndSale(const StringLike &eventSymbol) noexcept;
 
     ///
-    const IndexedEventSource &getSource() const & noexcept override {
-        return IndexedEventSource::DEFAULT;
-    }
+    const IndexedEventSource &getSource() const & noexcept override;
 
     ///
-    std::int32_t getEventFlags() const noexcept override {
-        return data_.eventFlags;
-    }
+    std::int32_t getEventFlags() const noexcept override;
 
     ///
-    EventFlagsMask getEventFlagsMask() const noexcept override {
-        return EventFlagsMask(data_.eventFlags);
-    }
+    EventFlagsMask getEventFlagsMask() const noexcept override;
 
     ///
-    void setEventFlags(std::int32_t eventFlags) noexcept override {
-        data_.eventFlags = eventFlags;
-    }
+    void setEventFlags(std::int32_t eventFlags) noexcept override;
 
     ///
-    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
-        data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
-    }
+    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override;
 
     /**
      * Returns a unique per-symbol index of this event.
@@ -208,9 +197,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @return unique index of this event.
      */
-    std::int64_t getIndex() const noexcept override {
-        return data_.index;
-    }
+    std::int64_t getIndex() const noexcept override;
 
     /**
      * Changes the unique per-symbol index of this event.
@@ -222,18 +209,14 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @param index the event index.
      * @see ::getIndex()
      */
-    void setIndex(std::int64_t index) override {
-        data_.index = index;
-    }
+    void setIndex(std::int64_t index) override;
 
     /**
      * Returns the timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
-    std::int64_t getTime() const noexcept override {
-        return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
-    }
+    std::int64_t getTime() const noexcept override;
 
     /**
      * Changes the timestamp of the event in milliseconds.
@@ -241,11 +224,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @param time timestamp of the event in milliseconds.
      * @see ::getTime()
      */
-    void setTime(std::int64_t time) noexcept {
-        data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-                                sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
-                           getSequence());
-    }
+    void setTime(std::int64_t time) noexcept;
 
     /**
      * Returns time of the original event in nanoseconds.
@@ -253,9 +232,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @return time of the original event in nanoseconds.
      */
-    std::int64_t getTimeNanos() const noexcept {
-        return time_nanos_util::getNanosFromMillisAndNanoPart(getTime(), data_.timeNanoPart);
-    }
+    std::int64_t getTimeNanos() const noexcept;
 
     /**
      * Changes time of the original event.
@@ -263,28 +240,21 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param timeNanos time of the original event in nanoseconds.
      */
-    void setTimeNanos(std::int64_t timeNanos) noexcept {
-        setTime(time_nanos_util::getMillisFromNanos(timeNanos));
-        data_.timeNanoPart = time_nanos_util::getNanoPartFromNanos(timeNanos);
-    }
+    void setTimeNanos(std::int64_t timeNanos) noexcept;
 
     /**
      * Changes microseconds and nanoseconds time part of the original event.
      *
      * @param timeNanoPart microseconds and nanoseconds time part of the original event.
      */
-    void setTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        data_.timeNanoPart = timeNanoPart;
-    }
+    void setTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Returns microseconds and nanoseconds time part of the original event.
      *
      * @return microseconds and nanoseconds time part of the original event.
      */
-    std::int32_t getTimeNanoPart() const noexcept {
-        return data_.timeNanoPart;
-    }
+    std::int32_t getTimeNanoPart() const noexcept;
 
     /**
      * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() "time".
@@ -293,9 +263,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
@@ -304,35 +272,21 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @see ::getSequence()
      * @throws InvalidArgumentException
      */
-    void setSequence(std::int32_t sequence) {
-        assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
-        if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
-            throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
-        }
-
-        data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
-    }
+    void setSequence(std::int32_t sequence);
 
     /**
      * Returns exchange code of this time and sale event.
      *
      * @return exchange code of this time and sale event.
      */
-    std::int16_t getExchangeCode() const noexcept {
-        return data_.exchangeCode;
-    }
+    std::int16_t getExchangeCode() const noexcept;
 
     /**
      * Returns exchange code of this time and sale event as UTF8 string.
      *
      * @return exchange code of this time and sale event as UTF8 string.
      */
-    std::string getExchangeCodeString() const noexcept {
-        // TODO: cache [EN-8231]
-
-        return utf16toUtf8String(data_.exchangeCode);
-    }
+    std::string getExchangeCodeString() const noexcept;
 
     /**
      * Changes exchange code of this time and sale event.
@@ -346,72 +300,56 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param exchangeCode exchange code of this time and sale event.
      */
-    void setExchangeCode(std::int16_t exchangeCode) noexcept {
-        data_.exchangeCode = exchangeCode;
-    }
+    void setExchangeCode(std::int16_t exchangeCode) noexcept;
 
     /**
      * Returns price of this time and sale event.
      *
      * @return price of this time and sale event.
      */
-    double getPrice() const noexcept {
-        return data_.price;
-    }
+    double getPrice() const noexcept;
 
     /**
      * Changes price of this time and sale event.
      *
      * @param price price of this time and sale event.
      */
-    void setPrice(double price) noexcept {
-        data_.price = price;
-    }
+    void setPrice(double price) noexcept;
 
     /**
      * Returns size of this time and sale event.
      *
      * @return size of this time and sale event.
      */
-    double getSize() const noexcept {
-        return data_.size;
-    }
+    double getSize() const noexcept;
 
     /**
      * Changes size of this time and sale event.
      *
      * @param size size of this time and sale event.
      */
-    void setSize(double size) noexcept {
-        data_.size = size;
-    }
+    void setSize(double size) noexcept;
 
     /**
      * Returns the current bid price on the market when this time and sale event had occurred.
      *
      * @return the current bid price on the market when this time and sale event had occurred.
      */
-    double getBidPrice() const noexcept {
-        return data_.bidPrice;
-    }
+    double getBidPrice() const noexcept;
 
     /**
      * Changes the current bid price on the market when this time and sale event had occurred.
      *
      * @param bidPrice the current bid price on the market when this time and sale event had occurred.
      */
-    void setBidPrice(double bidPrice) noexcept {
-        data_.bidPrice = bidPrice;
-    }
+    void setBidPrice(double bidPrice) noexcept;
 
     /**
      * Returns the current ask price on the market when this time and sale event had occurred.
      *
      * @return the current ask price on the market when this time and sale event had occurred.
      */
-    double getAskPrice() const noexcept {
-        return data_.askPrice;
-    }
+    double getAskPrice() const noexcept;
 
     /**
      * Changes price of this time and sale event.the current ask price on the market when this time and sale event had
@@ -419,9 +357,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param askPrice the current ask price on the market when this time and sale event had occurred.
      */
-    void setAskPrice(double askPrice) noexcept {
-        data_.askPrice = askPrice;
-    }
+    void setAskPrice(double askPrice) noexcept;
 
     /**
      * Returns sale conditions provided for this event by data feed.
@@ -429,13 +365,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @return sale conditions or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
-    const std::string &getExchangeSaleConditions() const & noexcept {
-        if (!data_.exchangeSaleConditions) {
-            return String::NUL;
-        }
-
-        return data_.exchangeSaleConditions.value();
-    }
+    const std::string &getExchangeSaleConditions() const & noexcept;
 
     /**
      * Returns sale conditions provided for this event by data feed.
@@ -443,92 +373,70 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @return sale conditions or std::nullopt
      */
-    const std::optional<std::string> &getExchangeSaleConditionsOpt() const & noexcept {
-        return data_.exchangeSaleConditions;
-    }
+    const std::optional<std::string> &getExchangeSaleConditionsOpt() const & noexcept;
 
     /**
      * Changes sale conditions provided for this event by data feed.
      *
      * @param exchangeSaleConditions sale conditions.
      */
-    void setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept {
-        data_.exchangeSaleConditions = std::string(exchangeSaleConditions);
-    }
+    void setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept;
 
     /**
      * Returns TradeThroughExempt flag of this time and sale event.
      *
      * @return TradeThroughExempt flag of this time and sale event.
      */
-    char getTradeThroughExempt() const noexcept {
-        return static_cast<char>(static_cast<unsigned char>(getBits(data_.flags, TTE_MASK, TTE_SHIFT)));
-    }
+    char getTradeThroughExempt() const noexcept;
 
     /**
      * Changes TradeThroughExempt flag of this time and sale event.
      *
      * @param tradeThroughExempt TradeThroughExempt flag of this time and sale event.
      */
-    void setTradeThroughExempt(char tradeThroughExempt) {
-        util::checkChar(tradeThroughExempt, TTE_MASK, "tradeThroughExempt");
-
-        data_.flags = setBits(data_.flags, TTE_MASK, TTE_SHIFT, tradeThroughExempt);
-    }
+    void setTradeThroughExempt(char tradeThroughExempt);
 
     /**
      * Returns aggressor side of this time and sale event.
      *
      * @return aggressor side of this time and sale event.
      */
-    const Side &getAggressorSide() const & noexcept {
-        return Side::valueOf(getBits(data_.flags, SIDE_MASK, SIDE_SHIFT));
-    }
+    const Side &getAggressorSide() const & noexcept;
 
     /**
      * Changes aggressor side of this time and sale event.
      *
      * @param side aggressor side of this time and sale event.
      */
-    void setAggressorSide(const Side &side) noexcept {
-        data_.flags = setBits(data_.flags, SIDE_MASK, SIDE_SHIFT, side.getCode());
-    }
+    void setAggressorSide(const Side &side) noexcept;
 
     /**
      * Returns whether this event represents a spread leg.
      *
      * @return `true` if this event represents a spread leg.
      */
-    bool isSpreadLeg() const noexcept {
-        return andOp(data_.flags, SPREAD_LEG) != 0;
-    }
+    bool isSpreadLeg() const noexcept;
 
     /**
      * Changes whether this event represents a spread leg.
      *
      * @param spreadLeg `true` if this event represents a spread leg.
      */
-    void setSpreadLeg(bool spreadLeg) noexcept {
-        data_.flags = spreadLeg ? orOp(data_.flags, SPREAD_LEG) : andOp(data_.flags, ~SPREAD_LEG);
-    }
+    void setSpreadLeg(bool spreadLeg) noexcept;
 
     /**
      * Returns whether this event represents an extended trading hours sale.
      *
      * @return `true` if this event represents an extended trading hours sale.
      */
-    bool isExtendedTradingHours() const noexcept {
-        return andOp(data_.flags, ETH) != 0;
-    }
+    bool isExtendedTradingHours() const noexcept;
 
     /**
      * Changes whether this event represents an extended trading hours sale.
      *
      * @param extendedTradingHours `true` if this event represents an extended trading hours sale.
      */
-    void setExtendedTradingHours(bool extendedTradingHours) noexcept {
-        data_.flags = extendedTradingHours ? orOp(data_.flags, ETH) : andOp(data_.flags, ~ETH);
-    }
+    void setExtendedTradingHours(bool extendedTradingHours) noexcept;
 
     /**
      * Returns whether this event represents a valid intraday tick.
@@ -537,36 +445,28 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @return `true` if this event represents a valid intraday tick.
      */
-    bool isValidTick() const noexcept {
-        return andOp(data_.flags, VALID_TICK) != 0;
-    }
+    bool isValidTick() const noexcept;
 
     /**
      * Changes whether this event represents a valid intraday tick.
      *
      * @param validTick `true` if this event represents a valid intraday tick.
      */
-    void setValidTick(bool validTick) noexcept {
-        data_.flags = validTick ? orOp(data_.flags, VALID_TICK) : andOp(data_.flags, ~VALID_TICK);
-    }
+    void setValidTick(bool validTick) noexcept;
 
     /**
      * Returns type of this time and sale event.
      *
      * @return type of this time and sale event.
      */
-    const TimeAndSaleType &getType() const & noexcept {
-        return TimeAndSaleType::valueOf(getBits(data_.flags, TYPE_MASK, TYPE_SHIFT));
-    }
+    const TimeAndSaleType &getType() const & noexcept;
 
     /**
      * Changes type of this time and sale event.
      *
      * @param type type of this time and sale event.
      */
-    void setType(const TimeAndSaleType &type) noexcept {
-        data_.flags = setBits(data_.flags, TYPE_MASK, TYPE_SHIFT, type.getCode());
-    }
+    void setType(const TimeAndSaleType &type) noexcept;
 
     /**
      * Returns whether this is a new event (not cancellation or correction).
@@ -574,9 +474,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @return `true` if this is a new event (not cancellation or correction).
      */
-    bool isNew() const noexcept {
-        return getType() == TimeAndSaleType::NEW;
-    }
+    bool isNew() const noexcept;
 
     /**
      * Returns whether this is a correction of a previous event.
@@ -584,80 +482,56 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @return `true` if this is a correction of a previous event
      */
-    bool isCorrection() const noexcept {
-        return getType() == TimeAndSaleType::CORRECTION;
-    }
+    bool isCorrection() const noexcept;
 
     /**
      * Returns whether this is a cancellation of a previous event.
      * It is `false` for newly created time and sale event.
      * @return `true` if this is a cancellation of a previous event
      */
-    bool isCancel() const noexcept {
-        return getType() == TimeAndSaleType::CANCEL;
-    }
+    bool isCancel() const noexcept;
 
     /**
      * Returns buyer of this time and sale event.
      *
      * @return buyer of this time and sale event or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
-    const std::string &getBuyer() const & noexcept {
-        if (!data_.buyer) {
-            return String::NUL;
-        }
-
-        return data_.buyer.value();
-    }
+    const std::string &getBuyer() const & noexcept;
 
     /**
      * Returns buyer of this time and sale event.
      *
      * @return buyer of this time and sale event or std::nullopt
      */
-    const std::optional<std::string> &getBuyerOpt() const & noexcept {
-        return data_.buyer;
-    }
+    const std::optional<std::string> &getBuyerOpt() const & noexcept;
 
     /**
      * Changes buyer of this time and sale event.
      *
      * @param buyer buyer of this time and sale event.
      */
-    void setBuyer(const StringLike &buyer) noexcept {
-        data_.buyer = std::string(buyer);
-    }
+    void setBuyer(const StringLike &buyer) noexcept;
 
     /**
      * Returns seller of this time and sale event.
      *
      * @return seller of this time and sale event or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
-    const std::string &getSeller() const & noexcept {
-        if (!data_.seller) {
-            return String::NUL;
-        }
-
-        return data_.seller.value();
-    }
+    const std::string &getSeller() const & noexcept;
 
     /**
      * Returns seller of this time and sale event.
      *
      * @return seller of this time and sale event or std::nullopt
      */
-    const std::optional<std::string> &getSellerOpt() const & noexcept {
-        return data_.seller;
-    }
+    const std::optional<std::string> &getSellerOpt() const & noexcept;
 
     /**
      * Changes seller of this time and sale event.
      *
      * @param seller seller of this time and sale event.
      */
-    void setSeller(const StringLike &seller) noexcept {
-        data_.seller = std::string(seller);
-    }
+    void setSeller(const StringLike &seller) noexcept;
 
     /**
      * Returns a string representation of the current object.

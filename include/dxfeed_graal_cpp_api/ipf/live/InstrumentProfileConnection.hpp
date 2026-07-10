@@ -75,22 +75,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     struct Impl;
 
     public:
-    static std::string stateToString(State state) noexcept {
-        switch (state) {
-        case State::NOT_CONNECTED:
-            return "NOT_CONNECTED";
-        case State::CONNECTING:
-            return "CONNECTING";
-        case State::CONNECTED:
-            return "CONNECTED";
-        case State::COMPLETED:
-            return "COMPLETED";
-        case State::CLOSED:
-            return "CLOSED";
-        }
-
-        return "";
-    }
+    static std::string stateToString(State state) noexcept;
 
     /**
      * Creates instrument profile connection with a specified address and collector.
@@ -136,9 +121,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return The update period in milliseconds as chrono::duration.
      */
-    std::chrono::milliseconds getUpdatePeriodAsDuration() const {
-        return std::chrono::milliseconds(getUpdatePeriod());
-    }
+    std::chrono::milliseconds getUpdatePeriodAsDuration() const;
 
     /**
      * Changes the update period in milliseconds.
@@ -154,9 +137,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @param updatePeriod The update period in milliseconds as chrono::duration.
      * @see InstrumentProfileConnection::getUpdatePeriod()
      */
-    void setUpdatePeriod(std::chrono::milliseconds updatePeriod) const {
-        setUpdatePeriod(updatePeriod.count());
-    }
+    void setUpdatePeriod(std::chrono::milliseconds updatePeriod) const;
 
     /**
      * Returns state of this instrument profile connections.
@@ -214,9 +195,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @param listenerId The listener id to remove
      */
-    void removeStateChangeListener(std::size_t listenerId) {
-        onStateChange_ -= listenerId;
-    }
+    void removeStateChangeListener(std::size_t listenerId);
 
     /**
      * Returns the onStateChange @ref SimpleHandler<void(ArgTypes...)> "handler" that can be used to add or remove
@@ -224,9 +203,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return onStateChange handler with `void(State, State)` signature
      */
-    auto &onStateChange() {
-        return onStateChange_;
-    }
+    SimpleHandler<void(State, State)> &onStateChange();
 
     /**
      * Synchronously waits for full first snapshot read with the specified timeout.
@@ -244,9 +221,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      * @return `true` if @ref InstrumentProfileConnection::State::COMPLETED "COMPLETED" state was reached and `false`
      *         if the waiting time elapsed before snapshot was fully read.
      */
-    bool waitUntilCompleted(std::chrono::milliseconds timeout) const {
-        return waitUntilCompleted(timeout.count());
-    }
+    bool waitUntilCompleted(std::chrono::milliseconds timeout) const;
 };
 
 DXFCPP_END_NAMESPACE

@@ -14,7 +14,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../TimeSeriesEvent.hpp"
 #include "../market/MarketEvent.hpp"
 
-#include <cassert>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -33,7 +32,7 @@ struct EventMapper;
  * It represents the most recent information that is available about the corresponding values on
  * the market at any given moment of time.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots.</a></h3>
  *
  * Some greeks sources provide a consistent view of the set of known greeks.
  * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
@@ -137,33 +136,22 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Greeks(const StringLike & eventSymbol) noexcept : MarketEvent(eventSymbol) {
-    }
+    explicit Greeks(const StringLike & eventSymbol) noexcept;
 
     ///
-    const IndexedEventSource &getSource() const & noexcept override {
-        return IndexedEventSource::DEFAULT;
-    }
+    const IndexedEventSource &getSource() const & noexcept override;
 
     ///
-    std::int32_t getEventFlags() const noexcept override {
-        return data_.eventFlags;
-    }
+    std::int32_t getEventFlags() const noexcept override;
 
     ///
-    EventFlagsMask getEventFlagsMask() const noexcept override {
-        return EventFlagsMask(data_.eventFlags);
-    }
+    EventFlagsMask getEventFlagsMask() const noexcept override;
 
     ///
-    void setEventFlags(std::int32_t eventFlags) noexcept override {
-        data_.eventFlags = eventFlags;
-    }
+    void setEventFlags(std::int32_t eventFlags) noexcept override;
 
     ///
-    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
-        data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
-    }
+    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override;
 
     /**
      * Returns a unique per-symbol index of this event.
@@ -172,9 +160,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      *
      * @return unique index of this event.
      */
-    std::int64_t getIndex() const noexcept override {
-        return data_.index;
-    }
+    std::int64_t getIndex() const noexcept override;
 
     /**
      * Changes the unique per-symbol index of this event.
@@ -186,18 +172,14 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      * @param index the event index.
      * @see ::getIndex()
      */
-    void setIndex(std::int64_t index) override {
-        data_.index = index;
-    }
+    void setIndex(std::int64_t index) override;
 
     /**
      * Returns the timestamp of the event in milliseconds.
      *
      * @return timestamp of the event in milliseconds
      */
-    std::int64_t getTime() const noexcept override {
-        return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
-    }
+    std::int64_t getTime() const noexcept override;
 
     /**
      * Changes the timestamp of the event in milliseconds.
@@ -205,11 +187,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      * @param time timestamp of the event in milliseconds.
      * @see ::getTime()
      */
-    void setTime(std::int64_t time) noexcept {
-        data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-                                sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
-                           getSequence());
-    }
+    void setTime(std::int64_t time) noexcept;
 
     /**
      * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() "time".
@@ -218,9 +196,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      *
      * @return The sequence number of this event
      */
-    std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes @ref ::getSequence() "sequence number" of this event.
@@ -235,126 +211,98 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      *
      * @return option market price.
      */
-    double getPrice() const noexcept {
-        return data_.price;
-    }
+    double getPrice() const noexcept;
 
     /**
      * Changes option market price.
      *
      * @param price option market price.
      */
-    void setPrice(double price) noexcept {
-        data_.price = price;
-    }
+    void setPrice(double price) noexcept;
 
     /**
      * Returns Black-Scholes implied volatility of the option.
      *
      * @return Black-Scholes implied volatility of the option.
      */
-    double getVolatility() const noexcept {
-        return data_.volatility;
-    }
+    double getVolatility() const noexcept;
 
     /**
      * Changes Black-Scholes implied volatility of the option.
      *
      * @param volatility Black-Scholes implied volatility of the option.
      */
-    void setVolatility(double volatility) noexcept {
-        data_.volatility = volatility;
-    }
+    void setVolatility(double volatility) noexcept;
 
     /**
      * Return option delta. Delta is the first derivative of an option price by an underlying price.
      *
      * @return option delta.
      */
-    double getDelta() const noexcept {
-        return data_.delta;
-    }
+    double getDelta() const noexcept;
 
     /**
      * Changes option delta.
      *
      * @param delta option delta.
      */
-    void setDelta(double delta) noexcept {
-        data_.delta = delta;
-    }
+    void setDelta(double delta) noexcept;
 
     /**
      * Returns option gamma. Gamma is the second derivative of an option price by an underlying price.
      *
      * @return option gamma.
      */
-    double getGamma() const noexcept {
-        return data_.gamma;
-    }
+    double getGamma() const noexcept;
 
     /**
      * Changes option gamma.
      *
      * @param gamma option gamma.
      */
-    void setGamma(double gamma) noexcept {
-        data_.gamma = gamma;
-    }
+    void setGamma(double gamma) noexcept;
 
     /**
      * Returns option theta. Theta is the first derivative of an option price by a number of days to expiration.
      *
      * @return option theta.
      */
-    double getTheta() const noexcept {
-        return data_.theta;
-    }
+    double getTheta() const noexcept;
 
     /**
      * Changes option theta.
      *
      * @param theta option theta.
      */
-    void setTheta(double theta) noexcept {
-        data_.theta = theta;
-    }
+    void setTheta(double theta) noexcept;
 
     /**
      * Returns option rho. Rho is the first derivative of an option price by percentage interest rate.
      *
      * @return option rho.
      */
-    double getRho() const noexcept {
-        return data_.rho;
-    }
+    double getRho() const noexcept;
 
     /**
      * Changes option rho.
      *
      * @param rho option rho.
      */
-    void setRho(double rho) noexcept {
-        data_.rho = rho;
-    }
+    void setRho(double rho) noexcept;
 
     /**
      * Returns option vega. Vega is the first derivative of an option price by percentage volatility.
      *
      * @return option vega.
      */
-    double getVega() const noexcept {
-        return data_.vega;
-    }
+    double getVega() const noexcept;
 
     /**
      * Changes option vega.
      *
      * @param vega option vega.
      */
-    void setVega(double vega) noexcept {
-        data_.vega = vega;
-    }
+    void setVega(double vega) noexcept;
 
     /**
      * Returns a string representation of the current object.

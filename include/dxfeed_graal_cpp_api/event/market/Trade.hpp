@@ -125,8 +125,7 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Trade(const StringLike& eventSymbol) noexcept : TradeBase(eventSymbol) {
-    }
+    explicit Trade(const StringLike& eventSymbol) noexcept;
 
     /**
      * Returns a string representation of the current object.

@@ -8,8 +8,8 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
-#include "../EventTypeEnum.hpp"
 #include "../EventType.hpp"
+#include "../EventTypeEnum.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -30,9 +30,9 @@ struct EventMapper;
  * are not connected to the message publisher, so they shall be only used for notification purposes in
  * addition to a persistence mechanism.
  *
- * <h3>Implementation details</h3>
+ * <h3>Implementation details.</h3>
  *
- * This event is implemented on top of QDS record `Message`.
+ * This event is implemented on top of the QDS record ` Message `.
  */
 class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
     friend struct EventMapper;
@@ -93,49 +93,35 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      * Creates a new message with the specified event symbol.
      * @param eventSymbol event symbol.
      */
-    explicit Message(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
-    }
+    explicit Message(const StringLike &eventSymbol) noexcept;
 
     /**
      * Creates a new message with the specified event symbol and attachment.
      * @param eventSymbol event symbol.
      * @param attachment attachment.
      */
-    Message(const StringLike &eventSymbol, const StringLike &attachment) noexcept
-        : eventSymbol_{eventSymbol}, attachment_{attachment} {
-    }
+    Message(const StringLike &eventSymbol, const StringLike &attachment) noexcept;
 
     /**
      * Returns a symbol of this event.
      *
      * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
-    const std::string &getEventSymbol() const & noexcept override {
-        if (!eventSymbol_) {
-            return String::NUL;
-        }
-
-        return eventSymbol_.value();
-    }
+    const std::string &getEventSymbol() const & noexcept override;
 
     /**
      * Returns a symbol of this event.
      *
      * @return symbol of this event or `std::nullopt`.
      */
-    const std::optional<std::string> &getEventSymbolOpt() const & noexcept override {
-        return eventSymbol_;
-    }
+    const std::optional<std::string> &getEventSymbolOpt() const & noexcept override;
 
     /**
      * Changes symbol of this event.
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const StringLike &eventSymbol) noexcept override {
-        // TODO: check invalid utf-8 [EN-8233]
-        eventSymbol_ = std::string(eventSymbol);
-    }
+    void setEventSymbol(const StringLike &eventSymbol) noexcept override;
 
     /**
      * Changes an event's symbol and returns the current message.
@@ -143,65 +129,43 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol The symbol of this event.
      * @return The current message.
      */
-    Message &withEventSymbol(const StringLike &eventSymbol) noexcept {
-        Message::setEventSymbol(eventSymbol);
-
-        return *this;
-    }
+    Message &withEventSymbol(const StringLike &eventSymbol) noexcept;
 
     ///
-    std::int64_t getEventTime() const noexcept override {
-        return eventTime_;
-    }
+    std::int64_t getEventTime() const noexcept override;
 
     ///
-    void setEventTime(std::int64_t eventTime) noexcept override {
-        eventTime_ = eventTime;
-    }
+    void setEventTime(std::int64_t eventTime) noexcept override;
 
     /**
-     * Changes event's creation time and returns the current message.
+     * Changes the event's creation time and returns the current message.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
      * @return The current message.
      */
-    Message &withEventTime(std::int64_t eventTime) noexcept {
-        Message::setEventTime(eventTime);
-
-        return *this;
-    }
+    Message &withEventTime(std::int64_t eventTime) noexcept;
 
     /**
      * Returns attachment.
      *
      * @return attachment.
      */
-    const std::string &getAttachment() const & {
-        if (!attachment_) {
-            return String::NUL;
-        }
-
-        return attachment_.value();
-    }
+    const std::string &getAttachment() const &;
 
     /**
      * Returns attachment of this event.
      *
      * @return attachment of this event or `std::nullopt`.
      */
-    const std::optional<std::string> &getAttachmentOpt() const & noexcept {
-        return attachment_;
-    }
+    const std::optional<std::string> &getAttachmentOpt() const & noexcept;
 
     /**
      * Changes attachment.
      *
      * @param attachment attachment.
      */
-    void setAttachment(const StringLike &attachment) {
-        attachment_ = std::string(attachment);
-    }
+    void setAttachment(const StringLike &attachment);
 
     /**
      * Changes attachment and returns the current message.
@@ -210,12 +174,13 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      *
      * @return The current message.
      */
-    Message &withAttachment(const StringLike &attachment) noexcept {
-        setAttachment(attachment);
+    Message &withAttachment(const StringLike &attachment) noexcept;
 
-        return *this;
-    }
-
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
     std::string toString() const override;
 };
 

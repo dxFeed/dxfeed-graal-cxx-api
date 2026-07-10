@@ -54,11 +54,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
 
     Data data_{};
 
-    void recomputeTimeMillisPart() noexcept {
-        data_.timeMillisSequence =
-            orOp(sal(time_util::getMillisFromTime(std::max(data_.askTime, data_.bidTime)), MILLISECONDS_SHIFT),
-                 getSequence());
-    }
+    void recomputeTimeMillisPart() noexcept;
 
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
@@ -117,8 +113,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Quote(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
-    }
+    explicit Quote(const StringLike &eventSymbol) noexcept;
 
     /**
      * Changes an event's symbol and returns the current quote.
@@ -126,11 +121,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current quote.
      */
-    Quote &withEventSymbol(const StringLike &eventSymbol) noexcept {
-        MarketEvent::setEventSymbol(eventSymbol);
-
-        return *this;
-    }
+    Quote &withEventSymbol(const StringLike &eventSymbol) noexcept;
 
     /**
      * Changes event's creation time and returns the current quote.
@@ -139,22 +130,16 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * midnight, January 1, 1970 UTC.
      * @return The current quote.
      */
-    Quote &withEventTime(std::int64_t eventTime) noexcept {
-        MarketEvent::setEventTime(eventTime);
-
-        return *this;
-    }
+    Quote &withEventTime(std::int64_t eventTime) noexcept;
 
     /**
-     * Returns a sequence number of this quote to distinguish quotes that have the same @ref Quote::getTime() "time". This
-     * sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to
+     * Returns a sequence number of this quote to distinguish quotes that have the same @ref Quote::getTime() "time".
+     * This sequence number does not have to be unique and does not need to be sequential. Sequence can range from 0 to
      * Quote::MAX_SEQUENCE.
      *
      * @return sequence of this quote.
      */
-    std::int32_t getSequence() const noexcept {
-        return andOp(data_.timeMillisSequence, MAX_SEQUENCE);
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes @ref Quote::getSequence() "sequence number" of this quote.
@@ -173,11 +158,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @return The current quote.
      * @see Quote::getSequence()
      */
-    Quote &withSequence(std::int32_t sequence) noexcept {
-        setSequence(sequence);
-
-        return *this;
-    }
+    Quote &withSequence(std::int32_t sequence) noexcept;
 
     /**
      * Returns time of the last bid or ask change.
@@ -185,10 +166,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @return The time of the last bid or ask change.
      */
-    std::int64_t getTime() const noexcept {
-        return math::floorDiv(std::max(data_.bidTime, data_.askTime), 1000LL) * 1000LL +
-               shr(data_.timeMillisSequence, MILLISECONDS_SHIFT);
-    }
+    std::int64_t getTime() const noexcept;
 
     /**
      * Returns time of the last bid or ask change in nanoseconds.
@@ -196,18 +174,14 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @return The time of the last bid or ask change in nanoseconds.
      */
-    std::int64_t getTimeNanos() const noexcept {
-        return time_nanos_util::getNanosFromMillisAndNanoPart(getTime(), data_.timeNanoPart);
-    }
+    std::int64_t getTimeNanos() const noexcept;
 
     /**
      * Returns microseconds and nanoseconds part of time of the last bid or ask change.
      *
      * @return The microseconds and nanoseconds part of time of the last bid or ask change.
      */
-    std::int32_t getTimeNanoPart() const noexcept {
-        return data_.timeNanoPart;
-    }
+    std::int32_t getTimeNanoPart() const noexcept;
 
     /**
      * Changes microseconds and nanoseconds part of time of the last bid or ask change.
@@ -215,9 +189,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @param timeNanoPart The microseconds and nanoseconds part of time of the last bid or ask change.
      */
-    void setTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        data_.timeNanoPart = timeNanoPart;
-    }
+    void setTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Changes microseconds and nanoseconds part of time of the last bid or ask change and returns the current quote.
@@ -226,11 +198,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param timeNanoPart The microseconds and nanoseconds part of time of the last bid or ask change.
      * @return The current quote.
      */
-    Quote &withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
-        setTimeNanoPart(timeNanoPart);
-
-        return *this;
-    }
+    Quote &withTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Returns time of the last bid change.
@@ -241,9 +209,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @return The time of the last bid change.
      */
-    std::int64_t getBidTime() const noexcept {
-        return data_.bidTime;
-    }
+    std::int64_t getBidTime() const noexcept;
 
     /**
      * Changes time of the last bid change.
@@ -254,11 +220,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @param bidTime The time of the last bid change.
      */
-    void setBidTime(std::int64_t bidTime) noexcept {
-        data_.bidTime = bidTime;
-
-        recomputeTimeMillisPart();
-    }
+    void setBidTime(std::int64_t bidTime) noexcept;
 
     /**
      * Changes time of the last bid change and returns the current quote.
@@ -270,11 +232,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param bidTime The time of the last bid change.
      * @return The current quote.
      */
-    Quote &withBidTime(std::int64_t bidTime) noexcept {
-        setBidTime(bidTime);
-
-        return *this;
-    }
+    Quote &withBidTime(std::int64_t bidTime) noexcept;
 
     /**
      * Returns bid exchange code.
@@ -303,11 +261,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param bidExchangeCode The bid exchange code.
      * @return The current quote
      */
-    Quote &withBidExchangeCode(char bidExchangeCode) noexcept {
-        setBidExchangeCode(bidExchangeCode);
-
-        return *this;
-    }
+    Quote &withBidExchangeCode(char bidExchangeCode) noexcept;
 
     /**
      * Changes bid exchange code.
@@ -322,29 +276,21 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param bidExchangeCode The bid exchange code.
      * @return The current quote.
      */
-    Quote &withBidExchangeCode(std::int16_t bidExchangeCode) noexcept {
-        setBidExchangeCode(bidExchangeCode);
-
-        return *this;
-    }
+    Quote &withBidExchangeCode(std::int16_t bidExchangeCode) noexcept;
 
     /**
      * Returns bid price.
      *
      * @return The bid price.
      */
-    double getBidPrice() const noexcept {
-        return data_.bidPrice;
-    }
+    double getBidPrice() const noexcept;
 
     /**
      * Changes bid price.
      *
      * @param bidPrice The bid price.
      */
-    void setBidPrice(double bidPrice) noexcept {
-        data_.bidPrice = bidPrice;
-    }
+    void setBidPrice(double bidPrice) noexcept;
 
     /**
      * Changes bid price and returns the current quote.
@@ -352,29 +298,21 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param bidPrice The bid price.
      * @return The current quote
      */
-    Quote &withBidPrice(double bidPrice) noexcept {
-        setBidPrice(bidPrice);
-
-        return *this;
-    }
+    Quote &withBidPrice(double bidPrice) noexcept;
 
     /**
      * Returns bid size.
      *
      * @return The bid size
      */
-    double getBidSize() const noexcept {
-        return data_.bidSize;
-    }
+    double getBidSize() const noexcept;
 
     /**
      * Changes bid size.
      *
      * @param bidSize The bid size.
      */
-    void setBidSize(double bidSize) noexcept {
-        data_.bidSize = bidSize;
-    }
+    void setBidSize(double bidSize) noexcept;
 
     /**
      * Changes bid size and returns the current quote.
@@ -382,11 +320,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param bidSize The bid size.
      * @return The current quote.
      */
-    Quote &withBidSize(double bidSize) noexcept {
-        setBidSize(bidSize);
-
-        return *this;
-    }
+    Quote &withBidSize(double bidSize) noexcept;
 
     /**
      * Returns time of the last ask change.
@@ -397,9 +331,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @return The time of the last ask change.
      */
-    std::int64_t getAskTime() const noexcept {
-        return data_.askTime;
-    }
+    std::int64_t getAskTime() const noexcept;
 
     /**
      * Changes time of the last ask change.
@@ -410,11 +342,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @param askTime The time of the last ask change.
      */
-    void setAskTime(std::int64_t askTime) noexcept {
-        data_.askTime = askTime;
-
-        recomputeTimeMillisPart();
-    }
+    void setAskTime(std::int64_t askTime) noexcept;
 
     /**
      * Changes time of the last ask change and returns the current quote.
@@ -426,11 +354,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param askTime The time of the last ask change.
      * @return The current quote.
      */
-    Quote &withAskTime(std::int64_t askTime) noexcept {
-        setAskTime(askTime);
-
-        return *this;
-    }
+    Quote &withAskTime(std::int64_t askTime) noexcept;
 
     /**
      * Returns ask exchange code.
@@ -459,11 +383,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param askExchangeCode The ask exchange code.
      * @return The current quote
      */
-    Quote &withAskExchangeCode(char askExchangeCode) noexcept {
-        setAskExchangeCode(askExchangeCode);
-
-        return *this;
-    }
+    Quote &withAskExchangeCode(char askExchangeCode) noexcept;
 
     /**
      * Changes ask exchange code.
@@ -478,29 +398,21 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param askExchangeCode The ask exchange code.
      * @return The current quote.
      */
-    Quote &withAskExchangeCode(std::int16_t askExchangeCode) noexcept {
-        setAskExchangeCode(askExchangeCode);
-
-        return *this;
-    }
+    Quote &withAskExchangeCode(std::int16_t askExchangeCode) noexcept;
 
     /**
      * Returns ask price.
      *
      * @return The ask price.
      */
-    double getAskPrice() const {
-        return data_.askPrice;
-    }
+    double getAskPrice() const;
 
     /**
      * Changes ask price.
      *
      * @param askPrice The ask price.
      */
-    void setAskPrice(double askPrice) {
-        data_.askPrice = askPrice;
-    }
+    void setAskPrice(double askPrice);
 
     /**
      * Changes ask price and returns the current quote.
@@ -508,29 +420,21 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param askPrice The ask price.
      * @return The current quote
      */
-    Quote &withAskPrice(double askPrice) noexcept {
-        setAskPrice(askPrice);
-
-        return *this;
-    }
+    Quote &withAskPrice(double askPrice) noexcept;
 
     /**
      * Returns ask size.
      *
      * @return The ask size
      */
-    double getAskSize() const {
-        return data_.askSize;
-    }
+    double getAskSize() const;
 
     /**
      * Changes ask size.
      *
      * @param askSize The ask size.
      */
-    void setAskSize(double askSize) {
-        data_.askSize = askSize;
-    }
+    void setAskSize(double askSize);
 
     /**
      * Changes ask size and returns the current quote.
@@ -538,11 +442,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param askSize The ask size.
      * @return The current quote.
      */
-    Quote &withAskSize(double askSize) noexcept {
-        setAskSize(askSize);
-
-        return *this;
-    }
+    Quote &withAskSize(double askSize) noexcept;
 
     /**
      * Returns a string representation of the current object.

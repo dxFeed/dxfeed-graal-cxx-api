@@ -21,6 +21,126 @@ DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 
 DXFCPP_BEGIN_NAMESPACE
 
+
+StringLike::StringLike() {
+}
+
+StringLike::StringLike(const char *s) : owned_(s ? s : ""), view_(owned_) {
+}
+
+StringLike::StringLike(std::string_view sv) : view_(sv) {
+}
+
+StringLike::StringLike(const std::string &s) : owned_(s), view_(owned_) {
+}
+
+StringLike::StringLike(std::string &&s) noexcept : owned_(std::move(s)), view_(owned_) {
+}
+
+StringLike::operator std::string_view() const noexcept {
+    return view_;
+}
+
+StringLike::operator std::string() const {
+    return std::string(view_);
+}
+
+const char *StringLike::data() const noexcept {
+    return view_.data();
+}
+
+const char *StringLike::c_str() const {
+    if (owned_.empty() && !view_.empty()) {
+        owned_ = std::string(view_);
+        view_ = owned_;
+    }
+
+    return owned_.c_str();
+}
+
+std::string_view::const_iterator StringLike::begin() const noexcept {
+    return view_.begin();
+}
+
+std::string_view::const_iterator StringLike::end() const noexcept {
+    return view_.end();
+}
+
+std::string_view::const_iterator StringLike::cbegin() const noexcept {
+    return view_.cbegin();
+}
+
+std::string_view::const_iterator StringLike::cend() const noexcept {
+    return view_.cend();
+}
+
+bool StringLike::empty() const noexcept {
+    return view_.empty();
+}
+
+std::size_t StringLike::size() const noexcept {
+    return view_.size();
+}
+
+std::size_t StringLike::length() const noexcept {
+    return view_.size();
+}
+
+bool StringLike::ends_with(const StringLike &other) const noexcept {
+#if __cpp_lib_ends_with >= 201907L
+    return view_.ends_with(other.view_);
+#else
+    const auto sv = other.view_;
+
+    return sv.size() <= view_.size() && view_.compare(view_.size() - sv.size(), sv.size(), sv) == 0;
+#endif
+}
+
+std::string StringLike::substr(std::size_t pos, std::size_t count) const {
+    const auto sv2 = view_.substr(pos, count);
+
+    return std::string(sv2);
+}
+
+bool StringLike::operator==(const StringLike &other) const noexcept {
+    return view_ == other.view_;
+}
+
+StringLike::operator double() const {
+    double result{};
+#if defined(_LIBCPP_VERSION)
+    result = std::stod(std::string(view_));
+#else
+    if (auto [ptr, ec] = std::from_chars(view_.data(), view_.data() + view_.size(), result); ec != std::errc{})
+        throw std::invalid_argument("StringLike: cannot convert to double");
+#endif
+    return result;
+}
+
+std::string StringLike::toString() const noexcept {
+    return std::string(view_);
+}
+
+std::string_view StringLike::toStringView() const noexcept {
+    return view_;
+}
+
+std::size_t StringHash::operator()(const char *str) const {
+    return HashType{}(str);
+}
+
+std::size_t StringHash::operator()(std::string_view sv) const {
+    return HashType{}(sv);
+}
+
+std::size_t StringHash::operator()(const std::string &str) const {
+    return HashType{}(str);
+}
+
+std::size_t StringHash::operator()(const StringLike &s) const {
+    return HashType{}(s);
+}
+
 std::string toString(bool b) noexcept {
     return b ? "true" : "false";
 }
@@ -82,6 +202,9 @@ std::string encodeChar(std::int16_t c) {
     }
 
     return fmt::format("\\u{:04x}", c);
+}
+
+detail::IsIEqual::IsIEqual(const std::locale &locale) : locale_{locale} {
 }
 
 char utf16to8(std::int16_t in) noexcept {

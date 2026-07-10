@@ -82,7 +82,7 @@ struct DXFCPP_EXPORT TimeSeriesTxModelImpl {
  * <p>This model is designed to handle incremental transactions. Users of this model only see the list
  * of events in a consistent state. This model delays incoming events that are part of an incomplete snapshot
  * or ongoing transaction until the snapshot is complete or the transaction has ended. This model notifies
- * the user of received transactions through an installed @ref TxModelListener "listener".
+ * the user of received transactions through an installed @ref TimeSeriesTxModelListener "listener".
  *
  * <h3>Configuration</h3>
  *

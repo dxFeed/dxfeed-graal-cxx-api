@@ -30,9 +30,9 @@ struct EventMapper;
  * are not connected to the message publisher, so they shall be only used for notification purposes in
  * addition to a persistence mechanism.
  *
- * <h3>Implementation details</h3>
+ * <h3>Implementation details.</h3>
  *
- * This event is implemented on top of QDS record `TextMessage`.
+ * This event is implemented on top of the QDS record `TextMessage`.
  */
 class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     friend struct EventMapper;
@@ -160,7 +160,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     void setEventTime(std::int64_t eventTime) noexcept override;
 
     /**
-     * Changes event's creation time and returns the current message.
+     * Changes the event's creation time and returns the current message.
      *
      * @param eventTime the difference, measured in milliseconds, between the event creation time and
      * midnight, January 1, 1970 UTC.
@@ -219,7 +219,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     std::int32_t getSequence() const noexcept;
 
     /**
-     * Changes ::getSequence() sequence number of the text message.
+     * Changes @ref getSequence() "sequence" number of the text message.
      *
      * @param sequence the sequence.
      * @throws InvalidArgumentException if a sequence is below zero or above #MAX_SEQUENCE.
@@ -248,7 +248,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @param text text.
      */
-    void setText(const StringLike & text);
+    void setText(const StringLike &text);
 
     /**
      * Changes text and returns the current message.
@@ -257,8 +257,13 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @return The current message.
      */
-    TextMessage &withText(const StringLike & text) noexcept;
+    TextMessage &withText(const StringLike &text) noexcept;
 
+    /**
+     * Returns a string representation of the current object.
+     *
+     * @return a string representation
+     */
     std::string toString() const override;
 };
 

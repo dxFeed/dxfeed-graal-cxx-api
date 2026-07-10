@@ -64,14 +64,9 @@ class DXFCPP_EXPORT InstrumentProfileField {
     bool numericField_;
 
     InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike& name,
-                           InstrumentProfileFieldTypeEnum typeEnum) noexcept
-        : fieldEnum_{fieldEnum}, name_{name}, typeEnum_{typeEnum},
-          numericField_{typeEnum != InstrumentProfileFieldTypeEnum::STRING} {
-    }
+                           InstrumentProfileFieldTypeEnum typeEnum) noexcept;
 
-    explicit InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike &name) noexcept
-        : InstrumentProfileField(fieldEnum, name, InstrumentProfileFieldTypeEnum::STRING) {
-    }
+    explicit InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike &name) noexcept;
 
     public:
     const static InstrumentProfileField TYPE;
@@ -106,9 +101,7 @@ class DXFCPP_EXPORT InstrumentProfileField {
     const static InstrumentProfileField PRICE_INCREMENTS;
     const static InstrumentProfileField TRADING_HOURS;
 
-    [[nodiscard]] const std::string &getName() const & noexcept {
-        return name_;
-    }
+    [[nodiscard]] const std::string &getName() const & noexcept;
 
     private:
     const static std::unordered_map<std::string, std::reference_wrapper<const InstrumentProfileField>> MAP;
@@ -117,13 +110,7 @@ class DXFCPP_EXPORT InstrumentProfileField {
     /**
      * Returns cref to field for specified name or std::nullopt if field is not found.
      */
-    static std::optional<std::reference_wrapper<const InstrumentProfileField>> find(const StringLike &name) noexcept {
-        if (MAP.contains(name)) {
-            return MAP.at(name);
-        }
-
-        return std::nullopt;
-    }
+    static std::optional<std::reference_wrapper<const InstrumentProfileField>> find(const StringLike &name) noexcept;
 
     InstrumentProfileFieldEnum getFieldEnum() const;
 

@@ -173,6 +173,10 @@ bool Day::operator==(const Day &other) const {
     return isolated::schedule::IsolatedDay::equals(handle_, other.handle_);
 }
 
+bool Day::operator==(const Day::Ptr &other) const {
+    return *this == *other;
+}
+
 std::size_t Day::hashCode() const noexcept {
     try {
         return isolated::schedule::IsolatedDay::hashCode(handle_);

@@ -1,3 +1,6 @@
+* **\[BREAKING]** Project build speed has been improved. The implementation of all non-template methods of non-template classes is now located in .cpp files.
+* Improved documentation. Classes are now divided into "modules". `Main Page - Topics - dxFeed Graal C++ API Modules.`
+
 ## v6.0.0
 
 * **\[MDAPI-405]** Fixed project build errors that occurred when attempting to build a project using clang 19+.

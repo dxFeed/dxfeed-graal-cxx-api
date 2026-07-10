@@ -105,8 +105,7 @@ class DXFCPP_EXPORT EventFlag final {
     std::uint32_t flag_;
     std::string name_;
 
-    EventFlag(std::uint32_t flag, std::string name) noexcept : flag_{flag}, name_{std::move(name)} {
-    }
+    EventFlag(std::uint32_t flag, std::string name) noexcept;
 
     public:
     /**
@@ -184,15 +183,12 @@ class DXFCPP_EXPORT EventFlag final {
     /**
      * Creates the invalid event flag
      */
-    explicit EventFlag() noexcept : flag_{unsigned(-1)}, name_{"INVALID"} {
-    }
+    explicit EventFlag() noexcept;
 
     /**
      * @return The event flag's value
      */
-    std::uint32_t getFlag() const noexcept {
-        return flag_;
-    }
+    std::uint32_t getFlag() const noexcept;
 
     /**
      * Determines if the given flag is in the mask.
@@ -201,9 +197,7 @@ class DXFCPP_EXPORT EventFlag final {
      *
      * @return `true` the given flag is in the mask.
      */
-    bool in(std::uint32_t eventFlagsMask) const noexcept {
-        return (eventFlagsMask & flag_) != 0;
-    }
+    bool in(std::uint32_t eventFlagsMask) const noexcept;
 
     /**
      * Determines if the given flag is in the mask.
@@ -225,14 +219,10 @@ class DXFCPP_EXPORT EventFlag final {
     }
 
     ///
-    const std::string &getName() const & noexcept {
-        return name_;
-    }
+    const std::string &getName() const & noexcept;
 
     ///
-    const std::string &toString() const & noexcept {
-        return name_;
-    }
+    const std::string &toString() const & noexcept;
 
     /**
      * Performs a bit `or` operation with two event flags
@@ -407,8 +397,7 @@ class EventFlagsMask final {
     /**
      * Creates an empty event flags mask
      */
-    explicit EventFlagsMask() noexcept : mask_{0u} {
-    }
+    explicit EventFlagsMask() noexcept;
 
     /**
      * Create event flags mask by integer value
@@ -438,9 +427,7 @@ class EventFlagsMask final {
      *
      * @param eventFlags The list with flags
      */
-    EventFlagsMask(std::initializer_list<EventFlag> eventFlags) noexcept
-        : EventFlagsMask(eventFlags.begin(), eventFlags.end()) {
-    }
+    EventFlagsMask(std::initializer_list<EventFlag> eventFlags) noexcept;
 
     /**
      * Returns an integer representation of an event mask
@@ -455,9 +442,7 @@ class EventFlagsMask final {
      * @param flag The flag to check.
      * @return `true` if this mask contains the flag.
      */
-    bool contains(const EventFlag &flag) const noexcept {
-        return (mask_ & flag.getFlag()) != 0;
-    }
+    bool contains(const EventFlag &flag) const noexcept;
 
     /**
      * Performs a bit `or` operation with an event flags' mask and an event flag
@@ -482,28 +467,7 @@ class EventFlagsMask final {
     }
 
     ///
-    std::string toString() const {
-        bool addOrSign = false;
-        std::ostringstream result{};
-
-        for (const auto &flag :
-             {EventFlag::TX_PENDING, EventFlag::REMOVE_EVENT, EventFlag::SNAPSHOT_BEGIN, EventFlag::SNAPSHOT_END,
-              EventFlag::SNAPSHOT_SNIP, EventFlag::SNAPSHOT_MODE, EventFlag::REMOVE_SYMBOL}) {
-            if (flag.in(mask_)) {
-                if (addOrSign) {
-                    result << "|";
-                } else {
-                    addOrSign = true;
-                }
-
-                result << flag.toString();
-            }
-        }
-
-        result << "(0x" << std::hex << mask_ << ")";
-
-        return result.str();
-    }
+    std::string toString() const;
 };
 
 DXFCPP_END_NAMESPACE

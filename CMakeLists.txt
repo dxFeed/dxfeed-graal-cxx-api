@@ -247,8 +247,11 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/JavaObjectHandle.cpp
         src/internal/EventClassList.cpp
         src/internal/Common.cpp
+        src/internal/Metrics.cpp
         src/internal/Platform.cpp
+        src/internal/StopWatch.cpp
         src/internal/TimeFormat.cpp
+        src/internal/Timer.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources
@@ -382,6 +385,7 @@ set(dxFeedGraalCxxApi_Event_Sources
         src/event/IndexedEvent.cpp
         src/event/EventMapper.cpp
         src/event/EventSourceWrapper.cpp
+        src/event/TimeSeriesEvent.cpp
 )
 
 set(dxFeedGraalCxxApi_EventCandle_Sources
@@ -403,6 +407,7 @@ set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
         src/event/market/MarketEvent.cpp
+        src/event/market/MarketEventSymbols.cpp
         src/event/market/OptionSale.cpp
         src/event/market/Order.cpp
         src/event/market/OrderAction.cpp

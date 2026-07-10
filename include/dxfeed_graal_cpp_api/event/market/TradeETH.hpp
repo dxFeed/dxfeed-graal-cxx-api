@@ -148,8 +148,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TradeETH(std::string eventSymbol) noexcept : TradeBase(std::move(eventSymbol)) {
-    }
+    explicit TradeETH(std::string eventSymbol) noexcept;
 
     /**
      * Returns a string representation of the current object.

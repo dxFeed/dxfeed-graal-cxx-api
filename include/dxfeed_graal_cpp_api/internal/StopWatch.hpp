@@ -12,7 +12,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct StopWatch final {
+/// A simple thread-safe stopwatch.
+struct DXFCPP_EXPORT StopWatch final {
     private:
     mutable std::mutex mutex_{};
     std::chrono::milliseconds elapsed_{};
@@ -21,82 +22,21 @@ struct StopWatch final {
     std::atomic<bool> isRunning_{};
 
     public:
-    StopWatch() noexcept {
-        reset();
-    }
+    StopWatch() noexcept;
 
-    void start() noexcept {
-        if (!isRunning_) {
-            std::lock_guard lock{mutex_};
-            startTimeStamp_ = std::chrono::steady_clock::now();
-            isRunning_ = true;
-        }
-    }
+    void start() noexcept;
 
-    void stop() noexcept {
-        if (isRunning_) {
-            const auto endTimestamp = std::chrono::steady_clock::now();
+    void stop() noexcept;
 
-            std::lock_guard lock{mutex_};
-            const auto elapsedThisPeriod = endTimestamp - startTimeStamp_;
+    void reset() noexcept;
 
-            elapsed_ += std::chrono::duration_cast<std::chrono::milliseconds>(elapsedThisPeriod);
-            elapsedInNanos_ += elapsedThisPeriod;
-            isRunning_ = false;
-        }
-    }
+    void restart() noexcept;
 
-    void reset() noexcept {
-        std::lock_guard lock{mutex_};
+    bool isRunning() const noexcept;
 
-        elapsed_ = std::chrono::milliseconds::zero();
-        elapsedInNanos_ = std::chrono::nanoseconds::zero();
-        isRunning_ = false;
-        startTimeStamp_ = std::chrono::steady_clock::time_point{};
-    }
+    std::chrono::milliseconds elapsed() const noexcept;
 
-    void restart() noexcept {
-        std::lock_guard lock{mutex_};
-
-        elapsed_ = std::chrono::milliseconds::zero();
-        elapsedInNanos_ = std::chrono::nanoseconds::zero();
-        isRunning_ = true;
-        startTimeStamp_ = std::chrono::steady_clock::now();
-    }
-
-    bool isRunning() const noexcept {
-        return isRunning_;
-    }
-
-    std::chrono::milliseconds elapsed() const noexcept {
-        std::lock_guard lock{mutex_};
-
-        auto elapsed = elapsed_;
-
-        if (isRunning_) {
-            const auto currentTimestamp = std::chrono::steady_clock::now();
-            const auto elapsedUntilNow = currentTimestamp - startTimeStamp_;
-
-            elapsed += std::chrono::duration_cast<std::chrono::milliseconds>(elapsedUntilNow);
-        }
-
-        return elapsed;
-    }
-
-    std::chrono::nanoseconds elapsedInNanos() const noexcept {
-        std::lock_guard lock{mutex_};
-
-        auto elapsed = elapsedInNanos_;
-
-        if (isRunning_) {
-            const auto currentTimestamp = std::chrono::steady_clock::now();
-            const auto elapsedUntilNow = currentTimestamp - startTimeStamp_;
-
-            elapsed += elapsedUntilNow;
-        }
-
-        return elapsed;
-    }
+    std::chrono::nanoseconds elapsedInNanos() const noexcept;
 };
 
 DXFCPP_END_NAMESPACE

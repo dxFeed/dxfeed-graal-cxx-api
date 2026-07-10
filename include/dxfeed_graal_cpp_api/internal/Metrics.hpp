@@ -19,11 +19,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <variant>
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct MetricsManager : private NonCopyable<MetricsManager> {
+struct DXFCPP_EXPORT MetricsManager : private NonCopyable<MetricsManager> {
     static constexpr auto METRICS_GROUPS_PROPERTY_NAME = "MetricsManager.Dump.MetricsGroups";
 
     template <typename T> struct Stats {
@@ -41,9 +42,7 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
     std::unordered_map<std::string, Value> data_{};
     std::optional<std::unordered_set<std::string>> groupsToDump_{std::nullopt};
 
-    void setImpl(const std::string &name, const std::string &value) {
-        data_[name] = value;
-    }
+    void setImpl(const std::string &name, const std::string &value);
 
     template <typename T> void recalculateStatsImpl(Stats<T> &stats, T value) {
         stats.value = value;
@@ -55,17 +54,7 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         ++stats.count;
     }
 
-    void setImpl(const std::string &name, double value) {
-        if (!data_.contains(name)) {
-            data_[name] = Value{Stats{1, value, value, value, value}};
-
-            return;
-        }
-
-        if (std::holds_alternative<Stats<double>>(data_.at(name))) {
-            recalculateStatsImpl(std::get<Stats<double>>(data_[name]), value);
-        }
-    }
+    void setImpl(const std::string &name, double value);
 
     template <Integral T> void setImpl(const std::string &name, T value) {
         if (!data_.contains(name)) {
@@ -79,55 +68,9 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         }
     }
 
-    Stats<std::int64_t> getAsI64Impl(const std::string &name) {
-        if (!data_.contains(name)) {
-            return {};
-        }
+    Stats<std::int64_t> getAsI64Impl(const std::string &name);
 
-        if (std::holds_alternative<Stats<std::int64_t>>(data_.at(name))) {
-            return std::get<Stats<std::int64_t>>(data_.at(name));
-        }
-
-        if (std::holds_alternative<Stats<double>>(data_.at(name))) {
-            auto &[count, value, minValue, maxValue, avgValue] = std::get<Stats<double>>(data_.at(name));
-
-            return Stats{count, static_cast<std::int64_t>(value), static_cast<std::int64_t>(minValue),
-                         static_cast<std::int64_t>(maxValue), static_cast<std::int64_t>(avgValue)};
-        }
-
-        if (std::holds_alternative<std::string>(data_.at(name))) {
-            const auto &value = std::get<std::string>(data_.at(name));
-
-            return Stats<std::int64_t>{1, std::stoll(value), std::stoll(value), std::stoll(value)};
-        }
-
-        return {};
-    }
-
-    Stats<double> getAsDoubleImpl(const std::string &name) {
-        if (!data_.contains(name)) {
-            return {};
-        }
-
-        if (std::holds_alternative<Stats<double>>(data_.at(name))) {
-            return std::get<Stats<double>>(data_.at(name));
-        }
-
-        if (std::holds_alternative<Stats<std::int64_t>>(data_.at(name))) {
-            auto &[count, value, minValue, maxValue, avgValue] = std::get<Stats<std::int64_t>>(data_.at(name));
-
-            return Stats{count, static_cast<double>(value), static_cast<double>(minValue),
-                         static_cast<double>(maxValue), static_cast<double>(avgValue)};
-        }
-
-        if (std::holds_alternative<std::string>(data_.at(name))) {
-            const auto &value = std::get<std::string>(data_.at(name));
-
-            return Stats{1, std::stod(value), std::stod(value), std::stod(value)};
-        }
-
-        return {};
-    }
+    Stats<double> getAsDoubleImpl(const std::string &name);
 
     public:
     template <typename T>
@@ -148,53 +91,15 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         return ss.str();
     }
 
-    static std::string toString(const std::string &key, const Value &value, bool compact) {
-        return std::visit(Overloads{
-                              [key, compact](const std::string &s) {
-                                  if (compact) {
-                                      return s;
-                                  }
+    static std::string toString(const std::string &key, const Value &value, bool compact);
 
-                                  return key + ": " + s + '\n';
-                              },
-                              [key, compact](const auto &n) {
-                                  return toString(key, n, compact);
-                              },
-                          },
-                          value);
-    }
+    std::optional<Value> get(const std::string &name);
 
-    std::optional<Value> get(const std::string &name) {
-        std::lock_guard lockGuard{mtx_};
+    std::string getAsString(const std::string &name);
 
-        if (!data_.contains(name)) {
-            return std::nullopt;
-        }
+    Stats<double> getAsDouble(const std::string &name);
 
-        return {data_.at(name)};
-    }
-
-    std::string getAsString(const std::string &name) {
-        std::lock_guard lockGuard{mtx_};
-
-        if (!data_.contains(name)) {
-            return String::EMPTY;
-        }
-
-        return toString(name, data_.at(name), true);
-    }
-
-    Stats<double> getAsDouble(const std::string &name) {
-        std::lock_guard lockGuard{mtx_};
-
-        return getAsDoubleImpl(name);
-    }
-
-    Stats<std::int64_t> getAsI64(const std::string &name) {
-        std::lock_guard lockGuard{mtx_};
-
-        return getAsI64Impl(name);
-    }
+    Stats<std::int64_t> getAsI64(const std::string &name);
 
     template <typename T> void set(const std::string &name, const T &value) {
         std::lock_guard lockGuard{mtx_};
@@ -202,11 +107,7 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         setImpl(name, value);
     }
 
-    void inc(const std::string &name) {
-        std::lock_guard lockGuard{mtx_};
-
-        setImpl(name, getAsI64Impl(name).value + 1);
-    }
+    void inc(const std::string &name);
 
     template <Integral T> void add(const std::string &name, T value) {
         std::lock_guard lockGuard{mtx_};
@@ -214,55 +115,9 @@ struct MetricsManager : private NonCopyable<MetricsManager> {
         setImpl(name, getAsI64Impl(name).value + value);
     }
 
-    void add(const std::string &name, double value) {
-        std::lock_guard lockGuard{mtx_};
+    void add(const std::string &name, double value);
 
-        setImpl(name, getAsDoubleImpl(name).value + value);
-    }
-
-    std::string dump() {
-        std::lock_guard lockGuard{mtx_};
-
-        if (!groupsToDump_) {
-            const auto groupsString = System::getProperty(METRICS_GROUPS_PROPERTY_NAME);
-            std::unordered_set<std::string> groups{};
-
-            if (!groupsString.empty()) {
-                for (auto group : splitStr(groupsString, ',')) {
-                    groups.insert(group);
-                }
-            }
-
-            groupsToDump_ = groups;
-        }
-
-        if (data_.empty()) {
-            return String::EMPTY;
-        }
-
-        std::map records{data_.begin(), data_.end()};
-        std::string result{};
-
-        for (const auto &[key, value] : records) {
-            auto group = key.substr(0, key.find_first_of('.'));
-
-            if (!groupsToDump_ || groupsToDump_->contains(group)) {
-                result += toString(key, value, false);
-            }
-        }
-
-        const auto dxfgMetrics = isolated::metrics::IsolatedMetrics::dump();
-
-        result += dxfgMetrics;
-
-        if (!result.empty()) {
-            if (dxfgMetrics.empty()) {
-                return result.substr(0, result.size() - 1);
-            }
-        }
-
-        return result;
-    }
+    std::string dump();
 };
 
 DXFCPP_END_NAMESPACE

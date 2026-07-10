@@ -8,7 +8,6 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
-#include <utility>
 #include <variant>
 
 /**
@@ -43,14 +42,7 @@ struct DXFCPP_EXPORT StringSymbol final {
      * @param chars The array of chars
      */
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    StringSymbol(const char *chars) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("StringSymbol(chars = " + toStringAny(chars) + ")");
-        }
-
-        data_ = std::string(chars);
-    }
+    StringSymbol(const char *chars) noexcept;
 
     /**
      * Constructs StringSymbol from a std::string_view
@@ -58,24 +50,10 @@ struct DXFCPP_EXPORT StringSymbol final {
      * @param stringView The string view
      */
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    StringSymbol(std::string_view stringView) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("StringSymbol(stringView = " + toStringAny(stringView) + ")");
-        }
-
-        data_ = std::string(stringView);
-    }
+    StringSymbol(std::string_view stringView) noexcept;
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    StringSymbol(std::string string) noexcept : StringSymbol() { // NOLINT(*-explicit-constructor)
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("StringSymbol(string = " + toStringAny(string) + ")");
-        }
-
-        data_ = std::move(string);
-    }
+    StringSymbol(std::string string) noexcept;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -108,24 +86,13 @@ struct DXFCPP_EXPORT StringSymbol final {
      *
      * @return a string representation
      */
-    std::string toString() const { // NOLINT(*-use-nodiscard)
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            return "StringSymbol{" + data_ + "}";
-        } else {
-            return data_;
-        }
-    }
+    std::string toString() const;
 
     const std::string &getData() const; // NOLINT(*-use-nodiscard)
 
-    bool operator==(const StringSymbol &stringSymbol) const {
-        return getData() == stringSymbol.getData();
-    }
+    bool operator==(const StringSymbol &stringSymbol) const;
 
-    bool operator<(const StringSymbol &stringSymbol) const {
-        return getData() < stringSymbol.getData();
-    }
+    bool operator<(const StringSymbol &stringSymbol) const;
 };
 
 /**
@@ -140,11 +107,11 @@ concept ConvertibleToStringSymbol =
 inline namespace literals {
 
 /**
- * String literal that helps to construct StringSymbol from a char array.
+ * String literal that helps to construct StringSymbol from the char array.
  *
  * @param string The char array
  * @param length Tha char array's length
- * @return Wrapped string view built on char array
+ * @return Wrapped string view built on the char array
  */
 inline StringSymbol operator""_s(const char *string, size_t length) noexcept {
     return {std::string_view{string, length}};

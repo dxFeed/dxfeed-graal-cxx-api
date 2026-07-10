@@ -8,7 +8,6 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../event/EventMapper.hpp"
-#include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "./DXFeedSubscription.hpp"
 
@@ -189,9 +188,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      *
      * @param event The event to publish.
      */
-    void publishEvents(std::shared_ptr<EventType> event) noexcept {
-        publishEvents({event});
-    }
+    void publishEvents(std::shared_ptr<EventType> event) noexcept;
 
     /**
      * Publishes events to the corresponding feed.
@@ -202,6 +199,7 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      */
     template <typename EventIt> void publishEvents(EventIt begin, EventIt end) {
         if constexpr (Debugger::isDebug) {
+            // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(toString() + "::publishEvents(events = " + elementsToString(begin, end) + ")");
         }
 

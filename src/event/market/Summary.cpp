@@ -77,19 +77,6 @@ std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) {
     return summary;
 }
 
-std::string Summary::toString() const {
-    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
-                       "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
-                       "prevDayVolume={}, openInterest={}}}",
-                       MarketEvent::getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-                       day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
-                       dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()),
-                       dxfcpp::toString(getDayClosePrice()), getDayClosePriceType().toString(),
-                       day_util::getYearMonthDayByDayId(getPrevDayId()), dxfcpp::toString(getPrevDayClosePrice()),
-                       getPrevDayClosePriceType().toString(), dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
-}
-
 void *Summary::toGraal() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -130,6 +117,110 @@ void Summary::assign(std::shared_ptr<EventType> event) {
 }
 
 Summary::Summary() noexcept {
+}
+
+Summary::Summary(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+}
+
+std::int32_t Summary::getDayId() const noexcept {
+    return data_.dayId;
+}
+
+void Summary::setDayId(std::int32_t dayId) noexcept {
+    data_.dayId = dayId;
+}
+
+double Summary::getDayOpenPrice() const noexcept {
+    return data_.dayOpenPrice;
+}
+
+void Summary::setDayOpenPrice(double dayOpenPrice) noexcept {
+    data_.dayOpenPrice = dayOpenPrice;
+}
+
+double Summary::getDayHighPrice() const noexcept {
+    return data_.dayHighPrice;
+}
+
+void Summary::setDayHighPrice(double dayHighPrice) noexcept {
+    data_.dayHighPrice = dayHighPrice;
+}
+
+double Summary::getDayLowPrice() const noexcept {
+    return data_.dayLowPrice;
+}
+
+void Summary::setDayLowPrice(double dayLowPrice) noexcept {
+    data_.dayLowPrice = dayLowPrice;
+}
+
+double Summary::getDayClosePrice() const noexcept {
+    return data_.dayClosePrice;
+}
+
+void Summary::setDayClosePrice(double dayClosePrice) noexcept {
+    data_.dayClosePrice = dayClosePrice;
+}
+
+const PriceType &Summary::getDayClosePriceType() const & noexcept {
+    return PriceType::valueOf(getBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT));
+}
+
+void Summary::setDayClosePriceType(const PriceType &type) noexcept {
+    data_.flags = setBits(data_.flags, DAY_CLOSE_PRICE_TYPE_MASK, DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
+}
+
+std::int32_t Summary::getPrevDayId() const noexcept {
+    return data_.prevDayId;
+}
+
+void Summary::setPrevDayId(std::int32_t prevDayId) noexcept {
+    data_.prevDayId = prevDayId;
+}
+
+double Summary::getPrevDayClosePrice() const noexcept {
+    return data_.prevDayClosePrice;
+}
+
+void Summary::setPrevDayClosePrice(double prevDayClosePrice) noexcept {
+    data_.prevDayClosePrice = prevDayClosePrice;
+}
+
+const PriceType &Summary::getPrevDayClosePriceType() const & noexcept {
+    return PriceType::valueOf(getBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK, PREV_DAY_CLOSE_PRICE_TYPE_SHIFT));
+}
+
+void Summary::setPrevDayClosePriceType(const PriceType &type) noexcept {
+    data_.flags = setBits(data_.flags, PREV_DAY_CLOSE_PRICE_TYPE_MASK, PREV_DAY_CLOSE_PRICE_TYPE_SHIFT, type.getCode());
+}
+
+double Summary::getPrevDayVolume() const noexcept {
+    return data_.prevDayVolume;
+}
+
+void Summary::setPrevDayVolume(double prevDayVolume) noexcept {
+    data_.prevDayVolume = prevDayVolume;
+}
+
+std::int64_t Summary::getOpenInterest() const noexcept {
+    return data_.openInterest;
+}
+
+void Summary::setOpenInterest(std::int64_t openInterest) noexcept {
+    data_.openInterest = openInterest;
+}
+
+std::string Summary::toString() const {
+    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
+                       "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
+                       "prevDayVolume={}, openInterest={}}}",
+                       MarketEvent::getEventSymbol(),
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+                       day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
+                       dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()),
+                       dxfcpp::toString(getDayClosePrice()), getDayClosePriceType().toString(),
+                       day_util::getYearMonthDayByDayId(getPrevDayId()), dxfcpp::toString(getPrevDayClosePrice()),
+                       getPrevDayClosePriceType().toString(), dxfcpp::toString(getPrevDayVolume()), getOpenInterest());
 }
 
 DXFCPP_END_NAMESPACE

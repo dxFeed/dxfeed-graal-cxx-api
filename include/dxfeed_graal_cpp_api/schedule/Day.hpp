@@ -299,9 +299,7 @@ struct DXFCPP_EXPORT Day {
      * @param other Another object
      * @return `true` if this object is equal to `other` object
      */
-    bool operator==(const Day::Ptr &other) const {
-        return *this == *other;
-    }
+    bool operator==(const Day::Ptr &other) const;
 
     /**
      * @return A hash code value for this object.

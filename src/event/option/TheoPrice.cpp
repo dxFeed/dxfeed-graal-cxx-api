@@ -74,16 +74,6 @@ std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) {
     return theoPrice;
 }
 
-std::string TheoPrice::toString() const {
-    return fmt::format(
-        "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
-        "delta={}, gamma={}, dividend={}, interest={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
-        dxfcpp::toString(getPrice()), dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getDelta()),
-        dxfcpp::toString(getGamma()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
-}
-
 void *TheoPrice::toGraal() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -127,6 +117,51 @@ void TheoPrice::assign(std::shared_ptr<EventType> event) {
 TheoPrice::TheoPrice() noexcept {
 }
 
+TheoPrice::TheoPrice(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+}
+
+const IndexedEventSource &TheoPrice::getSource() const & noexcept {
+    return IndexedEventSource::DEFAULT;
+}
+
+std::int32_t TheoPrice::getEventFlags() const noexcept {
+    return data_.eventFlags;
+}
+
+EventFlagsMask TheoPrice::getEventFlagsMask() const noexcept {
+    return EventFlagsMask(data_.eventFlags);
+}
+
+void TheoPrice::setEventFlags(std::int32_t eventFlags) noexcept {
+    data_.eventFlags = eventFlags;
+}
+
+void TheoPrice::setEventFlags(const EventFlagsMask &eventFlags) noexcept {
+    data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
+}
+
+std::int64_t TheoPrice::getIndex() const noexcept {
+    return data_.index;
+}
+
+void TheoPrice::setIndex(std::int64_t index) {
+    data_.index = index;
+}
+
+std::int64_t TheoPrice::getTime() const noexcept {
+    return sar(data_.index, SECONDS_SHIFT) * 1000 + andOp(sar(data_.index, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
+}
+
+void TheoPrice::setTime(std::int64_t time) noexcept {
+    data_.index = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
+                            sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
+                       getSequence());
+}
+
+std::int32_t TheoPrice::getSequence() const noexcept {
+    return static_cast<std::int32_t>(andOp(data_.index, MAX_SEQUENCE));
+}
+
 void TheoPrice::setSequence(std::int32_t sequence) {
     assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
 
@@ -135,6 +170,64 @@ void TheoPrice::setSequence(std::int32_t sequence) {
     }
 
     data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
+}
+
+double TheoPrice::getPrice() const noexcept {
+    return data_.price;
+}
+
+void TheoPrice::setPrice(double price) noexcept {
+    data_.price = price;
+}
+
+double TheoPrice::getUnderlyingPrice() const noexcept {
+    return data_.underlyingPrice;
+}
+
+void TheoPrice::setUnderlyingPrice(double underlyingPrice) noexcept {
+    data_.underlyingPrice = underlyingPrice;
+}
+
+double TheoPrice::getDelta() const noexcept {
+    return data_.delta;
+}
+
+void TheoPrice::setDelta(double delta) noexcept {
+    data_.delta = delta;
+}
+
+double TheoPrice::getGamma() const noexcept {
+    return data_.gamma;
+}
+
+void TheoPrice::setGamma(double gamma) noexcept {
+    data_.gamma = gamma;
+}
+
+double TheoPrice::getDividend() const noexcept {
+    return data_.dividend;
+}
+
+void TheoPrice::setDividend(double dividend) noexcept {
+    data_.dividend = dividend;
+}
+
+double TheoPrice::getInterest() const noexcept {
+    return data_.interest;
+}
+
+void TheoPrice::setInterest(double interest) noexcept {
+    data_.interest = interest;
+}
+
+std::string TheoPrice::toString() const {
+    return fmt::format(
+        "TheoPrice{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, underlyingPrice={}, "
+        "delta={}, gamma={}, dividend={}, interest={}}}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
+        dxfcpp::toString(getPrice()), dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getDelta()),
+        dxfcpp::toString(getGamma()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));
 }
 
 DXFCPP_END_NAMESPACE

@@ -13,7 +13,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../IndexedEventSource.hpp"
 #include "../market/MarketEvent.hpp"
 
-#include <cassert>
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -33,7 +32,7 @@ struct EventMapper;
  * It represents the most recent information that is available about the corresponding values on
  * the market at any given moment of time.
  *
- * <p>Series is an IndexedEvent with multiple instances of event available for
+ * <p>Series is an IndexedEvent with multiple instances of an event available for
  * each underlying symbol. Each series event instance corresponds to an OptionSeries
  * of the corresponding underlying. The correspondence between a series event instance and
  * an OptionSeries is established via @ref Series::getExpiration() "expiration" property.
@@ -147,8 +146,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Series(const StringLike & eventSymbol) noexcept : MarketEvent(eventSymbol) {
-    }
+    explicit Series(const StringLike & eventSymbol) noexcept;
 
     /**
      * Changes an event's symbol and returns the current series.
@@ -156,11 +154,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current series.
      */
-    Series &withEventSymbol(const StringLike &eventSymbol) noexcept {
-        MarketEvent::setEventSymbol(eventSymbol);
-
-        return *this;
-    }
+    Series &withEventSymbol(const StringLike &eventSymbol) noexcept;
 
     /**
      * Changes event's creation time and returns the current series.
@@ -169,11 +163,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * midnight, January 1, 1970 UTC.
      * @return The current series.
      */
-    Series &withEventTime(std::int64_t eventTime) noexcept {
-        MarketEvent::setEventTime(eventTime);
-
-        return *this;
-    }
+    Series &withEventTime(std::int64_t eventTime) noexcept;
 
     ///
     const IndexedEventSource &getSource() const & noexcept override {
@@ -181,24 +171,16 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     }
 
     ///
-    std::int32_t getEventFlags() const noexcept override {
-        return data_.eventFlags;
-    }
+    std::int32_t getEventFlags() const noexcept override;
 
     ///
-    EventFlagsMask getEventFlagsMask() const noexcept override {
-        return EventFlagsMask(data_.eventFlags);
-    }
+    EventFlagsMask getEventFlagsMask() const noexcept override;
 
     ///
-    void setEventFlags(std::int32_t eventFlags) noexcept override {
-        data_.eventFlags = eventFlags;
-    }
+    void setEventFlags(std::int32_t eventFlags) noexcept override;
 
     ///
-    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override {
-        data_.eventFlags = static_cast<std::int32_t>(eventFlags.getMask());
-    }
+    void setEventFlags(const EventFlagsMask &eventFlags) noexcept override;
 
     /**
      * Changes transactional event flags and returns the current series.
@@ -207,11 +189,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param eventFlags transactional event flags.
      * @return The current series.
      */
-    Series &withEventFlags(std::int32_t eventFlags) noexcept {
-        Series::setEventFlags(eventFlags);
-
-        return *this;
-    }
+    Series &withEventFlags(std::int32_t eventFlags) noexcept;
 
     /**
      * Changes transactional event flags and returns the current series.
@@ -220,11 +198,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param eventFlags transactional event flags' mask.
      * @return The current series.
      */
-    Series &withEventFlags(const EventFlagsMask &eventFlags) noexcept {
-        Series::setEventFlags(eventFlags);
-
-        return *this;
-    }
+    Series &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
 
     /**
      * Returns a unique per-symbol index of this event.
@@ -233,9 +207,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @return unique index of this event.
      */
-    std::int64_t getIndex() const noexcept override {
-        return data_.index;
-    }
+    std::int64_t getIndex() const noexcept override;
 
     /**
      * Changes the unique per-symbol index of this event.
@@ -243,9 +215,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param index the event index.
      * @see Series::getIndex()
      */
-    void setIndex(std::int64_t index) override {
-        data_.index = index;
-    }
+    void setIndex(std::int64_t index) override;
 
     /**
      * Changes the unique per-symbol index of this series and returns it.
@@ -253,20 +223,14 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param index unique per-symbol index of this series.
      * @return The current series.
      */
-    Series &withIndex(std::int64_t index) noexcept {
-        Series::setIndex(index);
-
-        return *this;
-    }
+    Series &withIndex(std::int64_t index) noexcept;
 
     /**
      * Returns time and sequence of this event packaged into a single long value.
      *
      * @return time and sequence of this event.
      */
-    std::int64_t getTimeSequence() const noexcept {
-        return data_.timeSequence;
-    }
+    std::int64_t getTimeSequence() const noexcept;
 
     /**
      * Changes time and sequence of this event.
@@ -276,9 +240,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param timeSequence the time and sequence.
      * @see ::getTimeSequence()
      */
-    void setTimeSequence(std::int64_t timeSequence) noexcept {
-        data_.timeSequence = timeSequence;
-    }
+    void setTimeSequence(std::int64_t timeSequence) noexcept;
 
     /**
      * Returns time of this series event.
@@ -286,10 +248,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @return time of this series event.
      */
-    std::int64_t getTime() const noexcept {
-        return sar(data_.timeSequence, SECONDS_SHIFT) * 1000 +
-               andOp(sar(data_.timeSequence, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
-    }
+    std::int64_t getTime() const noexcept;
 
     /**
      * Changes time of this series event.
@@ -297,12 +256,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @param time time of this series event.
      */
-    void setTime(std::int64_t time) noexcept {
-        data_.timeSequence =
-            orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
-                      sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
-                 getSequence());
-    }
+    void setTime(std::int64_t time) noexcept;
 
     /**
      * Changes time of this series and returns it.
@@ -311,11 +265,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param time time of this series.
      * @return The current series.
      */
-    Series &withTime(std::int64_t time) noexcept {
-        setTime(time);
-
-        return *this;
-    }
+    Series &withTime(std::int64_t time) noexcept;
 
     /**
      * Returns sequence number of this series event to distinguish trades that have the same
@@ -324,9 +274,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @return sequence of this series event.
      */
-    std::int32_t getSequence() const noexcept {
-        return static_cast<std::int32_t>(andOp(data_.timeSequence, MAX_SEQUENCE));
-    }
+    std::int32_t getSequence() const noexcept;
 
     /**
      * Changes @ref Series::getSequence() "sequence number" of this series event.
@@ -345,11 +293,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @return The current series.
      * @see Series::getSequence()
      */
-    Series &withSequence(std::int32_t sequence) noexcept {
-        setSequence(sequence);
-
-        return *this;
-    }
+    Series &withSequence(std::int32_t sequence) noexcept;
 
     /**
      * Returns day id of expiration.
@@ -358,9 +302,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @return day id of expiration.
      */
-    std::int32_t getExpiration() const noexcept {
-        return data_.expiration;
-    }
+    std::int32_t getExpiration() const noexcept;
 
     /**
      * Changes day id of expiration.
@@ -368,152 +310,112 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @param expiration The day id of expiration.
      */
-    void setExpiration(std::int32_t expiration) noexcept {
-        data_.expiration = expiration;
-    }
+    void setExpiration(std::int32_t expiration) noexcept;
 
     /**
      * Returns implied volatility index for this series based on VIX methodology.
      *
      * @return implied volatility index for this series based on VIX methodology.
      */
-    double getVolatility() const noexcept {
-        return data_.volatility;
-    }
+    double getVolatility() const noexcept;
 
     /**
      * Changes implied volatility index for this series based on VIX methodology.
      *
      * @param volatility implied volatility index for this series based on VIX methodology.
      */
-    void setVolatility(double volatility) noexcept {
-        data_.volatility = volatility;
-    }
+    void setVolatility(double volatility) noexcept;
 
     /**
      * Returns call options traded volume for a day.
      *
      * @return call options traded volume for a day.
      */
-    double getCallVolume() const noexcept {
-        return data_.callVolume;
-    }
+    double getCallVolume() const noexcept;
 
     /**
      * Changes call options traded volume for a day.
      *
      * @param callVolume call options traded volume for a day.
      */
-    void setCallVolume(double callVolume) noexcept {
-        data_.callVolume = callVolume;
-    }
+    void setCallVolume(double callVolume) noexcept;
 
     /**
      * Returns put options traded volume for a day.
      *
      * @return put options traded volume for a day.
      */
-    double getPutVolume() const noexcept {
-        return data_.putVolume;
-    }
+    double getPutVolume() const noexcept;
 
     /**
      * Changes put options traded volume for a day.
      *
      * @param putVolume put options traded volume for a day.
      */
-    void setPutVolume(double putVolume) noexcept {
-        data_.putVolume = putVolume;
-    }
+    void setPutVolume(double putVolume) noexcept;
 
     /**
      * Returns options traded volume for a day.
      *
      * @return options traded volume for a day.
      */
-    double getOptionVolume() const noexcept {
-        if (std::isnan(data_.putVolume)) {
-            return data_.callVolume;
-        }
-
-        if (std::isnan(data_.callVolume)) {
-            return data_.putVolume;
-        }
-
-        return data_.putVolume + data_.callVolume;
-    }
+    double getOptionVolume() const noexcept;
 
     /**
      * Returns ratio of put options traded volume to call options traded volume for a day.
      *
      * @return ratio of put options traded volume to call options traded volume for a day.
      */
-    double getPutCallRatio() const noexcept {
-        return data_.putCallRatio;
-    }
+    double getPutCallRatio() const noexcept;
 
     /**
      * Changes ratio of put options traded volume to call options traded volume for a day.
      *
      * @param putCallRatio ratio of put options traded volume to call options traded volume for a day.
      */
-    void setPutCallRatio(double putCallRatio) noexcept {
-        data_.putCallRatio = putCallRatio;
-    }
+    void setPutCallRatio(double putCallRatio) noexcept;
 
     /**
      * Returns implied forward price for this option series.
      *
      * @return implied forward price for this option series.
      */
-    double getForwardPrice() const noexcept {
-        return data_.forwardPrice;
-    }
+    double getForwardPrice() const noexcept;
 
     /**
      * Changes implied forward price for this option series.
      *
      * @param forwardPrice implied forward price for this option series.
      */
-    void setForwardPrice(double forwardPrice) noexcept {
-        data_.forwardPrice = forwardPrice;
-    }
+    void setForwardPrice(double forwardPrice) noexcept;
 
     /**
      * Returns implied simple dividend return of the corresponding option series.
      *
      * @return implied simple dividend return of the corresponding option series.
      */
-    double getDividend() const noexcept {
-        return data_.dividend;
-    }
+    double getDividend() const noexcept;
 
     /**
      * Changes implied simple dividend return of the corresponding option series.
      *
      * @param dividend implied simple dividend return of the corresponding option series.
      */
-    void setDividend(double dividend) noexcept {
-        data_.dividend = dividend;
-    }
+    void setDividend(double dividend) noexcept;
 
     /**
      * Returns implied simple interest return of the corresponding option series.
      *
      * @return implied simple interest return of the corresponding option series.
      */
-    double getInterest() const noexcept {
-        return data_.interest;
-    }
+    double getInterest() const noexcept;
 
     /**
      * Changes implied simple interest return of the corresponding option series.
      *
      * @param interest implied simple interest return of the corresponding option series.
      */
-    void setInterest(double interest) noexcept {
-        data_.interest = interest;
-    }
+    void setInterest(double interest) noexcept;
 
     /**
      * Returns a string representation of the current object.

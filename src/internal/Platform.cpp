@@ -99,6 +99,10 @@ std::string getOSArchitecture() noexcept {
 #endif
 }
 
+std::size_t Platform::getLogicalCoresCount() noexcept {
+    return std::thread::hardware_concurrency();
+}
+
 std::string Platform::getPlatformInfo() noexcept {
     const auto cores = getLogicalCoresCount();
 

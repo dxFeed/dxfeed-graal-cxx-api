@@ -21,6 +21,10 @@ TimePeriod TimePeriod::valueOf(std::int64_t value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
 }
 
+TimePeriod TimePeriod::valueOf(std::chrono::milliseconds value) {
+    return valueOf(value.count());
+}
+
 TimePeriod TimePeriod::valueOf(const StringLike &value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
 }
