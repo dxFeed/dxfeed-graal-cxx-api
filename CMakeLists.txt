@@ -69,8 +69,8 @@ option(DXFCXX_NODEFAULTLIB "Ignore libcmt/libcmtd/msvcrt/msvcrtd. Use if DXFCXX_
 
 option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
-option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/" CACHE STRING "")
+option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_GITHUB "" ON)
+set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/download/" CACHE STRING "")
 option(DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK "" OFF)
 
 option(DXFCXX_USE_DXFG_STUB "Use dxFeed Graal SDK stub" OFF)
@@ -137,8 +137,8 @@ else ()
                         DOWNLOAD_NO_EXTRACT FALSE
                 )
             else ()
-                if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_JFROG)
-                    set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+                if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_GITHUB)
+                    set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}v${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
                 endif ()
 
                 if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")

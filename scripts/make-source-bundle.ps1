@@ -43,7 +43,7 @@ else
     Copy-Item -Path "$thisDir/../*.txt" -Force -Destination "$bundlePath"
     Copy-Item -Path "$thisDir/../LICENSE" -Force -Destination "$bundlePath"
     Copy-Item -Path "$thisDir/../.clang-format" -Force -Destination "$bundlePath"
-    Invoke-WebRequest -Uri "https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/${graalNativeSdkVer}/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -OutFile "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip"
+    Invoke-WebRequest -Uri "https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/download/v${graalNativeSdkVer}/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -OutFile "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip"
     Expand-Archive -Path "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -Force -DestinationPath "$bundlePath/third_party/graal-native-sdk-${graalNativeSdkVer}-amd64-windows"
-    Compress-Archive -Path "$bundlePath" -DestinationPath "$buildBundleDir/$bundleName.zip"
+    Compress-Archive -Force -Path "$bundlePath" -DestinationPath "$buildBundleDir/$bundleName.zip"
 }
