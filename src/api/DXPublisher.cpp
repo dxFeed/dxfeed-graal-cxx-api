@@ -43,7 +43,7 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
 }
 
 
-void DXPublisher::publishEvents(std::shared_ptr<EventType> event) noexcept {
+void DXPublisher::publishEvents(std::shared_ptr<EventType> event) const {
     publishEvents({event});
 }
 
@@ -66,7 +66,7 @@ std::string DXPublisher::toString() const {
     return std::string("DXPublisher{") + handle_.toString() + "}";
 }
 
-void DXPublisher::publishEventsImpl(void *graalEventsList) const noexcept {
+void DXPublisher::publishEventsImpl(void *graalEventsList) const {
     std::lock_guard guard{mutex_};
 
     isolated::api::IsolatedDXPublisher::publishEvents(handle_, graalEventsList);

@@ -1,4 +1,5 @@
 * **\[MDAPI-417]** **\[BREAKING]** All methods of the `Order` class and its descendants whose names begin with "with" are made virtual.
+* **\[MDAPI-416]** **\[BREAKING]** All "publish" methods of the `DXPublisher` class are now const and can throw exceptions.
 * The project now depends on the zip bundles of the dxFeed Graal Native SDK library, which are located in GitHub Releases.
 * **\[BREAKING]** Project build speed has been improved. The implementation of all non-template methods of non-template classes is now located in .cpp files.
 * Improved documentation. Classes are now divided into "modules". `Main Page - Topics - dxFeed Graal C++ API Modules.`
