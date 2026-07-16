@@ -1,3 +1,5 @@
+## v7.0.0
+
 * **\[MDAPI-417]** **\[BREAKING]** All methods of the `Order` class and its descendants whose names begin with "with" are made virtual.
 * **\[MDAPI-416]** **\[BREAKING]** All "publish" methods of the `DXPublisher` class are now const and can throw exceptions.
 * The project now depends on the zip bundles of the dxFeed Graal Native SDK library, which are located in GitHub Releases.
