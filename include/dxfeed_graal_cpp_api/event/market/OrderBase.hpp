@@ -10,7 +10,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Common.hpp"
 #include "../IndexedEvent.hpp"
-#include "../IndexedEventSource.hpp"
 #include "./MarketEvent.hpp"
 #include "./OrderAction.hpp"
 #include "./OrderSource.hpp"
@@ -31,7 +30,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct EventMapper;
 
 /**
- * Base class for common fields of Order, AnalyticOrder and SpreadOrder events.
+ * Base class for common fields of Order, AnalyticOrder, and SpreadOrder events.
  * Order events represent a snapshot of a full available market depth for a symbol.
  * The collection of order events of a symbol represents the most recent information that is
  * available about orders on the market at any given moment of time.
@@ -52,7 +51,7 @@ struct EventMapper;
  * for the corresponding index.
  * The method @ref OrderBase::hasSize() "hasSize" is a convenient method to test for size presence.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="eventFlagsSection">Event flags, transactions, and snapshots.</a></h3>
  *
  * Some order event sources provide a consistent view of the price-level or detailed order book. Their updates
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
@@ -63,7 +62,7 @@ struct EventMapper;
  * OrderBase::getIndex() "index". It occupies the highest bits of the @ref OrderBase::getIndex() "index" (index is
  * not-negative). The lowest bits of
  * @ref OrderBase::getIndex() "index" contain source-specific event index which is always zero in
- * an event that is marked with EventFlag::SNAPSHOT_END bit in @ref OrderBase::getEventFlags() "eventFlags".
+ * an event that is marked with a EventFlag::SNAPSHOT_END bit in @ref OrderBase::getEventFlags() "eventFlags".
  *
  * <p> Note that for an order with EventFlag::REMOVE_EVENT bit in @ref OrderBase::getEventFlags() "eventFlags"
  * it is always the case that @ref #getSize() "size" is either `0` or `NaN`,
@@ -247,7 +246,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns time of this order.
-     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+     * Time is measured in milliseconds between the current time and midnight, January 1, 1970, UTC.
      *
      * @return time of this order.
      */
@@ -255,7 +254,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes time of this order.
-     * Time is measured in milliseconds between the current time and midnight, January 1, 1970 UTC.
+     * Time is measured in milliseconds between the current time and midnight, January 1, 1970, UTC.
      *
      * @param time time of this order.
      */
@@ -296,7 +295,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns time of this order in nanoseconds.
-     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970, UTC.
      *
      * @return time of this order in nanoseconds
      */
@@ -304,7 +303,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes time of this order.
-     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970 UTC.
+     * Time is measured in nanoseconds between the current time and midnight, January 1, 1970, UTC.
      *
      * @param timeNanos time of this order in nanoseconds.
      */
@@ -359,10 +358,10 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     /**
      * Returns auxiliary order ID if available:
      * <ul>
-     * <li>in OrderAction::NEW - ID of the order replaced by this new order</li>
-     * <li>in OrderAction::DELETE - ID of the order that replaces this deleted order</li>
-     * <li>in OrderAction::PARTIAL - ID of the aggressor order</li>
-     * <li>in OrderAction::EXECUTE - ID of the aggressor order</li>
+     * <li>In OrderAction::NEW - ID of the order replaced by this new order.</li>
+     * <li>In OrderAction::DELETE - ID of the order that replaces this deleted order.</li>
+     * <li>In OrderAction::PARTIAL - ID of the aggressor order.</li>
+     * <li>In OrderAction::EXECUTE - ID of the aggressor order.</li>
      * </ul>
      * <p>This field is a part of the FOB support.
      *

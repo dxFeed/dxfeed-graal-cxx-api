@@ -36,9 +36,8 @@ struct EventMapper;
  * <p>
  * For more information about original fields, QAP, Quote Flags and Extended Quote Flags,
  * see <a href="https://downloads.dxfeed.com/specifications/OTC_Markets_Multicast_Data_Feeds.pdf">OTC Markets Multicast
- * Data Feed</a>. <p> For more information about display requirements, see <a
- * href="https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf">OTC Markets Display
- * Requirements</a>.
+ * Data Feed</a>.
+ * <p> For more information about display requirements, see <a href="https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf">OTC Markets Display Requirements</a>.
  *
  * <p> Like regular orders, OTC Markets order events arrive from multiple sources for the same market symbol and are
  * distinguished by their @ref ::getIndex "index".
@@ -209,7 +208,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * midnight, January 1, 1970 UTC.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withEventTime(std::int64_t eventTime) noexcept;
+    OtcMarketsOrder &withEventTime(std::int64_t eventTime) noexcept override;
 
     // OrderBase methods
 
@@ -220,7 +219,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param source source of this event.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withSource(const OrderSource &source) noexcept;
+    OtcMarketsOrder &withSource(const OrderSource &source) noexcept override;
 
     /**
      * Changes transactional event flags and returns the current OTC Markets order.
@@ -229,7 +228,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param eventFlags transactional event flags.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withEventFlags(std::int32_t eventFlags) noexcept;
+    OtcMarketsOrder &withEventFlags(std::int32_t eventFlags) noexcept override;
 
     /**
      * Changes transactional event flags and returns the current OTC Markets order.
@@ -238,7 +237,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param eventFlags transactional event flags' mask.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
+    OtcMarketsOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept override;
 
     /**
      * Changes unique per-symbol index of this OTC Markets order and returns it. Note, that this method also changes
@@ -248,7 +247,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param index unique per-symbol index of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withIndex(std::int64_t index) noexcept;
+    OtcMarketsOrder &withIndex(std::int64_t index) noexcept override;
 
     /**
      * Changes time of this OTC Markets order and returns it.
@@ -257,7 +256,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param time time of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withTime(std::int64_t time) noexcept;
+    OtcMarketsOrder &withTime(std::int64_t time) noexcept override;
 
     /**
      * Changes microseconds and nanoseconds time part of this OTC Markets order.
@@ -266,7 +265,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param timeNanoPart microseconds and nanoseconds time part of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept;
+    OtcMarketsOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept override;
 
     /**
      * Changes @ref OrderBase::getSequence() "sequence number" of this OTC Markets order.
@@ -276,7 +275,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @return The current OTC Markets order.
      * @see OrderBase::getSequence()
      */
-    OtcMarketsOrder &withSequence(std::int32_t sequence) noexcept;
+    OtcMarketsOrder &withSequence(std::int32_t sequence) noexcept override;
 
     /**
      * Changes time of this OTC Markets order and returns it.
@@ -285,15 +284,15 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param timeNanos The time of this OTC Markets order in nanoseconds.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withTimeNanos(std::int64_t timeNanos) noexcept;
+    OtcMarketsOrder &withTimeNanos(std::int64_t timeNanos) noexcept override;
 
     /**
-     * Changes action of this OTC Markets order and returns it.
+     * Changes an action of this OTC Markets order and returns it.
      *
      * @param action The side of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withAction(const OrderAction &action) noexcept;
+    OtcMarketsOrder &withAction(const OrderAction &action) noexcept override;
 
     /**
      * Changes time of the last action and returns current OTC Markets order.
@@ -301,7 +300,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param actionTime The last order action time.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withActionTime(std::int64_t actionTime) noexcept;
+    OtcMarketsOrder &withActionTime(std::int64_t actionTime) noexcept override;
 
     /**
      * Changes order ID.
@@ -310,7 +309,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param orderId The order ID.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withOrderId(std::int64_t orderId) noexcept;
+    OtcMarketsOrder &withOrderId(std::int64_t orderId) noexcept override;
 
     /**
      * Changes auxiliary order ID.
@@ -319,7 +318,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param auxOrderId The auxiliary order ID.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept;
+    OtcMarketsOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept override;
 
     /**
      * Changes price of this OTC Markets order.
@@ -328,7 +327,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param price The price of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withPrice(double price) noexcept;
+    OtcMarketsOrder &withPrice(double price) noexcept override;
 
     /**
      * Changes size of this OTC Markets order.
@@ -337,7 +336,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param size The size of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withSize(double size) noexcept;
+    OtcMarketsOrder &withSize(double size) noexcept override;
 
     /**
      * Changes executed size of this OTC Markets order.
@@ -346,16 +345,16 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param executedSize The executed size of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withExecutedSize(double executedSize) noexcept;
+    OtcMarketsOrder &withExecutedSize(double executedSize) noexcept override;
 
     /**
-     * Changes number of individual orders in this aggregate order.
+     * Changes a number of individual orders in this aggregate order.
      * Returns the current OTC Markets order.
      *
      * @param count The number of individual orders in this aggregate order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withCount(std::int64_t count) noexcept;
+    OtcMarketsOrder &withCount(std::int64_t count) noexcept override;
 
     /**
      * Changes trade ID.
@@ -364,7 +363,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param tradeId The trade ID.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withTradeId(std::int64_t tradeId) noexcept;
+    OtcMarketsOrder &withTradeId(std::int64_t tradeId) noexcept override;
 
     /**
      * Changes trade price.
@@ -373,7 +372,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param tradePrice The trade price.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withTradePrice(double tradePrice) noexcept;
+    OtcMarketsOrder &withTradePrice(double tradePrice) noexcept override;
 
     /**
      * Changes trade size.
@@ -382,7 +381,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param tradeSize The trade size.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withTradeSize(double tradeSize) noexcept;
+    OtcMarketsOrder &withTradeSize(double tradeSize) noexcept override;
 
     /**
      * Changes exchange code of this OTC Markets order.
@@ -391,7 +390,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param exchangeCode The exchange code of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withExchangeCode(char exchangeCode) noexcept;
+    OtcMarketsOrder &withExchangeCode(char exchangeCode) noexcept override;
 
     /**
      * Changes exchange code of this OTC Markets order.
@@ -400,7 +399,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param exchangeCode The exchange code of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withExchangeCode(std::int16_t exchangeCode) noexcept;
+    OtcMarketsOrder &withExchangeCode(std::int16_t exchangeCode) noexcept override;
 
     /**
      * Changes side of this OTC Markets order.
@@ -409,7 +408,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param side The side of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withOrderSide(const Side &side) noexcept;
+    OtcMarketsOrder &withOrderSide(const Side &side) noexcept override;
 
     /**
      * Changes scope of this OTC Markets order.
@@ -418,7 +417,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param scope The scope of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withScope(const Scope &scope) noexcept;
+    OtcMarketsOrder &withScope(const Scope &scope) noexcept override;
 
     // Order methods
 
@@ -429,7 +428,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param marketMaker The market maker or another aggregate identifier of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withMarketMaker(const StringLike& marketMaker) noexcept;
+    OtcMarketsOrder &withMarketMaker(const StringLike& marketMaker) noexcept override;
 
     // OtcMarketsOrder methods
 

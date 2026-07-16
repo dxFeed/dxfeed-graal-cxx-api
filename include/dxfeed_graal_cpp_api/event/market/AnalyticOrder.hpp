@@ -143,7 +143,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * midnight, January 1, 1970 UTC.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventTime(std::int64_t eventTime) noexcept;
+    AnalyticOrder &withEventTime(std::int64_t eventTime) noexcept override;
 
     // OrderBase methods
 
@@ -154,7 +154,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param source source of this event.
      * @return The current analytic order.
      */
-    AnalyticOrder &withSource(const OrderSource &source) noexcept;
+    AnalyticOrder &withSource(const OrderSource &source) noexcept override;
 
     /**
      * Changes transactional event flags and returns the current analytic order.
@@ -163,7 +163,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param eventFlags transactional event flags.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventFlags(std::int32_t eventFlags) noexcept;
+    AnalyticOrder &withEventFlags(std::int32_t eventFlags) noexcept override;
 
     /**
      * Changes transactional event flags and returns the current analytic order.
@@ -172,7 +172,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param eventFlags transactional event flags' mask.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
+    AnalyticOrder &withEventFlags(const EventFlagsMask &eventFlags) noexcept override;
 
     /**
      * Changes the unique per-symbol index of this analytic order and returns it. Note that this method also changes
@@ -182,7 +182,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param index unique per-symbol index of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withIndex(std::int64_t index) noexcept;
+    AnalyticOrder &withIndex(std::int64_t index) noexcept override;
 
     /**
      * Changes time of this analytic order and returns it.
@@ -191,7 +191,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param time time of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTime(std::int64_t time) noexcept;
+    AnalyticOrder &withTime(std::int64_t time) noexcept override;
 
     /**
      * Changes microseconds and nanoseconds time part of this analytic order.
@@ -200,7 +200,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param timeNanoPart microseconds and nanoseconds time part of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept;
+    AnalyticOrder &withTimeNanoPart(std::int32_t timeNanoPart) noexcept override;
 
     /**
      * Changes @ref OrderBase::getSequence() "sequence number" of this analytic order.
@@ -210,7 +210,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @return The current analytic order.
      * @see OrderBase::getSequence()
      */
-    AnalyticOrder &withSequence(std::int32_t sequence) noexcept;
+    AnalyticOrder &withSequence(std::int32_t sequence) noexcept override;
 
     /**
      * Changes time of this analytic order and returns it.
@@ -219,7 +219,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param timeNanos The time of this analytic order in nanoseconds.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTimeNanos(std::int64_t timeNanos) noexcept;
+    AnalyticOrder &withTimeNanos(std::int64_t timeNanos) noexcept override;
 
     /**
      * Changes the action of this analytic order and returns it.
@@ -227,7 +227,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param action The side of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withAction(const OrderAction &action) noexcept;
+    AnalyticOrder &withAction(const OrderAction &action) noexcept override;
 
     /**
      * Changes time of the last action and returns the current analytic order.
@@ -235,7 +235,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param actionTime The last order action time.
      * @return The current analytic order.
      */
-    AnalyticOrder &withActionTime(std::int64_t actionTime) noexcept;
+    AnalyticOrder &withActionTime(std::int64_t actionTime) noexcept override;
 
     /**
      * Changes order ID.
@@ -244,7 +244,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param orderId The order ID.
      * @return The current analytic order.
      */
-    AnalyticOrder &withOrderId(std::int64_t orderId) noexcept;
+    AnalyticOrder &withOrderId(std::int64_t orderId) noexcept override;
 
     /**
      * Changes auxiliary order ID.
@@ -253,7 +253,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param auxOrderId The auxiliary order ID.
      * @return The current analytic order.
      */
-    AnalyticOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept;
+    AnalyticOrder &withAuxOrderId(std::int64_t auxOrderId) noexcept override;
 
     /**
      * Changes price of this analytic order.
@@ -262,7 +262,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param price The price of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withPrice(double price) noexcept;
+    AnalyticOrder &withPrice(double price) noexcept override;
 
     /**
      * Changes size of this analytic order.
@@ -271,7 +271,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param size The size of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withSize(double size) noexcept;
+    AnalyticOrder &withSize(double size) noexcept override;
 
     /**
      * Changes executed size of this analytic order.
@@ -280,7 +280,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param executedSize The executed size of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withExecutedSize(double executedSize) noexcept;
+    AnalyticOrder &withExecutedSize(double executedSize) noexcept override;
 
     /**
      * Changes the number of individual orders in this aggregate order.
@@ -289,7 +289,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param count The number of individual orders in this aggregate order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withCount(std::int64_t count) noexcept;
+    AnalyticOrder &withCount(std::int64_t count) noexcept override;
 
     /**
      * Changes trade ID.
@@ -298,7 +298,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param tradeId The trade ID.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTradeId(std::int64_t tradeId) noexcept;
+    AnalyticOrder &withTradeId(std::int64_t tradeId) noexcept override;
 
     /**
      * Changes trade price.
@@ -307,7 +307,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param tradePrice The trade price.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTradePrice(double tradePrice) noexcept;
+    AnalyticOrder &withTradePrice(double tradePrice) noexcept override;
 
     /**
      * Changes trade size.
@@ -316,7 +316,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param tradeSize The trade size.
      * @return The current analytic order.
      */
-    AnalyticOrder &withTradeSize(double tradeSize) noexcept;
+    AnalyticOrder &withTradeSize(double tradeSize) noexcept override;
 
     /**
      * Changes exchange code of this analytic order.
@@ -325,7 +325,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param exchangeCode The exchange code of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withExchangeCode(char exchangeCode) noexcept;
+    AnalyticOrder &withExchangeCode(char exchangeCode) noexcept override;
 
     /**
      * Changes exchange code of this analytic order.
@@ -334,7 +334,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param exchangeCode The exchange code of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) noexcept;
+    AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) noexcept override;
 
     /**
      * Changes side of this analytic order.
@@ -343,7 +343,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param side The side of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withOrderSide(const Side &side) noexcept;
+    AnalyticOrder &withOrderSide(const Side &side) noexcept override;
 
     /**
      * Changes the scope of this analytic order.
@@ -352,7 +352,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param scope The scope of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withScope(const Scope &scope) noexcept;
+    AnalyticOrder &withScope(const Scope &scope) noexcept override;
 
     // Order methods
 
@@ -363,7 +363,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param marketMaker The market maker or another aggregate identifier of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withMarketMaker(const StringLike &marketMaker) noexcept;
+    AnalyticOrder &withMarketMaker(const StringLike &marketMaker) noexcept override;
 
     // AnalyticOrder methods
 

@@ -175,7 +175,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * midnight, January 1, 1970 UTC.
      * @return The current order.
      */
-    Order &withEventTime(std::int64_t eventTime) noexcept;
+    virtual Order &withEventTime(std::int64_t eventTime) noexcept;
 
     // OrderBase methods
 
@@ -186,7 +186,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param source source of this event.
      * @return The current order.
      */
-    Order &withSource(const OrderSource &source) noexcept;
+    virtual Order &withSource(const OrderSource &source) noexcept;
 
     /**
      * Changes transactional event flags and returns the current order.
@@ -195,7 +195,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param eventFlags transactional event flags.
      * @return The current order.
      */
-    Order &withEventFlags(std::int32_t eventFlags) noexcept;
+    virtual Order &withEventFlags(std::int32_t eventFlags) noexcept;
 
     /**
      * Changes transactional event flags and returns the current order.
@@ -204,7 +204,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param eventFlags transactional event flags' mask.
      * @return The current order.
      */
-    Order &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
+    virtual Order &withEventFlags(const EventFlagsMask &eventFlags) noexcept;
 
     /**
      * Changes the unique per-symbol index of this order and returns it. Note that this method also changes
@@ -214,7 +214,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param index unique per-symbol index of this order.
      * @return The current order.
      */
-    Order &withIndex(std::int64_t index) noexcept;
+    virtual Order &withIndex(std::int64_t index) noexcept;
 
     /**
      * Changes time of this order and returns it.
@@ -223,7 +223,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param time time of this order.
      * @return The current order.
      */
-    Order &withTime(std::int64_t time) noexcept;
+    virtual Order &withTime(std::int64_t time) noexcept;
 
     /**
      * Changes microseconds and nanoseconds time part of this order.
@@ -232,7 +232,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param timeNanoPart microseconds and nanoseconds time part of this order.
      * @return The current order.
      */
-    Order &withTimeNanoPart(std::int32_t timeNanoPart) noexcept;
+    virtual Order &withTimeNanoPart(std::int32_t timeNanoPart) noexcept;
 
     /**
      * Changes @ref OrderBase::getSequence() "sequence number" of this order.
@@ -242,7 +242,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @return The current order.
      * @see OrderBase::getSequence()
      */
-    Order &withSequence(std::int32_t sequence) noexcept;
+    virtual Order &withSequence(std::int32_t sequence) noexcept;
 
     /**
      * Changes time of this order and returns it.
@@ -251,7 +251,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param timeNanos The time of this order in nanoseconds.
      * @return The current order.
      */
-    Order &withTimeNanos(std::int64_t timeNanos) noexcept;
+    virtual Order &withTimeNanos(std::int64_t timeNanos) noexcept;
 
     /**
      * Changes the action of this order and returns it.
@@ -259,7 +259,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param action The side of this order.
      * @return The current order.
      */
-    Order &withAction(const OrderAction &action) noexcept;
+    virtual Order &withAction(const OrderAction &action) noexcept;
 
     /**
      * Changes time of the last action and returns the current order.
@@ -267,7 +267,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param actionTime The last order action time.
      * @return The current order.
      */
-    Order &withActionTime(std::int64_t actionTime) noexcept;
+    virtual Order &withActionTime(std::int64_t actionTime) noexcept;
 
     /**
      * Changes order ID.
@@ -276,7 +276,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param orderId The order ID.
      * @return The current order.
      */
-    Order &withOrderId(std::int64_t orderId) noexcept;
+    virtual Order &withOrderId(std::int64_t orderId) noexcept;
 
     /**
      * Changes auxiliary order ID.
@@ -285,7 +285,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param auxOrderId The auxiliary order ID.
      * @return The current order.
      */
-    Order &withAuxOrderId(std::int64_t auxOrderId) noexcept;
+    virtual Order &withAuxOrderId(std::int64_t auxOrderId) noexcept;
 
     /**
      * Changes price of this order.
@@ -294,7 +294,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param price The price of this order.
      * @return The current order.
      */
-    Order &withPrice(double price) noexcept;
+    virtual Order &withPrice(double price) noexcept;
 
     /**
      * Changes size of this order.
@@ -303,7 +303,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param size The size of this order.
      * @return The current order.
      */
-    Order &withSize(double size) noexcept;
+    virtual Order &withSize(double size) noexcept;
 
     /**
      * Changes executed size of this order.
@@ -312,7 +312,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param executedSize The executed size of this order.
      * @return The current order.
      */
-    Order &withExecutedSize(double executedSize) noexcept;
+    virtual Order &withExecutedSize(double executedSize) noexcept;
 
     /**
      * Changes the number of individual orders in this aggregate order.
@@ -321,7 +321,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param count The number of individual orders in this aggregate order.
      * @return The current order.
      */
-    Order &withCount(std::int64_t count) noexcept;
+    virtual Order &withCount(std::int64_t count) noexcept;
 
     /**
      * Changes trade ID.
@@ -330,7 +330,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param tradeId The trade ID.
      * @return The current order.
      */
-    Order &withTradeId(std::int64_t tradeId) noexcept;
+    virtual Order &withTradeId(std::int64_t tradeId) noexcept;
 
     /**
      * Changes trade price.
@@ -339,7 +339,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param tradePrice The trade price.
      * @return The current order.
      */
-    Order &withTradePrice(double tradePrice) noexcept;
+    virtual Order &withTradePrice(double tradePrice) noexcept;
 
     /**
      * Changes trade size.
@@ -348,7 +348,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param tradeSize The trade size.
      * @return The current order.
      */
-    Order &withTradeSize(double tradeSize) noexcept;
+    virtual Order &withTradeSize(double tradeSize) noexcept;
 
     /**
      * Changes exchange code of this order.
@@ -357,7 +357,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param exchangeCode The exchange code of this order.
      * @return The current order.
      */
-    Order &withExchangeCode(char exchangeCode) noexcept;
+    virtual Order &withExchangeCode(char exchangeCode) noexcept;
 
     /**
      * Changes exchange code of this order.
@@ -366,7 +366,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param exchangeCode The exchange code of this order.
      * @return The current order.
      */
-    Order &withExchangeCode(std::int16_t exchangeCode) noexcept;
+    virtual Order &withExchangeCode(std::int16_t exchangeCode) noexcept;
 
     /**
      * Changes side of this order.
@@ -375,7 +375,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param side The side of this order.
      * @return The current order.
      */
-    Order &withOrderSide(const Side &side) noexcept;
+    virtual Order &withOrderSide(const Side &side) noexcept;
 
     /**
      * Changes scope of this order.
@@ -384,7 +384,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param scope The scope of this order.
      * @return The current order.
      */
-    Order &withScope(const Scope &scope) noexcept;
+    virtual Order &withScope(const Scope &scope) noexcept;
 
     // Order methods
 
@@ -419,7 +419,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param marketMaker The market maker or the other aggregate identifier of this order.
      * @return The current order.
      */
-    Order &withMarketMaker(const StringLike &marketMaker) noexcept;
+    virtual Order &withMarketMaker(const StringLike &marketMaker) noexcept;
 
     /**
      * Returns a string representation of the current object.
