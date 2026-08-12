@@ -260,13 +260,13 @@ int main() {
     System::setProperty("scheme", "ext:opt:sysprops,resource:dxlink.xml");
     
     // For token-based authorization, use the following address format:
-    // "dxlink:wss://demo.dxfeed.com/dxlink-ws[login=dxlink:token]"
+    // "dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws[login=dxlink:token]"
     auto endpoint = DXEndpoint::newBuilder()
-            ->withProperty("dxfeed.address", "dxlink:wss://demo.dxfeed.com/dxlink-ws")
+            ->withProperty("dxfeed.address", "dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws")
             ->build();
     
     // Another way to connect the endpoint.
-    // auto endpoint = DXEndpoint::create()->connect("dxlink:wss://demo.dxfeed.com/dxlink-ws");
+    // auto endpoint = DXEndpoint::create()->connect("dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws");
     
     auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
     
@@ -292,18 +292,18 @@ I 231130 154554.602 [main] QD - Using scheme com.dxfeed.api.impl.DXFeedScheme sl
 I 231130 154555.094 [main] MARS - Started time synchronization tracker using multicast 239.192.51.45:5145 with gixCx
 I 231130 154555.100 [main] MARS - Started JVM self-monitoring
 I 231130 154555.100 [main] QD - monitoring with collectors [Ticker, Stream, History]
-I 231130 154555.103 [main] QD - monitoring DXEndpoint with dxfeed.address=dxlink:wss://demo.dxfeed.com/dxlink-ws
-I 231130 154555.105 [main] DxLinkClientWebSocket-Distributor - Starting DxLinkClientWebSocketConnector to wss://demo.dxfeed.com/dxlink-ws
-I 231130 154555.107 [wss://demo.dxfeed.com/dxlink-ws-Writer] DxLinkClientWebSocket-Distributor - Connecting to wss://demo.dxfeed.com/dxlink-ws
-I 231130 154556.640 [wss://demo.dxfeed.com/dxlink-ws-Writer] DxLinkClientWebSocket-Distributor - Connected to wss://demo.dxfeed.com/dxlink-ws
-D 231130 154557.801 [oioEventLoopGroup-2-1] QD - Distributor received protocol descriptor [type=dxlink, version=0.1-0.18-20231017-133150, keepaliveTimeout=120, acceptKeepaliveTimeout=5] sending [] from wss://demo.dxfeed.com/dxlink-ws
-D 231130 154557.802 [oioEventLoopGroup-2-1] QD - Distributor received protocol descriptor [type=dxlink, version=0.1-0.18-20231017-133150, keepaliveTimeout=120, acceptKeepaliveTimeout=5, authentication=] sending [] from wss://demo.dxfeed.com/dxlink-ws
+I 231130 154555.103 [main] QD - monitoring DXEndpoint with dxfeed.address=dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws
+I 231130 154555.105 [main] DxLinkClientWebSocket-Distributor - Starting DxLinkClientWebSocketConnector to wss://demo.dxfeed.com/market-data/dxlink-ws
+I 231130 154555.107 [wss://demo.dxfeed.com/market-data/dxlink-ws-Writer] DxLinkClientWebSocket-Distributor - Connecting to wss://demo.dxfeed.com/market-data/dxlink-ws
+I 231130 154556.640 [wss://demo.dxfeed.com/market-data/dxlink-ws-Writer] DxLinkClientWebSocket-Distributor - Connected to wss://demo.dxfeed.com/market-data/dxlink-ws
+D 231130 154557.801 [oioEventLoopGroup-2-1] QD - Distributor received protocol descriptor [type=dxlink, version=0.1-0.18-20231017-133150, keepaliveTimeout=120, acceptKeepaliveTimeout=5] sending [] from wss://demo.dxfeed.com/market-data/dxlink-ws
+D 231130 154557.802 [oioEventLoopGroup-2-1] QD - Distributor received protocol descriptor [type=dxlink, version=0.1-0.18-20231017-133150, keepaliveTimeout=120, acceptKeepaliveTimeout=5, authentication=] sending [] from wss://demo.dxfeed.com/market-data/dxlink-ws
 Quote{AAPL, eventTime=0, time=20231130-152903.000, timeNanoPart=0, sequence=0, bidTime=20231130-152903, bidExchange=P, bidPrice=189.9, bidSize=5.0, askTime=20231130-152854, askExchange=K, askPrice=189.98, askSize=10.0}
 ```
 
 </details>
 
-To familiarize with the dxLink protocol, please click [here](https://demo.dxfeed.com/dxlink-ws/debug/#/protocol).
+To familiarize with the dxLink protocol, please click [here](https://demo.dxfeed.com/market-data/dxlink-ws/debug/#/protocol).
 
 ## Tools
 
