@@ -234,7 +234,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @return The current message.
      * @throws InvalidArgumentException if a sequence is below zero or above #MAX_SEQUENCE.
      */
-    TextMessage &withSequence(std::int32_t sequence) noexcept;
+    TextMessage &withSequence(std::int32_t sequence);
 
     /**
      * Returns text.

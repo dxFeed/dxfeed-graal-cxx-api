@@ -24,7 +24,7 @@ namespace isolated::util::IsolatedTimePeriod {
 }
 
 /* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(const StringLike& value) {
-    return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_valueOf2, value.data()));
+    return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_valueOf2, value.c_str()));
 }
 
 std::int64_t getTime(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {

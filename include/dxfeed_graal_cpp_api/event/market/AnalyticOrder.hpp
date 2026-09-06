@@ -210,7 +210,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @return The current analytic order.
      * @see OrderBase::getSequence()
      */
-    AnalyticOrder &withSequence(std::int32_t sequence) noexcept override;
+    AnalyticOrder &withSequence(std::int32_t sequence) override;
 
     /**
      * Changes time of this analytic order and returns it.

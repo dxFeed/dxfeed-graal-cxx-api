@@ -102,10 +102,11 @@ void setSignalHandler() {
 }
 #endif
 
-int main(int /*argc*/, char ** /*argv*/) {
+int main(int argc, char **argv) {
     setSignalHandler();
 
     doctest::Context context;
+    context.applyCommandLine(argc, argv);
 
     const int res = context.run(); // run queries, or run tests unless --no-run is specified
 

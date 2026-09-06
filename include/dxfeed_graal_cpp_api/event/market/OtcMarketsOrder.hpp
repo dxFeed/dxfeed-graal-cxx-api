@@ -275,7 +275,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @return The current OTC Markets order.
      * @see OrderBase::getSequence()
      */
-    OtcMarketsOrder &withSequence(std::int32_t sequence) noexcept override;
+    OtcMarketsOrder &withSequence(std::int32_t sequence) override;
 
     /**
      * Changes time of this OTC Markets order and returns it.

@@ -211,7 +211,7 @@ void TimeAndSale::setSequence(std::int32_t sequence) {
         throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
     }
 
-    data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
+    data_.index = orOp(andOp(data_.index, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 
 std::int16_t TimeAndSale::getExchangeCode() const noexcept {

@@ -235,7 +235,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      * @see OrderBase::getSequence()
      */
-    SpreadOrder &withSequence(std::int32_t sequence) noexcept;
+    SpreadOrder &withSequence(std::int32_t sequence);
 
     /**
      * Changes time of this spread order and returns it.

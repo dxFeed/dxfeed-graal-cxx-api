@@ -49,7 +49,7 @@ std::reference_wrapper<const CandlePrice> CandlePrice::parse(const StringLike &s
     throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "price", s.toStringView()));
 }
 
-std::reference_wrapper<const CandlePrice> CandlePrice::getAttributeForSymbol(const StringLike &symbol) noexcept {
+std::reference_wrapper<const CandlePrice> CandlePrice::getAttributeForSymbol(const StringLike &symbol) {
     const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
     return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());

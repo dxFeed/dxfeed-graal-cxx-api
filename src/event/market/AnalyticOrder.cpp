@@ -145,7 +145,7 @@ AnalyticOrder &AnalyticOrder::withTimeNanoPart(std::int32_t timeNanoPart) noexce
     return dynamic_cast<AnalyticOrder &>(Order::withTimeNanoPart(timeNanoPart));
 }
 
-AnalyticOrder &AnalyticOrder::withSequence(std::int32_t sequence) noexcept {
+AnalyticOrder &AnalyticOrder::withSequence(std::int32_t sequence) {
     return dynamic_cast<AnalyticOrder &>(Order::withSequence(sequence));
 }
 

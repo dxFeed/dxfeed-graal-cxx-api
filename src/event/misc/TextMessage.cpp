@@ -206,10 +206,10 @@ void TextMessage::setSequence(std::int32_t sequence) {
         throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
     }
 
-    timeSequence_ = orOp(andOp(timeSequence_, ~MAX_SEQUENCE), sequence);
+    timeSequence_ = orOp(andOp(timeSequence_, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 
-TextMessage &TextMessage::withSequence(std::int32_t sequence) noexcept {
+TextMessage &TextMessage::withSequence(std::int32_t sequence) {
     setSequence(sequence);
 
     return *this;

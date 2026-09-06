@@ -97,11 +97,10 @@ struct DXFCPP_EXPORT CandleSymbol {
     std::optional<CandleAlignment> alignment_{};
     std::optional<CandlePriceLevel> priceLevel_{};
 
-    static std::string changeAttribute(const StringLike &symbol,
-                                       const CandleSymbolAttributeVariant &attribute) noexcept;
+    static std::string changeAttribute(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute);
 
     template <typename AttributeIt>
-    static std::string changeAttributes(const StringLike &s, AttributeIt begin, AttributeIt end) noexcept {
+    static std::string changeAttributes(const StringLike &s, AttributeIt begin, AttributeIt end) {
         auto symbol = std::string(s);
 
         for (auto it = begin; it != end; ++it) {
@@ -111,16 +110,16 @@ struct DXFCPP_EXPORT CandleSymbol {
         return symbol;
     }
 
-    static std::string normalize(const StringLike &s) noexcept;
+    static std::string normalize(const StringLike &s);
 
-    void initTransientFields(bool force = false) noexcept;
+    void initTransientFields(bool force = false);
 
-    explicit CandleSymbol(const StringLike &symbol) noexcept;
+    explicit CandleSymbol(const StringLike &symbol);
 
-    CandleSymbol(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept;
+    CandleSymbol(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute);
 
     template <typename CandleSymbolAttributeIt>
-    CandleSymbol(const StringLike &symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end) noexcept
+    CandleSymbol(const StringLike &symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end)
         : symbol_{normalize(changeAttributes(symbol, begin, end))} {
         initTransientFields();
     }
@@ -227,7 +226,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param symbol The string symbol.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(const StringLike &symbol) noexcept;
+    static CandleSymbol valueOf(const StringLike &symbol);
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attribute set.
@@ -236,7 +235,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param attribute The attribute to set.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept;
+    static CandleSymbol valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute);
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attribute set (iterators).
@@ -249,7 +248,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      */
     template <typename CandleSymbolAttributeIt>
     static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributeIt begin,
-                                CandleSymbolAttributeIt end) noexcept {
+                                CandleSymbolAttributeIt end) {
         return CandleSymbol{symbol, begin, end};
     }
 
@@ -262,7 +261,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @return The candle symbol object.
      */
     static CandleSymbol valueOf(const StringLike &symbol,
-                                std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept;
+                                std::initializer_list<CandleSymbolAttributeVariant> attributes);
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attributes set.
@@ -277,7 +276,7 @@ struct DXFCPP_EXPORT CandleSymbol {
             { std::begin(attributes) };
             { std::end(attributes) };
         }
-    static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributesCollection &&attributes) noexcept {
+    static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributesCollection &&attributes) {
         return valueOf(symbol, std::begin(attributes), std::end(attributes));
     }
 };
@@ -291,7 +290,7 @@ inline namespace literals {
  * @param length Tha char array's length
  * @return Wrapped string view built on char array
  */
-CandleSymbol operator""_c(const char *string, size_t length) noexcept;
+CandleSymbol operator""_c(const char *string, size_t length);
 
 } // namespace literals
 

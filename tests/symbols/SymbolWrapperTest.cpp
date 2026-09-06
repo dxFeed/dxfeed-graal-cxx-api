@@ -23,3 +23,21 @@ TEST_CASE("SymbolWrapper::toStringUnderlying should return the result of toStrin
     REQUIRE(SymbolWrapper(c).toString() != c.toString());
     REQUIRE(SymbolWrapper(WildcardSymbol::ALL).toString() != WildcardSymbol::ALL.toString());
 }
+
+TEST_CASE("StringLike should preserve owned data when copied and moved") {
+    auto original = StringLike(std::string{"short value"});
+    auto copy = original;
+    auto moved = std::move(copy);
+
+    original = StringLike(std::string{"a different and longer value"});
+
+    CHECK(std::string{moved} == "short value");
+    CHECK(std::string{moved.c_str()} == "short value");
+}
+
+TEST_CASE("StringLike::c_str should terminate a sliced string view at its boundary") {
+    const auto storage = std::string{"visible-hidden"};
+    const auto slice = StringLike(std::string_view{storage}.substr(0, 7));
+
+    CHECK(std::string{slice.c_str()} == "visible");
+}

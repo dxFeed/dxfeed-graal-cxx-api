@@ -53,7 +53,7 @@ std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<TimeFormat> 
     }
 
     return runGraalFunctionAndThrowIfMinusOne(dxfg_TimeFormat_parse,
-                                              static_cast<dxfg_time_format_t *>(timeFormat.get()), value.data());
+                                              static_cast<dxfg_time_format_t *>(timeFormat.get()), value.c_str());
 }
 
 std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<TimeFormat> &timeFormat,

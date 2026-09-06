@@ -87,10 +87,10 @@ void Series::setSequence(std::int32_t sequence) {
         throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
     }
 
-    data_.timeSequence = orOp(andOp(data_.timeSequence, ~MAX_SEQUENCE), sequence);
+    data_.timeSequence = orOp(andOp(data_.timeSequence, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 
-Series &Series::withSequence(std::int32_t sequence) noexcept {
+Series &Series::withSequence(std::int32_t sequence) {
     setSequence(sequence);
 
     return *this;

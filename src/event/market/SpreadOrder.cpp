@@ -163,7 +163,7 @@ SpreadOrder &SpreadOrder::withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
     return *this;
 }
 
-SpreadOrder &SpreadOrder::withSequence(std::int32_t sequence) noexcept {
+SpreadOrder &SpreadOrder::withSequence(std::int32_t sequence) {
     setSequence(sequence);
 
     return *this;

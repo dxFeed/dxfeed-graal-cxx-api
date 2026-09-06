@@ -293,7 +293,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @return The current series.
      * @see Series::getSequence()
      */
-    Series &withSequence(std::int32_t sequence) noexcept;
+    Series &withSequence(std::int32_t sequence);
 
     /**
      * Returns day id of expiration.

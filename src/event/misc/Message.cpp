@@ -22,6 +22,8 @@ void Message::fillData(void *graalNative) {
 
     auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
 
+    setEventTime(graalMessage->event_time);
+
     if (graalMessage->event_symbol != nullptr) {
         setEventSymbol(dxfcpp::toString(graalMessage->event_symbol));
     }

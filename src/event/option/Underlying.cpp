@@ -169,7 +169,7 @@ void Underlying::setSequence(std::int32_t sequence) {
         throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
     }
 
-    data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
+    data_.index = orOp(andOp(data_.index, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 
 double Underlying::getVolatility() const noexcept {

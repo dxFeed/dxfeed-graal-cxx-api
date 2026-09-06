@@ -96,7 +96,8 @@ void OrderBase::setSource(const OrderSource &source) noexcept {
             ? ~sal(std::int64_t{-1}, SPECIAL_SOURCE_ID_SHIFT)
             : ~sal(std::int64_t{-1}, NONSPECIAL_SOURCE_ID_SHIFT);
 
-    orderBaseData_.index = andOp(sal(static_cast<std::int64_t>(source.id()), shift), andOp(orderBaseData_.index, mask));
+    orderBaseData_.index = orOp(sal(static_cast<std::int64_t>(source.id()), shift),
+                                andOp(orderBaseData_.index, mask));
 }
 
 std::int32_t OrderBase::getEventFlags() const noexcept {
@@ -164,7 +165,8 @@ void OrderBase::setSequence(std::int32_t sequence) {
         throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
     }
 
-    orderBaseData_.timeSequence = orOp(andOp(orderBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
+    orderBaseData_.timeSequence =
+        orOp(andOp(orderBaseData_.timeSequence, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 
 std::int64_t OrderBase::getTimeNanos() const noexcept {

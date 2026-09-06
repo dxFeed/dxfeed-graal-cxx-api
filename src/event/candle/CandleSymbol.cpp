@@ -149,8 +149,7 @@ const std::vector<std::reference_wrapper<const CandleSession>> CandleSession::VA
 
 const CandleSymbol CandleSymbol::NUL{"<null>"};
 
-std::string CandleSymbol::changeAttribute(const StringLike &symbol,
-                                          const CandleSymbolAttributeVariant &attribute) noexcept {
+std::string CandleSymbol::changeAttribute(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) {
     return std::visit(
         [&symbol](auto &&a) {
             return a.changeAttributeForSymbol(symbol);
@@ -158,7 +157,7 @@ std::string CandleSymbol::changeAttribute(const StringLike &symbol,
         attribute);
 }
 
-std::string CandleSymbol::normalize(const StringLike &s) noexcept {
+std::string CandleSymbol::normalize(const StringLike &s) {
     auto symbol = CandlePrice::normalizeAttributeForSymbol(s);
 
     symbol = CandleSession::normalizeAttributeForSymbol(symbol);
@@ -169,7 +168,7 @@ std::string CandleSymbol::normalize(const StringLike &s) noexcept {
     return symbol;
 }
 
-void CandleSymbol::initTransientFields(bool force) noexcept {
+void CandleSymbol::initTransientFields(bool force) {
     baseSymbol_ = MarketEventSymbols::getBaseSymbol(symbol_);
 
     if (!exchange_ || force) {
@@ -197,11 +196,11 @@ void CandleSymbol::initTransientFields(bool force) noexcept {
     }
 }
 
-CandleSymbol::CandleSymbol(const StringLike &symbol) noexcept : symbol_{normalize(symbol)} {
+CandleSymbol::CandleSymbol(const StringLike &symbol) : symbol_{normalize(symbol)} {
     initTransientFields();
 }
 
-CandleSymbol::CandleSymbol(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept
+CandleSymbol::CandleSymbol(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute)
     : symbol_{normalize(changeAttribute(symbol, attribute))} {
     // TODO: check attributes
     initTransientFields();
@@ -327,20 +326,20 @@ CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
     return CandleSymbol{graalSymbol->symbol};
 }
 
-CandleSymbol CandleSymbol::valueOf(const StringLike &symbol) noexcept {
+CandleSymbol CandleSymbol::valueOf(const StringLike &symbol) {
     return CandleSymbol{symbol};
 }
 
-CandleSymbol CandleSymbol::valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) noexcept {
+CandleSymbol CandleSymbol::valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) {
     return CandleSymbol{symbol, attribute};
 }
 
 CandleSymbol CandleSymbol::valueOf(const StringLike &symbol,
-                                   std::initializer_list<CandleSymbolAttributeVariant> attributes) noexcept {
+                                   std::initializer_list<CandleSymbolAttributeVariant> attributes) {
     return valueOf(symbol, attributes.begin(), attributes.end());
 }
 
-CandleSymbol literals::operator""_c(const char *string, size_t length) noexcept {
+CandleSymbol literals::operator""_c(const char *string, size_t length) {
     return CandleSymbol::valueOf(std::string{string, length});
 }
 DXFCPP_END_NAMESPACE

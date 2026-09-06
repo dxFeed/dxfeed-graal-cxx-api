@@ -163,7 +163,7 @@ Order &Order::withTimeNanoPart(std::int32_t timeNanoPart) noexcept {
     return *this;
 }
 
-Order &Order::withSequence(std::int32_t sequence) noexcept {
+Order &Order::withSequence(std::int32_t sequence) {
     setSequence(sequence);
 
     return *this;

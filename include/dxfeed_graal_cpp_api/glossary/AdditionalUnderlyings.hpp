@@ -180,8 +180,12 @@ AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map
     mapLikeEntries.reserve(map.size());
 
     if constexpr (std::is_convertible_v<KeyType, std::string_view>) {
+        std::vector<std::string> keyStorage;
+        keyStorage.reserve(map.size());
+
         for (const auto &[key, value] : map) {
-            mapLikeEntries.emplace_back(std::string_view(key).data(), static_cast<double>(value));
+            keyStorage.emplace_back(std::string_view(key));
+            mapLikeEntries.emplace_back(keyStorage.back().c_str(), static_cast<double>(value));
         }
 
         return createShared(valueOfImpl(mapLikeEntries));

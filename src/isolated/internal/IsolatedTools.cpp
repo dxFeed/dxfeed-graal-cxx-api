@@ -19,7 +19,7 @@ std::unordered_set<std::string> /* dxfg_string_list* */
 parseSymbols(const StringLike& symbolList) {
     std::unordered_set<std::string> result{};
 
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.c_str());
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
@@ -33,7 +33,7 @@ parseSymbols(const StringLike& symbolList) {
 std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(const StringLike& symbolList) {
     std::vector<std::string> result{};
 
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.data());
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.c_str());
 
     result.reserve(graalStringList->size);
 
