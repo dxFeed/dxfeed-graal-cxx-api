@@ -93,7 +93,7 @@
 #ifndef DXFCPP_BEGIN_NAMESPACE
 #    define DXFCPP_BEGIN_NAMESPACE                                                                                     \
         namespace dxfcpp {                                                                                             \
-        inline namespace v7 {
+        inline namespace v8 {
 #    define DXFCPP_END_NAMESPACE                                                                                       \
         }                                                                                                              \
         }
