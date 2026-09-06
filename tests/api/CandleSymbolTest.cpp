@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <fmt/format.h>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -97,4 +98,35 @@ TEST_CASE("Double checks") {
             CandleSymbol::valueOf(
                 "AAPL", std::vector<CandleSymbolAttributeVariant>{CandlePeriod::valueOf(15, CandleType::MINUTE)})
                 .toString());
+}
+
+TEST_CASE("CandlePeriod string representation should round-trip small values") {
+    const auto period = CandlePeriod::valueOf(1.0e-8, CandleType::PRICE);
+
+    CHECK(CandlePeriod::parse(period.toString()) == period);
+    CHECK(period.getValue() == 1.0e-8);
+}
+
+TEST_CASE("CandlePriceLevel should follow Java validation and equality semantics") {
+    CHECK(CandlePriceLevel::DEFAULT == CandlePriceLevel::DEFAULT);
+    CHECK(CandlePriceLevel::valueOf(std::numeric_limits<double>::quiet_NaN()) == CandlePriceLevel::DEFAULT);
+    CHECK(CandlePriceLevel::DEFAULT.changeAttributeForSymbol("AAPL{pl=1}") == "AAPL");
+    CHECK(CandlePriceLevel::valueOf(1.0).toString() == "1");
+    CHECK(CandlePriceLevel::valueOf(0.0) != CandlePriceLevel::valueOf(1.0e-20));
+
+    CHECK_THROWS_AS(CandlePriceLevel::valueOf(-1.0), InvalidArgumentException);
+    CHECK_THROWS_AS(CandlePriceLevel::valueOf(-0.0), InvalidArgumentException);
+    CHECK_THROWS_AS(CandlePriceLevel::valueOf(std::numeric_limits<double>::infinity()), InvalidArgumentException);
+    CHECK_THROWS_AS(CandlePriceLevel::parse("1garbage"), InvalidArgumentException);
+}
+
+TEST_CASE("CandleSession attribute lookup should use Boolean.parseBoolean semantics") {
+    CHECK(CandleSession::getAttributeForSymbol("AAPL{tho=true}").get() == CandleSession::REGULAR);
+    CHECK(CandleSession::getAttributeForSymbol("AAPL{tho=TRUE}").get() == CandleSession::REGULAR);
+    CHECK(CandleSession::getAttributeForSymbol("AAPL{tho=t}").get() == CandleSession::DEFAULT);
+    CHECK(CandleSession::getAttributeForSymbol("AAPL{tho=garbage}").get() == CandleSession::DEFAULT);
+}
+
+TEST_CASE("CandleSymbol should report invalid attributes as exceptions") {
+    CHECK_THROWS_AS(CandleSymbol::valueOf("AAPL{=garbage}"), InvalidArgumentException);
 }

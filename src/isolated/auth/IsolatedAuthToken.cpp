@@ -16,21 +16,21 @@ namespace isolated::auth::IsolatedAuthToken {
 
 /// dxfg_AuthToken_valueOf
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ const StringLike &string) {
-    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_valueOf, string.data()));
+    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_valueOf, string.c_str()));
 }
 
 /// dxfg_AuthToken_createBasicToken
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
 createBasicToken(/* const char* */ const StringLike &userPassword) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken, userPassword.data()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken, userPassword.c_str()));
 }
 
 /// dxfg_AuthToken_createBasicToken2
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ const StringLike &user,
                                                                       /* const char* */ const StringLike &password) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken2, user.data(), password.data()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken2, user.c_str(), password.c_str()));
 }
 
 /// dxfg_AuthToken_createBasicTokenOrNull
@@ -38,27 +38,27 @@ createBasicToken(/* const char* */ const StringLike &userPassword) {
 createBasicTokenOrNull(/* const char* */ const StringLike &user,
                        /* const char* */ const StringLike &password) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicTokenOrNull, user.data(), password.data()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicTokenOrNull, user.c_str(), password.c_str()));
 }
 
 /// dxfg_AuthToken_createBearerToken
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerToken(/* const char* */ const StringLike &token) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerToken, token.data()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerToken, token.c_str()));
 }
 
 /// dxfg_AuthToken_createBearerTokenOrNull
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
 createBearerTokenOrNull(/* const char* */ const StringLike &token) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerTokenOrNull, token.data()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerTokenOrNull, token.c_str()));
 }
 
 /// dxfg_AuthToken_createCustomToken
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createCustomToken(/* const char* */ const StringLike &scheme,
                                                                        /* const char* */ const StringLike &value) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createCustomToken, scheme.data(), value.data()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createCustomToken, scheme.c_str(), value.c_str()));
 }
 
 /// dxfg_AuthToken_getHttpAuthorization

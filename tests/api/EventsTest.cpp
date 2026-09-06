@@ -46,14 +46,18 @@ TEST_CASE("Candle::setTime() should change Index") {
 
 TEST_CASE("Candle::setSequence() should change Index") {
     auto c = Candle("AAPL"_c);
+    c.setTime(1'701'703'226'537LL);
     auto oldIndex = c.getIndex();
+    auto oldTime = c.getTime();
     std::int32_t sequence = 567;
 
     c.setSequence(sequence);
 
-    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~CandleConstants::MAX_SEQUENCE), sequence);
+    auto expectedIndex = dxfcpp::orOp(
+        dxfcpp::andOp(oldIndex, ~static_cast<std::int64_t>(CandleConstants::MAX_SEQUENCE)), sequence);
 
     REQUIRE(c.getIndex() == expectedIndex);
+    REQUIRE(c.getTime() == oldTime);
 }
 
 struct OptionSaleConstants {
@@ -211,14 +215,18 @@ TEST_CASE("TimeAndSale::setTime() should change Index") {
 
 TEST_CASE("TimeAndSale::setSequence() should change Index") {
     auto tns = TimeAndSale("AAPL");
+    tns.setTime(1'701'703'226'556LL);
     auto oldIndex = tns.getIndex();
+    auto oldTime = tns.getTime();
     std::int32_t sequence = 567;
 
     tns.setSequence(sequence);
 
-    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~TimeAndSaleConstants::MAX_SEQUENCE), sequence);
+    auto expectedIndex = dxfcpp::orOp(
+        dxfcpp::andOp(oldIndex, ~static_cast<std::int64_t>(TimeAndSaleConstants::MAX_SEQUENCE)), sequence);
 
     REQUIRE(tns.getIndex() == expectedIndex);
+    REQUIRE(tns.getTime() == oldTime);
 }
 
 struct TradeConstants {
@@ -297,14 +305,18 @@ TEST_CASE("Greeks::setTime() should change Index") {
 
 TEST_CASE("Greeks::setSequence() should change Index") {
     auto g = Greeks("AAPL");
+    g.setTime(1'701'703'226'535LL);
     auto oldIndex = g.getIndex();
+    auto oldTime = g.getTime();
     std::int32_t sequence = 567;
 
     g.setSequence(sequence);
 
-    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~GreeksConstants::MAX_SEQUENCE), sequence);
+    auto expectedIndex = dxfcpp::orOp(
+        dxfcpp::andOp(oldIndex, ~static_cast<std::int64_t>(GreeksConstants::MAX_SEQUENCE)), sequence);
 
     REQUIRE(g.getIndex() == expectedIndex);
+    REQUIRE(g.getTime() == oldTime);
 }
 
 struct SeriesConstants {
@@ -396,14 +408,18 @@ TEST_CASE("TheoPrice::setTime() should change Index") {
 
 TEST_CASE("TheoPrice::setSequence() should change Index") {
     auto tp = TheoPrice("AAPL");
+    tp.setTime(1'701'703'226'535LL);
     auto oldIndex = tp.getIndex();
+    auto oldTime = tp.getTime();
     std::int32_t sequence = 567;
 
     tp.setSequence(sequence);
 
-    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~TheoPriceConstants::MAX_SEQUENCE), sequence);
+    auto expectedIndex = dxfcpp::orOp(
+        dxfcpp::andOp(oldIndex, ~static_cast<std::int64_t>(TheoPriceConstants::MAX_SEQUENCE)), sequence);
 
     REQUIRE(tp.getIndex() == expectedIndex);
+    REQUIRE(tp.getTime() == oldTime);
 }
 
 struct UnderlyingConstants {
@@ -437,12 +453,59 @@ TEST_CASE("Underlying::setTime() should change Index") {
 
 TEST_CASE("Underlying::setSequence() should change Index") {
     auto u = Underlying("AAPL");
+    u.setTime(1'701'703'226'535LL);
     auto oldIndex = u.getIndex();
+    auto oldTime = u.getTime();
     std::int32_t sequence = 567;
 
     u.setSequence(sequence);
 
-    auto expectedIndex = dxfcpp::orOp(dxfcpp::andOp(oldIndex, ~UnderlyingConstants::MAX_SEQUENCE), sequence);
+    auto expectedIndex = dxfcpp::orOp(
+        dxfcpp::andOp(oldIndex, ~static_cast<std::int64_t>(UnderlyingConstants::MAX_SEQUENCE)), sequence);
 
     REQUIRE(u.getIndex() == expectedIndex);
+    REQUIRE(u.getTime() == oldTime);
+}
+
+TEST_CASE("setSequence() should preserve time in every event with a 64-bit packed field") {
+    constexpr std::int64_t time = 1'701'703'226'537LL;
+    constexpr std::int32_t sequence = 567;
+
+    const auto check = [time, sequence](auto event) {
+        event.setTime(time);
+        event.setSequence(sequence);
+
+        CHECK(event.getTime() == time);
+        CHECK(event.getSequence() == sequence);
+    };
+
+    check(Candle("AAPL"_c));
+    check(OptionSale("AAPL"));
+    check(Order("AAPL"));
+    check(TimeAndSale("AAPL"));
+    check(Trade("AAPL"));
+    check(TextMessage("AAPL"));
+    check(Greeks("AAPL"));
+    check(Series("AAPL"));
+    check(TheoPrice("AAPL"));
+    check(Underlying("AAPL"));
+}
+
+TEST_CASE("withSequence() should propagate validation errors") {
+    CHECK_THROWS_AS(Candle("AAPL"_c).withSequence(-1), InvalidArgumentException);
+    CHECK_THROWS_AS(Order("AAPL").withSequence(-1), InvalidArgumentException);
+    CHECK_THROWS_AS(Quote("AAPL").withSequence(-1), InvalidArgumentException);
+}
+
+TEST_CASE("Message Graal conversion should preserve event time") {
+    auto original = Message("notifications", "payload");
+    original.setEventTime(1'701'703'226'537LL);
+    auto graalMessage = original.toGraal();
+    auto restored = Message::fromGraal(graalMessage);
+
+    CHECK(restored->getEventTime() == original.getEventTime());
+    CHECK(restored->getEventSymbol() == original.getEventSymbol());
+    CHECK(restored->getAttachment() == original.getAttachment());
+
+    Message::freeGraal(graalMessage);
 }

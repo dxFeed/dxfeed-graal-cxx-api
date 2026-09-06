@@ -1,3 +1,16 @@
+## v8.0.0
+
+* **\[MDAPI-423]\[C++]** **\[BREAKING]** Fixed Java-to-C++ porting errors in packed event fields, native
+  conversions, string handling, and candle attributes.
+    * `setSequence()` and `OrderBase::setSource()` now preserve unrelated packed bits; `Message` native conversion
+      preserves event time; `StringLike` copy/move operations and native C-string handling are now safe.
+    * Candle equality, formatting, price-level validation/parsing, and session parsing now match Java QD semantics.
+      Price levels reject negative values, negative zero, infinities, and trailing parse data; floating-point equality
+      follows Java NaN/signed-zero rules; only case-insensitive `"true"` enables the regular candle session.
+    * APIs that can fail validation or parsing are no longer `noexcept`; invalid input now throws an exception instead
+      of terminating the process.
+* Migrated to Graal SDK v3.2.13.
+
 ## v7.0.0
 
 * **\[MDAPI-417]** **\[BREAKING]** All methods of the `Order` class and its descendants whose names begin with "with" are made virtual.

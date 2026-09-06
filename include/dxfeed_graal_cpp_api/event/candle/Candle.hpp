@@ -304,7 +304,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
      * @return The current candle.
      * @see Candle::getSequence()
      */
-    Candle &withSequence(std::int32_t sequence) noexcept;
+    Candle &withSequence(std::int32_t sequence);
 
     /**
      * Returns total number of original trade (or quote) events in this candle.

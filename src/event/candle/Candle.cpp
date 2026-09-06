@@ -259,10 +259,10 @@ void Candle::setSequence(std::int32_t sequence) {
             fmt::format(ires::Strings::Events::INVALID_VALUE_FOR_ARG, "sequence", std::to_string(sequence)));
     }
 
-    data_.index = orOp(andOp(data_.index, ~MAX_SEQUENCE), sequence);
+    data_.index = orOp(andOp(data_.index, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 
-Candle &Candle::withSequence(std::int32_t sequence) noexcept {
+Candle &Candle::withSequence(std::int32_t sequence) {
     setSequence(sequence);
 
     return *this;

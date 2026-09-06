@@ -355,7 +355,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @return The current option sale.
      * @see ::getSequence()
      */
-    OptionSale &withSequence(std::int32_t sequence) noexcept;
+    OptionSale &withSequence(std::int32_t sequence);
 
     /**
      * Returns exchange code of this option sale event.

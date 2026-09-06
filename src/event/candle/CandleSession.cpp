@@ -130,7 +130,7 @@ std::reference_wrapper<const CandleSession> CandleSession::parse(const StringLik
 std::reference_wrapper<const CandleSession> CandleSession::getAttributeForSymbol(const StringLike &symbol) {
     const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
 
-    return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
+    return stringOpt && iEquals(stringOpt.value(), "true") ? std::cref(REGULAR) : std::cref(DEFAULT);
 }
 
 std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol) noexcept {

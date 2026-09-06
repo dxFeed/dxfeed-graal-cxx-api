@@ -12,6 +12,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./CandleSymbolAttribute.hpp"
 #include "./CandleType.hpp"
 
+#include <cmath>
+#include <limits>
 #include <string>
 
 /**
@@ -150,7 +152,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle period of the given candle symbol string
      */
-    static CandlePeriod getAttributeForSymbol(const StringLike &symbol) noexcept;
+    static CandlePeriod getAttributeForSymbol(const StringLike &symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle period attribute.
@@ -169,7 +171,9 @@ template <> struct std::hash<dxfcpp::CandlePeriod> {
     std::size_t operator()(const dxfcpp::CandlePeriod &candlePeriod) const noexcept {
         std::size_t seed = 0;
 
-        dxfcpp::hashCombine(seed, candlePeriod.getValue());
+        const auto value = candlePeriod.getValue();
+
+        dxfcpp::hashCombine(seed, std::isnan(value) ? std::numeric_limits<double>::quiet_NaN() : value);
         dxfcpp::hashCombine(seed, candlePeriod.getType());
 
         return seed;

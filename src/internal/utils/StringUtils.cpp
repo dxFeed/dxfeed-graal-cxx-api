@@ -37,6 +37,43 @@ StringLike::StringLike(const std::string &s) : owned_(s), view_(owned_) {
 StringLike::StringLike(std::string &&s) noexcept : owned_(std::move(s)), view_(owned_) {
 }
 
+StringLike::StringLike(const StringLike &other) : owned_(other.owned_) {
+    view_ = other.view_.data() == other.owned_.data() ? std::string_view{owned_} : other.view_;
+}
+
+StringLike::StringLike(StringLike &&other) noexcept {
+    const auto ownsView = other.view_.data() == other.owned_.data();
+
+    owned_ = std::move(other.owned_);
+    view_ = ownsView ? std::string_view{owned_} : other.view_;
+}
+
+StringLike &StringLike::operator=(const StringLike &other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    const auto ownsView = other.view_.data() == other.owned_.data();
+
+    owned_ = other.owned_;
+    view_ = ownsView ? std::string_view{owned_} : other.view_;
+
+    return *this;
+}
+
+StringLike &StringLike::operator=(StringLike &&other) noexcept {
+    if (this == &other) {
+        return *this;
+    }
+
+    const auto ownsView = other.view_.data() == other.owned_.data();
+
+    owned_ = std::move(other.owned_);
+    view_ = ownsView ? std::string_view{owned_} : other.view_;
+
+    return *this;
+}
+
 StringLike::operator std::string_view() const noexcept {
     return view_;
 }
@@ -186,10 +223,17 @@ std::string toString(double d) {
         return "NaN";
     }
 
-    auto x = fmt::format("{}", d);
-    auto y = fmt::format("{}", std::round(d));
+    if (std::isinf(d)) {
+        return std::signbit(d) ? "-Infinity" : "Infinity";
+    }
 
-    return x.size() == y.size() ? x + ".0" : x;
+    auto result = fmt::format("{}", d);
+
+    if (result.find_first_of(".eE") == std::string::npos) {
+        result += ".0";
+    }
+
+    return result;
 }
 
 std::string encodeChar(std::int16_t c) {

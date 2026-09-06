@@ -42,6 +42,14 @@ struct StringLike {
     // ReSharper disable once CppNonExplicitConvertingConstructor
     StringLike(std::string &&s) noexcept;
 
+    StringLike(const StringLike &other);
+
+    StringLike(StringLike &&other) noexcept;
+
+    StringLike &operator=(const StringLike &other);
+
+    StringLike &operator=(StringLike &&other) noexcept;
+
     // ReSharper disable once CppNonExplicitConvertingConstructor
     template <std::size_t N> StringLike(const char (&arr)[N]) : view_(arr, N - 1) {
     }

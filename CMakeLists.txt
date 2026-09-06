@@ -21,7 +21,7 @@ set(DXFCXX_VERSION "v7.0.0" CACHE STRING "The dxFeed Graal CXX API package versi
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.2.0" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.2.13" CACHE STRING "")
 set(FMTLIB_VERSION "12.1.0")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -70,7 +70,7 @@ option(DXFCXX_NODEFAULTLIB "Ignore libcmt/libcmtd/msvcrt/msvcrtd. Use if DXFCXX_
 option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
 
 option(DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_GITHUB "" ON)
-set(DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL "https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/download/" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_BASE_URL "https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/download/" CACHE STRING "")
 option(DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK "" OFF)
 
 option(DXFCXX_USE_DXFG_STUB "Use dxFeed Graal SDK stub" OFF)
@@ -138,7 +138,7 @@ else ()
                 )
             else ()
                 if (DXFCXX_USE_DXFEED_GRAAL_NATIVE_SDK_GITHUB)
-                    set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_JFROG_BASE_URL}v${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+                    set(DXFEED_GRAAL_NATIVE_SDK_URL "${DXFEED_GRAAL_NATIVE_SDK_BASE_URL}v${DXFEED_GRAAL_NATIVE_SDK_VERSION}/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
                 endif ()
 
                 if (DXFCXX_GRAAL_TARGET_PLATFORM STREQUAL "unknown-unknown")

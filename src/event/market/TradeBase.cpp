@@ -120,7 +120,8 @@ void TradeBase::setSequence(std::int32_t sequence) {
         throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
     }
 
-    tradeBaseData_.timeSequence = orOp(andOp(tradeBaseData_.timeSequence, ~MAX_SEQUENCE), sequence);
+    tradeBaseData_.timeSequence =
+        orOp(andOp(tradeBaseData_.timeSequence, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 
 std::int16_t TradeBase::getExchangeCode() const noexcept {

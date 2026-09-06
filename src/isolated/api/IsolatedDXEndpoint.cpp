@@ -59,7 +59,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_user, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           user.data());
+                                           user.c_str());
 }
 
 void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint,
@@ -70,7 +70,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndp
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_password, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           password.data());
+                                           password.c_str());
 }
 
 void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint, const StringLike& address) {
@@ -80,7 +80,7 @@ void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_connect, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           address.data());
+                                           address.c_str());
 }
 
 void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
@@ -273,8 +273,8 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperty,
-                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()), key.data(),
-                                           value.data());
+                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()), key.c_str(),
+                                           value.c_str());
 }
 
 // dxfg_DXEndpoint_Builder_withProperties
@@ -287,7 +287,7 @@ withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperties,
-                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()), filePath.data());
+                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()), filePath.c_str());
 }
 
 // dxfg_DXEndpoint_Builder_supportsProperty
@@ -301,7 +301,7 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoi
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_supportsProperty,
                                                   static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                                  key.data()) == 1;
+                                                  key.c_str()) == 1;
 }
 
 // dxfg_DXEndpoint_Builder_build

@@ -158,7 +158,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @return The current quote.
      * @see Quote::getSequence()
      */
-    Quote &withSequence(std::int32_t sequence) noexcept;
+    Quote &withSequence(std::int32_t sequence);
 
     /**
      * Returns time of the last bid or ask change.

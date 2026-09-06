@@ -242,7 +242,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @return The current order.
      * @see OrderBase::getSequence()
      */
-    virtual Order &withSequence(std::int32_t sequence) noexcept;
+    virtual Order &withSequence(std::int32_t sequence);
 
     /**
      * Changes time of this order and returns it.

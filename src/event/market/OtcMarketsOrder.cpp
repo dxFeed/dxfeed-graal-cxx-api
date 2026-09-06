@@ -138,7 +138,7 @@ OtcMarketsOrder &OtcMarketsOrder::withTimeNanoPart(std::int32_t timeNanoPart) no
     return dynamic_cast<OtcMarketsOrder &>(Order::withTimeNanoPart(timeNanoPart));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withSequence(std::int32_t sequence) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withSequence(std::int32_t sequence) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withSequence(sequence));
 }
 

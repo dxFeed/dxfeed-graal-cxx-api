@@ -283,10 +283,10 @@ void OptionSale::setSequence(std::int32_t sequence) {
         throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
     }
 
-    data_.timeSequence = orOp(andOp(data_.timeSequence, ~MAX_SEQUENCE), sequence);
+    data_.timeSequence = orOp(andOp(data_.timeSequence, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 
-OptionSale &OptionSale::withSequence(std::int32_t sequence) noexcept {
+OptionSale &OptionSale::withSequence(std::int32_t sequence) {
     setSequence(sequence);
 
     return *this;

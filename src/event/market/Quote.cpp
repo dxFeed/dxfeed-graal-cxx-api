@@ -286,7 +286,7 @@ void Quote::setSequence(std::int32_t sequence) {
     data_.timeMillisSequence = orOp(andOp(data_.timeMillisSequence, ~MAX_SEQUENCE), sequence);
 }
 
-Quote &Quote::withSequence(std::int32_t sequence) noexcept {
+Quote &Quote::withSequence(std::int32_t sequence) {
     setSequence(sequence);
 
     return *this;

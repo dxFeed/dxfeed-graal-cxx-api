@@ -19,15 +19,11 @@ double CandlePriceLevel::getValue() const noexcept {
 }
 
 std::string CandlePriceLevel::toString() const {
-    if (math::equals(value_, static_cast<std::int64_t>(value_))) {
-        return std::to_string(static_cast<std::int64_t>(value_));
-    }
-
-    return std::to_string(value_);
+    return math::isInt64(value_) ? std::to_string(static_cast<std::int64_t>(value_)) : dxfcpp::toString(value_);
 }
 
 bool CandlePriceLevel::operator==(const CandlePriceLevel &candlePriceLevel) const noexcept {
-    return math::equals(value_, candlePriceLevel.getValue());
+    return math::doubleEquals(value_, candlePriceLevel.getValue());
 }
 
 std::string CandlePriceLevel::changeAttributeForSymbol(const StringLike &symbol) const {
@@ -36,11 +32,26 @@ std::string CandlePriceLevel::changeAttributeForSymbol(const StringLike &symbol)
 }
 
 CandlePriceLevel CandlePriceLevel::parse(const StringLike &s) {
-    return valueOf(std::stod(s));
+    const auto string = std::string{s};
+    std::size_t parsedLength = 0;
+
+    try {
+        const auto value = std::stod(string, &parsedLength);
+
+        if (parsedLength != string.size()) {
+            throw InvalidArgumentException("Incorrect candle price level: " + string);
+        }
+
+        return valueOf(value);
+    } catch (const InvalidArgumentException &) {
+        throw;
+    } catch (const std::exception &) {
+        throw InvalidArgumentException("Incorrect candle price level: " + string);
+    }
 }
 
 CandlePriceLevel CandlePriceLevel::valueOf(double value) {
-    if (std::isinf(value) || (value == 0.0 && std::signbit(value))) {
+    if (std::isinf(value) || (!std::isnan(value) && std::signbit(value))) {
         throw InvalidArgumentException("Incorrect candle price level: " + dxfcpp::toString(value));
     }
 

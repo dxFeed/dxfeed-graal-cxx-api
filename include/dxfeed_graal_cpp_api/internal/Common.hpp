@@ -293,6 +293,38 @@ static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
 
+/**
+ * Compares two double values using Java @c Double.equals semantics.
+ * All NaN values are considered equal, while positive and negative zero are considered different.
+ *
+ * @param a The first value.
+ * @param b The second value.
+ * @return @c true if the values are equal; @c false otherwise.
+ */
+inline bool doubleEquals(double a, double b) noexcept {
+    if (std::isnan(a) || std::isnan(b)) {
+        return std::isnan(a) && std::isnan(b);
+    }
+
+    if (a != b) {
+        return false;
+    }
+
+    return a != 0.0 || std::signbit(a) == std::signbit(b);
+}
+
+/**
+ * Checks whether a double value can be safely converted to @c std::int64_t without losing its fractional part.
+ *
+ * @param value The value to check.
+ * @return @c true if the value is finite, integral, and within the range of @c std::int64_t;
+ *         @c false otherwise.
+ */
+inline bool isInt64(double value) noexcept {
+    return std::isfinite(value) && value >= static_cast<double>(std::numeric_limits<std::int64_t>::min()) &&
+           value < -static_cast<double>(std::numeric_limits<std::int64_t>::min()) && value == std::trunc(value);
+}
+
 inline bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
     if (std::isnan(a) || std::isnan(b)) {
         return false;

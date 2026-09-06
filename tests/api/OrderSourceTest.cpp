@@ -20,3 +20,14 @@ TEST_CASE("OrderSource::valueOf the method should work correctly with predefined
     REQUIRE(OrderSource::valueOf("NTV") != OrderSource::ntv);
     REQUIRE(OrderSource::valueOf("NTV2") != OrderSource::NTV);
 }
+
+TEST_CASE("OrderBase::setSource should preserve the low index bits") {
+    constexpr std::int64_t index = 123'456'789LL;
+    auto order = Order("AAPL");
+
+    order.setIndex(index);
+    order.setSource(OrderSource::NTV);
+
+    CHECK(order.getSource() == OrderSource::NTV);
+    CHECK((order.getIndex() & 0xffff'ffffLL) == index);
+}
