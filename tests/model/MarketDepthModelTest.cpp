@@ -1,8 +1,6 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-// #include <dxfeed_graal_cpp_api/model/MarketDepthModel.hpp>
-
 #include <random>
 #include <string>
 #include <thread>
@@ -122,11 +120,11 @@ class MarketDepthModelTestFixture {
     }
 
     static int oneIfBuy(const std::shared_ptr<Order> &order) {
-        return order && order->getOrderSide() == Side::BUY && !math::equals(order->getSize(), 0) ? 1 : 0;
+        return order && order->getOrderSide() == Side::BUY && order->getSize() != 0.0 ? 1 : 0;
     }
 
     static int oneIfSell(const std::shared_ptr<Order> &order) {
-        return order && order->getOrderSide() == Side::SELL && !math::equals(order->getSize(), 0) ? 1 : 0;
+        return order && order->getOrderSide() == Side::SELL && order->getSize() != 0.0 ? 1 : 0;
     }
 
     static bool same(const std::shared_ptr<Order> &order, const std::shared_ptr<Order> &old) {
@@ -144,7 +142,7 @@ class MarketDepthModelTestFixture {
 
         // Check just relevant attributes
         return order->getScope() == old->getScope() && order->getOrderSide() == old->getOrderSide() &&
-               order->getIndex() == old->getIndex() && math::equals(order->getSize(), old->getSize()) &&
+               order->getIndex() == old->getIndex() && order->getSize() == old->getSize() &&
                order->getSource() == old->getSource();
     }
 

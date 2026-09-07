@@ -248,7 +248,7 @@ template <typename T> class OptionSeries final {
 
     bool operator==(const OptionSeries &other) const {
         return expiration_ == other.expiration_ && lastTrade_ == other.lastTrade_ &&
-               math::equals(multiplier_, other.multiplier_) && math::equals(spc_, other.spc_) &&
+               math::doubleEquals(multiplier_, other.multiplier_) && math::doubleEquals(spc_, other.spc_) &&
                additionalUnderlyings_ == other.additionalUnderlyings_ && expirationStyle_ == other.expirationStyle_ &&
                mmy_ == other.mmy_ && optionType_ == other.optionType_ && cfi_ == other.cfi_ &&
                settlementStyle_ == other.settlementStyle_;
@@ -267,12 +267,12 @@ template <typename T> class OptionSeries final {
             return lastTrade_ < other.lastTrade_;
         }
 
-        if (multiplier_ != other.multiplier_) {
-            return multiplier_ < other.multiplier_;
+        if (const auto result = math::doubleCompare(multiplier_, other.multiplier_); result != 0) {
+            return result < 0;
         }
 
-        if (spc_ != other.spc_) {
-            return spc_ < other.spc_;
+        if (const auto result = math::doubleCompare(spc_, other.spc_); result != 0) {
+            return result < 0;
         }
 
         if (additionalUnderlyings_ != other.additionalUnderlyings_) {
@@ -361,8 +361,8 @@ template <typename T> class OptionSeries final {
         auto result = static_cast<std::size_t>(expiration_);
 
         hashCombine(result, lastTrade_);
-        hashCombine(result, multiplier_);
-        hashCombine(result, spc_);
+        hashCombine(result, std::isnan(multiplier_) ? math::NaN : multiplier_);
+        hashCombine(result, std::isnan(spc_) ? math::NaN : spc_);
         hashCombine(result, additionalUnderlyings_);
         hashCombine(result, mmy_);
         hashCombine(result, optionType_);

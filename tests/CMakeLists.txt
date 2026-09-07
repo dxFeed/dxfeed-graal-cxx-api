@@ -44,6 +44,8 @@ set(DXFC_TEST_SOURCES
         exceptions/ExceptionsTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
         glossary/PriceIncrementsTest.cpp
+        internal/CommonTest.cpp
+        ipf/OptionSeriesTest.cpp
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp
         model/MarketDepthModelTest.cpp
