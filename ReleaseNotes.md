@@ -1,3 +1,7 @@
+* **\[MDAPI-424]\[C++]** Fixed `OptionSeries` floating-point equality, ordering, and hashing
+  to match Java semantics. Multiplier and SPC values now distinguish `-0.0` from `+0.0`, treat all NaN values as
+  equal, and order NaN after positive infinity; NaN values are canonicalized for consistent hashing.
+
 ## v8.0.0
 
 * **\[MDAPI-423]\[C++]** **\[BREAKING]** Fixed Java-to-C++ porting errors in packed event fields, native

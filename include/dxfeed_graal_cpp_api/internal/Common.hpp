@@ -12,7 +12,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #ifdef __cpp_lib_bit_cast
 #    include <bit>
 #endif
+#include <algorithm>
 #include <climits>
+#include <concepts>
 #include <cstring>
 
 #include <charconv>
@@ -314,6 +316,39 @@ inline bool doubleEquals(double a, double b) noexcept {
 }
 
 /**
+ * Compares two double values using Java @c Double.compare semantics.
+ * NaN is greater than every other value and all NaN values compare as equal. Positive zero is greater than negative
+ * zero.
+ *
+ * @param a The first value.
+ * @param b The second value.
+ * @return A negative value if @p a is less than @p b, zero if they are equal, or a positive value otherwise.
+ */
+inline std::int32_t doubleCompare(double a, double b) noexcept {
+    if (a < b) {
+        return -1;
+    }
+
+    if (a > b) {
+        return 1;
+    }
+
+    if (doubleEquals(a, b)) {
+        return 0;
+    }
+
+    if (std::isnan(a)) {
+        return 1;
+    }
+
+    if (std::isnan(b)) {
+        return -1;
+    }
+
+    return std::signbit(a) ? -1 : 1;
+}
+
+/**
  * Checks whether a double value can be safely converted to @c std::int64_t without losing its fractional part.
  *
  * @param value The value to check.
@@ -325,20 +360,43 @@ inline bool isInt64(double value) noexcept {
            value < -static_cast<double>(std::numeric_limits<std::int64_t>::min()) && value == std::trunc(value);
 }
 
-inline bool equals(double a, double b, double eps = std::numeric_limits<double>::epsilon()) {
-    if (std::isnan(a) || std::isnan(b)) {
+/**
+ * Checks whether two floating-point values are approximately equal using explicit relative and absolute tolerances.
+ * Equal infinities compare as equal, while NaN values never compare as approximately equal.
+ *
+ * @tparam T The type of the first floating-point value.
+ * @tparam U The type of the second floating-point value.
+ * @param a The first value.
+ * @param b The second value.
+ * @param relativeTolerance The non-negative relative tolerance.
+ * @param absoluteTolerance The non-negative absolute tolerance used for values close to zero.
+ * @return @c true if the values are equal within either tolerance; @c false otherwise or if a tolerance is invalid.
+ */
+template <std::floating_point T, std::floating_point U>
+inline bool approximatelyEquals(T a, U b, double relativeTolerance, double absoluteTolerance) noexcept {
+    if (!std::isfinite(relativeTolerance) || !std::isfinite(absoluteTolerance) || relativeTolerance < 0.0 ||
+        absoluteTolerance < 0.0) {
         return false;
     }
 
-    return std::abs(a - b) < eps;
-}
+    using CommonType = std::common_type_t<T, U, double>;
 
-template <typename T, typename U> static bool equals(T a, U b, double eps = std::numeric_limits<double>::epsilon()) {
-    if (std::isnan(static_cast<double>(a)) || std::isnan(static_cast<double>(b))) {
+    const auto first = static_cast<CommonType>(a);
+    const auto second = static_cast<CommonType>(b);
+
+    if (first == second) {
+        return true;
+    }
+
+    if (!std::isfinite(first) || !std::isfinite(second)) {
         return false;
     }
 
-    return std::abs(static_cast<double>(a) - static_cast<double>(b)) < eps;
+    const auto difference = std::abs(first - second);
+    const auto scale = std::max(std::abs(first), std::abs(second));
+
+    return difference <= std::max(static_cast<CommonType>(absoluteTolerance),
+                                  static_cast<CommonType>(relativeTolerance) * scale);
 }
 
 } // namespace math
