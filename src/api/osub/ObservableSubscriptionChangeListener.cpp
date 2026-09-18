@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
@@ -11,6 +11,8 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+using ObservableSubscriptionChangeListenerManager = WeakEntityManager<ObservableSubscriptionChangeListener>;
+
 struct ObservableSubscriptionChangeListener::Impl {
     static void onSymbolsAdded(graal_isolatethread_t * /* thread */, dxfg_symbol_list *symbols, void *userData) {
         if (!symbols) {
@@ -19,7 +21,7 @@ struct ObservableSubscriptionChangeListener::Impl {
 
         const auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
         const auto listener =
-            ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->getEntity(id);
+            ApiContext::getInstance()->getManager<ObservableSubscriptionChangeListenerManager>()->getEntity(id);
 
         if (!listener) {
             return;
@@ -36,7 +38,7 @@ struct ObservableSubscriptionChangeListener::Impl {
 
         const auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
         const auto listener =
-            ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->getEntity(id);
+            ApiContext::getInstance()->getManager<ObservableSubscriptionChangeListenerManager>()->getEntity(id);
 
         if (!listener) {
             return;
@@ -49,7 +51,7 @@ struct ObservableSubscriptionChangeListener::Impl {
     static void onSubscriptionClosed(graal_isolatethread_t * /* thread */, void *userData) {
         const auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
         const auto listener =
-            ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->getEntity(id);
+            ApiContext::getInstance()->getManager<ObservableSubscriptionChangeListenerManager>()->getEntity(id);
 
         if (!listener) {
             return;
@@ -64,20 +66,20 @@ ObservableSubscriptionChangeListener::ObservableSubscriptionChangeListener(LockE
 }
 
 ObservableSubscriptionChangeListener::~ObservableSubscriptionChangeListener() noexcept {
+    ApiContext::getInstance()->getManager<ObservableSubscriptionChangeListenerManager>()->unregisterEntity(id_);
 }
 
 std::shared_ptr<ObservableSubscriptionChangeListener> ObservableSubscriptionChangeListener::create(
     std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded) {
     auto listener = createShared();
-    const auto id =
-        ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->registerEntity(
-            listener);
+    listener->id_ =
+        ApiContext::getInstance()->getManager<ObservableSubscriptionChangeListenerManager>()->registerEntity(listener);
 
     listener->handle_ = isolated::api::IsolatedObservableSubscriptionChangeListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onSymbolsAdded),
         dxfcpp::bit_cast<void *>(&Impl::onSymbolsRemoved),
         dxfcpp::bit_cast<void *>(&Impl::onSubscriptionClosed),
-        dxfcpp::bit_cast<void *>(id.getValue()));
+        dxfcpp::bit_cast<void *>(listener->id_.getValue()));
     listener->onSymbolsAdded_ += std::move(onSymbolsAdded);
 
     return listener;
@@ -88,15 +90,14 @@ std::shared_ptr<ObservableSubscriptionChangeListener> ObservableSubscriptionChan
     std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved,
     std::function<void()> onSubscriptionClosed) {
     auto listener = createShared();
-    const auto id =
-        ApiContext::getInstance()->getManager<EntityManager<ObservableSubscriptionChangeListener>>()->registerEntity(
-            listener);
+    listener->id_ =
+        ApiContext::getInstance()->getManager<ObservableSubscriptionChangeListenerManager>()->registerEntity(listener);
 
     listener->handle_ = isolated::api::IsolatedObservableSubscriptionChangeListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onSymbolsAdded),
         dxfcpp::bit_cast<void *>(&Impl::onSymbolsRemoved),
         dxfcpp::bit_cast<void *>(&Impl::onSubscriptionClosed),
-        dxfcpp::bit_cast<void *>(id.getValue()));
+        dxfcpp::bit_cast<void *>(listener->id_.getValue()));
     listener->onSymbolsAdded_ += std::move(onSymbolsAdded);
     listener->onSymbolsRemoved_ += std::move(onSymbolsRemoved);
     listener->onSubscriptionClosed_ += std::move(onSubscriptionClosed);
@@ -108,6 +109,20 @@ const JavaObjectHandle<ObservableSubscriptionChangeListener> &ObservableSubscrip
     std::lock_guard guard{mutex_};
 
     return handle_;
+}
+
+void ObservableSubscriptionChangeListener::notifySymbolsAdded(
+    Key, const std::unordered_set<SymbolWrapper> &symbols) {
+    onSymbolsAdded_(symbols);
+}
+
+void ObservableSubscriptionChangeListener::notifySymbolsRemoved(
+    Key, const std::unordered_set<SymbolWrapper> &symbols) {
+    onSymbolsRemoved_(symbols);
+}
+
+void ObservableSubscriptionChangeListener::notifySubscriptionClosed(Key) {
+    onSubscriptionClosed_();
 }
 
 DXFCPP_END_NAMESPACE

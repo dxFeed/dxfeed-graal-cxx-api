@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -32,14 +32,26 @@ struct DXFCPP_EXPORT DXPublisherObservableSubscription : RequireMakeShared<DXPub
     private:
     inline static std::atomic<std::size_t> lastListenerId_{};
 
+    /** Owns the public listener and the per-subscription native callback bridge installed for it. */
+    struct ListenerRegistration {
+        std::shared_ptr<ObservableSubscriptionChangeListener> listener;
+        std::shared_ptr<ObservableSubscriptionChangeListener> bridge;
+    };
+
     JavaObjectHandle<DXPublisherObservableSubscription> handle_;
-    std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> listeners_;
+    std::unordered_map<std::size_t, ListenerRegistration> listeners_;
     std::recursive_mutex listenersMutex_{};
+
+    void releaseChangeListenerAfterClose(std::size_t listenerId);
 
     public:
     DXPublisherObservableSubscription(LockExternalConstructionTag,
                                       JavaObjectHandle<DXPublisherObservableSubscription> &&handle);
-    ~DXPublisherObservableSubscription() override;
+
+    /**
+     * Removes native listener registrations and releases all listeners owned by this subscription.
+     */
+    ~DXPublisherObservableSubscription() noexcept override;
 
     static std::shared_ptr<DXPublisherObservableSubscription>
     create(JavaObjectHandle<DXPublisherObservableSubscription> &&handle);

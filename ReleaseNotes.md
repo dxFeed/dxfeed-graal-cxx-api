@@ -3,6 +3,7 @@
   to match Java semantics. Multiplier and SPC values now distinguish `-0.0` from `+0.0`, treat all NaN values as
   equal, and order NaN after positive infinity; NaN values are canonicalized for consistent hashing.
 * Fixed `JavaHandle` leaks.
+* **\[MDAPI-425]\[C++]** Improved lifecycle management for native callback-backed entities.
 
 ## v8.0.0
 
