@@ -363,6 +363,14 @@ int runUi() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glslVersion);
 
+    ImFontConfig fontConfig{};
+    fontConfig.SizePixels = 15.0F;
+    ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontDefaultVector(&fontConfig);
+
+    const auto contentScale = std::max(1.0F, ImGui_ImplGlfw_GetContentScaleForWindow(window));
+    ImGui::GetStyle().ScaleAllSizes(contentScale);
+    ImGui::GetStyle().FontScaleDpi = contentScale;
+
     try {
         FeedController controller;
         std::array<char, 128> symbolInput{};
