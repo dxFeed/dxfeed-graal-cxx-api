@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -75,6 +75,14 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     struct Impl;
 
     public:
+    /**
+     * Removes the native state listener and closes this connection.
+     *
+     * Destruction is safe with concurrent state callbacks: a callback that has already acquired this object keeps it
+     * alive until the callback returns, while callbacks arriving later cannot lock its weak registry entry.
+     */
+    ~InstrumentProfileConnection() noexcept override;
+
     static std::string stateToString(State state) noexcept;
 
     /**

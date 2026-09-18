@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -46,6 +46,19 @@ bool close(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::Instrume
                &instrumentProfileConnection);
 
 bool addStateChangeListener(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
+        &instrumentProfileConnection,
+    /* dxfg_ipf_connection_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::IpfPropertyChangeListener>
+        &listener);
+
+/**
+ * Removes a native state-change listener from an instrument-profile connection.
+ *
+ * @param instrumentProfileConnection The native connection handle.
+ * @param listener The native listener handle.
+ * @return `true` if the native operation succeeds.
+ */
+bool removeStateChangeListener(
     /* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
         &instrumentProfileConnection,
     /* dxfg_ipf_connection_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::IpfPropertyChangeListener>

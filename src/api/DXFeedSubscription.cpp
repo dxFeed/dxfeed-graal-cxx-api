@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp"
@@ -217,7 +217,9 @@ void DXFeedSubscription::close() const {
         Debugger::debug(toString() + "::close()");
     }
 
+    std::lock_guard guard{changeListenersMutex_};
     isolated::api::IsolatedDXFeedSubscription::close(handle_);
+    changeListeners_.clear();
 }
 
 std::unordered_set<EventTypeEnum> DXFeedSubscription::getEventTypes() {
@@ -316,10 +318,18 @@ DXFeedSubscription::OnEventHandler &DXFeedSubscription::onEvent() {
 }
 
 std::size_t DXFeedSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
+    std::lock_guard guard{changeListenersMutex_};
+
+    if (isClosed()) {
+        return FAKE_CHANGE_LISTENER_ID;
+    }
+
     isolated::api::IsolatedDXFeedSubscription::addChangeListener(
         handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
-    std::lock_guard guard{changeListenersMutex_};
+    if (isClosed()) {
+        return FAKE_CHANGE_LISTENER_ID;
+    }
 
     if (lastChangeListenerId_ >= FAKE_CHANGE_LISTENER_ID - 1) {
         return FAKE_CHANGE_LISTENER_ID;
@@ -345,7 +355,7 @@ void DXFeedSubscription::removeChangeListener(std::size_t changeListenerId) {
         isolated::api::IsolatedDXFeedSubscription::removeChangeListener(
             handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
-        changeListeners_.erase(found);
+        changeListeners_.erase(changeListenerId);
     }
 }
 

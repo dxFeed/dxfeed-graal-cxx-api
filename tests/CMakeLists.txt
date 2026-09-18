@@ -1,4 +1,4 @@
-# Copyright (c) 2025 Devexperts LLC.
+# Copyright (c) 2026 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
 cmake_minimum_required(VERSION 3.15)
@@ -39,12 +39,14 @@ set(DXFC_TEST_SOURCES
         api/DXPublisherTest.cpp
         api/EventsTest.cpp
         api/MarketEventSymbolsTest.cpp
+        api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderSourceTest.cpp
         event/EventsTest.cpp
         exceptions/ExceptionsTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
         glossary/PriceIncrementsTest.cpp
         internal/CommonTest.cpp
+        internal/EntityManagerTest.cpp
         ipf/OptionSeriesTest.cpp
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp

@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../../include/dxfeed_graal_cpp_api/ipf/live/InstrumentProfileConnection.hpp"
@@ -11,6 +11,8 @@
 #include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
+
+using InstrumentProfileConnectionManager = WeakEntityManager<InstrumentProfileConnection>;
 
 InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state) {
     switch (state) {
@@ -35,7 +37,7 @@ struct InstrumentProfileConnection::Impl {
         const auto id = Id<InstrumentProfileConnection>::from(
             dxfcpp::bit_cast<Id<InstrumentProfileConnection>::ValueType>(userData));
         const auto connection =
-            ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileConnection>>()->getEntity(id);
+            ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->getEntity(id);
 
         if constexpr (Debugger::isDebug) {
             Debugger::debug("InstrumentProfileConnection::Impl::onStateChange: id = " + std::to_string(id.getValue()));
@@ -46,8 +48,7 @@ struct InstrumentProfileConnection::Impl {
                                        graalIpfConnectionStateToState(newState));
 
             if (newState == DXFG_IPF_CONNECTION_STATE_CLOSED) {
-                ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileConnection>>()->unregisterEntity(
-                    id);
+                ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id);
             }
         }
     }
@@ -55,6 +56,27 @@ struct InstrumentProfileConnection::Impl {
 
 InstrumentProfileConnection::InstrumentProfileConnection() noexcept
     : id_{Id<InstrumentProfileConnection>::UNKNOWN} {
+}
+
+InstrumentProfileConnection::~InstrumentProfileConnection() noexcept {
+    if (handle_ && stateChangeListenerHandle_) {
+        try {
+            isolated::ipf::live::IsolatedInstrumentProfileConnection::removeStateChangeListener(
+                handle_, stateChangeListenerHandle_);
+        } catch (...) {
+            // Destructors must remain noexcept even if the native isolate is already shutting down.
+        }
+    }
+
+    if (handle_) {
+        try {
+            isolated::ipf::live::IsolatedInstrumentProfileConnection::close(handle_);
+        } catch (...) {
+            // Destructors must remain noexcept even if the native isolate is already shutting down.
+        }
+    }
+
+    ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id_);
 }
 
 std::string InstrumentProfileConnection::stateToString(State state) noexcept {
@@ -80,7 +102,7 @@ InstrumentProfileConnection::createConnection(const StringLike &address,
     std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 
     connection->id_ =
-        ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileConnection>>()->registerEntity(connection);
+        ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->registerEntity(connection);
     connection->handle_ =
         isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address, collector->handle_);
     connection->stateChangeListenerHandle_ = isolated::ipf::live::IsolatedIpfPropertyChangeListener::create(

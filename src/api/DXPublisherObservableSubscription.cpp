@@ -1,11 +1,9 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisherObservableSubscription.hpp"
 
 #include <memory>
@@ -17,15 +15,36 @@ DXPublisherObservableSubscription::DXPublisherObservableSubscription(
     : handle_{std::move(handle)} {
 }
 
-DXPublisherObservableSubscription::~DXPublisherObservableSubscription() {};
+DXPublisherObservableSubscription::~DXPublisherObservableSubscription() noexcept {
+    decltype(listeners_) listeners;
+
+    {
+        std::lock_guard guard{listenersMutex_};
+        listeners.swap(listeners_);
+    }
+
+    if (handle_) {
+        for (const auto &[id, registration] : listeners) {
+            ignoreUnused(id);
+
+            try {
+                isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(
+                    handle_, registration.bridge->getHandle(ObservableSubscriptionChangeListener::Key{}));
+            } catch (...) {
+                // Destructors must remain noexcept even if the native isolate is already shutting down.
+            }
+        }
+    }
+}
 
 std::shared_ptr<DXPublisherObservableSubscription>
 DXPublisherObservableSubscription::create(JavaObjectHandle<DXPublisherObservableSubscription> &&handle) {
-    auto sub = createShared(std::move(handle));
+    return createShared(std::move(handle));
+}
 
-    ApiContext::getInstance()->getManager<EntityManager<DXPublisherObservableSubscription>>()->registerEntity(sub);
-
-    return sub;
+void DXPublisherObservableSubscription::releaseChangeListenerAfterClose(std::size_t listenerId) {
+    std::lock_guard guard{listenersMutex_};
+    listeners_.erase(listenerId);
 }
 
 bool DXPublisherObservableSubscription::isClosed() {
@@ -42,18 +61,54 @@ bool DXPublisherObservableSubscription::containsEventType(const EventTypeEnum &e
 
 std::size_t
 DXPublisherObservableSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
-    isolated::api::IsolatedDXPublisherObservableSubscription::addChangeListener(
-        handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
-
     std::lock_guard guard{listenersMutex_};
+
+    if (isClosed()) {
+        return FAKE_LISTENER_ID;
+    }
 
     if (lastListenerId_ >= FAKE_LISTENER_ID - 1) {
         return FAKE_LISTENER_ID;
     }
 
-    auto id = ++lastListenerId_;
+    const auto id = ++lastListenerId_;
+    const std::weak_ptr<DXPublisherObservableSubscription> weakSelf = sharedAs<DXPublisherObservableSubscription>();
+    const std::weak_ptr<ObservableSubscriptionChangeListener> weakListener = listener;
+    auto bridge = ObservableSubscriptionChangeListener::create(
+        [weakListener](const std::unordered_set<SymbolWrapper> &symbols) {
+            if (const auto target = weakListener.lock()) {
+                target->notifySymbolsAdded(ObservableSubscriptionChangeListener::Key{}, symbols);
+            }
+        },
+        [weakListener](const std::unordered_set<SymbolWrapper> &symbols) {
+            if (const auto target = weakListener.lock()) {
+                target->notifySymbolsRemoved(ObservableSubscriptionChangeListener::Key{}, symbols);
+            }
+        },
+        [weakSelf, weakListener, id] {
+            if (const auto target = weakListener.lock()) {
+                target->notifySubscriptionClosed(ObservableSubscriptionChangeListener::Key{});
+            }
 
-    listeners_.emplace(id, listener);
+            if (const auto self = weakSelf.lock()) {
+                self->releaseChangeListenerAfterClose(id);
+            }
+        });
+
+    listeners_.emplace(id, ListenerRegistration{listener, bridge});
+
+    try {
+        isolated::api::IsolatedDXPublisherObservableSubscription::addChangeListener(
+            handle_, bridge->getHandle(ObservableSubscriptionChangeListener::Key{}));
+    } catch (...) {
+        listeners_.erase(id);
+        throw;
+    }
+
+    if (isClosed() || !listeners_.contains(id)) {
+        listeners_.erase(id);
+        return FAKE_LISTENER_ID;
+    }
 
     return id;
 }
@@ -66,12 +121,12 @@ void DXPublisherObservableSubscription::removeChangeListener(std::size_t changeL
     }
 
     if (const auto found = listeners_.find(changeListenerId); found != listeners_.end()) {
-        const auto listener = found->second;
+        const auto bridge = found->second.bridge;
 
         isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(
-            handle_, listener->getHandle(ObservableSubscriptionChangeListener::Key{}));
+            handle_, bridge->getHandle(ObservableSubscriptionChangeListener::Key{}));
 
-        listeners_.erase(found);
+        listeners_.erase(changeListenerId);
     }
 }
 

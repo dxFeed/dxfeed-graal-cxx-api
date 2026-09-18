@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp"
@@ -136,6 +136,27 @@ bool addStateChangeListener(
 
     return runGraalFunctionAndThrowIfMinusOne(
                dxfg_InstrumentProfileConnection_addStateChangeListener,
+               static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get()),
+               static_cast<dxfg_ipf_connection_state_change_listener_t *>(listener.get())) == 0;
+}
+
+bool removeStateChangeListener(
+    /* dxfg_ipf_connection_t * */ const JavaObjectHandle<InstrumentProfileConnection> &instrumentProfileConnection,
+    /* dxfg_ipf_connection_state_change_listener_t * */ const JavaObjectHandle<IpfPropertyChangeListener> &listener) {
+    if (!instrumentProfileConnection) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_InstrumentProfileConnection_removeStateChangeListener`. The "
+            "`instrumentProfileConnection` handle is invalid");
+    }
+
+    if (!listener) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_InstrumentProfileConnection_removeStateChangeListener`. The "
+            "`listener` handle is invalid");
+    }
+
+    return runGraalFunctionAndThrowIfMinusOne(
+               dxfg_InstrumentProfileConnection_removeStateChangeListener,
                static_cast<dxfg_ipf_connection_t *>(instrumentProfileConnection.get()),
                static_cast<dxfg_ipf_connection_state_change_listener_t *>(listener.get())) == 0;
 }

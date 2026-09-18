@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -74,8 +74,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     std::mutex eventListenerMutex_{};
     JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
     OnEventHandler onEvent_{};
-    std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners_;
-    std::recursive_mutex changeListenersMutex_{};
+    mutable std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners_;
+    mutable std::recursive_mutex changeListenersMutex_{};
 
     static JavaObjectHandle<DXFeedSubscription>
     createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);

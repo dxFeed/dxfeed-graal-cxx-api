@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Devexperts LLC.
+// Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
 #pragma once
@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../entity/SharedEntity.hpp"
+#include "../../internal/Id.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
 
 #include <functional>
@@ -34,6 +35,13 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<Ob
     };
 
     explicit ObservableSubscriptionChangeListener(LockExternalConstructionTag);
+
+    /**
+     * Destroys this listener and invalidates its native callback registration context.
+     *
+     * Subscriptions that still have the listener installed keep it alive, so destruction cannot race with a callback
+     * that has successfully acquired the listener.
+     */
     ~ObservableSubscriptionChangeListener() noexcept override;
 
     /**
@@ -58,10 +66,33 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<Ob
            std::function<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved,
            std::function<void()> onSubscriptionClosed);
 
+    /**
+     * Returns the native listener handle to an owning subscription implementation.
+     *
+     * @return The native listener handle.
+     */
     const JavaObjectHandle<ObservableSubscriptionChangeListener> &getHandle(Key) const;
+
+    /**
+     * Delivers an added-symbol notification from an owning subscription implementation.
+     *
+     * @param symbols The symbols added to the subscription.
+     */
+    void notifySymbolsAdded(Key, const std::unordered_set<SymbolWrapper> &symbols);
+
+    /**
+     * Delivers a removed-symbol notification from an owning subscription implementation.
+     *
+     * @param symbols The symbols removed from the subscription.
+     */
+    void notifySymbolsRemoved(Key, const std::unordered_set<SymbolWrapper> &symbols);
+
+    /** Delivers a subscription-closed notification from an owning subscription implementation. */
+    void notifySubscriptionClosed(Key);
 
     private:
     mutable std::recursive_mutex mutex_{};
+    Id<ObservableSubscriptionChangeListener> id_{Id<ObservableSubscriptionChangeListener>::UNKNOWN};
     JavaObjectHandle<ObservableSubscriptionChangeListener> handle_{};
     SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded_{};
     SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved_{};
