@@ -10,12 +10,11 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include <fmt/chrono.h>
+
 #include <algorithm>
 #include <array>
 #include <cctype>
-#include <chrono>
-#include <cstdio>
-#include <cstring>
 #include <ctime>
 #include <iostream>
 #include <memory>
@@ -24,7 +23,6 @@
 #include <ranges>
 #include <stdexcept>
 #include <string>
-#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -272,14 +270,7 @@ std::string formatTime(std::int64_t milliseconds) {
     localtime_r(&seconds, &localTime);
 #endif
 
-    std::array<char, 32> buffer{};
-    std::strftime(buffer.data(), buffer.size(), "%H:%M:%S", &localTime);
-    return std::string{buffer.data()} + "." + [](std::int64_t millis) {
-        std::array<char, 4> fraction{};
-
-        std::snprintf(fraction.data(), fraction.size(), "%03lld", static_cast<long long>(millis));
-        return std::string{fraction.data()};
-    }((milliseconds % 1000 + 1000) % 1000);
+    return fmt::format("{:%H:%M:%S}.{:03}", localTime, (milliseconds % 1000 + 1000) % 1000);
 }
 
 std::string formatExchangeCode(std::int16_t code) {

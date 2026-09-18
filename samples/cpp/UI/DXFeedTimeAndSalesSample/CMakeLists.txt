@@ -65,7 +65,7 @@ target_include_directories(DXFeedTimeAndSalesImGui PUBLIC
 target_link_libraries(DXFeedTimeAndSalesImGui PUBLIC glfw OpenGL::GL)
 
 add_executable(${PROJECT_NAME} src/main.cpp src/TimeAndSalesStore.hpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE DXFeedTimeAndSalesImGui)
+target_link_libraries(${PROJECT_NAME} PRIVATE DXFeedTimeAndSalesImGui fmt::fmt-header-only)
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
     target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
