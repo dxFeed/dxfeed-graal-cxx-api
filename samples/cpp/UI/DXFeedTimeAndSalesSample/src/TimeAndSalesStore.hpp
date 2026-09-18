@@ -72,8 +72,8 @@ class TimeAndSalesStore final {
         std::vector<TimeAndSaleRow> result;
         result.reserve(rowsByIndex_.size());
 
-        for (auto it = rowsByIndex_.rbegin(); it != rowsByIndex_.rend(); ++it) {
-            result.push_back(it->second);
+        for (const auto &[index, row] : std::views::reverse(rowsByIndex_)) {
+            result.push_back(row);
         }
 
         std::ranges::stable_sort(result, {}, [](const auto &row) {

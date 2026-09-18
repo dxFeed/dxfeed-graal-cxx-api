@@ -146,6 +146,7 @@ class FeedController final {
         if (timeAndSalesModel_) {
             timeAndSalesModel_->close();
         }
+
         if (profileSubscription_) {
             profileSubscription_->close();
         }
@@ -208,6 +209,7 @@ std::string formatTime(std::int64_t milliseconds) {
     std::strftime(buffer.data(), buffer.size(), "%H:%M:%S", &localTime);
     return std::string{buffer.data()} + "." + [](std::int64_t millis) {
         std::array<char, 4> fraction{};
+
         std::snprintf(fraction.data(), fraction.size(), "%03lld", static_cast<long long>(millis));
         return std::string{fraction.data()};
     }((milliseconds % 1000 + 1000) % 1000);
@@ -320,16 +322,20 @@ int runUi() {
             ImGui::NewFrame();
 
             const auto viewport = ImGui::GetMainViewport();
+
             ImGui::SetNextWindowPos(viewport->WorkPos);
             ImGui::SetNextWindowSize(viewport->WorkSize);
+
             constexpr auto windowFlags =
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings;
+
             ImGui::Begin("DXFeed Time & Sales", nullptr, windowFlags);
 
             ImGui::AlignTextToFramePadding();
             ImGui::TextUnformatted("Symbol");
             ImGui::SameLine();
             ImGui::SetNextItemWidth(180.0F);
+
             const bool enterPressed = ImGui::InputText("##symbol", symbolInput.data(), symbolInput.size(),
                                                        ImGuiInputTextFlags_EnterReturnsTrue);
             ImGui::SameLine();
@@ -350,8 +356,10 @@ int runUi() {
             ImGui::End();
 
             ImGui::Render();
+
             int displayWidth{};
             int displayHeight{};
+
             glfwGetFramebufferSize(window, &displayWidth, &displayHeight);
             glViewport(0, 0, displayWidth, displayHeight);
             glClearColor(0.94F, 0.94F, 0.94F, 1.0F);
@@ -365,6 +373,7 @@ int runUi() {
         ImGui::DestroyContext();
         glfwDestroyWindow(window);
         glfwTerminate();
+
         throw;
     }
 
