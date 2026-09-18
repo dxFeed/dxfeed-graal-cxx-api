@@ -54,6 +54,7 @@ class UiMailbox final {
     mutable std::mutex mutex_{};
     TimeAndSalesStore store_{NUMBER_OF_PRESENT_TRADES};
     std::string symbol_{};
+    std::string profileSymbol_{};
     std::string description_{};
     std::uint64_t generation_{};
     bool dirty_{true};
@@ -62,13 +63,15 @@ class UiMailbox final {
     /**
      * Starts a new subscription generation and clears data belonging to the previous symbol.
      *
-     * @param symbol New normalized symbol, or an empty string when unsubscribing.
+     * @param symbol New normalized TimeAndSale symbol, or an empty string when unsubscribing.
+     * @param profileSymbol Base symbol used by the Profile subscription.
      * @return Generation token that the corresponding IndexedTxModel listener must use when publishing transactions.
      */
-    std::uint64_t reset(std::string symbol) {
+    std::uint64_t reset(std::string symbol, std::string profileSymbol) {
         const std::lock_guard lock{mutex_};
         ++generation_;
         symbol_ = std::move(symbol);
+        profileSymbol_ = std::move(profileSymbol);
         description_.clear();
         store_.clear();
         dirty_ = true;
@@ -104,7 +107,8 @@ class UiMailbox final {
      */
     void publishProfile(const std::string &symbol, const std::optional<std::string> &description) {
         const std::lock_guard lock{mutex_};
-        if (symbol != symbol_) {
+
+        if (symbol != profileSymbol_) {
             return;
         }
 
@@ -161,8 +165,9 @@ TimeAndSaleRow toRow(const std::shared_ptr<TimeAndSale> &event) {
 /**
  * Owns the dxFeed subscriptions used by the window and converts their callbacks into UI state updates.
  *
- * A Profile subscription supplies the instrument description. Each non-empty symbol also owns one
- * IndexedTxModel<TimeAndSale> configured for snapshot and batch processing.
+ * A Profile subscription supplies the instrument description. Regional TimeAndSale symbols use their base symbol for
+ * this subscription because Profile events are only available for composite symbols. Each non-empty symbol also owns
+ * one IndexedTxModel<TimeAndSale> configured for snapshot and batch processing.
  */
 class FeedController final {
     std::shared_ptr<DXFeed> feed_{DXFeed::getInstance()};
@@ -204,7 +209,8 @@ class FeedController final {
      * Switches the window to a new symbol.
      *
      * The previous model is closed before the mailbox is reset. An empty or whitespace-only symbol clears the view and
-     * leaves no TimeAndSale model active.
+     * leaves no TimeAndSale model active. A regional symbol such as AAPL&Q remains unchanged for TimeAndSale, while its
+     * base symbol AAPL is used for Profile.
      *
      * @param symbol Symbol entered by the user; leading and trailing whitespace is removed.
      */
@@ -216,8 +222,11 @@ class FeedController final {
             timeAndSalesModel_.reset();
         }
 
-        const auto generation = mailbox_->reset(symbol);
-        profileSubscription_->setSymbols(symbol.empty() ? std::vector<std::string>{} : std::vector{symbol});
+        const auto profileSymbol = MarketEventSymbols::getBaseSymbol(symbol);
+        const auto generation = mailbox_->reset(symbol, profileSymbol);
+
+        profileSubscription_->setSymbols(profileSymbol.empty() ? std::vector<std::string>{}
+                                                              : std::vector{profileSymbol});
 
         if (symbol.empty()) {
             return;

@@ -23,6 +23,8 @@ otherwise. The data endpoint is selected through the sample's
 Build and run the `DXFeedTimeAndSalesSample` target, enter a symbol such as `AAPL`, then press Enter or **Subscribe**.
 The table keeps the latest 30 trades. Feed callbacks accumulate `IndexedTxModel` transactions in a synchronized
 mailbox; the window reads the newest immutable view on each frame, so dxFeed does not need a UI-specific executor.
+Regional symbols are supported as well: for `AAPL&Q`, TimeAndSale remains subscribed to `AAPL&Q`, while Profile uses
+the composite symbol `AAPL` so that the instrument description is still available.
 
 On Linux, the sample builds GLFW with the X11 backend by default, which also works under WSLg through XWayland. Native
 Wayland support can be enabled with `-DDXFCXX_SAMPLE_GLFW_BUILD_WAYLAND=ON` when `wayland-scanner` and the Wayland
@@ -35,4 +37,6 @@ ctest --test-dir <build-directory> -R DXFeedTimeAndSalesStoreTest --output-on-fa
 ```
 
 For an integration smoke test, run the application against the demo endpoint, subscribe to `AAPL`, verify that the
-description appears and the table stays at 30 rows or fewer, then switch symbols and verify that old rows are cleared.
+description appears and the table stays at 30 rows or fewer, then switch to `AAPL&Q`. Verify that regional trades are
+shown, the composite `AAPL` profile still supplies the description, and rows from the previous subscription are
+cleared.
