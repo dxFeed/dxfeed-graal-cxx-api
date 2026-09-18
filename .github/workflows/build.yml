@@ -108,6 +108,27 @@ jobs:
 #        buildType: [ Release, Debug, RelWithDebInfo ]
         buildType: [ Release, Debug]
         sanitizers: [ NO_SAN, ASAN, UBSAN ]
+        # The prebuilt Intel Graal Native SDK uses the legacy macOS directory
+        # ABI and is not compatible with the Xcode sanitizer runtime.
+        exclude:
+          - config:
+              name: macos-15-intel-xcode-16-4
+              image: macos-15-intel
+              os: macos
+              cores: 4
+              xcode: '16.4'
+              cc: 'clang'
+              cxx: 'clang++'
+            sanitizers: ASAN
+          - config:
+              name: macos-15-intel-xcode-16-4
+              image: macos-15-intel
+              os: macos
+              cores: 4
+              xcode: '16.4'
+              cc: 'clang'
+              cxx: 'clang++'
+            sanitizers: UBSAN
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
     runs-on: ${{ matrix.config.image }}
