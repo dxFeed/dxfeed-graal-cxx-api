@@ -67,6 +67,7 @@ class UiMailbox final {
      */
     std::uint64_t reset(std::string symbol, std::string profileSymbol) {
         const std::lock_guard lock{mutex_};
+
         ++generation_;
         symbol_ = std::move(symbol);
         profileSymbol_ = std::move(profileSymbol);
@@ -89,6 +90,7 @@ class UiMailbox final {
      */
     void publishTrades(std::uint64_t generation, const std::vector<TimeAndSaleRow> &events, bool isSnapshot) {
         const std::lock_guard lock{mutex_};
+
         if (generation != generation_) {
             return;
         }
@@ -179,6 +181,7 @@ class FeedController final {
         const std::weak_ptr weakMailbox{mailbox_};
         profileSubscription_->addEventListener<Profile>([weakMailbox](const auto &profiles) {
             const auto mailbox = weakMailbox.lock();
+
             if (!mailbox) {
                 return;
             }
