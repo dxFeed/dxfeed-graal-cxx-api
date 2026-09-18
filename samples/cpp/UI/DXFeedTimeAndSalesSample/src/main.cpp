@@ -36,12 +36,20 @@ namespace {
 
 constexpr std::size_t NUMBER_OF_PRESENT_TRADES = 30;
 
+/** A detached copy of all data required to render one UI frame. */
 struct ViewState {
-    std::string symbol{};
-    std::string description{};
-    std::vector<TimeAndSaleRow> rows{};
+    std::string symbol{};                 ///< Currently subscribed symbol.
+    std::string description{};            ///< Latest instrument description, or an empty string if unavailable.
+    std::vector<TimeAndSaleRow> rows{};    ///< Accumulated trades in presentation order.
 };
 
+/**
+ * Synchronizes dxFeed callback data with the UI thread.
+ *
+ * Feed callbacks publish transactions and profile updates from dxFeed-managed threads. The render loop periodically
+ * takes a detached ViewState when anything has changed. Updates are coalesced into the latest state rather than queued,
+ * which keeps feed callbacks independent of the GLFW event loop and avoids requiring a custom dxFeed executor.
+ */
 class UiMailbox final {
     mutable std::mutex mutex_{};
     TimeAndSalesStore store_{NUMBER_OF_PRESENT_TRADES};
@@ -51,6 +59,12 @@ class UiMailbox final {
     bool dirty_{true};
 
     public:
+    /**
+     * Starts a new subscription generation and clears data belonging to the previous symbol.
+     *
+     * @param symbol New normalized symbol, or an empty string when unsubscribing.
+     * @return Generation token that the corresponding IndexedTxModel listener must use when publishing transactions.
+     */
     std::uint64_t reset(std::string symbol) {
         const std::lock_guard lock{mutex_};
         ++generation_;
@@ -62,6 +76,16 @@ class UiMailbox final {
         return generation_;
     }
 
+    /**
+     * Applies a TimeAndSale transaction received from IndexedTxModel.
+     *
+     * Transactions from an already closed model may arrive after a symbol change. Such transactions are ignored when
+     * their generation token no longer matches the active subscription.
+     *
+     * @param generation Subscription generation captured when the listener was created.
+     * @param events Rows belonging to the transaction.
+     * @param isSnapshot Whether the transaction replaces the previously accumulated snapshot.
+     */
     void publishTrades(std::uint64_t generation, const std::vector<TimeAndSaleRow> &events, bool isSnapshot) {
         const std::lock_guard lock{mutex_};
         if (generation != generation_) {
@@ -72,6 +96,12 @@ class UiMailbox final {
         dirty_ = true;
     }
 
+    /**
+     * Publishes an instrument description received from the Profile subscription.
+     *
+     * @param symbol Symbol to which the profile belongs. Profiles for inactive symbols are ignored.
+     * @param description Optional instrument description.
+     */
     void publishProfile(const std::string &symbol, const std::optional<std::string> &description) {
         const std::lock_guard lock{mutex_};
         if (symbol != symbol_) {
@@ -82,6 +112,13 @@ class UiMailbox final {
         dirty_ = true;
     }
 
+    /**
+     * Takes the latest detached view when state has changed since the previous call.
+     *
+     * Taking a view clears the dirty flag. A later callback sets it again, causing another view to be produced.
+     *
+     * @return The latest view, or std::nullopt when the UI already has the current state.
+     */
     [[nodiscard]] std::optional<ViewState> takeIfDirty() {
         const std::lock_guard lock{mutex_};
         if (!dirty_) {
@@ -121,6 +158,12 @@ TimeAndSaleRow toRow(const std::shared_ptr<TimeAndSale> &event) {
     };
 }
 
+/**
+ * Owns the dxFeed subscriptions used by the window and converts their callbacks into UI state updates.
+ *
+ * A Profile subscription supplies the instrument description. Each non-empty symbol also owns one
+ * IndexedTxModel<TimeAndSale> configured for snapshot and batch processing.
+ */
 class FeedController final {
     std::shared_ptr<DXFeed> feed_{DXFeed::getInstance()};
     std::shared_ptr<UiMailbox> mailbox_{std::make_shared<UiMailbox>()};
@@ -128,6 +171,7 @@ class FeedController final {
     std::shared_ptr<IndexedTxModel<TimeAndSale>> timeAndSalesModel_{};
 
     public:
+    /// Creates the shared Profile subscription and installs its event listener.
     FeedController() : profileSubscription_(feed_->createSubscription(Profile::TYPE)) {
         const std::weak_ptr weakMailbox{mailbox_};
         profileSubscription_->addEventListener<Profile>([weakMailbox](const auto &profiles) {
@@ -142,6 +186,7 @@ class FeedController final {
         });
     }
 
+    /// Closes the active IndexedTxModel and Profile subscription.
     ~FeedController() {
         if (timeAndSalesModel_) {
             timeAndSalesModel_->close();
@@ -155,6 +200,14 @@ class FeedController final {
     FeedController(const FeedController &) = delete;
     FeedController &operator=(const FeedController &) = delete;
 
+    /**
+     * Switches the window to a new symbol.
+     *
+     * The previous model is closed before the mailbox is reset. An empty or whitespace-only symbol clears the view and
+     * leaves no TimeAndSale model active.
+     *
+     * @param symbol Symbol entered by the user; leading and trailing whitespace is removed.
+     */
     void subscribe(std::string symbol) {
         symbol = trim(std::move(symbol));
 
@@ -191,6 +244,11 @@ class FeedController final {
                 ->build();
     }
 
+    /**
+     * Returns a new detached view only when a feed callback or subscription change modified the visible state.
+     *
+     * @return Updated UI data, or std::nullopt when no redraw data needs to be copied.
+     */
     [[nodiscard]] std::optional<ViewState> takeViewIfChanged() const {
         return mailbox_->takeIfDirty();
     }
