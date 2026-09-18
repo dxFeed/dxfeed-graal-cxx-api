@@ -8,6 +8,8 @@
   - Boost.Stacktrace 1.0
 - [utfcpp](https://github.com/nemtrif/utfcpp) v3.2.3
 - [fmt](https://github.com/fmtlib/fmt) v12.1.0
+- [GLFW](https://github.com/glfw/glfw) v3.4 (UI Samples)
+- [Dear ImGui](https://github.com/ocornut/imgui) v1.92.9b (UI Samples)
 - [doctest](https://github.com/doctest/doctest) v2.4.11 (Tests)
 - [range-v3](https://github.com/ericniebler/range-v3) v0.12
 - [date](https://github.com/HowardHinnant/date) v3.0.1

@@ -43,6 +43,14 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
      */
     static JavaException create(void *exceptionHandle);
 
+    /**
+     * Creates an exception from a native Java exception handle and releases the native representation.
+     *
+     * @param exceptionHandle The native Java exception handle.
+     * @return An exception containing a copy of the native exception data.
+     */
+    static JavaException createAndRelease(void *exceptionHandle);
+
     /// Throws a JavaException if it exists (i.e. intercepted by Graal SDK)
     static void throwIfJavaThreadExceptionExists();
 

@@ -252,8 +252,6 @@ std::int32_t Candle::getSequence() const noexcept {
 }
 
 void Candle::setSequence(std::int32_t sequence) {
-    assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
     if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
         throw InvalidArgumentException(
             fmt::format(ires::Strings::Events::INVALID_VALUE_FOR_ARG, "sequence", std::to_string(sequence)));

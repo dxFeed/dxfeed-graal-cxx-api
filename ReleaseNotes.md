@@ -1,6 +1,8 @@
+* **\[MDAPI-85]\[C++]** Added DXFeedTimeAndSales API sample.
 * **\[MDAPI-424]\[C++]** Fixed `OptionSeries` floating-point equality, ordering, and hashing
   to match Java semantics. Multiplier and SPC values now distinguish `-0.0` from `+0.0`, treat all NaN values as
   equal, and order NaN after positive infinity; NaN values are canonicalized for consistent hashing.
+* Fixed `JavaHandle` leaks.
 
 ## v8.0.0
 

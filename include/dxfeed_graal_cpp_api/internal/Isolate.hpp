@@ -35,6 +35,7 @@ class DXFCPP_EXPORT Isolate final {
         GraalIsolateThreadHandle handle{};
         std::thread::id tid{};
         std::size_t idx{};
+        bool detachOnDestruction{};
 
         explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr) noexcept;
 

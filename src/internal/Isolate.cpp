@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
 
 #include <config/config.hpp>
 #include <cstdlib>
@@ -86,6 +87,7 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
         }
 
         handle = nullptr;
+        detachOnDestruction = false;
     }
 
     return result;
@@ -118,6 +120,7 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate
         }
 
         handle = nullptr;
+        detachOnDestruction = false;
     }
 
     return result;
@@ -129,7 +132,9 @@ Isolate::IsolateThread::~IsolateThread() noexcept {
         Debugger::trace(toString() + "::~()");
     }
 
-    // detach();
+    if (detachOnDestruction) {
+        ignoreUnused(detach());
+    }
 }
 
 std::string Isolate::IsolateThread::toString() const {
@@ -147,6 +152,10 @@ Isolate::Isolate() noexcept {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("Isolate::Isolate()");
     }
+
+    // The handle registry must outlive the isolate so that cached Java handles
+    // can be released while calls into Graal are still valid.
+    ignoreUnused(JavaObjectHandleRegistry::getInstance());
 
     graal_isolate_t *graalIsolateHandle{};
     graal_isolatethread_t *graalIsolateThreadHandle{};
@@ -196,6 +205,7 @@ CEntryPointErrorsEnum Isolate::attach() const noexcept {
         }
 
         currentIsolateThread().handle = newIsolateThreadHandle;
+        currentIsolateThread().detachOnDestruction = true;
 
         if constexpr (Debugger::traceIsolates) {
             // ReSharper disable once CppDFAUnreachableCode
@@ -277,6 +287,10 @@ Isolate::~Isolate() {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("~Isolate()");
     }
+
+    JavaObjectHandleRegistry::getInstance().releaseAll();
+    ignoreUnused(currentIsolateThread().detachAllThreadsAndTearDownIsolate());
+    handle_ = nullptr;
 }
 
 std::string Isolate::toString() const {

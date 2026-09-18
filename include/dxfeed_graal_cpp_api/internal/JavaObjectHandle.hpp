@@ -12,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../isolated/internal/IsolatedObject.hpp"
 
+#include <atomic>
 #include <memory>
 #include <string>
 
@@ -23,6 +24,96 @@ struct DXFCPP_EXPORT JavaObject {
     static std::size_t hashCode(void *handle) noexcept;
 
     static bool equals(void *objectHandle1, void *objectHandle2);
+};
+
+class JavaObjectHandleState;
+
+/**
+ * Tracks native Java object handles that must be released before the Graal isolate is torn down.
+ *
+ * The registry is initialized before the isolate and therefore remains available for the complete isolate lifetime,
+ * including destruction of handles owned by function-local and namespace-scope static objects.
+ */
+class DXFCPP_EXPORT JavaObjectHandleRegistry final {
+    friend class JavaObjectHandleState;
+
+    static void registerHandle(JavaObjectHandleState &state) noexcept;
+    static void resetHandle(JavaObjectHandleState &state, void *handle) noexcept;
+    static void moveHandle(JavaObjectHandleState &from, JavaObjectHandleState &to) noexcept;
+    static void linkHandle(JavaObjectHandleState &state) noexcept;
+    static void unlinkHandle(JavaObjectHandleState &state) noexcept;
+
+    public:
+    /**
+     * Returns the process-wide handle registry.
+     *
+     * @return The handle registry instance.
+     */
+    static JavaObjectHandleRegistry &getInstance() noexcept;
+
+    /**
+     * Releases all currently registered handles while the Graal isolate is still available.
+     *
+     * Handle owners remain valid and observe a null handle after this call.
+     */
+    void releaseAll() noexcept;
+};
+
+/**
+ * Type-erased ownership state shared by Java object and Java object-list handle wrappers.
+ *
+ * A non-null state registers itself for isolate shutdown and unregisters itself when reset or destroyed.
+ */
+class DXFCPP_EXPORT JavaObjectHandleState final {
+    friend class JavaObjectHandleRegistry;
+
+    using Deleter = void (*)(void *) noexcept;
+
+    std::atomic<void *> handle_{};
+    Deleter deleter_{};
+    JavaObjectHandleState *previous_{};
+    JavaObjectHandleState *next_{};
+    bool registered_{};
+
+    public:
+    /**
+     * Creates an ownership state for a native handle.
+     *
+     * @param handle The native handle, or `nullptr` for an empty state.
+     * @param deleter The function used to release a non-null handle.
+     */
+    JavaObjectHandleState(void *handle, Deleter deleter) noexcept;
+
+    JavaObjectHandleState(const JavaObjectHandleState &) = delete;
+    JavaObjectHandleState(JavaObjectHandleState &&) = delete;
+    JavaObjectHandleState &operator=(const JavaObjectHandleState &) = delete;
+    JavaObjectHandleState &operator=(JavaObjectHandleState &&) = delete;
+
+    /** Releases the owned handle, if any, and unregisters the state. */
+    ~JavaObjectHandleState() noexcept;
+
+    /**
+     * Transfers ownership from another state and releases the handle previously owned by this state.
+     *
+     * @param other The state from which ownership is transferred.
+     */
+    void moveFrom(JavaObjectHandleState &other) noexcept;
+
+    /**
+     * Replaces the owned handle, releasing the previous one.
+     *
+     * @param handle The new native handle, or `nullptr` to make the state empty.
+     */
+    void reset(void *handle = nullptr) noexcept;
+
+    /**
+     * Returns the currently owned native handle.
+     *
+     * @return The native handle, or `nullptr` when the state is empty.
+     */
+    [[nodiscard]] void *get() const noexcept {
+        return handle_.load(std::memory_order_acquire);
+    }
 };
 
 template <typename T> struct JavaObjectHandle final {
@@ -54,11 +145,10 @@ template <typename T> struct JavaObjectHandle final {
         }
     }
 
-    using Impl = std::unique_ptr<void, decltype(&deleter)>;
+    using Impl = JavaObjectHandleState;
 
     explicit JavaObjectHandle(void *handle = nullptr) noexcept
-        // ReSharper disable once CppRedundantTypenameKeyword
-        : impl_{typename Impl::pointer(handle), &deleter} {
+        : impl_{handle, &deleter} {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
@@ -67,21 +157,22 @@ template <typename T> struct JavaObjectHandle final {
 
     JavaObjectHandle(const JavaObjectHandle &) = delete;
 
-    JavaObjectHandle(JavaObjectHandle &&other) noexcept : impl_{std::move(other.impl_)} {
+    JavaObjectHandle(JavaObjectHandle &&other) noexcept : impl_{nullptr, &deleter} {
+        impl_.moveFrom(other.impl_);
     }
 
     JavaObjectHandle &operator=(const JavaObjectHandle &) = delete;
 
     JavaObjectHandle &operator=(JavaObjectHandle &&other) noexcept {
-        impl_ = std::move(other.impl_);
+        impl_.moveFrom(other.impl_);
 
         return *this;
     }
 
-    ~JavaObjectHandle() noexcept {}
+    ~JavaObjectHandle() noexcept = default;
 
     [[nodiscard]] std::string toString() const {
-        if (impl_) {
+        if (impl_.get()) {
             return dxfcpp::toString(impl_.get());
         }
 
@@ -93,7 +184,7 @@ template <typename T> struct JavaObjectHandle final {
     }
 
     explicit operator bool() const noexcept {
-        return static_cast<bool>(impl_);
+        return impl_.get() != nullptr;
     }
 
     private:
@@ -129,11 +220,10 @@ template <typename T> struct JavaObjectHandleList final {
         }
     }
 
-    using Impl = std::unique_ptr<void, decltype(&deleter)>;
+    using Impl = JavaObjectHandleState;
 
     explicit JavaObjectHandleList(void *handle = nullptr) noexcept
-        // ReSharper disable once CppRedundantTypenameKeyword
-        : impl_{typename Impl::pointer(handle), &deleter} {
+        : impl_{handle, &deleter} {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
@@ -142,21 +232,22 @@ template <typename T> struct JavaObjectHandleList final {
 
     JavaObjectHandleList(const JavaObjectHandleList &) = delete;
 
-    JavaObjectHandleList(JavaObjectHandleList &&other) noexcept : impl_{std::move(other.impl_)} {
+    JavaObjectHandleList(JavaObjectHandleList &&other) noexcept : impl_{nullptr, &deleter} {
+        impl_.moveFrom(other.impl_);
     }
 
     JavaObjectHandleList &operator=(const JavaObjectHandleList &) = delete;
 
     JavaObjectHandleList &operator=(JavaObjectHandleList &&other) noexcept {
-        impl_ = std::move(other.impl_);
+        impl_.moveFrom(other.impl_);
 
         return *this;
     }
 
-    ~JavaObjectHandleList() noexcept {}
+    ~JavaObjectHandleList() noexcept = default;
 
     [[nodiscard]] std::string toString() const {
-        if (impl_) {
+        if (impl_.get()) {
             return dxfcpp::toString(impl_.get());
         }
 
@@ -168,7 +259,7 @@ template <typename T> struct JavaObjectHandleList final {
     }
 
     explicit operator bool() const noexcept {
-        return static_cast<bool>(impl_);
+        return impl_.get() != nullptr;
     }
 
     private:

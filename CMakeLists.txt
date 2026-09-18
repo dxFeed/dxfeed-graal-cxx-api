@@ -30,6 +30,8 @@ set(PROCESS_VERSION "3.0.1")
 set(CONSOLE_VERSION "1.0.1")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
+set(GLFW_VERSION "3.4")
+set(IMGUI_VERSION "1.92.9b")
 set(CPM_CMAKE_VERSION "v0.40.2")
 set(CONFIG_VERSION "1.0.3")
 
@@ -227,6 +229,12 @@ add_subdirectory(third_party/date-${DATE_VERSION})
 
 if (DXFCXX_FEATURE_STACKTRACE)
     set(BOOST_INCLUDE_LIBRARIES stacktrace)
+
+    if (DXFCXX_LINK_STATIC_RUNTIME AND
+            (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR
+                    (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")))
+        set(BOOST_RUNTIME_LINK static CACHE STRING "Boost runtime library selection for the MS ABI" FORCE)
+    endif ()
 
     CPMAddPackage(
             NAME Boost
@@ -488,13 +496,13 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF)
     set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
-    set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path;@executable_path;@executable_path/../Frameworks")
+    set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path/../../../${CMAKE_INSTALL_LIBDIR};@loader_path;@executable_path;@executable_path/../Frameworks")
 elseif (UNIX)
     set(CMAKE_SKIP_BUILD_RPATH ON)
     set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF)
     set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../../../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
 endif ()
 
 add_library(${PROJECT_NAME}_static STATIC
@@ -700,6 +708,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/Model/PriceLevelBookSample)
     add_subdirectory(samples/cpp/OnDemand/OnDemandSample)
     add_subdirectory(samples/cpp/Schedule/ScheduleSample)
+    add_subdirectory(samples/cpp/UI/DXFeedTimeAndSalesSample)
 endif ()
 
 add_subdirectory(docs)

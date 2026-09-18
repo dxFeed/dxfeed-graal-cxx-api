@@ -408,6 +408,10 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 
 ### UI
 
+- [x] [DXFeedTimeAndSalesSample](samples/cpp/UI/DXFeedTimeAndSalesSample/src/main.cpp)
+  displays the latest 30 `TimeAndSale` events and the instrument description in a cross-platform Dear ImGui window.
+  It accumulates snapshots and updates received from `IndexedTxModel`; the endpoint is configured in
+  `dxfeed.system.properties`. Enter a symbol and press Enter (or **Subscribe**) to change the subscription.
 - [ ] [MarketDepthModelSample](samples/cpp/UI/MarketDepthModelSample/src/main.cpp)
   demonstrates how to draw a Market Depth.
 - [ ] [CandleChartSample](samples/cpp/UI/CandleChartSample/src/main.cpp)

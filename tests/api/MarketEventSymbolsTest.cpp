@@ -56,6 +56,7 @@ TEST_CASE("Test a broken symbol") {
 TEST_CASE("Test regional") {
     auto s = "GE&N";
 
+    REQUIRE("AAPL" == MarketEventSymbols::getBaseSymbol("AAPL&Q"));
     REQUIRE("GE" == MarketEventSymbols::getBaseSymbol(s));
     REQUIRE("F&N" == MarketEventSymbols::changeBaseSymbol(s, "F"));
     REQUIRE(true == MarketEventSymbols::hasExchangeCode(s));

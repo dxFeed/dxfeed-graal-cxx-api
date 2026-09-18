@@ -40,6 +40,8 @@ struct DXEndpoint::Impl {
     };
 
     static Registry& getRegistry() {
+        // The registry owns Java handles, so it must be destroyed before the Graal isolate.
+        ignoreUnused(Isolate::getInstance());
         static Registry registry;
 
         return registry;
@@ -452,6 +454,22 @@ DXEndpoint::~DXEndpoint() noexcept {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::~DXEndpoint()");
+    }
+
+    if (handle_ && stateChangeListenerHandle_) {
+        try {
+            isolated::api::IsolatedDXEndpoint::removeStateChangeListener(handle_, stateChangeListenerHandle_);
+        } catch (...) {
+            // Destructors must not propagate errors during process shutdown.
+        }
+    }
+
+    if (handle_) {
+        try {
+            isolated::api::IsolatedDXEndpoint::close(handle_);
+        } catch (...) {
+            // Destructors must not propagate errors during process shutdown.
+        }
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)

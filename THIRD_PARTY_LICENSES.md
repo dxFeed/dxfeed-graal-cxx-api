@@ -24,3 +24,7 @@
     SPDX-License-Identifier: BSL-1.0
 12. nanobench - https://github.com/martinus/nanobench/blob/master/LICENSE  
     SPDX-License-Identifier: MIT
+13. GLFW - https://github.com/glfw/glfw/blob/master/LICENSE.md
+    SPDX-License-Identifier: Zlib
+14. Dear ImGui - https://github.com/ocornut/imgui/blob/master/LICENSE.txt
+    SPDX-License-Identifier: MIT

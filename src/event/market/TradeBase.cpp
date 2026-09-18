@@ -114,8 +114,6 @@ std::int32_t TradeBase::getSequence() const noexcept {
 }
 
 void TradeBase::setSequence(std::int32_t sequence) {
-    assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
     if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
         throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
     }

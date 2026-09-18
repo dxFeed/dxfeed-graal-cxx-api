@@ -81,8 +81,6 @@ std::shared_ptr<Series> Series::fromGraal(void *graalNative) {
 }
 
 void Series::setSequence(std::int32_t sequence) {
-    assert(sequence >= 0 && static_cast<std::uint32_t>(sequence) <= MAX_SEQUENCE);
-
     if (sequence < 0 || static_cast<std::uint32_t>(sequence) > MAX_SEQUENCE) {
         throw InvalidArgumentException("Invalid value for argument `sequence`: " + std::to_string(sequence));
     }
