@@ -5,12 +5,14 @@
 #include <doctest.h>
 
 #include "TimeAndSalesStore.hpp"
+#include "UiMailbox.hpp"
 
 #include <cstdint>
 #include <vector>
 
 using dxfeed::time_and_sales_sample::TimeAndSaleRow;
 using dxfeed::time_and_sales_sample::TimeAndSalesStore;
+using dxfeed::time_and_sales_sample::UiMailbox;
 
 namespace {
 
@@ -65,4 +67,31 @@ TEST_CASE("presentation order uses time and index from oldest to newest") {
     REQUIRE(snapshot.size() == 2);
     CHECK(snapshot[0].index == 200);
     CHECK(snapshot[1].index == 100);
+}
+
+TEST_CASE("profile description is retained when switching to a regional symbol with the same base symbol") {
+    UiMailbox mailbox{30};
+    mailbox.reset("AAPL", "AAPL");
+    mailbox.publishProfile("AAPL", "Apple Inc.");
+    (void)mailbox.takeIfDirty();
+
+    mailbox.reset("AAPL&Q", "AAPL");
+
+    const auto view = mailbox.takeIfDirty();
+    REQUIRE(view.has_value());
+    CHECK(view->symbol == "AAPL&Q");
+    CHECK(view->description == "Apple Inc.");
+}
+
+TEST_CASE("profile description is cleared when the base symbol changes") {
+    UiMailbox mailbox{30};
+    mailbox.reset("AAPL", "AAPL");
+    mailbox.publishProfile("AAPL", "Apple Inc.");
+    (void)mailbox.takeIfDirty();
+
+    mailbox.reset("MSFT&Q", "MSFT");
+
+    const auto view = mailbox.takeIfDirty();
+    REQUIRE(view.has_value());
+    CHECK(view->description.empty());
 }

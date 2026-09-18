@@ -64,7 +64,7 @@ target_include_directories(DXFeedTimeAndSalesImGui PUBLIC
         ${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}/backends)
 target_link_libraries(DXFeedTimeAndSalesImGui PUBLIC glfw OpenGL::GL)
 
-add_executable(${PROJECT_NAME} src/main.cpp src/TimeAndSalesStore.hpp)
+add_executable(${PROJECT_NAME} src/main.cpp src/TimeAndSalesStore.hpp src/UiMailbox.hpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE DXFeedTimeAndSalesImGui fmt::fmt-header-only)
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)

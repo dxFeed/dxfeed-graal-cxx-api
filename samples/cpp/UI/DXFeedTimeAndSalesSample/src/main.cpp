@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "TimeAndSalesStore.hpp"
+#include "UiMailbox.hpp"
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
@@ -18,8 +18,6 @@
 #include <ctime>
 #include <iostream>
 #include <memory>
-#include <mutex>
-#include <optional>
 #include <ranges>
 #include <stdexcept>
 #include <string>
@@ -28,111 +26,12 @@
 
 using namespace dxfcpp;
 using dxfeed::time_and_sales_sample::TimeAndSaleRow;
-using dxfeed::time_and_sales_sample::TimeAndSalesStore;
+using dxfeed::time_and_sales_sample::UiMailbox;
+using dxfeed::time_and_sales_sample::ViewState;
 
 namespace {
 
 constexpr std::size_t NUMBER_OF_PRESENT_TRADES = 30;
-
-/** A detached copy of all data required to render one UI frame. */
-struct ViewState {
-    std::string symbol{};                 ///< Currently subscribed symbol.
-    std::string description{};            ///< Latest instrument description, or an empty string if unavailable.
-    std::vector<TimeAndSaleRow> rows{};    ///< Accumulated trades in presentation order.
-};
-
-/**
- * Synchronizes dxFeed callback data with the UI thread.
- *
- * Feed callbacks publish transactions and profile updates from dxFeed-managed threads. The render loop periodically
- * takes a detached ViewState when anything has changed. Updates are coalesced into the latest state rather than queued,
- * which keeps feed callbacks independent of the GLFW event loop and avoids requiring a custom dxFeed executor.
- */
-class UiMailbox final {
-    mutable std::mutex mutex_{};
-    TimeAndSalesStore store_{NUMBER_OF_PRESENT_TRADES};
-    std::string symbol_{};
-    std::string profileSymbol_{};
-    std::string description_{};
-    std::uint64_t generation_{};
-    bool dirty_{true};
-
-    public:
-    /**
-     * Starts a new subscription generation and clears data belonging to the previous symbol.
-     *
-     * @param symbol New normalized TimeAndSale symbol, or an empty string when unsubscribing.
-     * @param profileSymbol Base symbol used by the Profile subscription.
-     * @return Generation token that the corresponding IndexedTxModel listener must use when publishing transactions.
-     */
-    std::uint64_t reset(std::string symbol, std::string profileSymbol) {
-        const std::lock_guard lock{mutex_};
-
-        ++generation_;
-        symbol_ = std::move(symbol);
-        profileSymbol_ = std::move(profileSymbol);
-        description_.clear();
-        store_.clear();
-        dirty_ = true;
-
-        return generation_;
-    }
-
-    /**
-     * Applies a TimeAndSale transaction received from IndexedTxModel.
-     *
-     * Transactions from an already closed model may arrive after a symbol change. Such transactions are ignored when
-     * their generation token no longer matches the active subscription.
-     *
-     * @param generation Subscription generation captured when the listener was created.
-     * @param events Rows belonging to the transaction.
-     * @param isSnapshot Whether the transaction replaces the previously accumulated snapshot.
-     */
-    void publishTrades(std::uint64_t generation, const std::vector<TimeAndSaleRow> &events, bool isSnapshot) {
-        const std::lock_guard lock{mutex_};
-
-        if (generation != generation_) {
-            return;
-        }
-
-        store_.apply(events, isSnapshot);
-        dirty_ = true;
-    }
-
-    /**
-     * Publishes an instrument description received from the Profile subscription.
-     *
-     * @param symbol Symbol to which the profile belongs. Profiles for inactive symbols are ignored.
-     * @param description Optional instrument description.
-     */
-    void publishProfile(const std::string &symbol, const std::optional<std::string> &description) {
-        const std::lock_guard lock{mutex_};
-
-        if (symbol != profileSymbol_) {
-            return;
-        }
-
-        description_ = description.value_or("");
-        dirty_ = true;
-    }
-
-    /**
-     * Takes the latest detached view when state has changed since the previous call.
-     *
-     * Taking a view clears the dirty flag. A later callback sets it again, causing another view to be produced.
-     *
-     * @return The latest view, or std::nullopt when the UI already has the current state.
-     */
-    [[nodiscard]] std::optional<ViewState> takeIfDirty() {
-        const std::lock_guard lock{mutex_};
-        if (!dirty_) {
-            return std::nullopt;
-        }
-
-        dirty_ = false;
-        return ViewState{symbol_, description_, store_.snapshot()};
-    }
-};
 
 std::string trim(std::string value) {
     const auto isNotSpace = [](unsigned char value) {
@@ -171,7 +70,7 @@ TimeAndSaleRow toRow(const std::shared_ptr<TimeAndSale> &event) {
  */
 class FeedController final {
     std::shared_ptr<DXFeed> feed_{DXFeed::getInstance()};
-    std::shared_ptr<UiMailbox> mailbox_{std::make_shared<UiMailbox>()};
+    std::shared_ptr<UiMailbox> mailbox_{std::make_shared<UiMailbox>(NUMBER_OF_PRESENT_TRADES)};
     std::shared_ptr<DXFeedSubscription> profileSubscription_{};
     std::shared_ptr<IndexedTxModel<TimeAndSale>> timeAndSalesModel_{};
 
@@ -179,6 +78,7 @@ class FeedController final {
     /// Creates the shared Profile subscription and installs its event listener.
     FeedController() : profileSubscription_(feed_->createSubscription(Profile::TYPE)) {
         const std::weak_ptr weakMailbox{mailbox_};
+
         profileSubscription_->addEventListener<Profile>([weakMailbox](const auto &profiles) {
             const auto mailbox = weakMailbox.lock();
 
@@ -242,6 +142,7 @@ class FeedController final {
                 ->withSymbol(symbol)
                 ->withListener([weakMailbox, generation](const auto &, const auto &events, bool isSnapshot) {
                     const auto mailbox = weakMailbox.lock();
+
                     if (!mailbox) {
                         return;
                     }
@@ -266,6 +167,7 @@ class FeedController final {
 
 std::string formatTime(std::int64_t milliseconds) {
     const std::time_t seconds = milliseconds / 1000;
+
     std::tm localTime{};
 #if defined(_WIN32)
     localtime_s(&localTime, &seconds);
@@ -335,25 +237,30 @@ void glfwErrorCallback(int error, const char *description) {
 
 int runUi() {
     glfwSetErrorCallback(glfwErrorCallback);
+
     if (!glfwInit()) {
         throw std::runtime_error{"Unable to initialize GLFW"};
     }
 
 #if defined(__APPLE__)
     constexpr auto glslVersion = "#version 150";
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #else
     constexpr auto glslVersion = "#version 130";
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 #endif
 
     GLFWwindow *window = glfwCreateWindow(1100, 620, "DXFeed Time & Sales", nullptr, nullptr);
+
     if (!window) {
         glfwTerminate();
+
         throw std::runtime_error{"Unable to create a GLFW window"};
     }
 
@@ -361,6 +268,7 @@ int runUi() {
     glfwSwapInterval(1);
 
     IMGUI_CHECKVERSION();
+
     ImGui::CreateContext();
     ImGui::StyleColorsLight();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -371,6 +279,7 @@ int runUi() {
     ImGui::GetIO().FontDefault = ImGui::GetIO().Fonts->AddFontDefaultVector(&fontConfig);
 
     const auto contentScale = std::max(1.0F, ImGui_ImplGlfw_GetContentScaleForWindow(window));
+
     ImGui::GetStyle().ScaleAllSizes(contentScale);
     ImGui::GetStyle().FontScaleDpi = contentScale;
 
@@ -399,7 +308,6 @@ int runUi() {
                 ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings;
 
             ImGui::Begin("DXFeed Time & Sales", nullptr, windowFlags);
-
             ImGui::AlignTextToFramePadding();
             ImGui::TextUnformatted("Symbol");
             ImGui::SameLine();
@@ -408,9 +316,11 @@ int runUi() {
             const bool enterPressed = ImGui::InputText("##symbol", symbolInput.data(), symbolInput.size(),
                                                        ImGuiInputTextFlags_EnterReturnsTrue);
             ImGui::SameLine();
+
             if (enterPressed || ImGui::Button("Subscribe")) {
                 controller.subscribe(symbolInput.data());
             }
+
             ImGui::SameLine();
             ImGui::TextUnformatted(view.description.c_str());
             ImGui::Separator();
@@ -462,6 +372,7 @@ int main() {
         return runUi();
     } catch (const std::exception &error) {
         std::cerr << error.what() << '\n';
+
         return 1;
     }
 }
