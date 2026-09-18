@@ -340,21 +340,21 @@ jobs:
         run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Upload [Lib]
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: artifacts-lib-${{matrix.config.name}}-${{matrix.buildType}}
           path: build-${{matrix.buildType}}/*.zip
 
       - name: Upload [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: artifacts-lib-${{matrix.config.name}}-${{matrix.buildType}}-mt
           path: build-${{matrix.buildType}}-mt/*.zip
 
       - name: Upload [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: artifacts-samples-and-tools-${{matrix.config.name}}-${{matrix.buildType}}
           path: |
@@ -411,7 +411,7 @@ jobs:
           zip -r ../dxFeedGraalCxxApi-${{needs.get_version.outputs.version}}-Docs.zip .
 
       - name: Upload Docs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: artifacts-docs
           path: |
@@ -486,7 +486,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Upload [Full Source Bundle]
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: artifacts-full-source-bundle-${{matrix.config.name}}
           path: |
