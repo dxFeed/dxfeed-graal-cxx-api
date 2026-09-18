@@ -17,6 +17,15 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CXX_EXTENSIONS OFF)
 
+if (NOT DXFCXX_DYNAMICALLY_LINK_SAMPLES AND DXFCXX_LINK_STATIC_RUNTIME AND
+        (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR
+                (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")))
+    # This directory creates the sample executable and its GLFW/ImGui static libraries.
+    # They must all use the same CRT; setting only the executable to /MT leaves the
+    # dependencies on /MD and produces unresolved __imp_* symbols at link time.
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif ()
+
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -72,11 +81,6 @@ if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
-
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND DXFCXX_LINK_STATIC_RUNTIME)
-        set_target_properties(${PROJECT_NAME} PROPERTIES
-                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-    endif ()
 endif ()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx_mingw_debug_link_options_interface)
