@@ -230,6 +230,12 @@ add_subdirectory(third_party/date-${DATE_VERSION})
 if (DXFCXX_FEATURE_STACKTRACE)
     set(BOOST_INCLUDE_LIBRARIES stacktrace)
 
+    if (DXFCXX_LINK_STATIC_RUNTIME AND
+            (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR
+                    (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")))
+        set(BOOST_RUNTIME_LINK static CACHE STRING "Boost runtime library selection for the MS ABI" FORCE)
+    endif ()
+
     CPMAddPackage(
             NAME Boost
             VERSION ${BOOST_VERSION}
