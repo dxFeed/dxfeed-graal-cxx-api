@@ -10,6 +10,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         config:
           - name: win2022-vs2022
@@ -144,6 +145,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc-${{ matrix.config.gcc_version }} g++-${{ matrix.config.gcc_version }}
 
+      - name: Install Linux UI dependencies
+        if: ${{ contains(matrix.config.os, 'linux') }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'mac') }}
         run: >
@@ -151,6 +158,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
@@ -162,6 +170,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
@@ -171,6 +180,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
@@ -179,6 +189,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build-mt
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}-static-mt
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_LINK_STATIC_RUNTIME=ON
@@ -202,8 +213,28 @@ jobs:
           --
           /p:CL_MPCount=${{matrix.config.cores}}          
 
+      - name: Pack artifacts
+        if: ${{ matrix.buildType == 'Release' && matrix.sanitizers == 'NO_SAN' }}
+        working-directory: ${{github.workspace}}/build
+        run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
+
+      - name: Pack artifacts (Win MT)
+        if: ${{ contains(matrix.config.os, 'win') && matrix.buildType == 'Release' && matrix.sanitizers == 'NO_SAN' }}
+        working-directory: ${{github.workspace}}/build-mt
+        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
+
+      - name: Upload artifacts
+        if: ${{ matrix.buildType == 'Release' && matrix.sanitizers == 'NO_SAN' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts-${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}
+          path: |
+            build/*.zip
+            build/*.tar.gz
+            build-mt/*.zip
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Test
-        if: ${{ ! cancelled() }}
-        continue-on-error: true
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{matrix.buildType}} --extra-verbose --output-on-failure --parallel ${{matrix.config.cores}}

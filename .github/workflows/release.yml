@@ -22,6 +22,7 @@ on:
 
 permissions:
   actions: read
+  contents: read
   pages: write
   id-token: write
 
@@ -103,6 +104,12 @@ jobs:
       - name: Select Xcode version
         if: ${{ contains(matrix.config.os, 'macos') }}
         run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
+
+      - name: Install Linux UI dependencies
+        if: ${{ contains(matrix.config.os, 'linux') && !contains(matrix.buildType, 'Deb') }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
 
       - name: Prepare build [Lib]
         run: |
@@ -325,12 +332,12 @@ jobs:
       - name: Pack [Samples]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         working-directory: ${{github.workspace}}/build-Samples
-        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
+        run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Pack [Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         working-directory: ${{github.workspace}}/build-Tools
-        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
+        run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Upload [Lib]
         uses: actions/upload-artifact@v4
@@ -352,7 +359,10 @@ jobs:
           name: artifacts-samples-and-tools-${{matrix.config.name}}-${{matrix.buildType}}
           path: |
             build-Samples/*.zip
+            build-Samples/*.tar.gz
             build-Tools/*.zip
+            build-Tools/*.tar.gz
+          if-no-files-found: error
 
   build_docs_and_upload_and_deploy_gh_pages:
     name: "${{ matrix.config.name }}: Build Docs & Upload"
@@ -443,7 +453,37 @@ jobs:
       - name: Build [Full Source Bundle]
         shell: pwsh
         run: |
-          ${{github.workspace}}/scripts/make-source-bundle.ps1 ${{needs.get_version.outputs.version}}
+          & "${{github.workspace}}/scripts/make-source-bundle.ps1" "${{needs.get_version.outputs.version}}"
+
+      - name: Verify [Full Source Bundle][Offline]
+        shell: pwsh
+        run: |
+          $bundleZips = @(Get-ChildItem -LiteralPath "${{github.workspace}}/build-bundle" -Filter "*-Full-Source-Bundle.zip")
+          if ($bundleZips.Count -ne 1) {
+              throw "Expected exactly one full source bundle, found $($bundleZips.Count)"
+          }
+
+          $verifySourceDir = Join-Path $env:RUNNER_TEMP "dxfcxx-source-bundle"
+          $verifyBuildDir = Join-Path $env:RUNNER_TEMP "dxfcxx-source-bundle-build"
+          New-Item -ItemType Directory -Path $verifySourceDir | Out-Null
+          Expand-Archive -LiteralPath $bundleZips[0].FullName -DestinationPath $verifySourceDir
+
+          $bundleRoots = @(Get-ChildItem -LiteralPath $verifySourceDir -Directory)
+          if ($bundleRoots.Count -ne 1) {
+              throw "Expected exactly one root directory in the source bundle, found $($bundleRoots.Count)"
+          }
+
+          cmake -S $bundleRoots[0].FullName -B $verifyBuildDir -A x64 `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DDXFCXX_BUILD_DOC=OFF `
+            -DFETCHCONTENT_FULLY_DISCONNECTED=ON
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          cmake --build $verifyBuildDir --config Release -j 4
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          ctest --test-dir $verifyBuildDir -C Release -R DXFeedTimeAndSalesStoreTest --output-on-failure
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Upload [Full Source Bundle]
         uses: actions/upload-artifact@v4
@@ -451,6 +491,7 @@ jobs:
           name: artifacts-full-source-bundle-${{matrix.config.name}}
           path: |
             build-bundle/*.zip
+          if-no-files-found: error
 
   publish_release:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}
@@ -458,10 +499,12 @@ jobs:
     name: Publish Release
     needs: [ get_version, build_package_and_upload, build_full_src_bundle_and_upload, build_docs_and_upload_and_deploy_gh_pages ]
     permissions:
+      actions: read
       contents: write
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/download-artifact@v4
+      - id: download
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
           pattern: artifacts-*
@@ -476,8 +519,11 @@ jobs:
         with:
           files: |
             artifacts/*.zip
+            artifacts/*.tar.gz
             artifacts/build-Samples/*.zip
+            artifacts/build-Samples/*.tar.gz
             artifacts/build-Tools/*.zip
+            artifacts/build-Tools/*.tar.gz
             artifacts/build-bundle/*.zip
           prerelease: >
             ${{ contains(needs.get_version.outputs.version, 'alpha')
