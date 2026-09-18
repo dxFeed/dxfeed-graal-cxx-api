@@ -123,12 +123,6 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     add_test(NAME ${DXFC_TEST_BASENAME} COMMAND ${DXFC_TEST_BASENAME})
 
-    if (DXFCXX_ENABLE_ASAN AND UNIX AND NOT APPLE)
-        set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES
-                ENVIRONMENT "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/lsan.supp:print_suppressions=1"
-        )
-    endif ()
-
     add_custom_command(TARGET ${DXFC_TEST_BASENAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:dxfcxx::graal>
             $<TARGET_FILE_DIR:${DXFC_TEST_BASENAME}>)
