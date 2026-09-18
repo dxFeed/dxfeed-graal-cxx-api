@@ -92,11 +92,7 @@ JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void *
     auto *graalException =
         runGraalFunctionAndThrowIfNullptr(dxfg_Promise_getException, static_cast<dxfg_promise_t *>(promise));
 
-    auto result = JavaException::create(graalException);
-
-    runGraalFunction(dxfg_Exception_release, graalException);
-
-    return result;
+    return JavaException::createAndRelease(graalException);
 }
 
 void /* int32_t */ await(/* dxfg_promise_t * */ void *promise) {
