@@ -9,7 +9,9 @@
 #include <doctest.h>
 #include <string>
 
-#ifdef WIN32
+// Sanitizers install their own SIGSEGV/SIGBUS handlers that print the full report. Replacing them with the handlers
+// below would hide the report, so they are not installed in sanitized builds.
+#if defined(WIN32) || defined(DXFCXX_SANITIZERS_ENABLED)
 void setSignalHandler() {
 }
 #else

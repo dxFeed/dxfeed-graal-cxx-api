@@ -1,3 +1,7 @@
+* **\[MDAPI-427]\[C++]** Improved the quality infrastructure and the build.
+    * Sanitizers now instrument both the shared and the static library and all their consumers (tests, samples,
+      tools). ASan and UBSan can be enabled together. Added ThreadSanitizer support (`DXFCXX_ENABLE_TSAN`).
+      The internal CMake functions `LinkAsan` and `LinkUbsan` were replaced by the `dxfcxx_sanitizers` target.
 * **\[MDAPI-85]\[C++]** Added DXFeedTimeAndSales API sample.
 * **\[MDAPI-424]\[C++]** Fixed `OptionSeries` floating-point equality, ordering, and hashing
   to match Java semantics. Multiplier and SPC values now distinguish `-0.0` from `+0.0`, treat all NaN values as

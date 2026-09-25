@@ -80,8 +80,9 @@ set(DXFG_STUB_REPO "https://github.com/ttldtor/DxFeedGraalNativeSdkStub" CACHE S
 
 set(DXFG_LOCAL_ARCHIVE_PATH "" CACHE STRING "")
 
-option(DXFCXX_ENABLE_ASAN "Enable address, address sanitizer" OFF)
-option(DXFCXX_ENABLE_UBSAN "Enable address, UB sanitizer" OFF)
+option(DXFCXX_ENABLE_ASAN "Enable AddressSanitizer for the library and all its consumers" OFF)
+option(DXFCXX_ENABLE_UBSAN "Enable UndefinedBehaviorSanitizer (can be combined with ASan; not supported by MSVC)" OFF)
+option(DXFCXX_ENABLE_TSAN "Enable ThreadSanitizer (cannot be combined with ASan; not supported by MSVC)" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
 
 option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
@@ -110,7 +111,7 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
-include(cmake/LinkAsanUbsan.cmake)
+include(cmake/Sanitizers.cmake)
 include(cmake/SetupStaticRuntimeMSVC.cmake)
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
@@ -635,11 +636,9 @@ if (DXFCXX_FEATURE_STACKTRACE)
     target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_FEATURE_STACKTRACE)
 endif ()
 
-if (DXFCXX_ENABLE_ASAN)
-    LinkAsan(${PROJECT_NAME})
-elseif (DXFCXX_ENABLE_UBSAN)
-    LinkUbsan(${PROJECT_NAME})
-endif ()
+# Both library targets are instrumented; PUBLIC propagates the options and the sanitizer runtime to every consumer.
+target_link_libraries(${PROJECT_NAME} PUBLIC dxfcxx_sanitizers)
+target_link_libraries(${PROJECT_NAME}_static PUBLIC dxfcxx_sanitizers)
 
 add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}_static>)

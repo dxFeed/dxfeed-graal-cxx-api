@@ -111,12 +111,6 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         endif ()
     endif ()
 
-    if (DXFCXX_ENABLE_ASAN)
-        LinkAsan(${DXFC_TEST_BASENAME})
-    elseif (DXFCXX_ENABLE_UBSAN)
-        LinkUbsan(${DXFC_TEST_BASENAME})
-    endif ()
-
     set_target_properties(${DXFC_TEST_BASENAME} PROPERTIES
             CXX_STANDARD 20
             CMAKE_C_STANDARD 11
@@ -124,6 +118,13 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     )
 
     add_test(NAME ${DXFC_TEST_BASENAME} COMMAND ${DXFC_TEST_BASENAME})
+
+    if (DXFCXX_SANITIZERS_ENABLED)
+        set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES ENVIRONMENT
+                "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1")
+    endif ()
+
+    dxfcxx_copy_sanitizer_runtime(${DXFC_TEST_BASENAME})
 
     add_custom_command(TARGET ${DXFC_TEST_BASENAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:dxfcxx::graal>

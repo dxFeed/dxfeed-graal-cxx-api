@@ -23,3 +23,18 @@ or use the `scripts/build.sh` or `scripts/build.cmd`. Make sure that you use `co
 cd build
 ctest -C Release --extra-verbose
 ```
+
+## Sanitizers
+
+```shell
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DDXFCXX_ENABLE_ASAN=ON -DDXFCXX_ENABLE_UBSAN=ON ..
+```
+
+- `DXFCXX_ENABLE_ASAN` - AddressSanitizer (GCC, Clang, AppleClang, MSVC, MinGW Clang; MinGW GCC has no sanitizer
+  runtime, the options are ignored there with a warning).
+- `DXFCXX_ENABLE_UBSAN` - UndefinedBehaviorSanitizer, can be combined with ASan (not supported by MSVC).
+- `DXFCXX_ENABLE_TSAN` - ThreadSanitizer, cannot be combined with ASan (not supported by MSVC). The unit tests use the
+  suppressions from `tests/sanitizers/tsan.supp`.
+
+Both library targets and all their consumers (tests, samples, tools) are instrumented. With MSVC, the ASan runtime DLL
+is copied next to the unit tests, so they can be run outside the Visual Studio developer prompt.
