@@ -136,3 +136,49 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
                 $<TARGET_FILE_DIR:${DXFC_TEST_BASENAME}>)
     endif ()
 endforeach ()
+
+# Sanitizer canaries: a deliberately defective LIBRARY function must produce the report of each active sanitizer.
+# They fail when a sanitizer is silently not applied, or when the library itself is not instrumented.
+if (DXFCXX_SANITIZERS_ENABLED)
+    set(DXFC_CANARY_TARGET dxFeedGraalCxxApi_SanitizerCanary)
+    add_executable(${DXFC_CANARY_TARGET} sanitizers/SanitizerCanaryTest.cpp)
+
+    if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
+        target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx)
+        target_compile_definitions(${DXFC_CANARY_TARGET} PRIVATE DXFCPP_USE_DLLS)
+        add_custom_command(TARGET ${DXFC_CANARY_TARGET} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_FILE:dxfcxx> $<TARGET_FILE_DIR:${DXFC_CANARY_TARGET}>)
+    else ()
+        target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx::static)
+
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_CANARY_TARGET} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface)
+    dxfcxx_copy_sanitizer_runtime(${DXFC_CANARY_TARGET})
+    add_custom_command(TARGET ${DXFC_CANARY_TARGET} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${DXFC_CANARY_TARGET}>)
+
+    set(DXFC_CANARY_ENVIRONMENT
+            "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp")
+
+    if (DXFCXX_ASAN_ACTIVE)
+        add_test(NAME ${DXFC_CANARY_TARGET}_asan COMMAND ${DXFC_CANARY_TARGET} asan)
+        set_tests_properties(${DXFC_CANARY_TARGET}_asan PROPERTIES ENVIRONMENT "${DXFC_CANARY_ENVIRONMENT}"
+                PASS_REGULAR_EXPRESSION "AddressSanitizer: heap-buffer-overflow")
+    endif ()
+
+    if (DXFCXX_UBSAN_ACTIVE)
+        add_test(NAME ${DXFC_CANARY_TARGET}_ubsan COMMAND ${DXFC_CANARY_TARGET} ubsan)
+        set_tests_properties(${DXFC_CANARY_TARGET}_ubsan PROPERTIES ENVIRONMENT "${DXFC_CANARY_ENVIRONMENT}"
+                PASS_REGULAR_EXPRESSION "runtime error: signed integer overflow")
+    endif ()
+
+    if (DXFCXX_TSAN_ACTIVE)
+        add_test(NAME ${DXFC_CANARY_TARGET}_tsan COMMAND ${DXFC_CANARY_TARGET} tsan)
+        set_tests_properties(${DXFC_CANARY_TARGET}_tsan PROPERTIES ENVIRONMENT "${DXFC_CANARY_ENVIRONMENT}"
+                PASS_REGULAR_EXPRESSION "ThreadSanitizer: data race")
+    endif ()
+endif ()

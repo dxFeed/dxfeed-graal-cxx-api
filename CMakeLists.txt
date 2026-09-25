@@ -640,6 +640,12 @@ endif ()
 target_link_libraries(${PROJECT_NAME} PUBLIC dxfcxx_sanitizers)
 target_link_libraries(${PROJECT_NAME}_static PUBLIC dxfcxx_sanitizers)
 
+if (DXFCXX_SANITIZERS_ENABLED)
+    # Deliberately defective functions for the sanitizer canary tests (tests/sanitizers); sanitized builds only.
+    target_sources(${PROJECT_NAME} PRIVATE src/internal/SanitizerCanary.cpp)
+    target_sources(${PROJECT_NAME}_static PRIVATE src/internal/SanitizerCanary.cpp)
+endif ()
+
 add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}_static>)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
