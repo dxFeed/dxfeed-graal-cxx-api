@@ -1,0 +1,13 @@
+# Copyright (c) 2026 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+# ThreadSanitizer suppressions for the unit tests (used when DXFCXX_ENABLE_TSAN=ON).
+
+# The GraalVM native image is not instrumented: TSan does not see its internal synchronization and reports races
+# between its own threads (malloc, pthread_mutex_trylock, ...) when they are called from the native SDK.
+called_from_lib:libDxFeedGraalNativeSdk
+
+# Known lock-order inversion between DXPublisherObservableSubscription::listenersMutex_ and the SimpleHandler mutex
+# (static analysis report, item TS-1). It is fixed by the listener dispatch rework in the lifetime ticket; remove this
+# line together with that fix.
+deadlock:dxfcpp::*::DXPublisherObservableSubscription::releaseChangeListenerAfterClose

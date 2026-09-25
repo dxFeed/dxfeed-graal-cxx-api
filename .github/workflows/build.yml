@@ -111,6 +111,23 @@ jobs:
         # The prebuilt Intel Graal Native SDK uses the legacy macOS directory
         # ABI and is not compatible with the Xcode sanitizer runtime.
         exclude:
+          # MSVC does not support UndefinedBehaviorSanitizer.
+          - config:
+              name: win2022-vs2022
+              image: windows-2022
+              os: windows
+              cores: 4
+              cc: 'cl'
+              cxx: 'cl'
+            sanitizers: UBSAN
+          - config:
+              name: win2025-vs2026
+              image: windows-2025-vs2026
+              os: windows
+              cores: 4
+              cc: 'cl'
+              cxx: 'cl'
+            sanitizers: UBSAN
           - config:
               name: macos-15-intel-xcode-16-4
               image: macos-15-intel
@@ -204,6 +221,7 @@ jobs:
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
+          -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
 
       - name: Configure CMake (Win MT)
         if: ${{ contains(matrix.config.os, 'win') }}
@@ -259,3 +277,86 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{matrix.buildType}} --extra-verbose --output-on-failure --parallel ${{matrix.config.cores}}
+
+  tsan:
+    name: "ubuntu-24.04-clang-18-RelWithDebInfo-TSAN"
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v6
+
+      # ThreadSanitizer of clang 18 cannot map its shadow memory with the default ASLR entropy of the runner kernel.
+      - name: Reduce ASLR entropy for TSan
+        run: sudo sysctl vm.mmap_rnd_bits=28
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DCMAKE_C_COMPILER=clang-18
+          -DCMAKE_CXX_COMPILER=clang++-18
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_ENABLE_TSAN=ON
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build -j 4
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest --extra-verbose --output-on-failure --parallel 4
+
+  # Unit tests linked against the shared library. On Windows they are expected to fail until the DLL-boundary defects
+  # are fixed: today 21 of 23 test executables do not link because StringLike is not exported, and entities registered
+  # from inline/template code land in a separate registry per module. Linux passes; see MDAPI-427.
+  dynamic-link-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: win2022-vs2022
+            image: windows-2022
+            os: windows
+            cc: 'cl'
+            cxx: 'cl'
+          - name: ubuntu-24.04-clang-18
+            image: ubuntu-24.04
+            os: linux
+            cc: 'clang-18'
+            cxx: 'clang++-18'
+          - name: macos-15-xcode-16-4
+            image: macos-15
+            os: macos
+            xcode: '16.4'
+            cc: 'clang'
+            cxx: 'clang++'
+
+    name: "${{ matrix.config.name }}-Release-dynamic-link-tests"
+    runs-on: ${{ matrix.config.image }}
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Select Xcode version
+        if: ${{ contains(matrix.config.os, 'macos') }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config Release -j 4
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C Release --extra-verbose --output-on-failure --parallel 4
