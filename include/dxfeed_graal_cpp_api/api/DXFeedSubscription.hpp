@@ -22,6 +22,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <concepts>
 #include <memory>
+#include <mutex>
 #include <type_traits>
 #include <unordered_set>
 

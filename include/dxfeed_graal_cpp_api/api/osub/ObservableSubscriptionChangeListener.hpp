@@ -10,9 +10,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../entity/SharedEntity.hpp"
 #include "../../internal/Id.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
+#include "../../internal/Handler.hpp"
 
 #include <functional>
 #include <memory>
+#include <mutex>
 #include <unordered_set>
 
 /**

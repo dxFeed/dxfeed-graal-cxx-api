@@ -11,6 +11,7 @@
 #endif
 
 #include <dxfg_api.h>
+#include <filesystem>
 #include <memory>
 #include <string>
 #include <utility>

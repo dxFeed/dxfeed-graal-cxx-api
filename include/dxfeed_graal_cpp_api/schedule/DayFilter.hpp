@@ -10,6 +10,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
+#include <mutex>
+
 /**
  * \addtogroup dxfcpp_schedule
  * @{

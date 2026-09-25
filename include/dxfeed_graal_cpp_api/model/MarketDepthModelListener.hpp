@@ -12,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Handler.hpp"
 
 #include <memory>
+#include <mutex>
 
 /**
  * \addtogroup dxfcpp_model

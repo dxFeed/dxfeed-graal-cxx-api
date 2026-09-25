@@ -4,10 +4,12 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include "../internal/utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
+#include <memory>
 #include <string>
 
 /**

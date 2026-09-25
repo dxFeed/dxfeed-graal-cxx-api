@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <iterator>
 #include <locale>
 #include <optional>
+#include <ostream>
 #include <string>
 #include <thread>
 #include <type_traits>

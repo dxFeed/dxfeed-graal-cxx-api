@@ -9,12 +9,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
+#include "../../internal/utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <memory>
 #include <mutex>
 #include <string>
 #include <unordered_map>
+#include <variant>
 
 /**
  * \addtogroup dxfcpp_market

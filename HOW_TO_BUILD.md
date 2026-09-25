@@ -42,3 +42,13 @@ is copied next to the unit tests, so they can be run outside the Visual Studio d
 Sanitized builds also add the `dxFeedGraalCxxApi_SanitizerCanary_<asan|ubsan|tsan>` tests: they call a deliberately
 defective library function and pass only if the sanitizer reports it, so a sanitizer that is silently not applied to the
 library makes them fail.
+
+## Header Check
+
+```shell
+cmake -DDXFCXX_BUILD_HEADER_CHECK=ON -DDXFCXX_USE_PRECOMPILED_HEADERS=OFF ..
+cmake --build . --target dxfcxx_header_check
+```
+
+`DXFCXX_BUILD_HEADER_CHECK` compiles every public header on its own to check that it includes everything it uses.
+Build with `DXFCXX_USE_PRECOMPILED_HEADERS=OFF`, since precompiled headers hide missing includes.

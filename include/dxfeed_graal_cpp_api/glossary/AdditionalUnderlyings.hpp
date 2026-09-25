@@ -11,6 +11,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
+#include <functional>
+#include <mutex>
+#include <ostream>
 #include <string>
 #include <unordered_map>
 

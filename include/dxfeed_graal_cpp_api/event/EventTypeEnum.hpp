@@ -4,13 +4,16 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include "../internal/utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <string>
 #include <type_traits>
+#include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_event

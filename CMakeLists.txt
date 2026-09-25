@@ -84,6 +84,7 @@ option(DXFCXX_ENABLE_ASAN "Enable AddressSanitizer for the library and all its c
 option(DXFCXX_ENABLE_UBSAN "Enable UndefinedBehaviorSanitizer (can be combined with ASan; not supported by MSVC)" OFF)
 option(DXFCXX_ENABLE_TSAN "Enable ThreadSanitizer (cannot be combined with ASan; not supported by MSVC)" OFF)
 option(DXFCXX_USE_PRECOMPILED_HEADERS "Use precompiled headers" ON)
+option(DXFCXX_BUILD_HEADER_CHECK "Compile every public header on its own to check that it is self-contained" OFF)
 
 option(DXFCXX_FEATURE_STACKTRACE "Allow capturing stacktraces using boost::stacktrace" OFF)
 
@@ -644,6 +645,34 @@ if (DXFCXX_SANITIZERS_ENABLED)
     # Deliberately defective functions for the sanitizer canary tests (tests/sanitizers); sanitized builds only.
     target_sources(${PROJECT_NAME} PRIVATE src/internal/SanitizerCanary.cpp)
     target_sources(${PROJECT_NAME}_static PRIVATE src/internal/SanitizerCanary.cpp)
+endif ()
+
+if (DXFCXX_BUILD_HEADER_CHECK)
+    # One translation unit per public header, containing only `#include <header>` and compiled without precompiled
+    # headers: a header that relies on includes it does not make fails to compile here.
+    file(GLOB_RECURSE DXFCXX_PUBLIC_HEADERS CONFIGURE_DEPENDS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/include"
+            "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp" "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+    set(DXFCXX_HEADER_CHECK_SOURCES "")
+
+    foreach (header ${DXFCXX_PUBLIC_HEADERS})
+        string(MAKE_C_IDENTIFIER "${header}" headerId)
+
+        if (header MATCHES "\\.h$")
+            set(source "${CMAKE_CURRENT_BINARY_DIR}/header_check/${headerId}.c") # C headers are checked as C
+        else ()
+            set(source "${CMAKE_CURRENT_BINARY_DIR}/header_check/${headerId}.cpp")
+        endif ()
+
+        file(CONFIGURE OUTPUT "${source}" CONTENT "#include <${header}>\n")
+        list(APPEND DXFCXX_HEADER_CHECK_SOURCES "${source}")
+    endforeach ()
+
+    add_library(dxfcxx_header_check OBJECT ${DXFCXX_HEADER_CHECK_SOURCES})
+    # The same include directories, definitions, options and dependencies as the library itself.
+    target_link_libraries(dxfcxx_header_check PRIVATE ${PROJECT_NAME}_static
+            DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config)
+    target_include_directories(dxfcxx_header_check PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
+    target_compile_definitions(dxfcxx_header_check PRIVATE FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 endif ()
 
 add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different

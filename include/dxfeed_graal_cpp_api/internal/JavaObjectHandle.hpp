@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./utils/debug/Debug.hpp"
 
 #include "../isolated/internal/IsolatedObject.hpp"
+#include "./Common.hpp"
 
 #include <atomic>
 #include <memory>

@@ -20,6 +20,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <ostream>
 #include <vector>
 
 /**

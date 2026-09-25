@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../FilteredSubscriptionSymbol.hpp"
+#include "./IndexedEventSubscriptionSymbol.hpp"
 
 #include <cstdint>
 #include <memory>

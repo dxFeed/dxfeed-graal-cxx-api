@@ -14,6 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <memory>
 #include <mutex>
+#include <unordered_map>
 #include <unordered_set>
 
 /**

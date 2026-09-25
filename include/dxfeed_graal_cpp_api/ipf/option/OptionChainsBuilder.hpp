@@ -10,6 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../internal/Common.hpp"
 #include "./OptionChain.hpp"
 #include "./OptionSeries.hpp"
+#include "../InstrumentProfile.hpp"
 
 #include <unordered_map>
 

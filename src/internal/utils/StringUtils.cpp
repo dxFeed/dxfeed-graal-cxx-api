@@ -7,6 +7,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 
+#include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 #include <utf8.h>

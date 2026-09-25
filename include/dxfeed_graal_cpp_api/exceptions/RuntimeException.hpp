@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
 #include "../internal/Common.hpp"
 
+#include <iosfwd>
 #include <stdexcept>
 #include <string>
 

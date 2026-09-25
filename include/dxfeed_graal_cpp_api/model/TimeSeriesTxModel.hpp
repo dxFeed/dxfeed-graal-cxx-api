@@ -16,6 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <chrono>
 #include <memory>
+#include <ostream>
 #include <unordered_set>
 
 /**

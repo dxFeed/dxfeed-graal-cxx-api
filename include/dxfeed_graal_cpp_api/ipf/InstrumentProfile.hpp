@@ -15,6 +15,7 @@ DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 
 #include <cstdint>
 #include <optional>
+#include <ostream>
 #include <string>
 #include <type_traits>
 #include <vector>

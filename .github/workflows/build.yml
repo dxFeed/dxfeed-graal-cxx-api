@@ -307,6 +307,66 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: ctest --extra-verbose --output-on-failure --parallel 4
 
+  # Every public header must compile on its own, and the whole project must build without precompiled headers.
+  headers:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: win2022-vs2022
+            image: windows-2022
+            os: windows
+            cc: 'cl'
+            cxx: 'cl'
+          - name: ubuntu-24.04-clang-18
+            image: ubuntu-24.04
+            os: linux
+            cc: 'clang-18'
+            cxx: 'clang++-18'
+          - name: ubuntu-24.04-gcc-14
+            image: ubuntu-24.04
+            os: linux
+            cc: 'gcc-14'
+            cxx: 'g++-14'
+          - name: macos-15-xcode-16-4
+            image: macos-15
+            os: macos
+            xcode: '16.4'
+            cc: 'clang'
+            cxx: 'clang++'
+
+    name: "${{ matrix.config.name }}-Debug-headers-no-pch"
+    runs-on: ${{ matrix.config.image }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Select Xcode version
+        if: ${{ contains(matrix.config.os, 'macos') }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
+
+      - name: Install Linux UI dependencies
+        if: ${{ contains(matrix.config.os, 'linux') }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_USE_PRECOMPILED_HEADERS=OFF
+          -DDXFCXX_BUILD_HEADER_CHECK=ON
+
+      - name: Check that public headers are self-contained
+        run: cmake --build ${{github.workspace}}/build --config Debug --target dxfcxx_header_check -j 4
+
+      - name: Build without precompiled headers
+        run: cmake --build ${{github.workspace}}/build --config Debug -j 4
+
   # Unit tests linked against the shared library. On Windows they are expected to fail until the DLL-boundary defects
   # are fixed: today 21 of 23 test executables do not link because StringLike is not exported, and entities registered
   # from inline/template code land in a separate registry per module. Linux passes; see MDAPI-427.

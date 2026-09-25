@@ -16,6 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./MarketDepthModelListener.hpp"
 
 #include <memory>
+#include <mutex>
 #include <set>
 #include <unordered_set>
 #include <utility>

@@ -4,11 +4,13 @@
 #pragma once
 
 #include "../../internal/Conf.hpp"
+#include "../../internal/utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 DXFCPP_BEGIN_NAMESPACE
 

@@ -10,6 +10,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 
 #include <cstdint>
+#include <functional>
+#include <mutex>
 
 /**
  * \defgroup dxfcpp_util "Util" Module

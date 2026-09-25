@@ -12,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../internal/Id.hpp"
 #include "../../internal/JavaObjectHandle.hpp"
 #include "./InstrumentProfileCollector.hpp"
+#include "../../internal/Handler.hpp"
 
 /**
  * \addtogroup dxfcpp_ipf
