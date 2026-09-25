@@ -367,6 +367,34 @@ jobs:
       - name: Build without precompiled headers
         run: cmake --build ${{github.workspace}}/build --config Debug -j 4
 
+  # Smoke tests against demo.dxfeed.com (CTest label "network"). They depend on an external service, so a failure
+  # does not fail the workflow; the other unit tests do not use external network.
+  network-tests:
+    name: "ubuntu-24.04-clang-18-Release-network-tests"
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_C_COMPILER=clang-18
+          -DCMAKE_CXX_COMPILER=clang++-18
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_ENABLE_NETWORK_TESTS=ON
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build -j 4 --target dxFeedGraalCxxApi_network_NetworkTest
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -L network --extra-verbose --output-on-failure
+
   # Unit tests linked against the shared library. On Windows they are expected to fail until the DLL-boundary defects
   # are fixed: today 21 of 23 test executables do not link because StringLike is not exported, and entities registered
   # from inline/template code land in a separate registry per module. Linux passes; see MDAPI-427.

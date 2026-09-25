@@ -61,6 +61,11 @@ if (DXFCXX_BUILD_BENCHMARKS)
     list(APPEND DXFC_TEST_SOURCES bench/StringLikeBench.cpp)
 endif ()
 
+# Tests that need external network access (demo.dxfeed.com). They are labeled "network": `ctest -L network`.
+if (DXFCXX_ENABLE_NETWORK_TESTS)
+    list(APPEND DXFC_TEST_SOURCES network/NetworkTest.cpp)
+endif ()
+
 foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     string(REPLACE ".cpp" "" DXFC_TEST_BASENAME "${DXFC_TEST_SOURCE}")
     string(REPLACE "/" "_" DXFC_TEST_BASENAME "${DXFC_TEST_BASENAME}")
@@ -68,9 +73,13 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     set(DXFC_TEST_BASENAME dxFeedGraalCxxApi_${DXFC_TEST_BASENAME})
     #    message("${DXFC_TEST_BASENAME}: ${DXFC_TEST_SOURCE}")
 
-    add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp)
+    add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp support/TestSupport.cpp)
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
     target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only)
+
+    if (WIN32)
+        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE ws2_32)
+    endif ()
 
     if (DXFC_TEST_BASENAME MATCHES "Bench$")
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE nanobench)
@@ -118,6 +127,10 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     )
 
     add_test(NAME ${DXFC_TEST_BASENAME} COMMAND ${DXFC_TEST_BASENAME})
+
+    if (DXFC_TEST_SOURCE MATCHES "^network/")
+        set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES LABELS network)
+    endif ()
 
     if (DXFCXX_SANITIZERS_ENABLED)
         set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES ENVIRONMENT

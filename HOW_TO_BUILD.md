@@ -21,7 +21,14 @@ or use the `scripts/build.sh` or `scripts/build.cmd`. Make sure that you use `co
 
 ```shell
 cd build
-ctest -C Release --extra-verbose
+ctest -C Release --extra-verbose --parallel 4
+```
+
+The unit tests do not need external network: they use a `LOCAL_HUB` endpoint or a loopback TCP server. The smoke tests
+against `demo.dxfeed.com` are built only with `-DDXFCXX_ENABLE_NETWORK_TESTS=ON` and have the CTest label `network`:
+
+```shell
+ctest -C Release -L network
 ```
 
 ## Sanitizers
