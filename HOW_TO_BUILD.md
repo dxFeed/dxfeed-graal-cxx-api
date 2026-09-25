@@ -38,3 +38,7 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DDXFCXX_ENABLE_ASAN=ON -DDXFCXX_ENABLE_
 
 Both library targets and all their consumers (tests, samples, tools) are instrumented. With MSVC, the ASan runtime DLL
 is copied next to the unit tests, so they can be run outside the Visual Studio developer prompt.
+
+Sanitized builds also add the `dxFeedGraalCxxApi_SanitizerCanary_<asan|ubsan|tsan>` tests: they call a deliberately
+defective library function and pass only if the sanitizer reports it, so a sanitizer that is silently not applied to the
+library makes them fail.

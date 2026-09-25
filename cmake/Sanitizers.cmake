@@ -14,7 +14,8 @@
 # MinGW GCC has no sanitizer runtime (libasan/libubsan), so the options are ignored there with a warning; use the
 # MSYS2 clang64 toolchain for sanitized Windows builds with MinGW.
 #
-# Sanitized builds define DXFCXX_SANITIZERS_ENABLED=1.
+# Sanitized builds define DXFCXX_SANITIZERS_ENABLED=1. The variables DXFCXX_ASAN_ACTIVE, DXFCXX_UBSAN_ACTIVE and
+# DXFCXX_TSAN_ACTIVE tell which sanitizers are really enabled for the current compiler (used by the canary tests).
 
 add_library(dxfcxx_sanitizers INTERFACE)
 
@@ -23,6 +24,9 @@ if (DXFCXX_ENABLE_TSAN AND DXFCXX_ENABLE_ASAN)
 endif ()
 
 set(DXFCXX_SANITIZERS_ENABLED OFF)
+set(DXFCXX_ASAN_ACTIVE OFF)
+set(DXFCXX_UBSAN_ACTIVE OFF)
+set(DXFCXX_TSAN_ACTIVE OFF)
 
 if (MSVC)
     if (DXFCXX_ENABLE_UBSAN)
@@ -35,6 +39,7 @@ if (MSVC)
 
     if (DXFCXX_ENABLE_ASAN)
         set(DXFCXX_SANITIZERS_ENABLED ON)
+        set(DXFCXX_ASAN_ACTIVE ON)
 
         # /Z7 + /DEBUG: debug information for readable ASan reports in every configuration (warning C5072 otherwise).
         # /Z7 keeps it in the object files, so parallel compiler processes do not share a PDB (C1041 with /Zi);
@@ -61,14 +66,17 @@ else ()
 
     if (DXFCXX_ENABLE_ASAN)
         list(APPEND sanitizers address)
+        set(DXFCXX_ASAN_ACTIVE ON)
     endif ()
 
     if (DXFCXX_ENABLE_UBSAN)
         list(APPEND sanitizers undefined)
+        set(DXFCXX_UBSAN_ACTIVE ON)
     endif ()
 
     if (DXFCXX_ENABLE_TSAN)
         list(APPEND sanitizers thread)
+        set(DXFCXX_TSAN_ACTIVE ON)
     endif ()
 
     if (sanitizers)
