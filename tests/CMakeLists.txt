@@ -161,8 +161,12 @@ if (DXFCXX_SANITIZERS_ENABLED)
     add_custom_command(TARGET ${DXFC_CANARY_TARGET} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${DXFC_CANARY_TARGET}>)
 
+    # abort_on_error=0: exit with a code instead of abort(). The default is 1 on macOS, and CTest reports a test killed by
+    # a signal as failed even when its output matches PASS_REGULAR_EXPRESSION.
     set(DXFC_CANARY_ENVIRONMENT
-            "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp")
+            "ASAN_OPTIONS=abort_on_error=0"
+            "UBSAN_OPTIONS=print_stacktrace=1:abort_on_error=0"
+            "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:abort_on_error=0")
 
     if (DXFCXX_ASAN_ACTIVE)
         add_test(NAME ${DXFC_CANARY_TARGET}_asan COMMAND ${DXFC_CANARY_TARGET} asan)
