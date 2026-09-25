@@ -36,17 +36,20 @@ if (MSVC)
     if (DXFCXX_ENABLE_ASAN)
         set(DXFCXX_SANITIZERS_ENABLED ON)
 
-        # /Zi + /DEBUG: debug information for readable ASan reports in every configuration (warning C5072 otherwise).
-        # /FS: parallel compiler processes write the same target PDB (C1041 without it in Release).
-        target_compile_options(dxfcxx_sanitizers INTERFACE /fsanitize=address /Zi /FS)
+        # /Z7 + /DEBUG: debug information for readable ASan reports in every configuration (warning C5072 otherwise).
+        # /Z7 keeps it in the object files, so parallel compiler processes do not share a PDB (C1041 with /Zi);
+        # the linker still writes the PDB of each executable and DLL.
+        target_compile_options(dxfcxx_sanitizers INTERFACE /fsanitize=address /Z7)
         # ASan is incompatible with incremental linking and with the /RTC run-time checks of the Debug configuration.
         target_link_options(dxfcxx_sanitizers INTERFACE /INCREMENTAL:NO /DEBUG)
-        # The prebuilt dependencies are not instrumented: disable the STL container annotations to avoid false
-        # container-overflow reports on std::vector/std::string that cross their boundary.
-        target_compile_definitions(dxfcxx_sanitizers INTERFACE _DISABLE_VECTOR_ANNOTATION _DISABLE_STRING_ANNOTATION)
+        # Third-party static libraries (Process, Console, ...) are not instrumented. Disable all STL ASan annotations,
+        # otherwise the linker reports `mismatch detected for 'annotate_<container>'` (newer STLs annotate
+        # std::optional too) and std::vector/std::string that cross the boundary give false container-overflows.
+        target_compile_definitions(dxfcxx_sanitizers INTERFACE _DISABLE_STL_ANNOTATION)
 
-        foreach (flagVar CMAKE_C_FLAGS_DEBUG CMAKE_CXX_FLAGS_DEBUG)
+        foreach (flagVar CMAKE_C_FLAGS_DEBUG CMAKE_CXX_FLAGS_DEBUG CMAKE_C_FLAGS_RELWITHDEBINFO CMAKE_CXX_FLAGS_RELWITHDEBINFO)
             string(REGEX REPLACE "/RTC[1csu]*" "" ${flagVar} "${${flagVar}}")
+            string(REPLACE "/Zi" "/Z7" ${flagVar} "${${flagVar}}")
         endforeach ()
     endif ()
 elseif (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
