@@ -3,197 +3,116 @@
 
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
-#include <fmt/format.h>
-#include <fmt/std.h>
 
-#include <iostream>
+#include "../support/TestSupport.hpp"
+
+#include <cstdint>
+#include <memory>
 #include <string>
-#include <thread>
+#include <vector>
 
 using namespace dxfcpp;
 using namespace std::literals;
 
-using stringOpt = std::optional<std::string>;
+namespace {
 
-struct DataIntegrityTestFixture {
-    DXEndpoint::Ptr endpoint{};
-    DXFeed::Ptr feed{};
-    DXPublisher::Ptr pub{};
-
-    DataIntegrityTestFixture() {
-        endpoint = DXEndpoint::newBuilder()
-                       ->withRole(DXEndpoint::Role::LOCAL_HUB)
-                       ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-                       ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true")
-                       ->withProperty(DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY, "true")
-                       ->build();
-        feed = endpoint->getFeed();
-        pub = endpoint->getPublisher();
-    }
-
-    ~DataIntegrityTestFixture() {
-        endpoint->awaitProcessed();
-        endpoint->close();
+struct DataIntegrityTestFixture : test::LocalHubFixture {
+    DataIntegrityTestFixture()
+        : LocalHubFixture({{DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true"},
+                           {DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true"},
+                           {DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY, "true"}}) {
     }
 };
 
-struct DataIntegrityLocalAddressTestFixture {
-    DXEndpoint::Ptr pubEndpoint{};
-    DXPublisher::Ptr pub{};
-    DXEndpoint::Ptr feedEndpoint{};
-    DXFeed::Ptr feed{};
+std::shared_ptr<TimeAndSale> createTimeAndSale(const std::string &symbol, std::int64_t time) {
+    auto tns = std::make_shared<TimeAndSale>(symbol);
 
-    DataIntegrityLocalAddressTestFixture() {
-        pubEndpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::PUBLISHER)->build();
-        pubEndpoint->connect(":7766");
-        pub = pubEndpoint->getPublisher();
-        feedEndpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
-        feedEndpoint->connect("127.0.0.1:7766");
-        feed = feedEndpoint->getFeed();
-    }
+    tns->setTime(time);
 
-    ~DataIntegrityLocalAddressTestFixture() {
-        feedEndpoint->close();
-        pubEndpoint->close();
-    }
-};
+    return tns;
+}
 
-struct DataIntegrityRemoteTestFixture {
-    DXEndpoint::Ptr endpoint{};
-    DXFeed::Ptr feed{};
-
-    DataIntegrityRemoteTestFixture() {
-        endpoint = DXEndpoint::newBuilder()
-                       ->withRole(DXEndpoint::Role::FEED)
-                       ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-                       ->build();
-        endpoint->connect("127.0.0.1:7777");
-        feed = endpoint->getFeed();
-    }
-
-    ~DataIntegrityRemoteTestFixture() {
-        endpoint->awaitProcessed();
-        endpoint->close();
-    }
-};
+} // namespace
 
 TEST_CASE_FIXTURE(DataIntegrityTestFixture, "dxFeed :: Test attach & detach sub") {
-    std::mutex ioMutex{};
+    std::vector<std::string> receivedAAA{};
+    std::vector<std::string> receivedBBB{};
 
-    auto println = [&ioMutex](auto s) {
-        std::lock_guard lock{ioMutex};
-        std::cout << s << std::endl;
-    };
-
-    auto tnsSubAAA = DXFeedSubscription::create({TimeAndSale::TYPE});
-    auto tnsSubBBB = DXFeedSubscription::create({TimeAndSale::TYPE});
+    const auto tnsSubAAA = DXFeedSubscription::create({TimeAndSale::TYPE});
+    const auto tnsSubBBB = DXFeedSubscription::create({TimeAndSale::TYPE});
 
     tnsSubAAA->addSymbols("AAA");
     tnsSubBBB->addSymbols("BBB");
 
-    tnsSubAAA->addEventListener<TimeAndSale>([&println](const auto &timeAndSales) {
+    tnsSubAAA->addEventListener<TimeAndSale>([&receivedAAA](const auto &timeAndSales) {
         for (auto &&tns : timeAndSales) {
-            println(fmt::format("tnsSubAAA: {}", tns->toString()));
+            receivedAAA.push_back(tns->getEventSymbol());
         }
     });
 
-    tnsSubBBB->addEventListener<TimeAndSale>([&println](const auto &timeAndSales) {
+    tnsSubBBB->addEventListener<TimeAndSale>([&receivedBBB](const auto &timeAndSales) {
         for (auto &&tns : timeAndSales) {
-            println(fmt::format("tnsSubBBB: {}", tns->toString()));
+            receivedBBB.push_back(tns->getEventSymbol());
         }
     });
 
-    std::atomic<bool> publishAAA{true};
-    std::atomic<bool> publishBBB{true};
-    std::atomic<bool> stop{false};
+    auto time = 1000;
+    const auto publishBoth = [&] {
+        publishAndProcess(std::vector<std::shared_ptr<TimeAndSale>>{createTimeAndSale("AAA", time),
+                                                                    createTimeAndSale("BBB", time)});
+        time += 1000;
+    };
 
-    auto t = std::thread([pub = pub, &publishAAA, &publishBBB, &stop]() {
-        auto tnsAAA = std::make_shared<TimeAndSale>("AAA");
-        auto tnsBBB = std::make_shared<TimeAndSale>("BBB");
+    publishBoth(); // nothing is attached yet
+    REQUIRE(receivedAAA.empty());
+    REQUIRE(receivedBBB.empty());
 
-        while (!stop) {
-            if (publishAAA) {
-                tnsAAA->setTime(tnsAAA->getTime() + 1000);
-                pub->publishEvents(tnsAAA);
-            }
-
-            if (publishBBB) {
-                tnsBBB->setTime(tnsBBB->getTime() + 1000);
-                pub->publishEvents(tnsBBB);
-            }
-
-            std::this_thread::sleep_for(100ms);
-        }
-    });
-
-    std::this_thread::sleep_for(1ms);
-
-    println("Attach tnsSubAAA");
     feed->attachSubscription(tnsSubAAA);
-    println("Attach tnsSubBBB");
     feed->attachSubscription(tnsSubBBB);
+    publishBoth();
+    REQUIRE(receivedAAA == std::vector<std::string>{"AAA"});
+    REQUIRE(receivedBBB == std::vector<std::string>{"BBB"});
 
-    std::this_thread::sleep_for(5s);
-
-    println("Detach tnsSubAAA");
     feed->detachSubscription(tnsSubAAA);
+    publishBoth();
+    REQUIRE(receivedAAA.size() == 1); // detached
+    REQUIRE(receivedBBB == std::vector<std::string>{"BBB", "BBB"});
 
-    std::this_thread::sleep_for(5s);
-
-    println("Detach tnsSubBBB");
     feed->detachSubscription(tnsSubBBB);
-
-    std::this_thread::sleep_for(5s);
-    stop = true;
-    t.join();
+    publishBoth();
+    REQUIRE(receivedAAA.size() == 1);
+    REQUIRE(receivedBBB.size() == 2);
 }
 
 TEST_CASE_FIXTURE(DataIntegrityTestFixture, "dxFeed :: Test TextMessage") {
-    std::mutex ioMutex{};
-
-    auto println = [&ioMutex](auto s) {
-        std::lock_guard lock{ioMutex};
-        std::cout << s << std::endl;
-    };
-
-    auto sub = DXFeedSubscription::create({TextMessage::TYPE});
+    std::vector<std::string> receivedTexts{};
+    const auto sub = DXFeedSubscription::create({TextMessage::TYPE});
 
     sub->addSymbols("TOKEN");
-
-    sub->addEventListener<TextMessage>([&println](const auto &textMessages) {
+    sub->addEventListener<TextMessage>([&receivedTexts](const auto &textMessages) {
         for (auto &&t : textMessages) {
-            println(fmt::format("sub: {}", t->toString()));
+            REQUIRE(t->getEventSymbol() == "TOKEN");
+            receivedTexts.push_back(t->getText());
         }
     });
 
-    std::atomic<bool> stop{false};
-
-    auto t = std::thread([pub = pub, &stop]() {
-        auto t = std::make_shared<TextMessage>("TOKEN");
-        auto i = 0;
-
-        while (!stop) {
-            t->setTime(t->getTime() + 1000);
-            t->setText(std::to_string(i++));
-
-            pub->publishEvents(t);
-
-            std::this_thread::sleep_for(100ms);
-        }
-    });
-
-    std::this_thread::sleep_for(1ms);
-
-    println("Attach sub");
     feed->attachSubscription(sub);
 
-    std::this_thread::sleep_for(5s);
+    for (auto i = 0; i < 3; i++) {
+        const auto t = std::make_shared<TextMessage>("TOKEN");
 
-    println("Detach sub");
+        t->setTime(1000 * (i + 1));
+        t->setText(std::to_string(i));
+        publishAndProcess(t);
+    }
+
+    REQUIRE(receivedTexts == std::vector<std::string>{"0", "1", "2"});
+
     feed->detachSubscription(sub);
 
-    std::this_thread::sleep_for(5s);
+    const auto t = std::make_shared<TextMessage>("TOKEN");
 
-    stop = true;
-    t.join();
+    t->setText("after detach");
+    publishAndProcess(t);
+    REQUIRE(receivedTexts.size() == 3);
 }
