@@ -8,6 +8,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -115,4 +116,54 @@ TEST_CASE_FIXTURE(DataIntegrityTestFixture, "dxFeed :: Test TextMessage") {
     t->setText("after detach");
     publishAndProcess(t);
     REQUIRE(receivedTexts.size() == 3);
+}
+
+// A PUBLISHER listens only on the loopback interface (`bindAddr`, Graal SDK v3.5.0+), a FEED connects to it over TCP.
+TEST_CASE("Events are delivered from a loopback PUBLISHER to a FEED over TCP") {
+    const auto port = std::to_string(test::findFreeLoopbackPort());
+    const auto publisherEndpoint = DXEndpoint::create(DXEndpoint::Role::PUBLISHER);
+    const auto feedEndpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    publisherEndpoint->connect(":" + port + "[bindAddr=127.0.0.1]");
+    feedEndpoint->connect("127.0.0.1:" + port);
+    REQUIRE(test::waitUntil([&] {
+        return feedEndpoint->getState() == DXEndpoint::State::CONNECTED;
+    }));
+
+    std::mutex mutex{};
+    std::vector<double> bidPrices{};
+    const auto subscription = feedEndpoint->getFeed()->createSubscription(Quote::TYPE);
+
+    subscription->addEventListener<Quote>([&](const auto &quotes) {
+        std::lock_guard lock{mutex};
+
+        for (const auto &quote : quotes) {
+            bidPrices.push_back(quote->getBidPrice());
+        }
+    });
+    subscription->addSymbols("TCP-TEST");
+
+    // The subscription reaches the publisher asynchronously, and a quote published before that is not delivered.
+    const auto quote = std::make_shared<Quote>("TCP-TEST");
+
+    quote->setBidPrice(12.5);
+    REQUIRE(test::waitUntil(
+        [&] {
+            publisherEndpoint->getPublisher()->publishEvents(quote);
+
+            std::lock_guard lock{mutex};
+
+            return !bidPrices.empty();
+        },
+        10s, 100ms));
+
+    {
+        std::lock_guard lock{mutex};
+
+        REQUIRE(bidPrices.front() == 12.5);
+    }
+
+    subscription->close();
+    feedEndpoint->close();
+    publisherEndpoint->close();
 }

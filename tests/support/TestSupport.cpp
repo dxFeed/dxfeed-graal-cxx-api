@@ -142,6 +142,33 @@ LoopbackTcpServer::~LoopbackTcpServer() {
     }
 }
 
+std::uint16_t findFreeLoopbackPort() {
+    socketLibrary();
+
+    const NativeSocket s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    if (s == INVALID_NATIVE_SOCKET) {
+        throw std::runtime_error("findFreeLoopbackPort: socket() failed");
+    }
+
+    sockaddr_in address{};
+    address.sin_family = AF_INET;
+    address.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+    address.sin_port = 0; // the OS picks a free port
+
+    socklen_t length = sizeof(address);
+    const bool isBound = bind(s, reinterpret_cast<sockaddr *>(&address), sizeof(address)) == 0 &&
+                         getsockname(s, reinterpret_cast<sockaddr *>(&address), &length) == 0;
+
+    closeNativeSocket(s);
+
+    if (!isBound) {
+        throw std::runtime_error("findFreeLoopbackPort: bind() failed");
+    }
+
+    return ntohs(address.sin_port);
+}
+
 std::size_t LoopbackTcpServer::getAcceptedConnectionCount() const {
     std::lock_guard lock{mutex_};
 
