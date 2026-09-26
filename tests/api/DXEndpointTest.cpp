@@ -40,20 +40,36 @@ TEST_CASE("DXRNDP") {
 
 namespace {
 
-// Records state changes reported by the listeners of an endpoint (they are called from the QD threads).
-struct StateChanges {
+// Records the state changes reported by the listeners of an endpoint. In QD (DXEndpointImpl.StateHolder) one task on
+// the executor of the endpoint fires the change from the last reported state to the state computed when the task runs,
+// so quick changes are reported as one (NOT_CONNECTED -> CONNECTED without CONNECTING), and a notification may arrive
+// after close() returns. So the tests check how many times each state that the endpoint really reached was reported.
+template <typename State> struct StateChanges {
     std::mutex mutex{};
-    std::vector<std::pair<DXEndpoint::State, DXEndpoint::State>> changes{};
+    std::vector<std::pair<State, State>> changes{};
 
-    void add(DXEndpoint::State oldState, DXEndpoint::State newState) {
+    void add(State oldState, State newState) {
         std::lock_guard lock{mutex};
         changes.emplace_back(oldState, newState);
     }
 
-    bool contains(DXEndpoint::State oldState, DXEndpoint::State newState) {
+    std::size_t countChangesTo(State newState) {
         std::lock_guard lock{mutex};
 
-        return std::find(changes.begin(), changes.end(), std::pair{oldState, newState}) != changes.end();
+        return static_cast<std::size_t>(std::count_if(changes.begin(), changes.end(), [newState](const auto &change) {
+            return change.second == newState;
+        }));
+    }
+
+    std::string toString() {
+        std::lock_guard lock{mutex};
+        std::string result{};
+
+        for (const auto &[oldState, newState] : changes) {
+            result += std::to_string(static_cast<int>(oldState)) + "->" + std::to_string(static_cast<int>(newState)) + " ";
+        }
+
+        return result;
     }
 };
 
@@ -63,58 +79,68 @@ TEST_CASE("DXEndpoint::Builder: the state follows connect, disconnect and close"
     using State = DXEndpoint::State;
 
     const test::LoopbackTcpServer server{};
+    const auto executor = InPlaceExecutor::create();
     const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
-    StateChanges changes1{};
-    StateChanges changes2{};
+    StateChanges<State> changes1{};
+    StateChanges<State> changes2{};
 
-    endpoint->onStateChange() += [&changes1](State oldState, State newState) {
+    // The notifications are delivered only by processAllPendingTasks(): the test decides when they arrive.
+    endpoint->executor(executor);
+
+    const auto listenerId1 = endpoint->onStateChange() += [&changes1](State oldState, State newState) {
         changes1.add(oldState, newState);
     };
 
-    endpoint->addStateChangeListener([&changes2](State oldState, State newState) {
+    const auto listenerId2 = endpoint->addStateChangeListener([&changes2](State oldState, State newState) {
         changes2.add(oldState, newState);
     });
 
+    // The endpoint also runs its own tasks of the connection process through the executor.
+    const auto waitForState = [&](State state) {
+        return test::waitUntil([&] {
+            executor->processAllPendingTasks();
+
+            return endpoint->getState() == state;
+        });
+    };
+
+    const auto waitForChangeTo = [&](State newState, std::size_t times) {
+        const auto result = test::waitUntil([&] {
+            executor->processAllPendingTasks();
+
+            return changes1.countChangesTo(newState) == times && changes2.countChangesTo(newState) == times;
+        });
+
+        INFO("state changes: ", changes1.toString(), "/ ", changes2.toString());
+        CHECK(result);
+
+        return result;
+    };
+
     REQUIRE(endpoint->getState() == State::NOT_CONNECTED);
 
     endpoint->connect(server.getAddress());
-    REQUIRE(test::waitUntil([&] {
-        return endpoint->getState() == State::CONNECTED;
-    }));
+    REQUIRE(waitForState(State::CONNECTED));
+    REQUIRE(waitForChangeTo(State::CONNECTED, 1));
 
     endpoint->disconnect();
     REQUIRE(endpoint->getState() == State::NOT_CONNECTED);
+    REQUIRE(waitForChangeTo(State::NOT_CONNECTED, 1));
 
     endpoint->connect(server.getAddress());
-    REQUIRE(test::waitUntil([&] {
-        return endpoint->getState() == State::CONNECTED;
-    }));
+    REQUIRE(waitForState(State::CONNECTED));
+    REQUIRE(waitForChangeTo(State::CONNECTED, 2));
 
     endpoint->close();
     REQUIRE(endpoint->getState() == State::CLOSED);
+    REQUIRE(waitForChangeTo(State::CLOSED, 1));
 
-    for (auto *changes : {&changes1, &changes2}) {
-        REQUIRE(test::waitUntil([&] {
-            return changes->contains(State::CONNECTED, State::CLOSED);
-        }));
-        REQUIRE(changes->contains(State::NOT_CONNECTED, State::CONNECTING));
-        REQUIRE(changes->contains(State::CONNECTING, State::CONNECTED));
-        REQUIRE(changes->contains(State::CONNECTED, State::NOT_CONNECTED));
-    }
+    // The listeners capture local variables.
+    endpoint->onStateChange() -= listenerId1;
+    endpoint->removeStateChangeListener(listenerId2);
 }
 
 namespace {
-
-struct CStateChanges {
-    std::mutex mutex{};
-    std::vector<std::pair<dxfc_dxendpoint_state_t, dxfc_dxendpoint_state_t>> changes{};
-
-    bool contains(dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState) {
-        std::lock_guard lock{mutex};
-
-        return std::find(changes.begin(), changes.end(), std::pair{oldState, newState}) != changes.end();
-    }
-};
 
 dxfc_dxendpoint_state_t cApiGetState(dxfc_dxendpoint_t endpoint) {
     dxfc_dxendpoint_state_t state{};
@@ -134,40 +160,53 @@ TEST_CASE("dxfc_dxendpoint_builder_t: the state follows connect, disconnect and 
     REQUIRE(dxfc_dxendpoint_new_builder(&builder) == DXFC_EC_SUCCESS);
     REQUIRE(dxfc_dxendpoint_builder_with_role(builder, DXFC_DXENDPOINT_ROLE_FEED) == DXFC_EC_SUCCESS);
 
-    CStateChanges changes{};
+    StateChanges<dxfc_dxendpoint_state_t> changes{};
     dxfc_dxendpoint_t endpoint{};
 
     REQUIRE(dxfc_dxendpoint_builder_build(builder, &changes, &endpoint) == DXFC_EC_SUCCESS);
-    REQUIRE(dxfc_dxendpoint_add_state_change_listener(
-                endpoint,
-                [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *userData) {
-                    auto *c = static_cast<CStateChanges *>(userData);
-                    std::lock_guard lock{c->mutex};
-                    c->changes.emplace_back(oldState, newState);
-                }) == DXFC_EC_SUCCESS);
+    const dxfc_dxendpoint_state_change_listener stateChangeListener = [](dxfc_dxendpoint_state_t oldState,
+                                                                          dxfc_dxendpoint_state_t newState,
+                                                                          void *userData) {
+        static_cast<StateChanges<dxfc_dxendpoint_state_t> *>(userData)->add(oldState, newState);
+    };
+
+    REQUIRE(dxfc_dxendpoint_add_state_change_listener(endpoint, stateChangeListener) == DXFC_EC_SUCCESS);
+
+    // The C API has no executor setter: wait for each notification before the next state change.
+    const auto waitForChangeTo = [&](dxfc_dxendpoint_state_t newState, std::size_t times) {
+        const auto result = test::waitUntil([&] {
+            return changes.countChangesTo(newState) == times;
+        });
+
+        INFO("state changes: ", changes.toString());
+        CHECK(result);
+
+        return result;
+    };
+
     REQUIRE(cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_NOT_CONNECTED);
 
     REQUIRE(dxfc_dxendpoint_connect(endpoint, clientAddress.c_str()) == DXFC_EC_SUCCESS);
     REQUIRE(test::waitUntil([&] {
         return cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_CONNECTED;
     }));
+    REQUIRE(waitForChangeTo(DXFC_DXENDPOINT_STATE_CONNECTED, 1));
 
     REQUIRE(dxfc_dxendpoint_disconnect(endpoint) == DXFC_EC_SUCCESS);
     REQUIRE(cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_NOT_CONNECTED);
+    REQUIRE(waitForChangeTo(DXFC_DXENDPOINT_STATE_NOT_CONNECTED, 1));
 
     REQUIRE(dxfc_dxendpoint_connect(endpoint, clientAddress.c_str()) == DXFC_EC_SUCCESS);
     REQUIRE(test::waitUntil([&] {
         return cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_CONNECTED;
     }));
+    REQUIRE(waitForChangeTo(DXFC_DXENDPOINT_STATE_CONNECTED, 2));
 
+    // Remove the listener before close(): a notification can still arrive after dxfc_dxendpoint_free() and would
+    // use the dangling userData (static analysis report, API-14; fixed in the lifetime ticket).
+    REQUIRE(dxfc_dxendpoint_remove_state_change_listener(endpoint, stateChangeListener) == DXFC_EC_SUCCESS);
     REQUIRE(dxfc_dxendpoint_close(endpoint) == DXFC_EC_SUCCESS);
     REQUIRE(cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_CLOSED);
-    REQUIRE(test::waitUntil([&] {
-        return changes.contains(DXFC_DXENDPOINT_STATE_CONNECTED, DXFC_DXENDPOINT_STATE_CLOSED);
-    }));
-    REQUIRE(changes.contains(DXFC_DXENDPOINT_STATE_NOT_CONNECTED, DXFC_DXENDPOINT_STATE_CONNECTING));
-    REQUIRE(changes.contains(DXFC_DXENDPOINT_STATE_CONNECTING, DXFC_DXENDPOINT_STATE_CONNECTED));
-    REQUIRE(changes.contains(DXFC_DXENDPOINT_STATE_CONNECTED, DXFC_DXENDPOINT_STATE_NOT_CONNECTED));
 
     REQUIRE(dxfc_dxendpoint_free(endpoint) == DXFC_EC_SUCCESS);
     REQUIRE(dxfc_dxendpoint_builder_free(builder) == DXFC_EC_SUCCESS);

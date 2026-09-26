@@ -134,7 +134,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     if (DXFCXX_SANITIZERS_ENABLED)
         set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES ENVIRONMENT
-                "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1")
+                "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
     endif ()
 
     dxfcxx_copy_sanitizer_runtime(${DXFC_TEST_BASENAME})

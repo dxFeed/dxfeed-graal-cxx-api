@@ -1,0 +1,9 @@
+# Copyright (c) 2026 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+# LeakSanitizer suppressions for the unit tests (LSAN_OPTIONS=suppressions=...).
+#
+# The Graal native image is not instrumented; its allocations (isolate threads and their structures) are alive when
+# the tests exit without the teardown (see exitWithoutTeardown() in tests/main.cpp). Leaks of the C++ library and of
+# the tests are still reported: their allocation stacks do not pass through the native image.
+leak:libDxFeedGraalNativeSdk
