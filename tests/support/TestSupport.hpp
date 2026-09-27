@@ -43,8 +43,8 @@ bool waitUntil(Predicate &&predicate, std::chrono::milliseconds timeout = 10s,
 /**
  * A TCP server on a free loopback port that accepts connections and never sends anything. A client endpoint connected
  * to getAddress() reaches the CONNECTED state without external network. The server listens only on 127.0.0.1, so it
- * does not trigger firewall prompts. (A PUBLISHER endpoint cannot be used here: the `bindAddr` connector property is
- * not available in the Graal native image.)
+ * does not trigger firewall prompts. To test the data transfer, use a PUBLISHER endpoint on
+ * `:<findFreeLoopbackPort()>[bindAddr=127.0.0.1]` instead (the `bindAddr` property needs Graal SDK v3.5.0+).
  */
 class LoopbackTcpServer final {
     std::intptr_t listenSocket_{};
@@ -66,6 +66,12 @@ class LoopbackTcpServer final {
 
     std::size_t getAcceptedConnectionCount() const;
 };
+
+/**
+ * Returns a loopback TCP port that is free at the moment of the call. Another process may take it before it is used;
+ * prefer LoopbackTcpServer where a server that only accepts connections is enough.
+ */
+std::uint16_t findFreeLoopbackPort();
 
 /**
  * A `LOCAL_HUB` endpoint with an in-place executor: events published with publishAndProcess() are delivered to the

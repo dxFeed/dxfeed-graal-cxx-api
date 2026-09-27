@@ -118,8 +118,11 @@ bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void *promise, s
             "Unable to execute function `dxfg_Promise_awaitWithoutException`. The `promise` is nullptr");
     }
 
+    // DXFG_EXECUTE_SUCCESSFULLY (0): the promise has completed; DXFG_PROMISE_AWAIT_TIMED_OUT (1, Graal SDK v3.5.0+):
+    // the wait timed out and the promise is cancelled. Graal SDK before v3.5.0 returned 0 on timeout as well.
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_awaitWithoutException,
-                                                  static_cast<dxfg_promise_t *>(promise), timeoutInMilliseconds) == 0;
+                                                  static_cast<dxfg_promise_t *>(promise),
+                                                  timeoutInMilliseconds) == DXFG_EXECUTE_SUCCESSFULLY;
 }
 
 void /* int32_t */ cancel(/* dxfg_promise_t * */ void *promise) {

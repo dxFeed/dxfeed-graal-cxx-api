@@ -6,6 +6,15 @@
       Added the `DXFCXX_BUILD_HEADER_CHECK` option that compiles every public header on its own.
     * Unit tests no longer need external network and can run in parallel. The tests against `demo.dxfeed.com` are built
       with the new `DXFCXX_ENABLE_NETWORK_TESTS` option (CTest label `network`).
+* Migrated to Graal SDK v3.5.0.
+    * `Promise::awaitWithoutException()` now returns `false` when the wait times out (the promise is cancelled then);
+      it returned `true` before.
+    * The QD `TimeSyncTracker` (UDP multicast to `239.192.51.45:5145` from every process) is disabled by default. Set
+      the system property `com.dxfeed.sdk.TimeSyncTracker.enable` to `true` before creating the first endpoint to
+      enable it.
+    * Connector properties in addresses (for example, `:7700[bindAddr=127.0.0.1]`) no longer fail with
+      `MissingReflectionRegistrationError`.
+    * A native listener is no longer called after its handle has been released.
 * **\[MDAPI-85]\[C++]** Added DXFeedTimeAndSales API sample.
 * **\[MDAPI-424]\[C++]** Fixed `OptionSeries` floating-point equality, ordering, and hashing
   to match Java semantics. Multiplier and SPC values now distinguish `-0.0` from `+0.0`, treat all NaN values as

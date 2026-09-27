@@ -183,15 +183,13 @@ TEST_CASE_FIXTURE(PromisesFixture, "getLastEventsPromises and Promises::allOf co
     REQUIRE(quotes[1]->getAskPrice() == 21.0);
 }
 
-// Graal SDK v3.2.13: dxfg_Promise_awaitWithoutException ignores the result of Promise.awaitWithoutException and always
-// returns 0, so the C++ wrapper reports `true` on timeout. See the static analysis report, SDK-1.
-TEST_CASE_FIXTURE(PromisesFixture, "awaitWithoutException returns false and cancels the promise on timeout" *
-                                       doctest::may_fail()) {
+// Requires Graal SDK v3.5.0+: before it, dxfg_Promise_awaitWithoutException returned 0 ("completed") on timeout.
+TEST_CASE_FIXTURE(PromisesFixture, "awaitWithoutException returns false and cancels the promise on timeout") {
     const auto promise = feed->getLastEventPromise<Quote>("NO-DATA");
 
     REQUIRE_FALSE(promise->isDone());
-    CHECK_FALSE(promise->awaitWithoutException(100ms));
-    CHECK(promise->isCancelled());
+    REQUIRE_FALSE(promise->awaitWithoutException(100ms));
+    REQUIRE(promise->isCancelled());
 }
 
 namespace {
