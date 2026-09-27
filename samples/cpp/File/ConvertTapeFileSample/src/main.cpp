@@ -18,9 +18,9 @@ int main(int argc, char *argv[]) {
         // Logging::init();
 
         // Determine input and output tapes and specify appropriate configuration parameters.
-        const std::string inputAddress = argc > 1 ? argv[0] : "file:ConvertTapeFile.in[readAs=stream_data,speed=max]";
+        const std::string inputAddress = argc > 1 ? argv[1] : "file:ConvertTapeFile.in[readAs=stream_data,speed=max]";
         const std::string outputAddress =
-            argc > 2 ? argv[1] : "tape:ConvertTapeFile.out[saveAs=stream_data,format=text]";
+            argc > 2 ? argv[2] : "tape:ConvertTapeFile.out[saveAs=stream_data,format=text]";
 
         // Create an input endpoint configured for tape reading.
         const auto inputEndpoint =

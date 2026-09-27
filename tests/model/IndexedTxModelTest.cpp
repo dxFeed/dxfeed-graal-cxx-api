@@ -15,7 +15,7 @@
 using namespace std::literals;
 using namespace dxfcpp;
 
-// The scenarios follow IndexedTxModelTest of the Java API (dxfeed-model), the ones that publish events through
+// The scenarios follow the Java API tests of IndexedTxModel, the ones that publish events through
 // a LOCAL_HUB publisher. The model notifies its listener through the endpoint executor, see process().
 namespace {
 

@@ -1,0 +1,39 @@
+==DXP3	type=tape	version=QDS-3.355	opt=hs	time=field	+RAW_DATA
+==RAW_DATA
+=Quote	EventSymbol	EventTime	BidTime	BidExchangeCode	BidPrice	BidSize	AskTime	AskExchangeCode	AskPrice	AskSize
+Quote	DEFAULTS	20231114-221320.000+0000	0	\0	NaN	NaN	0	\0	NaN	NaN
+=Trade	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	Tick	Change	DayId	DayVolume	DayTurnover	Flags
+Trade	DEFAULTS	20231114-221320.000+0000	0	0	\0	0	NaN	NaN	0	NaN	0	NaN	NaN	0
+=TradeETH	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	Change	DayId	DayVolume	DayTurnover	Flags
+TradeETH	DEFAULTS	20231114-221320.000+0000	0	0	\0	0	NaN	NaN	NaN	0	NaN	NaN	0
+=TimeAndSale	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	BidPrice	AskPrice	SaleConditions	Flags
+TimeAndSale	DEFAULTS	20231114-221320.000+0000	0	0	\0	0	NaN	NaN	NaN	NaN	\NULL	0
+=Summary	EventSymbol	EventTime	DayId	DayOpenPrice	DayHighPrice	DayLowPrice	DayClosePrice	PrevDayId	PrevDayClosePrice	PrevDayVolume	OpenInterest	Flags
+Summary	DEFAULTS	20231114-221320.000+0000	0	NaN	NaN	NaN	NaN	0	NaN	NaN	0	0
+=Profile	EventSymbol	EventTime	Beta	Eps	DivFreq	ExdDivAmount	ExdDivDate	HighPrice52	LowPrice52	Shares	FreeFloat	HighLimitPrice	LowLimitPrice	HaltStartTime	HaltEndTime	Flags	Description	StatusReason
+Profile	DEFAULTS	20231114-221320.000+0000	NaN	NaN	NaN	NaN	0	NaN	NaN	NaN	NaN	NaN	NaN	0	0	0	\NULL	\NULL
+=Order#NTV	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	MarketMaker
+Order#NTV	DEFAULTS	20231114-221320.000+0000	0	0	0	NaN	NaN	0	\NULL
+=AnalyticOrder#GLBX	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags
+AnalyticOrder#GLBX	DEFAULTS	20231114-221320.000+0000	0	0	0	NaN	NaN	0
+=OtcMarketsOrder#pink	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	MarketMaker	QuoteAccessPayment	OtcMarketsFlags
+OtcMarketsOrder#pink	DEFAULTS	20231114-221320.000+0000	0	0	0	NaN	NaN	0	\NULL	0	0
+=SpreadOrder#ISE	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	SpreadSymbol
+SpreadOrder#ISE	DEFAULTS	20231114-221320.000+0000	0	0	0	NaN	NaN	0	\NULL
+=Trade.Day	EventSymbol	EventTime	Time	Sequence	Count	Open	High	Low	Close	Volume	VWAP	BidVolume	AskVolume	ImpVolatility	OpenInterest
+Trade.Day	DEFAULTS	20231114-221320.000+0000	0	0	0	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN	NaN
+=Greeks	EventSymbol	EventTime	Time	Sequence	Price	Volatility	Delta	Gamma	Theta	Rho	Vega
+Greeks	DEFAULTS	20231114-221320.000+0000	0	0	NaN	NaN	NaN	NaN	NaN	NaN	NaN
+=TheoPrice	EventSymbol	EventTime	Time	Sequence	Price	UnderlyingPrice	Delta	Gamma	Dividend	Interest
+TheoPrice	DEFAULTS	20231114-221320.000+0000	0	0	NaN	NaN	NaN	NaN	NaN	NaN
+=Underlying	EventSymbol	EventTime	Time	Sequence	Volatility	FrontVolatility	BackVolatility	CallVolume	PutVolume	PutCallRatio
+Underlying	DEFAULTS	20231114-221320.000+0000	0	0	NaN	NaN	NaN	NaN	NaN	NaN
+=Series	EventSymbol	EventTime	Index	Time	Sequence	Expiration	Volatility	CallVolume	PutVolume	PutCallRatio	ForwardPrice	Dividend	Interest
+Series	DEFAULTS	20231114-221320.000+0000	0	0	0	0	NaN	NaN	NaN	NaN	NaN	NaN	NaN
+=OptionSale	EventSymbol	EventTime	Index	Time	Sequence	ExchangeCode	Price	Size	BidPrice	AskPrice	ExchangeSaleConditions	Flags	UnderlyingPrice	Volatility	Delta	OptionSymbol
+OptionSale	DEFAULTS	20231114-221320.000+0000	0	0	0	\0	NaN	NaN	NaN	NaN	\NULL	0	NaN	NaN	NaN	\NULL
+=TextMessage	EventSymbol	EventTime	Time	Sequence	Text
+TextMessage	DEFAULTS	20231114-221320.000+0000	0	0	\NULL
+=Message	EventSymbol	EventTime	Message
+Message	DEFAULTS	20231114-221320.000+0000	\NULL
+==

@@ -1,0 +1,39 @@
+==DXP3	type=tape	version=QDS-3.355	opt=hs	time=field	+RAW_DATA
+==RAW_DATA
+=Quote	EventSymbol	EventTime	BidTime	BidExchangeCode	BidPrice	BidSize	AskTime	AskExchangeCode	AskPrice	AskSize
+Quote	ROUND-TRIP	20231114-221320.001+0000	20231114-221321+0000	B	10.25	100	20231114-221322+0000	A	10.5	200
+=Trade	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	Tick	Change	DayId	DayVolume	DayTurnover	Flags
+Trade	ROUND-TRIP	20231114-221320.002+0000	20231114-221323+0000	456:9	Q	7001	100.5	10	1	1.25	20231114	1000	100500	11
+=TradeETH	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	Change	DayId	DayVolume	DayTurnover	Flags
+TradeETH	ROUND-TRIP	20231114-221320.003+0000	20231114-221324+0000	567:11	P	7002	101.75	20	-0.5	20231115	2000	203500	3
+=TimeAndSale	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	BidPrice	AskPrice	SaleConditions	Flags
+TimeAndSale	ROUND-TRIP	20231114-221320.004+0000	20231114-221325+0000	678:13	T	7003	102.5	30	102.25	102.75	TI	22589
+=Summary	EventSymbol	EventTime	DayId	DayOpenPrice	DayHighPrice	DayLowPrice	DayClosePrice	PrevDayId	PrevDayClosePrice	PrevDayVolume	OpenInterest	Flags
+Summary	ROUND-TRIP	20231114-221320.005+0000	20231116	90.5	95.25	89.75	94.5	20231115	91.25	3000	4000	14
+=Profile	EventSymbol	EventTime	Beta	Eps	DivFreq	ExdDivAmount	ExdDivDate	HighPrice52	LowPrice52	Shares	FreeFloat	HighLimitPrice	LowLimitPrice	HaltStartTime	HaltEndTime	Flags	Description	StatusReason
+Profile	ROUND-TRIP	20231114-221320.006+0000	1.5	2.25	4	0.75	20231117	120.5	80.25	5000000	4000000	110.5	85.5	20231114-221326+0000	20231114-221327+0000	5	"Round-trip test instrument"	"Test halt"
+=Order#NTV	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	MarketMaker
+Order#NTV	ROUND-TRIP	20231114-221320.007+0000	21	20231114-221328+0000	901:15	99.5	40	1255	MMKR
+=AnalyticOrder#GLBX	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags
+AnalyticOrder#GLBX	ROUND-TRIP	20231114-221320.008+0000	22	20231114-221329+0000	12:17	98.25	50	1147
+=OtcMarketsOrder#pink	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	MarketMaker	QuoteAccessPayment	OtcMarketsFlags
+OtcMarketsOrder#pink	ROUND-TRIP	20231114-221320.009+0000	23	20231114-221330+0000	123:19	0.0125	60	1367	OTCM	-3	119
+=SpreadOrder#ISE	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	SpreadSymbol
+SpreadOrder#ISE	ROUND-TRIP	20231114-221320.010+0000	24	20231114-221331+0000	234:21	1.5	70	1179	=ROUND-TRIP-SPREAD
+=Trade.Day	EventSymbol	EventTime	Time	Sequence	Count	Open	High	Low	Close	Volume	VWAP	BidVolume	AskVolume	ImpVolatility	OpenInterest
+Trade.Day	ROUND-TRIP	20231114-221320.011+0000	20231113-221320+0000	23	1234	10.5	12.25	9.75	11.5	5000	11.125	2000	3000	0.25	6000
+=Greeks	EventSymbol	EventTime	Time	Sequence	Price	Volatility	Delta	Gamma	Theta	Rho	Vega
+Greeks	ROUND-TRIP	20231114-221320.012+0000	20231114-221332+0000	345:25	3.5	0.375	0.5	0.0625	-0.125	0.25	0.75
+=TheoPrice	EventSymbol	EventTime	Time	Sequence	Price	UnderlyingPrice	Delta	Gamma	Dividend	Interest
+TheoPrice	ROUND-TRIP	20231114-221320.013+0000	20231114-221333+0000	456:27	4.25	100.5	0.625	0.03125	0.5	0.0375
+=Underlying	EventSymbol	EventTime	Time	Sequence	Volatility	FrontVolatility	BackVolatility	CallVolume	PutVolume	PutCallRatio
+Underlying	ROUND-TRIP	20231114-221320.014+0000	20231114-221334+0000	567:29	0.3125	0.28125	0.34375	7000	3500	0.5
+=Series	EventSymbol	EventTime	Index	Time	Sequence	Expiration	Volatility	CallVolume	PutVolume	PutCallRatio	ForwardPrice	Dividend	Interest
+Series	ROUND-TRIP	20231114-221320.015+0000	31	20231114-221335+0000	678:33	20231214	0.40625	8000	2000	0.25	101.25	0.625	0.04375
+=OptionSale	EventSymbol	EventTime	Index	Time	Sequence	ExchangeCode	Price	Size	BidPrice	AskPrice	ExchangeSaleConditions	Flags	UnderlyingPrice	Volatility	Delta	OptionSymbol
+OptionSale	ROUND-TRIP	20231114-221320.016+0000	35	20231114-221336+0000	789:37	C	5.25	80	5.125	5.375	OS	22878	100.75	0.46875	-0.375	.ROUND-TRIP231117C100
+=TextMessage	EventSymbol	EventTime	Time	Sequence	Text
+TextMessage	ROUND-TRIP	20231114-221320.017+0000	20231114-221337+0000	890:39	"Text with spaces, \"quotes\" and \\backslash"
+=Message	EventSymbol	EventTime	Message
+Message	ROUND-TRIP	20231114-221320.018+0000	"attachment rO0ABXQACmF0dGFjaG1lbnQ"
+==
