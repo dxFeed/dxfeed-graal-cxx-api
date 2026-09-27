@@ -27,14 +27,12 @@ using namespace dxfcpp;
 namespace {
 
 // Trade, TradeETH and TimeAndSale have no trade id in the C++ API (static analysis report, EVT-2).
-// Message attachments are not transferred by the native SDK (DXFG MessageMapper, static analysis report, SDK-8).
-const std::vector<std::string> KNOWN_ROUND_TRIP_DEFECTS{"Trade.TradeId", "TradeETH.TradeId", "TimeAndSale.TradeId",
-                                                        "Message.Message"};
+const std::vector<std::string> KNOWN_ROUND_TRIP_DEFECTS{"Trade.TradeId", "TradeETH.TradeId", "TimeAndSale.TradeId"};
 
 // Java defaults: the day volume and turnover of Trade and TradeETH are NaN, the text of TextMessage is null
-// (static analysis report, EVT-16); a Message without an attachment is written as `"null "` (SDK-8).
-const std::vector<std::string> KNOWN_DEFAULTS_DEFECTS{"Trade.DayVolume",    "Trade.DayTurnover", "TradeETH.DayVolume",
-                                                      "TradeETH.DayTurnover", "TextMessage.Text",  "Message.Message"};
+// (static analysis report, EVT-16).
+const std::vector<std::string> KNOWN_DEFAULTS_DEFECTS{"Trade.DayVolume", "Trade.DayTurnover", "TradeETH.DayVolume",
+                                                      "TradeETH.DayTurnover", "TextMessage.Text"};
 
 // The key of an event in a tape: its type and, for the order-like events, its source.
 std::string eventKey(const std::shared_ptr<EventType> &event) {
@@ -47,13 +45,9 @@ std::string eventKey(const std::shared_ptr<EventType> &event) {
     return key;
 }
 
-bool isMessage(const std::shared_ptr<EventType> &event) {
-    return event->sharedAs<Message>() != nullptr;
-}
-
 // Compares the events by toString(), which prints all the fields of an event.
 void checkEvents(const std::vector<std::shared_ptr<EventType>> &expected,
-                 const std::vector<std::shared_ptr<EventType>> &actualEvents, bool withMessages) {
+                 const std::vector<std::shared_ptr<EventType>> &actualEvents) {
     std::map<std::string, std::shared_ptr<EventType>> actual{};
 
     for (const auto &event : actualEvents) {
@@ -61,10 +55,6 @@ void checkEvents(const std::vector<std::shared_ptr<EventType>> &expected,
     }
 
     for (const auto &event : expected) {
-        if (isMessage(event) != withMessages) {
-            continue;
-        }
-
         const auto key = eventKey(event);
 
         CAPTURE(key);
@@ -170,32 +160,19 @@ TEST_CASE("Events of all types are unchanged after a round trip through a text t
     const auto path = test::temporaryFilePath("round-trip.txt");
 
     test::writeTextTape(path, expected);
-    checkEvents(expected, test::readTape(path, {test::tapeCandleSymbol()}), false);
-}
-
-TEST_CASE("A Message attachment is unchanged after a round trip through a text tape (SDK-8)" * doctest::may_fail()) {
-    const auto expected = test::createTapeEvents();
-    const auto path = test::temporaryFilePath("round-trip-message.txt");
-
-    test::writeTextTape(path, expected);
-    checkEvents(expected, test::readTape(path), true);
+    checkEvents(expected, test::readTape(path, {test::tapeCandleSymbol()}));
 }
 
 TEST_CASE("The golden tape is read as the events of the factory") {
     checkEvents(test::createTapeEvents(),
-                test::readTape(test::testDataPath("tapes/all-events.txt"), {test::tapeCandleSymbol()}), false);
-}
-
-TEST_CASE("The Message of the golden tape is read with its attachment (SDK-8)" * doctest::may_fail()) {
-    checkEvents(test::createTapeEvents(), test::readTape(test::testDataPath("tapes/all-events.txt")), true);
+                test::readTape(test::testDataPath("tapes/all-events.txt"), {test::tapeCandleSymbol()}));
 }
 
 TEST_CASE("Every column of the golden tape survives reading into C++ and writing back, except known defects") {
     checkDifferences(goldenRoundTripDifferences(), KNOWN_ROUND_TRIP_DEFECTS, false);
 }
 
-TEST_CASE("Every column of the golden tape survives reading into C++ and writing back (EVT-2, SDK-8)" *
-          doctest::may_fail()) {
+TEST_CASE("Every column of the golden tape survives reading into C++ and writing back (EVT-2)" * doctest::may_fail()) {
     checkDifferences(goldenRoundTripDifferences(), KNOWN_ROUND_TRIP_DEFECTS, true);
 }
 
@@ -203,6 +180,6 @@ TEST_CASE("Default events are written as the Java API writes them, except known 
     checkDifferences(defaultsDifferences(), KNOWN_DEFAULTS_DEFECTS, false);
 }
 
-TEST_CASE("Default events are written as the Java API writes them (EVT-16, SDK-8)" * doctest::may_fail()) {
+TEST_CASE("Default events are written as the Java API writes them (EVT-16)" * doctest::may_fail()) {
     checkDifferences(defaultsDifferences(), KNOWN_DEFAULTS_DEFECTS, true);
 }
