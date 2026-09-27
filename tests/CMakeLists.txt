@@ -42,14 +42,17 @@ set(DXFC_TEST_SOURCES
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderSourceTest.cpp
         event/EventsTest.cpp
+        event/TapeRoundTripTest.cpp
         exceptions/ExceptionsTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
         glossary/PriceIncrementsTest.cpp
         internal/CommonTest.cpp
         internal/EntityManagerTest.cpp
+        ipf/OptionChainsTest.cpp
         ipf/OptionSeriesTest.cpp
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp
+        model/TxModelTapeTest.cpp
         model/MarketDepthModelTest.cpp
         promise/PromisesTest.cpp
         schedule/ScheduleTest.cpp
@@ -66,6 +69,12 @@ if (DXFCXX_ENABLE_NETWORK_TESTS)
     list(APPEND DXFC_TEST_SOURCES network/NetworkTest.cpp)
 endif ()
 
+set(DXFC_TEST_SUPPORT_SOURCES support/TestSupport.cpp support/EventFactory.cpp support/TapeSupport.cpp)
+
+# Temporary files of the tests (tapes written by the tests).
+set(DXFC_TEST_TEMP_DIR "${CMAKE_CURRENT_BINARY_DIR}/tmp")
+file(MAKE_DIRECTORY "${DXFC_TEST_TEMP_DIR}")
+
 foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     string(REPLACE ".cpp" "" DXFC_TEST_BASENAME "${DXFC_TEST_SOURCE}")
     string(REPLACE "/" "_" DXFC_TEST_BASENAME "${DXFC_TEST_BASENAME}")
@@ -73,8 +82,10 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     set(DXFC_TEST_BASENAME dxFeedGraalCxxApi_${DXFC_TEST_BASENAME})
     #    message("${DXFC_TEST_BASENAME}: ${DXFC_TEST_SOURCE}")
 
-    add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp support/TestSupport.cpp)
+    add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp ${DXFC_TEST_SUPPORT_SOURCES})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+    target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE
+            DXFCXX_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data" DXFCXX_TEST_TEMP_DIR="${DXFC_TEST_TEMP_DIR}")
     target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only)
 
     if (WIN32)

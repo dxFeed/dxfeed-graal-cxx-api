@@ -4,7 +4,7 @@
   "doctest": "2.4.11",
   "fmt": "12.1.0",
   "glfw": "3.4",
-  "graal-native-sdk": "3.5.0",
+  "graal-native-sdk": "3.6.0",
   "imgui": "1.92.9b",
   "Process": "3.0.1",
   "range-v3": "0.12",

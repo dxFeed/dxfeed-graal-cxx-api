@@ -6,7 +6,12 @@
       Added the `DXFCXX_BUILD_HEADER_CHECK` option that compiles every public header on its own.
     * Unit tests no longer need external network and can run in parallel. The tests against `demo.dxfeed.com` are built
       with the new `DXFCXX_ENABLE_NETWORK_TESTS` option (CTest label `network`).
-* Migrated to Graal SDK v3.5.0.
+    * Unit tests compare the events of all types, the option chains of an IPF file and the tx model scenarios with
+      the Java API through golden QD tapes (`tests/data`).
+* Migrated to Graal SDK v3.6.0.
+    * The attachment of `Message` is transferred in both directions: a `Message` published from C++ keeps its
+      attachment, and a received attachment is the string as is (it was JSON before: `"text"` with the quotes, the
+      string `null` for no attachment). A non-string Java attachment is received as its `toString()`.
     * `Promise::awaitWithoutException()` now returns `false` when the wait times out (the promise is cancelled then);
       it returned `true` before.
     * The QD `TimeSyncTracker` (UDP multicast to `239.192.51.45:5145` from every process) is disabled by default. Set
@@ -20,6 +25,8 @@
   to match Java semantics. Multiplier and SPC values now distinguish `-0.0` from `+0.0`, treat all NaN values as
   equal, and order NaN after positive infinity; NaN values are canonicalized for consistent hashing.
 * Fixed `JavaHandle` leaks.
+* Fixed `ConvertTapeFileSample`: the input and output addresses are now taken from the first and the second command
+  line arguments; the sample used the program path as the input address before.
 * **\[MDAPI-425]\[C++]** Improved lifecycle management for native callback-backed entities.
 
 ## v8.0.0
