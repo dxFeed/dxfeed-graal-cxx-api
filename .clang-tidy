@@ -1,0 +1,60 @@
+# clang-tidy profile of the CI job "clang-tidy" (.github/workflows/static-analysis.yml): checks that find bugs, no style
+# checks and no aliases of enabled checks. Disabled checks and why:
+#  - bugprone-easily-swappable-parameters: style.
+#  - bugprone-narrowing-conversions: every implicit int/double conversion; compiler warnings cover it (-Wconversion).
+#  - bugprone-signed-bitwise: the packed event fields use bitwise operations on signed ints on purpose (as in Java).
+#  - bugprone-throwing-static-initialization, cert-err58-cpp: the public constants are static objects (CONST-1, fixed in
+#    the correctness ticket); the check reports every one of them.
+#  - bugprone-multi-level-implicit-pointer-conversion, bugprone-bitwise-pointer-cast: the conversions of the native
+#    handles at the C API boundary (void **, bit_cast of pointers) are intended.
+#  - bugprone-crtp-constructor-accessibility: style.
+#  - cert-* aliases of bugprone/misc/performance checks are disabled in favor of the originals.
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-narrowing-conversions,
+  -bugprone-signed-bitwise,
+  -bugprone-throwing-static-initialization,
+  -bugprone-multi-level-implicit-pointer-conversion,
+  -bugprone-bitwise-pointer-cast,
+  -bugprone-crtp-constructor-accessibility,
+  cert-err33-c,
+  cert-err34-c,
+  cert-err52-cpp,
+  cert-err60-cpp,
+  cert-int09-c,
+  cert-flp30-c,
+  cert-msc50-cpp,
+  cert-msc51-cpp,
+  cert-oop57-cpp,
+  cert-oop58-cpp,
+  clang-analyzer-*,
+  concurrency-*,
+  cppcoreguidelines-missing-std-forward,
+  cppcoreguidelines-rvalue-reference-param-not-moved,
+  cppcoreguidelines-slicing,
+  cppcoreguidelines-virtual-class-destructor,
+  misc-header-include-cycle,
+  misc-misplaced-const,
+  misc-new-delete-overloads,
+  misc-non-copyable-objects,
+  misc-redundant-expression,
+  misc-static-assert,
+  misc-throw-by-value-catch-by-reference,
+  misc-unconventional-assign-operator,
+  misc-uniqueptr-reset-release,
+  misc-unused-using-decls,
+  modernize-use-override,
+  performance-*,
+  -performance-enum-size,
+  readability-inconsistent-declaration-parameter-name,
+  readability-misleading-indentation,
+  readability-suspicious-call-argument
+WarningsAsErrors: ''
+HeaderFilterRegex: '(include/dxfeed_graal_c(pp)?_api|src)/'
+ExcludeHeaderFilterRegex: 'third_party/'
+SystemHeaders: false
+CheckOptions:
+  # The check reports the include cycles of third-party headers (fmt) regardless of the header filter.
+  misc-header-include-cycle.IgnoredFilesList: 'third_party/'

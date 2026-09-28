@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MPL-2.0
 
 // Smoke tests against the public demo feed. They need external network access and are built only with
-// DXFCXX_ENABLE_NETWORK_TESTS=ON (CTest label: network). The hermetic variants of these scenarios are in the other tests.
+// DXFCXX_ENABLE_NETWORK_TESTS=ON (CTest label: network). The hermetic variants of these scenarios are in the other
+// tests.
 
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>

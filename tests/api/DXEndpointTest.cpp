@@ -30,7 +30,7 @@ TEST_CASE("DXRNDP") {
     for (auto e : {e1, e2, e3, e4, e5, e6}) {
         std::cout << e->toString() << " - " << DXEndpoint::roleToString(e->getRole()) << "\n";
 
-        for (auto et: e->getEventTypes()) {
+        for (auto et : e->getEventTypes()) {
             std::cout << et.getName() << ", ";
         }
 
@@ -66,7 +66,8 @@ template <typename State> struct StateChanges {
         std::string result{};
 
         for (const auto &[oldState, newState] : changes) {
-            result += std::to_string(static_cast<int>(oldState)) + "->" + std::to_string(static_cast<int>(newState)) + " ";
+            result +=
+                std::to_string(static_cast<int>(oldState)) + "->" + std::to_string(static_cast<int>(newState)) + " ";
         }
 
         return result;
@@ -164,11 +165,10 @@ TEST_CASE("dxfc_dxendpoint_builder_t: the state follows connect, disconnect and 
     dxfc_dxendpoint_t endpoint{};
 
     REQUIRE(dxfc_dxendpoint_builder_build(builder, &changes, &endpoint) == DXFC_EC_SUCCESS);
-    const dxfc_dxendpoint_state_change_listener stateChangeListener = [](dxfc_dxendpoint_state_t oldState,
-                                                                          dxfc_dxendpoint_state_t newState,
-                                                                          void *userData) {
-        static_cast<StateChanges<dxfc_dxendpoint_state_t> *>(userData)->add(oldState, newState);
-    };
+    const dxfc_dxendpoint_state_change_listener stateChangeListener =
+        [](dxfc_dxendpoint_state_t oldState, dxfc_dxendpoint_state_t newState, void *userData) {
+            static_cast<StateChanges<dxfc_dxendpoint_state_t> *>(userData)->add(oldState, newState);
+        };
 
     REQUIRE(dxfc_dxendpoint_add_state_change_listener(endpoint, stateChangeListener) == DXFC_EC_SUCCESS);
 
