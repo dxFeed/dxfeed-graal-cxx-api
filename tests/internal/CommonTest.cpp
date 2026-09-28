@@ -24,6 +24,51 @@ static_assert(!ApproximatelyComparable<std::int64_t, std::int64_t>);
 
 } // namespace
 
+TEST_CASE("floorDiv and floorMod should match Java Math.floorDiv and Math.floorMod, including the int64 limits") {
+    constexpr auto MIN = std::numeric_limits<std::int64_t>::min();
+    constexpr auto MAX = std::numeric_limits<std::int64_t>::max();
+
+    struct Case {
+        std::int64_t x;
+        std::int64_t y;
+        std::int64_t floorDiv;
+        std::int64_t floorMod;
+    };
+
+    // The results of the Java API for the same arguments.
+    const Case cases[]{
+        {7, 1000, 0, 7},
+        {-1, 1000, -1, 999},
+        {1, -1000, -1, -999},
+        {-1000, 1000, -1, 0},
+        {-7, -1000, 0, -7},
+        {MAX, 1000, 9'223'372'036'854'775, 807},
+        {MIN, 1000, -9'223'372'036'854'776, 192},
+        {MIN, 1'000'000, -9'223'372'036'855, 224'192},
+        {MIN, -1, MIN, 0},
+        {MAX, -1, -MAX, 0},
+        {5, -1, -5, 0},
+        {-5, -1, 5, 0},
+        {MIN, MIN, 1, 0},
+        {MAX, MIN, -1, -1},
+        {MIN, MAX, -2, MAX - 1},
+        {-1, MIN, 0, -1},
+    };
+
+    for (const auto &c : cases) {
+        CAPTURE(c.x);
+        CAPTURE(c.y);
+        CHECK(math::floorDiv(c.x, c.y) == c.floorDiv);
+        CHECK(math::floorMod(c.x, c.y) == c.floorMod);
+    }
+
+    CHECK_THROWS_AS(math::floorDiv(1, 0), InvalidArgumentException);
+    CHECK_THROWS_AS(math::floorMod(1, 0), InvalidArgumentException);
+
+    static_assert(math::floorMod(MIN, 1000) == 192);
+    static_assert(math::floorDiv(MIN, -1) == MIN);
+}
+
 TEST_CASE("doubleEquals should match Java Double.equals semantics") {
     CHECK(math::doubleEquals(1.0, 1.0));
     CHECK_FALSE(math::doubleEquals(1.0, std::nextafter(1.0, 2.0)));

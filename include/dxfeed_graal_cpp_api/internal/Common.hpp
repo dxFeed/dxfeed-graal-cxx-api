@@ -5,6 +5,7 @@
 
 #include "./Conf.hpp"
 
+#include "../exceptions/InvalidArgumentException.hpp"
 #include "./utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
@@ -20,6 +21,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <charconv>
 #include <chrono>
 #include <cmath>
+#include <limits>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -278,19 +280,57 @@ inline auto now() {
 }
 
 namespace math {
+/**
+ * Returns the largest value that is less than or equal to the algebraic quotient, as Java Math.floorDiv(long, long).
+ * floorDiv(INT64_MIN, -1) is INT64_MIN, as in Java.
+ *
+ * @throws InvalidArgumentException if `y` is 0 (Java throws ArithmeticException).
+ */
 static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
-    std::int64_t r = x / y;
-
-    // if the signs are different and modulo not zero, round down
-    if ((x < 0) != (y < 0) && (r * y != x)) {
-        r--;
+    if (y == 0) {
+        throw InvalidArgumentException("/ by zero");
     }
 
-    return r;
+    // INT64_MIN / -1 overflows (undefined behavior in C++); Java wraps the result to INT64_MIN.
+    if (x == std::numeric_limits<std::int64_t>::min() && y == -1) {
+        return x;
+    }
+
+    std::int64_t quotient = x / y;
+
+    // The division truncates towards zero: when the signs differ and there is a remainder, round down.
+    if (x % y != 0 && (x < 0) != (y < 0)) {
+        quotient--;
+    }
+
+    return quotient;
 }
 
+/**
+ * Returns the floor modulus `x - floorDiv(x, y) * y` (the sign of the result is the sign of `y`), as Java
+ * Math.floorMod(long, long), without the overflow of that expression.
+ *
+ * @throws InvalidArgumentException if `y` is 0 (Java throws ArithmeticException).
+ */
 static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
-    return x - (floorDiv(x, y) * y);
+    if (y == 0) {
+        throw InvalidArgumentException("/ by zero");
+    }
+
+    // x % -1 is 0, but INT64_MIN % -1 overflows (undefined behavior in C++).
+    if (y == -1) {
+        return 0;
+    }
+
+    std::int64_t remainder = x % y;
+
+    // The remainder has the sign of x: when the signs differ, move it to the sign of y. |remainder| < |y| and the signs
+    // are opposite, so the sum does not overflow.
+    if (remainder != 0 && (remainder < 0) != (y < 0)) {
+        remainder += y;
+    }
+
+    return remainder;
 }
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();

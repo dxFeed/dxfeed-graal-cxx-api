@@ -3,6 +3,10 @@
 
 #include "EventFactory.hpp"
 
+#include <array>
+#include <cstdio>
+#include <limits>
+
 namespace dxfcpp::test {
 
 namespace {
@@ -311,6 +315,355 @@ std::vector<std::shared_ptr<EventType>> createDefaultEvents() {
         std::make_shared<TextMessage>(DEFAULTS_SYMBOL),
         std::make_shared<Message>(DEFAULTS_SYMBOL),
     };
+
+    for (const auto &event : events) {
+        event->setEventTime(T);
+    }
+
+    return events;
+}
+
+namespace {
+
+// The value sets of createEdgeEvents(): the k-th symbol gets the k-th value of every array.
+const std::array<std::string, 11> EDGE_SYMBOLS{"EDGE-NAN",      "EDGE-ZERO",  "EDGE-NEG-ZERO", "EDGE-INF",
+                                               "EDGE-NEG-INF",  "EDGE-MAX",   "EDGE-LOWEST",   "EDGE-DENORM",
+                                               "EDGE-FRACTION", "EDGE-LARGE", "EDGE-SMALL"};
+
+const std::array<double, 11> EDGE_DOUBLES{std::numeric_limits<double>::quiet_NaN(),
+                                          0.0,
+                                          -0.0,
+                                          std::numeric_limits<double>::infinity(),
+                                          -std::numeric_limits<double>::infinity(),
+                                          std::numeric_limits<double>::max(),
+                                          std::numeric_limits<double>::lowest(),
+                                          std::numeric_limits<double>::denorm_min(),
+                                          0.1,
+                                          1e15 + 0.5,
+                                          -1.5e-7};
+
+const std::array<std::int64_t, 11> EDGE_LONGS{0,
+                                              0,
+                                              -1,
+                                              std::numeric_limits<std::int64_t>::max(),
+                                              std::numeric_limits<std::int64_t>::min(),
+                                              std::numeric_limits<std::int64_t>::max(),
+                                              std::numeric_limits<std::int64_t>::min(),
+                                              1,
+                                              1'700'000'000'123LL,
+                                              -1'700'000'000'123LL,
+                                              std::int64_t{std::numeric_limits<std::int32_t>::max()} + 1};
+
+const std::array<std::int32_t, 11> EDGE_INTS{0,
+                                             0,
+                                             -1,
+                                             std::numeric_limits<std::int32_t>::max(),
+                                             std::numeric_limits<std::int32_t>::min(),
+                                             std::numeric_limits<std::int32_t>::max(),
+                                             std::numeric_limits<std::int32_t>::min(),
+                                             1,
+                                             19'675,
+                                             -19'675,
+                                             65'536};
+
+// Sequences must be in [0, MAX_SEQUENCE] (4194303).
+const std::array<std::int32_t, 11> EDGE_SEQUENCES{0, 0, 1, 4'194'303, 4'194'303, 4'194'303, 0, 1, 2, 3, 4};
+
+const std::array<std::string, 11> EDGE_STRINGS{"",
+                                               "<null>",
+                                               "\\NULL",
+                                               "\xC3\x9C\xE2\x82\xAC\xF0\x9F\x98\x80", // U+00DC U+20AC U+1F600
+                                               "tab\tnew\nline",
+                                               std::string(300, 'x'),
+                                               " spaces ",
+                                               "\"quoted\"",
+                                               "back\\slash",
+                                               ",;=#",
+                                               "ASCII"};
+
+// QD short strings (market maker, sale conditions): at most 8 ASCII characters.
+const std::array<std::string, 11> EDGE_SHORT_STRINGS{"",         "<null>", "\\NULL", "A",    "Z9",   "~",
+                                                     " spaces ", "\"q\"",  "a\\b",   ",;=#", "ASCII"};
+
+const std::array<char, 3> EDGE_CHARS{'\0', ' ', '~'};
+
+template <typename T, std::size_t N> const T &pick(const std::array<const T *, N> &values, std::size_t k) {
+    return *values[k % N];
+}
+
+} // namespace
+
+std::vector<std::string> edgeSymbols() {
+    return {EDGE_SYMBOLS.begin(), EDGE_SYMBOLS.end()};
+}
+
+std::vector<std::string> edgeCandleSymbols() {
+    std::vector<std::string> result{};
+
+    for (const auto &symbol : EDGE_SYMBOLS) {
+        result.push_back(symbol + "{=d}");
+    }
+
+    return result;
+}
+
+std::vector<std::shared_ptr<EventType>> createEdgeEvents() {
+    const std::array<const Side *, 3> sides{&Side::UNDEFINED, &Side::BUY, &Side::SELL};
+    // Java rejects a non-empty order with the UNDEFINED side.
+    const std::array<const Side *, 2> orderSides{&Side::BUY, &Side::SELL};
+    const std::array<const Scope *, 4> scopes{&Scope::COMPOSITE, &Scope::REGIONAL, &Scope::AGGREGATE, &Scope::ORDER};
+    const std::array<const Direction *, 6> directions{&Direction::UNDEFINED, &Direction::DOWN,    &Direction::ZERO_DOWN,
+                                                      &Direction::ZERO,      &Direction::ZERO_UP, &Direction::UP};
+    const std::array<const PriceType *, 4> priceTypes{&PriceType::REGULAR, &PriceType::INDICATIVE,
+                                                      &PriceType::PRELIMINARY, &PriceType::FINAL};
+    const std::array<const TimeAndSaleType *, 3> timeAndSaleTypes{&TimeAndSaleType::NEW, &TimeAndSaleType::CORRECTION,
+                                                                  &TimeAndSaleType::CANCEL};
+    const std::array<const ShortSaleRestriction *, 3> shortSaleRestrictions{
+        &ShortSaleRestriction::UNDEFINED, &ShortSaleRestriction::ACTIVE, &ShortSaleRestriction::INACTIVE};
+    const std::array<const TradingStatus *, 3> tradingStatuses{&TradingStatus::UNDEFINED, &TradingStatus::HALTED,
+                                                               &TradingStatus::ACTIVE};
+    const std::array<const OtcMarketsPriceType *, 3> otcMarketsPriceTypes{
+        &OtcMarketsPriceType::UNPRICED, &OtcMarketsPriceType::ACTUAL, &OtcMarketsPriceType::WANTED};
+
+    std::vector<std::shared_ptr<EventType>> events{};
+
+    for (std::size_t k = 0; k < EDGE_SYMBOLS.size(); k++) {
+        const auto &symbol = EDGE_SYMBOLS[k];
+        const auto d = EDGE_DOUBLES[k];
+        const auto l = EDGE_LONGS[k];
+        const auto i = EDGE_INTS[k];
+        const auto sequence = EDGE_SEQUENCES[k];
+        const auto &s = EDGE_STRINGS[k];
+        const auto &shortString = EDGE_SHORT_STRINGS[k];
+        const auto c = EDGE_CHARS[k % EDGE_CHARS.size()];
+        const bool b = k % 2 == 0;
+        const auto index = static_cast<std::int64_t>(k + 1);
+
+        auto quote = std::make_shared<Quote>(symbol);
+        quote->setBidTime(l);
+        quote->setBidExchangeCode(c);
+        quote->setBidPrice(d);
+        quote->setBidSize(d);
+        quote->setAskTime(l);
+        quote->setAskExchangeCode(c);
+        quote->setAskPrice(d);
+        quote->setAskSize(d);
+        events.push_back(quote);
+
+        for (const std::shared_ptr<TradeBase> &trade :
+             {std::shared_ptr<TradeBase>(std::make_shared<Trade>(symbol)),
+              std::shared_ptr<TradeBase>(std::make_shared<TradeETH>(symbol))}) {
+            trade->setTime(l);
+            trade->setSequence(sequence);
+            trade->setExchangeCode(c);
+            trade->setPrice(d);
+            trade->setSize(d);
+            trade->setTickDirection(pick(directions, k));
+            trade->setChange(d);
+            trade->setDayId(i);
+            trade->setDayVolume(d);
+            trade->setDayTurnover(d);
+            trade->setExtendedTradingHours(b);
+            events.push_back(trade);
+        }
+
+        auto timeAndSale = std::make_shared<TimeAndSale>(symbol);
+        timeAndSale->setTime(l);
+        timeAndSale->setSequence(sequence);
+        timeAndSale->setExchangeCode(c);
+        timeAndSale->setPrice(d);
+        timeAndSale->setSize(d);
+        timeAndSale->setBidPrice(d);
+        timeAndSale->setAskPrice(d);
+        timeAndSale->setExchangeSaleConditions(shortString);
+        timeAndSale->setTradeThroughExempt(c);
+        timeAndSale->setAggressorSide(pick(sides, k));
+        timeAndSale->setSpreadLeg(b);
+        timeAndSale->setExtendedTradingHours(!b);
+        timeAndSale->setValidTick(b);
+        timeAndSale->setType(pick(timeAndSaleTypes, k));
+        events.push_back(timeAndSale);
+
+        auto summary = std::make_shared<Summary>(symbol);
+        summary->setDayId(i);
+        summary->setDayOpenPrice(d);
+        summary->setDayHighPrice(d);
+        summary->setDayLowPrice(d);
+        summary->setDayClosePrice(d);
+        summary->setDayClosePriceType(pick(priceTypes, k));
+        summary->setPrevDayId(i);
+        summary->setPrevDayClosePrice(d);
+        summary->setPrevDayClosePriceType(pick(priceTypes, k + 1));
+        summary->setPrevDayVolume(d);
+        summary->setOpenInterest(l);
+        events.push_back(summary);
+
+        auto profile = std::make_shared<Profile>(symbol);
+        profile->setBeta(d);
+        profile->setEarningsPerShare(d);
+        profile->setDividendFrequency(d);
+        profile->setExDividendAmount(d);
+        profile->setExDividendDayId(i);
+        profile->setHigh52WeekPrice(d);
+        profile->setLow52WeekPrice(d);
+        profile->setShares(d);
+        profile->setFreeFloat(d);
+        profile->setHighLimitPrice(d);
+        profile->setLowLimitPrice(d);
+        profile->setHaltStartTime(l);
+        profile->setHaltEndTime(l);
+        profile->setShortSaleRestriction(pick(shortSaleRestrictions, k));
+        profile->setTradingStatus(pick(tradingStatuses, k));
+        profile->setDescription(s);
+        profile->setStatusReason(s);
+        events.push_back(profile);
+
+        auto order = std::make_shared<Order>(symbol);
+        auto analyticOrder = std::make_shared<AnalyticOrder>(symbol);
+        auto otcMarketsOrder = std::make_shared<OtcMarketsOrder>(symbol);
+        auto spreadOrder = std::make_shared<SpreadOrder>(symbol);
+        const std::array<std::shared_ptr<OrderBase>, 4> orders{order, analyticOrder, otcMarketsOrder, spreadOrder};
+        const std::array<const OrderSource *, 4> sources{&OrderSource::NTV, &OrderSource::GLBX, &OrderSource::pink,
+                                                         &OrderSource::ISE};
+
+        for (std::size_t j = 0; j < orders.size(); j++) {
+            const auto &orderBase = orders[j];
+
+            orderBase->setIndex(index);
+            orderBase->setSource(*sources[j]);
+            orderBase->setTime(l);
+            orderBase->setSequence(sequence);
+            orderBase->setPrice(d);
+            orderBase->setSize(d);
+            orderBase->setOrderSide(pick(orderSides, k));
+            orderBase->setScope(pick(scopes, k));
+            orderBase->setExchangeCode(c);
+            events.push_back(orderBase);
+        }
+
+        order->setMarketMaker(shortString);
+        otcMarketsOrder->setMarketMaker(shortString);
+        otcMarketsOrder->setQuoteAccessPayment(i);
+        otcMarketsOrder->setOpen(b);
+        otcMarketsOrder->setUnsolicited(!b);
+        otcMarketsOrder->setOtcMarketsPriceType(pick(otcMarketsPriceTypes, k));
+        otcMarketsOrder->setSaturated(b);
+        otcMarketsOrder->setAutoExecution(!b);
+        otcMarketsOrder->setNmsConditional(b);
+        spreadOrder->setSpreadSymbol(s);
+
+        auto candle = std::make_shared<Candle>(CandleSymbol::valueOf(symbol + "{=d}"));
+        candle->setTime(l);
+        candle->setSequence(sequence);
+        candle->setCount(l);
+        candle->setOpen(d);
+        candle->setHigh(d);
+        candle->setLow(d);
+        candle->setClose(d);
+        candle->setVolume(d);
+        candle->setVWAP(d);
+        candle->setBidVolume(d);
+        candle->setAskVolume(d);
+        candle->setImpVolatility(d);
+        candle->setOpenInterest(d);
+        events.push_back(candle);
+
+        auto greeks = std::make_shared<Greeks>(symbol);
+        greeks->setTime(l);
+        greeks->setSequence(sequence);
+        greeks->setPrice(d);
+        greeks->setVolatility(d);
+        greeks->setDelta(d);
+        greeks->setGamma(d);
+        greeks->setTheta(d);
+        greeks->setRho(d);
+        greeks->setVega(d);
+        events.push_back(greeks);
+
+        auto theoPrice = std::make_shared<TheoPrice>(symbol);
+        theoPrice->setTime(l);
+        theoPrice->setSequence(sequence);
+        theoPrice->setPrice(d);
+        theoPrice->setUnderlyingPrice(d);
+        theoPrice->setDelta(d);
+        theoPrice->setGamma(d);
+        theoPrice->setDividend(d);
+        theoPrice->setInterest(d);
+        events.push_back(theoPrice);
+
+        auto underlying = std::make_shared<Underlying>(symbol);
+        underlying->setTime(l);
+        underlying->setSequence(sequence);
+        underlying->setVolatility(d);
+        underlying->setFrontVolatility(d);
+        underlying->setBackVolatility(d);
+        underlying->setCallVolume(d);
+        underlying->setPutVolume(d);
+        underlying->setPutCallRatio(d);
+        events.push_back(underlying);
+
+        auto series = std::make_shared<Series>(symbol);
+        series->setIndex(index);
+        series->setTime(l);
+        series->setSequence(sequence);
+        series->setExpiration(i);
+        series->setVolatility(d);
+        series->setCallVolume(d);
+        series->setPutVolume(d);
+        series->setPutCallRatio(d);
+        series->setForwardPrice(d);
+        series->setDividend(d);
+        series->setInterest(d);
+        events.push_back(series);
+
+        auto optionSale = std::make_shared<OptionSale>(symbol);
+        optionSale->setIndex(index);
+        optionSale->setTime(l);
+        optionSale->setSequence(sequence);
+        optionSale->setExchangeCode(c);
+        optionSale->setPrice(d);
+        optionSale->setSize(d);
+        optionSale->setBidPrice(d);
+        optionSale->setAskPrice(d);
+        optionSale->setExchangeSaleConditions(shortString);
+        optionSale->setTradeThroughExempt(c);
+        optionSale->setAggressorSide(pick(sides, k));
+        optionSale->setSpreadLeg(b);
+        optionSale->setExtendedTradingHours(!b);
+        optionSale->setValidTick(b);
+        optionSale->setType(pick(timeAndSaleTypes, k));
+        optionSale->setUnderlyingPrice(d);
+        optionSale->setVolatility(d);
+        optionSale->setDelta(d);
+        optionSale->setOptionSymbol(s);
+        events.push_back(optionSale);
+
+        auto textMessage = std::make_shared<TextMessage>(symbol);
+        textMessage->setTime(l);
+        textMessage->setSequence(sequence);
+        textMessage->setText(s);
+        events.push_back(textMessage);
+
+        events.push_back(std::make_shared<Message>(symbol, s));
+    }
+
+    // All 256 values of the event flags byte on an Order with index 0 (setIndex() after setSource() resets the source
+    // to DEFAULT, as in the Java API).
+    for (std::int32_t flags = 0; flags < 256; flags++) {
+        char symbol[32]{};
+
+        std::snprintf(symbol, sizeof(symbol), "EDGE-FLAGS-%03d", flags);
+
+        auto order = std::make_shared<Order>(symbol);
+
+        order->setSource(OrderSource::NTV);
+        order->setIndex(0);
+        order->setOrderSide(Side::BUY);
+        order->setPrice(1);
+        order->setSize(1);
+        order->setEventFlags(flags);
+        events.push_back(order);
+    }
 
     for (const auto &event : events) {
         event->setEventTime(T);

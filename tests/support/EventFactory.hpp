@@ -39,4 +39,24 @@ inline constexpr auto DEFAULTS_SYMBOL = "DEFAULTS";
  */
 std::vector<std::shared_ptr<EventType>> createDefaultEvents();
 
+/// The symbols of the value sets of createEdgeEvents(): `EDGE-NAN`, `EDGE-ZERO`, ..., one per set.
+std::vector<std::string> edgeSymbols();
+
+/// The candle symbols (`<edge symbol>{=d}`) of the Candle events created by createEdgeEvents().
+std::vector<std::string> edgeCandleSymbols();
+
+/**
+ * Creates the events of all 18 types for every value set of edgeSymbols() and 256 orders with every value of the event
+ * flags byte (`EDGE-FLAGS-000` ... `EDGE-FLAGS-255`). In a value set every double field gets the same edge value (NaN,
+ * +0.0, -0.0, infinities, the largest, the lowest and the smallest subnormal values, a fraction, a large number with a
+ * fraction, a small negative number), the time and long fields get the int64 limits and other values, the int fields
+ * get the int32 limits, the strings get an empty string, `"<null>"`, `\NULL`, non-ASCII UTF-8, tabs and line feeds, a
+ * long string and escaped characters, the enums cycle through all their values. Only the values that the Java API
+ * publishes are used: orders do not get the UNDEFINED side, the QD short strings (market maker, sale conditions) get
+ * at most 8 ASCII characters.
+ *
+ * The events match `tests/data/tapes/edge-values.txt`, which is written by the Java API from the same values.
+ */
+std::vector<std::shared_ptr<EventType>> createEdgeEvents();
+
 } // namespace dxfcpp::test
