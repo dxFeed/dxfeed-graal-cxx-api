@@ -8,6 +8,16 @@
       with the new `DXFCXX_ENABLE_NETWORK_TESTS` option (CTest label `network`).
     * Unit tests compare the events of all types, the option chains of an IPF file and the tx model scenarios with
       the Java API through golden QD tapes (`tests/data`).
+    * Unit tests compare the edge values of all event types (NaN, ±0.0, infinities, number limits, special strings,
+      all enum values, all event flags), the order sources of invalid ids and names and the events that the publisher
+      rejects with the Java API.
+    * Fixed a signed integer overflow (undefined behavior) in the time conversions of events with times near the
+      `int64` minimum (`math::floorMod`, found by UBSan in the edge-value tests). `math::floorDiv` and
+      `math::floorMod` now return the results of Java `Math.floorDiv` and `Math.floorMod` for all arguments,
+      including `INT64_MIN / -1`, and throw `InvalidArgumentException` for a zero divisor.
+    * The exception headers no longer include `internal/Common.hpp` (they include `internal/utils/StringUtils.hpp`),
+      so `Common.hpp` can use the exceptions. Code that got `Common.hpp` only through an exception header must include
+      it.
 * Migrated to Graal SDK v3.6.0.
     * The attachment of `Message` is transferred in both directions: a `Message` published from C++ keeps its
       attachment, and a received attachment is the string as is (it was JSON before: `"text"` with the quotes, the

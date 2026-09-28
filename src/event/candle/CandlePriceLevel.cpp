@@ -3,6 +3,10 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandlePriceLevel.hpp"
 
+#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+
+#include <cmath>
+
 DXFCPP_BEGIN_NAMESPACE
 
 CandlePriceLevel::CandlePriceLevel(double value) noexcept : value_{value} {

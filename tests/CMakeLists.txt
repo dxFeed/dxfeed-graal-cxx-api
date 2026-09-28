@@ -41,6 +41,7 @@ set(DXFC_TEST_SOURCES
         api/MarketEventSymbolsTest.cpp
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderSourceTest.cpp
+        event/EdgeValuesTapeTest.cpp
         event/EventsTest.cpp
         event/TapeRoundTripTest.cpp
         exceptions/ExceptionsTest.cpp
