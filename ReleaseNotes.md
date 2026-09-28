@@ -15,6 +15,9 @@
       iterator type). It accepts a `LastingEventCollection` (a collection of `std::shared_ptr` of lasting events) and
       returns a reference to a named collection and a temporary collection by value, so the result of a temporary can
       be used in a range-based for loop without a dangling reference.
+    * Added libFuzzer targets for the parsers, string utilities and packed event fields (`fuzz/`, the
+      `DXFCXX_BUILD_FUZZERS` option, LLVM Clang only) and the "Fuzzing" CI workflow in report mode: 60 s per target on
+      pull requests, 30 min nightly.
     * Added the "Static analysis" CI workflow: clang-tidy (LLVM 23, the bug-oriented profile in `.clang-tidy`) and
       cppcheck (2.22) on the library sources in report mode, with the findings counted in the job summaries.
     * Unit tests compare the edge values of all event types (NaN, ±0.0, infinities, number limits, special strings,
