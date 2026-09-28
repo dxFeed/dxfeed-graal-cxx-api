@@ -106,7 +106,7 @@ jobs:
           echo "${CPPCHECK_SHA256}  cppcheck.tar.gz" | sha256sum -c -
           tar xzf cppcheck.tar.gz
           cmake -S cppcheck-${CPPCHECK_VERSION} -B cppcheck-build -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=ON \
-            -DHAVE_RULES=OFF -DBUILD_GUI=OFF -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$HOME/cppcheck
+            -DHAVE_RULES=OFF -DBUILD_GUI=OFF -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$HOME/cppcheck
           cmake --build cppcheck-build -j 4
           cmake --install cppcheck-build
 
