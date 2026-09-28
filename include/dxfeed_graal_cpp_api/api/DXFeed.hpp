@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../event/LastingEvent.hpp"
 #include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
 #include "../internal/Isolate.hpp"
@@ -15,7 +16,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../promise/Promise.hpp"
 #include "./DXFeedSubscription.hpp"
 
+#include <iterator>
 #include <memory>
+#include <type_traits>
+#include <utility>
 
 /**
  * \addtogroup dxfcpp_api
@@ -28,6 +32,24 @@ struct DXEndpoint;
 class EventTypeEnum;
 struct IndexedTxModelImpl;
 struct TimeSeriesTxModelImpl;
+
+namespace detail {
+
+/// Whether `T` is `std::shared_ptr<E>`, where `E` is a descendant of LastingEvent (the elements of
+/// DXFeed::getLastEvents).
+template <typename T> struct IsSharedPtrOfLastingEvent : std::false_type {};
+
+template <typename E> struct IsSharedPtrOfLastingEvent<std::shared_ptr<E>> : std::is_base_of<LastingEvent, E> {};
+
+} // namespace detail
+
+/**
+ * A collection of `std::shared_ptr<Event>`, where `Event` is a descendant of LastingEvent (the argument of
+ * DXFeed::getLastEvents): for example, `std::vector<std::shared_ptr<Quote>>` or `std::list<std::shared_ptr<Trade>>`.
+ */
+template <typename Collection>
+concept LastingEventCollection =
+    detail::IsSharedPtrOfLastingEvent<std::remove_cvref_t<decltype(*std::begin(std::declval<Collection &>()))>>::value;
 
 /**
  * Main entry class for dxFeed API (<b>read it first</b>).
@@ -260,23 +282,21 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Note, that this method does not work when DXEndpoint was created with
      * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role.
      *
-     * @tparam Collection The collection type.
+     * <p>For a named collection (an lvalue) this method returns a reference to it. A temporary collection is returned
+     * by value (moved), so the result can be used after the full expression, for example in a range-based for loop:
+     * `for (const auto &quote : feed->getLastEvents(std::vector{std::make_shared<Quote>("AAPL")}))`.
+     *
+     * @tparam Collection The collection type, a LastingEventCollection.
      * @param events The collection of shared ptrs of events.
-     * @return The same collection of shared ptrs of events.
+     * @return The same collection of shared ptrs of events: a reference to `events` for an lvalue, `events` moved for
+     * an rvalue.
      */
-    template <typename Collection, typename Element = std::decay_t<decltype(std::begin(Collection()))>,
-              typename Event = std::decay_t<decltype(*Element())>>
-    const Collection &getLastEvents(const Collection &events) {
-        static_assert(
-            std::is_same_v<Element, std::shared_ptr<Event>> && std::is_base_of_v<LastingEvent, Event>,
-            "The collection element must be of type `std::shared_ptr<Event>`, where `Event` is a descendant of "
-            "`LastingEvent`");
-
-        for (auto e : events) {
-            getLastEvent(e);
+    template <LastingEventCollection Collection> Collection getLastEvents(Collection &&events) {
+        for (const auto &event : events) {
+            getLastEvent(event);
         }
 
-        return events;
+        return std::forward<Collection>(events);
     }
 
     /**
@@ -309,8 +329,15 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         // https://youtrack.jetbrains.com/issue/RSCPP-15139
         // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=67965
         // https://bugs.llvm.org/show_bug.cgi?id=25179
+        const auto event = getLastEventIfSubscribedImpl(E::TYPE, symbol);
+
+        // No subscription for the symbol: the native SDK returns no event.
+        if (!event) {
+            return {};
+        }
+
         // ReSharper disable once CppRedundantTemplateKeyword
-        return getLastEventIfSubscribedImpl(E::TYPE, symbol)->template sharedAs<E>();
+        return event->template sharedAs<E>();
     }
 
     /**

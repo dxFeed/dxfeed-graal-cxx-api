@@ -8,6 +8,15 @@
       with the new `DXFCXX_ENABLE_NETWORK_TESTS` option (CTest label `network`).
     * Unit tests compare the events of all types, the option chains of an IPF file and the tx model scenarios with
       the Java API through golden QD tapes (`tests/data`).
+    * Fixed `DXFeed::getLastEventIfSubscribed()` and `DXFeed::getLastEvent()`: they crashed (null dereference) for a
+      symbol without a subscription; now `getLastEventIfSubscribed()` returns `nullptr` and `getLastEvent()` leaves
+      the event unchanged, as documented.
+    * Fixed `DXFeed::getLastEvents()`: it did not compile for any collection (the element type was deduced as the
+      iterator type). It accepts a `LastingEventCollection` (a collection of `std::shared_ptr` of lasting events) and
+      returns a reference to a named collection and a temporary collection by value, so the result of a temporary can
+      be used in a range-based for loop without a dangling reference.
+    * Added the "Static analysis" CI workflow: clang-tidy (LLVM 23, the bug-oriented profile in `.clang-tidy`) and
+      cppcheck (2.22) on the library sources in report mode, with the findings counted in the job summaries.
     * Unit tests compare the edge values of all event types (NaN, ±0.0, infinities, number limits, special strings,
       all enum values, all event flags), the order sources of invalid ids and names and the events that the publisher
       rejects with the Java API.

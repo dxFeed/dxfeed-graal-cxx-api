@@ -1,0 +1,155 @@
+# Copyright (c) 2026 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+# Static analysis of the library sources in report mode: the jobs fail only when a tool itself fails (for example, a
+# source does not compile), not on findings. The findings are counted in the job summary and the full reports are
+# uploaded as artifacts.
+name: Static analysis
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  LLVM_VERSION: '23'
+  CPPCHECK_VERSION: '2.22.0'
+  CPPCHECK_SHA256: 'd74945deb2d50393430e07596b766f8a779512c7f60dac2a30ea64e059ece57b'
+
+jobs:
+  clang-tidy:
+    name: "clang-tidy"
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install clang-tidy from LLVM apt repo
+        run: |
+          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+          echo "deb https://apt.llvm.org/noble/ llvm-toolchain-noble-${LLVM_VERSION} main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          sudo apt-get update
+          sudo apt-get install -y clang-${LLVM_VERSION} clang-tidy-${LLVM_VERSION}
+          clang-tidy-${LLVM_VERSION} --version
+
+      # The compilation database without precompiled headers: clang-tidy analyzes every source with its own includes.
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=clang-${LLVM_VERSION}
+          -DCMAKE_CXX_COMPILER=clang++-${LLVM_VERSION}
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          -DDXFCXX_USE_PRECOMPILED_HEADERS=OFF
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+
+      # The checks and the header filter are in .clang-tidy.
+      - name: Run clang-tidy
+        run: >
+          run-clang-tidy-${LLVM_VERSION} -p ${{github.workspace}}/build -quiet -j 4
+          "${{github.workspace}}/src/.*[.]cpp$" > clang-tidy.log
+
+      - name: Summary
+        if: ${{ always() }}
+        run: |
+          # A header warning comes once per translation unit and with different paths (src/x/../../include/...):
+          # normalize the paths and keep one line per place and check.
+          grep -oE '^[^ :]+:[0-9]+:[0-9]+: warning: .* \[[a-z0-9.,-]+\]$' clang-tidy.log |
+            python3 -c 'import os, sys; [print(os.path.relpath(os.path.normpath(l.split(":", 1)[0])) + ":" + l.split(":", 1)[1], end="") for l in sys.stdin]' |
+            sort -u > clang-tidy-warnings.txt || true
+          {
+            echo "### clang-tidy ${LLVM_VERSION}: $(wc -l < clang-tidy-warnings.txt) warnings"
+            echo
+            echo "| Warnings | Check |"
+            echo "|---:|---|"
+            grep -oE '\[[a-z0-9.,-]+\]$' clang-tidy-warnings.txt | tr -d '[]' | tr ',' '\n' | sort | uniq -c | sort -rn |
+              awk '{print "| " $1 " | `" $2 "` |"}'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: clang-tidy-report
+          path: |
+            clang-tidy.log
+            clang-tidy-warnings.txt
+          retention-days: 14
+
+  cppcheck:
+    name: "cppcheck"
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # Ubuntu packages an old cppcheck, so the release is built from source once per version and cached.
+      - name: Restore cppcheck
+        id: cache-cppcheck
+        uses: actions/cache@v6
+        with:
+          path: ~/cppcheck
+          key: cppcheck-${{ env.CPPCHECK_VERSION }}-ubuntu-24.04
+
+      - name: Build cppcheck
+        if: ${{ steps.cache-cppcheck.outputs.cache-hit != 'true' }}
+        run: |
+          curl -sSL -o cppcheck.tar.gz \
+            https://github.com/cppcheck-opensource/cppcheck/archive/refs/tags/${CPPCHECK_VERSION}.tar.gz
+          echo "${CPPCHECK_SHA256}  cppcheck.tar.gz" | sha256sum -c -
+          tar xzf cppcheck.tar.gz
+          cmake -S cppcheck-${CPPCHECK_VERSION} -B cppcheck-build -DCMAKE_BUILD_TYPE=Release -DUSE_MATCHCOMPILER=ON \
+            -DHAVE_RULES=OFF -DBUILD_GUI=OFF -DBUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$HOME/cppcheck
+          cmake --build cppcheck-build -j 4
+          cmake --install cppcheck-build
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          -DDXFCXX_USE_PRECOMPILED_HEADERS=OFF
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+
+      # -DDXFCPP_EXPORT=: otherwise cppcheck skips the classes declared as "class DXFCPP_EXPORT X".
+      - name: Run cppcheck
+        run: |
+          mkdir -p cppcheck-cache
+          ~/cppcheck/bin/cppcheck --version
+          ~/cppcheck/bin/cppcheck --project=${{github.workspace}}/build/compile_commands.json \
+            --file-filter="${{github.workspace}}/src/*" -i${{github.workspace}}/third_party \
+            --suppress="*:${{github.workspace}}/third_party/*" --suppress="*:${{github.workspace}}/build/*" \
+            -DDXFCPP_EXPORT= --enable=warning,performance,portability --inconclusive --std=c++20 --library=posix \
+            --suppress=missingIncludeSystem --suppress=unmatchedSuppression --suppress=checkersReport \
+            --cppcheck-build-dir=cppcheck-cache -j 4 --xml --output-file=cppcheck.xml
+
+      - name: Summary
+        if: ${{ always() }}
+        run: |
+          {
+            echo "### cppcheck ${CPPCHECK_VERSION}: $(grep -c '<error ' cppcheck.xml) findings"
+            echo
+            echo "| Findings | Severity | Id |"
+            echo "|---:|---|---|"
+            grep -oE '<error id="[^"]+" severity="[^"]+"' cppcheck.xml |
+              sed -E 's/<error id="([^"]+)" severity="([^"]+)"/\2 \1/' | sort | uniq -c | sort -rn |
+              awk '{print "| " $1 " | " $2 " | `" $3 "` |"}'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: cppcheck-report
+          path: cppcheck.xml
+          retention-days: 14
