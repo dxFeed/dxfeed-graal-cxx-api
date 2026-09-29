@@ -1,2 +1,4 @@
 # Golden test data (QD tapes, IPF files) must stay byte-identical on every platform.
 tests/data/** text eol=lf
+# Fuzzer seed inputs are raw bytes.
+fuzz/corpus/** binary

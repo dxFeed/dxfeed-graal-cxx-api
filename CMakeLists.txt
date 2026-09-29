@@ -55,6 +55,7 @@ endif ()
 
 option(DXFCXX_BUILD_UNIT_TESTS "Build tests" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_BUILD_BENCHMARKS "Build benchmarks" OFF)
+option(DXFCXX_BUILD_FUZZERS "Build the libFuzzer targets in fuzz/ (Clang only; instruments the static library for coverage)" OFF)
 option(DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS "Dynamically link unit tests" OFF)
 option(DXFCXX_ENABLE_NETWORK_TESTS "Build the unit tests that connect to demo.dxfeed.com (CTest label: network)" OFF)
 option(DXFCXX_BUILD_SAMPLES "Build samples" ${DXFCXX_IS_ROOT_PROJECT})
@@ -642,6 +643,16 @@ endif ()
 target_link_libraries(${PROJECT_NAME} PUBLIC dxfcxx_sanitizers)
 target_link_libraries(${PROJECT_NAME}_static PUBLIC dxfcxx_sanitizers)
 
+if (DXFCXX_BUILD_FUZZERS)
+    # libFuzzer ships with LLVM Clang only (not with AppleClang, GCC or MSVC).
+    if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        message(FATAL_ERROR "DXFCXX_BUILD_FUZZERS requires LLVM Clang (libFuzzer), the compiler is ${CMAKE_CXX_COMPILER_ID}")
+    endif ()
+
+    # Coverage instrumentation of the library code for libFuzzer; the fuzz targets link libFuzzer itself.
+    target_compile_options(${PROJECT_NAME}_static PRIVATE -fsanitize=fuzzer-no-link)
+endif ()
+
 if (DXFCXX_SANITIZERS_ENABLED)
     # Deliberately defective functions for the sanitizer canary tests (tests/sanitizers); sanitized builds only.
     target_sources(${PROJECT_NAME} PRIVATE src/internal/SanitizerCanary.cpp)
@@ -718,6 +729,10 @@ endif ()
 if (DXFCXX_BUILD_UNIT_TESTS)
     include(CTest)
     add_subdirectory(tests)
+endif ()
+
+if (DXFCXX_BUILD_FUZZERS)
+    add_subdirectory(fuzz)
 endif ()
 
 if (DXFCXX_BUILD_SAMPLES)

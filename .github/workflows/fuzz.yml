@@ -1,0 +1,68 @@
+# Copyright (c) 2026 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+# libFuzzer targets of fuzz/ in report mode: failing inputs are counted in the job summary and uploaded as artifacts,
+# but do not fail the job, because some targets still find known defects that are not fixed yet. The job fails only
+# when the targets do not build or do not run. Pull requests fuzz each target for 60 s, the nightly run for 30 min.
+# The corpus found by earlier runs is kept in the cache.
+name: Fuzzing
+
+on:
+  pull_request:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fuzz:
+    name: "fuzz"
+    runs-on: ubuntu-24.04
+    # The nightly run takes 7 targets x 30 min.
+    timeout-minutes: 300
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Restore corpus
+        uses: actions/cache@v6
+        with:
+          path: fuzz-corpus
+          key: fuzz-corpus-${{ github.run_id }}
+          restore-keys: fuzz-corpus-
+
+      # LLVM 18 of the runner: the fork mode of libFuzzer 23 crashes (SEGV in fuzzer::GlobalEnv::RunOneMergeJob).
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build-fuzz
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DCMAKE_C_COMPILER=clang-18
+          -DCMAKE_CXX_COMPILER=clang++-18
+          -DDXFCXX_BUILD_FUZZERS=ON
+          -DDXFCXX_ENABLE_ASAN=ON
+          -DDXFCXX_ENABLE_UBSAN=ON
+          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_BUILD_DOC=OFF
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build-fuzz -j 4
+
+      - name: Fuzz
+        run: |
+          set -o pipefail
+          seconds=60
+          [ "${{ github.event_name }}" = "schedule" ] && seconds=1800
+          bash fuzz/run-fuzzers.sh build-fuzz/fuzz "$seconds" fuzz-corpus fuzz-artifacts | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload failing inputs and logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: fuzz-artifacts
+          path: fuzz-artifacts
+          if-no-files-found: ignore
+          retention-days: 14
