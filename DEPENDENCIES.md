@@ -41,7 +41,8 @@ top of `CMakeLists.txt`. After changing a version, update its hash as well:
   `DXFEED_GRAAL_NATIVE_SDK_VERSION`, the archive is downloaded without verification and a warning is printed.
 
 Git dependencies are pinned by tag or commit. GitHub Actions in `.github/workflows` are pinned by commit SHA with the
-version in a comment; Dependabot (`.github/dependabot.yml`) proposes their updates weekly.
+version in a comment; Dependabot (`.github/dependabot.yml`) proposes their updates weekly: the minor and patch
+updates in one pull request, every major update in a pull request of its own.
 
 ## Run-time
 
