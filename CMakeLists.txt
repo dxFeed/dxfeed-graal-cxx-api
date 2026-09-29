@@ -28,12 +28,31 @@ set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
 set(PROCESS_VERSION "3.0.1")
 set(CONSOLE_VERSION "1.0.1")
+set(PORTALS_VERSION "0.1.1")
+set(BITS_VERSION "1.0.0")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
 set(GLFW_VERSION "3.4")
 set(IMGUI_VERSION "1.92.9b")
 set(CPM_CMAKE_VERSION "v0.40.2")
 set(CONFIG_VERSION "1.0.3")
+
+# SHA-256 of the downloaded archives (URL_HASH): a changed or substituted archive fails the configuration.
+set(FMTLIB_SHA256 "695fd197fa5aff8fc67b5f2bbc110490a875cdf7a41686ac8512fb480fa8ada7")
+set(BOOST_SHA256 "2e64e5d79a738d0fa6fb546c6e5c2bd28f88d268a2a080546f74e5ff98f29d0e")
+set(GLFW_SHA256 "a133ddc3d3c66143eba9035621db8e0bcf34dba1ee9514a9e23e96afd39fd57a")
+set(IMGUI_SHA256 "e1c46d676c2bcb7ced847ba27f50553e33a19db97b3cadaec7f8be64449139f8")
+# The Graal Native SDK archives of the releases page by platform, for DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION only.
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.6.0")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "658c9521b31c3a478cc7c442a5b1f20baf5f6cd2065cd51bacb8f274773063b9")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "a5529ed84adeec3ad3d80a186c8c4809f95123e7dd3b5fb7f4471aedf7425e03")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "9e2880a5620fcb8081f23e618bdd10ef94ae7766241bec2109e1f91f5be6c34a")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "c7b1db36bbd40f79d628ef0e8fbd948e33d476b61f1acae4c2fc88d6c74754af")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "261d2a652f801d04fbcb7e1ff7765320deda15a00006e070e4dbcc4db79fb970")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "3ec520f373d457a4eb3514fcccbf4bf426cec5af4b9c1cc637d9e4bbead75a46")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "ae39d1d01f3f258b79987bd8184eb9bd437dad21c26d9ca294a7ed0af7ea7a2f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "5c16d941260ef9959e7cbaad369389ba383411eeb5b5cd14126667d82c3360c4")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "5a71228aaaade21ba7fb7dfdccc86425283fab0bf2c93e4c79a2bc422e4a7782")
 
 include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 
@@ -162,17 +181,25 @@ else ()
                     message(FATAL_ERROR "Unsupported platform ${DXFCXX_GRAAL_TARGET_PLATFORM}: the Graal Native SDK archives are built for ${DXFCXX_GRAAL_SUPPORTED_PLATFORMS_TEXT}. To use another build, set DXFG_LOCAL_ARCHIVE_PATH or the DXFEED_GRAAL_NATIVE_SDK_URL environment variable.")
                 endif ()
 
-                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFCXX_GRAAL_TARGET_PLATFORM})
+                set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFCXX_GRAAL_TARGET_PLATFORM})
 
                 if (DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK)
-                    set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-debug)
+                    set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-debug)
                 endif ()
 
-                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}.zip)
+                set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}.zip)
+                set(DXFEED_GRAAL_NATIVE_SDK_URL_HASH "")
+
+                if (DXFEED_GRAAL_NATIVE_SDK_VERSION STREQUAL DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION)
+                    set(DXFEED_GRAAL_NATIVE_SDK_URL_HASH URL_HASH SHA256=${DXFEED_GRAAL_NATIVE_SDK_SHA256_${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}})
+                else ()
+                    message(WARNING "No SHA-256 for the Graal Native SDK ${DXFEED_GRAAL_NATIVE_SDK_VERSION} (known: ${DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION}): the downloaded archive is not verified")
+                endif ()
 
                 FetchContent_Declare(
                         DxFeedGraalNativeSdk
                         URL ${DXFEED_GRAAL_NATIVE_SDK_URL}
+                        ${DXFEED_GRAAL_NATIVE_SDK_URL_HASH}
                         USES_TERMINAL_DOWNLOAD TRUE
                         GIT_PROGRESS TRUE
                         DOWNLOAD_NO_EXTRACT FALSE
@@ -206,10 +233,16 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
     SetupStaticRuntimeMSVC(console ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals/CMakeLists.txt")
-    add_subdirectory(third_party/portals)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals-${PORTALS_VERSION}/CMakeLists.txt")
+    # portals fetches bits with FetchContent: take the vendored copy instead of cloning it.
+    if (NOT DEFINED FETCHCONTENT_SOURCE_DIR_BITS AND
+            EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}/CMakeLists.txt")
+        set(FETCHCONTENT_SOURCE_DIR_BITS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}")
+    endif ()
+
+    add_subdirectory(third_party/portals-${PORTALS_VERSION})
 else ()
-    CPMAddPackage("gh:ttldtor/portals#default")
+    CPMAddPackage("gh:ttldtor/portals#v${PORTALS_VERSION}")
 endif ()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
@@ -226,6 +259,7 @@ else ()
     FetchContent_Declare(
             fmt
             URL https://github.com/fmtlib/fmt/releases/download/${FMTLIB_VERSION}/fmt-${FMTLIB_VERSION}.zip # downloading a zip release speeds up the download
+            URL_HASH SHA256=${FMTLIB_SHA256}
             USES_TERMINAL_DOWNLOAD TRUE
             GIT_PROGRESS TRUE
             DOWNLOAD_NO_EXTRACT FALSE
@@ -255,6 +289,7 @@ if (DXFCXX_FEATURE_STACKTRACE)
             NAME Boost
             VERSION ${BOOST_VERSION}
             URL https://github.com/boostorg/boost/releases/download/boost-${BOOST_VERSION}/boost-${BOOST_VERSION}.tar.xz
+            URL_HASH SHA256=${BOOST_SHA256}
             OPTIONS "BOOST_ENABLE_CMAKE ON"
             USES_TERMINAL_DOWNLOAD TRUE
             GIT_PROGRESS TRUE

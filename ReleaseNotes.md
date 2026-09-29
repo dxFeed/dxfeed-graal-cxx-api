@@ -24,6 +24,12 @@
       `CXX_EXTENSIONS OFF` had no effect).
     * The configuration fails with a clear message for a platform without Graal Native SDK archives (it went on and
       failed to download a nonexistent archive).
+    * The downloaded archives (Graal Native SDK, fmt, Boost, GLFW, Dear ImGui) are verified with SHA-256, also in the
+      Full Source Bundle script. nanobench is fetched by commit. GitHub Actions are pinned by commit SHA and updated by
+      Dependabot; the CI workflow has read-only repository permissions.
+    * portals (used by `MarketDepthModelSample`) is updated to v0.1.1 (`third_party/portals-0.1.1`, or the `v0.1.1`
+      tag instead of the default branch when it is not vendored); its new dependency bits v1.0.0 is vendored in
+      `third_party/bits-1.0.0`.
     * Added the "Static analysis" CI workflow: clang-tidy (LLVM 23, the bug-oriented profile in `.clang-tidy`) and
       cppcheck (2.22) on the library sources in report mode, with the findings counted in the job summaries.
     * Unit tests compare the edge values of all event types (NaN, ±0.0, infinities, number limits, special strings,

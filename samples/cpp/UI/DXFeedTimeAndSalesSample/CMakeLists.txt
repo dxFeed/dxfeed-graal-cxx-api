@@ -44,6 +44,7 @@ else ()
     FetchContent_Declare(
             dxfcxx_sample_glfw
             URL https://github.com/glfw/glfw/archive/refs/tags/${GLFW_VERSION}.zip
+            URL_HASH SHA256=${GLFW_SHA256}
             DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
     FetchContent_MakeAvailable(dxfcxx_sample_glfw)
     set(DXFCXX_SAMPLE_GLFW_SOURCE_DIR "${dxfcxx_sample_glfw_SOURCE_DIR}")
@@ -54,6 +55,7 @@ if (NOT EXISTS "${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}/imgui.cpp")
     FetchContent_Declare(
             dxfcxx_sample_imgui
             URL https://github.com/ocornut/imgui/archive/refs/tags/v${IMGUI_VERSION}.zip
+            URL_HASH SHA256=${IMGUI_SHA256}
             DOWNLOAD_EXTRACT_TIMESTAMP TRUE)
     FetchContent_MakeAvailable(dxfcxx_sample_imgui)
     set(DXFCXX_SAMPLE_IMGUI_SOURCE_DIR "${dxfcxx_sample_imgui_SOURCE_DIR}")
