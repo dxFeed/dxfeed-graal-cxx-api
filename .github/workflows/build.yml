@@ -198,6 +198,7 @@ jobs:
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
 
@@ -210,6 +211,7 @@ jobs:
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
 
@@ -220,6 +222,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
 
@@ -230,6 +233,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}-static-mt
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_LINK_STATIC_RUNTIME=ON
 
@@ -358,6 +362,7 @@ jobs:
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_USE_PRECOMPILED_HEADERS=OFF
           -DDXFCXX_BUILD_HEADER_CHECK=ON
 
@@ -396,8 +401,8 @@ jobs:
         run: ctest -L network --extra-verbose --output-on-failure
 
   # Unit tests linked against the shared library. On Windows they are expected to fail until the DLL-boundary defects
-  # are fixed: today 21 of 23 test executables do not link because StringLike is not exported, and entities registered
-  # from inline/template code land in a separate registry per module. Linux passes; see MDAPI-427.
+  # are fixed: today most test executables do not link because StringLike is not exported, and entities registered
+  # from inline/template code land in a separate registry per module. Linux and macOS pass; see MDAPI-427.
   dynamic-link-tests:
     strategy:
       fail-fast: false

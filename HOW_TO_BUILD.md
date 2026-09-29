@@ -31,6 +31,22 @@ against `demo.dxfeed.com` are built only with `-DDXFCXX_ENABLE_NETWORK_TESTS=ON`
 ctest -C Release -L network
 ```
 
+## UI Samples
+
+`DXFCXX_BUILD_UI_SAMPLES` controls the UI samples (Dear ImGui, GLFW, OpenGL):
+
+- `AUTO` (default) - build them when their dependencies are found: always on Windows and macOS; on Linux, the X11 and
+  OpenGL development packages. Otherwise the configuration prints one line with the missing packages and goes on
+  without the UI samples.
+- `ON` - build them; the configuration fails when the dependencies are missing.
+- `OFF` - do not build them.
+
+On Debian/Ubuntu the dependencies are:
+
+```shell
+sudo apt-get install libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev
+```
+
 ## Sanitizers
 
 ```shell

@@ -172,6 +172,7 @@ jobs:
           -DDXFCXX_INSTALL_LIB=OFF
           -DDXFCXX_INSTALL_TOOLS=OFF
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
           cmake -B ${{github.workspace}}/build-Tools
@@ -216,6 +217,7 @@ jobs:
           -DDXFCXX_INSTALL_LIB=OFF
           -DDXFCXX_INSTALL_TOOLS=OFF
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
           cmake -B ${{github.workspace}}/build-Tools
@@ -262,6 +264,7 @@ jobs:
           -DDXFCXX_INSTALL_LIB=OFF
           -DDXFCXX_INSTALL_TOOLS=OFF
           -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
           cmake -B ${{github.workspace}}/build-Tools
