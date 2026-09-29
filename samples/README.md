@@ -20,6 +20,9 @@ pinned UI sources from `third_party` when they are present (for example, in the 
 otherwise. The data endpoint is selected through the sample's
 `dxfeed.system.properties` file, which is copied next to the executable.
 
+The sample is built when its dependencies are found (on Linux, the X11 and OpenGL development packages); see
+`DXFCXX_BUILD_UI_SAMPLES` in [How To Build](../HOW_TO_BUILD.md#ui-samples).
+
 Build and run the `DXFeedTimeAndSalesSample` target, enter a symbol such as `AAPL`, then press Enter or **Subscribe**.
 The table keeps the latest 30 trades. Feed callbacks accumulate `IndexedTxModel` transactions in a synchronized
 mailbox; the window reads the newest immutable view on each frame, so dxFeed does not need a UI-specific executor.
