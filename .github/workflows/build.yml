@@ -154,7 +154,7 @@ jobs:
     runs-on: ${{ matrix.config.image }}
 
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Select Xcode version
         if: ${{ contains(matrix.config.os, 'macos') }}
@@ -290,7 +290,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # ThreadSanitizer of clang 18 cannot map its shadow memory with the default ASLR entropy of the runner kernel.
       - name: Reduce ASLR entropy for TSan
@@ -346,7 +346,7 @@ jobs:
     runs-on: ${{ matrix.config.image }}
 
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Select Xcode version
         if: ${{ contains(matrix.config.os, 'macos') }}
@@ -383,7 +383,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Configure CMake
         run: >
@@ -433,7 +433,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Select Xcode version
         if: ${{ contains(matrix.config.os, 'macos') }}
