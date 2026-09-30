@@ -30,6 +30,14 @@
     * portals (used by `MarketDepthModelSample`) is updated to v0.1.1 (`third_party/portals-0.1.1`, or the `v0.1.1`
       tag instead of the default branch when it is not vendored); its new dependency bits v1.0.0 is vendored in
       `third_party/bits-1.0.0`.
+    * The bit operations of `internal/Common.hpp` (`sal`, `sar`, `shl`, `shr`, `andOp`, `orOp`, `xorOp` and the
+      others, still in `dxfcpp`) come from bits v1.0.0, a header-only dependency of the public headers now: its
+      headers are installed with the library (`include/bits`). A shift by the minimum value of a signed shift type
+      (for example `sal(x, INT32_MIN)`) is no longer undefined behavior (it recursed infinitely); the results of all
+      other shifts are unchanged.
+    * The packages no longer contain the headers and CMake package configs of the header-only dependencies that
+      installed themselves: bits (also in the Samples and Tools packages) and config (a dependency of the library
+      sources only).
     * Added the "Static analysis" CI workflow: clang-tidy (LLVM 23, the bug-oriented profile in `.clang-tidy`) and
       cppcheck (2.22) on the library sources in report mode, with the findings counted in the job summaries.
     * Unit tests compare the edge values of all event types (NaN, ±0.0, infinities, number limits, special strings,

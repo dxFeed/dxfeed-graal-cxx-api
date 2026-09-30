@@ -16,8 +16,8 @@
 - [Process](https://github.com/ttldtor/Process) v3.0.1 (Tools)
 - [Console](https://github.com/ttldtor/Console) v1.0.1 (Tools)
 - [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) v0.40.2
+- [bits](https://github.com/ttldtor/bits) v1.0.0 (header-only, used by the public headers and by portals)
 - [portals](https://github.com/ttldtor/portals) v0.1.1 (Samples)
-  - [bits](https://github.com/ttldtor/bits) v1.0.0
 - [config](https://github.com/ttldtor/config) v1.0.3
 - [nanobench](https://github.com/martinus/nanobench) v4.3.11 (Tests::Benchmarks)
 

@@ -233,13 +233,23 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
     SetupStaticRuntimeMSVC(console ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals-${PORTALS_VERSION}/CMakeLists.txt")
-    # portals fetches bits with FetchContent: take the vendored copy instead of cloning it.
-    if (NOT DEFINED FETCHCONTENT_SOURCE_DIR_BITS AND
-            EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}/CMakeLists.txt")
-        set(FETCHCONTENT_SOURCE_DIR_BITS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}")
-    endif ()
+# bits (header-only): the bit operations of the library headers. It is declared before portals, which fetches it with
+# the same name: the first declaration is used. EXCLUDE_FROM_ALL (CMake 3.28+) disables its own install rules; its
+# headers are installed with the library below.
+if (NOT DEFINED FETCHCONTENT_SOURCE_DIR_BITS AND
+        EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}/CMakeLists.txt")
+    set(FETCHCONTENT_SOURCE_DIR_BITS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}")
+endif ()
 
+FetchContent_Declare(
+        bits
+        GIT_REPOSITORY https://github.com/ttldtor/bits.git
+        GIT_TAG 9b59e45d2cc75303ffc4cc6d5b42363f8ab3508b # v1.0.0
+        EXCLUDE_FROM_ALL
+)
+FetchContent_MakeAvailable(bits)
+
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals-${PORTALS_VERSION}/CMakeLists.txt")
     add_subdirectory(third_party/portals-${PORTALS_VERSION})
 else ()
     CPMAddPackage("gh:ttldtor/portals#v${PORTALS_VERSION}")
@@ -297,7 +307,9 @@ if (DXFCXX_FEATURE_STACKTRACE)
     )
 endif ()
 
-add_subdirectory(third_party/config-${CONFIG_VERSION})
+# config (header-only) is used by the library sources only: EXCLUDE_FROM_ALL keeps its install rules (headers and
+# a CMake package config) out of the packages.
+add_subdirectory(third_party/config-${CONFIG_VERSION} EXCLUDE_FROM_ALL)
 
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
@@ -668,11 +680,15 @@ if (DXFCXX_USE_PRECOMPILED_HEADERS)
 endif ()
 
 target_link_libraries(${PROJECT_NAME}
+        PUBLIC
+        bits::bits
         PRIVATE
         DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
 )
 
 target_link_libraries(${PROJECT_NAME}_static
+        PUBLIC
+        bits::bits
         PRIVATE
         DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
 )
@@ -834,6 +850,8 @@ if (DXFCXX_INSTALL)
         install(TARGETS ${PROJECT_NAME})
         install(TARGETS ${PROJECT_NAME}_static)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
+        # The public headers include <bits/bits.hpp>.
+        install(DIRECTORY "${bits_SOURCE_DIR}/include/" DESTINATION "include")
     endif ()
 
     install(FILES "DEPENDENCIES.md" "LICENSE" "README.md" "ReleaseNotes.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
