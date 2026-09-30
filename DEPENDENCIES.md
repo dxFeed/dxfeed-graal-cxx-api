@@ -16,7 +16,8 @@
 - [Process](https://github.com/ttldtor/Process) v3.0.1 (Tools)
 - [Console](https://github.com/ttldtor/Console) v1.0.1 (Tools)
 - [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) v0.40.2
-- [portals](https://github.com/ttldtor/portals) (Samples)
+- [portals](https://github.com/ttldtor/portals) v0.1.1 (Samples)
+  - [bits](https://github.com/ttldtor/bits) v1.0.0
 - [config](https://github.com/ttldtor/config) v1.0.3
 - [nanobench](https://github.com/martinus/nanobench) v4.3.11 (Tests::Benchmarks)
 
@@ -29,6 +30,20 @@
     - libbacktrace \[opt] (Diagnostic backtraces)
     - libdl \[opt] (Diagnostic backtraces)
     - addr2line \[opt] (Diagnostic backtraces)
+## Updating a dependency
+
+The archives that CMake downloads are verified with SHA-256 (`URL_HASH`); the hashes are next to the versions at the
+top of `CMakeLists.txt`. After changing a version, update its hash as well:
+
+- a GitHub release asset: `gh api repos/<owner>/<repo>/releases/tags/<tag> --jq '.assets[] | "\(.name) \(.digest)"'`;
+- any other archive: `sha256sum` (or `certutil -hashfile <file> SHA256` on Windows) of the downloaded file;
+- the Graal Native SDK: `DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION` and the hashes of all platforms; with another
+  `DXFEED_GRAAL_NATIVE_SDK_VERSION`, the archive is downloaded without verification and a warning is printed.
+
+Git dependencies are pinned by tag or commit. GitHub Actions in `.github/workflows` are pinned by commit SHA with the
+version in a comment; Dependabot (`.github/dependabot.yml`) proposes their updates weekly: the minor and patch
+updates in one pull request, every major update in a pull request of its own.
+
 ## Run-time
 
 - [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.6.0

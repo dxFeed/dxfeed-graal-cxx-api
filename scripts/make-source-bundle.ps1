@@ -34,6 +34,52 @@ else
         }
     }
 
+    # The archives are verified with the SHA-256 hashes that CMakeLists.txt uses for the same downloads.
+    $cmakeLists = Get-Content "$repoRoot/CMakeLists.txt" -Raw
+
+    function Get-CMakeValue
+    {
+        param (
+            [Parameter(Mandatory = $true)] [string] $Variable,
+            [Parameter(Mandatory = $true)] [string] $Pattern
+        )
+
+        $match = [regex]::Match($cmakeLists, "set\($([regex]::Escape($Variable)) `"($Pattern)`"\)")
+
+        if (!$match.Success)
+        {
+            throw "CMakeLists.txt does not set $Variable"
+        }
+
+        return $match.Groups[1].Value
+    }
+
+    function Assert-Sha256
+    {
+        param (
+            [Parameter(Mandatory = $true)] [string] $Path,
+            [Parameter(Mandatory = $true)] [string] $Expected
+        )
+
+        $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash.ToLowerInvariant()
+
+        if ($actual -ne $Expected)
+        {
+            throw "SHA-256 mismatch for ${Path}: expected $Expected, actual $actual"
+        }
+    }
+
+    $sdkSha256Version = Get-CMakeValue -Variable "DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION" -Pattern "[^`"]+"
+
+    if ($graalNativeSdkVer -ne $sdkSha256Version)
+    {
+        throw "CMakeLists.txt has the SHA-256 of the Graal Native SDK $sdkSha256Version, not $graalNativeSdkVer"
+    }
+
+    $sdkSha256 = Get-CMakeValue -Variable "DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows" -Pattern "[0-9a-f]{64}"
+    $glfwSha256 = Get-CMakeValue -Variable "GLFW_SHA256" -Pattern "[0-9a-f]{64}"
+    $imguiSha256 = Get-CMakeValue -Variable "IMGUI_SHA256" -Pattern "[0-9a-f]{64}"
+
     Write-Host "dxFeed Graal Native SDK: $graalNativeSdkVer"
     Write-Host "GLFW: $glfwVer"
     Write-Host "Dear ImGui: $imguiVer"
@@ -56,7 +102,8 @@ else
         param (
             [Parameter(Mandatory = $true)] [string] $Repository,
             [Parameter(Mandatory = $true)] [string] $Tag,
-            [Parameter(Mandatory = $true)] [string] $ExpectedDirectory
+            [Parameter(Mandatory = $true)] [string] $ExpectedDirectory,
+            [Parameter(Mandatory = $true)] [string] $Sha256
         )
 
         $archiveFileName = ($Repository -replace '/', '-') + "-$Tag.zip"
@@ -65,6 +112,7 @@ else
 
         Write-Host "Downloading $uri"
         Invoke-WebRequest -Uri $uri -OutFile $archivePath -ErrorAction Stop
+        Assert-Sha256 -Path $archivePath -Expected $Sha256
         Expand-Archive -Path $archivePath -Force -DestinationPath "$bundlePath/third_party"
 
         if (!(Test-Path "$bundlePath/third_party/$ExpectedDirectory" -PathType Container))
@@ -90,10 +138,11 @@ else
     Copy-Item -Path "$thisDir/../LICENSE" -Force -Destination "$bundlePath"
     Copy-Item -Path "$thisDir/../.clang-format" -Force -Destination "$bundlePath"
     Invoke-WebRequest -Uri "https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/download/v${graalNativeSdkVer}/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -OutFile "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -ErrorAction Stop
+    Assert-Sha256 -Path "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -Expected $sdkSha256
     Expand-Archive -Path "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -Force -DestinationPath "$bundlePath/third_party/graal-native-sdk-${graalNativeSdkVer}-amd64-windows"
 
-    Add-GitHubArchiveToBundle -Repository "glfw/glfw" -Tag $glfwVer -ExpectedDirectory "glfw-$glfwVer"
-    Add-GitHubArchiveToBundle -Repository "ocornut/imgui" -Tag "v$imguiVer" -ExpectedDirectory "imgui-$imguiVer"
+    Add-GitHubArchiveToBundle -Repository "glfw/glfw" -Tag $glfwVer -ExpectedDirectory "glfw-$glfwVer" -Sha256 $glfwSha256
+    Add-GitHubArchiveToBundle -Repository "ocornut/imgui" -Tag "v$imguiVer" -ExpectedDirectory "imgui-$imguiVer" -Sha256 $imguiSha256
 
     Compress-Archive -Force -Path "$bundlePath" -DestinationPath "$buildBundleDir/$bundleName.zip"
 }

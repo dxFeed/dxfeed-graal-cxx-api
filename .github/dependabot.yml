@@ -1,0 +1,19 @@
+# Copyright (c) 2026 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+# The actions in .github/workflows are pinned by commit SHA; Dependabot proposes the updates (the SHA and the version
+# comment) weekly: the minor and patch updates of all actions in one pull request, and every major update in a pull
+# request of its own, so that a breaking major version can be checked and merged separately.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch

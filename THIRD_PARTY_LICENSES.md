@@ -28,3 +28,5 @@
     SPDX-License-Identifier: Zlib
 14. Dear ImGui - https://github.com/ocornut/imgui/blob/master/LICENSE.txt
     SPDX-License-Identifier: MIT
+15. bits - https://github.com/ttldtor/bits/blob/default/LICENSE.txt
+    SPDX-License-Identifier: BSL-1.0
