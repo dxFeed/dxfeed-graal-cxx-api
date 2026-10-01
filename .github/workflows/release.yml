@@ -109,7 +109,7 @@ jobs:
         if: ${{ contains(matrix.config.os, 'linux') && !contains(matrix.buildType, 'Deb') }}
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
 
       - name: Prepare build [Lib]
         run: |

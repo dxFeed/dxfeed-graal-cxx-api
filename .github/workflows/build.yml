@@ -190,7 +190,7 @@ jobs:
         if: ${{ contains(matrix.config.os, 'linux') }}
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'mac') }}
@@ -352,11 +352,13 @@ jobs:
         if: ${{ contains(matrix.config.os, 'macos') }}
         run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
 
-      - name: Install Linux UI dependencies
+      # Only the Wayland backend of the UI samples here (the build matrix has both X11 and Wayland), so that the
+      # Wayland-only configuration is built as well.
+      - name: Install Linux UI dependencies (Wayland only)
         if: ${{ contains(matrix.config.os, 'linux') }}
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+          sudo apt-get install -y libgl1-mesa-dev libwayland-dev libxkbcommon-dev
 
       - name: Configure CMake
         run: >

@@ -18,8 +18,12 @@
     * Added libFuzzer targets for the parsers, string utilities and packed event fields (`fuzz/`, the
       `DXFCXX_BUILD_FUZZERS` option, LLVM Clang only) and the "Fuzzing" CI workflow in report mode: 60 s per target on
       pull requests, 30 min nightly.
+    * The UI samples on Linux are built with the X11 backend of GLFW, the Wayland backend or both, whichever
+      development packages are installed (it was always X11, and Wayland only with
+      `DXFCXX_SAMPLE_GLFW_BUILD_WAYLAND=ON`, which now makes Wayland required); GLFW selects the backend at run time.
     * Added the `DXFCXX_BUILD_UI_SAMPLES` option (`AUTO` by default, `ON`, `OFF`). With `AUTO`, the UI samples are
-      skipped with a status message instead of failing the configuration when X11 or OpenGL are missing on Linux.
+      skipped with a status message instead of failing the configuration when OpenGL or both X11 and Wayland are
+      missing on Linux.
     * GCC and Clang now compile with `-std=c++20` instead of `-std=gnu++20` (`CMAKE_CXX_EXTENSIONS OFF`; the previous
       `CXX_EXTENSIONS OFF` had no effect).
     * The configuration fails with a clear message for a platform without Graal Native SDK archives (it went on and
