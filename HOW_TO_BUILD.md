@@ -35,17 +35,30 @@ ctest -C Release -L network
 
 `DXFCXX_BUILD_UI_SAMPLES` controls the UI samples (Dear ImGui, GLFW, OpenGL):
 
-- `AUTO` (default) - build them when their dependencies are found: always on Windows and macOS; on Linux, the X11 and
-  OpenGL development packages. Otherwise the configuration prints one line with the missing packages and goes on
-  without the UI samples.
+- `AUTO` (default) - build them when their dependencies are found: always on Windows and macOS; on Linux, the OpenGL
+  and the X11 or Wayland development packages. Otherwise the configuration prints one line with the missing packages
+  and goes on without the UI samples.
 - `ON` - build them; the configuration fails when the dependencies are missing.
 - `OFF` - do not build them.
 
-On Debian/Ubuntu the dependencies are:
+On Linux, GLFW is built with every window system backend that is found, X11, Wayland or both, and selects one at run
+time: the one of `XDG_SESSION_TYPE` (`x11` or `wayland`), otherwise the first that connects. With
+`-DDXFCXX_SAMPLE_GLFW_BUILD_WAYLAND=ON`, the configuration fails when the Wayland backend cannot be built.
+
+On Debian/Ubuntu, install OpenGL and **one** of the backends (or both, then GLFW gets both):
 
 ```shell
+# Wayland
+sudo apt-get install libgl1-mesa-dev libwayland-dev libxkbcommon-dev pkg-config
+```
+
+```shell
+# X11
 sudo apt-get install libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev
 ```
+
+`libgl1-mesa-dev` brings the core X11 headers (`libx11-dev`) with it, but the X11 backend also needs the extension
+headers, so the Wayland set builds only the Wayland backend.
 
 ## Sanitizers
 

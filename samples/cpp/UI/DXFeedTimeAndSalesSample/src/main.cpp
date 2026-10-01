@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <memory>
@@ -235,12 +236,44 @@ void glfwErrorCallback(int error, const char *description) {
     std::cerr << "GLFW error " << error << ": " << description << '\n';
 }
 
+// GLFW selects the backend of XDG_SESSION_TYPE and otherwise the first one that connects, which is Wayland. Without
+// XDG_SESSION_TYPE (for example, under WSLg) X11 is preferred when it is available: a Wayland compositor that does not
+// decorate the windows itself leaves them without a title bar and buttons unless libdecor is installed.
+void initGlfw() {
+    const bool preferX11 = std::getenv("XDG_SESSION_TYPE") == nullptr && std::getenv("DISPLAY") != nullptr &&
+                           glfwPlatformSupported(GLFW_PLATFORM_X11) == GLFW_TRUE;
+
+    if (preferX11) {
+        glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+    }
+
+    if (glfwInit() == GLFW_FALSE) {
+        if (!preferX11) {
+            throw std::runtime_error{"Unable to initialize GLFW"};
+        }
+
+        glfwInitHint(GLFW_PLATFORM, GLFW_ANY_PLATFORM);
+
+        if (glfwInit() == GLFW_FALSE) {
+            throw std::runtime_error{"Unable to initialize GLFW"};
+        }
+    }
+
+    switch (glfwGetPlatform()) {
+    case GLFW_PLATFORM_WAYLAND:
+        std::cerr << "GLFW platform: Wayland\n";
+        break;
+    case GLFW_PLATFORM_X11:
+        std::cerr << "GLFW platform: X11\n";
+        break;
+    default:
+        break;
+    }
+}
+
 int runUi() {
     glfwSetErrorCallback(glfwErrorCallback);
-
-    if (!glfwInit()) {
-        throw std::runtime_error{"Unable to initialize GLFW"};
-    }
+    initGlfw();
 
 #if defined(__APPLE__)
     constexpr auto glslVersion = "#version 150";
