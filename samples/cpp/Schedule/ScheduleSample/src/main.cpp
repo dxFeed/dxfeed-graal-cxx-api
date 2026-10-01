@@ -50,7 +50,7 @@ std::unordered_map<std::string, std::shared_ptr<InstrumentProfile>> loadInstrume
 }
 
 void checkAllSchedules(auto &&profiles) {
-    auto successes = 0;
+    std::size_t successes = 0;
 
     for (auto &&[symbol, profile] : profiles) {
         bool error = false;

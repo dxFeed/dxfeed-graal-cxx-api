@@ -97,7 +97,9 @@ std::vector<double> getPriceIncrements(const JavaObjectHandle<PriceIncrements> &
 
     std::vector<double> result{};
 
-    result.reserve(size);
+    if (size > 0) {
+        result.reserve(static_cast<std::size_t>(size));
+    }
 
     for (auto i = 0; i < size; i++) {
         result.emplace_back(increments[i]);

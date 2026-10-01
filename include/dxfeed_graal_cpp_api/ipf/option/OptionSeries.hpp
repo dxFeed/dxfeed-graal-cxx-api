@@ -62,7 +62,7 @@ template <typename T> class OptionSeries final {
      *
      * @return A default-initialized instance of OptionSeries.
      */
-    OptionSeries() {};
+    OptionSeries() {}
 
     /**
      * Returns day id of expiration.
@@ -239,11 +239,12 @@ template <typename T> class OptionSeries final {
     std::vector<double> getNStrikesAround(std::size_t n, double strike) const {
         const auto &strikesVector = getStrikes();
         const auto it = std::lower_bound(strikesVector.begin(), strikesVector.end(), strike);
-        const std::size_t index = std::distance(strikesVector.begin(), it);
+        const auto index = static_cast<std::size_t>(std::distance(strikesVector.begin(), it));
         const std::size_t fromIndex = (index < n / 2) ? 0 : (index - n / 2);
         const std::size_t toIndex = std::min(strikesVector.size(), fromIndex + n);
 
-        return std::vector<double>(strikesVector.begin() + fromIndex, strikesVector.begin() + toIndex);
+        return std::vector<double>(strikesVector.begin() + static_cast<std::ptrdiff_t>(fromIndex),
+                                   strikesVector.begin() + static_cast<std::ptrdiff_t>(toIndex));
     }
 
     bool operator==(const OptionSeries &other) const {
@@ -318,11 +319,11 @@ template <typename T> class OptionSeries final {
             ss << ", lastTrade=" << lastTrade_;
         }
 
-        if (multiplier_ != 0) {
+        if (!math::exactlyEquals(multiplier_, 0.0)) {
             ss << ", multiplier=" << multiplier_;
         }
 
-        if (spc_ != 0) {
+        if (!math::exactlyEquals(spc_, 0.0)) {
             ss << ", spc=" << spc_;
         }
 

@@ -68,7 +68,7 @@ struct DXEndpoint::Impl {
                 // ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->unregisterEntity(id);
             }
         }
-    };
+    }
 
     static std::shared_ptr<DXEndpoint> getInstance(Role role) noexcept {
         if constexpr (Debugger::isDebug) {
@@ -579,7 +579,7 @@ static bool remove(BuilderHandle *handle) {
 
     return ApiContext::getInstance()->getManager<EntityManager<DXEndpoint::Builder>>()->unregisterEntity(handle);
 }
-}; // namespace BuilderRegistry
+} // namespace BuilderRegistry
 
 struct EndpointWrapperHandle {};
 
@@ -588,8 +588,8 @@ struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
     void *userData{};
     std::unordered_map<dxfc_dxendpoint_state_change_listener, std::size_t> listeners{};
 
-    EndpointWrapper(std::shared_ptr<DXEndpoint> endpoint, void *userData)
-        : endpoint{std::move(endpoint)}, userData{userData} {
+    EndpointWrapper(std::shared_ptr<DXEndpoint> wrappedEndpoint, void *listenerUserData)
+        : endpoint{std::move(wrappedEndpoint)}, userData{listenerUserData} {
     }
 
     std::string toString() const noexcept {
@@ -618,7 +618,7 @@ static bool remove(EndpointWrapperHandle *handle) {
 
     return ApiContext::getInstance()->getManager<EntityManager<EndpointWrapper>>()->unregisterEntity(handle);
 }
-}; // namespace EndpointWrapperRegistry
+} // namespace EndpointWrapperRegistry
 
 static DXEndpoint::Role cApiRoleToRole(dxfc_dxendpoint_role_t role) {
     switch (role) {

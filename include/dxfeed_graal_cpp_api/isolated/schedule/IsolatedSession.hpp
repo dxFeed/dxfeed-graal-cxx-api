@@ -17,7 +17,7 @@ namespace IsolatedSessionFilter {
 
 /* dxfg_session_filter_t* */ JavaObjectHandle<dxfcpp::SessionFilter> getInstance(std::uint32_t code);
 
-};
+}
 
 namespace IsolatedSession {
 

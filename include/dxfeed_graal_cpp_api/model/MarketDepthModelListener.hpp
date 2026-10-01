@@ -53,9 +53,9 @@ struct /* DXFCPP_EXPORT */ MarketDepthModelListener final : RequireMakeShared<Ma
         return onEventsReceived_;
     }
 
-    explicit MarketDepthModelListener(RequireMakeShared<MarketDepthModelListener<O>>::LockExternalConstructionTag) {};
+    explicit MarketDepthModelListener(RequireMakeShared<MarketDepthModelListener<O>>::LockExternalConstructionTag) {}
 
-    ~MarketDepthModelListener() noexcept override {};
+    ~MarketDepthModelListener() noexcept override {}
 
     /**
      * Constructs the new listener from the callback.

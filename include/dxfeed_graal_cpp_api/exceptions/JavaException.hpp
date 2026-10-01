@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 #include "./RuntimeException.hpp"
 
 #include <limits>
+#include <type_traits>
 
 /**
  * \addtogroup dxfcpp_exceptions
@@ -80,8 +81,19 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
         return v;
     }
 
+    // -1 of the C API functions; for an enum (state, error code), -1 of its underlying type.
+    template <typename T> static constexpr bool isMinusOne(T v) noexcept {
+        if constexpr (std::is_enum_v<T>) {
+            using U = std::underlying_type_t<T>;
+
+            return static_cast<U>(v) == static_cast<U>(-1);
+        } else {
+            return v == static_cast<T>(-1);
+        }
+    }
+
     template <typename T> static constexpr T throwIfMinusOne(T v) {
-        if (v == T(-1)) {
+        if (isMinusOne(v)) {
             throwIfJavaThreadExceptionExists();
         }
 
@@ -97,7 +109,7 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
     }
 
     template <typename T> static constexpr T throwIfMinusInf(T v) {
-        if (v == -std::numeric_limits<T>::infinity()) {
+        if (v < std::numeric_limits<T>::lowest()) { // -infinity
             throwIfJavaThreadExceptionExists();
         }
 

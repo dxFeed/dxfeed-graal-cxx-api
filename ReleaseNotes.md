@@ -42,6 +42,11 @@
     * The packages no longer contain the headers and CMake package configs of the header-only dependencies that
       installed themselves: bits (also in the Samples and Tools packages) and config (a dependency of the library
       sources only).
+    * The library, tests, samples, tools and fuzzers are compiled with `-Wshadow`, `-Wsign-conversion`,
+      `-Wfloat-equal` and `-Wextra-semi` (MSVC: C4365), and their warnings are fixed; the CI builds treat the
+      warnings as errors (the new `DXFCXX_WARNINGS_AS_ERRORS` option, `OFF` by default). The warnings are not passed to
+      the projects that use the library, and the headers of the dependencies are system headers. clang-tidy fails the
+      CI job on `bugprone-use-after-move` and `clang-analyzer-*` findings.
     * Added the "Static analysis" CI workflow: clang-tidy (LLVM 23, the bug-oriented profile in `.clang-tidy`) and
       cppcheck (2.22) on the library sources in report mode, with the findings counted in the job summaries.
     * Unit tests compare the edge values of all event types (NaN, ±0.0, infinities, number limits, special strings,

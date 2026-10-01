@@ -298,7 +298,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
-        return static_cast<std::int32_t>(andOp(eventFlag1.getFlag(), eventFlag2));
+        return static_cast<std::uint32_t>(andOp(eventFlag1.getFlag(), eventFlag2));
     }
 
     /**

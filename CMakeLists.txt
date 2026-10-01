@@ -312,6 +312,10 @@ endif ()
 # a CMake package config) out of the packages.
 add_subdirectory(third_party/config-${CONFIG_VERSION} EXCLUDE_FROM_ALL)
 
+include(cmake/Warnings.cmake)
+dxfcxx_system_includes(fmt::fmt-header-only fmt::fmt utf8cpp date::date config::config bits::bits portals::portals
+        process::process console::console)
+
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp
@@ -602,12 +606,12 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
 endif ()
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_include_directories(${PROJECT_NAME} PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
         DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
 target_include_directories(${PROJECT_NAME}_static PUBLIC include)
-target_include_directories(${PROJECT_NAME}_static PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
+target_include_directories(${PROJECT_NAME}_static SYSTEM PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
@@ -684,6 +688,7 @@ target_link_libraries(${PROJECT_NAME}
         PUBLIC
         bits::bits
         PRIVATE
+        dxfcxx_warnings
         DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
 )
 
@@ -691,6 +696,7 @@ target_link_libraries(${PROJECT_NAME}_static
         PUBLIC
         bits::bits
         PRIVATE
+        dxfcxx_warnings
         DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
 )
 
@@ -744,9 +750,9 @@ if (DXFCXX_BUILD_HEADER_CHECK)
 
     add_library(dxfcxx_header_check OBJECT ${DXFCXX_HEADER_CHECK_SOURCES})
     # The same include directories, definitions, options and dependencies as the library itself.
-    target_link_libraries(dxfcxx_header_check PRIVATE ${PROJECT_NAME}_static
+    target_link_libraries(dxfcxx_header_check PRIVATE ${PROJECT_NAME}_static dxfcxx_warnings
             DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config)
-    target_include_directories(dxfcxx_header_check PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
+    target_include_directories(dxfcxx_header_check SYSTEM PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
     target_compile_definitions(dxfcxx_header_check PRIVATE FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 endif ()
 

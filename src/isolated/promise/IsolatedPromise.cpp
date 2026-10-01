@@ -10,6 +10,8 @@
 
 #include <dxfg_api.h>
 
+#include <utility>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::promise::IsolatedPromise {
@@ -133,10 +135,24 @@ void /* int32_t */ cancel(/* dxfg_promise_t * */ void *promise) {
     runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_cancel, static_cast<dxfg_promise_t *>(promise));
 }
 
+// A list of the C API allocated by C++. The owning wrapper frees it; it is not copyable, so that a list is not freed
+// twice.
 template <typename ListType, typename ElementType, typename SizeType = decltype(ListType::size)>
 struct GraalListWrapper {
     void *handle = nullptr;
     bool own = false;
+
+    GraalListWrapper(void *listHandle, bool isOwned) noexcept : handle{listHandle}, own{isOwned} {
+    }
+
+    GraalListWrapper(const GraalListWrapper &) = delete;
+    GraalListWrapper &operator=(const GraalListWrapper &) = delete;
+
+    GraalListWrapper(GraalListWrapper &&other) noexcept
+        : handle{std::exchange(other.handle, nullptr)}, own{std::exchange(other.own, false)} {
+    }
+
+    GraalListWrapper &operator=(GraalListWrapper &&) = delete;
 
     static std::ptrdiff_t calculateSize(std::ptrdiff_t initSize) noexcept {
         if (initSize < 0) {
@@ -157,7 +173,7 @@ struct GraalListWrapper {
             return static_cast<void *>(list);
         }
 
-        list->elements = new ElementType *[size] {
+        list->elements = new ElementType *[static_cast<std::size_t>(size)] {
             nullptr
         };
 
@@ -165,24 +181,29 @@ struct GraalListWrapper {
     }
 
     bool setElement(std::ptrdiff_t elementIdx, void *element) noexcept {
-        if (handle == nullptr || elementIdx < 0 || elementIdx >= std::numeric_limits<SizeType>::max() ||
-            element == nullptr) {
+        if (handle == nullptr || elementIdx < 0 || element == nullptr) {
             return false;
         }
 
-        static_cast<ListType *>(handle)->elements[elementIdx] = static_cast<ElementType *>(element);
+        auto *list = static_cast<ListType *>(handle);
+
+        if (list->elements == nullptr || elementIdx >= list->size) {
+            return false;
+        }
+
+        list->elements[elementIdx] = static_cast<ElementType *>(element);
 
         return true;
     }
 
     static GraalListWrapper create(const std::vector<void *> &handles) {
-        auto list = GraalListWrapper{create(calculateSize(handles.size()))};
+        GraalListWrapper list{create(calculateSize(static_cast<std::ptrdiff_t>(handles.size()))), true};
 
         for (std::size_t i = 0; i < handles.size(); i++) {
-            list.setElement(i, handles[i]);
+            list.setElement(static_cast<std::ptrdiff_t>(i), handles[i]);
         }
 
-        return GraalListWrapper{list.handle, true};
+        return list;
     }
 
     void free() {
@@ -192,10 +213,7 @@ struct GraalListWrapper {
 
         auto list = static_cast<ListType *>(handle);
 
-        if (list->size > 0 && list->elements != nullptr) {
-            delete[] list->elements;
-        }
-
+        delete[] list->elements;
         delete list;
     }
 

@@ -215,9 +215,9 @@ struct FlagArg : NamedArg {
 
 template <std::size_t POSITION = 0> struct TailArg : PositionalArg<POSITION>, RequiredMixin {
     template <typename A> static ParseResult<std::string> parse(const std::vector<std::string> &args) noexcept {
-        return RequiredMixin::parse<A, [](const std::vector<std::string> &args) noexcept {
-            return ParseResult<std::string>::ok(args | ranges::views::join(std::string(" ")) | ranges::to<std::string>,
-                                                args.size() - 1);
+        return RequiredMixin::parse<A, [](const std::vector<std::string> &tailArgs) noexcept {
+            return ParseResult<std::string>::ok(
+                tailArgs | ranges::views::join(std::string(" ")) | ranges::to<std::string>, tailArgs.size() - 1);
         }>(args);
     }
 };

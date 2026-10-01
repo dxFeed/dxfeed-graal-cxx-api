@@ -32,7 +32,7 @@ struct DXFCPP_EXPORT PromiseImpl {
     std::atomic<void *> handle = nullptr;
 
     public:
-    explicit PromiseImpl(void *handle);
+    explicit PromiseImpl(void *promiseHandle);
 
     bool isDone() const;
     bool hasResult() const;
@@ -49,7 +49,7 @@ struct DXFCPP_EXPORT VoidPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
-    explicit VoidPromiseImpl(void *handle, bool own = true);
+    explicit VoidPromiseImpl(void *promiseHandle, bool isOwned = true);
     ~VoidPromiseImpl();
     void getResult() const;
 };
@@ -58,7 +58,7 @@ struct DXFCPP_EXPORT EventPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
-    explicit EventPromiseImpl(void *handle, bool own = true);
+    explicit EventPromiseImpl(void *promiseHandle, bool isOwned = true);
     ~EventPromiseImpl();
     std::shared_ptr<EventType> getResult() const;
 };
@@ -67,7 +67,7 @@ struct DXFCPP_EXPORT EventsPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
-    explicit EventsPromiseImpl(void *handle, bool own = true);
+    explicit EventsPromiseImpl(void *promiseHandle, bool isOwned = true);
     ~EventsPromiseImpl();
     std::vector<std::shared_ptr<EventType>> getResult() const;
 };
@@ -427,7 +427,7 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
 struct DXFCPP_EXPORT PromiseListImpl {
     std::atomic<void *> handle = nullptr;
 
-    explicit PromiseListImpl(void *handle);
+    explicit PromiseListImpl(void *promiseListHandle);
     ~PromiseListImpl();
 
     static std::size_t getSize(void *handle);

@@ -78,9 +78,10 @@ Error::~Error() noexcept {
 Error::Error() noexcept {
 }
 
-Error::Error(std::size_t causeId, std::size_t groupId, std::string location, std::string message) noexcept
-    : causeId{causeId}, threadId{std::this_thread::get_id()}, groupId{groupId}, location{std::move(location)},
-      message{std::move(message)} {
+Error::Error(std::size_t errorCauseId, std::size_t errorGroupId, std::string errorLocation,
+             std::string errorMessage) noexcept
+    : causeId{errorCauseId}, threadId{std::this_thread::get_id()}, groupId{errorGroupId},
+      location{std::move(errorLocation)}, message{std::move(errorMessage)} {
 }
 
 ErrorHandlingManager::ErrorHandlingManager() noexcept {

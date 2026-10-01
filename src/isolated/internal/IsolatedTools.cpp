@@ -35,7 +35,9 @@ std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(const 
 
     auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.c_str());
 
-    result.reserve(graalStringList->size);
+    if (graalStringList->size > 0) {
+        result.reserve(static_cast<std::size_t>(graalStringList->size));
+    }
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace_back(dxfcpp::toString(graalStringList->elements[i]));

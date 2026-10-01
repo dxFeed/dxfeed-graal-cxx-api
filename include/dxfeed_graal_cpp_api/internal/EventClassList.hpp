@@ -20,7 +20,7 @@ struct DXFCPP_EXPORT EventClassList {
             return {};
         }
 
-        auto list = create(size);
+        auto list = create(static_cast<std::size_t>(size));
 
         if (!list || list->isEmpty()) {
             return {};

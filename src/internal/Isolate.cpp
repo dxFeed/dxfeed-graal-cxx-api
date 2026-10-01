@@ -47,8 +47,8 @@ std::optional<std::string> getEnvironmentVariable(const std::string &name) {
 
 DXFCPP_BEGIN_NAMESPACE
 
-Isolate::IsolateThread::IsolateThread(GraalIsolateThreadHandle handle) noexcept
-    : handle{handle}, tid{std::this_thread::get_id()} {
+Isolate::IsolateThread::IsolateThread(GraalIsolateThreadHandle threadHandle) noexcept
+    : handle{threadHandle}, tid{std::this_thread::get_id()} {
     this->idx = Id<IsolateThread>::getNext().getValue();
 
     if constexpr (Debugger::traceIsolates) {
