@@ -101,7 +101,9 @@ std::unordered_map<std::string, double> getMap(const JavaObjectHandle<Additional
         return result;
     }
 
-    result.reserve(size);
+    if (size > 0) {
+        result.reserve(static_cast<std::size_t>(size));
+    }
 
     for (std::int32_t i = 0; i < size; i++) {
         result[dxfcpp::toString(mapEntries[i].key)] = mapEntries[i].value;

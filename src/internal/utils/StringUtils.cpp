@@ -380,7 +380,7 @@ std::string trimStr(const StringLike &s) noexcept {
 
     return s | ranges::views::drop_while(trimPredicate) | ranges::views::reverse |
            ranges::views::drop_while(trimPredicate) | ranges::views::reverse | ranges::to<std::string>();
-};
+}
 
 inline auto transformToString = ranges::views::transform([](auto &&s) {
     return s | ranges::to<std::string>();

@@ -20,7 +20,7 @@ namespace IsolatedSessionFilter {
         dxfg_SessionFilter_getInstance, static_cast<dxfg_session_filter_prepare_t>(code))};
 }
 
-}; // namespace IsolatedSessionFilter
+} // namespace IsolatedSessionFilter
 
 namespace IsolatedSession {
 

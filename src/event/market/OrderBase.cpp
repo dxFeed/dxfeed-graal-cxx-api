@@ -227,7 +227,7 @@ void OrderBase::setSize(double size) noexcept {
 }
 
 bool OrderBase::hasSize() const noexcept {
-    return orderBaseData_.size != 0 && !std::isnan(orderBaseData_.size);
+    return !math::exactlyEquals(orderBaseData_.size, 0.0) && !std::isnan(orderBaseData_.size);
 }
 
 double OrderBase::getExecutedSize() const noexcept {

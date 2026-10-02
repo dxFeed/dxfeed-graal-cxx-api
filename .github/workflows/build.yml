@@ -197,6 +197,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
@@ -210,6 +211,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
@@ -223,6 +225,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_BUILD_UI_SAMPLES=ON
@@ -234,6 +237,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build-mt
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}-static-mt
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_BUILD_UI_SAMPLES=ON
@@ -300,6 +304,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=clang-18
           -DCMAKE_CXX_COMPILER=clang++-18
           -DDXFCXX_BUILD_DOC=OFF
@@ -364,6 +369,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=Debug
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF
@@ -391,6 +397,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=Release
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=clang-18
           -DCMAKE_CXX_COMPILER=clang++-18
           -DDXFCXX_BUILD_DOC=OFF
@@ -445,6 +452,7 @@ jobs:
         run: >
           cmake -B ${{github.workspace}}/build
           -DCMAKE_BUILD_TYPE=Release
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF

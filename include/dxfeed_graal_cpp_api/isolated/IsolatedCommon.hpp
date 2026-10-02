@@ -91,16 +91,16 @@ constexpr auto throwIfMinusInf = [](auto v) {
 
 constexpr auto runGraalFunction(auto graalFunction, auto &&...params) {
     return runIsolatedThrow(
-        [](auto threadHandle, auto &&graalFunction, auto &&...params) {
-            return graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...);
+        [](auto threadHandle, auto &&function, auto &&...functionParams) {
+            return function(static_cast<graal_isolatethread_t *>(threadHandle), functionParams...);
         },
         graalFunction, params...);
 }
 
 constexpr auto runGraalFunctionAndThrow(auto resultCheckerConverter, auto graalFunction, auto &&...params) {
     return runIsolatedThrow(
-        [](auto threadHandle, auto &&resultCheckerConverter, auto &&graalFunction, auto &&...params) {
-            return resultCheckerConverter(graalFunction(static_cast<graal_isolatethread_t *>(threadHandle), params...));
+        [](auto threadHandle, auto &&checkerConverter, auto &&function, auto &&...functionParams) {
+            return checkerConverter(function(static_cast<graal_isolatethread_t *>(threadHandle), functionParams...));
         },
         resultCheckerConverter, graalFunction, params...);
 }

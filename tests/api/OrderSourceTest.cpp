@@ -55,7 +55,7 @@ TEST_CASE("OrderSource::valueOf(name) returns the predefined sources and the sou
     for (const auto &[name, id] : expected) {
         CAPTURE(name);
 
-        const auto &source = OrderSource::valueOf(name);
+        const auto source = OrderSource::valueOf(name);
 
         CHECK(source.id() == id);
         CHECK(source.name() == name);

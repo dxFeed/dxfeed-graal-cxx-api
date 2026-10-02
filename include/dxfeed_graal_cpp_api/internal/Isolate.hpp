@@ -37,7 +37,7 @@ class DXFCPP_EXPORT Isolate final {
         std::size_t idx{};
         bool detachOnDestruction{};
 
-        explicit IsolateThread(GraalIsolateThreadHandle handle = nullptr) noexcept;
+        explicit IsolateThread(GraalIsolateThreadHandle threadHandle = nullptr) noexcept;
 
         IsolateThread(const IsolateThread &) = delete;
         IsolateThread(IsolateThread &&) noexcept;
@@ -211,11 +211,11 @@ class DXFCPP_EXPORT Isolate final {
     auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
         return std::visit(
             [dv = std::move(defaultValue)]<typename T>(
-                T &&arg) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...> {
+                T &&result) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...> {
                 if constexpr (std::is_same_v<T, CEntryPointErrorsEnum>) {
                     return dv;
                 } else {
-                    return arg;
+                    return result;
                 }
             },
             Isolate::getInstance().runIsolated(std::forward<F>(f), std::forward<Arg>(arg),

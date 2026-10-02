@@ -24,7 +24,7 @@ struct ObservableSubscriptionChangeListener;
  * Observable set of subscription symbols.
  */
 struct DXFCPP_EXPORT ObservableSubscription {
-    virtual ~ObservableSubscription() {};
+    virtual ~ObservableSubscription() {}
 
     /**
      * @return `true` if this subscription is closed.

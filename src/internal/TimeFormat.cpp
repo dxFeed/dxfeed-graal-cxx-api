@@ -27,7 +27,7 @@ const TimeFormat TimeFormat::GMT([] {
 });
 
 TimeFormat::TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer)
-    : initializer_(std::move(initializer)) {};
+    : initializer_(std::move(initializer)) {}
 
 void TimeFormat::init() const {
     if (!initialized_) {

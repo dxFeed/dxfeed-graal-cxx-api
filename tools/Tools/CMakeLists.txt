@@ -39,7 +39,11 @@ add_executable(${PROJECT_NAME}
         src/Args/Args.cpp
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE ../../third_party/range-v3-0.12/include)
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../third_party/range-v3-0.12/include)
+
+if (TARGET dxfcxx_warnings)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx_warnings)
+endif ()
 
 if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
     target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)

@@ -11,7 +11,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-PromiseImpl::PromiseImpl(void *handle) : handle(handle) {
+PromiseImpl::PromiseImpl(void *promiseHandle) : handle(promiseHandle) {
 }
 
 bool PromiseImpl::isDone() const {
@@ -50,7 +50,8 @@ void PromiseImpl::cancel() const {
     isolated::promise::IsolatedPromise::cancel(handle);
 }
 
-VoidPromiseImpl::VoidPromiseImpl(void *handle, bool own) : PromiseImpl(handle), handle(handle), own(own) {
+VoidPromiseImpl::VoidPromiseImpl(void *promiseHandle, bool isOwned)
+    : PromiseImpl(promiseHandle), handle(promiseHandle), own(isOwned) {
 }
 
 VoidPromiseImpl::~VoidPromiseImpl() {
@@ -62,7 +63,8 @@ VoidPromiseImpl::~VoidPromiseImpl() {
 void VoidPromiseImpl::getResult() const {
 }
 
-EventPromiseImpl::EventPromiseImpl(void *handle, bool own) : PromiseImpl(handle), handle(handle), own(own) {
+EventPromiseImpl::EventPromiseImpl(void *promiseHandle, bool isOwned)
+    : PromiseImpl(promiseHandle), handle(promiseHandle), own(isOwned) {
 }
 
 EventPromiseImpl::~EventPromiseImpl() {
@@ -75,7 +77,8 @@ std::shared_ptr<EventType> EventPromiseImpl::getResult() const {
     return isolated::promise::IsolatedPromise::getResult(handle);
 }
 
-EventsPromiseImpl::EventsPromiseImpl(void *handle, bool own) : PromiseImpl(handle), handle(handle), own(own) {
+EventsPromiseImpl::EventsPromiseImpl(void *promiseHandle, bool isOwned)
+    : PromiseImpl(promiseHandle), handle(promiseHandle), own(isOwned) {
 }
 
 EventsPromiseImpl::~EventsPromiseImpl() {
@@ -88,7 +91,7 @@ std::vector<std::shared_ptr<EventType>> EventsPromiseImpl::getResult() const {
     return isolated::promise::IsolatedPromise::getResults(handle);
 }
 
-PromiseListImpl::PromiseListImpl(void *handle) : handle(handle) {
+PromiseListImpl::PromiseListImpl(void *promiseListHandle) : handle(promiseListHandle) {
 }
 
 PromiseListImpl::~PromiseListImpl() {
@@ -104,11 +107,11 @@ std::size_t PromiseListImpl::getSize(void *handle) {
 
     auto list = static_cast<ListType *>(handle);
 
-    if (list->elements == nullptr) {
+    if (list->elements == nullptr || list->size <= 0) {
         return 0;
     }
 
-    return list->size;
+    return static_cast<std::size_t>(list->size);
 }
 
 void *PromiseListImpl::getElement(void *handle, std::size_t index) {

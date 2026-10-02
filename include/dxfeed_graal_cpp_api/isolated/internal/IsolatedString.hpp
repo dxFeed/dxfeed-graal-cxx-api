@@ -54,11 +54,13 @@ template <typename L> struct NativeStringListWrapper final {
         } else {
             list = new L{};
             list->size = fitToType<decltype(L::size)>(values.size());
-            list->elements = new const char *[list->size] {
+            const auto size = static_cast<std::size_t>(list->size);
+
+            list->elements = new const char *[size] {
                 nullptr
             };
 
-            for (int i = 0; i < list->size; i++) {
+            for (std::size_t i = 0; i < size; i++) {
                 if (!values[i].empty()) {
                     list->elements[i] = createCString(values[i]);
                 }

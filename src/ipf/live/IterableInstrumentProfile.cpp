@@ -31,6 +31,6 @@ std::shared_ptr<InstrumentProfile> IterableInstrumentProfile::next() const {
     auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
     return result;
-};
+}
 
 DXFCPP_END_NAMESPACE

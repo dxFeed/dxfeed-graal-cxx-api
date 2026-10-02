@@ -33,7 +33,8 @@ struct DXFCPP_EXPORT Error {
     Error &operator=(Error &&) noexcept;
     ~Error() noexcept;
     Error() noexcept;
-    Error(std::size_t causeId, std::size_t groupId, std::string location, std::string message) noexcept;
+    Error(std::size_t errorCauseId, std::size_t errorGroupId, std::string errorLocation,
+          std::string errorMessage) noexcept;
 };
 
 // TODO: implement retrieving, grouping methods

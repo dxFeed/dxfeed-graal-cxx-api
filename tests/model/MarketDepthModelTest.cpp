@@ -76,7 +76,7 @@ class MarketDepthModelTestFixture {
         changesSell_ = 0;
     }
 
-    void checkOrder(const Side &side, const std::shared_ptr<Order> &order, int pos) {
+    void checkOrder(const Side &side, const std::shared_ptr<Order> &order, std::size_t pos) {
         const auto &orders = side == Side::BUY ? buyOrders_ : sellOrders_;
 
         REQUIRE_GT(orders.size(), pos);
@@ -120,15 +120,15 @@ class MarketDepthModelTestFixture {
     }
 
     static int oneIfBuy(const std::shared_ptr<Order> &order) {
-        return order && order->getOrderSide() == Side::BUY && order->getSize() != 0.0 ? 1 : 0;
+        return order && order->getOrderSide() == Side::BUY && !math::exactlyEquals(order->getSize(), 0.0) ? 1 : 0;
     }
 
     static int oneIfSell(const std::shared_ptr<Order> &order) {
-        return order && order->getOrderSide() == Side::SELL && order->getSize() != 0.0 ? 1 : 0;
+        return order && order->getOrderSide() == Side::SELL && !math::exactlyEquals(order->getSize(), 0.0) ? 1 : 0;
     }
 
     static bool same(const std::shared_ptr<Order> &order, const std::shared_ptr<Order> &old) {
-        if (order && order->getSize() == 0) {
+        if (order && math::exactlyEquals(order->getSize(), 0.0)) {
             return true; // order with zero size is the same as null (missing)
         }
 
@@ -142,18 +142,18 @@ class MarketDepthModelTestFixture {
 
         // Check just relevant attributes
         return order->getScope() == old->getScope() && order->getOrderSide() == old->getOrderSide() &&
-               order->getIndex() == old->getIndex() && order->getSize() == old->getSize() &&
+               order->getIndex() == old->getIndex() && math::exactlyEquals(order->getSize(), old->getSize()) &&
                order->getSource() == old->getSource();
     }
 
     std::shared_ptr<Order> createOrder(std::int64_t index, const Side &side, double price, double size,
-                                       std::int32_t eventFlags) {
+                                       std::uint32_t eventFlags) {
         return std::make_shared<Order>(symbol_)
             ->withIndex(index)
             .withOrderSide(side)
             .withPrice(price)
             .withSize(size)
-            .withEventFlags(eventFlags)
+            .withEventFlags(static_cast<std::int32_t>(eventFlags))
             .sharedAs<Order>();
     }
 
@@ -376,9 +376,9 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestStressBuySellOrders") {
         auto index = bookDistrib(gen);
         auto order = createOrder(Scope::ORDER, sideDistrib(gen) != 0 ? Side::BUY : Side::SELL, index, valueDistrib(gen),
                                  '\0', std::nullopt);
-        auto old = book[index];
+        auto old = book[static_cast<std::size_t>(index)];
 
-        book[index] = order;
+        book[static_cast<std::size_t>(index)] = order;
 
         auto deltaBuy = oneIfBuy(order) - oneIfBuy(old);
         auto deltaSell = oneIfSell(order) - oneIfSell(old);

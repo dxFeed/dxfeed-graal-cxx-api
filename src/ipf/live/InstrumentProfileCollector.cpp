@@ -34,7 +34,7 @@ struct NonOwningInstrumentProfileIterator {
         auto result = InstrumentProfile::create(JavaObjectHandle<InstrumentProfile>(graalProfile));
 
         return result;
-    };
+    }
 
     [[nodiscard]] std::vector<std::shared_ptr<InstrumentProfile>> collect() const {
         if (!iterable) {

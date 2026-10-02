@@ -50,10 +50,11 @@ std::string System::getProperty(const StringLike &key) {
         [key = key](auto threadHandle) {
             std::string resultString{};
 
-            if (auto result = dxfg_system_get_property(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str());
-                result != nullptr) {
-                resultString = result;
-                dxfg_system_release_property(static_cast<graal_isolatethread_t *>(threadHandle), result);
+            if (auto property =
+                    dxfg_system_get_property(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str());
+                property != nullptr) {
+                resultString = property;
+                dxfg_system_release_property(static_cast<graal_isolatethread_t *>(threadHandle), property);
             }
 
             return resultString;

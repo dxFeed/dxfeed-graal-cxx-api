@@ -55,6 +55,10 @@ endif ()
 # Workaround for mingw + debug
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx_mingw_debug_link_options_interface)
 
+if (TARGET dxfcxx_warnings)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx_warnings)
+endif ()
+
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})
 endif ()

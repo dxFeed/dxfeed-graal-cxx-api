@@ -108,7 +108,7 @@ template <RawGraalList List, auto ElementSetter> struct RawListWrapper {
         }
 
         list_.size = static_cast<typename RawGraalListTraits<List>::SizeType>(size);
-        list_.elements = new typename RawGraalListTraits<List>::ElementType *[list_.size];
+        list_.elements = new typename RawGraalListTraits<List>::ElementType *[static_cast<std::size_t>(list_.size)];
 
         for (typename RawGraalListTraits<List>::SizeType i = 0; i < list_.size; i++) {
             list_.elements[i] = new typename RawGraalListTraits<List>::ElementType{};

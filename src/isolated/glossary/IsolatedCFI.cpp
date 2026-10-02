@@ -207,7 +207,9 @@ std::vector<void *> decipher(const JavaObjectHandle<CFI> &cfi) {
     });
 
     std::vector<void *> result{};
-    result.reserve(size);
+    if (size > 0) {
+        result.reserve(static_cast<std::size_t>(size));
+    }
 
     try {
         for (std::int32_t i = 0; i < size; i++) {
@@ -308,7 +310,9 @@ std::vector<void *> getValues(const JavaObjectHandle<CFI::Attribute> &cfiAttribu
     });
 
     std::vector<void *> result{};
-    result.reserve(size);
+    if (size > 0) {
+        result.reserve(static_cast<std::size_t>(size));
+    }
 
     try {
         for (std::int32_t i = 0; i < size; i++) {

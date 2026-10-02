@@ -248,7 +248,7 @@ void *EventMapper::newGraalList(std::ptrdiff_t size) {
         return list;
     }
 
-    list->elements = new ElementType *[size] {
+    list->elements = new ElementType *[static_cast<std::size_t>(size)] {
         nullptr
     };
 
