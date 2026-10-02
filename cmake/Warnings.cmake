@@ -14,8 +14,11 @@ target_compile_options(dxfcxx_warnings INTERFACE
         "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/w44365>")
 
 if (DXFCXX_WARNINGS_AS_ERRORS)
+    # GCC reports -Wmaybe-uninitialized in third-party code inlined into ours (range-v3 with ASan in Release), even from
+    # system headers, and documents its false positives with sanitizers: it stays a warning.
     target_compile_options(dxfcxx_warnings INTERFACE
             "$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Werror>"
+            "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wno-error=maybe-uninitialized>"
             "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX>")
 endif ()
 
@@ -38,5 +41,16 @@ function(dxfcxx_system_includes)
         if (directories)
             set_property(TARGET ${target} APPEND PROPERTY INTERFACE_SYSTEM_INCLUDE_DIRECTORIES ${directories})
         endif ()
+    endforeach ()
+endfunction()
+
+# The same for all targets of a dependency added as a directory tree (for example, Boost with its libraries).
+function(dxfcxx_system_includes_in_directory directory)
+    get_property(targets DIRECTORY "${directory}" PROPERTY BUILDSYSTEM_TARGETS)
+    dxfcxx_system_includes(${targets})
+    get_property(subdirectories DIRECTORY "${directory}" PROPERTY SUBDIRECTORIES)
+
+    foreach (subdirectory IN LISTS subdirectories)
+        dxfcxx_system_includes_in_directory("${subdirectory}")
     endforeach ()
 endfunction()

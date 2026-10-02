@@ -74,6 +74,8 @@ target_include_directories(DXFeedTimeAndSalesImGui SYSTEM PUBLIC
         ${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}
         ${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}/backends)
 target_link_libraries(DXFeedTimeAndSalesImGui PUBLIC glfw OpenGL::GL)
+# OpenGL is deprecated on macOS (since 10.14) but still works; the sample uses it on purpose.
+target_compile_definitions(DXFeedTimeAndSalesImGui PUBLIC $<$<PLATFORM_ID:Darwin>:GL_SILENCE_DEPRECATION>)
 
 if (COMMAND dxfcxx_system_includes)
     dxfcxx_system_includes(glfw)

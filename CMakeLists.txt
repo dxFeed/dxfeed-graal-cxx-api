@@ -316,6 +316,10 @@ include(cmake/Warnings.cmake)
 dxfcxx_system_includes(fmt::fmt-header-only fmt::fmt utf8cpp date::date config::config bits::bits portals::portals
         process::process console::console)
 
+if (DXFCXX_FEATURE_STACKTRACE AND DEFINED Boost_SOURCE_DIR)
+    dxfcxx_system_includes_in_directory("${Boost_SOURCE_DIR}")
+endif ()
+
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
         src/internal/Isolate.cpp
