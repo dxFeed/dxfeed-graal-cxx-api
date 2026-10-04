@@ -35,8 +35,8 @@ namespace {
 constexpr std::size_t NUMBER_OF_PRESENT_TRADES = 30;
 
 std::string trim(std::string value) {
-    const auto isNotSpace = [](unsigned char value) {
-        return !std::isspace(value);
+    const auto isNotSpace = [](unsigned char c) {
+        return !std::isspace(c);
     };
     const auto first = std::ranges::find_if(value, isNotSpace);
     const auto last = std::ranges::find_if(value | std::views::reverse, isNotSpace).base();

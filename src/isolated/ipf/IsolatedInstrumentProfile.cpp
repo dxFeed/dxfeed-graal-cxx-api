@@ -997,7 +997,9 @@ setDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentP
     const auto size = static_cast<dxfg_string_list *>(graalStringList.get())->size;
     const auto elements = static_cast<dxfg_string_list *>(graalStringList.get())->elements;
 
-    result.reserve(size);
+    if (size > 0) {
+        result.reserve(static_cast<std::size_t>(size));
+    }
 
     for (auto i = 0; i < size; i++) {
         result.emplace_back(dxfcpp::toString(elements[i]));

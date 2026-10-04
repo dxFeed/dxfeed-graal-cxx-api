@@ -51,7 +51,7 @@ std::int64_t daysFromCivil(std::int64_t y, unsigned m, unsigned d) {
     y -= m <= 2;
     const std::int64_t era = (y >= 0 ? y : y - 399) / 400;
     const auto yoe = static_cast<unsigned>(y - era * 400);
-    const unsigned doy = (153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1;
+    const unsigned doy = (153 * (m > 2 ? m - 3 : m + 9) + 2) / 5 + d - 1;
     const unsigned doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
 
     return era * 146097 + static_cast<std::int64_t>(doe) - 719468;
@@ -249,7 +249,7 @@ std::vector<TapeRecord> parseTextTape(const std::string &path) {
             throw std::runtime_error("parseTextTape: no columns for the record " + values.front());
         }
 
-        TapeRecord record{values.front(), {}};
+        TapeRecord record{values.front(), {}, {}};
 
         for (std::size_t i = 0; i < columns->second.size(); i++) {
             std::string offset{};
@@ -343,7 +343,8 @@ std::vector<std::string> compareTapes(const std::string &expectedPath, const std
 void checkEvents(const std::vector<std::shared_ptr<EventType>> &expected,
                  const std::vector<std::shared_ptr<EventType>> &actual) {
     const auto keyOf = [](const std::shared_ptr<EventType> &event) {
-        std::string key = typeid(*event).name();
+        const auto &eventRef = *event;
+        std::string key = typeid(eventRef).name();
 
         if (const auto order = event->sharedAs<OrderBase>()) {
             key += "#" + order->getSource().name();

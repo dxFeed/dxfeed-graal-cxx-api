@@ -76,11 +76,11 @@ CandlePeriod CandlePeriod::parse(const StringLike &s) {
 }
 
 CandlePeriod CandlePeriod::valueOf(double value, const CandleType &type) noexcept {
-    if (value == 1 && type == CandleType::DAY) {
+    if (math::exactlyEquals(value, 1.0) && type == CandleType::DAY) {
         return DAY;
     }
 
-    if (value == 1 && type == CandleType::TICK) {
+    if (math::exactlyEquals(value, 1.0) && type == CandleType::TICK) {
         return TICK;
     }
 

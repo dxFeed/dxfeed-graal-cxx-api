@@ -70,10 +70,16 @@ add_library(DXFeedTimeAndSalesImGui STATIC
         ${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}/imgui_widgets.cpp
         ${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
         ${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp)
-target_include_directories(DXFeedTimeAndSalesImGui PUBLIC
+target_include_directories(DXFeedTimeAndSalesImGui SYSTEM PUBLIC
         ${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}
         ${DXFCXX_SAMPLE_IMGUI_SOURCE_DIR}/backends)
 target_link_libraries(DXFeedTimeAndSalesImGui PUBLIC glfw OpenGL::GL)
+# OpenGL is deprecated on macOS (since 10.14) but still works; the sample uses it on purpose.
+target_compile_definitions(DXFeedTimeAndSalesImGui PUBLIC $<$<PLATFORM_ID:Darwin>:GL_SILENCE_DEPRECATION>)
+
+if (COMMAND dxfcxx_system_includes)
+    dxfcxx_system_includes(glfw)
+endif ()
 
 add_executable(${PROJECT_NAME} src/main.cpp src/TimeAndSalesStore.hpp src/UiMailbox.hpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE DXFeedTimeAndSalesImGui fmt::fmt-header-only)
@@ -86,6 +92,10 @@ else ()
 endif ()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx_mingw_debug_link_options_interface)
+
+if (TARGET dxfcxx_warnings)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx_warnings)
+endif ()
 
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})
@@ -107,6 +117,7 @@ if (DXFCXX_BUILD_UNIT_TESTS)
     target_include_directories(DXFeedTimeAndSalesStoreTest PRIVATE
             src
             ${CMAKE_SOURCE_DIR}/third_party/doctest-${DOCTEST_VERSION})
+    target_compile_options(DXFeedTimeAndSalesStoreTest PRIVATE ${DXFCXX_DOCTEST_COMPILE_OPTIONS})
     add_test(NAME DXFeedTimeAndSalesStoreTest COMMAND DXFeedTimeAndSalesStoreTest)
 endif ()
 

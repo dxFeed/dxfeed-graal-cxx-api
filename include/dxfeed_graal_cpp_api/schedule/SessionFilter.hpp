@@ -128,17 +128,17 @@ DXFCPP_END_NAMESPACE
 
 template <> struct std::hash<dxfcpp::SessionFilter> {
     std::size_t operator()(const dxfcpp::SessionFilter &sessionFilter) const noexcept {
-        std::size_t hash = 0;
+        std::size_t result = 0;
 
         if (sessionFilter.getType()) {
-            dxfcpp::hashCombine(hash, sessionFilter.getType().value());
+            dxfcpp::hashCombine(result, sessionFilter.getType().value());
         }
 
         if (sessionFilter.getTrading()) {
-            dxfcpp::hashCombine(hash, sessionFilter.getTrading().value());
+            dxfcpp::hashCombine(result, sessionFilter.getTrading().value());
         }
 
-        return hash;
+        return result;
     }
 };
 

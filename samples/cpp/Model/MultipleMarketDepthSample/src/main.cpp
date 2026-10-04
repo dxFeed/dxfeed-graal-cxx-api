@@ -26,13 +26,13 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
         std::recursive_mutex ioMutex{};
         auto symbol = IndexedEventSubscriptionSymbol("AAPL", OrderSource::NTV);
-        auto printBook = [&ioMutex](const IndexedEventSubscriptionSymbol &symbol,
+        auto printBook = [&ioMutex](const IndexedEventSubscriptionSymbol &bookSymbol,
                                     const std::shared_ptr<OrderBook<Order>> &book) {
             std::lock_guard lock{ioMutex};
 
             std::string result{};
 
-            result += fmt::format("{}:\n", symbol.toString());
+            result += fmt::format("{}:\n", bookSymbol.toString());
 
             const auto maxCount = std::max(book->buy.size(), book->sell.size());
 

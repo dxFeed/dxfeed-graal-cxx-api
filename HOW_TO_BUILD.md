@@ -79,6 +79,18 @@ Sanitized builds also add the `dxFeedGraalCxxApi_SanitizerCanary_<asan|ubsan|tsa
 defective library function and pass only if the sanitizer reports it, so a sanitizer that is silently not applied to the
 library makes them fail.
 
+## Warnings
+
+This project's own code (the libraries, tests, samples, tools, fuzzers) is compiled with `-Wshadow`,
+`-Wsign-conversion`, `-Wfloat-equal` and `-Wextra-semi` (MSVC: C4365) on top of `-Wall -Wextra -pedantic` (`/W4`).
+These warnings are not passed to the projects that use the library, and the headers of the dependencies are included
+as system headers, so their warnings are not reported. With `-DDXFCXX_WARNINGS_AS_ERRORS=ON` (the CI builds) the
+warnings of this project's code are errors (`-Werror`, `/WX`).
+
+```shell
+cmake -DDXFCXX_WARNINGS_AS_ERRORS=ON ..
+```
+
 ## Header Check
 
 ```shell

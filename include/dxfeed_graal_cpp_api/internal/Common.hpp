@@ -184,7 +184,7 @@ template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
             return static_cast<void *>(list);
         }
 
-        list->elements = new ElementType[size]{nullptr};
+        list->elements = new ElementType[static_cast<std::size_t>(size)]{nullptr};
 
         return list;
     }
@@ -337,6 +337,22 @@ static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
 
+// The functions below compare floating-point numbers exactly on purpose.
+DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wfloat-equal")
+DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wfloat-equal")
+
+/**
+ * Exact IEEE 754 equality of floating-point numbers, as @c == in Java: NaN is not equal to anything, and positive and
+ * negative zero are equal. Use it where an exact comparison is intended (-Wfloat-equal reports the others).
+ *
+ * @param a The first value.
+ * @param b The second value.
+ * @return @c true if the values are equal; @c false otherwise.
+ */
+template <std::floating_point T, std::floating_point U> constexpr bool exactlyEquals(T a, U b) noexcept {
+    return a == b;
+}
+
 /**
  * Compares two double values using Java @c Double.equals semantics.
  * All NaN values are considered equal, while positive and negative zero are considered different.
@@ -440,6 +456,9 @@ inline bool approximatelyEquals(T a, U b, double relativeTolerance, double absol
     return difference <= std::max(static_cast<CommonType>(absoluteTolerance),
                                   static_cast<CommonType>(relativeTolerance) * scale);
 }
+
+DXFCXX_DISABLE_CLANG_WARNINGS_POP()
+DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
 } // namespace math
 
@@ -629,7 +648,7 @@ template <Integral T> static constexpr T setBits(T flags, T mask, T shift, T bit
         return static_cast<T>((static_cast<U>(flags) & ~(static_cast<U>(mask) << static_cast<U>(shift))) |
                               ((static_cast<U>(bits) & static_cast<U>(mask)) << static_cast<U>(shift)));
     } else {
-        return (flags & ~(mask << shift)) | ((bits & mask) << shift);
+        return static_cast<T>((flags & ~(mask << shift)) | ((bits & mask) << shift));
     }
 }
 

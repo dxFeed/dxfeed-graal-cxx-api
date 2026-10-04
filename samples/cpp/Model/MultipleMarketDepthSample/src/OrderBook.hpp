@@ -12,8 +12,8 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct OrderBook : std::enable_s
     std::vector<std::shared_ptr<O>> buy{};
     std::vector<std::shared_ptr<O>> sell{};
 
-    OrderBook(const std::vector<std::shared_ptr<O>> &buy, const std::vector<std::shared_ptr<O>> &sell) {
-        this->buy = buy;
-        this->sell = sell;
+    OrderBook(const std::vector<std::shared_ptr<O>> &buyOrders, const std::vector<std::shared_ptr<O>> &sellOrders) {
+        this->buy = buyOrders;
+        this->sell = sellOrders;
     }
 };

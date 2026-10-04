@@ -10,6 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <chrono>
 #include <deque>
 #include <future>
+#include <type_traits>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -20,6 +21,15 @@ struct DXFCPP_EXPORT Timer final {
     std::atomic<bool> isRunning_{};
 
     Timer() noexcept;
+
+    // A delay or a period: milliseconds as an integer, or a std::chrono duration.
+    template <typename Duration> static std::chrono::milliseconds toMilliseconds(const Duration &duration) {
+        if constexpr (std::is_integral_v<Duration>) {
+            return std::chrono::milliseconds{duration};
+        } else {
+            return std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+        }
+    }
 
     public:
     void interruptableSleep(std::chrono::milliseconds ms) const;
@@ -32,13 +42,13 @@ struct DXFCPP_EXPORT Timer final {
 
         t->future_ = std::make_unique<std::future<void>>(std::async(
             std::launch::async,
-            [self = t](auto &&f, auto &&d, auto &&p) {
+            [self = t](auto &&function, auto &&d, auto &&p) {
                 self->isRunning_ = true;
-                self->interruptableSleep(d);
+                self->interruptableSleep(toMilliseconds(d));
 
                 while (self->isRunning_) {
-                    f();
-                    self->interruptableSleep(p);
+                    function();
+                    self->interruptableSleep(toMilliseconds(p));
                 }
 
                 self->isRunning_ = false;
@@ -53,12 +63,12 @@ struct DXFCPP_EXPORT Timer final {
 
         t->future_ = std::make_unique<std::future<void>>(std::async(
             std::launch::async,
-            [self = t](auto &&f, auto &&d) {
+            [self = t](auto &&function, auto &&d) {
                 self->isRunning_ = true;
-                self->interruptableSleep(d);
+                self->interruptableSleep(toMilliseconds(d));
 
                 if (self->isRunning_) {
-                    f();
+                    function();
                     self->isRunning_ = false;
                 }
             },

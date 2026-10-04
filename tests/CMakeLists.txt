@@ -20,7 +20,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_EXTENSIONS OFF)
 
-set(DXFC_TEST_INCLUDE_DIRS ../include ../third_party/doctest-${DOCTEST_VERSION} ../third_party/range-v3-${RANGE_VERSION}/include)
+set(DXFC_TEST_INCLUDE_DIRS ../include)
+set(DXFC_TEST_SYSTEM_INCLUDE_DIRS ../third_party/doctest-${DOCTEST_VERSION} ../third_party/range-v3-${RANGE_VERSION}/include)
 
 if (DXFCXX_BUILD_BENCHMARKS)
     FetchContent_Declare(
@@ -29,6 +30,7 @@ if (DXFCXX_BUILD_BENCHMARKS)
             GIT_TAG a5a50c2b33eea2ff1fcb355cacdface43eb42b25 # v4.3.11
     )
     FetchContent_MakeAvailable(nanobench)
+    dxfcxx_system_includes(nanobench)
 endif ()
 
 set(DXFC_TEST_SOURCES
@@ -85,6 +87,8 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp ${DXFC_TEST_SUPPORT_SOURCES})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+    target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE ${DXFC_TEST_SYSTEM_INCLUDE_DIRS})
+    target_compile_options(${DXFC_TEST_BASENAME} PRIVATE ${DXFCXX_DOCTEST_COMPILE_OPTIONS})
     target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE
             DXFCXX_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data" DXFCXX_TEST_TEMP_DIR="${DXFC_TEST_TEMP_DIR}")
     target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only)
@@ -113,7 +117,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     endif ()
 
     # Workaround for mingw + debug
-    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx_mingw_debug_link_options_interface)
+    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
 
     if (DXFCXX_FEATURE_STACKTRACE)
         LinkStacktrace(${DXFC_TEST_BASENAME})

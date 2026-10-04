@@ -51,7 +51,11 @@ Checks: >
   readability-inconsistent-declaration-parameter-name,
   readability-misleading-indentation,
   readability-suspicious-call-argument
-WarningsAsErrors: ''
+# These checks have no findings and fail the CI job if they get one. bugprone-exception-escape (exceptions out of
+# noexcept functions) stays a report until the correctness and the error model tickets fix its findings.
+WarningsAsErrors: >
+  bugprone-use-after-move,
+  clang-analyzer-*
 HeaderFilterRegex: '(include/dxfeed_graal_c(pp)?_api|src)/'
 ExcludeHeaderFilterRegex: 'third_party/'
 SystemHeaders: false

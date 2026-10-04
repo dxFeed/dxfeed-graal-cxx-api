@@ -198,13 +198,13 @@ namespace {
 constexpr auto SERIES_SYMBOL = "TEST";
 
 std::shared_ptr<Series> createSeries(std::int64_t index, std::int32_t expiration, double volatility,
-                                     std::int32_t eventFlags) {
+                                     std::uint32_t eventFlags) {
     auto series = std::make_shared<Series>(SERIES_SYMBOL);
 
     series->setIndex(index);
     series->setExpiration(expiration);
     series->setVolatility(volatility);
-    series->setEventFlags(eventFlags);
+    series->setEventFlags(static_cast<std::int32_t>(eventFlags));
 
     return series;
 }
@@ -234,8 +234,7 @@ TEST_CASE_FIXTURE(PromisesFixture, "getIndexedEventsPromise completes on the end
     REQUIRE_FALSE(promise->isDone());
     publishAndProcess(createSeries(1, 100, 10.03, 0));
     REQUIRE_FALSE(promise->isDone());
-    publishAndProcess(createSeries(
-        0, 0, math::NaN, static_cast<std::int32_t>((EventFlag::SNAPSHOT_END | EventFlag::REMOVE_EVENT).getMask())));
+    publishAndProcess(createSeries(0, 0, math::NaN, (EventFlag::SNAPSHOT_END | EventFlag::REMOVE_EVENT).getMask()));
     assertRemoved(SERIES_SYMBOL);
     REQUIRE(promise->isDone());
 
@@ -259,12 +258,12 @@ CandleSymbol candleSymbol() {
 constexpr std::int64_t CANDLE_TIME = 1579194000000LL;
 constexpr std::int64_t CANDLE_PERIOD = 60'000LL;
 
-std::shared_ptr<Candle> createCandle(std::int64_t time, std::int64_t count, std::int32_t eventFlags) {
+std::shared_ptr<Candle> createCandle(std::int64_t time, std::int64_t count, std::uint32_t eventFlags) {
     auto candle = std::make_shared<Candle>(candleSymbol());
 
     candle->setTime(time);
     candle->setCount(count);
-    candle->setEventFlags(eventFlags);
+    candle->setEventFlags(static_cast<std::int32_t>(eventFlags));
 
     return candle;
 }

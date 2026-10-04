@@ -61,15 +61,15 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
     std::shared_future<void> handleImpl(ArgTypes... args) {
         return std::async(
             std::launch::async,
-            [this](ArgTypes... args) {
+            [this](ArgTypes... listenerArgs) {
                 std::lock_guard guard{listenersMutex_};
 
                 for (auto &listener : listeners_) {
-                    listener.second(args...);
+                    listener.second(listenerArgs...);
                 }
 
                 for (auto &listener : lowPriorityListeners_) {
-                    listener.second(args...);
+                    listener.second(listenerArgs...);
                 }
             },
             args...);
@@ -268,15 +268,15 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
     std::shared_future<void> handleImpl(ArgTypes... args) {
         return std::async(
             std::launch::async,
-            [this](ArgTypes... args) {
+            [this](ArgTypes... listenerArgs) {
                 std::lock_guard guard{listenersMutex_};
 
                 for (auto &listener : listeners_) {
-                    listener.second(args...);
+                    listener.second(listenerArgs...);
                 }
 
                 for (auto &listener : lowPriorityListeners_) {
-                    listener.second(args...);
+                    listener.second(listenerArgs...);
                 }
             },
             args...);

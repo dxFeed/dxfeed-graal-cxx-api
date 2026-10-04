@@ -25,7 +25,7 @@ foreach (DXFCXX_FUZZ_TARGET ${DXFCXX_FUZZ_TARGETS})
     set(DXFCXX_FUZZ_EXECUTABLE fuzz_${DXFCXX_FUZZ_TARGET})
 
     add_executable(${DXFCXX_FUZZ_EXECUTABLE} ${DXFCXX_FUZZ_EXECUTABLE}.cpp)
-    target_link_libraries(${DXFCXX_FUZZ_EXECUTABLE} PRIVATE dxfcxx::static)
+    target_link_libraries(${DXFCXX_FUZZ_EXECUTABLE} PRIVATE dxfcxx::static dxfcxx_warnings)
     target_compile_options(${DXFCXX_FUZZ_EXECUTABLE} PRIVATE -fsanitize=fuzzer)
     target_link_options(${DXFCXX_FUZZ_EXECUTABLE} PRIVATE -fsanitize=fuzzer)
     set_target_properties(${DXFCXX_FUZZ_EXECUTABLE} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
