@@ -25,12 +25,11 @@ foreach (DXFCXX_FUZZ_TARGET ${DXFCXX_FUZZ_TARGETS})
     set(DXFCXX_FUZZ_EXECUTABLE fuzz_${DXFCXX_FUZZ_TARGET})
 
     add_executable(${DXFCXX_FUZZ_EXECUTABLE} ${DXFCXX_FUZZ_EXECUTABLE}.cpp)
+    list(APPEND DXFCXX_FUZZ_EXECUTABLES ${DXFCXX_FUZZ_EXECUTABLE})
     target_link_libraries(${DXFCXX_FUZZ_EXECUTABLE} PRIVATE dxfcxx::static dxfcxx_warnings)
     target_compile_options(${DXFCXX_FUZZ_EXECUTABLE} PRIVATE -fsanitize=fuzzer)
     target_link_options(${DXFCXX_FUZZ_EXECUTABLE} PRIVATE -fsanitize=fuzzer)
     set_target_properties(${DXFCXX_FUZZ_EXECUTABLE} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
-
-    add_custom_command(TARGET ${DXFCXX_FUZZ_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx::graal>
-            $<TARGET_FILE_DIR:${DXFCXX_FUZZ_EXECUTABLE}>)
 endforeach ()
+
+dxfcxx_copy_runtime(dxfcxx_fuzz_runtime FILES $<TARGET_FILE:dxfcxx::graal> TARGETS ${DXFCXX_FUZZ_EXECUTABLES})

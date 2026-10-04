@@ -28,6 +28,9 @@
       `CXX_EXTENSIONS OFF` had no effect).
     * The configuration fails with a clear message for a platform without Graal Native SDK archives (it went on and
       failed to download a nonexistent archive).
+    * Fixed a race in parallel builds: every test (and fuzzer, and both libraries) copied the Graal Native SDK library
+      into the same directory after it was linked, and a copy sometimes failed with "No such file or directory". The
+      libraries are now copied once per directory by one target (`dxfcxx_copy_runtime`).
     * The downloaded archives (Graal Native SDK, fmt, Boost, GLFW, Dear ImGui) are verified with SHA-256, also in the
       Full Source Bundle script. nanobench is fetched by commit. GitHub Actions are pinned by commit SHA and updated by
       Dependabot; the CI workflow has read-only repository permissions.

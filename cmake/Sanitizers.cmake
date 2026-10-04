@@ -94,9 +94,12 @@ if (DXFCXX_SANITIZERS_ENABLED)
     target_compile_definitions(dxfcxx_sanitizers INTERFACE DXFCXX_SANITIZERS_ENABLED=1)
 endif ()
 
-# Copies the MSVC ASan runtime DLL next to an executable, so it can be started outside a Visual Studio developer
-# prompt (for example by CTest on a CI runner). Does nothing for other compilers or without ASan.
-function(dxfcxx_copy_sanitizer_runtime targetName)
+# Sets <outputVariable> to the MSVC ASan runtime DLLs, which are copied next to the executables (dxfcxx_copy_runtime),
+# so they can be started outside a Visual Studio developer prompt (for example by CTest on a CI runner). Empty for
+# other compilers or without ASan.
+function(dxfcxx_sanitizer_runtime_files outputVariable)
+    set(${outputVariable} "" PARENT_SCOPE)
+
     if (NOT (MSVC AND DXFCXX_ENABLE_ASAN))
         return()
     endif ()
@@ -118,6 +121,5 @@ function(dxfcxx_copy_sanitizer_runtime targetName)
         return()
     endif ()
 
-    add_custom_command(TARGET ${targetName} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different ${runtimes} "$<TARGET_FILE_DIR:${targetName}>")
+    set(${outputVariable} ${runtimes} PARENT_SCOPE)
 endfunction()
