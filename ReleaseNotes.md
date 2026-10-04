@@ -59,7 +59,15 @@
     * The exception headers no longer include `internal/Common.hpp` (they include `internal/utils/StringUtils.hpp`),
       so `Common.hpp` can use the exceptions. Code that got `Common.hpp` only through an exception header must include
       it.
-* Migrated to Graal SDK v3.6.0.
+* Migrated to Graal SDK v3.8.0.
+    * Linux and macOS: the process is no longer killed by `SIGPIPE` when an endpoint is disconnected or closed while
+      its connector writes to the socket. When the isolate is created and the action of `SIGPIPE` or `SIGXFSZ` is the
+      default one, the SDK installs a no-op handler (as the JVM does), so such a write fails with `EPIPE`; a handler
+      or `SIG_IGN` set by the application before the first API call is kept.
+    * Fixed memory leaks of the SDK: the strings of `NuamOrder` and the method names of the stack trace of an
+      exception were not freed.
+    * macOS: the SDK library declares macOS 14.0 on arm64 and 11.0 on x64 as its minimum version (it was the version
+      of the build machine, macOS 26.0, so the linker warned for an application built for an older macOS).
     * The attachment of `Message` is transferred in both directions: a `Message` published from C++ keeps its
       attachment, and a received attachment is the string as is (it was JSON before: `"text"` with the quotes, the
       string `null` for no attachment). A non-string Java attachment is received as its `toString()`.

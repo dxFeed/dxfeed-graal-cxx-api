@@ -55,8 +55,7 @@ std::vector<std::shared_ptr<EventType>> getTimeSeriesIfSubscribed(const JavaObje
                                                                   const SymbolWrapper &symbol, std::int64_t fromTime,
                                                                   std::int64_t toTime);
 
-// use dxfg_EventType_new to create an empty structure so that java tries to free up memory when replacing subjects
-// dxfg_DXFeed_getLastEvent
+// dxfg_DXFeed_getLastEvent2
 /* int32_t */ std::shared_ptr<EventType> getLastEvent(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
                                                       /* dxfg_event_type_t * */ const StringLike &symbolName,
                                                       const EventTypeEnum &eventType);
