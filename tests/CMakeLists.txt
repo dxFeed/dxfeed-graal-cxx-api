@@ -88,6 +88,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp ${DXFC_TEST_SUPPORT_SOURCES})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
     target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE ${DXFC_TEST_SYSTEM_INCLUDE_DIRS})
+    target_compile_options(${DXFC_TEST_BASENAME} PRIVATE ${DXFCXX_DOCTEST_COMPILE_OPTIONS})
     target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE
             DXFCXX_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data" DXFCXX_TEST_TEMP_DIR="${DXFC_TEST_TEMP_DIR}")
     target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only)

@@ -117,6 +117,7 @@ if (DXFCXX_BUILD_UNIT_TESTS)
     target_include_directories(DXFeedTimeAndSalesStoreTest PRIVATE
             src
             ${CMAKE_SOURCE_DIR}/third_party/doctest-${DOCTEST_VERSION})
+    target_compile_options(DXFeedTimeAndSalesStoreTest PRIVATE ${DXFCXX_DOCTEST_COMPILE_OPTIONS})
     add_test(NAME DXFeedTimeAndSalesStoreTest COMMAND DXFeedTimeAndSalesStoreTest)
 endif ()
 

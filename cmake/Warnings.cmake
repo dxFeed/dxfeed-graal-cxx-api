@@ -22,6 +22,20 @@ if (DXFCXX_WARNINGS_AS_ERRORS)
             "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX>")
 endif ()
 
+# Clang 22+ reports __COUNTER__ with -pedantic as a C2y extension at the macro use site, even when the macro comes from a
+# system header: every TEST_CASE of doctest. The targets that use doctest add DXFCXX_DOCTEST_COMPILE_OPTIONS. Older
+# Clang versions do not know the flag and report it as unknown, hence the check.
+set(DXFCXX_DOCTEST_COMPILE_OPTIONS "")
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    include(CheckCXXCompilerFlag)
+    check_cxx_compiler_flag(-Wc2y-extensions DXFCXX_HAS_WC2Y_EXTENSIONS)
+
+    if (DXFCXX_HAS_WC2Y_EXTENSIONS)
+        set(DXFCXX_DOCTEST_COMPILE_OPTIONS -Wno-c2y-extensions)
+    endif ()
+endif ()
+
 # Makes the include directories of the given dependency targets system ones, so that the warnings in their headers are
 # not reported in this project's code. Missing targets are skipped; an ALIAS is resolved to its target.
 function(dxfcxx_system_includes)
