@@ -124,21 +124,25 @@ std::vector<std::shared_ptr<EventType>> getTimeSeriesIfSubscribed(const JavaObje
     return EventMapper::fromGraalList(u.get());
 }
 
-// dxfg_DXFeed_getLastEvent
+// dxfg_DXFeed_getLastEvent2
 /* int32_t */ std::shared_ptr<EventType> getLastEvent(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
                                                       /* dxfg_event_type_t * */ const StringLike &symbolName,
                                                       const EventTypeEnum &eventType) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getLastEvent`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_DXFeed_getLastEvent2`. The `feed` handle is invalid");
     }
 
     const auto e = event::IsolatedEventType::toUnique(event::IsolatedEventType::create(symbolName, eventType));
+    dxfg_event_type_t *lastEvent = nullptr;
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_DXFeed_getLastEvent, static_cast<dxfg_feed_t *>(feed.get()),
-                                       static_cast<dxfg_event_type_t *>(e.get()));
+    // Only reads the given event and writes a new one: the last event, or a copy of the given one when it is missing.
+    runGraalFunctionAndThrowIfMinusOne(dxfg_DXFeed_getLastEvent2, static_cast<dxfg_feed_t *>(feed.get()),
+                                       static_cast<const dxfg_event_type_t *>(e.get()), &lastEvent);
 
-    return EventMapper::fromGraal(e.get());
+    const auto u = event::IsolatedEventType::toUnique(lastEvent);
+
+    return EventMapper::fromGraal(u.get());
 }
 
 /*
