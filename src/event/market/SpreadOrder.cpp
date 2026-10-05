@@ -145,7 +145,7 @@ SpreadOrder &SpreadOrder::withEventFlags(const EventFlagsMask &eventFlags) noexc
     return *this;
 }
 
-SpreadOrder &SpreadOrder::withIndex(std::int64_t index) noexcept {
+SpreadOrder &SpreadOrder::withIndex(std::int64_t index) {
     OrderBase::setIndex(index);
 
     return *this;
@@ -241,13 +241,13 @@ SpreadOrder &SpreadOrder::withTradeSize(double tradeSize) noexcept {
     return *this;
 }
 
-SpreadOrder &SpreadOrder::withExchangeCode(char exchangeCode) noexcept {
+SpreadOrder &SpreadOrder::withExchangeCode(char exchangeCode) {
     setExchangeCode(exchangeCode);
 
     return *this;
 }
 
-SpreadOrder &SpreadOrder::withExchangeCode(std::int16_t exchangeCode) noexcept {
+SpreadOrder &SpreadOrder::withExchangeCode(std::int16_t exchangeCode) {
     setExchangeCode(exchangeCode);
 
     return *this;

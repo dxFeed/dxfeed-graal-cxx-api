@@ -181,8 +181,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param index unique per-symbol index of this analytic order.
      * @return The current analytic order.
+     * @throws InvalidArgumentException if the index is negative.
      */
-    AnalyticOrder &withIndex(std::int64_t index) noexcept override;
+    AnalyticOrder &withIndex(std::int64_t index) override;
 
     /**
      * Changes time of this analytic order and returns it.
@@ -324,8 +325,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param exchangeCode The exchange code of this analytic order.
      * @return The current analytic order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    AnalyticOrder &withExchangeCode(char exchangeCode) noexcept override;
+    AnalyticOrder &withExchangeCode(char exchangeCode) override;
 
     /**
      * Changes exchange code of this analytic order.
@@ -333,8 +335,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param exchangeCode The exchange code of this analytic order.
      * @return The current analytic order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) noexcept override;
+    AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) override;
 
     /**
      * Changes side of this analytic order.

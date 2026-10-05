@@ -71,8 +71,9 @@ struct DXFCPP_EXPORT IndexedEvent {
      * Returns the source of this event.
      *
      * @return The source of this event.
+     * @throws InvalidArgumentException if the source id of the event is not valid (see OrderBase::getSource()).
      */
-    virtual const IndexedEventSource &getSource() const & noexcept = 0;
+    virtual const IndexedEventSource &getSource() const & = 0;
 
     /**
      * Returns transactional event flags.

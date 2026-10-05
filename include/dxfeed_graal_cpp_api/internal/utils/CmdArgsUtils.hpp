@@ -139,8 +139,9 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      *
      * @param sources The input source names.
      * @return The set of sources or wrapped IndexedEventSource::DEFAULT if `sources` is empty.
+     * @throws InvalidArgumentException if a source name is not valid.
      */
-    static std::unordered_set<EventSourceWrapper> parseEventSources(const StringLike &sources) noexcept;
+    static std::unordered_set<EventSourceWrapper> parseEventSources(const StringLike &sources);
 };
 
 DXFCPP_END_NAMESPACE

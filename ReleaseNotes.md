@@ -1,3 +1,11 @@
+* **\[MDAPI-429]\[C++]** **\[BREAKING]** Fixed `noexcept` functions that threw.
+    * **\[BREAKING]** `OrderBase::getSource()`, `OrderBase::setExchangeCode(std::int16_t)` and the `withIndex()` /
+      `withExchangeCode()` methods of `Order`, `SpreadOrder`, `AnalyticOrder` and `OtcMarketsOrder` are no longer
+      `noexcept` (`IndexedEvent::getSource()` too). An invalid source id in the index, an invalid exchange code or a
+      negative index now throws `InvalidArgumentException` (as Java throws `IllegalArgumentException`) instead of
+      terminating the process.
+    * **\[BREAKING]** `CmdArgsUtils::parseEventSources()` is no longer `noexcept`. An invalid source name now throws
+      `InvalidArgumentException` instead of terminating the process.
 * **\[MDAPI-427]\[C++]** Improved the quality infrastructure and the build.
     * Sanitizers now instrument both the shared and the static library and all their consumers (tests, samples,
       tools). ASan and UBSan can be enabled together. Added ThreadSanitizer support (`DXFCXX_ENABLE_TSAN`).

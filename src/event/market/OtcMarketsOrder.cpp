@@ -126,7 +126,7 @@ OtcMarketsOrder &OtcMarketsOrder::withEventFlags(const EventFlagsMask &eventFlag
     return dynamic_cast<OtcMarketsOrder &>(Order::withEventFlags(eventFlags));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withIndex(std::int64_t index) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withIndex(std::int64_t index) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withIndex(index));
 }
 
@@ -190,11 +190,11 @@ OtcMarketsOrder &OtcMarketsOrder::withTradeSize(double tradeSize) noexcept {
     return dynamic_cast<OtcMarketsOrder &>(Order::withTradeSize(tradeSize));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withExchangeCode(char exchangeCode) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withExchangeCode(char exchangeCode) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withExchangeCode(exchangeCode));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withExchangeCode(std::int16_t exchangeCode) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withExchangeCode(std::int16_t exchangeCode) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withExchangeCode(exchangeCode));
 }
 

@@ -133,7 +133,7 @@ AnalyticOrder &AnalyticOrder::withEventFlags(const EventFlagsMask &eventFlags) n
     return dynamic_cast<AnalyticOrder &>(Order::withEventFlags(eventFlags));
 }
 
-AnalyticOrder &AnalyticOrder::withIndex(std::int64_t index) noexcept {
+AnalyticOrder &AnalyticOrder::withIndex(std::int64_t index) {
     return dynamic_cast<AnalyticOrder &>(Order::withIndex(index));
 }
 
@@ -197,11 +197,11 @@ AnalyticOrder &AnalyticOrder::withTradeSize(double tradeSize) noexcept {
     return dynamic_cast<AnalyticOrder &>(Order::withTradeSize(tradeSize));
 }
 
-AnalyticOrder &AnalyticOrder::withExchangeCode(char exchangeCode) noexcept {
+AnalyticOrder &AnalyticOrder::withExchangeCode(char exchangeCode) {
     return dynamic_cast<AnalyticOrder &>(Order::withExchangeCode(exchangeCode));
 }
 
-AnalyticOrder &AnalyticOrder::withExchangeCode(std::int16_t exchangeCode) noexcept {
+AnalyticOrder &AnalyticOrder::withExchangeCode(std::int16_t exchangeCode) {
     return dynamic_cast<AnalyticOrder &>(Order::withExchangeCode(exchangeCode));
 }
 

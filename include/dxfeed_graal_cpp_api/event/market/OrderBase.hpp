@@ -186,8 +186,9 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * The source is stored in the highest bits of the @ref getIndex() "index" of this event.
      *
      * @return source of this event.
+     * @throws InvalidArgumentException if the source id stored in the index is not a valid source id.
      */
-    const OrderSource &getSource() const & noexcept override;
+    const OrderSource &getSource() const & override;
 
     /**
      * Changes source of this event.
@@ -502,6 +503,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * Changes exchange code of this order.
      *
      * @param exchangeCode exchange code of this order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
     void setExchangeCode(char exchangeCode);
 
@@ -509,8 +511,9 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * Changes exchange code of this order.
      *
      * @param exchangeCode exchange code of this order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    void setExchangeCode(std::int16_t exchangeCode) noexcept;
+    void setExchangeCode(std::int16_t exchangeCode);
 
     /**
      * Returns side of this order.

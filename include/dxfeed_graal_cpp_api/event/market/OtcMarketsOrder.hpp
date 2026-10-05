@@ -246,8 +246,9 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param index unique per-symbol index of this OTC Markets order.
      * @return The current OTC Markets order.
+     * @throws InvalidArgumentException if the index is negative.
      */
-    OtcMarketsOrder &withIndex(std::int64_t index) noexcept override;
+    OtcMarketsOrder &withIndex(std::int64_t index) override;
 
     /**
      * Changes time of this OTC Markets order and returns it.
@@ -389,8 +390,9 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param exchangeCode The exchange code of this OTC Markets order.
      * @return The current OTC Markets order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    OtcMarketsOrder &withExchangeCode(char exchangeCode) noexcept override;
+    OtcMarketsOrder &withExchangeCode(char exchangeCode) override;
 
     /**
      * Changes exchange code of this OTC Markets order.
@@ -398,8 +400,9 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param exchangeCode The exchange code of this OTC Markets order.
      * @return The current OTC Markets order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    OtcMarketsOrder &withExchangeCode(std::int16_t exchangeCode) noexcept override;
+    OtcMarketsOrder &withExchangeCode(std::int16_t exchangeCode) override;
 
     /**
      * Changes side of this OTC Markets order.
