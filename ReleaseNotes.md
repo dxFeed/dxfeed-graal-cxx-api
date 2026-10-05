@@ -1,3 +1,5 @@
+## v8.1.0
+
 * **\[MDAPI-427]\[C++]** Improved the quality infrastructure and the build.
     * Sanitizers now instrument both the shared and the static library and all their consumers (tests, samples,
       tools). ASan and UBSan can be enabled together. Added ThreadSanitizer support (`DXFCXX_ENABLE_TSAN`).
