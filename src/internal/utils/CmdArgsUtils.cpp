@@ -163,7 +163,7 @@ std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const
            ranges::to<std::unordered_map<std::string, std::string>>();
 }
 
-std::unordered_set<EventSourceWrapper> CmdArgsUtils::parseEventSources(const StringLike &sources) noexcept {
+std::unordered_set<EventSourceWrapper> CmdArgsUtils::parseEventSources(const StringLike &sources) {
     auto s = trimStr(sources);
 
     if (s.empty()) {

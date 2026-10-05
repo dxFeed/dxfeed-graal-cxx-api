@@ -2,12 +2,21 @@
 // SPDX-License-Identifier: MPL-2.0
 
 // Fuzz packed fields of Order (index/source, exchange code, time/sequence) and day_util.
-// Many setters are noexcept -> any internal throw = std::terminate.
+// Invalid values throw InvalidArgumentException, as Java throws IllegalArgumentException; any other exception, or a
+// throw from a noexcept function (std::terminate), is a defect.
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <cstdint>
 #include <cstring>
 #include <exception>
+
+// Calls f(); an InvalidArgumentException is the documented reaction to an invalid value.
+template <typename F> static void allowInvalidArgument(F &&f) {
+    try {
+        f();
+    } catch (const dxfcpp::InvalidArgumentException &) {
+    }
+}
 
 template <typename T> static T take(const std::uint8_t *&p, std::size_t &n) {
     T v{};
@@ -29,24 +38,30 @@ extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t *data, std::size_t size
 
     Order o("AAPL");
 
-    // setIndex() throws for a negative index (as in Java); the noexcept functions below must not throw.
-    try {
+    allowInvalidArgument([&] {
         o.setIndex(index);
-    } catch (const std::exception &) {
-    }
+    });
 
     (void)o.getIndex();
-    (void)o.getSource(); // noexcept, decodes source id from index
+    allowInvalidArgument([&] {
+        (void)o.getSource(); // decodes the source id from the index
+    });
     o.setTime(time);
     try {
         o.setSequence(seq);
     } catch (const std::exception &) {
     }
-    o.setExchangeCode(ex16); // noexcept
+    allowInvalidArgument([&] {
+        o.setExchangeCode(ex16);
+    });
     (void)o.getExchangeCode();
     (void)o.getExchangeCodeString();
-    (void)o.withIndex(index); // noexcept
-    (void)o.toString();
+    allowInvalidArgument([&] {
+        (void)o.withIndex(index);
+    });
+    allowInvalidArgument([&] {
+        (void)o.toString(); // prints the source
+    });
 
     (void)day_util::getYearMonthDayByDayId(dayId);
 

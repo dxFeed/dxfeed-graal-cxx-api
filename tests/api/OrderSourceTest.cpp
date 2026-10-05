@@ -1,9 +1,11 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <cstdint>
 #include <string>
 #include <thread>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -86,4 +88,74 @@ TEST_CASE("OrderBase::setSource should preserve the low index bits") {
 
     CHECK(order.getSource() == OrderSource::NTV);
     CHECK((order.getIndex() & 0xffff'ffffLL) == index);
+}
+
+// MDAPI-429: these functions throw on invalid input, as in Java (IllegalArgumentException); with noexcept the process
+// was terminated.
+static_assert(!noexcept(std::declval<const OrderBase &>().getSource()));
+static_assert(!noexcept(std::declval<OrderBase &>().setExchangeCode(std::int16_t{})));
+static_assert(!noexcept(std::declval<Order &>().withIndex(0)));
+static_assert(!noexcept(std::declval<Order &>().withExchangeCode('A')));
+static_assert(!noexcept(std::declval<Order &>().withExchangeCode(std::int16_t{})));
+static_assert(!noexcept(std::declval<SpreadOrder &>().withIndex(0)));
+static_assert(!noexcept(std::declval<SpreadOrder &>().withExchangeCode('A')));
+static_assert(!noexcept(std::declval<SpreadOrder &>().withExchangeCode(std::int16_t{})));
+static_assert(!noexcept(std::declval<AnalyticOrder &>().withIndex(0)));
+static_assert(!noexcept(std::declval<AnalyticOrder &>().withExchangeCode('A')));
+static_assert(!noexcept(std::declval<AnalyticOrder &>().withExchangeCode(std::int16_t{})));
+static_assert(!noexcept(std::declval<OtcMarketsOrder &>().withIndex(0)));
+static_assert(!noexcept(std::declval<OtcMarketsOrder &>().withExchangeCode('A')));
+static_assert(!noexcept(std::declval<OtcMarketsOrder &>().withExchangeCode(std::int16_t{})));
+static_assert(!noexcept(CmdArgsUtils::parseEventSources("")));
+
+TEST_CASE("OrderBase::getSource throws InvalidArgumentException for an invalid source id in the index") {
+    auto order = Order("AAPL");
+
+    order.setIndex(0x00FFLL << 48);
+
+    CHECK_THROWS_AS(order.getSource(), InvalidArgumentException);
+}
+
+TEST_CASE("OrderBase::setExchangeCode throws InvalidArgumentException for a code that is not a 7-bit character") {
+    auto order = Order("AAPL");
+
+    CHECK_THROWS_AS(order.setExchangeCode(std::int16_t{0xE2}), InvalidArgumentException);
+    CHECK_THROWS_AS(order.setExchangeCode(static_cast<char>(0xE2)), InvalidArgumentException);
+
+    order.setExchangeCode(std::int16_t{'Q'});
+
+    CHECK(order.getExchangeCode() == 'Q');
+}
+
+template <typename O> void checkOrderWithThrows() {
+    auto order = O("AAPL");
+
+    CHECK_THROWS_AS(order.withIndex(-1), InvalidArgumentException);
+    CHECK_THROWS_AS(order.withExchangeCode(static_cast<char>(0xE2)), InvalidArgumentException);
+    CHECK_THROWS_AS(order.withExchangeCode(std::int16_t{0xE2}), InvalidArgumentException);
+    CHECK(order.withIndex(1).withExchangeCode('Q').getExchangeCode() == 'Q');
+}
+
+TEST_CASE("withIndex and withExchangeCode of the order events throw InvalidArgumentException for invalid values") {
+    SUBCASE("Order") {
+        checkOrderWithThrows<Order>();
+    }
+
+    SUBCASE("SpreadOrder") {
+        checkOrderWithThrows<SpreadOrder>();
+    }
+
+    SUBCASE("AnalyticOrder") {
+        checkOrderWithThrows<AnalyticOrder>();
+    }
+
+    SUBCASE("OtcMarketsOrder") {
+        checkOrderWithThrows<OtcMarketsOrder>();
+    }
+}
+
+TEST_CASE("CmdArgsUtils::parseEventSources throws InvalidArgumentException for an invalid source name") {
+    CHECK_THROWS_AS(CmdArgsUtils::parseEventSources("A-B"), InvalidArgumentException);
+    CHECK_THROWS_AS(CmdArgsUtils::parseEventSources("ABCDE"), InvalidArgumentException);
+    CHECK(CmdArgsUtils::parseEventSources("NTV, ntv").size() == 2);
 }

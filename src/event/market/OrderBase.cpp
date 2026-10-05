@@ -78,7 +78,7 @@ OrderBase::OrderBase() noexcept {
 OrderBase::OrderBase(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
 }
 
-const OrderSource &OrderBase::getSource() const & noexcept {
+const OrderSource &OrderBase::getSource() const & {
     auto sourceId = static_cast<std::int32_t>(sar(orderBaseData_.index, SPECIAL_SOURCE_ID_SHIFT));
 
     if (!OrderSource::isSpecialSourceId(sourceId)) {
@@ -290,7 +290,7 @@ void OrderBase::setExchangeCode(char exchangeCode) {
         setBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT, static_cast<unsigned char>(exchangeCode));
 }
 
-void OrderBase::setExchangeCode(std::int16_t exchangeCode) noexcept {
+void OrderBase::setExchangeCode(std::int16_t exchangeCode) {
     setExchangeCode(utf16to8(exchangeCode));
 }
 

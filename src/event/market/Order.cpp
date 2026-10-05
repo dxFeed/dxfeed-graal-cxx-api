@@ -145,7 +145,7 @@ Order &Order::withEventFlags(const EventFlagsMask &eventFlags) noexcept {
     return *this;
 }
 
-Order &Order::withIndex(std::int64_t index) noexcept {
+Order &Order::withIndex(std::int64_t index) {
     OrderBase::setIndex(index);
 
     return *this;
@@ -241,13 +241,13 @@ Order &Order::withTradeSize(double tradeSize) noexcept {
     return *this;
 }
 
-Order &Order::withExchangeCode(char exchangeCode) noexcept {
+Order &Order::withExchangeCode(char exchangeCode) {
     setExchangeCode(exchangeCode);
 
     return *this;
 }
 
-Order &Order::withExchangeCode(std::int16_t exchangeCode) noexcept {
+Order &Order::withExchangeCode(std::int16_t exchangeCode) {
     setExchangeCode(exchangeCode);
 
     return *this;

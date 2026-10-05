@@ -206,8 +206,9 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param index The unique per-symbol index of this spread order.
      * @return The current spread order.
+     * @throws InvalidArgumentException if the index is negative.
      */
-    SpreadOrder &withIndex(std::int64_t index) noexcept;
+    SpreadOrder &withIndex(std::int64_t index);
 
     /**
      * Changes time of this spread order and returns it.
@@ -349,8 +350,9 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param exchangeCode The exchange code of this spread order.
      * @return The current spread order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    SpreadOrder &withExchangeCode(char exchangeCode) noexcept;
+    SpreadOrder &withExchangeCode(char exchangeCode);
 
     /**
      * Changes exchange code of this spread order.
@@ -358,8 +360,9 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param exchangeCode The exchange code of this spread order.
      * @return The current spread order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    SpreadOrder &withExchangeCode(std::int16_t exchangeCode) noexcept;
+    SpreadOrder &withExchangeCode(std::int16_t exchangeCode);
 
     /**
      * Changes side of this spread order.

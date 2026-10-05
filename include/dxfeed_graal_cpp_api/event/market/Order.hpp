@@ -213,8 +213,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param index unique per-symbol index of this order.
      * @return The current order.
+     * @throws InvalidArgumentException if the index is negative.
      */
-    virtual Order &withIndex(std::int64_t index) noexcept;
+    virtual Order &withIndex(std::int64_t index);
 
     /**
      * Changes time of this order and returns it.
@@ -356,8 +357,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param exchangeCode The exchange code of this order.
      * @return The current order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    virtual Order &withExchangeCode(char exchangeCode) noexcept;
+    virtual Order &withExchangeCode(char exchangeCode);
 
     /**
      * Changes exchange code of this order.
@@ -365,8 +367,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param exchangeCode The exchange code of this order.
      * @return The current order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    virtual Order &withExchangeCode(std::int16_t exchangeCode) noexcept;
+    virtual Order &withExchangeCode(std::int16_t exchangeCode);
 
     /**
      * Changes side of this order.
