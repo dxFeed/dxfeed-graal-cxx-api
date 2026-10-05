@@ -6,6 +6,11 @@
 #include "../include/dxfeed_graal_cpp_api/entity/SharedEntity.hpp"
 #include "../include/dxfeed_graal_cpp_api/event/EventType.hpp"
 
+#include <memory>
+#include <mutex>
+#include <string>
+#include <unordered_map>
+
 #ifdef NO_ERROR
 #    undef NO_ERROR
 #endif
@@ -22,6 +27,21 @@ std::shared_ptr<ApiContext> ApiContext::getInstance() noexcept {
     static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new ApiContext{});
 
     return instance;
+}
+
+std::shared_ptr<void> ApiContext::getManagerImpl(const char *typeName,
+                                                 std::shared_ptr<void> (*create)()) const noexcept {
+    static std::mutex mutex{};
+    static std::unordered_map<std::string, std::shared_ptr<void>> managers{};
+
+    std::lock_guard lock(mutex);
+    auto &manager = managers[typeName];
+
+    if (!manager) {
+        manager = create();
+    }
+
+    return manager;
 }
 
 auto C = ApiContext::getInstance();

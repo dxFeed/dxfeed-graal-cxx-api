@@ -290,7 +290,7 @@ inline namespace literals {
  * @param length Tha char array's length
  * @return Wrapped string view built on char array
  */
-CandleSymbol operator""_c(const char *string, size_t length);
+DXFCPP_EXPORT CandleSymbol operator""_c(const char *string, size_t length);
 
 } // namespace literals
 

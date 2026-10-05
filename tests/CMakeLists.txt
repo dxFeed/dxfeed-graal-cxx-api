@@ -40,6 +40,7 @@ set(DXFC_TEST_SOURCES
         api/DXEndpointTest.cpp
         api/DXPublisherTest.cpp
         api/EventsTest.cpp
+        api/ExportsTest.cpp
         api/MarketEventSymbolsTest.cpp
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderSourceTest.cpp
@@ -51,6 +52,8 @@ set(DXFC_TEST_SOURCES
         glossary/PriceIncrementsTest.cpp
         internal/CommonTest.cpp
         internal/EntityManagerTest.cpp
+        internal/HandlerTest.cpp
+        ipf/InstrumentProfileCollectorTest.cpp
         ipf/OptionChainsTest.cpp
         ipf/OptionSeriesTest.cpp
         model/IndexedTxModelTest.cpp

@@ -7,6 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <algorithm>
+#include <atomic>
 #include <functional>
 #include <future>
 #include <mutex>
@@ -51,7 +53,19 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
     std::unordered_map<std::size_t, ListenerType> listeners_{};
     std::unordered_map<std::size_t, ListenerType> lowPriorityListeners_{};
 
-    inline static std::atomic<std::size_t> lastId_{};
+    // The listener ids are unique within this handler only: they identify the listener for remove(). The counter is not
+    // static: a static member of a template has a copy in every module that instantiates it (on Windows: the shared
+    // library and each executable), so the ids of listeners added from the application and from the library collided.
+    std::atomic<std::size_t> lastId_{};
+
+    // After the listeners are swapped, both handlers continue after the larger of the two counters, so that no id that
+    // is in use in either handler is given out again.
+    template <typename OtherHandler> void syncLastIds(OtherHandler &other) noexcept {
+        const auto last = std::max(lastId_.load(), other.lastId_.load());
+
+        lastId_ = last;
+        other.lastId_ = last;
+    }
 
     std::recursive_mutex mainFuturesMutex_{};
     std::vector<std::shared_future<void>> mainFutures_{};
@@ -95,6 +109,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
 
         listeners_.swap(other.listeners_);
         lowPriorityListeners_.swap(other.lowPriorityListeners_);
+        lastId_ = other.lastId_.load(); // the moved listeners keep their ids
         mainFutures_.swap(other.mainFutures_);
         mainFuturesCurrentIndex_ = other.mainFuturesCurrentIndex_;
         mainFuturesSize_ = other.mainFuturesSize_;
@@ -107,6 +122,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
 
         listeners_.swap(other.listeners_);
         lowPriorityListeners_.swap(other.lowPriorityListeners_);
+        syncLastIds(other);
         mainFutures_.swap(other.mainFutures_);
         mainFuturesCurrentIndex_ = other.mainFuturesCurrentIndex_;
         mainFuturesSize_ = other.mainFuturesSize_;
@@ -151,7 +167,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      * Adds the listener to "main" group
      *
      * @param listener The listener
-     * @return The listener id
+     * @return The listener id, unique within this handler (not across handlers)
      */
     std::size_t add(ListenerType &&listener) {
         std::lock_guard guard{listenersMutex_};
@@ -172,7 +188,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      * It will be called after the "main" listeners
      *
      * @param listener The listener
-     * @return The listener id
+     * @return The listener id, unique within this handler (not across handlers)
      */
     std::size_t addLowPriority(ListenerType &&listener) {
         std::lock_guard guard{listenersMutex_};
@@ -192,7 +208,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      * Adds the listener to "main" group
      *
      * @param listener The listener
-     * @return The listener id
+     * @return The listener id, unique within this handler (not across handlers)
      */
     std::size_t operator+=(ListenerType &&listener) {
         return add(std::forward<ListenerType>(listener));
@@ -203,7 +219,7 @@ template <typename... ArgTypes> struct Handler<void(ArgTypes...)> final {
      * It will be called after the "main" listeners
      *
      * @param listener The listener
-     * @return The listener id
+     * @return The listener id, unique within this handler (not across handlers)
      */
     std::size_t operator%=(ListenerType &&listener) {
         return addLowPriority(std::forward<ListenerType>(listener));
@@ -263,7 +279,19 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
     std::unordered_map<std::size_t, ListenerType> listeners_{};
     std::unordered_map<std::size_t, ListenerType> lowPriorityListeners_{};
 
-    inline static std::atomic<std::size_t> lastId_{};
+    // The listener ids are unique within this handler only: they identify the listener for remove(). The counter is not
+    // static: a static member of a template has a copy in every module that instantiates it (on Windows: the shared
+    // library and each executable), so the ids of listeners added from the application and from the library collided.
+    std::atomic<std::size_t> lastId_{};
+
+    // After the listeners are swapped, both handlers continue after the larger of the two counters, so that no id that
+    // is in use in either handler is given out again.
+    template <typename OtherHandler> void syncLastIds(OtherHandler &other) noexcept {
+        const auto last = std::max(lastId_.load(), other.lastId_.load());
+
+        lastId_ = last;
+        other.lastId_ = last;
+    }
 
     std::shared_future<void> handleImpl(ArgTypes... args) {
         return std::async(
@@ -296,6 +324,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
 
         listeners_.swap(other.listeners_);
         lowPriorityListeners_.swap(other.lowPriorityListeners_);
+        lastId_ = other.lastId_.load(); // the moved listeners keep their ids
     }
 
     SimpleHandler &operator=(const SimpleHandler &) = delete;
@@ -305,6 +334,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
 
         listeners_.swap(other.listeners_);
         lowPriorityListeners_.swap(other.lowPriorityListeners_);
+        syncLastIds(other);
 
         return *this;
     }
@@ -333,7 +363,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
      * Adds the listener to "main" group
      *
      * @param listener The listener
-     * @return The listener id
+     * @return The listener id, unique within this handler (not across handlers)
      */
     std::size_t add(ListenerType &&listener) {
         std::lock_guard guard{listenersMutex_};
@@ -354,7 +384,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
      * It will be called after the "main" listeners
      *
      * @param listener The listener
-     * @return The listener id
+     * @return The listener id, unique within this handler (not across handlers)
      */
     std::size_t addLowPriority(ListenerType &&listener) {
         std::lock_guard guard{listenersMutex_};
@@ -374,7 +404,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
      * Adds the listener to "main" group
      *
      * @param listener The listener
-     * @return The listener id
+     * @return The listener id, unique within this handler (not across handlers)
      */
     std::size_t operator+=(ListenerType &&listener) {
         return add(std::forward<ListenerType>(listener));
@@ -385,7 +415,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
      * It will be called after the "main" listeners
      *
      * @param listener The listener
-     * @return The listener id
+     * @return The listener id, unique within this handler (not across handlers)
      */
     std::size_t operator%=(ListenerType &&listener) {
         return addLowPriority(std::forward<ListenerType>(listener));
