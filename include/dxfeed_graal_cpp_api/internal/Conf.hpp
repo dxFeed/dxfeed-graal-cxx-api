@@ -68,6 +68,15 @@
 #    endif
 #endif
 
+// DXFCPP_EXPORT marks the classes and functions of the shared library (DLL). Rules for the public headers:
+// - A function that the library defines in a .cpp file is exported: its class is DXFCPP_EXPORT, or the function is.
+//   A missing export is a link error only for the users of the shared library, so the tests are also built with
+//   -DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON (the dynamic-link-tests CI jobs).
+// - No mutable state in the headers outside of exported classes: a static data member of a class template or of a
+//   class without DXFCPP_EXPORT, a static local variable of an inline function or of a function template, and an
+//   inline variable have a copy in every module that uses them on Windows (the DLL and each executable), so the code
+//   inlined into the application and the code of the library see different objects. Keep such state in a .cpp file of
+//   the library (see ApiContext::getManager) or make it a member of an object.
 #ifndef DXFCPP_EXPORT
 #    if defined(DXFCPP_USE_DLLS) && defined(_MSC_VER)
 #        if defined(LIBDXFCPP_EXPORTS)

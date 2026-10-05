@@ -25,7 +25,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 /// A lightweight wrapper around strings or string-like inputs.
 /// Stores either a view or an owned string but always exposes a valid view.
-struct StringLike {
+struct DXFCPP_EXPORT StringLike {
     mutable std::string owned_;
     mutable std::string_view view_;
 
@@ -117,7 +117,7 @@ template <> struct DXFCPP_EXPORT std::hash<dxfcpp::StringLike> {
 DXFCPP_BEGIN_NAMESPACE
 
 /// Universal functional object that allows searching std::unordered_map for string-like keys.
-struct StringHash {
+struct DXFCPP_EXPORT StringHash {
     using HashType = std::hash<std::string_view>;
     using is_transparent = void;
 

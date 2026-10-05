@@ -390,7 +390,7 @@ template <> struct std::hash<dxfcpp::EventFlag> {
 DXFCPP_BEGIN_NAMESPACE
 
 /// The event flags' mask (a set of bit flags)
-class EventFlagsMask final {
+class DXFCPP_EXPORT EventFlagsMask final {
     std::uint32_t mask_;
 
     public:
