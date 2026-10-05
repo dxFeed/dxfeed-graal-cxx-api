@@ -137,6 +137,7 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
 include(cmake/Sanitizers.cmake)
+include(cmake/CopyRuntime.cmake)
 include(cmake/SetupStaticRuntimeMSVC.cmake)
 
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
@@ -760,10 +761,8 @@ if (DXFCXX_BUILD_HEADER_CHECK)
     target_compile_definitions(dxfcxx_header_check PRIVATE FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 endif ()
 
-add_custom_command(TARGET ${PROJECT_NAME}_static POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}_static>)
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:DxFeedGraalNativeSdk> $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+dxfcxx_copy_runtime(dxfcxx_graal_runtime FILES $<TARGET_FILE:DxFeedGraalNativeSdk>
+        TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_static)
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
         DXFCXX_VERSION="${DXFCXX_VERSION}"

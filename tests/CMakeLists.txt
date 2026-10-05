@@ -86,6 +86,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     #    message("${DXFC_TEST_BASENAME}: ${DXFC_TEST_SOURCE}")
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp ${DXFC_TEST_SUPPORT_SOURCES})
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_TEST_BASENAME})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
     target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE ${DXFC_TEST_SYSTEM_INCLUDE_DIRS})
     target_compile_options(${DXFC_TEST_BASENAME} PRIVATE ${DXFCXX_DOCTEST_COMPILE_OPTIONS})
@@ -152,18 +153,6 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES ENVIRONMENT
                 "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
     endif ()
-
-    dxfcxx_copy_sanitizer_runtime(${DXFC_TEST_BASENAME})
-
-    add_custom_command(TARGET ${DXFC_TEST_BASENAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx::graal>
-            $<TARGET_FILE_DIR:${DXFC_TEST_BASENAME}>)
-
-    if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
-        add_custom_command(TARGET ${DXFC_TEST_BASENAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                $<TARGET_FILE:dxfcxx>
-                $<TARGET_FILE_DIR:${DXFC_TEST_BASENAME}>)
-    endif ()
 endforeach ()
 
 # Sanitizer canaries: a deliberately defective LIBRARY function must produce the report of each active sanitizer.
@@ -171,12 +160,11 @@ endforeach ()
 if (DXFCXX_SANITIZERS_ENABLED)
     set(DXFC_CANARY_TARGET dxFeedGraalCxxApi_SanitizerCanary)
     add_executable(${DXFC_CANARY_TARGET} sanitizers/SanitizerCanaryTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_CANARY_TARGET})
 
     if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
         target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx)
         target_compile_definitions(${DXFC_CANARY_TARGET} PRIVATE DXFCPP_USE_DLLS)
-        add_custom_command(TARGET ${DXFC_CANARY_TARGET} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                $<TARGET_FILE:dxfcxx> $<TARGET_FILE_DIR:${DXFC_CANARY_TARGET}>)
     else ()
         target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx::static)
 
@@ -186,9 +174,6 @@ if (DXFCXX_SANITIZERS_ENABLED)
     endif ()
 
     target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface)
-    dxfcxx_copy_sanitizer_runtime(${DXFC_CANARY_TARGET})
-    add_custom_command(TARGET ${DXFC_CANARY_TARGET} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx::graal> $<TARGET_FILE_DIR:${DXFC_CANARY_TARGET}>)
 
     # abort_on_error=0: exit with a code instead of abort(). The default is 1 on macOS, and CTest reports a test killed by
     # a signal as failed even when its output matches PASS_REGULAR_EXPRESSION.
@@ -215,3 +200,17 @@ if (DXFCXX_SANITIZERS_ENABLED)
                 PASS_REGULAR_EXPRESSION "ThreadSanitizer: data race")
     endif ()
 endif ()
+
+# The libraries that the tests and the canary load, copied next to them once (see dxfcxx_copy_runtime).
+set(DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx::graal>)
+set(DXFC_TEST_RUNTIME_DEPENDS "")
+
+if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
+    list(APPEND DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx>)
+    list(APPEND DXFC_TEST_RUNTIME_DEPENDS dxfcxx)
+endif ()
+
+dxfcxx_sanitizer_runtime_files(DXFC_SANITIZER_RUNTIME_FILES)
+list(APPEND DXFC_TEST_RUNTIME_FILES ${DXFC_SANITIZER_RUNTIME_FILES})
+dxfcxx_copy_runtime(dxfcxx_test_runtime FILES ${DXFC_TEST_RUNTIME_FILES} TARGETS ${DXFC_TEST_TARGETS}
+        DEPENDS ${DXFC_TEST_RUNTIME_DEPENDS})
