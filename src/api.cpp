@@ -31,14 +31,20 @@ std::shared_ptr<ApiContext> ApiContext::getInstance() noexcept {
 
 std::shared_ptr<void> ApiContext::getManagerImpl(const char *typeName,
                                                  std::shared_ptr<void> (*create)()) const noexcept {
+    // The registry does not own the managers: the statics of getManager() in the modules do, so a manager lives as long
+    // as it did before the registry (it is destroyed with the statics of the module that created it first, before the
+    // isolate; owning it here kept the endpoints of the managers alive until the end of the exit, and closing them then
+    // hung the process).
     static std::mutex mutex{};
-    static std::unordered_map<std::string, std::shared_ptr<void>> managers{};
+    static std::unordered_map<std::string, std::weak_ptr<void>> managers{};
 
     std::lock_guard lock(mutex);
-    auto &manager = managers[typeName];
+    auto &registered = managers[typeName];
+    auto manager = registered.lock();
 
     if (!manager) {
         manager = create();
+        registered = manager;
     }
 
     return manager;
