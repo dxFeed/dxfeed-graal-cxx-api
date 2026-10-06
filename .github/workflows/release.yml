@@ -518,7 +518,7 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
-      - uses: softprops/action-gh-release@a4f117a9dd5572319a486154ec1147aebabd285c # untagged master commit of 2024-02-05
+      - uses: softprops/action-gh-release@4d8ab33c14495378882c8fef6babbed32e187639 # untagged master commit of 2024-02-05
         with:
           files: |
             artifacts/*.zip
