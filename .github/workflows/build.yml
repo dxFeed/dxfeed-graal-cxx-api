@@ -289,6 +289,20 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{matrix.buildType}} --extra-verbose --output-on-failure --parallel ${{matrix.config.cores}}
 
+  release-script:
+    name: "release-script-tests"
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # release.py, release.cmake (in a git repository) and their agreement
+      - name: Test scripts/release.py and scripts/release.cmake
+        run: python3 -m unittest discover -s scripts/tests -v
+
+      - name: Test the functions of scripts/release.cmake
+        run: cmake -P scripts/tests/test_release.cmake
+
   tsan:
     name: "ubuntu-24.04-clang-18-RelWithDebInfo-TSAN"
     runs-on: ubuntu-24.04
