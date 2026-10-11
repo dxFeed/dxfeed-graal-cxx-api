@@ -25,7 +25,8 @@ See what would change (nothing is changed):
 cmake -P scripts/release.cmake v8.2.0 --dry-run
 ```
 
-Release: the commit, the tag, then the branch and the tag are pushed (the tag last, it starts the workflow):
+Release: the commit, the tag, then the branch and the tag are pushed (the tag last, it starts the workflow). If a push
+fails, the script prints how to push the rest or, if nothing is pushed yet, how to undo the commit and the tag:
 
 ```shell
 cmake -P scripts/release.cmake v8.2.0 --push
@@ -55,7 +56,8 @@ cmake -P scripts/release.cmake v8.2.0 --push
    git reset --keep HEAD~1
    ```
 
-3. Push the branch, then the tag (the tag starts the workflow):
+3. Push the branch, then the tag (the tag starts the workflow). The script prints both commands; for `release/vN`
+   push that branch instead of `main`:
 
    ```shell
    git push origin main
@@ -84,7 +86,9 @@ unreleased items) is an error.
 
 `vX.Y.Z-draftN` is a trial run of the `release` workflow: no commit, only the tag on the current commit (`--push`
 pushes it). The draft GitHub release shows the unreleased items as a preview of the notes; Jira is not touched (only
-published releases are synchronized). Remove the draft release and its tag afterwards (needs the GitHub CLI):
+published releases are synchronized). Remove the draft release and its tag afterwards, also after a failed run (it
+has no release, but the tag is on origin). Each step says whether it deleted or found nothing; the release needs the
+GitHub CLI (`gh`), without it the tags are deleted and the release, if any, is deleted by hand:
 
 ```shell
 cmake -P scripts/release.cmake v8.2.0-draft1 --cleanup
@@ -97,7 +101,8 @@ cmake -P scripts/release.cmake v8.2.0-draft1 --cleanup
 2. `CMakeLists.txt`: `set(DXFCXX_VERSION "v8.2.0" CACHE STRING ...)`.
 3. `docs/Doxyfile`: `PROJECT_NUMBER = v8.2.0`.
 4. For a new major version only: `include/dxfeed_graal_cpp_api/internal/Conf.hpp`: `inline namespace v9 {`.
-5. Commit these files with the message `v8.2.0`, tag the commit (`git tag v8.2.0`), push the branch, then the tag.
+5. Commit these files with the message `v8.2.0`, tag the commit (`git tag v8.2.0`), push the branch (`main` or
+   `release/vN`), then the tag.
 
 The notes of a version, as the workflow takes them: `cmake -P scripts/release.cmake v8.2.0 --notes`.
 

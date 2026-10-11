@@ -6,12 +6,14 @@
 
 import contextlib
 import io
+import os
 import pathlib
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+import unittest.mock
 
 SCRIPTS = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SCRIPTS))
@@ -76,19 +78,25 @@ class UpdateNotesTest(unittest.TestCase):
                 self.assertEqual(self.update(text, "v8.2.0-draft1"), text)
 
     def test_errors(self):
-        cases = {
-            "an earlier pre-release": (notes("## v8.2.0-rc2\n", ITEMS, OLD), "v8.2.0-rc1"),
-            "the same pre-release": (notes("## v8.2.0-rc2\n", ITEMS, OLD), "v8.2.0-rc2"),
-            "alpha after rc": (notes("## v8.2.0-rc1\n", ITEMS, OLD), "v8.2.0-alpha1"),
-            "a released version": (notes("## v8.2.0\n", ITEMS, OLD), "v8.2.0"),
-            "a pre-release after its release": (notes("## v8.2.0\n", ITEMS, OLD), "v8.2.0-rc1"),
-            "no unreleased items": (OLD, "v8.2.0"),
-            "an older version": (notes(ITEMS, OLD), "v8.0.5"),
-            "a heading that is not a version": (notes(ITEMS, "## Unreleased\n"), "v8.2.0"),
+        cases = {  # (notes, version, the error)
+            "an earlier pre-release": (notes("## v8.2.0-rc2\n", ITEMS, OLD), "v8.2.0-rc1",
+                                       "already has v8.2.0-rc2: v8.2.0-rc1 cannot follow it"),
+            "the same pre-release": (notes("## v8.2.0-rc2\n", ITEMS, OLD), "v8.2.0-rc2",
+                                     "already has v8.2.0-rc2: v8.2.0-rc2 cannot follow it"),
+            "alpha after rc": (notes("## v8.2.0-rc1\n", ITEMS, OLD), "v8.2.0-alpha1",
+                               "already has v8.2.0-rc1: v8.2.0-alpha1 cannot follow it"),
+            "a released version": (notes("## v8.2.0\n", ITEMS, OLD), "v8.2.0",
+                                   "already has v8.2.0: v8.2.0 cannot follow it"),
+            "a pre-release after its release": (notes("## v8.2.0\n", ITEMS, OLD), "v8.2.0-rc1",
+                                                "already has v8.2.0: v8.2.0-rc1 cannot follow it"),
+            "no unreleased items": (OLD, "v8.2.0", "has no unreleased items at the top"),
+            "an older version": (notes(ITEMS, OLD), "v8.0.5", "already has v8.1.0: v8.0.5 cannot follow it"),
+            "a heading that is not a version": (notes(ITEMS, "## Unreleased\n"), "v8.2.0",
+                                                "the heading '## Unreleased'.* is not a version"),
         }
 
-        for name, (text, version) in cases.items():
-            with self.subTest(name), self.assertRaises(ReleaseError):
+        for name, (text, version, error) in cases.items():
+            with self.subTest(name), self.assertRaisesRegex(ReleaseError, error):
                 self.update(text, version)
 
 
@@ -134,6 +142,7 @@ class PrepareTest(unittest.TestCase):
     a local bare repository, so --push is tested too."""
 
     NOTES = notes(ITEMS, OLD)
+    FILES = SetVersionsTest.FILES
     LINE_END = "\r\n"  # CRLF is kept (the agreement test also uses LF)
 
     def setUp(self):
@@ -142,7 +151,7 @@ class PrepareTest(unittest.TestCase):
         self.remote = pathlib.Path(self.directory.name) / "origin.git"
         self.root.mkdir()
 
-        for path, text in {**SetVersionsTest.FILES, release.NOTES: self.NOTES}.items():
+        for path, text in {**self.FILES, release.NOTES: self.NOTES}.items():
             (self.root / path).parent.mkdir(parents=True, exist_ok=True)
             (self.root / path).write_bytes(text.replace("\n", self.LINE_END).encode())
 
@@ -166,16 +175,27 @@ class PrepareTest(unittest.TestCase):
                               text=True).stdout.strip()
 
     def run_release(self, *args):
-        """(exit code, stdout) of release.py in the repository."""
+        """(exit code, stdout) of release.py in the repository; stderr goes to self.error."""
         saved = release.ROOT
         release.ROOT = self.root
         output = io.StringIO()
+        error = io.StringIO()
 
         try:
-            with contextlib.redirect_stdout(output), contextlib.redirect_stderr(io.StringIO()):
+            with contextlib.redirect_stdout(output), contextlib.redirect_stderr(error):
                 return release.main(list(args)), output.getvalue()
         finally:
             release.ROOT = saved
+            self.error = error.getvalue()
+
+    def assert_refused(self, args, error):
+        """The release refuses with the error (whitespace collapsed: CMake wraps its messages) and changes nothing."""
+        head, tags, remote = self.git("rev-parse", "HEAD"), self.git("tag"), self.git("ls-remote", str(self.remote))
+
+        self.assertNotEqual(self.run_release(*args)[0], 0)
+        self.assertIn(error, " ".join(self.error.split()))
+        self.assertEqual((self.git("rev-parse", "HEAD"), self.git("tag"), self.git("ls-remote", str(self.remote))),
+                         (head, tags, remote))
 
     def test_release_commits_and_tags(self):
         self.assertEqual(self.run_release("v8.2.0")[0], 0)
@@ -210,15 +230,70 @@ class PrepareTest(unittest.TestCase):
         self.assertEqual(self.git("tag"), "v8.2.0-draft1")
         self.assertIn("refs/tags/v8.2.0-draft1", self.git("ls-remote", "--tags", str(self.remote)))
 
-    def test_refuses_a_dirty_tree_an_existing_tag_and_bad_arguments(self):
+    def test_refuses_a_dirty_tree(self):
         (self.root / "new.txt").write_text("x")
-        self.assertNotEqual(self.run_release("v8.2.0")[0], 0)
+        self.assert_refused(["v8.2.0"], "the working tree has changes")
 
-        (self.root / "new.txt").unlink()
+    def test_refuses_an_existing_tag(self):
         self.git("tag", "v8.2.0")
-        self.assertNotEqual(self.run_release("v8.2.0")[0], 0)
+        self.assert_refused(["v8.2.0"], "the tag v8.2.0 already exists")
+
+    def test_refuses_a_tag_that_is_only_on_origin(self):
+        self.git("push", "-q", "origin", "HEAD:refs/tags/v8.2.0")
+        self.assert_refused(["v8.2.0"], "the tag v8.2.0 already exists")
+        self.assert_refused(["v8.2.0", "--dry-run"], "the tag v8.2.0 already exists")
+
+    def test_refuses_a_detached_head(self):
+        self.git("checkout", "-q", "--detach")
+        self.assert_refused(["v8.2.0"], "detached HEAD")
+
+    def test_refuses_bad_arguments(self):
         self.assertNotEqual(self.run_release("v8.2.1", "--push", "--dry-run")[0], 0)
-        self.assertNotEqual(self.run_release("8.2.1")[0], 0)
+        self.assert_refused(["8.2.1"], "'8.2.1' is not a version")
+
+    def test_failed_push_says_how_to_push_again_or_undo(self):
+        # origin has a commit that the branch has not: the push of the branch is rejected.
+        self.git("push", "-q", "origin", "main")
+        self.git("commit", "-q", "--allow-empty", "-m", "elsewhere")
+        self.git("push", "-q", "origin", "main")
+        self.git("reset", "-q", "--hard", "HEAD~1")
+
+        self.assertNotEqual(self.run_release("v8.2.0", "--push")[0], 0)
+        error = " ".join(self.error.split())
+        self.assertIn("Push again: git push origin main && git push origin v8.2.0", error)
+        self.assertIn("Or undo: git tag -d v8.2.0 && git reset --keep HEAD~1", error)
+        self.assertEqual(self.git("tag"), "v8.2.0")  # the commit and the tag stay local
+        self.assertEqual(self.git("ls-remote", "--tags", str(self.remote)), "")
+
+    def run_cleanup(self, version, gh):
+        with unittest.mock.patch.dict(os.environ, {"RELEASE_GH": gh}):
+            return self.run_release(version, "--cleanup")
+
+    def test_cleanup_refuses_a_release(self):
+        self.git("tag", "v8.2.0")
+        self.assert_refused(["v8.2.0", "--cleanup"], "--cleanup removes only drafts, not v8.2.0")
+
+    def test_cleanup_without_gh_deletes_the_tags(self):
+        # A failed trial run has no release, but its tag is on origin: the tags are deleted without the GitHub CLI.
+        self.assertEqual(self.run_release("v8.2.0-draft1", "--push")[0], 0)
+        code, output = self.run_cleanup("v8.2.0-draft1", "gh-is-not-installed")
+
+        self.assertNotEqual(code, 0)  # the release, if any, has to be deleted by hand
+        self.assertIn("GitHub release v8.2.0-draft1: not checked, gh-is-not-installed is not installed", output)
+        self.assertIn("Tag v8.2.0-draft1 on origin: deleted", output)
+        self.assertIn("Local tag v8.2.0-draft1: deleted", output)
+        self.assertIn("the cleanup is incomplete", self.error)
+        self.assertEqual(self.git("tag"), "")
+        self.assertEqual(self.git("ls-remote", "--tags", str(self.remote)), "")
+
+    def test_cleanup_reports_a_failure_of_gh_and_what_is_not_found(self):
+        # "git release delete ..." fails as gh would fail without the access: reported, the cleanup goes on.
+        code, output = self.run_cleanup("v8.2.0-draft1", "git")
+
+        self.assertNotEqual(code, 0)
+        self.assertIn("GitHub release v8.2.0-draft1: not deleted:", output)
+        self.assertIn("Tag v8.2.0-draft1 on origin: not found", output)
+        self.assertIn("Local tag v8.2.0-draft1: not found", output)
 
     def test_long_release_notes(self):
         # Hundreds of kilobytes, as ReleaseNotes.md grows: a recursive regular expression of release.cmake overflowed
@@ -251,6 +326,7 @@ class CMakePrepareTest(PrepareTest):
     def run_release(self, *args):
         result = subprocess.run(["cmake", "-P", "scripts/release.cmake", *args], cwd=self.root, capture_output=True,
                                 text=True)
+        self.error = result.stderr
 
         return result.returncode, result.stdout
 
@@ -272,6 +348,8 @@ class AgreementTest(unittest.TestCase):
     def results(implementation, text, version, line_end):
         test = implementation("run_release")
         test.NOTES = text
+        # Without the final line break (as Conf.hpp was): both scripts add it.
+        test.FILES = {**SetVersionsTest.FILES, release.CONF: SetVersionsTest.FILES[release.CONF].rstrip("\n")}
         test.LINE_END = line_end
         test.setUp()
 

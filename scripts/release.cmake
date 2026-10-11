@@ -11,7 +11,8 @@
 #   cmake -P scripts/release.cmake <version> --push            the same, then pushes the branch and the tag
 #   cmake -P scripts/release.cmake <version> --dry-run         prints what would change and changes nothing
 #   cmake -P scripts/release.cmake <version> --notes [--ref <ref>]  prints the notes of the version
-#   cmake -P scripts/release.cmake vX.Y.Z-draftN --cleanup     deletes the draft release and its tag (GitHub CLI)
+#   cmake -P scripts/release.cmake vX.Y.Z-draftN --cleanup     deletes the draft release (GitHub CLI) and its tag, on
+#                                                               origin and local
 #
 # The text of ReleaseNotes.md is processed as one string (never as a list: it may contain semicolons).
 
@@ -320,10 +321,28 @@ function(release_write path text crlf)
     release_write_file("${RELEASE_ROOT}/${path}" "${text}" ${crlf})
 endfunction()
 
-function(release_push)
+# Pushes the refs (ARGN) in order; on a failure, says how to push the rest or, if nothing is pushed yet, to undo.
+function(release_push undo)
+    set(rest "${ARGN}")
+
     foreach (ref IN LISTS ARGN)
         release_print("git push origin ${ref}")
-        release_git(ignored push origin "${ref}")
+        execute_process(COMMAND git push origin "${ref}" WORKING_DIRECTORY "${RELEASE_ROOT}" RESULT_VARIABLE result
+                        OUTPUT_QUIET ERROR_VARIABLE error ERROR_STRIP_TRAILING_WHITESPACE)
+
+        if (NOT result EQUAL 0)
+            list(TRANSFORM rest PREPEND "git push origin ")
+            list(JOIN rest " && " rest)
+            set(message "git push origin ${ref}: ${error}\nPush again: ${rest}")
+
+            if (ref STREQUAL "${ARGV1}")
+                string(APPEND message "\nOr undo: ${undo}")
+            endif ()
+
+            release_fail("${message}")
+        endif ()
+
+        list(REMOVE_AT rest 0)
     endforeach ()
 endfunction()
 
@@ -349,7 +368,7 @@ function(release_prepare version dry_run push)
         release_print("Tagged ${version}")
 
         if (push)
-            release_push("${version}")
+            release_push("git tag -d ${version}" "${version}")
         else ()
             release_print("Push it: git push origin ${version}")
         endif ()
@@ -364,6 +383,12 @@ function(release_prepare version dry_run push)
         if (NOT status STREQUAL "")
             release_fail("the working tree has changes: commit or stash them first")
         endif ()
+    endif ()
+
+    release_git(branch rev-parse --abbrev-ref HEAD)
+
+    if (branch STREQUAL "HEAD")
+        release_fail("no branch (detached HEAD): check out the branch of the release")
     endif ()
 
     release_read("${RELEASE_NOTES}" notes_text)
@@ -400,13 +425,76 @@ function(release_prepare version dry_run push)
     release_git(ignored add "${RELEASE_NOTES}" "${RELEASE_CMAKE}" "${RELEASE_DOXYFILE}" "${RELEASE_CONF}")
     release_git(ignored commit -q -m "${version}")
     release_git(ignored tag "${version}")
-    release_git(branch rev-parse --abbrev-ref HEAD)
     release_print("Committed and tagged ${version}")
 
     if (push)
-        release_push("${branch}" "${version}")
+        release_push("git tag -d ${version} && git reset --keep HEAD~1" "${branch}" "${version}")
     else ()
         release_print("Push them: git push origin ${branch} && git push origin ${version}")
+    endif ()
+endfunction()
+
+# Deletes the draft release, the tag on origin and the local tag, each on its own: a run that failed before
+# publish_release has no release, but its tag is on origin.
+function(release_cleanup tag)
+    set(complete TRUE)
+
+    if (DEFINED ENV{RELEASE_GH}) # tests replace it
+        set(gh "$ENV{RELEASE_GH}")
+    else ()
+        set(gh gh)
+    endif ()
+
+    find_program(gh_program NAMES "${gh}" NO_CACHE)
+
+    if (NOT gh_program)
+        release_print("GitHub release ${tag}: not checked, ${gh} is not installed (delete it by hand if it exists)")
+        set(complete FALSE)
+    else ()
+        execute_process(COMMAND "${gh_program}" release delete "${tag}" --yes WORKING_DIRECTORY "${RELEASE_ROOT}"
+                        RESULT_VARIABLE result OUTPUT_QUIET ERROR_VARIABLE error ERROR_STRIP_TRAILING_WHITESPACE)
+
+        if (result EQUAL 0)
+            release_print("GitHub release ${tag}: deleted")
+        elseif (error MATCHES "release not found")
+            release_print("GitHub release ${tag}: not found")
+        else ()
+            release_print("GitHub release ${tag}: not deleted: ${error}")
+            set(complete FALSE)
+        endif ()
+    endif ()
+
+    execute_process(COMMAND git ls-remote --tags origin "refs/tags/${tag}" WORKING_DIRECTORY "${RELEASE_ROOT}"
+                    RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error
+                    OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_STRIP_TRAILING_WHITESPACE)
+
+    if (result EQUAL 0 AND output STREQUAL "")
+        release_print("Tag ${tag} on origin: not found")
+    else ()
+        if (result EQUAL 0)
+            execute_process(COMMAND git push origin --delete "refs/tags/${tag}" WORKING_DIRECTORY "${RELEASE_ROOT}"
+                            RESULT_VARIABLE result OUTPUT_QUIET ERROR_VARIABLE error ERROR_STRIP_TRAILING_WHITESPACE)
+        endif ()
+
+        if (result EQUAL 0)
+            release_print("Tag ${tag} on origin: deleted")
+        else ()
+            release_print("Tag ${tag} on origin: not deleted: ${error}")
+            set(complete FALSE)
+        endif ()
+    endif ()
+
+    release_git(local tag --list "${tag}")
+
+    if (local STREQUAL "")
+        release_print("Local tag ${tag}: not found")
+    else ()
+        release_git(ignored tag -d "${tag}")
+        release_print("Local tag ${tag}: deleted")
+    endif ()
+
+    if (NOT complete)
+        release_fail("the cleanup is incomplete, see above")
     endif ()
 endfunction()
 
@@ -481,9 +569,7 @@ function(release_main)
             release_fail("--cleanup removes only drafts, not ${version}")
         endif ()
 
-        execute_process(COMMAND gh release delete "${version}" --cleanup-tag --yes WORKING_DIRECTORY "${RELEASE_ROOT}")
-        release_git(ignored tag -d "${version}" ALLOW_FAILURE)
-        release_print("Removed the draft release and the tag ${version} (if they existed)")
+        release_cleanup("${version}")
     else ()
         set(dry_run FALSE)
         set(push FALSE)

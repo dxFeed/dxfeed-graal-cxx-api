@@ -28,11 +28,11 @@ function(check_update name text version expected)
     set(failures "${failures}" PARENT_SCOPE)
 endfunction()
 
-function(check_update_error name text version)
+function(check_update_error name text version expected)
     release_update_notes("${text}" "${version}" result action error)
 
-    if (error STREQUAL "")
-        check("${name}: an error expected" "no error" "an error")
+    if (NOT error MATCHES "${expected}")
+        check("${name}: the error" "${error}" "(matching) ${expected}")
     endif ()
 
     set(failures "${failures}" PARENT_SCOPE)
@@ -76,14 +76,22 @@ foreach (text IN ITEMS "${ITEMS}\n${OLD}" "## v8.2.0-rc1\n\n${ITEMS}\n${OLD}" "$
     check_update("a draft changes nothing" "${text}" v8.2.0-draft1 "${text}")
 endforeach ()
 
-check_update_error("an earlier pre-release" "## v8.2.0-rc2\n\n${ITEMS}\n${OLD}" v8.2.0-rc1)
-check_update_error("the same pre-release" "## v8.2.0-rc2\n\n${ITEMS}\n${OLD}" v8.2.0-rc2)
-check_update_error("alpha after rc" "## v8.2.0-rc1\n\n${ITEMS}\n${OLD}" v8.2.0-alpha1)
-check_update_error("a released version" "## v8.2.0\n\n${ITEMS}\n${OLD}" v8.2.0)
-check_update_error("a pre-release after its release" "## v8.2.0\n\n${ITEMS}\n${OLD}" v8.2.0-rc1)
-check_update_error("no unreleased items" "${OLD}" v8.2.0)
-check_update_error("an older version" "${ITEMS}\n${OLD}" v8.0.5)
-check_update_error("a heading that is not a version" "${ITEMS}\n## Unreleased\n" v8.2.0)
+check_update_error("an earlier pre-release" "## v8.2.0-rc2\n\n${ITEMS}\n${OLD}" v8.2.0-rc1
+                   "already has v8.2.0-rc2: v8.2.0-rc1 cannot follow it")
+check_update_error("the same pre-release" "## v8.2.0-rc2\n\n${ITEMS}\n${OLD}" v8.2.0-rc2
+                   "already has v8.2.0-rc2: v8.2.0-rc2 cannot follow it")
+check_update_error("alpha after rc" "## v8.2.0-rc1\n\n${ITEMS}\n${OLD}" v8.2.0-alpha1
+                   "already has v8.2.0-rc1: v8.2.0-alpha1 cannot follow it")
+check_update_error("a released version" "## v8.2.0\n\n${ITEMS}\n${OLD}" v8.2.0
+                   "already has v8.2.0: v8.2.0 cannot follow it")
+check_update_error("a pre-release after its release" "## v8.2.0\n\n${ITEMS}\n${OLD}" v8.2.0-rc1
+                   "already has v8.2.0: v8.2.0-rc1 cannot follow it")
+check_update_error("no unreleased items" "${OLD}" v8.2.0
+                   "has no unreleased items at the top")
+check_update_error("an older version" "${ITEMS}\n${OLD}" v8.0.5
+                   "already has v8.1.0: v8.0.5 cannot follow it")
+check_update_error("a heading that is not a version" "${ITEMS}\n## Unreleased\n" v8.2.0
+                   "the heading '## Unreleased'.* is not a version")
 
 # The notes of a version
 release_notes_of("## v8.2.0\n\n${ITEMS}\n${OLD}" v8.2.0 notes error)

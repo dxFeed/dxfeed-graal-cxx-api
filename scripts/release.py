@@ -14,13 +14,16 @@ CMake only (cmake -P scripts/release.cmake <arguments>).
   release.py <version> --dry-run                prints what would change and changes nothing
   release.py <version> --notes [--ref <ref>]    prints the notes of the version, the text of its GitHub release (a
                                                 draft: the unreleased items at the top of ReleaseNotes.md)
-  release.py vX.Y.Z-draftN --cleanup            deletes the draft release and its tag (needs the GitHub CLI)
+  release.py vX.Y.Z-draftN --cleanup            deletes the draft release (needs the GitHub CLI) and its tag, on origin
+                                                and local
 """
 
 import argparse
 import dataclasses
 import pathlib
+import os
 import re
+import shutil
 import subprocess
 import sys
 
@@ -190,11 +193,18 @@ def _read(path):
 
 
 def _write(path, text, crlf):
+    if not text.endswith("\n"):  # as file(CONFIGURE) of release.cmake: the last line always ends with a line break
+        text += "\n"
+
     (ROOT / path).write_bytes((text.replace("\n", "\r\n") if crlf else text).encode("utf-8"))
 
 
+def _run(*command, check=True):
+    return subprocess.run(command, cwd=ROOT, check=check, capture_output=True, text=True, encoding="utf-8")
+
+
 def _git(*args, check=True):
-    return subprocess.run(["git", *args], cwd=ROOT, check=check, capture_output=True, text=True).stdout.strip()
+    return _run("git", *args, check=check).stdout.strip()
 
 
 def _tag_exists(tag):
@@ -204,10 +214,17 @@ def _tag_exists(tag):
     return bool(local or remote)
 
 
-def _push(*refs):
-    for ref in refs:
+def _push(refs, undo):
+    """Pushes the refs in order; on a failure, says how to push the rest or, if nothing is pushed yet, to undo."""
+    for index, ref in enumerate(refs):
         print(f"git push origin {ref}")
-        _git("push", "origin", ref)
+        result = _run("git", "push", "origin", ref, check=False)
+
+        if result.returncode != 0:
+            rest = " && ".join(f"git push origin {ref}" for ref in refs[index:])
+            message = f"git push origin {ref}: {result.stderr.strip()}\nPush again: {rest}"
+
+            raise ReleaseError(message + (f"\nOr undo: {undo}" if index == 0 else ""))
 
 
 def prepare(version, dry_run, push):
@@ -226,7 +243,7 @@ def prepare(version, dry_run, push):
         print(f"Tagged {version}")
 
         if push:
-            _push(str(version))
+            _push([str(version)], f"git tag -d {version}")
         else:
             print(f"Push it: git push origin {version}")
 
@@ -235,6 +252,11 @@ def prepare(version, dry_run, push):
 
     if not dry_run and _git("status", "--porcelain"):
         raise ReleaseError("the working tree has changes: commit or stash them first")
+
+    branch = _git("rev-parse", "--abbrev-ref", "HEAD")
+
+    if branch == "HEAD":
+        raise ReleaseError("no branch (detached HEAD): check out the branch of the release")
 
     old = {path: _read(path) for path in (NOTES, CMAKE, DOXYFILE, CONF)}
     new, messages = set_versions({path: old[path][0] for path in (CMAKE, DOXYFILE, CONF)}, version)
@@ -253,22 +275,60 @@ def prepare(version, dry_run, push):
     _git("add", *old)
     _git("commit", "-q", "-m", str(version))
     _git("tag", str(version))
-    branch = _git("rev-parse", "--abbrev-ref", "HEAD")
     print(f"Committed and tagged {version}")
 
     if push:
-        _push(branch, str(version))
+        _push([branch, str(version)], f"git tag -d {version} && git reset --keep HEAD~1")
     else:
         print(f"Push them: git push origin {branch} && git push origin {version}")
 
 
 def cleanup(version):
+    """Deletes the draft release, the tag on origin and the local tag, each on its own: a run that failed before
+    publish_release has no release, but its tag is on origin."""
     if not version.is_draft:
         raise ReleaseError(f"--cleanup removes only drafts, not {version}")
 
-    subprocess.run(["gh", "release", "delete", str(version), "--cleanup-tag", "--yes"], cwd=ROOT, check=False)
-    _git("tag", "-d", str(version), check=False)
-    print(f"Removed the draft release and the tag {version} (if they existed)")
+    tag = str(version)
+    complete = True
+    gh = os.environ.get("RELEASE_GH", "gh")  # tests replace it
+
+    if shutil.which(gh) is None:
+        print(f"GitHub release {tag}: not checked, {gh} is not installed (delete it by hand if it exists)")
+        complete = False
+    else:
+        result = _run(gh, "release", "delete", tag, "--yes", check=False)
+
+        if result.returncode == 0:
+            print(f"GitHub release {tag}: deleted")
+        elif "release not found" in result.stderr:
+            print(f"GitHub release {tag}: not found")
+        else:
+            print(f"GitHub release {tag}: not deleted: {result.stderr.strip()}")
+            complete = False
+
+    result = _run("git", "ls-remote", "--tags", "origin", f"refs/tags/{tag}", check=False)
+
+    if result.returncode == 0 and not result.stdout.strip():
+        print(f"Tag {tag} on origin: not found")
+    else:
+        if result.returncode == 0:
+            result = _run("git", "push", "origin", "--delete", f"refs/tags/{tag}", check=False)
+
+        if result.returncode == 0:
+            print(f"Tag {tag} on origin: deleted")
+        else:
+            print(f"Tag {tag} on origin: not deleted: {result.stderr.strip()}")
+            complete = False
+
+    if _git("tag", "--list", tag):
+        _git("tag", "-d", tag)
+        print(f"Local tag {tag}: deleted")
+    else:
+        print(f"Local tag {tag}: not found")
+
+    if not complete:
+        raise ReleaseError("the cleanup is incomplete, see above")
 
 
 def main(argv=None):
