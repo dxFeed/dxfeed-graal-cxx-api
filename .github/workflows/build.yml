@@ -18,6 +18,12 @@ on:
 permissions:
   contents: read
 
+# A newer run of a pull request (a push, the full-ci label) cancels the older one; a run started by another label does
+# nothing and has its own group, so that it cancels nothing.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && 'other-label' || 'run' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   # The short set of the pull requests or the full matrix, both from .github/ci/build-matrix.json.
   plan:
@@ -38,7 +44,8 @@ jobs:
           FULL: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci') }}
         run: |
           echo "full=$FULL" >> "$GITHUB_OUTPUT"
-          echo "build=$(python3 .github/ci/build_matrix.py "$([ "$FULL" = true ] && echo full || echo pr)")" >> "$GITHUB_OUTPUT"
+          build=$(python3 .github/ci/build_matrix.py "$([ "$FULL" = true ] && echo full || echo pr)")
+          echo "build=$build" >> "$GITHUB_OUTPUT"
 
   build:
     needs: plan

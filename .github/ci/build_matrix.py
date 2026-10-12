@@ -7,7 +7,7 @@
 Usage: build_matrix.py <full|pr> [matrix file]
 
 `full` is every config x build type x sanitizer combination without the excluded ones; `pr` is the `pullRequest`
-subset of it. Every `pullRequest` row must be a combination of the full matrix.
+subset of it. Every `pullRequest` row must name a combination of the full matrix by all of its keys.
 """
 
 import json
@@ -31,6 +31,11 @@ def build(matrix, full):
     combinations = [c for c in combinations if not any(matches(e, c) for e in matrix["exclude"])]
 
     if not full:
+        unknown = [row for row in matrix["pullRequest"] if set(row) != set(KEYS)]
+
+        if unknown:
+            raise SystemExit(f"pullRequest rows must have exactly the keys {KEYS}: {unknown}")
+
         missing = [row for row in matrix["pullRequest"] if not any(matches(row, c) for c in combinations)]
 
         if missing:
