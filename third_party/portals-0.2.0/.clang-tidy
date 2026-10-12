@@ -1,0 +1,15 @@
+Checks: '-*,readability-identifier-naming'
+WarningsAsErrors: 'readability-identifier-naming'
+HeaderFilterRegex: '(^|[/\\])(include[/\\]portals|src|tests|tools|examples|experiments|fuzz)[/\\]'
+SystemHeaders: false
+CheckOptions:
+  readability-identifier-naming.FunctionCase: camelBack
+  readability-identifier-naming.MethodCase: camelBack
+  readability-identifier-naming.ConstexprFunctionCase: camelBack
+  readability-identifier-naming.ConstexprMethodCase: camelBack
+  readability-identifier-naming.EnumConstantCase: UPPER_CASE
+  readability-identifier-naming.ConstexprVariableCase: UPPER_CASE
+  readability-identifier-naming.ClassConstantCase: UPPER_CASE
+  readability-identifier-naming.GlobalConstantCase: UPPER_CASE
+  readability-identifier-naming.StaticConstantCase: UPPER_CASE
+  readability-identifier-naming.AggressiveDependentMemberLookup: false

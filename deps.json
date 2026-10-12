@@ -9,7 +9,7 @@
   "Process": "3.0.1",
   "range-v3": "0.12",
   "utfcpp": "3.2.3",
-  "portals": "0.1.1",
+  "portals": "0.2.0",
   "bits": "1.0.0",
   "config": "1.0.3",
   "nanobench": "4.3.11"

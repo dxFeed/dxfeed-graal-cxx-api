@@ -1,0 +1,8 @@
+# Copyright (c) 2026 ttldtor.
+# SPDX-License-Identifier: BSL-1.0
+*.sh text eol=lf
+
+/vendor/utf8proc/** -text
+/vendor/doctest/doctest.h -text
+/vendor/pfr/** -text
+/tests/fixtures/unicode/** -text

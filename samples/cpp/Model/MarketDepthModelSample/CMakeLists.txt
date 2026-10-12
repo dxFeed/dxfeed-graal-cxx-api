@@ -1,7 +1,7 @@
 # Copyright (c) 2025 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.24)
 
 if (POLICY CMP0092)
     cmake_policy(SET CMP0092 NEW)
@@ -13,7 +13,8 @@ endif ()
 
 project(MarketDepthModelSample LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+# Portals needs C++23 (std::expected, std::format).
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -39,9 +40,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE ../../../../third_party/range
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
     target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx portals::portals fmt::fmt-header-only)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx portals::core fmt::fmt-header-only)
 else ()
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static portals::portals fmt::fmt-header-only)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static portals::core fmt::fmt-header-only)
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         if (DXFCXX_LINK_STATIC_RUNTIME)

@@ -18,8 +18,9 @@
    SPDX-License-Identifier: BSL-1.0
 9. CPM.cmake - https://github.com/cpm-cmake/CPM.cmake/blob/master/LICENSE  
    SPDX-License-Identifier: MIT
-10. portals - https://github.com/ttldtor/portals/blob/default/LICENSE.txt  
-    SPDX-License-Identifier: BSL-1.0
+10. Portals - https://github.com/ttldtor/portals/blob/v0.2.0/LICENSE.txt  
+    SPDX-License-Identifier: BSL-1.0  
+    Bundled utf8proc (MIT, and the Unicode data license): https://github.com/ttldtor/portals/blob/v0.2.0/vendor/utf8proc/LICENSE.md
 11. config - https://github.com/ttldtor/config/blob/default/LICENSE.txt  
     SPDX-License-Identifier: BSL-1.0
 12. nanobench - https://github.com/martinus/nanobench/blob/master/LICENSE  

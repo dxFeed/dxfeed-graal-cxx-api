@@ -28,7 +28,7 @@ set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
 set(PROCESS_VERSION "3.0.1")
 set(CONSOLE_VERSION "1.0.1")
-set(PORTALS_VERSION "0.1.1")
+set(PORTALS_VERSION "0.2.0")
 set(BITS_VERSION "1.0.0")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
@@ -235,9 +235,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
     SetupStaticRuntimeMSVC(console ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
-# bits (header-only): the bit operations of the library headers. It is declared before portals, which fetches it with
-# the same name: the first declaration is used. EXCLUDE_FROM_ALL (CMake 3.28+) disables its own install rules; its
-# headers are installed with the library below.
+# bits (header-only): the bit operations of the library headers. EXCLUDE_FROM_ALL (CMake 3.28+) disables its own install
+# rules; its headers are installed with the library below.
 if (NOT DEFINED FETCHCONTENT_SOURCE_DIR_BITS AND
         EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}/CMakeLists.txt")
     set(FETCHCONTENT_SOURCE_DIR_BITS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}")
@@ -250,16 +249,6 @@ FetchContent_Declare(
         EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(bits)
-
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals-${PORTALS_VERSION}/CMakeLists.txt")
-    add_subdirectory(third_party/portals-${PORTALS_VERSION})
-else ()
-    CPMAddPackage("gh:ttldtor/portals#v${PORTALS_VERSION}")
-endif ()
-
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
-    SetupStaticRuntimeMSVC(portals ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
-endif ()
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
@@ -314,8 +303,8 @@ endif ()
 add_subdirectory(third_party/config-${CONFIG_VERSION} EXCLUDE_FROM_ALL)
 
 include(cmake/Warnings.cmake)
-dxfcxx_system_includes(fmt::fmt-header-only fmt::fmt utf8cpp date::date config::config bits::bits portals::portals
-        process::process console::console)
+dxfcxx_system_includes(fmt::fmt-header-only fmt::fmt utf8cpp date::date config::config bits::bits process::process
+        console::console)
 
 if (DXFCXX_FEATURE_STACKTRACE AND DEFINED Boost_SOURCE_DIR)
     dxfcxx_system_includes_in_directory("${Boost_SOURCE_DIR}")
@@ -825,11 +814,17 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/IPF/IpfLiveSample)
     add_subdirectory(samples/cpp/IPF/OptionChainSample)
     add_subdirectory(samples/cpp/Model/IncOrderSnapshotSample)
-    add_subdirectory(samples/cpp/Model/MarketDepthModelSample)
     add_subdirectory(samples/cpp/Model/MultipleMarketDepthSample)
     add_subdirectory(samples/cpp/Model/PriceLevelBookSample)
     add_subdirectory(samples/cpp/OnDemand/OnDemandSample)
     add_subdirectory(samples/cpp/Schedule/ScheduleSample)
+
+    include(cmake/Portals.cmake)
+    dxfcxx_add_portals(DXFCXX_PORTALS_ENABLED)
+
+    if (DXFCXX_PORTALS_ENABLED)
+        add_subdirectory(samples/cpp/Model/MarketDepthModelSample)
+    endif ()
 
     include(cmake/UiSamples.cmake)
     dxfcxx_check_ui_samples(DXFCXX_UI_SAMPLES_ENABLED)

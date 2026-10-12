@@ -1,0 +1,19 @@
+{
+  "license": "Unicode-3.0; full notice in Unicode-LICENSE.txt",
+  "retrieved_on": "2026-10-07",
+  "files": [
+    {
+      "name": "GraphemeBreakTest-18.0.0.txt",
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/auxiliary/GraphemeBreakTest.txt",
+      "sha256": "b0cf047ee94485bbdc846de2b902f5f8a815f6b674f9d04223cddadd91c9df31",
+      "bytes": 137090
+    },
+    {
+      "name": "Unicode-LICENSE.txt",
+      "url": "https://www.unicode.org/license.txt",
+      "sha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+      "bytes": 1995
+    }
+  ],
+  "unicode_version": "18.0.0"
+}

@@ -1,0 +1,3 @@
+add_executable(portals_dashboard main.cpp)
+target_link_libraries(portals_dashboard PRIVATE portals::core)
+portals_enable_warnings(portals_dashboard)
