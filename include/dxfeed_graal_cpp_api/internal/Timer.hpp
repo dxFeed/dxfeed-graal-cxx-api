@@ -40,10 +40,11 @@ struct DXFCPP_EXPORT Timer final {
     static std::shared_ptr<Timer> schedule(F &&f, Delay &&delay, Period &&period) {
         auto t = std::shared_ptr<Timer>(new Timer());
 
+        // Set before the thread starts, so that stop() called right after schedule() is not lost.
+        t->isRunning_ = true;
         t->future_ = std::make_unique<std::future<void>>(std::async(
             std::launch::async,
             [self = t](auto &&function, auto &&d, auto &&p) {
-                self->isRunning_ = true;
                 self->interruptableSleep(toMilliseconds(d));
 
                 while (self->isRunning_) {
@@ -61,10 +62,11 @@ struct DXFCPP_EXPORT Timer final {
     template <typename F, typename Delay> static std::shared_ptr<Timer> runOnce(F &&f, Delay &&delay) {
         auto t = std::shared_ptr<Timer>(new Timer());
 
+        // Set before the thread starts, so that stop() called right after runOnce() is not lost.
+        t->isRunning_ = true;
         t->future_ = std::make_unique<std::future<void>>(std::async(
             std::launch::async,
             [self = t](auto &&function, auto &&d) {
-                self->isRunning_ = true;
                 self->interruptableSleep(toMilliseconds(d));
 
                 if (self->isRunning_) {

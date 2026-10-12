@@ -1,6 +1,7 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <atomic>
 #include <random>
 #include <string>
 #include <thread>
@@ -413,4 +414,86 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestStressBuySellOrders") {
 
     REQUIRE(buyOrders_.empty());
     REQUIRE(sellOrders_.empty());
+}
+
+// An incremental update with a nonzero aggregation period schedules the notification on a timer thread.
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestAggregationTimerNotifiesListener") {
+    std::atomic<std::size_t> calls{};
+    auto model = createBuilder()
+                     ->withAggregationPeriod(50ms)
+                     ->withListener([&](const auto &, const auto &) {
+                         ++calls;
+                     })
+                     ->build();
+
+    publishAndProcess(createOrder(0, Side::BUY, 1, 1, 0));
+
+    for (int i = 0; i < 200 && calls == 0; i++) {
+        std::this_thread::sleep_for(10ms);
+    }
+
+    REQUIRE_EQ(calls.load(), 1);
+}
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestNoListenerCallAfterClose") {
+    std::atomic<std::size_t> calls{};
+    auto model = createBuilder()
+                     ->withAggregationPeriod(300ms)
+                     ->withListener([&](const auto &, const auto &) {
+                         ++calls;
+                     })
+                     ->build();
+
+    publishAndProcess(createOrder(0, Side::BUY, 1, 1, 0));
+
+    // A slow run may let the timer fire before close(): only the calls after it count.
+    const auto callsBeforeClose = calls.load();
+
+    model->close();
+    std::this_thread::sleep_for(600ms);
+
+    REQUIRE_EQ(calls.load(), callsBeforeClose);
+}
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestModelDestroyedWithPendingAggregation") {
+    std::atomic<std::size_t> calls{};
+    auto model = createBuilder()
+                     ->withAggregationPeriod(300ms)
+                     ->withListener([&](const auto &, const auto &) {
+                         ++calls;
+                     })
+                     ->build();
+
+    publishAndProcess(createOrder(0, Side::BUY, 1, 1, 0));
+
+    const auto callsBeforeReset = calls.load();
+
+    model.reset();
+    std::this_thread::sleep_for(600ms);
+
+    REQUIRE_EQ(calls.load(), callsBeforeReset);
+}
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestCloseFromListener") {
+    std::atomic<std::size_t> calls{};
+    std::shared_ptr<MarketDepthModel<Order>> model{};
+
+    model = createBuilder()
+                ->withAggregationPeriod(50ms)
+                ->withListener([&](const auto &, const auto &) {
+                    ++calls;
+                    model->close();
+                })
+                ->build();
+
+    publishAndProcess(createOrder(0, Side::BUY, 1, 1, 0));
+
+    for (int i = 0; i < 200 && calls == 0; i++) {
+        std::this_thread::sleep_for(10ms);
+    }
+
+    publishAndProcess(createOrder(1, Side::BUY, 2, 1, 0));
+    std::this_thread::sleep_for(200ms);
+
+    REQUIRE_EQ(calls.load(), 1);
 }

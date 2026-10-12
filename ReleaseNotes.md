@@ -1,3 +1,7 @@
+* **\[MDAPI-NNN]\[C++]** Fixed `MarketDepthModel` with a nonzero aggregation period: `close()` now cancels the
+  pending notification, the listener is not called after `close()` or after the model is destroyed, and the listener
+  can call the model (`close()` included) without a deadlock.
+  [#124](https://github.com/dxFeed/dxfeed-graal-cxx-api/issues/124)
 * **\[MDAPI-433]\[C++]** Added `scripts/release.cmake` (CMake only) and `scripts/release.py` (Python), which prepare a
   release: they set the version in all the places and the heading of `ReleaseNotes.md` (for the pre-releases `-alphaN`,
   `-betaN`, `-preN` and `-rcN` too), commit and tag it, and with `--push` push the branch and the tag; `-draftN` is a
