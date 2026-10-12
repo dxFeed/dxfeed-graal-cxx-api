@@ -124,7 +124,12 @@ TEST_CASE("Events are delivered from a loopback PUBLISHER to a FEED over TCP") {
     const auto publisherEndpoint = DXEndpoint::create(DXEndpoint::Role::PUBLISHER);
     const auto feedEndpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
 
+    // The PUBLISHER starts listening asynchronously and is CONNECTED once it listens. A FEED refused before that
+    // reconnects only after 10-20 s, so the FEED connects only after that.
     publisherEndpoint->connect(":" + port + "[bindAddr=127.0.0.1]");
+    REQUIRE(test::waitUntil([&] {
+        return publisherEndpoint->getState() == DXEndpoint::State::CONNECTED;
+    }));
     feedEndpoint->connect("127.0.0.1:" + port);
     REQUIRE(test::waitUntil([&] {
         return feedEndpoint->getState() == DXEndpoint::State::CONNECTED;
