@@ -3,152 +3,49 @@
 
 name: CI
 
+# A pull request runs the short set: the `pullRequest` rows of .github/ci/build-matrix.json and the other jobs except
+# the network tests. The full matrix runs on a push to main or release/*, nightly, on a manual run, and on a pull
+# request with the `full-ci` label (adding the label starts it).
 on:
   pull_request:
+    types: [ opened, synchronize, reopened, labeled ]
+  push:
+    branches: [ main, 'release/**' ]
+  schedule:
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
+  # The short set of the pull requests or the full matrix, both from .github/ci/build-matrix.json.
+  plan:
+    if: ${{ github.event.action != 'labeled' || github.event.label.name == 'full-ci' }}
+    runs-on: ubuntu-24.04
+    outputs:
+      full: ${{ steps.plan.outputs.full }}
+      build: ${{ steps.plan.outputs.build }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: .github/ci
+
+      - name: Select the matrix
+        id: plan
+        env:
+          FULL: ${{ github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci') }}
+        run: |
+          echo "full=$FULL" >> "$GITHUB_OUTPUT"
+          echo "build=$(python3 .github/ci/build_matrix.py "$([ "$FULL" = true ] && echo full || echo pr)")" >> "$GITHUB_OUTPUT"
+
   build:
+    needs: plan
     strategy:
       fail-fast: false
       matrix:
-        config:
-          - name: win2022-vs2022
-            image: windows-2022
-            os: windows
-            cores: 4
-            cc: 'cl'
-            cxx: 'cl'
-          - name: win2025-vs2026
-            image: windows-2025-vs2026
-            os: windows
-            cores: 4
-            cc: 'cl'
-            cxx: 'cl'
-          - name: macos-15-intel-xcode-16-4
-            image: macos-15-intel
-            os: macos
-            cores: 4
-            xcode: '16.4'
-            cc: 'clang'
-            cxx: 'clang++'
-          - name: ubuntu-24.04-clang-22
-            image: ubuntu-24.04
-            os: linux
-            cores: 4
-            cc: 'clang-22'
-            cxx: 'clang++-22'
-            llvm_version: '22'
-          - name: ubuntu-24.04-clang-21
-            image: ubuntu-24.04
-            os: linux
-            cores: 4
-            cc: 'clang-21'
-            cxx: 'clang++-21'
-            llvm_version: '21'
-#          - name: ubuntu-24.04-clang-20
-#            image: ubuntu-24.04
-#            os: linux
-#            cores: 4
-#            cc: 'clang-20'
-#            cxx: 'clang++-20'
-#            llvm_version: '20'
-#          - name: ubuntu-24.04-clang-19
-#            image: ubuntu-24.04
-#            os: linux
-#            cores: 4
-#            cc: 'clang-19'
-#            cxx: 'clang++-19'
-#            llvm_version: '19'
-          - name: ubuntu-24.04-clang-18
-            image: ubuntu-24.04
-            os: linux
-            cores: 4
-            cc: 'clang-18'
-            cxx: 'clang++-18'
-          - name: ubuntu-24.04-gcc-16
-            image: ubuntu-24.04
-            os: linux
-            cores: 4
-            cc: 'gcc-16'
-            cxx: 'g++-16'
-            gcc_version: '16'
-#          - name: ubuntu-24.04-gcc-15
-#            image: ubuntu-24.04
-#            os: linux
-#            cores: 4
-#            cc: 'gcc-15'
-#            cxx: 'g++-15'
-#            gcc_version: '15'
-          - name: ubuntu-24.04-gcc-14
-            image: ubuntu-24.04
-            os: linux
-            cores: 4
-            cc: 'gcc-14'
-            cxx: 'g++-14'
-#          - name: ubuntu-24.04-gcc-12
-#            image: ubuntu-24.04
-#            os: linux
-#            cores: 4
-#            cc: 'gcc-12'
-#            cxx: 'g++-12'
-          - name: ubuntu-22.04-gcc-11
-            image: ubuntu-22.04
-            os: linux
-            cores: 4
-            cc: 'gcc-11'
-            cxx: 'g++-11'
-          - name: macos-15-xcode-16-4
-            image: macos-15
-            os: macos
-            cores: 3
-            xcode: '16.4'
-            cc: 'clang'
-            cxx: 'clang++'
-#        buildType: [ Release, Debug, RelWithDebInfo ]
-        buildType: [ Release, Debug]
-        sanitizers: [ NO_SAN, ASAN, UBSAN ]
-        # The prebuilt Intel Graal Native SDK uses the legacy macOS directory
-        # ABI and is not compatible with the Xcode sanitizer runtime.
-        exclude:
-          # MSVC does not support UndefinedBehaviorSanitizer.
-          - config:
-              name: win2022-vs2022
-              image: windows-2022
-              os: windows
-              cores: 4
-              cc: 'cl'
-              cxx: 'cl'
-            sanitizers: UBSAN
-          - config:
-              name: win2025-vs2026
-              image: windows-2025-vs2026
-              os: windows
-              cores: 4
-              cc: 'cl'
-              cxx: 'cl'
-            sanitizers: UBSAN
-          - config:
-              name: macos-15-intel-xcode-16-4
-              image: macos-15-intel
-              os: macos
-              cores: 4
-              xcode: '16.4'
-              cc: 'clang'
-              cxx: 'clang++'
-            sanitizers: ASAN
-          - config:
-              name: macos-15-intel-xcode-16-4
-              image: macos-15-intel
-              os: macos
-              cores: 4
-              xcode: '16.4'
-              cc: 'clang'
-              cxx: 'clang++'
-            sanitizers: UBSAN
+        include: ${{ fromJSON(needs.plan.outputs.build) }}
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
     runs-on: ${{ matrix.config.image }}
@@ -290,6 +187,7 @@ jobs:
         run: ctest -C ${{matrix.buildType}} --extra-verbose --output-on-failure --parallel ${{matrix.config.cores}}
 
   release-script:
+    needs: plan
     name: "release-script-tests"
     runs-on: ubuntu-24.04
 
@@ -304,6 +202,7 @@ jobs:
         run: cmake -P scripts/tests/test_release.cmake
 
   tsan:
+    needs: plan
     name: "ubuntu-24.04-clang-18-RelWithDebInfo-TSAN"
     runs-on: ubuntu-24.04
 
@@ -335,6 +234,7 @@ jobs:
 
   # Every public header must compile on its own, and the whole project must build without precompiled headers.
   headers:
+    needs: plan
     strategy:
       fail-fast: false
       matrix:
@@ -400,6 +300,8 @@ jobs:
   # Smoke tests against demo.dxfeed.com (CTest label "network"). They depend on an external service, so a failure
   # does not fail the workflow; the other unit tests do not use external network.
   network-tests:
+    needs: plan
+    if: ${{ needs.plan.outputs.full == 'true' }}
     name: "ubuntu-24.04-clang-18-Release-network-tests"
     runs-on: ubuntu-24.04
     continue-on-error: true
@@ -430,6 +332,7 @@ jobs:
   # are fixed: today most test executables do not link because StringLike is not exported, and entities registered
   # from inline/template code land in a separate registry per module. Linux and macOS pass; see MDAPI-427.
   dynamic-link-tests:
+    needs: plan
     strategy:
       fail-fast: false
       matrix:
