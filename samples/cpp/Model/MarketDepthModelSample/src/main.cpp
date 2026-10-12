@@ -7,15 +7,14 @@
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <portals.hpp>
+#include <portals/legacy.hpp>
 #include <vector>
 
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
-namespace ot = org::ttldtor;
-namespace otp = org::ttldtor::portals;
+namespace otp = portals::legacy;
 
 auto drawHeader() {
     std::cout << fmt::format("{:=^78}\n", "");
@@ -47,7 +46,7 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
 }
 
 int main(int /*argc*/, char * /*argv*/[]) {
-    ot::VirtualTerminal::enable();
+    otp::VirtualTerminal::enable();
     otp::hideCursor();
 
     try {

@@ -1,0 +1,3 @@
+add_executable(portals_custom_widget main.cpp)
+target_link_libraries(portals_custom_widget PRIVATE portals::core)
+portals_enable_warnings(portals_custom_widget)

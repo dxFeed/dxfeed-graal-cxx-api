@@ -1,0 +1,16 @@
+/* Copyright (c) 2026 ttldtor.
+ * SPDX-License-Identifier: BSL-1.0
+ */
+
+.mermaidgraph {
+  margin: 1.5em 0;
+}
+
+.mermaidgraph img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  background: white;
+  border-radius: 6px;
+}

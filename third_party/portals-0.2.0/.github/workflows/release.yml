@@ -1,0 +1,492 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing vMAJOR.MINOR.PATCH or vMAJOR.MINOR.PATCH-rcN tag
+        required: true
+        type: string
+      publish:
+        description: Publish the verified assets as a GitHub release
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+env:
+  CMAKE_GENERATOR: Ninja
+  CMAKE_BUILD_PARALLEL_LEVEL: '2'
+  HEADLESS_EXCLUSION: '^portals\.line-edit\.native$'
+  DOXYGEN_VERSION: '1.18.0'
+  NODE_VERSION: '24'
+  MERMAID_VERSION: '12.0.0'
+  PYTHON_VERSION: '3.12'
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.select.outputs.tag }}
+      commit: ${{ steps.resolve.outputs.commit }}
+      publish: ${{ steps.select.outputs.publish }}
+    steps:
+      - name: Validate tag input before checkout
+        id: select
+        env:
+          REQUESTED_TAG: ${{ inputs.tag || github.ref_name }}
+          PUBLISH: ${{ github.event_name == 'push' || inputs.publish }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          tag = os.environ['REQUESTED_TAG']
+          if not re.fullmatch(r'v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(?:-rc[1-9][0-9]*)?', tag):
+              raise SystemExit('Invalid release tag')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write(f'tag={tag}\npublish={os.environ["PUBLISH"]}\n')
+          PY
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Resolve existing tag and require main ancestry
+        id: resolve
+        env:
+          RELEASE_TAG: ${{ steps.select.outputs.tag }}
+        run: |
+          python3 - <<'PY'
+          import os, subprocess
+          tag = os.environ['RELEASE_TAG']
+          commit = subprocess.check_output(['git', 'rev-parse', '--verify', '--end-of-options', f'refs/tags/{tag}^{{commit}}'], text=True).strip()
+          subprocess.run(['git', 'merge-base', '--is-ancestor', commit, 'refs/remotes/origin/main'], check=True)
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write(f'commit={commit}\n')
+          PY
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ steps.resolve.outputs.commit }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check version and extract release notes from the tag commit
+        env:
+          RELEASE_TAG: ${{ steps.select.outputs.tag }}
+        run: >-
+          python3 tools/release/metadata.py prepare
+          --tag "$RELEASE_TAG" --repository "$GITHUB_REPOSITORY"
+          --source "$GITHUB_WORKSPACE" --output-dir "$RUNNER_TEMP/release-metadata"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-metadata
+          path: ${{ runner.temp }}/release-metadata
+          if-no-files-found: error
+          retention-days: 14
+
+  naming:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ needs.prepare.outputs.commit }}
+          persist-credentials: false
+      - name: Install naming checker toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-20 clang-tidy-20 g++-14 ninja-build
+      - name: Configure naming compilation database
+        run: >-
+          cmake -S . -B build/naming -G Ninja -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=clang-20 -DCMAKE_CXX_COMPILER=clang++-20
+          -DCMAKE_CXX_FLAGS=--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/14
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPORTALS_BUILD_TESTS=ON
+          -DPORTALS_BUILD_EXAMPLES=ON
+      - name: Check project names
+        run: python3 tools/check_naming.py build/naming --clang-tidy clang-tidy-20
+
+  validation:
+    name: Validate ${{ matrix.toolchain }} / ${{ matrix.configuration }}
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            platform: windows
+            toolchain: msvc
+            c_compiler: cl
+            cxx_compiler: cl
+            configuration: Debug
+            msvc_runtime: MultiThreadedDebug
+            toolchain_packages: ''
+          - os: windows-2022
+            platform: windows
+            toolchain: msvc
+            c_compiler: cl
+            cxx_compiler: cl
+            configuration: Release
+            msvc_runtime: MultiThreaded
+            toolchain_packages: ''
+          - os: ubuntu-24.04
+            platform: linux
+            toolchain: gcc14
+            c_compiler: gcc-14
+            cxx_compiler: g++-14
+            configuration: Debug
+            msvc_runtime: ''
+            toolchain_packages: gcc-14 g++-14 ninja-build
+          - os: ubuntu-24.04
+            platform: linux
+            toolchain: gcc14
+            c_compiler: gcc-14
+            cxx_compiler: g++-14
+            configuration: Release
+            msvc_runtime: ''
+            toolchain_packages: gcc-14 g++-14 ninja-build
+    runs-on: ${{ matrix.os }}
+    env:
+      RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+      RELEASE_COMMIT: ${{ needs.prepare.outputs.commit }}
+      RELEASE_PLATFORM: ${{ matrix.platform }}
+      TOOLCHAIN: ${{ matrix.toolchain }}
+      C_COMPILER: ${{ matrix.c_compiler }}
+      CXX_COMPILER: ${{ matrix.cxx_compiler }}
+      BUILD_CONFIGURATION: ${{ matrix.configuration }}
+      MSVC_RUNTIME_LIBRARY: ${{ matrix.msvc_runtime }}
+      TOOLCHAIN_PACKAGES: ${{ matrix.toolchain_packages }}
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ needs.prepare.outputs.commit }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install the matrix toolchain
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ($env:TOOLCHAIN_PACKAGES.Split(' '))
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Configure x64 MSVC environment
+        if: runner.os == 'Windows'
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $vs = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vs) { throw 'MSVC installation not found' }
+          Import-Module "$vs/Common7/Tools/Microsoft.VisualStudio.DevShell.dll"
+          Enter-VsDevShell -VsInstallPath $vs -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          foreach ($name in @('PATH', 'INCLUDE', 'LIB', 'LIBPATH')) {
+            "$name=$([Environment]::GetEnvironmentVariable($name))" >> $env:GITHUB_ENV
+          }
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Configure the explicit compiler and configuration
+        run: >-
+          cmake -S "$env:GITHUB_WORKSPACE" -B "$env:RUNNER_TEMP/validation-build"
+          -G "$env:CMAKE_GENERATOR" "-DCMAKE_BUILD_TYPE=$env:BUILD_CONFIGURATION"
+          "-DCMAKE_C_COMPILER=$env:C_COMPILER" "-DCMAKE_CXX_COMPILER=$env:CXX_COMPILER"
+          "-DCMAKE_MSVC_RUNTIME_LIBRARY=$env:MSVC_RUNTIME_LIBRARY"
+          -DPORTALS_BUILD_TESTS=ON -DPORTALS_BUILD_EXAMPLES=ON
+          -DPORTALS_BUILD_TOOLS=ON -DPORTALS_BUILD_DOCS=OFF -DPORTALS_BUILD_FUZZERS=OFF
+      - name: Build
+        run: cmake --build "$env:RUNNER_TEMP/validation-build" --config $env:BUILD_CONFIGURATION --parallel $env:CMAKE_BUILD_PARALLEL_LEVEL
+      - name: Run the full headless suite and installed consumers
+        run: >-
+          ctest --test-dir "$env:RUNNER_TEMP/validation-build" -C $env:BUILD_CONFIGURATION
+          --output-on-failure --no-tests=error -E $env:HEADLESS_EXCLUSION
+      - name: Record the successful validation gate
+        run: |
+          New-Item -ItemType Directory -Path "$env:RUNNER_TEMP/validation" | Out-Null
+          @{
+            schema_version = 1
+            tag = $env:RELEASE_TAG
+            commit = $env:RELEASE_COMMIT
+            platform = $env:RELEASE_PLATFORM
+            toolchain = $env:TOOLCHAIN
+            c_compiler = $env:C_COMPILER
+            cxx_compiler = $env:CXX_COMPILER
+            configuration = $env:BUILD_CONFIGURATION
+            headless = 'passed'
+          } | ConvertTo-Json | Set-Content -Encoding utf8 "$env:RUNNER_TEMP/validation/$env:TOOLCHAIN-$env:BUILD_CONFIGURATION.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: validation-${{ matrix.toolchain }}-${{ matrix.configuration }}
+          path: ${{ runner.temp }}/validation
+          if-no-files-found: error
+          retention-days: 14
+
+  package:
+    name: Package ${{ matrix.toolchain }} / ${{ matrix.configuration }}
+    needs: [prepare, validation, naming]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            platform: windows
+            toolchain: msvc
+            c_compiler: cl
+            cxx_compiler: cl
+            configuration: Release
+            msvc_runtime: MultiThreaded
+            toolchain_packages: ''
+            archive_extension: zip
+            doxygen_archive_suffix: windows.x64.bin.zip
+            doxygen_executable: doxygen.exe
+            doxygen_sha256: e84f54cfd49ef06b0b16536056dbec0c496323de28abcce53a4269463de35eaf
+          - os: ubuntu-24.04
+            platform: linux
+            toolchain: gcc14
+            c_compiler: gcc-14
+            cxx_compiler: g++-14
+            configuration: Release
+            msvc_runtime: ''
+            toolchain_packages: gcc-14 g++-14 ninja-build
+            archive_extension: tar.gz
+            doxygen_archive_suffix: linux.bin.tar.gz
+            doxygen_executable: doxygen
+            doxygen_sha256: 14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90
+    runs-on: ${{ matrix.os }}
+    env:
+      RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+      RELEASE_COMMIT: ${{ needs.prepare.outputs.commit }}
+      RELEASE_PLATFORM: ${{ matrix.platform }}
+      TOOLCHAIN: ${{ matrix.toolchain }}
+      C_COMPILER: ${{ matrix.c_compiler }}
+      CXX_COMPILER: ${{ matrix.cxx_compiler }}
+      BUILD_CONFIGURATION: ${{ matrix.configuration }}
+      MSVC_RUNTIME_LIBRARY: ${{ matrix.msvc_runtime }}
+      TOOLCHAIN_PACKAGES: ${{ matrix.toolchain_packages }}
+      ARCHIVE_EXTENSION: ${{ matrix.archive_extension }}
+      DOXYGEN_ARCHIVE_SUFFIX: ${{ matrix.doxygen_archive_suffix }}
+      DOXYGEN_EXECUTABLE: ${{ matrix.doxygen_executable }}
+      DOXYGEN_SHA256: ${{ matrix.doxygen_sha256 }}
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ needs.prepare.outputs.commit }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install the matrix toolchain
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ($env:TOOLCHAIN_PACKAGES.Split(' '))
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Configure x64 MSVC environment
+        if: runner.os == 'Windows'
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $vs = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vs) { throw 'MSVC installation not found' }
+          Import-Module "$vs/Common7/Tools/Microsoft.VisualStudio.DevShell.dll"
+          Enter-VsDevShell -VsInstallPath $vs -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          foreach ($name in @('PATH', 'INCLUDE', 'LIB', 'LIBPATH')) {
+            "$name=$([Environment]::GetEnvironmentVariable($name))" >> $env:GITHUB_ENV
+          }
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install checksum-pinned Doxygen
+        run: |
+          $archiveName = "doxygen-$env:DOXYGEN_VERSION.$env:DOXYGEN_ARCHIVE_SUFFIX"
+          $releaseName = 'Release_' + $env:DOXYGEN_VERSION.Replace('.', '_')
+          $toolDirectory = "$env:RUNNER_TEMP/doxygen"
+          New-Item -ItemType Directory -Path $toolDirectory | Out-Null
+          $archive = "$toolDirectory/$archiveName"
+          Invoke-WebRequest "https://github.com/doxygen/doxygen/releases/download/$releaseName/$archiveName" -OutFile $archive
+          if ((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $env:DOXYGEN_SHA256) { throw 'Doxygen checksum mismatch' }
+          Push-Location $toolDirectory
+          try {
+            cmake -E tar xf $archive
+            if ($LASTEXITCODE) { throw 'Doxygen extraction failed' }
+          } finally { Pop-Location }
+          $binaries = @(Get-ChildItem -LiteralPath $toolDirectory -Recurse -File | Where-Object Name -EQ $env:DOXYGEN_EXECUTABLE)
+          if ($binaries.Count -ne 1) { throw 'Expected one Doxygen executable' }
+          $version = & $binaries[0].FullName --version
+          if ($LASTEXITCODE -or -not $version.StartsWith($env:DOXYGEN_VERSION)) { throw 'Unexpected Doxygen version' }
+          $binaries[0].DirectoryName >> $env:GITHUB_PATH
+      - name: Install pinned Mermaid
+        run: |
+          npm install --global "@mermaid-js/mermaid-cli@$env:MERMAID_VERSION"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Configure Mermaid Chromium only for this renderer
+        if: runner.os == 'Linux'
+        run: |
+          $rendererDirectory = "$env:RUNNER_TEMP/mermaid-renderer"
+          New-Item -ItemType Directory -Path $rendererDirectory | Out-Null
+          '{"args":["--no-sandbox"]}' | Set-Content -Encoding utf8 "$rendererDirectory/puppeteer.json"
+          $mmdcPath = (Get-Command mmdc -ErrorAction Stop).Source
+          if ($mmdcPath.Contains("'") -or $rendererDirectory.Contains("'")) { throw 'Unexpected quote in tool path' }
+          $wrapper = "#!/bin/sh`nexec '$mmdcPath' --puppeteerConfigFile '$rendererDirectory/puppeteer.json' " + '"$@"' + "`n"
+          [IO.File]::WriteAllText("$rendererDirectory/mmdc", $wrapper)
+          chmod +x "$rendererDirectory/mmdc"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $rendererDirectory >> $env:GITHUB_PATH
+      - name: Resolve compiler paths
+        run: |
+          "C_COMPILER_PATH=$((Get-Command $env:C_COMPILER -ErrorAction Stop).Source)" >> $env:GITHUB_ENV
+          "CXX_COMPILER_PATH=$((Get-Command $env:CXX_COMPILER -ErrorAction Stop).Source)" >> $env:GITHUB_ENV
+          "PYTHON_EXECUTABLE=$((Get-Command python -ErrorAction Stop).Source)" >> $env:GITHUB_ENV
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: validation-${{ matrix.toolchain }}-*
+          path: ${{ runner.temp }}/validation
+          merge-multiple: true
+      - name: Build and verify the immutable Release bundle
+        run: >-
+          cmake "-DSOURCE_DIR=$env:GITHUB_WORKSPACE" "-DSOURCE_REVISION=$env:RELEASE_COMMIT"
+          "-DWORK_DIR=$env:RUNNER_TEMP/bundle-work"
+          "-DOUTPUT_ARCHIVE=$env:RUNNER_TEMP/release-assets/portals-$env:RELEASE_TAG-$env:RELEASE_PLATFORM-x64-release.$env:ARCHIVE_EXTENSION"
+          "-DGENERATOR=$env:CMAKE_GENERATOR" "-DPARALLEL=$env:CMAKE_BUILD_PARALLEL_LEVEL"
+          "-DC_COMPILER=$env:C_COMPILER_PATH" "-DCXX_COMPILER=$env:CXX_COMPILER_PATH"
+          "-DMSVC_RUNTIME_LIBRARY=$env:MSVC_RUNTIME_LIBRARY" "-DPYTHON_EXECUTABLE=$env:PYTHON_EXECUTABLE"
+          -P tools/package/bundle.cmake
+      - name: Package source, documentation and the checked platform manifest
+        env:
+          PAGES_DIR: ${{ matrix.platform == 'linux' && format('{0}/pages', runner.temp) || '' }}
+        run: >-
+          cmake "-DSOURCE_DIR=$env:GITHUB_WORKSPACE" "-DSOURCE_REVISION=$env:RELEASE_COMMIT"
+          "-DRELEASE_TAG=$env:RELEASE_TAG" "-DPLATFORM=$env:RELEASE_PLATFORM"
+          "-DTOOLCHAIN=$env:TOOLCHAIN"
+          "-DCONFIGURATION=$env:BUILD_CONFIGURATION"
+          "-DPAYLOAD_DIR=$env:RUNNER_TEMP/bundle-work/portals-mvp-$env:RELEASE_PLATFORM-x64-release"
+          "-DOUTPUT_DIR=$env:RUNNER_TEMP/release-assets" "-DWORK_DIR=$env:RUNNER_TEMP/release-package"
+          "-DPAGES_DIR=$env:PAGES_DIR" "-DGENERATOR=$env:CMAKE_GENERATOR"
+          "-DPARALLEL=$env:CMAKE_BUILD_PARALLEL_LEVEL" "-DC_COMPILER=$env:C_COMPILER_PATH" "-DCXX_COMPILER=$env:CXX_COMPILER_PATH"
+          "-DDEBUG_GATE_RECEIPT=$env:RUNNER_TEMP/validation/$env:TOOLCHAIN-Debug.json"
+          "-DRELEASE_GATE_RECEIPT=$env:RUNNER_TEMP/validation/$env:TOOLCHAIN-Release.json"
+          -P tools/release/package.cmake
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-assets-${{ matrix.platform }}
+          path: ${{ runner.temp }}/release-assets
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: matrix.platform == 'linux'
+        with:
+          name: release-pages
+          path: ${{ runner.temp }}/pages
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+
+  assemble:
+    needs: [prepare, package]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ needs.prepare.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Verify release preparation, metadata and publication contracts
+        run: |
+          python3 tests/release_metadata.py
+          python3 tests/release_publish.py
+          pwsh --version
+          python3 tests/release_start.py
+      - name: Install the explicit packaging fixture toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-14 g++-14 ninja-build
+      - name: Verify CMake release packaging contracts
+        env:
+          C_COMPILER: gcc-14
+          CXX_COMPILER: g++-14
+        run: >-
+          cmake "-DTEST_ROOT_DIR=$RUNNER_TEMP/release-package-tests"
+          "-DC_COMPILER=$C_COMPILER" "-DCXX_COMPILER=$CXX_COMPILER"
+          "-DGENERATOR=$CMAKE_GENERATOR" -P tests/release_package.cmake
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: release-assets-*
+          path: ${{ runner.temp }}/publication
+          merge-multiple: true
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-metadata
+          path: ${{ runner.temp }}/publication
+      - name: Assemble checksums and final manifest without publication
+        env:
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+          RELEASE_COMMIT: ${{ needs.prepare.outputs.commit }}
+        run: >-
+          python3 tools/release/publish.py --directory "$RUNNER_TEMP/publication"
+          --repository "$GITHUB_REPOSITORY" --tag "$RELEASE_TAG" --commit "$RELEASE_COMMIT"
+          --dry-run
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-candidate
+          path: ${{ runner.temp }}/publication
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    needs: [prepare, assemble]
+    if: needs.prepare.outputs.publish == 'true'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    concurrency:
+      group: portals-release-publication
+      cancel-in-progress: false
+    outputs:
+      latest: ${{ steps.publish.outputs.latest }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ needs.prepare.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-candidate
+          path: ${{ runner.temp }}/publication
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Publish complete draft and preserve stable latest policy
+        id: publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+          RELEASE_COMMIT: ${{ needs.prepare.outputs.commit }}
+        run: >-
+          python3 tools/release/publish.py --directory "$RUNNER_TEMP/publication"
+          --repository "$GITHUB_REPOSITORY" --tag "$RELEASE_TAG" --commit "$RELEASE_COMMIT"
+          --github-output "$GITHUB_OUTPUT"
+
+  pages:
+    needs: [prepare, publish]
+    if: needs.publish.outputs.latest == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/docs.yml
+    with:
+      tag: ${{ needs.prepare.outputs.tag }}
+      commit: ${{ needs.prepare.outputs.commit }}
+      artifact: release-pages

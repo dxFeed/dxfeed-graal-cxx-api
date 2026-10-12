@@ -1,0 +1,203 @@
+name: Documentation Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing stable tag that is the current GitHub latest release
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      commit:
+        required: true
+        type: string
+      artifact:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  CMAKE_GENERATOR: Ninja
+  C_COMPILER: gcc-14
+  CXX_COMPILER: g++-14
+  BUILD_CONFIGURATION: Release
+  CMAKE_BUILD_PARALLEL_LEVEL: '2'
+  TOOLCHAIN_PACKAGES: gcc-14 g++-14 ninja-build
+  DOXYGEN_VERSION: '1.18.0'
+  DOXYGEN_ARCHIVE_SUFFIX: linux.bin.tar.gz
+  DOXYGEN_SHA256: 14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90
+  NODE_VERSION: '24'
+  MERMAID_VERSION: '12.0.0'
+  PYTHON_VERSION: '3.12'
+
+concurrency:
+  group: portals-documentation-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.select.outputs.tag }}
+    steps:
+      - name: Validate stable tag before checkout
+        id: select
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          tag = os.environ['RELEASE_TAG']
+          if not re.fullmatch(r'v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)', tag):
+              raise SystemExit('Pages requires an explicit stable tag')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write(f'tag={tag}\n')
+          PY
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Resolve tag, main ancestry and current stable latest
+        id: resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.select.outputs.tag }}
+          EXPECTED_COMMIT: ${{ inputs.commit }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          tag = os.environ['RELEASE_TAG']
+          latest = json.loads(subprocess.check_output(['gh', 'api', f'repos/{os.environ["GITHUB_REPOSITORY"]}/releases/latest'], text=True))
+          if latest['tag_name'] != tag or latest['prerelease'] or latest['draft']:
+              raise SystemExit('Only the current stable latest release can deploy Pages')
+          commit = subprocess.check_output(['git', 'rev-parse', '--verify', '--end-of-options', f'refs/tags/{tag}^{{commit}}'], text=True).strip()
+          subprocess.run(['git', 'merge-base', '--is-ancestor', commit, 'refs/remotes/origin/main'], check=True)
+          if os.environ['EXPECTED_COMMIT'] and commit != os.environ['EXPECTED_COMMIT']:
+              raise SystemExit('Release tag moved after publication')
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write(f'commit={commit}\n')
+          PY
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        if: inputs.artifact != ''
+        with:
+          name: ${{ inputs.artifact }}
+          path: ${{ runner.temp }}/site
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        if: inputs.artifact == ''
+        with:
+          ref: ${{ steps.resolve.outputs.commit }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        if: inputs.artifact == ''
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install the explicit documentation toolchain
+        if: inputs.artifact == ''
+        shell: pwsh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ($env:TOOLCHAIN_PACKAGES.Split(' '))
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Install checksum-pinned Doxygen
+        if: inputs.artifact == ''
+        shell: pwsh
+        run: |
+          $archiveName = "doxygen-$env:DOXYGEN_VERSION.$env:DOXYGEN_ARCHIVE_SUFFIX"
+          $releaseName = 'Release_' + $env:DOXYGEN_VERSION.Replace('.', '_')
+          $toolDirectory = "$env:RUNNER_TEMP/doxygen"
+          New-Item -ItemType Directory -Path $toolDirectory | Out-Null
+          $archive = "$toolDirectory/$archiveName"
+          Invoke-WebRequest "https://github.com/doxygen/doxygen/releases/download/$releaseName/$archiveName" -OutFile $archive
+          if ((Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant() -ne $env:DOXYGEN_SHA256) { throw 'Doxygen checksum mismatch' }
+          Push-Location $toolDirectory
+          try {
+            cmake -E tar xf $archive
+            if ($LASTEXITCODE) { throw 'Doxygen extraction failed' }
+          } finally { Pop-Location }
+          $binaries = @(Get-ChildItem -LiteralPath $toolDirectory -Recurse -File | Where-Object Name -EQ 'doxygen')
+          if ($binaries.Count -ne 1) { throw 'Expected one Doxygen executable' }
+          $version = & $binaries[0].FullName --version
+          if ($LASTEXITCODE -or -not $version.StartsWith($env:DOXYGEN_VERSION)) { throw 'Unexpected Doxygen version' }
+          $binaries[0].DirectoryName >> $env:GITHUB_PATH
+      - name: Install pinned Mermaid
+        if: inputs.artifact == ''
+        shell: pwsh
+        run: |
+          npm install --global "@mermaid-js/mermaid-cli@$env:MERMAID_VERSION"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Configure Mermaid Chromium only for this renderer
+        if: inputs.artifact == ''
+        shell: pwsh
+        run: |
+          $rendererDirectory = "$env:RUNNER_TEMP/mermaid-renderer"
+          New-Item -ItemType Directory -Path $rendererDirectory | Out-Null
+          '{"args":["--no-sandbox"]}' | Set-Content -Encoding utf8 "$rendererDirectory/puppeteer.json"
+          $mmdcPath = (Get-Command mmdc -ErrorAction Stop).Source
+          if ($mmdcPath.Contains("'") -or $rendererDirectory.Contains("'")) { throw 'Unexpected quote in tool path' }
+          $wrapper = "#!/bin/sh`nexec '$mmdcPath' --puppeteerConfigFile '$rendererDirectory/puppeteer.json' " + '"$@"' + "`n"
+          [IO.File]::WriteAllText("$rendererDirectory/mmdc", $wrapper)
+          chmod +x "$rendererDirectory/mmdc"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $rendererDirectory >> $env:GITHUB_PATH
+      - name: Configure documentation from the explicit release commit
+        if: inputs.artifact == ''
+        shell: pwsh
+        run: >-
+          cmake -S "$env:GITHUB_WORKSPACE" -B "$env:RUNNER_TEMP/documentation"
+          -G "$env:CMAKE_GENERATOR" "-DCMAKE_BUILD_TYPE=$env:BUILD_CONFIGURATION"
+          "-DCMAKE_C_COMPILER=$env:C_COMPILER" "-DCMAKE_CXX_COMPILER=$env:CXX_COMPILER"
+          -DPORTALS_BUILD_TESTS=OFF -DPORTALS_BUILD_EXAMPLES=OFF -DPORTALS_BUILD_TOOLS=OFF
+          -DPORTALS_BUILD_DOCS=ON -DPORTALS_BUILD_FUZZERS=OFF
+      - name: Build documentation
+        if: inputs.artifact == ''
+        shell: pwsh
+        run: cmake --build "$env:RUNNER_TEMP/documentation" --config $env:BUILD_CONFIGURATION --target portals_docs --parallel $env:CMAKE_BUILD_PARALLEL_LEVEL
+      - name: Stage the complete HTML and Mermaid SVG for Pages
+        if: inputs.artifact == ''
+        shell: pwsh
+        run: |
+          $html = "$env:RUNNER_TEMP/documentation/docs/html"
+          if (-not @(Get-ChildItem -LiteralPath $html -Recurse -File -Filter '*.svg').Count) { throw 'No Mermaid SVG was generated' }
+          [IO.File]::WriteAllText("$html/.nojekyll", '')
+          cmake -E copy_directory $html "$env:RUNNER_TEMP/site"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Verify HTML links before Pages upload
+        run: python3 tools/docs/check_links.py "$RUNNER_TEMP/site"
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: ${{ runner.temp }}/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Recheck latest immediately before deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.build.outputs.tag }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          latest = json.loads(subprocess.check_output(['gh', 'api', f'repos/{os.environ["GITHUB_REPOSITORY"]}/releases/latest'], text=True))
+          if latest['tag_name'] != os.environ['RELEASE_TAG'] or latest['prerelease'] or latest['draft']:
+              raise SystemExit('Stable latest changed; refusing stale Pages deployment')
+          PY
+      - uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+        id: deployment

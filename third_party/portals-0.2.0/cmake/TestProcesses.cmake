@@ -1,0 +1,15 @@
+# Apply only to executable targets in this test-enabled Portals build tree.
+# The core library and consumers built with PORTALS_BUILD_TESTS=OFF are untouched.
+function(portals_configure_test_processes directory)
+  get_property(targets DIRECTORY "${directory}" PROPERTY BUILDSYSTEM_TARGETS)
+  foreach(target IN LISTS targets)
+    get_target_property(kind "${target}" TYPE)
+    if(kind STREQUAL "EXECUTABLE")
+      target_sources("${target}" PRIVATE "${PROJECT_SOURCE_DIR}/tests/support/no_dialogs.cpp")
+    endif()
+  endforeach()
+  get_property(children DIRECTORY "${directory}" PROPERTY SUBDIRECTORIES)
+  foreach(child IN LISTS children)
+    portals_configure_test_processes("${child}")
+  endforeach()
+endfunction()

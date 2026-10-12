@@ -1,0 +1,80 @@
+# Install the current build, move it, and consume only the moved prefix.
+function(runStep)
+  execute_process(COMMAND ${ARGV} RESULT_VARIABLE result)
+  if(NOT result EQUAL 0)
+    message(FATAL_ERROR "Package test command failed (${result}): ${ARGV}")
+  endif()
+endfunction()
+
+foreach(required IN ITEMS SOURCE_DIR BINARY_DIR GENERATOR CXX_COMPILER)
+  if(NOT DEFINED ${required} OR "${${required}}" STREQUAL "")
+    message(FATAL_ERROR "Package install test requires ${required}")
+  endif()
+endforeach()
+
+# Fresh directories avoid removing unrelated user files or previous evidence.
+string(RANDOM LENGTH 12 ALPHABET 0123456789abcdef runId)
+get_filename_component(binaryRoot "${BINARY_DIR}" ABSOLUTE)
+set(testRoot "${binaryRoot}/package-install-${CONFIG}-${runId}")
+set(prefix "${testRoot}/original prefix")
+set(relocated "${testRoot}/relocated package é")
+set(consumerSource "${testRoot}/consumer source")
+set(consumerBuild "${testRoot}/consumer build")
+foreach(path IN ITEMS "${prefix}" "${relocated}" "${consumerSource}" "${consumerBuild}")
+  cmake_path(IS_PREFIX binaryRoot "${path}" NORMALIZE insideBuild)
+  if(NOT insideBuild)
+    message(FATAL_ERROR "Package test path escapes its build directory: ${path}")
+  endif()
+endforeach()
+file(MAKE_DIRECTORY "${prefix}" "${consumerSource}")
+
+if(DEFINED INSTALL_CONFIGS)
+  foreach(installConfig IN LISTS INSTALL_CONFIGS)
+    runStep("${CMAKE_COMMAND}" --build "${BINARY_DIR}" --config "${installConfig}" --target portals_core)
+    runStep("${CMAKE_COMMAND}" --install "${BINARY_DIR}" --config "${installConfig}" --prefix "${prefix}")
+  endforeach()
+else()
+  runStep("${CMAKE_COMMAND}" --install "${BINARY_DIR}" --config "${CONFIG}" --prefix "${prefix}")
+endif()
+file(RENAME "${prefix}" "${relocated}")
+include("${SOURCE_DIR}/tools/package/common.cmake")
+bundleStageConsumer("${SOURCE_DIR}" "${consumerSource}")
+
+set(configureArgs -S "${consumerSource}" -B "${consumerBuild}" -G "${GENERATOR}"
+  "-DCMAKE_BUILD_TYPE=${CONFIG}" "-DCMAKE_CXX_COMPILER=${CXX_COMPILER}"
+  "-DCMAKE_PREFIX_PATH=${relocated}"
+  -DCMAKE_FIND_USE_PACKAGE_REGISTRY=OFF -DCMAKE_FIND_USE_SYSTEM_PACKAGE_REGISTRY=OFF
+  -DCMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=ON)
+foreach(setting IN ITEMS MAKE_PROGRAM GENERATOR_PLATFORM GENERATOR_TOOLSET MSVC_RUNTIME_LIBRARY)
+  if(DEFINED ${setting} AND NOT "${${setting}}" STREQUAL "")
+    list(APPEND configureArgs "-DCMAKE_${setting}=${${setting}}")
+  endif()
+endforeach()
+runStep("${CMAKE_COMMAND}" ${configureArgs})
+
+file(GLOB_RECURSE exportedFiles "${relocated}/*.cmake")
+foreach(exported IN LISTS exportedFiles)
+  file(READ "${exported}" contents)
+  foreach(forbidden IN ITEMS "${SOURCE_DIR}" "${BINARY_DIR}" "${prefix}" "/W4" "/permissive-"
+      "-Wall" "-Wextra" "-Wpedantic" "UTF8PROC_STATIC" "vendor/utf8proc")
+    string(FIND "${contents}" "${forbidden}" found)
+    if(NOT found EQUAL -1)
+      message(FATAL_ERROR "Non-relocatable/private setting in ${exported}: ${forbidden}")
+    endif()
+  endforeach()
+endforeach()
+
+function(runConsumerConfig config)
+  runStep("${CMAKE_COMMAND}" --build "${consumerBuild}" --config "${config}")
+  runStep("${CMAKE_CTEST_COMMAND}" --test-dir "${consumerBuild}" -C "${config}"
+    --output-on-failure --no-tests=error -V)
+endfunction()
+
+if(DEFINED INSTALL_CONFIGS)
+  foreach(consumerConfig IN LISTS INSTALL_CONFIGS)
+    runConsumerConfig("${consumerConfig}")
+  endforeach()
+else()
+  runConsumerConfig("${CONFIG}")
+endif()
+message(STATUS "Relocated consumer verified; evidence retained in ${testRoot}")
