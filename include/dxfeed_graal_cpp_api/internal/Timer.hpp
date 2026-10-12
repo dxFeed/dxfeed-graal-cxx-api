@@ -10,6 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <chrono>
 #include <deque>
 #include <future>
+#include <thread>
 #include <type_traits>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -17,6 +18,8 @@ DXFCPP_BEGIN_NAMESPACE
 /// A simple thread-safe timer.
 struct DXFCPP_EXPORT Timer final {
     private:
+    // Not used: the task runs on a detached thread. A std::async future here kept the timer alive forever (the future
+    // holds the task, the task holds the timer) and could not be released on the timer's own thread. Kept for the ABI.
     std::unique_ptr<std::future<void>> future_;
     std::atomic<bool> isRunning_{};
 
@@ -31,6 +34,18 @@ struct DXFCPP_EXPORT Timer final {
         }
     }
 
+    // An exception of the task is not propagated (it was kept in the never-read std::async future); a periodic task
+    // stops after it, as before. Returns false on an exception.
+    template <typename F> static bool runTask(F &function) noexcept {
+        try {
+            function();
+
+            return true;
+        } catch (...) {
+            return false;
+        }
+    }
+
     public:
     void interruptableSleep(std::chrono::milliseconds ms) const;
 
@@ -42,19 +57,21 @@ struct DXFCPP_EXPORT Timer final {
 
         // Set before the thread starts, so that stop() called right after schedule() is not lost.
         t->isRunning_ = true;
-        t->future_ = std::make_unique<std::future<void>>(std::async(
-            std::launch::async,
-            [self = t](auto &&function, auto &&d, auto &&p) {
-                self->interruptableSleep(toMilliseconds(d));
+        // The thread holds the timer until it ends; the timer is freed when the caller has released it too.
+        std::thread([self = t, function = std::forward<F>(f), d = toMilliseconds(delay),
+                     p = toMilliseconds(period)]() mutable {
+            self->interruptableSleep(d);
 
-                while (self->isRunning_) {
-                    function();
-                    self->interruptableSleep(toMilliseconds(p));
+            while (self->isRunning_) {
+                if (!runTask(function)) {
+                    break;
                 }
 
-                self->isRunning_ = false;
-            },
-            std::forward<F>(f), std::forward<Delay>(delay), std::forward<Period>(period)));
+                self->interruptableSleep(p);
+            }
+
+            self->isRunning_ = false;
+        }).detach();
 
         return t;
     }
@@ -64,17 +81,15 @@ struct DXFCPP_EXPORT Timer final {
 
         // Set before the thread starts, so that stop() called right after runOnce() is not lost.
         t->isRunning_ = true;
-        t->future_ = std::make_unique<std::future<void>>(std::async(
-            std::launch::async,
-            [self = t](auto &&function, auto &&d) {
-                self->interruptableSleep(toMilliseconds(d));
+        // The thread holds the timer until it ends; the timer is freed when the caller has released it too.
+        std::thread([self = t, function = std::forward<F>(f), d = toMilliseconds(delay)]() mutable {
+            self->interruptableSleep(d);
 
-                if (self->isRunning_) {
-                    function();
-                    self->isRunning_ = false;
-                }
-            },
-            std::forward<F>(f), std::forward<Delay>(delay)));
+            if (self->isRunning_) {
+                runTask(function);
+                self->isRunning_ = false;
+            }
+        }).detach();
 
         return t;
     }
