@@ -2,7 +2,8 @@
 # SPDX-License-Identifier: MPL-2.0
 
 # Adds Portals (the terminal output of MarketDepthModelSample) when the toolchain can build it: CMake 3.24 or newer and
-# a C++23 compiler and standard library with <expected> and <format>. Otherwise prints one status line and adds
+# a C++23 compiler and standard library with std::expected, std::format, std::move_only_function and std::stop_token
+# (Apple libc++ of Xcode 16 has no std::stop_token and std::move_only_function). Otherwise prints one status line and adds
 # nothing, so the library and the other samples keep their CMake 3.21 and C++20 requirements.
 # Uses third_party/portals-<PORTALS_VERSION> when it is present, otherwise the pinned commit from GitHub. Its targets are
 # EXCLUDE_FROM_ALL: they are built only for the sample and are not installed.
@@ -23,17 +24,22 @@ function(dxfcxx_add_portals result_var)
         check_cxx_source_compiles([[
             #include <expected>
             #include <format>
+            #include <functional>
+            #include <stop_token>
             #include <string>
 
             int main() {
                 std::expected<int, std::string> value = 1;
+                std::stop_source source;
+                std::stop_callback callback(source.get_token(), [] {});
+                std::move_only_function<int()> function = [] { return 1; };
 
-                return std::format("{}", *value) == "1" ? 0 : 1;
+                return std::format("{}", *value) == "1" && function() == 1 ? 0 : 1;
             }
-        ]] DXFCXX_HAVE_CXX23_EXPECTED_AND_FORMAT)
+        ]] DXFCXX_HAVE_CXX23_FOR_PORTALS)
 
-        if (NOT DXFCXX_HAVE_CXX23_EXPECTED_AND_FORMAT)
-            set(reason "no std::expected or std::format in the C++23 standard library of ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+        if (NOT DXFCXX_HAVE_CXX23_FOR_PORTALS)
+            set(reason "no std::expected, std::format, std::move_only_function or std::stop_token in the C++23 standard library of ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
         endif ()
     endif ()
 
