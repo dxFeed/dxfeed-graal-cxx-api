@@ -89,11 +89,7 @@ template <typename M> struct TapeModelFixture {
     std::int64_t receivedSentinels{};
 
     static std::shared_ptr<DXEndpoint> createEndpoint(const std::shared_ptr<InPlaceExecutor> &executor) {
-        auto e = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::STREAM_FEED)->build();
-
-        e->executor(executor);
-
-        return e;
+        return DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::STREAM_FEED)->withExecutor(executor)->build();
     }
 
     TapeModelFixture(bool isBatch, bool isSnapshot) : isBatchProcessing(isBatch), isSnapshotProcessing(isSnapshot) {
