@@ -50,6 +50,10 @@ set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "e2471afa26ac4f1a3eca52e734cd45
 set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "9d5a19d1b4a162c3dfdd1276a34c0329957c7d9acd0668fc4b36a4b81046e7cf")
 set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "83e27fa92f10427d926194db4afa4428b9079153b836df052ce071f6b21d563f")
 set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "4d9546107fe1b56e029e1d04f157dafc0c5a177a1cf09c8e543d7f2c78bf9c69")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt "1e793cfe9ce3294edab48da3c953ffec7e9fa215b5582f86d3b60c309627b506")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt "36f194bb780df0f9ec4649ba61b9e79c842c7ab5778e194596c370302afd20b1")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib "1d68afb169fbe91ea6713231f29d94d85516e079419682da8e7d18784dc21689")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib "126470f52ba24d422fb8fafea8755eaeedb16d1b3b10681f9d5b763bdb01bce6")
 set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "b34208de8c9dfe49449101614779c2c886279da19dc473591eaab30c3879fb78")
 set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "e05a0770406e90acb6792af75f17910230d602bb693be7ef6c934c06068d9ddc")
 set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "4b22f687f0be428f4958ae6ed39950f70ccb635f1d9fc44db97ae1aaffb5ba42")
@@ -189,13 +193,43 @@ else ()
                     set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-debug)
                 endif ()
 
+                # The static runtime on Windows: the SDK DLL with the static CRT, and the static library of the SDK that
+                # is only installed (both archives define the target DxFeedGraalNativeSdk).
+                if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
+                    if (DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS "3.9.0")
+                        message(FATAL_ERROR "DXFCXX_LINK_STATIC_RUNTIME needs the Graal Native SDK 3.9.0 or newer (the static-crt and static-lib archives), not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+                    endif ()
+
+                    set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-lib)
+                    set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-crt)
+                endif ()
+
+                set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE_URL_PREFIX ${DXFEED_GRAAL_NATIVE_SDK_URL})
                 set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}.zip)
                 set(DXFEED_GRAAL_NATIVE_SDK_URL_HASH "")
+                set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_URL_HASH "")
 
                 if (DXFEED_GRAAL_NATIVE_SDK_VERSION STREQUAL DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION)
                     set(DXFEED_GRAAL_NATIVE_SDK_URL_HASH URL_HASH SHA256=${DXFEED_GRAAL_NATIVE_SDK_SHA256_${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}})
+
+                    if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+                        set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_URL_HASH URL_HASH SHA256=${DXFEED_GRAAL_NATIVE_SDK_SHA256_${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE}})
+                    endif ()
                 else ()
                     message(WARNING "No SHA-256 for the Graal Native SDK ${DXFEED_GRAAL_NATIVE_SDK_VERSION} (known: ${DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION}): the downloaded archive is not verified")
+                endif ()
+
+                if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+                    # SOURCE_SUBDIR without CMakeLists.txt: download and extract only.
+                    FetchContent_Declare(
+                            DxFeedGraalNativeSdkStaticLib
+                            URL ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE_URL_PREFIX}-${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE}.zip
+                            ${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_URL_HASH}
+                            SOURCE_SUBDIR no-cmake-project
+                            USES_TERMINAL_DOWNLOAD TRUE
+                            DOWNLOAD_NO_EXTRACT FALSE
+                    )
+                    FetchContent_MakeAvailable(DxFeedGraalNativeSdkStaticLib)
                 endif ()
 
                 FetchContent_Declare(
@@ -212,6 +246,10 @@ else ()
 
     FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
     # DxFeedGraalNativeSdk_SOURCE_DIR
+endif ()
+
+if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME AND NOT DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+    message(WARNING "DXFCXX_LINK_STATIC_RUNTIME: the Graal Native SDK is not taken from the releases page, so its C runtime and its static library are up to the given SDK")
 endif ()
 
 
@@ -597,6 +635,8 @@ add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
     # set_target_properties(${PROJECT_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
     SetupStaticRuntimeMSVC(${PROJECT_NAME}_static ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
+    # The DLL links the static CRT itself, so no /NODEFAULTLIB.
+    SetupStaticRuntimeMSVC(${PROJECT_NAME} ${DXFCXX_LINK_STATIC_RUNTIME} OFF)
 endif ()
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
@@ -857,6 +897,19 @@ if (DXFCXX_INSTALL)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
         # The public headers include <bits/bits.hpp>.
         install(DIRECTORY "${bits_SOURCE_DIR}/include/" DESTINATION "include")
+
+        # The -static-mt archives: _static.lib links either with the SDK import library and DLL, or with the static
+        # library of the SDK and the Windows libraries of link-flags.txt.
+        if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
+            install(FILES $<TARGET_LINKER_FILE:DxFeedGraalNativeSdk> DESTINATION lib)
+
+            if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+                install(FILES
+                        "${dxfeedgraalnativesdkstaticlib_SOURCE_DIR}/DxFeedGraalNativeSdk_static.lib"
+                        "${dxfeedgraalnativesdkstaticlib_SOURCE_DIR}/link-flags.txt"
+                        DESTINATION lib)
+            endif ()
+        endif ()
     endif ()
 
     install(FILES "DEPENDENCIES.md" "LICENSE" "README.md" "ReleaseNotes.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
