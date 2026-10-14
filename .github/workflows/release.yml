@@ -78,7 +78,8 @@ jobs:
       matrix:
         config:
           - name: win-vs2022
-            image: windows-latest
+            # VS 2022: the static libraries of the archives link with VS 2022 and newer.
+            image: windows-2022
             os: windows
             cores: 4
             cc: 'cl'
@@ -512,11 +513,64 @@ jobs:
             build-bundle/*.zip
           if-no-files-found: error
 
+  # The -static-mt archives need no Visual C++ Redistributable: no DLL imports the dynamic C runtime, and the check
+  # program linked in the three ways of the archive (.github/ci/static-mt-check) runs in a container without it.
+  check_static_mt:
+    name: "win-vs2022: Check the -static-mt archives"
+    needs: [ get_version, build_package_and_upload ]
+    # The container tag must match the host OS.
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{needs.get_version.outputs.tag_name}}
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          path: static-mt
+          pattern: artifacts-lib-win-vs2022-*-mt
+          merge-multiple: true
+
+      - name: Link the check program
+        shell: cmd
+        run: |
+          for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do call "%%i\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          mkdir unpacked
+          for %%z in (static-mt\*-static-mt.zip) do tar -xf "%%z" -C unpacked || exit /b 1
+          for %%t in (Release Debug RelWithDebInfo) do (
+            for /d %%d in (unpacked\*-%%t-static-mt) do (
+              call .github\ci\static-mt-check\check.cmd "%%d" check\%%t || exit /b 1
+            )
+            if not exist check\%%t\single\check.exe (
+              echo FAIL: no %%t -static-mt archive
+              exit /b 1
+            )
+          )
+
+      - name: Run the check program on the host
+        shell: pwsh
+        run: |
+          foreach ($type in 'Release', 'Debug', 'RelWithDebInfo') {
+            ./.github/ci/static-mt-check/run.ps1 "check/$type"
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+
+      - name: Run the check program in Windows Server Core without the Redistributable
+        shell: cmd
+        run: >
+          docker run --rm
+          -v "${{github.workspace}}\check\Release:C:\check"
+          -v "${{github.workspace}}\.github\ci\static-mt-check:C:\ci"
+          mcr.microsoft.com/windows/servercore:ltsc2022
+          powershell -NoProfile -ExecutionPolicy Bypass -Command
+          "if (Test-Path C:\Windows\System32\vcruntime140.dll) { Write-Output 'FAIL: the image has the Redistributable'; exit 1 };
+          & C:\ci\run.ps1 C:\check; exit $LASTEXITCODE"
+
   publish_release:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}
     runs-on: ubuntu-latest
     name: Publish Release
-    needs: [ get_version, build_package_and_upload, build_full_src_bundle_and_upload, build_docs_and_upload_and_deploy_gh_pages ]
+    needs: [ get_version, build_package_and_upload, build_full_src_bundle_and_upload, build_docs_and_upload_and_deploy_gh_pages, check_static_mt ]
     permissions:
       actions: read
       contents: write
