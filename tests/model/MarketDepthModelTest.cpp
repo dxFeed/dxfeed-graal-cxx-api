@@ -202,8 +202,7 @@ class MarketDepthModelTestFixture {
     public:
     MarketDepthModelTestFixture() {
         executor_ = InPlaceExecutor::create();
-        endpoint_ = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);
-        endpoint_->executor(executor_);
+        endpoint_ = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB)->withExecutor(executor_)->build();
         feed_ = endpoint_->getFeed();
         publisher_ = endpoint_->getPublisher();
         model_ = createBuilder()->build();

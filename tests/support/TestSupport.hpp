@@ -88,21 +88,15 @@ struct LocalHubFixture {
           feed(endpoint->getFeed()), publisher(endpoint->getPublisher()) {
     }
 
-    // The executor must be set before the feed is obtained: the feed keeps the executor it was created with, and
-    // DXEndpoint::executor() shuts down the default one (tasks are then rejected with RejectedExecutionException).
     static std::shared_ptr<DXEndpoint> createEndpoint(const std::shared_ptr<InPlaceExecutor> &executor,
                                                       const std::unordered_map<std::string, std::string> &properties) {
-        auto builder = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB);
+        auto builder = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB)->withExecutor(executor);
 
         for (const auto &[key, value] : properties) {
             builder = builder->withProperty(key, value);
         }
 
-        auto endpoint = builder->build();
-
-        endpoint->executor(executor);
-
-        return endpoint;
+        return builder->build();
     }
 
     ~LocalHubFixture() {
