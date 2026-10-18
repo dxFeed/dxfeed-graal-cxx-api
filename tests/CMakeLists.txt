@@ -34,6 +34,7 @@ if (DXFCXX_BUILD_BENCHMARKS)
 endif ()
 
 set(DXFC_TEST_SOURCES
+        api/CandleAttributesTest.cpp
         api/CandleSymbolTest.cpp
         api/DataIntegrityTest.cpp
         api/DXFeedTest.cpp

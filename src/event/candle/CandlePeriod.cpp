@@ -4,19 +4,42 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandlePeriod.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleType.hpp"
 
+#include "../../internal/utils/JavaUtils.hpp"
+
 DXFCPP_BEGIN_NAMESPACE
 
-CandlePeriod::CandlePeriod(double value, const CandleType &type) noexcept : value_{value}, type_{type} {
+namespace {
+
+// Java CandlePeriod.toString(): the type alone for the value 1, a long when the value equals its (long) cast,
+// otherwise Double.toString of the value.
+std::string toJavaString(double value, const CandleType &type) {
+    if (math::exactlyEquals(value, 1.0)) {
+        return type.toString();
+    }
+
+    const auto longValue = java::longCast(value);
+
+    if (math::exactlyEquals(value, static_cast<double>(longValue))) {
+        return std::to_string(longValue) + type.toString();
+    }
+
+    return java::doubleToString(value) + type.toString();
 }
 
-CandlePeriod::CandlePeriod() noexcept {
+} // namespace
+
+CandlePeriod::CandlePeriod(double value, const CandleType &type)
+    : value_{value}, type_{type}, string_{toJavaString(value_, type_)} {
+}
+
+CandlePeriod::CandlePeriod() : CandlePeriod(0.0, CandleType{}) {
 }
 
 CandlePeriod::~CandlePeriod() noexcept {
 }
 
 std::int64_t CandlePeriod::getPeriodIntervalMillis() const noexcept {
-    return static_cast<std::int64_t>(static_cast<double>(type_.getPeriodIntervalMillis()) * value_);
+    return java::longCast(static_cast<double>(type_.getPeriodIntervalMillis()) * value_);
 }
 
 std::string CandlePeriod::changeAttributeForSymbol(const StringLike &symbol) const {
@@ -33,13 +56,6 @@ const CandleType &CandlePeriod::getType() const & noexcept {
 }
 
 const std::string &CandlePeriod::toString() const & {
-    if (string_.empty()) {
-        string_ = math::doubleEquals(value_, DEFAULT_PERIOD_VALUE) ? type_.toString()
-                  : math::isInt64(value_)
-                      ? std::to_string(static_cast<std::int64_t>(value_)) + "" + type_.toString()
-                      : dxfcpp::toString(value_) + "" + type_.toString();
-    }
-
     return string_;
 }
 
@@ -68,14 +84,18 @@ CandlePeriod CandlePeriod::parse(const StringLike &s) {
 
     const auto valueStr = sw.substr(0, i);
     const auto typeStr = sw.substr(i);
-    // ReSharper disable once CppFunctionalStyleCast
-    const auto value = valueStr.empty() ? 1.0 : double(s);
+    const auto value = valueStr.empty() ? std::optional<double>{1.0} : java::parseDouble(valueStr);
+
+    if (!value) {
+        throw InvalidArgumentException("Invalid candle period value: " + std::string(valueStr));
+    }
+
     const auto type = CandleType::parse(typeStr);
 
-    return valueOf(value, type.get());
+    return valueOf(*value, type.get());
 }
 
-CandlePeriod CandlePeriod::valueOf(double value, const CandleType &type) noexcept {
+CandlePeriod CandlePeriod::valueOf(double value, const CandleType &type) {
     if (math::exactlyEquals(value, 1.0) && type == CandleType::DAY) {
         return DAY;
     }
