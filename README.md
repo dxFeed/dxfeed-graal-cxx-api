@@ -204,8 +204,9 @@ not link the static libraries of the archive. Link the static C++ API in one of 
 | Single exe or dll       | `lib\dxFeedGraalCxxApi_static.lib`, `lib\DxFeedGraalNativeSdk_static.lib`, the libraries of `lib\link-flags.txt` | nothing                        |
 
 The single exe or dll depends only on Windows DLLs and adds about 55 MB. `lib\link-flags.txt` lists the Windows
-libraries one per line (`psapi.lib`, `winhttp.lib`, `ws2_32.lib`, etc.). The `Debug` archive contains the same SDK
-libraries as the other archives: they do not depend on the C runtime variant.
+libraries one per line (`psapi.lib`, `winhttp.lib`, `ws2_32.lib`, etc.), so `cl` takes it as a response file:
+`@lib\link-flags.txt`. The `Debug` archive contains the same SDK libraries as the other archives: they do not depend
+on the C runtime variant.
 
 Do not link with `dxFeedGraalCxxApi.dll` of these archives: with the static C runtime, the DLL and your code each have
 their own C runtime, and the interface of the C++ API passes standard library objects (`std::string`,
@@ -215,7 +216,6 @@ For example, a `build.cmd` run from the x64 Native Tools Command Prompt (`%1` is
 
 ```bat
 @echo off
-setlocal EnableDelayedExpansion
 set "A=%~f1"
 
 rem Static C++ API, SDK DLL
@@ -224,10 +224,8 @@ cl /nologo /std:c++20 /MT /EHsc /utf-8 /I "%A%\include" main.cpp "%A%\lib\dxFeed
 copy /y "%A%\bin\DxFeedGraalNativeSdk.dll" . >nul
 
 rem Single exe
-set "LIBS="
-for /f "usebackq delims=" %%l in ("%A%\lib\link-flags.txt") do set "LIBS=!LIBS! %%l"
 cl /nologo /std:c++20 /MT /EHsc /utf-8 /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
-    "%A%\lib\DxFeedGraalNativeSdk_static.lib" !LIBS! /Fe:main-single.exe
+    "%A%\lib\DxFeedGraalNativeSdk_static.lib" @"%A%\lib\link-flags.txt" /Fe:main-single.exe
 ```
 
 ## Usage

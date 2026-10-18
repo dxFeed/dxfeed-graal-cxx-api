@@ -7,7 +7,7 @@ rem    static - dxFeedGraalCxxApi_static.lib, the SDK import library and the SDK
 rem    single - dxFeedGraalCxxApi_static.lib and the static library of the SDK: one exe that depends only on system
 rem             DLLs and exports nothing.
 rem The archive of a Debug build is checked with /MTd. Running the programs is up to the caller.
-setlocal EnableDelayedExpansion
+setlocal
 set "ARCHIVE=%~f1"
 set "OUT=%~f2"
 set "SRC=%~dp0main.cpp"
@@ -33,9 +33,6 @@ set "MT=/MT"
 echo %ARCHIVE% | findstr /i /c:"-Debug-" >nul && set "MT=/MTd"
 set "CL_FLAGS=/nologo /std:c++20 %MT% /EHsc /O2 /utf-8 /I "%ARCHIVE%\include""
 
-set "SYSTEM_LIBS="
-for /f "usebackq delims=" %%l in ("%ARCHIVE%\lib\link-flags.txt") do set "SYSTEM_LIBS=!SYSTEM_LIBS! %%l"
-
 for %%w in (static single) do (
     if exist "%OUT%\%%w" rmdir /s /q "%OUT%\%%w"
     mkdir "%OUT%\%%w" || exit /b 1
@@ -44,7 +41,7 @@ for %%w in (static single) do (
 cl %CL_FLAGS% "%SRC%" "%ARCHIVE%\lib\dxFeedGraalCxxApi_static.lib" "%ARCHIVE%\lib\DxFeedGraalNativeSdk.lib" /Fo"%OUT%\static\\" /Fe"%OUT%\static\check.exe" || exit /b 1
 copy /y "%ARCHIVE%\bin\DxFeedGraalNativeSdk.dll" "%OUT%\static\" >nul || exit /b 1
 
-cl %CL_FLAGS% "%SRC%" "%ARCHIVE%\lib\dxFeedGraalCxxApi_static.lib" "%ARCHIVE%\lib\DxFeedGraalNativeSdk_static.lib" %SYSTEM_LIBS% /Fo"%OUT%\single\\" /Fe"%OUT%\single\check.exe" || exit /b 1
+cl %CL_FLAGS% "%SRC%" "%ARCHIVE%\lib\dxFeedGraalCxxApi_static.lib" "%ARCHIVE%\lib\DxFeedGraalNativeSdk_static.lib" @"%ARCHIVE%\lib\link-flags.txt" /Fo"%OUT%\single\\" /Fe"%OUT%\single\check.exe" || exit /b 1
 
 for %%w in (static single) do (
     call :no_dynamic_crt "%OUT%\%%w\check.exe" || exit /b 1
