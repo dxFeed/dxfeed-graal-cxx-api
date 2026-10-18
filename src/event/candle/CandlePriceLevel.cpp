@@ -5,6 +5,8 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
 
+#include "../../internal/utils/JavaUtils.hpp"
+
 #include <cmath>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -23,7 +25,7 @@ double CandlePriceLevel::getValue() const noexcept {
 }
 
 std::string CandlePriceLevel::toString() const {
-    return math::isInt64(value_) ? std::to_string(static_cast<std::int64_t>(value_)) : dxfcpp::toString(value_);
+    return java::longOrDoubleToString(value_);
 }
 
 bool CandlePriceLevel::operator==(const CandlePriceLevel &candlePriceLevel) const noexcept {
@@ -36,27 +38,18 @@ std::string CandlePriceLevel::changeAttributeForSymbol(const StringLike &symbol)
 }
 
 CandlePriceLevel CandlePriceLevel::parse(const StringLike &s) {
-    const auto string = std::string{s};
-    std::size_t parsedLength = 0;
+    const auto value = java::parseDouble(s.operator std::string_view());
 
-    try {
-        const auto value = std::stod(string, &parsedLength);
-
-        if (parsedLength != string.size()) {
-            throw InvalidArgumentException("Incorrect candle price level: " + string);
-        }
-
-        return valueOf(value);
-    } catch (const InvalidArgumentException &) {
-        throw;
-    } catch (const std::exception &) {
-        throw InvalidArgumentException("Incorrect candle price level: " + string);
+    if (!value) {
+        throw InvalidArgumentException("Incorrect candle price level: " + std::string(s));
     }
+
+    return valueOf(*value);
 }
 
 CandlePriceLevel CandlePriceLevel::valueOf(double value) {
     if (std::isinf(value) || (!std::isnan(value) && std::signbit(value))) {
-        throw InvalidArgumentException("Incorrect candle price level: " + dxfcpp::toString(value));
+        throw InvalidArgumentException("Incorrect candle price level: " + java::doubleToString(value));
     }
 
     return std::isnan(value) ? DEFAULT : CandlePriceLevel(value);

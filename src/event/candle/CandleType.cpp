@@ -7,7 +7,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-// The CandleType static fields are initialized in CandlePeriod.cpp
+// The CandleType static fields are initialized in CandleSymbol.cpp
 
 CandleType::CandleType(const StringLike &name, const StringLike &string, std::int64_t periodIntervalMillis) noexcept
     : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {

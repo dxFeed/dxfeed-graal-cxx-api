@@ -64,16 +64,14 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     static const std::string ATTRIBUTE_KEY; // empty string as an attribute key is allowed!
 
     private:
-    static const std::int64_t DEFAULT_PERIOD_VALUE = 1LL;
-
     double value_{};
     CandleType type_{};
-    mutable std::string string_{};
+    std::string string_{};
 
-    CandlePeriod(double value, const CandleType &type) noexcept;
+    CandlePeriod(double value, const CandleType &type);
 
     public:
-    CandlePeriod() noexcept;
+    CandlePeriod();
     ~CandlePeriod() noexcept override;
 
     /**
@@ -144,7 +142,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * @param type candle period type.
      * @return candle period with the given value and type.
      */
-    static CandlePeriod valueOf(double value, const CandleType &type) noexcept;
+    static CandlePeriod valueOf(double value, const CandleType &type);
 
     /**
      * Returns candle period of the given candle symbol string.

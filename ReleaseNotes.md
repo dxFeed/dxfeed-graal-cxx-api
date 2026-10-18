@@ -1,3 +1,14 @@
+* **\[MDAPI-430]\[C++]** **\[BREAKING]** `CandlePeriod` and `CandlePriceLevel` are parsed and printed as in Java.
+    * **\[BREAKING]** `CandlePeriod::parse()` and `CandlePriceLevel::parse()` follow Java `Double.parseDouble`: a sign
+      (`+5m`), the `d`/`f` suffix and hexadecimal values (`0x1p3`) of a price level are accepted, and parsing no longer
+      depends on the C locale. An invalid number throws `InvalidArgumentException`.
+    * `CandlePeriod::toString()` and `CandlePriceLevel::toString()` print values as Java does (`1.0E19m`, `1.0E-5m`,
+      `NaNm`, `Infinitym`). Values beyond the range of `std::int64_t` previously printed as wrong numbers.
+    * `CandlePeriod::getPeriodIntervalMillis()` saturates as the Java `(long)` cast does (NaN gives 0) instead of
+      causing undefined behaviour for large periods such as `1e30m`.
+    * Fixed a data race in `CandlePeriod::toString()`: the string is computed in the constructor.
+    * **\[BREAKING]** `CandlePeriod::valueOf()` and the `CandlePeriod` default constructor are no longer `noexcept`
+      (they build the string representation).
 * **\[MDAPI-429]\[C++]** **\[BREAKING]** Fixed `noexcept` functions that threw and the shared library (DLL) on Windows.
     * **\[BREAKING]** `OrderBase::getSource()`, `OrderBase::setExchangeCode(std::int16_t)` and the `withIndex()` /
       `withExchangeCode()` methods of `Order`, `SpreadOrder`, `AnalyticOrder` and `OtcMarketsOrder` are no longer
