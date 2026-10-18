@@ -258,6 +258,13 @@ std::string doubleToString(double value) {
     return result;
 }
 
+std::string longOrDoubleToString(double value) {
+    const auto longValue = longCast(value);
+
+    return math::exactlyEquals(value, static_cast<double>(longValue)) ? std::to_string(longValue)
+                                                                      : doubleToString(value);
+}
+
 } // namespace java
 
 DXFCPP_END_NAMESPACE

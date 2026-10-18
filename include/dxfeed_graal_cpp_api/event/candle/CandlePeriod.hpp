@@ -64,8 +64,6 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     static const std::string ATTRIBUTE_KEY; // empty string as an attribute key is allowed!
 
     private:
-    static const std::int64_t DEFAULT_PERIOD_VALUE = 1LL;
-
     double value_{};
     CandleType type_{};
     std::string string_{};

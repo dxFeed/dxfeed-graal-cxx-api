@@ -10,20 +10,14 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace {
 
-// Java CandlePeriod.toString(): the type alone for the value 1, a long when the value equals its (long) cast,
-// otherwise Double.toString of the value.
+// Java CandlePeriod.toString(): the type alone for the value 1, otherwise the value (a long when it equals its long
+// cast, otherwise Double.toString) followed by the type.
 std::string toJavaString(double value, const CandleType &type) {
     if (math::exactlyEquals(value, 1.0)) {
         return type.toString();
     }
 
-    const auto longValue = java::longCast(value);
-
-    if (math::exactlyEquals(value, static_cast<double>(longValue))) {
-        return std::to_string(longValue) + type.toString();
-    }
-
-    return java::doubleToString(value) + type.toString();
+    return java::longOrDoubleToString(value) + type.toString();
 }
 
 } // namespace

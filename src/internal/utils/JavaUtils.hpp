@@ -35,6 +35,12 @@ std::int64_t longCast(double value) noexcept;
  */
 std::string doubleToString(double value);
 
+/**
+ * Formats a double as the Java candle attributes do: `Long.toString((long) value)` when the value equals its long
+ * cast (`5`, `0`), otherwise `Double.toString(value)` (`1.5`, `NaN`).
+ */
+std::string longOrDoubleToString(double value);
+
 } // namespace java
 
 DXFCPP_END_NAMESPACE

@@ -153,6 +153,37 @@ TEST_CASE("CandlePriceLevel::valueOf should match Java") {
     }
 }
 
+// Checked against Java QD 3.356: Double.parseDouble trims all characters <= ' ' and takes a type suffix after an
+// exponent; CandlePeriod.parse reads the value only as far as its own grammar goes.
+TEST_CASE("Candle attributes should parse control-character trim and type suffixes as Java") {
+    const std::string tab = "\t", newLine = "\n";
+
+    CHECK(CandlePriceLevel::parse(tab + "5" + newLine).toString() == "5");
+    CHECK(CandlePriceLevel::parse("\n1.5\r").toString() == "1.5");
+    CHECK(CandlePriceLevel::parse(std::string("\x0b") + "2" + "\x1f").toString() == "2");
+    CHECK(CandlePriceLevel::parse("1e2d").toString() == "100");
+    CHECK(CandlePriceLevel::parse("1E2F").toString() == "100");
+    CHECK(CandlePriceLevel::parse("0x1p3f").toString() == "8");
+    CHECK(CandlePriceLevel::parse("0x1.8p1D").toString() == "3");
+
+    for (const char *input : {"1e2dd", "1e2 d", "0x1p3ff", "1 5", "\t\n"}) {
+        CAPTURE(std::string(input));
+        CHECK_THROWS_AS(CandlePriceLevel::parse(input), InvalidArgumentException);
+    }
+
+    for (const char *input : {"1e2dm", "0x1p3fm", "\t5m"}) {
+        CAPTURE(std::string(input));
+        CHECK_THROWS_AS(CandlePeriod::parse(input), InvalidArgumentException);
+    }
+}
+
+TEST_CASE("A default-constructed CandlePeriod should print its value") {
+    const CandlePeriod period{};
+
+    CHECK(period.toString() == "0");
+    CHECK(period.getPeriodIntervalMillis() == 0);
+}
+
 TEST_CASE("Candle attributes should not depend on the C locale") {
     const std::string saved = std::setlocale(LC_ALL, nullptr);
     const char *locale = nullptr;

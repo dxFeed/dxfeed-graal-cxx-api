@@ -3,7 +3,8 @@
 
 // Fuzz individual candle attribute parsers: CandlePeriod, CandlePriceLevel, CandleType, CandlePrice,
 // CandleSession, CandleAlignment. Invariants: no UB (float-cast-overflow in getPeriodIntervalMillis!),
-// toString() of a parsed value parses back to the same string (CandlePeriod with a finite value, CandlePriceLevel).
+// toString() of a parsed value parses back to the same string and value (CandlePeriod with a finite value,
+// CandlePriceLevel).
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <cmath>
@@ -48,9 +49,16 @@ extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t *data, std::size_t size
 
         // As in Java, NaN and infinite values print as "NaNm" or "Infinitym", which do not parse back.
         if (std::isfinite(p.getValue())) {
-            checkReparse("CandlePeriod", s, p.toString(), [](const std::string &str) {
+            const auto reparsed = checkReparse("CandlePeriod", s, p.toString(), [](const std::string &str) {
                 return CandlePeriod::parse(str).toString();
             });
+
+            // toString() keeps the exact value (Double.toString round-trips); only the sign of zero may be lost.
+            if (!math::exactlyEquals(CandlePeriod::parse(reparsed).getValue(), p.getValue())) {
+                std::fprintf(stderr, "CandlePeriod VALUE MISMATCH in='%s' toString='%s'\n", s.c_str(),
+                             reparsed.c_str());
+                __builtin_trap();
+            }
         }
     } catch (const std::exception &) {
     }

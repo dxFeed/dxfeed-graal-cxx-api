@@ -25,9 +25,7 @@ double CandlePriceLevel::getValue() const noexcept {
 }
 
 std::string CandlePriceLevel::toString() const {
-    const auto longValue = java::longCast(value_);
-
-    return math::exactlyEquals(value_, static_cast<double>(longValue)) ? std::to_string(longValue) : java::doubleToString(value_);
+    return java::longOrDoubleToString(value_);
 }
 
 bool CandlePriceLevel::operator==(const CandlePriceLevel &candlePriceLevel) const noexcept {
