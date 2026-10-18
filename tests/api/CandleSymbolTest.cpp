@@ -240,6 +240,17 @@ TEST_CASE("A copy of a CandleSymbol should keep the symbol and all attributes") 
         CHECK(other.getPeriod() == original.getPeriod());
         CHECK(other.getAlignment() == original.getAlignment());
         CHECK(other.getPriceLevel() == original.getPriceLevel());
+
+        // The copy holds the same fields as a symbol parsed from its string.
+        const auto reparsed = CandleSymbol::valueOf(other.toString());
+
+        CHECK(other.getBaseSymbol() == reparsed.getBaseSymbol());
+        CHECK(other.getExchange()->toString() == reparsed.getExchange()->toString());
+        CHECK(other.getPrice() == reparsed.getPrice());
+        CHECK(other.getSession() == reparsed.getSession());
+        CHECK(other.getPeriod() == reparsed.getPeriod());
+        CHECK(other.getAlignment() == reparsed.getAlignment());
+        CHECK(other.getPriceLevel() == reparsed.getPriceLevel());
     };
 
     CHECK(original.toString() == "EUR/USD&E{=2h,a=s,pl=0.5,price=bid,source=bank,tho=true}");
@@ -272,6 +283,8 @@ TEST_CASE("CandleSymbol normalization should keep a default attribute that the b
              {"IB{=1M,=x}}{pl=NaN}", "IB{=1M,=x}}{pl=NaN}"},
              {"A{price=bid}{=t,price=bid}", "A{price=bid}{price=bid}"},
              {"A{b=1}{price=last}", "A{b=1}{price=last}"},
+             {"A{=t,}", "A{=t,}"},
+             {"A{&}{=t}", "A{&}{=t}"},
          }) {
         CAPTURE(input);
 
