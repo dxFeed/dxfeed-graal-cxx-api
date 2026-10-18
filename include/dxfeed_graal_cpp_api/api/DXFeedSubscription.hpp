@@ -783,7 +783,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
  *
  * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
  */
-class DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSubscription>, public DXFeedSubscription {
+class DXFCPP_EXPORT DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSubscription>,
+                                                   public DXFeedSubscription {
     std::atomic<std::int64_t> fromTime_{std::numeric_limits<std::int64_t>::max()};
 
     static void registerEntity();
