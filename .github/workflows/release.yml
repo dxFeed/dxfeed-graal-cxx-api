@@ -514,7 +514,7 @@ jobs:
           if-no-files-found: error
 
   # The -static-mt archives need no Visual C++ Redistributable: no DLL imports the dynamic C runtime, and the check
-  # program linked in the three ways of the archive (.github/ci/static-mt-check) runs in a container without it.
+  # program linked in the two ways of the archive (.github/ci/static-mt-check) runs in a container without it.
   check_static_mt:
     name: "win-vs2022: Check the -static-mt archives"
     needs: [ get_version, build_package_and_upload ]

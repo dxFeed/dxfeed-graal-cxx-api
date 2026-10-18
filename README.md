@@ -195,17 +195,21 @@ use `RPATH`, `LD_LIBRARY_PATH`).
 
 The `dxFeedGraalCxxApi-<version>-x86_64-windows-<build type>-static-mt.zip` archives are built with the static C
 runtime and need no Visual C++ Redistributable. Compile your code with `/MT` (`/MTd` with the `Debug` archive) and
-`/std:c++20`, with Visual Studio 2022 or newer. The archive supports three ways to link:
+`/std:c++20`, with Visual Studio 2022 17.14 or newer (MSVC 14.44 or newer): an older linker or standard library does
+not link the static libraries of the archive. Link the static C++ API in one of two ways:
 
-| Way                       | Compile             | Link                                                                                                   | Ship next to your exe or dll                            |
-|---------------------------|---------------------|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------|
-| C++ API DLL               | `/DDXFCPP_USE_DLLS` | `lib\dxFeedGraalCxxApi.lib`                                                                            | `bin\dxFeedGraalCxxApi.dll`, `bin\DxFeedGraalNativeSdk.dll` |
-| Static C++ API, SDK DLL   |                     | `lib\dxFeedGraalCxxApi_static.lib`, `lib\DxFeedGraalNativeSdk.lib`                                     | `bin\DxFeedGraalNativeSdk.dll`                          |
-| Single exe or dll         |                     | `lib\dxFeedGraalCxxApi_static.lib`, `lib\DxFeedGraalNativeSdk_static.lib`, the libraries of `lib\link-flags.txt` | nothing                                        |
+| Way                     | Link                                                                                                             | Ship next to your exe or dll   |
+|-------------------------|------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| Static C++ API, SDK DLL | `lib\dxFeedGraalCxxApi_static.lib`, `lib\DxFeedGraalNativeSdk.lib`                                               | `bin\DxFeedGraalNativeSdk.dll` |
+| Single exe or dll       | `lib\dxFeedGraalCxxApi_static.lib`, `lib\DxFeedGraalNativeSdk_static.lib`, the libraries of `lib\link-flags.txt` | nothing                        |
 
-The single exe or dll depends only on Windows DLLs and adds about 55 MB. It needs Visual Studio 2022 17.13 or newer.
-`lib\link-flags.txt` lists the Windows libraries one per line (`psapi.lib`, `winhttp.lib`, `ws2_32.lib`, etc.). The
-`Debug` archive contains the same SDK libraries as the other archives: they do not depend on the C runtime variant.
+The single exe or dll depends only on Windows DLLs and adds about 55 MB. `lib\link-flags.txt` lists the Windows
+libraries one per line (`psapi.lib`, `winhttp.lib`, `ws2_32.lib`, etc.). The `Debug` archive contains the same SDK
+libraries as the other archives: they do not depend on the C runtime variant.
+
+Do not link with `dxFeedGraalCxxApi.dll` of these archives: with the static C runtime, the DLL and your code each have
+their own C runtime, and the interface of the C++ API passes standard library objects (`std::string`,
+`std::shared_ptr`, etc.) between them. The `Debug` C runtime stops on such objects with a debug heap assertion.
 
 For example, a `build.cmd` run from the x64 Native Tools Command Prompt (`%1` is the unpacked archive):
 
@@ -225,11 +229,6 @@ for /f "usebackq delims=" %%l in ("%A%\lib\link-flags.txt") do set "LIBS=!LIBS! 
 cl /nologo /std:c++20 /MT /EHsc /utf-8 /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
     "%A%\lib\DxFeedGraalNativeSdk_static.lib" !LIBS! /Fe:main-single.exe
 ```
-
-Known issue of the C++ API DLL on Windows: a process that loaded `dxFeedGraalCxxApi.dll` does not exit after `main()`
-returns, because the DLL shuts the SDK down while Windows unloads it. A plugin dll built this way hangs its host
-application on exit. Prefer the other two ways; otherwise end the process with `TerminateProcess(GetCurrentProcess(),
-code)` after closing the endpoints.
 
 ## Usage
 

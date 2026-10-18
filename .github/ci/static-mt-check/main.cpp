@@ -13,12 +13,6 @@
 #include <memory>
 #include <vector>
 
-#ifdef DXFCPP_USE_DLLS
-#    define WIN32_LEAN_AND_MEAN
-#    define NOMINMAX
-#    include <windows.h>
-#endif
-
 int main() {
     using namespace dxfcpp;
 
@@ -54,12 +48,6 @@ int main() {
 
         std::cout << "OK: " << result.get() << std::endl;
         endpoint->closeAndAwaitTermination();
-
-#ifdef DXFCPP_USE_DLLS
-        // Known issue: a process that uses the C++ API DLL hangs on exit (the isolate is torn down in
-        // DLL_PROCESS_DETACH). TerminateProcess skips DLL_PROCESS_DETACH.
-        TerminateProcess(GetCurrentProcess(), 0);
-#endif
 
     } catch (const RuntimeException &e) {
         std::cerr << "FAIL: " << e << '\n';

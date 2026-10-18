@@ -1,7 +1,7 @@
 # Copyright (c) 2026 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
-# Runs the check programs built by check.cmd: <dir>\<way>\check.exe for the ways dll, static and single. Each must
+# Runs the check programs built by check.cmd: <dir>\<way>\check.exe for the ways static and single. Each must
 # print "OK:" and exit with 0 in the given time.
 # Usage: run.ps1 <dir> [-TimeoutSeconds 60]
 param(
@@ -11,7 +11,7 @@ param(
 
 $failed = $false
 
-foreach ($way in 'dll', 'static', 'single') {
+foreach ($way in 'static', 'single') {
     $wayDir = Join-Path $Dir $way
     $out = Join-Path $wayDir 'out.txt'
     $err = Join-Path $wayDir 'err.txt'

@@ -3,13 +3,15 @@
     * The archives take the SDK DLL built with the static C runtime, and the C++ API DLL is built with `/MT` (`/MTd`).
     * The archives add `lib\DxFeedGraalNativeSdk.lib`, `lib\DxFeedGraalNativeSdk_static.lib` and
       `lib\link-flags.txt`: `dxFeedGraalCxxApi_static.lib` links either with the SDK DLL or with the static SDK
-      library into one exe or dll that depends only on Windows DLLs (Visual Studio 2022 17.13 or newer).
-    * The Windows archives are built with Visual Studio 2022 (v8.1.0 was built with Visual Studio 2026), so their
-      static libraries link with Visual Studio 2022 and newer.
-    * `StringLike` and `StringHash` are exported from `dxFeedGraalCxxApi.dll`: a program that uses the DLL failed to
-      link.
+      library into one exe or dll that depends only on Windows DLLs.
+    * Code built with `/MT` shall not link with `dxFeedGraalCxxApi.dll` of these archives: the DLL and the code each
+      have their own C runtime, and the C++ API passes standard library objects between them.
+    * The Windows archives are built with Visual Studio 2022 17.14 (v8.1.0 was built with Visual Studio 2026), so
+      their static libraries link with Visual Studio 2022 17.14 and newer.
+    * `StringLike`, `StringHash`, `EventFlagsMask`, `operator""_c` and `DXFeedTimeSeriesSubscription` are exported
+      from `dxFeedGraalCxxApi.dll`: a program that used them with the DLL failed to link.
     * The release workflow checks the archives: no DLL imports the dynamic C runtime, and a program linked in each of
-      the three ways runs in Windows Server Core without the Redistributable.
+      the two ways runs in Windows Server Core without the Redistributable.
     * Known issue: a process that uses `dxFeedGraalCxxApi.dll` on Windows does not exit after `main()` returns.
 * **\[MDAPI-438]\[C++]** Migrated to Graal SDK v3.9.0 (QDS 3.356).
     * Added `DXEndpoint::Builder::withExecutor()`: it sets the executor of the endpoint's notifications before the
