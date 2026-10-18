@@ -44,6 +44,9 @@ foreach ($way in 'dll', 'static', 'single') {
     }
 }
 
+# An explicit exit sets $LASTEXITCODE for the caller of "& run.ps1" (without it, $LASTEXITCODE stays as it was).
 if ($failed) {
     exit 1
 }
+
+exit 0
