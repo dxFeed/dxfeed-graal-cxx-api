@@ -291,6 +291,19 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::
                  const StringLike &key);
 
 /**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withExecutor` in isolation.
+ * @param builder The DXEndpoint::Builder's handle.
+ * @param executor The executor's handle.
+ *
+ * @throws InvalidArgumentException if DXEndpoint::Builder's handle or the executor's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void /* int32_t */
+withExecutor(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+             /* dxfg_executor_t * */ const JavaObjectHandle<dxfcpp::ExecutorTag> &executor);
+
+/**
  * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_build` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @return The DXEndpoint's handle.

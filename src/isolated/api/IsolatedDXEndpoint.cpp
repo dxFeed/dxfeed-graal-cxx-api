@@ -47,8 +47,16 @@ void executor(const JavaObjectHandle<DXEndpoint> &endpoint, const JavaObjectHand
             "Unable to execute function `dxfg_DXEndpoint_executor`. The `ex` handle is invalid");
     }
 
+    // Deprecated since SDK 3.9.0 (QD-1795): DXEndpoint::executor() stays for compatibility, the builder uses
+    // dxfg_DXEndpoint_Builder_withExecutor.
+    DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
+    DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wdeprecated-declarations")
+    DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_executor, static_cast<dxfg_endpoint_t *>(endpoint.get()),
                                            static_cast<dxfg_executor_t *>(ex.get()));
+    DXFCXX_DISABLE_CLANG_WARNINGS_POP()
+    DXFCXX_DISABLE_GCC_WARNINGS_POP()
+    DXFCXX_DISABLE_MSC_WARNINGS_POP()
 }
 
 void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint,
@@ -302,6 +310,25 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoi
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_supportsProperty,
                                                   static_cast<dxfg_endpoint_builder_t *>(builder.get()),
                                                   key.c_str()) == 1;
+}
+
+// dxfg_DXEndpoint_Builder_withExecutor
+void /* int32_t */
+withExecutor(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
+             /* dxfg_executor_t * */ const JavaObjectHandle<ExecutorTag> &executor) {
+    if (!builder) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXEndpoint_Builder_withExecutor`. The `builder` handle is invalid");
+    }
+
+    if (!executor) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXEndpoint_Builder_withExecutor`. The `executor` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withExecutor,
+                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()),
+                                           static_cast<dxfg_executor_t *>(executor.get()));
 }
 
 // dxfg_DXEndpoint_Builder_build

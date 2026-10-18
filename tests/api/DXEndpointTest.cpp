@@ -81,12 +81,10 @@ TEST_CASE("DXEndpoint::Builder: the state follows connect, disconnect and close"
 
     const test::LoopbackTcpServer server{};
     const auto executor = InPlaceExecutor::create();
-    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
+    // The notifications are delivered only by processAllPendingTasks(): the test decides when they arrive.
+    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->withExecutor(executor)->build();
     StateChanges<State> changes1{};
     StateChanges<State> changes2{};
-
-    // The notifications are delivered only by processAllPendingTasks(): the test decides when they arrive.
-    endpoint->executor(executor);
 
     const auto listenerId1 = endpoint->onStateChange() += [&changes1](State oldState, State newState) {
         changes1.add(oldState, newState);

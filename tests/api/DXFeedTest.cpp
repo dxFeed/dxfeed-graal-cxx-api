@@ -127,8 +127,8 @@ struct DXFeedTestFixture {
                        ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
                        ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true")
                        ->withProperty(DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY, "true")
+                       ->withExecutor(executor)
                        ->build();
-        endpoint->executor(executor);
         feed = endpoint->getFeed();
         pub = endpoint->getPublisher();
     }

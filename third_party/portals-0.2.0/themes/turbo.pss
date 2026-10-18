@@ -1,0 +1,7 @@
+/* Turbo-like palette, encoded as ANSI16 when selected by the output owner. */
+* { foreground: #ffff55; background: #0000aa; }
+:focused { foreground: #0000aa; background: #00aaaa; bold: true; }
+:disabled { foreground: #aaaaaa; background: #0000aa; bold: false; }
+:selected { foreground: #ffff55; background: #aa0000; bold: true; }
+:header { foreground: #ffffff; background: #0000aa; bold: true; }
+:caret { foreground: #00aaaa; background: #0000aa; bold: false; }

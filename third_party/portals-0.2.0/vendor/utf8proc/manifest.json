@@ -1,0 +1,33 @@
+{
+  "upstream": "https://github.com/JuliaStrings/utf8proc",
+  "tag": "v2.12.0",
+  "commit": "79cdd5ab40c79afa559f689ffc13b76812dee1ac",
+  "retrieved_on": "2026-10-07",
+  "files": [
+    {
+      "name": "LICENSE.md",
+      "bytes": 5125,
+      "sha256": "3b510150d34f248a221bb88e1d811238d6c6c18b51231822c42974c39bb07256"
+    },
+    {
+      "name": "utf8proc_data.c",
+      "bytes": 2409012,
+      "sha256": "b4911d4162d216afa612317a9b981851e15d672f4d93b25f3a1eb986f8c0aedb"
+    },
+    {
+      "name": "utf8proc.c",
+      "bytes": 33831,
+      "sha256": "f38438eb986ba7eedad0f2e820a70fae1aaf05197364ba0381a5e84775099ef8"
+    },
+    {
+      "name": "utf8proc.h",
+      "bytes": 34834,
+      "sha256": "08da85e820efaa3613500946c26b2dc427a07f76001ed7c16bc90f298b814c35"
+    }
+  ],
+  "unicode_version": "18.0.0",
+  "license": "MIT (code); Unicode data permission notice; full notices in LICENSE.md",
+  "runtime_dependencies": [
+    "C runtime"
+  ]
+}

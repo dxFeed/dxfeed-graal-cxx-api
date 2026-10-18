@@ -17,18 +17,18 @@ project(dxFeedGraalCxxApi)
 
 include(cmake/ParseVersion.cmake)
 
-set(DXFCXX_VERSION "v8.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v8.1.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.8.0" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.9.0" CACHE STRING "")
 set(FMTLIB_VERSION "12.1.0")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
 set(DATE_VERSION "3.0.1")
 set(PROCESS_VERSION "3.0.1")
 set(CONSOLE_VERSION "1.0.1")
-set(PORTALS_VERSION "0.1.1")
+set(PORTALS_VERSION "0.2.0")
 set(BITS_VERSION "1.0.0")
 set(RANGE_VERSION "0.12")
 set(DOCTEST_VERSION "2.4.11")
@@ -43,16 +43,20 @@ set(BOOST_SHA256 "2e64e5d79a738d0fa6fb546c6e5c2bd28f88d268a2a080546f74e5ff98f29d
 set(GLFW_SHA256 "a133ddc3d3c66143eba9035621db8e0bcf34dba1ee9514a9e23e96afd39fd57a")
 set(IMGUI_SHA256 "e1c46d676c2bcb7ced847ba27f50553e33a19db97b3cadaec7f8be64449139f8")
 # The Graal Native SDK archives of the releases page by platform, for DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION only.
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.8.0")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "2391da3840a9a9b60bdcb7cec104371a83bbf6cf1cd8ac5e4bc17af05df80dcd")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "a72df66914cffffb7d71ab62ded80ad3570491c00faea626d344c579a4eb7e68")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "ce1c6cc48c39636adcd4264efb062594f25b6c931355a06b328606478da66954")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "ea6c508d6f97ded16ceb41ee705074287e27adf4cec85e058686d865934b1bb3")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "9259164c24f70069310d2ccdbad78a061199aaa5f09fcb0f2265312dcb591f42")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "75322e3180d63455701747dd562720ad646872e83c829e5260c1bcac7fbb388f")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "f0df0803a55bddb9fa4f21596a54ec8c55651a67c1f83cb8bea17d4684ce44fc")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "8d7b7dc71c3325d9bff942cfd971e5fa99b667de1624a5f66e0985e5385a8f80")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "d99e069a76c9d49ced2ba78eee511ee91c906f15fd7e626d965035107cae23f9")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.9.0")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "a00cb9d9362b82e4e241672f383ac4f51f9523838858ffa988224b01fe625fb9")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "25e706bb02d920f5c9278ff4f32ae6ade80ec500dad324645244baa0446cb522")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "e2471afa26ac4f1a3eca52e734cd4587d5f53cd4dcef3d867e11b44b6729071b")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "9d5a19d1b4a162c3dfdd1276a34c0329957c7d9acd0668fc4b36a4b81046e7cf")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "83e27fa92f10427d926194db4afa4428b9079153b836df052ce071f6b21d563f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "4d9546107fe1b56e029e1d04f157dafc0c5a177a1cf09c8e543d7f2c78bf9c69")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt "1e793cfe9ce3294edab48da3c953ffec7e9fa215b5582f86d3b60c309627b506")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt "36f194bb780df0f9ec4649ba61b9e79c842c7ab5778e194596c370302afd20b1")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib "1d68afb169fbe91ea6713231f29d94d85516e079419682da8e7d18784dc21689")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib "126470f52ba24d422fb8fafea8755eaeedb16d1b3b10681f9d5b763bdb01bce6")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "b34208de8c9dfe49449101614779c2c886279da19dc473591eaab30c3879fb78")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "e05a0770406e90acb6792af75f17910230d602bb693be7ef6c934c06068d9ddc")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "4b22f687f0be428f4958ae6ed39950f70ccb635f1d9fc44db97ae1aaffb5ba42")
 
 include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 
@@ -189,13 +193,43 @@ else ()
                     set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-debug)
                 endif ()
 
+                # The static runtime on Windows: the SDK DLL with the static CRT, and the static library of the SDK that
+                # is only installed (both archives define the target DxFeedGraalNativeSdk).
+                if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
+                    if (DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS "3.9.0")
+                        message(FATAL_ERROR "DXFCXX_LINK_STATIC_RUNTIME needs the Graal Native SDK 3.9.0 or newer (the static-crt and static-lib archives), not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+                    endif ()
+
+                    set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-lib)
+                    set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-crt)
+                endif ()
+
+                set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE_URL_PREFIX ${DXFEED_GRAAL_NATIVE_SDK_URL})
                 set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}.zip)
                 set(DXFEED_GRAAL_NATIVE_SDK_URL_HASH "")
+                set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_URL_HASH "")
 
                 if (DXFEED_GRAAL_NATIVE_SDK_VERSION STREQUAL DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION)
                     set(DXFEED_GRAAL_NATIVE_SDK_URL_HASH URL_HASH SHA256=${DXFEED_GRAAL_NATIVE_SDK_SHA256_${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}})
+
+                    if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+                        set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_URL_HASH URL_HASH SHA256=${DXFEED_GRAAL_NATIVE_SDK_SHA256_${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE}})
+                    endif ()
                 else ()
                     message(WARNING "No SHA-256 for the Graal Native SDK ${DXFEED_GRAAL_NATIVE_SDK_VERSION} (known: ${DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION}): the downloaded archive is not verified")
+                endif ()
+
+                if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+                    # SOURCE_SUBDIR without CMakeLists.txt: download and extract only.
+                    FetchContent_Declare(
+                            DxFeedGraalNativeSdkStaticLib
+                            URL ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE_URL_PREFIX}-${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE}.zip
+                            ${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_URL_HASH}
+                            SOURCE_SUBDIR no-cmake-project
+                            USES_TERMINAL_DOWNLOAD TRUE
+                            DOWNLOAD_NO_EXTRACT FALSE
+                    )
+                    FetchContent_MakeAvailable(DxFeedGraalNativeSdkStaticLib)
                 endif ()
 
                 FetchContent_Declare(
@@ -212,6 +246,10 @@ else ()
 
     FetchContent_MakeAvailable(DxFeedGraalNativeSdk)
     # DxFeedGraalNativeSdk_SOURCE_DIR
+endif ()
+
+if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME AND NOT DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+    message(WARNING "DXFCXX_LINK_STATIC_RUNTIME: the Graal Native SDK is not taken from the releases page, so its C runtime and its static library are up to the given SDK")
 endif ()
 
 
@@ -235,9 +273,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
     SetupStaticRuntimeMSVC(console ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
-# bits (header-only): the bit operations of the library headers. It is declared before portals, which fetches it with
-# the same name: the first declaration is used. EXCLUDE_FROM_ALL (CMake 3.28+) disables its own install rules; its
-# headers are installed with the library below.
+# bits (header-only): the bit operations of the library headers. EXCLUDE_FROM_ALL (CMake 3.28+) disables its own install
+# rules; its headers are installed with the library below.
 if (NOT DEFINED FETCHCONTENT_SOURCE_DIR_BITS AND
         EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}/CMakeLists.txt")
     set(FETCHCONTENT_SOURCE_DIR_BITS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}")
@@ -250,16 +287,6 @@ FetchContent_Declare(
         EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(bits)
-
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/portals-${PORTALS_VERSION}/CMakeLists.txt")
-    add_subdirectory(third_party/portals-${PORTALS_VERSION})
-else ()
-    CPMAddPackage("gh:ttldtor/portals#v${PORTALS_VERSION}")
-endif ()
-
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
-    SetupStaticRuntimeMSVC(portals ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
-endif ()
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
@@ -314,8 +341,8 @@ endif ()
 add_subdirectory(third_party/config-${CONFIG_VERSION} EXCLUDE_FROM_ALL)
 
 include(cmake/Warnings.cmake)
-dxfcxx_system_includes(fmt::fmt-header-only fmt::fmt utf8cpp date::date config::config bits::bits portals::portals
-        process::process console::console)
+dxfcxx_system_includes(fmt::fmt-header-only fmt::fmt utf8cpp date::date config::config bits::bits process::process
+        console::console)
 
 if (DXFCXX_FEATURE_STACKTRACE AND DEFINED Boost_SOURCE_DIR)
     dxfcxx_system_includes_in_directory("${Boost_SOURCE_DIR}")
@@ -608,6 +635,8 @@ add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
     # set_target_properties(${PROJECT_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
     SetupStaticRuntimeMSVC(${PROJECT_NAME}_static ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
+    # The DLL links the static CRT itself, so no /NODEFAULTLIB.
+    SetupStaticRuntimeMSVC(${PROJECT_NAME} ${DXFCXX_LINK_STATIC_RUNTIME} OFF)
 endif ()
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
@@ -825,11 +854,17 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/IPF/IpfLiveSample)
     add_subdirectory(samples/cpp/IPF/OptionChainSample)
     add_subdirectory(samples/cpp/Model/IncOrderSnapshotSample)
-    add_subdirectory(samples/cpp/Model/MarketDepthModelSample)
     add_subdirectory(samples/cpp/Model/MultipleMarketDepthSample)
     add_subdirectory(samples/cpp/Model/PriceLevelBookSample)
     add_subdirectory(samples/cpp/OnDemand/OnDemandSample)
     add_subdirectory(samples/cpp/Schedule/ScheduleSample)
+
+    include(cmake/Portals.cmake)
+    dxfcxx_add_portals(DXFCXX_PORTALS_ENABLED)
+
+    if (DXFCXX_PORTALS_ENABLED)
+        add_subdirectory(samples/cpp/Model/MarketDepthModelSample)
+    endif ()
 
     include(cmake/UiSamples.cmake)
     dxfcxx_check_ui_samples(DXFCXX_UI_SAMPLES_ENABLED)
@@ -862,6 +897,19 @@ if (DXFCXX_INSTALL)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
         # The public headers include <bits/bits.hpp>.
         install(DIRECTORY "${bits_SOURCE_DIR}/include/" DESTINATION "include")
+
+        # The -static-mt archives: _static.lib links either with the SDK import library and DLL, or with the static
+        # library of the SDK and the Windows libraries of link-flags.txt.
+        if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
+            install(FILES $<TARGET_LINKER_FILE:DxFeedGraalNativeSdk> DESTINATION lib)
+
+            if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+                install(FILES
+                        "${dxfeedgraalnativesdkstaticlib_SOURCE_DIR}/DxFeedGraalNativeSdk_static.lib"
+                        "${dxfeedgraalnativesdkstaticlib_SOURCE_DIR}/link-flags.txt"
+                        DESTINATION lib)
+            endif ()
+        endif ()
     endif ()
 
     install(FILES "DEPENDENCIES.md" "LICENSE" "README.md" "ReleaseNotes.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")

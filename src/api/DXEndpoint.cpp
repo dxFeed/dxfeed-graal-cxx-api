@@ -325,6 +325,16 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const Str
     return sharedAs<Builder>();
 }
 
+void DXEndpoint::Builder::withExecutorImpl(const JavaObjectHandle<ExecutorTag> &executor) const {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() +
+                        "}::withExecutor(executor = " + executor.toString() + ")");
+    }
+
+    isolated::api::IsolatedDXEndpoint::Builder::withExecutor(handle_, executor);
+}
+
 bool DXEndpoint::Builder::supportsProperty(const StringLike &key) const {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {

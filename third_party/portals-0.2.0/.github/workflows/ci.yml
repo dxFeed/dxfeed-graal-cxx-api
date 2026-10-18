@@ -1,0 +1,65 @@
+name: Build and test
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  naming:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install naming checker toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-20 clang-tidy-20 g++-14 ninja-build
+      - name: Configure compilation database
+        run: >-
+          cmake -S . -B build/naming -G Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=clang-20
+          -DCMAKE_CXX_COMPILER=clang++-20
+          -DCMAKE_CXX_FLAGS=--gcc-install-dir=/usr/lib/gcc/x86_64-linux-gnu/14
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          -DPORTALS_BUILD_TESTS=ON
+          -DPORTALS_BUILD_EXAMPLES=ON
+      - name: Check project names
+        run: python3 tools/check_naming.py build/naming --clang-tidy clang-tidy-20
+
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            preset: windows-msvc-debug
+          - os: ubuntu-24.04
+            preset: linux-gcc-debug
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Configure MSVC environment
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}/Microsoft Visual Studio/Installer/vswhere.exe"
+          $vs = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (-not $vs) { throw 'MSVC installation not found' }
+          Import-Module "$vs/Common7/Tools/Microsoft.VisualStudio.DevShell.dll"
+          Enter-VsDevShell -VsInstallPath $vs -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64'
+          foreach ($name in @('PATH', 'INCLUDE', 'LIB', 'LIBPATH')) {
+            "$name=$([Environment]::GetEnvironmentVariable($name))" >> $env:GITHUB_ENV
+          }
+      - name: Configure
+        run: cmake --preset ${{ matrix.preset }}
+      - name: Build
+        run: cmake --build --preset ${{ matrix.preset }}
+      - name: Test
+        run: ctest --preset ${{ matrix.preset }}
+      - name: Configure standalone consumer
+        run: cmake -S examples/consumer -B build/consumer -G Ninja -DCMAKE_BUILD_TYPE=Debug
+      - name: Build standalone consumer
+        run: cmake --build build/consumer
+      - name: Run standalone consumer
+        run: ./build/consumer/portals_consumer

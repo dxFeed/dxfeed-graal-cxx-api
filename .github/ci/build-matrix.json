@@ -1,0 +1,35 @@
+{
+  "configs": [
+    {"name": "win2022-vs2022", "image": "windows-2022", "os": "windows", "cores": 4, "cc": "cl", "cxx": "cl"},
+    {"name": "win2025-vs2026", "image": "windows-2025-vs2026", "os": "windows", "cores": 4, "cc": "cl", "cxx": "cl"},
+    {"name": "macos-15-intel-xcode-16-4", "image": "macos-15-intel", "os": "macos", "cores": 4, "xcode": "16.4", "cc": "clang", "cxx": "clang++"},
+    {"name": "ubuntu-24.04-clang-22", "image": "ubuntu-24.04", "os": "linux", "cores": 4, "cc": "clang-22", "cxx": "clang++-22", "llvm_version": "22"},
+    {"name": "ubuntu-24.04-clang-21", "image": "ubuntu-24.04", "os": "linux", "cores": 4, "cc": "clang-21", "cxx": "clang++-21", "llvm_version": "21"},
+    {"name": "ubuntu-24.04-clang-18", "image": "ubuntu-24.04", "os": "linux", "cores": 4, "cc": "clang-18", "cxx": "clang++-18"},
+    {"name": "ubuntu-24.04-gcc-16", "image": "ubuntu-24.04", "os": "linux", "cores": 4, "cc": "gcc-16", "cxx": "g++-16", "gcc_version": "16"},
+    {"name": "ubuntu-24.04-gcc-14", "image": "ubuntu-24.04", "os": "linux", "cores": 4, "cc": "gcc-14", "cxx": "g++-14"},
+    {"name": "ubuntu-22.04-gcc-11", "image": "ubuntu-22.04", "os": "linux", "cores": 4, "cc": "gcc-11", "cxx": "g++-11"},
+    {"name": "macos-15-xcode-16-4", "image": "macos-15", "os": "macos", "cores": 3, "xcode": "16.4", "cc": "clang", "cxx": "clang++"}
+  ],
+  "buildTypes": ["Release", "Debug"],
+  "sanitizers": ["NO_SAN", "ASAN", "UBSAN"],
+  "exclude": [
+    {"name": "win2022-vs2022", "sanitizers": "UBSAN", "reason": "MSVC does not support UndefinedBehaviorSanitizer"},
+    {"name": "win2025-vs2026", "sanitizers": "UBSAN", "reason": "MSVC does not support UndefinedBehaviorSanitizer"},
+    {"name": "macos-15-intel-xcode-16-4", "sanitizers": "ASAN", "reason": "the Intel Graal Native SDK is not compatible with the Xcode sanitizer runtime"},
+    {"name": "macos-15-intel-xcode-16-4", "sanitizers": "UBSAN", "reason": "the Intel Graal Native SDK is not compatible with the Xcode sanitizer runtime"}
+  ],
+  "pullRequest": [
+    {"name": "ubuntu-24.04-gcc-14", "buildType": "Release", "sanitizers": "NO_SAN"},
+    {"name": "ubuntu-24.04-gcc-14", "buildType": "Debug", "sanitizers": "ASAN"},
+    {"name": "ubuntu-24.04-gcc-14", "buildType": "Debug", "sanitizers": "UBSAN"},
+    {"name": "ubuntu-24.04-clang-22", "buildType": "Release", "sanitizers": "NO_SAN"},
+    {"name": "ubuntu-24.04-clang-22", "buildType": "Debug", "sanitizers": "ASAN"},
+    {"name": "ubuntu-24.04-clang-22", "buildType": "Debug", "sanitizers": "UBSAN"},
+    {"name": "ubuntu-22.04-gcc-11", "buildType": "Release", "sanitizers": "NO_SAN"},
+    {"name": "win2022-vs2022", "buildType": "Release", "sanitizers": "NO_SAN"},
+    {"name": "win2022-vs2022", "buildType": "Debug", "sanitizers": "ASAN"},
+    {"name": "macos-15-xcode-16-4", "buildType": "Release", "sanitizers": "NO_SAN"},
+    {"name": "macos-15-xcode-16-4", "buildType": "Debug", "sanitizers": "UBSAN"}
+  ]
+}
