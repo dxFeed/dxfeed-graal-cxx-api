@@ -1,0 +1,20 @@
+# Copyright (c) 2026 ttldtor.
+# SPDX-License-Identifier: BSL-1.0
+
+BasedOnStyle: LLVM
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: None
+AllowShortLoopsOnASingleLine: false
+ColumnLimit: 120
+ContinuationIndentWidth: 2
+IndentPPDirectives: AfterHash
+IndentWidth: 2
+SeparateDefinitionBlocks: Always
+IndentAccessModifiers: false
+AccessModifierOffset: -2
+TabWidth: 2
+UseTab: Never

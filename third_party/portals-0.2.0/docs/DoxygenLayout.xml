@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2026 ttldtor. SPDX-License-Identifier: BSL-1.0 -->
+<!-- Layout 2.0 inherits member-page defaults; this file only arranges navigation. -->
+<doxygenlayout version="2.0">
+  <navindex>
+    <tab type="mainpage" visible="yes" title="Documentation home"/>
+    <tab type="usergroup" title="1. Start here">
+      <tab type="user" title="Getting started" url="@ref docs/getting-started.md"/>
+      <tab type="user" title="Runnable examples" url="@ref docs/examples.md"/>
+      <tab type="user" title="Declarative composition" url="@ref docs/declarative-ui.md"/>
+      <tab type="user" title="Managed controls" url="@ref docs/managed-controls.md"/>
+      <tab type="user" title="Use the installed package" url="@ref docs/package.md"/>
+      <tab type="user" title="Current limitations" url="@ref docs/limitations.md"/>
+      <tab type="user" title="Release notes" url="@ref ReleaseNotes.md"/>
+    </tab>
+    <tab type="usergroup" title="2. Build an application">
+      <tab type="user" title="Application runner" url="@ref docs/application.md"/>
+      <tab type="usergroup" title="Controls and layout">
+        <tab type="user" title="Basic controls" url="@ref docs/controls.md"/>
+        <tab type="user" title="LineEdit" url="@ref docs/line-edit.md"/>
+        <tab type="user" title="Row and Column" url="@ref docs/layout.md"/>
+        <tab type="user" title="Grid and Overlay" url="@ref docs/grid.md"/>
+        <tab type="user" title="Styles and themes" url="@ref docs/styles.md"/>
+      </tab>
+      <tab type="usergroup" title="State and data">
+        <tab type="user" title="Properties" url="@ref docs/property.md"/>
+        <tab type="user" title="Immutable models" url="@ref docs/model.md"/>
+        <tab type="user" title="Prepare views from layout" url="@ref docs/virtual-preparation.md"/>
+        <tab type="user" title="Virtual lists" url="@ref docs/virtual-list.md"/>
+        <tab type="user" title="Virtual tables" url="@ref docs/virtual-table.md"/>
+        <tab type="user" title="Scrolling" url="@ref docs/scroll.md"/>
+        <tab type="user" title="Charts" url="@ref docs/chart.md"/>
+      </tab>
+      <tab type="user" title="Diagnose events" url="@ref docs/diagnostics.md"/>
+      <tab type="user" title="Inspect the terminal" url="@ref docs/terminal-probe.md"/>
+    </tab>
+    <tab type="usergroup" title="3. Understand the core">
+      <tab type="user" title="Architecture and diagrams" url="@ref docs/architecture.md"/>
+      <tab type="user" title="Widget ownership" url="@ref docs/widget-tree.md"/>
+      <tab type="user" title="Focus and event routing" url="@ref docs/focus.md"/>
+      <tab type="user" title="Scheduler" url="@ref docs/scheduler.md"/>
+      <tab type="user" title="UTF-8 and cell width" url="@ref docs/text.md"/>
+      <tab type="user" title="Geometry" url="@ref docs/geometry.md"/>
+      <tab type="user" title="Input decoder" url="@ref docs/input.md"/>
+      <tab type="user" title="Terminal session" url="@ref docs/terminal.md"/>
+      <tab type="user" title="Cell buffer" url="@ref docs/cell-buffer.md"/>
+      <tab type="user" title="Renderer" url="@ref docs/render.md"/>
+      <tab type="user" title="Diff and output" url="@ref docs/diff.md"/>
+    </tab>
+    <tab type="usergroup" title="4. API reference">
+      <tab type="namespaces" visible="yes" title="Namespaces">
+        <tab type="namespacelist" visible="yes" title="Namespaces"/>
+        <tab type="namespacemembers" visible="yes" title="Functions and constants"/>
+      </tab>
+      <tab type="classes" visible="yes" title="Types">
+        <tab type="classlist" visible="yes" title="Type list"/>
+        <tab type="classindex" visible="yes" title="Alphabetical index"/>
+        <tab type="hierarchy" visible="yes" title="Inheritance"/>
+        <tab type="classmembers" visible="yes" title="Members"/>
+      </tab>
+      <tab type="concepts" visible="yes" title="Concepts"/>
+      <tab type="files" visible="yes" title="Headers">
+        <tab type="filelist" visible="yes" title="Header list"/>
+        <tab type="globals" visible="yes" title="File members"/>
+      </tab>
+    </tab>
+    <tab type="usergroup" title="5. Develop Portals">
+      <tab type="user" title="Contributor guide and notices" url="@ref docs/development.md"/>
+      <tab type="user" title="Releasing and documentation deployment" url="@ref docs/releasing.md"/>
+      <tab type="user" title="Testing" url="@ref docs/testing.md"/>
+      <tab type="user" title="API performance experiment" url="@ref docs/managed-performance.md"/>
+      <tab type="user" title="Design scenarios (experimental)" url="@ref docs/api-design.md"/>
+    </tab>
+    <tab type="pages" visible="no"/>
+    <tab type="topics" visible="no"/>
+    <tab type="modules" visible="no"/>
+    <tab type="interfaces" visible="no"/>
+    <tab type="structs" visible="no"/>
+    <tab type="exceptions" visible="no"/>
+    <tab type="examples" visible="no"/>
+  </navindex>
+</doxygenlayout>
+
+

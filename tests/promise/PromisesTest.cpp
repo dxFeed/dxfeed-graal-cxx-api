@@ -311,3 +311,25 @@ TEST_CASE_FIXTURE(PromisesFixture, "getTimeSeriesPromise completes when the requ
     checkCandle(list[1], CANDLE_TIME - CANDLE_PERIOD, 1);
     checkCandle(list[2], CANDLE_TIME, 0);
 }
+
+// DXEndpoint::executor() is deprecated (QD-1795), but works when it is called before DXEndpoint::getFeed().
+TEST_CASE("getLastEventPromise completes with the executor set by DXEndpoint::executor() before getFeed()") {
+    const auto executor = InPlaceExecutor::create();
+    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB)->build();
+
+    endpoint->executor(executor);
+
+    const auto feed = endpoint->getFeed();
+    const auto publisher = endpoint->getPublisher();
+    const auto promise = feed->getLastEventPromise<Trade>("A");
+
+    executor->processAllPendingTasks();
+    REQUIRE_FALSE(promise->isDone());
+
+    publisher->publishEvents(std::make_shared<Trade>("A"));
+    executor->processAllPendingTasks();
+    REQUIRE(promise->isDone());
+    REQUIRE(promise->getResult()->getEventSymbol() == "A");
+
+    endpoint->close();
+}

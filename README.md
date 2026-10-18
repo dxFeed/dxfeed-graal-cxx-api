@@ -13,7 +13,7 @@ and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) 
 the [Overview](#overview) section.<br>
 
 [![Build](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml)
-![Graal Native SDK](https://img.shields.io/badge/Graal%20Native%20SDK-v3.8.0-yellow)
+![Graal Native SDK](https://img.shields.io/badge/Graal%20Native%20SDK-v3.9.0-yellow)
 ![Platform](https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20linux--aarch64%20%7C%20osx--x64%20%7C%20osx--aarch64-lightgrey)
 ![](https://img.shields.io/badge/C++%20standard-C++20-blueviolet) ![](https://img.shields.io/badge/C%20standard-C11-blueviolet)
 [![Release](https://img.shields.io/github/v/release/dxFeed/dxfeed-graal-cxx-api)](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest)
@@ -32,6 +32,7 @@ the [Overview](#overview) section.<br>
 - [Documentation](#documentation)
 - [Requirements](#requirements)
 - [Installation](#installation)
+  * [Windows without the Visual C++ Redistributable](#windows-without-the-visual-c-redistributable)
 - [Usage](#usage)
   * [How to connect to QD endpoint](#how-to-connect-to-qd-endpoint)
   * [How to connect to dxLink](#how-to-connect-to-dxlink)
@@ -143,7 +144,8 @@ Only x64 versions are supported.
 
 #### Requirements
 
-* [Visual C++ Redistributable for Visual Studio 2015][vc_redist]
+* [Visual C++ Redistributable for Visual Studio 2015][vc_redist], except for the `-static-mt` archives (see
+  [Windows without the Visual C++ Redistributable](#windows-without-the-visual-c-redistributable))
 
 [Windows-client]: https://www.microsoft.com/windows/
 
@@ -188,6 +190,43 @@ The API is delivered as a dynamic library (`dxFeedGraalCxxApi.so|dll|dylib`) and
 one (`dxFeedGraalCxxApi_static.a|lib`).
 Also, it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH` (Or
 use `RPATH`, `LD_LIBRARY_PATH`).
+
+### Windows without the Visual C++ Redistributable
+
+The `dxFeedGraalCxxApi-<version>-x86_64-windows-<build type>-static-mt.zip` archives are built with the static C
+runtime and need no Visual C++ Redistributable. Compile your code with `/MT` (`/MTd` with the `Debug` archive) and
+`/std:c++20`, with Visual Studio 2022 17.14 or newer (MSVC 14.44 or newer): an older linker or standard library does
+not link the static libraries of the archive. Link the static C++ API in one of two ways:
+
+| Way                     | Link                                                                                                             | Ship next to your exe or dll   |
+|-------------------------|------------------------------------------------------------------------------------------------------------------|--------------------------------|
+| Static C++ API, SDK DLL | `lib\dxFeedGraalCxxApi_static.lib`, `lib\DxFeedGraalNativeSdk.lib`                                               | `bin\DxFeedGraalNativeSdk.dll` |
+| Single exe or dll       | `lib\dxFeedGraalCxxApi_static.lib`, `lib\DxFeedGraalNativeSdk_static.lib`, the libraries of `lib\link-flags.txt` | nothing                        |
+
+The single exe or dll depends only on Windows DLLs and adds about 55 MB. `lib\link-flags.txt` lists the Windows
+libraries one per line (`psapi.lib`, `winhttp.lib`, `ws2_32.lib`, etc.), so `cl` takes it as a response file:
+`@lib\link-flags.txt`. The `Debug` archive contains the same SDK libraries as the other archives: they do not depend
+on the C runtime variant.
+
+Do not link with `dxFeedGraalCxxApi.dll` of these archives: with the static C runtime, the DLL and your code each have
+their own C runtime, and the interface of the C++ API passes standard library objects (`std::string`,
+`std::shared_ptr`, etc.) between them. The `Debug` C runtime stops on such objects with a debug heap assertion.
+
+For example, a `build.cmd` run from the x64 Native Tools Command Prompt (`%1` is the unpacked archive):
+
+```bat
+@echo off
+set "A=%~f1"
+
+rem Static C++ API, SDK DLL
+cl /nologo /std:c++20 /MT /EHsc /utf-8 /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
+    "%A%\lib\DxFeedGraalNativeSdk.lib" /Fe:main.exe || exit /b 1
+copy /y "%A%\bin\DxFeedGraalNativeSdk.dll" . >nul
+
+rem Single exe
+cl /nologo /std:c++20 /MT /EHsc /utf-8 /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
+    "%A%\lib\DxFeedGraalNativeSdk_static.lib" @"%A%\lib\link-flags.txt" /Fe:main-single.exe
+```
 
 ## Usage
 

@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <atomic>
 #include <cstdio>
-#include <filesystem>
 
 #ifdef _WIN32
 #    include <process.h>
@@ -176,29 +175,12 @@ std::vector<std::shared_ptr<EventType>> readTape(const std::string &path,
     return events;
 }
 
-// QD parses `tape:C:/...` as `host:port`, so on Windows the tape connector gets a path relative to the current
-// directory (`file:` accepts absolute Windows paths).
-static std::string tapeConnectorPath(const std::string &path) {
-#ifdef _WIN32
-    const auto relative = std::filesystem::relative(path).generic_string();
-
-    if (relative.empty() || relative.find(':') != std::string::npos) {
-        throw std::runtime_error("writeTextTape: " + path + " is not reachable by a relative path from " +
-                                 std::filesystem::current_path().string());
-    }
-
-    return relative;
-#else
-    return path;
-#endif
-}
-
 void writeTextTape(const std::string &path, const std::vector<std::shared_ptr<EventType>> &events) {
     std::remove(path.c_str());
 
     const auto endpoint = buildEndpoint(DXEndpoint::Role::PUBLISHER);
 
-    endpoint->connect("tape:" + tapeConnectorPath(path) + "[format=text]");
+    endpoint->connect("tape:" + path + "[format=text]");
 
     try {
         endpoint->getPublisher()->publishEvents(events.begin(), events.end());

@@ -1,0 +1,7 @@
+/* Modern terminal palette. No font-dependent decorations. */
+* { foreground: #dce1e8; background: #181c24; }
+:focused { foreground: #181c24; background: #4bb4dc; bold: true; }
+:disabled { foreground: #7d828c; background: #181c24; bold: false; }
+:selected { foreground: #dce1e8; background: #2d4b6e; bold: true; }
+:header { foreground: #4bb4dc; background: #181c24; bold: true; }
+:caret { foreground: #4bb4dc; background: #181c24; bold: false; }

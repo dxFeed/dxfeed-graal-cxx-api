@@ -1,0 +1,240 @@
+{
+  "upstream": "https://github.com/boostorg/pfr",
+  "tag": "boost-1.92.0",
+  "commit": "401385c240027423acbb1eb6dea2abe0043db5aa",
+  "archive": "https://github.com/boostorg/pfr/archive/401385c240027423acbb1eb6dea2abe0043db5aa.zip",
+  "archive_sha256": "ab61a5b3d5ae2eeb377233e4dc5e5b9354487579dc3786ac17f0e60fed8d8b87",
+  "license": "BSL-1.0",
+  "files": [
+    {
+      "path": "include/boost/pfr.hpp",
+      "bytes": 736,
+      "sha256": "4649852228196a1857e209f6ad84ffe95eb42ba3d53fff2b91802eb4be474fcd"
+    },
+    {
+      "path": "include/boost/pfr/config.hpp",
+      "bytes": 6143,
+      "sha256": "46fc8f34b8d5ed9fa46a452543fb091059d861fe45ff413fecd9a0d3f2ac7ab7"
+    },
+    {
+      "path": "include/boost/pfr/core_name.hpp",
+      "bytes": 4360,
+      "sha256": "fcf91dde2849a12c6f1fc1ea330959677b95e5b7266a35947d4a327eb5ceaf28"
+    },
+    {
+      "path": "include/boost/pfr/core.hpp",
+      "bytes": 9933,
+      "sha256": "f7f89a3725d1278b53d864c6a4cdc32ea81b320f442e393b0943108ab1d46530"
+    },
+    {
+      "path": "include/boost/pfr/detail/config.hpp",
+      "bytes": 1008,
+      "sha256": "10e20426d95ca544acf013ac6d8df61caf7b354fe92958ad9b62b792d52ad80c"
+    },
+    {
+      "path": "include/boost/pfr/detail/core_name.hpp",
+      "bytes": 1005,
+      "sha256": "9c838ff1156cdd2acaf911aa59739c4e602e66410f21f53f5209cbbf784de4fe"
+    },
+    {
+      "path": "include/boost/pfr/detail/core_name14_disabled.hpp",
+      "bytes": 1304,
+      "sha256": "a4d65ef53fa5d05b0edc48f81c78aa9f17fde4c7c573c7fa41b8496b92be2a73"
+    },
+    {
+      "path": "include/boost/pfr/detail/core_name20_static.hpp",
+      "bytes": 9358,
+      "sha256": "738061339251d85be02901dff9ad723d776967511fb6645d119d0893ab8ad7f4"
+    },
+    {
+      "path": "include/boost/pfr/detail/core_name26_reflection.hpp",
+      "bytes": 2013,
+      "sha256": "5bb8954b4b91087755bb6683156fe7b4768150b5ddf2a2f133dfda4e14e8d884"
+    },
+    {
+      "path": "include/boost/pfr/detail/core.hpp",
+      "bytes": 911,
+      "sha256": "c1c7c2a633844697ff1f91dc0fc1cad43a44325fa7eb097e828fd89253078b25"
+    },
+    {
+      "path": "include/boost/pfr/detail/core14_classic.hpp",
+      "bytes": 28759,
+      "sha256": "7083f69e3e2fe6859979efc65a4a5c8335ae348acaab7963fb960c904b1fb426"
+    },
+    {
+      "path": "include/boost/pfr/detail/core14_loophole.hpp",
+      "bytes": 7726,
+      "sha256": "6ca6eb541a90a780ef3020c0c6f58bafe6259f9688337aca7ce5dd2adebcebb9"
+    },
+    {
+      "path": "include/boost/pfr/detail/core17_generated.hpp",
+      "bytes": 1034929,
+      "sha256": "07903414f0798758fe140eea5e0048123878fd4204ce34baf502f72da866e9dd"
+    },
+    {
+      "path": "include/boost/pfr/detail/core17.hpp",
+      "bytes": 2712,
+      "sha256": "700cbe805be53e049981b9d279916b42b6c8e2e583a5dc8d0693382ecf497910"
+    },
+    {
+      "path": "include/boost/pfr/detail/core26_reflection.hpp",
+      "bytes": 1807,
+      "sha256": "5addeb8579d39ae470426b84b25a266fa9edc68a4bd1a19085e6bb4e4dfbe483"
+    },
+    {
+      "path": "include/boost/pfr/detail/core26.hpp",
+      "bytes": 1338,
+      "sha256": "5297b0557d614e48a7475ba8d717697839966894350412f924f90de716f15eca"
+    },
+    {
+      "path": "include/boost/pfr/detail/detectors.hpp",
+      "bytes": 3825,
+      "sha256": "40cac68c7a01af7307eec4725de71783ac7ad72db158463ed63eb049385f6242"
+    },
+    {
+      "path": "include/boost/pfr/detail/fake_object.hpp",
+      "bytes": 1654,
+      "sha256": "48ed22e2c7d63e8030ef919c9ff0c64f95a660043064025b1584861038104320"
+    },
+    {
+      "path": "include/boost/pfr/detail/fields_count.hpp",
+      "bytes": 20808,
+      "sha256": "2ad090e16de6857b65580fc757f2ff908a2dcc1e8dfd4df5be7899b8edad8891"
+    },
+    {
+      "path": "include/boost/pfr/detail/for_each_field_impl.hpp",
+      "bytes": 3468,
+      "sha256": "b9d4dc8b4470a7d62a0e34f25e253e8e983c2f7fb356808c0724990df91a75dd"
+    },
+    {
+      "path": "include/boost/pfr/detail/for_each_field.hpp",
+      "bytes": 2493,
+      "sha256": "6f49900af1ad7fd4094ae0b4901c18d08bd80dc2176626069aca4d6670bdad80"
+    },
+    {
+      "path": "include/boost/pfr/detail/functional.hpp",
+      "bytes": 8414,
+      "sha256": "6acbac4eea43b28d5c01f592756753b42d6d3be2820f3dab9f31d2c12d54a35a"
+    },
+    {
+      "path": "include/boost/pfr/detail/io.hpp",
+      "bytes": 2390,
+      "sha256": "63370759c7d28ae670b3dd78ddd5e91778f81da8f06ddbcb252ff755c592f63b"
+    },
+    {
+      "path": "include/boost/pfr/detail/make_flat_tuple_of_references.hpp",
+      "bytes": 4159,
+      "sha256": "2aad27e108445944e7cbf2b1e6a3326bb5cd1c2edaae04735f018cd898576e79"
+    },
+    {
+      "path": "include/boost/pfr/detail/make_integer_sequence.hpp",
+      "bytes": 2627,
+      "sha256": "7de6fd4a8e0385da613d60d19a1d33536a9764ae0060a18a6bc643f1d9ee5add"
+    },
+    {
+      "path": "include/boost/pfr/detail/offset_based_getter.hpp",
+      "bytes": 5994,
+      "sha256": "2ffb10662802fcb329b0c4da5119bc24058219862546dc9a38b226fa32a83c0e"
+    },
+    {
+      "path": "include/boost/pfr/detail/possible_reflectable.hpp",
+      "bytes": 1376,
+      "sha256": "74125e2b26a16e07e40236ccb7f24b2e7539963cadbaea9f04f5af295f1b3286"
+    },
+    {
+      "path": "include/boost/pfr/detail/rvalue_t.hpp",
+      "bytes": 1121,
+      "sha256": "4125eb1e522c042648a0c473d1a34372f9d2004eb92598eee7ab35b1c576dbb5"
+    },
+    {
+      "path": "include/boost/pfr/detail/sequence_tuple.hpp",
+      "bytes": 6335,
+      "sha256": "793d632854dbf755442629cd5713a2196dff6498912c3b7971dce7836a5c853d"
+    },
+    {
+      "path": "include/boost/pfr/detail/size_array.hpp",
+      "bytes": 2295,
+      "sha256": "9efcc3a3bfe24896d23ee0f8fd9a6e7ab5f55a87776bd7bcde89656e9e9d1d46"
+    },
+    {
+      "path": "include/boost/pfr/detail/size_t_.hpp",
+      "bytes": 639,
+      "sha256": "d6b90bfaf92b8ec264d2fd4d2f72e42f7268c06632b76a66e79211c125e9b173"
+    },
+    {
+      "path": "include/boost/pfr/detail/stdarray.hpp",
+      "bytes": 1125,
+      "sha256": "8f4aa7cd432f5118a94353abf93e36b0e12724bde1ad0eab55ad0e40e154bec0"
+    },
+    {
+      "path": "include/boost/pfr/detail/stdtuple.hpp",
+      "bytes": 1739,
+      "sha256": "9b14e3ecf131d8ccbfbfafa6e2e9c0abf61c178ce549486ad2907cfd8f3c9045"
+    },
+    {
+      "path": "include/boost/pfr/detail/tie_from_structure_tuple.hpp",
+      "bytes": 1453,
+      "sha256": "4d5d4fe37f233c89b6224d5a446a4399d6e1dab5ecc8288235523b42f0b2348f"
+    },
+    {
+      "path": "include/boost/pfr/detail/unsafe_declval.hpp",
+      "bytes": 1590,
+      "sha256": "a833b833a0febd16f68ea90835df287dee1ea03b2f3a8ce40ad35f6c18338752"
+    },
+    {
+      "path": "include/boost/pfr/functions_for.hpp",
+      "bytes": 5223,
+      "sha256": "76d131adf7981b395e4ac164382e25cce18842abd428f30ba3f4a0196b248d21"
+    },
+    {
+      "path": "include/boost/pfr/functors.hpp",
+      "bytes": 7269,
+      "sha256": "e3a921e058c73d08c116b8620bd35f839c5fa7aa935c85c8647e736b06793479"
+    },
+    {
+      "path": "include/boost/pfr/io_fields.hpp",
+      "bytes": 6220,
+      "sha256": "c80e394cc3578deaf4b0b7576aa7f87cb6348034144009133ee1d897cae13778"
+    },
+    {
+      "path": "include/boost/pfr/io.hpp",
+      "bytes": 3850,
+      "sha256": "3d9ed56e1c5a192a773c7ecd05745512bdd1e9b7940997e6ae0300c158a9c822"
+    },
+    {
+      "path": "include/boost/pfr/ops_fields.hpp",
+      "bytes": 5260,
+      "sha256": "4e3caefc635ba685aa4c5f6855bbcdc0c00f622023f9c4079c09576b9ce4e833"
+    },
+    {
+      "path": "include/boost/pfr/ops.hpp",
+      "bytes": 7560,
+      "sha256": "dfd8233a5c1041cd9971d85dc28175ade6b6439f9aff4bd99e65b117c9dc791f"
+    },
+    {
+      "path": "include/boost/pfr/traits_fwd.hpp",
+      "bytes": 703,
+      "sha256": "dc75f37c001d33707110eaaee90b1dff8b6d4efe1719142b677d5c4c4b21af54"
+    },
+    {
+      "path": "include/boost/pfr/traits.hpp",
+      "bytes": 2960,
+      "sha256": "00dfb9158b0971f500fa864394a185fd02b56b9b529232ba3ff4cc333d60f55e"
+    },
+    {
+      "path": "include/boost/pfr/tuple_size.hpp",
+      "bytes": 1665,
+      "sha256": "b4e65002af093af2749490d26dd171757162474454384188dd7aec78eb04540e"
+    },
+    {
+      "path": "LICENSE_1_0.txt",
+      "bytes": 1338,
+      "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+    },
+    {
+      "path": "README.md",
+      "bytes": 679,
+      "sha256": "56240e26d7d82c478887f3939779f8e514e27ea671c6f825cbd8b3c9aa7d668a"
+    }
+  ]
+}

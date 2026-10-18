@@ -55,3 +55,6 @@ CMakeSettings.json
 .cache/**
 /Folder.DotSettings.user
 out/
+
+# Python bytecode (scripts/release.py and its tests)
+__pycache__/

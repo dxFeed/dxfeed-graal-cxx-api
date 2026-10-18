@@ -545,6 +545,9 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
 
     private:
     mutable std::recursive_mutex mtx_{};
+    // Serializes the listener calls. The listener is called without mtx_: the handler runs it on another thread and
+    // waits, so a listener that calls the model (close() included) would otherwise deadlock.
+    std::recursive_mutex notifyMtx_{};
     std::unordered_map<std::int64_t, std::shared_ptr<O>> ordersByIndex_{};
     SortedOrderSet<BuyLess> buyOrders_{};
     SortedOrderSet<SellLess> sellOrders_{};
@@ -552,8 +555,9 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
     std::shared_ptr<MarketDepthModelListener<O>> listener_{};
     std::size_t depthLimit_{};
     std::int64_t aggregationPeriodMillis_{};
-    std::atomic<bool> taskScheduled_{};
-    std::shared_ptr<Timer> taskTimer_{};
+    mutable std::atomic<bool> taskScheduled_{};
+    mutable std::shared_ptr<Timer> taskTimer_{};
+    mutable bool closed_{};
 
     static std::shared_ptr<MarketDepthModel> create(std::shared_ptr<Builder> builder) {
         auto marketDepthModel = MarketDepthModel::createShared(builder);
@@ -578,25 +582,44 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
 
     void eventsReceived(const IndexedEventSource &source, const std::vector<std::shared_ptr<O>> &events,
                         bool isSnapshot) {
-        std::lock_guard guard(mtx_);
+        {
+            std::lock_guard guard(mtx_);
 
-        if (!update(source, events, isSnapshot)) {
-            return;
-        }
+            if (closed_ || !update(source, events, isSnapshot)) {
+                return;
+            }
 
-        if (isSnapshot || aggregationPeriodMillis_ == 0) {
+            if (!isSnapshot && aggregationPeriodMillis_ != 0) {
+                scheduleTaskIfNeeded(std::chrono::milliseconds(aggregationPeriodMillis_));
+
+                return;
+            }
+
             tryCancelTask();
-            notifyListeners();
-        } else {
-            scheduleTaskIfNeeded(std::chrono::milliseconds(aggregationPeriodMillis_));
         }
+
+        notifyListeners();
     }
 
+    // Must be called without mtx_ held.
     void notifyListeners() {
-        std::lock_guard guard(mtx_);
+        std::lock_guard notifyGuard(notifyMtx_);
+        std::vector<std::shared_ptr<O>> buyOrders{};
+        std::vector<std::shared_ptr<O>> sellOrders{};
 
-        listener_->getHandler()(getBuyOrders(), getSellOrders());
-        taskScheduled_ = false;
+        {
+            std::lock_guard guard(mtx_);
+
+            if (closed_) {
+                return;
+            }
+
+            buyOrders = getBuyOrders();
+            sellOrders = getSellOrders();
+            taskScheduled_ = false;
+        }
+
+        listener_->getHandler()(buyOrders, sellOrders);
     }
 
     void scheduleTaskIfNeeded(std::chrono::milliseconds delay) {
@@ -605,8 +628,10 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         if (!taskScheduled_) {
             taskScheduled_ = true;
             taskTimer_ = Timer::runOnce(
-                [this] {
-                    notifyListeners();
+                [m = this->weak_from_this()] {
+                    if (const auto model = m.lock()) {
+                        model->template sharedAs<MarketDepthModel>()->notifyListeners();
+                    }
                 },
                 delay);
         }
@@ -620,18 +645,21 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         }
     }
 
-    bool tryCancelTask() {
+    bool tryCancelTask() const {
         std::lock_guard guard(mtx_);
 
-        if (taskScheduled_ && taskTimer_ && taskTimer_->isRunning()) {
-            taskTimer_->stop();
-            taskTimer_.reset();
-            taskScheduled_ = false;
-
-            return true;
+        if (!taskScheduled_) {
+            return false;
         }
 
-        return false;
+        if (taskTimer_) {
+            taskTimer_->stop();
+            taskTimer_.reset();
+        }
+
+        taskScheduled_ = false;
+
+        return true;
     }
 
     bool update(const IndexedEventSource &source, const std::vector<std::shared_ptr<O>> &events, bool isSnapshot) {
@@ -738,16 +766,19 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
      * @param depthLimit The new depth limit value.
      */
     void setDepthLimit(std::size_t depthLimit) {
-        std::lock_guard guard(mtx_);
+        {
+            std::lock_guard guard(mtx_);
 
-        if (depthLimit == depthLimit_) {
-            return;
+            if (depthLimit == depthLimit_) {
+                return;
+            }
+
+            depthLimit_ = depthLimit;
+            buyOrders_.setDepthLimit(depthLimit);
+            sellOrders_.setDepthLimit(depthLimit);
+            tryCancelTask();
         }
 
-        depthLimit_ = depthLimit;
-        buyOrders_.setDepthLimit(depthLimit);
-        sellOrders_.setDepthLimit(depthLimit);
-        tryCancelTask();
         notifyListeners();
     }
 
@@ -787,10 +818,19 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
 
     /**
      * Closes this model and makes it <i>permanently detached</i>.
+     *
+     * A pending aggregated notification is cancelled, and no new listener call starts after this method returns; a call
+     * that has already started is not waited for. The method can be called from the listener.
      */
     void close() const {
         std::lock_guard guard(mtx_);
 
+        if (closed_) {
+            return;
+        }
+
+        closed_ = true;
+        tryCancelTask();
         indexedTxModel_->close();
     }
 };

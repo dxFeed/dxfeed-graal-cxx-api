@@ -2,7 +2,7 @@
 
 ## Compile-time
 
-- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.8.0
+- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.9.0
   - [Bundles](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/) 
 - \[opt] [Boost](https://github.com/boostorg/boost) v1.84.0
   - Boost.Stacktrace 1.0
@@ -16,8 +16,10 @@
 - [Process](https://github.com/ttldtor/Process) v3.0.1 (Tools)
 - [Console](https://github.com/ttldtor/Console) v1.0.1 (Tools)
 - [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) v0.40.2
-- [bits](https://github.com/ttldtor/bits) v1.0.0 (header-only, used by the public headers and by portals)
-- [portals](https://github.com/ttldtor/portals) v0.1.1 (Samples)
+- [bits](https://github.com/ttldtor/bits) v1.0.0 (header-only, used by the public headers)
+- [Portals](https://github.com/ttldtor/portals) v0.2.0 (MarketDepthModelSample; needs CMake 3.24 and C++23, the sample
+  is skipped otherwise)
+  - utf8proc v2.12.0 (bundled with Portals)
 - [config](https://github.com/ttldtor/config) v1.0.3
 - [nanobench](https://github.com/martinus/nanobench) v4.3.11 (Tests::Benchmarks)
 
@@ -46,7 +48,7 @@ updates in one pull request, every major update in a pull request of its own.
 
 ## Run-time
 
-- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.8.0
+- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.9.0
 - [doctest](https://github.com/doctest/doctest) v2.4.11 (Tests)
 - [nanobench](https://github.com/martinus/nanobench) v4.3.11 (Tests::Benchmarks)
 

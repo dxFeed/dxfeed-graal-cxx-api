@@ -636,6 +636,22 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      */
     SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &onStateChange() noexcept;
 
+    /**
+     * Changes the executor that is used for notifications (events, state changes, etc.) of this endpoint.
+     *
+     * Call it right after the endpoint is created, before DXEndpoint::getFeed() and DXEndpoint::getPublisher():
+     * called later, it leaves the feed with the default executor, which is shut down, and the last event promises
+     * (DXFeed::getLastEventPromise(), etc.) never complete.
+     *
+     * @deprecated Use DXEndpoint::Builder::withExecutor(): the builder sets the executor before the endpoint exists.
+     *
+     * @tparam Executor The executor's type (for example, InPlaceExecutor).
+     * @param executor The executor.
+     * @return this DXEndpoint.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
     template <typename Executor> std::shared_ptr<DXEndpoint> executor(const std::shared_ptr<Executor> &executor) {
         executorImpl(executor->getHandle());
 
@@ -860,6 +876,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         //   - GraalException if something happened with the GraalVM
         static std::shared_ptr<Builder> create();
 
+        void withExecutorImpl(const JavaObjectHandle<ExecutorTag> &executor) const;
+
         /**
          * Tries to load the default properties file for Role::FEED, Role::ON_DEMAND_FEED, or Role::PUBLISHER role.
          *
@@ -961,6 +979,24 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @throws GraalException
          */
         bool supportsProperty(const StringLike &key) const;
+
+        /**
+         * Sets the executor that is used for notifications (events, state changes, etc.) of the endpoint to build.
+         * By default, the endpoint uses a thread pool whose size is set by the
+         * DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY or DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY property.
+         *
+         * @tparam Executor The executor's type (for example, InPlaceExecutor).
+         * @param executor The executor.
+         * @return `this` endpoint builder.
+         * @throws InvalidArgumentException
+         * @throws JavaException
+         * @throws GraalException
+         */
+        template <typename Executor> std::shared_ptr<Builder> withExecutor(const std::shared_ptr<Executor> &executor) {
+            withExecutorImpl(executor->getHandle());
+
+            return sharedAs<Builder>();
+        }
 
         /**
          * Builds DXEndpoint instance.

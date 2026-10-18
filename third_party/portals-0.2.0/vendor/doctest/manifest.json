@@ -1,0 +1,12 @@
+{
+  "upstream": "https://github.com/doctest/doctest",
+  "tag": "v2.4.11",
+  "files": [
+    {
+      "name": "doctest.h",
+      "bytes": 321644,
+      "sha256": "44faa038e9c3f9728efbda143748d01124ea0a27f4bf78f35a15d8fab2e039fb"
+    }
+  ],
+  "license": "MIT"
+}

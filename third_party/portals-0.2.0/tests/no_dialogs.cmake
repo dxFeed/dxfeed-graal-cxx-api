@@ -1,0 +1,16 @@
+# Fatal test failures must reach CTest without a dialog or a successful exit.
+foreach(mode assert abort exception crt-assert crt-error crt-wide)
+  execute_process(COMMAND "${PROBE}" "${mode}"
+    RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 5)
+  if("${result}" STREQUAL "77" AND mode MATCHES "^crt-")
+    message(STATUS "${mode}: Debug CRT not present in this build")
+    continue()
+  endif()
+  if("${result}" STREQUAL "0" OR "${result}" MATCHES "[Tt]imeout|[Tt]imed out")
+    message(FATAL_ERROR "${mode}: expected prompt-free failure, got ${result}\n${output}\n${error}")
+  endif()
+  if(NOT error MATCHES "failure probe: ${mode}")
+    message(FATAL_ERROR "${mode}: process did not reach the failure fixture: ${result}\n${error}")
+  endif()
+  message(STATUS "${mode}: noninteractive failure ${result}\n${error}")
+endforeach()
