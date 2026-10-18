@@ -1,4 +1,4 @@
-* **\[MDAPI-430]\[C++]** **\[BREAKING]** `CandlePeriod` and `CandlePriceLevel` are parsed and printed as in Java.
+* **\[MDAPI-430]\[C++]** **\[BREAKING]** Candle attributes are parsed and printed as in Java.
     * **\[BREAKING]** `CandlePeriod::parse()` and `CandlePriceLevel::parse()` follow Java `Double.parseDouble`: a sign
       (`+5m`), the `d`/`f` suffix and hexadecimal values (`0x1p3`) of a price level are accepted, and parsing no longer
       depends on the C locale. An invalid number throws `InvalidArgumentException`.
@@ -9,6 +9,14 @@
     * Fixed a data race in `CandlePeriod::toString()`: the string is computed in the constructor.
     * **\[BREAKING]** `CandlePeriod::valueOf()` and the `CandlePeriod` default constructor are no longer `noexcept`
       (they build the string representation).
+    * `CandleSession()` is `CandleSession::ANY`: comparing a default-constructed `CandleSession` dereferenced a null
+      pointer.
+    * `CandleSymbol` normalization is idempotent: a default attribute is kept when removing it would leave a base symbol
+      that itself ends with attributes (`A{=t}{=t}`, `A{=t}{=1t}` gives `A{=t}{=t}`). The session attribute is normalized
+      as it is read (Java `Boolean.parseBoolean`): `A{tho=t}` gives `A` (any session) instead of `A{tho=true}`.
+      Unlike Java, normalization still removes the default attributes (`IBM{=t}` gives `IBM`).
+    * **\[BREAKING]** Copying and moving a `CandleSymbol` copy its fields instead of parsing the symbol again; these
+      operations are no longer `noexcept`.
 * **\[MDAPI-429]\[C++]** **\[BREAKING]** Fixed `noexcept` functions that threw and the shared library (DLL) on Windows.
     * **\[BREAKING]** `OrderBase::getSource()`, `OrderBase::setExchangeCode(std::int16_t)` and the `withIndex()` /
       `withExchangeCode()` methods of `Order`, `SpreadOrder`, `AnalyticOrder` and `OtcMarketsOrder` are no longer

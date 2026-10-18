@@ -6,6 +6,8 @@
 
 #include <fmt/format.h>
 
+#include "../../internal/utils/CandleUtils.hpp"
+
 DXFCPP_BEGIN_NAMESPACE
 
 CandlePrice::CandlePrice(const StringLike &string) noexcept : string_{string} {
@@ -66,7 +68,7 @@ std::string CandlePrice::normalizeAttributeForSymbol(const StringLike &symbol) {
         const auto other = parse(a.value());
 
         if (other.get() == DEFAULT) {
-            return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+            return candle::removeDefaultAttribute(symbol, ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.get().toString()) {

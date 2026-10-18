@@ -5,6 +5,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
 
+#include "../../internal/utils/CandleUtils.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
 
 #include <cmath>
@@ -72,7 +73,7 @@ std::string CandlePriceLevel::normalizeAttributeForSymbol(const StringLike &symb
         const auto other = parse(a.value());
 
         if (other == DEFAULT) {
-            return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+            return candle::removeDefaultAttribute(symbol, ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.toString()) {

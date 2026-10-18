@@ -364,6 +364,7 @@ set(dxFeedGraalCxxApi_Internal_Sources
 set(dxFeedGraalCxxApi_InternalUtils_Sources
         src/internal/utils/StringUtils.cpp
         src/internal/utils/JavaUtils.cpp
+        src/internal/utils/CandleUtils.cpp
         src/internal/utils/EnumUtils.cpp
         src/internal/utils/CmdArgsUtils.cpp
 )
