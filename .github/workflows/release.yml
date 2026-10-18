@@ -78,7 +78,7 @@ jobs:
       matrix:
         config:
           - name: win-vs2022
-            # VS 2022: the static libraries of the archives link with VS 2022 and newer.
+            # VS 2022 17.14: the static libraries of the archives link with MSVC 14.44 (VS 2022 17.14) and newer.
             image: windows-2022
             os: windows
             cores: 4
@@ -564,7 +564,7 @@ jobs:
           mcr.microsoft.com/windows/servercore:ltsc2022
           powershell -NoProfile -ExecutionPolicy Bypass -Command
           "if (Test-Path C:\Windows\System32\vcruntime140.dll) { Write-Output 'FAIL: the image has the Redistributable'; exit 1 };
-          & C:\ci\run.ps1 C:\check; exit $LASTEXITCODE"
+          & C:\ci\run.ps1 C:\check; if ($LASTEXITCODE -ne 0) { exit 1 }; exit 0"
 
   publish_release:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}

@@ -16,7 +16,14 @@ if not exist "%ARCHIVE%\lib\dxFeedGraalCxxApi_static.lib" (
     exit /b 1
 )
 set "CRT_DLLS=msvcp vcruntime api-ms-win-crt ucrtbase concrt"
+set "DUMP=%TEMP%\static-mt-check-dumpbin.txt"
 
+for %%f in (dxFeedGraalCxxApi.dll DxFeedGraalNativeSdk.dll) do (
+    if not exist "%ARCHIVE%\bin\%%f" (
+        echo FAIL: %ARCHIVE%\bin\%%f is missing
+        exit /b 1
+    )
+)
 for %%f in ("%ARCHIVE%\bin\*.dll") do (
     call :no_dynamic_crt "%%f" || exit /b 1
 )
@@ -42,11 +49,13 @@ cl %CL_FLAGS% "%SRC%" "%ARCHIVE%\lib\dxFeedGraalCxxApi_static.lib" "%ARCHIVE%\li
 for %%w in (static single) do (
     call :no_dynamic_crt "%OUT%\%%w\check.exe" || exit /b 1
 )
-dumpbin /nologo /dependents "%OUT%\single\check.exe" | findstr /i /c:"DxFeedGraalNativeSdk.dll" /c:"dxFeedGraalCxxApi.dll" >nul && (
+call :dumpbin /dependents "%OUT%\single\check.exe" || exit /b 1
+findstr /i /c:"DxFeedGraalNativeSdk.dll" /c:"dxFeedGraalCxxApi.dll" "%DUMP%" >nul && (
     echo FAIL: %OUT%\single\check.exe depends on a DLL of the archive
     exit /b 1
 )
-dumpbin /nologo /exports "%OUT%\single\check.exe" | findstr /r /c:"^ *[0-9][0-9]* *[0-9A-F][0-9A-F]* [0-9A-F]" >nul && (
+call :dumpbin /exports "%OUT%\single\check.exe" || exit /b 1
+findstr /r /c:"^ *[0-9][0-9]* *[0-9A-F][0-9A-F]* [0-9A-F]" "%DUMP%" >nul && (
     echo FAIL: %OUT%\single\check.exe exports symbols
     exit /b 1
 )
@@ -54,12 +63,28 @@ echo OK: %ARCHIVE%
 exit /b 0
 
 :no_dynamic_crt
+call :dumpbin /dependents "%~1" || exit /b 1
 for %%d in (%CRT_DLLS%) do (
-    dumpbin /nologo /dependents "%~1" | findstr /i /c:"    %%d" >nul && (
+    findstr /i /c:"    %%d" "%DUMP%" >nul && (
         echo FAIL: %~1 imports the dynamic C runtime ^(%%d^)
-        dumpbin /nologo /dependents "%~1"
+        type "%DUMP%"
         exit /b 1
     )
 )
 echo OK: %~nx1 imports no dynamic C runtime
+exit /b 0
+
+rem dumpbin <option> <file> into %DUMP%; fails unless dumpbin read the image ("File Type:"), so that a failed dumpbin
+rem does not pass the checks that look for a line in its output.
+:dumpbin
+dumpbin /nologo %1 "%~2" > "%DUMP%" 2>&1 || (
+    echo FAIL: dumpbin %1 %~2
+    type "%DUMP%"
+    exit /b 1
+)
+findstr /c:"File Type:" "%DUMP%" >nul || (
+    echo FAIL: dumpbin %1 %~2 did not read the image
+    type "%DUMP%"
+    exit /b 1
+)
 exit /b 0
