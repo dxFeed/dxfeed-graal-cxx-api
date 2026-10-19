@@ -9,6 +9,9 @@
 
 #include <fmt/format.h>
 
+#include <memory>
+#include <mutex>
+
 DXFCPP_BEGIN_NAMESPACE
 
 #ifdef DXFCXX_FEATURE_STACKTRACE
@@ -34,7 +37,7 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
         } else {
             if (const auto foundAt = frameString.find(" at "); foundAt != std::string::npos) {
                 what = frameString.substr(0, foundAt);
-                whereStart = foundIn + 4;
+                whereStart = foundAt + 4;
             } else {
                 whereStart = frameString.size();
             }
@@ -64,16 +67,23 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
 }
 #endif
 
-RuntimeException::RuntimeException(const StringLike &message, const StringLike &additionalStackTrace)
-    : std::runtime_error(message.c_str()),
+// The frames are captured when the exception is created; resolving them to names (slow: it may run addr2line for
+// each frame) is deferred to the first getStackTrace() call.
+struct RuntimeException::StackTrace {
+    std::string additional{};
 #ifdef DXFCXX_FEATURE_STACKTRACE
-      stackTrace_(additionalStackTrace.empty() ? stackTraceToString(boost::stacktrace::stacktrace())
-                                               : fmt::format("{}\n{}", additionalStackTrace.c_str(),
-                                                             stackTraceToString(boost::stacktrace::stacktrace())))
-#else
-      stackTrace_(additionalStackTrace)
+    boost::stacktrace::stacktrace frames{0, 0}; // empty: the default constructor would capture here
 #endif
-{
+    std::once_flag formatted{};
+    std::string text{};
+};
+
+RuntimeException::RuntimeException(const StringLike &message, const StringLike &additionalStackTrace)
+    : std::runtime_error(message.c_str()), stackTrace_(std::make_shared<StackTrace>()) {
+    stackTrace_->additional = additionalStackTrace;
+#ifdef DXFCXX_FEATURE_STACKTRACE
+    stackTrace_->frames = boost::stacktrace::stacktrace();
+#endif
 }
 
 RuntimeException::RuntimeException(const RuntimeException &other) noexcept
@@ -81,7 +91,17 @@ RuntimeException::RuntimeException(const RuntimeException &other) noexcept
 }
 
 const std::string &RuntimeException::getStackTrace() const & {
-    return stackTrace_;
+    std::call_once(stackTrace_->formatted, [st = stackTrace_.get()] {
+#ifdef DXFCXX_FEATURE_STACKTRACE
+        auto frames = stackTraceToString(st->frames);
+
+        st->text = st->additional.empty() ? std::move(frames) : fmt::format("{}\n{}", st->additional, frames);
+#else
+        st->text = st->additional;
+#endif
+    });
+
+    return stackTrace_->text;
 }
 
 DXFCPP_END_NAMESPACE

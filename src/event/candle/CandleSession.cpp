@@ -11,6 +11,8 @@
 #include <optional>
 #include <string>
 
+#include "../../internal/utils/CandleUtils.hpp"
+
 DXFCPP_BEGIN_NAMESPACE
 
 SessionType::SessionType(SessionTypeEnum code, const StringLike &name, bool trading) noexcept
@@ -85,7 +87,7 @@ CandleSession::CandleSession(const SessionFilter &sessionFilter, const StringLik
     : sessionFilter_{&sessionFilter}, string_{string} {
 }
 
-CandleSession::CandleSession() noexcept {
+CandleSession::CandleSession() noexcept : CandleSession(SessionFilter::ANY, "false") {
 }
 
 CandleSession::~CandleSession() noexcept {
@@ -140,22 +142,15 @@ std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol)
         return symbol;
     }
 
-    try {
-        const auto other = parse(a.value());
-
-        if (other.get() == DEFAULT) {
-            return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
-        }
-
-        if (a.value() != other.get().toString()) {
-            return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.get().toString());
-        }
-
-        return symbol;
-    } catch (const InvalidArgumentException &) {
-        return symbol;
-    } catch (const std::invalid_argument &) {
-        return symbol;
+    // As getAttributeForSymbol() (Java Boolean.parseBoolean): only "true" in any case is the regular session.
+    if (!iEquals(a.value(), "true")) {
+        return candle::removeDefaultAttribute(symbol, ATTRIBUTE_KEY, DEFAULT.toString());
     }
+
+    if (a.value() != REGULAR.toString()) {
+        return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, REGULAR.toString());
+    }
+
+    return symbol;
 }
 DXFCPP_END_NAMESPACE

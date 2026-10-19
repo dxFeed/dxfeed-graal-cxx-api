@@ -3,12 +3,16 @@
 
 #include <fmt/format.h>
 #include <limits>
+#include <map>
+#include <optional>
 #include <string>
 #include <vector>
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <doctest.h>
+
+#include "CandleAttributesJavaParity.hpp"
 
 using namespace dxfcpp;
 
@@ -129,4 +133,165 @@ TEST_CASE("CandleSession attribute lookup should use Boolean.parseBoolean semant
 
 TEST_CASE("CandleSymbol should report invalid attributes as exceptions") {
     CHECK_THROWS_AS(CandleSymbol::valueOf("AAPL{=garbage}"), InvalidArgumentException);
+}
+
+TEST_CASE("A default-constructed CandleSession should be CandleSession::ANY") {
+    const CandleSession session{};
+
+    CHECK(session == CandleSession::ANY);
+    CHECK(session == CandleSession::DEFAULT);
+    CHECK(session.toString() == "false");
+    CHECK(session.getSessionFilter() == SessionFilter::ANY);
+}
+
+namespace {
+
+// Where C++ deliberately differs from Java: Java keeps the default attributes (its normalization drops the result of
+// the removal), C++ removes them. The attributes themselves are the same as in Java (checked below).
+const std::map<std::string, std::string> CXX_STR_OVERRIDES = {
+    {"A{=t}", "A"},
+    {"A{=1t}", "A"},
+    {"A{tho=false}", "A"},
+    {"A{tho=t}", "A"},
+    {"A{tho=yes}", "A"},
+    {"A{tho=}", "A"},
+    {"A{price=last}", "A"},
+    {"A{price=l}", "A"},
+    {"A{price=la}", "A"},
+    {"A{a=m}", "A"},
+    {"A{a=M}", "A"},
+    {"A{pl=NaN}", "A"},
+    {"A{=t,pl=NaN}", "A"},
+    {"A{pl=NaN,tho=false,a=m,price=last,=t}", "A"},
+    {"A{tho=false,tho=true}", "A"},
+    {"A{=t,=5m}", "A"},
+    {"A&Q{=t}", "A&Q"},
+    {"{=t}", ""},
+    {"A{{=t}", "A{"},
+    {"A{=t,tho=true}", "A{tho=true}"},
+    {"A{=t,tho=false}", "A"},
+    {"A{=1t,tho=false}", "A"},
+    {"A{tho=false,=1t}", "A"},
+    {"A{=1t,pl=NaN,a=m}", "A"},
+    {"A{=1t,pl=NaN,a=s}", "A{a=s}"},
+    {"A{pl=NaN,price=ASK}", "A{price=ask}"},
+    {"A{pl=NaN,price=last,a=s}", "A{a=s}"},
+    {"A{pl=NaN,price=last,a=s,tho=TRUE}", "A{a=s,tho=true}"},
+    {"B{=Tick}", "B"},
+    {"B{=Ticks}", "B"},
+    {"A{tho=false,tho=false}", "A"},
+    {"A{tho=FALSE}", "A"},
+    {"A{price=last,price=bid}", "A"},
+    {"A{a=m,a=s}", "A"},
+    {"A{=t,=m}", "A"},
+    {"A{a=m,=t,tho=false}", "A"},
+    {"A{a=m,=1t}", "A"},
+    {"A{=1t,a=s}", "A{a=s}"},
+    {"A{=1.0t}", "A"},
+};
+
+} // namespace
+
+TEST_CASE("CandleSymbol::valueOf should match Java attributes and normalize idempotently") {
+    for (const auto &c : candle_java_parity::SYMBOL_VALUE_OF) {
+        const std::string input = c.input;
+
+        CAPTURE(input);
+
+        if (!c.ok) {
+            CHECK_THROWS_AS(CandleSymbol::valueOf(input), InvalidArgumentException);
+
+            continue;
+        }
+
+        std::optional<CandleSymbol> symbol{};
+
+        CHECK_NOTHROW(symbol = CandleSymbol::valueOf(input));
+
+        if (!symbol) {
+            continue;
+        }
+
+        const auto overridden = CXX_STR_OVERRIDES.find(input);
+        const std::string expected = overridden == CXX_STR_OVERRIDES.end() ? c.str : overridden->second;
+
+        CHECK(symbol->toString() == expected);
+        CHECK(symbol->getBaseSymbol() == std::string(c.base));
+        CHECK(symbol->getPrice()->toString() == std::string(c.price));
+        CHECK(symbol->getSession()->toString() == std::string(c.session));
+        CHECK(symbol->getPeriod()->toString() == std::string(c.period));
+        CHECK(symbol->getAlignment()->toString() == std::string(c.alignment));
+        CHECK(symbol->getPriceLevel()->toString() == std::string(c.priceLevel));
+        CHECK(CandleSymbol::valueOf(symbol->toString()).toString() == symbol->toString());
+    }
+}
+
+TEST_CASE("A copy of a CandleSymbol should keep the symbol and all attributes") {
+    const auto original = CandleSymbol::valueOf(
+        "EUR/USD&E{source=bank}", {CandlePrice::BID, CandlePeriod::valueOf(2, CandleType::HOUR), CandleSession::REGULAR,
+                                   CandleAlignment::SESSION, CandlePriceLevel::valueOf(0.5)});
+    const auto check = [&original](const CandleSymbol &other) {
+        CHECK(other == original);
+        CHECK(other.toString() == original.toString());
+        CHECK(other.getBaseSymbol() == original.getBaseSymbol());
+        CHECK(other.getExchange()->toString() == original.getExchange()->toString());
+        CHECK(other.getPrice() == original.getPrice());
+        CHECK(other.getSession() == original.getSession());
+        CHECK(other.getPeriod() == original.getPeriod());
+        CHECK(other.getAlignment() == original.getAlignment());
+        CHECK(other.getPriceLevel() == original.getPriceLevel());
+
+        // The copy holds the same fields as a symbol parsed from its string.
+        const auto reparsed = CandleSymbol::valueOf(other.toString());
+
+        CHECK(other.getBaseSymbol() == reparsed.getBaseSymbol());
+        CHECK(other.getExchange()->toString() == reparsed.getExchange()->toString());
+        CHECK(other.getPrice() == reparsed.getPrice());
+        CHECK(other.getSession() == reparsed.getSession());
+        CHECK(other.getPeriod() == reparsed.getPeriod());
+        CHECK(other.getAlignment() == reparsed.getAlignment());
+        CHECK(other.getPriceLevel() == reparsed.getPriceLevel());
+    };
+
+    CHECK(original.toString() == "EUR/USD&E{=2h,a=s,pl=0.5,price=bid,source=bank,tho=true}");
+
+    const CandleSymbol copy{original};
+
+    check(copy);
+
+    auto assigned = CandleSymbol::valueOf("IBM");
+
+    assigned = original;
+    check(assigned);
+
+    auto moveSource = original;
+    const CandleSymbol moved{std::move(moveSource)};
+
+    check(moved);
+
+    auto moveAssigned = CandleSymbol::valueOf("IBM");
+
+    moveAssigned = CandleSymbol{moved};
+    check(moveAssigned);
+}
+
+TEST_CASE("CandleSymbol normalization should keep a default attribute that the base symbol would take for its own") {
+    for (const auto &[input, expected] : std::vector<std::pair<std::string, std::string>>{
+             {"A{=t}{=t}", "A{=t}{=t}"},
+             {"A{=t}{=1t}", "A{=t}{=t}"},
+             {"X{=t,=bpr}{=t,=bpr}", "X{=t,=bpr}{=t}"},
+             {"IB{=1M,=x}}{pl=NaN}", "IB{=1M,=x}}{pl=NaN}"},
+             {"A{price=bid}{=t,price=bid}", "A{price=bid}{price=bid}"},
+             {"A{b=1}{price=last}", "A{b=1}{price=last}"},
+             {"A{=t,}", "A{=t,}"},
+             {"A{&}{=t}", "A{&}{=t}"},
+         }) {
+        CAPTURE(input);
+
+        const auto symbol = CandleSymbol::valueOf(input);
+
+        CHECK(symbol.toString() == expected);
+        CHECK(CandleSymbol::valueOf(symbol.toString()).toString() == expected);
+        CHECK(symbol.getBaseSymbol() == CandleSymbol::valueOf(expected).getBaseSymbol());
+    }
 }

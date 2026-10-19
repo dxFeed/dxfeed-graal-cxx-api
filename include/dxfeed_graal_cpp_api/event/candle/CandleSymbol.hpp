@@ -187,10 +187,10 @@ struct DXFCPP_EXPORT CandleSymbol {
 
     bool operator<(const CandleSymbol &candleSymbol) const noexcept;
 
-    CandleSymbol(const CandleSymbol &candleSymbol) noexcept;
-    CandleSymbol(CandleSymbol &&candleSymbol) noexcept;
-    CandleSymbol &operator=(const CandleSymbol &candleSymbol) noexcept;
-    CandleSymbol &operator=(CandleSymbol &&candleSymbol) noexcept;
+    CandleSymbol(const CandleSymbol &candleSymbol);
+    CandleSymbol(CandleSymbol &&candleSymbol);
+    CandleSymbol &operator=(const CandleSymbol &candleSymbol);
+    CandleSymbol &operator=(CandleSymbol &&candleSymbol);
     CandleSymbol() noexcept;
     virtual ~CandleSymbol() noexcept;
 

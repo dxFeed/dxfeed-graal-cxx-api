@@ -43,7 +43,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
     static const CandleExchange DEFAULT;
 
     private:
-    const char exchangeCode_{};
+    char exchangeCode_{};
 
     explicit CandleExchange(char exchangeCode) noexcept;
 

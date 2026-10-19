@@ -94,5 +94,13 @@ extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t *data, std::size_t size
     } catch (const std::exception &) {
     }
 
+    try {
+        const auto &session = CandleSession::parse(s).get();
+
+        (void)session.getSessionFilter();
+        (void)CandleSession::parse(session.toString());
+    } catch (const std::exception &) {
+    }
+
     return 0;
 }

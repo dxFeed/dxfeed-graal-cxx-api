@@ -4,6 +4,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandlePeriod.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleType.hpp"
 
+#include "../../internal/utils/CandleUtils.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
@@ -118,7 +119,7 @@ std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) 
         const auto other = parse(a.value());
 
         if (other == DEFAULT) {
-            return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+            return candle::removeDefaultAttribute(symbol, ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.toString()) {
