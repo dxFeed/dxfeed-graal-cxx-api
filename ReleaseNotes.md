@@ -7,8 +7,8 @@
       returned `true`).
     * `EventTypeEnum::isMarket()` returns whether the events are market events, as in Java (it returned
       `isOnlyIndexed()`, so `false` for `QUOTE`, `TRADE`, `GREEKS` and other market events).
-    * `InstrumentProfile::setDateField()` stores a date (`2024-01-01`) instead of a number of days (`19723`), which
-      `getDateField()` could not read back.
+    * `InstrumentProfile::setDateField()` stores a date (`2024-01-01`) in a custom field instead of a number of days
+      (`19723`), which `getDateField()` could not read back.
     * `MarketDepthModel`: a new snapshot of a source (for example, after a reconnection) removes all the old orders of
       that source: some of them were left in the book, and removing the last order of the book was undefined
       behaviour. A model built without a listener no longer crashes on the first update.
