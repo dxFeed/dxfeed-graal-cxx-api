@@ -144,12 +144,16 @@ double PriceIncrements::incrementPrice(double price, std::int32_t direction, dou
 }
 
 bool PriceIncrements::operator==(const PriceIncrements &other) const {
+    if (this == &other) {
+        return true;
+    }
+
     std::scoped_lock lock(mtx_, other.mtx_);
 
     init();
     other.init();
 
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 std::size_t PriceIncrements::hashCode() const noexcept {

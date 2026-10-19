@@ -31,21 +31,12 @@ struct DXFCPP_EXPORT SharedEntity : Entity, std::enable_shared_from_this<SharedE
     ~SharedEntity() noexcept override;
 
     /**
-     * Checks that the pointer to the current type could be converted to type T*
-     * In other words: whether type T belongs to the type hierarchy in which the current type resides.
+     * Checks that the object is of type T: its dynamic type is T or derived from T.
      * @tparam T The type to check
-     * @return true if the type belongs to the type hierarchy in which the current type resides.
+     * @return `true` if the object is of type T (the pointer to it can be converted to T*).
      */
     template <typename T> bool is() const noexcept {
-        try {
-            auto p = dynamic_cast<const T *>(this);
-
-            ignoreUnused(p);
-
-            return true;
-        } catch (const std::bad_cast &) {
-            return false;
-        }
+        return dynamic_cast<const T *>(this) != nullptr;
     }
 
     /**

@@ -55,7 +55,7 @@ class DXFCPP_EXPORT Isolate final {
     };
 
     mutable std::recursive_mutex mtx_{};
-    ConstGraalIsolateThreadHandle handle_;
+    ConstGraalIsolateThreadHandle handle_{};
     static IsolateThread &currentIsolateThread() noexcept;
 
     Isolate() noexcept;

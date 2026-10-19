@@ -496,3 +496,98 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestCloseFromListener") {
 
     REQUIRE_EQ(calls.load(), 1);
 }
+
+// A new snapshot of a source (after a reconnection) clears the orders of that source from the book.
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestClearBySourceRemovesAllOrdersOfTheSource") {
+    using Set = MarketDepthModel<Order>::SortedOrderSet<MarketDepthModel<Order>::BuyLess>;
+
+    const auto order = [this](std::int64_t index, double price, const OrderSource &source) {
+        return createOrder(index, Side::BUY, price, 1, 0)->withSource(source).sharedAs<Order>();
+    };
+    const auto sources = [](const std::vector<std::shared_ptr<Order>> &orders) {
+        std::vector<std::int32_t> result{};
+
+        for (const auto &o : orders) {
+            result.push_back(o->getSource().id());
+        }
+
+        return result;
+    };
+
+    Set set{};
+
+    SUBCASE("Two orders of the source") {
+        set.insert(order(1, 2, OrderSource::NTV));
+        set.insert(order(0, 1, OrderSource::NTV));
+        set.toVector();
+        set.clearBySource(OrderSource::NTV);
+
+        CHECK(set.isChanged());
+        CHECK(set.toVector().empty());
+    }
+
+    SUBCASE("Orders of the source before an order of another source") {
+        set.insert(order(2, 3, OrderSource::NTV));
+        set.insert(order(1, 2, OrderSource::NTV));
+        set.insert(order(0, 1, OrderSource::ISE));
+        set.clearBySource(OrderSource::NTV);
+
+        CHECK(sources(set.toVector()) == std::vector<std::int32_t>{OrderSource::ISE.id()});
+    }
+
+    SUBCASE("Three orders of the source") {
+        set.insert(order(2, 3, OrderSource::NTV));
+        set.insert(order(1, 2, OrderSource::NTV));
+        set.insert(order(0, 1, OrderSource::NTV));
+        set.clearBySource(OrderSource::NTV);
+
+        CHECK(set.toVector().empty());
+    }
+
+    SUBCASE("No orders of the source") {
+        set.insert(order(0, 1, OrderSource::ISE));
+        set.toVector();
+        set.clearBySource(OrderSource::NTV);
+
+        CHECK_FALSE(set.isChanged());
+        CHECK(set.toVector().size() == 1);
+    }
+}
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestSnapshotKeepsOrdersOfOtherSources") {
+    const auto snapshot = (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END).getMask();
+    const auto withSource = [](const std::shared_ptr<Order> &order, const OrderSource &source) {
+        return order->withSource(source).sharedAs<Order>();
+    };
+
+    model_->close();
+    model_ = createBuilder()->withSources({OrderSource::DEFAULT, OrderSource::NTV})->build();
+
+    auto ntv = withSource(createOrder(0, Side::BUY, 1, 1, snapshot), OrderSource::NTV);
+
+    publishAndProcess(true, ntv);
+    publishAndProcess(true, {createOrder(1, Side::BUY, 3, 1, EventFlag::SNAPSHOT_BEGIN.getFlag()),
+                             createOrder(0, Side::BUY, 2, 1, EventFlag::SNAPSHOT_END.getFlag())});
+    checkBuySize(3);
+
+    auto order = createOrder(0, Side::BUY, 10, 1, snapshot);
+
+    publishAndProcess(true, order);
+    checkBuySize(2);
+    checkOrder(Side::BUY, order, 0);
+    checkOrder(Side::BUY, ntv, 1);
+}
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestModelWithoutListener") {
+    model_->close();
+
+    auto model = MarketDepthModel<Order>::newBuilder()
+                     ->withFeed(feed_)
+                     ->withSymbol(symbol_)
+                     ->withSources({OrderSource::DEFAULT})
+                     ->build();
+
+    publishAndProcess(createOrder(0, Side::BUY, 1, 1, (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END).getMask()));
+    publishAndProcess(createOrder(1, Side::SELL, 2, 1, 0));
+    model->close();
+}

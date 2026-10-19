@@ -120,7 +120,7 @@ bool AuthToken::operator==(const AuthToken &other) const {
         return false;
     }
 
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 AuthToken::~AuthToken() noexcept {

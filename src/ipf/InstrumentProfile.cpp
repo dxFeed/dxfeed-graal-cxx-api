@@ -320,7 +320,7 @@ bool InstrumentProfile::operator==(const InstrumentProfile &other) const {
         return false;
     }
 
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 InstrumentProfile::~InstrumentProfile() noexcept {

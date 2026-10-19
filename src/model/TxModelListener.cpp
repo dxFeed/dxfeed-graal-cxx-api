@@ -62,7 +62,7 @@ std::size_t TxModelListenerCommon::hashCode() const noexcept {
 }
 
 bool TxModelListenerCommon::operator==(const TxModelListenerCommon &other) const {
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 void TxModelListenerCommon::createHandle(Id<TxModelListenerTag> id) {

@@ -521,15 +521,11 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         void clearBySource(const IndexedEventSource &source) {
             std::lock_guard lock(mutex_);
 
-            std::size_t size = orders_.size();
-
-            for (auto it = orders_.begin(); it != orders_.end(); ++it) {
-                if ((*it)->getSource() == source) {
-                    it = orders_.erase(it);
-                }
+            if (std::erase_if(orders_, [&source](const auto &order) {
+                    return order->getSource() == source;
+                }) > 0) {
+                isChanged_ = true;
             }
-
-            isChanged_ = orders_.size() != size;
         }
 
         std::vector<std::shared_ptr<O>> toVector() {
@@ -619,7 +615,9 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
             taskScheduled_ = false;
         }
 
-        listener_->getHandler()(buyOrders, sellOrders);
+        if (listener_) {
+            listener_->getHandler()(buyOrders, sellOrders);
+        }
     }
 
     void scheduleTaskIfNeeded(std::chrono::milliseconds delay) {
