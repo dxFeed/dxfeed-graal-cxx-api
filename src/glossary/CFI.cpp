@@ -157,12 +157,16 @@ std::string CFI::describe() const {
 }
 
 bool CFI::operator==(const CFI &other) const {
+    if (this == &other) {
+        return true;
+    }
+
     std::scoped_lock lock(mtx_, other.mtx_);
 
     init();
     other.init();
 
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 std::size_t CFI::hashCode() const noexcept {
@@ -216,7 +220,7 @@ std::vector<std::shared_ptr<CFI::Value>> CFI::Attribute::getValues() const {
 }
 
 bool CFI::Attribute::operator==(const Attribute &other) const {
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 std::size_t CFI::Attribute::hashCode() const noexcept {
@@ -256,7 +260,7 @@ std::string CFI::Value::getDescription() const {
 }
 
 bool CFI::Value::operator==(const Value &other) const {
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 std::size_t CFI::Value::hashCode() const noexcept {

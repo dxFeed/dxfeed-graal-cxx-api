@@ -40,6 +40,7 @@ set(DXFC_TEST_SOURCES
         api/DXFeedTest.cpp
         api/DXEndpointTest.cpp
         api/DXPublisherTest.cpp
+        api/EqualityTest.cpp
         api/EventsTest.cpp
         api/ExportsTest.cpp
         api/MarketEventSymbolsTest.cpp
@@ -47,6 +48,7 @@ set(DXFC_TEST_SOURCES
         api/OrderSourceTest.cpp
         event/EdgeValuesTapeTest.cpp
         event/EventsTest.cpp
+        event/EventTypeTest.cpp
         event/TapeRoundTripTest.cpp
         exceptions/ExceptionsTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
@@ -55,6 +57,7 @@ set(DXFC_TEST_SOURCES
         internal/EntityManagerTest.cpp
         internal/HandlerTest.cpp
         ipf/InstrumentProfileCollectorTest.cpp
+        ipf/InstrumentProfileTest.cpp
         ipf/OptionChainsTest.cpp
         ipf/OptionSeriesTest.cpp
         model/IndexedTxModelTest.cpp

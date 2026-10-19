@@ -70,12 +70,16 @@ double AdditionalUnderlyings::getSPC(const StringLike &symbol) const {
 }
 
 bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const {
+    if (this == &other) {
+        return true;
+    }
+
     std::scoped_lock lock(mtx_, other.mtx_);
 
     init();
     other.init();
 
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 std::size_t AdditionalUnderlyings::hashCode() const noexcept {

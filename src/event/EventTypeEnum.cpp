@@ -154,7 +154,7 @@ bool EventTypeEnum::isOnlyIndexed() const noexcept {
 }
 
 bool EventTypeEnum::isMarket() const noexcept {
-    return isOnlyIndexed_;
+    return isMarket_;
 }
 
 EventTypeEnum literals::operator""_et(const char *eventTypeString, size_t) noexcept {

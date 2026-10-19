@@ -971,11 +971,11 @@ std::int32_t getDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandl
 setDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
              const StringLike &name, std::int32_t value) {
     if (!instrumentProfile) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setNumericField`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfile_setDateField`. The "
                                        "`instrumentProfile` handle is invalid");
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setNumericField,
+    runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setDateField,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()), name.c_str(),
                                        value);
 }

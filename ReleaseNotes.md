@@ -1,3 +1,17 @@
+* **\[MDAPI-432]\[C++]** **\[BREAKING]** Fixed equality, type checks and the market depth model.
+    * **\[BREAKING]** Fixed inverted equality of `AuthToken`, `CFI`, `CFI::Attribute`, `CFI::Value`, `PriceIncrements`,
+      `AdditionalUnderlyings`, `InstrumentProfile` and the tx model listeners: `operator==` returned `false` for equal
+      objects and `true` for different ones. Comparing a `CFI`, `PriceIncrements` or `AdditionalUnderlyings` with
+      itself no longer deadlocks.
+    * **\[BREAKING]** `SharedEntity::is<T>()` returns `true` only if the entity is a `T` or derived from `T` (it always
+      returned `true`).
+    * `EventTypeEnum::isMarket()` returns whether the events are market events, as in Java (it returned
+      `isOnlyIndexed()`, so `false` for `QUOTE`, `TRADE`, `GREEKS` and other market events).
+    * `InstrumentProfile::setDateField()` stores a date (`2024-01-01`) in a custom field instead of a number of days
+      (`19723`), which `getDateField()` could not read back.
+    * `MarketDepthModel`: a new snapshot of a source (for example, after a reconnection) removes all the old orders of
+      that source: some of them were left in the book, and removing the last order of the book was undefined
+      behaviour. A model built without a listener no longer crashes on the first update.
 * **\[MDAPI-430]\[C++]** **\[BREAKING]** Candle attributes are parsed and printed as in Java.
     * **\[BREAKING]** `CandlePeriod::parse()` and `CandlePriceLevel::parse()` follow Java `Double.parseDouble`: a sign
       (`+5m`), the `d`/`f` suffix and hexadecimal values (`0x1p3`) of a price level are accepted, and parsing no longer
