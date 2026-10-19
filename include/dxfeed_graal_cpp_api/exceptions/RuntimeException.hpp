@@ -10,6 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 #include "../internal/utils/StringUtils.hpp"
 
 #include <iosfwd>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -35,12 +36,18 @@ struct DXFCPP_EXPORT RuntimeException : std::runtime_error {
     RuntimeException(const RuntimeException &other) noexcept;
 
     /**
-     * @return The current stacktrace + the additional stacktrace if present.
+     * Returns the stacktrace. The frames are captured when the exception is created and are formatted on the first
+     * call.
+     *
+     * @return The additional stacktrace if present + the current stacktrace.
      */
     const std::string &getStackTrace() const &;
 
     private:
-    std::string stackTrace_;
+    struct StackTrace;
+
+    // Shared by the copies, so a copy is cheap and the stacktrace is formatted once.
+    std::shared_ptr<StackTrace> stackTrace_;
 };
 
 DXFCPP_END_NAMESPACE
