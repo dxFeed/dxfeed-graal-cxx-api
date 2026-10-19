@@ -21,6 +21,7 @@
       instead of when it is thrown: with `DXFCXX_FEATURE_STACKTRACE` each exception resolved the names of all frames
       (on Linux by running `addr2line`), which made each throw slow (up to tens of seconds in a Debug build with
       ASan). The copies of an exception share the stacktrace.
+    * A stacktrace frame without a path (`??:0`, a relative file name) prints its location instead of the whole frame.
 * **\[MDAPI-429]\[C++]** **\[BREAKING]** Fixed `noexcept` functions that threw and the shared library (DLL) on Windows.
     * **\[BREAKING]** `OrderBase::getSource()`, `OrderBase::setExchangeCode(std::int16_t)` and the `withIndex()` /
       `withExchangeCode()` methods of `Order`, `SpreadOrder`, `AnalyticOrder` and `OtcMarketsOrder` are no longer

@@ -37,7 +37,7 @@ std::string stackTraceToString(const boost::stacktrace::stacktrace &stacktrace) 
         } else {
             if (const auto foundAt = frameString.find(" at "); foundAt != std::string::npos) {
                 what = frameString.substr(0, foundAt);
-                whereStart = foundIn + 4;
+                whereStart = foundAt + 4;
             } else {
                 whereStart = frameString.size();
             }
