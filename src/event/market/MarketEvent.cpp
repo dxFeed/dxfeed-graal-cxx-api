@@ -54,7 +54,7 @@ void MarketEvent::assign(std::shared_ptr<EventType> event) {
 
 const std::string &MarketEvent::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return eventSymbol_.value();

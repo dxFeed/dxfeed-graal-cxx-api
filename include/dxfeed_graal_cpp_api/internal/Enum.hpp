@@ -10,12 +10,25 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./Common.hpp"
 
 #include <cstdint>
+#include <functional>
+#include <span>
+#include <stdexcept>
 #include <string>
+#include <string_view>
 #include <type_traits>
-#include <unordered_map>
 
 DXFCPP_BEGIN_NAMESPACE
 
+/**
+ * A base of the enums that emulate Java enums.
+ *
+ * The elements are constant-initialized (`constinit`), so they and valueOf() can be used in the dynamic initialization
+ * of global variables.
+ *
+ * @tparam Child The enum type: declares `static const std::span<const std::reference_wrapper<const Child>> ALL`,
+ * all elements of the enum.
+ * @tparam Code The type of the element code.
+ */
 template <typename Child, typename Code> struct Enum {
     using ParentType = Enum<Child, Code>;
     using ChildType = Child;
@@ -23,19 +36,23 @@ template <typename Child, typename Code> struct Enum {
 
     private:
     const CodeType code_;
-    const std::string name_;
+    const std::string_view name_;
 
     protected:
     template <Integral OtherCodeType> static constexpr CodeType convertToInnerCodeType(OtherCodeType code) noexcept {
         return static_cast<Code>(static_cast<std::make_unsigned_t<Code>>(code));
     }
 
+    /**
+     * Creates an element of the enum.
+     *
+     * @param code The element code.
+     * @param name The element name with static storage duration (a string literal).
+     */
     template <Integral OtherCodeType>
-    Enum(OtherCodeType code, const StringLike &name) noexcept
+    constexpr Enum(OtherCodeType code, std::string_view name) noexcept
         : code_{convertToInnerCodeType(code)}, name_{name} {
     }
-
-    static const std::unordered_map<CodeType, std::reference_wrapper<const Child>> ALL;
 
     public:
     /**
@@ -43,7 +60,7 @@ template <typename Child, typename Code> struct Enum {
      *
      * @return code.
      */
-    [[nodiscard]] Code getCode() const {
+    [[nodiscard]] constexpr Code getCode() const noexcept {
         return code_;
     }
 
@@ -52,8 +69,8 @@ template <typename Child, typename Code> struct Enum {
      *
      * @return name
      */
-    [[nodiscard]] const std::string &getName() const & noexcept {
-        return name_;
+    [[nodiscard]] std::string getName() const {
+        return std::string{name_};
     }
 
     /**
@@ -61,8 +78,8 @@ template <typename Child, typename Code> struct Enum {
      *
      * @return a string representation
      */
-    [[nodiscard]] const std::string &toString() const & noexcept {
-        return name_;
+    [[nodiscard]] std::string toString() const {
+        return std::string{name_};
     }
 
     /**
@@ -97,19 +114,30 @@ template <typename Child, typename Code> struct Enum {
      * Returns enum element by integer code bit pattern.
      *
      * @param code integer code.
-     * @return enum element.
+     * @return enum element; the element with code `0` when no element has the specified code.
+     * @throws std::out_of_range if no element has the specified code or code `0`.
      */
-    template <Integral OtherCodeType> inline static const Child &valueOf(OtherCodeType code) {
-        if (auto found = ALL.find(convertToInnerCodeType(code)); found != ALL.end()) {
-            return found->second;
+    template <Integral OtherCodeType> static const Child &valueOf(OtherCodeType code) {
+        if (const auto *found = find(convertToInnerCodeType(code))) {
+            return *found;
         }
 
-        // TODO: try to implement C++11-like code for this
-        if constexpr (requires { Child::getDefault(); }) {
-            return Child::getDefault();
-        } else {
-            return ALL.at(0);
+        if (const auto *found = find(CodeType{})) {
+            return *found;
         }
+
+        throw std::out_of_range("Enum::valueOf: unknown code");
+    }
+
+    private:
+    static const Child *find(CodeType code) noexcept {
+        for (const auto &element : Child::ALL) {
+            if (element.get().getCode() == code) {
+                return &element.get();
+            }
+        }
+
+        return nullptr;
     }
 };
 

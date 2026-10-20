@@ -657,6 +657,12 @@ set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS /PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_
 set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
 set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
 
+# clang-cl takes the MSVC options (it rejects -fPIC and -pedantic).
+set(DXFCXX_MSVC_LIKE_CXX "$<AND:$<COMPILE_LANGUAGE:CXX>,$<BOOL:${MSVC}>>")
+set(DXFCXX_MSVC_LIKE_C "$<AND:$<COMPILE_LANGUAGE:C>,$<BOOL:${MSVC}>>")
+set(DXFCXX_GCC_LIKE_CXX "$<AND:$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>")
+set(DXFCXX_GCC_LIKE_C "$<AND:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>")
+
 #A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
 set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
 
@@ -674,7 +680,7 @@ if (DXFCXX_MSVC_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
     # https://github.com/microsoft/STL/wiki/VS-2022-Changelog#vs-2022-1710
     # https://github.com/microsoft/STL/pull/3824
     # https://github.com/actions/runner-images/issues/10004
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    if (MSVC)
         target_compile_definitions(${PROJECT_NAME} PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
         target_compile_definitions(${PROJECT_NAME}_static PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
     endif ()
@@ -687,32 +693,32 @@ endif ()
 
 target_compile_options(${PROJECT_NAME}
         PUBLIC
-        $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<${DXFCXX_MSVC_LIKE_CXX}:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<${DXFCXX_MSVC_LIKE_C}:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_CXX}:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_C}:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
 )
 
 target_link_options(${PROJECT_NAME}
         PUBLIC
-        $<$<AND:$<COMPILE_LANG_AND_ID:CXX,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
-        $<$<AND:$<COMPILE_LANG_AND_ID:C,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        $<$<AND:${DXFCXX_MSVC_LIKE_CXX},$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
+        $<$<AND:${DXFCXX_MSVC_LIKE_C},$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_CXX}:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_C}:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
 )
 
 target_compile_options(${PROJECT_NAME}_static
         PUBLIC
-        $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<${DXFCXX_MSVC_LIKE_CXX}:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<${DXFCXX_MSVC_LIKE_C}:${DXFCXX_MSVC_COMPILE_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_CXX}:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_C}:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
 )
 
 target_link_options(${PROJECT_NAME}_static
         PUBLIC
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_CXX}:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_C}:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
 )
 
 if (DXFCXX_USE_PRECOMPILED_HEADERS)

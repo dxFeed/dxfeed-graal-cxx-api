@@ -272,7 +272,7 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
         default:;
         }
 
-        return String::EMPTY;
+        return String::EMPTY();
     }(role_);
 
     if (propertiesFileKey.empty()) {
@@ -356,7 +356,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     if (auto name = properties_.contains(NAME_PROPERTY) ? properties_.at(NAME_PROPERTY) : std::string{}; name.empty()) {
         const std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId() + 1;
 
-        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY : std::string("-") + std::to_string(id));
+        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY() : std::string("-") + std::to_string(id));
 
         const auto newBuilder = withProperty(NAME_PROPERTY, name);
 

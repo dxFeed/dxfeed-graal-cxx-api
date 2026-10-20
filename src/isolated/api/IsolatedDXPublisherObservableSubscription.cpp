@@ -39,8 +39,8 @@ std::unordered_set<EventTypeEnum> /* dxfg_event_clazz_list_t* */ getEventTypes(
         for (auto i = 0; i < eventTypesList->size; i++) {
             dxfg_event_clazz_t ec = *eventTypesList->elements[static_cast<std::size_t>(i)];
 
-            if (auto etIt = EventTypeEnum::ALL_BY_ID.find(static_cast<std::uint32_t>(ec));
-                etIt != EventTypeEnum::ALL_BY_ID.end()) {
+            if (auto etIt = EventTypeEnum::ALL_BY_ID().find(static_cast<std::uint32_t>(ec));
+                etIt != EventTypeEnum::ALL_BY_ID().end()) {
                 result.emplace(etIt->second.get());
             }
         }

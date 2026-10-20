@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include "../internal/utils/ConstString.hpp"
 #include "../internal/utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
@@ -11,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <string_view>
 
 /**
  * \addtogroup dxfcpp_event
@@ -30,7 +32,22 @@ class DXFCPP_EXPORT IndexedEventSource {
     friend struct EventSourceWrapper;
 
     std::int32_t id_{};
-    std::string name_{};
+    ConstString name_{};
+
+    protected:
+    /**
+     * Creates a constant source in constant expressions.
+     *
+     * @param id The identifier.
+     * @param name The name with static storage duration.
+     */
+    constexpr IndexedEventSource(std::int32_t id, ConstString::Literal name) noexcept : id_{id}, name_{name} {
+    }
+
+    /// @return The name without a copy.
+    [[nodiscard]] constexpr std::string_view nameView() const noexcept {
+        return name_.view();
+    }
 
     public:
     /**
@@ -89,7 +106,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      *
      * @return The string representation of the object.
      */
-    const std::string &name() const noexcept;
+    std::string name() const;
 
     /**
      * Returns the string representation of the object.

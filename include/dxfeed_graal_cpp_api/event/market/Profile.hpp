@@ -129,7 +129,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     /**
      * Returns description of the security instrument.
      *
-     * @return description of the security instrument or dxfcpp::String::NUL (`std::string{"<null>"}`).
+     * @return description of the security instrument or dxfcpp::String::NUL() (`std::string{"<null>"}`).
      */
     const std::string &getDescription() const & noexcept;
 
@@ -192,7 +192,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     /**
      * Returns a description of the reason that trading was halted.
      *
-     * @return description of the reason that trading was halted or dxfcpp::String::NUL (`std::string{"<null>"}`).
+     * @return description of the reason that trading was halted or dxfcpp::String::NUL() (`std::string{"<null>"}`).
      */
     const std::string &getStatusReason() const & noexcept;
 

@@ -50,7 +50,7 @@
 #    endif
 #endif
 
-#if !defined(_MSC_VER) && defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__NVCOMPILER)
+#if defined(__clang__) && !defined(__INTEL_COMPILER) && !defined(__NVCOMPILER)
 #    ifndef DXFCXX_DO_PRAGMA
 #        define DXFCXX_DO_PRAGMA(x) _Pragma(#x)
 #    endif

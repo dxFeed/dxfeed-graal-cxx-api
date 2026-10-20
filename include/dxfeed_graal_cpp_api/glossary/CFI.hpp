@@ -46,6 +46,8 @@ struct DXFCPP_EXPORT CFI : RequireMakeShared<CFI> {
     public:
     /**
      * Empty CFI - it has code "XXXXXX".
+     *
+     * It is built at dynamic initialization, so the initializers of global variables should not use it.
      */
     static const Ptr EMPTY;
 

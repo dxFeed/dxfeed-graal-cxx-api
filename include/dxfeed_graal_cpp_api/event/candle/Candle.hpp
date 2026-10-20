@@ -166,7 +166,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     /**
      * Returns a symbol of this event.
      *
-     * @return symbol of this event or dxfcpp::CandleSymbol::NUL (`dxfcpp::CandleSymbol{"<null>"}`)
+     * @return symbol of this event or dxfcpp::CandleSymbol::NUL() (`dxfcpp::CandleSymbol{"<null>"}`)
      */
     const CandleSymbol &getEventSymbol() const & noexcept override;
 

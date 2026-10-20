@@ -132,10 +132,10 @@ CmdArgsUtils::parseTypes(const StringLike &types) {
     std::vector<std::string> unknown;
 
     for (auto t : split) {
-        if (auto u = toUpper(t); EventTypeEnum::ALL_BY_NAME.contains(u)) {
-            result.emplace(EventTypeEnum::ALL_BY_NAME.at(u));
-        } else if (EventTypeEnum::ALL_BY_CLASS_NAME.contains(t)) {
-            result.emplace(EventTypeEnum::ALL_BY_CLASS_NAME.at(t));
+        if (auto u = toUpper(t); EventTypeEnum::ALL_BY_NAME().contains(u)) {
+            result.emplace(EventTypeEnum::ALL_BY_NAME().at(u));
+        } else if (EventTypeEnum::ALL_BY_CLASS_NAME().contains(t)) {
+            result.emplace(EventTypeEnum::ALL_BY_CLASS_NAME().at(t));
         } else {
             unknown.push_back(t);
         }

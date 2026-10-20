@@ -85,7 +85,9 @@ using CandleSymbolAttributeVariant =
  * their shortest possible form.
  */
 struct DXFCPP_EXPORT CandleSymbol {
-    static const CandleSymbol NUL;
+    /// The candle symbol "<null>". It is created at the first call and is never destroyed,
+    /// so it can be used by global variables.
+    static const CandleSymbol &NUL();
 
     private:
     std::string symbol_{};

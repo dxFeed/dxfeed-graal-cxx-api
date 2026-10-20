@@ -54,6 +54,8 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     public:
     /**
      * Empty additional underlyings - it has empty text and empty map.
+     *
+     * It is built at dynamic initialization, so the initializers of global variables should not use it.
      */
     static const Ptr EMPTY;
 

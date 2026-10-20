@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <type_traits>
-#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_market
@@ -46,9 +45,10 @@ struct Scope : Enum<Scope, std::uint32_t> {
      * Represents individual order on the market.
      */
     static const DXFCPP_EXPORT Scope ORDER;
-};
 
-template <> const std::unordered_map<Scope::CodeType, std::reference_wrapper<const Scope>> Scope::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const Scope>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

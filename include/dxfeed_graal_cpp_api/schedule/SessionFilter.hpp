@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include "../internal/utils/ConstString.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -11,7 +12,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./SessionType.hpp"
 #include "../internal/Common.hpp"
 
-#include <mutex>
 
 /**
  * \addtogroup dxfcpp_schedule
@@ -68,15 +68,25 @@ struct DXFCPP_EXPORT SessionFilter final {
     protected:
     SessionFilterEnum code_{};
 
-    std::string name_{};
+    ConstString name_{};
 
     /// Required type, std::nullopt if not relevant.
     std::optional<SessionType> type_{};
     /// Required trading flag, std::nullopt if not relevant.
     std::optional<bool> trading_{};
 
-    mutable std::mutex mtx_{};
     mutable JavaObjectHandle<SessionFilter> handle_{};
+
+    private:
+    // The constants: constant-initialized, a session type is created in place.
+    constexpr SessionFilter(SessionFilterEnum code, ConstString::Literal name, std::optional<bool> trading) noexcept
+        : code_{code}, name_{name}, trading_{trading} {
+    }
+
+    constexpr SessionFilter(SessionFilterEnum code, ConstString::Literal name, SessionTypeEnum typeCode,
+                            std::string_view typeName, bool typeTrading) noexcept
+        : code_{code}, name_{name}, type_{SessionType{typeCode, typeName, typeTrading}} {
+    }
 
     public:
     SessionFilter() noexcept;

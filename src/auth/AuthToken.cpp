@@ -57,7 +57,7 @@ AuthToken AuthToken::createCustomToken(const StringLike &scheme, const StringLik
 
 std::string AuthToken::getHttpAuthorization() const {
     if (isNull_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return isolated::auth::IsolatedAuthToken::getHttpAuthorization(handle_);
@@ -65,7 +65,7 @@ std::string AuthToken::getHttpAuthorization() const {
 
 std::string AuthToken::getUser() const {
     if (isNull_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return isolated::auth::IsolatedAuthToken::getUser(handle_);
@@ -73,7 +73,7 @@ std::string AuthToken::getUser() const {
 
 std::string AuthToken::getPassword() const {
     if (isNull_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return isolated::auth::IsolatedAuthToken::getPassword(handle_);
@@ -81,7 +81,7 @@ std::string AuthToken::getPassword() const {
 
 std::string AuthToken::getScheme() const {
     if (isNull_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return isolated::auth::IsolatedAuthToken::getScheme(handle_);
@@ -89,7 +89,7 @@ std::string AuthToken::getScheme() const {
 
 std::string AuthToken::getValue() const {
     if (isNull_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return isolated::auth::IsolatedAuthToken::getValue(handle_);

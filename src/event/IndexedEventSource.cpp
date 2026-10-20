@@ -7,10 +7,10 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
+constinit const IndexedEventSource IndexedEventSource::DEFAULT{0, ConstString::Literal{"DEFAULT"}};
 
 void *IndexedEventSource::toGraal() const {
-    auto *graalSource = new dxfg_indexed_event_source_t{INDEXED_EVENT_SOURCE, id_, createCString(name_)};
+    auto *graalSource = new dxfg_indexed_event_source_t{INDEXED_EVENT_SOURCE, id_, createCString(name_.view())};
 
     return graalSource;
 }
@@ -46,19 +46,20 @@ IndexedEventSource::IndexedEventSource() noexcept {
 IndexedEventSource::~IndexedEventSource() noexcept {
 }
 
-IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name) noexcept : id_{id}, name_{name} {
+IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name) noexcept
+    : id_{id}, name_{ConstString::copyOf(name)} {
 }
 
 std::int32_t IndexedEventSource::id() const noexcept {
     return id_;
 }
 
-const std::string &IndexedEventSource::name() const noexcept {
-    return name_;
+std::string IndexedEventSource::name() const {
+    return name_.str();
 }
 
 std::string IndexedEventSource::toString() const {
-    return name_;
+    return name_.str();
 }
 
 bool IndexedEventSource::operator==(const IndexedEventSource &indexedEventSource) const {

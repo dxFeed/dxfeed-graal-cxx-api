@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <type_traits>
-#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_market
@@ -40,11 +39,10 @@ struct ShortSaleRestriction : Enum<ShortSaleRestriction, std::uint32_t> {
      * Short sale restriction is inactive.
      */
     static const DXFCPP_EXPORT ShortSaleRestriction INACTIVE;
-};
 
-template <>
-const std::unordered_map<ShortSaleRestriction::CodeType, std::reference_wrapper<const ShortSaleRestriction>>
-    ShortSaleRestriction::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const ShortSaleRestriction>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

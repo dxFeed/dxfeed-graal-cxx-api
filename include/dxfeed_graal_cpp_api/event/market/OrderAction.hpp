@@ -139,10 +139,10 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * </ul>
      */
     static const DXFCPP_EXPORT OrderAction BUST;
-};
 
-template <>
-const std::unordered_map<OrderAction::CodeType, std::reference_wrapper<const OrderAction>> OrderAction::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const OrderAction>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

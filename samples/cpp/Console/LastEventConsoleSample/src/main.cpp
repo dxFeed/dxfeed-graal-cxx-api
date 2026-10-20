@@ -137,7 +137,7 @@ int main() {
             for (const auto &promise : promises) {
                 const auto event = promise->getResult();
 
-                std::cout << (!event ? String::NUL : event->toString()) << std::endl;
+                std::cout << (!event ? String::NUL() : event->toString()) << std::endl;
             }
         }
     } catch (const RuntimeException &e) {

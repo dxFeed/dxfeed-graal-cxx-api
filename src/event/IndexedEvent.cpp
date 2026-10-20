@@ -5,17 +5,14 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-EventFlag::EventFlag(std::uint32_t flag, std::string name) noexcept : flag_{flag}, name_{std::move(name)} {
-}
-
-const EventFlag EventFlag::TX_PENDING{0x01u, "TX_PENDING"};
-const EventFlag EventFlag::REMOVE_EVENT{0x02u, "REMOVE_EVENT"};
-const EventFlag EventFlag::SNAPSHOT_BEGIN{0x04u, "SNAPSHOT_BEGIN"};
-const EventFlag EventFlag::SNAPSHOT_END{0x08u, "SNAPSHOT_END"};
-const EventFlag EventFlag::SNAPSHOT_SNIP{0x10u, "SNAPSHOT_SNIP"};
+constinit const EventFlag EventFlag::TX_PENDING{0x01u, "TX_PENDING"};
+constinit const EventFlag EventFlag::REMOVE_EVENT{0x02u, "REMOVE_EVENT"};
+constinit const EventFlag EventFlag::SNAPSHOT_BEGIN{0x04u, "SNAPSHOT_BEGIN"};
+constinit const EventFlag EventFlag::SNAPSHOT_END{0x08u, "SNAPSHOT_END"};
+constinit const EventFlag EventFlag::SNAPSHOT_SNIP{0x10u, "SNAPSHOT_SNIP"};
 // 0x20 is reserved. This flag will fit into 1-byte on the wire in QTP protocol
-const EventFlag EventFlag::SNAPSHOT_MODE{0x40u, "SNAPSHOT_MODE"};
-const EventFlag EventFlag::REMOVE_SYMBOL{0x80u, "REMOVE_SYMBOL"};
+constinit const EventFlag EventFlag::SNAPSHOT_MODE{0x40u, "SNAPSHOT_MODE"};
+constinit const EventFlag EventFlag::REMOVE_SYMBOL{0x80u, "REMOVE_SYMBOL"};
 
 EventFlag::EventFlag() noexcept : flag_{static_cast<unsigned>(-1)}, name_{"INVALID"} {
 }
@@ -28,12 +25,12 @@ bool EventFlag::in(std::uint32_t eventFlagsMask) const noexcept {
     return (eventFlagsMask & flag_) != 0;
 }
 
-const std::string &EventFlag::getName() const & noexcept {
-    return name_;
+std::string EventFlag::getName() const {
+    return std::string{name_};
 }
 
-const std::string &EventFlag::toString() const & noexcept {
-    return name_;
+std::string EventFlag::toString() const {
+    return std::string{name_};
 }
 
 EventFlagsMask::EventFlagsMask() noexcept : mask_{0u} {
@@ -73,11 +70,12 @@ std::string EventFlagsMask::toString() const {
 IndexedEvent::~IndexedEvent() {
 }
 
-const EventFlag IndexedEvent::TX_PENDING = EventFlag::TX_PENDING;
-const EventFlag IndexedEvent::REMOVE_EVENT = EventFlag::REMOVE_EVENT;
-const EventFlag IndexedEvent::SNAPSHOT_BEGIN = EventFlag::SNAPSHOT_BEGIN;
-const EventFlag IndexedEvent::SNAPSHOT_END = EventFlag::SNAPSHOT_END;
-const EventFlag IndexedEvent::SNAPSHOT_SNIP = EventFlag::SNAPSHOT_SNIP;
-const EventFlag IndexedEvent::SNAPSHOT_MODE = EventFlag::SNAPSHOT_MODE;
+// The values of the EventFlag constants: a constinit constant is not read in a constant expression.
+constinit const EventFlag IndexedEvent::TX_PENDING{0x01u, "TX_PENDING"};
+constinit const EventFlag IndexedEvent::REMOVE_EVENT{0x02u, "REMOVE_EVENT"};
+constinit const EventFlag IndexedEvent::SNAPSHOT_BEGIN{0x04u, "SNAPSHOT_BEGIN"};
+constinit const EventFlag IndexedEvent::SNAPSHOT_END{0x08u, "SNAPSHOT_END"};
+constinit const EventFlag IndexedEvent::SNAPSHOT_SNIP{0x10u, "SNAPSHOT_SNIP"};
+constinit const EventFlag IndexedEvent::SNAPSHOT_MODE{0x40u, "SNAPSHOT_MODE"};
 
 DXFCPP_END_NAMESPACE

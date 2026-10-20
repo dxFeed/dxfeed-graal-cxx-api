@@ -10,7 +10,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../internal/Enum.hpp"
 
 #include <cstdint>
-#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_market
@@ -46,11 +45,10 @@ struct OtcMarketsPriceType : Enum<OtcMarketsPriceType, std::uint32_t> {
      * OW/BW quotes may not have a Quote Access Payment (QAP) value.
      */
     static const DXFCPP_EXPORT OtcMarketsPriceType WANTED;
-};
 
-template <>
-const std::unordered_map<OtcMarketsPriceType::CodeType, std::reference_wrapper<const OtcMarketsPriceType>>
-    OtcMarketsPriceType::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const OtcMarketsPriceType>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

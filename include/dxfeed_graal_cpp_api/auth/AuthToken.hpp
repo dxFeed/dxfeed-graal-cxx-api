@@ -120,16 +120,16 @@ struct DXFCPP_EXPORT AuthToken {
     std::string getHttpAuthorization() const;
 
     /**
-     * Returns the username or dxfcpp::String::NUL (`std::string{"<null>"}`) if it is not known or applicable.
+     * Returns the username or dxfcpp::String::NUL() (`std::string{"<null>"}`) if it is not known or applicable.
      *
-     * @return the username, or dxfcpp::String::NUL (`std::string{"<null>"}`) if not known or applicable
+     * @return the username, or dxfcpp::String::NUL() (`std::string{"<null>"}`) if not known or applicable
      */
     std::string getUser() const;
 
     /**
-     * Returns the password or dxfcpp::String::NUL (`std::string{"<null>"}`) if it is not known or applicable.
+     * Returns the password or dxfcpp::String::NUL() (`std::string{"<null>"}`) if it is not known or applicable.
      *
-     * @return the password, or dxfcpp::String::NUL (`std::string{"<null>"}`) if not known or applicable
+     * @return the password, or dxfcpp::String::NUL() (`std::string{"<null>"}`) if not known or applicable
      */
     std::string getPassword() const;
 

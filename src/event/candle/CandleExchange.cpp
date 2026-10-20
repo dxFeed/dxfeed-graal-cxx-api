@@ -5,9 +5,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-CandleExchange::CandleExchange(char exchangeCode) noexcept : exchangeCode_{exchangeCode} {
-}
-
 CandleExchange::CandleExchange() noexcept {
 }
 

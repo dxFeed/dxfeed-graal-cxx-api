@@ -7,12 +7,8 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const std::string WildcardSymbol::RESERVED_PREFIX = "*";
-
-const WildcardSymbol WildcardSymbol::ALL{RESERVED_PREFIX};
-
-WildcardSymbol::WildcardSymbol(const std::string &symbol) noexcept : symbol_{symbol} {
-}
+// ALL is constant-initialized; RESERVED_PREFIX() is created at the first call.
+constinit const WildcardSymbol WildcardSymbol::ALL{"*"};
 
 WildcardSymbol::WildcardSymbol(const WildcardSymbol &) noexcept = default;
 
@@ -26,8 +22,8 @@ WildcardSymbol::WildcardSymbol() noexcept = default;
 
 WildcardSymbol::~WildcardSymbol() noexcept = default;
 
-const std::string &WildcardSymbol::getSymbol() const noexcept {
-    return symbol_;
+std::string WildcardSymbol::getSymbol() const {
+    return std::string{symbol_};
 }
 
 void *WildcardSymbol::toGraal() const noexcept {
@@ -57,9 +53,9 @@ const WildcardSymbol &WildcardSymbol::fromGraal(void *) {
 std::string WildcardSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        return "WildcardSymbol{" + symbol_ + "}";
+        return "WildcardSymbol{" + getSymbol() + "}";
     } else {
-        return symbol_;
+        return getSymbol();
     }
 }
 
@@ -77,6 +73,12 @@ WildcardSymbol literals::operator""_ws(const char *, size_t) noexcept {
 
 WildcardSymbol literals::operator""_wcs(const char *, size_t) noexcept {
     return WildcardSymbol::ALL;
+}
+
+const std::string &WildcardSymbol::RESERVED_PREFIX() {
+    static const auto *const value = new std::string{"*"};
+
+    return *value;
 }
 
 DXFCPP_END_NAMESPACE

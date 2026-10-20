@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/ConstString.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 #include "./CandleType.hpp"
@@ -16,6 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cmath>
 #include <limits>
 #include <string>
+#include <string_view>
 
 /**
  * \addtogroup dxfcpp_candle
@@ -35,7 +37,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via CandlePeriod::ATTRIBUTE_KEY constant.
+ * The key to use with these methods is available via CandlePeriod::ATTRIBUTE_KEY() constant.
  * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString()
  */
 struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
@@ -60,15 +62,22 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * The value of this constant is an empty string because this is the main attribute that every CandleSymbol must
      * have.
      * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString()
+     *
+     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string ATTRIBUTE_KEY; // empty string as an attribute key is allowed!
+    static const std::string &ATTRIBUTE_KEY(); // empty string as an attribute key is allowed!
 
     private:
     double value_{};
     CandleType type_{};
-    std::string string_{};
+    ConstString string_{};
 
     CandlePeriod(double value, const CandleType &type);
+
+    constexpr CandlePeriod(double value, std::string_view typeName, std::string_view typeString,
+                           std::int64_t typePeriodIntervalMillis, ConstString::Literal string) noexcept
+        : value_{value}, type_{typeName, typeString, typePeriodIntervalMillis}, string_{string} {
+    }
 
     public:
     CandlePeriod();
@@ -120,7 +129,7 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      *
      * @return string representation of this aggregation period.
      */
-    const std::string &toString() const &;
+    std::string toString() const;
 
     bool operator==(const CandlePeriod &candlePeriod) const;
 

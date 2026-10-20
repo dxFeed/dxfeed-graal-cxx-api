@@ -128,6 +128,7 @@ jobs:
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
           cmake -B ${{github.workspace}}/build
+          ${{ matrix.config.toolset && format('-T {0}', matrix.config.toolset) || '' }}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
@@ -140,6 +141,7 @@ jobs:
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
           cmake -B ${{github.workspace}}/build-mt
+          ${{ matrix.config.toolset && format('-T {0}', matrix.config.toolset) || '' }}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}-static-mt

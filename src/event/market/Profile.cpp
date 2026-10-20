@@ -152,7 +152,7 @@ Profile::Profile(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymb
 
 const std::string &Profile::getDescription() const & noexcept {
     if (!data_.description) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return data_.description.value();
@@ -192,7 +192,7 @@ bool Profile::isTradingHalted() const noexcept {
 
 const std::string &Profile::getStatusReason() const & noexcept {
     if (!data_.statusReason) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return data_.statusReason.value();

@@ -36,6 +36,8 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
 
     JavaException(const JavaException &other) noexcept;
 
+    JavaException &operator=(const JavaException &other) = default;
+
     /**
      * Creates an exception using native (GraalVM) Java exception handle
      *

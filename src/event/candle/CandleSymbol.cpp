@@ -6,148 +6,138 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleSymbol.hpp"
 
+#include "../../internal/utils/CandleUtils.hpp"
+
+#include <array>
+#include <functional>
+#include <limits>
+#include <span>
+
 #include <fmt/format.h>
 #include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const CandleAlignment CandleAlignment::MIDNIGHT{"m"};
-const CandleAlignment CandleAlignment::SESSION{"s"};
-const CandleAlignment CandleAlignment::DEFAULT = MIDNIGHT;
-const std::string CandleAlignment::ATTRIBUTE_KEY{"a"};
+// The constants are constant-initialized (constinit), so they can be used in the dynamic initialization of global
+// variables of other translation units. A constinit constant is not read in a constant expression, so DEFAULT and the
+// other constants equal to a constant repeat its values. The maps and the keys are created at the first call of
+// BY_STRING() and ATTRIBUTE_KEY().
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash, std::equal_to<>>
-    CandleAlignment::BY_STRING{
-            {MIDNIGHT.toString(), std::cref(MIDNIGHT)},
-            {SESSION.toString(), std::cref(SESSION)},
-        };
+constinit const CandleAlignment CandleAlignment::MIDNIGHT{"m"};
+constinit const CandleAlignment CandleAlignment::SESSION{"s"};
+constinit const CandleAlignment CandleAlignment::DEFAULT{"m"};
 
-const std::vector<std::reference_wrapper<const CandleAlignment>> CandleAlignment::VALUES{
-    std::cref(MIDNIGHT),
-    std::cref(SESSION),
+namespace {
+constinit const std::array CANDLE_ALIGNMENTS{
+    std::cref(CandleAlignment::MIDNIGHT),
+    std::cref(CandleAlignment::SESSION),
 };
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const CandleAlignment>> CandleAlignment::VALUES{
+    CANDLE_ALIGNMENTS};
 
 //------------
 
-const CandleExchange CandleExchange::COMPOSITE{'\0'};
+constinit const CandleExchange CandleExchange::COMPOSITE{'\0'};
 
-const CandleExchange CandleExchange::DEFAULT = COMPOSITE;
+constinit const CandleExchange CandleExchange::DEFAULT{'\0'};
 
 //------------
 
-const CandleType CandleType::TICK{"TICK", "t", 0LL};
-const CandleType CandleType::SECOND{"SECOND", "s", 1000LL};
-const CandleType CandleType::MINUTE{"MINUTE", "m", 60LL * 1000LL};
-const CandleType CandleType::HOUR{"HOUR", "h", 60LL * 60LL * 1000L};
-const CandleType CandleType::DAY{"DAY", "d", 24LL * 60LL * 60LL * 1000L};
-const CandleType CandleType::WEEK{"WEEK", "w", 7LL * 24LL * 60LL * 60LL * 1000LL};
-const CandleType CandleType::MONTH("MONTH", "mo", 30LL * 24LL * 60LL * 60LL * 1000LL);
-const CandleType CandleType::OPTEXP("OPTEXP", "o", 30LL * 24LL * 60LL * 60LL * 1000LL);
-const CandleType CandleType::YEAR("YEAR", "y", 365LL * 24LL * 60LL * 60LL * 1000LL);
-const CandleType CandleType::VOLUME("VOLUME", "v", 0LL);
-const CandleType CandleType::PRICE("PRICE", "p", 0LL);
-const CandleType CandleType::PRICE_MOMENTUM("PRICE_MOMENTUM", "pm", 0LL);
-const CandleType CandleType::PRICE_RENKO("PRICE_RENKO", "pr", 0LL);
+constinit const CandleType CandleType::TICK{"TICK", "t", 0LL};
+constinit const CandleType CandleType::SECOND{"SECOND", "s", 1000LL};
+constinit const CandleType CandleType::MINUTE{"MINUTE", "m", 60LL * 1000LL};
+constinit const CandleType CandleType::HOUR{"HOUR", "h", 60LL * 60LL * 1000L};
+constinit const CandleType CandleType::DAY{"DAY", "d", 24LL * 60LL * 60LL * 1000L};
+constinit const CandleType CandleType::WEEK{"WEEK", "w", 7LL * 24LL * 60LL * 60LL * 1000LL};
+constinit const CandleType CandleType::MONTH("MONTH", "mo", 30LL * 24LL * 60LL * 60LL * 1000LL);
+constinit const CandleType CandleType::OPTEXP("OPTEXP", "o", 30LL * 24LL * 60LL * 60LL * 1000LL);
+constinit const CandleType CandleType::YEAR("YEAR", "y", 365LL * 24LL * 60LL * 60LL * 1000LL);
+constinit const CandleType CandleType::VOLUME("VOLUME", "v", 0LL);
+constinit const CandleType CandleType::PRICE("PRICE", "p", 0LL);
+constinit const CandleType CandleType::PRICE_MOMENTUM("PRICE_MOMENTUM", "pm", 0LL);
+constinit const CandleType CandleType::PRICE_RENKO("PRICE_RENKO", "pr", 0LL);
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash, std::equal_to<>>
-    CandleType::BY_STRING{
-        {TICK.toString(), std::cref(TICK)},
-        {SECOND.toString(), std::cref(SECOND)},
-        {MINUTE.toString(), std::cref(MINUTE)},
-        {HOUR.toString(), std::cref(HOUR)},
-        {DAY.toString(), std::cref(DAY)},
-        {WEEK.toString(), std::cref(WEEK)},
-        {MONTH.toString(), std::cref(MONTH)},
-        {OPTEXP.toString(), std::cref(OPTEXP)},
-        {YEAR.toString(), std::cref(YEAR)},
-        {VOLUME.toString(), std::cref(VOLUME)},
-        {PRICE.toString(), std::cref(PRICE)},
-        {PRICE_MOMENTUM.toString(), std::cref(PRICE_MOMENTUM)},
-        {PRICE_RENKO.toString(), std::cref(PRICE_RENKO)},
-    };
-
-const std::vector<std::reference_wrapper<const CandleType>> CandleType::VALUES{
-    std::cref(TICK),  std::cref(SECOND),         std::cref(MINUTE),      std::cref(HOUR), std::cref(DAY),
-    std::cref(WEEK),  std::cref(MONTH),          std::cref(OPTEXP),      std::cref(YEAR), std::cref(VOLUME),
-    std::cref(PRICE), std::cref(PRICE_MOMENTUM), std::cref(PRICE_RENKO),
+namespace {
+constinit const std::array CANDLE_TYPES{
+    std::cref(CandleType::TICK),        std::cref(CandleType::SECOND), std::cref(CandleType::MINUTE),
+    std::cref(CandleType::HOUR),        std::cref(CandleType::DAY),    std::cref(CandleType::WEEK),
+    std::cref(CandleType::MONTH),       std::cref(CandleType::OPTEXP), std::cref(CandleType::YEAR),
+    std::cref(CandleType::VOLUME),      std::cref(CandleType::PRICE),  std::cref(CandleType::PRICE_MOMENTUM),
+    std::cref(CandleType::PRICE_RENKO),
 };
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const CandleType>> CandleType::VALUES{CANDLE_TYPES};
 
 //------------
 
-const CandlePeriod CandlePeriod::TICK{1, CandleType::TICK};
-const CandlePeriod CandlePeriod::DAY{1, CandleType::DAY};
-const CandlePeriod CandlePeriod::DEFAULT = TICK;
-const std::string CandlePeriod::ATTRIBUTE_KEY{};
+constinit const CandlePeriod CandlePeriod::TICK{1.0, "TICK", "t", 0LL, ConstString::Literal{"t"}};
+constinit const CandlePeriod CandlePeriod::DAY{1.0, "DAY", "d", 24LL * 60LL * 60LL * 1000L, ConstString::Literal{"d"}};
+constinit const CandlePeriod CandlePeriod::DEFAULT{1.0, "TICK", "t", 0LL, ConstString::Literal{"t"}};
 
 //------------
 
-const CandlePrice CandlePrice::LAST{"last"};
-const CandlePrice CandlePrice::BID{"bid"};
-const CandlePrice CandlePrice::ASK{"ask"};
-const CandlePrice CandlePrice::MARK{"mark"};
-const CandlePrice CandlePrice::SETTLEMENT{"s"};
-const CandlePrice CandlePrice::DEFAULT = LAST;
+constinit const CandlePrice CandlePrice::LAST{"last"};
+constinit const CandlePrice CandlePrice::BID{"bid"};
+constinit const CandlePrice CandlePrice::ASK{"ask"};
+constinit const CandlePrice CandlePrice::MARK{"mark"};
+constinit const CandlePrice CandlePrice::SETTLEMENT{"s"};
+constinit const CandlePrice CandlePrice::DEFAULT{"last"};
 
-const std::string CandlePrice::ATTRIBUTE_KEY{"price"};
-
-const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>, StringHash, std::equal_to<>>
-    CandlePrice::BY_STRING{
-        {LAST.toString(), std::cref(LAST)},
-        {BID.toString(), std::cref(BID)},
-        {ASK.toString(), std::cref(ASK)},
-        {MARK.toString(), std::cref(MARK)},
-        {SETTLEMENT.toString(), std::cref(SETTLEMENT)},
-    };
-
-const std::vector<std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES{
-    std::cref(LAST), std::cref(BID), std::cref(ASK), std::cref(MARK), std::cref(SETTLEMENT),
+namespace {
+constinit const std::array CANDLE_PRICES{
+    std::cref(CandlePrice::LAST), std::cref(CandlePrice::BID),        std::cref(CandlePrice::ASK),
+    std::cref(CandlePrice::MARK), std::cref(CandlePrice::SETTLEMENT),
 };
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES{CANDLE_PRICES};
 
 //------------
 
-const CandlePriceLevel CandlePriceLevel::DEFAULT{math::NaN};
-
-const std::string CandlePriceLevel::ATTRIBUTE_KEY{"pl"};
+constinit const CandlePriceLevel CandlePriceLevel::DEFAULT{std::numeric_limits<double>::quiet_NaN()};
 
 //------------
 
-const SessionType SessionType::NO_TRADING{SessionTypeEnum::NO_TRADING, "NO_TRADING", false};
-const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARKET", true};
-const SessionType SessionType::REGULAR{SessionTypeEnum::REGULAR, "REGULAR", true};
-const SessionType SessionType::AFTER_MARKET{SessionTypeEnum::AFTER_MARKET, "AFTER_MARKET", true};
+constinit const SessionType SessionType::NO_TRADING{SessionTypeEnum::NO_TRADING, "NO_TRADING", false};
+constinit const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARKET", true};
+constinit const SessionType SessionType::REGULAR{SessionTypeEnum::REGULAR, "REGULAR", true};
+constinit const SessionType SessionType::AFTER_MARKET{SessionTypeEnum::AFTER_MARKET, "AFTER_MARKET", true};
 
 //------------
 
-const SessionFilter SessionFilter::ANY{SessionFilterEnum::ANY, "ANY", std::nullopt, std::nullopt};
-const SessionFilter SessionFilter::TRADING{SessionFilterEnum::TRADING, "TRADING", std::nullopt, true};
-const SessionFilter SessionFilter::NON_TRADING{SessionFilterEnum::NON_TRADING, "NON_TRADING", std::nullopt, false};
+constinit const SessionFilter SessionFilter::ANY{SessionFilterEnum::ANY, ConstString::Literal{"ANY"}, std::nullopt};
+constinit const SessionFilter SessionFilter::TRADING{SessionFilterEnum::TRADING, ConstString::Literal{"TRADING"}, true};
+constinit const SessionFilter SessionFilter::NON_TRADING{SessionFilterEnum::NON_TRADING,
+                                                         ConstString::Literal{"NON_TRADING"}, false};
 
-const SessionFilter SessionFilter::NO_TRADING{SessionFilterEnum::NO_TRADING, "NO_TRADING", SessionType::NO_TRADING,
-                                              std::nullopt};
-const SessionFilter SessionFilter::PRE_MARKET{SessionFilterEnum::PRE_MARKET, "PRE_MARKET", SessionType::PRE_MARKET,
-                                              std::nullopt};
-const SessionFilter SessionFilter::REGULAR{SessionFilterEnum::REGULAR, "REGULAR", SessionType::REGULAR, std::nullopt};
-const SessionFilter SessionFilter::AFTER_MARKET{SessionFilterEnum::AFTER_MARKET, "AFTER_MARKET",
-                                                SessionType::AFTER_MARKET, std::nullopt};
+constinit const SessionFilter SessionFilter::NO_TRADING{SessionFilterEnum::NO_TRADING,
+                                                        ConstString::Literal{"NO_TRADING"}, SessionTypeEnum::NO_TRADING,
+                                                        "NO_TRADING", false};
+constinit const SessionFilter SessionFilter::PRE_MARKET{
+    SessionFilterEnum::PRE_MARKET, ConstString::Literal{"PRE_MARKET"}, SessionTypeEnum::PRE_MARKET, "PRE_MARKET", true};
+constinit const SessionFilter SessionFilter::REGULAR{SessionFilterEnum::REGULAR, ConstString::Literal{"REGULAR"},
+                                                     SessionTypeEnum::REGULAR, "REGULAR", true};
+constinit const SessionFilter SessionFilter::AFTER_MARKET{SessionFilterEnum::AFTER_MARKET,
+                                                          ConstString::Literal{"AFTER_MARKET"},
+                                                          SessionTypeEnum::AFTER_MARKET, "AFTER_MARKET", true};
 
-const CandleSession CandleSession::ANY{SessionFilter::ANY, "false"};
-const CandleSession CandleSession::REGULAR{SessionFilter::REGULAR, "true"};
-const CandleSession CandleSession::DEFAULT = ANY;
-const std::string CandleSession::ATTRIBUTE_KEY = "tho";
+constinit const CandleSession CandleSession::ANY{SessionFilter::ANY, "false"};
+constinit const CandleSession CandleSession::REGULAR{SessionFilter::REGULAR, "true"};
+constinit const CandleSession CandleSession::DEFAULT{SessionFilter::ANY, "false"};
 
-const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> CandleSession::BY_STRING{
-        {ANY.toString(), std::cref(ANY)},
-        {REGULAR.toString(), std::cref(REGULAR)},
-    };
-
-const std::vector<std::reference_wrapper<const CandleSession>> CandleSession::VALUES{
-    std::cref(ANY),
-    std::cref(REGULAR),
+namespace {
+constinit const std::array CANDLE_SESSIONS{
+    std::cref(CandleSession::ANY),
+    std::cref(CandleSession::REGULAR),
 };
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const CandleSession>> CandleSession::VALUES{CANDLE_SESSIONS};
 
 //------------
-
-const CandleSymbol CandleSymbol::NUL{"<null>"};
 
 std::string CandleSymbol::changeAttribute(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) {
     return std::visit(
@@ -318,4 +308,10 @@ CandleSymbol CandleSymbol::valueOf(const StringLike &symbol,
 CandleSymbol literals::operator""_c(const char *string, size_t length) {
     return CandleSymbol::valueOf(std::string{string, length});
 }
+const CandleSymbol &CandleSymbol::NUL() {
+    static const auto *const value = new CandleSymbol{"<null>"};
+
+    return *value;
+}
+
 DXFCPP_END_NAMESPACE

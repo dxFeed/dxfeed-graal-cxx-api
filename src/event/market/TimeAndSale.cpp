@@ -260,7 +260,7 @@ void TimeAndSale::setAskPrice(double askPrice) noexcept {
 
 const std::string &TimeAndSale::getExchangeSaleConditions() const & noexcept {
     if (!data_.exchangeSaleConditions) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return data_.exchangeSaleConditions.value();
@@ -338,7 +338,7 @@ bool TimeAndSale::isCancel() const noexcept {
 
 const std::string &TimeAndSale::getBuyer() const & noexcept {
     if (!data_.buyer) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return data_.buyer.value();
@@ -354,7 +354,7 @@ void TimeAndSale::setBuyer(const StringLike &buyer) noexcept {
 
 const std::string &TimeAndSale::getSeller() const & noexcept {
     if (!data_.seller) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return data_.seller.value();

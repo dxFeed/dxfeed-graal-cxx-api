@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <type_traits>
-#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_market
@@ -59,10 +58,10 @@ struct Direction : Enum<Direction, std::uint32_t> {
      * The current price is higher than the previous price.
      */
     static const DXFCPP_EXPORT Direction UP;
-};
 
-template <>
-const std::unordered_map<Direction::CodeType, std::reference_wrapper<const Direction>> Direction::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const Direction>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 
