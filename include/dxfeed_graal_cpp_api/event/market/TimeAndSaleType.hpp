@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <type_traits>
-#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_market
@@ -40,11 +39,10 @@ struct TimeAndSaleType : Enum<TimeAndSaleType, std::uint32_t> {
      * Represents cancel time and sale event.
      */
     static const DXFCPP_EXPORT TimeAndSaleType CANCEL;
-};
 
-template <>
-const std::unordered_map<TimeAndSaleType::CodeType, std::reference_wrapper<const TimeAndSaleType>>
-    TimeAndSaleType::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const TimeAndSaleType>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

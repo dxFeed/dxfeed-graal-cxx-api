@@ -32,7 +32,7 @@ void TextMessage::fillData(void *graalNative) {
     if (graalMessage->text != nullptr) {
         setText(dxfcpp::toString(dxfcpp::bit_cast<const char *>(graalMessage->text)));
     } else {
-        setText(String::NUL);
+        setText(String::NUL());
     }
 }
 
@@ -138,7 +138,7 @@ TextMessage::TextMessage(const StringLike &eventSymbol, std::int64_t time, const
 
 const std::string &TextMessage::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return eventSymbol_.value();

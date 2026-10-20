@@ -9,7 +9,10 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
+#include <functional>
+#include <span>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
@@ -22,17 +25,27 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+class EventTypeEnum;
+
+inline namespace literals {
+
+DXFCPP_EXPORT EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept;
+
+} // namespace literals
+
 /**
  * The enumeration type that provides additional information about the dxFeed Graal C++-API event type.
  * Useful when used as a subscription parameter.
  */
 class DXFCPP_EXPORT EventTypeEnum {
+    friend EventTypeEnum literals::operator""_et(const char *eventTypeString, size_t) noexcept;
+
     /// The dxFeed Graal Native C-API event class id corresponding to the current enum element.
     const std::uint32_t id_;
 
-    const std::string name_;
+    const std::string_view name_;
 
-    const std::string className_;
+    const std::string_view className_;
 
     // A flag that indicates that the current enum element is characterizing the Lasting (TICKER) event.
     const bool isLasting_;
@@ -50,8 +63,11 @@ class DXFCPP_EXPORT EventTypeEnum {
     // A flag that indicates that the current enum element is characterizing the Market event.
     const bool isMarket_;
 
-    EventTypeEnum(std::uint32_t id, const StringLike & name, const StringLike & className, bool isLasting, bool isIndexed = false,
-                  bool isTimeSeries = false, bool isMarket = true) noexcept;
+    constexpr EventTypeEnum(std::uint32_t id, std::string_view name, std::string_view className, bool isLasting,
+                            bool isIndexed = false, bool isTimeSeries = false, bool isMarket = true) noexcept
+        : id_{id}, name_{name}, className_{className}, isLasting_{isLasting}, isIndexed_{isIndexed || isTimeSeries},
+          isTimeSeries_{isTimeSeries}, isOnlyIndexed_{isIndexed && !isTimeSeries}, isMarket_{isMarket} {
+    }
 
     public:
     using RefSetType =
@@ -88,13 +104,16 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     static const EventTypeEnum TEXT_MESSAGE;
 
-    static const std::vector<std::reference_wrapper<const EventTypeEnum>> ALL;
+    /// All event types (constant-initialized, so it can be used in the dynamic initialization of global variables).
+    static const std::span<const std::reference_wrapper<const EventTypeEnum>> ALL;
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> ALL_BY_NAME;
+    // The maps below are created at the first call and are never destroyed, so they can be used by global variables.
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> ALL_BY_CLASS_NAME;
+    static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> &ALL_BY_NAME();
 
-    static const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> ALL_BY_ID;
+    static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> &ALL_BY_CLASS_NAME();
+
+    static const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> &ALL_BY_ID();
 
     EventTypeEnum() noexcept;
 
@@ -108,12 +127,12 @@ class DXFCPP_EXPORT EventTypeEnum {
     /**
      * @return The current enum element name
      */
-    [[nodiscard]] const std::string &getName() const & noexcept;
+    [[nodiscard]] std::string getName() const;
 
     /**
      * @return The current enum element class name
      */
-    [[nodiscard]] const std::string &getClassName() const & noexcept;
+    [[nodiscard]] std::string getClassName() const;
 
     bool operator==(const EventTypeEnum &eventTypeEnum) const noexcept;
 
@@ -169,7 +188,7 @@ inline namespace literals {
  * @param eventTypeString The event type name's char array
  * @return EventTypeEnum built on the char array
  */
-EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept;
+DXFCPP_EXPORT EventTypeEnum operator""_et(const char *eventTypeString, size_t) noexcept;
 
 } // namespace literals
 

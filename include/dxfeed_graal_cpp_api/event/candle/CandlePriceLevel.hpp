@@ -29,8 +29,8 @@ DXFCPP_BEGIN_NAMESPACE
  * <li>Price interval may be equal to zero. It means every unique price creates a particular candle
  * to aggregate all events with this price for the chosen CandlePeriod.
  * <li>Non-zero price level creates a sequence of intervals starting from 0:
- * `..., [-pl; 0), [0; pl), [pl; 2 * pl), ..., [n * pl, n * pl + pl)`. Events aggregated by chosen CandlePeriod and price
- * intervals.
+ * `..., [-pl; 0), [0; pl), [pl; 2 * pl), ..., [n * pl, n * pl + pl)`. Events aggregated by chosen CandlePeriod and
+ * price intervals.
  * </ul>
  *
  * <h3>Implementation details</h3>
@@ -39,7 +39,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY constant.
+ * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY() constant.
  * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
  */
 struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
@@ -53,13 +53,16 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
      * of MarketEventSymbols class.
      * The value of this constant is "pl".
      * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
+     *
+     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string ATTRIBUTE_KEY;
+    static const std::string &ATTRIBUTE_KEY();
 
     private:
     double value_{};
 
-    explicit CandlePriceLevel(double value) noexcept;
+    constexpr explicit CandlePriceLevel(double value) noexcept : value_{value} {
+    }
 
     public:
     CandlePriceLevel() noexcept;

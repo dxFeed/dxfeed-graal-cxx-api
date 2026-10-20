@@ -24,7 +24,7 @@ std::string toJavaString(double value, const CandleType &type) {
 } // namespace
 
 CandlePeriod::CandlePeriod(double value, const CandleType &type)
-    : value_{value}, type_{type}, string_{toJavaString(value_, type_)} {
+    : value_{value}, type_{type}, string_{ConstString::copyOf(toJavaString(value_, type_))} {
 }
 
 CandlePeriod::CandlePeriod() : CandlePeriod(0.0, CandleType{}) {
@@ -38,8 +38,8 @@ std::int64_t CandlePeriod::getPeriodIntervalMillis() const noexcept {
 }
 
 std::string CandlePeriod::changeAttributeForSymbol(const StringLike &symbol) const {
-    return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
-                            : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
+    return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, candle::PERIOD_KEY)
+                            : MarketEventSymbols::changeAttributeStringByKey(symbol, candle::PERIOD_KEY, toString());
 }
 
 double CandlePeriod::getValue() const noexcept {
@@ -50,8 +50,8 @@ const CandleType &CandlePeriod::getType() const & noexcept {
     return type_;
 }
 
-const std::string &CandlePeriod::toString() const & {
-    return string_;
+std::string CandlePeriod::toString() const {
+    return string_.str();
 }
 
 bool CandlePeriod::operator==(const CandlePeriod &candlePeriod) const {
@@ -103,13 +103,13 @@ CandlePeriod CandlePeriod::valueOf(double value, const CandleType &type) {
 }
 
 CandlePeriod CandlePeriod::getAttributeForSymbol(const StringLike &symbol) {
-    const auto string = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+    const auto string = MarketEventSymbols::getAttributeStringByKey(symbol, candle::PERIOD_KEY);
 
     return !string ? DEFAULT : parse(string.value());
 }
 
 std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, candle::PERIOD_KEY);
 
     if (!a) {
         return symbol;
@@ -119,11 +119,11 @@ std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) 
         const auto other = parse(a.value());
 
         if (other == DEFAULT) {
-            return candle::removeDefaultAttribute(symbol, ATTRIBUTE_KEY, DEFAULT.toString());
+            return candle::removeDefaultAttribute(symbol, candle::PERIOD_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.toString()) {
-            return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.toString());
+            return MarketEventSymbols::changeAttributeStringByKey(symbol, candle::PERIOD_KEY, other.toString());
         }
 
         return symbol;
@@ -132,6 +132,12 @@ std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) 
     } catch (const std::invalid_argument &) {
         return symbol;
     }
+}
+
+const std::string &CandlePeriod::ATTRIBUTE_KEY() {
+    static const auto *const value = new std::string{candle::PERIOD_KEY};
+
+    return *value;
 }
 
 DXFCPP_END_NAMESPACE

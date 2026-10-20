@@ -9,10 +9,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 // The CandleType static fields are initialized in CandleSymbol.cpp
 
-CandleType::CandleType(const StringLike &name, const StringLike &string, std::int64_t periodIntervalMillis) noexcept
-    : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {
-}
-
 CandleType::CandleType() noexcept {
 }
 
@@ -23,12 +19,12 @@ std::int64_t CandleType::getPeriodIntervalMillis() const noexcept {
     return periodIntervalMillis_;
 }
 
-const std::string &CandleType::getName() const & noexcept {
-    return name_;
+std::string CandleType::getName() const {
+    return std::string{name_};
 }
 
-const std::string &CandleType::toString() const & noexcept {
-    return string_;
+std::string CandleType::toString() const {
+    return std::string{string_};
 }
 
 std::reference_wrapper<const CandleType> CandleType::parse(const StringLike &s) {
@@ -36,12 +32,14 @@ std::reference_wrapper<const CandleType> CandleType::parse(const StringLike &s) 
         throw InvalidArgumentException("Missing candle type");
     }
 
-    if (const auto result = BY_STRING.find(s); result != BY_STRING.end()) {
-        return result->second;
+    for (const auto &typeRef : VALUES) {
+        if (typeRef.get().string_ == std::string_view{s}) {
+            return typeRef;
+        }
     }
 
     for (const auto &typeRef : VALUES) {
-        const auto &name = typeRef.get().getName();
+        const auto name = typeRef.get().getName();
 
         // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc
         if (name.length() >= s.length() && iEquals(name.substr(0, s.length()), s)) {
@@ -59,6 +57,28 @@ std::reference_wrapper<const CandleType> CandleType::parse(const StringLike &s) 
 
 bool CandleType::operator==(const CandleType &candleType) const noexcept {
     return string_ == candleType.string_;
+}
+
+const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash, std::equal_to<>> &
+CandleType::BY_STRING() {
+    static const auto *const value =
+        new std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash, std::equal_to<>>{
+            {TICK.toString(), std::cref(TICK)},
+            {SECOND.toString(), std::cref(SECOND)},
+            {MINUTE.toString(), std::cref(MINUTE)},
+            {HOUR.toString(), std::cref(HOUR)},
+            {DAY.toString(), std::cref(DAY)},
+            {WEEK.toString(), std::cref(WEEK)},
+            {MONTH.toString(), std::cref(MONTH)},
+            {OPTEXP.toString(), std::cref(OPTEXP)},
+            {YEAR.toString(), std::cref(YEAR)},
+            {VOLUME.toString(), std::cref(VOLUME)},
+            {PRICE.toString(), std::cref(PRICE)},
+            {PRICE_MOMENTUM.toString(), std::cref(PRICE_MOMENTUM)},
+            {PRICE_RENKO.toString(), std::cref(PRICE_RENKO)},
+        };
+
+    return *value;
 }
 
 DXFCPP_END_NAMESPACE

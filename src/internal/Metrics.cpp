@@ -101,7 +101,7 @@ std::string MetricsManager::getAsString(const std::string &name) {
     std::lock_guard lockGuard{mtx_};
 
     if (!data_.contains(name)) {
-        return String::EMPTY;
+        return String::EMPTY();
     }
 
     return toString(name, data_.at(name), true);
@@ -148,7 +148,7 @@ std::string MetricsManager::dump() {
     }
 
     if (data_.empty()) {
-        return String::EMPTY;
+        return String::EMPTY();
     }
 
     std::map records{data_.begin(), data_.end()};

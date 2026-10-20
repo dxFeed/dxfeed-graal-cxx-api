@@ -99,7 +99,7 @@ struct PriceLevel {
 
     /// Returns a string representation of this price level.
     std::string toString() const {
-        return "PriceLevel{" + eventSymbol_.value_or(dxfcpp::String::NUL) + ", source=" + eventSource_.toString() +
+        return "PriceLevel{" + eventSymbol_.value_or(dxfcpp::String::NUL()) + ", source=" + eventSource_.toString() +
                ", side=" + side_.toString() + ", price=" + dxfcpp::toString(price_) +
                ", size=" + dxfcpp::toString(size_) + "}";
     }

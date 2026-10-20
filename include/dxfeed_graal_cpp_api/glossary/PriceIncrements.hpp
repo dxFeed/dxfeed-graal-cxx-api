@@ -263,6 +263,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
     public:
     /**
      * Empty price increments - it has empty text and sole increment with value 0.
+     *
+     * It is built at dynamic initialization, so the initializers of global variables should not use it.
      */
     static const Ptr EMPTY;
 

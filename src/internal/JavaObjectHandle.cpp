@@ -153,6 +153,12 @@ JavaObjectHandleState::JavaObjectHandleState(void *handle, Deleter deleter) noex
 }
 
 JavaObjectHandleState::~JavaObjectHandleState() noexcept {
+    // An empty state is not in the registry. A constant-initialized handle (the constexpr constructor) can be
+    // destroyed after the registry at exit, so the registry is not touched.
+    if (!registered_ && !handle_.load(std::memory_order_acquire)) {
+        return;
+    }
+
     reset();
 }
 

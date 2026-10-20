@@ -6,12 +6,20 @@
 #include "../../../include/dxfeed_graal_cpp_api/internal/Conf.hpp"
 
 #include <string>
+#include <string_view>
 
 DXFCPP_BEGIN_NAMESPACE
 
 struct StringLike;
 
 namespace candle {
+
+// The attribute keys used by the library: the same strings as the public ATTRIBUTE_KEY() of the attributes.
+inline constexpr std::string_view ALIGNMENT_KEY = "a";
+inline constexpr std::string_view PERIOD_KEY = "";
+inline constexpr std::string_view PRICE_KEY = "price";
+inline constexpr std::string_view PRICE_LEVEL_KEY = "pl";
+inline constexpr std::string_view SESSION_KEY = "tho";
 
 /**
  * Removes the attribute with the default value from a candle symbol during normalization. If the removal would change

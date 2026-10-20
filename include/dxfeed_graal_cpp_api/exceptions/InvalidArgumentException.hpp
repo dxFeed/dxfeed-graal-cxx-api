@@ -25,6 +25,8 @@ struct DXFCPP_EXPORT InvalidArgumentException : RuntimeException {
                                       const StringLike &additionalStackTrace = "");
 
     InvalidArgumentException(const InvalidArgumentException &other) noexcept;
+
+    InvalidArgumentException &operator=(const InvalidArgumentException &other) = default;
 };
 
 DXFCPP_END_NAMESPACE

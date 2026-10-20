@@ -3,43 +3,46 @@
 
 #include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfileType.hpp"
 
+#include <array>
+#include <functional>
+#include <span>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const InstrumentProfileType InstrumentProfileType::CURRENCY{0, "CURRENCY"};
-const InstrumentProfileType InstrumentProfileType::FOREX{1, "FOREX"};
-const InstrumentProfileType InstrumentProfileType::BOND{2, "BOND"};
-const InstrumentProfileType InstrumentProfileType::INDEX{3, "INDEX"};
-const InstrumentProfileType InstrumentProfileType::STOCK{4, "STOCK"};
-const InstrumentProfileType InstrumentProfileType::ETF{5, "ETF"};
-const InstrumentProfileType InstrumentProfileType::MUTUAL_FUND{6, "MUTUAL_FUND"};
-const InstrumentProfileType InstrumentProfileType::MONEY_MARKET_FUND{7, "MONEY_MARKET_FUND"};
-const InstrumentProfileType InstrumentProfileType::PRODUCT{8, "PRODUCT"};
-const InstrumentProfileType InstrumentProfileType::FUTURE{9, "FUTURE"};
-const InstrumentProfileType InstrumentProfileType::OPTION{10, "OPTION"};
-const InstrumentProfileType InstrumentProfileType::WARRANT{11, "WARRANT"};
-const InstrumentProfileType InstrumentProfileType::CFD{12, "CFD"};
-const InstrumentProfileType InstrumentProfileType::SPREAD{13, "SPREAD"};
-const InstrumentProfileType InstrumentProfileType::OTHER{14, "OTHER"};
-const InstrumentProfileType InstrumentProfileType::REMOVED{15, "REMOVED"};
+constinit const InstrumentProfileType InstrumentProfileType::CURRENCY{0, "CURRENCY"};
+constinit const InstrumentProfileType InstrumentProfileType::FOREX{1, "FOREX"};
+constinit const InstrumentProfileType InstrumentProfileType::BOND{2, "BOND"};
+constinit const InstrumentProfileType InstrumentProfileType::INDEX{3, "INDEX"};
+constinit const InstrumentProfileType InstrumentProfileType::STOCK{4, "STOCK"};
+constinit const InstrumentProfileType InstrumentProfileType::ETF{5, "ETF"};
+constinit const InstrumentProfileType InstrumentProfileType::MUTUAL_FUND{6, "MUTUAL_FUND"};
+constinit const InstrumentProfileType InstrumentProfileType::MONEY_MARKET_FUND{7, "MONEY_MARKET_FUND"};
+constinit const InstrumentProfileType InstrumentProfileType::PRODUCT{8, "PRODUCT"};
+constinit const InstrumentProfileType InstrumentProfileType::FUTURE{9, "FUTURE"};
+constinit const InstrumentProfileType InstrumentProfileType::OPTION{10, "OPTION"};
+constinit const InstrumentProfileType InstrumentProfileType::WARRANT{11, "WARRANT"};
+constinit const InstrumentProfileType InstrumentProfileType::CFD{12, "CFD"};
+constinit const InstrumentProfileType InstrumentProfileType::SPREAD{13, "SPREAD"};
+constinit const InstrumentProfileType InstrumentProfileType::OTHER{14, "OTHER"};
+constinit const InstrumentProfileType InstrumentProfileType::REMOVED{15, "REMOVED"};
 
-template <>
-const std::unordered_map<InstrumentProfileType::CodeType, std::reference_wrapper<const InstrumentProfileType>>
-    InstrumentProfileType::ParentType::ALL =
-        [](std::initializer_list<std::reference_wrapper<const InstrumentProfileType>> orders) {
-            std::unordered_map<CodeType, std::reference_wrapper<const InstrumentProfileType>> result{};
+namespace {
 
-            for (auto &&o : orders) {
-                result.emplace(o.get().getCode(), o);
-            }
+constinit const std::array<std::reference_wrapper<const InstrumentProfileType>, 16> ALL_ELEMENTS{
+    std::cref(InstrumentProfileType::CURRENCY),    std::cref(InstrumentProfileType::FOREX),
+    std::cref(InstrumentProfileType::BOND),        std::cref(InstrumentProfileType::INDEX),
+    std::cref(InstrumentProfileType::STOCK),       std::cref(InstrumentProfileType::ETF),
+    std::cref(InstrumentProfileType::MUTUAL_FUND), std::cref(InstrumentProfileType::MONEY_MARKET_FUND),
+    std::cref(InstrumentProfileType::PRODUCT),     std::cref(InstrumentProfileType::FUTURE),
+    std::cref(InstrumentProfileType::OPTION),      std::cref(InstrumentProfileType::WARRANT),
+    std::cref(InstrumentProfileType::CFD),         std::cref(InstrumentProfileType::SPREAD),
+    std::cref(InstrumentProfileType::OTHER),       std::cref(InstrumentProfileType::REMOVED),
+};
 
-            return result;
-        }({InstrumentProfileType::CURRENCY, InstrumentProfileType::FOREX, InstrumentProfileType::BOND,
-           InstrumentProfileType::INDEX, InstrumentProfileType::STOCK, InstrumentProfileType::ETF,
-           InstrumentProfileType::MUTUAL_FUND, InstrumentProfileType::MONEY_MARKET_FUND, InstrumentProfileType::PRODUCT,
-           InstrumentProfileType::FUTURE, InstrumentProfileType::OPTION, InstrumentProfileType::WARRANT,
-           InstrumentProfileType::CFD, InstrumentProfileType::SPREAD, InstrumentProfileType::OTHER,
-           InstrumentProfileType::REMOVED});
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const InstrumentProfileType>> InstrumentProfileType::ALL{
+    ALL_ELEMENTS};
 
 DXFCPP_END_NAMESPACE

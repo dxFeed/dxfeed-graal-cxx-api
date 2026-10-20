@@ -43,10 +43,10 @@ struct PriceType : Enum<PriceType, std::uint32_t> {
      * Final price (final settlement price).
      */
     static const DXFCPP_EXPORT PriceType FINAL;
-};
 
-template <>
-const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const PriceType>> PriceType::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const PriceType>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

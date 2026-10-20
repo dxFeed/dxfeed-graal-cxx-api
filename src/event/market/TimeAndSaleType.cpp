@@ -3,21 +3,27 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/TimeAndSaleType.hpp"
 
+#include <array>
+#include <functional>
+#include <span>
 #include <type_traits>
-#include <unordered_map>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const TimeAndSaleType TimeAndSaleType::NEW{0, "NEW"};
-const TimeAndSaleType TimeAndSaleType::CORRECTION{1, "CORRECTION"};
-const TimeAndSaleType TimeAndSaleType::CANCEL{2, "CANCEL"};
+constinit const TimeAndSaleType TimeAndSaleType::NEW{0, "NEW"};
+constinit const TimeAndSaleType TimeAndSaleType::CORRECTION{1, "CORRECTION"};
+constinit const TimeAndSaleType TimeAndSaleType::CANCEL{2, "CANCEL"};
 
-template <>
-const std::unordered_map<TimeAndSaleType::CodeType, std::reference_wrapper<const TimeAndSaleType>>
-    TimeAndSaleType::ParentType::ALL{
-        {TimeAndSaleType::NEW.getCode(), std::cref(TimeAndSaleType::NEW)},
-        {TimeAndSaleType::CORRECTION.getCode(), std::cref(TimeAndSaleType::CORRECTION)},
-        {TimeAndSaleType::CANCEL.getCode(), std::cref(TimeAndSaleType::CANCEL)},
-    };
+namespace {
+
+constinit const std::array<std::reference_wrapper<const TimeAndSaleType>, 3> ALL_ELEMENTS{
+    std::cref(TimeAndSaleType::NEW),
+    std::cref(TimeAndSaleType::CORRECTION),
+    std::cref(TimeAndSaleType::CANCEL),
+};
+
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const TimeAndSaleType>> TimeAndSaleType::ALL{ALL_ELEMENTS};
 
 DXFCPP_END_NAMESPACE

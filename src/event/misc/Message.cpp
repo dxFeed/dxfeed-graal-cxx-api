@@ -129,7 +129,7 @@ Message::Message(const StringLike &eventSymbol, const StringLike &attachment) no
 
 const std::string &Message::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return eventSymbol_.value();
@@ -166,7 +166,7 @@ Message &Message::withEventTime(std::int64_t eventTime) noexcept {
 
 const std::string &Message::getAttachment() const & {
     if (!attachment_) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return attachment_.value();
@@ -188,7 +188,7 @@ Message &Message::withAttachment(const StringLike &attachment) noexcept {
 
 std::string Message::toString() const {
     return fmt::format("Message{{{}, eventTime={}, attachment={}}}", getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL));
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL()));
 }
 
 DXFCPP_END_NAMESPACE

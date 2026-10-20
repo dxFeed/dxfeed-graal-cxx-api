@@ -14,6 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <numeric>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <utility>
 
 /**
@@ -102,10 +103,13 @@ DXFCPP_BEGIN_NAMESPACE
  * also set to `true`.
  */
 class DXFCPP_EXPORT EventFlag final {
-    std::uint32_t flag_;
-    std::string name_;
+    friend struct IndexedEvent;
 
-    EventFlag(std::uint32_t flag, std::string name) noexcept;
+    std::uint32_t flag_;
+    std::string_view name_;
+
+    constexpr EventFlag(std::uint32_t flag, std::string_view name) noexcept : flag_{flag}, name_{name} {
+    }
 
     public:
     /**
@@ -219,10 +223,10 @@ class DXFCPP_EXPORT EventFlag final {
     }
 
     ///
-    const std::string &getName() const & noexcept;
+    std::string getName() const;
 
     ///
-    const std::string &toString() const & noexcept;
+    std::string toString() const;
 
     /**
      * Performs a bit `or` operation with two event flags

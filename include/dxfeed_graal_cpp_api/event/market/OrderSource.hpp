@@ -13,8 +13,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <memory>
-#include <mutex>
+#include <span>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <variant>
 
@@ -54,25 +55,58 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static constexpr std::uint32_t FLAGS_SIZE = 6U;
 
     public:
-    static const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
-        PREDEFINED_SOURCES;
+    /**
+     * The predefined sources by identifier and by name.
+     *
+     * It is created at the first call and is never destroyed, so it can be used by global variables.
+     */
+    static const std::unordered_map<std::variant<std::int32_t, std::string>,
+                                    std::reference_wrapper<const OrderSource>> &
+    PREDEFINED_SOURCES();
 
     private:
-    static inline std::mutex MTX_{};
-    static std::unordered_map<std::int32_t, OrderSource> USER_SOURCES_;
+    // The predefined sources (constant-initialized).
+    static const std::span<const std::reference_wrapper<const OrderSource>> PREDEFINED_;
 
     std::uint32_t pubFlags_{};
     bool builtin_{};
 
-    OrderSource(std::int32_t id, const StringLike& name, std::uint32_t pubFlags) noexcept;
+    constexpr OrderSource(std::int32_t id, ConstString::Literal name, std::uint32_t pubFlags) noexcept
+        : IndexedEventSource(id, name), pubFlags_{pubFlags}, builtin_{true} {
+    }
 
-    OrderSource(const StringLike &name, std::uint32_t pubFlags);
+    constexpr OrderSource(ConstString::Literal name, std::uint32_t pubFlags)
+        : OrderSource(composeId(name.view), name, pubFlags) {
+    }
 
     OrderSource(std::int32_t id, const StringLike &name) noexcept;
 
-    static std::int32_t composeId(const StringLike &name);
+    // A name that is not valid makes a constant not constant-initialized: a compilation error.
+    static constexpr std::int32_t composeId(std::string_view name) {
+        std::int32_t sourceId = 0;
 
-    static void checkChar(char c);
+        if (name.empty() || name.size() > 4) {
+            throwInvalidName("Source name must contain from 1 to 4 characters");
+        }
+
+        for (const auto c : name) {
+            checkChar(c);
+            sourceId = static_cast<std::int32_t>((static_cast<std::uint32_t>(sourceId) << 8U) |
+                                                 static_cast<std::uint32_t>(static_cast<unsigned char>(c)));
+        }
+
+        return sourceId;
+    }
+
+    static constexpr void checkChar(char c) {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
+            return;
+        }
+
+        throwInvalidName("Source name must contain only alphanumeric characters");
+    }
+
+    [[noreturn]] static void throwInvalidName(const char *message);
 
     static std::string decodeName(std::int32_t id);
 

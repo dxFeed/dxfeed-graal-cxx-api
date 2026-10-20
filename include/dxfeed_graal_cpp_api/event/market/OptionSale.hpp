@@ -499,7 +499,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * Returns sale conditions provided for this event by data feed.
      * This field format is specific for every particular data feed.
      *
-     * @return sale conditions or dxfcpp::String::NUL (`std::string{"<null>"}`).
+     * @return sale conditions or dxfcpp::String::NUL() (`std::string{"<null>"}`).
      */
     const std::string &getExchangeSaleConditions() const & noexcept;
 
@@ -763,7 +763,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     /**
      * Returns option symbol of this event.
      *
-     * @return option symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`).
+     * @return option symbol of this event or dxfcpp::String::NUL() (`std::string{"<null>"}`).
      */
     const std::string &getOptionSymbol() const & noexcept;
 

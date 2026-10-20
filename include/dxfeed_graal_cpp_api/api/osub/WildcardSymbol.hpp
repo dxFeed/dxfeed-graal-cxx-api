@@ -10,6 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <string_view>
 
 /**
  * \addtogroup dxfcpp_osub
@@ -28,8 +29,10 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     /**
      * Symbol prefix that is reserved for wildcard subscriptions.
      * Any subscription starting with "*" is ignored except the WildcardSymbol subscription.
+     *
+     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string RESERVED_PREFIX;
+    static const std::string &RESERVED_PREFIX();
 
     /**
      * Represents [wildcard] subscription to all events of the specific event type.
@@ -47,9 +50,10 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     static const WildcardSymbol ALL;
 
     private:
-    std::string symbol_;
+    std::string_view symbol_{};
 
-    WildcardSymbol(const std::string &symbol) noexcept;
+    constexpr explicit WildcardSymbol(std::string_view symbol) noexcept : symbol_{symbol} {
+    }
 
     public:
     WildcardSymbol(const WildcardSymbol &) noexcept;
@@ -59,7 +63,7 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     WildcardSymbol() noexcept;
     ~WildcardSymbol() noexcept;
 
-    const std::string &getSymbol() const noexcept;
+    std::string getSymbol() const;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -101,9 +105,9 @@ struct DXFCPP_EXPORT WildcardSymbol final {
 
 inline namespace literals {
 
-WildcardSymbol operator""_ws(const char *, size_t) noexcept;
+DXFCPP_EXPORT WildcardSymbol operator""_ws(const char *, size_t) noexcept;
 
-WildcardSymbol operator""_wcs(const char *, size_t) noexcept;
+DXFCPP_EXPORT WildcardSymbol operator""_wcs(const char *, size_t) noexcept;
 
 } // namespace literals
 

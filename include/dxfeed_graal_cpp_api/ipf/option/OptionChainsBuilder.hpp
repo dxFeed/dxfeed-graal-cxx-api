@@ -57,7 +57,7 @@ template <class T> class OptionChainsBuilder {
      * @param product The product for futures and options on futures (underlying asset name).
      */
     void setProduct(const StringLike &product) {
-        product_ = product == String::NUL || product.empty() ? String::EMPTY : std::string(product);
+        product_ = product == String::NUL() || product.empty() ? String::EMPTY() : std::string(product);
     }
 
     /**
@@ -68,7 +68,7 @@ template <class T> class OptionChainsBuilder {
      * @param underlying The primary underlying symbol for options.
      */
     void setUnderlying(const StringLike &underlying) {
-        underlying_ = underlying == String::NUL || underlying.empty() ? String::EMPTY : std::string(underlying);
+        underlying_ = underlying == String::NUL() || underlying.empty() ? String::EMPTY() : std::string(underlying);
     }
 
     /**
@@ -124,8 +124,8 @@ template <class T> class OptionChainsBuilder {
      * @param additionalUnderlyings The additional underlyings for options, including additional cash.
      */
     void setAdditionalUnderlyings(const StringLike &additionalUnderlyings) {
-        series_.additionalUnderlyings_ = additionalUnderlyings == String::NUL || additionalUnderlyings.empty()
-                                             ? String::EMPTY
+        series_.additionalUnderlyings_ = additionalUnderlyings == String::NUL() || additionalUnderlyings.empty()
+                                             ? String::EMPTY()
                                              : std::string(additionalUnderlyings);
     }
 
@@ -141,7 +141,7 @@ template <class T> class OptionChainsBuilder {
      * @param mmy The maturity month-year as provided for corresponding FIX tag (200).
      */
     void setMMY(const std::string &mmy) {
-        series_.mmy_ = mmy == String::NUL || mmy.empty() ? String::EMPTY : mmy;
+        series_.mmy_ = mmy == String::NUL() || mmy.empty() ? String::EMPTY() : mmy;
     }
 
     /**
@@ -160,7 +160,8 @@ template <class T> class OptionChainsBuilder {
      * @param optionType The type of option.
      */
     void setOptionType(const StringLike &optionType) {
-        series_.optionType_ = optionType == String::NUL || optionType.empty() ? String::EMPTY : std::string(optionType);
+        series_.optionType_ =
+            optionType == String::NUL() || optionType.empty() ? String::EMPTY() : std::string(optionType);
     }
 
     /**
@@ -169,8 +170,9 @@ template <class T> class OptionChainsBuilder {
      * @param expirationStyle The expiration cycle style.
      */
     void setExpirationStyle(const StringLike &expirationStyle) {
-        series_.expirationStyle_ =
-            expirationStyle == String::NUL || expirationStyle.empty() ? String::EMPTY : std::string(expirationStyle);
+        series_.expirationStyle_ = expirationStyle == String::NUL() || expirationStyle.empty()
+                                       ? String::EMPTY()
+                                       : std::string(expirationStyle);
     }
 
     /**
@@ -179,8 +181,9 @@ template <class T> class OptionChainsBuilder {
      * @param settlementStyle The settlement price determination style.
      */
     void setSettlementStyle(const StringLike &settlementStyle) {
-        series_.settlementStyle_ =
-            settlementStyle == String::NUL || settlementStyle.empty() ? String::EMPTY : std::string(settlementStyle);
+        series_.settlementStyle_ = settlementStyle == String::NUL() || settlementStyle.empty()
+                                       ? String::EMPTY()
+                                       : std::string(settlementStyle);
     }
 
     /**
@@ -196,7 +199,7 @@ template <class T> class OptionChainsBuilder {
      * @param cfi CFI code.
      */
     void setCFI(const StringLike &cfi) {
-        cfi_ = cfi == String::NUL || cfi.empty() ? String::EMPTY : std::string(cfi);
+        cfi_ = cfi == String::NUL() || cfi.empty() ? String::EMPTY() : std::string(cfi);
         series_.cfi_ = cfi_.size() < 2 ? cfi_ : cfi_[0] + std::string("X") + cfi_.substr(2);
     }
 

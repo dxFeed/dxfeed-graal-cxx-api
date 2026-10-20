@@ -35,6 +35,8 @@ struct DXFCPP_EXPORT RuntimeException : std::runtime_error {
 
     RuntimeException(const RuntimeException &other) noexcept;
 
+    RuntimeException &operator=(const RuntimeException &other) = default;
+
     /**
      * Returns the stacktrace. The frames are captured when the exception is created and are formatted on the first
      * call.

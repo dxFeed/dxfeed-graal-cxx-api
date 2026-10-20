@@ -85,6 +85,15 @@ class DXFCPP_EXPORT JavaObjectHandleState final {
      */
     JavaObjectHandleState(void *handle, Deleter deleter) noexcept;
 
+    /**
+     * Creates an empty ownership state. It is not registered, so it is created in constant expressions: a constant that
+     * holds it is initialized before any dynamic initialization (`constinit`).
+     *
+     * @param deleter The function used to release a non-null handle.
+     */
+    constexpr explicit JavaObjectHandleState(Deleter deleter) noexcept : deleter_{deleter} {
+    }
+
     JavaObjectHandleState(const JavaObjectHandleState &) = delete;
     JavaObjectHandleState(JavaObjectHandleState &&) = delete;
     JavaObjectHandleState &operator=(const JavaObjectHandleState &) = delete;
@@ -148,8 +157,11 @@ template <typename T> struct JavaObjectHandle final {
 
     using Impl = JavaObjectHandleState;
 
-    explicit JavaObjectHandle(void *handle = nullptr) noexcept
-        : impl_{handle, &deleter} {
+    /// Creates an empty handle in constant expressions (see JavaObjectHandleState).
+    constexpr JavaObjectHandle() noexcept : impl_{&deleter} {
+    }
+
+    explicit JavaObjectHandle(void *handle) noexcept : impl_{handle, &deleter} {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");

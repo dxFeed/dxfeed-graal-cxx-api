@@ -4,32 +4,33 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/OrderAction.hpp"
 
+#include <array>
+#include <functional>
+#include <span>
 #include <type_traits>
-#include <unordered_map>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const OrderAction OrderAction::UNDEFINED{0, "UNDEFINED"};
-const OrderAction OrderAction::NEW{1, "NEW"};
-const OrderAction OrderAction::REPLACE{2, "REPLACE"};
-const OrderAction OrderAction::MODIFY{3, "MODIFY"};
-const OrderAction OrderAction::DELETE{4, "DELETE"};
-const OrderAction OrderAction::PARTIAL{5, "PARTIAL"};
-const OrderAction OrderAction::EXECUTE{6, "EXECUTE"};
-const OrderAction OrderAction::TRADE{7, "TRADE"};
-const OrderAction OrderAction::BUST{8, "BUST"};
+constinit const OrderAction OrderAction::UNDEFINED{0, "UNDEFINED"};
+constinit const OrderAction OrderAction::NEW{1, "NEW"};
+constinit const OrderAction OrderAction::REPLACE{2, "REPLACE"};
+constinit const OrderAction OrderAction::MODIFY{3, "MODIFY"};
+constinit const OrderAction OrderAction::DELETE{4, "DELETE"};
+constinit const OrderAction OrderAction::PARTIAL{5, "PARTIAL"};
+constinit const OrderAction OrderAction::EXECUTE{6, "EXECUTE"};
+constinit const OrderAction OrderAction::TRADE{7, "TRADE"};
+constinit const OrderAction OrderAction::BUST{8, "BUST"};
 
-template <>
-const std::unordered_map<OrderAction::CodeType, std::reference_wrapper<const OrderAction>> OrderAction::ParentType::ALL{
-    {OrderAction::UNDEFINED.getCode(), std::cref(OrderAction::UNDEFINED)},
-    {OrderAction::NEW.getCode(), std::cref(OrderAction::NEW)},
-    {OrderAction::REPLACE.getCode(), std::cref(OrderAction::REPLACE)},
-    {OrderAction::MODIFY.getCode(), std::cref(OrderAction::MODIFY)},
-    {OrderAction::DELETE.getCode(), std::cref(OrderAction::DELETE)},
-    {OrderAction::PARTIAL.getCode(), std::cref(OrderAction::PARTIAL)},
-    {OrderAction::EXECUTE.getCode(), std::cref(OrderAction::EXECUTE)},
-    {OrderAction::TRADE.getCode(), std::cref(OrderAction::TRADE)},
-    {OrderAction::BUST.getCode(), std::cref(OrderAction::BUST)},
+namespace {
+
+constinit const std::array<std::reference_wrapper<const OrderAction>, 9> ALL_ELEMENTS{
+    std::cref(OrderAction::UNDEFINED), std::cref(OrderAction::NEW),    std::cref(OrderAction::REPLACE),
+    std::cref(OrderAction::MODIFY),    std::cref(OrderAction::DELETE), std::cref(OrderAction::PARTIAL),
+    std::cref(OrderAction::EXECUTE),   std::cref(OrderAction::TRADE),  std::cref(OrderAction::BUST),
 };
+
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const OrderAction>> OrderAction::ALL{ALL_ELEMENTS};
 
 DXFCPP_END_NAMESPACE

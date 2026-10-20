@@ -33,6 +33,8 @@ struct DXFCPP_EXPORT GraalException : RuntimeException {
 
     GraalException(const GraalException &other) noexcept;
 
+    GraalException &operator=(const GraalException &other) = default;
+
     private:
     static std::string createMessage(CEntryPointErrorsEnum entryPointErrorsEnum);
 };

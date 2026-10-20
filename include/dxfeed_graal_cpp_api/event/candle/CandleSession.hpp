@@ -13,7 +13,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
+#include <span>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <vector>
@@ -36,7 +38,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
  *
  * <p> CandleSession::ANY session is a default.
- * The key to use with these methods is available via CandleSession::ATTRIBUTE_KEY constant.
+ * The key to use with these methods is available via CandleSession::ATTRIBUTE_KEY() constant.
  * The value that this key shall be set to is equal to the corresponding CandleSession::toString()
  */
 struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
@@ -61,17 +63,24 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * The value of this constant is "tho", which is an abbreviation for "trading hours only".
      * The value that this key shall be set to is equal to
      * the corresponding CandleSession::toString()
+     *
+     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string ATTRIBUTE_KEY;
+    static const std::string &ATTRIBUTE_KEY();
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> BY_STRING;
-    static const std::vector<std::reference_wrapper<const CandleSession>> VALUES;
+    /// The elements by their string representations. It is created at the first call and is never
+    /// destroyed, so it can be used by global variables.
+    static const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> &BY_STRING();
+    /// All elements (constant-initialized, so the initializers of global variables can use it).
+    static const std::span<const std::reference_wrapper<const CandleSession>> VALUES;
 
     private:
     const SessionFilter *sessionFilter_{};
-    std::string string_;
+    std::string_view string_{};
 
-    CandleSession(const SessionFilter &sessionFilter, const StringLike &string) noexcept;
+    constexpr CandleSession(const SessionFilter &sessionFilter, std::string_view string) noexcept
+        : sessionFilter_{&sessionFilter}, string_{string} {
+    }
 
     public:
     CandleSession() noexcept;
@@ -98,7 +107,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      *
      * @return string representation of this candle session attribute.
      */
-    const std::string &toString() const & noexcept;
+    std::string toString() const;
 
     bool operator==(const CandleSession &candleSession) const noexcept;
 

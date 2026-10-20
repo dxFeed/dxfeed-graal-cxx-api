@@ -22,6 +22,19 @@ DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 
 DXFCPP_BEGIN_NAMESPACE
 
+// The constants of the library that are built at run time are created at the first call and are never destroyed: they
+// can be used in the constructors and the destructors of global variables in any order.
+const std::string &String::EMPTY() noexcept {
+    static const auto *const value = new std::string{};
+
+    return *value;
+}
+
+const std::string &String::NUL() noexcept {
+    static const auto *const value = new std::string{"<null>"};
+
+    return *value;
+}
 
 StringLike::StringLike() {
 }
@@ -187,7 +200,7 @@ std::string toString(const char *chars) noexcept {
     // TODO: cache [EN-8231]
 
     if (chars == nullptr) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return chars;
@@ -360,7 +373,7 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
 }
 
 char *createCString(const StringLike &s) {
-    if (s == String::NUL) {
+    if (s == String::NUL()) {
         return nullptr;
     }
 

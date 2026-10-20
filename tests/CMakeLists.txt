@@ -46,6 +46,7 @@ set(DXFC_TEST_SOURCES
         api/MarketEventSymbolsTest.cpp
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderSourceTest.cpp
+        event/ConstantsTest.cpp
         event/EdgeValuesTapeTest.cpp
         event/EventsTest.cpp
         event/EventTypeTest.cpp
@@ -54,6 +55,7 @@ set(DXFC_TEST_SOURCES
         glossary/AdditionalUnderlyingsTest.cpp
         glossary/PriceIncrementsTest.cpp
         internal/CommonTest.cpp
+        internal/ConstStringTest.cpp
         internal/EntityManagerTest.cpp
         internal/HandlerTest.cpp
         ipf/InstrumentProfileCollectorTest.cpp
@@ -115,7 +117,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     else ()
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static)
 
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        if (MSVC)
             if (DXFCXX_LINK_STATIC_RUNTIME)
                 set_target_properties(${DXFC_TEST_BASENAME} PROPERTIES
                         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
@@ -175,7 +177,7 @@ if (DXFCXX_SANITIZERS_ENABLED)
     else ()
         target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx::static)
 
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND DXFCXX_LINK_STATIC_RUNTIME)
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
             set_target_properties(${DXFC_CANARY_TARGET} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
         endif ()
     endif ()
@@ -208,11 +210,47 @@ if (DXFCXX_SANITIZERS_ENABLED)
     endif ()
 endif ()
 
+# The library constants read from the global initializers of a user translation unit, with each kind of linking.
+# The shared variant is not built with the static C runtime: the library and the test would have separate heaps.
+set(DXFC_STATIC_INIT_VARIANTS static)
+
+if (NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+    list(APPEND DXFC_STATIC_INIT_VARIANTS shared)
+endif ()
+
+foreach (DXFC_STATIC_INIT_VARIANT IN LISTS DXFC_STATIC_INIT_VARIANTS)
+    set(DXFC_STATIC_INIT_TARGET dxFeedGraalCxxApi_StaticInit_${DXFC_STATIC_INIT_VARIANT})
+    add_executable(${DXFC_STATIC_INIT_TARGET} static-init/StaticInitTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_STATIC_INIT_TARGET})
+    target_include_directories(${DXFC_STATIC_INIT_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+
+    if (DXFC_STATIC_INIT_VARIANT STREQUAL "shared")
+        target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx)
+        target_compile_definitions(${DXFC_STATIC_INIT_TARGET} PRIVATE DXFCPP_USE_DLLS)
+    else ()
+        target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx::static)
+
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+    add_test(NAME ${DXFC_STATIC_INIT_TARGET} COMMAND ${DXFC_STATIC_INIT_TARGET})
+
+    if (DXFCXX_SANITIZERS_ENABLED)
+        set_tests_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES ENVIRONMENT
+                "ASAN_OPTIONS=check_initialization_order=1:strict_init_order=1;UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+    endif ()
+endforeach ()
+
 # The libraries that the tests and the canary load, copied next to them once (see dxfcxx_copy_runtime).
 set(DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx::graal>)
 set(DXFC_TEST_RUNTIME_DEPENDS "")
 
-if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
+if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS OR "shared" IN_LIST DXFC_STATIC_INIT_VARIANTS)
     list(APPEND DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx>)
     list(APPEND DXFC_TEST_RUNTIME_DEPENDS dxfcxx)
 endif ()

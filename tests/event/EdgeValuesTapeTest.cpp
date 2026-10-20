@@ -25,7 +25,7 @@ using namespace dxfcpp;
 
 namespace {
 
-// The string "<null>" is String::NUL in the C++ API, so it is passed to Java as null, and a null string comes back as
+// The string "<null>" is String::NUL() in the C++ API, so it is passed to Java as null, and a null string comes back as
 // "<null>" (static analysis report, EVT-18). EDGE-ZERO is the value set with the "<null>" strings.
 const std::vector<std::string> KNOWN_ROUND_TRIP_DEFECTS{
     "Profile.Description@EDGE-ZERO",     "Profile.StatusReason@EDGE-ZERO", "SpreadOrder#ISE.SpreadSymbol@EDGE-ZERO",

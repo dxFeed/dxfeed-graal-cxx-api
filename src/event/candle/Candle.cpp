@@ -52,7 +52,7 @@ void Candle::fillGraalData(void *graalNative) const {
     const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     graalCandle->event_type.clazz = DXFG_EVENT_CANDLE;
-    graalCandle->event_symbol = createCString(eventSymbol_.value_or(CandleSymbol::NUL).toString());
+    graalCandle->event_symbol = createCString(eventSymbol_.value_or(CandleSymbol::NUL()).toString());
     graalCandle->event_time = data_.eventTime;
     graalCandle->event_flags = data_.eventFlags;
     graalCandle->index = data_.index;
@@ -149,7 +149,7 @@ Candle::Candle(CandleSymbol eventSymbol) noexcept : eventSymbol_{std::move(event
 
 const CandleSymbol &Candle::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return CandleSymbol::NUL;
+        return CandleSymbol::NUL();
     }
 
     return eventSymbol_.value();

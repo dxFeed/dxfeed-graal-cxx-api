@@ -267,7 +267,7 @@ Order &Order::withScope(const Scope &scope) noexcept {
 
 const std::string &Order::getMarketMaker() const & noexcept {
     if (!orderData_.marketMaker) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return orderData_.marketMaker.value();

@@ -267,7 +267,7 @@ SpreadOrder &SpreadOrder::withScope(const Scope &scope) noexcept {
 
 const std::string &SpreadOrder::getSpreadSymbol() const & noexcept {
     if (!spreadOrderData_.spreadSymbol) {
-        return String::NUL;
+        return String::NUL();
     }
 
     return spreadOrderData_.spreadSymbol.value();

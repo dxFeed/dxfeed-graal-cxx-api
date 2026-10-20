@@ -1,4 +1,5 @@
-* **\[MDAPI-432]\[C++]** **\[BREAKING]** Fixed equality, type checks and the market depth model.
+* **\[MDAPI-432]\[C++]** **\[BREAKING]** Fixed equality, type checks, the market depth model and the initialization
+  of the constants.
     * **\[BREAKING]** Fixed inverted equality of `AuthToken`, `CFI`, `CFI::Attribute`, `CFI::Value`, `PriceIncrements`,
       `AdditionalUnderlyings`, `InstrumentProfile` and the tx model listeners: `operator==` returned `false` for equal
       objects and `true` for different ones. Comparing a `CFI`, `PriceIncrements` or `AdditionalUnderlyings` with
@@ -12,6 +13,32 @@
     * `MarketDepthModel`: a new snapshot of a source (for example, after a reconnection) removes all the old orders of
       that source: some of them were left in the book, and removing the last order of the book was undefined
       behaviour. A model built without a listener no longer crashes on the first update.
+    * The constants of the enums, candle attributes, schedule filters, event types, event flags, order sources,
+      `InstrumentProfileField` and `WildcardSymbol::ALL` are constant-initialized: they can be used in the
+      initializers of global variables of user code, with the static and the shared library (`CandleType::parse("h")`
+      in such an initializer crashed). The `EMPTY` constants of `CFI`, `PriceIncrements` and `AdditionalUnderlyings`
+      are still built at dynamic initialization.
+    * **\[BREAKING]** The constants that are built at run time are functions with the same names: `String::NUL()`,
+      `String::EMPTY()`, `CandleSymbol::NUL()`, `ATTRIBUTE_KEY()` of the candle attributes, `BY_STRING()` of
+      `CandleType`, `CandlePrice`, `CandleAlignment` and `CandleSession`, `EventTypeEnum::ALL_BY_NAME()`,
+      `ALL_BY_CLASS_NAME()` and `ALL_BY_ID()`, `OrderSource::PREDEFINED_SOURCES()` and
+      `WildcardSymbol::RESERVED_PREFIX()`. Each returns a reference to an object that is created at the first call and
+      is never destroyed, so it can be used in the constructors and the destructors of global variables.
+    * **\[BREAKING]** The name getters of these constants return `std::string` by value instead of
+      `const std::string &`: `getName()` and `toString()` of the enums, `EventFlag`, `CandleType` and `SessionType`,
+      `InstrumentProfileField::getName()`, `EventTypeEnum::getName()` and `getClassName()`,
+      `IndexedEventSource::name()`, `toString()` of `CandlePeriod`, `CandlePrice` and `CandleSession`, and
+      `WildcardSymbol::getSymbol()`.
+    * **\[BREAKING]** `EventTypeEnum::ALL` and the `VALUES` of `CandleType`, `CandlePrice`, `CandleAlignment` and
+      `CandleSession` are `std::span<const std::reference_wrapper<const T>>` (they were `std::vector`). Each enum
+      (`Side`, `Scope`, `OrderAction`, `InstrumentProfileType` and others) has a public `ALL` with its elements.
+    * `valueOf()` of the enums (`Side::valueOf()` and others) and the `_et`, `_ws` and `_wcs` literals link with the
+      shared library (DLL) on Windows.
+    * The library, the tests and the samples build with clang-cl (the `ClangCL` toolset of Visual Studio), which is
+      checked by CI.
+    * **\[BREAKING]** ABI: the layouts of these classes changed, `SessionFilter` and `DayFilter` no longer have a mutex
+      member, the `OrderSource` user sources are no longer static members, and the names of `IndexedEventSource`,
+      `OrderSource`, `CandlePeriod` and `SessionFilter` are stored in the new internal `ConstString`.
 * **\[MDAPI-430]\[C++]** **\[BREAKING]** Candle attributes are parsed and printed as in Java.
     * **\[BREAKING]** `CandlePeriod::parse()` and `CandlePriceLevel::parse()` follow Java `Double.parseDouble`: a sign
       (`+5m`), the `d`/`f` suffix and hexadecimal values (`0x1p3`) of a price level are accepted, and parsing no longer

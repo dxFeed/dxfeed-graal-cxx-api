@@ -7,130 +7,128 @@
 #include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
 
 #include <dxfg_api.h>
+
+#include <array>
+#include <functional>
+#include <mutex>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const OrderSource OrderSource::COMPOSITE_BID(1, "COMPOSITE_BID", 0);
-const OrderSource OrderSource::COMPOSITE_ASK(2, "COMPOSITE_ASK", 0);
-const OrderSource OrderSource::REGIONAL_BID(3, "REGIONAL_BID", 0);
-const OrderSource OrderSource::REGIONAL_ASK(4, "REGIONAL_ASK", 0);
-const OrderSource OrderSource::AGGREGATE_BID(5, "AGGREGATE_BID", 0);
-const OrderSource OrderSource::AGGREGATE_ASK(6, "AGGREGATE_ASK", 0);
-const OrderSource OrderSource::COMPOSITE(7, "COMPOSITE", 0);
-const OrderSource OrderSource::REGIONAL(8, "REGIONAL", 0);
-const OrderSource OrderSource::AGGREGATE(9, "AGGREGATE", 0);
-const OrderSource OrderSource::DEFAULT(0, "DEFAULT",
-                                       PUB_ORDER | PUB_ANALYTIC_ORDER | PUB_OTC_MARKETS_ORDER | PUB_SPREAD_ORDER |
-                                           FULL_ORDER_BOOK | PUB_NUAM_ORDER);
+constinit const OrderSource OrderSource::COMPOSITE_BID(1, ConstString::Literal{"COMPOSITE_BID"}, 0);
+constinit const OrderSource OrderSource::COMPOSITE_ASK(2, ConstString::Literal{"COMPOSITE_ASK"}, 0);
+constinit const OrderSource OrderSource::REGIONAL_BID(3, ConstString::Literal{"REGIONAL_BID"}, 0);
+constinit const OrderSource OrderSource::REGIONAL_ASK(4, ConstString::Literal{"REGIONAL_ASK"}, 0);
+constinit const OrderSource OrderSource::AGGREGATE_BID(5, ConstString::Literal{"AGGREGATE_BID"}, 0);
+constinit const OrderSource OrderSource::AGGREGATE_ASK(6, ConstString::Literal{"AGGREGATE_ASK"}, 0);
+constinit const OrderSource OrderSource::COMPOSITE(7, ConstString::Literal{"COMPOSITE"}, 0);
+constinit const OrderSource OrderSource::REGIONAL(8, ConstString::Literal{"REGIONAL"}, 0);
+constinit const OrderSource OrderSource::AGGREGATE(9, ConstString::Literal{"AGGREGATE"}, 0);
+constinit const OrderSource OrderSource::DEFAULT(0, ConstString::Literal{"DEFAULT"},
+                                                 PUB_ORDER | PUB_ANALYTIC_ORDER | PUB_OTC_MARKETS_ORDER |
+                                                     PUB_SPREAD_ORDER | FULL_ORDER_BOOK | PUB_NUAM_ORDER);
 
-const OrderSource OrderSource::NTV("NTV", PUB_ORDER | FULL_ORDER_BOOK);
-const OrderSource OrderSource::ntv("ntv", PUB_ORDER);
-const OrderSource OrderSource::NFX("NFX", PUB_ORDER);
-const OrderSource OrderSource::ESPD("ESPD", PUB_ORDER);
-const OrderSource OrderSource::XNFI("XNFI", PUB_ORDER);
-const OrderSource OrderSource::ICE("ICE", PUB_ORDER);
-const OrderSource OrderSource::ISE("ISE", PUB_ORDER | PUB_SPREAD_ORDER);
-const OrderSource OrderSource::DEA("DEA", PUB_ORDER);
-const OrderSource OrderSource::DEX("DEX", PUB_ORDER);
-const OrderSource OrderSource::dex("dex", PUB_ORDER);
-const OrderSource OrderSource::BYX("BYX", PUB_ORDER);
-const OrderSource OrderSource::BZX("BZX", PUB_ORDER);
-const OrderSource OrderSource::bzx("bzx", PUB_ORDER);
-const OrderSource OrderSource::BATE("BATE", PUB_ORDER);
-const OrderSource OrderSource::CHIX("CHIX", PUB_ORDER);
-const OrderSource OrderSource::CEUX("CEUX", PUB_ORDER);
-const OrderSource OrderSource::BXTR("BXTR", PUB_ORDER);
-const OrderSource OrderSource::IST("IST", PUB_ORDER);
-const OrderSource OrderSource::BI20("BI20", PUB_ORDER);
-const OrderSource OrderSource::ABE("ABE", PUB_ORDER);
-const OrderSource OrderSource::FAIR("FAIR", PUB_ORDER);
-const OrderSource OrderSource::GLBX("GLBX", PUB_ORDER | PUB_ANALYTIC_ORDER);
-const OrderSource OrderSource::glbx("glbx", PUB_ORDER);
-const OrderSource OrderSource::ERIS("ERIS", PUB_ORDER);
-const OrderSource OrderSource::XEUR("XEUR", PUB_ORDER);
-const OrderSource OrderSource::xeur("xeur", PUB_ORDER);
-const OrderSource OrderSource::CFE("CFE", PUB_ORDER);
-const OrderSource OrderSource::C2OX("C2OX", PUB_ORDER);
-const OrderSource OrderSource::SMFE("SMFE", PUB_ORDER);
-const OrderSource OrderSource::smfe("smfe", PUB_ORDER);
-const OrderSource OrderSource::iex("iex", PUB_ORDER);
-const OrderSource OrderSource::MEMX("MEMX", PUB_ORDER);
-const OrderSource OrderSource::memx("memx", PUB_ORDER);
-const OrderSource OrderSource::OCEA("OCEA", PUB_ORDER);
-const OrderSource OrderSource::ocea("ocea", PUB_ORDER);
-const OrderSource OrderSource::pink("pink", PUB_ORDER | PUB_OTC_MARKETS_ORDER);
-const OrderSource OrderSource::ARCA("ARCA", PUB_ORDER);
-const OrderSource OrderSource::arca("arca", PUB_ORDER);
-const OrderSource OrderSource::CEDX("CEDX", PUB_ORDER);
-const OrderSource OrderSource::cedx("cedx", PUB_ORDER);
-const OrderSource OrderSource::IGC("IGC", PUB_ORDER);
-const OrderSource OrderSource::igc("igc", PUB_ORDER);
-const OrderSource OrderSource::EDX("EDX", PUB_ORDER);
-const OrderSource OrderSource::edx("edx", PUB_ORDER);
-const OrderSource OrderSource::NUAM("NUAM", PUB_ORDER | FULL_ORDER_BOOK | PUB_NUAM_ORDER);
-const OrderSource OrderSource::nuam("nuam", PUB_ORDER | PUB_NUAM_ORDER);
+constinit const OrderSource OrderSource::NTV(ConstString::Literal{"NTV"}, PUB_ORDER | FULL_ORDER_BOOK);
+constinit const OrderSource OrderSource::ntv(ConstString::Literal{"ntv"}, PUB_ORDER);
+constinit const OrderSource OrderSource::NFX(ConstString::Literal{"NFX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::ESPD(ConstString::Literal{"ESPD"}, PUB_ORDER);
+constinit const OrderSource OrderSource::XNFI(ConstString::Literal{"XNFI"}, PUB_ORDER);
+constinit const OrderSource OrderSource::ICE(ConstString::Literal{"ICE"}, PUB_ORDER);
+constinit const OrderSource OrderSource::ISE(ConstString::Literal{"ISE"}, PUB_ORDER | PUB_SPREAD_ORDER);
+constinit const OrderSource OrderSource::DEA(ConstString::Literal{"DEA"}, PUB_ORDER);
+constinit const OrderSource OrderSource::DEX(ConstString::Literal{"DEX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::dex(ConstString::Literal{"dex"}, PUB_ORDER);
+constinit const OrderSource OrderSource::BYX(ConstString::Literal{"BYX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::BZX(ConstString::Literal{"BZX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::bzx(ConstString::Literal{"bzx"}, PUB_ORDER);
+constinit const OrderSource OrderSource::BATE(ConstString::Literal{"BATE"}, PUB_ORDER);
+constinit const OrderSource OrderSource::CHIX(ConstString::Literal{"CHIX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::CEUX(ConstString::Literal{"CEUX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::BXTR(ConstString::Literal{"BXTR"}, PUB_ORDER);
+constinit const OrderSource OrderSource::IST(ConstString::Literal{"IST"}, PUB_ORDER);
+constinit const OrderSource OrderSource::BI20(ConstString::Literal{"BI20"}, PUB_ORDER);
+constinit const OrderSource OrderSource::ABE(ConstString::Literal{"ABE"}, PUB_ORDER);
+constinit const OrderSource OrderSource::FAIR(ConstString::Literal{"FAIR"}, PUB_ORDER);
+constinit const OrderSource OrderSource::GLBX(ConstString::Literal{"GLBX"}, PUB_ORDER | PUB_ANALYTIC_ORDER);
+constinit const OrderSource OrderSource::glbx(ConstString::Literal{"glbx"}, PUB_ORDER);
+constinit const OrderSource OrderSource::ERIS(ConstString::Literal{"ERIS"}, PUB_ORDER);
+constinit const OrderSource OrderSource::XEUR(ConstString::Literal{"XEUR"}, PUB_ORDER);
+constinit const OrderSource OrderSource::xeur(ConstString::Literal{"xeur"}, PUB_ORDER);
+constinit const OrderSource OrderSource::CFE(ConstString::Literal{"CFE"}, PUB_ORDER);
+constinit const OrderSource OrderSource::C2OX(ConstString::Literal{"C2OX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::SMFE(ConstString::Literal{"SMFE"}, PUB_ORDER);
+constinit const OrderSource OrderSource::smfe(ConstString::Literal{"smfe"}, PUB_ORDER);
+constinit const OrderSource OrderSource::iex(ConstString::Literal{"iex"}, PUB_ORDER);
+constinit const OrderSource OrderSource::MEMX(ConstString::Literal{"MEMX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::memx(ConstString::Literal{"memx"}, PUB_ORDER);
+constinit const OrderSource OrderSource::OCEA(ConstString::Literal{"OCEA"}, PUB_ORDER);
+constinit const OrderSource OrderSource::ocea(ConstString::Literal{"ocea"}, PUB_ORDER);
+constinit const OrderSource OrderSource::pink(ConstString::Literal{"pink"}, PUB_ORDER | PUB_OTC_MARKETS_ORDER);
+constinit const OrderSource OrderSource::ARCA(ConstString::Literal{"ARCA"}, PUB_ORDER);
+constinit const OrderSource OrderSource::arca(ConstString::Literal{"arca"}, PUB_ORDER);
+constinit const OrderSource OrderSource::CEDX(ConstString::Literal{"CEDX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::cedx(ConstString::Literal{"cedx"}, PUB_ORDER);
+constinit const OrderSource OrderSource::IGC(ConstString::Literal{"IGC"}, PUB_ORDER);
+constinit const OrderSource OrderSource::igc(ConstString::Literal{"igc"}, PUB_ORDER);
+constinit const OrderSource OrderSource::EDX(ConstString::Literal{"EDX"}, PUB_ORDER);
+constinit const OrderSource OrderSource::edx(ConstString::Literal{"edx"}, PUB_ORDER);
+constinit const OrderSource OrderSource::NUAM(ConstString::Literal{"NUAM"},
+                                              PUB_ORDER | FULL_ORDER_BOOK | PUB_NUAM_ORDER);
+constinit const OrderSource OrderSource::nuam(ConstString::Literal{"nuam"}, PUB_ORDER | PUB_NUAM_ORDER);
 
-const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
-    OrderSource::PREDEFINED_SOURCES =
-        [](std::initializer_list<std::reference_wrapper<const OrderSource>> orders) {
-            std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
-                result{};
+namespace {
 
-            for (auto &&o : orders) {
-                result.emplace(o.get().id(), o);
-                result.emplace(o.get().name(), o);
-            }
+constinit const std::array PREDEFINED{
+    std::cref(OrderSource::COMPOSITE_BID), std::cref(OrderSource::COMPOSITE_ASK), std::cref(OrderSource::REGIONAL_BID),
+    std::cref(OrderSource::REGIONAL_ASK),  std::cref(OrderSource::AGGREGATE_BID), std::cref(OrderSource::AGGREGATE_ASK),
+    std::cref(OrderSource::COMPOSITE),     std::cref(OrderSource::REGIONAL),      std::cref(OrderSource::AGGREGATE),
+    std::cref(OrderSource::DEFAULT),       std::cref(OrderSource::NTV),           std::cref(OrderSource::ntv),
+    std::cref(OrderSource::NFX),           std::cref(OrderSource::ESPD),          std::cref(OrderSource::XNFI),
+    std::cref(OrderSource::ICE),           std::cref(OrderSource::ISE),           std::cref(OrderSource::DEA),
+    std::cref(OrderSource::DEX),           std::cref(OrderSource::dex),           std::cref(OrderSource::BYX),
+    std::cref(OrderSource::BZX),           std::cref(OrderSource::bzx),           std::cref(OrderSource::BATE),
+    std::cref(OrderSource::CHIX),          std::cref(OrderSource::CEUX),          std::cref(OrderSource::BXTR),
+    std::cref(OrderSource::IST),           std::cref(OrderSource::BI20),          std::cref(OrderSource::ABE),
+    std::cref(OrderSource::FAIR),          std::cref(OrderSource::GLBX),          std::cref(OrderSource::glbx),
+    std::cref(OrderSource::ERIS),          std::cref(OrderSource::XEUR),          std::cref(OrderSource::xeur),
+    std::cref(OrderSource::CFE),           std::cref(OrderSource::C2OX),          std::cref(OrderSource::SMFE),
+    std::cref(OrderSource::smfe),          std::cref(OrderSource::iex),           std::cref(OrderSource::MEMX),
+    std::cref(OrderSource::memx),          std::cref(OrderSource::OCEA),          std::cref(OrderSource::ocea),
+    std::cref(OrderSource::pink),          std::cref(OrderSource::ARCA),          std::cref(OrderSource::arca),
+    std::cref(OrderSource::CEDX),          std::cref(OrderSource::cedx),          std::cref(OrderSource::IGC),
+    std::cref(OrderSource::igc),           std::cref(OrderSource::EDX),           std::cref(OrderSource::edx),
+    std::cref(OrderSource::NUAM),          std::cref(OrderSource::nuam),
+};
 
-            return result;
-        }({//
-           COMPOSITE_BID, COMPOSITE_ASK, REGIONAL_BID, REGIONAL_ASK, AGGREGATE_BID, AGGREGATE_ASK, COMPOSITE, REGIONAL,
-           AGGREGATE,
-           //
-           DEFAULT,
-           //
-           NTV, ntv, NFX, ESPD, XNFI, ICE, ISE, DEA, DEX, dex, BYX, BZX, bzx, BATE, CHIX, CEUX, BXTR, IST, BI20, ABE,
-           FAIR, GLBX, glbx, ERIS, XEUR, xeur, CFE, C2OX, SMFE, smfe, iex, MEMX, memx, OCEA, ocea, pink, ARCA, arca,
-           CEDX, cedx, IGC, igc, EDX, edx, NUAM, nuam});
+} // namespace
 
-std::unordered_map<std::int32_t, OrderSource> OrderSource::USER_SOURCES_{};
+constinit const std::span<const std::reference_wrapper<const OrderSource>> OrderSource::PREDEFINED_{PREDEFINED};
 
-OrderSource::OrderSource(std::int32_t id, const StringLike &name, std::uint32_t pubFlags) noexcept
-    : IndexedEventSource(id, name), pubFlags_{pubFlags}, builtin_{true} {
+namespace {
+
+// A function-local static: valueOf() is called from the global initializers of other translation units.
+struct UserSources {
+    std::mutex mutex{};
+    std::unordered_map<std::int32_t, OrderSource> sources{};
+};
+
+UserSources &userSources() {
+    // Never destroyed: the user sources can be used in the destructors of global variables.
+    static auto *const instance = new UserSources{};
+
+    return *instance;
 }
 
-OrderSource::OrderSource(const StringLike &name, std::uint32_t pubFlags)
-    : OrderSource(composeId(name), name, pubFlags) {
-}
+} // namespace
 
 OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : IndexedEventSource(id, name) {
 }
 
-std::int32_t OrderSource::composeId(const StringLike &name) {
-    std::int32_t sourceId = 0;
-
-    const auto n = name.length();
-
-    if (n == 0 || n > 4) {
-        throw InvalidArgumentException("Source name must contain from 1 to 4 characters");
-    }
-
-    for (const auto c : name) {
-        checkChar(c);
-        sourceId = orOp(sal(sourceId, 8), c);
-    }
-
-    return sourceId;
-}
-
-void OrderSource::checkChar(char c) {
-    if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
-        return;
-    }
-
-    throw InvalidArgumentException("Source name must contain only alphanumeric characters");
+void OrderSource::throwInvalidName(const char *message) {
+    throw InvalidArgumentException(message);
 }
 
 std::string OrderSource::decodeName(std::int32_t id) {
@@ -196,33 +194,58 @@ bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
 }
 
 const OrderSource &OrderSource::valueOf(std::int32_t sourceId) {
-    if (const auto found = PREDEFINED_SOURCES.find(sourceId); found != PREDEFINED_SOURCES.end()) {
+    for (const auto &source : PREDEFINED) {
+        if (source.get().id() == sourceId) {
+            return source;
+        }
+    }
+
+    auto &[mutex, sources] = userSources();
+    std::lock_guard lock(mutex);
+
+    if (const auto found = sources.find(sourceId); found != sources.end()) {
         return found->second;
     }
 
-    std::lock_guard lock(MTX_);
-
-    if (const auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
-        return found->second;
-    }
-
-    return USER_SOURCES_.try_emplace(sourceId, OrderSource(sourceId, decodeName(sourceId))).first->second;
+    return sources.try_emplace(sourceId, OrderSource(sourceId, decodeName(sourceId))).first->second;
 }
 
 const OrderSource &OrderSource::valueOf(const StringLike &name) {
-    if (const auto found = PREDEFINED_SOURCES.find(name); found != PREDEFINED_SOURCES.end()) {
+    const std::string_view nameView{name};
+
+    for (const auto &source : PREDEFINED) {
+        if (source.get().nameView() == nameView) {
+            return source;
+        }
+    }
+
+    const auto sourceId = composeId(nameView);
+    auto &[mutex, sources] = userSources();
+    std::lock_guard lock(mutex);
+
+    if (const auto found = sources.find(sourceId); found != sources.end()) {
         return found->second;
     }
 
-    std::lock_guard lock(MTX_);
+    return sources.try_emplace(sourceId, OrderSource(sourceId, name)).first->second;
+}
 
-    const auto sourceId = composeId(name);
+const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>> &
+OrderSource::PREDEFINED_SOURCES() {
+    static const auto *const value =
+        new std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>([] {
+            std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
+                result{};
 
-    if (const auto found = USER_SOURCES_.find(sourceId); found != USER_SOURCES_.end()) {
-        return found->second;
-    }
+            for (const auto &source : PREDEFINED_) {
+                result.emplace(source.get().id(), source);
+                result.emplace(source.get().name(), source);
+            }
 
-    return USER_SOURCES_.try_emplace(sourceId, OrderSource(sourceId, name)).first->second;
+            return result;
+        }());
+
+    return *value;
 }
 
 DXFCPP_END_NAMESPACE
