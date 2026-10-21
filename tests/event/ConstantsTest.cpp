@@ -488,3 +488,49 @@ TEST_CASE("The Graal-dependent constants are initialized once for concurrent fir
     CHECK(!TimeFormat::DEFAULT_WITH_MILLIS.format(0).empty());
     CHECK(!TimeFormat::DEFAULT.format(0).empty());
 }
+
+namespace {
+
+std::atomic<int> lazyInitializerCalls{};
+
+// The first call fails. The handle is empty: no Java object is created.
+JavaObjectHandle<TimePeriod> lazyInitializer() {
+    if (lazyInitializerCalls.fetch_add(1) == 0) {
+        throw std::runtime_error("The first call fails");
+    }
+
+    return JavaObjectHandle<TimePeriod>{};
+}
+
+} // namespace
+
+TEST_CASE("LazyJavaObjectHandle calls the initializer again after a failure and once after a success") {
+    const LazyJavaObjectHandle<TimePeriod> handle{&lazyInitializer};
+
+    CHECK(lazyInitializerCalls.load() == 0);
+    CHECK_THROWS_AS(static_cast<void>(handle.get()), std::runtime_error);
+    CHECK(lazyInitializerCalls.load() == 1);
+
+    std::atomic<bool> start{};
+    std::vector<std::thread> threads{};
+
+    for (int i = 0; i < 4; i++) {
+        threads.emplace_back([&] {
+            while (!start.load()) {
+                std::this_thread::yield();
+            }
+
+            static_cast<void>(handle.get());
+        });
+    }
+
+    start.store(true);
+    static_cast<void>(handle.get());
+
+    for (auto &thread : threads) {
+        thread.join();
+    }
+
+    CHECK(lazyInitializerCalls.load() == 2);
+    CHECK(&handle.get() == &handle.get());
+}

@@ -40,7 +40,8 @@
       constant-initialized. The Java objects of `TimePeriod`, `TimeFormat`, `CFI`, `PriceIncrements` and
       `AdditionalUnderlyings` constants are created at the first use (`TimePeriod::ZERO.getTime()` and others), and
       their getters no longer lock a mutex on each call. Such calls need the Graal isolate, so the destructors of
-      global variables should not make them: the isolate may already be torn down there.
+      global variables should not make them: the isolate may already be torn down there. The other constants do not
+      create the Graal isolate; the new internal `Isolate::isCreated()` tells whether it was created.
     * **\[BREAKING]** The name getters of these constants return `std::string` by value instead of
       `const std::string &`: `getName()` and `toString()` of the enums, `EventFlag`, `CandleType` and `SessionType`,
       `InstrumentProfileField::getName()`, `EventTypeEnum::getName()` and `getClassName()`,
@@ -56,8 +57,9 @@
     * **\[BREAKING]** ABI: the layouts of these classes changed, `SessionFilter` and `DayFilter` no longer have a mutex
       member, the `OrderSource` user sources are no longer static members, the names of `IndexedEventSource`,
       `OrderSource`, `CandlePeriod` and `SessionFilter` are stored in the new internal `ConstString`, `TimePeriod`,
-      `TimeFormat`, `CFI`, `PriceIncrements` and `AdditionalUnderlyings` have a `std::once_flag` and a function pointer
-      instead of a mutex and a `std::function`, and the string keys of `DXEndpoint`, `AuthToken`, `String` and
+      `TimeFormat`, `CFI`, `PriceIncrements` and `AdditionalUnderlyings` keep their Java object in the new internal
+      `LazyJavaObjectHandle` (a `std::once_flag` and a function pointer instead of a mutex and a `std::function`), and
+      the string keys of `DXEndpoint`, `AuthToken`, `String` and
       `WildcardSymbol` are no longer exported variables.
 * **\[MDAPI-430]\[C++]** **\[BREAKING]** Candle attributes are parsed and printed as in Java.
     * **\[BREAKING]** `CandlePeriod::parse()` and `CandlePriceLevel::parse()` follow Java `Double.parseDouble`: a sign

@@ -4,6 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
 
+#include <atomic>
 #include <config/config.hpp>
 #include <cstdlib>
 #include <dxfg_api.h>
@@ -147,11 +148,18 @@ Isolate::IsolateThread &Isolate::currentIsolateThread() noexcept {
     return current;
 }
 
+namespace {
+// Constant-initialized, so it can be read before the dynamic initialization of the library.
+constinit std::atomic<bool> isolateCreated{false};
+} // namespace
+
 Isolate::Isolate() noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("Isolate::Isolate()");
     }
+
+    isolateCreated.store(true);
 
     // The handle registry must outlive the isolate so that cached Java handles
     // can be released while calls into Graal are still valid.
@@ -280,6 +288,10 @@ Isolate &Isolate::getInstance() noexcept {
     }
 
     return instance;
+}
+
+bool Isolate::isCreated() noexcept {
+    return isolateCreated.load();
 }
 
 Isolate::~Isolate() {

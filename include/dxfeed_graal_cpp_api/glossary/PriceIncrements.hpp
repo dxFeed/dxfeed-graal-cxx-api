@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
-#include <mutex>
 #include <ostream>
 
 /**
@@ -252,11 +251,11 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
     using Unique = std::unique_ptr<PriceIncrements>;
 
     private:
-    mutable JavaObjectHandle<PriceIncrements> handle_;
-    mutable std::once_flag initialized_{};
-    JavaObjectHandle<PriceIncrements> (*initializer_)(){};
+    LazyJavaObjectHandle<PriceIncrements> handle_;
 
-    void init() const;
+    const JavaObjectHandle<PriceIncrements> &getHandle() const {
+        return handle_.get();
+    }
 
     public:
     /**

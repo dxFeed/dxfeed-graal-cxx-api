@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
-#include <mutex>
 #include <ostream>
 #include <string>
 #include <unordered_map>
@@ -40,11 +39,11 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     using Unique = std::unique_ptr<AdditionalUnderlyings>;
 
     private:
-    mutable JavaObjectHandle<AdditionalUnderlyings> handle_;
-    mutable std::once_flag initialized_{};
-    JavaObjectHandle<AdditionalUnderlyings> (*initializer_)(){};
+    LazyJavaObjectHandle<AdditionalUnderlyings> handle_;
 
-    void init() const;
+    const JavaObjectHandle<AdditionalUnderlyings> &getHandle() const {
+        return handle_.get();
+    }
 
     static JavaObjectHandle<AdditionalUnderlyings>
     valueOfImpl(const std::vector<std::pair<const char *, double>> &mapLikeEntries);

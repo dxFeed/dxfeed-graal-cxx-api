@@ -45,13 +45,7 @@ TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle) : handle_(std::mov
 }
 
 const JavaObjectHandle<TimePeriod> &TimePeriod::getHandle() const {
-    if (initializer_) {
-        std::call_once(initialized_, [this] {
-            handle_ = initializer_();
-        });
-    }
-
-    return handle_;
+    return handle_.get();
 }
 
 DXFCPP_END_NAMESPACE

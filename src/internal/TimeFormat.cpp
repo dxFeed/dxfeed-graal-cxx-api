@@ -32,13 +32,7 @@ TimeFormat::~TimeFormat() noexcept {
 }
 
 const JavaObjectHandle<TimeFormat> &TimeFormat::getHandle() const {
-    if (initializer_) {
-        std::call_once(initialized_, [this] {
-            handle_ = initializer_();
-        });
-    }
-
-    return handle_;
+    return handle_.get();
 }
 
 std::int64_t TimeFormat::parse(const StringLike &value) const {

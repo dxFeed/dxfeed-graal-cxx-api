@@ -10,7 +10,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 
 #include <cstdint>
-#include <mutex>
 
 /**
  * \defgroup dxfcpp_util "Util" Module
@@ -97,14 +96,12 @@ struct DXFCPP_EXPORT TimePeriod {
     TimePeriod &operator=(const TimePeriod &&) noexcept = delete;
 
     private:
-    using Initializer = JavaObjectHandle<TimePeriod> (*)();
+    using Initializer = LazyJavaObjectHandle<TimePeriod>::Initializer;
 
-    mutable JavaObjectHandle<TimePeriod> handle_;
-    mutable std::once_flag initialized_{};
-    Initializer initializer_{};
+    LazyJavaObjectHandle<TimePeriod> handle_;
 
     // The constructor of the constants: constant initialization, the Java object is created at the first use.
-    constexpr explicit TimePeriod(Initializer initializer) noexcept : initializer_{initializer} {
+    constexpr explicit TimePeriod(Initializer initializer) noexcept : handle_{initializer} {
     }
 
     explicit TimePeriod(JavaObjectHandle<TimePeriod> &&handle);

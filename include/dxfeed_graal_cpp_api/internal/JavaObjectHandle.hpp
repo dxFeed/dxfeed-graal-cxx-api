@@ -15,7 +15,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
+#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -202,6 +204,51 @@ template <typename T> struct JavaObjectHandle final {
 
     private:
     Impl impl_;
+};
+
+/**
+ * A handle of a Java object that can be created at the first use.
+ *
+ * The constructor with an initializer is `constexpr`, so an object that holds the handle can be constant-initialized
+ * and no Java call is made before the first get(). The first get() calls the initializer once (std::call_once): the
+ * concurrent first calls wait for it, and if the initializer throws, the next call calls it again.
+ *
+ * @tparam T The type of the object that owns the Java object.
+ */
+template <typename T> class LazyJavaObjectHandle final {
+    public:
+    /// The function that creates the Java object.
+    using Initializer = JavaObjectHandle<T> (*)();
+
+    private:
+    mutable JavaObjectHandle<T> handle_{};
+    mutable std::once_flag initialized_{};
+    Initializer initializer_{};
+
+    public:
+    /// Creates the handle whose Java object is created by the initializer at the first get().
+    constexpr explicit LazyJavaObjectHandle(Initializer initializer) noexcept : initializer_{initializer} {
+    }
+
+    /// Creates the handle of an existing Java object.
+    explicit LazyJavaObjectHandle(JavaObjectHandle<T> &&handle) noexcept : handle_{std::move(handle)} {
+    }
+
+    LazyJavaObjectHandle(const LazyJavaObjectHandle &) = delete;
+    LazyJavaObjectHandle &operator=(const LazyJavaObjectHandle &) = delete;
+
+    /**
+     * @return The handle of the Java object, created by the initializer at the first call.
+     */
+    [[nodiscard]] const JavaObjectHandle<T> &get() const {
+        if (initializer_) {
+            std::call_once(initialized_, [this] {
+                handle_ = initializer_();
+            });
+        }
+
+        return handle_;
+    }
 };
 
 template <typename T> struct JavaObjectHandleList final {

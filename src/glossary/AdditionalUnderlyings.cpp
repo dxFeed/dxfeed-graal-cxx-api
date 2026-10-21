@@ -7,14 +7,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-void AdditionalUnderlyings::init() const {
-    if (initializer_) {
-        std::call_once(initialized_, [this] {
-            handle_ = initializer_();
-        });
-    }
-}
-
 JavaObjectHandle<AdditionalUnderlyings>
 AdditionalUnderlyings::valueOfImpl(const std::vector<std::pair<const char *, double>> &mapLikeEntries) {
     return isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(mapLikeEntries);
@@ -28,7 +20,7 @@ const AdditionalUnderlyings::Ptr &AdditionalUnderlyings::EMPTY() {
 
 AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
                                              JavaObjectHandle<AdditionalUnderlyings> (*initializer)())
-    : initializer_(initializer) {
+    : handle_(initializer) {
 }
 
 AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
@@ -48,21 +40,15 @@ double AdditionalUnderlyings::getSPC(const StringLike &text, const StringLike &s
 }
 
 std::string AdditionalUnderlyings::getText() const {
-    init();
-
-    return isolated::glossary::IsolatedAdditionalUnderlyings::getText(handle_);
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getText(getHandle());
 }
 
 std::unordered_map<std::string, double> AdditionalUnderlyings::getMap() const {
-    init();
-
-    return isolated::glossary::IsolatedAdditionalUnderlyings::getMap(handle_);
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getMap(getHandle());
 }
 
 double AdditionalUnderlyings::getSPC(const StringLike &symbol) const {
-    init();
-
-    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(handle_, symbol);
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(getHandle(), symbol);
 }
 
 bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const {
@@ -70,26 +56,19 @@ bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const
         return true;
     }
 
-    init();
-    other.init();
-
-    return JavaObject::equals(handle_.get(), other.handle_.get());
+    return JavaObject::equals(getHandle().get(), other.getHandle().get());
 }
 
 std::size_t AdditionalUnderlyings::hashCode() const noexcept {
     try {
-        init();
-
-        return JavaObject::hashCode(handle_.get());
+        return JavaObject::hashCode(getHandle().get());
     } catch (...) {
         return 0;
     }
 }
 
 std::string AdditionalUnderlyings::toString() const {
-    init();
-
-    return JavaObject::toString(handle_.get());
+    return JavaObject::toString(getHandle().get());
 }
 
 DXFCPP_END_NAMESPACE

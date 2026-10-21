@@ -7,14 +7,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-void PriceIncrements::init() const {
-    if (initializer_) {
-        std::call_once(initialized_, [this] {
-            handle_ = initializer_();
-        });
-    }
-}
-
 const PriceIncrements::Ptr &PriceIncrements::EMPTY() {
     static const Ptr value = createShared(&isolated::glossary::IsolatedPriceIncrements::EMPTY);
 
@@ -22,7 +14,7 @@ const PriceIncrements::Ptr &PriceIncrements::EMPTY() {
 }
 
 PriceIncrements::PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<PriceIncrements> (*initializer)())
-    : initializer_(initializer) {
+    : handle_(initializer) {
 }
 
 PriceIncrements::PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<PriceIncrements> &&handle)
@@ -49,75 +41,51 @@ PriceIncrements::Ptr PriceIncrements::valueOf(std::initializer_list<double> incr
 }
 
 std::string PriceIncrements::getText() const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::getText(handle_);
+    return isolated::glossary::IsolatedPriceIncrements::getText(getHandle());
 }
 
 std::vector<double> PriceIncrements::getPriceIncrements() const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrements(handle_);
+    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrements(getHandle());
 }
 
 double PriceIncrements::getPriceIncrement() const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrement(handle_);
+    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrement(getHandle());
 }
 
 double PriceIncrements::getPriceIncrement(double price) const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrement(handle_, price);
+    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrement(getHandle(), price);
 }
 
 double PriceIncrements::getPriceIncrement(double price, std::int32_t direction) const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrement(handle_, price, direction);
+    return isolated::glossary::IsolatedPriceIncrements::getPriceIncrement(getHandle(), price, direction);
 }
 
 std::int32_t PriceIncrements::getPricePrecision() const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::getPricePrecision(handle_);
+    return isolated::glossary::IsolatedPriceIncrements::getPricePrecision(getHandle());
 }
 
 std::int32_t PriceIncrements::getPricePrecision(double price) const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::getPricePrecision(handle_, price);
+    return isolated::glossary::IsolatedPriceIncrements::getPricePrecision(getHandle(), price);
 }
 
 double PriceIncrements::roundPrice(double price) const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::roundPrice(handle_, price);
+    return isolated::glossary::IsolatedPriceIncrements::roundPrice(getHandle(), price);
 }
 
 double PriceIncrements::roundPrice(double price, std::int32_t direction) const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::roundPrice(handle_, price, direction);
+    return isolated::glossary::IsolatedPriceIncrements::roundPrice(getHandle(), price, direction);
 }
 
 double PriceIncrements::roundPrice(double price, RoundingMode roundingMode) const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::roundPrice(handle_, price, roundingMode);
+    return isolated::glossary::IsolatedPriceIncrements::roundPrice(getHandle(), price, roundingMode);
 }
 
 double PriceIncrements::incrementPrice(double price, std::int32_t direction) const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::incrementPrice(handle_, price, direction);
+    return isolated::glossary::IsolatedPriceIncrements::incrementPrice(getHandle(), price, direction);
 }
 
 double PriceIncrements::incrementPrice(double price, std::int32_t direction, double step) const {
-    init();
-
-    return isolated::glossary::IsolatedPriceIncrements::incrementPrice(handle_, price, direction, step);
+    return isolated::glossary::IsolatedPriceIncrements::incrementPrice(getHandle(), price, direction, step);
 }
 
 bool PriceIncrements::operator==(const PriceIncrements &other) const {
@@ -125,26 +93,19 @@ bool PriceIncrements::operator==(const PriceIncrements &other) const {
         return true;
     }
 
-    init();
-    other.init();
-
-    return JavaObject::equals(handle_.get(), other.handle_.get());
+    return JavaObject::equals(getHandle().get(), other.getHandle().get());
 }
 
 std::size_t PriceIncrements::hashCode() const noexcept {
     try {
-        init();
-
-        return JavaObject::hashCode(handle_.get());
+        return JavaObject::hashCode(getHandle().get());
     } catch (...) {
         return 0;
     }
 }
 
 std::string PriceIncrements::toString() const {
-    init();
-
-    return JavaObject::toString(handle_.get());
+    return JavaObject::toString(getHandle().get());
 }
 
 DXFCPP_END_NAMESPACE
