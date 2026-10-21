@@ -55,8 +55,8 @@ int main(int argc, char *argv[]) {
         const auto user = argv[2];
         const auto password = argv[3];
         const auto baseSymbol = argv[4];
-        const auto fromTime = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().parse(argv[5]);
-        const auto toTime = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().parse(argv[6]);
+        const auto fromTime = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[5]);
+        const auto toTime = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[6]);
 
         const auto builder =
             HistoryEndpoint::newBuilder()->withAddress(address)->withUserName(user)->withPassword(password);

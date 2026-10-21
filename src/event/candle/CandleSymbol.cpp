@@ -12,6 +12,8 @@
 #include <functional>
 #include <limits>
 #include <span>
+#include <string_view>
+#include <tuple>
 
 #include <fmt/format.h>
 #include <dxfg_api.h>
@@ -20,8 +22,8 @@ DXFCPP_BEGIN_NAMESPACE
 
 // The constants are constant-initialized (constinit), so they can be used in the dynamic initialization of global
 // variables of other translation units. A constinit constant is not read in a constant expression, so DEFAULT and the
-// other constants equal to a constant repeat its values. The maps and the keys are created at the first call of
-// BY_STRING() and ATTRIBUTE_KEY().
+// other constants equal to a constant repeat its values, and the keys of the BY_STRING maps repeat the strings of the
+// constants (ConstantsTest checks them).
 
 constinit const CandleAlignment CandleAlignment::MIDNIGHT{"m"};
 constinit const CandleAlignment CandleAlignment::SESSION{"s"};
@@ -36,6 +38,16 @@ constinit const std::array CANDLE_ALIGNMENTS{
 
 constinit const std::span<const std::reference_wrapper<const CandleAlignment>> CandleAlignment::VALUES{
     CANDLE_ALIGNMENTS};
+
+namespace {
+constexpr auto CANDLE_ALIGNMENTS_BY_STRING = ConstantMap<std::string_view, CandleAlignment>::sorted({
+    {"m", CandleAlignment::MIDNIGHT},
+    {"s", CandleAlignment::SESSION},
+});
+static_assert(CANDLE_ALIGNMENTS_BY_STRING.size() == std::tuple_size_v<decltype(CANDLE_ALIGNMENTS)>);
+} // namespace
+
+constinit const ConstantMap<std::string_view, CandleAlignment> CandleAlignment::BY_STRING{CANDLE_ALIGNMENTS_BY_STRING};
 
 //------------
 
@@ -71,6 +83,27 @@ constinit const std::array CANDLE_TYPES{
 
 constinit const std::span<const std::reference_wrapper<const CandleType>> CandleType::VALUES{CANDLE_TYPES};
 
+namespace {
+constexpr auto CANDLE_TYPES_BY_STRING = ConstantMap<std::string_view, CandleType>::sorted({
+    {"t", CandleType::TICK},
+    {"s", CandleType::SECOND},
+    {"m", CandleType::MINUTE},
+    {"h", CandleType::HOUR},
+    {"d", CandleType::DAY},
+    {"w", CandleType::WEEK},
+    {"mo", CandleType::MONTH},
+    {"o", CandleType::OPTEXP},
+    {"y", CandleType::YEAR},
+    {"v", CandleType::VOLUME},
+    {"p", CandleType::PRICE},
+    {"pm", CandleType::PRICE_MOMENTUM},
+    {"pr", CandleType::PRICE_RENKO},
+});
+static_assert(CANDLE_TYPES_BY_STRING.size() == std::tuple_size_v<decltype(CANDLE_TYPES)>);
+} // namespace
+
+constinit const ConstantMap<std::string_view, CandleType> CandleType::BY_STRING{CANDLE_TYPES_BY_STRING};
+
 //------------
 
 constinit const CandlePeriod CandlePeriod::TICK{1.0, "TICK", "t", 0LL, ConstString::Literal{"t"}};
@@ -94,6 +127,19 @@ constinit const std::array CANDLE_PRICES{
 } // namespace
 
 constinit const std::span<const std::reference_wrapper<const CandlePrice>> CandlePrice::VALUES{CANDLE_PRICES};
+
+namespace {
+constexpr auto CANDLE_PRICES_BY_STRING = ConstantMap<std::string_view, CandlePrice>::sorted({
+    {"last", CandlePrice::LAST},
+    {"bid", CandlePrice::BID},
+    {"ask", CandlePrice::ASK},
+    {"mark", CandlePrice::MARK},
+    {"s", CandlePrice::SETTLEMENT},
+});
+static_assert(CANDLE_PRICES_BY_STRING.size() == std::tuple_size_v<decltype(CANDLE_PRICES)>);
+} // namespace
+
+constinit const ConstantMap<std::string_view, CandlePrice> CandlePrice::BY_STRING{CANDLE_PRICES_BY_STRING};
 
 //------------
 
@@ -136,6 +182,16 @@ constinit const std::array CANDLE_SESSIONS{
 } // namespace
 
 constinit const std::span<const std::reference_wrapper<const CandleSession>> CandleSession::VALUES{CANDLE_SESSIONS};
+
+namespace {
+constexpr auto CANDLE_SESSIONS_BY_STRING = ConstantMap<std::string_view, CandleSession>::sorted({
+    {"false", CandleSession::ANY},
+    {"true", CandleSession::REGULAR},
+});
+static_assert(CANDLE_SESSIONS_BY_STRING.size() == std::tuple_size_v<decltype(CANDLE_SESSIONS)>);
+} // namespace
+
+constinit const ConstantMap<std::string_view, CandleSession> CandleSession::BY_STRING{CANDLE_SESSIONS_BY_STRING};
 
 //------------
 
@@ -308,10 +364,8 @@ CandleSymbol CandleSymbol::valueOf(const StringLike &symbol,
 CandleSymbol literals::operator""_c(const char *string, size_t length) {
     return CandleSymbol::valueOf(std::string{string, length});
 }
-const CandleSymbol &CandleSymbol::NUL() {
-    static const auto *const value = new CandleSymbol{"<null>"};
-
-    return *value;
+CandleSymbol CandleSymbol::NUL() {
+    return CandleSymbol{String::NUL};
 }
 
 DXFCPP_END_NAMESPACE

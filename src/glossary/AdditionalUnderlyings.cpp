@@ -8,9 +8,10 @@
 DXFCPP_BEGIN_NAMESPACE
 
 void AdditionalUnderlyings::init() const {
-    if (!initialized_) {
-        handle_ = initializer_();
-        initialized_ = true;
+    if (initializer_) {
+        std::call_once(initialized_, [this] {
+            handle_ = initializer_();
+        });
     }
 }
 
@@ -20,22 +21,19 @@ AdditionalUnderlyings::valueOfImpl(const std::vector<std::pair<const char *, dou
 }
 
 const AdditionalUnderlyings::Ptr &AdditionalUnderlyings::EMPTY() {
-    static const auto *const value = new AdditionalUnderlyings::Ptr(createShared([] {
-        return isolated::glossary::IsolatedAdditionalUnderlyings::EMPTY();
-    }));
+    static const Ptr value = createShared(&isolated::glossary::IsolatedAdditionalUnderlyings::EMPTY);
 
-    return *value;
+    return value;
 }
 
-AdditionalUnderlyings::AdditionalUnderlyings(
-    LockExternalConstructionTag, std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer)
-    : initializer_(std::move(initializer)) {
+AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
+                                             JavaObjectHandle<AdditionalUnderlyings> (*initializer)())
+    : initializer_(initializer) {
 }
 
 AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
                                                     JavaObjectHandle<AdditionalUnderlyings> &&handle)
     : handle_(std::move(handle)) {
-    initialized_ = true;
 }
 
 AdditionalUnderlyings::~AdditionalUnderlyings() noexcept {
@@ -50,24 +48,18 @@ double AdditionalUnderlyings::getSPC(const StringLike &text, const StringLike &s
 }
 
 std::string AdditionalUnderlyings::getText() const {
-    std::lock_guard lock(mtx_);
-
     init();
 
     return isolated::glossary::IsolatedAdditionalUnderlyings::getText(handle_);
 }
 
 std::unordered_map<std::string, double> AdditionalUnderlyings::getMap() const {
-    std::lock_guard lock(mtx_);
-
     init();
 
     return isolated::glossary::IsolatedAdditionalUnderlyings::getMap(handle_);
 }
 
 double AdditionalUnderlyings::getSPC(const StringLike &symbol) const {
-    std::lock_guard lock(mtx_);
-
     init();
 
     return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(handle_, symbol);
@@ -78,8 +70,6 @@ bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const
         return true;
     }
 
-    std::scoped_lock lock(mtx_, other.mtx_);
-
     init();
     other.init();
 
@@ -88,8 +78,6 @@ bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const
 
 std::size_t AdditionalUnderlyings::hashCode() const noexcept {
     try {
-        std::lock_guard lock(mtx_);
-
         init();
 
         return JavaObject::hashCode(handle_.get());
@@ -99,8 +87,6 @@ std::size_t AdditionalUnderlyings::hashCode() const noexcept {
 }
 
 std::string AdditionalUnderlyings::toString() const {
-    std::lock_guard lock(mtx_);
-
     init();
 
     return JavaObject::toString(handle_.get());

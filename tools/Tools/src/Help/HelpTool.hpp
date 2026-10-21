@@ -112,7 +112,7 @@ struct HelpTool {
             }
         }
 
-        return {String::EMPTY(), String::EMPTY()};
+        return {String::EMPTY, String::EMPTY};
     }
 
     template <typename Tool>

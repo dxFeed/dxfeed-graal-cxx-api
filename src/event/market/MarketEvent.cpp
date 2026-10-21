@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEvent.hpp"
+#include "../../internal/utils/StringConstants.hpp"
 
 #include <dxfg_api.h>
 
@@ -54,7 +55,7 @@ void MarketEvent::assign(std::shared_ptr<EventType> event) {
 
 const std::string &MarketEvent::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL();
+        return nulString();
     }
 
     return eventSymbol_.value();

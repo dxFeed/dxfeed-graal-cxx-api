@@ -15,6 +15,7 @@
 #include <functional>
 #include <limits>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -65,11 +66,12 @@ struct Capture {
 struct DestructionObserver {
     ~DestructionObserver() {
         const auto read = run([] {
-            return std::string(CandleType::MINUTE.toString()) + " " + String::NUL() + " " +
-                   CandleSymbol::NUL().toString() + " " + CandleType::BY_STRING().at("h").get().getName() + " " +
-                   DXEndpoint::NAME_PROPERTY();
+            return std::string(CandleType::MINUTE.toString()) + " " + String::NUL + " " +
+                   CandleSymbol::NUL().toString() + " " + CandleType::BY_STRING.at("h").get().getName() + " " +
+                   DXEndpoint::NAME_PROPERTY + " " + OrderSource::PREDEFINED_SOURCES.at("NTV").get().name() + " " +
+                   Candle{}.getEventSymbol().toString() + " " + Profile{}.getDescription();
         });
-        const bool ok = read == "m <null> <null> HOUR name";
+        const bool ok = read == "m <null> <null> HOUR name NTV <null> <null>";
 
         std::printf("%s destruction: '%s'\n", ok ? "OK  " : "FAIL", read.c_str());
         std::fflush(stdout);
@@ -123,23 +125,23 @@ DXFC_CAPTURE(profileField, InstrumentProfileField::find("TRADING_HOURS").value()
 DXFC_CAPTURE(sessionType, SessionType::REGULAR.getName(), "REGULAR");
 DXFC_CAPTURE(sideAll, std::to_string(Side::ALL.size()), "3");
 DXFC_CAPTURE(candleTypes, std::to_string(CandleType::VALUES.size()), "13");
-
-// The constants built at run time are functions: created at the first call.
-DXFC_CAPTURE(attributeKey, CandlePrice::ATTRIBUTE_KEY() + CandleSession::ATTRIBUTE_KEY(), "pricetho");
-DXFC_CAPTURE(candleTypeByString, CandleType::BY_STRING().at("h").get().getName(), "HOUR");
-DXFC_CAPTURE(candleSessionByString, toString(&CandleSession::BY_STRING().at("true").get() == &CandleSession::REGULAR),
-             "true");
-DXFC_CAPTURE(eventTypeByName, EventTypeEnum::ALL_BY_NAME().at("TRADE").get().getClassName(), "Trade");
-DXFC_CAPTURE(eventTypeById, EventTypeEnum::ALL_BY_ID().at(EventTypeEnum::QUOTE.getId()).get().getName(), "QUOTE");
-DXFC_CAPTURE(predefinedSources, OrderSource::PREDEFINED_SOURCES().at("NTV").get().name(), "NTV");
-DXFC_CAPTURE(candleSymbolNul, CandleSymbol::NUL().toString(), "<null>");
-DXFC_CAPTURE(reservedPrefix, WildcardSymbol::RESERVED_PREFIX(), "*");
-DXFC_CAPTURE(stringNul, String::NUL(), "<null>");
-DXFC_CAPTURE(stringEmpty, toString(String::EMPTY().empty()), "true");
-DXFC_CAPTURE(endpointKeys, DXEndpoint::NAME_PROPERTY() + " " + DXEndpoint::DXFEED_ADDRESS_PROPERTY(),
+DXFC_CAPTURE(attributeKey, std::string(CandlePrice::ATTRIBUTE_KEY) + CandleSession::ATTRIBUTE_KEY, "pricetho");
+DXFC_CAPTURE(reservedPrefix, WildcardSymbol::RESERVED_PREFIX, "*");
+DXFC_CAPTURE(stringNul, String::NUL, "<null>");
+DXFC_CAPTURE(stringEmpty, toString(std::string_view{String::EMPTY}.empty()), "true");
+DXFC_CAPTURE(endpointKeys, std::string(DXEndpoint::NAME_PROPERTY) + " " + DXEndpoint::DXFEED_ADDRESS_PROPERTY,
              "name dxfeed.address");
-DXFC_CAPTURE(authSchemes, AuthToken::BASIC_SCHEME() + " " + AuthToken::BEARER_SCHEME(), "Basic Bearer");
-DXFC_CAPTURE(nullToken, AuthToken::NULL_TOKEN().getHttpAuthorization(), "<null>");
+DXFC_CAPTURE(authSchemes, std::string(AuthToken::BASIC_SCHEME) + " " + AuthToken::BEARER_SCHEME, "Basic Bearer");
+DXFC_CAPTURE(nullToken, AuthToken::NULL_TOKEN.getHttpAuthorization(), "<null>");
+
+// The maps of constants are constant-initialized; CandleSymbol::NUL() creates a symbol.
+DXFC_CAPTURE(candleTypeByString, CandleType::BY_STRING.at("h").get().getName(), "HOUR");
+DXFC_CAPTURE(candleSessionByString, toString(&CandleSession::BY_STRING.at("true").get() == &CandleSession::REGULAR),
+             "true");
+DXFC_CAPTURE(eventTypeByName, EventTypeEnum::ALL_BY_NAME.at("TRADE").get().getClassName(), "Trade");
+DXFC_CAPTURE(eventTypeById, EventTypeEnum::ALL_BY_ID.at(EventTypeEnum::QUOTE.getId()).get().getName(), "QUOTE");
+DXFC_CAPTURE(predefinedSources, OrderSource::PREDEFINED_SOURCES.at("NTV").get().name(), "NTV");
+DXFC_CAPTURE(candleSymbolNul, CandleSymbol::NUL().toString(), "<null>");
 
 // The Graal-dependent constants: the Java objects are created by the first use, here at static initialization. With
 // the DLL on Windows a process that used the Graal isolate hangs at exit (the library tears down the isolate when it is
@@ -151,10 +153,10 @@ DXFC_CAPTURE(nullToken, AuthToken::NULL_TOKEN().getHttpAuthorization(), "<null>"
 #endif
 
 #if DXFC_GRAAL_CHECKS
-DXFC_CAPTURE(timePeriodZero, std::to_string(TimePeriod::ZERO().getTime()), "0");
-DXFC_CAPTURE(timePeriodUnlimited, std::to_string(TimePeriod::UNLIMITED().getTime()),
+DXFC_CAPTURE(timePeriodZero, std::to_string(TimePeriod::ZERO.getTime()), "0");
+DXFC_CAPTURE(timePeriodUnlimited, std::to_string(TimePeriod::UNLIMITED.getTime()),
              std::to_string(std::numeric_limits<std::int64_t>::max()));
-DXFC_CAPTURE(timeFormat, TimeFormat::GMT().format(0), "0");
+DXFC_CAPTURE(timeFormat, TimeFormat::GMT.format(0), "0");
 DXFC_CAPTURE(cfiEmpty, CFI::EMPTY()->getCode(), "XXXXXX");
 DXFC_CAPTURE(priceIncrementsEmpty, toString(PriceIncrements::EMPTY()->getText().empty()), "true");
 DXFC_CAPTURE(additionalUnderlyingsEmpty, toString(AdditionalUnderlyings::EMPTY()->getText().empty()), "true");

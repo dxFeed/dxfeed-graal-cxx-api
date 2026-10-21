@@ -7,9 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../internal/utils/ConstantMap.hpp"
+#include "../../internal/utils/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
-#include "../../internal/utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -58,15 +59,17 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * The predefined sources by identifier and by name.
      *
-     * It is created at the first call and is never destroyed, so it can be used by global variables.
+     * It is constant-initialized, so it can be used in the dynamic initialization and the destruction of global
+     * variables.
      */
-    static const std::unordered_map<std::variant<std::int32_t, std::string>,
-                                    std::reference_wrapper<const OrderSource>> &
-    PREDEFINED_SOURCES();
+    static const ConstantMap<std::variant<std::int32_t, std::string_view>, OrderSource> PREDEFINED_SOURCES;
 
     private:
     // The predefined sources (constant-initialized).
     static const std::span<const std::reference_wrapper<const OrderSource>> PREDEFINED_;
+
+    // The entries of PREDEFINED_SOURCES (in OrderSource.cpp).
+    struct PredefinedSources;
 
     std::uint32_t pubFlags_{};
     bool builtin_{};

@@ -7,6 +7,10 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 
+#include "StringConstants.hpp"
+
+#include <new>
+
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ranges.h>
@@ -22,16 +26,11 @@ DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 
 DXFCPP_BEGIN_NAMESPACE
 
-// The constants of the library that are built at run time are created at the first call and are never destroyed: they
-// can be used in the constructors and the destructors of global variables in any order.
-const std::string &String::EMPTY() noexcept {
-    static const auto *const value = new std::string{};
-
-    return *value;
-}
-
-const std::string &String::NUL() noexcept {
-    static const auto *const value = new std::string{"<null>"};
+const std::string &nulString() noexcept {
+    // The string is short, so the standard libraries keep it in the object itself, without the heap (only the debug
+    // iterators of MSVC allocate a small proxy). The object is created in a static buffer and is never destroyed.
+    alignas(std::string) static unsigned char storage[sizeof(std::string)];
+    static const auto *const value = new (storage) std::string{String::NUL};
 
     return *value;
 }
@@ -200,7 +199,7 @@ std::string toString(const char *chars) noexcept {
     // TODO: cache [EN-8231]
 
     if (chars == nullptr) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return chars;
@@ -334,7 +333,7 @@ std::int16_t utf8to16(char in) noexcept {
 }
 
 std::string formatTimeStamp(std::int64_t timestamp) {
-    return TimeFormat::DEFAULT().format(timestamp);
+    return TimeFormat::DEFAULT.format(timestamp);
 }
 
 std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
@@ -365,15 +364,15 @@ std::string formatTimeStampFast(std::int64_t timestamp) {
 }
 
 std::string formatTimeStampWithMillis(std::int64_t timestamp) {
-    return TimeFormat::DEFAULT_WITH_MILLIS().format(timestamp);
+    return TimeFormat::DEFAULT_WITH_MILLIS.format(timestamp);
 }
 
 std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
-    return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().format(timestamp);
+    return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(timestamp);
 }
 
 char *createCString(const StringLike &s) {
-    if (s == String::NUL()) {
+    if (s == String::NUL) {
         return nullptr;
     }
 

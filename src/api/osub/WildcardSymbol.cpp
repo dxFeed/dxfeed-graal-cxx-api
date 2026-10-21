@@ -7,7 +7,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-// ALL is constant-initialized; RESERVED_PREFIX() is created at the first call.
+// ALL is constant-initialized.
 constinit const WildcardSymbol WildcardSymbol::ALL{"*"};
 
 WildcardSymbol::WildcardSymbol(const WildcardSymbol &) noexcept = default;
@@ -73,12 +73,6 @@ WildcardSymbol literals::operator""_ws(const char *, size_t) noexcept {
 
 WildcardSymbol literals::operator""_wcs(const char *, size_t) noexcept {
     return WildcardSymbol::ALL;
-}
-
-const std::string &WildcardSymbol::RESERVED_PREFIX() {
-    static const auto *const value = new std::string{"*"};
-
-    return *value;
 }
 
 DXFCPP_END_NAMESPACE

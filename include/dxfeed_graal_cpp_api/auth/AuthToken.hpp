@@ -35,16 +35,13 @@ DXFCPP_BEGIN_NAMESPACE
  */
 struct DXFCPP_EXPORT AuthToken {
     /// String representation for Basic (`Base64(login:password)`) authorization.
-    /// It is created at the first call and is never destroyed, so it can be used by global variables.
-    static const std::string &BASIC_SCHEME();
+    static constexpr char BASIC_SCHEME[] = "Basic";
 
     /// String representation for the Bearer (`token`) authorization.
-    /// It is created at the first call and is never destroyed, so it can be used by global variables.
-    static const std::string &BEARER_SCHEME();
+    static constexpr char BEARER_SCHEME[] = "Bearer";
 
     /// A stub that is needed to simulate null AuthToken without using std::optional.
-    /// It is created at the first call and is never destroyed, so it can be used by global variables.
-    static const AuthToken &NULL_TOKEN();
+    static const AuthToken NULL_TOKEN;
 
     /**
      * Constructs an AuthToken from the specified string.
@@ -80,11 +77,11 @@ struct DXFCPP_EXPORT AuthToken {
 
     /**
      * Constructs an AuthToken with the specified username and password per RFC2617.
-     * If both the username and password are empty, returns AuthToken::NULL_TOKEN().
+     * If both the username and password are empty, returns AuthToken::NULL_TOKEN.
      *
      * @param user the username
      * @param password the password
-     * @return the constructed AuthToken or AuthToken::NULL_TOKEN()
+     * @return the constructed AuthToken or AuthToken::NULL_TOKEN
      */
     static AuthToken createBasicTokenOrNull(const StringLike &user, const StringLike &password);
 
@@ -101,7 +98,7 @@ struct DXFCPP_EXPORT AuthToken {
      * Constructs an AuthToken with the specified bearer token per RFC6750.
      *
      * @param token the access token
-     * @return the constructed AuthToken or AuthToken::NULL_TOKEN().
+     * @return the constructed AuthToken or AuthToken::NULL_TOKEN.
      */
     static AuthToken createBearerTokenOrNull(const StringLike &token);
 
@@ -123,16 +120,16 @@ struct DXFCPP_EXPORT AuthToken {
     std::string getHttpAuthorization() const;
 
     /**
-     * Returns the username or dxfcpp::String::NUL() (`std::string{"<null>"}`) if it is not known or applicable.
+     * Returns the username or dxfcpp::String::NUL (`std::string{"<null>"}`) if it is not known or applicable.
      *
-     * @return the username, or dxfcpp::String::NUL() (`std::string{"<null>"}`) if not known or applicable
+     * @return the username, or dxfcpp::String::NUL (`std::string{"<null>"}`) if not known or applicable
      */
     std::string getUser() const;
 
     /**
-     * Returns the password or dxfcpp::String::NUL() (`std::string{"<null>"}`) if it is not known or applicable.
+     * Returns the password or dxfcpp::String::NUL (`std::string{"<null>"}`) if it is not known or applicable.
      *
-     * @return the password, or dxfcpp::String::NUL() (`std::string{"<null>"}`) if not known or applicable
+     * @return the password, or dxfcpp::String::NUL (`std::string{"<null>"}`) if not known or applicable
      */
     std::string getPassword() const;
 
@@ -177,6 +174,10 @@ struct DXFCPP_EXPORT AuthToken {
 
     private:
     std::atomic<bool> isNull_;
+
+    // The constructor of NULL_TOKEN: constant initialization.
+    constexpr AuthToken() noexcept : isNull_{true} {
+    }
 
     explicit AuthToken(JavaObjectHandle<AuthToken> &&handle, bool isNull = false);
 };

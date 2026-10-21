@@ -11,7 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
-#include <functional>
 #include <mutex>
 #include <ostream>
 
@@ -254,9 +253,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
 
     private:
     mutable JavaObjectHandle<PriceIncrements> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<PriceIncrements>()> initializer_;
+    mutable std::once_flag initialized_{};
+    JavaObjectHandle<PriceIncrements> (*initializer_)(){};
 
     void init() const;
 
@@ -264,12 +262,12 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
     /**
      * Empty price increments - it has empty text and sole increment with value 0.
      *
-     * It is created at the first call and is never destroyed, so it can be used by global variables.
+     * It is created at the first call, so it can be used by the initializers of global variables.
      */
     static const Ptr &EMPTY();
 
     // lazy c-tor
-    PriceIncrements(LockExternalConstructionTag, std::function<JavaObjectHandle<PriceIncrements>()> initializer);
+    PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<PriceIncrements> (*initializer)());
 
     PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<PriceIncrements> &&handle);
 

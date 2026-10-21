@@ -18,96 +18,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const std::string &DXEndpoint::NAME_PROPERTY() {
-    static const auto *const value = new std::string{"name"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXFEED_PROPERTIES_PROPERTY() {
-    static const auto *const value = new std::string{"dxfeed.properties"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXFEED_ADDRESS_PROPERTY() {
-    static const auto *const value = new std::string{"dxfeed.address"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXFEED_USER_PROPERTY() {
-    static const auto *const value = new std::string{"dxfeed.user"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXFEED_PASSWORD_PROPERTY() {
-    static const auto *const value = new std::string{"dxfeed.password"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY() {
-    static const auto *const value = new std::string{"dxfeed.threadPoolSize"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY() {
-    static const auto *const value = new std::string{"dxfeed.aggregationPeriod"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY() {
-    static const auto *const value = new std::string{"dxfeed.wildcard.enable"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY() {
-    static const auto *const value = new std::string{"dxpublisher.properties"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY() {
-    static const auto *const value = new std::string{"dxpublisher.address"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY() {
-    static const auto *const value = new std::string{"dxpublisher.threadPoolSize"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY() {
-    static const auto *const value = new std::string{"dxendpoint.eventTime"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY() {
-    static const auto *const value = new std::string{"dxendpoint.storeEverything"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY() {
-    static const auto *const value = new std::string{"dxscheme.nanoTime"};
-
-    return *value;
-}
-
-const std::string &DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX() {
-    static const auto *const value = new std::string{"dxscheme.enabled."};
-
-    return *value;
-}
-
 struct DXEndpoint::Impl {
     struct Registry {
         std::mutex mutex;
@@ -200,7 +110,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, Role role,
                         ", role = " + roleToString(role) + ", properties[" + std::to_string(properties.size()) + "])");
     }
 
-    auto endpoint = createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY()));
+    auto endpoint = createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY));
     const auto id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->registerEntity(endpoint);
 
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
@@ -332,13 +242,13 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() {
 void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
     // The default properties file is only valid for the
     // Feed, OnDemandFeed and Publisher roles.
-    const std::string propertiesFileKey = [](auto role) -> const std::string & {
+    const std::string propertiesFileKey = [](auto role) -> const char * {
         switch (role) {
         case Role::FEED:
         case Role::ON_DEMAND_FEED:
-            return DXFEED_PROPERTIES_PROPERTY();
+            return DXFEED_PROPERTIES_PROPERTY;
         case Role::PUBLISHER:
-            return DXPUBLISHER_PROPERTIES_PROPERTY();
+            return DXPUBLISHER_PROPERTIES_PROPERTY;
         case Role::STREAM_FEED:
         case Role::STREAM_PUBLISHER:
         case Role::LOCAL_HUB:
@@ -346,7 +256,7 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
         default:;
         }
 
-        return String::EMPTY();
+        return String::EMPTY;
     }(role_);
 
     if (propertiesFileKey.empty()) {
@@ -427,13 +337,12 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
 
     loadDefaultPropertiesImpl();
 
-    if (auto name = properties_.contains(NAME_PROPERTY()) ? properties_.at(NAME_PROPERTY()) : std::string{};
-        name.empty()) {
+    if (auto name = properties_.contains(NAME_PROPERTY) ? properties_.at(NAME_PROPERTY) : std::string{}; name.empty()) {
         const std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId() + 1;
 
-        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY() : std::string("-") + std::to_string(id));
+        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY : std::string("-") + std::to_string(id));
 
-        const auto newBuilder = withProperty(NAME_PROPERTY(), name);
+        const auto newBuilder = withProperty(NAME_PROPERTY, name);
 
         return newBuilder->build();
     }
@@ -470,7 +379,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const StringL
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");
     }
 
-    return withProperty(NAME_PROPERTY(), name);
+    return withProperty(NAME_PROPERTY, name);
 }
 
 std::string DXEndpoint::toString() const {

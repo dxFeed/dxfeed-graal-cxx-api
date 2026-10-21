@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../internal/utils/ConstantMap.hpp"
 #include "../../internal/utils/StringUtils.hpp"
 #include "../../schedule/SessionFilter.hpp"
 #include "../market/MarketEventSymbols.hpp"
@@ -38,7 +39,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
  *
  * <p> CandleSession::ANY session is a default.
- * The key to use with these methods is available via CandleSession::ATTRIBUTE_KEY() constant.
+ * The key to use with these methods is available via CandleSession::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandleSession::toString()
  */
 struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
@@ -63,14 +64,12 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * The value of this constant is "tho", which is an abbreviation for "trading hours only".
      * The value that this key shall be set to is equal to
      * the corresponding CandleSession::toString()
-     *
-     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string &ATTRIBUTE_KEY();
+    static constexpr char ATTRIBUTE_KEY[] = "tho";
 
-    /// The elements by their string representations. It is created at the first call and is never
-    /// destroyed, so it can be used by global variables.
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> &BY_STRING();
+    /// The elements by their string representations (constant-initialized, so it can be used in the dynamic
+    /// initialization and the destruction of global variables).
+    static const ConstantMap<std::string_view, CandleSession> BY_STRING;
     /// All elements (constant-initialized, so the initializers of global variables can use it).
     static const std::span<const std::reference_wrapper<const CandleSession>> VALUES;
 

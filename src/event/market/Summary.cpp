@@ -215,7 +215,7 @@ std::string Summary::toString() const {
                        "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
                        "prevDayVolume={}, openInterest={}}}",
                        MarketEvent::getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS().format(MarketEvent::getEventTime()),
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
                        day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayOpenPrice()),
                        dxfcpp::toString(getDayHighPrice()), dxfcpp::toString(getDayLowPrice()),
                        dxfcpp::toString(getDayClosePrice()), getDayClosePriceType().toString(),

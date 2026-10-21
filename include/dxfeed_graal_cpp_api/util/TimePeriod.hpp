@@ -10,7 +10,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 
 #include <cstdint>
-#include <functional>
 #include <mutex>
 
 /**
@@ -30,12 +29,10 @@ struct DXFCPP_EXPORT TimePeriod {
     friend DXFeedSubscription;
 
     /// Time-period of zero.
-    /// It is created at the first call and is never destroyed, so it can be used by global variables.
-    static const TimePeriod &ZERO();
+    static const TimePeriod ZERO;
 
     /// Time-period of "infinity" (time of `std::numeric_limits<std::int64_t>::max()` or `LLONG_MAX`).
-    /// It is created at the first call and is never destroyed, so it can be used by global variables.
-    static const TimePeriod &UNLIMITED();
+    static const TimePeriod UNLIMITED;
 
     /**
      * Returns TimePeriod with <tt>value</tt> milliseconds.
@@ -100,16 +97,19 @@ struct DXFCPP_EXPORT TimePeriod {
     TimePeriod &operator=(const TimePeriod &&) noexcept = delete;
 
     private:
-    mutable JavaObjectHandle<TimePeriod> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<TimePeriod>()> initializer_;
+    using Initializer = JavaObjectHandle<TimePeriod> (*)();
 
-    // lazy c-tor
-    explicit TimePeriod(std::function<JavaObjectHandle<TimePeriod>()> &&initializer);
+    mutable JavaObjectHandle<TimePeriod> handle_;
+    mutable std::once_flag initialized_{};
+    Initializer initializer_{};
+
+    // The constructor of the constants: constant initialization, the Java object is created at the first use.
+    constexpr explicit TimePeriod(Initializer initializer) noexcept : initializer_{initializer} {
+    }
+
     explicit TimePeriod(JavaObjectHandle<TimePeriod> &&handle);
 
-    void init() const;
+    const JavaObjectHandle<TimePeriod> &getHandle() const;
 };
 
 DXFCPP_END_NAMESPACE

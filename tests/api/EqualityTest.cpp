@@ -20,7 +20,7 @@ TEST_CASE("AuthToken::operator== should compare the token values") {
     CHECK(token == AuthToken::valueOf(token.toString()));
     CHECK_FALSE(token == AuthToken::createBasicToken("user", "another"));
     CHECK_FALSE(token == AuthToken::createBearerToken("token"));
-    CHECK_FALSE(token == AuthToken::NULL_TOKEN());
+    CHECK_FALSE(token == AuthToken::NULL_TOKEN);
     CHECK(token != AuthToken::createBasicToken("user", "another"));
     CHECK_FALSE(token != AuthToken::createBasicToken("user", "password"));
 }

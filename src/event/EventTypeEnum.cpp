@@ -10,6 +10,7 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <tuple>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -80,6 +81,85 @@ constinit const std::array ALL_EVENT_TYPES{
 } // namespace
 
 constinit const std::span<const std::reference_wrapper<const EventTypeEnum>> EventTypeEnum::ALL{ALL_EVENT_TYPES};
+
+namespace {
+
+// The keys repeat the names, the class names and the ids of the event types: a constinit constant is not read in a
+// constant expression (ConstantsTest checks them).
+
+constexpr auto ALL_EVENT_TYPES_BY_NAME = ConstantMap<std::string_view, EventTypeEnum>::sorted({
+    {"QUOTE", EventTypeEnum::QUOTE},
+    {"PROFILE", EventTypeEnum::PROFILE},
+    {"SUMMARY", EventTypeEnum::SUMMARY},
+    {"GREEKS", EventTypeEnum::GREEKS},
+    {"CANDLE", EventTypeEnum::CANDLE},
+    {"UNDERLYING", EventTypeEnum::UNDERLYING},
+    {"THEO_PRICE", EventTypeEnum::THEO_PRICE},
+    {"TRADE", EventTypeEnum::TRADE},
+    {"TRADE_ETH", EventTypeEnum::TRADE_ETH},
+    {"MESSAGE", EventTypeEnum::MESSAGE},
+    {"TIME_AND_SALE", EventTypeEnum::TIME_AND_SALE},
+    {"ORDER", EventTypeEnum::ORDER},
+    {"ANALYTIC_ORDER", EventTypeEnum::ANALYTIC_ORDER},
+    {"OTC_MARKETS_ORDER", EventTypeEnum::OTC_MARKETS_ORDER},
+    {"SPREAD_ORDER", EventTypeEnum::SPREAD_ORDER},
+    {"SERIES", EventTypeEnum::SERIES},
+    {"OPTION_SALE", EventTypeEnum::OPTION_SALE},
+    {"TEXT_MESSAGE", EventTypeEnum::TEXT_MESSAGE},
+});
+
+constexpr auto ALL_EVENT_TYPES_BY_CLASS_NAME = ConstantMap<std::string_view, EventTypeEnum>::sorted({
+    {"Quote", EventTypeEnum::QUOTE},
+    {"Profile", EventTypeEnum::PROFILE},
+    {"Summary", EventTypeEnum::SUMMARY},
+    {"Greeks", EventTypeEnum::GREEKS},
+    {"Candle", EventTypeEnum::CANDLE},
+    {"Underlying", EventTypeEnum::UNDERLYING},
+    {"TheoPrice", EventTypeEnum::THEO_PRICE},
+    {"Trade", EventTypeEnum::TRADE},
+    {"TradeETH", EventTypeEnum::TRADE_ETH},
+    {"Message", EventTypeEnum::MESSAGE},
+    {"TimeAndSale", EventTypeEnum::TIME_AND_SALE},
+    {"Order", EventTypeEnum::ORDER},
+    {"AnalyticOrder", EventTypeEnum::ANALYTIC_ORDER},
+    {"OtcMarketsOrder", EventTypeEnum::OTC_MARKETS_ORDER},
+    {"SpreadOrder", EventTypeEnum::SPREAD_ORDER},
+    {"Series", EventTypeEnum::SERIES},
+    {"OptionSale", EventTypeEnum::OPTION_SALE},
+    {"TextMessage", EventTypeEnum::TEXT_MESSAGE},
+});
+
+constexpr auto ALL_EVENT_TYPES_BY_ID = ConstantMap<std::uint32_t, EventTypeEnum>::sorted({
+    {DXFG_EVENT_QUOTE, EventTypeEnum::QUOTE},
+    {DXFG_EVENT_PROFILE, EventTypeEnum::PROFILE},
+    {DXFG_EVENT_SUMMARY, EventTypeEnum::SUMMARY},
+    {DXFG_EVENT_GREEKS, EventTypeEnum::GREEKS},
+    {DXFG_EVENT_CANDLE, EventTypeEnum::CANDLE},
+    {DXFG_EVENT_UNDERLYING, EventTypeEnum::UNDERLYING},
+    {DXFG_EVENT_THEO_PRICE, EventTypeEnum::THEO_PRICE},
+    {DXFG_EVENT_TRADE, EventTypeEnum::TRADE},
+    {DXFG_EVENT_TRADE_ETH, EventTypeEnum::TRADE_ETH},
+    {DXFG_EVENT_MESSAGE, EventTypeEnum::MESSAGE},
+    {DXFG_EVENT_TIME_AND_SALE, EventTypeEnum::TIME_AND_SALE},
+    {DXFG_EVENT_ORDER, EventTypeEnum::ORDER},
+    {DXFG_EVENT_ANALYTIC_ORDER, EventTypeEnum::ANALYTIC_ORDER},
+    {DXFG_EVENT_OTC_MARKETS_ORDER, EventTypeEnum::OTC_MARKETS_ORDER},
+    {DXFG_EVENT_SPREAD_ORDER, EventTypeEnum::SPREAD_ORDER},
+    {DXFG_EVENT_SERIES, EventTypeEnum::SERIES},
+    {DXFG_EVENT_OPTION_SALE, EventTypeEnum::OPTION_SALE},
+    {DXFG_EVENT_TEXT_MESSAGE, EventTypeEnum::TEXT_MESSAGE},
+});
+
+static_assert(ALL_EVENT_TYPES_BY_NAME.size() == std::tuple_size_v<decltype(ALL_EVENT_TYPES)>);
+static_assert(ALL_EVENT_TYPES_BY_CLASS_NAME.size() == std::tuple_size_v<decltype(ALL_EVENT_TYPES)>);
+static_assert(ALL_EVENT_TYPES_BY_ID.size() == std::tuple_size_v<decltype(ALL_EVENT_TYPES)>);
+
+} // namespace
+
+constinit const ConstantMap<std::string_view, EventTypeEnum> EventTypeEnum::ALL_BY_NAME{ALL_EVENT_TYPES_BY_NAME};
+constinit const ConstantMap<std::string_view, EventTypeEnum> EventTypeEnum::ALL_BY_CLASS_NAME{
+    ALL_EVENT_TYPES_BY_CLASS_NAME};
+constinit const ConstantMap<std::uint32_t, EventTypeEnum> EventTypeEnum::ALL_BY_ID{ALL_EVENT_TYPES_BY_ID};
 
 EventTypeEnum::EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", "Invalid", false} {
 }
@@ -166,49 +246,4 @@ bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1
                const EventTypeEnum &eventTypeEnum2) noexcept {
     return eventTypeEnum1.get().id_ < eventTypeEnum2.id_;
 }
-const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> &EventTypeEnum::ALL_BY_NAME() {
-    static const auto *const value =
-        new std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>>([] {
-            std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> result{};
-
-            for (const auto &eventType : ALL) {
-                result.emplace(eventType.get().getName(), eventType);
-            }
-
-            return result;
-        }());
-
-    return *value;
-}
-
-const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> &EventTypeEnum::ALL_BY_CLASS_NAME() {
-    static const auto *const value =
-        new std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>>([] {
-            std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> result{};
-
-            for (const auto &eventType : ALL) {
-                result.emplace(eventType.get().getClassName(), eventType);
-            }
-
-            return result;
-        }());
-
-    return *value;
-}
-
-const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> &EventTypeEnum::ALL_BY_ID() {
-    static const auto *const value =
-        new std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>>([] {
-            std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> result{};
-
-            for (const auto &eventType : ALL) {
-                result.emplace(eventType.get().getId(), eventType);
-            }
-
-            return result;
-        }());
-
-    return *value;
-}
-
 DXFCPP_END_NAMESPACE

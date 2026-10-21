@@ -17,7 +17,7 @@ int main() {
         // Create an appropriate endpoint.
         const auto endpoint = DXEndpoint::newBuilder()
                                   // Is required for tape connector to be able to receive everything.
-                                  ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true")
+                                  ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
                                   ->withRole(DXEndpoint::Role::PUBLISHER)
                                   ->build();
 

@@ -201,7 +201,7 @@ bool SymbolWrapper::isStringSymbol() const noexcept {
 }
 
 std::string SymbolWrapper::asStringSymbol() const noexcept {
-    return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY();
+    return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
 }
 
 bool SymbolWrapper::isWildcardSymbol() const noexcept {

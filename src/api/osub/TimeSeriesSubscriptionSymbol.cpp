@@ -67,10 +67,10 @@ std::string TimeSeriesSubscriptionSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         return "TimeSeriesSubscriptionSymbol{" + getEventSymbol()->toString() +
-               ", fromTime = " + TimeFormat::DEFAULT_WITH_MILLIS().format(fromTime_) + "}";
+               ", fromTime = " + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     } else {
         return getEventSymbol()->toStringUnderlying() +
-               "{fromTime=" + TimeFormat::DEFAULT_WITH_MILLIS().format(fromTime_) + "}";
+               "{fromTime=" + TimeFormat::DEFAULT_WITH_MILLIS.format(fromTime_) + "}";
     }
 }
 

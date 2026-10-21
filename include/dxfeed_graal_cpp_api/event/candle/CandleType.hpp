@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../internal/utils/ConstantMap.hpp"
 #include "../../internal/utils/StringUtils.hpp"
 
 #include <functional>
@@ -117,11 +118,9 @@ struct DXFCPP_EXPORT CandleType {
      */
     static const CandleType PRICE_RENKO;
 
-    /// The elements by their string representations. It is created at the first call and is never
-    /// destroyed, so it can be used by global variables.
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash,
-                                    std::equal_to<>> &
-    BY_STRING();
+    /// The elements by their string representations (constant-initialized, so it can be used in the dynamic
+    /// initialization and the destruction of global variables).
+    static const ConstantMap<std::string_view, CandleType> BY_STRING;
     /// All elements (constant-initialized, so the initializers of global variables can use it).
     static const std::span<const std::reference_wrapper<const CandleType>> VALUES;
 

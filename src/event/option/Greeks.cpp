@@ -231,8 +231,8 @@ std::string Greeks::toString() const {
     return fmt::format(
         "Greeks{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, price={}, volatility={}, delta={}, "
         "gamma={}, theta={}, rho={}, vega={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS().format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS().format(getTime()), getSequence(),
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
         dxfcpp::toString(getPrice()), dxfcpp::toString(getVolatility()), dxfcpp::toString(getDelta()),
         dxfcpp::toString(getGamma()), dxfcpp::toString(getTheta()), dxfcpp::toString(getRho()),
         dxfcpp::toString(getVega()));

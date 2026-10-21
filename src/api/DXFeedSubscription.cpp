@@ -296,7 +296,7 @@ TimePeriod DXFeedSubscription::getAggregationPeriod() const {
 }
 
 void DXFeedSubscription::setAggregationPeriod(const TimePeriod &aggregationPeriod) const {
-    isolated::api::IsolatedDXFeedSubscription::setAggregationPeriod(handle_, aggregationPeriod.handle_);
+    isolated::api::IsolatedDXFeedSubscription::setAggregationPeriod(handle_, aggregationPeriod.getHandle());
 }
 
 void DXFeedSubscription::setAggregationPeriod(std::chrono::milliseconds aggregationPeriod) const {

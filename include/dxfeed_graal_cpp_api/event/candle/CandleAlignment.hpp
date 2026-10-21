@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/ConstantMap.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
 #include <span>
@@ -33,7 +34,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via CandleAlignment::ATTRIBUTE_KEY() constant.
+ * The key to use with these methods is available via CandleAlignment::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandleAlignment::toString()
  */
 struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
@@ -57,16 +58,12 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
      * a symbol string using methods of MarketEventSymbols class.
      * The value of this constant is "a".
      * The value that this key shall be set to is equal to the corresponding CandleAlignment::toString()
-     *
-     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string &ATTRIBUTE_KEY();
+    static constexpr char ATTRIBUTE_KEY[] = "a";
 
-    /// The elements by their string representations. It is created at the first call and is never
-    /// destroyed, so it can be used by global variables.
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash,
-                                    std::equal_to<>> &
-    BY_STRING();
+    /// The elements by their string representations (constant-initialized, so it can be used in the dynamic
+    /// initialization and the destruction of global variables).
+    static const ConstantMap<std::string_view, CandleAlignment> BY_STRING;
 
     /// All elements (constant-initialized, so the initializers of global variables can use it).
     static const std::span<const std::reference_wrapper<const CandleAlignment>> VALUES;

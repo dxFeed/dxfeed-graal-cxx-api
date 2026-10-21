@@ -9,10 +9,13 @@
 #include <limits>
 #include <set>
 #include <span>
+#include <stdexcept>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <unordered_map>
 #include <utility>
+#include <variant>
 #include <vector>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -108,16 +111,16 @@ TEST_CASE("Enum::valueOf returns the element of code 0 for an unknown code") {
 }
 
 TEST_CASE("The event types are the constants and are found by name, class name and id") {
-    REQUIRE(EventTypeEnum::ALL.size() == EventTypeEnum::ALL_BY_NAME().size());
-    REQUIRE(EventTypeEnum::ALL.size() == EventTypeEnum::ALL_BY_CLASS_NAME().size());
-    REQUIRE(EventTypeEnum::ALL.size() == EventTypeEnum::ALL_BY_ID().size());
+    REQUIRE(EventTypeEnum::ALL.size() == EventTypeEnum::ALL_BY_NAME.size());
+    REQUIRE(EventTypeEnum::ALL.size() == EventTypeEnum::ALL_BY_CLASS_NAME.size());
+    REQUIRE(EventTypeEnum::ALL.size() == EventTypeEnum::ALL_BY_ID.size());
 
     for (const auto &eventTypeRef : EventTypeEnum::ALL) {
         const auto &eventType = eventTypeRef.get();
 
-        CHECK(&EventTypeEnum::ALL_BY_NAME().at(eventType.getName()).get() == &eventType);
-        CHECK(&EventTypeEnum::ALL_BY_CLASS_NAME().at(eventType.getClassName()).get() == &eventType);
-        CHECK(&EventTypeEnum::ALL_BY_ID().at(eventType.getId()).get() == &eventType);
+        CHECK(&EventTypeEnum::ALL_BY_NAME.at(eventType.getName()).get() == &eventType);
+        CHECK(&EventTypeEnum::ALL_BY_CLASS_NAME.at(eventType.getClassName()).get() == &eventType);
+        CHECK(&EventTypeEnum::ALL_BY_ID.at(eventType.getId()).get() == &eventType);
     }
 
     CHECK(&EventTypeEnum::ALL.front().get() == &EventTypeEnum::QUOTE);
@@ -167,7 +170,7 @@ TEST_CASE("The candle attribute collections are their constants, which are parse
 
         CHECK(&CandleType::parse(type.toString()).get() == &type);
         CHECK(&CandleType::parse(type.getName()).get() == &type);
-        CHECK(&CandleType::BY_STRING().at(type.toString()).get() == &type);
+        CHECK(&CandleType::BY_STRING.at(type.toString()).get() == &type);
     }
 
     CHECK(CandleType::MONTH.toString() == "mo");
@@ -182,7 +185,7 @@ TEST_CASE("The candle attribute collections are their constants, which are parse
 
     for (const auto &priceRef : CandlePrice::VALUES) {
         CHECK(&CandlePrice::parse(priceRef.get().toString()).get() == &priceRef.get());
-        CHECK(&CandlePrice::BY_STRING().at(priceRef.get().toString()).get() == &priceRef.get());
+        CHECK(&CandlePrice::BY_STRING.at(priceRef.get().toString()).get() == &priceRef.get());
     }
 
     checkSameConstants<CandleAlignment>(
@@ -190,6 +193,7 @@ TEST_CASE("The candle attribute collections are their constants, which are parse
 
     for (const auto &alignmentRef : CandleAlignment::VALUES) {
         CHECK(&CandleAlignment::parse(alignmentRef.get().toString()).get() == &alignmentRef.get());
+        CHECK(&CandleAlignment::BY_STRING.at(alignmentRef.get().toString()).get() == &alignmentRef.get());
     }
 
     checkSameConstants<CandleSession>(CandleSession::VALUES,
@@ -197,6 +201,7 @@ TEST_CASE("The candle attribute collections are their constants, which are parse
 
     for (const auto &sessionRef : CandleSession::VALUES) {
         CHECK(&CandleSession::parse(sessionRef.get().toString()).get() == &sessionRef.get());
+        CHECK(&CandleSession::BY_STRING.at(sessionRef.get().toString()).get() == &sessionRef.get());
     }
 }
 
@@ -258,11 +263,12 @@ TEST_CASE("The DEFAULT candle attributes equal the constants they are documented
     CHECK(CandlePeriod::parse("1d") == CandlePeriod::DAY);
     CHECK(CandlePeriod::valueOf(5, CandleType::MINUTE).toString() == "5m");
 
-    CHECK(CandleAlignment::ATTRIBUTE_KEY() == "a");
-    CHECK(CandlePeriod::ATTRIBUTE_KEY().empty());
-    CHECK(CandlePrice::ATTRIBUTE_KEY() == "price");
-    CHECK(CandlePriceLevel::ATTRIBUTE_KEY() == "pl");
-    CHECK(CandleSession::ATTRIBUTE_KEY() == "tho");
+    // The keys are literals, usable in constant expressions.
+    static_assert(std::string_view{CandleAlignment::ATTRIBUTE_KEY} == "a");
+    static_assert(std::string_view{CandlePeriod::ATTRIBUTE_KEY}.empty());
+    static_assert(std::string_view{CandlePrice::ATTRIBUTE_KEY} == "price");
+    static_assert(std::string_view{CandlePriceLevel::ATTRIBUTE_KEY} == "pl");
+    static_assert(std::string_view{CandleSession::ATTRIBUTE_KEY} == "tho");
 }
 
 TEST_CASE("The session types and filters keep their names and conditions") {
@@ -286,13 +292,61 @@ TEST_CASE("The session types and filters keep their names and conditions") {
     CHECK(DayFilter::WEEK_DAY.getDayOfWeekMask() == 62u);
 }
 
+namespace {
+
+// Local constants: the address of a constant imported from the DLL is not a constant expression.
+struct MapElement {
+    int value;
+};
+
+constinit const MapElement ONE{1};
+constinit const MapElement TWO{2};
+constinit const MapElement THREE{3};
+
+} // namespace
+
+TEST_CASE("ConstantMap finds the constants by key") {
+    static constexpr auto ENTRIES = ConstantMap<std::string_view, MapElement>::sorted({
+        {"one", ONE},
+        {"two", TWO},
+        {"three", THREE},
+    });
+    static constexpr ConstantMap<std::string_view, MapElement> map{ENTRIES};
+
+    static_assert(map.size() == 3);
+    static_assert(ENTRIES[0].first == "one" && ENTRIES[1].first == "three" && ENTRIES[2].first == "two");
+    static_assert(map.contains("two") && !map.contains("four") && !map.contains(""));
+    static_assert(&map.at("three").get() == &THREE);
+
+    CHECK(map.find("four") == map.end());
+    CHECK(map.find("one") == map.begin());
+    CHECK(map.at("two").get().value == 2);
+    CHECK_THROWS_AS(static_cast<void>(map.at("four")), std::out_of_range);
+
+    // A repeated key: at compile time it is a compilation error.
+    CHECK_THROWS_AS(static_cast<void>(ConstantMap<std::string_view, MapElement>::sorted({
+                        {"one", ONE},
+                        {"one", TWO},
+                    })),
+                    std::invalid_argument);
+}
+
 TEST_CASE("The predefined order sources are found by id and by name") {
     CHECK(IndexedEventSource::DEFAULT.id() == 0);
     CHECK(IndexedEventSource::DEFAULT.name() == "DEFAULT");
 
-    for (const auto &[key, sourceRef] : OrderSource::PREDEFINED_SOURCES()) {
+    for (const auto &[key, sourceRef] : OrderSource::PREDEFINED_SOURCES) {
         const auto &source = sourceRef.get();
 
+        // The keys are written apart from the sources.
+        if (std::holds_alternative<std::int32_t>(key)) {
+            CHECK(std::get<std::int32_t>(key) == source.id());
+        } else {
+            CHECK(std::get<std::string_view>(key) == source.name());
+        }
+
+        CHECK(&OrderSource::PREDEFINED_SOURCES.at(source.id()).get() == &source);
+        CHECK(&OrderSource::PREDEFINED_SOURCES.at(source.name()).get() == &source);
         CHECK(&OrderSource::valueOf(source.id()) == &source);
         CHECK(&OrderSource::valueOf(source.name()) == &source);
     }
@@ -333,7 +387,7 @@ TEST_CASE("OrderSource::valueOf returns the same user source to concurrent calle
 
 TEST_CASE("WildcardSymbol::ALL and InstrumentProfileField keep their strings") {
     CHECK(WildcardSymbol::ALL.getSymbol() == "*");
-    CHECK(WildcardSymbol::ALL.getSymbol() == WildcardSymbol::RESERVED_PREFIX());
+    CHECK(WildcardSymbol::ALL.getSymbol() == WildcardSymbol::RESERVED_PREFIX);
     CHECK(WildcardSymbol::ALL.toString().find('*') != std::string::npos);
 
     CHECK(InstrumentProfileField::STRIKE.getName() == "STRIKE");
@@ -347,43 +401,58 @@ TEST_CASE("WildcardSymbol::ALL and InstrumentProfileField keep their strings") {
 TEST_CASE("The DXEndpoint keys and the AuthToken constants keep their strings") {
     std::unordered_map<std::string, std::string> properties{};
 
-    properties[DXEndpoint::DXFEED_ADDRESS_PROPERTY()] = "demo.dxfeed.com:7300";
+    properties[DXEndpoint::DXFEED_ADDRESS_PROPERTY] = "demo.dxfeed.com:7300";
 
     CHECK(properties.at("dxfeed.address") == "demo.dxfeed.com:7300");
-    CHECK(&DXEndpoint::NAME_PROPERTY() == &DXEndpoint::NAME_PROPERTY());
+    static_assert(std::string_view{DXEndpoint::NAME_PROPERTY} == "name");
 
     // The keys of the Java DXEndpoint.
     const std::vector<std::pair<std::string, std::string>> keys{
-        {DXEndpoint::NAME_PROPERTY(), "name"},
-        {DXEndpoint::DXFEED_PROPERTIES_PROPERTY(), "dxfeed.properties"},
-        {DXEndpoint::DXFEED_ADDRESS_PROPERTY(), "dxfeed.address"},
-        {DXEndpoint::DXFEED_USER_PROPERTY(), "dxfeed.user"},
-        {DXEndpoint::DXFEED_PASSWORD_PROPERTY(), "dxfeed.password"},
-        {DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY(), "dxfeed.threadPoolSize"},
-        {DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY(), "dxfeed.aggregationPeriod"},
-        {DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "dxfeed.wildcard.enable"},
-        {DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY(), "dxpublisher.properties"},
-        {DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY(), "dxpublisher.address"},
-        {DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY(), "dxpublisher.threadPoolSize"},
-        {DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY(), "dxendpoint.eventTime"},
-        {DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY(), "dxendpoint.storeEverything"},
-        {DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY(), "dxscheme.nanoTime"},
-        {DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX(), "dxscheme.enabled."},
+        {DXEndpoint::NAME_PROPERTY, "name"},
+        {DXEndpoint::DXFEED_PROPERTIES_PROPERTY, "dxfeed.properties"},
+        {DXEndpoint::DXFEED_ADDRESS_PROPERTY, "dxfeed.address"},
+        {DXEndpoint::DXFEED_USER_PROPERTY, "dxfeed.user"},
+        {DXEndpoint::DXFEED_PASSWORD_PROPERTY, "dxfeed.password"},
+        {DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY, "dxfeed.threadPoolSize"},
+        {DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY, "dxfeed.aggregationPeriod"},
+        {DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "dxfeed.wildcard.enable"},
+        {DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY, "dxpublisher.properties"},
+        {DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY, "dxpublisher.address"},
+        {DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY, "dxpublisher.threadPoolSize"},
+        {DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "dxendpoint.eventTime"},
+        {DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY, "dxendpoint.storeEverything"},
+        {DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY, "dxscheme.nanoTime"},
+        {DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX, "dxscheme.enabled."},
     };
 
     for (const auto &[key, expected] : keys) {
         CHECK(key == expected);
     }
 
-    CHECK(AuthToken::BASIC_SCHEME() == "Basic");
-    CHECK(AuthToken::BEARER_SCHEME() == "Bearer");
-    CHECK(AuthToken::NULL_TOKEN().getHttpAuthorization() == String::NUL());
-    CHECK(&AuthToken::NULL_TOKEN() == &AuthToken::NULL_TOKEN());
+    static_assert(std::string_view{AuthToken::BASIC_SCHEME} == "Basic");
+    static_assert(std::string_view{AuthToken::BEARER_SCHEME} == "Bearer");
+    static_assert(std::string_view{String::NUL} == "<null>");
+    static_assert(std::string_view{String::EMPTY}.empty());
+    CHECK(AuthToken::NULL_TOKEN.getHttpAuthorization() == String::NUL);
+    const auto nullToken = AuthToken::createBasicTokenOrNull("", "");
+
+    CHECK(nullToken == AuthToken::NULL_TOKEN);
 }
 
-TEST_CASE("The Graal-dependent constants are the same objects for concurrent first callers") {
-    const TimePeriod *zero = nullptr;
+TEST_CASE("The events without a symbol or a string return the same \"<null>\" objects") {
+    const Candle candle{};
+    const Profile profile{};
+
+    CHECK(candle.getEventSymbol().toString() == String::NUL);
+    CHECK(&candle.getEventSymbol() == &Candle{}.getEventSymbol());
+    CHECK(profile.getDescription() == String::NUL);
+    CHECK(profile.getStatusReason() == String::NUL);
+    CHECK(&profile.getDescription() == &profile.getStatusReason());
+}
+
+TEST_CASE("The Graal-dependent constants are initialized once for concurrent first callers") {
     std::int64_t zeroTime = -1;
+    const CFI *empty = nullptr;
     std::string emptyCode{};
     std::atomic<bool> start{};
 
@@ -392,30 +461,30 @@ TEST_CASE("The Graal-dependent constants are the same objects for concurrent fir
             std::this_thread::yield();
         }
 
-        zero = &TimePeriod::ZERO();
-        zeroTime = TimePeriod::ZERO().getTime();
+        zeroTime = TimePeriod::ZERO.getTime();
+        empty = CFI::EMPTY().get();
         emptyCode = CFI::EMPTY()->getCode();
     });
 
     start.store(true);
 
-    const auto *mainZero = &TimePeriod::ZERO();
-    const auto mainZeroTime = TimePeriod::ZERO().getTime();
+    const auto mainZeroTime = TimePeriod::ZERO.getTime();
+    const auto *mainEmpty = CFI::EMPTY().get();
     const auto mainEmptyCode = CFI::EMPTY()->getCode();
 
     thread.join();
 
-    CHECK(zero == mainZero);
+    CHECK(empty == mainEmpty);
     CHECK(zeroTime == 0);
     CHECK(mainZeroTime == 0);
     CHECK(emptyCode == "XXXXXX");
     CHECK(mainEmptyCode == "XXXXXX");
-    CHECK(TimePeriod::UNLIMITED().getTime() == std::numeric_limits<std::int64_t>::max());
+    CHECK(TimePeriod::UNLIMITED.getTime() == std::numeric_limits<std::int64_t>::max());
     CHECK(PriceIncrements::EMPTY()->getText().empty());
     CHECK(AdditionalUnderlyings::EMPTY()->getText().empty());
-    CHECK(TimeFormat::GMT().format(0) == "0");
-    // DEFAULT_WITH_MILLIS_WITH_TIMEZONE() is built from DEFAULT_WITH_MILLIS(), which is built from DEFAULT().
-    CHECK(!TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().format(0).empty());
-    CHECK(!TimeFormat::DEFAULT_WITH_MILLIS().format(0).empty());
-    CHECK(!TimeFormat::DEFAULT().format(0).empty());
+    CHECK(TimeFormat::GMT.format(0) == "0");
+    // DEFAULT_WITH_MILLIS_WITH_TIMEZONE is built from DEFAULT_WITH_MILLIS, which is built from DEFAULT.
+    CHECK(!TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(0).empty());
+    CHECK(!TimeFormat::DEFAULT_WITH_MILLIS.format(0).empty());
+    CHECK(!TimeFormat::DEFAULT.format(0).empty());
 }

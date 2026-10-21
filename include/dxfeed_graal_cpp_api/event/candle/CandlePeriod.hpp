@@ -37,7 +37,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via CandlePeriod::ATTRIBUTE_KEY() constant.
+ * The key to use with these methods is available via CandlePeriod::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString()
  */
 struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
@@ -62,10 +62,8 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
      * The value of this constant is an empty string because this is the main attribute that every CandleSymbol must
      * have.
      * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString()
-     *
-     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string &ATTRIBUTE_KEY(); // empty string as an attribute key is allowed!
+    static constexpr char ATTRIBUTE_KEY[] = ""; // empty string as an attribute key is allowed!
 
     private:
     double value_{};

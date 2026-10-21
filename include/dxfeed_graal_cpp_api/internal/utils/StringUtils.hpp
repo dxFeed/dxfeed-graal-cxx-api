@@ -130,17 +130,16 @@ struct DXFCPP_EXPORT StringHash {
 /**
  * Common string constants used across the library.
  *
- * `EMPTY()` returns an empty string value.
- * `NUL()` returns a textual placeholder for a missing or null string value
+ * `EMPTY` is an empty string value.
+ * `NUL` is a textual placeholder for a missing or null string value
  * and is intended for logging, debugging, and diagnostic output.
  */
 struct DXFCPP_EXPORT String {
     /// Empty string constant: `""`.
-    static const std::string &EMPTY() noexcept;
+    static constexpr char EMPTY[] = "";
 
-    /// Textual representation of a null / missing string: `"<null>"`. It is created at the first call and is
-    /// never destroyed, so it can be used by global variables.
-    static const std::string &NUL() noexcept;
+    /// Textual representation of a null / missing string: `"<null>"`.
+    static constexpr char NUL[] = "<null>";
 };
 
 DXFCPP_EXPORT std::string toString(bool b) noexcept; // NOLINT(*-redundant-declaration)
@@ -329,7 +328,7 @@ std::string namesToString(It begin, It end) {
     std::string result{"["};
 
     for (auto it = begin; it != end; ++it) {
-        result += String::EMPTY() + "'" + it->getName() + "'" + (std::next(it) == end ? "" : ", ");
+        result += "'" + it->getName() + "'" + (std::next(it) == end ? "" : ", ");
     }
 
     return result + "]";
@@ -341,7 +340,7 @@ std::string namesToString(It begin, It end) {
     std::string result{"["};
 
     for (auto it = begin; it != end; ++it) {
-        result += String::EMPTY() + "'" + it->get().getName() + "'" + (std::next(it) == end ? "" : ", ");
+        result += "'" + it->get().getName() + "'" + (std::next(it) == end ? "" : ", ");
     }
 
     return result + "]";
@@ -353,7 +352,7 @@ std::string elementsToString(It begin, It end, const std::string &prefix = "[", 
     std::string result{prefix};
 
     for (auto it = begin; it != end; ++it) {
-        result += String::EMPTY() + toStringAny(*it) + (std::next(it) == end ? "" : separator);
+        result += toStringAny(*it) + (std::next(it) == end ? "" : separator);
     }
 
     return result + postfix;

@@ -13,20 +13,33 @@
     * `MarketDepthModel`: a new snapshot of a source (for example, after a reconnection) removes all the old orders of
       that source: some of them were left in the book, and removing the last order of the book was undefined
       behaviour. A model built without a listener no longer crashes on the first update.
+    * `DXFeedSubscription::setAggregationPeriod()` threw `InvalidArgumentException` ("The `period` handle is
+      invalid") for `TimePeriod::ZERO` or `UNLIMITED` that had not been used before.
     * The constants of the enums, candle attributes, schedule filters, event types, event flags, order sources,
       `InstrumentProfileField` and `WildcardSymbol::ALL` are constant-initialized: they can be used in the
       initializers of global variables of user code, with the static and the shared library (`CandleType::parse("h")`
       in such an initializer crashed).
-    * **\[BREAKING]** The constants that are built at run time are functions with the same names: `String::NUL()`,
-      `String::EMPTY()`, `CandleSymbol::NUL()`, `ATTRIBUTE_KEY()` of the candle attributes, `BY_STRING()` of
-      `CandleType`, `CandlePrice`, `CandleAlignment` and `CandleSession`, `EventTypeEnum::ALL_BY_NAME()`,
-      `ALL_BY_CLASS_NAME()` and `ALL_BY_ID()`, `OrderSource::PREDEFINED_SOURCES()`,
-      `WildcardSymbol::RESERVED_PREFIX()`, the `*_PROPERTY()` keys of `DXEndpoint`, `AuthToken::BASIC_SCHEME()`,
-      `BEARER_SCHEME()` and `NULL_TOKEN()`, `TimePeriod::ZERO()` and `UNLIMITED()`, the `EMPTY()` of `CFI`,
-      `PriceIncrements` and `AdditionalUnderlyings`, and the `TimeFormat` instances. Each returns a reference to an
-      object that is created at the first call and is never destroyed, so it can be used in the constructors and the
-      destructors of global variables. The Java objects of the Graal-dependent constants are still created on the
-      first use (`TimePeriod::ZERO().getTime()` and others). Such calls need the Graal isolate, so the destructors of
+    * **\[BREAKING]** The string keys and literals are `static constexpr char[]` instead of `const std::string`, with
+      the same names: `String::NUL` and `EMPTY`, `ATTRIBUTE_KEY` of the candle attributes,
+      `WildcardSymbol::RESERVED_PREFIX`, the `*_PROPERTY` keys and `DXSCHEME_ENABLED_PROPERTY_PREFIX` of `DXEndpoint`,
+      `AuthToken::BASIC_SCHEME` and `BEARER_SCHEME`. Code that calls member functions of `std::string` on them or adds
+      them to each other or to a string literal needs `std::string(...)` or `std::string_view`; comparing a
+      `const char *` with them compares pointers.
+    * **\[BREAKING]** The maps of constants are constant-initialized `dxfcpp::ConstantMap` instead of
+      `std::unordered_map`, with the same names: `BY_STRING` of `CandleType`, `CandlePrice`, `CandleAlignment` and
+      `CandleSession`, `EventTypeEnum::ALL_BY_NAME`, `ALL_BY_CLASS_NAME` and `ALL_BY_ID`,
+      `OrderSource::PREDEFINED_SOURCES`. A `ConstantMap` has `at()`, `find()`, `contains()`, `size()` and iterators over
+      `std::pair<Key, std::reference_wrapper<const T>>` sorted by key; the string keys are `std::string_view`, and the
+      keys of `PREDEFINED_SOURCES` are `std::variant<std::int32_t, std::string_view>`. The maps can be used in the
+      initializers and the destructors of global variables.
+    * **\[BREAKING]** `CandleSymbol::NUL()` returns a new `CandleSymbol` by value. The `EMPTY()` of `CFI`,
+      `PriceIncrements` and `AdditionalUnderlyings` are functions that return the object created at the first call, so
+      they can be used in the initializers of global variables. These objects and the `OrderSource` user sources
+      (`valueOf("CNST")`) are destroyed at exit, so the destructors of global variables should not use them.
+    * `TimePeriod::ZERO` and `UNLIMITED`, `AuthToken::NULL_TOKEN` and the `TimeFormat` instances are
+      constant-initialized. The Java objects of `TimePeriod`, `TimeFormat`, `CFI`, `PriceIncrements` and
+      `AdditionalUnderlyings` constants are created at the first use (`TimePeriod::ZERO.getTime()` and others), and
+      their getters no longer lock a mutex on each call. Such calls need the Graal isolate, so the destructors of
       global variables should not make them: the isolate may already be torn down there.
     * **\[BREAKING]** The name getters of these constants return `std::string` by value instead of
       `const std::string &`: `getName()` and `toString()` of the enums, `EventFlag`, `CandleType` and `SessionType`,
@@ -41,8 +54,11 @@
     * The library, the tests and the samples build with clang-cl (the `ClangCL` toolset of Visual Studio), which is
       checked by CI.
     * **\[BREAKING]** ABI: the layouts of these classes changed, `SessionFilter` and `DayFilter` no longer have a mutex
-      member, the `OrderSource` user sources are no longer static members, and the names of `IndexedEventSource`,
-      `OrderSource`, `CandlePeriod` and `SessionFilter` are stored in the new internal `ConstString`.
+      member, the `OrderSource` user sources are no longer static members, the names of `IndexedEventSource`,
+      `OrderSource`, `CandlePeriod` and `SessionFilter` are stored in the new internal `ConstString`, `TimePeriod`,
+      `TimeFormat`, `CFI`, `PriceIncrements` and `AdditionalUnderlyings` have a `std::once_flag` and a function pointer
+      instead of a mutex and a `std::function`, and the string keys of `DXEndpoint`, `AuthToken`, `String` and
+      `WildcardSymbol` are no longer exported variables.
 * **\[MDAPI-430]\[C++]** **\[BREAKING]** Candle attributes are parsed and printed as in Java.
     * **\[BREAKING]** `CandlePeriod::parse()` and `CandlePriceLevel::parse()` follow Java `Double.parseDouble`: a sign
       (`+5m`), the `d`/`f` suffix and hexadecimal values (`0x1p3`) of a price level are accepted, and parsing no longer

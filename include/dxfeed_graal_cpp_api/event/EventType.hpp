@@ -46,7 +46,7 @@ struct DXFCPP_EXPORT EventType : SharedEntity {
      * Returns time when an event was created or zero when time is not available.
      *
      * <p>This event time is available only when the corresponding DXEndpoint is created
-     * with @ref DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY() "DXENDPOINT_EVENT_TIME_PROPERTY" and
+     * with @ref DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY "DXENDPOINT_EVENT_TIME_PROPERTY" and
      * the data source has embedded event times. This is typically true only for data events
      * that are read from historical tape files and from OnDemandService.
      * Events that are coming from network connections do not have an embedded event time information, and

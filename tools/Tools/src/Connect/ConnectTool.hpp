@@ -172,7 +172,7 @@ struct ConnectTool {
             auto parsedSymbols = CmdArgsUtils::parseSymbols(args.symbols);
 
             if (args.fromTime.has_value()) {
-                auto fromTime = TimeFormat::DEFAULT().parse(args.fromTime.value());
+                auto fromTime = TimeFormat::DEFAULT.parse(args.fromTime.value());
 
                 parsedSymbols = parsedSymbols | ranges::views::transform([fromTime](const auto &sw) {
                                     return TimeSeriesSubscriptionSymbol{sw, fromTime};
@@ -208,15 +208,14 @@ struct ConnectTool {
             if (args.tape.has_value()) {
                 std::string tape = args.tape.value();
 
-                auto pub =
-                    DXEndpoint::newBuilder()
-                        ->withRole(DXEndpoint::Role::STREAM_PUBLISHER)
-                        ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true") // Enabled by default
-                        ->withProperties(parsedProperties)
-                        ->withName(NAME + "Tool-Publisher")
-                        ->build()
-                        ->connect(tape.starts_with("tape:") ? tape : "tape:" + tape)
-                        ->getPublisher();
+                auto pub = DXEndpoint::newBuilder()
+                               ->withRole(DXEndpoint::Role::STREAM_PUBLISHER)
+                               ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default
+                               ->withProperties(parsedProperties)
+                               ->withName(NAME + "Tool-Publisher")
+                               ->build()
+                               ->connect(tape.starts_with("tape:") ? tape : "tape:" + tape)
+                               ->getPublisher();
 
                 sub->addEventListener([pub](auto &&events) {
                     pub->publishEvents(events);

@@ -13,9 +13,24 @@
 #include <dxfg_api.h>
 #include <fmt/format.h>
 #include <memory>
+#include <new>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
+
+namespace {
+
+// The symbol of a candle without one. The strings of "<null>" are short and its attributes are the defaults, so the
+// symbol does not use the heap (only the debug iterators of MSVC allocate small proxies). It is created in a static
+// buffer and is never destroyed, so the events can be used by the destructors of global variables.
+const CandleSymbol &nulCandleSymbol() {
+    alignas(CandleSymbol) static unsigned char storage[sizeof(CandleSymbol)];
+    static const auto *const value = new (storage) CandleSymbol{CandleSymbol::NUL()};
+
+    return *value;
+}
+
+} // namespace
 
 void Candle::fillData(void *graalNative) {
     if (graalNative == nullptr) {
@@ -52,7 +67,7 @@ void Candle::fillGraalData(void *graalNative) const {
     const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     graalCandle->event_type.clazz = DXFG_EVENT_CANDLE;
-    graalCandle->event_symbol = createCString(eventSymbol_.value_or(CandleSymbol::NUL()).toString());
+    graalCandle->event_symbol = createCString(eventSymbol_ ? eventSymbol_->toString() : std::string{String::NUL});
     graalCandle->event_time = data_.eventTime;
     graalCandle->event_flags = data_.eventFlags;
     graalCandle->index = data_.index;
@@ -149,7 +164,7 @@ Candle::Candle(CandleSymbol eventSymbol) noexcept : eventSymbol_{std::move(event
 
 const CandleSymbol &Candle::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return CandleSymbol::NUL();
+        return nulCandleSymbol();
     }
 
     return eventSymbol_.value();
@@ -426,8 +441,8 @@ std::string Candle::toString() const {
     return fmt::format(
         "Candle{{{}, eventTime={}, eventFlags={:#x}, time={}, sequence={}, count={}, open={}, high={}, low={}, "
         "close={}, volume={}, vwap={}, bidVolume={}, askVolume={}, impVolatility={}, openInterest={}}}",
-        getEventSymbol().toString(), TimeFormat::DEFAULT_WITH_MILLIS().format(getEventTime()),
-        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS().format(getTime()), getSequence(), getCount(),
+        getEventSymbol().toString(), TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), getCount(),
         dxfcpp::toString(getOpen()), dxfcpp::toString(getHigh()), dxfcpp::toString(getLow()),
         dxfcpp::toString(getClose()), dxfcpp::toString(getVolume()), dxfcpp::toString(getVWAP()),
         dxfcpp::toString(getBidVolume()), dxfcpp::toString(getAskVolume()), dxfcpp::toString(getImpVolatility()),

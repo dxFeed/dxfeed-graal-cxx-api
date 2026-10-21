@@ -5,6 +5,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../internal/utils/StringConstants.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -267,7 +268,7 @@ Order &Order::withScope(const Scope &scope) noexcept {
 
 const std::string &Order::getMarketMaker() const & noexcept {
     if (!orderData_.marketMaker) {
-        return String::NUL();
+        return nulString();
     }
 
     return orderData_.marketMaker.value();

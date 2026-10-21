@@ -385,7 +385,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     /**
      * Returns spread symbol of this event.
      *
-     * @return spread symbol of this event or dxfcpp::String::NUL() (`std::string{"<null>"}`).
+     * @return spread symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getSpreadSymbol() const & noexcept;
 

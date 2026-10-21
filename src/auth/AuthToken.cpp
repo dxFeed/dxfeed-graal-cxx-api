@@ -10,23 +10,9 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const std::string &AuthToken::BASIC_SCHEME() {
-    static const auto *const value = new std::string{"Basic"};
-
-    return *value;
-}
-
-const std::string &AuthToken::BEARER_SCHEME() {
-    static const auto *const value = new std::string{"Bearer"};
-
-    return *value;
-}
-
-const AuthToken &AuthToken::NULL_TOKEN() {
-    static const auto *const value = new AuthToken(JavaObjectHandle<AuthToken>(), true);
-
-    return *value;
-}
+// Constant-initialized (constinit), so it can be used in the dynamic initialization of global variables of other
+// translation units.
+constinit const AuthToken AuthToken::NULL_TOKEN{};
 
 AuthToken AuthToken::valueOf(const StringLike &string) {
     return AuthToken(isolated::auth::IsolatedAuthToken::valueOf(string));
@@ -70,7 +56,7 @@ AuthToken AuthToken::createCustomToken(const StringLike &scheme, const StringLik
 
 std::string AuthToken::getHttpAuthorization() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getHttpAuthorization(handle_);
@@ -78,7 +64,7 @@ std::string AuthToken::getHttpAuthorization() const {
 
 std::string AuthToken::getUser() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getUser(handle_);
@@ -86,7 +72,7 @@ std::string AuthToken::getUser() const {
 
 std::string AuthToken::getPassword() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getPassword(handle_);
@@ -94,7 +80,7 @@ std::string AuthToken::getPassword() const {
 
 std::string AuthToken::getScheme() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getScheme(handle_);
@@ -102,7 +88,7 @@ std::string AuthToken::getScheme() const {
 
 std::string AuthToken::getValue() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getValue(handle_);

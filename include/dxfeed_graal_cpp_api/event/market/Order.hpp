@@ -395,7 +395,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * Returns market maker or other aggregate identifier of this order.
      * This value is defined for Scope::AGGREGATE and Scope::ORDER orders.
      *
-     * @return market maker or other aggregate identifier of this order or dxfcpp::String::NUL()
+     * @return market maker or other aggregate identifier of this order or dxfcpp::String::NUL
      * (`std::string{"<null>"}`).
      */
     const std::string &getMarketMaker() const & noexcept;

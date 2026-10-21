@@ -9,21 +9,10 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const TimePeriod &TimePeriod::ZERO() {
-    static const auto *const value = new TimePeriod([] {
-        return isolated::util::IsolatedTimePeriod::ZERO();
-    });
-
-    return *value;
-}
-
-const TimePeriod &TimePeriod::UNLIMITED() {
-    static const auto *const value = new TimePeriod([] {
-        return isolated::util::IsolatedTimePeriod::UNLIMITED();
-    });
-
-    return *value;
-}
+// The constants are constant-initialized (constinit), so they can be used in the dynamic initialization of global
+// variables of other translation units. The Java objects are created at the first use.
+constinit const TimePeriod TimePeriod::ZERO{&isolated::util::IsolatedTimePeriod::ZERO};
+constinit const TimePeriod TimePeriod::UNLIMITED{&isolated::util::IsolatedTimePeriod::UNLIMITED};
 
 TimePeriod TimePeriod::valueOf(std::int64_t value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
@@ -38,45 +27,31 @@ TimePeriod TimePeriod::valueOf(const StringLike &value) {
 }
 
 std::int64_t TimePeriod::getTime() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::util::IsolatedTimePeriod::getTime(handle_);
+    return isolated::util::IsolatedTimePeriod::getTime(getHandle());
 }
 
 std::int32_t TimePeriod::getSeconds() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::util::IsolatedTimePeriod::getSeconds(handle_);
+    return isolated::util::IsolatedTimePeriod::getSeconds(getHandle());
 }
 
 std::int64_t TimePeriod::getNanos() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::util::IsolatedTimePeriod::getNanos(handle_);
+    return isolated::util::IsolatedTimePeriod::getNanos(getHandle());
 }
 
 TimePeriod::~TimePeriod() noexcept {
 }
 
-TimePeriod::TimePeriod(std::function<JavaObjectHandle<TimePeriod>()> &&initializer)
-    : initializer_(std::move(initializer)) {
-}
-
 TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle) : handle_(std::move(handle)) {
-    initialized_ = true;
 }
 
-void TimePeriod::init() const {
-    if (!initialized_) {
-        handle_ = initializer_();
-        initialized_ = true;
+const JavaObjectHandle<TimePeriod> &TimePeriod::getHandle() const {
+    if (initializer_) {
+        std::call_once(initialized_, [this] {
+            handle_ = initializer_();
+        });
     }
+
+    return handle_;
 }
 
 DXFCPP_END_NAMESPACE

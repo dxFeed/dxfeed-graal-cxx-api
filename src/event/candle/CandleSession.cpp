@@ -89,8 +89,9 @@ const SessionFilter &CandleSession::getSessionFilter() const & noexcept {
 }
 
 std::string CandleSession::changeAttributeForSymbol(const StringLike &symbol) const {
-    return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, candle::SESSION_KEY)
-                            : MarketEventSymbols::changeAttributeStringByKey(symbol, candle::SESSION_KEY, toString());
+    return *this == DEFAULT
+               ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY)
+               : MarketEventSymbols::changeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY, toString());
 }
 
 std::string CandleSession::toString() const {
@@ -123,13 +124,13 @@ std::reference_wrapper<const CandleSession> CandleSession::parse(const StringLik
 }
 
 std::reference_wrapper<const CandleSession> CandleSession::getAttributeForSymbol(const StringLike &symbol) {
-    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, candle::SESSION_KEY);
+    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY);
 
     return stringOpt && iEquals(stringOpt.value(), "true") ? std::cref(REGULAR) : std::cref(DEFAULT);
 }
 
 std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol) noexcept {
-    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, candle::SESSION_KEY);
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY);
 
     if (!a) {
         return symbol;
@@ -137,28 +138,13 @@ std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol)
 
     // As getAttributeForSymbol() (Java Boolean.parseBoolean): only "true" in any case is the regular session.
     if (!iEquals(a.value(), "true")) {
-        return candle::removeDefaultAttribute(symbol, candle::SESSION_KEY, DEFAULT.toString());
+        return candle::removeDefaultAttribute(symbol, CandleSession::ATTRIBUTE_KEY, DEFAULT.toString());
     }
 
     if (a.value() != REGULAR.toString()) {
-        return MarketEventSymbols::changeAttributeStringByKey(symbol, candle::SESSION_KEY, REGULAR.toString());
+        return MarketEventSymbols::changeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY, REGULAR.toString());
     }
 
     return symbol;
 }
-const std::string &CandleSession::ATTRIBUTE_KEY() {
-    static const auto *const value = new std::string{candle::SESSION_KEY};
-
-    return *value;
-}
-
-const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> &CandleSession::BY_STRING() {
-    static const auto *const value = new std::unordered_map<std::string, std::reference_wrapper<const CandleSession>>{
-        {ANY.toString(), std::cref(ANY)},
-        {REGULAR.toString(), std::cref(REGULAR)},
-    };
-
-    return *value;
-}
-
 DXFCPP_END_NAMESPACE
