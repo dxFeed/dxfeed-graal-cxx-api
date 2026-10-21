@@ -9,7 +9,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Common.hpp"
-#include "../../internal/utils/ConstString.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 #include "./CandleType.hpp"
@@ -40,7 +39,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandlePeriod::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePeriod::toString()
  */
-struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandlePeriod final : public CandleSymbolAttribute {
     /**
      * Tick aggregation where each candle represents an individual tick.
      */
@@ -68,18 +67,16 @@ struct DXFCPP_EXPORT CandlePeriod : public CandleSymbolAttribute {
     private:
     double value_{};
     CandleType type_{};
-    ConstString string_{};
 
     CandlePeriod(double value, const CandleType &type);
 
     constexpr CandlePeriod(double value, std::string_view typeName, std::string_view typeString,
-                           std::int64_t typePeriodIntervalMillis, ConstString::Literal string) noexcept
-        : value_{value}, type_{typeName, typeString, typePeriodIntervalMillis}, string_{string} {
+                           std::int64_t typePeriodIntervalMillis) noexcept
+        : value_{value}, type_{typeName, typeString, typePeriodIntervalMillis} {
     }
 
     public:
     CandlePeriod();
-    ~CandlePeriod() noexcept override;
 
     /**
      * Returns an aggregation period in milliseconds as closely as possible.

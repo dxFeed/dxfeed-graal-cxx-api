@@ -250,7 +250,11 @@ UserSources &userSources() {
 
 } // namespace
 
-OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : IndexedEventSource(id, name) {
+OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : IndexedEventSource(id, name, true) {
+}
+
+OrderSource::OrderSource(const OrderSource &other) noexcept
+    : IndexedEventSource(other, true), pubFlags_{other.pubFlags_}, builtin_{other.builtin_} {
 }
 
 void OrderSource::throwInvalidName(const char *message) {
@@ -303,16 +307,6 @@ std::uint32_t OrderSource::getEventTypeMask(const EventTypeEnum &eventType) {
     // }
 
     throw InvalidArgumentException("Invalid order event type: " + eventType.getName());
-}
-
-void *OrderSource::toGraal() const {
-    auto *graalSource = new dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
-
-    return graalSource;
-}
-
-std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> OrderSource::toGraalUnique() const noexcept {
-    return {toGraal(), freeGraal};
 }
 
 bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {

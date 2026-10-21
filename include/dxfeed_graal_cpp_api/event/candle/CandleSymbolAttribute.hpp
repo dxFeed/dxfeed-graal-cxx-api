@@ -22,9 +22,6 @@ struct StringLike;
  * Attribute of the CandleSymbol.
  */
 struct DXFCPP_EXPORT CandleSymbolAttribute {
-    virtual ~CandleSymbolAttribute() {
-    }
-
     /**
      * Returns candle event symbol string with this attribute set.
      *
@@ -32,6 +29,11 @@ struct DXFCPP_EXPORT CandleSymbolAttribute {
      * @return candle event symbol string with this attribute set.
      */
     virtual std::string changeAttributeForSymbol(const StringLike &symbol) const = 0;
+
+    protected:
+    // Not virtual: an attribute is not deleted through a pointer to this class. The destructor is trivial, so the
+    // constants of the attributes are not destroyed at exit and can be used by the destructors of global variables.
+    ~CandleSymbolAttribute() = default;
 };
 
 DXFCPP_END_NAMESPACE

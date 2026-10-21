@@ -13,9 +13,6 @@ DXFCPP_BEGIN_NAMESPACE
 CandlePrice::CandlePrice() noexcept {
 }
 
-CandlePrice::~CandlePrice() noexcept {
-}
-
 std::string CandlePrice::changeAttributeForSymbol(const StringLike &symbol) const {
     return *this == DEFAULT
                ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandlePrice::ATTRIBUTE_KEY)

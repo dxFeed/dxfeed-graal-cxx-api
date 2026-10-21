@@ -8,9 +8,6 @@ DXFCPP_BEGIN_NAMESPACE
 CandleExchange::CandleExchange() noexcept {
 }
 
-CandleExchange::~CandleExchange() noexcept {
-}
-
 char CandleExchange::getExchangeCode() const noexcept {
     return exchangeCode_;
 }

@@ -9,19 +9,45 @@
 
 #include <dxfg_api.h>
 
-#include <mutex>
+#include <iterator>
 DXFCPP_BEGIN_NAMESPACE
 
+namespace {
+
+template <DayFilterEnum code> JavaObjectHandle<DayFilter> createHandle() {
+    return isolated::schedule::IsolatedDayFilter::getInstance(static_cast<std::uint32_t>(code));
+}
+
+using Handle = LazyJavaObjectHandle<DayFilter>;
+
+// The handles of constants: they are not destroyed at exit.
+constexpr Handle::ConstantTag CONSTANT{};
+
+// The Java objects of the filters by code, created at the first use. Not members of the constants: the filters stay
+// trivially destructible.
+constinit const Handle HANDLES[] = {
+    Handle{&createHandle<DayFilterEnum::ANY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::TRADING>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::NON_TRADING>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::HOLIDAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::SHORT_DAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::MONDAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::TUESDAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::WEDNESDAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::THURSDAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::FRIDAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::SATURDAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::SUNDAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::WEEK_DAY>, CONSTANT},
+    Handle{&createHandle<DayFilterEnum::WEEK_END>, CONSTANT},
+};
+
+static_assert(std::size(HANDLES) == static_cast<std::size_t>(DayFilterEnum::WEEK_END) + 1);
+
+} // namespace
+
 const JavaObjectHandle<DayFilter> &DayFilter::getHandle() const & {
-    // Not a member: the constants are constant-initialized, and std::mutex is not constexpr in every configuration.
-    static std::mutex mutex{};
-    std::lock_guard lock(mutex);
-
-    if (!handle_) {
-        handle_ = isolated::schedule::IsolatedDayFilter::getInstance(static_cast<std::uint32_t>(code_));
-    }
-
-    return handle_;
+    return HANDLES[static_cast<std::size_t>(code_)].get();
 }
 
 /// Accepts any day - useful for pure calendar navigation.

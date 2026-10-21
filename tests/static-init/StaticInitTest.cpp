@@ -69,9 +69,13 @@ struct DestructionObserver {
             return std::string(CandleType::MINUTE.toString()) + " " + String::NUL + " " +
                    CandleSymbol::NUL().toString() + " " + CandleType::BY_STRING.at("h").get().getName() + " " +
                    DXEndpoint::NAME_PROPERTY + " " + OrderSource::PREDEFINED_SOURCES.at("NTV").get().name() + " " +
-                   Candle{}.getEventSymbol().toString() + " " + Profile{}.getDescription();
+                   Candle{}.getEventSymbol().toString() + " " + Profile{}.getDescription() + " " +
+                   // A virtual call: it fails if a constant of a polymorphic type was destroyed.
+                   CandleExchange::COMPOSITE.changeAttributeForSymbol("A") + " " + EventTypeEnum::QUOTE.getName() +
+                   " " + DayFilter::MONDAY.getName() + " " + SessionType::REGULAR.getName() + " " +
+                   OrderSource::NTV.toString() + " " + WildcardSymbol::ALL.getSymbol();
         });
-        const bool ok = read == "m <null> <null> HOUR name NTV <null> <null>";
+        const bool ok = read == "m <null> <null> HOUR name NTV <null> <null> A QUOTE MONDAY REGULAR NTV *";
 
         std::printf("%s destruction: '%s'\n", ok ? "OK  " : "FAIL", read.c_str());
         std::fflush(stdout);

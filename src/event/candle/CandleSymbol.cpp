@@ -106,9 +106,9 @@ constinit const ConstantMap<std::string_view, CandleType> CandleType::BY_STRING{
 
 //------------
 
-constinit const CandlePeriod CandlePeriod::TICK{1.0, "TICK", "t", 0LL, ConstString::Literal{"t"}};
-constinit const CandlePeriod CandlePeriod::DAY{1.0, "DAY", "d", 24LL * 60LL * 60LL * 1000L, ConstString::Literal{"d"}};
-constinit const CandlePeriod CandlePeriod::DEFAULT{1.0, "TICK", "t", 0LL, ConstString::Literal{"t"}};
+constinit const CandlePeriod CandlePeriod::TICK{1.0, "TICK", "t", 0LL};
+constinit const CandlePeriod CandlePeriod::DAY{1.0, "DAY", "d", 24LL * 60LL * 60LL * 1000L};
+constinit const CandlePeriod CandlePeriod::DEFAULT{1.0, "TICK", "t", 0LL};
 
 //------------
 

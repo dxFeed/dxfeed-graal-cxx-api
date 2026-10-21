@@ -45,11 +45,11 @@ struct DXFCPP_EXPORT TimeFormat {
     LazyJavaObjectHandle<TimeFormat> handle_;
 
     // The constructor of the instances: constant initialization, the Java object is created at the first use.
-    constexpr explicit TimeFormat(Initializer initializer) noexcept : handle_{initializer} {
+    constexpr explicit TimeFormat(Initializer initializer) noexcept
+        : handle_{initializer, LazyJavaObjectHandle<TimeFormat>::ConstantTag{}} {
     }
 
     public:
-    virtual ~TimeFormat() noexcept;
 
     TimeFormat(const TimeFormat &) = delete;
     TimeFormat(TimeFormat &&) noexcept = delete;

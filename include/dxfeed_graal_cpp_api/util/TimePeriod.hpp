@@ -88,8 +88,6 @@ struct DXFCPP_EXPORT TimePeriod {
      */
     std::int64_t getNanos() const;
 
-    virtual ~TimePeriod() noexcept;
-
     TimePeriod(const TimePeriod &) = delete;
     TimePeriod(TimePeriod &&) noexcept = delete;
     TimePeriod &operator=(const TimePeriod &) = delete;
@@ -101,7 +99,8 @@ struct DXFCPP_EXPORT TimePeriod {
     LazyJavaObjectHandle<TimePeriod> handle_;
 
     // The constructor of the constants: constant initialization, the Java object is created at the first use.
-    constexpr explicit TimePeriod(Initializer initializer) noexcept : handle_{initializer} {
+    constexpr explicit TimePeriod(Initializer initializer) noexcept
+        : handle_{initializer, LazyJavaObjectHandle<TimePeriod>::ConstantTag{}} {
     }
 
     explicit TimePeriod(JavaObjectHandle<TimePeriod> &&handle);

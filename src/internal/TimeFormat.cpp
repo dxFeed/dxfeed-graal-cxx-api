@@ -28,9 +28,6 @@ constinit const TimeFormat TimeFormat::GMT{[] {
     return isolated::internal::IsolatedTimeFormat::getGmt();
 }};
 
-TimeFormat::~TimeFormat() noexcept {
-}
-
 const JavaObjectHandle<TimeFormat> &TimeFormat::getHandle() const {
     return handle_.get();
 }

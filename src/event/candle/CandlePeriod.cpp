@@ -23,14 +23,10 @@ std::string toJavaString(double value, const CandleType &type) {
 
 } // namespace
 
-CandlePeriod::CandlePeriod(double value, const CandleType &type)
-    : value_{value}, type_{type}, string_{ConstString::copyOf(toJavaString(value_, type_))} {
+CandlePeriod::CandlePeriod(double value, const CandleType &type) : value_{value}, type_{type} {
 }
 
 CandlePeriod::CandlePeriod() : CandlePeriod(0.0, CandleType{}) {
-}
-
-CandlePeriod::~CandlePeriod() noexcept {
 }
 
 std::int64_t CandlePeriod::getPeriodIntervalMillis() const noexcept {
@@ -52,7 +48,8 @@ const CandleType &CandlePeriod::getType() const & noexcept {
 }
 
 std::string CandlePeriod::toString() const {
-    return string_.str();
+    // Not stored: the period stays trivially destructible.
+    return toJavaString(value_, type_);
 }
 
 bool CandlePeriod::operator==(const CandlePeriod &candlePeriod) const {

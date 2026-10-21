@@ -7,12 +7,14 @@
 #include <cstdint>
 #include <functional>
 #include <limits>
+#include <memory>
 #include <set>
 #include <span>
 #include <stdexcept>
 #include <string>
 #include <string_view>
 #include <thread>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <variant>
@@ -20,6 +22,7 @@
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp>
 
 #include <doctest.h>
 
@@ -533,4 +536,71 @@ TEST_CASE("LazyJavaObjectHandle calls the initializer again after a failure and 
 
     CHECK(lazyInitializerCalls.load() == 2);
     CHECK(&handle.get() == &handle.get());
+}
+
+// The internal functions are not exported from the shared library.
+#ifndef DXFCPP_USE_DLLS
+TEST_CASE("LazyJavaObjectHandle that is not a constant releases the Java object created by the initializer") {
+    // As the EMPTY() objects of CFI, PriceIncrements and AdditionalUnderlyings.
+    auto handle = std::make_unique<LazyJavaObjectHandle<TimePeriod>>(&isolated::util::IsolatedTimePeriod::ZERO);
+
+    REQUIRE(static_cast<bool>(handle->get()));
+
+    handle.reset();
+
+    // A new Java handle is linked in the registry before the handles created earlier: if the destroyed handle stayed
+    // there, the link writes to freed memory (AddressSanitizer).
+    CHECK(TimePeriod::valueOf(1).getTime() == 1);
+}
+#endif
+
+// The constants of these types are not destroyed at exit, so the destructors of global variables can use them.
+static_assert(std::is_trivially_destructible_v<CandleAlignment>);
+static_assert(std::is_trivially_destructible_v<CandleExchange>);
+static_assert(std::is_trivially_destructible_v<CandlePeriod>);
+static_assert(std::is_trivially_destructible_v<CandlePrice>);
+static_assert(std::is_trivially_destructible_v<CandlePriceLevel>);
+static_assert(std::is_trivially_destructible_v<CandleSession>);
+static_assert(std::is_trivially_destructible_v<CandleType>);
+static_assert(std::is_trivially_destructible_v<DayFilter>);
+static_assert(std::is_trivially_destructible_v<EventTypeEnum>);
+static_assert(std::is_trivially_destructible_v<SessionType>);
+static_assert(std::is_trivially_destructible_v<WildcardSymbol>);
+
+// The constants of these types are destroyed at exit without a change: the types are not polymorphic, the names of the
+// constants are not owned, and the Java objects of the constants are not released (LazyJavaObjectHandle).
+static_assert(!std::is_polymorphic_v<AuthToken>);
+static_assert(!std::is_polymorphic_v<IndexedEventSource>);
+static_assert(!std::is_polymorphic_v<OrderSource>);
+static_assert(!std::is_polymorphic_v<SessionFilter>);
+static_assert(!std::is_polymorphic_v<TimeFormat>);
+static_assert(!std::is_polymorphic_v<TimePeriod>);
+
+TEST_CASE("An order source keeps its Graal type without virtual functions, and a copy to IndexedEventSource does not") {
+    // Through a reference to the base class, as DXFeed::getIndexedEventsPromise() converts a source.
+    const auto graalSource = [](const IndexedEventSource &source) {
+        return EventSourceWrapper::fromGraal(source.toGraalUnique().get());
+    };
+
+    CHECK(graalSource(OrderSource::NTV).isOrderSource());
+    CHECK(graalSource(OrderSource::valueOf("abcd")).isOrderSource());
+
+    const OrderSource copy = OrderSource::NTV;
+
+    CHECK(graalSource(copy).isOrderSource());
+    CHECK(copy == OrderSource::NTV);
+
+    const IndexedEventSource sliced = OrderSource::NTV;
+
+    CHECK(graalSource(sliced).isIndexedEventSource());
+    CHECK(sliced.id() == OrderSource::NTV.id());
+    CHECK(sliced.name() == "NTV");
+
+    IndexedEventSource assigned = IndexedEventSource::DEFAULT;
+
+    assigned = OrderSource::NTV;
+
+    CHECK(graalSource(assigned).isIndexedEventSource());
+    CHECK(assigned.id() == OrderSource::NTV.id());
+    CHECK(graalSource(IndexedEventSource::DEFAULT).isIndexedEventSource());
 }

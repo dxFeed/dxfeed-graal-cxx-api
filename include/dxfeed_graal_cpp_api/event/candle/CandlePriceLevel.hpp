@@ -42,7 +42,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
  */
-struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandlePriceLevel final : CandleSymbolAttribute {
     /**
      * Default price level corresponds to `NaN (std::numeric_limits<double>::quiet_NaN())`
      */
@@ -64,8 +64,6 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
 
     public:
     CandlePriceLevel() noexcept;
-
-    ~CandlePriceLevel() noexcept override;
 
     /**
      * Returns price level value. For example, the value of `1` represents `[0;1), [1;2)` and so on intervals

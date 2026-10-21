@@ -16,9 +16,6 @@ DXFCPP_BEGIN_NAMESPACE
 CandleAlignment::CandleAlignment() noexcept {
 }
 
-CandleAlignment::~CandleAlignment() noexcept {
-}
-
 std::string CandleAlignment::changeAttributeForSymbol(const StringLike &symbol) const {
     return *this == DEFAULT
                ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY)

@@ -164,9 +164,6 @@ constinit const ConstantMap<std::uint32_t, EventTypeEnum> EventTypeEnum::ALL_BY_
 EventTypeEnum::EventTypeEnum() noexcept : EventTypeEnum{static_cast<std::uint32_t>(-1), "INVALID", "Invalid", false} {
 }
 
-EventTypeEnum::~EventTypeEnum() noexcept {
-}
-
 std::uint32_t EventTypeEnum::getId() const noexcept {
     return id_;
 }

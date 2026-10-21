@@ -15,9 +15,6 @@ DXFCPP_BEGIN_NAMESPACE
 CandlePriceLevel::CandlePriceLevel() noexcept {
 }
 
-CandlePriceLevel::~CandlePriceLevel() noexcept {
-}
-
 double CandlePriceLevel::getValue() const noexcept {
     return value_;
 }

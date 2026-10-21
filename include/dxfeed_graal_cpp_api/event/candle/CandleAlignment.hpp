@@ -37,7 +37,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandleAlignment::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandleAlignment::toString()
  */
-struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandleAlignment final : CandleSymbolAttribute {
     /**
      * Align candles at midnight.
      */
@@ -76,8 +76,6 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
 
     public:
     CandleAlignment() noexcept;
-
-    ~CandleAlignment() noexcept override;
 
     /**
      * Returns candle event symbol string with this candle alignment set.

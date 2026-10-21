@@ -39,7 +39,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandlePrice::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePrice::toString()
  */
-struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandlePrice final : CandleSymbolAttribute {
     /**
      * Last trading price.
      */
@@ -95,8 +95,6 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
 
     public:
     CandlePrice() noexcept;
-
-    ~CandlePrice() noexcept override;
 
     /**
      * Returns candle event symbol string with this candle price type set.

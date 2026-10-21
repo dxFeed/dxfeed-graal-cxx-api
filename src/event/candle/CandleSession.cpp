@@ -7,7 +7,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/schedule/SessionType.hpp"
 
-#include <mutex>
+#include <iterator>
 #include <optional>
 #include <string>
 
@@ -41,9 +41,6 @@ bool SessionType::operator==(const SessionType &sessionType) const noexcept {
 SessionFilter::SessionFilter() noexcept {
 }
 
-SessionFilter::~SessionFilter() noexcept {
-}
-
 SessionFilter::SessionFilter(SessionFilterEnum code, const StringLike &name, std::optional<SessionType> type,
                              std::optional<bool> trading) noexcept
     : code_{code}, name_{ConstString::copyOf(name)}, type_{type}, trading_{trading} {
@@ -66,22 +63,44 @@ const std::optional<bool> &SessionFilter::getTrading() const & noexcept {
     return trading_;
 }
 
-const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
-    // Not a member: the constants are constant-initialized, and std::mutex is not constexpr in every configuration.
-    static std::mutex mutex{};
-    std::lock_guard lock(mutex);
+namespace {
 
-    if (!handle_) {
-        handle_ = isolated::schedule::IsolatedSessionFilter::getInstance(static_cast<std::uint32_t>(code_));
+template <SessionFilterEnum code> JavaObjectHandle<SessionFilter> createSessionFilterHandle() {
+    return isolated::schedule::IsolatedSessionFilter::getInstance(static_cast<std::uint32_t>(code));
+}
+
+using SessionFilterHandle = LazyJavaObjectHandle<SessionFilter>;
+
+// The handles of constants: they are not destroyed at exit.
+constexpr SessionFilterHandle::ConstantTag SESSION_FILTER_CONSTANT{};
+
+// The Java objects of the filters by code, created at the first use. Not members of the filters: the constants do not
+// release them when they are destroyed at exit.
+constinit const SessionFilterHandle SESSION_FILTER_HANDLES[] = {
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::ANY>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::TRADING>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::NON_TRADING>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::NO_TRADING>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::PRE_MARKET>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::REGULAR>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::AFTER_MARKET>, SESSION_FILTER_CONSTANT},
+};
+
+static_assert(std::size(SESSION_FILTER_HANDLES) == static_cast<std::size_t>(SessionFilterEnum::AFTER_MARKET) + 1);
+
+} // namespace
+
+const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
+    const auto index = static_cast<std::size_t>(code_);
+
+    if (index >= std::size(SESSION_FILTER_HANDLES)) {
+        throw InvalidArgumentException("Unknown session filter code: " + std::to_string(index));
     }
 
-    return handle_;
+    return SESSION_FILTER_HANDLES[index].get();
 }
 
 CandleSession::CandleSession() noexcept : CandleSession(SessionFilter::ANY, "false") {
-}
-
-CandleSession::~CandleSession() noexcept {
 }
 
 const SessionFilter &CandleSession::getSessionFilter() const & noexcept {

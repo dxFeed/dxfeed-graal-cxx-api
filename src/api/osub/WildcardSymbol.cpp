@@ -20,8 +20,6 @@ WildcardSymbol &WildcardSymbol::operator=(WildcardSymbol &&) noexcept = default;
 
 WildcardSymbol::WildcardSymbol() noexcept = default;
 
-WildcardSymbol::~WildcardSymbol() noexcept = default;
-
 std::string WildcardSymbol::getSymbol() const {
     return std::string{symbol_};
 }

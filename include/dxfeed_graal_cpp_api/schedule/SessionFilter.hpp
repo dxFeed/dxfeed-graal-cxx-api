@@ -75,8 +75,6 @@ struct DXFCPP_EXPORT SessionFilter final {
     /// Required trading flag, std::nullopt if not relevant.
     std::optional<bool> trading_{};
 
-    mutable JavaObjectHandle<SessionFilter> handle_{};
-
     private:
     // The constants: constant-initialized, a session type is created in place.
     constexpr SessionFilter(SessionFilterEnum code, ConstString::Literal name, std::optional<bool> trading) noexcept
@@ -90,7 +88,6 @@ struct DXFCPP_EXPORT SessionFilter final {
 
     public:
     SessionFilter() noexcept;
-    ~SessionFilter() noexcept;
 
     SessionFilter(const SessionFilter &) = delete;
     SessionFilter(SessionFilter &&) noexcept = delete;

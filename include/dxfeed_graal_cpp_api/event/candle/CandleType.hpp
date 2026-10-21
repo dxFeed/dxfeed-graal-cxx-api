@@ -135,7 +135,6 @@ struct DXFCPP_EXPORT CandleType {
 
     public:
     CandleType() noexcept;
-    virtual ~CandleType() noexcept;
 
     /**
      * Returns a candle type period in milliseconds as closely as possible.

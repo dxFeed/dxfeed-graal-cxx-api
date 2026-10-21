@@ -38,9 +38,6 @@ std::int64_t TimePeriod::getNanos() const {
     return isolated::util::IsolatedTimePeriod::getNanos(getHandle());
 }
 
-TimePeriod::~TimePeriod() noexcept {
-}
-
 TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle) : handle_(std::move(handle)) {
 }
 

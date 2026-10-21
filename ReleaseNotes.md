@@ -19,6 +19,16 @@
       `InstrumentProfileField` and `WildcardSymbol::ALL` are constant-initialized: they can be used in the
       initializers of global variables of user code, with the static and the shared library (`CandleType::parse("h")`
       in such an initializer crashed).
+    * **\[BREAKING]** The constants can be used in the destructors of global variables of user code: their destruction
+      at exit, which can come before such a destructor, no longer changes them (a virtual call on a candle attribute
+      constant there could call a pure virtual function). The candle attributes, `CandleType`, `EventTypeEnum`,
+      `SessionType`, `DayFilter` and `WildcardSymbol` are trivially destructible: `CandleSymbolAttribute` has a
+      protected non-virtual destructor, so an attribute can not be deleted through a pointer to it, and the attributes
+      are `final`. `IndexedEventSource`, `OrderSource`, `AuthToken`, `TimePeriod` and `TimeFormat` are not polymorphic:
+      their destructors and `IndexedEventSource::toGraal()` and `toGraalUnique()` are not virtual, `OrderSource` no
+      longer overrides them, and a copy of an order source to `IndexedEventSource` is converted to Graal as before. The
+      Java objects of the constants are released when the Graal isolate is torn down, not when the constants are
+      destroyed.
     * **\[BREAKING]** The string keys and literals are `static constexpr char[]` instead of `const std::string`, with
       the same names: `String::NUL` and `EMPTY`, `ATTRIBUTE_KEY` of the candle attributes,
       `WildcardSymbol::RESERVED_PREFIX`, the `*_PROPERTY` keys and `DXSCHEME_ENABLED_PROPERTY_PREFIX` of `DXEndpoint`,
@@ -55,12 +65,13 @@
     * The library, the tests and the samples build with clang-cl (the `ClangCL` toolset of Visual Studio), which is
       checked by CI.
     * **\[BREAKING]** ABI: the layouts of these classes changed, `SessionFilter` and `DayFilter` no longer have a mutex
-      member, the `OrderSource` user sources are no longer static members, the names of `IndexedEventSource`,
-      `OrderSource`, `CandlePeriod` and `SessionFilter` are stored in the new internal `ConstString`, `TimePeriod`,
+      member or a Java handle, the `OrderSource` user sources are no longer static members, the names of
+      `IndexedEventSource`, `OrderSource` and `SessionFilter` are stored in the new internal `ConstString`,
+      `CandlePeriod` no longer stores its string, the classes above have no virtual destructors and `IndexedEventSource`
+      has no virtual functions (`OrderSource` has no `toGraal()` and `toGraalUnique()` of its own), `TimePeriod`,
       `TimeFormat`, `CFI`, `PriceIncrements` and `AdditionalUnderlyings` keep their Java object in the new internal
-      `LazyJavaObjectHandle` (a `std::once_flag` and a function pointer instead of a mutex and a `std::function`), and
-      the string keys of `DXEndpoint`, `AuthToken`, `String` and
-      `WildcardSymbol` are no longer exported variables.
+      `LazyJavaObjectHandle` (an atomic state and a function pointer instead of a mutex and a `std::function`), and the
+      string keys of `DXEndpoint`, `AuthToken`, `String` and `WildcardSymbol` are no longer exported variables.
 * **\[MDAPI-430]\[C++]** **\[BREAKING]** Candle attributes are parsed and printed as in Java.
     * **\[BREAKING]** `CandlePeriod::parse()` and `CandlePriceLevel::parse()` follow Java `Double.parseDouble`: a sign
       (`+5m`), the `d`/`f` suffix and hexadecimal values (`0x1p3`) of a price level are accepted, and parsing no longer
@@ -69,9 +80,8 @@
       `NaNm`, `Infinitym`). Values beyond the range of `std::int64_t` previously printed as wrong numbers.
     * `CandlePeriod::getPeriodIntervalMillis()` saturates as the Java `(long)` cast does (NaN gives 0) instead of
       causing undefined behaviour for large periods such as `1e30m`.
-    * Fixed a data race in `CandlePeriod::toString()`: the string is computed in the constructor.
-    * **\[BREAKING]** `CandlePeriod::valueOf()` and the `CandlePeriod` default constructor are no longer `noexcept`
-      (they build the string representation).
+    * Fixed a data race in `CandlePeriod::toString()`: the string is computed on each call instead of being cached.
+    * **\[BREAKING]** `CandlePeriod::valueOf()` and the `CandlePeriod` default constructor are no longer `noexcept`.
     * `CandleSession()` is `CandleSession::ANY`: comparing a default-constructed `CandleSession` dereferenced a null
       pointer.
     * `CandleSymbol` normalization is idempotent: a default attribute is kept when removing it would leave a base symbol

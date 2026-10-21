@@ -122,8 +122,6 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     EventTypeEnum() noexcept;
 
-    virtual ~EventTypeEnum() noexcept;
-
     /**
      * @return The dxFeed Graal Native C-API event class id
      */

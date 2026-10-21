@@ -75,7 +75,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     bool builtin_{};
 
     constexpr OrderSource(std::int32_t id, ConstString::Literal name, std::uint32_t pubFlags) noexcept
-        : IndexedEventSource(id, name), pubFlags_{pubFlags}, builtin_{true} {
+        : IndexedEventSource(id, name, true), pubFlags_{pubFlags}, builtin_{true} {
     }
 
     constexpr OrderSource(ConstString::Literal name, std::uint32_t pubFlags)
@@ -115,18 +115,22 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType);
 
-    /**
-     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
-     * Returns the pointer to the filled structure.
-     *
-     * @return The pointer to the filled dxFeed Graal SDK structure
-     */
-    void *toGraal() const override;
-
-    std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept override;
-
     public:
+    /**
+     * Creates a copy of the order source.
+     *
+     * @param other The order source to copy.
+     */
+    OrderSource(const OrderSource &other) noexcept;
+
+    /**
+     * Copies the order source.
+     *
+     * @param other The order source to copy.
+     * @return This order source.
+     */
+    OrderSource &operator=(const OrderSource &other) noexcept = default;
+
     /**
      * Bid side of a composite Quote.
      * It is a <em>synthetic</em> source.

@@ -59,7 +59,6 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     WildcardSymbol &operator=(const WildcardSymbol &) noexcept;
     WildcardSymbol &operator=(WildcardSymbol &&) noexcept;
     WildcardSymbol() noexcept;
-    ~WildcardSymbol() noexcept;
 
     std::string getSymbol() const;
 
