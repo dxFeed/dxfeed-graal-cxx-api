@@ -1,14 +1,17 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <atomic>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <limits>
 #include <set>
 #include <span>
 #include <string>
 #include <thread>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -339,4 +342,80 @@ TEST_CASE("WildcardSymbol::ALL and InstrumentProfileField keep their strings") {
     REQUIRE(InstrumentProfileField::find("TRADING_HOURS"));
     CHECK(&InstrumentProfileField::find("TRADING_HOURS")->get() == &InstrumentProfileField::TRADING_HOURS);
     CHECK(!InstrumentProfileField::find("UNKNOWN"));
+}
+
+TEST_CASE("The DXEndpoint keys and the AuthToken constants keep their strings") {
+    std::unordered_map<std::string, std::string> properties{};
+
+    properties[DXEndpoint::DXFEED_ADDRESS_PROPERTY()] = "demo.dxfeed.com:7300";
+
+    CHECK(properties.at("dxfeed.address") == "demo.dxfeed.com:7300");
+    CHECK(&DXEndpoint::NAME_PROPERTY() == &DXEndpoint::NAME_PROPERTY());
+
+    // The keys of the Java DXEndpoint.
+    const std::vector<std::pair<std::string, std::string>> keys{
+        {DXEndpoint::NAME_PROPERTY(), "name"},
+        {DXEndpoint::DXFEED_PROPERTIES_PROPERTY(), "dxfeed.properties"},
+        {DXEndpoint::DXFEED_ADDRESS_PROPERTY(), "dxfeed.address"},
+        {DXEndpoint::DXFEED_USER_PROPERTY(), "dxfeed.user"},
+        {DXEndpoint::DXFEED_PASSWORD_PROPERTY(), "dxfeed.password"},
+        {DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY(), "dxfeed.threadPoolSize"},
+        {DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY(), "dxfeed.aggregationPeriod"},
+        {DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "dxfeed.wildcard.enable"},
+        {DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY(), "dxpublisher.properties"},
+        {DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY(), "dxpublisher.address"},
+        {DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY(), "dxpublisher.threadPoolSize"},
+        {DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY(), "dxendpoint.eventTime"},
+        {DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY(), "dxendpoint.storeEverything"},
+        {DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY(), "dxscheme.nanoTime"},
+        {DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX(), "dxscheme.enabled."},
+    };
+
+    for (const auto &[key, expected] : keys) {
+        CHECK(key == expected);
+    }
+
+    CHECK(AuthToken::BASIC_SCHEME() == "Basic");
+    CHECK(AuthToken::BEARER_SCHEME() == "Bearer");
+    CHECK(AuthToken::NULL_TOKEN().getHttpAuthorization() == String::NUL());
+    CHECK(&AuthToken::NULL_TOKEN() == &AuthToken::NULL_TOKEN());
+}
+
+TEST_CASE("The Graal-dependent constants are the same objects for concurrent first callers") {
+    const TimePeriod *zero = nullptr;
+    std::int64_t zeroTime = -1;
+    std::string emptyCode{};
+    std::atomic<bool> start{};
+
+    std::thread thread([&] {
+        while (!start.load()) {
+            std::this_thread::yield();
+        }
+
+        zero = &TimePeriod::ZERO();
+        zeroTime = TimePeriod::ZERO().getTime();
+        emptyCode = CFI::EMPTY()->getCode();
+    });
+
+    start.store(true);
+
+    const auto *mainZero = &TimePeriod::ZERO();
+    const auto mainZeroTime = TimePeriod::ZERO().getTime();
+    const auto mainEmptyCode = CFI::EMPTY()->getCode();
+
+    thread.join();
+
+    CHECK(zero == mainZero);
+    CHECK(zeroTime == 0);
+    CHECK(mainZeroTime == 0);
+    CHECK(emptyCode == "XXXXXX");
+    CHECK(mainEmptyCode == "XXXXXX");
+    CHECK(TimePeriod::UNLIMITED().getTime() == std::numeric_limits<std::int64_t>::max());
+    CHECK(PriceIncrements::EMPTY()->getText().empty());
+    CHECK(AdditionalUnderlyings::EMPTY()->getText().empty());
+    CHECK(TimeFormat::GMT().format(0) == "0");
+    // DEFAULT_WITH_MILLIS_WITH_TIMEZONE() is built from DEFAULT_WITH_MILLIS(), which is built from DEFAULT().
+    CHECK(!TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().format(0).empty());
+    CHECK(!TimeFormat::DEFAULT_WITH_MILLIS().format(0).empty());
+    CHECK(!TimeFormat::DEFAULT().format(0).empty());
 }

@@ -19,9 +19,9 @@ namespace {
 
 struct DataIntegrityTestFixture : test::LocalHubFixture {
     DataIntegrityTestFixture()
-        : LocalHubFixture({{DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true"},
-                           {DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true"},
-                           {DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY, "true"}}) {
+        : LocalHubFixture({{DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true"},
+                           {DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY(), "true"},
+                           {DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY(), "true"}}) {
     }
 };
 

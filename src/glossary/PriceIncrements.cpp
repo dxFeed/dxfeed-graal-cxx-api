@@ -14,9 +14,13 @@ void PriceIncrements::init() const {
     }
 }
 
-const PriceIncrements::Ptr PriceIncrements::EMPTY(createShared([] {
-    return isolated::glossary::IsolatedPriceIncrements::EMPTY();
-}));
+const PriceIncrements::Ptr &PriceIncrements::EMPTY() {
+    static const auto *const value = new PriceIncrements::Ptr(createShared([] {
+        return isolated::glossary::IsolatedPriceIncrements::EMPTY();
+    }));
+
+    return *value;
+}
 
 PriceIncrements::PriceIncrements(LockExternalConstructionTag,
                                  std::function<JavaObjectHandle<PriceIncrements>()> initializer)

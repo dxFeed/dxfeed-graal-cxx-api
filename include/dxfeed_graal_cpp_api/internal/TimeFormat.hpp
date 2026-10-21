@@ -28,18 +28,20 @@ struct StringLike;
  * @throws GraalException if something happened with the GraalVM
  */
 struct DXFCPP_EXPORT TimeFormat {
+    // The instances are created at the first call and are never destroyed, so they can be used by global variables.
+
     /**
      * An instance of TimeFormat that corresponds to default timezone as returned by TimeZone::getDefault() method.
      */
-    const static TimeFormat DEFAULT;
-    const static TimeFormat DEFAULT_WITH_MILLIS;
-    const static TimeFormat DEFAULT_WITH_MILLIS_WITH_TIMEZONE;
+    static const TimeFormat &DEFAULT();
+    static const TimeFormat &DEFAULT_WITH_MILLIS();
+    static const TimeFormat &DEFAULT_WITH_MILLIS_WITH_TIMEZONE();
 
     /**
      * An instance of TimeFormat that corresponds to GMT timezone as returned by
      * @ref TimeZone::getTimeZone() "TimeZone::getTimeZone(\"GMT\")".
      */
-    const static TimeFormat GMT;
+    static const TimeFormat &GMT();
 
     private:
     mutable JavaObjectHandle<TimeFormat> handle_;

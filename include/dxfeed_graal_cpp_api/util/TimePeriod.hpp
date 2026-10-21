@@ -30,10 +30,12 @@ struct DXFCPP_EXPORT TimePeriod {
     friend DXFeedSubscription;
 
     /// Time-period of zero.
-    static const TimePeriod ZERO;
+    /// It is created at the first call and is never destroyed, so it can be used by global variables.
+    static const TimePeriod &ZERO();
 
     /// Time-period of "infinity" (time of `std::numeric_limits<std::int64_t>::max()` or `LLONG_MAX`).
-    static const TimePeriod UNLIMITED;
+    /// It is created at the first call and is never destroyed, so it can be used by global variables.
+    static const TimePeriod &UNLIMITED();
 
     /**
      * Returns TimePeriod with <tt>value</tt> milliseconds.

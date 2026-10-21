@@ -55,9 +55,9 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     /**
      * Empty additional underlyings - it has empty text and empty map.
      *
-     * It is built at dynamic initialization, so the initializers of global variables should not use it.
+     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const Ptr EMPTY;
+    static const Ptr &EMPTY();
 
     // lazy c-tor
     AdditionalUnderlyings(LockExternalConstructionTag,

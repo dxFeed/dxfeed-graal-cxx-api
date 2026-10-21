@@ -9,13 +9,21 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const TimePeriod TimePeriod::ZERO([] {
-    return isolated::util::IsolatedTimePeriod::ZERO();
-});
+const TimePeriod &TimePeriod::ZERO() {
+    static const auto *const value = new TimePeriod([] {
+        return isolated::util::IsolatedTimePeriod::ZERO();
+    });
 
-const TimePeriod TimePeriod::UNLIMITED([] {
-    return isolated::util::IsolatedTimePeriod::UNLIMITED();
-});
+    return *value;
+}
+
+const TimePeriod &TimePeriod::UNLIMITED() {
+    static const auto *const value = new TimePeriod([] {
+        return isolated::util::IsolatedTimePeriod::UNLIMITED();
+    });
+
+    return *value;
+}
 
 TimePeriod TimePeriod::valueOf(std::int64_t value) {
     return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));

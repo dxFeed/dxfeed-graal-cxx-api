@@ -16,14 +16,18 @@
     * The constants of the enums, candle attributes, schedule filters, event types, event flags, order sources,
       `InstrumentProfileField` and `WildcardSymbol::ALL` are constant-initialized: they can be used in the
       initializers of global variables of user code, with the static and the shared library (`CandleType::parse("h")`
-      in such an initializer crashed). The `EMPTY` constants of `CFI`, `PriceIncrements` and `AdditionalUnderlyings`
-      are still built at dynamic initialization.
+      in such an initializer crashed).
     * **\[BREAKING]** The constants that are built at run time are functions with the same names: `String::NUL()`,
       `String::EMPTY()`, `CandleSymbol::NUL()`, `ATTRIBUTE_KEY()` of the candle attributes, `BY_STRING()` of
       `CandleType`, `CandlePrice`, `CandleAlignment` and `CandleSession`, `EventTypeEnum::ALL_BY_NAME()`,
-      `ALL_BY_CLASS_NAME()` and `ALL_BY_ID()`, `OrderSource::PREDEFINED_SOURCES()` and
-      `WildcardSymbol::RESERVED_PREFIX()`. Each returns a reference to an object that is created at the first call and
-      is never destroyed, so it can be used in the constructors and the destructors of global variables.
+      `ALL_BY_CLASS_NAME()` and `ALL_BY_ID()`, `OrderSource::PREDEFINED_SOURCES()`,
+      `WildcardSymbol::RESERVED_PREFIX()`, the `*_PROPERTY()` keys of `DXEndpoint`, `AuthToken::BASIC_SCHEME()`,
+      `BEARER_SCHEME()` and `NULL_TOKEN()`, `TimePeriod::ZERO()` and `UNLIMITED()`, the `EMPTY()` of `CFI`,
+      `PriceIncrements` and `AdditionalUnderlyings`, and the `TimeFormat` instances. Each returns a reference to an
+      object that is created at the first call and is never destroyed, so it can be used in the constructors and the
+      destructors of global variables. The Java objects of the Graal-dependent constants are still created on the
+      first use (`TimePeriod::ZERO().getTime()` and others). Such calls need the Graal isolate, so the destructors of
+      global variables should not make them: the isolate may already be torn down there.
     * **\[BREAKING]** The name getters of these constants return `std::string` by value instead of
       `const std::string &`: `getName()` and `toString()` of the enums, `EventFlag`, `CandleType` and `SessionType`,
       `InstrumentProfileField::getName()`, `EventTypeEnum::getName()` and `getClassName()`,

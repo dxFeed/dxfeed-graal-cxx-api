@@ -35,8 +35,8 @@ int main(int /* argc */, char * /* argv */[]) {
         sub->addSymbols("ACN");
 
         // Watch Accenture drop under $1 on May 6, 2010 "Flashcrash" from 14:47:48 to 14:48:02 EST
-        auto from = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse("2010-05-06 14:47:48.000 EST");
-        auto to = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse("2010-05-06 14:48:02.000 EST");
+        auto from = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().parse("2010-05-06 14:47:48.000 EST");
+        auto to = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().parse("2010-05-06 14:48:02.000 EST");
 
         // switch into historical on-demand data replay mode
         onDemand->replay(from);

@@ -334,7 +334,7 @@ std::int16_t utf8to16(char in) noexcept {
 }
 
 std::string formatTimeStamp(std::int64_t timestamp) {
-    return TimeFormat::DEFAULT.format(timestamp);
+    return TimeFormat::DEFAULT().format(timestamp);
 }
 
 std::string formatTimeStampWithTimeZone(std::int64_t timestamp) {
@@ -365,11 +365,11 @@ std::string formatTimeStampFast(std::int64_t timestamp) {
 }
 
 std::string formatTimeStampWithMillis(std::int64_t timestamp) {
-    return TimeFormat::DEFAULT_WITH_MILLIS.format(timestamp);
+    return TimeFormat::DEFAULT_WITH_MILLIS().format(timestamp);
 }
 
 std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
-    return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(timestamp);
+    return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().format(timestamp);
 }
 
 char *createCString(const StringLike &s) {

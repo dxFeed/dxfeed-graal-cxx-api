@@ -25,7 +25,7 @@ using namespace dxfcpp::literals;
 
 int main(int argc, char *argv[]) {
     try {
-        System::setProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true");
+        System::setProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true");
         // Enable experimental feature.
         System::setProperty("dxfeed.experimental.dxlink.enable", "true");
         // Set scheme for dxLink.

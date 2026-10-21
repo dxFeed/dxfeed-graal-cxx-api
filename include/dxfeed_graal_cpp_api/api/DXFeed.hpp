@@ -66,11 +66,11 @@ concept LastingEventCollection =
  *
  * <p>In particular,
  * you can provide a default address to connect and credentials  using
- * @ref DXEndpoint::DXFEED_ADDRESS_PROPERTY "dxfeed.address",
- * @ref DXEndpoint::DXFEED_USER_PROPERTY "dxfeed.user", and
- * @ref DXEndpoint::DXFEED_PASSWORD_PROPERTY "dxfeed.password"
+ * @ref DXEndpoint::DXFEED_ADDRESS_PROPERTY() "dxfeed.address",
+ * @ref DXEndpoint::DXFEED_USER_PROPERTY() "dxfeed.user", and
+ * @ref DXEndpoint::DXFEED_PASSWORD_PROPERTY() "dxfeed.password"
  * system properties or by putting them into
- * @ref DXEndpoint::DXFEED_PROPERTIES_PROPERTY "dxfeed.properties"
+ * @ref DXEndpoint::DXFEED_PROPERTIES_PROPERTY() "dxfeed.properties"
  * file in the same directory. dxFeed API samples come with a ready-to-use <b>"dxfeed.properties"</b>
  * file that contains an address of dxFeed demo feed at <b>"demo.dxfeed.com:7300"</b> and
  * demo access credentials.

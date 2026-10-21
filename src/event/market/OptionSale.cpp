@@ -566,13 +566,13 @@ std::string OptionSale::toString() const {
         "OptionSale{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, timeNanoPart={}, sequence={}, "
         "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
         "validTick={}, type={}, underlyingPrice={}, volatility={}, delta={}, optionSymbol='{}'}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
-        getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()),
-        dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()), getExchangeSaleConditions(),
-        encodeChar(getTradeThroughExempt()), getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(),
-        isValidTick(), getType().toString(), dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getVolatility()),
-        dxfcpp::toString(getDelta()), getOptionSymbol());
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS().format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS().format(getTime()),
+        getTimeNanoPart(), getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
+        dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
+        getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()), getAggressorSide().toString(), isSpreadLeg(),
+        isExtendedTradingHours(), isValidTick(), getType().toString(), dxfcpp::toString(getUnderlyingPrice()),
+        dxfcpp::toString(getVolatility()), dxfcpp::toString(getDelta()), getOptionSymbol());
 }
 
 DXFCPP_END_NAMESPACE

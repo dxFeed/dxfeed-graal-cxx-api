@@ -232,8 +232,8 @@ TextMessage &TextMessage::withText(const StringLike &text) noexcept {
 
 std::string TextMessage::toString() const {
     return fmt::format("TextMessage{{{}, eventTime={}, time={}, sequence={}, text={}}}", getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), text_);
+                       TimeFormat::DEFAULT_WITH_MILLIS().format(getEventTime()),
+                       TimeFormat::DEFAULT_WITH_MILLIS().format(getTime()), getSequence(), text_);
 }
 
 DXFCPP_END_NAMESPACE

@@ -10,10 +10,23 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const std::string AuthToken::BASIC_SCHEME{"Basic"};
-const std::string AuthToken::BEARER_SCHEME{"Bearer"};
+const std::string &AuthToken::BASIC_SCHEME() {
+    static const auto *const value = new std::string{"Basic"};
 
-const AuthToken AuthToken::NULL_TOKEN(JavaObjectHandle<AuthToken>(), true);
+    return *value;
+}
+
+const std::string &AuthToken::BEARER_SCHEME() {
+    static const auto *const value = new std::string{"Bearer"};
+
+    return *value;
+}
+
+const AuthToken &AuthToken::NULL_TOKEN() {
+    static const auto *const value = new AuthToken(JavaObjectHandle<AuthToken>(), true);
+
+    return *value;
+}
 
 AuthToken AuthToken::valueOf(const StringLike &string) {
     return AuthToken(isolated::auth::IsolatedAuthToken::valueOf(string));

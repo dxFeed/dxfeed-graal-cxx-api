@@ -19,9 +19,13 @@ AdditionalUnderlyings::valueOfImpl(const std::vector<std::pair<const char *, dou
     return isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(mapLikeEntries);
 }
 
-const AdditionalUnderlyings::Ptr AdditionalUnderlyings::EMPTY(createShared([] {
-    return isolated::glossary::IsolatedAdditionalUnderlyings::EMPTY();
-}));
+const AdditionalUnderlyings::Ptr &AdditionalUnderlyings::EMPTY() {
+    static const auto *const value = new AdditionalUnderlyings::Ptr(createShared([] {
+        return isolated::glossary::IsolatedAdditionalUnderlyings::EMPTY();
+    }));
+
+    return *value;
+}
 
 AdditionalUnderlyings::AdditionalUnderlyings(
     LockExternalConstructionTag, std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer)

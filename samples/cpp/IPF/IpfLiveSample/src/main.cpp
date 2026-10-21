@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
             std::cout << "Total number of profiles (2): " + std::to_string(symbols.size()) << std::endl;
 
             std::cout << "Last modified: " +
-                             TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(self->getLastUpdateTime())
+                             TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().format(self->getLastUpdateTime())
                       << std::endl;
         });
 

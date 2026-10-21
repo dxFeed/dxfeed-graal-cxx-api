@@ -124,9 +124,9 @@ struct DXFeedTestFixture {
         executor = InPlaceExecutor::create();
         endpoint = DXEndpoint::newBuilder()
                        ->withRole(DXEndpoint::Role::LOCAL_HUB)
-                       ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-                       ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true")
-                       ->withProperty(DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY, "true")
+                       ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true")
+                       ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY(), "true")
+                       ->withProperty(DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY(), "true")
                        ->withExecutor(executor)
                        ->build();
         feed = endpoint->getFeed();

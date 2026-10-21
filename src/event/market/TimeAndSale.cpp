@@ -373,8 +373,8 @@ std::string TimeAndSale::toString() const {
                        "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
                        "validTick={}, type={}{}{}}}",
                        MarketEvent::getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-                       getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()),
+                       TimeFormat::DEFAULT_WITH_MILLIS().format(MarketEvent::getEventTime()),
+                       getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS().format(getTime()),
                        getTimeNanoPart(), getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
                        dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
                        getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()), getAggressorSide().toString(),

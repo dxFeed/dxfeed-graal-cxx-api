@@ -152,7 +152,7 @@ struct DumpTool {
             auto inputEndpoint =
                 DXEndpoint::newBuilder()
                     ->withRole(DXEndpoint::Role::STREAM_FEED)
-                    ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default
+                    ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true") // Enabled by default
                     ->withProperties(parsedProperties)
                     ->withName(NAME + "Tool-Feed")
                     ->build();
@@ -177,7 +177,7 @@ struct DumpTool {
                 outputEndpoint =
                     DXEndpoint::newBuilder()
                         ->withRole(DXEndpoint::Role::STREAM_PUBLISHER)
-                        ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enabled by default
+                        ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true") // Enabled by default
                         ->withProperties(parsedProperties)
                         ->withName(NAME + "Tool-Publisher")
                         ->build()

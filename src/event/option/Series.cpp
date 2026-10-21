@@ -303,8 +303,8 @@ std::string Series::toString() const {
     return fmt::format(
         "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
         "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS().format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS().format(getTime()), getSequence(),
         day_util::getYearMonthDayByDayId(getExpiration()), dxfcpp::toString(getVolatility()),
         dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()), dxfcpp::toString(getPutCallRatio()),
         dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));

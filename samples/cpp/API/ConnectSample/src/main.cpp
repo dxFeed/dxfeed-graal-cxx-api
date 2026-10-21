@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
         auto time = -1LL;
 
         if (argc >= 5) {
-            time = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.parse(argv[4]);
+            time = TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE().parse(argv[4]);
         }
 
         // Create an endpoint and connect to a specified address.

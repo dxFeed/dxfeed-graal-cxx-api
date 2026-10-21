@@ -38,9 +38,9 @@ struct ObservableSubscription;
  * It is created on the first use with default configuration properties that are explained in detail in
  * documentation for DXEndpoint class in the "Default properties" section. In particular,
  * you can provide a default address to connect using
- * '@ref DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY "dxpublisher.address"'
+ * '@ref DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY() "dxpublisher.address"'
  * system property or by putting it into
- * '@ref DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY "dxpublisher.properties"'
+ * '@ref DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY() "dxpublisher.properties"'
  * file in the current directory.
  *
  * <h4>Publish a single event.</h4>

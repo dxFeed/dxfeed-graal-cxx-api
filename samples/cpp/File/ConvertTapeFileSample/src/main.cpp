@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
         const auto inputEndpoint =
             DXEndpoint::newBuilder()
                 ->withRole(DXEndpoint::Role::STREAM_FEED) // Prevents event conflation and loss due to buffer overflow.
-                ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enables wildcard subscription.
-                ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true")  // Use provided event times.
+                ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true") // Enables wildcard subscription.
+                ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY(), "true")  // Use provided event times.
                 ->build();
 
         // Create an output endpoint configured for tape writing.
@@ -35,8 +35,8 @@ int main(int argc, char *argv[]) {
             DXEndpoint::newBuilder()
                 ->withRole(
                     DXEndpoint::Role::STREAM_PUBLISHER) // Prevents event conflation and loss due to buffer overflow.
-                ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true") // Enables wildcard subscription.
-                ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true")  // Use provided event times.
+                ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true") // Enables wildcard subscription.
+                ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY(), "true")  // Use provided event times.
                 ->build();
 
         // Create and link event processor for all types of events.

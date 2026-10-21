@@ -315,10 +315,10 @@ std::string OrderBase::baseFieldsToString() const {
         "{}, eventTime={}, source={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, "
         "timeNanoPart={}, action={}, actionTime={}, orderId={}, auxOrderId={}, price={}, "
         "size={}, executedSize={}, count={}, exchange={}, side={}, scope={}, tradeId={}, tradePrice={}, tradeSize={}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS().format(MarketEvent::getEventTime()),
         getSource().toString(), getEventFlagsMask().getMask(), getIndex(),
-        TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), getTimeNanoPart(), getAction().toString(),
-        TimeFormat::DEFAULT_WITH_MILLIS.format(getActionTime()), getOrderId(), getAuxOrderId(),
+        TimeFormat::DEFAULT_WITH_MILLIS().format(getTime()), getSequence(), getTimeNanoPart(), getAction().toString(),
+        TimeFormat::DEFAULT_WITH_MILLIS().format(getActionTime()), getOrderId(), getAuxOrderId(),
         dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()), dxfcpp::toString(getExecutedSize()), getCount(),
         encodeChar(getExchangeCode()), getOrderSide().toString(), getScope().toString(), getTradeId(),
         dxfcpp::toString(getTradePrice()), dxfcpp::toString(getTradeSize()));

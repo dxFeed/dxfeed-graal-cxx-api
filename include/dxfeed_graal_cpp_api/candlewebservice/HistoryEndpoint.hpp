@@ -34,8 +34,8 @@ DXFCPP_BEGIN_NAMESPACE
  * const auto candleDataUrl = "https://tools.dxfeed.com/candledata";
  * const auto user = "*****";
  * const auto password = "*****";
- * const auto start = TimeFormat::DEFAULT.parse("20221201-000000");
- * const auto stop = TimeFormat::DEFAULT.parse("20230101-000000");
+ * const auto start = TimeFormat::DEFAULT().parse("20221201-000000");
+ * const auto stop = TimeFormat::DEFAULT().parse("20230101-000000");
  * const auto builder = HistoryEndpoint::newBuilder()
  *         ->withAddress(candleDataUrl)
  *         ->withUserName(user)
@@ -46,8 +46,8 @@ DXFCPP_BEGIN_NAMESPACE
  * std::cout << "Received candle count: " << res.size() << std::endl;
  * const auto resTns= builder->build()->getTimeSeries<TimeAndSale>(
  *         "AAPL&Q",
- *         TimeFormat::DEFAULT.parse("20250818-120000"),
- *         TimeFormat::DEFAULT.parse("20250819-130000"));
+ *         TimeFormat::DEFAULT().parse("20250818-120000"),
+ *         TimeFormat::DEFAULT().parse("20250819-130000"));
  *
  * std::cout << "Received tns count: " << resTns.size() << std::endl;
  * ```

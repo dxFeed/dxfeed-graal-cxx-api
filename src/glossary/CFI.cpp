@@ -14,9 +14,13 @@ void CFI::init() const {
     }
 }
 
-const CFI::Ptr CFI::EMPTY(createShared([] {
-    return isolated::glossary::IsolatedCFI::EMPTY();
-}));
+const CFI::Ptr &CFI::EMPTY() {
+    static const auto *const value = new CFI::Ptr(createShared([] {
+        return isolated::glossary::IsolatedCFI::EMPTY();
+    }));
+
+    return *value;
+}
 
 CFI::CFI(LockExternalConstructionTag, std::function<JavaObjectHandle<CFI>()> initializer)
     : initializer_(std::move(initializer)) {

@@ -333,10 +333,10 @@ std::string Quote::toString() const {
     return fmt::format(
         "Quote{{{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, bidTime={}, bidExchange={}, bidPrice={}, "
         "bidSize={}, askTime={}, askExchange={}, askPrice={}, askSize={}}}",
-        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(), getSequence(),
-        TimeFormat::DEFAULT.format(getBidTime()), encodeChar(getBidExchangeCode()), dxfcpp::toString(getBidPrice()),
-        dxfcpp::toString(getBidSize()), TimeFormat::DEFAULT.format(getAskTime()), encodeChar(getAskExchangeCode()),
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS().format(MarketEvent::getEventTime()),
+        TimeFormat::DEFAULT_WITH_MILLIS().format(getTime()), getTimeNanoPart(), getSequence(),
+        TimeFormat::DEFAULT().format(getBidTime()), encodeChar(getBidExchangeCode()), dxfcpp::toString(getBidPrice()),
+        dxfcpp::toString(getBidSize()), TimeFormat::DEFAULT().format(getAskTime()), encodeChar(getAskExchangeCode()),
         dxfcpp::toString(getAskPrice()), dxfcpp::toString(getAskSize()));
 }
 

@@ -34,8 +34,8 @@ namespace {
 std::shared_ptr<DXEndpoint> buildEndpoint(DXEndpoint::Role role) {
     return DXEndpoint::newBuilder()
         ->withRole(role)
-        ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true")
-        ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true")
+        ->withProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY(), "true")
+        ->withProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY(), "true")
         ->build();
 }
 

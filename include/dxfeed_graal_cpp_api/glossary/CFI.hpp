@@ -47,9 +47,9 @@ struct DXFCPP_EXPORT CFI : RequireMakeShared<CFI> {
     /**
      * Empty CFI - it has code "XXXXXX".
      *
-     * It is built at dynamic initialization, so the initializers of global variables should not use it.
+     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const Ptr EMPTY;
+    static const Ptr &EMPTY();
 
     // lazy c-tor
     CFI(LockExternalConstructionTag, std::function<JavaObjectHandle<CFI>()> initializer);

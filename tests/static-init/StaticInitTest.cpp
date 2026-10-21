@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <exception>
 #include <functional>
+#include <limits>
 #include <string>
 #include <utility>
 #include <vector>
@@ -65,9 +66,10 @@ struct DestructionObserver {
     ~DestructionObserver() {
         const auto read = run([] {
             return std::string(CandleType::MINUTE.toString()) + " " + String::NUL() + " " +
-                   CandleSymbol::NUL().toString() + " " + CandleType::BY_STRING().at("h").get().getName();
+                   CandleSymbol::NUL().toString() + " " + CandleType::BY_STRING().at("h").get().getName() + " " +
+                   DXEndpoint::NAME_PROPERTY();
         });
-        const bool ok = read == "m <null> <null> HOUR";
+        const bool ok = read == "m <null> <null> HOUR name";
 
         std::printf("%s destruction: '%s'\n", ok ? "OK  " : "FAIL", read.c_str());
         std::fflush(stdout);
@@ -134,6 +136,29 @@ DXFC_CAPTURE(candleSymbolNul, CandleSymbol::NUL().toString(), "<null>");
 DXFC_CAPTURE(reservedPrefix, WildcardSymbol::RESERVED_PREFIX(), "*");
 DXFC_CAPTURE(stringNul, String::NUL(), "<null>");
 DXFC_CAPTURE(stringEmpty, toString(String::EMPTY().empty()), "true");
+DXFC_CAPTURE(endpointKeys, DXEndpoint::NAME_PROPERTY() + " " + DXEndpoint::DXFEED_ADDRESS_PROPERTY(),
+             "name dxfeed.address");
+DXFC_CAPTURE(authSchemes, AuthToken::BASIC_SCHEME() + " " + AuthToken::BEARER_SCHEME(), "Basic Bearer");
+DXFC_CAPTURE(nullToken, AuthToken::NULL_TOKEN().getHttpAuthorization(), "<null>");
+
+// The Graal-dependent constants: the Java objects are created by the first use, here at static initialization. With
+// the DLL on Windows a process that used the Graal isolate hangs at exit (the library tears down the isolate when it is
+// unloaded, after the threads of the isolate were terminated), so these checks are left out there.
+#if defined(_WIN32) && defined(DXFCPP_USE_DLLS)
+#    define DXFC_GRAAL_CHECKS 0
+#else
+#    define DXFC_GRAAL_CHECKS 1
+#endif
+
+#if DXFC_GRAAL_CHECKS
+DXFC_CAPTURE(timePeriodZero, std::to_string(TimePeriod::ZERO().getTime()), "0");
+DXFC_CAPTURE(timePeriodUnlimited, std::to_string(TimePeriod::UNLIMITED().getTime()),
+             std::to_string(std::numeric_limits<std::int64_t>::max()));
+DXFC_CAPTURE(timeFormat, TimeFormat::GMT().format(0), "0");
+DXFC_CAPTURE(cfiEmpty, CFI::EMPTY()->getCode(), "XXXXXX");
+DXFC_CAPTURE(priceIncrementsEmpty, toString(PriceIncrements::EMPTY()->getText().empty()), "true");
+DXFC_CAPTURE(additionalUnderlyingsEmpty, toString(AdditionalUnderlyings::EMPTY()->getText().empty()), "true");
+#endif
 
 #undef DXFC_CAPTURE
 
@@ -160,7 +185,7 @@ int main() {
     }
 
     // All the variables above were initialized.
-    constexpr std::size_t expectedChecks = 42;
+    constexpr std::size_t expectedChecks = DXFC_GRAAL_CHECKS ? 51 : 45;
 
     if (checks().size() != expectedChecks) {
         std::printf("FAIL %zu checks instead of %zu\n", checks().size(), expectedChecks);

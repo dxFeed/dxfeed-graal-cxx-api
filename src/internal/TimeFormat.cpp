@@ -7,24 +7,40 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const TimeFormat TimeFormat::DEFAULT([] {
-    return isolated::internal::IsolatedTimeFormat::getDefault();
-});
+const TimeFormat &TimeFormat::DEFAULT() {
+    static const auto *const value = new TimeFormat([] {
+        return isolated::internal::IsolatedTimeFormat::getDefault();
+    });
 
-const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS([] {
-    return DEFAULT.getHandle() ? isolated::internal::IsolatedTimeFormat::withMillis(DEFAULT.getHandle())
-                               : JavaObjectHandle<TimeFormat>{nullptr};
-});
+    return *value;
+}
 
-const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE([] {
-    return DEFAULT_WITH_MILLIS.getHandle()
-               ? isolated::internal::IsolatedTimeFormat::withTimeZone(DEFAULT_WITH_MILLIS.getHandle())
-               : JavaObjectHandle<TimeFormat>{nullptr};
-});
+const TimeFormat &TimeFormat::DEFAULT_WITH_MILLIS() {
+    static const auto *const value = new TimeFormat([] {
+        return DEFAULT().getHandle() ? isolated::internal::IsolatedTimeFormat::withMillis(DEFAULT().getHandle())
+                                     : JavaObjectHandle<TimeFormat>{nullptr};
+    });
 
-const TimeFormat TimeFormat::GMT([] {
-    return isolated::internal::IsolatedTimeFormat::getGmt();
-});
+    return *value;
+}
+
+const TimeFormat &TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE() {
+    static const auto *const value = new TimeFormat([] {
+        return DEFAULT_WITH_MILLIS().getHandle()
+                   ? isolated::internal::IsolatedTimeFormat::withTimeZone(DEFAULT_WITH_MILLIS().getHandle())
+                   : JavaObjectHandle<TimeFormat>{nullptr};
+    });
+
+    return *value;
+}
+
+const TimeFormat &TimeFormat::GMT() {
+    static const auto *const value = new TimeFormat([] {
+        return isolated::internal::IsolatedTimeFormat::getGmt();
+    });
+
+    return *value;
+}
 
 TimeFormat::TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer)
     : initializer_(std::move(initializer)) {}

@@ -188,7 +188,7 @@ Message &Message::withAttachment(const StringLike &attachment) noexcept {
 
 std::string Message::toString() const {
     return fmt::format("Message{{{}, eventTime={}, attachment={}}}", getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL()));
+                       TimeFormat::DEFAULT_WITH_MILLIS().format(getEventTime()), attachment_.value_or(String::NUL()));
 }
 
 DXFCPP_END_NAMESPACE
