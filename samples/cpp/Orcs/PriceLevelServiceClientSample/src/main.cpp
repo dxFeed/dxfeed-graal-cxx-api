@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
         // Parse args.
         const auto address = argv[1];
         const auto symbol = CandleSymbol::valueOf(argv[2]);
-        const auto &source = OrderSource::valueOf(argv[3]);
+        const auto source = OrderSource::valueOf(argv[3]);
         const auto fromTime = TimeFormat::DEFAULT.parse(argv[4]);
         const auto toTime = TimeFormat::DEFAULT.parse(argv[5]);
         auto validate = false;
