@@ -55,7 +55,7 @@ struct ConnectTool {
         std::optional<std::string> source;
         std::optional<std::string> properties;
         std::optional<std::string> tape;
-        bool isQuite{};
+        bool isQuiet{};
         bool forceStream{};
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
@@ -97,7 +97,7 @@ struct ConnectTool {
             std::optional<std::string> properties{};
             bool tapeIsParsed{};
             std::optional<std::string> tape{};
-            bool isQuite{};
+            bool isQuiet{};
             bool forceStream{};
 
             while (index < args.size()) {
@@ -127,7 +127,7 @@ struct ConnectTool {
                     index = parseResult.nextIndex;
                 } else {
                     // ReSharper disable once CppUsingResultOfAssignmentAsCondition
-                    if (!isQuite && (isQuite = QuiteArg::parse(args, index).result)) {
+                    if (!isQuiet && (isQuiet = QuietArg::parse(args, index).result)) {
                         index++;
                         continue;
                     }
@@ -143,7 +143,7 @@ struct ConnectTool {
             }
 
             return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, fromTime,
-                                          source, properties, tape, isQuite, forceStream});
+                                          source, properties, tape, isQuiet, forceStream});
         }
     };
 
@@ -195,7 +195,7 @@ struct ConnectTool {
 
             std::shared_ptr<DXFeedSubscription> sub = endpoint->getFeed()->createSubscription(parsedTypes);
 
-            if (!args.isQuite) {
+            if (!args.isQuiet) {
                 sub->addEventListener([](auto &&events) {
                     for (auto &&e : events) {
                         std::cout << e << "\n";

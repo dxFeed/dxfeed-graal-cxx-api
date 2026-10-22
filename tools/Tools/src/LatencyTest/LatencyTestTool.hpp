@@ -15,6 +15,7 @@
 #include <fmt/format.h>
 #include <list>
 #include <memory>
+#include <unordered_set>
 #include <utility>
 #include <variant>
 
@@ -71,8 +72,10 @@ struct LatencyTest {
         std::unordered_set<std::string> symbols_{};
         std::list<std::int64_t> deltaTimes_{};
         std::chrono::seconds measurementPeriod_{};
+        std::unordered_set<std::int16_t> ignoredExchanges_{};
 
-        explicit Diagnostic(std::chrono::seconds measurementPeriod) noexcept : measurementPeriod_{measurementPeriod} {
+        Diagnostic(std::chrono::seconds measurementPeriod, std::unordered_set<std::int16_t> ignoredExchanges) noexcept
+            : measurementPeriod_{measurementPeriod}, ignoredExchanges_{std::move(ignoredExchanges)} {
             timerDiff_.restart();
             runningDiff_.restart();
         }
@@ -206,9 +209,10 @@ struct LatencyTest {
         }
 
         public:
-        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod) noexcept {
+        static std::shared_ptr<Diagnostic> create(std::chrono::seconds measurementPeriod,
+                                                  std::unordered_set<std::int16_t> ignoredExchanges) noexcept {
             // ReSharper disable once CppDFAMemoryLeak
-            auto d = std::shared_ptr<Diagnostic>(new Diagnostic(measurementPeriod));
+            auto d = std::shared_ptr<Diagnostic>(new Diagnostic(measurementPeriod, std::move(ignoredExchanges)));
 
             d->timer_ = Timer::schedule(
                 [self = d] {
@@ -227,6 +231,10 @@ struct LatencyTest {
             listenerCallsCounter_ += value;
         }
 
+        bool isIgnored(std::int16_t exchangeCode) const noexcept {
+            return ignoredExchanges_.contains(exchangeCode);
+        }
+
         void handleEvents(const std::vector<std::shared_ptr<EventType>> &events) {
             auto time = std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::system_clock::now().time_since_epoch())
@@ -239,22 +247,35 @@ struct LatencyTest {
                 std::int64_t deltaTime = 0;
 
                 if (std::shared_ptr<Quote> quote = e->sharedAs<Quote>(); quote) {
+                    if (isIgnored(quote->getBidExchangeCode()) || isIgnored(quote->getAskExchangeCode())) {
+                        continue;
+                    }
+
                     deltaTime = time - quote->getTime();
                     validEvents++;
                     deltaTimes_.emplace_back(deltaTime);
                     symbols_.emplace(quote->getEventSymbol());
                 } else if (std::shared_ptr<Trade> trade = e->sharedAs<Trade>(); trade) {
+                    if (isIgnored(trade->getExchangeCode())) {
+                        continue;
+                    }
+
                     deltaTime = time - trade->getTime();
                     validEvents++;
                     deltaTimes_.emplace_back(deltaTime);
                     symbols_.emplace(trade->getEventSymbol());
                 } else if (std::shared_ptr<TradeETH> tradeEth = e->sharedAs<TradeETH>(); tradeEth) {
+                    if (isIgnored(tradeEth->getExchangeCode())) {
+                        continue;
+                    }
+
                     deltaTime = time - tradeEth->getTime();
                     validEvents++;
                     deltaTimes_.emplace_back(deltaTime);
                     symbols_.emplace(tradeEth->getEventSymbol());
                 } else if (std::shared_ptr<TimeAndSale> timeAndSale = e->sharedAs<TimeAndSale>(); timeAndSale) {
-                    if (!timeAndSale->isNew() || !timeAndSale->isValidTick()) {
+                    if (!timeAndSale->isNew() || !timeAndSale->isValidTick() ||
+                        isIgnored(timeAndSale->getExchangeCode())) {
                         continue;
                     }
 
@@ -276,6 +297,7 @@ struct LatencyTest {
         std::optional<std::string> properties{};
         bool forceStream{};
         std::size_t interval{2};
+        std::unordered_set<std::int16_t> ignoredExchanges{};
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
             std::size_t index = 0;
@@ -309,6 +331,8 @@ struct LatencyTest {
             bool intervalIsParsed{};
             std::optional<std::size_t> interval{};
             bool forceStream{};
+            bool ignoredExchangesIsParsed{};
+            std::unordered_set<std::int16_t> ignoredExchanges{};
 
             while (index < args.size()) {
                 if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
@@ -322,6 +346,17 @@ struct LatencyTest {
 
                     interval = parseResult.result;
                     intervalIsParsed = true;
+                    index = parseResult.nextIndex;
+                } else if (!ignoredExchangesIsParsed && IgnoreExchangesArg::canParse(args, index)) {
+                    auto parseResult = IgnoreExchangesArg::parse(args, index);
+                    auto parsedCodes = IgnoreExchangesArg::parseExchangeCodes(parseResult.result.value_or(""));
+
+                    if (parsedCodes.isError) {
+                        return ParseResult<Args>::error(parsedCodes.errorString);
+                    }
+
+                    ignoredExchanges = std::move(parsedCodes.result);
+                    ignoredExchangesIsParsed = true;
                     index = parseResult.nextIndex;
                 } else {
                     if (!forceStream) {
@@ -338,7 +373,7 @@ struct LatencyTest {
             }
 
             return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, properties,
-                                          forceStream, interval.value_or(2)});
+                                          forceStream, interval.value_or(2), std::move(ignoredExchanges)});
         }
     };
 
@@ -375,7 +410,7 @@ struct LatencyTest {
                     ->build();
 
             auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
-            auto diagnostic = Diagnostic::create(std::chrono::seconds(args.interval));
+            auto diagnostic = Diagnostic::create(std::chrono::seconds(args.interval), args.ignoredExchanges);
 
             sub->addEventListener([d = diagnostic](auto &&events) {
                 d->addListenerCallsCounter(1);

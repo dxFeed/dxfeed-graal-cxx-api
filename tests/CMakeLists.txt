@@ -71,7 +71,8 @@ set(DXFC_TEST_SOURCES
         promise/PromisesTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
-        system/SystemTest.cpp)
+        system/SystemTest.cpp
+        tools/ToolsArgsTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
 if (DXFCXX_BUILD_BENCHMARKS)
@@ -97,6 +98,11 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     #    message("${DXFC_TEST_BASENAME}: ${DXFC_TEST_SOURCE}")
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp ${DXFC_TEST_SUPPORT_SOURCES})
+
+    # The argument parsing of the tools is compiled into their tests: the tools are an executable.
+    if (DXFC_TEST_SOURCE MATCHES "^tools/")
+        target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp)
+    endif ()
     list(APPEND DXFC_TEST_TARGETS ${DXFC_TEST_BASENAME})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
     target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE ${DXFC_TEST_SYSTEM_INCLUDE_DIRS})
