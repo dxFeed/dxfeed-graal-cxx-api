@@ -19,6 +19,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./DXPublisher.hpp"
 #include "./DXPublisherObservableSubscription.hpp"
 #include "./FilteredSubscriptionSymbol.hpp"
+#include "./SubscriptionController.hpp"
 #include "./osub/OsubModule.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -43,6 +43,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "./internal/utils/debug/Debug.hpp"
 #include "./ipf/IpfModule.hpp"
 #include "./logging/Logging.hpp"
+#include "./model/IndexedEventTxModel.hpp"
 #include "./model/IndexedTxModel.hpp"
 #include "./model/MarketDepthModel.hpp"
 #include "./model/MarketDepthModelListener.hpp"

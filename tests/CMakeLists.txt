@@ -62,6 +62,7 @@ set(DXFC_TEST_SOURCES
         ipf/InstrumentProfileTest.cpp
         ipf/OptionChainsTest.cpp
         ipf/OptionSeriesTest.cpp
+        model/IndexedEventTxModelTest.cpp
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp
         model/TxModelTapeTest.cpp

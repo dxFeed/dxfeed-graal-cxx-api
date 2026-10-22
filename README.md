@@ -425,6 +425,8 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 
 ### Model
 
+- [x] [SimpleOrderBookSample](samples/cpp/Model/SimpleOrderBookSample/src/main.cpp)
+  demonstrates how to build an order book of a symbol and an order source with `IndexedEventTxModel`
 - [x] [IncOrderSnapshotSample](samples/cpp/Model/IncOrderSnapshotSample/src/main.cpp)
   demonstrates how to subscribe to the Order event and handle snapshots and updates
 - [x] [MultipleMarketDepthSample](samples/cpp/Model/MultipleMarketDepthSample/src/main.cpp)
