@@ -33,10 +33,11 @@ const std::string TapeArg::HELP_TEXT{R"(
 Tape all incoming data into the specified file (see "Help Tape").
 )"};
 
-const std::string QuiteArg::NAME{"quite"};
-const std::string QuiteArg::SHORT_NAME{"q"};
-const std::string QuiteArg::LONG_NAME{"quite"};
-const std::string QuiteArg::HELP_TEXT{R"(
+const std::string QuietArg::NAME{"quiet"};
+const std::string QuietArg::SHORT_NAME{"q"};
+const std::string QuietArg::LONG_NAME{"quiet"};
+const std::string QuietArg::LEGACY_LONG_NAME{"quite"};
+const std::string QuietArg::HELP_TEXT{R"(
 Be quiet, event printing is disabled.
 )"};
 
@@ -66,6 +67,13 @@ const std::string IntervalArg::SHORT_NAME{};
 const std::string IntervalArg::LONG_NAME{"interval"};
 const std::string IntervalArg::HELP_TEXT{R"(
 Measurement interval in seconds.
+)"};
+
+const std::string IgnoreExchangesArg::NAME{"ignoreExchanges"};
+const std::string IgnoreExchangesArg::SHORT_NAME{};
+const std::string IgnoreExchangesArg::LONG_NAME{"ignore-exchanges"};
+const std::string IgnoreExchangesArg::HELP_TEXT{R"(
+Comma-separated list of exchange codes (e.g. "Q,Z") whose events are not measured.
 )"};
 
 const std::string HelpArg::NAME{"help"};

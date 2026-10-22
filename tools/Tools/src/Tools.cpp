@@ -18,7 +18,7 @@ const std::vector<std::string> ConnectTool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> ConnectTool::ARGS{
     AddressArgRequired{}, TypesArgRequired{}, SymbolsArgRequired{}, FromTimeArg{},    SourceArg{},
-    PropertiesArg{},      TapeArg{},          QuiteArg{},           ForceStreamArg{}, HelpArg{}};
+    PropertiesArg{},      TapeArg{},          QuietArg{},           ForceStreamArg{}, HelpArg{}};
 
 const std::string DumpTool::NAME{"Dump"};
 const std::string DumpTool::SHORT_DESCRIPTION{"Dumps all events received from address."};
@@ -37,7 +37,7 @@ const std::vector<std::string> DumpTool::USAGE{
 const std::vector<std::string> DumpTool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> DumpTool::ARGS{AddressArgRequired{}, TypesArg{}, SymbolsArg{}, PropertiesArg{}, TapeArg{},
-                                          QuiteArg{},           HelpArg{}};
+                                          QuietArg{},           HelpArg{}};
 
 const std::string LatencyTest::NAME{"LatencyTest"};
 const std::string LatencyTest::SHORT_DESCRIPTION{"Connects to the specified address(es) and calculates latency."};
@@ -49,8 +49,8 @@ const std::vector<std::string> LatencyTest::USAGE{
 };
 const std::vector<std::string> LatencyTest::ADDITIONAL_INFO{};
 
-const std::vector<ArgType> LatencyTest::ARGS{AddressArgRequired{}, TypesArg{},    SymbolsArg{}, PropertiesArg{},
-                                             ForceStreamArg{},     IntervalArg{}, HelpArg{}};
+const std::vector<ArgType> LatencyTest::ARGS{AddressArgRequired{}, TypesArg{},    SymbolsArg{},         PropertiesArg{},
+                                             ForceStreamArg{},     IntervalArg{}, IgnoreExchangesArg{}, HelpArg{}};
 
 const std::string PerfTestTool::NAME{"PerfTest"};
 const std::string PerfTestTool::SHORT_DESCRIPTION{"Connects to specified address and calculates performance counters."};

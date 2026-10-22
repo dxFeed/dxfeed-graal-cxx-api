@@ -392,8 +392,8 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 
 ### Candle
 
-- [ ] [CandleSample](samples/cpp/Candle/CandleSample/src/main.cpp)
-  demonstrates how to subscribe to `Candle` events
+- [x] [CandleSample](samples/cpp/Candle/CandleSample/src/main.cpp)
+  demonstrates how to subscribe to `Candle` events from a time with the candle symbol attributes
 - [x] [CandleDataSample](samples/cpp/Candle/CandleDataSample/src/main.cpp)
   demonstrates how to query the CandleData service using the `HistoryEndpoint`.
 - [x] [FetchDailyCandlesSample](samples/cpp/Candle/FetchDailyCandlesSample/src/main.cpp)
