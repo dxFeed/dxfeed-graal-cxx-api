@@ -66,10 +66,6 @@ struct DXFCPP_EXPORT SessionType {
 
     public:
     SessionType() noexcept;
-    // constexpr: a filter constant holds a session type and is constant-initialized. Not defaulted: GCC 11 does not
-    // evaluate a defaulted virtual constexpr destructor ("used before its definition").
-    constexpr virtual ~SessionType() noexcept { // NOLINT(modernize-use-equals-default)
-    }
 
     SessionTypeEnum getCode() const noexcept;
 

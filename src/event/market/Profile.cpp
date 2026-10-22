@@ -4,8 +4,9 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/Profile.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../internal/utils/StringConstants.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -152,7 +153,7 @@ Profile::Profile(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymb
 
 const std::string &Profile::getDescription() const & noexcept {
     if (!data_.description) {
-        return String::NUL();
+        return nulString();
     }
 
     return data_.description.value();
@@ -192,7 +193,7 @@ bool Profile::isTradingHalted() const noexcept {
 
 const std::string &Profile::getStatusReason() const & noexcept {
     if (!data_.statusReason) {
-        return String::NUL();
+        return nulString();
     }
 
     return data_.statusReason.value();

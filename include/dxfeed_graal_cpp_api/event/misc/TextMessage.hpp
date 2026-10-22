@@ -127,7 +127,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     /**
      * Returns a symbol of this event.
      *
-     * @return symbol of this event or dxfcpp::String::NUL() (`std::string{"<null>"}`)
+     * @return symbol of this event or dxfcpp::String::NUL (`std::string{"<null>"}`)
      */
     const std::string &getEventSymbol() const & noexcept override;
 

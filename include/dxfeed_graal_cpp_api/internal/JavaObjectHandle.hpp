@@ -16,6 +16,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <atomic>
 #include <memory>
 #include <string>
+#include <thread>
+#include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -202,6 +204,114 @@ template <typename T> struct JavaObjectHandle final {
 
     private:
     Impl impl_;
+};
+
+/**
+ * A handle of a Java object that can be created at the first use.
+ *
+ * The constructor with an initializer is `constexpr`, so an object that holds the handle can be constant-initialized
+ * and no Java call is made before the first get(). The first get() calls the initializer once: the concurrent first
+ * calls wait for it, and if the initializer throws, the next call calls it again. Not std::call_once: its retry after
+ * an exception hangs with some implementations of pthread_once, such as that of ThreadSanitizer.
+ *
+ * The handle of a constant (created with ConstantTag) is not destroyed with this object, so a constant that is
+ * destroyed at exit before a global variable of the user stays usable by the destructor of that variable. Its Java
+ * object is released with the other handles when the Graal isolate is torn down (JavaObjectHandleRegistry).
+ *
+ * @tparam T The type of the object that owns the Java object.
+ */
+template <typename T> class LazyJavaObjectHandle final {
+    public:
+    /// The function that creates the Java object.
+    using Initializer = JavaObjectHandle<T> (*)();
+
+    /// Marks the handle of a constant with static storage duration: the handle is not destroyed with the object.
+    struct ConstantTag {};
+
+    private:
+    // A union, so the handle is destroyed only by the destructor below.
+    union Storage {
+        JavaObjectHandle<T> handle;
+
+        constexpr Storage() noexcept : handle{} {
+        }
+
+        explicit Storage(JavaObjectHandle<T> &&value) noexcept : handle{std::move(value)} {
+        }
+
+        ~Storage() noexcept { // NOLINT(modernize-use-equals-default): a defaulted one is deleted in a union
+        }
+    };
+
+    enum State : int { EMPTY, CREATING, CREATED };
+
+    Initializer initializer_{};
+    mutable Storage storage_{};
+    mutable std::atomic<int> state_{EMPTY};
+    bool constant_{};
+
+    public:
+    /// Creates the handle whose Java object is created by the initializer at the first get().
+    constexpr explicit LazyJavaObjectHandle(Initializer initializer) noexcept : initializer_{initializer} {
+    }
+
+    /// Creates the handle of a constant whose Java object is created by the initializer at the first get().
+    constexpr LazyJavaObjectHandle(Initializer initializer, ConstantTag) noexcept
+        : initializer_{initializer}, constant_{true} {
+    }
+
+    /// Creates the handle of an existing Java object.
+    explicit LazyJavaObjectHandle(JavaObjectHandle<T> &&handle) noexcept : storage_{std::move(handle)} {
+    }
+
+    LazyJavaObjectHandle(const LazyJavaObjectHandle &) = delete;
+    LazyJavaObjectHandle &operator=(const LazyJavaObjectHandle &) = delete;
+
+    /// Releases the Java object unless this is the handle of a constant.
+    ~LazyJavaObjectHandle() noexcept {
+        if (!constant_) {
+            std::destroy_at(&storage_.handle);
+        }
+    }
+
+    /**
+     * @return The handle of the Java object, created by the initializer at the first call.
+     */
+    [[nodiscard]] const JavaObjectHandle<T> &get() const {
+        if (!initializer_) {
+            return storage_.handle;
+        }
+
+        auto state = state_.load(std::memory_order_acquire);
+
+        while (state != CREATED) {
+            if (state == CREATING) {
+                // Another thread calls the initializer: it is called once, so the wait is short.
+                std::this_thread::yield();
+                state = state_.load(std::memory_order_acquire);
+
+                continue;
+            }
+
+            if (!state_.compare_exchange_weak(state, CREATING, std::memory_order_acquire)) {
+                continue;
+            }
+
+            try {
+                storage_.handle = initializer_();
+            } catch (...) {
+                state_.store(EMPTY, std::memory_order_release);
+
+                throw;
+            }
+
+            state_.store(CREATED, std::memory_order_release);
+
+            break;
+        }
+
+        return storage_.handle;
+    }
 };
 
 template <typename T> struct JavaObjectHandleList final {

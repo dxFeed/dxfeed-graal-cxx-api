@@ -153,7 +153,8 @@ struct OnDemandService;
  * const StringLike&) "withProperty" method always take precedence.
  *
  * @ref Role::FEED "FEED" and @ref Role::PUBLISHER "PUBLISHER" automatically establish connection on creation
- * when the corresponding DXEndpoint::DXFEED_ADDRESS_PROPERTY or DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY is specified.
+ * when the corresponding DXEndpoint::DXFEED_ADDRESS_PROPERTY or DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY is
+ * specified.
  *
  * <h3>Permanent subscription</h3>
  *
@@ -193,7 +194,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Use Builder::withProperty(const StringLike&, const StringLike&) method.
      * This property is also changed by the Builder::withName(const StringLike&) method.
      */
-    static const std::string NAME_PROPERTY;
+    static constexpr char NAME_PROPERTY[] = "name";
 
     /**
      * `"dxfeed.properties"`
@@ -204,7 +205,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
-    static const std::string DXFEED_PROPERTIES_PROPERTY;
+    static constexpr char DXFEED_PROPERTIES_PROPERTY[] = "dxfeed.properties";
 
     /**
      * `"dxfeed.address"`
@@ -223,7 +224,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
-    static const std::string DXFEED_ADDRESS_PROPERTY;
+    static constexpr char DXFEED_ADDRESS_PROPERTY[] = "dxfeed.address";
 
     /**
      * `"dxfeed.user"`
@@ -233,7 +234,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * @see DXEndpoint::user(const StringLike&)
      */
-    static const std::string DXFEED_USER_PROPERTY;
+    static constexpr char DXFEED_USER_PROPERTY[] = "dxfeed.user";
 
     /**
      * `"dxfeed.password"`
@@ -243,7 +244,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * @see DXEndpoint::password(const StringLike&)
      */
-    static const std::string DXFEED_PASSWORD_PROPERTY;
+    static constexpr char DXFEED_PASSWORD_PROPERTY[] = "dxfeed.password";
 
     /**
      * `"dxfeed.threadPoolSize"`
@@ -252,7 +253,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * By default, the thread pool size is equal to the number of available processors.
      * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
-    static const std::string DXFEED_THREAD_POOL_SIZE_PROPERTY;
+    static constexpr char DXFEED_THREAD_POOL_SIZE_PROPERTY[] = "dxfeed.threadPoolSize";
 
     /**
      * `"dxfeed.aggregationPeriod"`
@@ -262,7 +263,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * to "0.1s" limits notification to once every "100ms" (at most 10 per second).
      * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
-    static const std::string DXFEED_AGGREGATION_PERIOD_PROPERTY;
+    static constexpr char DXFEED_AGGREGATION_PERIOD_PROPERTY[] = "dxfeed.aggregationPeriod";
 
     /**
      * `"dxfeed.wildcard.enable"`
@@ -271,7 +272,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * By default, the endpoint does not support wildcards. This property is needed for
      * WildcardSymbol support and for the use of "tape:..." address in DXPublisher.
      */
-    static const std::string DXFEED_WILDCARD_ENABLE_PROPERTY;
+    static constexpr char DXFEED_WILDCARD_ENABLE_PROPERTY[] = "dxfeed.wildcard.enable";
 
     /**
      * `"dxpublisher.properties"`
@@ -280,7 +281,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * By default, properties are loaded from a classpath resource named "dxpublisher.properties".
      * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
-    static const std::string DXPUBLISHER_PROPERTIES_PROPERTY;
+    static constexpr char DXPUBLISHER_PROPERTIES_PROPERTY[] = "dxpublisher.properties";
 
     /**
      * `"dxpublisher.address"`
@@ -290,7 +291,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * By default, the connection is not established until DXEndpoint::connect(const StringLike&) is invoked.
      * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
-    static const std::string DXPUBLISHER_ADDRESS_PROPERTY;
+    static constexpr char DXPUBLISHER_ADDRESS_PROPERTY[] = "dxpublisher.address";
 
     /**
      * `"dxpublisher.threadPoolSize"`
@@ -299,7 +300,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * By default, the thread pool size is equal to the number of available processors.
      * @see Builder#withProperty(const StringLike&, const StringLike&)
      */
-    static const std::string DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY;
+    static constexpr char DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY[] = "dxpublisher.threadPoolSize";
 
     /**
      * `"dxendpoint.eventTime"`
@@ -316,7 +317,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Use this property if you need to work with historical data coming from files
      * or from OnDemandService or writing data with times to file via DXPublisher using a "tape:..." address.
      */
-    static const std::string DXENDPOINT_EVENT_TIME_PROPERTY;
+    static constexpr char DXENDPOINT_EVENT_TIME_PROPERTY[] = "dxendpoint.eventTime";
 
     /**
      * `"dxendpoint.storeEverything"`
@@ -329,7 +330,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * since API does not currently provide any means to remove those events from the storage, and there might
      * be an effective memory leak if the spaces of symbols on which events are published grow without a bound.
      */
-    static const std::string DXENDPOINT_STORE_EVERYTHING_PROPERTY;
+    static constexpr char DXENDPOINT_STORE_EVERYTHING_PROPERTY[] = "dxendpoint.storeEverything";
 
     /**
      * `"dxscheme.nanoTime"`
@@ -349,7 +350,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * dxscheme.enabled.TimeNanoPart=*
      * ```
      */
-    static const std::string DXSCHEME_NANO_TIME_PROPERTY;
+    static constexpr char DXSCHEME_NANO_TIME_PROPERTY[] = "dxscheme.nanoTime";
 
     /**
      * `"dxscheme.enabled."`
@@ -363,7 +364,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * There is a shortcut for turning on nano-time support using DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY.
      */
-    static const std::string DXSCHEME_ENABLED_PROPERTY_PREFIX;
+    static constexpr char DXSCHEME_ENABLED_PROPERTY_PREFIX[] = "dxscheme.enabled.";
 
     /**
      * Represents the role of an endpoint that was specified during its @ref DXEndpoint::create() "creation".
@@ -983,7 +984,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         /**
          * Sets the executor that is used for notifications (events, state changes, etc.) of the endpoint to build.
          * By default, the endpoint uses a thread pool whose size is set by the
-         * DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY or DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY property.
+         * DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY or DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY
+         * property.
          *
          * @tparam Executor The executor's type (for example, InPlaceExecutor).
          * @param executor The executor.

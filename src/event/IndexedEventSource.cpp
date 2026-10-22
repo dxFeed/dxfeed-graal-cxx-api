@@ -10,7 +10,8 @@ DXFCPP_BEGIN_NAMESPACE
 constinit const IndexedEventSource IndexedEventSource::DEFAULT{0, ConstString::Literal{"DEFAULT"}};
 
 void *IndexedEventSource::toGraal() const {
-    auto *graalSource = new dxfg_indexed_event_source_t{INDEXED_EVENT_SOURCE, id_, createCString(name_.view())};
+    auto *graalSource = new dxfg_indexed_event_source_t{orderSource_ ? ORDER_SOURCE : INDEXED_EVENT_SOURCE, id_,
+                                                        createCString(name_.view())};
 
     return graalSource;
 }
@@ -43,11 +44,26 @@ IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) {
 IndexedEventSource::IndexedEventSource() noexcept {
 }
 
-IndexedEventSource::~IndexedEventSource() noexcept {
+IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name) noexcept
+    : IndexedEventSource(id, name, false) {
 }
 
-IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name) noexcept
-    : id_{id}, name_{ConstString::copyOf(name)} {
+IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name, bool orderSource) noexcept
+    : id_{id}, name_{ConstString::copyOf(name)}, orderSource_{orderSource} {
+}
+
+IndexedEventSource::IndexedEventSource(const IndexedEventSource &other) noexcept : IndexedEventSource(other, false) {
+}
+
+IndexedEventSource::IndexedEventSource(const IndexedEventSource &other, bool orderSource) noexcept
+    : id_{other.id_}, name_{other.name_}, orderSource_{orderSource} {
+}
+
+IndexedEventSource &IndexedEventSource::operator=(const IndexedEventSource &other) noexcept {
+    id_ = other.id_;
+    name_ = other.name_;
+
+    return *this;
 }
 
 std::int32_t IndexedEventSource::id() const noexcept {

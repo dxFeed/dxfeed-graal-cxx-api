@@ -10,8 +10,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./JavaObjectHandle.hpp"
 
 #include <cstdint>
-#include <functional>
-#include <mutex>
 #include <string>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -31,29 +29,27 @@ struct DXFCPP_EXPORT TimeFormat {
     /**
      * An instance of TimeFormat that corresponds to default timezone as returned by TimeZone::getDefault() method.
      */
-    const static TimeFormat DEFAULT;
-    const static TimeFormat DEFAULT_WITH_MILLIS;
-    const static TimeFormat DEFAULT_WITH_MILLIS_WITH_TIMEZONE;
+    static const TimeFormat DEFAULT;
+    static const TimeFormat DEFAULT_WITH_MILLIS;
+    static const TimeFormat DEFAULT_WITH_MILLIS_WITH_TIMEZONE;
 
     /**
      * An instance of TimeFormat that corresponds to GMT timezone as returned by
      * @ref TimeZone::getTimeZone() "TimeZone::getTimeZone(\"GMT\")".
      */
-    const static TimeFormat GMT;
+    static const TimeFormat GMT;
 
     private:
-    mutable JavaObjectHandle<TimeFormat> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<TimeFormat>()> initializer_;
+    using Initializer = LazyJavaObjectHandle<TimeFormat>::Initializer;
 
-    // lazy c-tor
-    explicit TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer);
+    LazyJavaObjectHandle<TimeFormat> handle_;
 
-    void init() const;
+    // The constructor of the instances: constant initialization, the Java object is created at the first use.
+    constexpr explicit TimeFormat(Initializer initializer) noexcept
+        : handle_{initializer, LazyJavaObjectHandle<TimeFormat>::ConstantTag{}} {
+    }
 
     public:
-    virtual ~TimeFormat() noexcept;
 
     TimeFormat(const TimeFormat &) = delete;
     TimeFormat(TimeFormat &&) noexcept = delete;

@@ -7,31 +7,25 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-void AdditionalUnderlyings::init() const {
-    if (!initialized_) {
-        handle_ = initializer_();
-        initialized_ = true;
-    }
-}
-
 JavaObjectHandle<AdditionalUnderlyings>
 AdditionalUnderlyings::valueOfImpl(const std::vector<std::pair<const char *, double>> &mapLikeEntries) {
     return isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(mapLikeEntries);
 }
 
-const AdditionalUnderlyings::Ptr AdditionalUnderlyings::EMPTY(createShared([] {
-    return isolated::glossary::IsolatedAdditionalUnderlyings::EMPTY();
-}));
+const AdditionalUnderlyings::Ptr &AdditionalUnderlyings::EMPTY() {
+    static const Ptr value = createShared(&isolated::glossary::IsolatedAdditionalUnderlyings::EMPTY);
 
-AdditionalUnderlyings::AdditionalUnderlyings(
-    LockExternalConstructionTag, std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer)
-    : initializer_(std::move(initializer)) {
+    return value;
+}
+
+AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
+                                             JavaObjectHandle<AdditionalUnderlyings> (*initializer)())
+    : handle_(initializer) {
 }
 
 AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
                                                     JavaObjectHandle<AdditionalUnderlyings> &&handle)
     : handle_(std::move(handle)) {
-    initialized_ = true;
 }
 
 AdditionalUnderlyings::~AdditionalUnderlyings() noexcept {
@@ -46,27 +40,15 @@ double AdditionalUnderlyings::getSPC(const StringLike &text, const StringLike &s
 }
 
 std::string AdditionalUnderlyings::getText() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedAdditionalUnderlyings::getText(handle_);
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getText(getHandle());
 }
 
 std::unordered_map<std::string, double> AdditionalUnderlyings::getMap() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedAdditionalUnderlyings::getMap(handle_);
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getMap(getHandle());
 }
 
 double AdditionalUnderlyings::getSPC(const StringLike &symbol) const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(handle_, symbol);
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(getHandle(), symbol);
 }
 
 bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const {
@@ -74,32 +56,19 @@ bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const
         return true;
     }
 
-    std::scoped_lock lock(mtx_, other.mtx_);
-
-    init();
-    other.init();
-
-    return JavaObject::equals(handle_.get(), other.handle_.get());
+    return JavaObject::equals(getHandle().get(), other.getHandle().get());
 }
 
 std::size_t AdditionalUnderlyings::hashCode() const noexcept {
     try {
-        std::lock_guard lock(mtx_);
-
-        init();
-
-        return JavaObject::hashCode(handle_.get());
+        return JavaObject::hashCode(getHandle().get());
     } catch (...) {
         return 0;
     }
 }
 
 std::string AdditionalUnderlyings::toString() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return JavaObject::toString(handle_.get());
+    return JavaObject::toString(getHandle().get());
 }
 
 DXFCPP_END_NAMESPACE

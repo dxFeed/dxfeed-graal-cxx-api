@@ -39,10 +39,10 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY() constant.
+ * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
  */
-struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandlePriceLevel final : CandleSymbolAttribute {
     /**
      * Default price level corresponds to `NaN (std::numeric_limits<double>::quiet_NaN())`
      */
@@ -53,10 +53,8 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
      * of MarketEventSymbols class.
      * The value of this constant is "pl".
      * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
-     *
-     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string &ATTRIBUTE_KEY();
+    static constexpr char ATTRIBUTE_KEY[] = "pl";
 
     private:
     double value_{};
@@ -66,8 +64,6 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
 
     public:
     CandlePriceLevel() noexcept;
-
-    ~CandlePriceLevel() noexcept override;
 
     /**
      * Returns price level value. For example, the value of `1` represents `[0;1), [1;2)` and so on intervals

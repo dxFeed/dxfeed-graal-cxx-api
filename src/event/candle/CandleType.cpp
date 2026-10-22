@@ -12,9 +12,6 @@ DXFCPP_BEGIN_NAMESPACE
 CandleType::CandleType() noexcept {
 }
 
-CandleType::~CandleType() noexcept {
-}
-
 std::int64_t CandleType::getPeriodIntervalMillis() const noexcept {
     return periodIntervalMillis_;
 }
@@ -57,28 +54,6 @@ std::reference_wrapper<const CandleType> CandleType::parse(const StringLike &s) 
 
 bool CandleType::operator==(const CandleType &candleType) const noexcept {
     return string_ == candleType.string_;
-}
-
-const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash, std::equal_to<>> &
-CandleType::BY_STRING() {
-    static const auto *const value =
-        new std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash, std::equal_to<>>{
-            {TICK.toString(), std::cref(TICK)},
-            {SECOND.toString(), std::cref(SECOND)},
-            {MINUTE.toString(), std::cref(MINUTE)},
-            {HOUR.toString(), std::cref(HOUR)},
-            {DAY.toString(), std::cref(DAY)},
-            {WEEK.toString(), std::cref(WEEK)},
-            {MONTH.toString(), std::cref(MONTH)},
-            {OPTEXP.toString(), std::cref(OPTEXP)},
-            {YEAR.toString(), std::cref(YEAR)},
-            {VOLUME.toString(), std::cref(VOLUME)},
-            {PRICE.toString(), std::cref(PRICE)},
-            {PRICE_MOMENTUM.toString(), std::cref(PRICE_MOMENTUM)},
-            {PRICE_RENKO.toString(), std::cref(PRICE_RENKO)},
-        };
-
-    return *value;
 }
 
 DXFCPP_END_NAMESPACE

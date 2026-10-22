@@ -220,3 +220,14 @@ TEST_CASE_FIXTURE(DXFeedTestFixture, "DXFeed::getTimeSeriesIfSubscribed should r
     REQUIRE(events[0]->getClose() == doctest::Approx(c->getClose()));
     REQUIRE(events[0]->getVolume() == doctest::Approx(c->getVolume()));
 }
+
+TEST_CASE_FIXTURE(test::LocalHubFixture, "setAggregationPeriod accepts TimePeriod::ZERO before its first use") {
+    const auto subscription = feed->createSubscription(Quote::TYPE);
+
+    subscription->setAggregationPeriod(TimePeriod::valueOf(1000));
+    REQUIRE(subscription->getAggregationPeriod().getTime() == 1000);
+
+    // The first use of TimePeriod::ZERO in this process: its Java object is created by setAggregationPeriod.
+    subscription->setAggregationPeriod(TimePeriod::ZERO);
+    CHECK(subscription->getAggregationPeriod().getTime() == 0);
+}

@@ -7,7 +7,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/schedule/SessionType.hpp"
 
-#include <mutex>
+#include <iterator>
 #include <optional>
 #include <string>
 
@@ -41,9 +41,6 @@ bool SessionType::operator==(const SessionType &sessionType) const noexcept {
 SessionFilter::SessionFilter() noexcept {
 }
 
-SessionFilter::~SessionFilter() noexcept {
-}
-
 SessionFilter::SessionFilter(SessionFilterEnum code, const StringLike &name, std::optional<SessionType> type,
                              std::optional<bool> trading) noexcept
     : code_{code}, name_{ConstString::copyOf(name)}, type_{type}, trading_{trading} {
@@ -66,22 +63,44 @@ const std::optional<bool> &SessionFilter::getTrading() const & noexcept {
     return trading_;
 }
 
-const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
-    // Not a member: the constants are constant-initialized, and std::mutex is not constexpr in every configuration.
-    static std::mutex mutex{};
-    std::lock_guard lock(mutex);
+namespace {
 
-    if (!handle_) {
-        handle_ = isolated::schedule::IsolatedSessionFilter::getInstance(static_cast<std::uint32_t>(code_));
+template <SessionFilterEnum code> JavaObjectHandle<SessionFilter> createSessionFilterHandle() {
+    return isolated::schedule::IsolatedSessionFilter::getInstance(static_cast<std::uint32_t>(code));
+}
+
+using SessionFilterHandle = LazyJavaObjectHandle<SessionFilter>;
+
+// The handles of constants: they are not destroyed at exit.
+constexpr SessionFilterHandle::ConstantTag SESSION_FILTER_CONSTANT{};
+
+// The Java objects of the filters by code, created at the first use. Not members of the filters: the constants do not
+// release them when they are destroyed at exit.
+constinit const SessionFilterHandle SESSION_FILTER_HANDLES[] = {
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::ANY>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::TRADING>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::NON_TRADING>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::NO_TRADING>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::PRE_MARKET>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::REGULAR>, SESSION_FILTER_CONSTANT},
+    SessionFilterHandle{&createSessionFilterHandle<SessionFilterEnum::AFTER_MARKET>, SESSION_FILTER_CONSTANT},
+};
+
+static_assert(std::size(SESSION_FILTER_HANDLES) == static_cast<std::size_t>(SessionFilterEnum::AFTER_MARKET) + 1);
+
+} // namespace
+
+const JavaObjectHandle<SessionFilter> &SessionFilter::getHandle() const & {
+    const auto index = static_cast<std::size_t>(code_);
+
+    if (index >= std::size(SESSION_FILTER_HANDLES)) {
+        throw InvalidArgumentException("Unknown session filter code: " + std::to_string(index));
     }
 
-    return handle_;
+    return SESSION_FILTER_HANDLES[index].get();
 }
 
 CandleSession::CandleSession() noexcept : CandleSession(SessionFilter::ANY, "false") {
-}
-
-CandleSession::~CandleSession() noexcept {
 }
 
 const SessionFilter &CandleSession::getSessionFilter() const & noexcept {
@@ -89,8 +108,9 @@ const SessionFilter &CandleSession::getSessionFilter() const & noexcept {
 }
 
 std::string CandleSession::changeAttributeForSymbol(const StringLike &symbol) const {
-    return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, candle::SESSION_KEY)
-                            : MarketEventSymbols::changeAttributeStringByKey(symbol, candle::SESSION_KEY, toString());
+    return *this == DEFAULT
+               ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY)
+               : MarketEventSymbols::changeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY, toString());
 }
 
 std::string CandleSession::toString() const {
@@ -123,13 +143,13 @@ std::reference_wrapper<const CandleSession> CandleSession::parse(const StringLik
 }
 
 std::reference_wrapper<const CandleSession> CandleSession::getAttributeForSymbol(const StringLike &symbol) {
-    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, candle::SESSION_KEY);
+    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY);
 
     return stringOpt && iEquals(stringOpt.value(), "true") ? std::cref(REGULAR) : std::cref(DEFAULT);
 }
 
 std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol) noexcept {
-    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, candle::SESSION_KEY);
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY);
 
     if (!a) {
         return symbol;
@@ -137,28 +157,13 @@ std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol)
 
     // As getAttributeForSymbol() (Java Boolean.parseBoolean): only "true" in any case is the regular session.
     if (!iEquals(a.value(), "true")) {
-        return candle::removeDefaultAttribute(symbol, candle::SESSION_KEY, DEFAULT.toString());
+        return candle::removeDefaultAttribute(symbol, CandleSession::ATTRIBUTE_KEY, DEFAULT.toString());
     }
 
     if (a.value() != REGULAR.toString()) {
-        return MarketEventSymbols::changeAttributeStringByKey(symbol, candle::SESSION_KEY, REGULAR.toString());
+        return MarketEventSymbols::changeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY, REGULAR.toString());
     }
 
     return symbol;
 }
-const std::string &CandleSession::ATTRIBUTE_KEY() {
-    static const auto *const value = new std::string{candle::SESSION_KEY};
-
-    return *value;
-}
-
-const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> &CandleSession::BY_STRING() {
-    static const auto *const value = new std::unordered_map<std::string, std::reference_wrapper<const CandleSession>>{
-        {ANY.toString(), std::cref(ANY)},
-        {REGULAR.toString(), std::cref(REGULAR)},
-    };
-
-    return *value;
-}
-
 DXFCPP_END_NAMESPACE

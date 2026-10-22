@@ -21,24 +21,23 @@ DXFCPP_BEGIN_NAMESPACE
 namespace enum_utils {
 
 std::string getEventTypeEnumNamesList(std::string separator) noexcept {
-    return EventTypeEnum::ALL_BY_NAME() | ranges::views::keys | ranges::views::join(separator) |
-           ranges::to<std::string>;
+    return EventTypeEnum::ALL_BY_NAME | ranges::views::keys | ranges::views::join(separator) | ranges::to<std::string>;
 }
 
 std::string getMarketEventTypeEnumNamesList(std::string separator) noexcept {
-    return EventTypeEnum::ALL_BY_NAME() | ranges::views::filter([](const auto &et) {
+    return EventTypeEnum::ALL_BY_NAME | ranges::views::filter([](const auto &et) {
                return et.second.get().isMarket();
            }) |
            ranges::views::keys | ranges::views::join(separator) | ranges::to<std::string>;
 }
 
 std::string getEventTypeEnumClassNamesList(std::string separator) noexcept {
-    return EventTypeEnum::ALL_BY_CLASS_NAME() | ranges::views::keys | ranges::views::join(separator) |
+    return EventTypeEnum::ALL_BY_CLASS_NAME | ranges::views::keys | ranges::views::join(separator) |
            ranges::to<std::string>;
 }
 
 std::string getMarketEventTypeEnumClassNamesList(std::string separator) noexcept {
-    return EventTypeEnum::ALL_BY_CLASS_NAME() | ranges::views::filter([](const auto &et) {
+    return EventTypeEnum::ALL_BY_CLASS_NAME | ranges::views::filter([](const auto &et) {
                return et.second.get().isMarket();
            }) |
            ranges::views::keys | ranges::views::join(separator) | ranges::to<std::string>;

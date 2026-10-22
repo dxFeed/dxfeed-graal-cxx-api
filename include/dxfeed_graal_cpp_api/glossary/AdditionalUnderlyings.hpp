@@ -11,8 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
-#include <functional>
-#include <mutex>
 #include <ostream>
 #include <string>
 #include <unordered_map>
@@ -41,12 +39,11 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     using Unique = std::unique_ptr<AdditionalUnderlyings>;
 
     private:
-    mutable JavaObjectHandle<AdditionalUnderlyings> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer_;
+    LazyJavaObjectHandle<AdditionalUnderlyings> handle_;
 
-    void init() const;
+    const JavaObjectHandle<AdditionalUnderlyings> &getHandle() const {
+        return handle_.get();
+    }
 
     static JavaObjectHandle<AdditionalUnderlyings>
     valueOfImpl(const std::vector<std::pair<const char *, double>> &mapLikeEntries);
@@ -55,13 +52,12 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     /**
      * Empty additional underlyings - it has empty text and empty map.
      *
-     * It is built at dynamic initialization, so the initializers of global variables should not use it.
+     * It is created at the first call, so it can be used by the initializers of global variables.
      */
-    static const Ptr EMPTY;
+    static const Ptr &EMPTY();
 
     // lazy c-tor
-    AdditionalUnderlyings(LockExternalConstructionTag,
-                          std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer);
+    AdditionalUnderlyings(LockExternalConstructionTag, JavaObjectHandle<AdditionalUnderlyings> (*initializer)());
 
     AdditionalUnderlyings(LockExternalConstructionTag, JavaObjectHandle<AdditionalUnderlyings> &&handle);
 

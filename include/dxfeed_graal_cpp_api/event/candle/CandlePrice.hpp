@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../internal/utils/ConstantMap.hpp"
 #include "../../internal/utils/StringUtils.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
@@ -35,10 +36,10 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::getAttributeStringByKey() "MarketEventSymbols.getAttributeStringByKey",
  * @ref MarketEventSymbols::changeAttributeStringByKey() "changeAttributeStringByKey", and
  * @ref MarketEventSymbols::removeAttributeStringByKey() "removeAttributeStringByKey" methods.
- * The key to use with these methods is available via CandlePrice::ATTRIBUTE_KEY() constant.
+ * The key to use with these methods is available via CandlePrice::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePrice::toString()
  */
-struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandlePrice final : CandleSymbolAttribute {
     /**
      * Last trading price.
      */
@@ -76,16 +77,12 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
      * MarketEventSymbols class.
      * The value of this constant is "price".
      * The value that this key shall be set to is equal to the corresponding CandlePrice::toString()
-     *
-     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string &ATTRIBUTE_KEY();
+    static constexpr char ATTRIBUTE_KEY[] = "price";
 
-    /// The elements by their string representations. It is created at the first call and is never
-    /// destroyed, so it can be used by global variables.
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>, StringHash,
-                                    std::equal_to<>> &
-    BY_STRING();
+    /// The elements by their string representations (constant-initialized, so it can be used in the dynamic
+    /// initialization and the destruction of global variables).
+    static const ConstantMap<std::string_view, CandlePrice> BY_STRING;
 
     /// All elements (constant-initialized, so the initializers of global variables can use it).
     static const std::span<const std::reference_wrapper<const CandlePrice>> VALUES;
@@ -98,8 +95,6 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
 
     public:
     CandlePrice() noexcept;
-
-    ~CandlePrice() noexcept override;
 
     /**
      * Returns candle event symbol string with this candle price type set.

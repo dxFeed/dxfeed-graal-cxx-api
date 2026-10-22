@@ -29,10 +29,8 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     /**
      * Symbol prefix that is reserved for wildcard subscriptions.
      * Any subscription starting with "*" is ignored except the WildcardSymbol subscription.
-     *
-     * It is created at the first call and is never destroyed, so it can be used by global variables.
      */
-    static const std::string &RESERVED_PREFIX();
+    static constexpr char RESERVED_PREFIX[] = "*";
 
     /**
      * Represents [wildcard] subscription to all events of the specific event type.
@@ -61,7 +59,6 @@ struct DXFCPP_EXPORT WildcardSymbol final {
     WildcardSymbol &operator=(const WildcardSymbol &) noexcept;
     WildcardSymbol &operator=(WildcardSymbol &&) noexcept;
     WildcardSymbol() noexcept;
-    ~WildcardSymbol() noexcept;
 
     std::string getSymbol() const;
 

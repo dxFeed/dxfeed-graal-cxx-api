@@ -7,60 +7,37 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const TimeFormat TimeFormat::DEFAULT([] {
+// The instances are constant-initialized (constinit), so they can be used in the dynamic initialization of global
+// variables of other translation units. The Java objects are created at the first use.
+constinit const TimeFormat TimeFormat::DEFAULT{[] {
     return isolated::internal::IsolatedTimeFormat::getDefault();
-});
+}};
 
-const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS([] {
+constinit const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS{[] {
     return DEFAULT.getHandle() ? isolated::internal::IsolatedTimeFormat::withMillis(DEFAULT.getHandle())
                                : JavaObjectHandle<TimeFormat>{nullptr};
-});
+}};
 
-const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE([] {
+constinit const TimeFormat TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE{[] {
     return DEFAULT_WITH_MILLIS.getHandle()
                ? isolated::internal::IsolatedTimeFormat::withTimeZone(DEFAULT_WITH_MILLIS.getHandle())
                : JavaObjectHandle<TimeFormat>{nullptr};
-});
+}};
 
-const TimeFormat TimeFormat::GMT([] {
+constinit const TimeFormat TimeFormat::GMT{[] {
     return isolated::internal::IsolatedTimeFormat::getGmt();
-});
-
-TimeFormat::TimeFormat(std::function<JavaObjectHandle<TimeFormat>()> &&initializer)
-    : initializer_(std::move(initializer)) {}
-
-void TimeFormat::init() const {
-    if (!initialized_) {
-        handle_ = initializer_();
-        initialized_ = true;
-    }
-}
-
-TimeFormat::~TimeFormat() noexcept {
-}
+}};
 
 const JavaObjectHandle<TimeFormat> &TimeFormat::getHandle() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return handle_;
+    return handle_.get();
 }
 
 std::int64_t TimeFormat::parse(const StringLike &value) const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::internal::IsolatedTimeFormat::parse(handle_, value);
+    return isolated::internal::IsolatedTimeFormat::parse(getHandle(), value);
 }
 
 std::string TimeFormat::format(std::int64_t timestamp) const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::internal::IsolatedTimeFormat::format(handle_, timestamp);
+    return isolated::internal::IsolatedTimeFormat::format(getHandle(), timestamp);
 }
 
 DXFCPP_END_NAMESPACE

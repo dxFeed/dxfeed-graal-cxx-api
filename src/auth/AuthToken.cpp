@@ -10,10 +10,9 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const std::string AuthToken::BASIC_SCHEME{"Basic"};
-const std::string AuthToken::BEARER_SCHEME{"Bearer"};
-
-const AuthToken AuthToken::NULL_TOKEN(JavaObjectHandle<AuthToken>(), true);
+// Constant-initialized (constinit), so it can be used in the dynamic initialization of global variables of other
+// translation units.
+constinit const AuthToken AuthToken::NULL_TOKEN{};
 
 AuthToken AuthToken::valueOf(const StringLike &string) {
     return AuthToken(isolated::auth::IsolatedAuthToken::valueOf(string));
@@ -57,7 +56,7 @@ AuthToken AuthToken::createCustomToken(const StringLike &scheme, const StringLik
 
 std::string AuthToken::getHttpAuthorization() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getHttpAuthorization(handle_);
@@ -65,7 +64,7 @@ std::string AuthToken::getHttpAuthorization() const {
 
 std::string AuthToken::getUser() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getUser(handle_);
@@ -73,7 +72,7 @@ std::string AuthToken::getUser() const {
 
 std::string AuthToken::getPassword() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getPassword(handle_);
@@ -81,7 +80,7 @@ std::string AuthToken::getPassword() const {
 
 std::string AuthToken::getScheme() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getScheme(handle_);
@@ -89,7 +88,7 @@ std::string AuthToken::getScheme() const {
 
 std::string AuthToken::getValue() const {
     if (isNull_) {
-        return String::NUL();
+        return String::NUL;
     }
 
     return isolated::auth::IsolatedAuthToken::getValue(handle_);
@@ -121,9 +120,6 @@ bool AuthToken::operator==(const AuthToken &other) const {
     }
 
     return JavaObject::equals(handle_.get(), other.handle_.get());
-}
-
-AuthToken::~AuthToken() noexcept {
 }
 
 AuthToken::AuthToken(JavaObjectHandle<AuthToken> &&handle, bool isNull) : handle_(std::move(handle)), isNull_(isNull) {

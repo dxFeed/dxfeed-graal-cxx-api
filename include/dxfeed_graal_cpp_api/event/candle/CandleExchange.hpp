@@ -31,7 +31,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::getExchangeCode() "MarketEventSymbols.getExchangeCode" and
  * @ref MarketEventSymbols::changeExchangeCode() "changeExchangeCode" methods.
  */
-struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandleExchange final : public CandleSymbolAttribute {
     /**
      * Composite exchange where data is taken from all exchanges.
      */
@@ -50,8 +50,6 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
 
     public:
     CandleExchange() noexcept;
-
-    ~CandleExchange() noexcept override;
 
     /**
      * Returns exchange code. It is `'\0'` for CandleExchange::COMPOSITE exchange.

@@ -7,6 +7,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../internal/utils/StringConstants.hpp"
 
 #include <cstring>
 #include <dxfg_api.h>
@@ -378,7 +379,7 @@ OptionSale &OptionSale::withAskPrice(double askPrice) noexcept {
 
 const std::string &OptionSale::getExchangeSaleConditions() const & noexcept {
     if (!data_.exchangeSaleConditions) {
-        return String::NUL();
+        return nulString();
     }
 
     return data_.exchangeSaleConditions.value();
@@ -541,7 +542,7 @@ OptionSale &OptionSale::withDelta(double delta) noexcept {
 
 const std::string &OptionSale::getOptionSymbol() const & noexcept {
     if (!data_.optionSymbol) {
-        return String::NUL();
+        return nulString();
     }
 
     return data_.optionSymbol.value();

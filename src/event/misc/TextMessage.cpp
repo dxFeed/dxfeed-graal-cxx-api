@@ -6,6 +6,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../internal/utils/StringConstants.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -32,7 +33,7 @@ void TextMessage::fillData(void *graalNative) {
     if (graalMessage->text != nullptr) {
         setText(dxfcpp::toString(dxfcpp::bit_cast<const char *>(graalMessage->text)));
     } else {
-        setText(String::NUL());
+        setText(String::NUL);
     }
 }
 
@@ -138,7 +139,7 @@ TextMessage::TextMessage(const StringLike &eventSymbol, std::int64_t time, const
 
 const std::string &TextMessage::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL();
+        return nulString();
     }
 
     return eventSymbol_.value();

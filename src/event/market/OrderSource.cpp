@@ -12,6 +12,7 @@
 #include <functional>
 #include <mutex>
 #include <string_view>
+#include <tuple>
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
@@ -107,6 +108,131 @@ constinit const std::array PREDEFINED{
 
 constinit const std::span<const std::reference_wrapper<const OrderSource>> OrderSource::PREDEFINED_{PREDEFINED};
 
+// A nested class has access to composeId(). The keys repeat the ids and the names of the sources: a constinit constant
+// is not read in a constant expression (ConstantsTest checks them).
+struct OrderSource::PredefinedSources {
+    using Map = ConstantMap<std::variant<std::int32_t, std::string_view>, OrderSource>;
+
+    static constexpr auto ENTRIES = Map::sorted({
+        {1, COMPOSITE_BID},
+        {"COMPOSITE_BID", COMPOSITE_BID},
+        {2, COMPOSITE_ASK},
+        {"COMPOSITE_ASK", COMPOSITE_ASK},
+        {3, REGIONAL_BID},
+        {"REGIONAL_BID", REGIONAL_BID},
+        {4, REGIONAL_ASK},
+        {"REGIONAL_ASK", REGIONAL_ASK},
+        {5, AGGREGATE_BID},
+        {"AGGREGATE_BID", AGGREGATE_BID},
+        {6, AGGREGATE_ASK},
+        {"AGGREGATE_ASK", AGGREGATE_ASK},
+        {7, COMPOSITE},
+        {"COMPOSITE", COMPOSITE},
+        {8, REGIONAL},
+        {"REGIONAL", REGIONAL},
+        {9, AGGREGATE},
+        {"AGGREGATE", AGGREGATE},
+        {0, DEFAULT},
+        {"DEFAULT", DEFAULT},
+        {composeId("NTV"), NTV},
+        {"NTV", NTV},
+        {composeId("ntv"), ntv},
+        {"ntv", ntv},
+        {composeId("NFX"), NFX},
+        {"NFX", NFX},
+        {composeId("ESPD"), ESPD},
+        {"ESPD", ESPD},
+        {composeId("XNFI"), XNFI},
+        {"XNFI", XNFI},
+        {composeId("ICE"), ICE},
+        {"ICE", ICE},
+        {composeId("ISE"), ISE},
+        {"ISE", ISE},
+        {composeId("DEA"), DEA},
+        {"DEA", DEA},
+        {composeId("DEX"), DEX},
+        {"DEX", DEX},
+        {composeId("dex"), dex},
+        {"dex", dex},
+        {composeId("BYX"), BYX},
+        {"BYX", BYX},
+        {composeId("BZX"), BZX},
+        {"BZX", BZX},
+        {composeId("bzx"), bzx},
+        {"bzx", bzx},
+        {composeId("BATE"), BATE},
+        {"BATE", BATE},
+        {composeId("CHIX"), CHIX},
+        {"CHIX", CHIX},
+        {composeId("CEUX"), CEUX},
+        {"CEUX", CEUX},
+        {composeId("BXTR"), BXTR},
+        {"BXTR", BXTR},
+        {composeId("IST"), IST},
+        {"IST", IST},
+        {composeId("BI20"), BI20},
+        {"BI20", BI20},
+        {composeId("ABE"), ABE},
+        {"ABE", ABE},
+        {composeId("FAIR"), FAIR},
+        {"FAIR", FAIR},
+        {composeId("GLBX"), GLBX},
+        {"GLBX", GLBX},
+        {composeId("glbx"), glbx},
+        {"glbx", glbx},
+        {composeId("ERIS"), ERIS},
+        {"ERIS", ERIS},
+        {composeId("XEUR"), XEUR},
+        {"XEUR", XEUR},
+        {composeId("xeur"), xeur},
+        {"xeur", xeur},
+        {composeId("CFE"), CFE},
+        {"CFE", CFE},
+        {composeId("C2OX"), C2OX},
+        {"C2OX", C2OX},
+        {composeId("SMFE"), SMFE},
+        {"SMFE", SMFE},
+        {composeId("smfe"), smfe},
+        {"smfe", smfe},
+        {composeId("iex"), iex},
+        {"iex", iex},
+        {composeId("MEMX"), MEMX},
+        {"MEMX", MEMX},
+        {composeId("memx"), memx},
+        {"memx", memx},
+        {composeId("OCEA"), OCEA},
+        {"OCEA", OCEA},
+        {composeId("ocea"), ocea},
+        {"ocea", ocea},
+        {composeId("pink"), pink},
+        {"pink", pink},
+        {composeId("ARCA"), ARCA},
+        {"ARCA", ARCA},
+        {composeId("arca"), arca},
+        {"arca", arca},
+        {composeId("CEDX"), CEDX},
+        {"CEDX", CEDX},
+        {composeId("cedx"), cedx},
+        {"cedx", cedx},
+        {composeId("IGC"), IGC},
+        {"IGC", IGC},
+        {composeId("igc"), igc},
+        {"igc", igc},
+        {composeId("EDX"), EDX},
+        {"EDX", EDX},
+        {composeId("edx"), edx},
+        {"edx", edx},
+        {composeId("NUAM"), NUAM},
+        {"NUAM", NUAM},
+        {composeId("nuam"), nuam},
+        {"nuam", nuam},
+    });
+
+    static_assert(ENTRIES.size() == 2 * std::tuple_size_v<decltype(PREDEFINED)>);
+};
+
+constinit const OrderSource::PredefinedSources::Map OrderSource::PREDEFINED_SOURCES{PredefinedSources::ENTRIES};
+
 namespace {
 
 // A function-local static: valueOf() is called from the global initializers of other translation units.
@@ -116,15 +242,19 @@ struct UserSources {
 };
 
 UserSources &userSources() {
-    // Never destroyed: the user sources can be used in the destructors of global variables.
-    static auto *const instance = new UserSources{};
+    // Destroyed at exit: the user sources must not be used in the destructors of global variables.
+    static UserSources instance{};
 
-    return *instance;
+    return instance;
 }
 
 } // namespace
 
-OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : IndexedEventSource(id, name) {
+OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : IndexedEventSource(id, name, true) {
+}
+
+OrderSource::OrderSource(const OrderSource &other) noexcept
+    : IndexedEventSource(other, true), pubFlags_{other.pubFlags_}, builtin_{other.builtin_} {
 }
 
 void OrderSource::throwInvalidName(const char *message) {
@@ -179,16 +309,6 @@ std::uint32_t OrderSource::getEventTypeMask(const EventTypeEnum &eventType) {
     throw InvalidArgumentException("Invalid order event type: " + eventType.getName());
 }
 
-void *OrderSource::toGraal() const {
-    auto *graalSource = new dxfg_indexed_event_source_t{ORDER_SOURCE, id(), createCString(name())};
-
-    return graalSource;
-}
-
-std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> OrderSource::toGraalUnique() const noexcept {
-    return {toGraal(), freeGraal};
-}
-
 bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
     return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE.id();
 }
@@ -228,24 +348,6 @@ const OrderSource &OrderSource::valueOf(const StringLike &name) {
     }
 
     return sources.try_emplace(sourceId, OrderSource(sourceId, name)).first->second;
-}
-
-const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>> &
-OrderSource::PREDEFINED_SOURCES() {
-    static const auto *const value =
-        new std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>([] {
-            std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
-                result{};
-
-            for (const auto &source : PREDEFINED_) {
-                result.emplace(source.get().id(), source);
-                result.emplace(source.get().name(), source);
-            }
-
-            return result;
-        }());
-
-    return *value;
 }
 
 DXFCPP_END_NAMESPACE

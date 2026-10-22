@@ -11,8 +11,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 
-#include <functional>
-#include <mutex>
 #include <ostream>
 
 /**
@@ -236,7 +234,7 @@ enum class RoundingMode : std::int32_t {
  * limits, with extreme limits (0 and infinity) omitted for short.
  * Negative space (from negative infinity to 0) uses symmetrical price ranges.
  * <p>
- * There is a special value PriceIncrements::EMPTY that is used to represent unknown or undefined rules.
+ * There is a special value PriceIncrements::EMPTY() that is used to represent unknown or undefined rules.
  * This value has empty textual representation and is considered to have a sole increment with value 0.
  * <p>
  * See PriceIncrements::getText() and PriceIncrements::getPriceIncrements() for details about used formats
@@ -253,23 +251,22 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
     using Unique = std::unique_ptr<PriceIncrements>;
 
     private:
-    mutable JavaObjectHandle<PriceIncrements> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<PriceIncrements>()> initializer_;
+    LazyJavaObjectHandle<PriceIncrements> handle_;
 
-    void init() const;
+    const JavaObjectHandle<PriceIncrements> &getHandle() const {
+        return handle_.get();
+    }
 
     public:
     /**
      * Empty price increments - it has empty text and sole increment with value 0.
      *
-     * It is built at dynamic initialization, so the initializers of global variables should not use it.
+     * It is created at the first call, so it can be used by the initializers of global variables.
      */
-    static const Ptr EMPTY;
+    static const Ptr &EMPTY();
 
     // lazy c-tor
-    PriceIncrements(LockExternalConstructionTag, std::function<JavaObjectHandle<PriceIncrements>()> initializer);
+    PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<PriceIncrements> (*initializer)());
 
     PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<PriceIncrements> &&handle);
 
@@ -324,7 +321,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * Where `INCREMENT` is a price increment in the given price range and `UPPER_LIMIT` is the upper bound of that
      * range. All ranges are listed in the ascending order of upper limits, and the last range is considered to extend
      * toward infinity and is therefore specified without upper limit. All increments and limits are finite positive
-     * numbers. The case with empty text is a special stub used for PriceIncrements::EMPTY value, it uses a sole
+     * numbers. The case with empty text is a special stub used for PriceIncrements::EMPTY() value, it uses a sole
      * increment with value 0.
      *
      * @return The textual representation.
@@ -336,7 +333,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * This array specifies all numbers from textual representation (see PriceIncrements::getText()) in the same order.
      * Therefore, numbers at even positions are increments and numbers at odd positions are upper limits.
      * The array always has an odd length - the infinite upper limit of the last range is always omitted, and
-     * the first increment (for price range adjacent to 0) is always included even for PriceIncrements::EMPTY value.
+     * the first increment (for price range adjacent to 0) is always included even for PriceIncrements::EMPTY() value.
      *
      * @return The internal representation of price increments.
      */
@@ -344,7 +341,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
 
     /**
      * Returns the first price increment (for price range adjacent to 0), usually the smallest one.
-     * Returns 0 for PriceIncrements::EMPTY price increments.
+     * Returns 0 for PriceIncrements::EMPTY() price increments.
      *
      * @return The first price increment.
      */
@@ -375,7 +372,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
 
     /**
      * Returns first price precision (for price range adjacent to 0), usually the largest one.
-     * Returns 0 for PriceIncrements::EMPTY price increments.
+     * Returns 0 for PriceIncrements::EMPTY() price increments.
      *
      * @return The first price precision.
      */

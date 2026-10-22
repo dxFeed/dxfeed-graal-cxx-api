@@ -72,6 +72,14 @@ class DXFCPP_EXPORT Isolate final {
 
     static Isolate &getInstance() noexcept;
 
+    /**
+     * Returns `true` if the Graal isolate was created: the first call into Graal (Java) has happened. It does not
+     * create the isolate.
+     *
+     * @return `true` if the Graal isolate was created or is being created.
+     */
+    static bool isCreated() noexcept;
+
     template <typename F>
     auto runIsolated(F &&f)
         -> std::variant<CEntryPointErrorsEnum, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {

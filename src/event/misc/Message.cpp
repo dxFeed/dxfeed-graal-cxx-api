@@ -6,6 +6,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../internal/utils/StringConstants.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -129,7 +130,7 @@ Message::Message(const StringLike &eventSymbol, const StringLike &attachment) no
 
 const std::string &Message::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL();
+        return nulString();
     }
 
     return eventSymbol_.value();
@@ -166,7 +167,7 @@ Message &Message::withEventTime(std::int64_t eventTime) noexcept {
 
 const std::string &Message::getAttachment() const & {
     if (!attachment_) {
-        return String::NUL();
+        return nulString();
     }
 
     return attachment_.value();
@@ -188,7 +189,7 @@ Message &Message::withAttachment(const StringLike &attachment) noexcept {
 
 std::string Message::toString() const {
     return fmt::format("Message{{{}, eventTime={}, attachment={}}}", getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL()));
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()), attachment_.value_or(String::NUL));
 }
 
 DXFCPP_END_NAMESPACE

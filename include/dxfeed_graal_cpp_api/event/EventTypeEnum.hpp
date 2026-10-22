@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../internal/Conf.hpp"
+#include "../internal/utils/ConstantMap.hpp"
 #include "../internal/utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
@@ -107,17 +108,19 @@ class DXFCPP_EXPORT EventTypeEnum {
     /// All event types (constant-initialized, so it can be used in the dynamic initialization of global variables).
     static const std::span<const std::reference_wrapper<const EventTypeEnum>> ALL;
 
-    // The maps below are created at the first call and are never destroyed, so they can be used by global variables.
+    // The maps below are constant-initialized, so they can be used in the dynamic initialization and the
+    // destruction of global variables.
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> &ALL_BY_NAME();
+    /// All event types by their names.
+    static const ConstantMap<std::string_view, EventTypeEnum> ALL_BY_NAME;
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const EventTypeEnum>> &ALL_BY_CLASS_NAME();
+    /// All event types by their class names.
+    static const ConstantMap<std::string_view, EventTypeEnum> ALL_BY_CLASS_NAME;
 
-    static const std::unordered_map<std::uint32_t, std::reference_wrapper<const EventTypeEnum>> &ALL_BY_ID();
+    /// All event types by their ids.
+    static const ConstantMap<std::uint32_t, EventTypeEnum> ALL_BY_ID;
 
     EventTypeEnum() noexcept;
-
-    virtual ~EventTypeEnum() noexcept;
 
     /**
      * @return The dxFeed Graal Native C-API event class id

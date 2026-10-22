@@ -219,8 +219,9 @@ if (DXFCXX_SANITIZERS_ENABLED)
 endif ()
 
 # The library constants read from the global initializers of a user translation unit, with each kind of linking.
-# The shared variant is not built with the static C runtime: the library and the test would have separate heaps.
-set(DXFC_STATIC_INIT_VARIANTS static)
+# The shared variant is not built with the static C runtime: the library and the test would have separate heaps. The
+# static_nograal variant reads only the constants that do not need Java and checks that the Graal isolate is not created.
+set(DXFC_STATIC_INIT_VARIANTS static static_nograal)
 
 if (NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
     list(APPEND DXFC_STATIC_INIT_VARIANTS shared)
@@ -237,6 +238,10 @@ foreach (DXFC_STATIC_INIT_VARIANT IN LISTS DXFC_STATIC_INIT_VARIANTS)
         target_compile_definitions(${DXFC_STATIC_INIT_TARGET} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx::static)
+
+        if (DXFC_STATIC_INIT_VARIANT STREQUAL "static_nograal")
+            target_compile_definitions(${DXFC_STATIC_INIT_TARGET} PRIVATE DXFC_STATIC_INIT_NO_GRAAL)
+        endif ()
 
         if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
             set_target_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES

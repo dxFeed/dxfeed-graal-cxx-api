@@ -15,9 +15,6 @@ DXFCPP_BEGIN_NAMESPACE
 CandlePriceLevel::CandlePriceLevel() noexcept {
 }
 
-CandlePriceLevel::~CandlePriceLevel() noexcept {
-}
-
 double CandlePriceLevel::getValue() const noexcept {
     return value_;
 }
@@ -32,8 +29,8 @@ bool CandlePriceLevel::operator==(const CandlePriceLevel &candlePriceLevel) cons
 
 std::string CandlePriceLevel::changeAttributeForSymbol(const StringLike &symbol) const {
     return *this == DEFAULT
-               ? MarketEventSymbols::removeAttributeStringByKey(symbol, candle::PRICE_LEVEL_KEY)
-               : MarketEventSymbols::changeAttributeStringByKey(symbol, candle::PRICE_LEVEL_KEY, toString());
+               ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY)
+               : MarketEventSymbols::changeAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY, toString());
 }
 
 CandlePriceLevel CandlePriceLevel::parse(const StringLike &s) {
@@ -55,13 +52,13 @@ CandlePriceLevel CandlePriceLevel::valueOf(double value) {
 }
 
 CandlePriceLevel CandlePriceLevel::getAttributeForSymbol(const StringLike &symbol) {
-    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, candle::PRICE_LEVEL_KEY);
+    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY);
 
     return !stringOpt ? DEFAULT : parse(stringOpt.value());
 }
 
 std::string CandlePriceLevel::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, candle::PRICE_LEVEL_KEY);
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY);
 
     if (!a) {
         return symbol;
@@ -71,11 +68,12 @@ std::string CandlePriceLevel::normalizeAttributeForSymbol(const StringLike &symb
         const auto other = parse(a.value());
 
         if (other == DEFAULT) {
-            return candle::removeDefaultAttribute(symbol, candle::PRICE_LEVEL_KEY, DEFAULT.toString());
+            return candle::removeDefaultAttribute(symbol, CandlePriceLevel::ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.toString()) {
-            return MarketEventSymbols::changeAttributeStringByKey(symbol, candle::PRICE_LEVEL_KEY, other.toString());
+            return MarketEventSymbols::changeAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY,
+                                                                  other.toString());
         }
 
         return symbol;
@@ -85,10 +83,4 @@ std::string CandlePriceLevel::normalizeAttributeForSymbol(const StringLike &symb
         return symbol;
     }
 }
-const std::string &CandlePriceLevel::ATTRIBUTE_KEY() {
-    static const auto *const value = new std::string{candle::PRICE_LEVEL_KEY};
-
-    return *value;
-}
-
 DXFCPP_END_NAMESPACE

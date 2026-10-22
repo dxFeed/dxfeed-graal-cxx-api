@@ -35,10 +35,10 @@ DXFCPP_BEGIN_NAMESPACE
  */
 struct DXFCPP_EXPORT AuthToken {
     /// String representation for Basic (`Base64(login:password)`) authorization.
-    static const std::string BASIC_SCHEME;
+    static constexpr char BASIC_SCHEME[] = "Basic";
 
     /// String representation for the Bearer (`token`) authorization.
-    static const std::string BEARER_SCHEME;
+    static constexpr char BEARER_SCHEME[] = "Bearer";
 
     /// A stub that is needed to simulate null AuthToken without using std::optional.
     static const AuthToken NULL_TOKEN;
@@ -120,16 +120,16 @@ struct DXFCPP_EXPORT AuthToken {
     std::string getHttpAuthorization() const;
 
     /**
-     * Returns the username or dxfcpp::String::NUL() (`std::string{"<null>"}`) if it is not known or applicable.
+     * Returns the username or dxfcpp::String::NUL (`std::string{"<null>"}`) if it is not known or applicable.
      *
-     * @return the username, or dxfcpp::String::NUL() (`std::string{"<null>"}`) if not known or applicable
+     * @return the username, or dxfcpp::String::NUL (`std::string{"<null>"}`) if not known or applicable
      */
     std::string getUser() const;
 
     /**
-     * Returns the password or dxfcpp::String::NUL() (`std::string{"<null>"}`) if it is not known or applicable.
+     * Returns the password or dxfcpp::String::NUL (`std::string{"<null>"}`) if it is not known or applicable.
      *
-     * @return the password, or dxfcpp::String::NUL() (`std::string{"<null>"}`) if not known or applicable
+     * @return the password, or dxfcpp::String::NUL (`std::string{"<null>"}`) if not known or applicable
      */
     std::string getPassword() const;
 
@@ -157,8 +157,6 @@ struct DXFCPP_EXPORT AuthToken {
 
     bool operator==(const AuthToken &other) const;
 
-    virtual ~AuthToken() noexcept;
-
     AuthToken(const AuthToken &) = delete;
     AuthToken(AuthToken &&) noexcept = delete;
     AuthToken &operator=(const AuthToken &) = delete;
@@ -174,6 +172,10 @@ struct DXFCPP_EXPORT AuthToken {
 
     private:
     std::atomic<bool> isNull_;
+
+    // The constructor of NULL_TOKEN: constant initialization.
+    constexpr AuthToken() noexcept : isNull_{true} {
+    }
 
     explicit AuthToken(JavaObjectHandle<AuthToken> &&handle, bool isNull = false);
 };

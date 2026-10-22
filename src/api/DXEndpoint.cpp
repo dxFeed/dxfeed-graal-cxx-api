@@ -18,22 +18,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-const std::string DXEndpoint::NAME_PROPERTY = "name";
-const std::string DXEndpoint::DXFEED_PROPERTIES_PROPERTY = "dxfeed.properties";
-const std::string DXEndpoint::DXFEED_ADDRESS_PROPERTY = "dxfeed.address";
-const std::string DXEndpoint::DXFEED_USER_PROPERTY = "dxfeed.user";
-const std::string DXEndpoint::DXFEED_PASSWORD_PROPERTY = "dxfeed.password";
-const std::string DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY = "dxfeed.threadPoolSize";
-const std::string DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY = "dxfeed.aggregationPeriod";
-const std::string DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY = "dxfeed.wildcard.enable";
-const std::string DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY = "dxpublisher.properties";
-const std::string DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY = "dxpublisher.address";
-const std::string DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY = "dxpublisher.threadPoolSize";
-const std::string DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY = "dxendpoint.eventTime";
-const std::string DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY = "dxendpoint.storeEverything";
-const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
-const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
-
 struct DXEndpoint::Impl {
     struct Registry {
         std::mutex mutex;
@@ -258,7 +242,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() {
 void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
     // The default properties file is only valid for the
     // Feed, OnDemandFeed and Publisher roles.
-    const auto &propertiesFileKey = [](auto role) constexpr -> const auto & {
+    const std::string propertiesFileKey = [](auto role) -> const char * {
         switch (role) {
         case Role::FEED:
         case Role::ON_DEMAND_FEED:
@@ -272,7 +256,7 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
         default:;
         }
 
-        return String::EMPTY();
+        return String::EMPTY;
     }(role_);
 
     if (propertiesFileKey.empty()) {
@@ -356,7 +340,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     if (auto name = properties_.contains(NAME_PROPERTY) ? properties_.at(NAME_PROPERTY) : std::string{}; name.empty()) {
         const std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId() + 1;
 
-        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY() : std::string("-") + std::to_string(id));
+        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY : std::string("-") + std::to_string(id));
 
         const auto newBuilder = withProperty(NAME_PROPERTY, name);
 

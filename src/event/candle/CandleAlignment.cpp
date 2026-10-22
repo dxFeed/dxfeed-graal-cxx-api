@@ -16,12 +16,10 @@ DXFCPP_BEGIN_NAMESPACE
 CandleAlignment::CandleAlignment() noexcept {
 }
 
-CandleAlignment::~CandleAlignment() noexcept {
-}
-
 std::string CandleAlignment::changeAttributeForSymbol(const StringLike &symbol) const {
-    return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, candle::ALIGNMENT_KEY)
-                            : MarketEventSymbols::changeAttributeStringByKey(symbol, candle::ALIGNMENT_KEY, toString());
+    return *this == DEFAULT
+               ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY)
+               : MarketEventSymbols::changeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY, toString());
 }
 
 std::string CandleAlignment::toString() const {
@@ -49,13 +47,13 @@ std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const Strin
 }
 
 std::reference_wrapper<const CandleAlignment> CandleAlignment::getAttributeForSymbol(const StringLike &symbol) {
-    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, candle::ALIGNMENT_KEY);
+    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY);
 
     return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
 }
 
 std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, candle::ALIGNMENT_KEY);
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY);
 
     if (!a) {
         return symbol;
@@ -65,11 +63,11 @@ std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbo
         const auto other = parse(a.value());
 
         if (other.get() == DEFAULT) {
-            return candle::removeDefaultAttribute(symbol, candle::ALIGNMENT_KEY, DEFAULT.toString());
+            return candle::removeDefaultAttribute(symbol, CandleAlignment::ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.get().toString()) {
-            return MarketEventSymbols::changeAttributeStringByKey(symbol, candle::ALIGNMENT_KEY,
+            return MarketEventSymbols::changeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY,
                                                                   other.get().toString());
         }
 
@@ -79,23 +77,6 @@ std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbo
     } catch (const std::invalid_argument &) {
         return symbol;
     }
-}
-
-const std::string &CandleAlignment::ATTRIBUTE_KEY() {
-    static const auto *const value = new std::string{candle::ALIGNMENT_KEY};
-
-    return *value;
-}
-
-const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash, std::equal_to<>> &
-CandleAlignment::BY_STRING() {
-    static const auto *const value =
-        new std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash, std::equal_to<>>{
-            {MIDNIGHT.toString(), std::cref(MIDNIGHT)},
-            {SESSION.toString(), std::cref(SESSION)},
-        };
-
-    return *value;
 }
 
 DXFCPP_END_NAMESPACE

@@ -10,8 +10,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 
 #include <cstdint>
-#include <functional>
-#include <mutex>
 
 /**
  * \defgroup dxfcpp_util "Util" Module
@@ -90,24 +88,24 @@ struct DXFCPP_EXPORT TimePeriod {
      */
     std::int64_t getNanos() const;
 
-    virtual ~TimePeriod() noexcept;
-
     TimePeriod(const TimePeriod &) = delete;
     TimePeriod(TimePeriod &&) noexcept = delete;
     TimePeriod &operator=(const TimePeriod &) = delete;
     TimePeriod &operator=(const TimePeriod &&) noexcept = delete;
 
     private:
-    mutable JavaObjectHandle<TimePeriod> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<TimePeriod>()> initializer_;
+    using Initializer = LazyJavaObjectHandle<TimePeriod>::Initializer;
 
-    // lazy c-tor
-    explicit TimePeriod(std::function<JavaObjectHandle<TimePeriod>()> &&initializer);
+    LazyJavaObjectHandle<TimePeriod> handle_;
+
+    // The constructor of the constants: constant initialization, the Java object is created at the first use.
+    constexpr explicit TimePeriod(Initializer initializer) noexcept
+        : handle_{initializer, LazyJavaObjectHandle<TimePeriod>::ConstantTag{}} {
+    }
+
     explicit TimePeriod(JavaObjectHandle<TimePeriod> &&handle);
 
-    void init() const;
+    const JavaObjectHandle<TimePeriod> &getHandle() const;
 };
 
 DXFCPP_END_NAMESPACE

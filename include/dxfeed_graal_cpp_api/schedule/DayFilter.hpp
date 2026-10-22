@@ -149,8 +149,6 @@ struct DXFCPP_EXPORT DayFilter {
     /// Required trading flag, Tristate::NONE if not relevant.
     Tristate trading_;
 
-    mutable JavaObjectHandle<DayFilter> handle_{};
-
     /**
      * Creates a filter with specified conditions.
      * <p>

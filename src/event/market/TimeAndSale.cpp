@@ -5,6 +5,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../internal/utils/StringConstants.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -260,7 +261,7 @@ void TimeAndSale::setAskPrice(double askPrice) noexcept {
 
 const std::string &TimeAndSale::getExchangeSaleConditions() const & noexcept {
     if (!data_.exchangeSaleConditions) {
-        return String::NUL();
+        return nulString();
     }
 
     return data_.exchangeSaleConditions.value();
@@ -338,7 +339,7 @@ bool TimeAndSale::isCancel() const noexcept {
 
 const std::string &TimeAndSale::getBuyer() const & noexcept {
     if (!data_.buyer) {
-        return String::NUL();
+        return nulString();
     }
 
     return data_.buyer.value();
@@ -354,7 +355,7 @@ void TimeAndSale::setBuyer(const StringLike &buyer) noexcept {
 
 const std::string &TimeAndSale::getSeller() const & noexcept {
     if (!data_.seller) {
-        return String::NUL();
+        return nulString();
     }
 
     return data_.seller.value();

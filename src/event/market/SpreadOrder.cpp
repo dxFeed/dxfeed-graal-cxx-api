@@ -5,6 +5,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../internal/utils/StringConstants.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -267,7 +268,7 @@ SpreadOrder &SpreadOrder::withScope(const Scope &scope) noexcept {
 
 const std::string &SpreadOrder::getSpreadSymbol() const & noexcept {
     if (!spreadOrderData_.spreadSymbol) {
-        return String::NUL();
+        return nulString();
     }
 
     return spreadOrderData_.spreadSymbol.value();

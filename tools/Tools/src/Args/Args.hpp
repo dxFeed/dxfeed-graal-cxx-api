@@ -164,7 +164,7 @@ struct NamedArg : Arg {
         }
 
         if (!A::LONG_NAME.empty()) {
-            result += (!A::SHORT_NAME.empty() ? ", " : String::EMPTY()) + "--" + A::LONG_NAME;
+            result += std::string(!A::SHORT_NAME.empty() ? ", " : String::EMPTY) + "--" + A::LONG_NAME;
         }
 
         return result;
