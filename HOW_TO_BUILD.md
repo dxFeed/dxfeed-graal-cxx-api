@@ -91,7 +91,8 @@ This project's own code (the libraries, tests, samples, tools, fuzzers) is compi
 `-Wsign-conversion`, `-Wfloat-equal` and `-Wextra-semi` (MSVC: C4365) on top of `-Wall -Wextra -pedantic` (`/W4`).
 These warnings are not passed to the projects that use the library, and the headers of the dependencies are included
 as system headers, so their warnings are not reported. With `-DDXFCXX_WARNINGS_AS_ERRORS=ON` (the CI builds) the
-warnings of this project's code are errors (`-Werror`, `/WX`).
+warnings of this project's code are errors (`-Werror`, `/WX`), except the use of deprecated functions, which stays a
+warning (MSVC: C4996 is disabled).
 
 ```shell
 cmake -DDXFCXX_WARNINGS_AS_ERRORS=ON ..
