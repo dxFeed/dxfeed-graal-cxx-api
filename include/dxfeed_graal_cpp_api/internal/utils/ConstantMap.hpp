@@ -7,6 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <functional>
@@ -39,6 +40,26 @@ template <typename Key, typename T> class ConstantMap final {
     private:
     std::span<const value_type> entries_{};
 
+    template <std::size_t N, std::size_t... I>
+    static constexpr std::array<value_type, N> sortedByIndices(const value_type (&unsorted)[N],
+                                                               std::index_sequence<I...>) {
+        // The indices are sorted, not the entries: std::swap of std::variant (the key of the order sources) is not
+        // constexpr in libstdc++ 11.
+        std::array<std::size_t, N> order{I...};
+
+        std::sort(order.begin(), order.end(), [&unsorted](std::size_t left, std::size_t right) {
+            return unsorted[left].first < unsorted[right].first;
+        });
+
+        if (std::adjacent_find(order.begin(), order.end(), [&unsorted](std::size_t left, std::size_t right) {
+                return unsorted[left].first == unsorted[right].first;
+            }) != order.end()) {
+            throw std::invalid_argument("The key is repeated");
+        }
+
+        return {unsorted[order[I]]...};
+    }
+
     public:
     /**
      * Sorts the entries by key. A repeated key is an error, so in a constant expression it fails the compilation.
@@ -47,28 +68,7 @@ template <typename Key, typename T> class ConstantMap final {
      * @return The entries sorted by key.
      */
     template <std::size_t N> static constexpr std::array<value_type, N> sorted(const value_type (&unsorted)[N]) {
-        auto entries = std::to_array(unsorted);
-
-        // An insertion sort: the maps are small, and the algorithms of some standard libraries (and std::swap of
-        // std::variant in libstdc++ 11) are not constexpr.
-        for (std::size_t i = 1; i < N; i++) {
-            const auto entry = entries[i];
-            auto j = i;
-
-            for (; j > 0 && entry.first < entries[j - 1].first; j--) {
-                entries[j] = entries[j - 1];
-            }
-
-            entries[j] = entry;
-        }
-
-        for (std::size_t i = 1; i < N; i++) {
-            if (entries[i - 1].first == entries[i].first) {
-                throw std::invalid_argument("The key is repeated");
-            }
-        }
-
-        return entries;
+        return sortedByIndices(unsorted, std::make_index_sequence<N>{});
     }
 
     /**
@@ -110,22 +110,11 @@ template <typename Key, typename T> class ConstantMap final {
      * @return The iterator to the entry or end() if there is no such key.
      */
     [[nodiscard]] constexpr const_iterator find(const Key &key) const noexcept {
-        auto first = begin();
-        auto count = size();
+        const auto entry = std::lower_bound(begin(), end(), key, [](const value_type &element, const Key &value) {
+            return element.first < value;
+        });
 
-        // std::lower_bound.
-        while (count > 0) {
-            const auto step = count / 2;
-
-            if (const auto middle = first + static_cast<std::ptrdiff_t>(step); middle->first < key) {
-                first = middle + 1;
-                count -= step + 1;
-            } else {
-                count = step;
-            }
-        }
-
-        return first != end() && first->first == key ? first : end();
+        return entry != end() && entry->first == key ? entry : end();
     }
 
     /**
