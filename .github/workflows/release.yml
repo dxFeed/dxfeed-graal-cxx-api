@@ -56,7 +56,7 @@ jobs:
           fi
 
       # The text of the GitHub release: the section of the version in ReleaseNotes.md of the tag (a draft: the unreleased
-      # items). A release without its section fails here, before the packages are built.
+      # items, with those of release-notes/). A release without its section fails here, before the packages are built.
       - name: Release notes
         env:
           VERSION: ${{ steps.set_version.outputs.version }}

@@ -6,14 +6,14 @@
 CMake only (cmake -P scripts/release.cmake <arguments>).
 
   release.py vX.Y.Z[-alphaN|-betaN|-preN|-rcN]  sets the version (CMakeLists.txt, docs/Doxyfile, the inline namespace
-                                                of Conf.hpp) and the heading of ReleaseNotes.md, commits "vX.Y.Z..."
-                                                and tags it
+                                                of Conf.hpp) and the heading of ReleaseNotes.md, moves the items of
+                                                release-notes/*.md there, commits "vX.Y.Z..." and tags it
   release.py vX.Y.Z-draftN                      a trial run of release.yml: only the tag on the current commit
   release.py <version> --push                   the same, then pushes the branch and the tag (the tag starts
                                                 release.yml)
   release.py <version> --dry-run                prints what would change and changes nothing
   release.py <version> --notes [--ref <ref>]    prints the notes of the version, the text of its GitHub release (a
-                                                draft: the unreleased items at the top of ReleaseNotes.md)
+                                                draft: the unreleased items of ReleaseNotes.md and release-notes/*.md)
   release.py vX.Y.Z-draftN --cleanup            deletes the draft release (needs the GitHub CLI) and its tag, on origin
                                                 and local
 """
@@ -32,10 +32,12 @@ NOTES = "ReleaseNotes.md"
 CMAKE = "CMakeLists.txt"
 DOXYFILE = "docs/Doxyfile"
 CONF = "include/dxfeed_graal_cpp_api/internal/Conf.hpp"
+FRAGMENTS = "release-notes"  # the unreleased items, one file per ticket: release-notes/README.md
 
 PRE_RELEASE_ORDER = ("alpha", "beta", "pre", "rc")
 VERSION = re.compile(r"^v(\d+)\.(\d+)\.(\d+)(?:-(alpha|beta|pre|rc|draft)(\d+))?$")
 HEADING = re.compile(r"^## (\S+)\s*$")
+TICKET = re.compile(r"^[A-Z][A-Z0-9]*-([0-9]{1,9})\.md$")
 
 # The places of the version: (file, name in the messages, pattern with the value as group 2, the value of a version).
 PLACES = (
@@ -105,6 +107,47 @@ def _first_heading(lines):
                 raise ReleaseError(f"{NOTES}:{index + 1}: the heading {line!r}: {error}") from None
 
     return None, None
+
+
+def is_fragment(name):
+    return name.endswith(".md") and name != "README.md"
+
+
+def sort_fragments(fragments):
+    """The names of the fragments ({name: text}) in the order of their items: [BREAKING] first (an item of the top
+    level that has it), then the files named by a ticket, the newest (the greatest number) first, then the others by
+    name."""
+    def key(name):
+        breaking = any(line.startswith("* ") and "[BREAKING]" in line for line in fragments[name].split("\n"))
+        ticket = TICKET.match(name)
+
+        return not breaking, ticket is None, -int(ticket.group(1)) if ticket else 0, name
+
+    return sorted(fragments, key=key)
+
+
+def add_fragments(text, fragments):
+    """ReleaseNotes.md with the items of the fragments ({name: text}) after the unreleased items at its top, in the
+    order of sort_fragments, and one empty line before the first heading."""
+    if not fragments:
+        return text
+
+    items = []
+
+    for name in sort_fragments(fragments):
+        item = re.sub(r"^([ \t\r]*\n)+", "", fragments[name].replace("\r\n", "\n")).rstrip(" \t\r\n")
+
+        if not item:
+            raise ReleaseError(f"{FRAGMENTS}/{name} is empty")
+
+        items.append(item)
+
+    lines = text.split("\n")
+    index, _ = _first_heading(lines)
+    top = "\n".join(lines[:index] if index is not None else lines).rstrip(" \t\r\n")
+    items = "\n".join(([top] if top else []) + items)
+
+    return items + "\n\n" + "\n".join(lines[index:]) if index is not None else items + "\n"
 
 
 def update_notes(text, version):
@@ -199,6 +242,20 @@ def _write(path, text, crlf):
     (ROOT / path).write_bytes((text.replace("\n", "\r\n") if crlf else text).encode("utf-8"))
 
 
+def _fragments(ref=None):
+    """{name: text} of release-notes/*.md in the working tree or in the git ref."""
+    if ref is None:
+        directory = ROOT / FRAGMENTS
+
+        return {path.name: _read(f"{FRAGMENTS}/{path.name}")[0] for path in sorted(directory.glob("*"))
+                if path.is_file() and is_fragment(path.name)} if directory.is_dir() else {}
+
+    names = [path.split("/")[-1] for path in _git("ls-tree", "--name-only", ref, f"{FRAGMENTS}/").split("\n") if path]
+
+    # Not _git: it strips the indent of a first line.
+    return {name: _run("git", "show", f"{ref}:{FRAGMENTS}/{name}").stdout for name in names if is_fragment(name)}
+
+
 def _run(*command, check=True):
     return subprocess.run(command, cwd=ROOT, check=check, capture_output=True, text=True, encoding="utf-8")
 
@@ -260,17 +317,25 @@ def prepare(version, dry_run, push):
 
     old = {path: _read(path) for path in (NOTES, CMAKE, DOXYFILE, CONF)}
     new, messages = set_versions({path: old[path][0] for path in (CMAKE, DOXYFILE, CONF)}, version)
-    new[NOTES], action = update_notes(old[NOTES][0], version)
+    fragments = _fragments()
+    new[NOTES], action = update_notes(add_fragments(old[NOTES][0], fragments), version)
+    moved = [f"{FRAGMENTS}/{name}" for name in sort_fragments(fragments)]
 
-    for message in [f"{NOTES}: {action}"] + messages:
+    for message in [f"{path}: moved to {NOTES}" for path in moved] + [f"{NOTES}: {action}"] + messages:
         print(message)
 
     if dry_run:
         print(f"(dry run: no files changed, no commit {version}, no tag {version})")
         return
 
+    if moved:  # before any write: an ignored fragment passes the check of the working tree, but git rm fails
+        _git("ls-files", "--error-unmatch", "--", *moved)
+
     for path in old:
         _write(path, new[path], old[path][1])
+
+    if moved:
+        _git("rm", "-q", "--", *moved)
 
     _git("add", *old)
     _git("commit", "-q", "-m", str(version))
@@ -354,7 +419,7 @@ def main(argv=None):
             else:
                 text = _read(NOTES)[0]
 
-            sys.stdout.write(notes_of(text, version))
+            sys.stdout.write(notes_of(add_fragments(text, _fragments(args.ref)), version))
         elif args.cleanup:
             cleanup(version)
         else:

@@ -115,6 +115,61 @@ class NotesOfTest(unittest.TestCase):
             release.notes_of(notes(ITEMS, OLD), Version.parse("v8.2.0"))
 
 
+FRAGMENTS = {  # in the order of their items
+    "MDAPI-12.md": "* **\\[MDAPI-12]\\[C++]** **\\[BREAKING]** Breaking.\n",
+    "MDAPI-3.md": "* **\\[MDAPI-3]\\[C++]** Changed; the nested items of a\n  breaking change:\n"
+                  "    * **\\[BREAKING]** Nested.\n",
+    "MDAPI-100.md": "* **\\[MDAPI-100]\\[C++]** Newest.\n",
+    "MDAPI-20.md": "\n\r\n* **\\[MDAPI-20]\\[C++]** Blank lines around,\r\n  CRLF.  \r\n\r\n",
+    "MDAPI-9.md": "* **\\[MDAPI-9]\\[C++]** Older.\n",
+    "graal-sdk.md": "* Migrated to Graal SDK v9.9.9.\n",
+    "graal.md": "* Without a ticket.\n",
+}
+FRAGMENT_ITEMS = ("* **\\[MDAPI-12]\\[C++]** **\\[BREAKING]** Breaking.\n"
+                  "* **\\[MDAPI-100]\\[C++]** Newest.\n"
+                  "* **\\[MDAPI-20]\\[C++]** Blank lines around,\n  CRLF.\n"
+                  "* **\\[MDAPI-9]\\[C++]** Older.\n"
+                  "* **\\[MDAPI-3]\\[C++]** Changed; the nested items of a\n  breaking change:\n"
+                  "    * **\\[BREAKING]** Nested.\n"
+                  "* Migrated to Graal SDK v9.9.9.\n"
+                  "* Without a ticket.\n")
+
+
+class FragmentsTest(unittest.TestCase):
+    def shuffled(self):
+        return dict(sorted(FRAGMENTS.items(), key=lambda item: item[1]))
+
+    def test_order(self):
+        # [BREAKING] in an item of the top level, the tickets from the newest, the others by name.
+        self.assertEqual(release.sort_fragments(self.shuffled()),
+                         ["MDAPI-12.md", "MDAPI-100.md", "MDAPI-20.md", "MDAPI-9.md", "MDAPI-3.md", "graal-sdk.md",
+                          "graal.md"])
+
+    def test_items_follow_the_unreleased_items(self):
+        self.assertEqual(release.add_fragments(notes(ITEMS, OLD), self.shuffled()), notes(ITEMS + FRAGMENT_ITEMS, OLD))
+        self.assertEqual(release.add_fragments(notes(ITEMS + "\n\n", OLD), {"a.md": "* A.\n"}),
+                         notes(ITEMS + "* A.\n", OLD))
+
+    def test_items_above_a_pre_release(self):
+        text = notes("## v8.2.0-rc1\n", ITEMS, OLD)
+
+        self.assertEqual(release.add_fragments(text, {"a.md": "* A.\n"}), notes("* A.\n", text))
+        self.assertEqual(release.add_fragments("", {"a.md": "* A."}), "* A.\n")  # no heading
+
+    def test_no_fragments_change_nothing(self):
+        for text in (notes(ITEMS, OLD), notes(ITEMS + "\n\n", OLD), OLD, ""):
+            with self.subTest(text):
+                self.assertEqual(release.add_fragments(text, {}), text)
+
+    def test_empty_fragment(self):
+        with self.assertRaisesRegex(ReleaseError, "release-notes/MDAPI-1.md is empty"):
+            release.add_fragments(notes(ITEMS, OLD), {"MDAPI-1.md": " \r\n\n"})
+
+    def test_is_fragment(self):
+        self.assertEqual([name for name in ("MDAPI-1.md", "README.md", "notes.txt", "x.md") if release.is_fragment(name)],
+                         ["MDAPI-1.md", "x.md"])
+
+
 class SetVersionsTest(unittest.TestCase):
     FILES = {
         release.CMAKE: 'set(DXFCXX_VERSION "v8.1.0" CACHE STRING "The package version")\n',
@@ -143,6 +198,7 @@ class PrepareTest(unittest.TestCase):
 
     NOTES = notes(ITEMS, OLD)
     FILES = SetVersionsTest.FILES
+    FRAGMENTS = {}  # {name: text} of release-notes/
     LINE_END = "\r\n"  # CRLF is kept (the agreement test also uses LF)
 
     def setUp(self):
@@ -154,6 +210,10 @@ class PrepareTest(unittest.TestCase):
         for path, text in {**self.FILES, release.NOTES: self.NOTES}.items():
             (self.root / path).parent.mkdir(parents=True, exist_ok=True)
             (self.root / path).write_bytes(text.replace("\n", self.LINE_END).encode())
+
+        for name, text in self.FRAGMENTS.items():  # as they are
+            (self.root / release.FRAGMENTS).mkdir(exist_ok=True)
+            (self.root / release.FRAGMENTS / name).write_bytes(text.encode())
 
         (self.root / "scripts").mkdir(exist_ok=True)
         shutil.copy(SCRIPTS / "release.cmake", self.root / "scripts" / "release.cmake")
@@ -318,6 +378,71 @@ class PrepareTest(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(output.replace("\r\n", "\n"), ITEMS)
 
+    def add_fragments(self, fragments):
+        (self.root / release.FRAGMENTS).mkdir(exist_ok=True)
+
+        for name, text in fragments.items():
+            (self.root / release.FRAGMENTS / name).write_bytes(text.encode())
+
+        self.git("add", ".")
+        self.git("commit", "-q", "-m", "fragments")
+
+    def test_release_moves_the_fragments(self):
+        self.add_fragments({**FRAGMENTS, "README.md": "How to add an item.\n"})
+        code, output = self.run_release("v8.2.0")
+
+        self.assertEqual(code, 0)
+        self.assertEqual((self.root / release.NOTES).read_bytes().decode().replace("\r\n", "\n"),
+                         notes("## v8.2.0\n", ITEMS + FRAGMENT_ITEMS, OLD))
+        self.assertEqual(self.git("ls-files", release.FRAGMENTS), "release-notes/README.md")
+        self.assertEqual(self.git("status", "--porcelain"), "")
+        self.assertEqual(self.git("log", "-1", "--format=%s"), "v8.2.0")
+        self.assertIn("release-notes/MDAPI-12.md: moved to ReleaseNotes.md\nrelease-notes/MDAPI-100.md: moved to",
+                      output.replace("\r\n", "\n"))
+        self.assertEqual(self.run_release("v8.2.0", "--notes")[1].replace("\r\n", "\n"), ITEMS + FRAGMENT_ITEMS)
+
+    def test_fragments_without_unreleased_items(self):
+        (self.root / release.NOTES).write_bytes(OLD.encode())
+        self.add_fragments({"a.md": "* A.\n"})
+
+        self.assertEqual(self.run_release("v8.2.0")[0], 0)
+        self.assertEqual((self.root / release.NOTES).read_text(), notes("## v8.2.0\n", "* A.\n", OLD))
+
+    def test_dry_run_lists_the_fragments(self):
+        self.add_fragments({"MDAPI-1.md": "* One.\n", "MDAPI-2.md": "* Two.\n"})
+        head = self.git("rev-parse", "HEAD")
+        code, output = self.run_release("v8.2.0", "--dry-run")
+
+        self.assertEqual(code, 0)
+        self.assertIn("release-notes/MDAPI-2.md: moved to ReleaseNotes.md\n"
+                      "release-notes/MDAPI-1.md: moved to ReleaseNotes.md\n"
+                      "ReleaseNotes.md: ## v8.2.0 inserted above the unreleased items", output.replace("\r\n", "\n"))
+        self.assertEqual((self.git("rev-parse", "HEAD"), self.git("status", "--porcelain")), (head, ""))
+
+    def test_draft_notes_of_a_ref_show_the_fragments(self):
+        # As release.yml takes the notes of a draft: of its tag, also after the fragments changed.
+        self.add_fragments(FRAGMENTS)
+        self.assertEqual(self.run_release("v8.2.0-draft1")[0], 0)
+        self.git("rm", "-q", "-r", release.FRAGMENTS)
+        self.git("commit", "-q", "-m", "no fragments")
+        code, output = self.run_release("v8.2.0-draft1", "--notes", "--ref", "refs/tags/v8.2.0-draft1")
+
+        self.assertEqual(code, 0)
+        self.assertEqual(output.replace("\r\n", "\n"), ITEMS + FRAGMENT_ITEMS)
+        self.assertEqual(self.run_release("v8.2.0-draft1", "--notes")[1].replace("\r\n", "\n"), ITEMS)
+
+    def test_refuses_an_ignored_fragment(self):
+        # Not in "git status": the release must stop before it writes anything.
+        (self.root / ".gitignore").write_text("release-notes/ignored.md\n")
+        self.add_fragments({"MDAPI-1.md": "* One.\n"})
+        (self.root / release.FRAGMENTS / "ignored.md").write_text("* Ignored.\n")
+        self.assert_refused(["v8.2.0"], "release-notes/ignored.md")
+        self.assertEqual(self.git("status", "--porcelain"), "")
+
+    def test_refuses_an_empty_fragment(self):
+        self.add_fragments({"MDAPI-1.md": "\n"})
+        self.assert_refused(["v8.2.0"], "release-notes/MDAPI-1.md is empty")
+
 
 @unittest.skipUnless(shutil.which("git") and shutil.which("cmake"), "git and cmake are needed")
 class CMakePrepareTest(PrepareTest):
@@ -335,40 +460,49 @@ class CMakePrepareTest(PrepareTest):
 class AgreementTest(unittest.TestCase):
     """release.py and release.cmake give the same files, commits, tags and notes."""
 
-    CASES = {
-        "rc1": (notes(ITEMS, OLD), "v8.2.0-rc1"),
-        "rc2 after rc1 with new items": (notes("* Added after rc1.\n", "## v8.2.0-rc1\n", ITEMS, OLD), "v8.2.0-rc2"),
-        "release after rc": (notes("## v8.2.0-rc3\n", ITEMS, OLD), "v8.2.0"),
-        "a new major release": (notes(ITEMS, OLD), "v9.0.0"),
-        "draft": (notes(ITEMS, OLD), "v8.2.0-draft1"),
-        "error: an earlier pre-release": (notes("## v8.2.0-rc2\n", ITEMS, OLD), "v8.2.0-rc1"),
+    CASES = {  # (ReleaseNotes.md, version, fragments)
+        "rc1": (notes(ITEMS, OLD), "v8.2.0-rc1", {}),
+        "rc2 after rc1 with new items": (notes("* Added after rc1.\n", "## v8.2.0-rc1\n", ITEMS, OLD), "v8.2.0-rc2",
+                                         {}),
+        "release after rc": (notes("## v8.2.0-rc3\n", ITEMS, OLD), "v8.2.0", {}),
+        "a new major release": (notes(ITEMS, OLD), "v9.0.0", {}),
+        "draft": (notes(ITEMS, OLD), "v8.2.0-draft1", {}),
+        "error: an earlier pre-release": (notes("## v8.2.0-rc2\n", ITEMS, OLD), "v8.2.0-rc1", {}),
+        "fragments": (notes(ITEMS, OLD), "v8.2.0-rc1", FRAGMENTS),
+        "fragments only": (OLD, "v8.2.0", FRAGMENTS),
+        "fragments after rc1": (notes("## v8.2.0-rc1\n", ITEMS, OLD), "v8.2.0", FRAGMENTS),
+        "fragments of a draft": (notes(ITEMS, OLD), "v8.2.0-draft1", FRAGMENTS),
+        "error: an empty fragment": (notes(ITEMS, OLD), "v8.2.0", {**FRAGMENTS, "MDAPI-1.md": " \n"}),
     }
 
     @staticmethod
-    def results(implementation, text, version, line_end):
+    def results(implementation, text, version, fragments, line_end):
         test = implementation("run_release")
         test.NOTES = text
         # Without the final line break (as Conf.hpp was): both scripts add it.
         test.FILES = {**SetVersionsTest.FILES, release.CONF: SetVersionsTest.FILES[release.CONF].rstrip("\n")}
+        test.FRAGMENTS = {name: fragment.replace("\r\n", "\n").replace("\n", line_end)
+                          for name, fragment in fragments.items()}
         test.LINE_END = line_end
         test.setUp()
 
         try:
-            code, _ = test.run_release(version)
+            code, output = test.run_release(version)
             files = {path: (test.root / path).read_bytes() for path in
                      (release.NOTES, release.CMAKE, release.DOXYFILE, release.CONF)}
             notes_output = test.run_release(version, "--notes")[1].replace("\r\n", "\n") if code == 0 else ""
 
-            return code == 0, files, test.git("log", "-1", "--format=%s"), test.git("tag"), notes_output
+            return (code == 0, files, test.git("log", "-1", "--format=%s"), test.git("tag"), notes_output,
+                    test.git("ls-files"), [line for line in output.splitlines() if "moved to" in line])
         finally:
             test.tearDown()
 
     def test_same_results(self):
-        for name, (text, version) in self.CASES.items():
+        for name, (text, version, fragments) in self.CASES.items():
             for line_end in ("\r\n", "\n"):
                 with self.subTest(name, line_end=repr(line_end)):
-                    python = self.results(PrepareTest, text, version, line_end)
-                    cmake = self.results(CMakePrepareTest, text, version, line_end)
+                    python = self.results(PrepareTest, text, version, fragments, line_end)
+                    cmake = self.results(CMakePrepareTest, text, version, fragments, line_end)
 
                     self.assertEqual(python, cmake)
 

@@ -13,8 +13,8 @@ Two scripts prepare the release, with the same arguments and the same result; ta
 - `scripts/release.py`: Python 3: `python3 scripts/release.py ...` (`py -3` on Windows)
 
 They set the version in `CMakeLists.txt` (`DXFCXX_VERSION`), `docs/Doxyfile` (`PROJECT_NUMBER`) and
-`include/dxfeed_graal_cpp_api/internal/Conf.hpp` (`inline namespace vN`), put the heading of the version at the top
-of `ReleaseNotes.md`, commit `vX.Y.Z` and tag it. Run them on the branch that is released (`main`, or `release/vN` for
+`include/dxfeed_graal_cpp_api/internal/Conf.hpp` (`inline namespace vN`), move the unreleased items of
+`release-notes/*.md` to `ReleaseNotes.md` and put the heading of the version above them, commit `vX.Y.Z` and tag it. Run them on the branch that is released (`main`, or `release/vN` for
 a new major version) with a clean working tree. The same can be done by hand, see below. `v8.2.0` is an example.
 
 ### In one command
@@ -67,9 +67,18 @@ cmake -P scripts/release.cmake v8.2.0 --push
    git push origin v8.2.0
    ```
 
+### The unreleased items
+
+Each pull request adds its item as a file of `release-notes/` (see `release-notes/README.md`). A release or a
+pre-release moves them to the top of `ReleaseNotes.md` and removes the files in the commit `vX.Y.Z`: the items marked
+`[BREAKING]` first, then the files named by a ticket (`MDAPI-455.md`), the newest first, then the others by name.
+`--dry-run` lists them in this order. Items written at the top of `ReleaseNotes.md` itself (by a branch made before
+`release-notes/`) stay above them.
+
 ### The heading of ReleaseNotes.md
 
-The unreleased items are at the top of `ReleaseNotes.md`, above the first heading. The heading of a version:
+The unreleased items are at the top of `ReleaseNotes.md`, above the first heading, with the items of `release-notes/`
+after them. The heading of a version:
 
 | Version                                          | Top of `ReleaseNotes.md`                             | Result                      |
 |--------------------------------------------------|------------------------------------------------------|-----------------------------|
@@ -85,7 +94,8 @@ unreleased items) is an error.
 ### Draft
 
 `vX.Y.Z-draftN` is a trial run of the `release` workflow: no commit, only the tag on the current commit (`--push`
-pushes it). The draft GitHub release shows the unreleased items as a preview of the notes; Jira is not touched (only
+pushes it). The draft GitHub release shows the unreleased items (with those of `release-notes/`) as a preview of the
+notes; Jira is not touched (only
 published releases are synchronized). Remove the draft release and its tag afterwards, also after a failed run (it
 has no release, but the tag is on origin). Each step says whether it deleted or found nothing; the release needs the
 GitHub CLI (`gh`), without it the tags are deleted and the release, if any, is deleted by hand:
@@ -96,12 +106,13 @@ cmake -P scripts/release.cmake v8.2.0-draft1 --cleanup
 
 ### By hand
 
-1. `ReleaseNotes.md`: put `## v8.2.0` and an empty line above the unreleased items (for a release after a
-   pre-release: replace the heading of the pre-release, see the table).
+1. `ReleaseNotes.md`: add the items of `release-notes/*.md` after the unreleased items, in the order above, and
+   remove these files (`git rm`; `release-notes/README.md` stays). Put `## v8.2.0` and an empty line above the
+   unreleased items (for a release after a pre-release: replace the heading of the pre-release, see the table).
 2. `CMakeLists.txt`: `set(DXFCXX_VERSION "v8.2.0" CACHE STRING ...)`.
 3. `docs/Doxyfile`: `PROJECT_NUMBER = v8.2.0`.
 4. For a new major version only: `include/dxfeed_graal_cpp_api/internal/Conf.hpp`: `inline namespace v9 {`.
-5. Commit these files with the message `v8.2.0`, tag the commit (`git tag v8.2.0`), push the branch (`main` or
+5. Commit these files and the removal with the message `v8.2.0`, tag the commit (`git tag v8.2.0`), push the branch (`main` or
    `release/vN`), then the tag.
 
 The notes of a version, as the workflow takes them: `cmake -P scripts/release.cmake v8.2.0 --notes`.

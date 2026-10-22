@@ -5,12 +5,13 @@
 # HOW_TO_RELEASE.md).
 #
 #   cmake -P scripts/release.cmake vX.Y.Z[-alphaN|-betaN|-preN|-rcN]  sets the version (CMakeLists.txt, docs/Doxyfile,
-#                                     the inline namespace of Conf.hpp) and the heading of ReleaseNotes.md, commits
-#                                     "vX.Y.Z..." and tags it
+#                                     the inline namespace of Conf.hpp) and the heading of ReleaseNotes.md, moves the
+#                                     items of release-notes/*.md there, commits "vX.Y.Z..." and tags it
 #   cmake -P scripts/release.cmake vX.Y.Z-draftN               a trial run of release.yml: only the tag
 #   cmake -P scripts/release.cmake <version> --push            the same, then pushes the branch and the tag
 #   cmake -P scripts/release.cmake <version> --dry-run         prints what would change and changes nothing
-#   cmake -P scripts/release.cmake <version> --notes [--ref <ref>]  prints the notes of the version
+#   cmake -P scripts/release.cmake <version> --notes [--ref <ref>]  prints the notes of the version (a draft: the
+#                                     unreleased items of ReleaseNotes.md and release-notes/*.md)
 #   cmake -P scripts/release.cmake vX.Y.Z-draftN --cleanup     deletes the draft release (GitHub CLI) and its tag, on
 #                                                               origin and local
 #
@@ -26,6 +27,7 @@ set(RELEASE_NOTES "ReleaseNotes.md")
 set(RELEASE_CMAKE "CMakeLists.txt")
 set(RELEASE_DOXYFILE "docs/Doxyfile")
 set(RELEASE_CONF "include/dxfeed_graal_cpp_api/internal/Conf.hpp")
+set(RELEASE_FRAGMENTS "release-notes") # the unreleased items, one file per ticket: release-notes/README.md
 set(RELEASE_PRE_RELEASE_ORDER alpha beta pre rc)
 
 # Parses a version: <out>_OK, <out>_BASE (X.Y.Z), <out>_MAJOR, <out>_KIND ("" for a release, a pre-release kind or
@@ -83,6 +85,102 @@ function(release_first_heading text out)
     set(${out}_START "${start}" PARENT_SCOPE)
     set(${out}_END "${end}" PARENT_SCOPE)
     set(${out}_NAME "${name}" PARENT_SCOPE)
+endfunction()
+
+# The indexes of the fragments (the list of the names <fragments> and their texts <fragments>_<index>, as
+# release_read_fragments gives them) in the order of their items: <out>. The same as sort_fragments of release.py.
+function(release_sort_fragments fragments_var out)
+    set(keys "")
+    set(index 0)
+
+    foreach (name IN LISTS ${fragments_var})
+        set(breaking 1)
+        set(ticket 1)
+        set(number 0000000000)
+
+        if ("${${fragments_var}_${index}}" MATCHES "(^|\n)\\* [^\n]*\\[BREAKING\\]")
+            set(breaking 0)
+        endif ()
+
+        if (name MATCHES "^[A-Z][A-Z0-9]*-([0-9]+)\\.md$")
+            string(LENGTH "${CMAKE_MATCH_1}" length)
+            string(REGEX REPLACE "^0+([0-9])" "\\1" value "${CMAKE_MATCH_1}")
+
+            if (length LESS_EQUAL 9)
+                set(ticket 0)
+                math(EXPR number "1999999999 - ${value}") # ten digits, the newest (the greatest number) first
+            endif ()
+        endif ()
+
+        # "\n" sorts below any character of a name, so a name sorts before the longer names that start with it.
+        list(APPEND keys "${breaking}${ticket}${number}${name}\n${index}")
+        math(EXPR index "${index} + 1")
+    endforeach ()
+
+    list(SORT keys)
+    set(order "")
+
+    foreach (key IN LISTS keys)
+        string(REGEX MATCH "[0-9]+$" index "${key}")
+        list(APPEND order "${index}")
+    endforeach ()
+
+    set(${out} "${order}" PARENT_SCOPE)
+endfunction()
+
+# ReleaseNotes.md with the items of the fragments (as for release_sort_fragments) after the unreleased items at its
+# top, in their order, and one empty line before the first heading: <out_text> or <out_error>. The same as
+# add_fragments of release.py.
+function(release_add_fragments text fragments_var out_text out_error)
+    set(${out_error} "" PARENT_SCOPE)
+    set(${out_text} "${text}" PARENT_SCOPE)
+    release_sort_fragments(${fragments_var} order)
+
+    if (order STREQUAL "")
+        return()
+    endif ()
+
+    set(items "")
+
+    foreach (index IN LISTS order)
+        set(item "${${fragments_var}_${index}}")
+        string(REPLACE "\r\n" "\n" item "${item}")
+        string(REGEX REPLACE "^([ \t\r]*\n)+" "" item "${item}")
+        string(REGEX REPLACE "[ \t\r\n]+$" "" item "${item}")
+
+        if (item STREQUAL "")
+            list(GET ${fragments_var} ${index} name)
+            set(${out_error} "${RELEASE_FRAGMENTS}/${name} is empty" PARENT_SCOPE)
+            return()
+        endif ()
+
+        if (items STREQUAL "")
+            set(items "${item}")
+        else ()
+            string(APPEND items "\n${item}")
+        endif ()
+    endforeach ()
+
+    release_first_heading("${text}" heading)
+    set(top "${text}")
+    set(rest "")
+
+    if (heading_FOUND)
+        string(SUBSTRING "${text}" 0 ${heading_START} top)
+        string(SUBSTRING "${text}" ${heading_START} -1 rest)
+    endif ()
+
+    string(REGEX REPLACE "[ \t\r\n]+$" "" top "${top}")
+
+    if (NOT top STREQUAL "")
+        set(items "${top}\n${items}")
+    endif ()
+
+    if (heading_FOUND)
+        set(${out_text} "${items}\n\n${rest}" PARENT_SCOPE)
+    else ()
+        set(${out_text} "${items}\n" PARENT_SCOPE)
+    endif ()
 endfunction()
 
 # ReleaseNotes.md with the heading of the version (see HOW_TO_RELEASE.md; a draft changes nothing): <out_text>,
@@ -298,6 +396,41 @@ function(release_read path var)
     endwhile ()
 endfunction()
 
+# The fragments release-notes/*.md of the working tree, or of the git ref if it is not empty: <out> (the list of the
+# names) and <out>_<index> (the text of each).
+function(release_read_fragments ref out)
+    set(names "")
+
+    if (ref STREQUAL "")
+        file(GLOB paths LIST_DIRECTORIES FALSE "${RELEASE_ROOT}/${RELEASE_FRAGMENTS}/*")
+    else ()
+        release_git(paths ls-tree --name-only "${ref}" "${RELEASE_FRAGMENTS}/")
+        string(REPLACE "\n" ";" paths "${paths}")
+    endif ()
+
+    foreach (path IN LISTS paths)
+        get_filename_component(name "${path}" NAME)
+
+        if (NOT name MATCHES "\\.md$" OR name STREQUAL "README.md")
+            continue()
+        endif ()
+
+        list(LENGTH names index)
+
+        if (ref STREQUAL "")
+            release_read("${RELEASE_FRAGMENTS}/${name}" text)
+        else ()
+            release_git(text show "${ref}:${RELEASE_FRAGMENTS}/${name}")
+            string(REPLACE "\r\n" "\n" text "${text}")
+        endif ()
+
+        set(${out}_${index} "${text}" PARENT_SCOPE)
+        list(APPEND names "${name}")
+    endforeach ()
+
+    set(${out} "${names}" PARENT_SCOPE)
+endfunction()
+
 # Writes the text with the given line ends: file(WRITE) adds CR on Windows only, file(CONFIGURE) has NEWLINE_STYLE.
 # @ONLY: no ${} substitution, and every "@" is escaped as @AT@ (substituted back).
 function(release_write_file file text crlf)
@@ -401,11 +534,27 @@ function(release_prepare version dry_run push)
         release_fail("${error}")
     endif ()
 
-    release_update_notes("${notes_text}" "${version}" new_notes action error)
+    release_read_fragments("" fragments)
+    release_add_fragments("${notes_text}" fragments new_notes error)
 
     if (NOT error STREQUAL "")
         release_fail("${error}")
     endif ()
+
+    release_update_notes("${new_notes}" "${version}" new_notes action error)
+
+    if (NOT error STREQUAL "")
+        release_fail("${error}")
+    endif ()
+
+    release_sort_fragments(fragments order)
+    set(moved "")
+
+    foreach (index IN LISTS order)
+        list(GET fragments ${index} name)
+        list(APPEND moved "${RELEASE_FRAGMENTS}/${name}")
+        release_print("${RELEASE_FRAGMENTS}/${name}: moved to ${RELEASE_NOTES}")
+    endforeach ()
 
     release_print("${RELEASE_NOTES}: ${action}")
 
@@ -418,10 +567,20 @@ function(release_prepare version dry_run push)
         return()
     endif ()
 
+    # Before any write: an ignored fragment passes the check of the working tree, but git rm fails.
+    if (NOT moved STREQUAL "")
+        release_git(ignored ls-files --error-unmatch -- ${moved})
+    endif ()
+
     release_write("${RELEASE_NOTES}" "${new_notes}" ${notes_text_CRLF})
     release_write("${RELEASE_CMAKE}" "${cmake_text}" ${cmake_text_CRLF})
     release_write("${RELEASE_DOXYFILE}" "${doxyfile_text}" ${doxyfile_text_CRLF})
     release_write("${RELEASE_CONF}" "${conf_text}" ${conf_text_CRLF})
+
+    if (NOT moved STREQUAL "")
+        release_git(ignored rm -q -- ${moved})
+    endif ()
+
     release_git(ignored add "${RELEASE_NOTES}" "${RELEASE_CMAKE}" "${RELEASE_DOXYFILE}" "${RELEASE_CONF}")
     release_git(ignored commit -q -m "${version}")
     release_git(ignored tag "${version}")
@@ -550,6 +709,13 @@ function(release_main)
         else ()
             release_git(text show "${ref}:${RELEASE_NOTES}")
             string(REPLACE "\r\n" "\n" text "${text}")
+        endif ()
+
+        release_read_fragments("${ref}" fragments)
+        release_add_fragments("${text}" fragments text error)
+
+        if (NOT error STREQUAL "")
+            release_fail("${error}")
         endif ()
 
         release_notes_of("${text}" "${version}" notes error)
