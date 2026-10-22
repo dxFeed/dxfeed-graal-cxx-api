@@ -16,10 +16,14 @@ target_compile_options(dxfcxx_warnings INTERFACE
 if (DXFCXX_WARNINGS_AS_ERRORS)
     # GCC reports -Wmaybe-uninitialized in third-party code inlined into ours (range-v3 with ASan in Release), even from
     # system headers, and documents its false positives with sanitizers: it stays a warning.
+    # The use of deprecated functions (of the Graal Native SDK, DXFG_DEPRECATED, or of this library) stays a warning
+    # too: a deprecation announces a migration, which can follow later, and must not break the build. MSVC cannot turn
+    # a single warning back from an error under /WX, so C4996 is disabled there (with its "unsafe" CRT functions); GCC
+    # and Clang builds still report the deprecations.
     target_compile_options(dxfcxx_warnings INTERFACE
-            "$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Werror>"
+            "$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Werror;-Wno-error=deprecated-declarations>"
             "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wno-error=maybe-uninitialized>"
-            "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX>")
+            "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX;/wd4996>")
 endif ()
 
 # Clang 22+ reports __COUNTER__ with -pedantic as a C2y extension at the macro use site, even when the macro comes from a

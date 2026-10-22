@@ -1,3 +1,5 @@
+* **\[MDAPI-454]\[C++]** With `DXFCXX_WARNINGS_AS_ERRORS=ON` the use of deprecated functions stays a warning instead of
+  failing the build (MSVC: C4996 is disabled).
 * **\[MDAPI-452]\[C++]** Tools and samples:
     * `Connect` and `Dump`: the quiet option is `-q, --quiet` as in Java. The former `--quite` is still accepted.
     * `LatencyTest`: `--ignore-exchanges <list>` skips the events of the specified exchange codes (e.g. `Q,Z`):
