@@ -148,6 +148,8 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct DXEndpoint;
     friend struct TimeSeriesTxModelImpl;
     friend struct IndexedTxModelImpl;
+    friend struct IndexedEventTxModelImpl;
+    friend struct SubscriptionController;
 
     private:
     JavaObjectHandle<DXFeed> handle_{};

@@ -396,6 +396,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXFeedSubscription.cpp
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
+        src/isolated/api/IsolatedSubscriptionController.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
         src/isolated/candlewebservice/IsolatedHistoryEndpoint.cpp
         src/isolated/auth/IsolatedAuthToken.cpp
@@ -417,6 +418,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/metrics/IsolatedMetrics.cpp
         src/isolated/model/IsolatedTxModelListener.cpp
         src/isolated/model/IsolatedIndexedTxModel.cpp
+        src/isolated/model/IsolatedIndexedEventTxModel.cpp
         src/isolated/model/IsolatedTimeSeriesTxModel.cpp
         src/isolated/ondemand/IsolatedOnDemandService.cpp
         src/isolated/orcs/IsolatedPriceLevelService.cpp
@@ -432,6 +434,7 @@ set(dxFeedGraalCxxApi_Api_Sources
         src/api/DXFeedSubscription.cpp
         src/api/DXPublisherObservableSubscription.cpp
         src/api/DXPublisher.cpp
+        src/api/SubscriptionController.cpp
 )
 
 set(dxFeedGraalCxxApi_ApiOsub_Sources
@@ -466,6 +469,7 @@ set(dxFeedGraalCxxApi_Logging_Sources
 set(dxFeedGraalCxxApi_Model_Sources
         src/model/TxModelListener.cpp
         src/model/IndexedTxModel.cpp
+        src/model/IndexedEventTxModel.cpp
         src/model/TimeSeriesTxModel.cpp
         src/model/MarketDepthModel.cpp
 )
@@ -872,6 +876,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/Model/IncOrderSnapshotSample)
     add_subdirectory(samples/cpp/Model/MultipleMarketDepthSample)
     add_subdirectory(samples/cpp/Model/PriceLevelBookSample)
+    add_subdirectory(samples/cpp/Model/SimpleOrderBookSample)
     add_subdirectory(samples/cpp/OnDemand/OnDemandSample)
     add_subdirectory(samples/cpp/Orcs/PriceLevelServiceClientSample)
     add_subdirectory(samples/cpp/Schedule/ScheduleSample)

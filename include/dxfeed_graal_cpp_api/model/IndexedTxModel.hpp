@@ -95,6 +95,10 @@ struct DXFCPP_EXPORT IndexedTxModelImpl {
  *
  * <p>This model only supports single symbol subscriptions; multiple symbols cannot be configured.
  *
+ * <p>IndexedEventTxModel is the model of dxFeed Java API with one source and a SubscriptionController (the events
+ * batch limit, the aggregation period and the executor of the subscription). Choose IndexedTxModel for several sources
+ * that can be changed later or for the batch and snapshot processing flags.
+ *
  * <h3>Resource management and closed models</h3>
  *
  * <p>Attached model is a potential memory leak. If the pointer to attached model is lost, then there is no way
