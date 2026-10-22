@@ -194,10 +194,13 @@ TEST_CASE_FIXTURE(IndexedEventTxModelFixture, "IndexedEventTxModel: the settings
     REQUIRE(controller->getEventsBatchLimit() == 5);
     REQUIRE(controller->getAggregationPeriod().getTime() == 50);
 
-    controller->setEventsBatchLimit(DXFeedSubscription::OPTIMAL_BATCH_LIMIT);
+    // A copy: REQUIRE binds its operands by reference, and the static member has no out-of-class definition.
+    constexpr std::int32_t optimalBatchLimit = DXFeedSubscription::OPTIMAL_BATCH_LIMIT;
+
+    controller->setEventsBatchLimit(optimalBatchLimit);
     controller->setAggregationPeriod(TimePeriod::valueOf(0));
 
-    REQUIRE(controller->getEventsBatchLimit() == DXFeedSubscription::OPTIMAL_BATCH_LIMIT);
+    REQUIRE(controller->getEventsBatchLimit() == optimalBatchLimit);
     REQUIRE(controller->getAggregationPeriod().getTime() == 0);
 
     controller->setAggregationPeriod(std::int64_t{100});
