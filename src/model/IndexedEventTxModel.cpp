@@ -21,8 +21,8 @@ struct IndexedEventTxModelImpl::Listener {
     // progress on other threads), so `this` (the user data of the native listener) is not used after that.
     JavaObjectHandle<IndexedEventTxModelListenerTag> handle;
 
-    explicit Listener(EventsReceived &&eventsReceived)
-        : eventsReceived(std::make_shared<EventsReceived>(std::move(eventsReceived))) {
+    explicit Listener(EventsReceived &&onEvents)
+        : eventsReceived(std::make_shared<EventsReceived>(std::move(onEvents))) {
     }
 
     // typedef void (*dxfg_IndexedEventTxModel_Listener_eventsReceived_f)(graal_isolatethread_t *thread,

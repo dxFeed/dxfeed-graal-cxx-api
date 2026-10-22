@@ -51,14 +51,30 @@ class OrderListener {
     struct BuyOrderComparator {
         bool operator()(const std::shared_ptr<Order> &a, const std::shared_ptr<Order> &b) const {
             // The price in descending order, the index if the prices are equal.
-            return a->getPrice() != b->getPrice() ? a->getPrice() > b->getPrice() : a->getIndex() < b->getIndex();
+            if (a->getPrice() > b->getPrice()) {
+                return true;
+            }
+
+            if (a->getPrice() < b->getPrice()) {
+                return false;
+            }
+
+            return a->getIndex() < b->getIndex();
         }
     };
 
     struct SellOrderComparator {
         bool operator()(const std::shared_ptr<Order> &a, const std::shared_ptr<Order> &b) const {
             // The price in ascending order, the index if the prices are equal.
-            return a->getPrice() != b->getPrice() ? a->getPrice() < b->getPrice() : a->getIndex() < b->getIndex();
+            if (a->getPrice() < b->getPrice()) {
+                return true;
+            }
+
+            if (a->getPrice() > b->getPrice()) {
+                return false;
+            }
+
+            return a->getIndex() < b->getIndex();
         }
     };
 
