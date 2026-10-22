@@ -419,6 +419,7 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/model/IsolatedIndexedTxModel.cpp
         src/isolated/model/IsolatedTimeSeriesTxModel.cpp
         src/isolated/ondemand/IsolatedOnDemandService.cpp
+        src/isolated/orcs/IsolatedPriceLevelService.cpp
         src/isolated/util/IsolatedTimePeriod.cpp
         src/isolated/schedule/IsolatedDay.cpp
         src/isolated/schedule/IsolatedSession.cpp
@@ -471,6 +472,12 @@ set(dxFeedGraalCxxApi_Model_Sources
 
 set(dxFeedGraalCxxApi_OnDemand_Sources
         src/ondemand/OnDemandService.cpp
+)
+
+set(dxFeedGraalCxxApi_Orcs_Sources
+        src/orcs/AuthOrderSource.cpp
+        src/orcs/PriceLevelChecker.cpp
+        src/orcs/PriceLevelService.cpp
 )
 
 set(dxFeedGraalCxxApi_Promise_Sources
@@ -579,6 +586,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Logging_Sources}
         ${dxFeedGraalCxxApi_Model_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
+        ${dxFeedGraalCxxApi_Orcs_Sources}
         ${dxFeedGraalCxxApi_Promise_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}
         ${dxFeedGraalCxxApi_System_Sources}
@@ -865,6 +873,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/Model/MultipleMarketDepthSample)
     add_subdirectory(samples/cpp/Model/PriceLevelBookSample)
     add_subdirectory(samples/cpp/OnDemand/OnDemandSample)
+    add_subdirectory(samples/cpp/Orcs/PriceLevelServiceClientSample)
     add_subdirectory(samples/cpp/Schedule/ScheduleSample)
 
     include(cmake/Portals.cmake)
