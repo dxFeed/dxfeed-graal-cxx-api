@@ -245,9 +245,9 @@ template <typename T> class LazyJavaObjectHandle final {
 
     enum State : int { EMPTY, CREATING, CREATED };
 
+    Initializer initializer_{};
     mutable Storage storage_{};
     mutable std::atomic<int> state_{EMPTY};
-    Initializer initializer_{};
     bool constant_{};
 
     public:
