@@ -174,6 +174,8 @@ struct PriceIncrements;
 struct CFI;
 struct AdditionalUnderlyings;
 struct HistoryEndpoint;
+struct PriceLevelService;
+struct AuthOrderSource;
 struct TimeSeriesTxModelBuilderTag;
 struct TimeSeriesTxModelTag;
 struct IndexedTxModelBuilderTag;
@@ -262,6 +264,9 @@ template struct JavaObjectHandle<Logging::ListenerTag>;
 
 template struct JavaObjectHandle<HistoryEndpoint>;
 template struct JavaObjectHandle<HistoryEndpoint::Builder>;
+
+template struct JavaObjectHandle<PriceLevelService>;
+template struct JavaObjectHandle<AuthOrderSource>;
 
 template struct JavaObjectHandle<AdditionalUnderlyings>;
 template struct JavaObjectHandle<CFI>;

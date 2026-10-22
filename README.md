@@ -445,6 +445,12 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 - [x] [OnDemandSample](samples/cpp/OnDemand/OnDemandSample/src/main.cpp)
   a sample that demonstrates how to use the dxFeed on-demand history data replay service API
 
+### ORCS
+
+- [x] [PriceLevelServiceClientSample](samples/cpp/Orcs/PriceLevelServiceClientSample/src/main.cpp)
+  demonstrates how to get the price levels and the quotes of a symbol for a period from the Order Reconstruction
+  Service (ORCS) with `PriceLevelService`
+
 ### UI
 
 - [x] [DXFeedTimeAndSalesSample](samples/cpp/UI/DXFeedTimeAndSalesSample/src/main.cpp)
