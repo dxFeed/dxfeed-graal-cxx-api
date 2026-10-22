@@ -567,6 +567,11 @@ function(release_prepare version dry_run push)
         return()
     endif ()
 
+    # Before any write: an ignored fragment passes the check of the working tree, but git rm fails.
+    if (NOT moved STREQUAL "")
+        release_git(ignored ls-files --error-unmatch -- ${moved})
+    endif ()
+
     release_write("${RELEASE_NOTES}" "${new_notes}" ${notes_text_CRLF})
     release_write("${RELEASE_CMAKE}" "${cmake_text}" ${cmake_text_CRLF})
     release_write("${RELEASE_DOXYFILE}" "${doxyfile_text}" ${doxyfile_text_CRLF})

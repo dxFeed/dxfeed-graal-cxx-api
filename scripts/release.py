@@ -328,6 +328,9 @@ def prepare(version, dry_run, push):
         print(f"(dry run: no files changed, no commit {version}, no tag {version})")
         return
 
+    if moved:  # before any write: an ignored fragment passes the check of the working tree, but git rm fails
+        _git("ls-files", "--error-unmatch", "--", *moved)
+
     for path in old:
         _write(path, new[path], old[path][1])
 

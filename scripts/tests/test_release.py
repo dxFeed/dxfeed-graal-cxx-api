@@ -431,6 +431,14 @@ class PrepareTest(unittest.TestCase):
         self.assertEqual(output.replace("\r\n", "\n"), ITEMS + FRAGMENT_ITEMS)
         self.assertEqual(self.run_release("v8.2.0-draft1", "--notes")[1].replace("\r\n", "\n"), ITEMS)
 
+    def test_refuses_an_ignored_fragment(self):
+        # Not in "git status": the release must stop before it writes anything.
+        (self.root / ".gitignore").write_text("release-notes/ignored.md\n")
+        self.add_fragments({"MDAPI-1.md": "* One.\n"})
+        (self.root / release.FRAGMENTS / "ignored.md").write_text("* Ignored.\n")
+        self.assert_refused(["v8.2.0"], "release-notes/ignored.md")
+        self.assertEqual(self.git("status", "--porcelain"), "")
+
     def test_refuses_an_empty_fragment(self):
         self.add_fragments({"MDAPI-1.md": "\n"})
         self.assert_refused(["v8.2.0"], "release-notes/MDAPI-1.md is empty")
