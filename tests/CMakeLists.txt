@@ -66,6 +66,7 @@ set(DXFC_TEST_SOURCES
         model/TimeSeriesTxModelTest.cpp
         model/TxModelTapeTest.cpp
         model/MarketDepthModelTest.cpp
+        orcs/PriceLevelServiceTest.cpp
         promise/PromisesTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp

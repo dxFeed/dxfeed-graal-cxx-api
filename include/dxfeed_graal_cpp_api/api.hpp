@@ -49,6 +49,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "./model/TimeSeriesTxModel.hpp"
 #include "./model/TxModelListener.hpp"
 #include "./ondemand/OnDemandService.hpp"
+#include "./orcs/OrcsModule.hpp"
 #include "./promise/Promise.hpp"
 #include "./promise/Promises.hpp"
 #include "./schedule/ScheduleModule.hpp"
