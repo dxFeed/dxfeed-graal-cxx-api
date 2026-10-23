@@ -332,6 +332,10 @@ std::uint32_t OrderSource::getEventTypeMask(const EventTypeEnum &eventType) {
         return PUB_SPREAD_ORDER;
     }
 
+    if (eventType == EventTypeEnum::ORDER_IMBALANCE) {
+        return PUB_ORDER_IMBALANCE;
+    }
+
     // TODO: MDAPI-243, MDAPI-256
     // if (eventType == EventTypeEnum::NUAM_ORDER) {
     //     return PUB_NUAM_ORDER;
