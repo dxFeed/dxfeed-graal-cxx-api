@@ -48,7 +48,7 @@ OrderImbalance makePopulated() {
 
 // The same value or both are NaN.
 bool sameDouble(double actual, double expected) {
-    return (std::isnan(actual) && std::isnan(expected)) || actual == expected;
+    return (std::isnan(actual) && std::isnan(expected)) || math::exactlyEquals(actual, expected);
 }
 
 void checkSame(const OrderImbalance &actual, const OrderImbalance &expected) {
