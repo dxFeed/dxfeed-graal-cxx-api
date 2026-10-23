@@ -10,6 +10,7 @@
 #include <span>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -413,7 +414,9 @@ TEST_CASE("OrderImbalance::toString() prints the fields as the Java API does") {
 namespace {
 
 struct OrderImbalanceHubFixture : test::LocalHubFixture {
-    OrderImbalanceHubFixture() : LocalHubFixture({{DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true"}}) {
+    OrderImbalanceHubFixture()
+        : LocalHubFixture(
+              std::unordered_map<std::string, std::string>{{DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true"}}) {
     }
 
     // Subscribes to the symbols, publishes the events and returns what the subscription received.
