@@ -15,7 +15,10 @@ on:
 permissions:
   contents: read
 
+# Retries and a network timeout (seconds) for apt-get; the steps that install packages also have a time limit,
+# so a stalled mirror or PPA fails the step instead of holding the job.
 env:
+  APT_OPTIONS: -o Acquire::Retries=3 -o Acquire::http::Timeout=60 -o Acquire::https::Timeout=60
   LLVM_VERSION: '23'
   CPPCHECK_VERSION: '2.22.0'
   CPPCHECK_SHA256: 'd74945deb2d50393430e07596b766f8a779512c7f60dac2a30ea64e059ece57b'
@@ -24,16 +27,19 @@ jobs:
   clang-tidy:
     name: "clang-tidy"
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install clang-tidy from LLVM apt repo
+        timeout-minutes: 10
         run: |
-          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+          wget -qO- --tries=3 --timeout=60 https://apt.llvm.org/llvm-snapshot.gpg.key \
+            | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
           echo "deb https://apt.llvm.org/noble/ llvm-toolchain-noble-${LLVM_VERSION} main" | sudo tee /etc/apt/sources.list.d/llvm.list
-          sudo apt-get update
-          sudo apt-get install -y clang-${LLVM_VERSION} clang-tidy-${LLVM_VERSION}
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y clang-${LLVM_VERSION} clang-tidy-${LLVM_VERSION}
           clang-tidy-${LLVM_VERSION} --version
 
       # The compilation database without precompiled headers: clang-tidy analyzes every source with its own includes.
@@ -86,6 +92,7 @@ jobs:
   cppcheck:
     name: "cppcheck"
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -100,8 +107,9 @@ jobs:
 
       - name: Build cppcheck
         if: ${{ steps.cache-cppcheck.outputs.cache-hit != 'true' }}
+        timeout-minutes: 30
         run: |
-          curl -sSL -o cppcheck.tar.gz \
+          curl -sSL --retry 3 --connect-timeout 60 -o cppcheck.tar.gz \
             https://github.com/cppcheck-opensource/cppcheck/archive/refs/tags/${CPPCHECK_VERSION}.tar.gz
           echo "${CPPCHECK_SHA256}  cppcheck.tar.gz" | sha256sum -c -
           tar xzf cppcheck.tar.gz

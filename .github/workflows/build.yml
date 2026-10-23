@@ -24,11 +24,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && 'other-label' || 'run' }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+# Retries and a network timeout (seconds) for apt-get; the steps that install packages also have a time limit,
+# so a stalled mirror or PPA fails the step instead of holding the job.
+env:
+  APT_OPTIONS: -o Acquire::Retries=3 -o Acquire::http::Timeout=60 -o Acquire::https::Timeout=60
+
 jobs:
   # The short set of the pull requests or the full matrix, both from .github/ci/build-matrix.json.
   plan:
     if: ${{ github.event.action != 'labeled' || github.event.label.name == 'full-ci' }}
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     outputs:
       full: ${{ steps.plan.outputs.full }}
       build: ${{ steps.plan.outputs.build }}
@@ -56,6 +62,7 @@ jobs:
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
     runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 90
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -77,24 +84,28 @@ jobs:
 
       - name: Install clang from LLVM apt repo
         if: ${{ matrix.config.llvm_version != '' && matrix.config.llvm_version != null }}
+        timeout-minutes: 10
         run: |
-          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+          wget -qO- --tries=3 --timeout=60 https://apt.llvm.org/llvm-snapshot.gpg.key \
+            | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
           echo "deb https://apt.llvm.org/noble/ llvm-toolchain-noble-${{ matrix.config.llvm_version }} main" | sudo tee /etc/apt/sources.list.d/llvm.list
-          sudo apt-get update
-          sudo apt-get install -y clang-${{ matrix.config.llvm_version }}
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y clang-${{ matrix.config.llvm_version }}
           
       - name: Install gcc from ubuntu-toolchain-r PPA
         if: ${{ matrix.config.gcc_version != '' && matrix.config.gcc_version != null }}
+        timeout-minutes: 10
         run: |
-          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-          sudo apt-get update
-          sudo apt-get install -y gcc-${{ matrix.config.gcc_version }} g++-${{ matrix.config.gcc_version }}
+          sudo add-apt-repository -y -n ppa:ubuntu-toolchain-r/test
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y gcc-${{ matrix.config.gcc_version }} g++-${{ matrix.config.gcc_version }}
 
       - name: Install Linux UI dependencies
         if: ${{ contains(matrix.config.os, 'linux') }}
+        timeout-minutes: 10
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'mac') }}
@@ -199,6 +210,7 @@ jobs:
     needs: plan
     name: "release-script-tests"
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -214,6 +226,7 @@ jobs:
     needs: plan
     name: "ubuntu-24.04-clang-18-RelWithDebInfo-TSAN"
     runs-on: ubuntu-24.04
+    timeout-minutes: 45
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -272,6 +285,7 @@ jobs:
 
     name: "${{ matrix.config.name }}-Debug-headers-no-pch"
     runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -284,9 +298,10 @@ jobs:
       # Wayland-only configuration is built as well.
       - name: Install Linux UI dependencies (Wayland only)
         if: ${{ contains(matrix.config.os, 'linux') }}
+        timeout-minutes: 10
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libwayland-dev libxkbcommon-dev
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y libgl1-mesa-dev libwayland-dev libxkbcommon-dev
 
       - name: Configure CMake
         run: >
@@ -313,6 +328,7 @@ jobs:
     if: ${{ needs.plan.outputs.full == 'true' }}
     name: "ubuntu-24.04-clang-18-Release-network-tests"
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     continue-on-error: true
 
     steps:
@@ -365,6 +381,7 @@ jobs:
 
     name: "${{ matrix.config.name }}-Release-dynamic-link-tests"
     runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 45
     continue-on-error: true
 
     steps:

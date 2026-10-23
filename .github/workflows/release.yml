@@ -26,10 +26,16 @@ permissions:
   pages: write
   id-token: write
 
+# Retries and a network timeout (seconds) for apt-get; the steps that install packages also have a time limit,
+# so a stalled mirror or PPA fails the step instead of holding the job.
+env:
+  APT_OPTIONS: -o Acquire::Retries=3 -o Acquire::http::Timeout=60 -o Acquire::https::Timeout=60
+
 jobs:
   get_version:
     name: Get Version
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       version: ${{ steps.set_version.outputs.version }}
       tag_name: ${{ steps.set_version.outputs.tag_name }}
@@ -112,6 +118,7 @@ jobs:
             cxx: 'clang++'
         buildType: [ Release, Debug, RelWithDebInfo ]
     runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 90
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -124,9 +131,10 @@ jobs:
 
       - name: Install Linux UI dependencies
         if: ${{ contains(matrix.config.os, 'linux') && !contains(matrix.buildType, 'Deb') }}
+        timeout-minutes: 10
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
 
       - name: Prepare build [Lib]
         run: |
@@ -393,12 +401,15 @@ jobs:
           - name: ubuntu-24.04
             image: ubuntu-24.04
     runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 30
     steps:
       - name: Install Doxygen
+        timeout-minutes: 10
         run: |
           mkdir dox
           cd dox
-          wget https://github.com/doxygen/doxygen/releases/download/Release_1_18_0/doxygen-1.18.0.linux.bin.tar.gz
+          wget --tries=3 --timeout=60 \
+            https://github.com/doxygen/doxygen/releases/download/Release_1_18_0/doxygen-1.18.0.linux.bin.tar.gz
           echo "14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90  doxygen-1.18.0.linux.bin.tar.gz" \
             | sha256sum -c -
           tar -xf doxygen-1.18.0.linux.bin.tar.gz
@@ -465,6 +476,7 @@ jobs:
           - name: win-vs2022
             image: windows-latest
     runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -530,6 +542,7 @@ jobs:
     needs: [ get_version, build_package_and_upload ]
     # The container tag must match the host OS.
     runs-on: windows-2022
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -579,6 +592,7 @@ jobs:
   publish_release:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     name: Publish Release
     needs: [ get_version, build_package_and_upload, build_full_src_bundle_and_upload, build_docs_and_upload_and_deploy_gh_pages, check_static_mt ]
     permissions:
