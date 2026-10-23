@@ -7,6 +7,7 @@
 #include "../../include/dxfeed_graal_cpp_api/event/candle/Candle.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/AnalyticOrder.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/OptionSale.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/market/OrderImbalance.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/Order.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/OtcMarketsOrder.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/Profile.hpp"
@@ -79,6 +80,8 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
         return OptionSale::fromGraal(e);
     case DXFG_EVENT_TEXT_MESSAGE:
         return TextMessage::fromGraal(e);
+    case DXFG_EVENT_ORDER_IMBALANCE:
+        return OrderImbalance::fromGraal(e);
     default:
         throw InvalidArgumentException("Unknown event type: " + std::to_string(e->clazz));
     }
@@ -189,6 +192,10 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
         break;
     case DXFG_EVENT_TEXT_MESSAGE:
         TextMessage::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_ORDER_IMBALANCE:
+        OrderImbalance::freeGraal(e);
 
         break;
     default:

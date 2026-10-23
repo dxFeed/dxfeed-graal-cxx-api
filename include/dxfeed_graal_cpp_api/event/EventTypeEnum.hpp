@@ -104,6 +104,7 @@ class DXFCPP_EXPORT EventTypeEnum {
     static const EventTypeEnum OPTION_SALE;
 
     static const EventTypeEnum TEXT_MESSAGE;
+    static const EventTypeEnum ORDER_IMBALANCE;
 
     /// All event types (constant-initialized, so it can be used in the dynamic initialization of global variables).
     static const std::span<const std::reference_wrapper<const EventTypeEnum>> ALL;

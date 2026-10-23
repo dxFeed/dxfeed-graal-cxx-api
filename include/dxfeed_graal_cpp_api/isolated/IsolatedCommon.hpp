@@ -64,6 +64,8 @@ inline std::string_view toString(dxfg_event_clazz_t eventClazz) {
         return "DXFG_EVENT_MARKET_MAKER";
     case DXFG_EVENT_TEXT_CONFIGURATION:
         return "DXFG_EVENT_TEXT_CONFIGURATION";
+    case DXFG_EVENT_ORDER_IMBALANCE:
+        return "DXFG_EVENT_ORDER_IMBALANCE";
     default:
         return "UNKNOWN";
     }

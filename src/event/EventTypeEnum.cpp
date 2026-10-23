@@ -53,6 +53,8 @@ constinit const EventTypeEnum EventTypeEnum::OPTION_SALE{DXFG_EVENT_OPTION_SALE,
                                                          true};
 constinit const EventTypeEnum EventTypeEnum::TEXT_MESSAGE{
     DXFG_EVENT_TEXT_MESSAGE, "TEXT_MESSAGE", "TextMessage", false, false, false, false};
+constinit const EventTypeEnum EventTypeEnum::ORDER_IMBALANCE{DXFG_EVENT_ORDER_IMBALANCE, "ORDER_IMBALANCE",
+                                                             "OrderImbalance", false};
 
 namespace {
 
@@ -76,6 +78,7 @@ constinit const std::array ALL_EVENT_TYPES{
     std::cref(EventTypeEnum::SERIES),
     std::cref(EventTypeEnum::OPTION_SALE),
     std::cref(EventTypeEnum::TEXT_MESSAGE),
+    std::cref(EventTypeEnum::ORDER_IMBALANCE),
 };
 
 } // namespace
@@ -106,6 +109,7 @@ constexpr auto ALL_EVENT_TYPES_BY_NAME = ConstantMap<std::string_view, EventType
     {"SERIES", EventTypeEnum::SERIES},
     {"OPTION_SALE", EventTypeEnum::OPTION_SALE},
     {"TEXT_MESSAGE", EventTypeEnum::TEXT_MESSAGE},
+    {"ORDER_IMBALANCE", EventTypeEnum::ORDER_IMBALANCE},
 });
 
 constexpr auto ALL_EVENT_TYPES_BY_CLASS_NAME = ConstantMap<std::string_view, EventTypeEnum>::sorted({
@@ -127,6 +131,7 @@ constexpr auto ALL_EVENT_TYPES_BY_CLASS_NAME = ConstantMap<std::string_view, Eve
     {"Series", EventTypeEnum::SERIES},
     {"OptionSale", EventTypeEnum::OPTION_SALE},
     {"TextMessage", EventTypeEnum::TEXT_MESSAGE},
+    {"OrderImbalance", EventTypeEnum::ORDER_IMBALANCE},
 });
 
 constexpr auto ALL_EVENT_TYPES_BY_ID = ConstantMap<std::uint32_t, EventTypeEnum>::sorted({
@@ -148,6 +153,7 @@ constexpr auto ALL_EVENT_TYPES_BY_ID = ConstantMap<std::uint32_t, EventTypeEnum>
     {DXFG_EVENT_SERIES, EventTypeEnum::SERIES},
     {DXFG_EVENT_OPTION_SALE, EventTypeEnum::OPTION_SALE},
     {DXFG_EVENT_TEXT_MESSAGE, EventTypeEnum::TEXT_MESSAGE},
+    {DXFG_EVENT_ORDER_IMBALANCE, EventTypeEnum::ORDER_IMBALANCE},
 });
 
 static_assert(ALL_EVENT_TYPES_BY_NAME.size() == std::tuple_size_v<decltype(ALL_EVENT_TYPES)>);

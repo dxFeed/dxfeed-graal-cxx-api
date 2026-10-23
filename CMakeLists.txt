@@ -522,16 +522,19 @@ set(dxFeedGraalCxxApi_EventCandle_Sources
 
 set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/AnalyticOrder.cpp
+        src/event/market/AuctionType.cpp
         src/event/market/OtcMarketsPriceType.cpp
         src/event/market/OtcMarketsOrder.cpp
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
+        src/event/market/ImbalanceSide.cpp
         src/event/market/MarketEvent.cpp
         src/event/market/MarketEventSymbols.cpp
         src/event/market/OptionSale.cpp
         src/event/market/Order.cpp
         src/event/market/OrderAction.cpp
         src/event/market/OrderBase.cpp
+        src/event/market/OrderImbalance.cpp
         src/event/market/OrderSource.cpp
         src/event/market/PriceType.cpp
         src/event/market/Profile.cpp
