@@ -1,0 +1,14 @@
+/* README images marked for one GitHub theme (#gh-light-mode-only, #gh-dark-mode-only) follow the color scheme here too. */
+img[src$="#gh-dark-mode-only"] {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    img[src$="#gh-light-mode-only"] {
+        display: none;
+    }
+
+    img[src$="#gh-dark-mode-only"] {
+        display: inline;
+    }
+}

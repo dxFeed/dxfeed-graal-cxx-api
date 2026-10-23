@@ -1,7 +1,5 @@
-<picture>
- <source media="(prefers-color-scheme: dark)" srcset="docs/images/logo_dark.svg">
- <img alt="light" src="docs/images/logo_light.svg">
-</picture>
+![dxFeed](docs/images/logo_light.svg#gh-light-mode-only)
+![dxFeed](docs/images/logo_dark.svg#gh-dark-mode-only)
 
 This package provides access to [dxFeed market data](https://dxfeed.com/market-data/).
 The library is built as a language-specific wrapper over
@@ -9,7 +7,7 @@ the [dxFeed Graal Native](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxf
 which was compiled with [GraalVM Native Image](https://www.graalvm.org/latest/reference-manual/native-image/)
 and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) (our flagman API).
 
-:information_source: If you already use [dxFeed C API](https://github.com/dxFeed/dxfeed-c-api), please see
+ℹ️ If you already use [dxFeed C API](https://github.com/dxFeed/dxfeed-c-api), please see
 the [Overview](#overview) section.<br>
 
 [![Build](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml)
@@ -54,10 +52,10 @@ that prevent us from providing a state-of-the-art technological solution.
 
 ### Benefits of the New Version
 
-- :rocket: Increased performance
-- :milky_way: Wider functionality
-- :gemini: Identical programming interfaces to our best API
-- :thumbsup: Higher quality of support and service
+- 🚀 Increased performance
+- 🌌 Wider functionality
+- ♊ Identical programming interfaces to our best API
+- 👍 Higher quality of support and service
 
 ### Milestones
 
@@ -92,10 +90,8 @@ will be amended, *"best practices"*, specific language restrictions).
 
 Below is a scheme of this process:
 
-<picture>
- <source media="(prefers-color-scheme: dark)" srcset="docs/images/scheme_dark.svg">
- <img alt="light" src="docs/images/scheme_light.svg">
-</picture>
+![API scheme](docs/images/scheme_light.svg#gh-light-mode-only)
+![API scheme](docs/images/scheme_dark.svg#gh-dark-mode-only)
 
 ### Architectural Restrictions and Other Limitations of the Old Version
 
@@ -459,11 +455,11 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
   displays the latest 30 `TimeAndSale` events and the instrument description in a cross-platform Dear ImGui window.
   It accumulates snapshots and updates received from `IndexedTxModel`; the endpoint is configured in
   `dxfeed.system.properties`. Enter a symbol and press Enter (or **Subscribe**) to change the subscription.
-- [ ] [MarketDepthModelSample](samples/cpp/UI/MarketDepthModelSample/src/main.cpp)
+- [ ] MarketDepthModelSample
   demonstrates how to draw a Market Depth.
-- [ ] [CandleChartSample](samples/cpp/UI/CandleChartSample/src/main.cpp)
+- [ ] CandleChartSample
   demonstrates how to draw a Candlestick Chart.
-- [ ] [PriceLevelBookSample](samples/cpp/UI/PriceLevelBookSample/src/main.cpp)
+- [ ] PriceLevelBookSample
   demonstrates how to compile a price level book (market by price) that aggregates individual orders
   (market by order)
 
@@ -476,91 +472,91 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
 
 ### Endpoint Roles
 
-- [FEED](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2dae352a08d4fba713e5ae1e538bf27258c) connects to the remote data
+- [FEED](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d03/structDXEndpoint.html#a4257e04caaa1ff898a60ece339e02810ae352a08d4fba713e5ae1e538bf27258c) connects to the remote data
   feed provider and is optimized for real-time or delayed data processing, this is a default role
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [STREAM_FEED](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da08e8da2638e7a4a4dfb3d29ab5afb751) is similar to
+- [STREAM_FEED](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d03/structDXEndpoint.html#a4257e04caaa1ff898a60ece339e02810a08e8da2638e7a4a4dfb3d29ab5afb751) is similar to
   FEED and also connects to the remote data feed provider but is designed for bulk data parsing from files
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [PUBLISHER](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da02c25714ac6e2973dfb530a7520c80ae) connects to the
+- [PUBLISHER](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d03/structDXEndpoint.html#a4257e04caaa1ff898a60ece339e02810a02c25714ac6e2973dfb530a7520c80ae) connects to the
   remote publisher hub (also known as multiplexor) or creates a publisher on the local
-  host ([WriteTapeFile](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/WriteTapeFile/src/main.cpp))
+  host ([WriteTapeFile](samples/cpp/File/WriteTapeFileSample/src/main.cpp))
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [STREAM_PUBLISHER](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da511c10e349c1261b726f4bf830c8a0e2) is
+- [STREAM_PUBLISHER](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d03/structDXEndpoint.html#a4257e04caaa1ff898a60ece339e02810a511c10e349c1261b726f4bf830c8a0e2) is
   similar to PUBLISHER and also connects to the remote publisher hub, but is designed for bulk data publishing
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [LOCAL_HUB](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da16722a7e83ac68f9bc32cae5242046f5) is a local hub
+- [LOCAL_HUB](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d03/structDXEndpoint.html#a4257e04caaa1ff898a60ece339e02810a16722a7e83ac68f9bc32cae5242046f5) is a local hub
   without the ability to establish network connections. Events published via publisher are delivered to local feed only.
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [ON_DEMAND_FEED](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d03/structdxfcpp_1_1_d_x_endpoint.html#ac5cd7cd6eed2fdaf9daf96d4e0cf9f2da4e0e3dbd8f06b71f54c84c97fea30e22) is similar
+- [ON_DEMAND_FEED](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d03/structDXEndpoint.html#a4257e04caaa1ff898a60ece339e02810a4e0e3dbd8f06b71f54c84c97fea30e22) is similar
   to FEED, but it is designed to be used with OnDemandService for historical data replay only
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
 
 ### Event Types
 
-- [Order](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d00/classdxfcpp_1_1_order.html) is a snapshot of the full available
+- [Order](https://dxfeed.github.io/dxfeed-graal-cxx-api/d5/d03/classOrder.html) is a snapshot of the full available
   market depth for a symbol
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [SpreadOrder](https://dxfeed.github.io/dxfeed-graal-cxx-api/da/d01/classdxfcpp_1_1_spread_order.html) is a snapshot of the
+- [SpreadOrder](https://dxfeed.github.io/dxfeed-graal-cxx-api/d5/d02/classSpreadOrder.html) is a snapshot of the
   full available market depth for all spreads
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [AnalyticOrder](https://dxfeed.github.io/dxfeed-graal-cxx-api/d4/d00/classdxfcpp_1_1_analytic_order.html) represents an
+- [AnalyticOrder](https://dxfeed.github.io/dxfeed-graal-cxx-api/df/d01/classAnalyticOrder.html) represents an
   extension of Order introducing analytic information, e.g., adding iceberg-related
   information to this order
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [Trade](https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d01/classdxfcpp_1_1_trade.html) is a snapshot of the price and size
+- [Trade](https://dxfeed.github.io/dxfeed-graal-cxx-api/d6/d03/classTrade.html) is a snapshot of the price and size
   of the last trade during regular trading hours and an overall day
   volume and day turnover
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [TradeETH](https://dxfeed.github.io/dxfeed-graal-cxx-api/dd/d02/classdxfcpp_1_1_trade_e_t_h.html) is a snapshot of the price
+- [TradeETH](https://dxfeed.github.io/dxfeed-graal-cxx-api/dc/d03/classTradeETH.html) is a snapshot of the price
   and size of the last trade during extended trading hours and the extended
   trading hours day volume and day turnover
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [Candle](https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d03/classdxfcpp_1_1_candle.html) - event with open, high, low, and
+- [Candle](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d02/classCandle.html) - event with open, high, low, and
   close prices and other information for a specific period
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [Quote](https://dxfeed.github.io/dxfeed-graal-cxx-api/df/d03/classdxfcpp_1_1_quote.html) is a snapshot of the best bid and
+- [Quote](https://dxfeed.github.io/dxfeed-graal-cxx-api/df/d00/classQuote.html) is a snapshot of the best bid and
   ask prices and other fields that change with each quote
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [Profile](https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d00/classdxfcpp_1_1_profile.html) is a snapshot that contains the
+- [Profile](https://dxfeed.github.io/dxfeed-graal-cxx-api/dd/d00/classProfile.html) is a snapshot that contains the
   security instrument description
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [Summary](https://dxfeed.github.io/dxfeed-graal-cxx-api/dd/d03/classdxfcpp_1_1_summary.html) is a snapshot of the trading
+- [Summary](https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d02/classSummary.html) is a snapshot of the trading
   session, including session highs, lows, etc.
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [TimeAndSale](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d00/classdxfcpp_1_1_time_and_sale.html) - represents a trade or
+- [TimeAndSale](https://dxfeed.github.io/dxfeed-graal-cxx-api/d7/d02/classTimeAndSale.html) - represents a trade or
   other market event with price, like market open/close price, etc.
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [Greeks](https://dxfeed.github.io/dxfeed-graal-cxx-api/d9/d01/classdxfcpp_1_1_greeks.html) is a snapshot of the option
+- [Greeks](https://dxfeed.github.io/dxfeed-graal-cxx-api/da/d02/classGreeks.html) is a snapshot of the option
   price, Black-Scholes volatility, and Greeks
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [Series](https://dxfeed.github.io/dxfeed-graal-cxx-api/d1/d02/classdxfcpp_1_1_series.html) is a snapshot of computed values
+- [Series](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d00/classSeries.html) is a snapshot of computed values
   available for all options series for a given underlying symbol based on options market prices
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [TheoPrice](https://dxfeed.github.io/dxfeed-graal-cxx-api/d2/d03/classdxfcpp_1_1_theo_price.html) is a snapshot of the
+- [TheoPrice](https://dxfeed.github.io/dxfeed-graal-cxx-api/d2/d00/classTheoPrice.html) is a snapshot of the
   theoretical option price computation that is periodically performed
   by [dxPrice](http://www.devexperts.com/en/products/price.html) model-free computation
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [Underlying](https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d02/classdxfcpp_1_1_underlying.html) is a snapshot of computed
+- [Underlying](https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d02/classUnderlying.html) is a snapshot of computed
   values available for an option underlying symbol based on the market’s option prices
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
@@ -568,7 +564,7 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
   application-specific attachment
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [OptionSale](https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d02/classdxfcpp_1_1_option_sale.html) is an event that represents
+- [OptionSale](https://dxfeed.github.io/dxfeed-graal-cxx-api/d1/d00/classOptionSale.html) is an event that represents
   a trade or another market event with the price (for example, market open/close price, etc.) for each option symbol
   listed under the specified Underlying
   - [ ] dxFeed Graal C API
@@ -583,27 +579,27 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
 - String is a string representation of the symbol
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [TimeSeriesSubscriptionSymbol](https://dxfeed.github.io/dxfeed-graal-cxx-api/d6/d01/classdxfcpp_1_1_time_series_subscription_symbol.html)
+- [TimeSeriesSubscriptionSymbol](https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d03/classTimeSeriesSubscriptionSymbol.html)
   represents subscription to time-series events
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [IndexedEventSubscriptionSymbol](https://dxfeed.github.io/dxfeed-graal-cxx-api/df/d02/classdxfcpp_1_1_indexed_event_subscription_symbol.html)
+- [IndexedEventSubscriptionSymbol](https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d03/classIndexedEventSubscriptionSymbol.html)
   represents subscription to a specific source of indexed events
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [WildcardSymbol.ALL](https://dxfeed.github.io/dxfeed-graal-cxx-api/dd/d03/structdxfcpp_1_1_wildcard_symbol.html)  represents a
+- [WildcardSymbol.ALL](https://dxfeed.github.io/dxfeed-graal-cxx-api/d9/d00/structWildcardSymbol.html)  represents a
   *wildcard* subscription to all events of the specific event type
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [CandleSymbol](https://dxfeed.github.io/dxfeed-graal-cxx-api/da/d01/structdxfcpp_1_1_candle_symbol.html)  symbol used
-  with [DXFeedSubscription](https://dxfeed.github.io/dxfeed-graal-cxx-api/d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html) class to
-  subscribe for [Candle](https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d03/classdxfcpp_1_1_candle.html) events
+- [CandleSymbol](https://dxfeed.github.io/dxfeed-graal-cxx-api/dc/d01/structCandleSymbol.html)  symbol used
+  with [DXFeedSubscription](https://dxfeed.github.io/dxfeed-graal-cxx-api/d7/d00/classDXFeedSubscription.html) class to
+  subscribe for [Candle](https://dxfeed.github.io/dxfeed-graal-cxx-api/d0/d02/classCandle.html) events
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
 
 ### Subscriptions & Models
 
-- [DXFeedSubscription](https://dxfeed.github.io/dxfeed-graal-cxx-api/d9/d03/classdxfcpp_1_1_d_x_feed_subscription.html) is a subscription for
+- [DXFeedSubscription](https://dxfeed.github.io/dxfeed-graal-cxx-api/d7/d00/classDXFeedSubscription.html) is a subscription for
   a set of symbols and event types
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
@@ -618,33 +614,33 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
 
 ### IPF & Schedule
 
-- [InstrumentProfile](https://dxfeed.github.io/dxfeed-graal-cxx-api/d8/d01/classdxfcpp_1_1_instrument_profile.html) represents basic
+- [InstrumentProfile](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d03/structInstrumentProfile.html) represents basic
   profile information about a market instrument
   - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API ([DxFeedIpfConnect](https://github.com/dxFeed/dxfeed-graal-cxx-api/tree/main/samples/cpp/DxFeedIpfConnect))
+  - [x] dxFeed Graal C++ API ([IpfSample](samples/cpp/IPF/IpfSample/src/main.cpp))
 - [InstrumentProfileReader](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/ipf/InstrumentProfileReader.html) reads
   instrument profiles from the stream using Instrument Profile Format (IPF).
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [InstrumentProfileConnection](https://dxfeed.github.io/dxfeed-graal-cxx-api/db/d00/classdxfcpp_1_1_instrument_profile_connection.html)
+- [InstrumentProfileConnection](https://dxfeed.github.io/dxfeed-graal-cxx-api/da/d03/classInstrumentProfileConnection.html)
   connects to an instrument profile URL and reads instrument profiles with support of streaming live updates.
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [InstrumentProfileCollector](https://dxfeed.github.io/dxfeed-graal-cxx-api/de/d03/classdxfcpp_1_1_instrument_profile_collector.html)
+- [InstrumentProfileCollector](https://dxfeed.github.io/dxfeed-graal-cxx-api/d8/d00/classInstrumentProfileCollector.html)
   collects instrument profile updates and provides the live instrument profiles list
   - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API ([DxFeedLiveIpfSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/DxFeedLiveIpfSample/src/main.cpp))
-- [Schedule](https://dxfeed.github.io/dxfeed-graal-cxx-api/d1/d00/structdxfcpp_1_1_schedule.html) provides API to retrieve and
+  - [x] dxFeed Graal C++ API ([IpfLiveSample](samples/cpp/IPF/IpfLiveSample/src/main.cpp))
+- [Schedule](https://dxfeed.github.io/dxfeed-graal-cxx-api/dc/d01/structSchedule.html) provides API to retrieve and
   explore various exchanges’ trading schedules and different financial instrument
   classes
   - [ ] dxFeed Graal C API
-  - [x] dxFeed Graal C++ API ([ScheduleSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/ScheduleSample/src/main.cpp))
+  - [x] dxFeed Graal C++ API ([ScheduleSample](samples/cpp/Schedule/ScheduleSample/src/main.cpp))
 
 ### Services
 
-- [OnDemandService](https://dxfeed.github.io/dxfeed-graal-cxx-api/d4/d02/structdxfcpp_1_1_on_demand_service.html) provides on-demand
+- [OnDemandService](https://dxfeed.github.io/dxfeed-graal-cxx-api/d3/d00/structOnDemandService.html) provides on-demand
   historical tick data replay
-  controls ([OnDemandSample](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/samples/cpp/OnDemandSample/src/main.cpp))
+  controls ([OnDemandSample](samples/cpp/OnDemand/OnDemandSample/src/main.cpp))
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
 
