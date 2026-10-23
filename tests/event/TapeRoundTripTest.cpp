@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MPL-2.0
 
 // Events of all types through QD text tapes. The golden tapes in tests/data/tapes are the reference: the text format
-// is QD's own, and the Java API reads and writes them the same way (checked with QD 3.355, see the README there).
+// is QD's own, and the Java API reads and writes them the same way (checked with QD 3.355, and 3.356 for
+// OrderImbalance, see the README there).
 //  - C++ -> Java -> C++: the events of the factory are written to a tape and read back.
 //  - Java -> C++: the golden tape is read into C++ events.
 //  - Java -> C++ -> Java: every column of the golden tape survives reading into C++ and writing back.

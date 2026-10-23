@@ -299,8 +299,9 @@ TEST_CASE("OrderSource predefined sources are the sources of the Java API with t
         CHECK(source.isPublishable(EventTypeEnum::ANALYTIC_ORDER) == ((flags & PUB_ANALYTIC_ORDER) != 0));
         CHECK(source.isPublishable(EventTypeEnum::OTC_MARKETS_ORDER) == ((flags & PUB_OTC_MARKETS_ORDER) != 0));
         CHECK(source.isPublishable(EventTypeEnum::SPREAD_ORDER) == ((flags & PUB_SPREAD_ORDER) != 0));
+        CHECK(source.isPublishable(EventTypeEnum::ORDER_IMBALANCE) == ((flags & PUB_ORDER_IMBALANCE) != 0));
         CHECK(source.isFullOrderBook() == ((flags & FULL_ORDER_BOOK) != 0));
-        // PUB_NUAM_ORDER and PUB_ORDER_IMBALANCE are checked when NuamOrder and OrderImbalance are added (MDAPI-256).
+        // PUB_NUAM_ORDER is checked when NuamOrder is added.
     }
 }
 
@@ -310,9 +311,12 @@ TEST_CASE("OrderSource::publishable and OrderSource::fullOrderBook list the sour
     CHECK(names(OrderSource::publishable(EventTypeEnum::OTC_MARKETS_ORDER)) ==
           javaNamesWithFlag(PUB_OTC_MARKETS_ORDER));
     CHECK(names(OrderSource::publishable(EventTypeEnum::SPREAD_ORDER)) == javaNamesWithFlag(PUB_SPREAD_ORDER));
+    CHECK(names(OrderSource::publishable(EventTypeEnum::ORDER_IMBALANCE)) == javaNamesWithFlag(PUB_ORDER_IMBALANCE));
     CHECK(names(OrderSource::fullOrderBook()) == std::vector<std::string>{"DEFAULT", "NTV", "NUAM"});
 
     CHECK(names(OrderSource::publishable(EventTypeEnum::SPREAD_ORDER)) == std::vector<std::string>{"DEFAULT", "ISE"});
+    CHECK(names(OrderSource::publishable(EventTypeEnum::ORDER_IMBALANCE)) ==
+          std::vector<std::string>{"DEFAULT", "NTV", "ARCA", "NUAM"});
     CHECK(names(OrderSource::publishable(EventTypeEnum::ORDER)).size() == javaPredefinedSources().size() - 9);
 }
 

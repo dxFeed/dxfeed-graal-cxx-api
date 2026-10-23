@@ -573,6 +573,10 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
   extension of `Order` for the symbols traded on the OTC Markets
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
+- [OrderImbalance](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/OrderImbalance.html) (experimental)
+  shows the imbalance between buy and sell orders during auctions
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
 
 ### Subscription Symbols
 

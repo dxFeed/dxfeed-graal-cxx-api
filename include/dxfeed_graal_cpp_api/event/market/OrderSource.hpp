@@ -30,7 +30,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct EventSourceWrapper;
 
 /**
- * Identifies a source of Order, AnalyticOrder, OtcMarketsOrder, and SpreadOrder events.
+ * Identifies a source of Order, AnalyticOrder, OtcMarketsOrder, SpreadOrder, and OrderImbalance events.
  * There are the following kinds of order sources:
  * <ul>
  * <li><em>Synthetic</em> sources OrderSource::COMPOSITE_BID, OrderSource::COMPOSITE_ASK,
@@ -690,8 +690,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @ref isPublishable() "isPublishable" is `true`, in the order of their declaration. Events can be directly
      * published with these sources, and their subscription can be observed directly via DXPublisher.
      *
-     * @param eventType EventTypeEnum::ORDER, EventTypeEnum::ANALYTIC_ORDER, EventTypeEnum::OTC_MARKETS_ORDER or
-     * EventTypeEnum::SPREAD_ORDER.
+     * @param eventType EventTypeEnum::ORDER, EventTypeEnum::ANALYTIC_ORDER, EventTypeEnum::OTC_MARKETS_ORDER,
+     * EventTypeEnum::SPREAD_ORDER or EventTypeEnum::ORDER_IMBALANCE.
      * @return a list of the publishable order sources.
      * @throws InvalidArgumentException if the event type is not one of the above.
      *
@@ -714,8 +714,8 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * Returns `true` if the events of the given type can be directly published with this source.
      * Subscription on such sources can be observed directly via DXPublisher.
      *
-     * @param eventType EventTypeEnum::ORDER, EventTypeEnum::ANALYTIC_ORDER, EventTypeEnum::OTC_MARKETS_ORDER or
-     * EventTypeEnum::SPREAD_ORDER.
+     * @param eventType EventTypeEnum::ORDER, EventTypeEnum::ANALYTIC_ORDER, EventTypeEnum::OTC_MARKETS_ORDER,
+     * EventTypeEnum::SPREAD_ORDER or EventTypeEnum::ORDER_IMBALANCE.
      * @return `true` if the events of the given type can be directly published with this source.
      * @throws InvalidArgumentException if the event type is not one of the above.
      */

@@ -81,6 +81,12 @@ TEST_CASE("The elements of Enum are its constants and are found by code") {
                           DXFC_ELEMENT(Direction, ZERO_UP), DXFC_ELEMENT(Direction, UP)});
     checkEnum<IcebergType>({DXFC_ELEMENT(IcebergType, UNDEFINED), DXFC_ELEMENT(IcebergType, NATIVE),
                             DXFC_ELEMENT(IcebergType, SYNTHETIC)});
+    checkEnum<AuctionType>({DXFC_ELEMENT(AuctionType, UNDEFINED), DXFC_ELEMENT(AuctionType, OPENING),
+                            DXFC_ELEMENT(AuctionType, CLOSING), DXFC_ELEMENT(AuctionType, REOPENING),
+                            DXFC_ELEMENT(AuctionType, OTHER)});
+    checkEnum<ImbalanceSide>({DXFC_ELEMENT(ImbalanceSide, UNDEFINED), DXFC_ELEMENT(ImbalanceSide, BUY),
+                              DXFC_ELEMENT(ImbalanceSide, SELL), DXFC_ELEMENT(ImbalanceSide, NO_IMBALANCE),
+                              DXFC_ELEMENT(ImbalanceSide, INSUFFICIENT_ORDERS), DXFC_ELEMENT(ImbalanceSide, PAUSED)});
     checkEnum<OrderAction>(
         {DXFC_ELEMENT(OrderAction, UNDEFINED), DXFC_ELEMENT(OrderAction, NEW), DXFC_ELEMENT(OrderAction, REPLACE),
          DXFC_ELEMENT(OrderAction, MODIFY), DXFC_ELEMENT(OrderAction, DELETE), DXFC_ELEMENT(OrderAction, PARTIAL),
@@ -111,6 +117,12 @@ TEST_CASE("The elements of Enum are its constants and are found by code") {
 TEST_CASE("Enum::valueOf returns the element of code 0 for an unknown code") {
     CHECK(&Side::valueOf(100) == &Side::UNDEFINED);
     CHECK(&Scope::valueOf(100) == &Scope::COMPOSITE);
+    // The codes of the flag bits that no element has (the codes of Java enums are 0..7).
+    CHECK(&ImbalanceSide::valueOf(6) == &ImbalanceSide::UNDEFINED);
+    CHECK(&ImbalanceSide::valueOf(7) == &ImbalanceSide::UNDEFINED);
+    CHECK(&AuctionType::valueOf(5) == &AuctionType::UNDEFINED);
+    CHECK(&AuctionType::valueOf(6) == &AuctionType::UNDEFINED);
+    CHECK(&AuctionType::valueOf(7) == &AuctionType::UNDEFINED);
 }
 
 TEST_CASE("The event types are the constants and are found by name, class name and id") {

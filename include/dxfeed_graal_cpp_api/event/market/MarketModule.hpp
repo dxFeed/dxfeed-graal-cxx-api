@@ -13,14 +13,17 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  */
 
 #include "./AnalyticOrder.hpp"
+#include "./AuctionType.hpp"
 #include "./Direction.hpp"
 #include "./IcebergType.hpp"
+#include "./ImbalanceSide.hpp"
 #include "./MarketEvent.hpp"
 #include "./MarketEventSymbols.hpp"
 #include "./OptionSale.hpp"
 #include "./Order.hpp"
 #include "./OrderAction.hpp"
 #include "./OrderBase.hpp"
+#include "./OrderImbalance.hpp"
 #include "./OrderSource.hpp"
 #include "./OtcMarketsOrder.hpp"
 #include "./OtcMarketsPriceType.hpp"

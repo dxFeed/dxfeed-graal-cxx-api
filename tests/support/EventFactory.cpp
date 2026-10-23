@@ -281,6 +281,36 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     message->setEventTime(T + 18);
     events.push_back(message);
 
+    // OrderImbalance is not an order: its source is only the record suffix (OrderImbalance#NTV), so it comes twice to
+    // show that two sources of one symbol stay apart.
+    auto orderImbalanceNtv = std::make_shared<OrderImbalance>(TAPE_SYMBOL);
+    orderImbalanceNtv->setEventTime(T + 19);
+    orderImbalanceNtv->setSource(OrderSource::NTV);
+    orderImbalanceNtv->setTime(T + 19'234);
+    orderImbalanceNtv->setSequence(41);
+    orderImbalanceNtv->setRefPrice(150.25);
+    orderImbalanceNtv->setPairedSize(1'200);
+    orderImbalanceNtv->setImbalanceSize(300);
+    orderImbalanceNtv->setNearPrice(150.5);
+    orderImbalanceNtv->setFarPrice(149.75);
+    orderImbalanceNtv->setImbalanceSide(ImbalanceSide::BUY);
+    orderImbalanceNtv->setAuctionType(AuctionType::OPENING);
+    events.push_back(orderImbalanceNtv);
+
+    auto orderImbalanceNuam = std::make_shared<OrderImbalance>(TAPE_SYMBOL);
+    orderImbalanceNuam->setEventTime(T + 20);
+    orderImbalanceNuam->setSource(OrderSource::NUAM);
+    orderImbalanceNuam->setTime(T + 20'345);
+    orderImbalanceNuam->setSequence(43);
+    orderImbalanceNuam->setRefPrice(99.5);
+    orderImbalanceNuam->setPairedSize(2'500);
+    orderImbalanceNuam->setImbalanceSize(700.5);
+    orderImbalanceNuam->setNearPrice(99.75);
+    orderImbalanceNuam->setFarPrice(99.25);
+    orderImbalanceNuam->setImbalanceSide(ImbalanceSide::SELL);
+    orderImbalanceNuam->setAuctionType(AuctionType::CLOSING);
+    events.push_back(orderImbalanceNuam);
+
     return events;
 }
 
@@ -294,6 +324,10 @@ std::vector<std::shared_ptr<EventType>> createDefaultEvents() {
     analyticOrder->setSource(OrderSource::GLBX);
     otcMarketsOrder->setSource(OrderSource::pink);
     spreadOrder->setSource(OrderSource::ISE);
+
+    const auto orderImbalance = std::make_shared<OrderImbalance>(DEFAULTS_SYMBOL);
+
+    orderImbalance->setSource(OrderSource::NTV);
 
     std::vector<std::shared_ptr<EventType>> events{
         std::make_shared<Quote>(DEFAULTS_SYMBOL),
@@ -314,6 +348,7 @@ std::vector<std::shared_ptr<EventType>> createDefaultEvents() {
         std::make_shared<OptionSale>(DEFAULTS_SYMBOL),
         std::make_shared<TextMessage>(DEFAULTS_SYMBOL),
         std::make_shared<Message>(DEFAULTS_SYMBOL),
+        orderImbalance,
     };
 
     for (const auto &event : events) {
@@ -424,6 +459,15 @@ std::vector<std::shared_ptr<EventType>> createEdgeEvents() {
                                                                &TradingStatus::ACTIVE};
     const std::array<const OtcMarketsPriceType *, 3> otcMarketsPriceTypes{
         &OtcMarketsPriceType::UNPRICED, &OtcMarketsPriceType::ACTUAL, &OtcMarketsPriceType::WANTED};
+
+    const std::array<const OrderSource *, 4> imbalanceSources{&OrderSource::NTV, &OrderSource::NUAM, &OrderSource::ARCA,
+                                                              &OrderSource::DEFAULT};
+    const std::array<const ImbalanceSide *, 6> imbalanceSides{
+        &ImbalanceSide::UNDEFINED,           &ImbalanceSide::BUY,   &ImbalanceSide::SELL, &ImbalanceSide::NO_IMBALANCE,
+        &ImbalanceSide::INSUFFICIENT_ORDERS, &ImbalanceSide::PAUSED};
+    const std::array<const AuctionType *, 5> auctionTypes{&AuctionType::UNDEFINED, &AuctionType::OPENING,
+                                                          &AuctionType::CLOSING, &AuctionType::REOPENING,
+                                                          &AuctionType::OTHER};
 
     std::vector<std::shared_ptr<EventType>> events{};
 
@@ -645,6 +689,21 @@ std::vector<std::shared_ptr<EventType>> createEdgeEvents() {
         events.push_back(textMessage);
 
         events.push_back(std::make_shared<Message>(symbol, s));
+
+        // The sources cycle through all the publishable ones, including the default (the record without a suffix).
+        auto orderImbalance = std::make_shared<OrderImbalance>(symbol);
+
+        orderImbalance->setSource(pick(imbalanceSources, k));
+        orderImbalance->setTime(l);
+        orderImbalance->setSequence(sequence);
+        orderImbalance->setRefPrice(d);
+        orderImbalance->setPairedSize(d);
+        orderImbalance->setImbalanceSize(d);
+        orderImbalance->setNearPrice(d);
+        orderImbalance->setFarPrice(d);
+        orderImbalance->setImbalanceSide(pick(imbalanceSides, k));
+        orderImbalance->setAuctionType(pick(auctionTypes, k));
+        events.push_back(orderImbalance);
     }
 
     // All 256 values of the event flags byte on an Order with index 0 (setIndex() after setSource() resets the source

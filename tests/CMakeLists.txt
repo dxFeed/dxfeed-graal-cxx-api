@@ -45,6 +45,7 @@ set(DXFC_TEST_SOURCES
         api/ExportsTest.cpp
         api/MarketEventSymbolsTest.cpp
         api/ObservableSubscriptionLifecycleTest.cpp
+        api/OrderImbalanceTest.cpp
         api/OrderSourceTest.cpp
         event/ConstantsTest.cpp
         event/EdgeValuesTapeTest.cpp
