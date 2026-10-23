@@ -77,8 +77,8 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards positive infinity. If the result is positive, behaves as for
-     * #ROUNDING_MODE_UP; if negative, behaves as for #ROUNDING_MODE_DOWN. Note that this rounding mode never
-     * decreases the calculated value.
+     * RoundingMode::ROUNDING_MODE_UP; if negative, behaves as for RoundingMode::ROUNDING_MODE_DOWN. Note that this
+     * rounding mode never decreases the calculated value.
      *
      *<p>Example:
      *<table border>
@@ -101,8 +101,8 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards negative infinity. If the result is positive, behave as for
-     * #ROUNDING_MODE_DOWN; if negative, behave as for #ROUNDING_MODE_UP. Note that this rounding mode never
-     * increases the calculated value.
+     * RoundingMode::ROUNDING_MODE_DOWN; if negative, behave as for RoundingMode::ROUNDING_MODE_UP. Note that this
+     * rounding mode never increases the calculated value.
      *
      *<p>Example:
      *<table border>
@@ -125,8 +125,8 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round up.
-     * Behaves as for #ROUNDING_MODE_UP if the discarded fraction is <= 0.5; otherwise, behaves as for
-     * #ROUNDING_MODE_DOWN. Note that this is the rounding mode commonly taught at school.
+     * Behaves as for RoundingMode::ROUNDING_MODE_UP if the discarded fraction is <= 0.5; otherwise, behaves as for
+     * RoundingMode::ROUNDING_MODE_DOWN. Note that this is the rounding mode commonly taught at school.
      *
      *<p>Example:
      *<table border>
@@ -149,8 +149,8 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round
-     * down. Behaves as for #ROUNDING_MODE_UP if the discarded fraction is > 0.5; otherwise, behaves as for
-     * #ROUNDING_MODE_DOWN.
+     * down. Behaves as for RoundingMode::ROUNDING_MODE_UP if the discarded fraction is > 0.5; otherwise, behaves as for
+     * RoundingMode::ROUNDING_MODE_DOWN.
      *
      *<p>Example:
      *<table border>
@@ -173,9 +173,9 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards the "nearest neighbor" unless both neighbors are equidistant, in which case, round
-     * towards the even neighbor. Behaves as for #ROUNDING_MODE_HALF_UP if the digit to the left of the
-     * discarded fraction is odd; behaves as for #ROUNDING_MODE_HALF_DOWN if it's even. Note that this is the
-     * rounding mode that statistically minimizes cumulative error when applied repeatedly over a sequence of
+     * towards the even neighbor. Behaves as for RoundingMode::ROUNDING_MODE_HALF_UP if the digit to the left of the
+     * discarded fraction is odd; behaves as for RoundingMode::ROUNDING_MODE_HALF_DOWN if it's even. Note that this is
+     * the rounding mode that statistically minimizes cumulative error when applied repeatedly over a sequence of
      * calculations. It is sometimes known as "Banker's rounding" and is chiefly used in the USA. This rounding mode is
      * analogous to the rounding policy used for `float` and `double` arithmetic in Java.
      *

@@ -43,10 +43,10 @@ struct EventMapper;
  * <h3><a name="seriesEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Series data source provides a consistent view of the set of known series.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
  * Multiple event sources for the same symbol are not supported for series, thus
- * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ * @ref getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * <p>IndexedEventModel class handles all the snapshot and transaction logic and conveniently represents
  * a list current of events.
@@ -202,7 +202,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns a unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
+     * The index is composed of @ref getTime() "time" and @ref getSequence() "sequence".
      * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
@@ -269,7 +269,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns sequence number of this series event to distinguish trades that have the same
-     * @ref ::getTime() "time". This sequence number does not have to be unique and
+     * @ref getTime() "time". This sequence number does not have to be unique and
      * does not need to be sequential. Sequence can range from 0 to ::MAX_SEQUENCE.
      *
      * @return sequence of this series event.

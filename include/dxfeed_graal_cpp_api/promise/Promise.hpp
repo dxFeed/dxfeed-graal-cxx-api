@@ -120,7 +120,7 @@ template <typename P> struct CommonPromiseMixin {
      * Returns exceptional outcome of computation. If the computation has no ::hasException() exception,
      * then this method returns an exception with a message "null". If a computation has completed exceptionally or was
      * cancelled, then the result of this method is not an exception with a message "null". If computation was @ref
-     * ::isCancelled() "cancelled", then this method returns "an instance of CancellationException".
+     * isCancelled() "cancelled", then this method returns "an instance of CancellationException".
      *
      * @return exceptional outcome of computation.
      * @see ::hasException()
@@ -131,10 +131,10 @@ template <typename P> struct CommonPromiseMixin {
 
     /**
      * Wait for computation to complete or timeout or throw an exception in case of exceptional completion.
-     * If the wait is interrupted, then the computation is @ref ::cancel() "canceled",
+     * If the wait is interrupted, then the computation is @ref cancel() "canceled",
      * the interruption flag on the current thread is set, and "CancellationException" is thrown.
      *
-     * <p>If the wait times are out, then the computation is @ref ::cancel() "canceled" and this method returns `false`.
+     * <p>If the wait times are out, then the computation is @ref cancel() "canceled" and this method returns `false`.
      * Use this method in the code that shall continue normal execution in case of timeout.
      *
      * @param timeoutInMilliseconds The timeout.
@@ -148,10 +148,10 @@ template <typename P> struct CommonPromiseMixin {
 
     /**
      * Wait for computation to complete or timeout or throw an exception in case of exceptional completion.
-     * If the wait is interrupted, then the computation is @ref ::cancel() "canceled",
+     * If the wait is interrupted, then the computation is @ref cancel() "canceled",
      * the interruption flag on the current thread is set, and "CancellationException" is thrown.
      *
-     * <p>If the wait times are out, then the computation is @ref ::cancel() "canceled" and this method returns `false`.
+     * <p>If the wait times are out, then the computation is @ref cancel() "canceled" and this method returns `false`.
      * Use this method in the code that shall continue normal execution in case of timeout.
      *
      * @param timeoutInMilliseconds The timeout.
@@ -165,10 +165,10 @@ template <typename P> struct CommonPromiseMixin {
     }
 
     /**
-     * This method cancels computation. This method does nothing if the computation has already @ref ::isDone() "completed".
+     * This method cancels computation. This method does nothing if the computation has already @ref isDone() "completed".
      *
      * <p>If cancelled, then ::getException() will return "CancellationException",
-     * @ref ::isDone() "isDone", @ref ::isCancelled() "isCancelled", and @ref ::hasException() "hasException" will
+     * @ref isDone() "isDone", @ref isCancelled() "isCancelled", and @ref hasException() "hasException" will
      * return `true`, all handlers that were installed with `whenDone` method are notified by invoking their
      * `promiseDone` method, and all waiters on `await` method throw "CancellationException".
      */

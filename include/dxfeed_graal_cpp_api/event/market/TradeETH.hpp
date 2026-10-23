@@ -34,7 +34,7 @@ struct EventMapper;
  *
  * The TradeETH event defines the last trade @ref TradeETH::getPrice() "price" as officially defined
  * by the corresponding exchange for its <b>extended trading hours</b> (ETH).
- * It also includes @ref TradeETH::getDayVolume() "dayVolume" and @ref ::getDayTurnover() "dayTurnover"
+ * It also includes @ref TradeETH::getDayVolume() "dayVolume" and @ref getDayTurnover() "dayTurnover"
  * <b>for the extended trading hours only</b> of the trading day identified by @ref TradeETH::getDayId "dayId".
  * This event is not defined for symbols that have no concept of ETH.
  *
@@ -58,7 +58,7 @@ struct EventMapper;
  * <h3>Volume and Turnover</h3>
  *
  * <p>Note that one can compute volume-weighted average price (VWAP) for extended trading hours by this formula:
- * <br><code>vwap = @ref TradeETH::getDayTurnover() "dayTurnover" / @ref ::getDayVolume() "dayVolume";</code>
+ * <br><code>vwap = @ref TradeETH::getDayTurnover() "dayTurnover" / @ref getDayVolume() "dayVolume";</code>
  *
  * <h3>Daily reset</h3>
  *

@@ -207,7 +207,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     void removeStateChangeListener(std::size_t listenerId);
 
     /**
-     * Returns the onStateChange @ref SimpleHandler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * Returns the onStateChange @ref SimpleHandler "handler" that can be used to add or remove
      * listeners.
      *
      * @return onStateChange handler with `void(State, State)` signature

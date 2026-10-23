@@ -40,9 +40,9 @@ struct EventMapper;
  * <p> For more information about display requirements, see <a href="https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf">OTC Markets Display Requirements</a>.
  *
  * <p> Like regular orders, OTC Markets order events arrive from multiple sources for the same market symbol and are
- * distinguished by their @ref ::getIndex "index".
+ * distinguished by their @ref getIndex "index".
  * It is unique across all the sources of depth information for the symbol.
- * The event with @ref ::getSize() "size" either `0` or `NaN` is a signal to remove previously received order for the
+ * The event with @ref getSize() "size" either `0` or `NaN` is a signal to remove previously received order for the
  * corresponding index.
  * The method ::hasSize() is a convenient method to test for size presence.
  *
@@ -69,21 +69,21 @@ struct EventMapper;
  *
  * OTC Markets order event sources provide a consistent view of the order book. Their updates
  * may incorporate multiple changes to individual orders that have to be processed at the same time.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref getEventFlags() "eventFlags" property.
  *
  * <p> See the "Event Flags" section of OrderBase class documentation for details.
  *
  * <h3>Publishing order books</h3>
  *
  * When publishing an order event with DXPublisher::publishEvents() method, least significant 32 bits of
- * order @ref ::getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()`
+ * order @ref getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()`
  * inclusive. Use ::setSource() method after ::setIndex() to properly include source identifier into the
  * index.
  *
- * A snapshot has to be published in the <em>descending</em> order of @ref ::getIndex() "index", starting with
- * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref ::getEventFlags()
+ * A snapshot has to be published in the <em>descending</em> order of @ref getIndex() "index", starting with
+ * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref getEventFlags()
  * "eventFlags", and finishing the snapshot with an event that has zero 32 least significant bits of index.
- * EventFlag::SNAPSHOT_END bit in @ref ::getEventFlags() "eventFlags" is optional during publishing.
+ * EventFlag::SNAPSHOT_END bit in @ref getEventFlags() "eventFlags" is optional during publishing.
  * It will be properly set on receiving end anyway.
  *
  * <h3>Limitations</h3>
@@ -94,13 +94,13 @@ struct EventMapper;
  *
  * Some feeds provide support for "Full Order Book" (FOB) where additional fields will be available:
  * <ul>
- * <li>@ref ::getAction() "action" - event business meaning (see OrderAction for more details)</li>
- * <li>@ref ::getActionTime() "actionTime" - time of the last action</li>
- * <li>@ref ::getOrderId() "orderId" - ID of this OTC Markets order</li>
- * <li>@ref ::getAuxOrderId() "auxOrderId" - additional ID for this OTC Markets order</li>
- * <li>@ref ::getTradeId() "tradeId" - trade (order execution) ID</li>
- * <li>@ref ::getTradePrice() "tradePrice" - price of the trade</li>
- * <li>@ref ::getTradeSize() "tradeSize" - size of the trade</li>
+ * <li>@ref getAction() "action" - event business meaning (see OrderAction for more details)</li>
+ * <li>@ref getActionTime() "actionTime" - time of the last action</li>
+ * <li>@ref getOrderId() "orderId" - ID of this OTC Markets order</li>
+ * <li>@ref getAuxOrderId() "auxOrderId" - additional ID for this OTC Markets order</li>
+ * <li>@ref getTradeId() "tradeId" - trade (order execution) ID</li>
+ * <li>@ref getTradePrice() "tradePrice" - price of the trade</li>
+ * <li>@ref getTradeSize() "tradeSize" - size of the trade</li>
  * </ul>
  *
  * <h3>Implementation details</h3>

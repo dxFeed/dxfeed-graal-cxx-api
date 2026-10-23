@@ -247,7 +247,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * corresponding symbol and event type.
      * WildcardSymbol::ALL subscription does not count for that purpose.
      *
-     * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the absence
+     * <p>Use @ref getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the absence
      * of subscription.
      *
      * <p> This method fills in the values for the last event into the `event` argument.
@@ -257,9 +257,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <p>This method provides no way to distinguish a case when there is no subscription from the case when
      * there is a subscription, but the event data have not arrived yet. It is recommended to use
-     * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method instead of this `getLastEvent` method to
+     * @ref getLastEventIfSubscribed() "getLastEventIfSubscribed" method instead of this `getLastEvent` method to
      * fail-fast in case when the subscription was supposed to be set by the logic of the code, since
-     * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method returns `std::shared_ptr<E>(nullptr)` when
+     * @ref getLastEventIfSubscribed() "getLastEventIfSubscribed" method returns `std::shared_ptr<E>(nullptr)` when
      * there is no subscription.
      *
      * <p>Note that this method does not work when DXEndpoint was created with
@@ -279,7 +279,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Returns the last events for the specified list of event instances.
-     * This is a bulk version of @ref ::getLastEvent() "getLastEvent" method.
+     * This is a bulk version of @ref getLastEvent() "getLastEvent" method.
      *
      * <p>Note, that this method does not work when DXEndpoint was created with
      * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role.
@@ -316,7 +316,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * this method returns a non-initialized event object: its @ref EventTypeWithSymbol::getEventSymbol() "eventSymbol"
      * property is set to the requested symbol, but all the other properties have their default values.
      *
-     * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the
+     * <p>Use @ref getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the
      * absence of subscription.
      *
      * <p>Note that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED

@@ -27,16 +27,16 @@ DXFCPP_BEGIN_NAMESPACE
  * moments, while Candle events represent snapshots of aggregate information about trading over a specific time period.
  *
  * Time-series events can be used with DXFeedTimeSeriesSubscription to receive a time-series history of past events.
- * Time-series events are conflated based on unique @ref ::getIndex() "index" for each symbol.
+ * Time-series events are conflated based on unique @ref getIndex() "index" for each symbol.
  * Last indexed event for each symbol and index is always delivered to event listeners on subscription, but
  * intermediate (next-to-last) events for each symbol+index pair are not queued anywhere, they are simply discarded as
  * stale events.
  *
- * Timestamp of an event is available via @ref ::getTime() "time" property with a millisecond precision. Some events
- * may happen multiple times per millisecond. In this case they have the same @ref ::getTime() "time", but different
- * @ref ::getIndex() "index". An ordering of @ref ::getIndex() "index" is the same as an ordering
- * of @ref ::getTime() "time". That is, an collection of time-series events that is ordered
- * by @ref ::getIndex() "index" is ascending order will be also ordered by @ref ::getTime() "time" in ascending order.
+ * Timestamp of an event is available via @ref getTime() "time" property with a millisecond precision. Some events
+ * may happen multiple times per millisecond. In this case they have the same @ref getTime() "time", but different
+ * @ref getIndex() "index". An ordering of @ref getIndex() "index" is the same as an ordering
+ * of @ref getTime() "time". That is, an collection of time-series events that is ordered
+ * by @ref getIndex() "index" is ascending order will be also ordered by @ref getTime() "time" in ascending order.
  *
  * Time-series events are a more specific subtype of IndexedEvent.
  * All general documentation and @ref eventFlagsSection "Event Flags" section, in particular,
@@ -75,7 +75,7 @@ DXFCPP_BEGIN_NAMESPACE
  * snapshot.
  *
  * Both TimeAndSale and Candle time-series events define a sequence property that is mixed into an
- * @ref ::getIndex() "index" property. It provides a way to distinguish different events at the same time. For a
+ * @ref getIndex() "index" property. It provides a way to distinguish different events at the same time. For a
  * snapshot end event the sequence has to be left at its default zero value. It means, that if there is an actual
  * event to be published at subscription @ref TimeSeriesSubscriptionSymbol::getFromTime() "fromTime" with non-zero
  * sequence, then generation of an additional snapshot end event with the subscription
@@ -97,7 +97,7 @@ struct DXFCPP_EXPORT TimeSeriesEvent : IndexedEvent {
     /**
      * Returns unique per-symbol index of this event.
      * Event indices are unique within event symbol.
-     * Typically event index for a time series event includes @ref ::getTime() "time" inside.
+     * Typically event index for a time series event includes @ref getTime() "time" inside.
      *
      * <h3>Implementation notes</h3>
      *

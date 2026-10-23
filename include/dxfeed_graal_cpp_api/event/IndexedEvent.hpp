@@ -29,7 +29,7 @@ DXFCPP_BEGIN_NAMESPACE
  * multiple periods available.
  * The ::Candle is also an example of ::TimeSeriesEvent that is a more specific event type.
  *
- * Index for each event is available via @ref ::getIndex() "index" property.
+ * Index for each event is available via @ref getIndex() "index" property.
  * Indexed events retain information about multiple events per symbol based on the event index
  * and are conflated based on the event index. Last indexed event for each symbol and index is always
  * delivered to event listeners on subscription, but intermediate (next-to-last) events for each

@@ -63,7 +63,7 @@ class DXFCPP_EXPORT IndexedEventSource {
 
     public:
     /**
-     * The default source with zero @ref ::id() "identifier" for all events that do not support multiple sources.
+     * The default source with zero @ref id() "identifier" for all events that do not support multiple sources.
      */
     static const IndexedEventSource DEFAULT;
 

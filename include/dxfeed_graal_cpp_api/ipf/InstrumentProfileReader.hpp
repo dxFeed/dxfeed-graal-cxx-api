@@ -89,7 +89,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * <p>Authentication information can be supplied to this method as part of URL user info
      * like `"http://user:password@host:port/path/file.ipf"`.
      *
-     * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
+     * <p>This operation updates @ref getLastModified() "lastModified" and @ref wasComplete() "wasComplete".
      *
      * @param address URL of file to read from
      * @return list of instrument profiles
@@ -107,7 +107,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * <p>Specified user and password take precedence over authentication information that is supplied to this method
      * as part of URL user info like `"http://user:password@host:port/path/file.ipf"`.
      *
-     * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
+     * <p>This operation updates @ref getLastModified() "lastModified" and @ref wasComplete() "wasComplete".
      *
      * @param address URL of file to read from
      * @param user the user name
@@ -128,7 +128,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * <p>Specified token take precedence over authentication information that is supplied to this method
      * as part of URL user info like `"http://user:password@host:port/path/file.ipf"`.
      *
-     * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
+     * <p>This operation updates @ref getLastModified() "lastModified" and @ref wasComplete() "wasComplete".
      *
      * @param address URL of file to read from
      * @param token the token

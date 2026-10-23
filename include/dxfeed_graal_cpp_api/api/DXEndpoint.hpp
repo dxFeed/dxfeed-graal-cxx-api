@@ -630,7 +630,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     void removeStateChangeListener(std::size_t listenerId) noexcept;
 
     /**
-     * Returns the onStateChange @ref SimpleHandler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * Returns the onStateChange @ref SimpleHandler "handler" that can be used to add or remove
      * listeners.
      *
      * @return onStateChange handler with `void(State, State)` signature
@@ -703,7 +703,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * few hundred of connections).
      *
      * <p>For premium services access credentials must be configured before invocation of `connect` method
-     * using @ref ::user(const StringLike&) "user" and @ref ::password(const StringLike&) "password" methods.
+     * using @ref user(const StringLike&) "user" and @ref password(const StringLike&) "password" methods.
      *
      * <p> <b>This method does not wait until the connection actually gets established</b>. The actual connection
      * establishment happens asynchronously after the invocation of this method. However, this method waits until
@@ -746,7 +746,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Terminates all remote network connections.
      * This method does nothing if this endpoint is @ref State#CLOSED "CLOSED".
-     * The endpoint @ref ::getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
+     * The endpoint @ref getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
      *
      * <p>This method does not release all resources that are associated with this endpoint.
      * Use ::close() method to release all resources.
@@ -762,7 +762,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Terminates all remote network connections and clears stored data.
      * This method does nothing if this endpoint is @ref State::CLOSED "CLOSED".
-     * The endpoint @ref ::getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
+     * The endpoint @ref getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
      *
      * <p>This method does not release all resources that are associated with this endpoint.
      * Use the close() method to release all resources.
@@ -779,7 +779,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Closes this endpoint. All network connections are terminated as with the ::disconnect() method, and no further
      * connections can be established.
      *
-     * The endpoint @ref ::getState() "state" immediately becomes @ref State::CLOSED "CLOSED".
+     * The endpoint @ref getState() "state" immediately becomes @ref State::CLOSED "CLOSED".
      * All resources associated with this endpoint are released.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#close--)
@@ -791,7 +791,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     void close() const;
 
     /**
-     * Waits while this endpoint @ref ::getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
+     * Waits while this endpoint @ref getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
      * @ref State::CLOSED "CLOSED". It is a signal that any files opened with the
      * @ref connect(const StringLike&) "connect(\"file:...\")" method were finished reading, but not necessarily were
      * completely processed by the corresponding subscription listeners. Use closeAndAwaitTermination() after this
@@ -905,7 +905,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         /**
          * Changes the name used to distinguish multiple endpoints
          * in the same process (GraalVM Isolate) in logs and in other diagnostic means.
-         * This is a shortcut for @ref ::withProperty "withProperty"(::NAME_PROPERTY, `name`)
+         * This is a shortcut for @ref withProperty "withProperty"(::NAME_PROPERTY, `name`)
          *
          * @param name The endpoint's name
          *
