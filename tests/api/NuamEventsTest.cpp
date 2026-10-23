@@ -252,7 +252,7 @@ void checkToStringParity(const std::string &className, const Cases &cases, bool 
 } // namespace
 
 TEST_CASE("NuamOrder has the flags of the Java class") {
-    const auto &flags = flagsOf("NuamOrder");
+    const auto flags = flagsOf("NuamOrder");
 
     CHECK(NuamOrder::TYPE.isLasting() == flags.lasting);
     CHECK(NuamOrder::TYPE.isIndexed() == flags.indexed);
@@ -261,7 +261,7 @@ TEST_CASE("NuamOrder has the flags of the Java class") {
 }
 
 TEST_CASE("NuamTrade has the flags of the Java class") {
-    const auto &flags = flagsOf("NuamTrade");
+    const auto flags = flagsOf("NuamTrade");
 
     CHECK(NuamTrade::TYPE.isLasting() == flags.lasting);
     CHECK(NuamTrade::TYPE.isIndexed() == flags.indexed);
@@ -270,7 +270,7 @@ TEST_CASE("NuamTrade has the flags of the Java class") {
 }
 
 TEST_CASE("NuamTimeAndSale has the flags of the Java class") {
-    const auto &flags = flagsOf("NuamTimeAndSale");
+    const auto flags = flagsOf("NuamTimeAndSale");
 
     CHECK(NuamTimeAndSale::TYPE.isLasting() == flags.lasting);
     CHECK(NuamTimeAndSale::TYPE.isIndexed() == flags.indexed);
@@ -310,7 +310,7 @@ struct NuamHubFixture : test::LocalHubFixture {
             subscription->addSymbols(symbol);
         }
 
-        subscription->addEventListener<E>([&received](const auto &events) {
+        subscription->template addEventListener<E>([&received](const auto &events) {
             for (auto &&event : events) {
                 received.push_back(event);
             }
@@ -464,6 +464,9 @@ TEST_CASE_FIXTURE(NuamHubFixture, "NuamOrder is published on NUAM and received w
     CHECK(sameDouble(event.getRefreshQuantity(), 50.5));
     CHECK(sameDouble(event.getLeavesQuantity(), 850.0));
     CHECK(sameDouble(event.getMatchedQuantity(), 150.5));
+
+    CHECK(received[0]->is<Order>());
+    CHECK(std::dynamic_pointer_cast<Order>(received[0]) != nullptr);
 }
 
 TEST_CASE_FIXTURE(NuamHubFixture, "NuamOrder with null strings and NaN fields keeps them") {

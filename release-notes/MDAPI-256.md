@@ -19,8 +19,9 @@
       number of trades and the VWAP; `NuamTimeAndSale` extends `TimeAndSale` with the match id. Code that handles
       `Trade` and `TimeAndSale` handles them too (`is<Trade>()`, `std::dynamic_pointer_cast<Trade>()`), so `Trade` and
       `TimeAndSale` are no longer `final`.
-    * `toString()` prints the events as the Java API does (without the `tradeId` of the Java base classes: the C++
-      `Trade` and `TimeAndSale` do not have it).
+    * `toString()` prints the events as the Java API does, except for what comes from the C++ base classes: there is no
+      `tradeId` (the C++ `Trade` and `TimeAndSale` do not have it), and the inherited numbers keep the format of
+      `Order`, `Trade` and `TimeAndSale` (`250000000.0` where Java prints `2.5E8`).
 * **\[MDAPI-256]\[C++]** `TimeAndSale::toString()` prints unset values as the Java API does: `ESC='null'` (was
   `ESC='<null>'`), and `buyer` and `seller` only when they are set, an empty string included (it printed
   `buyer='<null>'` for an unset buyer and skipped an empty one).
