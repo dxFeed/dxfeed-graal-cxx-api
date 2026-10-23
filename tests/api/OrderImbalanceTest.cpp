@@ -1,15 +1,24 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <functional>
+#include <limits>
 #include <memory>
+#include <span>
+#include <stdexcept>
 #include <string>
+#include <vector>
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <doctest.h>
+
+#include "../support/TestSupport.hpp"
+#include "EventsJavaParity.hpp"
 
 using namespace dxfcpp;
 using namespace std::literals;
@@ -283,21 +292,266 @@ TEST_CASE("OrderImbalance::assign() copies every field") {
     CHECK(&target->getAuctionType() == &AuctionType::CLOSING);
 }
 
-TEST_CASE("OrderImbalance::toString() prints the fields as Java does") {
-    const auto imbalance = makePopulated();
+namespace {
 
-    const auto expected =
-        "OrderImbalance{AAPL, eventTime=" + TimeFormat::DEFAULT_WITH_MILLIS.format(EVENT_TIME) +
-        ", source=NUAM, time=" + TimeFormat::DEFAULT_WITH_MILLIS.format(TIME) +
-        ", sequence=12345, refPrice=100.5, pairedSize=1000.0, imbalanceSize=200.25, nearPrice=100.75, "
-        "farPrice=99.5, imbalanceSide=SELL, auctionType=CLOSING}";
+template <typename E>
+const E &findByName(const std::span<const std::reference_wrapper<const E>> all, const std::string &name) {
+    for (const auto &element : all) {
+        if (element.get().getName() == name) {
+            return element.get();
+        }
+    }
 
-    CHECK(imbalance.toString() == expected);
+    throw std::runtime_error("No element " + name);
+}
 
-    const auto defaults = OrderImbalance("AAPL").toString();
+// toString() prints the times in the default time zone of the Java isolate without a zone suffix, the Java references
+// are recorded with the zone UTC. The zone is read at the first use of TimeFormat in the process (TZ is not honored by
+// the native SDK on Windows), so it is set when the test run starts, before any test formats a time. Not from a
+// dynamic initializer: the library may be linked statically and not yet initialized there.
+struct UtcTimeZoneListener : doctest::IReporter {
+    explicit UtcTimeZoneListener(const doctest::ContextOptions &) {
+    }
 
-    CHECK(defaults == "OrderImbalance{AAPL, eventTime=" + TimeFormat::DEFAULT_WITH_MILLIS.format(0) +
-                          ", source=DEFAULT, time=" + TimeFormat::DEFAULT_WITH_MILLIS.format(0) +
-                          ", sequence=0, refPrice=NaN, pairedSize=NaN, imbalanceSize=NaN, nearPrice=NaN, "
-                          "farPrice=NaN, imbalanceSide=UNDEFINED, auctionType=UNDEFINED}");
+    void test_run_start() override {
+        System::setProperty("user.timezone", "UTC");
+    }
+
+    void report_query(const doctest::QueryData &) override {
+    }
+
+    void test_run_end(const doctest::TestRunStats &) override {
+    }
+
+    void test_case_start(const doctest::TestCaseData &) override {
+    }
+
+    void test_case_reenter(const doctest::TestCaseData &) override {
+    }
+
+    void test_case_end(const doctest::CurrentTestCaseStats &) override {
+    }
+
+    void test_case_exception(const doctest::TestCaseException &) override {
+    }
+
+    void subcase_start(const doctest::SubcaseSignature &) override {
+    }
+
+    void subcase_end() override {
+    }
+
+    void log_assert(const doctest::AssertData &) override {
+    }
+
+    void log_message(const doctest::MessageData &) override {
+    }
+
+    void test_case_skipped(const doctest::TestCaseData &) override {
+    }
+};
+
+DOCTEST_REGISTER_LISTENER("utc-time-zone", 0, UtcTimeZoneListener);
+
+// The event with the values of the case that the Java probe recorded (tests/api/EventsJavaParity.hpp).
+OrderImbalance makeFromJavaCase(const events_java_parity::OrderImbalanceCase &javaCase) {
+    OrderImbalance imbalance{};
+
+    if (javaCase.symbol != nullptr) {
+        imbalance.setEventSymbol(javaCase.symbol);
+    }
+
+    imbalance.setEventTime(javaCase.eventTime);
+    imbalance.setSource(OrderSource::valueOf(javaCase.source));
+    imbalance.setTime(javaCase.time);
+    imbalance.setSequence(javaCase.sequence);
+    imbalance.setRefPrice(javaCase.refPrice);
+    imbalance.setPairedSize(javaCase.pairedSize);
+    imbalance.setImbalanceSize(javaCase.imbalanceSize);
+    imbalance.setNearPrice(javaCase.nearPrice);
+    imbalance.setFarPrice(javaCase.farPrice);
+    imbalance.setImbalanceSide(findByName(ImbalanceSide::ALL, javaCase.imbalanceSide));
+    imbalance.setAuctionType(findByName(AuctionType::ALL, javaCase.auctionType));
+
+    return imbalance;
+}
+
+} // namespace
+
+TEST_CASE("OrderImbalance has the flags of the Java class") {
+    const auto &flags = events_java_parity::TYPE_FLAGS[0];
+
+    REQUIRE(std::string(flags.name) == "OrderImbalance");
+    CHECK(OrderImbalance::TYPE.isLasting() == flags.lasting);
+    CHECK(OrderImbalance::TYPE.isIndexed() == flags.indexed);
+    CHECK(OrderImbalance::TYPE.isTimeSeries() == flags.timeSeries);
+    CHECK(OrderImbalance::TYPE.isMarket() == flags.market);
+    CHECK(OrderImbalance::MAX_SEQUENCE == events_java_parity::ORDER_IMBALANCE_MAX_SEQUENCE);
+}
+
+TEST_CASE("OrderImbalance::toString() prints the fields as the Java API does") {
+    // The zone must be UTC here (UtcTimeZoneListener), otherwise every comparison below fails on the time text.
+    REQUIRE(TimeFormat::DEFAULT_WITH_MILLIS.format(1'700'000'000'123LL) == "20231114-221320.123");
+
+    for (const auto &javaCase : events_java_parity::ORDER_IMBALANCE) {
+        CAPTURE(javaCase.name);
+
+        auto expected = std::string(javaCase.str);
+
+        if (javaCase.symbol == nullptr) {
+            // A null symbol is String::NUL (`<null>`) in the C++ API, Java prints `null`.
+            const std::string javaNull = "OrderImbalance{null,";
+
+            REQUIRE(expected.rfind(javaNull, 0) == 0);
+            expected.replace(0, javaNull.size(), std::string("OrderImbalance{") + String::NUL + ",");
+        }
+
+        CHECK(makeFromJavaCase(javaCase).toString() == expected);
+    }
+}
+
+namespace {
+
+struct OrderImbalanceHubFixture : test::LocalHubFixture {
+    OrderImbalanceHubFixture() : LocalHubFixture({{DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true"}}) {
+    }
+
+    // Subscribes to the symbols, publishes the events and returns what the subscription received.
+    std::vector<std::shared_ptr<OrderImbalance>>
+    publishAndReceive(const std::vector<std::string> &symbols,
+                      const std::vector<std::shared_ptr<OrderImbalance>> &published) {
+        std::vector<std::shared_ptr<OrderImbalance>> received{};
+        const auto subscription = DXFeedSubscription::create({OrderImbalance::TYPE});
+
+        for (const auto &symbol : symbols) {
+            subscription->addSymbols(symbol);
+        }
+
+        subscription->addEventListener<OrderImbalance>([&received](const auto &events) {
+            for (auto &&event : events) {
+                received.push_back(event);
+            }
+        });
+
+        feed->attachSubscription(subscription);
+        publishAndProcess(published);
+        feed->detachSubscription(subscription);
+
+        return received;
+    }
+};
+
+std::shared_ptr<OrderImbalance> makeOnSource(const std::string &symbol, const std::string &source,
+                                             std::int32_t sequence) {
+    auto imbalance = std::make_shared<OrderImbalance>(makePopulated());
+
+    imbalance->setEventSymbol(symbol);
+    imbalance->setSource(OrderSource::valueOf(source));
+    imbalance->setSequence(sequence);
+
+    return imbalance;
+}
+
+} // namespace
+
+TEST_CASE_FIXTURE(OrderImbalanceHubFixture, "OrderImbalance is published on NTV and received with every field") {
+    auto published = std::make_shared<OrderImbalance>("AAPL");
+
+    // A different value in every field.
+    published->setEventTime(EVENT_TIME);
+    published->setSource(OrderSource::NTV);
+    published->setTime(TIME);
+    published->setSequence(12345);
+    published->setRefPrice(150.25);
+    published->setPairedSize(1200.0);
+    published->setImbalanceSize(300.5);
+    published->setNearPrice(150.5);
+    published->setFarPrice(149.75);
+    published->setImbalanceSide(ImbalanceSide::BUY);
+    published->setAuctionType(AuctionType::REOPENING);
+
+    const auto received = publishAndReceive({"AAPL"}, {published});
+
+    REQUIRE(received.size() == 1);
+
+    const auto &event = *received[0];
+
+    CHECK(event.getEventSymbol() == "AAPL");
+    CHECK(event.getEventTime() == EVENT_TIME);
+    CHECK(event.getSource() == OrderSource::NTV);
+    CHECK(event.getTimeSequence() == published->getTimeSequence());
+    CHECK(event.getTime() == TIME); // the milliseconds survive
+    CHECK(event.getSequence() == 12345);
+    CHECK(event.getRefPrice() == 150.25);
+    CHECK(event.getPairedSize() == 1200.0);
+    CHECK(event.getImbalanceSize() == 300.5);
+    CHECK(event.getNearPrice() == 150.5);
+    CHECK(event.getFarPrice() == 149.75);
+    CHECK(&event.getImbalanceSide() == &ImbalanceSide::BUY);
+    CHECK(&event.getAuctionType() == &AuctionType::REOPENING);
+    checkSame(event, *published);
+}
+
+TEST_CASE_FIXTURE(OrderImbalanceHubFixture,
+                  "OrderImbalance keeps NaN fields, the maximum sequence and every enum value") {
+    std::vector<std::shared_ptr<OrderImbalance>> published{};
+
+    // The side and the type cycle through all their values, one event per symbol.
+    for (std::size_t i = 0; i < ImbalanceSide::ALL.size(); i++) {
+        auto imbalance = std::make_shared<OrderImbalance>("S" + std::to_string(i));
+
+        imbalance->setSource(OrderSource::NUAM);
+        imbalance->setTime(TIME + static_cast<std::int64_t>(i));
+        imbalance->setSequence(i == 0 ? static_cast<std::int32_t>(OrderImbalance::MAX_SEQUENCE)
+                                      : static_cast<std::int32_t>(i));
+        imbalance->setRefPrice(i % 2 == 0 ? std::numeric_limits<double>::quiet_NaN() : 1.5 + static_cast<double>(i));
+        imbalance->setImbalanceSide(ImbalanceSide::ALL[i]);
+        imbalance->setAuctionType(AuctionType::ALL[i % AuctionType::ALL.size()]);
+        published.push_back(imbalance);
+    }
+
+    std::vector<std::string> symbols{};
+
+    for (const auto &event : published) {
+        symbols.push_back(event->getEventSymbol());
+    }
+
+    const auto received = publishAndReceive(symbols, published);
+
+    REQUIRE(received.size() == published.size());
+
+    for (std::size_t i = 0; i < published.size(); i++) {
+        CAPTURE(i);
+
+        const auto found = std::find_if(received.begin(), received.end(), [&](const auto &event) {
+            return event->getEventSymbol() == published[i]->getEventSymbol();
+        });
+
+        REQUIRE(found != received.end());
+        checkSame(**found, *published[i]);
+    }
+}
+
+TEST_CASE_FIXTURE(OrderImbalanceHubFixture,
+                  "OrderImbalance of one symbol on several sources arrives with every source") {
+    const auto ntv = makeOnSource("AAPL", "NTV", 1);
+    const auto nuam = makeOnSource("AAPL", "NUAM", 2);
+    const auto arca = makeOnSource("AAPL", "ARCA", 3);
+    const auto defaultSource = makeOnSource("AAPL", "DEFAULT", 4);
+
+    // The subscription is by the plain symbol, not by a wildcard: the Java API delivers all sources to it.
+    const auto received = publishAndReceive({"AAPL"}, {ntv, nuam, arca, defaultSource});
+
+    REQUIRE(received.size() == 4);
+
+    for (const auto &expected : {ntv, nuam, arca, defaultSource}) {
+        CAPTURE(expected->getSource().toString());
+
+        const auto found = std::find_if(received.begin(), received.end(), [&](const auto &event) {
+            return event->getSource() == expected->getSource();
+        });
+
+        REQUIRE(found != received.end());
+        checkSame(**found, *expected);
+    }
 }
