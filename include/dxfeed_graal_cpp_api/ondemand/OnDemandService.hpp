@@ -103,7 +103,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      *
      * <p>If you need an instance of OnDemandService to seamlessly switch from other real-time or delayed
      * data feed to on-demand historical tick data replay, then use
-     * {@ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance(endpoint)" method for a specific
+     * @ref OnDemandService::getInstance(std::shared_ptr<DXEndpoint>) "getInstance(endpoint)" method for a specific
      * `endpoint` that you are using.
      *
      * @return on-demand endpoint for the default DXEndpoint instance.
@@ -185,7 +185,7 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
      * Turns on-demand historical data replay mode from a specified time with real-time speed.
      * This is a shortcut for:
      * <pre><tt>
-     *     @ref OnDemandService::replay(std::int64_t,double) "replay"(time, 1);</tt></pre>
+     *     @ref OnDemandService::replay(std::int64_t, double) const "replay"(time, 1);</tt></pre>
      * This method can be used only when OnDemandService::isReplaySupported() method returns `true`,
      * that is when DXEndpoint is @ref DXEndpoint::connect() "connected"
      * to an address with "(ondemand:<address>)" component that specifies an on-demand historical

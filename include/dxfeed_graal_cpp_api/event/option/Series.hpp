@@ -38,9 +38,9 @@ struct EventMapper;
  * an OptionSeries is established via @ref Series::getExpiration() "expiration" property.
  * If case where there are multiple series at the same expiration day id, then series events are
  * are ordered by their @ref Series::getIndex() "index" in the same order as the corresponding
- * OptionSeries are @ref OptionSeries::compareTo(OptionSeries) "ordered" by their attributes.
+ * OptionSeries are ordered by their attributes.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="seriesEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Series data source provides a consistent view of the set of known series.
  * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
@@ -298,7 +298,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     /**
      * Returns day id of expiration.
      *
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @return day id of expiration.
      */
@@ -306,7 +306,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @param expiration The day id of expiration.
      */

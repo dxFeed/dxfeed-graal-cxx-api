@@ -43,7 +43,8 @@ using CandleSymbolAttributeVariant =
  * by an optional '&' with an @ref CandleSymbol::getExchange() "exchange" code letter and followed by an optional list
  * of comma-separated key=value pairs in curly braces:
  *
- * <p>`<baseSymbol> [ '&' <exchange> ] [ '{' <key1>=<value1> [ ',' <key2>=<value2> ] ... '}' ]`
+ * <p><code>&lt;baseSymbol&gt; [ '&amp;' &lt;exchange&gt; ]
+ * [ '{' &lt;key1&gt;=&lt;value1&gt; [ ',' &lt;key2&gt;=&lt;value2&gt; ] ... '}' ]</code>
  *
  * <p>Properties of the candle symbol correspond to the keys in the string representation in the following way:
  *

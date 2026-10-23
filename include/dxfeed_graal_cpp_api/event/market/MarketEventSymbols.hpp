@@ -52,15 +52,15 @@ struct DXFCPP_EXPORT MarketEventSymbols {
     static bool hasExchangeCode(const StringLike &symbol) noexcept;
 
     /**
-     * Returns exchange code of the specified symbol or `'\0'` if none is defined.
+     * Returns exchange code of the specified symbol or <code>'\0'</code> if none is defined.
      *
      * @param symbol The symbol.
-     * @return exchange code of the specified symbol or `'\0'` if none is defined.
+     * @return exchange code of the specified symbol or <code>'\0'</code> if none is defined.
      */
     static char getExchangeCode(const StringLike &symbol) noexcept;
 
     /**
-     * Changes exchange code of the specified symbol or removes it if the new exchange code is `'\0'`.
+     * Changes exchange code of the specified symbol or removes it if the new exchange code is <code>'\0'</code>.
      *
      * @param symbol The old symbol.
      * @param exchangeCode The new exchange code.

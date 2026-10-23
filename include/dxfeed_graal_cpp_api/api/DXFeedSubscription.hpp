@@ -403,8 +403,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * Adds the specified symbol to the set of subscribed symbols.
      * This is a convenience method to subscribe to one symbol at a time that has a return fast-path for a case when
      * the symbol is already in the set.
-     * When subscribing to multiple symbols at once, it is preferable to use @ref DXFeedSubscription::addSymbols(const
-     * SymbolsCollection &collection) "addSymbols(symbols)" method.
+     * When subscribing to multiple symbols at once, it is preferable to use
+     * @ref DXFeedSubscription::addSymbols(const SymbolsCollection &) const "addSymbols(symbols)" method.
      *
      * Example:
      * ```cpp
@@ -475,8 +475,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 
     /**
      * Removes the specified symbol from the set of subscribed symbols.
-     * To conveniently remove one or few symbols, you can use @ref DXFeedSubscription::removeSymbols(const
-     * SymbolsCollection &collection) "removeSymbols(symbols)" method.
+     * To conveniently remove one or few symbols, you can use
+     * @ref DXFeedSubscription::removeSymbols(SymbolsCollection &&) const "removeSymbols(symbols)" method.
      *
      * Example:
      * ```cpp

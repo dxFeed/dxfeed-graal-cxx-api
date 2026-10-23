@@ -39,7 +39,7 @@ DXFCPP_BEGIN_NAMESPACE
  * by @ref ::getIndex() "index" is ascending order will be also ordered by @ref ::getTime() "time" in ascending order.
  *
  * Time-series events are a more specific subtype of IndexedEvent.
- * All general documentation and <a href="IndexedEvent.html#eventFlagsSection">Event Flags</a> section, in particular,
+ * All general documentation and @ref eventFlagsSection "Event Flags" section, in particular,
  * applies to time-series events. However, the time-series events never come from multiple sources for the same symbol
  * and their @ref TimeSeriesEvent::getSource() "source" is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *

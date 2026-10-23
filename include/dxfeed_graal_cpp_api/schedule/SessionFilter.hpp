@@ -20,6 +20,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+/**
+ * The codes of the predefined session filters.
+ */
 enum class SessionFilterEnum : std::uint32_t {
     /** Accepts any session - useful for pure schedule navigation. */
     ANY = 0,

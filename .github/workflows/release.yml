@@ -419,10 +419,18 @@ jobs:
         run: |
           ls ${{github.workspace}}
 
+      # The README links to the samples and images by paths relative to the repository: in the docs, the samples point
+      # to their sources of this release on GitHub, and the images are copied next to the main page.
       - name: Run Doxygen
+        env:
+          VERSION: ${{needs.get_version.outputs.version}}
         run: |
-          cd "${{github.workspace}}/docs"
+          cd "${{github.workspace}}"
+          sed -i "s#](samples/#](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${VERSION}/samples/#g" README.md
+          cd docs
           doxygen ./Doxyfile
+          mkdir -p html/docs
+          cp -r images html/docs/
           cd ..
 
       - name: Pack

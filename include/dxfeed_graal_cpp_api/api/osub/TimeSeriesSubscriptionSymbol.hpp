@@ -26,8 +26,7 @@ class IndexedEventSubscriptionSymbol;
 /**
  * Represents subscription to time-series of events.
  * This is symbol is observed by ObservableSubscriptionChangeListener
- * methods @ref ObservableSubscriptionChangeListener::symbolsAdded() "symbolsAdded"
- * and @ref ObservableSubscriptionChangeListener::symbolsRemoved() "symbolsRemoved"
+ * callbacks `onSymbolsAdded` and `onSymbolsRemoved`
  * when time-series subscription is created via DXFeedTimeSeriesSubscription class.
  *
  * <p>Instances of this class can be used with DXFeedSubscription to specify subscription

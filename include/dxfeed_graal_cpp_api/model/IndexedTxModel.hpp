@@ -88,8 +88,8 @@ struct DXFCPP_EXPORT IndexedTxModelImpl {
  *
  * <p>This model must be configured using the @ref IndexedTxModel::Builder "builder", as most configuration
  * settings cannot be changed once the model is built. This model requires configuration with
- * a @ref IndexedTxModel::Builder::Builder#withSymbol() "symbol" and a @ref IndexedTxModel::Builder::withSources()
- * sources for subscription, and it must be @ref IndexedTxModel::Builder::withFeed() "attached" to a DXFeed instance to
+ * a @ref IndexedTxModel::Builder::withSymbol() "symbol" and @ref IndexedTxModel::Builder::withSources() "sources"
+ * for subscription, and it must be @ref IndexedTxModel::Builder::withFeed() "attached" to a DXFeed instance to
  * begin operation. For ease of use, some of these configurations can be changed after the model is built, see
  * @ref IndexedTxModel::setSources() "setSources" and @ref IndexedTxModel::attach() "attach" and their overloads.
  *

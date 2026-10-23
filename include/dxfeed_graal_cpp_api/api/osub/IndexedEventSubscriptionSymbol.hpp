@@ -25,8 +25,7 @@ struct SymbolWrapper;
 /**
  * Represents a subscription to a specific source of indexed events.
  * This is symbol is observed by ObservableSubscriptionChangeListener
- * methods @ref ObservableSubscriptionChangeListener::symbolsAdded() "symbolsAdded"
- * and @ref ObservableSubscriptionChangeListener::symbolsRemoved() "symbolsRemoved"
+ * callbacks `onSymbolsAdded` and `onSymbolsRemoved`
  * when subscription to IndexedEvent is defined.
  *
  * <p>Instances of this class can be used with DXFeedSubscription to specify subscription

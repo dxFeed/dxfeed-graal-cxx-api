@@ -41,7 +41,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The value of @ref IndexedEvent::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT"
  * for time-series events and other singe-sourced events like ::Series, that do not support this feature.
  *
- * See also the <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+ * See also the @ref eventFlagsSection "Event Flags" section
  */
 struct DXFCPP_EXPORT IndexedEvent {
     virtual ~IndexedEvent();

@@ -44,7 +44,7 @@ struct EventMapper;
  * to the end-user, order events must be filtered to remove coarse-grained events that
  * are superseded by the finer-grained events.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="orderEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some order event sources provide a consistent view of the price-level or detailed order book. Their updates
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.

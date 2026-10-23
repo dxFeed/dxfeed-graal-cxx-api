@@ -170,7 +170,7 @@ template <typename P> struct CommonPromiseMixin {
      * <p>If cancelled, then ::getException() will return "CancellationException",
      * @ref ::isDone() "isDone", @ref ::isCancelled() "isCancelled", and @ref ::hasException() "hasException" will
      * return `true`, all handlers that were installed with `whenDone` method are notified by invoking their
-     * `promiseDone` method, and all waiters on @ref ::await() "join" method throw "CancellationException".
+     * `promiseDone` method, and all waiters on `await` method throw "CancellationException".
      */
     void cancel() const {
         static_cast<const P *>(this)->impl.cancel();
@@ -186,7 +186,6 @@ template <typename P> struct VoidPromiseMixin {
     /**
      * Returns result of computation.
      *
-     * @return The result of computation.
      * @see CommonPromiseMixin::hasResult()
      */
     void getResult() const {
@@ -195,7 +194,6 @@ template <typename P> struct VoidPromiseMixin {
 
     /**
      * Wait for the computation to complete and return its result or throw an exception in case of exceptional completion.
-     * @return result of computation.
      * @throws CancellationException if computation was canceled.
      * @throws PromiseException if computation has completed exceptionally.
      */
@@ -210,7 +208,6 @@ template <typename P> struct VoidPromiseMixin {
      * completion or timeout.
      *
      * @param timeoutInMilliseconds The timeout.
-     * @return The result of computation.
      * @throws CancellationException if computation was canceled or timed out.
      * @throws PromiseException if computation has completed exceptionally.
      */
@@ -225,7 +222,6 @@ template <typename P> struct VoidPromiseMixin {
      * completion or timeout.
      *
      * @param timeoutInMilliseconds The timeout.
-     * @return The result of computation.
      * @throws CancellationException if computation was cancelled or timed out.
      * @throws PromiseException if computation has completed exceptionally.
      */

@@ -120,6 +120,9 @@ struct SymbolWrapper;
  */
 template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel final : RequireMakeShared<MarketDepthModel<O>> {
 
+    /**
+     * A builder class for creating an instance of MarketDepthModel.
+     */
     struct /* DXFCPP_EXPORT */ Builder final : RequireMakeShared<Builder> {
         friend struct MarketDepthModel;
 

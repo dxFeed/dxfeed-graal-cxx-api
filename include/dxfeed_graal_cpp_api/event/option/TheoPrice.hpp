@@ -38,7 +38,7 @@ struct EventMapper;
  * the real-time theoretical option price can be estimated on real-time changes of the underlying
  * price in the vicinity.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="theoPriceEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some TheoPrice sources provide a consistent view of the set of known TheoPrice.
  * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.

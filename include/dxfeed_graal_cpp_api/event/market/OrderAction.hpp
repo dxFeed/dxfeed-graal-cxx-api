@@ -100,7 +100,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
 
     /**
      * Order is fully executed and removed from the Order Book.
-     * Order's {@ref Order#getSize() size} will be equal to 0.
+     * Order's @ref Order::getSize() "size" will be equal to 0.
      *
      * <p>Full Order Book fields:
      * <ul>

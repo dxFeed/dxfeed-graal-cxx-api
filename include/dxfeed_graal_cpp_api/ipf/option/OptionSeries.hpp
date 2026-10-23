@@ -59,14 +59,12 @@ template <typename T> class OptionSeries final {
     public:
     /**
      * Default constructor for the OptionSeries class.
-     *
-     * @return A default-initialized instance of OptionSeries.
      */
     OptionSeries() {}
 
     /**
      * Returns day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @return day id of expiration.
      */
@@ -76,7 +74,7 @@ template <typename T> class OptionSeries final {
 
     /**
      * Returns day id of last trading day.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 16)`.
      *
      * @return The day id of last trading day.
      */
@@ -112,7 +110,7 @@ template <typename T> class OptionSeries final {
      *     <LIST> ::= <AU> | <AU> <semicolon> <space> <LIST>
      *     <AU> ::= <UNDERLYING> <space> <SPC>
      * ```
-     * The list shall be sorted by <UNDERLYING>.
+     * The list shall be sorted by &lt;UNDERLYING&gt;.
      * Example: "SE 50", "FIS 53; US$ 45.46".
      *
      * @return The additional underlyings for options, including additional cash.

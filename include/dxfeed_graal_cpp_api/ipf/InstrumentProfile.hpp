@@ -531,7 +531,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
 
     /**
      * Returns day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @return The day id of expiration.
      */
@@ -539,7 +539,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
 
     /**
      * Changes day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @param expiration The day id of expiration.
      */
@@ -547,7 +547,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
 
     /**
      * Returns day id of last trading day.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 16)`.
      *
      * @return The day id of last trading day.
      */
@@ -555,7 +555,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
 
     /**
      * Changes day id of last trading day.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 16)`.
      *
      * @param lastTrade The day id of last trading day.
      */

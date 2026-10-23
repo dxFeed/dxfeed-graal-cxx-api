@@ -39,7 +39,7 @@ class InstrumentProfileConnection;
  *
  * <p>Removal of instrument profile is represented by an InstrumentProfile instance with a
  * @ref InstrumentProfile::getType() "type" equal to
- * <code>@ref InstrumentProfileType "InstrumentProfileType"::@ref InstrumentProfileType::REMOVED "REMOVED".@ref
+ * <code>@ref InstrumentProfileType "InstrumentProfileType"::REMOVED.@ref
  * InstrumentProfileType::getName() "getName()"</code>.
  *
  * <p><b>This class is thread-safe.</b>
@@ -111,7 +111,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * Returns a concurrent view of the set of instrument profiles.
      * Note, that removal of instrument profile is represented by an InstrumentProfile instance with a
      * @ref InstrumentProfile::getType() "type" equal to
-     * <code>@ref InstrumentProfileType "InstrumentProfileType"::@ref InstrumentProfileType::REMOVED "REMOVED".@ref
+     * <code>@ref InstrumentProfileType "InstrumentProfileType"::REMOVED.@ref
      * InstrumentProfileType::getName() "getName()"</code>. Normally, this view exposes only non-removed profiles.
      * However, if iteration is concurrent with removal, then a removed instrument profile (with a removed type) can be
      * exposed by this view.
@@ -130,19 +130,20 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * ```cpp
      * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) {
      *     for (const auto &p : profiles) {
-     *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
+     *         if (InstrumentProfileType::REMOVED.getName() == p->getType()) {
      *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
      *         } else {
      *             std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
      *         }
      *     }
      * });
+     * ```
      *
      * Example:
      * ```cpp
      * collector->addUpdateListener([](auto &&profiles) -> void {
      *     for (const auto &p : profiles) {
-     *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
+     *         if (InstrumentProfileType::REMOVED.getName() == p->getType()) {
      *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
      *         } else {
      *             std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
@@ -185,7 +186,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * ```cpp
      * auto id = collector->addUpdateListener([](auto){});
      *
-     * collector->removeEventListener(id);
+     * collector->removeUpdateListener(id);
      * ```
      *
      * @param listenerId The listener id

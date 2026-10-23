@@ -113,69 +113,72 @@ class DXFCPP_EXPORT EventFlag final {
 
     public:
     /**
-     * `0x01` - A bitmask to get transaction pending indicator from the value of @ref ::getEventFlags() "eventFlags"
-     * property.
+     * `0x01` - A bitmask to get transaction pending indicator from the value of @ref IndexedEvent::getEventFlags()
+     * "eventFlags" property.
      *
      * ```cpp
      * bool txPending = (event-> getEventFlags() & IndexedEvent::TX_PENDING) != 0;
      * ```
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag TX_PENDING;
 
     /**
-     * `0x02` - A bitmask to get removal indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     * `0x02` - A bitmask to get removal indicator from the value of @ref IndexedEvent::getEventFlags() "eventFlags"
+     * property.
      *
      * ```cpp
      * bool removeEvent = (event-> getEventFlags() & IndexedEvent::REMOVE_EVENT) != 0;
      * ```
      *
-     * See <a href="#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag REMOVE_EVENT;
 
     /**
-     * `0x04` - A bitmask to get snapshot begin indicator from the value of @ref ::getEventFlags() "eventFlags"
-     * property.
+     * `0x04` - A bitmask to get snapshot begin indicator from the value of @ref IndexedEvent::getEventFlags()
+     * "eventFlags" property.
      *
      * ```cpp
      * bool snapshotBegin = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;
      * ```
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag SNAPSHOT_BEGIN;
 
     /**
-     * `0x08` - A bitmask to get snapshot end indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     * `0x08` - A bitmask to get snapshot end indicator from the value of @ref IndexedEvent::getEventFlags()
+     * "eventFlags" property.
      *
      * ```cpp
      * bool snapshotEnd = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_END) != 0;
      * ```
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag SNAPSHOT_END;
 
     /**
-     * `0x10` - A bitmask to get snapshot snip indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     * `0x10` - A bitmask to get snapshot snip indicator from the value of @ref IndexedEvent::getEventFlags()
+     * "eventFlags" property.
      *
      * ```cpp
      * bool snapshotSnip = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_SNIP) != 0;
      * ```
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag SNAPSHOT_SNIP;
 
     // 0x20 is reserved. This flag will fit into 1-byte on the wire in QTP protocol
 
     /**
-     * `0x40` - A bitmask to set snapshot mode indicator into the value of @ref ::setEventFlags() "eventFlags" property.
-     * This flag is intended for publishing only.
+     * `0x40` - A bitmask to set snapshot mode indicator into the value of @ref IndexedEvent::setEventFlags()
+     * "eventFlags" property. This flag is intended for publishing only.
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag SNAPSHOT_MODE;
 

@@ -45,7 +45,7 @@ struct EventMapper;
  * is a signal to remove a previously received order for the corresponding index.
  * The method @ref SpreadOrder::hasSize() "hasSize" is a convenient method to test for size presence.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="spreadOrderEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some spread order event sources provide a consistent view of the price-level or detailed order book. Their updates
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
@@ -74,7 +74,7 @@ struct EventMapper;
  *
  * This event type cannot be used with @ref DXFeed::getLastEvent() method.
  *
- * <h3><a name="fobSection">Full Order Book Support</a></h3>
+ * <h3><a name="spreadOrderFobSection">Full Order Book Support</a></h3>
  *
  * Some feeds provide support for "Full Order Book" (FOB) where additional fields will be available:
  * <ul>

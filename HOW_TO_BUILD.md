@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - CMake
-- clang\gcc\Visual Studio
+- clang, gcc or Visual Studio
 
 ## Build
 
