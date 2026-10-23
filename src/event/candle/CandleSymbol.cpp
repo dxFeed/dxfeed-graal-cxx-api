@@ -147,6 +147,16 @@ constinit const CandlePriceLevel CandlePriceLevel::DEFAULT{std::numeric_limits<d
 
 //------------
 
+constinit const CandleDataType CandleDataType::SOURCE{"source"};
+constinit const CandleDataType CandleDataType::THO{"tho"};
+constinit const CandleDataType CandleDataType::ALL{"all"};
+constinit const CandleDataType CandleDataType::RTH{"rth"};
+constinit const CandleDataType CandleDataType::ETH{"eth"};
+constinit const CandleDataType CandleDataType::UNDEFINED{""};
+constinit const CandleDataType CandleDataType::DEFAULT{""};
+
+//------------
+
 constinit const SessionType SessionType::NO_TRADING{SessionTypeEnum::NO_TRADING, "NO_TRADING", false};
 constinit const SessionType SessionType::PRE_MARKET{SessionTypeEnum::PRE_MARKET, "PRE_MARKET", true};
 constinit const SessionType SessionType::REGULAR{SessionTypeEnum::REGULAR, "REGULAR", true};
@@ -210,6 +220,7 @@ std::string CandleSymbol::normalize(const StringLike &s) {
     symbol = CandlePeriod::normalizeAttributeForSymbol(symbol);
     symbol = CandleAlignment::normalizeAttributeForSymbol(symbol);
     symbol = CandlePriceLevel::normalizeAttributeForSymbol(symbol);
+    symbol = CandleDataType::normalizeAttributeForSymbol(symbol);
 
     return symbol;
 }
@@ -239,6 +250,10 @@ void CandleSymbol::initTransientFields(bool force) {
 
     if (!priceLevel_ || force) {
         priceLevel_ = CandlePriceLevel::getAttributeForSymbol(symbol_);
+    }
+
+    if (!dataType_ || force) {
+        dataType_ = CandleDataType::getAttributeForSymbol(symbol_);
     }
 }
 
@@ -278,6 +293,10 @@ const std::optional<CandleAlignment> &CandleSymbol::getAlignment() const & noexc
 
 const std::optional<CandlePriceLevel> &CandleSymbol::getPriceLevel() const & noexcept {
     return priceLevel_;
+}
+
+const std::optional<CandleDataType> &CandleSymbol::getDataType() const & noexcept {
+    return dataType_;
 }
 
 const std::string &CandleSymbol::toString() const & noexcept {

@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "./CandleAlignment.hpp"
+#include "./CandleDataType.hpp"
 #include "./CandleExchange.hpp"
 #include "./CandlePeriod.hpp"
 #include "./CandlePrice.hpp"
@@ -30,8 +31,8 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * The common "variant" type for the candle attribute types
  */
-using CandleSymbolAttributeVariant =
-    std::variant<CandleExchange, CandlePrice, CandleSession, CandlePeriod, CandleAlignment, CandlePriceLevel>;
+using CandleSymbolAttributeVariant = std::variant<CandleExchange, CandlePrice, CandleSession, CandlePeriod,
+                                                  CandleAlignment, CandlePriceLevel, CandleDataType>;
 
 /**
  * Symbol that should be used with DXFeedSubscription class to subscribe for Candle events. `DXFeedSubscription` also
@@ -67,8 +68,8 @@ using CandleSymbolAttributeVariant =
  * CandleSession::REGULAR which limits the candle to trading hours only, so a 133 tick candles on "GOOG" base symbol
  * collected over trading hours only can be specified with "GOOG{=133t,tho=true}" string. Note that the default daily
  * candles for US equities are special for historical reasons and correspond to the way US equity exchange report their
- *     daily summary data. The volume of the US equity default daily candle corresponds to the total daily traded volume,
- *     while open, high, low, and close correspond to the regular trading hours only.
+ *     daily summary data. The volume of the US equity default daily candle corresponds to the total daily traded
+ *     volume, while open, high, low, and close correspond to the regular trading hours only.
  * <li>"a" key corresponds to @ref CandleSymbol::getAlignment() "alignment" &mdash; alignment attribute of this symbol.
  *     The CandleAlignment defines possible values with CandleAlignment::MIDNIGHT being default. The alignment values
  *     can be abbreviated to the first letter. So, a 1 hour candle on a symbol "AAPL" that starts at the regular
@@ -78,12 +79,16 @@ using CandleSymbolAttributeVariant =
  * symbol. The CandlePriceLevel defines additional axis to split candles within particular price corridor in addition to
  *     CandlePeriod attribute with the default value `NaN`. So a one-minute candles of "AAPL" with price level 0.1
  *     shall be specified with "AAPL{=m,pl=0.1}".
+ * <li>"dt" key corresponds to @ref CandleSymbol::getDataType() "data type" &mdash; data type attribute of this symbol.
+ *     The CandleDataType defines which types of data are used to build the candles, with CandleDataType::UNDEFINED
+ *     being default. Any string is a valid data type, and its value is case-sensitive, so one-minute candles of
+ *     "AAPL" built from the extended trading hours data shall be specified with "AAPL{=m,dt=eth}".
  * </ul>
  *
- * Keys in the candle symbol are case-sensitive, while values are not. The CandleSymbol::valueOf() method parses any
- * valid string representation into a candle symbol object. The result of the candle symbol CandleSymbol::toString()
- * method is always normalized: keys are ordered lexicographically, values are in lower-case and are abbreviated to
- * their shortest possible form.
+ * Keys in the candle symbol are case-sensitive, while values (except the data type) are not. The
+ * CandleSymbol::valueOf() method parses any valid string representation into a candle symbol object. The result of the
+ * candle symbol CandleSymbol::toString() method is always normalized: keys are ordered lexicographically, values (except
+ * the data type) are in lower-case and are abbreviated to their shortest possible form.
  */
 struct DXFCPP_EXPORT CandleSymbol {
     /// Returns the candle symbol "<null>".
@@ -98,6 +103,7 @@ struct DXFCPP_EXPORT CandleSymbol {
     std::optional<CandlePeriod> period_{};
     std::optional<CandleAlignment> alignment_{};
     std::optional<CandlePriceLevel> priceLevel_{};
+    std::optional<CandleDataType> dataType_{};
 
     static std::string changeAttribute(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute);
 
@@ -175,6 +181,13 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @return price level attribute of this symbol.
      */
     const std::optional<CandlePriceLevel> &getPriceLevel() const & noexcept;
+
+    /**
+     * Returns the data type attribute of this symbol.
+     *
+     * @return data type attribute of this symbol.
+     */
+    const std::optional<CandleDataType> &getDataType() const & noexcept;
 
     /**
      * Returns string representation of this symbol.

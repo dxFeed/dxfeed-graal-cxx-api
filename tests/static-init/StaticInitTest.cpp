@@ -63,6 +63,14 @@ struct Capture {
 // changed. The observer is constructed before the variables below create the constants at the first call, so it is
 // destroyed after the objects of the constants would be. On Windows the shared library destroys its objects when it is
 // unloaded, after this observer, so only the static variant checks destruction there.
+// A virtual call through a volatile pointer: the compiler cannot devirtualize it, so it reads the vptr of the constant
+// and fails if the destruction of the constant changed it.
+std::string changeAttributeVirtually(const CandleSymbolAttribute &attribute, const char *symbol) {
+    const CandleSymbolAttribute *volatile pointer = &attribute;
+
+    return pointer->changeAttributeForSymbol(symbol);
+}
+
 struct DestructionObserver {
     ~DestructionObserver() {
         const auto read = run([] {
@@ -70,12 +78,12 @@ struct DestructionObserver {
                    CandleSymbol::NUL().toString() + " " + CandleType::BY_STRING.at("h").get().getName() + " " +
                    DXEndpoint::NAME_PROPERTY + " " + OrderSource::PREDEFINED_SOURCES.at("NTV").get().name() + " " +
                    Candle{}.getEventSymbol().toString() + " " + Profile{}.getDescription() + " " +
-                   // A virtual call: it fails if a constant of a polymorphic type was destroyed.
-                   CandleExchange::COMPOSITE.changeAttributeForSymbol("A") + " " + EventTypeEnum::QUOTE.getName() +
+                   changeAttributeVirtually(CandleExchange::COMPOSITE, "A") + " " + EventTypeEnum::QUOTE.getName() +
                    " " + DayFilter::MONDAY.getName() + " " + SessionType::REGULAR.getName() + " " +
-                   OrderSource::NTV.toString() + " " + WildcardSymbol::ALL.getSymbol();
+                   OrderSource::NTV.toString() + " " + WildcardSymbol::ALL.getSymbol() + " " +
+                   changeAttributeVirtually(CandleDataType::THO, "A");
         });
-        const bool ok = read == "m <null> <null> HOUR name NTV <null> <null> A QUOTE MONDAY REGULAR NTV *";
+        const bool ok = read == "m <null> <null> HOUR name NTV <null> <null> A QUOTE MONDAY REGULAR NTV * A{dt=tho}";
 
         std::printf("%s destruction: '%s'\n", ok ? "OK  " : "FAIL", read.c_str());
         std::fflush(stdout);
@@ -125,6 +133,7 @@ DXFC_CAPTURE(candleAlignmentParse, toString(&CandleAlignment::parse("s").get() =
 DXFC_CAPTURE(candleSessionParse, toString(&CandleSession::parse("true").get() == &CandleSession::REGULAR), "true");
 DXFC_CAPTURE(candleExchange, toString(CandleExchange::DEFAULT == CandleExchange::COMPOSITE), "true");
 DXFC_CAPTURE(candlePriceLevel, toString(std::isnan(CandlePriceLevel::DEFAULT.getValue())), "true");
+DXFC_CAPTURE(candleDataType, CandleDataType::valueOf("tho").toString() + CandleDataType::ETH.toString(), "thoeth");
 DXFC_CAPTURE(profileField, InstrumentProfileField::find("TRADING_HOURS").value().get().getName(), "TRADING_HOURS");
 DXFC_CAPTURE(sessionType, SessionType::REGULAR.getName(), "REGULAR");
 DXFC_CAPTURE(sideAll, std::to_string(Side::ALL.size()), "3");
@@ -200,7 +209,7 @@ int main() {
     }
 
     // All the variables above were initialized.
-    constexpr std::size_t expectedChecks = DXFC_GRAAL_CHECKS ? 52 : 46;
+    constexpr std::size_t expectedChecks = DXFC_GRAAL_CHECKS ? 53 : 47;
 
     if (checks().size() != expectedChecks) {
         std::printf("FAIL %zu checks instead of %zu\n", checks().size(), expectedChecks);

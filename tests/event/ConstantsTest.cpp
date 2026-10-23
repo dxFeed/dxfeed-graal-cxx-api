@@ -255,6 +255,8 @@ TEST_CASE("The DEFAULT candle attributes equal the constants they are documented
     CHECK(&CandleSession::DEFAULT.getSessionFilter() == &SessionFilter::ANY);
     CHECK(&CandleSession::REGULAR.getSessionFilter() == &SessionFilter::REGULAR);
     CHECK(std::isnan(CandlePriceLevel::DEFAULT.getValue()));
+    CHECK(CandleDataType::DEFAULT == CandleDataType::UNDEFINED);
+    CHECK(CandleDataType::DEFAULT.toString().empty());
 
     CHECK(CandlePeriod::DEFAULT == CandlePeriod::TICK);
     CHECK(CandlePeriod::TICK.toString() == "t");
@@ -556,6 +558,7 @@ TEST_CASE("LazyJavaObjectHandle that is not a constant releases the Java object 
 
 // The constants of these types are not destroyed at exit, so the destructors of global variables can use them.
 static_assert(std::is_trivially_destructible_v<CandleAlignment>);
+static_assert(std::is_trivially_destructible_v<CandleDataType>);
 static_assert(std::is_trivially_destructible_v<CandleExchange>);
 static_assert(std::is_trivially_destructible_v<CandlePeriod>);
 static_assert(std::is_trivially_destructible_v<CandlePrice>);
