@@ -577,6 +577,18 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
   shows the imbalance between buy and sell orders during auctions
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
+- [NuamOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamOrder.html) (experimental) is an
+  extension of `Order` for the NUAM exchange
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [NuamTrade](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTrade.html) (experimental) is an
+  extension of `Trade` for the NUAM exchange
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [NuamTimeAndSale](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTimeAndSale.html) (experimental)
+  is an extension of `TimeAndSale` for the NUAM exchange
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
 
 ### Subscription Symbols
 
