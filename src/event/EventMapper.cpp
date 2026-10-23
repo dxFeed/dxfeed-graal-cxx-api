@@ -5,6 +5,9 @@
 
 #include "../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/candle/Candle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/custom/NuamOrder.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/custom/NuamTimeAndSale.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/custom/NuamTrade.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/AnalyticOrder.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/OptionSale.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/Order.hpp"
@@ -82,6 +85,12 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
         return TextMessage::fromGraal(e);
     case DXFG_EVENT_ORDER_IMBALANCE:
         return OrderImbalance::fromGraal(e);
+    case DXFG_EVENT_NUAM_ORDER:
+        return NuamOrder::fromGraal(e);
+    case DXFG_EVENT_NUAM_TRADE:
+        return NuamTrade::fromGraal(e);
+    case DXFG_EVENT_NUAM_TIME_AND_SALE:
+        return NuamTimeAndSale::fromGraal(e);
     default:
         throw InvalidArgumentException("Unknown event type: " + std::to_string(e->clazz));
     }
@@ -196,6 +205,18 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
         break;
     case DXFG_EVENT_ORDER_IMBALANCE:
         OrderImbalance::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_NUAM_ORDER:
+        NuamOrder::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_NUAM_TRADE:
+        NuamTrade::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_NUAM_TIME_AND_SALE:
+        NuamTimeAndSale::freeGraal(e);
 
         break;
     default:
