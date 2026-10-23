@@ -9,6 +9,7 @@
 #include <dxfg_api.h>
 
 #include <array>
+#include <bit>
 #include <functional>
 #include <mutex>
 #include <string_view>
@@ -16,6 +17,7 @@
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
+#include <vector>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -30,9 +32,11 @@ constinit const OrderSource OrderSource::REGIONAL(8, ConstString::Literal{"REGIO
 constinit const OrderSource OrderSource::AGGREGATE(9, ConstString::Literal{"AGGREGATE"}, 0);
 constinit const OrderSource OrderSource::DEFAULT(0, ConstString::Literal{"DEFAULT"},
                                                  PUB_ORDER | PUB_ANALYTIC_ORDER | PUB_OTC_MARKETS_ORDER |
-                                                     PUB_SPREAD_ORDER | FULL_ORDER_BOOK | PUB_NUAM_ORDER);
+                                                     PUB_SPREAD_ORDER | FULL_ORDER_BOOK | PUB_NUAM_ORDER |
+                                                     PUB_ORDER_IMBALANCE);
 
-constinit const OrderSource OrderSource::NTV(ConstString::Literal{"NTV"}, PUB_ORDER | FULL_ORDER_BOOK);
+constinit const OrderSource OrderSource::NTV(ConstString::Literal{"NTV"},
+                                             PUB_ORDER | FULL_ORDER_BOOK | PUB_ORDER_IMBALANCE);
 constinit const OrderSource OrderSource::ntv(ConstString::Literal{"ntv"}, PUB_ORDER);
 constinit const OrderSource OrderSource::NFX(ConstString::Literal{"NFX"}, PUB_ORDER);
 constinit const OrderSource OrderSource::ESPD(ConstString::Literal{"ESPD"}, PUB_ORDER);
@@ -68,7 +72,7 @@ constinit const OrderSource OrderSource::memx(ConstString::Literal{"memx"}, PUB_
 constinit const OrderSource OrderSource::OCEA(ConstString::Literal{"OCEA"}, PUB_ORDER);
 constinit const OrderSource OrderSource::ocea(ConstString::Literal{"ocea"}, PUB_ORDER);
 constinit const OrderSource OrderSource::pink(ConstString::Literal{"pink"}, PUB_ORDER | PUB_OTC_MARKETS_ORDER);
-constinit const OrderSource OrderSource::ARCA(ConstString::Literal{"ARCA"}, PUB_ORDER);
+constinit const OrderSource OrderSource::ARCA(ConstString::Literal{"ARCA"}, PUB_ORDER | PUB_ORDER_IMBALANCE);
 constinit const OrderSource OrderSource::arca(ConstString::Literal{"arca"}, PUB_ORDER);
 constinit const OrderSource OrderSource::CEDX(ConstString::Literal{"CEDX"}, PUB_ORDER);
 constinit const OrderSource OrderSource::cedx(ConstString::Literal{"cedx"}, PUB_ORDER);
@@ -77,8 +81,16 @@ constinit const OrderSource OrderSource::igc(ConstString::Literal{"igc"}, PUB_OR
 constinit const OrderSource OrderSource::EDX(ConstString::Literal{"EDX"}, PUB_ORDER);
 constinit const OrderSource OrderSource::edx(ConstString::Literal{"edx"}, PUB_ORDER);
 constinit const OrderSource OrderSource::NUAM(ConstString::Literal{"NUAM"},
-                                              PUB_ORDER | FULL_ORDER_BOOK | PUB_NUAM_ORDER);
+                                              PUB_ORDER | FULL_ORDER_BOOK | PUB_NUAM_ORDER | PUB_ORDER_IMBALANCE);
 constinit const OrderSource OrderSource::nuam(ConstString::Literal{"nuam"}, PUB_ORDER | PUB_NUAM_ORDER);
+constinit const OrderSource OrderSource::MOON(ConstString::Literal{"MOON"}, PUB_ORDER);
+constinit const OrderSource OrderSource::moon(ConstString::Literal{"moon"}, PUB_ORDER);
+constinit const OrderSource OrderSource::OTCM(ConstString::Literal{"OTCM"}, PUB_ORDER);
+constinit const OrderSource OrderSource::otcm(ConstString::Literal{"otcm"}, PUB_ORDER);
+constinit const OrderSource OrderSource::BOSS(ConstString::Literal{"BOSS"}, PUB_ORDER);
+constinit const OrderSource OrderSource::boss(ConstString::Literal{"boss"}, PUB_ORDER);
+constinit const OrderSource OrderSource::NEO(ConstString::Literal{"NEO"}, PUB_ORDER);
+constinit const OrderSource OrderSource::neo(ConstString::Literal{"neo"}, PUB_ORDER);
 
 namespace {
 
@@ -101,7 +113,10 @@ constinit const std::array PREDEFINED{
     std::cref(OrderSource::pink),          std::cref(OrderSource::ARCA),          std::cref(OrderSource::arca),
     std::cref(OrderSource::CEDX),          std::cref(OrderSource::cedx),          std::cref(OrderSource::IGC),
     std::cref(OrderSource::igc),           std::cref(OrderSource::EDX),           std::cref(OrderSource::edx),
-    std::cref(OrderSource::NUAM),          std::cref(OrderSource::nuam),
+    std::cref(OrderSource::NUAM),          std::cref(OrderSource::nuam),          std::cref(OrderSource::MOON),
+    std::cref(OrderSource::moon),          std::cref(OrderSource::OTCM),          std::cref(OrderSource::otcm),
+    std::cref(OrderSource::BOSS),          std::cref(OrderSource::boss),          std::cref(OrderSource::NEO),
+    std::cref(OrderSource::neo),
 };
 
 } // namespace
@@ -226,6 +241,22 @@ struct OrderSource::PredefinedSources {
         {"NUAM", NUAM},
         {composeId("nuam"), nuam},
         {"nuam", nuam},
+        {composeId("MOON"), MOON},
+        {"MOON", MOON},
+        {composeId("moon"), moon},
+        {"moon", moon},
+        {composeId("OTCM"), OTCM},
+        {"OTCM", OTCM},
+        {composeId("otcm"), otcm},
+        {"otcm", otcm},
+        {composeId("BOSS"), BOSS},
+        {"BOSS", BOSS},
+        {composeId("boss"), boss},
+        {"boss", boss},
+        {composeId("NEO"), NEO},
+        {"NEO", NEO},
+        {composeId("neo"), neo},
+        {"neo", neo},
     });
 
     static_assert(ENTRIES.size() == 2 * std::tuple_size_v<decltype(PREDEFINED)>);
@@ -309,6 +340,25 @@ std::uint32_t OrderSource::getEventTypeMask(const EventTypeEnum &eventType) {
     throw InvalidArgumentException("Invalid order event type: " + eventType.getName());
 }
 
+std::span<const std::reference_wrapper<const OrderSource>> OrderSource::publishableByFlag(std::uint32_t flag) {
+    // The lists of the sources with each flag, in the order of their declaration (as in Java).
+    static const auto LISTS = [] {
+        std::array<std::vector<std::reference_wrapper<const OrderSource>>, FLAGS_SIZE> result{};
+
+        for (const auto &source : PREDEFINED) {
+            for (std::uint32_t i = 0; i < FLAGS_SIZE; i++) {
+                if ((source.get().pubFlags_ & (1U << i)) != 0) {
+                    result[i].push_back(source);
+                }
+            }
+        }
+
+        return result;
+    }();
+
+    return LISTS[static_cast<std::size_t>(std::countr_zero(flag))];
+}
+
 bool OrderSource::isSpecialSourceId(std::int32_t sourceId) noexcept {
     return sourceId >= COMPOSITE_BID.id() && sourceId <= AGGREGATE.id();
 }
@@ -348,6 +398,22 @@ const OrderSource &OrderSource::valueOf(const StringLike &name) {
     }
 
     return sources.try_emplace(sourceId, OrderSource(sourceId, name)).first->second;
+}
+
+std::span<const std::reference_wrapper<const OrderSource>> OrderSource::publishable(const EventTypeEnum &eventType) {
+    return publishableByFlag(getEventTypeMask(eventType));
+}
+
+std::span<const std::reference_wrapper<const OrderSource>> OrderSource::fullOrderBook() {
+    return publishableByFlag(FULL_ORDER_BOOK);
+}
+
+bool OrderSource::isPublishable(const EventTypeEnum &eventType) const {
+    return (pubFlags_ & getEventTypeMask(eventType)) != 0;
+}
+
+bool OrderSource::isFullOrderBook() const noexcept {
+    return (pubFlags_ & FULL_ORDER_BOOK) != 0;
 }
 
 DXFCPP_END_NAMESPACE
