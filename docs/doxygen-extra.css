@@ -1,14 +1,23 @@
-/* README images marked for one GitHub theme (#gh-light-mode-only, #gh-dark-mode-only) follow the color scheme here too. */
+/* README images marked for one GitHub theme (#gh-light-mode-only, #gh-dark-mode-only) follow the color scheme here too:
+   the system one, or the one doxygen-awesome-css forces with the dark-mode / light-mode class. */
 img[src$="#gh-dark-mode-only"] {
     display: none;
 }
 
 @media (prefers-color-scheme: dark) {
-    img[src$="#gh-light-mode-only"] {
+    html:not(.light-mode) img[src$="#gh-light-mode-only"] {
         display: none;
     }
 
-    img[src$="#gh-dark-mode-only"] {
+    html:not(.light-mode) img[src$="#gh-dark-mode-only"] {
         display: inline;
     }
+}
+
+html.dark-mode img[src$="#gh-light-mode-only"] {
+    display: none;
+}
+
+html.dark-mode img[src$="#gh-dark-mode-only"] {
+    display: inline;
 }

@@ -131,15 +131,25 @@ The first one also runs `release.cmake` in a git repository and checks that both
 
 ### Build the documentation
 
+- Point the README links to the samples at their sources of the release on GitHub, as the release workflow does (the
+  tag here is an example; this change is not committed):
+```shell
+sed -i "s#](samples/#](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/v8.2.0/samples/#g" README.md
+```
 - Go to the documentation folder:
 ```shell
 cd docs
 ```
-- Run the doxygen
+- Run Doxygen 1.18.0 (the version of the release workflow) and copy the README images next to the main page:
 ```shell
 doxygen ./Doxyfile
+mkdir -p html/docs && cp -r images html/docs/
 ```
 - Copy the `html` folder somewhere
+- Undo the README change:
+```shell
+git restore ../README.md
+```
 - Switch to `gh-pages` git branch
 ```shell
 git switch gh-pages 

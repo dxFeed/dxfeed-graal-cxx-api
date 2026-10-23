@@ -330,7 +330,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     std::int32_t getTimeNanoPart() const noexcept;
 
     /**
-     * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() "time".
+     * Returns the sequence number of this event to distinguish events that have the same @ref getTime() "time".
      * This sequence number does not have to be unique and does not need to be sequential.
      * Sequence can range from 0 to ::MAX_SEQUENCE.
      *
@@ -339,7 +339,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     std::int32_t getSequence() const noexcept;
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of this event.
+     * Changes @ref getSequence() "sequence number" of this event.
      *
      * @param sequence the sequence.
      * @see ::getSequence()
@@ -348,7 +348,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     void setSequence(std::int32_t sequence);
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of this event.
+     * Changes @ref getSequence() "sequence number" of this event.
      * Returns the current option sale.
      *
      * @param sequence the sequence.

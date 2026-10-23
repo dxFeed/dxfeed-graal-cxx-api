@@ -214,18 +214,18 @@ template <class T> class OptionChainsBuilder {
     /**
      * Adds an option instrument to this builder.
      *
-     * Option is added to chains for the currently set @ref ::setProduct() "product" and/or
-     * @ref ::setUnderlying() "underlying" to the @ref OptionSeries "series" that corresponding
+     * Option is added to chains for the currently set @ref setProduct() "product" and/or
+     * @ref setUnderlying() "underlying" to the @ref OptionSeries "series" that corresponding
      * to all other currently set attributes. This method is safe in the sense that is ignores
      * illegal state of the builder. It only adds an option when all the following conditions are met:
      * <ul>
-     *  <li>@ref ::setCFI() "CFI code" is set and starts with either "OC" for call or "OP" for put;
-     *  <li>@ref ::setExpiration() "expiration" is set and is not zero;
-     *  <li>@ref ::setStrike() "strike" is set and is not NaN nor Inf;
-     *  <li>@ref ::setProduct() "product" or @ref ::setUnderlying() "underlying symbol" are set;
+     *  <li>@ref setCFI() "CFI code" is set and starts with either "OC" for call or "OP" for put;
+     *  <li>@ref setExpiration() "expiration" is set and is not zero;
+     *  <li>@ref setStrike() "strike" is set and is not NaN nor Inf;
+     *  <li>@ref setProduct() "product" or @ref setUnderlying() "underlying symbol" are set;
      * </ul>
      * All the attributes remain set as before after the call to this method, but
-     * @ref ::getChains() "chains" are updated correspondingly.
+     * @ref getChains() "chains" are updated correspondingly.
      *
      * @param option The option to add.
      */
@@ -255,7 +255,7 @@ template <class T> class OptionChainsBuilder {
 
     /**
      * Returns a view of chains created by this builder.
-     * It updates as new options are added with @ref ::addOption() "addOption" method.
+     * It updates as new options are added with @ref addOption() "addOption" method.
      *
      * @return The view of chains created by this builder.
      */

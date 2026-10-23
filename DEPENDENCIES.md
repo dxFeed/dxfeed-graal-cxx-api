@@ -32,6 +32,13 @@
     - libbacktrace \[opt] (Diagnostic backtraces)
     - libdl \[opt] (Diagnostic backtraces)
     - addr2line \[opt] (Diagnostic backtraces)
+## Documentation
+
+- [Doxygen](https://github.com/doxygen/doxygen) v1.18.0 (the release workflow downloads it and checks its SHA-256)
+- [Doxygen Awesome](https://github.com/jothepro/doxygen-awesome-css) v2.5.0, the theme of the documentation: a copy
+  of its `doxygen-awesome.css` and `LICENSE` in `docs/doxygen-awesome-css`; to update it, replace both with those of
+  the new tag
+
 ## Updating a dependency
 
 The archives that CMake downloads are verified with SHA-256 (`URL_HASH`); the hashes are next to the versions at the

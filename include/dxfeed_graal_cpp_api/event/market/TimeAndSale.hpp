@@ -192,7 +192,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
 
     /**
      * Returns a unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
+     * The index is composed of @ref getTime() "time" and @ref getSequence() "sequence".
      * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
@@ -201,10 +201,10 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
 
     /**
      * Changes the unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence" and
+     * The index is composed of @ref getTime() "time" and @ref getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref setTime() "time" and/or @ref setSequence() "sequence".
      *
      * @param index the event index.
      * @see ::getIndex()
@@ -257,7 +257,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     std::int32_t getTimeNanoPart() const noexcept;
 
     /**
-     * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() "time".
+     * Returns the sequence number of this event to distinguish events that have the same @ref getTime() "time".
      * This sequence number does not have to be unique and does not need to be sequential.
      * Sequence can range from 0 to ::MAX_SEQUENCE.
      *
@@ -266,7 +266,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     std::int32_t getSequence() const noexcept;
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of this event.
+     * Changes @ref getSequence() "sequence number" of this event.
      *
      * @param sequence the sequence.
      * @see ::getSequence()

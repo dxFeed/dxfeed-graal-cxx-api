@@ -397,10 +397,12 @@ jobs:
       - name: Install Doxygen
         run: |
           mkdir dox
-          cd dox          
-          wget https://github.com/doxygen/doxygen/releases/download/Release_1_13_2/doxygen-1.13.2.linux.bin.tar.gz
-          tar -xf doxygen-1.13.2.linux.bin.tar.gz
-          cd doxygen-1.13.2
+          cd dox
+          wget https://github.com/doxygen/doxygen/releases/download/Release_1_18_0/doxygen-1.18.0.linux.bin.tar.gz
+          echo "14fa81bdc34171edb5f1f02b1d60e74802f0439b77fa44e592565d517d72df90  doxygen-1.18.0.linux.bin.tar.gz" \
+            | sha256sum -c -
+          tar -xf doxygen-1.18.0.linux.bin.tar.gz
+          cd doxygen-1.18.0
           sudo make
           sudo make install
           doxygen --version
