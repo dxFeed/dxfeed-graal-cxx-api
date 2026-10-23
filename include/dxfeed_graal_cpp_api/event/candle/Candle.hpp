@@ -34,11 +34,11 @@ struct EventMapper;
  * CandleAlignment.
  *
  * <p> Event symbol of the candle is represented with CandleSymbol class.
- * Since the `Candle is a time-series event, it is typically subscribed to using DXFeedTimeSeriesSubscription class
+ * Since the Candle is a time-series event, it is typically subscribed to using DXFeedTimeSeriesSubscription class
  * that handles the necessary wrapping of the symbol into TimeSeriesSubscriptionSymbol to specify a subscription
  * time range.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions, and snapshots.</a></h3>
+ * <h3><a name="candleEventFlagsSection">Event flags, transactions, and snapshots.</a></h3>
  *
  * Some candle sources provide a consistent view of the set of known candles.
  * The corresponding information is carried in @ref Candle::getEventFlags() "eventFlags" property.

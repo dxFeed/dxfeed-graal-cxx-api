@@ -32,7 +32,7 @@ struct EventMapper;
  *
  * <h3>Trading sessions</h3>
  *
- * The TradeETH event defines the last trade TradeETH::getPrice @ref () "price" as officially defined
+ * The TradeETH event defines the last trade @ref TradeETH::getPrice() "price" as officially defined
  * by the corresponding exchange for its <b>extended trading hours</b> (ETH).
  * It also includes @ref TradeETH::getDayVolume() "dayVolume" and @ref ::getDayTurnover() "dayTurnover"
  * <b>for the extended trading hours only</b> of the trading day identified by @ref TradeETH::getDayId "dayId".

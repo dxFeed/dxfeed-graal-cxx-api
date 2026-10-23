@@ -22,6 +22,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+/**
+ * The codes of the session types.
+ */
 enum class SessionTypeEnum : std::uint32_t {
     /// Non-trading session type is used to mark periods of time during which trading is not allowed.
     NO_TRADING = 0,

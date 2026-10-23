@@ -106,7 +106,7 @@ struct DXFCPP_EXPORT CandlePrice final : CandleSymbolAttribute {
     /**
      * Returns string representation of this candle price type.
      * The string representation of a candle price type is a lower case string that corresponds to
-     * its @ref CandlePrice::name() "name". For example, CandlePrice::LAST is represented as "last".
+     * its name. For example, CandlePrice::LAST is represented as "last".
      *
      * @return string representation of this candle price type.
      */

@@ -65,7 +65,7 @@ struct EventMapper;
  *     <li>NMSConditionalQuoteFlag - @ref OtcMarketsOrder::isNmsConditional() "nmsConditional"
  * </ul>
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="otcMarketsOrderEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * OTC Markets order event sources provide a consistent view of the order book. Their updates
  * may incorporate multiple changes to individual orders that have to be processed at the same time.
@@ -90,7 +90,7 @@ struct EventMapper;
  *
  * This event type cannot be used with DXFeed::getLastEvent() method.
  *
- * <h3><a name="fobSection">Full Order Book Support</a></h3>
+ * <h3><a name="otcMarketsOrderFobSection">Full Order Book Support</a></h3>
  *
  * Some feeds provide support for "Full Order Book" (FOB) where additional fields will be available:
  * <ul>

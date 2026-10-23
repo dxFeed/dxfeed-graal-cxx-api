@@ -38,7 +38,7 @@ struct AuthToken;
  * the strategy for missing "##COMPLETE" tag when reading IPF, possible values are:
  * <ul>
  *     <li>`warn` - show warning in the log (default)</li>
- *     <li>`error - throw exception (future default)</li>
+ *     <li>`error` - throw exception (future default)</li>
  *     <li>`ignore` - do nothing (for backward compatibility)</li>
  * </ul>
  */
@@ -87,7 +87,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * In other cases data considered uncompressed and will be parsed as is.
      *
      * <p>Authentication information can be supplied to this method as part of URL user info
-     * like {@code "http://user:password@host:port/path/file.ipf"}.
+     * like `"http://user:password@host:port/path/file.ipf"`.
      *
      * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
      *
@@ -105,7 +105,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * In other cases data considered uncompressed and will be parsed as is.
      *
      * <p>Specified user and password take precedence over authentication information that is supplied to this method
-     * as part of URL user info like {@code "http://user:password@host:port/path/file.ipf"}.
+     * as part of URL user info like `"http://user:password@host:port/path/file.ipf"`.
      *
      * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
      *
@@ -126,7 +126,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * In other cases data considered uncompressed and will be parsed as is.
      *
      * <p>Specified token take precedence over authentication information that is supplied to this method
-     * as part of URL user info like {@code "http://user:password@host:port/path/file.ipf"}.
+     * as part of URL user info like `"http://user:password@host:port/path/file.ipf"`.
      *
      * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
      *

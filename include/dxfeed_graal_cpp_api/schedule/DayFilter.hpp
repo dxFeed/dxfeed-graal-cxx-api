@@ -17,7 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-/// Helper enum for DayFilter
+/// Helper enum for %DayFilter
 enum class DayFilterEnum : std::uint32_t {
     /// Accepts any day - useful for pure calendar navigation.
     ANY = 0,

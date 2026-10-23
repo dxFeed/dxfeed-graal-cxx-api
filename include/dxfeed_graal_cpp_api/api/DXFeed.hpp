@@ -83,7 +83,7 @@ concept LastingEventCollection =
  * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription()
  * "createSubscription"(Quote::TYPE);
  *
- * sub->@ref DXFeedSubscription::addEventListener() "addEventListener"<Quote>([](const auto& quotes) {
+ * sub->@ref DXFeedSubscription::addEventListener() "addEventListener"&lt;Quote&gt;([](const auto& quotes) {
  *     for (const auto& quote : quotes) {
  *         std::cout << "Mid = " + (quote->@ref Quote::getBidPrice() "getBidPrice"() + quote->@ref Quote::getAskPrice()
  * "getAskPrice"()) / 2) << std::endl;
@@ -313,7 +313,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * If there is no subscription, then this method returns `std::shared_ptr<E>(nullptr)`.
      *
      * <p>If there is a subscription, but the event has not arrived from the uplink data provider,
-     * this method returns a non-initialized event object: its @ref EventType#getEventSymbol() "eventSymbol"
+     * this method returns a non-initialized event object: its @ref EventTypeWithSymbol::getEventSymbol() "eventSymbol"
      * property is set to the requested symbol, but all the other properties have their default values.
      *
      * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the
@@ -836,7 +836,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <p>This method does not accept an instance of IndexedEventSubscriptionSymbol as a `symbol`.
      * The later class is designed for use with DXFeedSubscription and to observe source-specific subscription
-     * in @DXPublisher.
+     * in DXPublisher.
      *
      * <h3>Event flags and consistent snapshot</h3>
      *

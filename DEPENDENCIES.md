@@ -37,7 +37,12 @@
 The archives that CMake downloads are verified with SHA-256 (`URL_HASH`); the hashes are next to the versions at the
 top of `CMakeLists.txt`. After changing a version, update its hash as well:
 
-- a GitHub release asset: `gh api repos/<owner>/<repo>/releases/tags/<tag> --jq '.assets[] | "\(.name) \(.digest)"'`;
+- a GitHub release asset:
+
+  ```sh
+  gh api repos/<owner>/<repo>/releases/tags/<tag> --jq '.assets[] | "\(.name) \(.digest)"'
+  ```
+
 - any other archive: `sha256sum` (or `certutil -hashfile <file> SHA256` on Windows) of the downloaded file;
 - the Graal Native SDK: `DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION` and the hashes of all platforms; with another
   `DXFEED_GRAAL_NATIVE_SDK_VERSION`, the archive is downloaded without verification and a warning is printed.

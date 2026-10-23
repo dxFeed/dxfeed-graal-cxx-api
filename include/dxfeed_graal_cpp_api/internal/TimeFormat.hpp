@@ -35,7 +35,7 @@ struct DXFCPP_EXPORT TimeFormat {
 
     /**
      * An instance of TimeFormat that corresponds to GMT timezone as returned by
-     * @ref TimeZone::getTimeZone() "TimeZone::getTimeZone(\"GMT\")".
+     * Java `TimeZone.getTimeZone("GMT")`.
      */
     static const TimeFormat GMT;
 

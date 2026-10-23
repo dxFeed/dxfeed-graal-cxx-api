@@ -33,7 +33,7 @@ struct EventMapper;
  * It represents the most recent information that is available about the corresponding values on
  * the market at any given moment of time.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="underlyingEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some Underlying sources provide a consistent view of the set of known Underlying events.
  * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.

@@ -52,7 +52,7 @@ struct DXFCPP_EXPORT CandleExchange final : public CandleSymbolAttribute {
     CandleExchange() noexcept;
 
     /**
-     * Returns exchange code. It is `'\0'` for CandleExchange::COMPOSITE exchange.
+     * Returns exchange code. It is <code>'\0'</code> for CandleExchange::COMPOSITE exchange.
      * @return exchange code.
      */
     char getExchangeCode() const noexcept;

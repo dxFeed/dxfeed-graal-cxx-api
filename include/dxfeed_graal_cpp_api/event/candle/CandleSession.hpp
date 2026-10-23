@@ -100,7 +100,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
     /**
      * Returns string representation of this candle session attribute.
      * The string representation of the candle session attribute is a lower case string that corresponds to its
-     * @ref CandleSession::name() "name". For example, CandleSession::ANY is represented as "any".
+     * name. For example, CandleSession::ANY is represented as "any".
      *
      * @return string representation of this candle session attribute.
      */

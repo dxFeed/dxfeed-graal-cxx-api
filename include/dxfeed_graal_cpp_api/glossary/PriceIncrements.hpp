@@ -351,7 +351,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * Returns price increment which shall be applied to the specified price.
      * If the price is Not-a-Number (`NaN`), then the first price increment is returned.
      * If price is a breakpoint between two ranges, then a minimum of upward and downward increments is returned.
-     * This method is equivalent to calling @ref PriceIncrements::getPriceIncrement(double, int) "PriceIncrements::getPriceIncrement(price, 0)".
+     * This method is equivalent to calling
+     * @ref PriceIncrements::getPriceIncrement(double, std::int32_t) const "PriceIncrements::getPriceIncrement(price, 0)".
      *
      * @param price The price.
      * @return The price increment.
@@ -395,7 +396,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * Returns specified price rounded to nearest valid value.
      * If the price is Not-a-Number (`NaN`), then NaN is returned.
      * If the appropriate price increment is 0, then the specified price is returned as is.
-     * This method is equivalent to calling @ref PriceIncrements::roundPrice(double, int) "PriceIncrements::roundPrice(price, 0)".
+     * This method is equivalent to calling
+     * @ref PriceIncrements::roundPrice(double, std::int32_t) const "PriceIncrements::roundPrice(price, 0)".
      *
      * @param price The price to round.
      * @return The rounded price.
@@ -432,7 +434,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * by appropriate increment and then rounded to the nearest valid value.
      * If the price is Not-a-Number (`NaN`), then NaN is returned.
      * If the appropriate price increment is 0, then the specified price is returned as is.
-     * This method is equivalent to calling @ref PriceIncrements::incrementPrice(double, int, double) "PriceIncrements::incrementPrice(price, direction, 0)".
+     * This method is equivalent to calling @ref PriceIncrements::incrementPrice(double, std::int32_t, double) const
+     * "PriceIncrements::incrementPrice(price, direction, 0)".
      *
      * @param price The price to increment.
      * @param direction The direction.
