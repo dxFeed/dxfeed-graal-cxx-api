@@ -55,7 +55,7 @@ class OptionSale;
  *
  * This event is implemented on top of QDS record `TimeAndSale`.
  */
-class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
+class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
     friend struct EventMapper;
     friend class OptionSale;
 
@@ -115,9 +115,18 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
 
     Data data_{};
 
+    protected:
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
     static void freeGraalData(void *graalNative) noexcept;
+
+    /**
+     * Returns a string representation of the fields of this event, without the class name and the braces.
+     * The inheritors append their own fields to it.
+     *
+     * @return a string representation of the fields
+     */
+    std::string baseFieldsToString() const;
 
     public:
     /// The alias to a type of shared pointer to the TimeAndSale object

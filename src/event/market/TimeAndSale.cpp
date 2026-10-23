@@ -369,19 +369,24 @@ void TimeAndSale::setSeller(const StringLike &seller) noexcept {
     data_.seller = std::string(seller);
 }
 
-std::string TimeAndSale::toString() const {
-    return fmt::format("TimeAndSale{{{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
+std::string TimeAndSale::baseFieldsToString() const {
+    return fmt::format("{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
                        "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
-                       "validTick={}, type={}{}{}}}",
+                       "validTick={}, type={}{}{}",
                        MarketEvent::getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
                        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()),
                        getTimeNanoPart(), getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
                        dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
-                       getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()), getAggressorSide().toString(),
-                       isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
-                       getBuyer().empty() ? std::string{} : fmt::format(", buyer='{}'", getBuyer()),
-                       getSeller().empty() ? std::string{} : fmt::format(", seller='{}'", getSeller()));
+                       getExchangeSaleConditionsOpt().value_or("null"), encodeChar(getTradeThroughExempt()),
+                       getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(),
+                       getType().toString(),
+                       getBuyerOpt() ? fmt::format(", buyer='{}'", *getBuyerOpt()) : std::string{},
+                       getSellerOpt() ? fmt::format(", seller='{}'", *getSellerOpt()) : std::string{});
+}
+
+std::string TimeAndSale::toString() const {
+    return fmt::format("TimeAndSale{{{}}}", baseFieldsToString());
 }
 
 DXFCPP_END_NAMESPACE
