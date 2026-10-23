@@ -511,6 +511,7 @@ set(dxFeedGraalCxxApi_Event_Sources
 set(dxFeedGraalCxxApi_EventCandle_Sources
         src/event/candle/Candle.cpp
         src/event/candle/CandleAlignment.cpp
+        src/event/candle/CandleDataType.cpp
         src/event/candle/CandleExchange.cpp
         src/event/candle/CandlePeriod.cpp
         src/event/candle/CandlePrice.cpp

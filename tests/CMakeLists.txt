@@ -35,6 +35,7 @@ endif ()
 
 set(DXFC_TEST_SOURCES
         api/CandleAttributesTest.cpp
+        api/CandleDataTypeTest.cpp
         api/CandleSymbolTest.cpp
         api/DataIntegrityTest.cpp
         api/DXFeedTest.cpp
