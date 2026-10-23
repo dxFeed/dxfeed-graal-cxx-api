@@ -3,7 +3,7 @@
 
 // Events of all types through QD text tapes. The golden tapes in tests/data/tapes are the reference: the text format
 // is QD's own, and the Java API reads and writes them the same way (checked with QD 3.355, and 3.356 for
-// OrderImbalance, see the README there).
+// OrderImbalance and the Nuam events, see the README there).
 //  - C++ -> Java -> C++: the events of the factory are written to a tape and read back.
 //  - Java -> C++: the golden tape is read into C++ events.
 //  - Java -> C++ -> Java: every column of the golden tape survives reading into C++ and writing back.
@@ -23,13 +23,16 @@ using namespace dxfcpp;
 
 namespace {
 
-// Trade, TradeETH and TimeAndSale have no trade id in the C++ API (static analysis report, EVT-2).
-const std::vector<std::string> KNOWN_ROUND_TRIP_DEFECTS{"Trade.TradeId", "TradeETH.TradeId", "TimeAndSale.TradeId"};
+// Trade, TradeETH, TimeAndSale and their Nuam subclasses have no trade id in the C++ API (static analysis report,
+// EVT-2).
+const std::vector<std::string> KNOWN_ROUND_TRIP_DEFECTS{"Trade.TradeId", "TradeETH.TradeId", "TimeAndSale.TradeId",
+                                                        "NuamTrade.TradeId", "NuamTimeAndSale.TradeId"};
 
-// Java defaults: the day volume and turnover of Trade and TradeETH are NaN, the text of TextMessage is null
+// Java defaults: the day volume and turnover of Trade, TradeETH and NuamTrade are NaN, the text of TextMessage is null
 // (static analysis report, EVT-16).
-const std::vector<std::string> KNOWN_DEFAULTS_DEFECTS{"Trade.DayVolume", "Trade.DayTurnover", "TradeETH.DayVolume",
-                                                      "TradeETH.DayTurnover", "TextMessage.Text"};
+const std::vector<std::string> KNOWN_DEFAULTS_DEFECTS{
+    "Trade.DayVolume",     "Trade.DayTurnover",     "TradeETH.DayVolume", "TradeETH.DayTurnover",
+    "NuamTrade.DayVolume", "NuamTrade.DayTurnover", "TextMessage.Text"};
 
 std::vector<std::string> goldenRoundTripDifferences() {
     const auto golden = test::testDataPath("tapes/all-events.txt");

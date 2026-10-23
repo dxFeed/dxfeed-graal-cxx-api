@@ -19,6 +19,7 @@
 #include <doctest.h>
 
 #include "../support/TestSupport.hpp"
+#include "../support/UtcTimeZone.hpp"
 #include "EventsJavaParity.hpp"
 
 using namespace dxfcpp;
@@ -305,54 +306,6 @@ const E &findByName(const std::span<const std::reference_wrapper<const E>> all, 
 
     throw std::runtime_error("No element " + name);
 }
-
-// toString() prints the times in the default time zone of the Java isolate without a zone suffix, the Java references
-// are recorded with the zone UTC. The zone is read at the first use of TimeFormat in the process (TZ is not honored by
-// the native SDK on Windows), so it is set when the test run starts, before any test formats a time. Not from a
-// dynamic initializer: the library may be linked statically and not yet initialized there.
-struct UtcTimeZoneListener : doctest::IReporter {
-    explicit UtcTimeZoneListener(const doctest::ContextOptions &) {
-    }
-
-    void test_run_start() override {
-        System::setProperty("user.timezone", "UTC");
-    }
-
-    void report_query(const doctest::QueryData &) override {
-    }
-
-    void test_run_end(const doctest::TestRunStats &) override {
-    }
-
-    void test_case_start(const doctest::TestCaseData &) override {
-    }
-
-    void test_case_reenter(const doctest::TestCaseData &) override {
-    }
-
-    void test_case_end(const doctest::CurrentTestCaseStats &) override {
-    }
-
-    void test_case_exception(const doctest::TestCaseException &) override {
-    }
-
-    void subcase_start(const doctest::SubcaseSignature &) override {
-    }
-
-    void subcase_end() override {
-    }
-
-    void log_assert(const doctest::AssertData &) override {
-    }
-
-    void log_message(const doctest::MessageData &) override {
-    }
-
-    void test_case_skipped(const doctest::TestCaseData &) override {
-    }
-};
-
-DOCTEST_REGISTER_LISTENER("utc-time-zone", 0, UtcTimeZoneListener);
 
 // The event with the values of the case that the Java probe recorded (tests/api/EventsJavaParity.hpp).
 OrderImbalance makeFromJavaCase(const events_java_parity::OrderImbalanceCase &javaCase) {
