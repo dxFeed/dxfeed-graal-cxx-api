@@ -19,6 +19,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./ImbalanceSide.hpp"
 #include "./MarketEvent.hpp"
 #include "./MarketEventSymbols.hpp"
+#include "./MarketMaker.hpp"
 #include "./OptionSale.hpp"
 #include "./Order.hpp"
 #include "./OrderAction.hpp"

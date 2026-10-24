@@ -59,6 +59,10 @@ constinit const EventTypeEnum EventTypeEnum::NUAM_ORDER{DXFG_EVENT_NUAM_ORDER, "
 constinit const EventTypeEnum EventTypeEnum::NUAM_TRADE{DXFG_EVENT_NUAM_TRADE, "NUAM_TRADE", "NuamTrade", true};
 constinit const EventTypeEnum EventTypeEnum::NUAM_TIME_AND_SALE{
     DXFG_EVENT_NUAM_TIME_AND_SALE, "NUAM_TIME_AND_SALE", "NuamTimeAndSale", false, true, true};
+constinit const EventTypeEnum EventTypeEnum::MARKET_MAKER{DXFG_EVENT_MARKET_MAKER, "MARKET_MAKER", "MarketMaker", false,
+                                                          true};
+constinit const EventTypeEnum EventTypeEnum::TEXT_CONFIGURATION{
+    DXFG_EVENT_TEXT_CONFIGURATION, "TEXT_CONFIGURATION", "TextConfiguration", true, false, false, false};
 
 namespace {
 
@@ -86,6 +90,8 @@ constinit const std::array ALL_EVENT_TYPES{
     std::cref(EventTypeEnum::NUAM_ORDER),
     std::cref(EventTypeEnum::NUAM_TRADE),
     std::cref(EventTypeEnum::NUAM_TIME_AND_SALE),
+    std::cref(EventTypeEnum::MARKET_MAKER),
+    std::cref(EventTypeEnum::TEXT_CONFIGURATION),
 };
 
 } // namespace
@@ -120,6 +126,8 @@ constexpr auto ALL_EVENT_TYPES_BY_NAME = ConstantMap<std::string_view, EventType
     {"NUAM_ORDER", EventTypeEnum::NUAM_ORDER},
     {"NUAM_TRADE", EventTypeEnum::NUAM_TRADE},
     {"NUAM_TIME_AND_SALE", EventTypeEnum::NUAM_TIME_AND_SALE},
+    {"MARKET_MAKER", EventTypeEnum::MARKET_MAKER},
+    {"TEXT_CONFIGURATION", EventTypeEnum::TEXT_CONFIGURATION},
 });
 
 constexpr auto ALL_EVENT_TYPES_BY_CLASS_NAME = ConstantMap<std::string_view, EventTypeEnum>::sorted({
@@ -145,6 +153,8 @@ constexpr auto ALL_EVENT_TYPES_BY_CLASS_NAME = ConstantMap<std::string_view, Eve
     {"NuamOrder", EventTypeEnum::NUAM_ORDER},
     {"NuamTrade", EventTypeEnum::NUAM_TRADE},
     {"NuamTimeAndSale", EventTypeEnum::NUAM_TIME_AND_SALE},
+    {"MarketMaker", EventTypeEnum::MARKET_MAKER},
+    {"TextConfiguration", EventTypeEnum::TEXT_CONFIGURATION},
 });
 
 constexpr auto ALL_EVENT_TYPES_BY_ID = ConstantMap<std::uint32_t, EventTypeEnum>::sorted({
@@ -170,6 +180,8 @@ constexpr auto ALL_EVENT_TYPES_BY_ID = ConstantMap<std::uint32_t, EventTypeEnum>
     {DXFG_EVENT_NUAM_ORDER, EventTypeEnum::NUAM_ORDER},
     {DXFG_EVENT_NUAM_TRADE, EventTypeEnum::NUAM_TRADE},
     {DXFG_EVENT_NUAM_TIME_AND_SALE, EventTypeEnum::NUAM_TIME_AND_SALE},
+    {DXFG_EVENT_MARKET_MAKER, EventTypeEnum::MARKET_MAKER},
+    {DXFG_EVENT_TEXT_CONFIGURATION, EventTypeEnum::TEXT_CONFIGURATION},
 });
 
 static_assert(ALL_EVENT_TYPES_BY_NAME.size() == std::tuple_size_v<decltype(ALL_EVENT_TYPES)>);

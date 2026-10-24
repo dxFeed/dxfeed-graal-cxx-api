@@ -1,7 +1,8 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-// Expected values recorded from the Java API (QD 3.356): NuamOrder, NuamTimeAndSale, NuamTrade, OrderImbalance.
+// Expected values recorded from the Java API (QD 3.356): MarketMaker, NuamOrder, NuamTimeAndSale, NuamTrade,
+// OrderImbalance, TextConfiguration.
 // Change the values only from a new run of the Java probe, not by hand.
 
 #pragma once
@@ -24,13 +25,13 @@ struct TypeFlags {
 };
 
 inline const TypeFlags TYPE_FLAGS[] = {
-    {"OrderImbalance", false, false, false, true},
-    {"NuamOrder", false, true, false, true},
-    {"NuamTrade", true, false, false, true},
-    {"NuamTimeAndSale", false, true, true, true},
+    {"OrderImbalance", false, false, false, true}, {"NuamOrder", false, true, false, true},
+    {"NuamTrade", true, false, false, true},       {"NuamTimeAndSale", false, true, true, true},
+    {"MarketMaker", false, true, false, true},     {"TextConfiguration", true, false, false, false},
 };
 
 inline constexpr std::int64_t ORDER_IMBALANCE_MAX_SEQUENCE = 4194303;
+inline constexpr std::int64_t TEXT_CONFIGURATION_MAX_SEQUENCE = 4194303;
 
 // The field values of the OrderImbalance cases and what Java toString() prints for them (with the time zone UTC).
 struct OrderImbalanceCase {
@@ -548,6 +549,126 @@ inline const NuamTimeAndSaleCase NUAM_TIME_AND_SALE[] = {
      "seller='S2', matchId=1002}",
      "TYPE2", 1700000006000LL, 2, 1700000006002LL, 0, 2, 67, 0LL, 12.5, 22.0, 32.25, 42.75, "C2", 72, "SELL", true,
      false, true, "CANCEL", "B2", "S2", 1002LL},
+};
+
+// The field values of the MarketMaker cases and what Java toString() prints for them (with the time zone UTC).
+struct MarketMakerCase {
+    const char *name;
+    const char *str;
+    const char *symbol; // nullptr: the Java null symbol
+    std::int64_t eventTime;
+    std::int32_t eventFlags;
+    std::int32_t exchangeCode;
+    const char *marketMaker; // nullptr: the Java null
+    std::int64_t index;
+    std::int64_t bidTime;
+    double bidPrice;
+    double bidSize;
+    std::int64_t bidCount;
+    std::int64_t askTime;
+    double askPrice;
+    double askSize;
+    std::int64_t askCount;
+};
+
+inline const MarketMakerCase MARKET_MAKER[] = {
+    {"default",
+     "MarketMaker{null, eventTime=0, source=DEFAULT, eventFlags=0x0, index=0x0, time=0, exchange=\\0, "
+     "marketMaker='null', bidTime=0, bidPrice=NaN, bidSize=NaN, bidCount=0, askTime=0, askPrice=NaN, "
+     "askSize=NaN, askCount=0}",
+     nullptr, 0LL, 0, 0, nullptr, 0LL, 0LL, NaN_, NaN_, 0LL, 0LL, NaN_, NaN_, 0LL},
+    {"full",
+     "MarketMaker{AAPL, eventTime=20231114-221321.456, source=DEFAULT, eventFlags=0x3, "
+     "index=0x514e534451, time=20231114-221321.123, exchange=Q, marketMaker='NSDQ', "
+     "bidTime=20231114-221320.000, bidPrice=150.25, bidSize=100.5, bidCount=7, "
+     "askTime=20231114-221321.123, askPrice=150.5, askSize=200.0, askCount=9}",
+     "AAPL", 1700000001456LL, 3, 81, "NSDQ", 349206430801LL, 1700000000000LL, 150.25, 100.5, 7LL, 1700000001123LL,
+     150.5, 200.0, 9LL},
+    {"bidLater",
+     "MarketMaker{IBM, eventTime=20231114-221322.000, source=DEFAULT, eventFlags=0x0, index=0x4141524358, "
+     "time=20231114-221325.999, exchange=A, marketMaker='ARCX', bidTime=20231114-221325.999, "
+     "bidPrice=0.001, bidSize=9999999.5, bidCount=1, askTime=20231114-221324.000, askPrice=1.0E7, "
+     "askSize=1.0E-5, askCount=2}",
+     "IBM", 1700000002000LL, 0, 65, "ARCX", 280268784472LL, 1700000005999LL, 0.001, 9999999.5, 1LL, 1700000004000LL,
+     10000000.0, 1e-05, 2LL},
+    {"truncated",
+     "MarketMaker{MSFT, eventTime=0, source=DEFAULT, eventFlags=0x0, index=0x5a43444546, time=0, "
+     "exchange=Z, marketMaker='CDEF', bidTime=0, bidPrice=NaN, bidSize=NaN, bidCount=0, askTime=0, "
+     "askPrice=NaN, askSize=NaN, askCount=0}",
+     "MSFT", 0LL, 0, 90, "ABCDEF", 387675604294LL, 0LL, NaN_, NaN_, 0LL, 0LL, NaN_, NaN_, 0LL},
+    {"eightChars",
+     "MarketMaker{MSFT, eventTime=0, source=DEFAULT, eventFlags=0x0, index=0x5a45464748, time=0, "
+     "exchange=Z, marketMaker='EFGH', bidTime=0, bidPrice=NaN, bidSize=NaN, bidCount=0, askTime=0, "
+     "askPrice=NaN, askSize=NaN, askCount=0}",
+     "MSFT", 0LL, 0, 90, "ABCDEFGH", 387709290312LL, 0LL, NaN_, NaN_, 0LL, 0LL, NaN_, NaN_, 0LL},
+    {"latin1",
+     "MarketMaker{ES, eventTime=0, source=DEFAULT, eventFlags=0x0, index=0xdc004ddcff, time=0, "
+     "exchange=\\u00dc, marketMaker='M\303\234\303\277', bidTime=0, bidPrice=NaN, bidSize=NaN, bidCount=0, askTime=0, "
+     "askPrice=NaN, askSize=NaN, askCount=0}",
+     "ES", 0LL, 0, 220, "M\303\234\303\277", 944897907967LL, 0LL, NaN_, NaN_, 0LL, 0LL, NaN_, NaN_, 0LL},
+    {"highExchange",
+     "MarketMaker{NQ, eventTime=0, source=DEFAULT, eventFlags=0x0, index=0xffff0000005a, time=0, "
+     "exchange=\\uffff, marketMaker='Z', bidTime=0, bidPrice=-0.0, bidSize=NaN, bidCount=0, askTime=0, "
+     "askPrice=Infinity, askSize=NaN, askCount=0}",
+     "NQ", 0LL, 0, 65535, "Z", 281470681743450LL, 0LL, -0.0, NaN_, 0LL, 0LL, INF_, NaN_, 0LL},
+    {"empty",
+     "MarketMaker{RTY, eventTime=0, source=DEFAULT, eventFlags=0x0, index=0x0, time=19691231-235959.999, "
+     "exchange=\\0, marketMaker='null', bidTime=19160218-014639.877, bidPrice=NaN, bidSize=NaN, "
+     "bidCount=0, askTime=19691231-235959.999, askPrice=NaN, askSize=NaN, askCount=0}",
+     "RTY", 0LL, 0, 0, "", 0LL, -1700000000123LL, NaN_, NaN_, 0LL, -1LL, NaN_, NaN_, 0LL},
+    {"extreme",
+     "MarketMaker{YM, eventTime=21000101-000000.123, source=DEFAULT, eventFlags=0xffffffff, "
+     "index=0x7e27623d63, time=21000101-000000.123, exchange=~, marketMaker=''b=c', "
+     "bidTime=21000101-000000.123, bidPrice=1.0E21, bidSize=-1.5E10, bidCount=9223372036854775807, "
+     "askTime=21000101-000000.000, askPrice=-Infinity, askSize=NaN, askCount=-9223372036854775808}",
+     "YM", 4102444800123LL, -1, 126, "a'b=c", 541826628963LL, 4102444800123LL, 1e+21, -15000000000.0,
+     9223372036854775807LL, 4102444800000LL, -INF_, NaN_, (-9223372036854775807LL - 1)},
+    {"nullSymbol",
+     "MarketMaker{null, eventTime=0, source=DEFAULT, eventFlags=0x0, index=0x4200000058, time=0, "
+     "exchange=B, marketMaker='X', bidTime=0, bidPrice=1.5, bidSize=NaN, bidCount=0, askTime=0, "
+     "askPrice=2.5, askSize=NaN, askCount=0}",
+     nullptr, 0LL, 0, 66, "X", 283467841624LL, 0LL, 1.5, NaN_, 0LL, 0LL, 2.5, NaN_, 0LL},
+};
+
+// The field values of the TextConfiguration cases and what Java toString() prints for them (with the time zone UTC).
+struct TextConfigurationCase {
+    const char *name;
+    const char *str;
+    const char *symbol; // nullptr: the Java null symbol
+    std::int64_t eventTime;
+    std::int64_t time;
+    std::int32_t sequence;
+    std::int32_t version;
+    const char *text; // nullptr: the Java null
+};
+
+inline const TextConfigurationCase TEXT_CONFIGURATION[] = {
+    {"default", "TextConfiguration{null, eventTime=0, time=0, sequence=0, version=0, text='null'}", nullptr, 0LL, 0LL,
+     0, 0, nullptr},
+    {"full",
+     "TextConfiguration{AAPL, eventTime=20231114-221321.456, time=20231114-221320.123, sequence=42, "
+     "version=7, text='{\"key\":\"value\"}'}",
+     "AAPL", 1700000001456LL, 1700000000123LL, 42, 7, "{\"key\":\"value\"}"},
+    {"nullText",
+     "TextConfiguration{IBM, eventTime=20231114-221322.000, time=20231114-221321.000, sequence=1, "
+     "version=1, text='null'}",
+     "IBM", 1700000002000LL, 1700000001000LL, 1, 1, nullptr},
+    {"emptyText", "TextConfiguration{MSFT, eventTime=0, time=20231114-221323.999, sequence=0, version=0, text=''}",
+     "MSFT", 0LL, 1700000003999LL, 0, 0, ""},
+    {"unicode",
+     "TextConfiguration{ES, eventTime=0, time=20231114-221324.000, sequence=0, version=2, "
+     "text='\303\234\342\202\254\360\237\230\200'}",
+     "ES", 0LL, 1700000004000LL, 0, 2, "\303\234\342\202\254\360\237\230\200"},
+    {"extreme",
+     "TextConfiguration{NQ, eventTime=21000101-000000.123, time=20380119-031407.123, sequence=4194303, "
+     "version=2147483647, text='a'b=c'}",
+     "NQ", 4102444800123LL, 4102444800123LL, 4194303, 2147483647, "a'b=c"},
+    {"negative",
+     "TextConfiguration{RTY, eventTime=0, time=19160218-014639.877, sequence=0, version=-2147483648, "
+     "text='back\\slash'}",
+     "RTY", 0LL, -1700000000123LL, 0, (-2147483647 - 1), "back\\slash"},
+    {"nullSymbol", "TextConfiguration{null, eventTime=0, time=19700101-000000.001, sequence=0, version=-1, text='x'}",
+     nullptr, 0LL, 1LL, 0, -1, "x"},
 };
 
 } // namespace events_java_parity

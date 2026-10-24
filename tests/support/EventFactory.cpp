@@ -417,6 +417,27 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     nuamTimeAndSale->setMatchId(9'876'543'210LL);
     events.push_back(nuamTimeAndSale);
 
+    // The default scheme transfers the bid and ask times of MarketMaker in seconds.
+    auto marketMaker = std::make_shared<MarketMaker>(TAPE_SYMBOL);
+    marketMaker->setEventTime(T + 25);
+    marketMaker->setExchangeCode('Q');
+    marketMaker->setMarketMaker("NSDQ");
+    marketMaker->setBidTime(T + 25'000);
+    marketMaker->setBidPrice(132.25);
+    marketMaker->setBidSize(400);
+    marketMaker->setBidCount(4);
+    marketMaker->setAskTime(T + 26'000);
+    marketMaker->setAskPrice(132.75);
+    marketMaker->setAskSize(500);
+    marketMaker->setAskCount(5);
+    events.push_back(marketMaker);
+
+    auto textConfiguration = std::make_shared<TextConfiguration>(TAPE_SYMBOL, "{\"limit\": 100}", 3);
+    textConfiguration->setEventTime(T + 27);
+    textConfiguration->setTime(T + 27'890);
+    textConfiguration->setSequence(53);
+    events.push_back(textConfiguration);
+
     return events;
 }
 
@@ -462,6 +483,8 @@ std::vector<std::shared_ptr<EventType>> createDefaultEvents() {
         nuamOrder,
         std::make_shared<NuamTrade>(DEFAULTS_SYMBOL),
         std::make_shared<NuamTimeAndSale>(DEFAULTS_SYMBOL),
+        std::make_shared<MarketMaker>(DEFAULTS_SYMBOL),
+        std::make_shared<TextConfiguration>(DEFAULTS_SYMBOL),
     };
 
     for (const auto &event : events) {
@@ -892,6 +915,27 @@ std::vector<std::shared_ptr<EventType>> createEdgeEvents() {
         nuamTimeAndSale->setType(pick(timeAndSaleTypes, k));
         nuamTimeAndSale->setMatchId(l);
         events.push_back(nuamTimeAndSale);
+
+        // The market maker id keeps the last 4 characters of the short string, as in the Java API.
+        auto marketMaker = std::make_shared<MarketMaker>(symbol);
+
+        marketMaker->setExchangeCode(c);
+        marketMaker->setMarketMaker(shortString);
+        marketMaker->setBidTime(l);
+        marketMaker->setBidPrice(d);
+        marketMaker->setBidSize(d);
+        marketMaker->setBidCount(l);
+        marketMaker->setAskTime(l);
+        marketMaker->setAskPrice(d);
+        marketMaker->setAskSize(d);
+        marketMaker->setAskCount(l);
+        events.push_back(marketMaker);
+
+        auto textConfiguration = std::make_shared<TextConfiguration>(symbol, s, i);
+
+        textConfiguration->setTime(l);
+        textConfiguration->setSequence(sequence);
+        events.push_back(textConfiguration);
     }
 
     // All 256 values of the event flags byte on an Order with index 0 (setIndex() after setSource() resets the source

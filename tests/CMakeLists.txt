@@ -45,10 +45,12 @@ set(DXFC_TEST_SOURCES
         api/EventsTest.cpp
         api/ExportsTest.cpp
         api/MarketEventSymbolsTest.cpp
+        api/MarketMakerTest.cpp
         api/NuamEventsTest.cpp
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderImbalanceTest.cpp
         api/OrderSourceTest.cpp
+        api/TextConfigurationTest.cpp
         event/ConstantsTest.cpp
         event/EdgeValuesTapeTest.cpp
         event/EventsTest.cpp

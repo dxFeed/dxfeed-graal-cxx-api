@@ -9,6 +9,7 @@
 #include "../../include/dxfeed_graal_cpp_api/event/custom/NuamTimeAndSale.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/custom/NuamTrade.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/AnalyticOrder.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/market/MarketMaker.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/OptionSale.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/Order.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/OrderImbalance.hpp"
@@ -21,6 +22,7 @@
 #include "../../include/dxfeed_graal_cpp_api/event/market/Trade.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/market/TradeETH.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/misc/Message.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/misc/TextConfiguration.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/misc/TextMessage.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/option/Greeks.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/option/Series.hpp"
@@ -91,6 +93,10 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
         return NuamTrade::fromGraal(e);
     case DXFG_EVENT_NUAM_TIME_AND_SALE:
         return NuamTimeAndSale::fromGraal(e);
+    case DXFG_EVENT_MARKET_MAKER:
+        return MarketMaker::fromGraal(e);
+    case DXFG_EVENT_TEXT_CONFIGURATION:
+        return TextConfiguration::fromGraal(e);
     default:
         throw InvalidArgumentException("Unknown event type: " + std::to_string(e->clazz));
     }
@@ -217,6 +223,14 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
         break;
     case DXFG_EVENT_NUAM_TIME_AND_SALE:
         NuamTimeAndSale::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_MARKET_MAKER:
+        MarketMaker::freeGraal(e);
+
+        break;
+    case DXFG_EVENT_TEXT_CONFIGURATION:
+        TextConfiguration::freeGraal(e);
 
         break;
     default:

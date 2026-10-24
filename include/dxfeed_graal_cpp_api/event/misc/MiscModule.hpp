@@ -14,6 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "./Configuration.hpp"
 #include "./Message.hpp"
+#include "./TextConfiguration.hpp"
 #include "./TextMessage.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
