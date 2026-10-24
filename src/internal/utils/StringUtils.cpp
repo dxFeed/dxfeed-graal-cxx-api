@@ -258,7 +258,8 @@ std::string encodeChar(std::int16_t c) {
         return "\\0";
     }
 
-    return fmt::format("\\u{:04x}", c);
+    // The code is a UTF-16 unit: 0x8000-0xFFFF are negative int16 values.
+    return fmt::format("\\u{:04x}", static_cast<std::uint16_t>(c));
 }
 
 detail::IsIEqual::IsIEqual(const std::locale &locale) : locale_{locale} {

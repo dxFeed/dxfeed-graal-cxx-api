@@ -6,8 +6,8 @@ writes these files the same way.
 
 | File | Content | Used by |
 |---|---|---|
-| `all-events.txt` | One event of each of the 22 event types (`OrderImbalance` on two sources, NTV and NUAM, `NuamOrder` on two sources, NUAM and nuam), every transferred field has its own value (the events of `test::createTapeEvents()`, plus the Java-only fields: `TradeId` of `Trade`, `TradeETH`, `TimeAndSale`, `NuamTrade` and `NuamTimeAndSale`, and the `Message` attachment) | `tests/event/TapeRoundTripTest.cpp` |
-| `defaults.txt` | Default-constructed events of the 22 types, written by the Java API | `tests/event/TapeRoundTripTest.cpp` |
+| `all-events.txt` | One event of each of the 24 event types (`OrderImbalance` on two sources, NTV and NUAM, `NuamOrder` on two sources, NUAM and nuam), every transferred field has its own value (the events of `test::createTapeEvents()`, plus the Java-only fields: `TradeId` of `Trade`, `TradeETH`, `TimeAndSale`, `NuamTrade` and `NuamTimeAndSale`, and the `Message` attachment) | `tests/event/TapeRoundTripTest.cpp` |
+| `defaults.txt` | Default-constructed events of the 24 types, written by the Java API | `tests/event/TapeRoundTripTest.cpp` |
 | `edge-values.txt` | The edge values of `test::createEdgeEvents()` (NaN, ±0.0, infinities, number limits, special strings, all enum values, all 256 values of the event flags byte), written by the Java API from the same values | `tests/event/EdgeValuesTapeTest.cpp` |
 | `edge-values-round-trip.txt` | `edge-values.txt` read by the Java API (`STREAM_FEED`) and written back (`PUBLISHER`): QD does not read back every value it writes, e.g. the day ids of the int32 limits become 0 | `tests/event/EdgeValuesTapeTest.cpp` |
 
@@ -26,6 +26,9 @@ writes these files the same way.
   packs the time in force and the order type. `NuamTrade` and `NuamTimeAndSale` are plain records that
   repeat the columns of `Trade` and `TimeAndSale` (including `TradeId`, which the C++ API does not have) and add
   their own.
+- `MarketMaker` is a plain record keyed by the symbol, the exchange code and the market maker id (`ExchangeCode`,
+  `MarketMaker`); the default scheme writes `BidTime` and `AskTime` in seconds. `TextConfiguration` packs
+  `<milliseconds>:<sequence>` in `Sequence`, as `TextMessage` does.
 - Event flags follow the columns as `EventFlags=TX_PENDING,SNAPSHOT_END`.
 - QD writes the UTC offset in whole minutes. For times before a zone switched to standard time (local mean time with
   seconds, e.g. `+02:30:17` in Europe/Moscow until 1919) a tape written in that zone is up to 59 seconds off, so the

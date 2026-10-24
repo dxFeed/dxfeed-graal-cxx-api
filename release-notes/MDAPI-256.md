@@ -25,3 +25,15 @@
 * **\[MDAPI-256]\[C++]** `TimeAndSale::toString()` prints unset values as the Java API does: `ESC='null'` (was
   `ESC='<null>'`), and `buyer` and `seller` only when they are set, an empty string included (it printed
   `buyer='<null>'` for an unset buyer and skipped an empty one).
+* **\[MDAPI-256]\[C++]** Added the `MarketMaker` and `TextConfiguration` events of QDS 3.356
+  (`EventTypeEnum::MARKET_MAKER`, `TEXT_CONFIGURATION`).
+    * `MarketMaker` is the bid and ask of a market maker: the bid and ask times, prices, sizes and counts. The index
+      packs the exchange code and the market maker id, a QD short string that keeps the last 4 characters up to U+00FF
+      (`getMarketMakerOpt()` is `std::nullopt` for an unset or empty id); `setMarketMaker()` throws
+      `InvalidArgumentException` for more than 8 characters, a character above U+00FF or invalid UTF-8, as the Java API
+      does. The default scheme transfers the bid and ask times in seconds.
+    * `TextConfiguration` is a lasting event with a text, a version, time and sequence. The text is `null` until set
+      (`getTextOpt()`).
+    * `toString()` prints the events as the Java API does.
+* **\[MDAPI-256]\[C++]** `toString()` of the events prints an exchange code from U+8000 to U+FFFF as `\uXXXX`, as the
+  Java API does (it printed a negative number).

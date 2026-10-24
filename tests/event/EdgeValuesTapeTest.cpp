@@ -36,7 +36,8 @@ const std::vector<std::string> KNOWN_NULL_STRING_DEFECTS{"Profile.Description@ED
                                                          "NuamOrder#nuam.ClientOrderId@EDGE-ZERO",
                                                          "NuamOrder#nuam.CustomerAccount@EDGE-ZERO",
                                                          "NuamOrder#nuam.CustomerInfo@EDGE-ZERO",
-                                                         "NuamOrder#nuam.ExchangeInfo@EDGE-ZERO"};
+                                                         "NuamOrder#nuam.ExchangeInfo@EDGE-ZERO",
+                                                         "TextConfiguration.Text@EDGE-ZERO"};
 
 // Not a null string, and only on reading: the Java API itself reads the int64 minimum of TradeStatTime as that minimum
 // plus the current time in milliseconds (the golden round trip has the value of the day it was written), so it is never
