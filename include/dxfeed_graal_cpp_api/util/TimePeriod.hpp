@@ -26,7 +26,15 @@ class DXFeedSubscription;
  */
 struct DXFCPP_EXPORT TimePeriod {
     friend DXFeedSubscription;
+    friend struct DXEndpoint;
 
+    private:
+    // The key of the constructor for `std::optional<TimePeriod>`: only the friends of TimePeriod can create it.
+    struct ConstructionKey {
+        explicit ConstructionKey() = default;
+    };
+
+    public:
     /// Time-period of zero.
     static const TimePeriod ZERO;
 
@@ -87,6 +95,9 @@ struct DXFCPP_EXPORT TimePeriod {
      * @return value in nanoseconds
      */
     std::int64_t getNanos() const;
+
+    /// Not a part of the API: it lets `std::optional<TimePeriod>` create the value in place (TimePeriod can not move).
+    TimePeriod(ConstructionKey, JavaObjectHandle<TimePeriod> &&handle);
 
     TimePeriod(const TimePeriod &) = delete;
     TimePeriod(TimePeriod &&) noexcept = delete;

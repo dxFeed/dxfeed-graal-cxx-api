@@ -6,6 +6,7 @@
 #include "../../include/dxfeed_graal_c_api/api.h"
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
 #    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
@@ -235,6 +236,42 @@ std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() const {
     }
 
     return impl_->getPublisher(handle_);
+}
+
+std::optional<TimePeriod> DXEndpoint::getRequestedAggregationPeriod() const {
+    const auto period = isolated::api::IsolatedDXEndpoint::getRequestedAggregationPeriodMillis(handle_);
+
+    if (period < 0) {
+        return std::nullopt;
+    }
+
+    // TimePeriod can not move, so the value is created in place.
+    return std::optional<TimePeriod>{std::in_place, TimePeriod::ConstructionKey{},
+                                     isolated::util::IsolatedTimePeriod::valueOf(period)};
+}
+
+void DXEndpoint::setRequestedAggregationPeriod(const TimePeriod &requestedAggregationPeriod) const {
+    isolated::api::IsolatedDXEndpoint::setRequestedAggregationPeriodMillis(handle_,
+                                                                           requestedAggregationPeriod.getTime());
+}
+
+void DXEndpoint::setRequestedAggregationPeriod(std::chrono::milliseconds requestedAggregationPeriod) const {
+    setRequestedAggregationPeriod(TimePeriod::valueOf(requestedAggregationPeriod));
+}
+
+void DXEndpoint::setRequestedAggregationPeriod(std::int64_t requestedAggregationPeriod) const {
+    setRequestedAggregationPeriod(TimePeriod::valueOf(requestedAggregationPeriod));
+}
+
+void DXEndpoint::setRequestedAggregationPeriod(std::nullopt_t) const {
+    // A negative period clears the requested one.
+    isolated::api::IsolatedDXEndpoint::setRequestedAggregationPeriodMillis(handle_, -1);
+}
+
+TimePeriodInfo DXEndpoint::getAggregationPeriodInfo() const {
+    const auto [min, max] = isolated::api::IsolatedDXEndpoint::getAggregationPeriodInfo(handle_);
+
+    return min < 0 || max < 0 ? TimePeriodInfo::UNKNOWN : TimePeriodInfo::valueOf(min, max);
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() {

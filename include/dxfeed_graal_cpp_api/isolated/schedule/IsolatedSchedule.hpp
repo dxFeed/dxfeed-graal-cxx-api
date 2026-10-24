@@ -58,6 +58,10 @@ std::string getTimeZoneDisplayName(/* dxfg_schedule_t* */ const JavaObjectHandle
 
 std::string getTimeZoneId(/* dxfg_schedule_t* */ const JavaObjectHandle<dxfcpp::Schedule> &schedule);
 
+// int32_t dxfg_Schedule_getDefinition(graal_isolatethread_t *thread, dxfg_schedule_t* schedule, DXFG_OUT char
+// **definition);
+std::string getDefinition(/* dxfg_schedule_t* */ const JavaObjectHandle<dxfcpp::Schedule> &schedule);
+
 } // namespace IsolatedSchedule
 
 } // namespace isolated::schedule

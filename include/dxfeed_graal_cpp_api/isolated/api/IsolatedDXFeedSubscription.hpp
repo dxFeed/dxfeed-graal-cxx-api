@@ -9,6 +9,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../api/DXFeedSubscription.hpp"
 
+#include <cstdint>
+#include <utility>
+
 DXFCPP_BEGIN_NAMESPACE
 
 struct TimePeriod;
@@ -191,6 +194,29 @@ getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSu
  */
 /* int32_t */ void setAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                                         /* dxfg_time_period_t * */ const JavaObjectHandle<TimePeriod> &period);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_getAggregationPeriodInfo` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @return The minimum and the maximum aggregation period in milliseconds, negative if unknown.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+std::pair<std::int64_t, std::int64_t>
+getAggregationPeriodInfo(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXFeedSubscription_getTotalDroppedEvents` in isolation.
+ *
+ * @param sub The subscription's handle.
+ * @return The number of the events dropped because of a buffer overflow since the subscription was created.
+ * @throws InvalidArgumentException if DXFeedSubscription's handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+std::int64_t getTotalDroppedEvents(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub);
 
 /**
  * Calls the Graal SDK function `dxfg_DXFeedSubscription_addEventListener` in isolation.

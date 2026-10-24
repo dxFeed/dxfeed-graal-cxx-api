@@ -314,6 +314,16 @@ void DXFeedSubscription::setAggregationPeriod(std::int64_t aggregationPeriod) co
     return setAggregationPeriod(TimePeriod::valueOf(aggregationPeriod));
 }
 
+TimePeriodInfo DXFeedSubscription::getAggregationPeriodInfo() const {
+    const auto [min, max] = isolated::api::IsolatedDXFeedSubscription::getAggregationPeriodInfo(handle_);
+
+    return min < 0 || max < 0 ? TimePeriodInfo::UNKNOWN : TimePeriodInfo::valueOf(min, max);
+}
+
+std::int64_t DXFeedSubscription::getTotalDroppedEvents() const {
+    return isolated::api::IsolatedDXFeedSubscription::getTotalDroppedEvents(handle_);
+}
+
 void DXFeedSubscription::removeEventListener(std::size_t listenerId) {
     onEvent_ -= listenerId;
 }

@@ -41,6 +41,9 @@ std::int64_t TimePeriod::getNanos() const {
 TimePeriod::TimePeriod(JavaObjectHandle<TimePeriod> &&handle) : handle_(std::move(handle)) {
 }
 
+TimePeriod::TimePeriod(ConstructionKey, JavaObjectHandle<TimePeriod> &&handle) : handle_(std::move(handle)) {
+}
+
 const JavaObjectHandle<TimePeriod> &TimePeriod::getHandle() const {
     return handle_.get();
 }

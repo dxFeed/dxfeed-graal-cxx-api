@@ -11,6 +11,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <dxfg_api.h>
 
+#include <cstdint>
+#include <utility>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXEndpoint {
@@ -226,6 +229,41 @@ getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> 
  */
 /* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum>
 getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_getRequestedAggregationPeriodMillis` in isolation.
+ *
+ * @param endpoint The endpoint's handle.
+ * @return The requested aggregation period in milliseconds, or -1 if no period is requested.
+ * @throws InvalidArgumentException if the endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+std::int64_t getRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_setRequestedAggregationPeriodMillis` in isolation.
+ *
+ * @param endpoint The endpoint's handle.
+ * @param period The requested aggregation period in milliseconds; a negative value clears the request.
+ * @throws InvalidArgumentException if the endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend (the period exceeds 24 hours).
+ * @throws GraalException if something happened with the GraalVM.
+ */
+void setRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint,
+                                         std::int64_t period);
+
+/**
+ * Calls the Graal SDK function `dxfg_DXEndpoint_getAggregationPeriodInfo` in isolation.
+ *
+ * @param endpoint The endpoint's handle.
+ * @return The minimum and the maximum aggregation period in milliseconds, negative if unknown.
+ * @throws InvalidArgumentException if the endpoint handle is invalid.
+ * @throws JavaException if something happened with the dxFeed API backend.
+ * @throws GraalException if something happened with the GraalVM.
+ */
+std::pair<std::int64_t, std::int64_t>
+getAggregationPeriodInfo(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint);
 
 namespace Builder {
 

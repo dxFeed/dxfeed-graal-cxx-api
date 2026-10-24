@@ -205,6 +205,36 @@ getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSu
                                            static_cast<dxfg_time_period_t *>(period.get()));
 }
 
+std::pair<std::int64_t, std::int64_t>
+getAggregationPeriodInfo(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_DXFeedSubscription_getAggregationPeriodInfo`. "
+                                       "The `sub` handle is invalid");
+    }
+
+    std::int64_t min{};
+    std::int64_t max{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_getAggregationPeriodInfo,
+                                           static_cast<dxfg_subscription_t *>(sub.get()), &min, &max);
+
+    return {min, max};
+}
+
+std::int64_t getTotalDroppedEvents(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub) {
+    if (!sub) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeedSubscription_getTotalDroppedEvents`. The `sub` handle is invalid");
+    }
+
+    std::int64_t droppedEvents{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_getTotalDroppedEvents,
+                                           static_cast<dxfg_subscription_t *>(sub.get()), &droppedEvents);
+
+    return droppedEvents;
+}
+
 void /* int32_t */
 addEventListener(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,
                  /* dxfg_feed_event_listener_t * */ const JavaObjectHandle<dxfcpp::DXFeedEventListener> &listener) {
