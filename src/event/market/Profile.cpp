@@ -318,13 +318,14 @@ std::string Profile::toString() const {
         "low52WeekPrice={}, beta={}, earningsPerShare={}, dividendFrequency={}, "
         "exDividendAmount={}, exDividendDay={}, shares={}, freeFloat={}}}",
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getDescription(), getShortSaleRestriction().toString(), getTradingStatus().toString(), getStatusReason(),
-        TimeFormat::DEFAULT.format(getHaltStartTime()), TimeFormat::DEFAULT.format(getHaltEndTime()),
-        dxfcpp::toString(getHighLimitPrice()), dxfcpp::toString(getLowLimitPrice()),
-        dxfcpp::toString(getHigh52WeekPrice()), dxfcpp::toString(getLow52WeekPrice()), dxfcpp::toString(getBeta()),
-        dxfcpp::toString(getEarningsPerShare()), dxfcpp::toString(getDividendFrequency()),
-        dxfcpp::toString(getExDividendAmount()), day_util::getYearMonthDayByDayId(getExDividendDayId()),
-        dxfcpp::toString(getShares()), dxfcpp::toString(getFreeFloat()));
+        getDescriptionOpt().value_or("null"), getShortSaleRestriction().toString(), getTradingStatus().toString(),
+        getStatusReasonOpt().value_or("null"), TimeFormat::DEFAULT.format(getHaltStartTime()),
+        TimeFormat::DEFAULT.format(getHaltEndTime()), dxfcpp::toString(getHighLimitPrice()),
+        dxfcpp::toString(getLowLimitPrice()), dxfcpp::toString(getHigh52WeekPrice()),
+        dxfcpp::toString(getLow52WeekPrice()), dxfcpp::toString(getBeta()), dxfcpp::toString(getEarningsPerShare()),
+        dxfcpp::toString(getDividendFrequency()), dxfcpp::toString(getExDividendAmount()),
+        day_util::getYearMonthDayByDayId(getExDividendDayId()), dxfcpp::toString(getShares()),
+        dxfcpp::toString(getFreeFloat()));
 }
 
 DXFCPP_END_NAMESPACE

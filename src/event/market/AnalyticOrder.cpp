@@ -275,11 +275,11 @@ AnalyticOrder &AnalyticOrder::withIcebergType(const IcebergType &icebergType) no
 }
 
 std::string AnalyticOrder::toString() const {
-    return fmt::format("AnalyticOrder{{{}, marketMaker={}, icebergPeakSize={}, icebergHiddenSize={}, "
+    return fmt::format("AnalyticOrder{{{}, marketMaker='{}', icebergPeakSize={}, icebergHiddenSize={}, "
                        "icebergExecutedSize={}, icebergType={}}}",
-                       baseFieldsToString(), getMarketMaker(), dxfcpp::toString(getIcebergPeakSize()),
-                       dxfcpp::toString(getIcebergHiddenSize()), dxfcpp::toString(getIcebergExecutedSize()),
-                       getIcebergType().toString());
+                       baseFieldsToString(), getMarketMakerOpt().value_or("null"),
+                       dxfcpp::toString(getIcebergPeakSize()), dxfcpp::toString(getIcebergHiddenSize()),
+                       dxfcpp::toString(getIcebergExecutedSize()), getIcebergType().toString());
 }
 
 DXFCPP_END_NAMESPACE

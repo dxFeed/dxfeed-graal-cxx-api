@@ -7,6 +7,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 
+#include "JavaUtils.hpp"
 #include "StringConstants.hpp"
 
 #include <new>
@@ -232,21 +233,7 @@ std::string toString(void *ptr) {
 }
 
 std::string toString(double d) {
-    if (std::isnan(d)) {
-        return "NaN";
-    }
-
-    if (std::isinf(d)) {
-        return std::signbit(d) ? "-Infinity" : "Infinity";
-    }
-
-    auto result = fmt::format("{}", d);
-
-    if (result.find_first_of(".eE") == std::string::npos) {
-        result += ".0";
-    }
-
-    return result;
+    return java::doubleToString(d);
 }
 
 std::string encodeChar(std::int16_t c) {

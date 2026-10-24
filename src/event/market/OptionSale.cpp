@@ -570,10 +570,11 @@ std::string OptionSale::toString() const {
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
         getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
         getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()),
-        dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()), getExchangeSaleConditions(),
-        encodeChar(getTradeThroughExempt()), getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(),
-        isValidTick(), getType().toString(), dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getVolatility()),
-        dxfcpp::toString(getDelta()), getOptionSymbol());
+        dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
+        getExchangeSaleConditionsOpt().value_or("null"), encodeChar(getTradeThroughExempt()),
+        getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
+        dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getVolatility()), dxfcpp::toString(getDelta()),
+        getOptionSymbolOpt().value_or("null"));
 }
 
 DXFCPP_END_NAMESPACE
