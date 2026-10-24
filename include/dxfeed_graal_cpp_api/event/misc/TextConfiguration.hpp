@@ -54,6 +54,13 @@ struct EventMapper;
 class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::string>, public LastingEvent {
     friend struct EventMapper;
 
+    /*
+     * The time and sequence are packed into one 64-bit field in the following way:
+     *   63..32     31..22         21..0
+     * +---------+--------------+----------+
+     * | Seconds | Milliseconds | Sequence |
+     * +---------+--------------+----------+
+     */
     static constexpr std::uint64_t SECONDS_SHIFT = 32ULL;
     static constexpr std::uint64_t MILLISECONDS_SHIFT = 22ULL;
     static constexpr std::uint64_t MILLISECONDS_MASK = 0x3ffULL;

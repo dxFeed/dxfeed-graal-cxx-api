@@ -181,10 +181,13 @@ void TextConfiguration::setTimeSequence(std::int64_t timeSequence) noexcept {
 }
 
 std::int64_t TextConfiguration::getTime() const noexcept {
+    // Seconds from bits 63..32 (an arithmetic shift keeps the sign of a time before the epoch) plus milliseconds from
+    // bits 31..22 (10 bits, 0..999).
     return sar(timeSequence_, SECONDS_SHIFT) * 1000 + andOp(sar(timeSequence_, MILLISECONDS_SHIFT), MILLISECONDS_MASK);
 }
 
 void TextConfiguration::setTime(std::int64_t time) noexcept {
+    // Rebuilds the field from the seconds and milliseconds of the new time and keeps the sequence in bits 21..0.
     timeSequence_ = orOp(orOp(sal(static_cast<std::int64_t>(time_util::getSecondsFromTime(time)), SECONDS_SHIFT),
                               sal(static_cast<std::int64_t>(time_util::getMillisFromTime(time)), MILLISECONDS_SHIFT)),
                          getSequence());
@@ -197,6 +200,7 @@ TextConfiguration &TextConfiguration::withTime(std::int64_t time) noexcept {
 }
 
 std::int32_t TextConfiguration::getSequence() const noexcept {
+    // MAX_SEQUENCE is 22 one bits, so it also serves as the mask of bits 21..0.
     return static_cast<std::int32_t>(andOp(timeSequence_, MAX_SEQUENCE));
 }
 
@@ -205,6 +209,7 @@ void TextConfiguration::setSequence(std::int32_t sequence) {
         throw InvalidArgumentException("Invalid sequence value = " + std::to_string(sequence));
     }
 
+    // Clears bits 21..0 and puts the sequence there; the time in bits 63..22 stays as is.
     timeSequence_ = orOp(andOp(timeSequence_, ~static_cast<std::int64_t>(MAX_SEQUENCE)), sequence);
 }
 

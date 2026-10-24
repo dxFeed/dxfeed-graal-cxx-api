@@ -44,6 +44,9 @@ std::int64_t encodeShortString(const std::string &string) {
             throw InvalidArgumentException("Invalid market maker: the string contains an illegal character: " + string);
         }
 
+        // Each character takes one byte: the bytes already written move one byte up and the new character goes into
+        // the lowest byte. So "ABC" becomes 0x0000000000414243: the first character ends up in the highest occupied
+        // byte, and the unused high bytes stay zero.
         if (c != 0) {
             code = (code << 8U) | c;
         }
@@ -60,6 +63,9 @@ std::optional<std::string> decodeShortString(std::int64_t code) {
 
     std::string result{};
 
+    // Reads the 8 bytes from the highest (bits 63..56, shift 56 = 64 - 8) down to the lowest (bits 7..0, shift 0), so
+    // the characters come out in the order they were written. The zero bytes in front of a short string are skipped.
+    // Java collects the bytes from the lowest one into a reversed code and reads it back; the result is the same.
     for (int shift = 56; shift >= 0; shift -= 8) {
         if (const auto c = static_cast<char32_t>((static_cast<std::uint64_t>(code) >> shift) & 0xFFU); c != 0) {
             utf8::append(c, std::back_inserter(result));
@@ -284,6 +290,7 @@ MarketMaker &MarketMaker::withExchangeCode(char exchangeCode) noexcept {
 }
 
 void MarketMaker::setExchangeCode(std::int16_t exchangeCode) noexcept {
+    // The UTF-16 unit goes to bits 47..32: EXCHANGE_MASK keeps its 16 bits and leaves the MMID bits untouched.
     data_.index = setBits(data_.index, EXCHANGE_MASK, EXCHANGE_SHIFT, static_cast<std::uint16_t>(exchangeCode));
 }
 
@@ -308,6 +315,8 @@ std::optional<std::string> MarketMaker::getMarketMakerOpt() const {
 }
 
 void MarketMaker::setMarketMaker(const StringLike &marketMaker) {
+    // The short string code has up to 8 bytes, but MMID_MASK keeps only the lowest 4 (bits 31..0), i.e. the last 4
+    // characters, as in Java: "ABCDEF" is stored as "CDEF". The exchange code bits are left untouched.
     data_.index = setBits(data_.index, MMID_MASK, MMID_SHIFT, encodeShortString(std::string(marketMaker)));
 }
 
