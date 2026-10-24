@@ -4,6 +4,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
 
 #include <algorithm>
@@ -261,7 +262,7 @@ std::string MarketEventSymbols::buildSpreadSymbol(const std::map<std::string, do
     std::vector<Leg> legs{};
 
     for (const auto &[symbol, ratio] : spread) {
-        if (ratio != 0) {
+        if (!math::exactlyEquals(ratio, 0.0)) {
             legs.push_back({symbol, ratio});
         }
     }
@@ -270,7 +271,7 @@ std::string MarketEventSymbols::buildSpreadSymbol(const std::map<std::string, do
         return {};
     }
 
-    if (legs.size() == 1 && legs[0].ratio == 1) {
+    if (legs.size() == 1 && math::exactlyEquals(legs[0].ratio, 1.0)) {
         return std::string(legs[0].symbol);
     }
 
@@ -283,7 +284,7 @@ std::string MarketEventSymbols::buildSpreadSymbol(const std::map<std::string, do
             return !aIsNaN;
         }
 
-        if (!aIsNaN && a.ratio != b.ratio) {
+        if (!aIsNaN && !math::exactlyEquals(a.ratio, b.ratio)) {
             return a.ratio > b.ratio;
         }
 
@@ -299,9 +300,9 @@ std::string MarketEventSymbols::buildSpreadSymbol(const std::map<std::string, do
             result += '+'; // Plus only when not first.
         }
 
-        if (const auto ratio = std::abs(legRatio); ratio != 1) {
+        if (const auto ratio = std::abs(legRatio); !math::exactlyEquals(ratio, 1.0)) {
             // Java prints the ratio as an int when the (int) cast keeps its value, otherwise as Double.toString does.
-            if (ratio <= std::numeric_limits<std::int32_t>::max() && ratio == std::trunc(ratio)) {
+            if (ratio <= std::numeric_limits<std::int32_t>::max() && math::exactlyEquals(ratio, std::trunc(ratio))) {
                 result += std::to_string(static_cast<std::int32_t>(ratio));
             } else {
                 result += java::doubleToString(ratio);

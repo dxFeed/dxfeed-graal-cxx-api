@@ -164,7 +164,8 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * class. For greater flexibility, the outer square brackets of the character class can be omitted.
      *
      * The character class is an ECMAScript regular expression (`std::regex`): the Java-specific syntax, such as
-     * `\p{Upper}` or the `&&` intersection, is not supported.
+     * `\p{Upper}` or the `&&` intersection, is not supported. Such syntax either throws InvalidArgumentException or,
+     * when it is also a valid ECMAScript expression (`A-Z&&[^AB]`), matches other characters than in Java.
      *
      * Example:
      * ```cpp
