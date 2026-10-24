@@ -262,6 +262,58 @@ foreach (DXFC_STATIC_INIT_VARIANT IN LISTS DXFC_STATIC_INIT_VARIANTS)
     endif ()
 endforeach ()
 
+# The process exits while the Graal threads are running, with each kind of linking; a hang at exit fails the test by its
+# timeout. The shared variant is not built with the static C runtime, as above.
+set(DXFC_EXIT_VARIANTS static)
+
+if (NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+    list(APPEND DXFC_EXIT_VARIANTS shared)
+endif ()
+
+foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
+    set(DXFC_EXIT_TARGET dxFeedGraalCxxApi_Exit_${DXFC_EXIT_VARIANT})
+    set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown)
+
+    # The exit handler of a MinGW DLL runs after the statics of the executable are destroyed, so the checks of the
+    # callbacks from such a static do not apply to it.
+    if (DXFC_EXIT_VARIANT STREQUAL "static" OR NOT WIN32 OR MSVC)
+        list(APPEND DXFC_EXIT_SCENARIOS late-callback callback-in-progress)
+    endif ()
+    add_executable(${DXFC_EXIT_TARGET} exit/ExitTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_EXIT_TARGET})
+    target_include_directories(${DXFC_EXIT_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+
+    if (DXFC_EXIT_VARIANT STREQUAL "shared")
+        target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE dxfcxx)
+        target_compile_definitions(${DXFC_EXIT_TARGET} PRIVATE DXFCPP_USE_DLLS)
+    else ()
+        target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE dxfcxx::static)
+
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_EXIT_TARGET} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    if (WIN32)
+        target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE ws2_32)
+    endif ()
+
+    target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_EXIT_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+
+    foreach (DXFC_EXIT_SCENARIO IN LISTS DXFC_EXIT_SCENARIOS)
+        set(DXFC_EXIT_TEST ${DXFC_EXIT_TARGET}_${DXFC_EXIT_SCENARIO})
+        add_test(NAME ${DXFC_EXIT_TEST} COMMAND ${DXFC_EXIT_TARGET} ${DXFC_EXIT_SCENARIO})
+        set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES TIMEOUT 60)
+
+        if (DXFCXX_SANITIZERS_ENABLED)
+            set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES ENVIRONMENT
+                    "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+        endif ()
+    endforeach ()
+endforeach ()
+
 # The libraries that the tests and the canary load, copied next to them once (see dxfcxx_copy_runtime).
 set(DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx::graal>)
 set(DXFC_TEST_RUNTIME_DEPENDS "")

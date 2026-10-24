@@ -69,6 +69,10 @@ std::string System::getProperty(const StringLike &key) {
     return result;
 }
 
+void shutdown() {
+    Isolate::shutdown();
+}
+
 DXFCPP_END_NAMESPACE
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {

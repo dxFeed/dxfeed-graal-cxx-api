@@ -5,14 +5,30 @@
 #include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
 
 #include <atomic>
+#include <chrono>
 #include <config/config.hpp>
 #include <cstdlib>
 #include <dxfg_api.h>
+#include <mutex>
 #include <optional>
 #include <string>
+#include <thread>
 #include <utility>
 
 #include <fmt/format.h>
+
+#ifdef _WIN32
+#    ifndef WIN32_LEAN_AND_MEAN
+#        define WIN32_LEAN_AND_MEAN
+#    endif
+#    ifndef NOMINMAX
+#        define NOMINMAX
+#    endif
+#    if defined(_MSC_VER) && defined(_DLL)
+#        include <corecrt_startup.h>
+#    endif
+#    include <windows.h>
+#endif
 
 #ifdef NO_ERROR
 #    undef NO_ERROR
@@ -94,46 +110,15 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
     return result;
 }
 
-CEntryPointErrorsEnum Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate() noexcept {
-    if constexpr (Debugger::traceIsolates) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate()");
-    }
-
-    if (!handle) {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate(): !handle => Not attached");
-        }
-
-        return CEntryPointErrorsEnum::NO_ERROR;
-    }
-
-    const auto result = static_cast<CEntryPointErrorsEnum>(
-        graal_detach_all_threads_and_tear_down_isolate(static_cast<graal_isolatethread_t *>(handle)));
-
-    if (result == CEntryPointErrorsEnum::NO_ERROR) {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() +
-                            "::detachAllThreadsAndTearDownIsolate(): CEntryPointErrorsEnum::NO_ERROR => All "
-                            "threads have been detached. The isolate has been teared down.");
-        }
-
-        handle = nullptr;
-        detachOnDestruction = false;
-    }
-
-    return result;
-}
-
 Isolate::IsolateThread::~IsolateThread() noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::~()");
     }
 
-    if (detachOnDestruction) {
+    // At the process exit the thread is not detached: the other threads may already be ended, and the isolate
+    // ends with the process.
+    if (detachOnDestruction && !Isolate::isShutDown()) {
         ignoreUnused(detach());
     }
 }
@@ -149,9 +134,103 @@ Isolate::IsolateThread &Isolate::currentIsolateThread() noexcept {
 }
 
 namespace {
-// Constant-initialized, so it can be read before the dynamic initialization of the library.
+// Constant-initialized, so they can be read before the dynamic initialization of the library and after the
+// destruction of its statics.
 constinit std::atomic<bool> isolateCreated{false};
+
+// The Graal callbacks return at once (Isolate::isShuttingDown()).
+constinit std::atomic<bool> shuttingDown{false};
+
+// The isolate is not entered anymore (Isolate::isShutDown()).
+constinit std::atomic<bool> shutDown{false};
+
+// The Graal callbacks of the library in progress (Isolate::CallbackScope), on all threads and on this one.
+constinit std::atomic<std::size_t> callbacksInProgress{0};
+constinit thread_local std::size_t threadCallbacksInProgress{0};
+
+// How long the exit handler waits for the callbacks in progress: a listener may block, for example, on a lock that
+// the exiting thread holds. With the UCRT the handler runs under the exit lock, so a callback that registers an exit
+// function meanwhile (for example, initializes a function-local static with a destructor) blocks until the timeout.
+constexpr auto CALLBACKS_TIMEOUT = std::chrono::seconds(2);
+
+// The exit handler does not wait when it runs at DLL_PROCESS_DETACH: the other threads are already ended, and a
+// thread ended in a callback never leaves it.
+constinit std::atomic<bool> waitAtExit{true};
+
+// Waits for the callbacks in progress on the other threads, not for those of this thread: the process may exit from
+// a listener. Call it after setting shuttingDown.
+void waitForCallbacks() noexcept {
+    const auto deadline = std::chrono::steady_clock::now() + CALLBACKS_TIMEOUT;
+
+    while (callbacksInProgress.load() > threadCallbacksInProgress && std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+}
+
+// Registered when the isolate is created (registerExitHandler()), so it runs before the destructors of the statics
+// created earlier, and after those of the statics created later (they must not depend on the Graal threads).
+void onExit() noexcept {
+    shuttingDown = true;
+
+    if (waitAtExit) {
+        waitForCallbacks();
+    }
+
+    shutDown = true;
+}
+
+#if defined(_MSC_VER) && defined(_DLL)
+// Sets the flags at DLL_PROCESS_DETACH if onExit() has not run: the exit table of the process is not run when the
+// executable has its own C runtime or the process ends by ExitProcess().
+void onDetach() noexcept {
+    shuttingDown = true;
+    shutDown = true;
+}
+#endif
+
+void registerExitHandler() noexcept {
+#if defined(_MSC_VER) && defined(_DLL)
+    // std::atexit of a DLL runs the handler at DLL_PROCESS_DETACH, after the statics of the executable are destroyed
+    // and the other threads are ended. So the handler goes to the exit table of the process, as std::atexit of an
+    // executable does, and the module is pinned: it must not be unloaded before the process exits. onDetach() is
+    // registered first: in an executable both go to the same table, and onExit() runs first.
+    HMODULE module{};
+
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_PIN,
+                       reinterpret_cast<LPCWSTR>(&isolateCreated), &module);
+    std::atexit(onDetach);
+    _crt_atexit(onExit);
+#else
+#    ifdef _WIN32
+    // In a DLL (MinGW, the static C runtime) std::atexit runs the handler at DLL_PROCESS_DETACH.
+    HMODULE module{};
+
+    if (GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                           reinterpret_cast<LPCWSTR>(&isolateCreated), &module) &&
+        module != GetModuleHandleW(nullptr)) {
+        waitAtExit = false;
+    }
+#    endif
+    std::atexit(onExit);
+#endif
+}
 } // namespace
+
+Isolate::CallbackScope::CallbackScope() noexcept {
+    // Counted before the check: the exit handler sets the flag before it reads the counter.
+    callbacksInProgress.fetch_add(1);
+    threadCallbacksInProgress++;
+    active_ = !shuttingDown.load();
+}
+
+Isolate::CallbackScope::~CallbackScope() noexcept {
+    threadCallbacksInProgress--;
+    callbacksInProgress.fetch_sub(1);
+}
+
+Isolate::CallbackScope::operator bool() const noexcept {
+    return active_;
+}
 
 Isolate::Isolate() noexcept {
     if constexpr (Debugger::traceIsolates) {
@@ -160,10 +239,6 @@ Isolate::Isolate() noexcept {
     }
 
     isolateCreated.store(true);
-
-    // The handle registry must outlive the isolate so that cached Java handles
-    // can be released while calls into Graal are still valid.
-    ignoreUnused(JavaObjectHandleRegistry::getInstance());
 
     graal_isolate_t *graalIsolateHandle{};
     graal_isolatethread_t *graalIsolateThreadHandle{};
@@ -275,11 +350,13 @@ Isolate &Isolate::getInstance() noexcept {
         Debugger::trace("Isolate::getInstance()");
     }
 
-    static Isolate instance{};
+    // Never deleted: see the description of the function.
+    static Isolate &instance = *new Isolate{};
     static std::once_flag flag{};
 
     std::call_once(flag, []() {
         init(instance);
+        registerExitHandler();
     });
 
     if constexpr (Debugger::traceIsolates) {
@@ -294,15 +371,40 @@ bool Isolate::isCreated() noexcept {
     return isolateCreated.load();
 }
 
-Isolate::~Isolate() {
-    if constexpr (Debugger::traceIsolates) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::trace("~Isolate()");
+bool Isolate::isShuttingDown() noexcept {
+    return shuttingDown.load(std::memory_order_acquire);
+}
+
+bool Isolate::isShutDown() noexcept {
+    return shutDown.load(std::memory_order_acquire);
+}
+
+void Isolate::shutdown() {
+    // A concurrent call waits for the first one. Never destroyed: shutdown() may be called from a static destructor.
+    static auto &mutex = *new std::mutex{};
+    std::lock_guard lock(mutex);
+
+    // A second call, or the exit handler has run.
+    if (isShutDown()) {
+        return;
     }
 
-    JavaObjectHandleRegistry::getInstance().releaseAll();
-    ignoreUnused(currentIsolateThread().detachAllThreadsAndTearDownIsolate());
-    handle_ = nullptr;
+    // The new callbacks return at once.
+    shuttingDown = true;
+    waitForCallbacks();
+
+    if (isCreated()) {
+        // Releasing the last handle of a native listener deactivates it: the release waits for its callbacks in
+        // progress, and the listener is not called afterwards.
+        JavaObjectHandleRegistry::getInstance().releaseAll();
+        ignoreUnused(getInstance().runIsolated([](auto threadHandle) {
+            return dxfg_system_close_all_and_await_termination(static_cast<graal_isolatethread_t *>(threadHandle));
+        }));
+        // The handles created while the endpoints were closing.
+        JavaObjectHandleRegistry::getInstance().releaseAll();
+    }
+
+    shutDown = true;
 }
 
 std::string Isolate::toString() const {
