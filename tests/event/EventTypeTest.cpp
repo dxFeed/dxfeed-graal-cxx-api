@@ -73,6 +73,9 @@ TEST_CASE("EventTypeEnum flags should match the Java event classes") {
         {EventTypeEnum::SERIES, false, true, false, true, true},
         {EventTypeEnum::OPTION_SALE, false, true, false, true, true},
         {EventTypeEnum::ORDER_IMBALANCE, false, false, false, false, true},
+        {EventTypeEnum::NUAM_ORDER, false, true, false, true, true},
+        {EventTypeEnum::NUAM_TRADE, true, false, false, false, true},
+        {EventTypeEnum::NUAM_TIME_AND_SALE, false, true, true, false, true},
         {EventTypeEnum::TEXT_MESSAGE, false, false, false, false, false},
     };
 

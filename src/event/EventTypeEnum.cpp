@@ -55,6 +55,10 @@ constinit const EventTypeEnum EventTypeEnum::TEXT_MESSAGE{
     DXFG_EVENT_TEXT_MESSAGE, "TEXT_MESSAGE", "TextMessage", false, false, false, false};
 constinit const EventTypeEnum EventTypeEnum::ORDER_IMBALANCE{DXFG_EVENT_ORDER_IMBALANCE, "ORDER_IMBALANCE",
                                                              "OrderImbalance", false};
+constinit const EventTypeEnum EventTypeEnum::NUAM_ORDER{DXFG_EVENT_NUAM_ORDER, "NUAM_ORDER", "NuamOrder", false, true};
+constinit const EventTypeEnum EventTypeEnum::NUAM_TRADE{DXFG_EVENT_NUAM_TRADE, "NUAM_TRADE", "NuamTrade", true};
+constinit const EventTypeEnum EventTypeEnum::NUAM_TIME_AND_SALE{
+    DXFG_EVENT_NUAM_TIME_AND_SALE, "NUAM_TIME_AND_SALE", "NuamTimeAndSale", false, true, true};
 
 namespace {
 
@@ -79,6 +83,9 @@ constinit const std::array ALL_EVENT_TYPES{
     std::cref(EventTypeEnum::OPTION_SALE),
     std::cref(EventTypeEnum::TEXT_MESSAGE),
     std::cref(EventTypeEnum::ORDER_IMBALANCE),
+    std::cref(EventTypeEnum::NUAM_ORDER),
+    std::cref(EventTypeEnum::NUAM_TRADE),
+    std::cref(EventTypeEnum::NUAM_TIME_AND_SALE),
 };
 
 } // namespace
@@ -110,6 +117,9 @@ constexpr auto ALL_EVENT_TYPES_BY_NAME = ConstantMap<std::string_view, EventType
     {"OPTION_SALE", EventTypeEnum::OPTION_SALE},
     {"TEXT_MESSAGE", EventTypeEnum::TEXT_MESSAGE},
     {"ORDER_IMBALANCE", EventTypeEnum::ORDER_IMBALANCE},
+    {"NUAM_ORDER", EventTypeEnum::NUAM_ORDER},
+    {"NUAM_TRADE", EventTypeEnum::NUAM_TRADE},
+    {"NUAM_TIME_AND_SALE", EventTypeEnum::NUAM_TIME_AND_SALE},
 });
 
 constexpr auto ALL_EVENT_TYPES_BY_CLASS_NAME = ConstantMap<std::string_view, EventTypeEnum>::sorted({
@@ -132,6 +142,9 @@ constexpr auto ALL_EVENT_TYPES_BY_CLASS_NAME = ConstantMap<std::string_view, Eve
     {"OptionSale", EventTypeEnum::OPTION_SALE},
     {"TextMessage", EventTypeEnum::TEXT_MESSAGE},
     {"OrderImbalance", EventTypeEnum::ORDER_IMBALANCE},
+    {"NuamOrder", EventTypeEnum::NUAM_ORDER},
+    {"NuamTrade", EventTypeEnum::NUAM_TRADE},
+    {"NuamTimeAndSale", EventTypeEnum::NUAM_TIME_AND_SALE},
 });
 
 constexpr auto ALL_EVENT_TYPES_BY_ID = ConstantMap<std::uint32_t, EventTypeEnum>::sorted({
@@ -154,6 +167,9 @@ constexpr auto ALL_EVENT_TYPES_BY_ID = ConstantMap<std::uint32_t, EventTypeEnum>
     {DXFG_EVENT_OPTION_SALE, EventTypeEnum::OPTION_SALE},
     {DXFG_EVENT_TEXT_MESSAGE, EventTypeEnum::TEXT_MESSAGE},
     {DXFG_EVENT_ORDER_IMBALANCE, EventTypeEnum::ORDER_IMBALANCE},
+    {DXFG_EVENT_NUAM_ORDER, EventTypeEnum::NUAM_ORDER},
+    {DXFG_EVENT_NUAM_TRADE, EventTypeEnum::NUAM_TRADE},
+    {DXFG_EVENT_NUAM_TIME_AND_SALE, EventTypeEnum::NUAM_TIME_AND_SALE},
 });
 
 static_assert(ALL_EVENT_TYPES_BY_NAME.size() == std::tuple_size_v<decltype(ALL_EVENT_TYPES)>);

@@ -565,6 +565,14 @@ set(dxFeedGraalCxxApi_EventMisc_Sources
         src/event/misc/TextMessage.cpp
 )
 
+set(dxFeedGraalCxxApi_EventCustom_Sources
+        src/event/custom/NuamOrder.cpp
+        src/event/custom/NuamOrderType.cpp
+        src/event/custom/NuamTimeAndSale.cpp
+        src/event/custom/NuamTimeInForceType.cpp
+        src/event/custom/NuamTrade.cpp
+)
+
 set(dxFeedGraalCxxApi_Schedule_Sources
         src/schedule/SessionFilter.cpp
         src/schedule/SessionType.cpp
@@ -603,6 +611,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_EventMarket_Sources}
         ${dxFeedGraalCxxApi_EventOption_Sources}
         ${dxFeedGraalCxxApi_EventMisc_Sources}
+        ${dxFeedGraalCxxApi_EventCustom_Sources}
         ${dxFeedGraalCxxApi_Schedule_Sources}
         ${dxFeedGraalCxxApi_Util_Sources}
 )

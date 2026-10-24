@@ -40,4 +40,12 @@ Message	ROUND-TRIP	20231114-221320.018+0000	"attachment rO0ABXQACmF0dGFjaG1lbnQ"
 OrderImbalance#NTV	ROUND-TRIP	20231114-221320.019+0000	20231114-221339+0000	234:41	150.25	1200	300	150.5	149.75	9
 =OrderImbalance#NUAM	EventSymbol	EventTime	Time	Sequence	RefPrice	PairedSize	ImbalanceSize	NearPrice	FarPrice	Flags
 OrderImbalance#NUAM	ROUND-TRIP	20231114-221320.020+0000	20231114-221340+0000	345:43	99.5	2500	700.5	99.75	99.25	18
+=NuamOrder#NUAM	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	ActorId	ParticipantId	SubmitterId	OnBehalfOfSubmitterId	TimeInForceData	TriggerOrderBookId	TriggerPrice	TriggerSessionType	OrderQuantity	DisplayQuantity	RefreshQuantity	LeavesQuantity	MatchedQuantity	NuamFlags	ClientOrderId	CustomerAccount	CustomerInfo	ExchangeInfo
+NuamOrder#NUAM	ROUND-TRIP	20231114-221320.021+0000	25	20231114-221341+0000	456:45	120.5	300	1367	101	102	103	104	5	77	118.75	3	1000	300	150	700	300	33	CL-ORD-1	ACC-0042	"Customer info"	"Exchange info"
+=NuamOrder#nuam	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	ActorId	ParticipantId	SubmitterId	OnBehalfOfSubmitterId	TimeInForceData	TriggerOrderBookId	TriggerPrice	TriggerSessionType	OrderQuantity	DisplayQuantity	RefreshQuantity	LeavesQuantity	MatchedQuantity	NuamFlags	ClientOrderId	CustomerAccount	CustomerInfo	ExchangeInfo
+NuamOrder#nuam	ROUND-TRIP	20231114-221320.022+0000	26	20231114-221342+0000	567:47	121.25	310	1387	201	202	203	204	6	78	119.5	4	2000	310	155	1690	310	51	CL-ORD-2	ACC-0043	"Lower info"	"Lower exchange"
+=NuamTrade	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	Tick	Change	DayId	DayVolume	DayTurnover	Flags	TradeStatTime	LastSignificantPrice	LastPriceForAll	NumberOfTrades	VWAP
+NuamTrade	ROUND-TRIP	20231114-221320.023+0000	20231114-221343+0000	678:49	Y	7004	130.25	15	2	-0.75	20231114	1500	195375	2	20231114-221343.800+0000	130.5	130.25	321	129.875
+=NuamTimeAndSale	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	BidPrice	AskPrice	SaleConditions	Flags	MatchId
+NuamTimeAndSale	ROUND-TRIP	20231114-221320.024+0000	20231114-221344+0000	789:51	X	7005	131.5	25	131.25	131.75	TI	23118	9876543210
 ==

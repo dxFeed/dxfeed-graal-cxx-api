@@ -66,6 +66,12 @@ inline std::string_view toString(dxfg_event_clazz_t eventClazz) {
         return "DXFG_EVENT_TEXT_CONFIGURATION";
     case DXFG_EVENT_ORDER_IMBALANCE:
         return "DXFG_EVENT_ORDER_IMBALANCE";
+    case DXFG_EVENT_NUAM_ORDER:
+        return "DXFG_EVENT_NUAM_ORDER";
+    case DXFG_EVENT_NUAM_TRADE:
+        return "DXFG_EVENT_NUAM_TRADE";
+    case DXFG_EVENT_NUAM_TIME_AND_SALE:
+        return "DXFG_EVENT_NUAM_TIME_AND_SALE";
     default:
         return "UNKNOWN";
     }

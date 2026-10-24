@@ -38,4 +38,10 @@ TextMessage	DEFAULTS	20231114-221320.000+0000	0	0	\NULL
 Message	DEFAULTS	20231114-221320.000+0000	\NULL
 =OrderImbalance#NTV	EventSymbol	EventTime	Time	Sequence	RefPrice	PairedSize	ImbalanceSize	NearPrice	FarPrice	Flags
 OrderImbalance#NTV	DEFAULTS	20231114-221320.000+0000	0	0	NaN	NaN	NaN	NaN	NaN	0
+=NuamOrder#NUAM	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	ActorId	ParticipantId	SubmitterId	OnBehalfOfSubmitterId	TimeInForceData	TriggerOrderBookId	TriggerPrice	TriggerSessionType	OrderQuantity	DisplayQuantity	RefreshQuantity	LeavesQuantity	MatchedQuantity	NuamFlags	ClientOrderId	CustomerAccount	CustomerInfo	ExchangeInfo
+NuamOrder#NUAM	DEFAULTS	20231114-221320.000+0000	0	0	0	NaN	NaN	0	0	0	0	0	0	0	NaN	0	NaN	NaN	NaN	NaN	NaN	0	\NULL	\NULL	\NULL	\NULL
+=NuamTrade	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	Tick	Change	DayId	DayVolume	DayTurnover	Flags	TradeStatTime	LastSignificantPrice	LastPriceForAll	NumberOfTrades	VWAP
+NuamTrade	DEFAULTS	20231114-221320.000+0000	0	0	\0	0	NaN	NaN	0	NaN	0	NaN	NaN	0	0	NaN	NaN	0	NaN
+=NuamTimeAndSale	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	BidPrice	AskPrice	SaleConditions	Flags	MatchId
+NuamTimeAndSale	DEFAULTS	20231114-221320.000+0000	0	0	\0	0	NaN	NaN	NaN	NaN	\NULL	0	0
 ==

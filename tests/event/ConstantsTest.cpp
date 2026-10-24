@@ -87,6 +87,14 @@ TEST_CASE("The elements of Enum are its constants and are found by code") {
     checkEnum<ImbalanceSide>({DXFC_ELEMENT(ImbalanceSide, UNDEFINED), DXFC_ELEMENT(ImbalanceSide, BUY),
                               DXFC_ELEMENT(ImbalanceSide, SELL), DXFC_ELEMENT(ImbalanceSide, NO_IMBALANCE),
                               DXFC_ELEMENT(ImbalanceSide, INSUFFICIENT_ORDERS), DXFC_ELEMENT(ImbalanceSide, PAUSED)});
+    checkEnum<NuamOrderType>({DXFC_ELEMENT(NuamOrderType, UNDEFINED), DXFC_ELEMENT(NuamOrderType, LIMIT),
+                              DXFC_ELEMENT(NuamOrderType, MARKET), DXFC_ELEMENT(NuamOrderType, MARKET_TO_LIMIT),
+                              DXFC_ELEMENT(NuamOrderType, BEST_ORDER), DXFC_ELEMENT(NuamOrderType, IMBALANCE)});
+    checkEnum<NuamTimeInForceType>(
+        {DXFC_ELEMENT(NuamTimeInForceType, UNDEFINED), DXFC_ELEMENT(NuamTimeInForceType, REST_OF_DAY),
+         DXFC_ELEMENT(NuamTimeInForceType, GTC), DXFC_ELEMENT(NuamTimeInForceType, IMMEDIATE_OR_CANCEL),
+         DXFC_ELEMENT(NuamTimeInForceType, FILL_OR_KILL), DXFC_ELEMENT(NuamTimeInForceType, GOOD_TIL_SESSION),
+         DXFC_ELEMENT(NuamTimeInForceType, NUMBER_OF_DAYS)});
     checkEnum<OrderAction>(
         {DXFC_ELEMENT(OrderAction, UNDEFINED), DXFC_ELEMENT(OrderAction, NEW), DXFC_ELEMENT(OrderAction, REPLACE),
          DXFC_ELEMENT(OrderAction, MODIFY), DXFC_ELEMENT(OrderAction, DELETE), DXFC_ELEMENT(OrderAction, PARTIAL),
@@ -123,6 +131,16 @@ TEST_CASE("Enum::valueOf returns the element of code 0 for an unknown code") {
     CHECK(&AuctionType::valueOf(5) == &AuctionType::UNDEFINED);
     CHECK(&AuctionType::valueOf(6) == &AuctionType::UNDEFINED);
     CHECK(&AuctionType::valueOf(7) == &AuctionType::UNDEFINED);
+    // The codes of the flag bits (mask 15) that no element has.
+    for (std::uint32_t code = 6; code <= 15; ++code) {
+        CAPTURE(code);
+        CHECK(&NuamOrderType::valueOf(code) == &NuamOrderType::UNDEFINED);
+    }
+
+    for (std::uint32_t code = 7; code <= 15; ++code) {
+        CAPTURE(code);
+        CHECK(&NuamTimeInForceType::valueOf(code) == &NuamTimeInForceType::UNDEFINED);
+    }
 }
 
 TEST_CASE("The event types are the constants and are found by name, class name and id") {

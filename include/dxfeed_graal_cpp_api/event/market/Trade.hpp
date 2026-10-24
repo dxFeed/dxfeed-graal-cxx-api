@@ -72,9 +72,10 @@ struct EventMapper;
  * for regional exchange trades.
  * Regional records do not explicitly store a field for @ref Trade::getExchangeCode() "exchangeCode" property.
  */
-class DXFCPP_EXPORT Trade final : public TradeBase {
+class DXFCPP_EXPORT Trade : public TradeBase {
     friend struct EventMapper;
 
+    protected:
     void fillData(void *graalNative) noexcept override;
     void fillGraalData(void *graalNative) const noexcept override;
 
