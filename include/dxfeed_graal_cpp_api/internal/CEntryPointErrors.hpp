@@ -126,6 +126,9 @@ enum class CEntryPointErrorsEnum : uint32_t {
 
     /// 32 - Could not determine the stack boundaries.
     UNKNOWN_STACK_BOUNDARIES = 32,
+
+    /// 1000 - The library is shut down (dxfcpp::shutdown() or the process exit); not a GraalVM error code.
+    SHUT_DOWN = 1000,
 };
 
 constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum enumValue) {
@@ -201,6 +204,8 @@ constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum enumValue
         return "Could not create unique GOT file even after retrying.";
     case CEntryPointErrorsEnum::UNKNOWN_STACK_BOUNDARIES:
         return "Could not determine the stack boundaries.";
+    case CEntryPointErrorsEnum::SHUT_DOWN:
+        return "The library is shut down: dxfcpp::shutdown() was called, or the process is exiting.";
     }
 
     return nullptr;

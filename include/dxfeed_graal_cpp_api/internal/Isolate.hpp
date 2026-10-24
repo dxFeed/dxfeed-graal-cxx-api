@@ -47,7 +47,6 @@ class DXFCPP_EXPORT Isolate final {
 
         CEntryPointErrorsEnum detach() noexcept;
 
-        CEntryPointErrorsEnum detachAllThreadsAndTearDownIsolate() noexcept;
 
         ~IsolateThread() noexcept;
 
@@ -70,6 +69,11 @@ class DXFCPP_EXPORT Isolate final {
     Isolate(const Isolate &) = delete;
     Isolate &operator=(const Isolate &) = delete;
 
+    /**
+     * Returns the isolate, creating it on the first call. The isolate is never torn down (the tear-down waits for
+     * every Java thread, including the threads of open endpoints and live instrument profile connections): it lives
+     * until the process ends, and the OS ends its threads.
+     */
     static Isolate &getInstance() noexcept;
 
     /**
@@ -80,12 +84,51 @@ class DXFCPP_EXPORT Isolate final {
      */
     static bool isCreated() noexcept;
 
+    /**
+     * Returns `true` when the library is shutting down: dxfcpp::shutdown() was called, or the process is exiting.
+     * The Graal callbacks of the library return at once then, without calling the listeners.
+     */
+    static bool isShuttingDown() noexcept;
+
+    /**
+     * A Graal callback of the library in progress. A callback creates it first and returns at once if it converts to
+     * `false` (the library is shutting down). The exit handler and dxfcpp::shutdown() wait for the callbacks in
+     * progress on the other threads.
+     */
+    class DXFCPP_EXPORT CallbackScope {
+        bool active_;
+
+      public:
+        CallbackScope() noexcept;
+        ~CallbackScope() noexcept;
+
+        CallbackScope(const CallbackScope &) = delete;
+        CallbackScope &operator=(const CallbackScope &) = delete;
+
+        /// Returns `false` when the library is shutting down: the callback must return at once.
+        explicit operator bool() const noexcept;
+    };
+
+    /**
+     * Returns `true` when the library is shut down: dxfcpp::shutdown() has completed, or the process is exiting.
+     * The isolate is not entered anymore: runIsolated() and runIsolatedOrElse() return
+     * CEntryPointErrorsEnum::SHUT_DOWN (the fallback value), runIsolatedThrow() throws it as a GraalException.
+     */
+    static bool isShutDown() noexcept;
+
+    /// See dxfcpp::shutdown().
+    static void shutdown();
+
     template <typename F>
     auto runIsolated(F &&f)
         -> std::variant<CEntryPointErrorsEnum, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
         if constexpr (Debugger::traceIsolates) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
+        }
+
+        if (isShutDown()) {
+            return CEntryPointErrorsEnum::SHUT_DOWN;
         }
 
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
@@ -115,6 +158,10 @@ class DXFCPP_EXPORT Isolate final {
             Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() + ")");
         }
 
+        if (isShutDown()) {
+            throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
+        }
+
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
         if (auto currentThreadHandle = get(); currentThreadHandle != nullptr) {
             return std::invoke(std::forward<F>(f), currentThreadHandle);
@@ -141,6 +188,10 @@ class DXFCPP_EXPORT Isolate final {
         if constexpr (Debugger::traceIsolates) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
+        }
+
+        if (isShutDown()) {
+            return CEntryPointErrorsEnum::SHUT_DOWN;
         }
 
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
@@ -172,6 +223,10 @@ class DXFCPP_EXPORT Isolate final {
         if constexpr (Debugger::traceIsolates) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() + ")");
+        }
+
+        if (isShutDown()) {
+            throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
         }
 
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
@@ -229,8 +284,6 @@ class DXFCPP_EXPORT Isolate final {
             Isolate::getInstance().runIsolated(std::forward<F>(f), std::forward<Arg>(arg),
                                                std::forward<Args>(args)...));
     }
-
-    ~Isolate();
 
     std::string toString() const;
 };

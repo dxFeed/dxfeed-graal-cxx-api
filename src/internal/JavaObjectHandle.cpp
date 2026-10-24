@@ -22,7 +22,8 @@ struct JavaObjectHandleRegistryState final {
 };
 
 JavaObjectHandleRegistryState &getJavaObjectHandleRegistryState() noexcept {
-    static JavaObjectHandleRegistryState state{};
+    // Never deleted: the handles owned by statics are destroyed at exit in any order.
+    static auto &state = *new JavaObjectHandleRegistryState{};
 
     return state;
 }
@@ -66,10 +67,7 @@ void JavaObjectHandleRegistry::linkHandle(JavaObjectHandleState &state) noexcept
 }
 
 JavaObjectHandleRegistry &JavaObjectHandleRegistry::getInstance() noexcept {
-    // Construct the registry state while the isolate is being constructed. This
-    // guarantees that it remains alive until after the isolate is torn down.
-    ignoreUnused(getJavaObjectHandleRegistryState());
-    static JavaObjectHandleRegistry instance{};
+    static JavaObjectHandleRegistry instance{}; // stateless
 
     return instance;
 }

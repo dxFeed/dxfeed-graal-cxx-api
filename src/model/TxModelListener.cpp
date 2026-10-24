@@ -8,6 +8,7 @@
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/IndexedEventSource.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/Id.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTimeSeriesTxModel.hpp"
@@ -23,6 +24,12 @@ struct TxModelListenerCommon::Impl {
     // dxfg_indexed_event_source_t* source, dxfg_event_type_list* events, int32_t isSnapshot, void* user_data);
     static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_indexed_event_source_t *source,
                                  dxfg_event_type_list *events, int32_t isSnapshot, void *userData) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
+            return;
+        }
+
         if (!source || !events) {
             return;
         }

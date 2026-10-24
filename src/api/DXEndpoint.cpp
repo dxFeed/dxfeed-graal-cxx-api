@@ -4,6 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 
 #include "../../include/dxfeed_graal_c_api/api.h"
+#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
@@ -25,15 +26,20 @@ struct DXEndpoint::Impl {
     };
 
     static Registry& getRegistry() {
-        // The registry owns Java handles, so it must be destroyed before the Graal isolate.
-        ignoreUnused(Isolate::getInstance());
-        static Registry registry;
+        // Never deleted: the default endpoints are not closed at exit (it would call Graal).
+        static Registry &registry = *new Registry{};
 
         return registry;
     }
 
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                  dxfg_endpoint_state_t newState, void *userData) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
+            return;
+        }
+
         const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
         const auto endpoint = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getEntity(id);
 
@@ -54,7 +60,7 @@ struct DXEndpoint::Impl {
         }
     }
 
-    static std::shared_ptr<DXEndpoint> getInstance(Role role) noexcept {
+    static std::shared_ptr<DXEndpoint> getInstance(Role role) {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("DXEndpoint::Impl::getInstance(role = " + roleToString(role) + ")");
@@ -63,6 +69,11 @@ struct DXEndpoint::Impl {
         auto &[mutex, instances] = getRegistry();
 
         std::lock_guard lock(mutex);
+
+        // The default endpoint created earlier is closed and released.
+        if (Isolate::isShutDown()) {
+            throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
+        }
 
         auto& instance = instances[role];
 

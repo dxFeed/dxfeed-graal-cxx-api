@@ -7,6 +7,10 @@
 # between its own threads (malloc, pthread_mutex_trylock, ...) when they are called from the native SDK.
 called_from_lib:libDxFeedGraalNativeSdk
 
+# The library does not tear down the isolate, so the Java threads that have ended (for example, of a closed endpoint)
+# are not joined, and TSan reports them as leaked at exit.
+thread:libDxFeedGraalNativeSdk
+
 # Known lock-order inversion between DXPublisherObservableSubscription::listenersMutex_ and the SimpleHandler mutex
 # (static analysis report, item TS-1). It is fixed by the listener dispatch rework in the lifetime ticket; remove this
 # line together with that fix.

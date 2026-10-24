@@ -6,6 +6,7 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
@@ -22,6 +23,12 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeedSubscription::Impl {
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
+            return;
+        }
+
 #if defined(DXFCXX_ENABLE_METRICS)
         StopWatch sw{};
 #endif
