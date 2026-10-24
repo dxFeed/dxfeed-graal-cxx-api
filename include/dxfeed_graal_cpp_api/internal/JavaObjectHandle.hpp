@@ -32,10 +32,9 @@ struct DXFCPP_EXPORT JavaObject {
 class JavaObjectHandleState;
 
 /**
- * Tracks native Java object handles that must be released before the Graal isolate is torn down.
+ * Tracks the native Java object handles, so that dxfcpp::shutdown() releases them.
  *
- * The registry is initialized before the isolate and therefore remains available for the complete isolate lifetime,
- * including destruction of handles owned by function-local and namespace-scope static objects.
+ * The registry is never destroyed, so the handles owned by static objects can be destroyed in any order at exit.
  */
 class DXFCPP_EXPORT JavaObjectHandleRegistry final {
     friend class JavaObjectHandleState;
@@ -55,7 +54,7 @@ class DXFCPP_EXPORT JavaObjectHandleRegistry final {
     static JavaObjectHandleRegistry &getInstance() noexcept;
 
     /**
-     * Releases all currently registered handles while the Graal isolate is still available.
+     * Releases all currently registered handles (dxfcpp::shutdown()).
      *
      * Handle owners remain valid and observe a null handle after this call.
      */
@@ -65,7 +64,7 @@ class DXFCPP_EXPORT JavaObjectHandleRegistry final {
 /**
  * Type-erased ownership state shared by Java object and Java object-list handle wrappers.
  *
- * A non-null state registers itself for isolate shutdown and unregisters itself when reset or destroyed.
+ * A non-null state registers itself for dxfcpp::shutdown() and unregisters itself when reset or destroyed.
  */
 class DXFCPP_EXPORT JavaObjectHandleState final {
     friend class JavaObjectHandleRegistry;
@@ -216,7 +215,7 @@ template <typename T> struct JavaObjectHandle final {
  *
  * The handle of a constant (created with ConstantTag) is not destroyed with this object, so a constant that is
  * destroyed at exit before a global variable of the user stays usable by the destructor of that variable. Its Java
- * object is released with the other handles when the Graal isolate is torn down (JavaObjectHandleRegistry).
+ * object is released with the other handles by dxfcpp::shutdown() (JavaObjectHandleRegistry).
  *
  * @tparam T The type of the object that owns the Java object.
  */

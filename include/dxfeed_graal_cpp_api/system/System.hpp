@@ -51,6 +51,30 @@ struct DXFCPP_EXPORT System {
     static std::string getProperty(const StringLike &key);
 };
 
+/**
+ * Stops the library before the process exits: closes all the endpoints (including the default ones of
+ * DXEndpoint::getInstance(), DXFeed::getInstance() and DXPublisher::getInstance()) and the instrument profile
+ * connections, waits for the termination of the endpoints, and releases the Java objects. Calling it is optional: the
+ * process exits without it too.
+ *
+ * The listeners are not called after shutdown() starts; the listener calls in progress complete before it returns.
+ * Afterwards the library does not call Java anymore, and the functions that need Java fail: most throw GraalException;
+ * the methods of the objects created before shutdown() (their Java objects are released) throw
+ * InvalidArgumentException or do nothing; the functions that report a failure by the result, such as
+ * System::getProperty(), return it. The objects of the library can still be destroyed. Call it when the process is
+ * about to end: the threads that used the library are not detached from it afterwards.
+ *
+ * A concurrent call waits for the first one; a second call does nothing, as does a call after the library's exit
+ * handler has run. Do not call it from a listener: it waits for the listener calls in progress.
+ *
+ * Note that at exit the library does not close the endpoints and the connections: the process ends their threads.
+ * The listeners are not called after the library's exit handler (registered when the library is first used) has run,
+ * but a listener call in progress is not awaited, and with the library as a Windows DLL the handler runs after the
+ * static objects of the executable are destroyed. So close the endpoints or call shutdown() before the static objects
+ * that the listeners use are destroyed, for example before main() returns.
+ */
+DXFCPP_EXPORT void shutdown();
+
 DXFCPP_END_NAMESPACE
 
 /// @}

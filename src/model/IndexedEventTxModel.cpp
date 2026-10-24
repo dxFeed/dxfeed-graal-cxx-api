@@ -6,6 +6,7 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedIndexedEventTxModel.hpp"
 
 #include <dxfg_api.h>
@@ -29,6 +30,10 @@ struct IndexedEventTxModelImpl::Listener {
     // dxfg_event_type_list *events, int32_t isSnapshot, void *userData);
     static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_event_type_list *events, int32_t isSnapshot,
                                  void *userData) {
+        if (Isolate::isShuttingDown()) {
+            return;
+        }
+
         if (!events || !userData) {
             return;
         }

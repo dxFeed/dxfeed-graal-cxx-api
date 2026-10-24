@@ -3,6 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/ipf/live/InstrumentProfileCollector.hpp"
 
+#include "../../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
@@ -54,6 +55,10 @@ struct NonOwningInstrumentProfileIterator {
 struct InstrumentProfileCollector::Impl {
     static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
                                            void *userData) {
+        if (Isolate::isShuttingDown()) {
+            return;
+        }
+
         auto [collectorId, listenerId] = unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
         const auto id = Id<InstrumentProfileCollector>::from(collectorId);

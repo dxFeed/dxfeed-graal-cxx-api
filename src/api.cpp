@@ -24,27 +24,24 @@ ApiContext::~ApiContext() noexcept {
 }
 
 std::shared_ptr<ApiContext> ApiContext::getInstance() noexcept {
-    static std::shared_ptr<ApiContext> instance = std::shared_ptr<ApiContext>(new ApiContext{});
+    // Never deleted: the Graal callbacks may use the context until the process ends.
+    static const auto &instance = *new std::shared_ptr<ApiContext>(new ApiContext{});
 
     return instance;
 }
 
 std::shared_ptr<void> ApiContext::getManagerImpl(const char *typeName,
                                                  std::shared_ptr<void> (*create)()) const noexcept {
-    // The registry does not own the managers: the statics of getManager() in the modules do, so a manager lives as long
-    // as it did before the registry (it is destroyed with the statics of the module that created it first, before the
-    // isolate; owning it here kept the endpoints of the managers alive until the end of the exit, and closing them then
-    // hung the process).
-    static std::mutex mutex{};
-    static std::unordered_map<std::string, std::weak_ptr<void>> managers{};
+    // The registry owns the managers and is never deleted: the Graal callbacks look the entities up in the managers
+    // until the process ends, and the entities are not destroyed at exit (their destructors would call Graal).
+    static auto &mutex = *new std::mutex{};
+    static auto &managers = *new std::unordered_map<std::string, std::shared_ptr<void>>{};
 
     std::lock_guard lock(mutex);
-    auto &registered = managers[typeName];
-    auto manager = registered.lock();
+    auto &manager = managers[typeName];
 
     if (!manager) {
         manager = create();
-        registered = manager;
     }
 
     return manager;

@@ -3,6 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 
+#include "../../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
@@ -15,6 +16,10 @@ using ObservableSubscriptionChangeListenerManager = WeakEntityManager<Observable
 
 struct ObservableSubscriptionChangeListener::Impl {
     static void onSymbolsAdded(graal_isolatethread_t * /* thread */, dxfg_symbol_list *symbols, void *userData) {
+        if (Isolate::isShuttingDown()) {
+            return;
+        }
+
         if (!symbols) {
             return;
         }
@@ -32,6 +37,10 @@ struct ObservableSubscriptionChangeListener::Impl {
     }
 
     static void onSymbolsRemoved(graal_isolatethread_t * /* thread */, dxfg_symbol_list *symbols, void *userData) {
+        if (Isolate::isShuttingDown()) {
+            return;
+        }
+
         if (!symbols) {
             return;
         }
@@ -49,6 +58,10 @@ struct ObservableSubscriptionChangeListener::Impl {
     }
 
     static void onSubscriptionClosed(graal_isolatethread_t * /* thread */, void *userData) {
+        if (Isolate::isShuttingDown()) {
+            return;
+        }
+
         const auto id = Id<ObservableSubscriptionChangeListener>::from(userData);
         const auto listener =
             ApiContext::getInstance()->getManager<ObservableSubscriptionChangeListenerManager>()->getEntity(id);
