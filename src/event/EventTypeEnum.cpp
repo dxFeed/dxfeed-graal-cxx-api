@@ -55,11 +55,10 @@ constinit const EventTypeEnum EventTypeEnum::TEXT_MESSAGE{
     DXFG_EVENT_TEXT_MESSAGE, "TEXT_MESSAGE", "TextMessage", false, false, false, false};
 constinit const EventTypeEnum EventTypeEnum::ORDER_IMBALANCE{DXFG_EVENT_ORDER_IMBALANCE, "ORDER_IMBALANCE",
                                                              "OrderImbalance", false};
-constinit const EventTypeEnum EventTypeEnum::NUAM_ORDER{DXFG_EVENT_NUAM_ORDER, "NUAM_ORDER", "NuamOrder", false,
-                                                        true};
+constinit const EventTypeEnum EventTypeEnum::NUAM_ORDER{DXFG_EVENT_NUAM_ORDER, "NUAM_ORDER", "NuamOrder", false, true};
 constinit const EventTypeEnum EventTypeEnum::NUAM_TRADE{DXFG_EVENT_NUAM_TRADE, "NUAM_TRADE", "NuamTrade", true};
-constinit const EventTypeEnum EventTypeEnum::NUAM_TIME_AND_SALE{DXFG_EVENT_NUAM_TIME_AND_SALE, "NUAM_TIME_AND_SALE",
-                                                                "NuamTimeAndSale", false, true, true};
+constinit const EventTypeEnum EventTypeEnum::NUAM_TIME_AND_SALE{
+    DXFG_EVENT_NUAM_TIME_AND_SALE, "NUAM_TIME_AND_SALE", "NuamTimeAndSale", false, true, true};
 
 namespace {
 

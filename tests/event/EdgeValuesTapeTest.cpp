@@ -27,11 +27,16 @@ namespace {
 
 // The string "<null>" is String::NUL in the C++ API, so it is passed to Java as null, and a null string comes back as
 // "<null>" (static analysis report, EVT-18). EDGE-ZERO is the value set with the "<null>" strings.
-const std::vector<std::string> KNOWN_NULL_STRING_DEFECTS{
-    "Profile.Description@EDGE-ZERO", "Profile.StatusReason@EDGE-ZERO", "SpreadOrder#ISE.SpreadSymbol@EDGE-ZERO",
-    "OptionSale.OptionSymbol@EDGE-ZERO", "TextMessage.Text@EDGE-ZERO", "Message.Message@EDGE-ZERO",
-    "NuamOrder#nuam.ClientOrderId@EDGE-ZERO", "NuamOrder#nuam.CustomerAccount@EDGE-ZERO",
-    "NuamOrder#nuam.CustomerInfo@EDGE-ZERO", "NuamOrder#nuam.ExchangeInfo@EDGE-ZERO"};
+const std::vector<std::string> KNOWN_NULL_STRING_DEFECTS{"Profile.Description@EDGE-ZERO",
+                                                         "Profile.StatusReason@EDGE-ZERO",
+                                                         "SpreadOrder#ISE.SpreadSymbol@EDGE-ZERO",
+                                                         "OptionSale.OptionSymbol@EDGE-ZERO",
+                                                         "TextMessage.Text@EDGE-ZERO",
+                                                         "Message.Message@EDGE-ZERO",
+                                                         "NuamOrder#nuam.ClientOrderId@EDGE-ZERO",
+                                                         "NuamOrder#nuam.CustomerAccount@EDGE-ZERO",
+                                                         "NuamOrder#nuam.CustomerInfo@EDGE-ZERO",
+                                                         "NuamOrder#nuam.ExchangeInfo@EDGE-ZERO"};
 
 // Not a null string, and only on reading: the Java API itself reads the int64 minimum of TradeStatTime as that minimum
 // plus the current time in milliseconds (the golden round trip has the value of the day it was written), so it is never

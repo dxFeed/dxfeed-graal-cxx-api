@@ -370,19 +370,18 @@ void TimeAndSale::setSeller(const StringLike &seller) noexcept {
 }
 
 std::string TimeAndSale::baseFieldsToString() const {
-    return fmt::format("{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
-                       "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
-                       "validTick={}, type={}{}{}",
-                       MarketEvent::getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-                       getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()),
-                       getTimeNanoPart(), getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
-                       dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
-                       getExchangeSaleConditionsOpt().value_or("null"), encodeChar(getTradeThroughExempt()),
-                       getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(),
-                       getType().toString(),
-                       getBuyerOpt() ? fmt::format(", buyer='{}'", *getBuyerOpt()) : std::string{},
-                       getSellerOpt() ? fmt::format(", seller='{}'", *getSellerOpt()) : std::string{});
+    return fmt::format(
+        "{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
+        "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
+        "validTick={}, type={}{}{}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
+        getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()),
+        dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
+        getExchangeSaleConditionsOpt().value_or("null"), encodeChar(getTradeThroughExempt()),
+        getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
+        getBuyerOpt() ? fmt::format(", buyer='{}'", *getBuyerOpt()) : std::string{},
+        getSellerOpt() ? fmt::format(", seller='{}'", *getSellerOpt()) : std::string{});
 }
 
 std::string TimeAndSale::toString() const {
