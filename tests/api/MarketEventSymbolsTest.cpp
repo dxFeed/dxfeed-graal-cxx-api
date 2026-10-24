@@ -209,5 +209,12 @@ TEST_CASE("MarketEventSymbols::getExchangesByPattern as in Java") {
           MarketEventSymbols::SUPPORTED_EXCHANGES);
     CHECK_THROWS_WITH_AS(MarketEventSymbols::getExchangesByPattern("[!-#]"), "Unsupported exchange codes: !, \", #",
                          InvalidArgumentException);
-    CHECK_THROWS_AS(MarketEventSymbols::getExchangesByPattern("[z-a]"), InvalidArgumentException);
+    // A reversed range is rejected by every standard library, as in Java (libc++ `std::regex` alone accepts it).
+    CHECK_THROWS_WITH_AS(MarketEventSymbols::getExchangesByPattern("[z-a]"),
+                         doctest::Contains("the end of a range is less than its start"), InvalidArgumentException);
+    CHECK_THROWS_AS(MarketEventSymbols::getExchangesByPattern("z-a"), InvalidArgumentException);
+    CHECK_THROWS_AS(MarketEventSymbols::getExchangesByPattern("[^9-0]"), InvalidArgumentException);
+    // A dash at the end is not a range.
+    CHECK_THROWS_WITH_AS(MarketEventSymbols::getExchangesByPattern("[a-]"), "Unsupported exchange codes: -",
+                         InvalidArgumentException);
 }

@@ -9,8 +9,10 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <limits>
+#include <optional>
 #include <regex>
 #include <string_view>
 #include <vector>
@@ -317,6 +319,49 @@ std::string MarketEventSymbols::buildSpreadSymbol(const std::map<std::string, do
     return result;
 }
 
+namespace {
+
+// Returns `true` if a bracket expression of the pattern has a range whose end is less than its start, as in "[z-a]".
+// Java rejects such a range, and so do the MSVC and GNU `std::regex`, but libc++ accepts it as an empty set.
+bool hasReversedRange(const std::string &pattern) {
+    bool inClass = false;
+    std::optional<unsigned char> previous{}; // the last literal character of the bracket expression
+
+    for (std::size_t i = 0; i < pattern.size(); i++) {
+        const auto c = static_cast<unsigned char>(pattern[i]);
+
+        if (c == '\\') {
+            // An escape (\d, \], ...) is not checked as a range bound.
+            previous.reset();
+            i++;
+        } else if (!inClass) {
+            if (c == '[') {
+                inClass = true;
+                previous.reset();
+
+                if (i + 1 < pattern.size() && pattern[i + 1] == '^') {
+                    i++;
+                }
+            }
+        } else if (c == ']') {
+            inClass = false;
+        } else if (c == '-' && previous && i + 1 < pattern.size() && pattern[i + 1] != ']' && pattern[i + 1] != '\\') {
+            if (static_cast<unsigned char>(pattern[i + 1]) < *previous) {
+                return true;
+            }
+
+            previous.reset();
+            i++; // the end of the range
+        } else {
+            previous = c;
+        }
+    }
+
+    return false;
+}
+
+} // namespace
+
 std::string MarketEventSymbols::getExchangesByPattern(const StringLike &characterClass) {
     std::string pattern(characterClass);
 
@@ -326,6 +371,11 @@ std::string MarketEventSymbols::getExchangesByPattern(const StringLike &characte
 
     if (pattern[0] != '[' && pattern[0] != '\\') {
         pattern = '[' + pattern + ']';
+    }
+
+    if (hasReversedRange(pattern)) {
+        throw InvalidArgumentException("Invalid character class: " + std::string(characterClass) +
+                                       ": the end of a range is less than its start");
     }
 
     std::regex regex{};
