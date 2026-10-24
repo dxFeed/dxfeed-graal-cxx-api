@@ -589,6 +589,14 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
   is an extension of `TimeAndSale` for the NUAM exchange
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
+- [MarketMaker](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/MarketMaker.html) is the bid and ask of a
+  market maker on an exchange
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
+- [TextConfiguration](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/misc/TextConfiguration.html) is a
+  configuration event with a text payload and a version
+  - [ ] dxFeed Graal C API
+  - [x] dxFeed Graal C++ API
 
 ### Subscription Symbols
 

@@ -77,6 +77,8 @@ TEST_CASE("EventTypeEnum flags should match the Java event classes") {
         {EventTypeEnum::NUAM_TRADE, true, false, false, false, true},
         {EventTypeEnum::NUAM_TIME_AND_SALE, false, true, true, false, true},
         {EventTypeEnum::TEXT_MESSAGE, false, false, false, false, false},
+        {EventTypeEnum::MARKET_MAKER, false, true, false, true, true},
+        {EventTypeEnum::TEXT_CONFIGURATION, true, false, false, false, false},
     };
 
     for (const auto &flags : expected) {
