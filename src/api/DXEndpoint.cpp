@@ -34,7 +34,9 @@ struct DXEndpoint::Impl {
 
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                  dxfg_endpoint_state_t newState, void *userData) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 

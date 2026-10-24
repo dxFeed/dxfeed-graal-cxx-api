@@ -55,7 +55,9 @@ struct NonOwningInstrumentProfileIterator {
 struct InstrumentProfileCollector::Impl {
     static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
                                            void *userData) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 

@@ -5,15 +5,30 @@
 #include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
 
 #include <atomic>
+#include <chrono>
 #include <config/config.hpp>
 #include <cstdlib>
 #include <dxfg_api.h>
 #include <mutex>
 #include <optional>
 #include <string>
+#include <thread>
 #include <utility>
 
 #include <fmt/format.h>
+
+#ifdef _WIN32
+#    ifndef WIN32_LEAN_AND_MEAN
+#        define WIN32_LEAN_AND_MEAN
+#    endif
+#    ifndef NOMINMAX
+#        define NOMINMAX
+#    endif
+#    if defined(_MSC_VER) && defined(_DLL)
+#        include <corecrt_startup.h>
+#    endif
+#    include <windows.h>
+#endif
 
 #ifdef NO_ERROR
 #    undef NO_ERROR
@@ -129,14 +144,93 @@ constinit std::atomic<bool> shuttingDown{false};
 // The isolate is not entered anymore (Isolate::isShutDown()).
 constinit std::atomic<bool> shutDown{false};
 
-// Registered with std::atexit when the isolate is created, so it runs before the destructors of the statics
+// The Graal callbacks of the library in progress (Isolate::CallbackScope), on all threads and on this one.
+constinit std::atomic<std::size_t> callbacksInProgress{0};
+constinit thread_local std::size_t threadCallbacksInProgress{0};
+
+// How long the exit handler waits for the callbacks in progress: a listener may block, for example, on a lock that
+// the exiting thread holds. With the UCRT the handler runs under the exit lock, so a callback that registers an exit
+// function meanwhile (for example, initializes a function-local static with a destructor) blocks until the timeout.
+constexpr auto CALLBACKS_TIMEOUT = std::chrono::seconds(2);
+
+// The exit handler does not wait when it runs at DLL_PROCESS_DETACH: the other threads are already ended, and a
+// thread ended in a callback never leaves it.
+constinit std::atomic<bool> waitAtExit{true};
+
+// Waits for the callbacks in progress on the other threads, not for those of this thread: the process may exit from
+// a listener. Call it after setting shuttingDown.
+void waitForCallbacks() noexcept {
+    const auto deadline = std::chrono::steady_clock::now() + CALLBACKS_TIMEOUT;
+
+    while (callbacksInProgress.load() > threadCallbacksInProgress && std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+}
+
+// Registered when the isolate is created (registerExitHandler()), so it runs before the destructors of the statics
 // created earlier, and after those of the statics created later (they must not depend on the Graal threads).
-// In a Windows DLL it runs at DLL_PROCESS_DETACH, when the other threads are already ended.
 void onExit() noexcept {
+    shuttingDown = true;
+
+    if (waitAtExit) {
+        waitForCallbacks();
+    }
+
+    shutDown = true;
+}
+
+#if defined(_MSC_VER) && defined(_DLL)
+// Sets the flags at DLL_PROCESS_DETACH if onExit() has not run: the exit table of the process is not run when the
+// executable has its own C runtime or the process ends by ExitProcess().
+void onDetach() noexcept {
     shuttingDown = true;
     shutDown = true;
 }
+#endif
+
+void registerExitHandler() noexcept {
+#if defined(_MSC_VER) && defined(_DLL)
+    // std::atexit of a DLL runs the handler at DLL_PROCESS_DETACH, after the statics of the executable are destroyed
+    // and the other threads are ended. So the handler goes to the exit table of the process, as std::atexit of an
+    // executable does, and the module is pinned: it must not be unloaded before the process exits. onDetach() is
+    // registered first: in an executable both go to the same table, and onExit() runs first.
+    HMODULE module{};
+
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_PIN,
+                       reinterpret_cast<LPCWSTR>(&isolateCreated), &module);
+    std::atexit(onDetach);
+    _crt_atexit(onExit);
+#else
+#    ifdef _WIN32
+    // In a DLL (MinGW, the static C runtime) std::atexit runs the handler at DLL_PROCESS_DETACH.
+    HMODULE module{};
+
+    if (GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                           reinterpret_cast<LPCWSTR>(&isolateCreated), &module) &&
+        module != GetModuleHandleW(nullptr)) {
+        waitAtExit = false;
+    }
+#    endif
+    std::atexit(onExit);
+#endif
+}
 } // namespace
+
+Isolate::CallbackScope::CallbackScope() noexcept {
+    // Counted before the check: the exit handler sets the flag before it reads the counter.
+    callbacksInProgress.fetch_add(1);
+    threadCallbacksInProgress++;
+    active_ = !shuttingDown.load();
+}
+
+Isolate::CallbackScope::~CallbackScope() noexcept {
+    threadCallbacksInProgress--;
+    callbacksInProgress.fetch_sub(1);
+}
+
+Isolate::CallbackScope::operator bool() const noexcept {
+    return active_;
+}
 
 Isolate::Isolate() noexcept {
     if constexpr (Debugger::traceIsolates) {
@@ -262,7 +356,7 @@ Isolate &Isolate::getInstance() noexcept {
 
     std::call_once(flag, []() {
         init(instance);
-        std::atexit(onExit);
+        registerExitHandler();
     });
 
     if constexpr (Debugger::traceIsolates) {
@@ -295,8 +389,9 @@ void Isolate::shutdown() {
         return;
     }
 
-    // The callbacks in progress end, the new ones return at once.
+    // The new callbacks return at once.
     shuttingDown = true;
+    waitForCallbacks();
 
     if (isCreated()) {
         // Releasing the last handle of a native listener deactivates it: the release waits for its callbacks in

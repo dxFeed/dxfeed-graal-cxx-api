@@ -68,10 +68,11 @@ struct DXFCPP_EXPORT System {
  * handler has run. Do not call it from a listener: it waits for the listener calls in progress.
  *
  * Note that at exit the library does not close the endpoints and the connections: the process ends their threads.
- * The listeners are not called after the library's exit handler (registered when the library is first used) has run,
- * but a listener call in progress is not awaited, and with the library as a Windows DLL the handler runs after the
- * static objects of the executable are destroyed. So close the endpoints or call shutdown() before the static objects
- * that the listeners use are destroyed, for example before main() returns.
+ * The library's exit handler (registered when the library is first used) stops the listener calls and waits up to
+ * 2 seconds for the calls in progress on other threads, so the listeners can use the static objects created before
+ * the library was first used. The static objects created later are destroyed before the handler runs: if the
+ * listeners use them, close the endpoints or call shutdown() before that. With the library as a DLL built with MinGW
+ * or with the static C runtime, the handler runs after the static objects of the executable are destroyed.
  */
 DXFCPP_EXPORT void shutdown();
 

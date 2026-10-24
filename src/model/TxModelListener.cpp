@@ -24,7 +24,9 @@ struct TxModelListenerCommon::Impl {
     // dxfg_indexed_event_source_t* source, dxfg_event_type_list* events, int32_t isSnapshot, void* user_data);
     static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_indexed_event_source_t *source,
                                  dxfg_event_type_list *events, int32_t isSnapshot, void *userData) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 

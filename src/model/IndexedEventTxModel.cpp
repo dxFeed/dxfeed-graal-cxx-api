@@ -30,7 +30,9 @@ struct IndexedEventTxModelImpl::Listener {
     // dxfg_event_type_list *events, int32_t isSnapshot, void *userData);
     static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_event_type_list *events, int32_t isSnapshot,
                                  void *userData) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 

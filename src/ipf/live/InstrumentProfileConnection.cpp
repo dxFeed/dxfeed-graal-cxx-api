@@ -35,7 +35,9 @@ InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_conne
 struct InstrumentProfileConnection::Impl {
     static void onStateChange(graal_isolatethread_t * /*thread*/, dxfg_ipf_connection_state_t oldState,
                               dxfg_ipf_connection_state_t newState, void *userData) noexcept {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 

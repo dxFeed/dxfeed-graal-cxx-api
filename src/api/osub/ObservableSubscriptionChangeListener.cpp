@@ -16,7 +16,9 @@ using ObservableSubscriptionChangeListenerManager = WeakEntityManager<Observable
 
 struct ObservableSubscriptionChangeListener::Impl {
     static void onSymbolsAdded(graal_isolatethread_t * /* thread */, dxfg_symbol_list *symbols, void *userData) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 
@@ -37,7 +39,9 @@ struct ObservableSubscriptionChangeListener::Impl {
     }
 
     static void onSymbolsRemoved(graal_isolatethread_t * /* thread */, dxfg_symbol_list *symbols, void *userData) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 
@@ -58,7 +62,9 @@ struct ObservableSubscriptionChangeListener::Impl {
     }
 
     static void onSubscriptionClosed(graal_isolatethread_t * /* thread */, void *userData) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 

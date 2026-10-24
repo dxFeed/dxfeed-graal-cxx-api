@@ -91,6 +91,25 @@ class DXFCPP_EXPORT Isolate final {
     static bool isShuttingDown() noexcept;
 
     /**
+     * A Graal callback of the library in progress. A callback creates it first and returns at once if it converts to
+     * `false` (the library is shutting down). The exit handler and dxfcpp::shutdown() wait for the callbacks in
+     * progress on the other threads.
+     */
+    class DXFCPP_EXPORT CallbackScope {
+        bool active_;
+
+      public:
+        CallbackScope() noexcept;
+        ~CallbackScope() noexcept;
+
+        CallbackScope(const CallbackScope &) = delete;
+        CallbackScope &operator=(const CallbackScope &) = delete;
+
+        /// Returns `false` when the library is shutting down: the callback must return at once.
+        explicit operator bool() const noexcept;
+    };
+
+    /**
      * Returns `true` when the library is shut down: dxfcpp::shutdown() has completed, or the process is exiting.
      * The isolate is not entered anymore: runIsolated() and runIsolatedOrElse() return
      * CEntryPointErrorsEnum::SHUT_DOWN (the fallback value), runIsolatedThrow() throws it as a GraalException.

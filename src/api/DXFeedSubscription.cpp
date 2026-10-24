@@ -23,7 +23,9 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeedSubscription::Impl {
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 

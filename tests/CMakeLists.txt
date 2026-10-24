@@ -273,10 +273,10 @@ foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
     set(DXFC_EXIT_TARGET dxFeedGraalCxxApi_Exit_${DXFC_EXIT_VARIANT})
     set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown)
 
-    # The exit handler of a Windows DLL runs after the statics of the executable are destroyed, so the check of the
-    # late callback from such a static does not apply to it.
-    if (DXFC_EXIT_VARIANT STREQUAL "static" OR NOT WIN32)
-        list(APPEND DXFC_EXIT_SCENARIOS late-callback)
+    # The exit handler of a MinGW DLL runs after the statics of the executable are destroyed, so the checks of the
+    # callbacks from such a static do not apply to it.
+    if (DXFC_EXIT_VARIANT STREQUAL "static" OR NOT WIN32 OR MSVC)
+        list(APPEND DXFC_EXIT_SCENARIOS late-callback callback-in-progress)
     endif ()
     add_executable(${DXFC_EXIT_TARGET} exit/ExitTest.cpp)
     list(APPEND DXFC_TEST_TARGETS ${DXFC_EXIT_TARGET})

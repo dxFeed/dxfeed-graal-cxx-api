@@ -43,7 +43,9 @@ struct Logging::Impl {
     static void onLog(graal_isolatethread_t * /*thread*/, dxfg_logging_level_t level, int64_t timestamp,
                       const char *threadName, int64_t threadId, const char *loggerName, const char *message,
                       dxfg_exception_t * /*exception*/, const char * /*formattedMessage*/, void * /*userData*/) {
-        if (Isolate::isShuttingDown()) {
+        const Isolate::CallbackScope callbackScope{};
+
+        if (!callbackScope) {
             return;
         }
 

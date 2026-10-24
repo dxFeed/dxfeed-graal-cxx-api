@@ -150,6 +150,8 @@ class LiveIpfServer final {
 constinit std::atomic<std::size_t> received{};
 constinit std::atomic<std::size_t> listenerCalls{};
 constinit std::atomic<bool> slowListener{};
+constinit std::atomic<bool> blockListener{};
+constinit std::atomic<bool> listenerBlocked{};
 
 /**
  * Created before main(), so destroyed after the exit handler of the library (registered when the library is first
@@ -174,6 +176,22 @@ struct LateCallbackCheck {
         }
     }
 } lateCallbackCheck{};
+
+/**
+ * Created before main(), so destroyed after the exit handler of the library. When enabled, the destructor fails the
+ * process if a listener call is still in progress: the handler must wait for it.
+ */
+struct CallbackInProgressCheck {
+    bool enabled{};
+
+    ~CallbackInProgressCheck() {
+        if (enabled && listenerBlocked.load()) {
+            std::fputs("A listener call was in progress after the exit handler of the library\n", stderr);
+            std::fflush(stderr);
+            std::_Exit(6);
+        }
+    }
+} callbackInProgressCheck{};
 
 /// Creates an endpoint that delivers a stream of events to a listener; returns once the listener has been called.
 std::shared_ptr<DXEndpoint> startEvents() {
@@ -228,6 +246,13 @@ std::shared_ptr<InstrumentProfileConnection> startLiveIpf() {
 
     collector->addUpdateListener([](const auto &) {
         listenerCalls++;
+
+        if (blockListener.exchange(false)) {
+            listenerBlocked = true;
+            std::this_thread::sleep_for(500ms); // the process exits meanwhile
+            listenerBlocked = false;
+        }
+
         std::this_thread::sleep_for(slowListener ? 50ms : 1ms);
     });
     connection->start();
@@ -264,6 +289,25 @@ int lateCallback() {
     lateCallbackCheck.enabled = true;
 
     keepOpen(startLiveIpf()); // the server sends updates until the process ends
+
+    return 0;
+}
+
+/// Returns from main() while a listener call is in progress; the exit handler of the library must wait for it.
+int callbackInProgress() {
+    callbackInProgressCheck.enabled = true;
+    keepOpen(startLiveIpf());
+    blockListener = true;
+
+    const auto deadline = std::chrono::steady_clock::now() + 10s;
+
+    while (!listenerBlocked && std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(1ms);
+    }
+
+    if (!listenerBlocked) {
+        throw std::runtime_error("The listener was not called");
+    }
 
     return 0;
 }
@@ -320,7 +364,9 @@ int main(int argc, char *argv[]) {
 #endif
 
     if (argc != 2) {
-        std::fputs("Usage: <executable> endpoint | late-callback | ipf-live | ipf-live-close | shutdown\n", stderr);
+        std::fputs("Usage: <executable> endpoint | late-callback | callback-in-progress | ipf-live | ipf-live-close | "
+                   "shutdown\n",
+                   stderr);
 
         return 1;
     }
@@ -334,6 +380,10 @@ int main(int argc, char *argv[]) {
 
         if (scenario == "late-callback") {
             return lateCallback();
+        }
+
+        if (scenario == "callback-in-progress") {
+            return callbackInProgress();
         }
 
         if (scenario == "ipf-live") {
