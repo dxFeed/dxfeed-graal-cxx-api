@@ -38,9 +38,9 @@ constinit const std::array<std::reference_wrapper<const InstrumentProfileType>, 
     std::cref(InstrumentProfileType::MUTUAL_FUND), std::cref(InstrumentProfileType::MONEY_MARKET_FUND),
     std::cref(InstrumentProfileType::PRODUCT),     std::cref(InstrumentProfileType::FUTURE),
     std::cref(InstrumentProfileType::OPTION),      std::cref(InstrumentProfileType::WARRANT),
-    std::cref(InstrumentProfileType::CERTIFICATE),
-    std::cref(InstrumentProfileType::CFD),         std::cref(InstrumentProfileType::SPREAD),
-    std::cref(InstrumentProfileType::OTHER),       std::cref(InstrumentProfileType::REMOVED),
+    std::cref(InstrumentProfileType::CERTIFICATE), std::cref(InstrumentProfileType::CFD),
+    std::cref(InstrumentProfileType::SPREAD),      std::cref(InstrumentProfileType::OTHER),
+    std::cref(InstrumentProfileType::REMOVED),
 };
 
 } // namespace

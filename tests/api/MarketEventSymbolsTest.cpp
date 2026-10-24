@@ -155,16 +155,15 @@ TEST_CASE("normalizeAttributeForSymbol") {
 
 // The expected values are printed by the Java API 3.356 for the same arguments.
 TEST_CASE("MarketEventSymbols::hasAttributes as in Java") {
-    for (const auto &[symbol, expected] :
-         std::vector<std::pair<std::string, bool>>{{"", false},
-                                                   {"AAPL", false},
-                                                   {"AAPL{=5m}", true},
-                                                   {"AAPL&Q{=5m,tho=true}", true},
-                                                   {"{}", false},
-                                                   {"A{}", false},
-                                                   {"{a}", true},
-                                                   {"AAPL{", false},
-                                                   {"AAPL}", false}}) {
+    for (const auto &[symbol, expected] : std::vector<std::pair<std::string, bool>>{{"", false},
+                                                                                    {"AAPL", false},
+                                                                                    {"AAPL{=5m}", true},
+                                                                                    {"AAPL&Q{=5m,tho=true}", true},
+                                                                                    {"{}", false},
+                                                                                    {"A{}", false},
+                                                                                    {"{a}", true},
+                                                                                    {"AAPL{", false},
+                                                                                    {"AAPL}", false}}) {
         CAPTURE(symbol);
         CHECK(MarketEventSymbols::hasAttributes(symbol) == expected);
     }
@@ -191,9 +190,9 @@ TEST_CASE("MarketEventSymbols::buildSpreadSymbol as in Java") {
     }
 
     // Java can not order NaN ratios; here they go last, by symbol.
-    CHECK(MarketEventSymbols::buildSpreadSymbol(
-              {{"B", std::numeric_limits<double>::quiet_NaN()}, {"A", std::numeric_limits<double>::quiet_NaN()},
-               {"C", -1}}) == "=-C+NaN*A+NaN*B");
+    CHECK(MarketEventSymbols::buildSpreadSymbol({{"B", std::numeric_limits<double>::quiet_NaN()},
+                                                 {"A", std::numeric_limits<double>::quiet_NaN()},
+                                                 {"C", -1}}) == "=-C+NaN*A+NaN*B");
 }
 
 TEST_CASE("MarketEventSymbols::getExchangesByPattern as in Java") {
