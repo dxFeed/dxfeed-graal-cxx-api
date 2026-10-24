@@ -37,6 +37,7 @@ struct InstrumentProfileType : Enum<InstrumentProfileType, std::uint32_t> {
     static const DXFCPP_EXPORT InstrumentProfileType FUTURE;
     static const DXFCPP_EXPORT InstrumentProfileType OPTION;
     static const DXFCPP_EXPORT InstrumentProfileType WARRANT;
+    static const DXFCPP_EXPORT InstrumentProfileType CERTIFICATE;
     static const DXFCPP_EXPORT InstrumentProfileType CFD;
     static const DXFCPP_EXPORT InstrumentProfileType SPREAD;
     static const DXFCPP_EXPORT InstrumentProfileType OTHER;

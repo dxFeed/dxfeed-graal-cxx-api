@@ -1,9 +1,12 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <limits>
+#include <map>
 #include <string>
 #include <thread>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 #include <dxfeed_graal_c_api/api.h>
@@ -148,4 +151,64 @@ TEST_CASE("normalizeAttributeForSymbol") {
     auto s = "AAPL&Q{a=m}";
 
     REQUIRE("AAPL&Q" == CandleAlignment::normalizeAttributeForSymbol(s));
+}
+
+// The expected values are printed by the Java API 3.356 for the same arguments.
+TEST_CASE("MarketEventSymbols::hasAttributes as in Java") {
+    for (const auto &[symbol, expected] :
+         std::vector<std::pair<std::string, bool>>{{"", false},
+                                                   {"AAPL", false},
+                                                   {"AAPL{=5m}", true},
+                                                   {"AAPL&Q{=5m,tho=true}", true},
+                                                   {"{}", false},
+                                                   {"A{}", false},
+                                                   {"{a}", true},
+                                                   {"AAPL{", false},
+                                                   {"AAPL}", false}}) {
+        CAPTURE(symbol);
+        CHECK(MarketEventSymbols::hasAttributes(symbol) == expected);
+    }
+}
+
+TEST_CASE("MarketEventSymbols::buildSpreadSymbol as in Java") {
+    constexpr auto INF = std::numeric_limits<double>::infinity();
+
+    for (const auto &[spread, expected] : std::vector<std::pair<std::map<std::string, double>, std::string>>{
+             {{}, ""},
+             {{{"AAPL", 1}}, "AAPL"},
+             {{{"AAPL", 2}}, "=2*AAPL"},
+             {{{"AAPL", 1}, {"MSFT", -1}}, "=AAPL-MSFT"},
+             {{{"MSFT", 1}, {"AAPL", 1}, {"IBM", -1}, {"GOOG", -1}}, "=AAPL+MSFT-IBM-GOOG"},
+             {{{"A", 0.5}, {"B", -2.5}, {"C", 0}}, "=0.5*A-2.5*B"},
+             {{{"A", 1e-5}, {"B", 3e9}, {"C", 1e7}}, "=3.0E9*B+10000000*C+1.0E-5*A"},
+             {{{"A", INF}, {"B", -INF}}, "=Infinity*A-Infinity*B"},
+             {{{"A", 2147483647.0}, {"B", 2147483648.0}}, "=2.147483648E9*B+2147483647*A"},
+             {{{"A", -1}, {"B", -1}}, "=-B-A"},
+             {{{"A", 0.0}, {"B", -0.0}}, ""},
+         }) {
+        CAPTURE(expected);
+        CHECK(MarketEventSymbols::buildSpreadSymbol(spread) == expected);
+    }
+
+    // Java can not order NaN ratios; here they go last, by symbol.
+    CHECK(MarketEventSymbols::buildSpreadSymbol(
+              {{"B", std::numeric_limits<double>::quiet_NaN()}, {"A", std::numeric_limits<double>::quiet_NaN()},
+               {"C", -1}}) == "=-C+NaN*A+NaN*B");
+}
+
+TEST_CASE("MarketEventSymbols::getExchangesByPattern as in Java") {
+    CHECK(std::string(MarketEventSymbols::EXCHANGES_PATTERN) == "[0-9A-Za-z]");
+    CHECK(std::string(MarketEventSymbols::SUPPORTED_EXCHANGES) ==
+          "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+    CHECK(MarketEventSymbols::getExchangesByPattern("") == "");
+    CHECK(MarketEventSymbols::getExchangesByPattern("A-C") == "ABC");
+    CHECK(MarketEventSymbols::getExchangesByPattern("[0-9]") == "0123456789");
+    CHECK(MarketEventSymbols::getExchangesByPattern("\\d") == "0123456789");
+    CHECK(MarketEventSymbols::getExchangesByPattern("XYZ") == "XYZ");
+    CHECK(MarketEventSymbols::getExchangesByPattern("A-Za-z0-9") == MarketEventSymbols::SUPPORTED_EXCHANGES);
+    CHECK(MarketEventSymbols::getExchangesByPattern(MarketEventSymbols::EXCHANGES_PATTERN) ==
+          MarketEventSymbols::SUPPORTED_EXCHANGES);
+    CHECK_THROWS_WITH_AS(MarketEventSymbols::getExchangesByPattern("[!-#]"), "Unsupported exchange codes: !, \", #",
+                         InvalidArgumentException);
+    CHECK_THROWS_AS(MarketEventSymbols::getExchangesByPattern("[z-a]"), InvalidArgumentException);
 }
