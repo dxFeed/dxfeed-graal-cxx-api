@@ -103,6 +103,18 @@ TEST_CASE("DXEndpoint: the requested aggregation period can be set, read and cle
     endpoint->close();
 }
 
+TEST_CASE("DXEndpoint: the requested aggregation period can be set with a property") {
+    const auto endpoint = DXEndpoint::newBuilder()
+                              ->withRole(DXEndpoint::Role::FEED)
+                              ->withProperty(DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY, "1.5s")
+                              ->build();
+
+    REQUIRE(endpoint->getRequestedAggregationPeriod().has_value());
+    REQUIRE(endpoint->getRequestedAggregationPeriod()->getTime() == 1500);
+
+    endpoint->close();
+}
+
 TEST_CASE("DXFeedSubscription: a new subscription has no aggregation period info and no dropped events") {
     const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
     const auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);

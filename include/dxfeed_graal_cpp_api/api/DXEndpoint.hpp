@@ -271,6 +271,21 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     static constexpr char DXFEED_AGGREGATION_PERIOD_PROPERTY[] = "dxfeed.aggregationPeriod";
 
     /**
+     * `"dxfeed.requestedAggregationPeriod"`
+     *
+     * Defines the aggregation period that an endpoint requests from the server. The server applies its own rules and
+     * limits to the request and applies the resulting period on its side, reducing the network traffic and the load of
+     * the server. Unlike DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY, which limits the notifications on the client
+     * side only, it changes the rate at which the server sends the data.
+     *
+     * The format is a TimePeriod string, for example "1s", "0.5s" or "0" for real-time delivery. When it is not set,
+     * the server uses its default.
+     * @see DXEndpoint::setRequestedAggregationPeriod()
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     */
+    static constexpr char DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY[] = "dxfeed.requestedAggregationPeriod";
+
+    /**
      * `"dxfeed.wildcard.enable"`
      *
      * Set this property to `true` to turn on wildcard support.

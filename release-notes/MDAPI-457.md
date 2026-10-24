@@ -4,7 +4,8 @@
     * `DXEndpoint::setRequestedAggregationPeriod()` sets the period that the endpoint requests from the server
       (`TimePeriod`, `std::chrono::milliseconds` or milliseconds); `std::nullopt` clears it. Zero requests real-time
       delivery; a period over 24 hours throws `JavaException`. `DXEndpoint::getRequestedAggregationPeriod()` returns
-      the period or `std::nullopt` (`null` in Java).
+      the period or `std::nullopt` (`null` in Java). The period can also be set with the
+      `DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY` property (`"dxfeed.requestedAggregationPeriod"`).
     * The new `TimePeriodInfo` is the range of aggregation periods: `getMin()`, `getMax()`, `isUnknown()`,
       `TimePeriodInfo::UNKNOWN` and `EMPTY`, `valueOf(min, max)`, and `toString()` as in Java (`{"min":1.5,"max":2}`,
       in seconds).
