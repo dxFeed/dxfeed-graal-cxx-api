@@ -160,13 +160,21 @@ namespace {
 struct AggregationPeriodInfos {
     std::string subscription;
     std::string endpoint;
+
+    bool operator==(const AggregationPeriodInfos &other) const {
+        return subscription == other.subscription && endpoint == other.endpoint;
+    }
 };
 
-// Publishes quotes from a loopback PUBLISHER until a FEED subscription receives them, then returns the aggregation
-// period info of the subscription and of the FEED endpoint.
+// Publishes quotes from a loopback PUBLISHER to a FEED subscription until the subscription has received them and the
+// aggregation period infos of the subscription and of the FEED endpoint are the expected ones (or the time is out),
+// then returns the infos.
 AggregationPeriodInfos infosAfterEvents(const std::optional<std::string> &aggregationPeriodProperty,
                                         std::optional<std::chrono::milliseconds> requestedPeriod,
-                                        std::optional<std::chrono::milliseconds> subscriptionPeriod) {
+                                        std::optional<std::chrono::milliseconds> subscriptionPeriod,
+                                        const AggregationPeriodInfos &expected) {
+    // Declared before the subscription, so it outlives the listener even when a REQUIRE below throws.
+    std::atomic<std::size_t> received{};
     const auto port = std::to_string(test::findFreeLoopbackPort());
     const auto publisherEndpoint = DXEndpoint::create(DXEndpoint::Role::PUBLISHER);
     const auto builder = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED);
@@ -187,8 +195,6 @@ AggregationPeriodInfos infosAfterEvents(const std::optional<std::string> &aggreg
         subscription->setAggregationPeriod(*subscriptionPeriod);
     }
 
-    std::atomic<std::size_t> received{};
-
     subscription->addEventListener([&received](const auto &events) {
         received += events.size();
     });
@@ -204,23 +210,27 @@ AggregationPeriodInfos infosAfterEvents(const std::optional<std::string> &aggreg
         return feedEndpoint->getState() == DXEndpoint::State::CONNECTED;
     }));
 
+    const auto infos = [&] {
+        return AggregationPeriodInfos{subscription->getAggregationPeriodInfo().toString(),
+                                      feedEndpoint->getAggregationPeriodInfo().toString()};
+    };
     double price = 1.0;
 
     // Each poll publishes one more quote: the first ones may be sent before the subscription reaches the publisher.
-    REQUIRE(test::waitUntil(
+    // The infos are compared by the caller, so a timeout shows the values instead of failing here.
+    test::waitUntil(
         [&] {
             const auto quote = std::make_shared<Quote>("AAPL");
 
             quote->setBidPrice(price++);
             publisherEndpoint->getPublisher()->publishEvents(quote);
 
-            return received > 0 && !subscription->getAggregationPeriodInfo().isUnknown() &&
-                   !feedEndpoint->getAggregationPeriodInfo().isUnknown();
+            return received > 0 && infos() == expected;
         },
-        10s, 50ms));
+        10s, 50ms);
+    CHECK(received > 0);
 
-    AggregationPeriodInfos result{subscription->getAggregationPeriodInfo().toString(),
-                                  feedEndpoint->getAggregationPeriodInfo().toString()};
+    const auto result = infos();
 
     subscription->close();
     feedEndpoint->close();
@@ -234,38 +244,40 @@ AggregationPeriodInfos infosAfterEvents(const std::optional<std::string> &aggreg
 // delivered; the period requested from the server is reported by the endpoint only. The expected strings are the
 // output of the same scenarios in the dxFeed Java API 3.356.
 TEST_CASE("DXFeedSubscription: the aggregation period info after events") {
-    SUBCASE("no aggregation") {
-        const auto infos = infosAfterEvents(std::nullopt, std::nullopt, std::nullopt);
+    std::optional<std::string> property{};
+    std::optional<std::chrono::milliseconds> requested{};
+    std::optional<std::chrono::milliseconds> period{};
+    AggregationPeriodInfos expected{};
 
-        CHECK(infos.subscription == R"({"min":0,"max":0})");
-        CHECK(infos.endpoint == R"({"min":0,"max":0})");
+    SUBCASE("no aggregation") {
+        expected = {R"({"min":0,"max":0})", R"({"min":0,"max":0})"};
     }
 
     SUBCASE("the aggregation period of the subscription") {
-        const auto infos = infosAfterEvents(std::nullopt, std::nullopt, 200ms);
-
-        CHECK(infos.subscription == R"({"min":0.2,"max":0.2})");
-        CHECK(infos.endpoint == R"({"min":0,"max":0})");
+        period = 200ms;
+        expected = {R"({"min":0.2,"max":0.2})", R"({"min":0,"max":0})"};
     }
 
     SUBCASE("the requested aggregation period does not apply to the subscription") {
-        const auto infos = infosAfterEvents(std::nullopt, 1000ms, 200ms);
-
-        CHECK(infos.subscription == R"({"min":0.2,"max":0.2})");
-        CHECK(infos.endpoint == R"({"min":1,"max":1})");
+        requested = 1000ms;
+        period = 200ms;
+        expected = {R"({"min":0.2,"max":0.2})", R"({"min":1,"max":1})"};
     }
 
     SUBCASE("dxfeed.aggregationPeriod is larger than the period of the subscription") {
-        const auto infos = infosAfterEvents("0.5s", std::nullopt, 200ms);
-
-        CHECK(infos.subscription == R"({"min":0.5,"max":0.5})");
-        CHECK(infos.endpoint == R"({"min":0,"max":0})");
+        property = "0.5s";
+        period = 200ms;
+        expected = {R"({"min":0.5,"max":0.5})", R"({"min":0,"max":0})"};
     }
 
     SUBCASE("dxfeed.aggregationPeriod is smaller than the period of the subscription") {
-        const auto infos = infosAfterEvents("0.1s", std::nullopt, 300ms);
-
-        CHECK(infos.subscription == R"({"min":0.3,"max":0.3})");
-        CHECK(infos.endpoint == R"({"min":0,"max":0})");
+        property = "0.1s";
+        period = 300ms;
+        expected = {R"({"min":0.3,"max":0.3})", R"({"min":0,"max":0})"};
     }
+
+    const auto infos = infosAfterEvents(property, requested, period, expected);
+
+    CHECK(infos.subscription == expected.subscription);
+    CHECK(infos.endpoint == expected.endpoint);
 }
