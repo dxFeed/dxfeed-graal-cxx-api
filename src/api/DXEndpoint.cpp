@@ -4,6 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 
 #include "../../include/dxfeed_graal_c_api/api.h"
+#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
@@ -35,30 +36,26 @@ struct DXEndpoint::Impl {
 
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                  dxfg_endpoint_state_t newState, void *userData) {
-        const Isolate::CallbackScope callbackScope{};
+        runCallback("DXEndpoint", [&] {
+            const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
+            const auto endpoint = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getEntity(id);
 
-        if (!callbackScope) {
-            return;
-        }
-
-        const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
-        const auto endpoint = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getEntity(id);
-
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
-                            ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr"));
-        }
-
-        if (endpoint) {
-            endpoint->onStateChange_(isolated::api::IsolatedDXEndpoint::graalStateToState(oldState),
-                                     isolated::api::IsolatedDXEndpoint::graalStateToState(newState));
-
-            if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
-                // TODO: fix endpoint lifetime
-                // ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->unregisterEntity(id);
+            if constexpr (Debugger::isDebug) {
+                // ReSharper disable once CppDFAUnreachableCode
+                Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
+                                ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr"));
             }
-        }
+
+            if (endpoint) {
+                endpoint->onStateChange_(isolated::api::IsolatedDXEndpoint::graalStateToState(oldState),
+                                         isolated::api::IsolatedDXEndpoint::graalStateToState(newState));
+
+                if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
+                    // TODO: fix endpoint lifetime
+                    // ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->unregisterEntity(id);
+                }
+            }
+        });
     }
 
     static std::shared_ptr<DXEndpoint> getInstance(Role role) {

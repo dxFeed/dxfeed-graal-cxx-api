@@ -3,7 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/ipf/live/InstrumentProfileCollector.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
@@ -55,32 +55,28 @@ struct NonOwningInstrumentProfileIterator {
 struct InstrumentProfileCollector::Impl {
     static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
                                            void *userData) {
-        const Isolate::CallbackScope callbackScope{};
+        runCallback("InstrumentProfileCollector", [&] {
+            auto [collectorId, listenerId] = unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
-        if (!callbackScope) {
-            return;
-        }
+            const auto id = Id<InstrumentProfileCollector>::from(collectorId);
+            const auto collector =
+                ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileCollector>>()->getEntity(id);
 
-        auto [collectorId, listenerId] = unpack(dxfcpp::bit_cast<std::size_t>(userData));
-
-        const auto id = Id<InstrumentProfileCollector>::from(collectorId);
-        const auto collector =
-            ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileCollector>>()->getEntity(id);
-
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate2: id = " +
-                            std::to_string(id.getValue()));
-        }
-
-        if (collector) {
-            auto &&apiProfiles = NonOwningInstrumentProfileIterator{profiles}.collect();
-
-            std::lock_guard guard{collector->listenersMutex_};
-
-            if (collector->onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
-                collector->onInstrumentProfilesUpdateHandlers_[listenerId](apiProfiles);
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate2: id = " +
+                                std::to_string(id.getValue()));
             }
-        }
+
+            if (collector) {
+                auto &&apiProfiles = NonOwningInstrumentProfileIterator{profiles}.collect();
+
+                std::lock_guard guard{collector->listenersMutex_};
+
+                if (collector->onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
+                    collector->onInstrumentProfilesUpdateHandlers_[listenerId](apiProfiles);
+                }
+            }
+        });
     }
 };
 

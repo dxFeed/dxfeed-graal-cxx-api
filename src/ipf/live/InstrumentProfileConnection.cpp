@@ -3,7 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/ipf/live/InstrumentProfileConnection.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp"
@@ -35,29 +35,25 @@ InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_conne
 struct InstrumentProfileConnection::Impl {
     static void onStateChange(graal_isolatethread_t * /*thread*/, dxfg_ipf_connection_state_t oldState,
                               dxfg_ipf_connection_state_t newState, void *userData) noexcept {
-        const Isolate::CallbackScope callbackScope{};
+        runCallback("InstrumentProfileConnection", [&] {
+            const auto id = Id<InstrumentProfileConnection>::from(
+                dxfcpp::bit_cast<Id<InstrumentProfileConnection>::ValueType>(userData));
+            const auto connection =
+                ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->getEntity(id);
 
-        if (!callbackScope) {
-            return;
-        }
-
-        const auto id = Id<InstrumentProfileConnection>::from(
-            dxfcpp::bit_cast<Id<InstrumentProfileConnection>::ValueType>(userData));
-        const auto connection =
-            ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->getEntity(id);
-
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("InstrumentProfileConnection::Impl::onStateChange: id = " + std::to_string(id.getValue()));
-        }
-
-        if (connection) {
-            connection->onStateChange_(graalIpfConnectionStateToState(oldState),
-                                       graalIpfConnectionStateToState(newState));
-
-            if (newState == DXFG_IPF_CONNECTION_STATE_CLOSED) {
-                ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id);
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("InstrumentProfileConnection::Impl::onStateChange: id = " + std::to_string(id.getValue()));
             }
-        }
+
+            if (connection) {
+                connection->onStateChange_(graalIpfConnectionStateToState(oldState),
+                                           graalIpfConnectionStateToState(newState));
+
+                if (newState == DXFG_IPF_CONNECTION_STATE_CLOSED) {
+                    ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id);
+                }
+            }
+        });
     }
 };
 
