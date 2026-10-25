@@ -26,18 +26,21 @@ constinit const InstrumentProfileType InstrumentProfileType::CFD{12, "CFD"};
 constinit const InstrumentProfileType InstrumentProfileType::SPREAD{13, "SPREAD"};
 constinit const InstrumentProfileType InstrumentProfileType::OTHER{14, "OTHER"};
 constinit const InstrumentProfileType InstrumentProfileType::REMOVED{15, "REMOVED"};
+// After WARRANT in ALL, as in Java, but with the next free code, so the codes of the other types stay.
+constinit const InstrumentProfileType InstrumentProfileType::CERTIFICATE{16, "CERTIFICATE"};
 
 namespace {
 
-constinit const std::array<std::reference_wrapper<const InstrumentProfileType>, 16> ALL_ELEMENTS{
+constinit const std::array<std::reference_wrapper<const InstrumentProfileType>, 17> ALL_ELEMENTS{
     std::cref(InstrumentProfileType::CURRENCY),    std::cref(InstrumentProfileType::FOREX),
     std::cref(InstrumentProfileType::BOND),        std::cref(InstrumentProfileType::INDEX),
     std::cref(InstrumentProfileType::STOCK),       std::cref(InstrumentProfileType::ETF),
     std::cref(InstrumentProfileType::MUTUAL_FUND), std::cref(InstrumentProfileType::MONEY_MARKET_FUND),
     std::cref(InstrumentProfileType::PRODUCT),     std::cref(InstrumentProfileType::FUTURE),
     std::cref(InstrumentProfileType::OPTION),      std::cref(InstrumentProfileType::WARRANT),
-    std::cref(InstrumentProfileType::CFD),         std::cref(InstrumentProfileType::SPREAD),
-    std::cref(InstrumentProfileType::OTHER),       std::cref(InstrumentProfileType::REMOVED),
+    std::cref(InstrumentProfileType::CERTIFICATE), std::cref(InstrumentProfileType::CFD),
+    std::cref(InstrumentProfileType::SPREAD),      std::cref(InstrumentProfileType::OTHER),
+    std::cref(InstrumentProfileType::REMOVED),
 };
 
 } // namespace

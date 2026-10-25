@@ -8,7 +8,9 @@
 #include "../support/TestSupport.hpp"
 
 #include <algorithm>
+#include <cstdint>
 #include <iostream>
+#include <limits>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -274,4 +276,35 @@ TEST_CASE("Test DXEndpoint + multi-thread setProperty v2") {
     std::this_thread::sleep_for(1s);
 
     endpoint->close();
+}
+TEST_CASE("DXEndpoint: the property keys of QDS 3.330-3.351 as in Java") {
+    CHECK(std::string(DXEndpoint::DXFEED_STRIPE_PROPERTY) == "dxfeed.stripe");
+    CHECK(std::string(DXEndpoint::DXFEED_STICKY_SUBSCRIPTION_PROPERTY) == "dxfeed.stickySubscriptionPeriod");
+    CHECK(std::string(DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY) == "dxfeed.requestedAggregationPeriod");
+
+    const auto builder = DXEndpoint::newBuilder();
+
+    CHECK(builder->supportsProperty(DXEndpoint::DXFEED_STRIPE_PROPERTY));
+    CHECK(builder->supportsProperty(DXEndpoint::DXFEED_STICKY_SUBSCRIPTION_PROPERTY));
+    CHECK(builder->supportsProperty(DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY));
+
+    // The builder accepts the properties and builds the endpoint with them.
+    const auto endpoint = DXEndpoint::newBuilder()
+                              ->withRole(DXEndpoint::Role::FEED)
+                              ->withProperty(DXEndpoint::DXFEED_STICKY_SUBSCRIPTION_PROPERTY, "1s")
+                              ->withProperty(DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY, "0.5s")
+                              ->build();
+
+    REQUIRE(endpoint);
+    endpoint->close();
+}
+
+TEST_CASE("DXFeedSubscription batch limits can be bound by reference") {
+    // Binds the constants by reference (an ODR use): links only when they are defined (static constexpr).
+    const auto &optimal = DXFeedSubscription::OPTIMAL_BATCH_LIMIT;
+    const auto &max = DXFeedSubscription::MAX_BATCH_LIMIT;
+
+    CHECK(optimal == 0);
+    CHECK(max == std::numeric_limits<std::int32_t>::max());
+    CHECK(std::max(DXFeedSubscription::OPTIMAL_BATCH_LIMIT, DXFeedSubscription::MAX_BATCH_LIMIT) == max);
 }

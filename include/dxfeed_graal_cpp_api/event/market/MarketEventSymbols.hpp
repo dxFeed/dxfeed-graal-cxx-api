@@ -8,6 +8,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <map>
 #include <optional>
 #include <string>
 
@@ -43,6 +44,19 @@ DXFCPP_BEGIN_NAMESPACE
  * The methods in this class always maintain attribute keys in alphabetic order.
  */
 struct DXFCPP_EXPORT MarketEventSymbols {
+    /**
+     * `"[0-9A-Za-z]"`
+     *
+     * The character class that all exchange codes of regional events match (a regular expression).
+     */
+    static constexpr char EXCHANGES_PATTERN[] = "[0-9A-Za-z]";
+
+    /**
+     * All exchange codes that match MarketEventSymbols::EXCHANGES_PATTERN: the digits and the Latin letters, in the
+     * order of their codes.
+     */
+    static constexpr char SUPPORTED_EXCHANGES[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
     /**
      * Returns `true` if the specified symbol has the exchange code specification.
      *
@@ -116,6 +130,54 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @return new symbol without the specified key and everything else from the old symbol.
      */
     static std::string removeAttributeStringByKey(const StringLike &symbol, const StringLike &key) noexcept;
+
+    /**
+     * Returns `true` if the specified symbol has any attributes.
+     *
+     * @param symbol The symbol.
+     * @return `true` if the specified symbol has any attributes.
+     */
+    static bool hasAttributes(const StringLike &symbol) noexcept;
+
+    /**
+     * Builds the canonical spread symbol for the specified spread components.
+     * The canonical representation uses a special prefix, leg ordering and formatting.
+     *
+     * Spread legs with a zero ratio are ignored (not included in the spread symbol).
+     * If the spread is empty, then an empty string is returned.
+     * If the spread consists of one leg with a ratio of 1, then the pure leg symbol is returned.
+     * Legs with a NaN ratio, which have no order in Java, go last, by symbol.
+     *
+     * Example:
+     * ```cpp
+     * MarketEventSymbols::buildSpreadSymbol({{"AAPL", 1}, {"MSFT", -1}}); // "=AAPL-MSFT"
+     * MarketEventSymbols::buildSpreadSymbol({{"A", 0.5}, {"B", -2.5}});   // "=0.5*A-2.5*B"
+     * ```
+     *
+     * @param spread The map of the spread leg symbols to their ratios in the spread.
+     * @return The canonical spread symbol for the specified spread components.
+     */
+    static std::string buildSpreadSymbol(const std::map<std::string, double> &spread);
+
+    /**
+     * Returns a string with all exchange codes (the characters with codes 0..127) that match the specified character
+     * class. For greater flexibility, the outer square brackets of the character class can be omitted.
+     *
+     * The character class is an ECMAScript regular expression (`std::regex`): the Java-specific syntax, such as
+     * `\p{Upper}` or the `&&` intersection, is not supported. Such syntax either throws InvalidArgumentException or,
+     * when it is also a valid ECMAScript expression (`A-Z&&[^AB]`), matches other characters than in Java.
+     *
+     * Example:
+     * ```cpp
+     * MarketEventSymbols::getExchangesByPattern("A-C"); // "ABC"
+     * ```
+     *
+     * @param characterClass The regular expression character class.
+     * @return All exchange codes that match the specified character class.
+     * @throws InvalidArgumentException if the character class is not a valid regular expression or the matching
+     * exchange codes violate MarketEventSymbols::EXCHANGES_PATTERN.
+     */
+    static std::string getExchangesByPattern(const StringLike &characterClass);
 
     private:
     static constexpr char EXCHANGE_SEPARATOR = '&';
