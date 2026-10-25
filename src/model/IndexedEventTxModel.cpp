@@ -38,7 +38,7 @@ struct IndexedEventTxModelImpl::Listener {
             // The list belongs to the Graal SDK: it is freed after this call.
             const auto f = static_cast<Listener *>(userData)->eventsReceived;
 
-            (*f)(EventMapper::fromGraalList(events), isSnapshot == 1);
+            (*f)(EventMapper::fromGraalListSkippingErrors(events), isSnapshot == 1);
         });
     }
 };

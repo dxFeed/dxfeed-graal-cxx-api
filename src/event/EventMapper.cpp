@@ -31,10 +31,38 @@
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 
+#include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
+
 #include <dxfg_api.h>
+#include <fmt/format.h>
+#include <map>
 #include <string>
 
 DXFCPP_BEGIN_NAMESPACE
+
+namespace {
+
+std::string eventTypeName(std::int32_t clazz) {
+    switch (clazz) {
+    case DXFG_EVENT_DAILY_CANDLE:
+        return "DAILY_CANDLE";
+    case DXFG_EVENT_CONFIGURATION:
+        return EventTypeEnum::CONFIGURATION.getName();
+    case DXFG_EVENT_ORDER_BASE:
+        return "ORDER_BASE";
+    default:
+        break;
+    }
+
+    if (const auto it = EventTypeEnum::ALL_BY_ID.find(static_cast<std::uint32_t>(clazz));
+        it != EventTypeEnum::ALL_BY_ID.end()) {
+        return it->second.get().getName();
+    }
+
+    return std::to_string(clazz);
+}
+
+} // namespace
 
 std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     if (!graalNativeEvent) {
@@ -102,10 +130,63 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     }
 }
 
+std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalListSkippingErrors(void *graalNativeList) {
+    const auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
+
+    if (list == nullptr || list->size <= 0) {
+        return {};
+    }
+
+    struct Skipped {
+        std::size_t count{};
+        std::string firstError{};
+    };
+
+    std::vector<std::shared_ptr<EventType>> result{};
+    std::map<std::int32_t, Skipped> skippedByClass{};
+
+    result.reserve(static_cast<std::size_t>(list->size));
+
+    for (std::size_t i = 0; i < static_cast<std::size_t>(list->size); i++) {
+        auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(list->elements[i]);
+
+        if (e == nullptr) {
+            continue;
+        }
+
+        std::string error{};
+
+        try {
+            if (auto event = fromGraal(e)) {
+                result.emplace_back(std::move(event));
+            }
+
+            continue;
+        } catch (const std::exception &ex) {
+            error = ex.what();
+        } catch (...) {
+            error = "unknown exception";
+        }
+
+        auto &skipped = skippedByClass[static_cast<std::int32_t>(e->clazz)];
+
+        if (skipped.count++ == 0) {
+            skipped.firstError = std::move(error);
+        }
+    }
+
+    for (const auto &[clazz, skipped] : skippedByClass) {
+        ErrorManager::report("EventMapper", fmt::format("{} event(s) of type {} skipped: {}", skipped.count,
+                                                        eventTypeName(clazz), skipped.firstError));
+    }
+
+    return result;
+}
+
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) {
     const auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
 
-    if (list->size <= 0) {
+    if (list == nullptr || list->size <= 0) {
         return {};
     }
 

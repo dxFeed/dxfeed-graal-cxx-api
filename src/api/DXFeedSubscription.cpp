@@ -35,7 +35,13 @@ struct DXFeedSubscription::Impl {
 #if defined(DXFCXX_ENABLE_METRICS)
                 sw.start();
 #endif
-                auto &&events = EventMapper::fromGraalList(static_cast<void *>(graalNativeEvents));
+                auto &&events = EventMapper::fromGraalListSkippingErrors(static_cast<void *>(graalNativeEvents));
+
+                // All the events of the batch were skipped: a listener gets non-empty batches only.
+                if (events.empty()) {
+                    return;
+                }
+
 #if defined(DXFCXX_ENABLE_METRICS)
                 sw.stop();
 

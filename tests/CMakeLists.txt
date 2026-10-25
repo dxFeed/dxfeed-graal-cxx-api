@@ -58,6 +58,9 @@ set(DXFC_TEST_SOURCES
         event/EventsToStringTest.cpp
         event/EventTypeTest.cpp
         event/TapeRoundTripTest.cpp
+        event/UnsupportedEventTest.cpp
+        exceptions/CallbackBarrierTest.cpp
+        exceptions/ErrorManagerTest.cpp
         exceptions/ExceptionsTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
         glossary/PriceIncrementsTest.cpp
@@ -109,6 +112,12 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     # The argument parsing of the tools is compiled into their tests: the tools are an executable.
     if (DXFC_TEST_SOURCE MATCHES "^tools/")
         target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp)
+    endif ()
+
+    # The test builds the lists of events of the C API of the dxFeed Graal SDK by hand.
+    if (DXFC_TEST_SOURCE STREQUAL "event/UnsupportedEventTest.cpp")
+        target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE
+                $<TARGET_PROPERTY:DxFeedGraalNativeSdk,INTERFACE_INCLUDE_DIRECTORIES>)
     endif ()
     list(APPEND DXFC_TEST_TARGETS ${DXFC_TEST_BASENAME})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})

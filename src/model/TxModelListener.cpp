@@ -38,7 +38,7 @@ struct TxModelListenerCommon::Impl {
                 return;
             }
 
-            listener->onEventsReceived_(IndexedEventSource::fromGraal(source), EventMapper::fromGraalList(events),
+            listener->onEventsReceived_(IndexedEventSource::fromGraal(source), EventMapper::fromGraalListSkippingErrors(events),
                                         isSnapshot == 1);
         });
     }

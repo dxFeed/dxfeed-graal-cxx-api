@@ -1,0 +1,8 @@
+==DXP3	type=tape	version=QDS-3.356	opt=hs	time=field	+RAW_DATA
+==RAW_DATA
+=Configuration	EventSymbol	Version	Configuration
+Configuration	CFG	1	\NULL
+Configuration	CFG2	2	\NULL
+Configuration	CFG3	3	\NULL
+=Quote	EventSymbol	BidTime	BidExchangeCode	BidPrice	BidSize	AskTime	AskExchangeCode	AskPrice	AskSize
+Quote	QT	20231114-221321+0000	B	10.25	100	20231114-221322+0000	A	10.5	200

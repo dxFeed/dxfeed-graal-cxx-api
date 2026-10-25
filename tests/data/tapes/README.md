@@ -7,6 +7,7 @@ writes these files the same way.
 | File | Content | Used by |
 |---|---|---|
 | `all-events.txt` | One event of each of the 24 event types (`OrderImbalance` on two sources, NTV and NUAM, `NuamOrder` on two sources, NUAM and nuam), every transferred field has its own value (the events of `test::createTapeEvents()`, plus the Java-only fields: `TradeId` of `Trade`, `TradeETH`, `TimeAndSale`, `NuamTrade` and `NuamTimeAndSale`, and the `Message` attachment) | `tests/event/TapeRoundTripTest.cpp` |
+| `configuration.txt` | Three `Configuration` events (a type that the C++ API does not implement) and one `Quote`, written by hand | `tests/event/UnsupportedEventTest.cpp` |
 | `defaults.txt` | Default-constructed events of the 24 types, written by the Java API | `tests/event/TapeRoundTripTest.cpp` |
 | `edge-values.txt` | The edge values of `test::createEdgeEvents()` (NaN, ±0.0, infinities, number limits, special strings, all enum values, all 256 values of the event flags byte), written by the Java API from the same values | `tests/event/EdgeValuesTapeTest.cpp` |
 | `edge-values-round-trip.txt` | `edge-values.txt` read by the Java API (`STREAM_FEED`) and written back (`PUBLISHER`): QD does not read back every value it writes, e.g. the day ids of the int32 limits become 0 | `tests/event/EdgeValuesTapeTest.cpp` |
