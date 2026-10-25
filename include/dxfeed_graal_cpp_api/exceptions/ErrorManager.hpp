@@ -19,13 +19,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <vector>
 
 /**
- * \addtogroup dxfcpp_exceptions
- * @{
- */
-
-DXFCPP_BEGIN_NAMESPACE
-
-/**
  * @page error_handling Error handling
  *
  * The library reports an error through one of two channels.
@@ -63,6 +56,13 @@ DXFCPP_BEGIN_NAMESPACE
  * });
  * ```
  */
+
+/**
+ * \addtogroup dxfcpp_exceptions
+ * @{
+ */
+
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * An error without a caller, reported to ErrorManager. A value: copies do not change when ErrorManager gets new
