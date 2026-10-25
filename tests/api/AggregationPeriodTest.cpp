@@ -7,6 +7,7 @@
 
 #include "../support/TestSupport.hpp"
 
+#include <atomic>
 #include <chrono>
 #include <cstdint>
 #include <limits>
@@ -153,4 +154,118 @@ TEST_CASE("DXEndpoint: the aggregation period info is reported over a connection
 
     feedEndpoint->close();
     publisherEndpoint->close();
+}
+
+namespace {
+struct AggregationPeriodInfos {
+    std::string subscription;
+    std::string endpoint;
+};
+
+// Publishes quotes from a loopback PUBLISHER until a FEED subscription receives them, then returns the aggregation
+// period info of the subscription and of the FEED endpoint.
+AggregationPeriodInfos infosAfterEvents(const std::optional<std::string> &aggregationPeriodProperty,
+                                        std::optional<std::chrono::milliseconds> requestedPeriod,
+                                        std::optional<std::chrono::milliseconds> subscriptionPeriod) {
+    const auto port = std::to_string(test::findFreeLoopbackPort());
+    const auto publisherEndpoint = DXEndpoint::create(DXEndpoint::Role::PUBLISHER);
+    const auto builder = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED);
+
+    if (aggregationPeriodProperty) {
+        builder->withProperty(DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY, *aggregationPeriodProperty);
+    }
+
+    const auto feedEndpoint = builder->build();
+
+    if (requestedPeriod) {
+        feedEndpoint->setRequestedAggregationPeriod(*requestedPeriod);
+    }
+
+    const auto subscription = feedEndpoint->getFeed()->createSubscription(Quote::TYPE);
+
+    if (subscriptionPeriod) {
+        subscription->setAggregationPeriod(*subscriptionPeriod);
+    }
+
+    std::atomic<std::size_t> received{};
+
+    subscription->addEventListener([&received](const auto &events) {
+        received += events.size();
+    });
+    subscription->addSymbols("AAPL");
+    REQUIRE(subscription->getAggregationPeriodInfo().isUnknown());
+
+    publisherEndpoint->connect(":" + port + "[bindAddr=127.0.0.1]");
+    REQUIRE(test::waitUntil([&] {
+        return publisherEndpoint->getState() == DXEndpoint::State::CONNECTED;
+    }));
+    feedEndpoint->connect("127.0.0.1:" + port);
+    REQUIRE(test::waitUntil([&] {
+        return feedEndpoint->getState() == DXEndpoint::State::CONNECTED;
+    }));
+
+    double price = 1.0;
+
+    // Each poll publishes one more quote: the first ones may be sent before the subscription reaches the publisher.
+    REQUIRE(test::waitUntil(
+        [&] {
+            const auto quote = std::make_shared<Quote>("AAPL");
+
+            quote->setBidPrice(price++);
+            publisherEndpoint->getPublisher()->publishEvents(quote);
+
+            return received > 0 && !subscription->getAggregationPeriodInfo().isUnknown() &&
+                   !feedEndpoint->getAggregationPeriodInfo().isUnknown();
+        },
+        10s, 50ms));
+
+    AggregationPeriodInfos result{subscription->getAggregationPeriodInfo().toString(),
+                                  feedEndpoint->getAggregationPeriodInfo().toString()};
+
+    subscription->close();
+    feedEndpoint->close();
+    publisherEndpoint->close();
+
+    return result;
+}
+} // namespace
+
+// The subscription reports the larger of `dxfeed.aggregationPeriod` and its own aggregation period once events are
+// delivered; the period requested from the server is reported by the endpoint only. The expected strings are the
+// output of the same scenarios in the dxFeed Java API 3.356.
+TEST_CASE("DXFeedSubscription: the aggregation period info after events") {
+    SUBCASE("no aggregation") {
+        const auto infos = infosAfterEvents(std::nullopt, std::nullopt, std::nullopt);
+
+        CHECK(infos.subscription == R"({"min":0,"max":0})");
+        CHECK(infos.endpoint == R"({"min":0,"max":0})");
+    }
+
+    SUBCASE("the aggregation period of the subscription") {
+        const auto infos = infosAfterEvents(std::nullopt, std::nullopt, 200ms);
+
+        CHECK(infos.subscription == R"({"min":0.2,"max":0.2})");
+        CHECK(infos.endpoint == R"({"min":0,"max":0})");
+    }
+
+    SUBCASE("the requested aggregation period does not apply to the subscription") {
+        const auto infos = infosAfterEvents(std::nullopt, 1000ms, 200ms);
+
+        CHECK(infos.subscription == R"({"min":0.2,"max":0.2})");
+        CHECK(infos.endpoint == R"({"min":1,"max":1})");
+    }
+
+    SUBCASE("dxfeed.aggregationPeriod is larger than the period of the subscription") {
+        const auto infos = infosAfterEvents("0.5s", std::nullopt, 200ms);
+
+        CHECK(infos.subscription == R"({"min":0.5,"max":0.5})");
+        CHECK(infos.endpoint == R"({"min":0,"max":0})");
+    }
+
+    SUBCASE("dxfeed.aggregationPeriod is smaller than the period of the subscription") {
+        const auto infos = infosAfterEvents("0.1s", std::nullopt, 300ms);
+
+        CHECK(infos.subscription == R"({"min":0.3,"max":0.3})");
+        CHECK(infos.endpoint == R"({"min":0,"max":0})");
+    }
 }

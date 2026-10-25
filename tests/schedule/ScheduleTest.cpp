@@ -223,3 +223,10 @@ TEST_CASE("Schedule::getDefinition() returns the definition of the schedule") {
 
     REQUIRE(Schedule::getInstance(utcDefinition)->getDefinition() == utcDefinition);
 }
+
+// The expected definitions are the output of Java `Schedule.UTC.getDefinition()` and `Schedule.NYSE.getDefinition()`
+// (dxFeed Java API 3.356).
+TEST_CASE("Schedule::getDefinition() of Schedule::UTC() and Schedule::NYSE() as in Java") {
+    CHECK(Schedule::UTC()->getDefinition() == "UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)");
+    CHECK(Schedule::NYSE()->getDefinition() == "XNYS()");
+}
