@@ -234,6 +234,49 @@ getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoi
     return result;
 }
 
+std::int64_t getRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
+    if (!endpoint) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXEndpoint_getRequestedAggregationPeriodMillis`. "
+            "The `endpoint` handle is invalid");
+    }
+
+    std::int64_t period{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getRequestedAggregationPeriodMillis,
+                                           static_cast<dxfg_endpoint_t *>(endpoint.get()), &period);
+
+    return period;
+}
+
+void setRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint,
+                                         std::int64_t period) {
+    if (!endpoint) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXEndpoint_setRequestedAggregationPeriodMillis`. "
+            "The `endpoint` handle is invalid");
+    }
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_setRequestedAggregationPeriodMillis,
+                                           static_cast<dxfg_endpoint_t *>(endpoint.get()), period);
+}
+
+std::pair<std::int64_t, std::int64_t>
+getAggregationPeriodInfo(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
+    if (!endpoint) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXEndpoint_getAggregationPeriodInfo`. The `endpoint` handle is invalid");
+    }
+
+    std::int64_t min{};
+    std::int64_t max{};
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getAggregationPeriodInfo,
+                                           static_cast<dxfg_endpoint_t *>(endpoint.get()), &min, &max);
+
+    return {min, max};
+}
+
 dxfg_endpoint_role_t roleToGraalRole(DXEndpoint::Role role) {
     switch (role) {
     case DXEndpoint::Role::FEED:

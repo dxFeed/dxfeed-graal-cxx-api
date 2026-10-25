@@ -193,6 +193,7 @@ TEST_CASE("Test hd sets and days intersect with wrong syntax") {
     REQUIRE_FALSE_MESSAGE(gmt(def)->getDayByYearMonthDay(20210215)->isHoliday(), "US and CA Holiday");
     REQUIRE_MESSAGE(gmt(def)->getDayByYearMonthDay(20210101)->isHoliday(), "Only one remain holiday");
 }
+
 // The expected values are printed by the Java API 3.356 for Schedule.UTC and Schedule.NYSE.
 TEST_CASE("Schedule::UTC and Schedule::NYSE as in Java") {
     const auto &utc = Schedule::UTC();
@@ -212,4 +213,13 @@ TEST_CASE("Schedule::UTC and Schedule::NYSE as in Java") {
     CHECK(nyse->getTimeZoneId() == "America/New_York");
     CHECK(nyse->getDayByYearMonthDay(20240101)->isHoliday());
     CHECK(nyse->getDayByYearMonthDay(20240102)->isTrading());
+}
+
+// The expected definitions are the output of Java `Schedule.getDefinition()` (dxFeed Java API 3.356).
+TEST_CASE("Schedule::getDefinition() returns the definition of the schedule") {
+    REQUIRE(Schedule::getInstance("XNYS()")->getDefinition() == "XNYS()");
+
+    const std::string utcDefinition = "UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)";
+
+    REQUIRE(Schedule::getInstance(utcDefinition)->getDefinition() == utcDefinition);
 }

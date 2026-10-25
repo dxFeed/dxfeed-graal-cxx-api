@@ -18,6 +18,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/managers/EntityManager.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "../util/TimePeriod.hpp"
+#include "../util/TimePeriodInfo.hpp"
 #include "./osub/ObservableSubscription.hpp"
 
 #include <concepts>
@@ -584,6 +585,37 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param aggregationPeriod the new aggregation period (in millis) for data
      */
     void setAggregationPeriod(std::int64_t aggregationPeriod) const;
+
+    /**
+     * Returns the aggregation period that was applied to the events delivered to this subscription: the maximum of the
+     * period that the server applies (see DXEndpoint::getAggregationPeriodInfo()) and getAggregationPeriod(), as it
+     * was used when the events were delivered.
+     *
+     * The value is informational and updates when the events are delivered: it is TimePeriodInfo::UNKNOWN until the
+     * first events arrive.
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html#getAggregationPeriodInfo--)
+     *
+     * @return The applied aggregation period info, or TimePeriodInfo::UNKNOWN.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    TimePeriodInfo getAggregationPeriodInfo() const;
+
+    /**
+     * Returns the total number of events that were dropped for this subscription since it was created.
+     *
+     * <b>This method is experimental and may change in the future versions.</b>
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html#getTotalDroppedEvents--)
+     *
+     * @return The total number of dropped events.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    std::int64_t getTotalDroppedEvents() const;
 
     /**
      * Adds listener for events.

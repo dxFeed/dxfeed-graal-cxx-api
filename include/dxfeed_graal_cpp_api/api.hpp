@@ -58,5 +58,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "./symbols/SymbolWrapper.hpp"
 #include "./system/System.hpp"
 #include "./util/TimePeriod.hpp"
+#include "./util/TimePeriodInfo.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

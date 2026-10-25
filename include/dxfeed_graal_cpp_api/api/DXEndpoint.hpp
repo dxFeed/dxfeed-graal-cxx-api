@@ -11,9 +11,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/JavaObjectHandle.hpp"
+#include "../util/TimePeriod.hpp"
+#include "../util/TimePeriodInfo.hpp"
 #include "./DXFeed.hpp"
 #include "./DXPublisher.hpp"
 
+#include <chrono>
+#include <cstdint>
+#include <optional>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
@@ -302,6 +307,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Format: a TimePeriod string (e.g., "1s", "0.5s", "0" for real-time). If not specified, the server uses its
      * default.
+     * @see DXEndpoint::setRequestedAggregationPeriod()
      * @see Builder::withProperty(const StringLike&, const StringLike&)
      */
     static constexpr char DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY[] = "dxfeed.requestedAggregationPeriod";
@@ -886,6 +892,89 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @throws GraalException
      */
     std::shared_ptr<DXPublisher> getPublisher() const;
+
+    /**
+     * Returns the aggregation period that this endpoint requests from the server, or an empty value if no period is
+     * requested.
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#getRequestedAggregationPeriod--)
+     *
+     * @return The requested aggregation period or `std::nullopt`.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    std::optional<TimePeriod> getRequestedAggregationPeriod() const;
+
+    /**
+     * Sets the aggregation period that this endpoint requests from the server.
+     *
+     * The server applies the period on its side, reducing the network traffic and the load of the server and the
+     * client, and may adjust it by its own rules and limits: getAggregationPeriodInfo() returns the period in effect.
+     * TimePeriod::ZERO requests real-time delivery (no aggregation). The period can also be requested with the
+     * DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY property.
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#setRequestedAggregationPeriod-com.devexperts.util.TimePeriod-)
+     *
+     * @param requestedAggregationPeriod The requested aggregation period. It must not exceed 24 hours.
+     * @throws InvalidArgumentException
+     * @throws JavaException "IllegalArgumentException" if the period exceeds 24 hours.
+     * @throws GraalException
+     */
+    void setRequestedAggregationPeriod(const TimePeriod &requestedAggregationPeriod) const;
+
+    /**
+     * Sets the aggregation period that this endpoint requests from the server.
+     * See setRequestedAggregationPeriod(const TimePeriod &) const.
+     *
+     * @param requestedAggregationPeriod The requested aggregation period. It must not be negative or exceed 24 hours.
+     * @throws InvalidArgumentException
+     * @throws JavaException "IllegalArgumentException" if the period is negative or exceeds 24 hours.
+     * @throws GraalException
+     */
+    void setRequestedAggregationPeriod(std::chrono::milliseconds requestedAggregationPeriod) const;
+
+    /**
+     * Sets the aggregation period that this endpoint requests from the server.
+     * See setRequestedAggregationPeriod(const TimePeriod &) const.
+     *
+     * @param requestedAggregationPeriod The requested aggregation period in milliseconds. It must not be negative or
+     * exceed 24 hours (86400000).
+     * @throws InvalidArgumentException
+     * @throws JavaException "IllegalArgumentException" if the period is negative or exceeds 24 hours.
+     * @throws GraalException
+     */
+    void setRequestedAggregationPeriod(std::int64_t requestedAggregationPeriod) const;
+
+    /**
+     * Clears the aggregation period that this endpoint requests from the server: the server falls back to its default
+     * period. The same as `setRequestedAggregationPeriod(null)` in Java.
+     *
+     * ```cpp
+     * endpoint->setRequestedAggregationPeriod(std::nullopt);
+     * ```
+     *
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    void setRequestedAggregationPeriod(std::nullopt_t) const;
+
+    /**
+     * Returns the aggregation period that the servers report, over all connections of this endpoint.
+     *
+     * The servers report the period when a connection is established, so the result is TimePeriodInfo::UNKNOWN until
+     * then, and also when no server reports it (for example, without connections or with an older server). The
+     * period applied to the events of a subscription is returned by DXFeedSubscription::getAggregationPeriodInfo().
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#getAggregationPeriodInfo--)
+     *
+     * @return The aggregation period info reported by the servers, or TimePeriodInfo::UNKNOWN.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    TimePeriodInfo getAggregationPeriodInfo() const;
 
     /**
      * Builder class for DXEndpoint that supports additional configuration properties.

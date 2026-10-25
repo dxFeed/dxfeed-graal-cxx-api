@@ -247,6 +247,17 @@ struct DXFCPP_EXPORT Schedule {
      * @return time zone id in which this schedule is defined
      */
     std::string getTimeZoneId() const;
+
+    /**
+     * Returns the definition of this schedule: the string that getInstance(const StringLike &) accepts to return this
+     * schedule, for example `XNYS()`.
+     *
+     * @return The definition of this schedule.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    std::string getDefinition() const;
 };
 
 DXFCPP_END_NAMESPACE

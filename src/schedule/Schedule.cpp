@@ -117,4 +117,8 @@ std::string Schedule::getTimeZoneId() const {
     return isolated::schedule::IsolatedSchedule::getTimeZoneId(handle_);
 }
 
+std::string Schedule::getDefinition() const {
+    return isolated::schedule::IsolatedSchedule::getDefinition(handle_);
+}
+
 DXFCPP_END_NAMESPACE
