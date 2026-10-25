@@ -11,6 +11,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 #include "./RuntimeException.hpp"
 
 #include <limits>
+#include <memory>
+#include <string>
 #include <type_traits>
 
 /**
@@ -53,6 +55,15 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
      * @return An exception containing a copy of the native exception data.
      */
     static JavaException createAndRelease(void *exceptionHandle);
+
+    /// @return The class name of the Java exception.
+    const std::string &getJavaClassName() const & noexcept;
+
+    /// @return The message of the Java exception, without the prefix that what() adds.
+    const std::string &getJavaMessage() const & noexcept;
+
+    /// @return The stack trace of the Java exception.
+    const std::string &getJavaStackTrace() const & noexcept;
 
     /// Throws a JavaException if it exists (i.e. intercepted by Graal SDK)
     static void throwIfJavaThreadExceptionExists();
@@ -117,6 +128,11 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
 
         return v;
     }
+
+    private:
+    struct JavaData;
+
+    std::shared_ptr<const JavaData> javaData_;
 };
 
 DXFCPP_END_NAMESPACE
