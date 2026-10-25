@@ -211,7 +211,7 @@ void Summary::setOpenInterest(std::int64_t openInterest) noexcept {
 }
 
 std::string Summary::toString() const {
-    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
+    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow={}, "
                        "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
                        "prevDayVolume={}, openInterest={}}}",
                        MarketEvent::getEventSymbol(),

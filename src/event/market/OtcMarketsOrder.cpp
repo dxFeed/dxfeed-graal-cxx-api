@@ -331,10 +331,11 @@ OtcMarketsOrder &OtcMarketsOrder::withNmsConditional(bool nmsConditional) noexce
 }
 
 std::string OtcMarketsOrder::toString() const {
-    return fmt::format("OtcMarketsOrder{{{}, marketMaker={}, QAP={}, open={}, unsolicited={}, priceType={}, "
+    return fmt::format("OtcMarketsOrder{{{}, marketMaker='{}', QAP={}, open={}, unsolicited={}, priceType={}, "
                        "saturated={}, autoEx={}, NMS={}}}",
-                       baseFieldsToString(), getMarketMaker(), getQuoteAccessPayment(), isOpen(), isUnsolicited(),
-                       getOtcMarketsPriceType().toString(), isSaturated(), isAutoExecution(), isNmsConditional());
+                       baseFieldsToString(), getMarketMakerOpt().value_or("null"), getQuoteAccessPayment(), isOpen(),
+                       isUnsolicited(), getOtcMarketsPriceType().toString(), isSaturated(), isAutoExecution(),
+                       isNmsConditional());
 }
 
 DXFCPP_END_NAMESPACE

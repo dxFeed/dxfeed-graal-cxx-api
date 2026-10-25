@@ -289,7 +289,7 @@ Order &Order::withMarketMaker(const StringLike &marketMaker) noexcept {
 }
 
 std::string Order::toString() const {
-    return fmt::format("Order{{{}, marketMaker={}}}", baseFieldsToString(), getMarketMaker());
+    return fmt::format("Order{{{}, marketMaker='{}'}}", baseFieldsToString(), getMarketMakerOpt().value_or("null"));
 }
 
 DXFCPP_END_NAMESPACE
