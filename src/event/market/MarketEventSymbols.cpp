@@ -3,6 +3,20 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp"
 
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+#include "../../internal/utils/JavaUtils.hpp"
+
+#include <algorithm>
+#include <cmath>
+#include <cstddef>
+#include <cstdint>
+#include <limits>
+#include <optional>
+#include <regex>
+#include <string_view>
+#include <vector>
+
 DXFCPP_BEGIN_NAMESPACE
 
 bool MarketEventSymbols::hasExchangeCode(const StringLike &symbol) noexcept {
@@ -235,6 +249,162 @@ std::string MarketEventSymbols::addAttributeInternal(std::string symbol, std::si
     }
 
     return symbol.substr(0, i - 1) + ATTRIBUTES_SEPARATOR + key + ATTRIBUTE_VALUE + value + symbol.substr(i - 1);
+}
+
+bool MarketEventSymbols::hasAttributes(const StringLike &symbol) noexcept {
+    return getLengthWithoutAttributesInternal(symbol) < symbol.length();
+}
+
+std::string MarketEventSymbols::buildSpreadSymbol(const std::map<std::string, double> &spread) {
+    struct Leg {
+        std::string_view symbol;
+        double ratio;
+    };
+
+    std::vector<Leg> legs{};
+
+    for (const auto &[symbol, ratio] : spread) {
+        if (!math::exactlyEquals(ratio, 0.0)) {
+            legs.push_back({symbol, ratio});
+        }
+    }
+
+    if (legs.empty()) {
+        return {};
+    }
+
+    if (legs.size() == 1 && math::exactlyEquals(legs[0].ratio, 1.0)) {
+        return std::string(legs[0].symbol);
+    }
+
+    // Java SpreadLeg.compareTo: a larger ratio first, equal ratios by symbol (in reverse order for a negative ratio).
+    // NaN ratios, which Java can not order, go last, by symbol, so that the order stays strict.
+    std::sort(legs.begin(), legs.end(), [](const Leg &a, const Leg &b) {
+        const bool aIsNaN = std::isnan(a.ratio);
+
+        if (aIsNaN != std::isnan(b.ratio)) {
+            return !aIsNaN;
+        }
+
+        if (!aIsNaN && !math::exactlyEquals(a.ratio, b.ratio)) {
+            return a.ratio > b.ratio;
+        }
+
+        return aIsNaN || a.ratio >= 0 ? a.symbol < b.symbol : a.symbol > b.symbol;
+    });
+
+    std::string result = "=";
+
+    for (const auto &[symbol, legRatio] : legs) {
+        if (legRatio < 0) {
+            result += '-';
+        } else if (result.length() > 1) {
+            result += '+'; // Plus only when not first.
+        }
+
+        if (const auto ratio = std::abs(legRatio); !math::exactlyEquals(ratio, 1.0)) {
+            // Java prints the ratio as an int when the (int) cast keeps its value, otherwise as Double.toString does.
+            if (ratio <= std::numeric_limits<std::int32_t>::max() && math::exactlyEquals(ratio, std::trunc(ratio))) {
+                result += std::to_string(static_cast<std::int32_t>(ratio));
+            } else {
+                result += java::doubleToString(ratio);
+            }
+
+            result += '*';
+        }
+
+        result += symbol;
+    }
+
+    return result;
+}
+
+namespace {
+
+// Returns `true` if a bracket expression of the pattern has a range whose end is less than its start, as in "[z-a]".
+// Java rejects such a range, and so do the MSVC and GNU `std::regex`, but libc++ accepts it as an empty set.
+bool hasReversedRange(const std::string &pattern) {
+    bool inClass = false;
+    std::optional<unsigned char> previous{}; // the last literal character of the bracket expression
+
+    for (std::size_t i = 0; i < pattern.size(); i++) {
+        const auto c = static_cast<unsigned char>(pattern[i]);
+
+        if (c == '\\') {
+            // An escape (\d, \], ...) is not checked as a range bound.
+            previous.reset();
+            i++;
+        } else if (!inClass) {
+            if (c == '[') {
+                inClass = true;
+                previous.reset();
+
+                if (i + 1 < pattern.size() && pattern[i + 1] == '^') {
+                    i++;
+                }
+            }
+        } else if (c == ']') {
+            inClass = false;
+        } else if (c == '-' && previous && i + 1 < pattern.size() && pattern[i + 1] != ']' && pattern[i + 1] != '\\') {
+            if (static_cast<unsigned char>(pattern[i + 1]) < *previous) {
+                return true;
+            }
+
+            previous.reset();
+            i++; // the end of the range
+        } else {
+            previous = c;
+        }
+    }
+
+    return false;
+}
+
+} // namespace
+
+std::string MarketEventSymbols::getExchangesByPattern(const StringLike &characterClass) {
+    std::string pattern(characterClass);
+
+    if (pattern.empty()) {
+        return {};
+    }
+
+    if (pattern[0] != '[' && pattern[0] != '\\') {
+        pattern = '[' + pattern + ']';
+    }
+
+    if (hasReversedRange(pattern)) {
+        throw InvalidArgumentException("Invalid character class: " + std::string(characterClass) +
+                                       ": the end of a range is less than its start");
+    }
+
+    std::regex regex{};
+
+    try {
+        regex = std::regex(pattern, std::regex::ECMAScript);
+    } catch (const std::regex_error &e) {
+        throw InvalidArgumentException("Invalid character class: " + std::string(characterClass) + ": " + e.what());
+    }
+
+    static const std::regex EXCHANGES_REGEX(EXCHANGES_PATTERN, std::regex::ECMAScript);
+    std::string exchanges{};
+    std::string unsupportedExchanges{};
+
+    for (int code = 0; code <= 127; code++) {
+        if (const std::string exchange(1, static_cast<char>(code)); std::regex_match(exchange, regex)) {
+            exchanges += exchange;
+
+            if (!std::regex_match(exchange, EXCHANGES_REGEX)) {
+                unsupportedExchanges += (unsupportedExchanges.empty() ? "" : ", ") + exchange;
+            }
+        }
+    }
+
+    if (!unsupportedExchanges.empty()) {
+        throw InvalidArgumentException("Unsupported exchange codes: " + unsupportedExchanges);
+    }
+
+    return exchanges;
 }
 
 DXFCPP_END_NAMESPACE

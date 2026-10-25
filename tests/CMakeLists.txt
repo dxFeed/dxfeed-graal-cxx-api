@@ -55,6 +55,7 @@ set(DXFC_TEST_SOURCES
         event/ConstantsTest.cpp
         event/EdgeValuesTapeTest.cpp
         event/EventsTest.cpp
+        event/EventsToStringTest.cpp
         event/EventTypeTest.cpp
         event/TapeRoundTripTest.cpp
         exceptions/ExceptionsTest.cpp

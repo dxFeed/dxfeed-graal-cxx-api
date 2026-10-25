@@ -54,12 +54,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     /**
      * The optimal events' batch limit for a single notification in OnEventHandler.
      */
-    static const std::int32_t OPTIMAL_BATCH_LIMIT = 0;
+    static constexpr std::int32_t OPTIMAL_BATCH_LIMIT = 0;
 
     /**
      * The maximum events' batch limit for a single notification in OnEventHandler.
      */
-    static const std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
+    static constexpr std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
 
     protected:
     friend struct DXFeed;

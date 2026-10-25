@@ -289,7 +289,8 @@ SpreadOrder &SpreadOrder::withSpreadSymbol(const StringLike &spreadSymbol) noexc
 }
 
 std::string SpreadOrder::toString() const {
-    return fmt::format("SpreadOrder{{{}, spreadSymbol={}}}", baseFieldsToString(), getSpreadSymbol());
+    return fmt::format("SpreadOrder{{{}, spreadSymbol='{}'}}", baseFieldsToString(),
+                       getSpreadSymbolOpt().value_or("null"));
 }
 
 DXFCPP_END_NAMESPACE

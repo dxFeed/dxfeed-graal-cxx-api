@@ -295,6 +295,38 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     static constexpr char DXFEED_WILDCARD_ENABLE_PROPERTY[] = "dxfeed.wildcard.enable";
 
     /**
+     * `"dxfeed.stripe"`
+     *
+     * Defines a symbol striping strategy for an endpoint.
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     */
+    static constexpr char DXFEED_STRIPE_PROPERTY[] = "dxfeed.stripe";
+
+    /**
+     * `"dxfeed.stickySubscriptionPeriod"`
+     *
+     * Defines a sticky subscription period in the format of TimePeriod.
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     */
+    static constexpr char DXFEED_STICKY_SUBSCRIPTION_PROPERTY[] = "dxfeed.stickySubscriptionPeriod";
+
+    /**
+     * `"dxfeed.requestedAggregationPeriod"`
+     *
+     * Defines a requested aggregation period to be negotiated with the server. The server applies its own rules and
+     * limits to the request and applies the resulting period on the server side to control the data transmission rate
+     * (reduces network traffic and server load).
+     *
+     * Differs from DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY, which is local and client-side only: the client
+     * throttles locally, but the server sends at its own rate.
+     *
+     * Format: a TimePeriod string (e.g., "1s", "0.5s", "0" for real-time). If not specified, the server uses its
+     * default.
+     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     */
+    static constexpr char DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY[] = "dxfeed.requestedAggregationPeriod";
+
+    /**
      * `"dxpublisher.properties"`
      *
      * Defines a path to a file with properties for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".

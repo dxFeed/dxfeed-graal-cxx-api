@@ -55,6 +55,25 @@ struct DXFCPP_EXPORT Schedule {
 
     public:
     /**
+     * The default schedule for the UTC time zone (a 5-day week with no holidays):
+     * `UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)`.
+     *
+     * It is created at the first call, so it can be used by the initializers of global variables.
+     *
+     * @return The default schedule for the UTC time zone.
+     */
+    static const Ptr &UTC();
+
+    /**
+     * The default schedule for the NYSE exchange: `XNYS()`.
+     *
+     * It is created at the first call, so it can be used by the initializers of global variables.
+     *
+     * @return The default schedule for the NYSE exchange.
+     */
+    static const Ptr &NYSE();
+
+    /**
      * Returns default schedule instance for specified instrument profile.
      *
      * @param profile The instrument profile those schedule is requested

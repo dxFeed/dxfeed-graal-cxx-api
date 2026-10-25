@@ -37,6 +37,18 @@ Schedule::Ptr Schedule::getInstance(const StringLike &scheduleDefinition) {
     return create(isolated::schedule::IsolatedSchedule::getInstance(scheduleDefinition));
 }
 
+const Schedule::Ptr &Schedule::UTC() {
+    static const Ptr value = getInstance("UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)");
+
+    return value;
+}
+
+const Schedule::Ptr &Schedule::NYSE() {
+    static const Ptr value = getInstance("XNYS()");
+
+    return value;
+}
+
 Schedule::Ptr Schedule::getInstance(const std::shared_ptr<InstrumentProfile> &profile, const StringLike &venue) {
     if (!profile) {
         throw InvalidArgumentException("The `profile` is nullptr");

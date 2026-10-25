@@ -118,8 +118,9 @@ TEST_CASE("The elements of Enum are its constants and are found by code") {
          DXFC_ELEMENT(InstrumentProfileType, MUTUAL_FUND), DXFC_ELEMENT(InstrumentProfileType, MONEY_MARKET_FUND),
          DXFC_ELEMENT(InstrumentProfileType, PRODUCT), DXFC_ELEMENT(InstrumentProfileType, FUTURE),
          DXFC_ELEMENT(InstrumentProfileType, OPTION), DXFC_ELEMENT(InstrumentProfileType, WARRANT),
-         DXFC_ELEMENT(InstrumentProfileType, CFD), DXFC_ELEMENT(InstrumentProfileType, SPREAD),
-         DXFC_ELEMENT(InstrumentProfileType, OTHER), DXFC_ELEMENT(InstrumentProfileType, REMOVED)});
+         DXFC_ELEMENT(InstrumentProfileType, CERTIFICATE), DXFC_ELEMENT(InstrumentProfileType, CFD),
+         DXFC_ELEMENT(InstrumentProfileType, SPREAD), DXFC_ELEMENT(InstrumentProfileType, OTHER),
+         DXFC_ELEMENT(InstrumentProfileType, REMOVED)});
 }
 
 TEST_CASE("Enum::valueOf returns the element of code 0 for an unknown code") {
