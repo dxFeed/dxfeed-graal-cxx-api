@@ -4,6 +4,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedIndexedEventTxModel.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
@@ -44,10 +45,9 @@ void releaseSymbol(dxfg_symbol_t *symbol) noexcept {
         return;
     }
 
-    try {
+    runRelease("IndexedEventTxModel", [&] {
         runGraalFunctionAndThrowIfLessThanZero(dxfg_Symbol_release, symbol);
-    } catch (...) {
-    }
+    });
 }
 
 // A deleter of std::unique_ptr: a failure to free the source must not escape it.
@@ -56,10 +56,9 @@ void releaseSource(dxfg_indexed_event_source_t *source) noexcept {
         return;
     }
 
-    try {
+    runRelease("IndexedEventTxModel", [&] {
         event::IsolatedIndexedEventSource::release(source);
-    } catch (...) {
-    }
+    });
 }
 
 } // namespace

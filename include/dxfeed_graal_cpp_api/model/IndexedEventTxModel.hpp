@@ -15,6 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/EventTypeEnum.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/IndexedEventSource.hpp"
+#include "../internal/CallbackBarrier.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../internal/utils/StringUtils.hpp"
 #include "../util/TimePeriod.hpp"
@@ -329,11 +330,9 @@ struct /* DXFCPP_EXPORT */ IndexedEventTxModel final : IndexedEventTxModelImpl,
     /// Closes the model and destructs it. If the model is the last owner of its listener, waits for the calls of the
     /// listener in progress on other threads.
     ~IndexedEventTxModel() noexcept override {
-        try {
+        runRelease("IndexedEventTxModel", [this] {
             close();
-        } catch (...) {
-            // The destructor does not throw: the handles are released anyway.
-        }
+        });
     }
 
     /**

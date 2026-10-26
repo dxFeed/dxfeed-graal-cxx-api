@@ -319,7 +319,7 @@ template <typename S> char *createCString(const std::optional<S> &s) {
         return nullptr;
     }
 
-    return createCString(s.value());
+    return createCString(*s);
 }
 
 template <typename It>

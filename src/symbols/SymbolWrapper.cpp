@@ -40,53 +40,47 @@ std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *g
 
 SymbolWrapper::SymbolWrapper(const SymbolWrapper &) noexcept = default;
 SymbolWrapper::SymbolWrapper(SymbolWrapper &&) noexcept = default;
-SymbolWrapper &SymbolWrapper::operator=(const SymbolWrapper &) noexcept = default;
-SymbolWrapper &SymbolWrapper::operator=(SymbolWrapper &&) noexcept = default;
+// The bad_variant_access of the visit of a valueless variant: data_ never is one, it is set only by noexcept functions,
+// where a throwing copy terminates (the same for std::visit in toGraal()).
+SymbolWrapper &SymbolWrapper::operator=(const SymbolWrapper &) noexcept = default; // NOLINT(bugprone-exception-escape)
+SymbolWrapper &SymbolWrapper::operator=(SymbolWrapper &&) noexcept = default;      // NOLINT(bugprone-exception-escape)
 SymbolWrapper::SymbolWrapper() noexcept {
 }
 SymbolWrapper::~SymbolWrapper() noexcept {
 }
 
-SymbolWrapper::SymbolWrapper(const StringSymbol &stringSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const StringSymbol &stringSymbol) noexcept : data_{stringSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper(stringSymbol = " + toStringAny(stringSymbol) + ")");
     }
-
-    data_ = stringSymbol;
 }
 
-SymbolWrapper::SymbolWrapper(const WildcardSymbol &wildcardSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const WildcardSymbol &wildcardSymbol) noexcept : data_{wildcardSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper(wildcardSymbol = " + toStringAny(wildcardSymbol) + ")");
     }
-
-    data_ = wildcardSymbol;
 }
 
-SymbolWrapper::SymbolWrapper(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept
+    : data_{indexedEventSubscriptionSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(
             "SymbolWrapper(indexedEventSubscriptionSymbol = " + toStringAny(indexedEventSubscriptionSymbol) + ")");
     }
-
-    data_ = indexedEventSubscriptionSymbol;
 }
 
-SymbolWrapper::SymbolWrapper(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept
+    : data_{timeSeriesSubscriptionSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper(timeSeriesSubscriptionSymbol = " + toStringAny(timeSeriesSubscriptionSymbol) +
                         ")");
     }
-
-    data_ = timeSeriesSubscriptionSymbol;
 }
 
-SymbolWrapper::SymbolWrapper(const CandleSymbol &candleSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const CandleSymbol &candleSymbol) noexcept : data_{candleSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper(candleSymbol = " + toStringAny(candleSymbol) + ")");
     }
-
-    data_ = candleSymbol;
 }
 
 template void *SymbolWrapper::SymbolListUtils::toGraalList<SymbolWrapper const *>(SymbolWrapper const *,
@@ -162,7 +156,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
     }
 }
 
-void *SymbolWrapper::toGraal() const noexcept {
+void *SymbolWrapper::toGraal() const noexcept { // NOLINT(bugprone-exception-escape): see operator=
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper::toGraal()");
     }
@@ -201,7 +195,9 @@ bool SymbolWrapper::isStringSymbol() const noexcept {
 }
 
 std::string SymbolWrapper::asStringSymbol() const noexcept {
-    return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
+    const auto *stringSymbol = std::get_if<StringSymbol>(&data_);
+
+    return stringSymbol ? stringSymbol->getData() : String::EMPTY;
 }
 
 bool SymbolWrapper::isWildcardSymbol() const noexcept {
@@ -217,9 +213,9 @@ bool SymbolWrapper::isIndexedEventSubscriptionSymbol() const noexcept {
 }
 
 std::optional<IndexedEventSubscriptionSymbol> SymbolWrapper::asIndexedEventSubscriptionSymbol() const noexcept {
-    return isIndexedEventSubscriptionSymbol()
-               ? std::make_optional<IndexedEventSubscriptionSymbol>(std::get<IndexedEventSubscriptionSymbol>(data_))
-               : std::nullopt;
+    const auto *value = std::get_if<IndexedEventSubscriptionSymbol>(&data_);
+
+    return value ? std::make_optional<IndexedEventSubscriptionSymbol>(*value) : std::nullopt;
 }
 
 bool SymbolWrapper::isTimeSeriesSubscriptionSymbol() const noexcept {
@@ -227,9 +223,9 @@ bool SymbolWrapper::isTimeSeriesSubscriptionSymbol() const noexcept {
 }
 
 std::optional<TimeSeriesSubscriptionSymbol> SymbolWrapper::asTimeSeriesSubscriptionSymbol() const noexcept {
-    return isTimeSeriesSubscriptionSymbol()
-               ? std::make_optional<TimeSeriesSubscriptionSymbol>(std::get<TimeSeriesSubscriptionSymbol>(data_))
-               : std::nullopt;
+    const auto *value = std::get_if<TimeSeriesSubscriptionSymbol>(&data_);
+
+    return value ? std::make_optional<TimeSeriesSubscriptionSymbol>(*value) : std::nullopt;
 }
 
 bool SymbolWrapper::isCandleSymbol() const noexcept {
@@ -237,7 +233,9 @@ bool SymbolWrapper::isCandleSymbol() const noexcept {
 }
 
 std::optional<CandleSymbol> SymbolWrapper::asCandleSymbol() const noexcept {
-    return isCandleSymbol() ? std::make_optional<CandleSymbol>(std::get<CandleSymbol>(data_)) : std::nullopt;
+    const auto *value = std::get_if<CandleSymbol>(&data_);
+
+    return value ? std::make_optional<CandleSymbol>(*value) : std::nullopt;
 }
 
 const SymbolWrapper::DataType &SymbolWrapper::getData() const noexcept {

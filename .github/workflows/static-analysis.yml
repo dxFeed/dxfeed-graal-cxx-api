@@ -66,8 +66,8 @@ jobs:
         if: ${{ always() }}
         run: |
           # A header warning comes once per translation unit and with different paths (src/x/../../include/...):
-          # normalize the paths and keep one line per place and check.
-          grep -oE '^[^ :]+:[0-9]+:[0-9]+: warning: .* \[[a-z0-9.,-]+\]$' clang-tidy.log |
+          # normalize the paths and keep one line per place and check. A check of WarningsAsErrors reports an error.
+          grep -oE '^[^ :]+:[0-9]+:[0-9]+: (warning|error): .* \[[a-z0-9.,-]+\]$' clang-tidy.log |
             python3 -c 'import os, sys; [print(os.path.relpath(os.path.normpath(l.split(":", 1)[0])) + ":" + l.split(":", 1)[1], end="") for l in sys.stdin]' |
             sort -u > clang-tidy-warnings.txt || true
           {
@@ -75,7 +75,8 @@ jobs:
             echo
             echo "| Warnings | Check |"
             echo "|---:|---|"
-            grep -oE '\[[a-z0-9.,-]+\]$' clang-tidy-warnings.txt | tr -d '[]' | tr ',' '\n' | sort | uniq -c | sort -rn |
+            grep -oE '\[[a-z0-9.,-]+\]$' clang-tidy-warnings.txt | tr -d '[]' | tr ',' '\n' | grep -v '^-' | sort |
+              uniq -c | sort -rn |
               awk '{print "| " $1 " | `" $2 "` |"}'
           } >> "$GITHUB_STEP_SUMMARY"
 

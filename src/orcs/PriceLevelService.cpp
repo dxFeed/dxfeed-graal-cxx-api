@@ -3,6 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/orcs/PriceLevelService.hpp"
 
+#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/orcs/IsolatedPriceLevelService.hpp"
 
 #include <memory>
@@ -15,11 +16,9 @@ PriceLevelService::PriceLevelService(LockExternalConstructionTag, JavaObjectHand
 }
 
 PriceLevelService::~PriceLevelService() noexcept {
-    try {
+    runRelease("PriceLevelService", [&] {
         close();
-    } catch (...) {
-        // The destructor does not throw: the handle is released anyway.
-    }
+    });
 }
 
 std::shared_ptr<PriceLevelService> PriceLevelService::create(const StringLike &address) {

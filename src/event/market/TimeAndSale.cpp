@@ -264,7 +264,7 @@ const std::string &TimeAndSale::getExchangeSaleConditions() const & noexcept {
         return nulString();
     }
 
-    return data_.exchangeSaleConditions.value();
+    return *data_.exchangeSaleConditions;
 }
 
 const std::optional<std::string> &TimeAndSale::getExchangeSaleConditionsOpt() const & noexcept {
@@ -342,7 +342,7 @@ const std::string &TimeAndSale::getBuyer() const & noexcept {
         return nulString();
     }
 
-    return data_.buyer.value();
+    return *data_.buyer;
 }
 
 const std::optional<std::string> &TimeAndSale::getBuyerOpt() const & noexcept {
@@ -358,7 +358,7 @@ const std::string &TimeAndSale::getSeller() const & noexcept {
         return nulString();
     }
 
-    return data_.seller.value();
+    return *data_.seller;
 }
 
 const std::optional<std::string> &TimeAndSale::getSellerOpt() const & noexcept {

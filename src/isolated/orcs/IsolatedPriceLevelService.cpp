@@ -6,6 +6,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/event/EventSourceWrapper.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
@@ -132,10 +133,9 @@ void freeList(dxfg_symbols_by_order_source_id_map_entry_list_t *list) noexcept {
         return;
     }
 
-    try {
+    runRelease("PriceLevelService", [&] {
         runGraalFunctionAndThrowIfLessThanZero(dxfg_symbols_by_order_source_id_map_entry_list_free, list);
-    } catch (...) {
-    }
+    });
 }
 
 } // namespace

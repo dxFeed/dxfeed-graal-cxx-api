@@ -63,20 +63,16 @@ InstrumentProfileConnection::InstrumentProfileConnection() noexcept
 
 InstrumentProfileConnection::~InstrumentProfileConnection() noexcept {
     if (handle_ && stateChangeListenerHandle_) {
-        try {
+        runRelease("InstrumentProfileConnection", [&] {
             isolated::ipf::live::IsolatedInstrumentProfileConnection::removeStateChangeListener(
                 handle_, stateChangeListenerHandle_);
-        } catch (...) {
-            // Destructors must remain noexcept even if the native isolate is already shutting down.
-        }
+        });
     }
 
     if (handle_) {
-        try {
+        runRelease("InstrumentProfileConnection", [&] {
             isolated::ipf::live::IsolatedInstrumentProfileConnection::close(handle_);
-        } catch (...) {
-            // Destructors must remain noexcept even if the native isolate is already shutting down.
-        }
+        });
     }
 
     ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id_);

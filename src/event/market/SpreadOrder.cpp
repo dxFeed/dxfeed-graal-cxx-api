@@ -271,7 +271,7 @@ const std::string &SpreadOrder::getSpreadSymbol() const & noexcept {
         return nulString();
     }
 
-    return spreadOrderData_.spreadSymbol.value();
+    return *spreadOrderData_.spreadSymbol;
 }
 
 const std::optional<std::string> &SpreadOrder::getSpreadSymbolOpt() const & noexcept {

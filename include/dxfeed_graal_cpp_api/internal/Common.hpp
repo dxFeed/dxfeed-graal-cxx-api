@@ -22,6 +22,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <chrono>
 #include <cmath>
 #include <limits>
+#include <source_location>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -136,21 +137,35 @@ enum class Tristate : std::uint8_t {
 #define DXFCPP_MACRO_UNIQUE_NAME(base) DXFCPP_MACRO_CONCAT(base, __LINE__)
 
 namespace detail {
+// Reports the exception being handled, thrown by the body of DXFCPP_FINALLY, to ErrorManager (not while the library is
+// shutting down: the SDK is not called any more then).
+DXFCPP_EXPORT void reportScopeExitException(const std::source_location &location) noexcept;
+
 template <typename Func> struct OnScopeExit {
     Func func;
+    std::source_location location;
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    OnScopeExit(const Func &f) : func(static_cast<Func &&>(f)) { // NOLINT(*-explicit-constructor)
+    OnScopeExit(const Func &f, // NOLINT(*-explicit-constructor)
+                const std::source_location &sourceLocation = std::source_location::current())
+        : func(static_cast<Func &&>(f)), location{sourceLocation} {
     }
 
     // ReSharper disable once CppNonExplicitConvertingConstructor
-    OnScopeExit(Func &&f) : func(f) { // NOLINT(*-explicit-constructor)
+    OnScopeExit(Func &&f, // NOLINT(*-explicit-constructor)
+                const std::source_location &sourceLocation = std::source_location::current())
+        : func(f), location{sourceLocation} {
     }
 
     OnScopeExit(const OnScopeExit &) = delete;
 
-    ~OnScopeExit() {
-        func();
+    // The body runs in a destructor: an exception of it goes to ErrorManager instead of terminating the process.
+    ~OnScopeExit() noexcept {
+        try {
+            func();
+        } catch (...) {
+            reportScopeExitException(location);
+        }
     }
 };
 } // namespace detail
@@ -282,17 +297,9 @@ inline auto now() {
 }
 
 namespace math {
-/**
- * Returns the largest value that is less than or equal to the algebraic quotient, as Java Math.floorDiv(long, long).
- * floorDiv(INT64_MIN, -1) is INT64_MIN, as in Java.
- *
- * @throws InvalidArgumentException if `y` is 0 (Java throws ArithmeticException).
- */
-static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
-    if (y == 0) {
-        throw InvalidArgumentException("/ by zero");
-    }
-
+namespace detail {
+// floorDiv() for y != 0.
+static constexpr std::int64_t floorDivNonZero(std::int64_t x, std::int64_t y) noexcept {
     // INT64_MIN / -1 overflows (undefined behavior in C++); Java wraps the result to INT64_MIN.
     if (x == std::numeric_limits<std::int64_t>::min() && y == -1) {
         return x;
@@ -308,17 +315,8 @@ static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
     return quotient;
 }
 
-/**
- * Returns the floor modulus `x - floorDiv(x, y) * y` (the sign of the result is the sign of `y`), as Java
- * Math.floorMod(long, long), without the overflow of that expression.
- *
- * @throws InvalidArgumentException if `y` is 0 (Java throws ArithmeticException).
- */
-static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
-    if (y == 0) {
-        throw InvalidArgumentException("/ by zero");
-    }
-
+// floorMod() for y != 0.
+static constexpr std::int64_t floorModNonZero(std::int64_t x, std::int64_t y) noexcept {
     // x % -1 is 0, but INT64_MIN % -1 overflows (undefined behavior in C++).
     if (y == -1) {
         return 0;
@@ -333,6 +331,53 @@ static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
     }
 
     return remainder;
+}
+} // namespace detail
+
+/**
+ * Returns the largest value that is less than or equal to the algebraic quotient, as Java Math.floorDiv(long, long).
+ * floorDiv(INT64_MIN, -1) is INT64_MIN, as in Java.
+ *
+ * @throws InvalidArgumentException if `y` is 0 (Java throws ArithmeticException).
+ */
+static constexpr std::int64_t floorDiv(std::int64_t x, std::int64_t y) {
+    if (y == 0) {
+        throw InvalidArgumentException("/ by zero");
+    }
+
+    return detail::floorDivNonZero(x, y);
+}
+
+/**
+ * floorDiv(x, y) for a constant divisor `y`, not 0: does not throw.
+ */
+template <std::int64_t y>
+    requires(y != 0)
+static constexpr std::int64_t floorDiv(std::int64_t x) noexcept {
+    return detail::floorDivNonZero(x, y);
+}
+
+/**
+ * Returns the floor modulus `x - floorDiv(x, y) * y` (the sign of the result is the sign of `y`), as Java
+ * Math.floorMod(long, long), without the overflow of that expression.
+ *
+ * @throws InvalidArgumentException if `y` is 0 (Java throws ArithmeticException).
+ */
+static constexpr std::int64_t floorMod(std::int64_t x, std::int64_t y) {
+    if (y == 0) {
+        throw InvalidArgumentException("/ by zero");
+    }
+
+    return detail::floorModNonZero(x, y);
+}
+
+/**
+ * floorMod(x, y) for a constant divisor `y`, not 0: does not throw.
+ */
+template <std::int64_t y>
+    requires(y != 0)
+static constexpr std::int64_t floorMod(std::int64_t x) noexcept {
+    return detail::floorModNonZero(x, y);
 }
 
 static const double NaN = std::numeric_limits<double>::quiet_NaN();
@@ -487,8 +532,8 @@ static constexpr std::int64_t getNanosFromMillisAndNanoPart(std::int64_t timeMil
  * @return time measured in milliseconds since epoch.
  * @see ::getNanoPartFromNanos()
  */
-static constexpr std::int64_t getMillisFromNanos(std::int64_t timeNanos) {
-    return math::floorDiv(timeNanos, NANOS_IN_MILLIS);
+static constexpr std::int64_t getMillisFromNanos(std::int64_t timeNanos) noexcept {
+    return math::floorDiv<NANOS_IN_MILLIS>(timeNanos);
 }
 
 /**
@@ -501,8 +546,8 @@ static constexpr std::int64_t getMillisFromNanos(std::int64_t timeNanos) {
  * @return time measured in milliseconds since epoch.
  * @see ::getMillisFromNanos()
  */
-static constexpr std::int32_t getNanoPartFromNanos(std::int64_t timeNanos) {
-    return static_cast<std::int32_t>(math::floorMod(timeNanos, NANOS_IN_MILLIS));
+static constexpr std::int32_t getNanoPartFromNanos(std::int64_t timeNanos) noexcept {
+    return static_cast<std::int32_t>(math::floorMod<NANOS_IN_MILLIS>(timeNanos));
 }
 
 } // namespace time_nanos_util
@@ -527,8 +572,8 @@ static constexpr std::int64_t DAY = 24LL * HOUR;
  * @param timeMillis The timestamp in milliseconds
  * @return a correct number of milliseconds
  */
-static constexpr std::int32_t getMillisFromTime(std::int64_t timeMillis) {
-    return static_cast<std::int32_t>(math::floorMod(timeMillis, SECOND));
+static constexpr std::int32_t getMillisFromTime(std::int64_t timeMillis) noexcept {
+    return static_cast<std::int32_t>(math::floorMod<SECOND>(timeMillis));
 }
 
 /**
@@ -538,7 +583,7 @@ static constexpr std::int32_t getMillisFromTime(std::int64_t timeMillis) {
  * @param timeMillis The timestamp in milliseconds
  * @return a correct number of second
  */
-static constexpr std::int32_t getSecondsFromTime(std::int64_t timeMillis) {
+static constexpr std::int32_t getSecondsFromTime(std::int64_t timeMillis) noexcept {
     if (timeMillis >= 0) {
         return static_cast<std::int32_t>(
             std::min(timeMillis / SECOND, static_cast<std::int64_t>(std::numeric_limits<std::int32_t>::max())));

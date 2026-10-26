@@ -15,8 +15,6 @@
 #include <thread>
 #include <utility>
 
-#include <fmt/format.h>
-
 #ifdef _WIN32
 #    ifndef WIN32_LEAN_AND_MEAN
 #        define WIN32_LEAN_AND_MEAN
@@ -124,7 +122,9 @@ Isolate::IsolateThread::~IsolateThread() noexcept {
 }
 
 std::string Isolate::IsolateThread::toString() const {
-    return fmt::format("IsolateThread{{{}, tid = {}, idx = {}}}", dxfcpp::toString(handle), dxfcpp::toString(tid), idx);
+    // Without fmt (its formatting is not noexcept): the traces of the noexcept functions call it.
+    return "IsolateThread{" + dxfcpp::toString(handle) + ", tid = " + dxfcpp::toString(tid) +
+           ", idx = " + std::to_string(idx) + "}";
 }
 
 Isolate::IsolateThread &Isolate::currentIsolateThread() noexcept {
@@ -408,7 +408,8 @@ void Isolate::shutdown() {
 }
 
 std::string Isolate::toString() const {
-    return fmt::format("Isolate{{{}, current = {}}}", dxfcpp::toString(handle_), currentIsolateThread().toString());
+    // Without fmt, as IsolateThread::toString().
+    return "Isolate{" + dxfcpp::toString(handle_) + ", current = " + currentIsolateThread().toString() + "}";
 }
 
 DXFCPP_END_NAMESPACE

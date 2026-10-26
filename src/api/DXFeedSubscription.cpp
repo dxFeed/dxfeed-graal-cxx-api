@@ -161,7 +161,9 @@ DXFeedSubscription::~DXFeedSubscription() {
     }
 
     if (handle_) {
-        close();
+        runRelease("DXFeedSubscription", [&] {
+            close();
+        });
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)

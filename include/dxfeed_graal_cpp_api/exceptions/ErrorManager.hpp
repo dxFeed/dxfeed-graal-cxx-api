@@ -30,6 +30,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  *   instrument profile connection, a change of a subscription, instrument profiles of a collector, the events of a
  *   model). An exception of that code would otherwise terminate the process, and the caller's thread could not see
  *   it anyway: the callback runs on a thread of the SDK.
+ * - **A release that fails** goes to ErrorManager as well: a destructor or a function that frees the native data of
+ *   the SDK (for example, the destructor of a subscription or of a model that closes it) does not throw. From the
+ *   start of the shutdown of the library (dxfcpp::shutdown(), the exit of the process) a failure of a release is not
+ *   reported: the SDK is being closed or is closed already.
  *
  * ErrorManager passes each error to the handler and keeps the last errors in a journal:
  *

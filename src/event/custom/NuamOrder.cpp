@@ -326,7 +326,7 @@ const std::string &NuamOrder::getClientOrderId() const & noexcept {
         return nulString();
     }
 
-    return nuamOrderData_.clientOrderId.value();
+    return *nuamOrderData_.clientOrderId;
 }
 
 const std::optional<std::string> &NuamOrder::getClientOrderIdOpt() const & noexcept {
@@ -348,7 +348,7 @@ const std::string &NuamOrder::getCustomerAccount() const & noexcept {
         return nulString();
     }
 
-    return nuamOrderData_.customerAccount.value();
+    return *nuamOrderData_.customerAccount;
 }
 
 const std::optional<std::string> &NuamOrder::getCustomerAccountOpt() const & noexcept {
@@ -370,7 +370,7 @@ const std::string &NuamOrder::getCustomerInfo() const & noexcept {
         return nulString();
     }
 
-    return nuamOrderData_.customerInfo.value();
+    return *nuamOrderData_.customerInfo;
 }
 
 const std::optional<std::string> &NuamOrder::getCustomerInfoOpt() const & noexcept {
@@ -392,7 +392,7 @@ const std::string &NuamOrder::getExchangeInfo() const & noexcept {
         return nulString();
     }
 
-    return nuamOrderData_.exchangeInfo.value();
+    return *nuamOrderData_.exchangeInfo;
 }
 
 const std::optional<std::string> &NuamOrder::getExchangeInfoOpt() const & noexcept {

@@ -3,6 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/JavaException.hpp"
 
+#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 
 #include <dxfg_api.h>
@@ -33,7 +34,7 @@ void releaseStackTraceMethodNames(graal_isolatethread_t *thread, dxfg_exception_
 }
 
 void releaseException(void *exceptionHandle) noexcept {
-    try {
+    runRelease("JavaException", [&] {
         runIsolatedThrow(
             [](auto threadHandle, auto *exception) {
                 auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
@@ -42,9 +43,7 @@ void releaseException(void *exceptionHandle) noexcept {
                 dxfg_Exception_release(thread, exception);
             },
             static_cast<dxfg_exception_t *>(exceptionHandle));
-    } catch (...) {
-        // Cleanup must not replace the Java exception that is already being handled.
-    }
+    });
 }
 
 } // namespace

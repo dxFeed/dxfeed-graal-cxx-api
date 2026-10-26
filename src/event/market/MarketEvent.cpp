@@ -58,7 +58,7 @@ const std::string &MarketEvent::getEventSymbol() const & noexcept {
         return nulString();
     }
 
-    return eventSymbol_.value();
+    return *eventSymbol_;
 }
 
 const std::optional<std::string> &MarketEvent::getEventSymbolOpt() const & noexcept {

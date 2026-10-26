@@ -3,9 +3,19 @@
 
 #include "../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
 
+#include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+
+#include <exception>
 
 DXFCPP_BEGIN_NAMESPACE
+
+void detail::reportScopeExitException(const std::source_location &location) noexcept {
+    if (!Isolate::isShuttingDown()) {
+        ErrorManager::reportException("DXFCPP_FINALLY", std::current_exception(), location);
+    }
+}
 
 namespace day_util {
 std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day) {

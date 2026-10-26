@@ -167,7 +167,7 @@ const CandleSymbol &Candle::getEventSymbol() const & noexcept {
         return nulCandleSymbol();
     }
 
-    return eventSymbol_.value();
+    return *eventSymbol_;
 }
 
 const std::optional<CandleSymbol> &Candle::getEventSymbolOpt() const & noexcept {

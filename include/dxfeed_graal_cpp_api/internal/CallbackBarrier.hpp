@@ -44,6 +44,28 @@ void runCallback(const char *component, Body &&body,
     }
 }
 
+/**
+ * Runs a release path that must not throw: a destructor, a deleter, a function that frees native data.
+ *
+ * An exception of the body is reported to ErrorManager. While the library is shutting down (dxfcpp::shutdown(), the
+ * exit of the process) the SDK is not called any more, so an exception then is expected and is not reported.
+ *
+ * @param component The class that releases, for ErrorInfo::component.
+ * @param body The release.
+ * @param location The source location of the release, for ErrorInfo::location.
+ */
+template <typename Body>
+void runRelease(const char *component, Body &&body,
+                const std::source_location &location = std::source_location::current()) noexcept {
+    try {
+        std::forward<Body>(body)();
+    } catch (...) {
+        if (!Isolate::isShuttingDown()) {
+            ErrorManager::reportException(std::string_view{component}, std::current_exception(), location);
+        }
+    }
+}
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

@@ -156,7 +156,7 @@ const std::string &Profile::getDescription() const & noexcept {
         return nulString();
     }
 
-    return data_.description.value();
+    return *data_.description;
 }
 
 const std::optional<std::string> &Profile::getDescriptionOpt() const & noexcept {
@@ -196,7 +196,7 @@ const std::string &Profile::getStatusReason() const & noexcept {
         return nulString();
     }
 
-    return data_.statusReason.value();
+    return *data_.statusReason;
 }
 
 const std::optional<std::string> &Profile::getStatusReasonOpt() const & noexcept {

@@ -382,7 +382,7 @@ const std::string &OptionSale::getExchangeSaleConditions() const & noexcept {
         return nulString();
     }
 
-    return data_.exchangeSaleConditions.value();
+    return *data_.exchangeSaleConditions;
 }
 
 const std::optional<std::string> &OptionSale::getExchangeSaleConditionsOpt() const & noexcept {
@@ -545,7 +545,7 @@ const std::string &OptionSale::getOptionSymbol() const & noexcept {
         return nulString();
     }
 
-    return data_.optionSymbol.value();
+    return *data_.optionSymbol;
 }
 
 const std::optional<std::string> &OptionSale::getOptionSymbolOpt() const & noexcept {

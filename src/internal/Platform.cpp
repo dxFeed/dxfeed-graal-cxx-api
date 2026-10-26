@@ -3,8 +3,6 @@
 
 #include "../../include/dxfeed_graal_cpp_api/internal/Platform.hpp"
 
-#include <fmt/format.h>
-
 #include <sstream>
 
 #if defined(__APPLE__)
@@ -106,7 +104,9 @@ std::size_t Platform::getLogicalCoresCount() noexcept {
 std::string Platform::getPlatformInfo() noexcept {
     const auto cores = getLogicalCoresCount();
 
-    return fmt::format("{} {}({} core{})", getOSName(), getOSArchitecture(), cores, (cores > 1 ? "s" : ""));
+    // Without fmt: its formatting is not noexcept.
+    return getOSName() + " " + getOSArchitecture() + "(" + std::to_string(cores) + " core" + (cores > 1 ? "s" : "") +
+           ")";
 }
 
 DXFCPP_END_NAMESPACE
