@@ -1,0 +1,214 @@
+# How to develop
+
+Notes for the developers of the library: how the code is layered, how to write a callback of the dxFeed Graal SDK,
+and what to change when a new entity or a new event type is added. How to build and run the tests:
+[HOW_TO_BUILD.md](HOW_TO_BUILD.md); how to release: [HOW_TO_RELEASE.md](HOW_TO_RELEASE.md).
+
+## Layers
+
+| Layer | Where | What it does |
+|---|---|---|
+| Public API | `include/dxfeed_graal_cpp_api/<module>/X.hpp`, `src/<module>/X.cpp` | The classes of the users, as in the Java API. They never call `dxfg_*` functions. |
+| Isolated layer | `include/dxfeed_graal_cpp_api/isolated/<module>/IsolatedX.hpp`, `src/isolated/<module>/IsolatedX.cpp` | One C++ function per `dxfg_*` function: checks the handles, calls the SDK in the isolate thread, turns the result into a C++ value or an exception. |
+| Handles | `JavaObjectHandle<T>` (`internal/JavaObjectHandle.hpp`) | Owns a Java object of the SDK and releases it (`dxfg_JavaObjectHandler_release`). |
+| Entities and managers | `EntityManager<T>`, `ApiContext` (`internal/managers`, `internal/context`) | Find a C++ object by its id in a callback. |
+| Graal SDK | `DxFeedGraalNativeSdk` (C API `dxfg_*`) | The Java API compiled by GraalVM Native Image. |
+
+A call goes public class → isolated function → `dxfg_*`. A callback goes the other way: the SDK calls a static
+function of the library on its own thread, the function finds the C++ object by id and calls the listeners of the user.
+
+## Calling the SDK
+
+Write a function of the isolated layer for each `dxfg_*` function, next to the others of its module
+(`src/isolated/api/IsolatedDXFeedSubscription.cpp` is a good example):
+
+```cpp
+void addEventListener(const JavaObjectHandle<DXFeedSubscription> &sub,
+                      const JavaObjectHandle<dxfcpp::DXFeedEventListener> &listener) {
+    if (!sub) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The `sub` handle is invalid");
+    }
+    // ... the same check for `listener`
+
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_addEventListener,
+                                           static_cast<dxfg_subscription_t *>(sub.get()),
+                                           static_cast<dxfg_feed_event_listener_t *>(listener.get()));
+}
+```
+
+- The `runGraalFunctionAndThrow*` helpers of `isolated/IsolatedCommon.hpp` run the function in the isolate thread
+  and throw `JavaException` when the result means an error: `...IfNullptr` for functions that return a pointer,
+  `...IfLessThanZero` and `...IfMinusOne` for the status codes, `...IfMinusMin`, `...IfMinusInf` for numbers. Pick
+  the one that matches what the C API documents for the function.
+- A function that creates a Java object returns `JavaObjectHandle<T>`. Strings and lists that the SDK returns are
+  copied into C++ values and released at once with the matching `dxfg_*_release` function.
+- After `dxfcpp::shutdown()` or at the exit of the process the isolate does not run any more: the `runIsolated*`
+  functions of `internal/Isolate.hpp` return `CEntryPointErrorsEnum::SHUT_DOWN` (or throw it), so a call of the SDK
+  fails instead of hanging.
+
+## Callbacks of the Graal SDK
+
+A callback is a function of the library that the SDK calls: listeners of events, of a state change, of a
+subscription change, of instrument profiles, of a log record, of a model. It runs on a thread of the SDK, so an
+exception thrown out of it terminates the process, and nobody waits for its result.
+
+Rules:
+
+1. **Wrap the whole body in `runCallback`** (`internal/CallbackBarrier.hpp`). It is `noexcept`. It returns at once
+   when the isolate is shutting down (`Isolate::CallbackScope`: the exit of the process and `dxfcpp::shutdown()`
+   wait for the callbacks in progress), and it reports any exception of the body to `ErrorManager` with the name of
+   the component and the source location. Do not swallow exceptions inside the body: catch only what the callback
+   really handles, and let the rest reach `runCallback`.
+2. **Pass an id, not a pointer, as the user data.** The C++ object may be destroyed while the SDK still holds the
+   listener. Register the object in `EntityManager<T>` and pass `Id<T>`; the callback looks it up and does nothing
+   when the object is gone. The managers are never destroyed, so the lookup works at exit as well. A second template
+   argument gives the id its own tag type (`EntityManager<TxModelListenerCommon, TxModelListenerTag>`). A pointer is
+   allowed only to an object that owns the native listener and releases it first, before the rest of its members:
+   releasing a native listener waits for its calls in progress (`IndexedEventTxModelImpl::Listener` in
+   `src/model/IndexedEventTxModel.cpp`).
+3. **Convert events with `EventMapper::fromGraalListSkippingErrors`.** It skips an event that cannot be converted
+   (for example, a type the C++ API does not implement) and reports one error per type with the number of the skipped
+   events, so one bad event does not lose the batch. Do not call a listener with an empty batch. The strict
+   `EventMapper::fromGraalList` is for the synchronous calls, where the caller gets the exception.
+4. **Do not keep pointers to the native data** after the callback returns: copy what you need into C++ values.
+5. **Do not hold a lock of the library while calling the user's code**, and do not release a listener under a lock
+   that its callback takes: the callback may run on another thread and wait for that lock.
+
+The canonical example, without its metrics, is `DXFeedSubscription::Impl::onEvents` (`src/api/DXFeedSubscription.cpp`):
+
+```cpp
+static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
+    runCallback("DXFeedSubscription", [&] {
+        const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
+
+        const auto manager = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>();
+
+        if (const auto sub = manager->getEntity(id)) {
+            auto &&events = EventMapper::fromGraalListSkippingErrors(static_cast<void *>(graalNativeEvents));
+
+            if (events.empty()) {
+                return;
+            }
+
+            sub->onEvent_(events);
+        }
+    });
+}
+```
+
+The native listener is created with the address of the static function and the id (`setEventListenerHandle()` in the
+same file), and its `JavaObjectHandle` is released with the entity. All the callbacks that use `runCallback` are the
+examples to follow: `DXEndpoint`, `DXFeedSubscription`, `ObservableSubscriptionChangeListener`,
+`InstrumentProfileCollector`, `InstrumentProfileConnection`, `Logging`, `IndexedEventTxModel`, `TxModelListener`.
+
+### Errors without a caller
+
+`ErrorManager` (`exceptions/ErrorManager.hpp`, the Doxygen page "Error handling") receives the errors that have no
+caller: the exceptions of the callbacks and of the code the library runs on its own. Code that has a caller throws;
+code that has none calls `runCallback`, or `ErrorManager::report()` / `ErrorManager::reportException()` directly.
+`ErrorManager` never calls the SDK and is never destroyed, so it is safe at exit and after `dxfcpp::shutdown()`.
+
+Destructors, deleters and the release functions of the handles are `noexcept`: they must not throw, and they must
+not call code that can throw without catching it.
+
+## Adding an entity
+
+An entity is a C++ class that wraps a Java object of the SDK (`DXFeedSubscription`, `DXPublisher`,
+`OnDemandService`, `InstrumentProfileCollector`, models). The commit of `IndexedEventTxModel` and
+`SubscriptionController` is a complete example: `git show --stat 35e63475`.
+
+1. **Public header** `include/dxfeed_graal_cpp_api/<module>/X.hpp` and `src/<module>/X.cpp`.
+   - Derive from `SharedEntity` (`entity/SharedEntity.hpp`), or from `RequireMakeShared<X>`, which brings
+     `SharedEntity`, for a class that is created only through `std::make_shared`: its constructor takes a
+     `LockExternalConstructionTag` (see `DXFeedSubscription`).
+   - Mark the class `DXFCPP_EXPORT` and follow the rules next to the macro in `internal/Conf.hpp`: every function
+     defined in a `.cpp` file is exported, and no mutable state in the headers outside exported classes (a static of
+     a template, of an inline function or an inline variable has its own copy in the DLL and in each executable on
+     Windows).
+   - Keep the Java handle in a `JavaObjectHandle<X>` member.
+   - Add the header to the module header, if the module has one (for example `api/ApiModule.hpp`), and to
+     `include/dxfeed_graal_cpp_api/api.hpp`.
+   - If the entity is created from the private handle of `DXFeed` or `DXEndpoint`, add a `friend` declaration there
+     (see `IndexedEventTxModelImpl` in `api/DXFeed.hpp`).
+2. **`JavaObjectHandle<X>`**: forward-declare the class, or a `...Tag` struct for a handle without its own public
+   class (the builder and the listener of a model: `IndexedEventTxModelBuilderTag`,
+   `IndexedEventTxModelListenerTag`), and add `template struct JavaObjectHandle<X>;` in
+   `src/internal/JavaObjectHandle.cpp`, next to the others.
+3. **Isolated layer**: `isolated/<module>/IsolatedX.hpp` and `src/isolated/<module>/IsolatedX.cpp` with one function
+   per `dxfg_*` function the class uses (see [Calling the SDK](#calling-the-sdk)).
+4. **Callbacks**: if the SDK calls the entity back, register it in `EntityManager<X>` when it is created
+   (`registerEntity`), pass its id as the user data and write the callback as in
+   [Callbacks of the Graal SDK](#callbacks-of-the-graal-sdk). `ApiContext::getManager<EntityManager<X>>()` creates
+   the manager on first use; nothing else needs to be registered.
+5. **CMake**: add the `.cpp` files to the source lists of their groups in the root `CMakeLists.txt`
+   (`IsolatedX.cpp` to `dxFeedGraalCxxApi_Isolated_Sources`, `X.cpp` to the list of its module, for example
+   `dxFeedGraalCxxApi_Api_Sources`).
+6. **Tests**: a test file in `tests/<module>/`, added to the list in `tests/CMakeLists.txt`. Test the static and the
+   dynamic library (`-DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON`): a missing `DXFCPP_EXPORT` is a link error only with
+   the DLL.
+7. **Docs**: Doxygen comments in the public header, as in the Java API. When the entity is something the users start
+   with, a sample: `samples/cpp/<group>/<Name>Sample/` with its `CMakeLists.txt`, `dxfeed.system.properties` and
+   `src/main.cpp`, an `add_subdirectory` in the samples block of the root `CMakeLists.txt` and a line in the list of
+   the samples in `README.md`.
+8. **Release note**: see [Release notes](#release-notes).
+
+## Adding an event type
+
+The event types follow the Java API (`com.dxfeed.event`) field by field. The commit of `OrderImbalance` is a complete
+example: `git show --stat 1d92540a` (and `aec2a65e` for `MarketMaker` and `TextConfiguration`).
+
+1. **The event class** `include/dxfeed_graal_cpp_api/event/<module>/X.hpp`, `src/event/<module>/X.cpp`, derived from
+   the same base as in Java (`MarketEvent`, `LastingEvent`, `IndexedEvent`, `TimeSeriesEvent`):
+   - `static const EventTypeEnum &TYPE;`, defined as `EventTypeEnum::X` in the `.cpp` file;
+   - `fromGraal(void *)`, `toGraal()`, `freeGraal(void *)` and the helpers `fillData`, `fillGraalData`,
+     `freeGraalData` (copy every field of `dxfg_x_t` of the SDK in both directions, release the strings);
+   - `assign()` and the `with*` setters, as in the other events;
+   - `toString()` that prints what Java `toString()` prints: the same field names and order, numbers, unset values and
+     quoted strings as in Java (use `TimeFormat::DEFAULT_WITH_MILLIS` for the times);
+   - new enums of the event as their own classes (`AuctionType`, `ImbalanceSide`).
+   Add the header to the module header (for example `event/market/MarketModule.hpp`).
+2. **`EventTypeEnum`**: the constant in `event/EventTypeEnum.hpp` and, in `src/event/EventTypeEnum.cpp`, its
+   definition (the `dxfg_event_clazz_t` value, the name, the class name and the flags `isLasting`, `isIndexed`,
+   `isTimeSeries`, `isMarket` as in Java; `isMarket` is `true` by default) and its entries in all the lists and maps
+   of that file (the list of all types, by name, by class name, by `dxfg_event_clazz_t`).
+3. **`EventMapper`** (`src/event/EventMapper.cpp`): the include and the `case DXFG_EVENT_X` in `fromGraal` and in
+   `freeGraal`. Without them the event is skipped in the callbacks and reported to `ErrorManager`.
+4. **`isolated/IsolatedCommon.hpp`**: the name of `DXFG_EVENT_X` in `toString(dxfg_event_clazz_t)`.
+5. **`OrderSource`**, if the event is published per order source as in Java: its flag in the masks of the sources and
+   in `OrderSource::getEventTypeMask` (`src/event/market/OrderSource.cpp`), otherwise `isPublishable()` throws for the
+   new type; `tests/api/OrderSourceTest.cpp`.
+6. **CMake**: the new `.cpp` files in the source list of their group in the root `CMakeLists.txt` (for example
+   `dxFeedGraalCxxApi_EventMarket_Sources`).
+7. **Tests**:
+   - a test of the class in `tests/api/` (fields, flags, `toString()`), with the expected Java values in
+     `tests/api/EventsJavaParity.hpp` recorded from the Java API, not written by hand;
+   - the row of the type in the table of `tests/event/EventTypeTest.cpp` (the same flags as in `EventTypeEnum`);
+     `tests/event/ConstantsTest.cpp` when the event adds enums;
+   - the round trip through QD: the event in `tests/support/EventFactory.cpp` (and the counts of the types in the
+     comments of `EventFactory.hpp`), the records of the event appended to the golden tapes of `tests/data/tapes`
+     as the Java API writes them, the edge-value tapes written again (both as its README says, with its table
+     updated), `tests/support/TapeSupport.cpp` when the event is published per source, `KNOWN_NULL_STRING_DEFECTS`
+     of `tests/event/EdgeValuesTapeTest.cpp` when a string of the event does not survive the tape as null;
+   - add new test files to `tests/CMakeLists.txt`.
+8. **Docs**: the event in the list of the supported events in `README.md`, Doxygen comments as in the Java API.
+9. **Release note**: see [Release notes](#release-notes).
+
+The SDK may send an event class that this version does not know (a newer SDK): `EventMapper` reads the class as an
+integer and skips such events with a report, so do not cast an unknown value to `dxfg_event_clazz_t` elsewhere.
+
+## Release notes
+
+A user-visible change adds a file to `release-notes/` instead of editing `ReleaseNotes.md`: `release-notes/MDAPI-NNN.md`
+for a ticket, one item of the top level with nested items for the details. The rules are in
+[release-notes/README.md](release-notes/README.md); the release scripts check them.
+
+## Code style
+
+- `clang-format` with `.clang-format` (LLVM based, 4 spaces, 120 columns).
+- `clang-tidy` with `.clang-tidy` finds bugs in CI; it does not check the style.
+- Each file starts with the copyright and `SPDX-License-Identifier: MPL-2.0` lines; headers use `#pragma once`; code
+  is inside `DXFCPP_BEGIN_NAMESPACE` / `DXFCPP_END_NAMESPACE`.
+- Names: classes in `PascalCase`, functions and variables in `camelCase`, data members with a trailing underscore
+  (`handle_`), constants in `UPPER_CASE`.
+- Warnings are errors in CI (`-DDXFCXX_WARNINGS_AS_ERRORS=ON`): build with it locally before a PR.
