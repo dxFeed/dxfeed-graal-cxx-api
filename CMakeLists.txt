@@ -378,6 +378,7 @@ set(dxFeedGraalCxxApi_Exceptions_Sources
         src/exceptions/InvalidArgumentException.cpp
         src/exceptions/GraalException.cpp
         src/exceptions/JavaException.cpp
+        src/exceptions/ErrorManager.cpp
 )
 
 set(dxFeedGraalCxxApi_Executors_Sources

@@ -22,7 +22,12 @@ DXFCPP_BEGIN_NAMESPACE
 struct DXFCPP_EXPORT EventMapper {
     static std::shared_ptr<EventType> fromGraal(void *graalNativeEvent);
 
+    // Throws on an event that cannot be converted (for example, of a type that the C++ API does not implement).
     static std::vector<std::shared_ptr<EventType>> fromGraalList(void *graalNativeList);
+
+    // For the event callbacks of the dxFeed Graal SDK: an event that cannot be converted is skipped, and one error per
+    // event type with the number of the skipped events is reported to ErrorManager.
+    static std::vector<std::shared_ptr<EventType>> fromGraalListSkippingErrors(void *graalNativeList);
 
     static void freeGraal(void *graalNativeEvent);
 

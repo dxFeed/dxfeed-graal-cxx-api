@@ -20,6 +20,13 @@ int main(int argc, char *argv[]) {
         // Disable QD logging.
         // Logging::init();
 
+        // Errors that have no caller go to ErrorManager: for example, an exception thrown by the listener below, which
+        // runs on a thread of the SDK. The default handler writes one line per error to stderr; this one adds a prefix.
+        // The handler is called on the thread of the error and must be thread-safe.
+        ErrorManager::setHandler([](const ErrorInfo &error) {
+            std::cerr << "PrintQuoteEventsSample: " << error.toString() << '\n';
+        });
+
         // Creates a subscription attached to a default DXFeed with a Quote event type.
         // The endpoint address to use is stored in the "dxfeed.system.properties" file.
         const auto subscription = DXFeed::getInstance()->createSubscription(Quote::TYPE);

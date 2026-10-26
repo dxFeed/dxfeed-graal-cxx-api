@@ -31,10 +31,51 @@
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 
+#include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
+
+#include <cstdint>
+#include <cstring>
 #include <dxfg_api.h>
+#include <fmt/format.h>
+#include <map>
 #include <string>
 
 DXFCPP_BEGIN_NAMESPACE
+
+namespace {
+
+// The class of a native event as an integer: a newer SDK can send a class that dxfg_event_clazz_t does not have, and
+// loading such a value as the enum is undefined behaviour.
+std::int32_t eventClass(const dxfg_event_type_t *event) noexcept {
+    std::int32_t clazz{};
+
+    static_assert(sizeof(clazz) == sizeof(event->clazz));
+    std::memcpy(&clazz, &event->clazz, sizeof(clazz));
+
+    return clazz;
+}
+
+std::string eventTypeName(std::int32_t clazz) {
+    switch (clazz) {
+    case DXFG_EVENT_DAILY_CANDLE:
+        return "DAILY_CANDLE";
+    case DXFG_EVENT_CONFIGURATION:
+        return EventTypeEnum::CONFIGURATION.getName();
+    case DXFG_EVENT_ORDER_BASE:
+        return "ORDER_BASE";
+    default:
+        break;
+    }
+
+    if (const auto it = EventTypeEnum::ALL_BY_ID.find(static_cast<std::uint32_t>(clazz));
+        it != EventTypeEnum::ALL_BY_ID.end()) {
+        return it->second.get().getName();
+    }
+
+    return std::to_string(clazz);
+}
+
+} // namespace
 
 std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     if (!graalNativeEvent) {
@@ -42,7 +83,7 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     }
 
     // TODO: implement other types [EN-8235]
-    switch (auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNativeEvent); e->clazz) {
+    switch (auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNativeEvent); eventClass(e)) {
     case DXFG_EVENT_QUOTE:
         return Quote::fromGraal(e);
     case DXFG_EVENT_PROFILE:
@@ -54,7 +95,7 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_CANDLE:
         return Candle::fromGraal(e);
     case DXFG_EVENT_DAILY_CANDLE:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(eventClass(e)));
     case DXFG_EVENT_UNDERLYING:
         return Underlying::fromGraal(e);
     case DXFG_EVENT_THEO_PRICE:
@@ -64,13 +105,13 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_TRADE_ETH:
         return TradeETH::fromGraal(e);
     case DXFG_EVENT_CONFIGURATION:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(eventClass(e)));
     case DXFG_EVENT_MESSAGE:
         return Message::fromGraal(e);
     case DXFG_EVENT_TIME_AND_SALE:
         return TimeAndSale::fromGraal(e);
     case DXFG_EVENT_ORDER_BASE:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(eventClass(e)));
     case DXFG_EVENT_ORDER:
         return Order::fromGraal(e);
     case DXFG_EVENT_ANALYTIC_ORDER:
@@ -98,14 +139,67 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     case DXFG_EVENT_TEXT_CONFIGURATION:
         return TextConfiguration::fromGraal(e);
     default:
-        throw InvalidArgumentException("Unknown event type: " + std::to_string(e->clazz));
+        throw InvalidArgumentException("Unknown event type: " + std::to_string(eventClass(e)));
     }
+}
+
+std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalListSkippingErrors(void *graalNativeList) {
+    const auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
+
+    if (list == nullptr || list->size <= 0) {
+        return {};
+    }
+
+    struct Skipped {
+        std::size_t count{};
+        std::string firstError{};
+    };
+
+    std::vector<std::shared_ptr<EventType>> result{};
+    std::map<std::int32_t, Skipped> skippedByClass{};
+
+    result.reserve(static_cast<std::size_t>(list->size));
+
+    for (std::size_t i = 0; i < static_cast<std::size_t>(list->size); i++) {
+        auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(list->elements[i]);
+
+        if (e == nullptr) {
+            continue;
+        }
+
+        std::string error{};
+
+        try {
+            if (auto event = fromGraal(e)) {
+                result.emplace_back(std::move(event));
+            }
+
+            continue;
+        } catch (const std::exception &ex) {
+            error = ex.what();
+        } catch (...) {
+            error = "unknown exception";
+        }
+
+        auto &skipped = skippedByClass[eventClass(e)];
+
+        if (skipped.count++ == 0) {
+            skipped.firstError = std::move(error);
+        }
+    }
+
+    for (const auto &[clazz, skipped] : skippedByClass) {
+        ErrorManager::report("EventMapper", fmt::format("{} event(s) of type {} skipped: {}", skipped.count,
+                                                        eventTypeName(clazz), skipped.firstError));
+    }
+
+    return result;
 }
 
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) {
     const auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
 
-    if (list->size <= 0) {
+    if (list == nullptr || list->size <= 0) {
         return {};
     }
 
@@ -127,7 +221,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
     }
 
     // TODO: implement other types [EN-8235]
-    switch (auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNativeEvent); e->clazz) {
+    switch (auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNativeEvent); eventClass(e)) {
     case DXFG_EVENT_QUOTE:
         Quote::freeGraal(e);
 
@@ -149,7 +243,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_DAILY_CANDLE:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(eventClass(e)));
 
     case DXFG_EVENT_UNDERLYING:
         Underlying::freeGraal(e);
@@ -168,7 +262,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_CONFIGURATION:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(eventClass(e)));
 
     case DXFG_EVENT_MESSAGE:
         Message::freeGraal(e);
@@ -179,7 +273,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     case DXFG_EVENT_ORDER_BASE:
-        throw InvalidArgumentException("Not implemented event type: " + std::to_string(e->clazz));
+        throw InvalidArgumentException("Not implemented event type: " + std::to_string(eventClass(e)));
 
     case DXFG_EVENT_ORDER:
         Order::freeGraal(e);
@@ -234,7 +328,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
 
         break;
     default:
-        throw InvalidArgumentException("Unknown event type: " + std::to_string(e->clazz));
+        throw InvalidArgumentException("Unknown event type: " + std::to_string(eventClass(e)));
     }
 }
 

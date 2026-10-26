@@ -3,7 +3,8 @@
 
 // The process ends when main() returns while the Graal threads are still running: an endpoint delivers events, or a
 // live instrument profile connection holds its stream open; or after dxfcpp::shutdown(). Each scenario is a separate
-// process, and the test fails by its timeout when the process hangs at exit. Usage: <executable> <scenario>.
+// process, and the test fails by its timeout when the process hangs at exit. The error-manager scenario reports errors
+// at exit. Usage: <executable> <scenario>.
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
@@ -13,6 +14,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <exception>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -355,6 +357,48 @@ int shutdownWithOpenEntities() {
     return 0; // the endpoint and the connection are destroyed after shutdown()
 }
 
+/// Reports errors to ErrorManager after dxfcpp::shutdown(), from the destructor of a static object and from a thread
+/// that keeps reporting while the process ends: ErrorManager is never destroyed and does not use the isolate.
+int errorManagerAtExit() {
+    static auto &handled = *new std::atomic<std::uint64_t>{};
+
+    ErrorManager::setHandler([](const ErrorInfo &) {
+        handled.fetch_add(1);
+    });
+
+    shutdown();
+
+    ErrorManager::report("ExitTest", "after shutdown()");
+    ErrorManager::reportException("ExitTest", std::make_exception_ptr(std::runtime_error("after shutdown()")));
+
+    const auto last = ErrorManager::getLastError();
+
+    if (handled.load() != 2 || !last || last->message != "after shutdown()") {
+        std::fputs("ErrorManager did not handle the errors after shutdown()\n", stderr);
+
+        return 3;
+    }
+
+    struct ReportAtExit {
+        ~ReportAtExit() {
+            ErrorManager::report("ExitTest", "static destructor");
+        }
+    };
+
+    static const ReportAtExit reportAtExit{};
+
+    std::thread{[] {
+        for (;;) {
+            ErrorManager::report("ExitTest", "exit thread");
+            std::this_thread::sleep_for(1ms);
+        }
+    }}.detach();
+
+    std::this_thread::sleep_for(20ms);
+
+    return 0;
+}
+
 } // namespace
 
 int main(int argc, char *argv[]) {
@@ -365,7 +409,7 @@ int main(int argc, char *argv[]) {
 
     if (argc != 2) {
         std::fputs("Usage: <executable> endpoint | late-callback | callback-in-progress | ipf-live | ipf-live-close | "
-                   "shutdown\n",
+                   "shutdown | error-manager\n",
                    stderr);
 
         return 1;
@@ -396,6 +440,10 @@ int main(int argc, char *argv[]) {
 
         if (scenario == "shutdown") {
             return shutdownWithOpenEntities();
+        }
+
+        if (scenario == "error-manager") {
+            return errorManagerAtExit();
         }
     } catch (const std::exception &e) {
         std::fprintf(stderr, "Exception: %s\n", e.what());

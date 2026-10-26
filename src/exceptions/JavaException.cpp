@@ -49,12 +49,34 @@ void releaseException(void *exceptionHandle) noexcept {
 
 } // namespace
 
+struct JavaException::JavaData {
+    std::string className;
+    std::string message;
+    std::string stackTrace;
+};
+
 JavaException::JavaException(const StringLike &message, const StringLike &className, const StringLike &stackTrace)
     : RuntimeException(fmt::format("Java exception of type '{}' was thrown. {}", className.c_str(), message.c_str()),
-                       stackTrace) {
+                       stackTrace),
+      javaData_(std::make_shared<const JavaData>(
+          JavaData{std::string(std::string_view(className)), std::string(std::string_view(message)),
+                   std::string(std::string_view(stackTrace))})) {
 }
 
-JavaException::JavaException(const JavaException &other) noexcept : RuntimeException(other) {
+JavaException::JavaException(const JavaException &other) noexcept
+    : RuntimeException(other), javaData_(other.javaData_) {
+}
+
+const std::string &JavaException::getJavaClassName() const & noexcept {
+    return javaData_->className;
+}
+
+const std::string &JavaException::getJavaMessage() const & noexcept {
+    return javaData_->message;
+}
+
+const std::string &JavaException::getJavaStackTrace() const & noexcept {
+    return javaData_->stackTrace;
 }
 
 JavaException JavaException::create(void *exceptionHandle) {

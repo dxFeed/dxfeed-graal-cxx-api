@@ -6,7 +6,7 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedIndexedEventTxModel.hpp"
 
 #include <dxfg_api.h>
@@ -30,24 +30,16 @@ struct IndexedEventTxModelImpl::Listener {
     // dxfg_event_type_list *events, int32_t isSnapshot, void *userData);
     static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_event_type_list *events, int32_t isSnapshot,
                                  void *userData) {
-        const Isolate::CallbackScope callbackScope{};
+        runCallback("IndexedEventTxModel", [&] {
+            if (!events || !userData) {
+                return;
+            }
 
-        if (!callbackScope) {
-            return;
-        }
-
-        if (!events || !userData) {
-            return;
-        }
-
-        try {
             // The list belongs to the Graal SDK: it is freed after this call.
             const auto f = static_cast<Listener *>(userData)->eventsReceived;
 
-            (*f)(EventMapper::fromGraalList(events), isSnapshot == 1);
-        } catch (...) {
-            // An exception must not cross the Graal SDK.
-        }
+            (*f)(EventMapper::fromGraalListSkippingErrors(events), isSnapshot == 1);
+        });
     }
 };
 

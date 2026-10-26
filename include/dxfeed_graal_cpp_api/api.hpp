@@ -36,7 +36,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "./internal/Timer.hpp"
 #include "./internal/context/ApiContext.hpp"
 #include "./internal/managers/EntityManager.hpp"
-#include "./internal/managers/ErrorHandlingManager.hpp"
 #include "./internal/utils/CmdArgsUtils.hpp"
 #include "./internal/utils/EnumUtils.hpp"
 #include "./internal/utils/StringUtils.hpp"

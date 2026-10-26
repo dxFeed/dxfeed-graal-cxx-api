@@ -58,6 +58,9 @@ set(DXFC_TEST_SOURCES
         event/EventsToStringTest.cpp
         event/EventTypeTest.cpp
         event/TapeRoundTripTest.cpp
+        event/UnsupportedEventTest.cpp
+        exceptions/CallbackBarrierTest.cpp
+        exceptions/ErrorManagerTest.cpp
         exceptions/ExceptionsTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
         glossary/PriceIncrementsTest.cpp
@@ -109,6 +112,12 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     # The argument parsing of the tools is compiled into their tests: the tools are an executable.
     if (DXFC_TEST_SOURCE MATCHES "^tools/")
         target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp)
+    endif ()
+
+    # The test builds the lists of events of the C API of the dxFeed Graal SDK by hand.
+    if (DXFC_TEST_SOURCE STREQUAL "event/UnsupportedEventTest.cpp")
+        target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE
+                $<TARGET_PROPERTY:DxFeedGraalNativeSdk,INTERFACE_INCLUDE_DIRECTORIES>)
     endif ()
     list(APPEND DXFC_TEST_TARGETS ${DXFC_TEST_BASENAME})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
@@ -278,7 +287,7 @@ endif ()
 
 foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
     set(DXFC_EXIT_TARGET dxFeedGraalCxxApi_Exit_${DXFC_EXIT_VARIANT})
-    set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown)
+    set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown error-manager)
 
     # The exit handler of a MinGW DLL runs after the statics of the executable are destroyed, so the checks of the
     # callbacks from such a static do not apply to it.
