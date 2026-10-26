@@ -143,6 +143,18 @@ set(empty_0 " \r\n\n")
 release_add_fragments("${ITEMS}\n${OLD}" empty result error)
 check("an empty fragment" "${error}" "release-notes/MDAPI-1.md is empty")
 
+set(several "MDAPI-1.md")
+
+foreach (case IN ITEMS "2|* A.\n* B.\n" "0|Text.\n" "1|Text.\n* A.\n")
+    string(FIND "${case}" "|" bar)
+    string(SUBSTRING "${case}" 0 ${bar} count)
+    math(EXPR bar "${bar} + 1")
+    string(SUBSTRING "${case}" ${bar} -1 several_0)
+    release_add_fragments("${ITEMS}\n${OLD}" several result error)
+    check("a fragment of ${count} items of the top level" "${error}"
+          "release-notes/MDAPI-1.md has ${count} items of the top level instead of one (put the others in its nested items)")
+endforeach ()
+
 # The places of the version
 set(cmake_text "set(DXFCXX_VERSION \"v8.1.0\" CACHE STRING \"The package version\")\n")
 set(doxyfile_text "PROJECT_NAME = x\nPROJECT_NUMBER         = v8.1.0\n")

@@ -154,6 +154,16 @@ function(release_add_fragments text fragments_var out_text out_error)
             return()
         endif ()
 
+        # One item of the top level per file: the other changes of the ticket are its nested items.
+        string(REGEX MATCHALL "(^|\n)\\* " top_items "${item}")
+        list(LENGTH top_items top_count)
+
+        if (NOT top_count EQUAL 1 OR NOT item MATCHES "^\\* ")
+            list(GET ${fragments_var} ${index} name)
+            set(${out_error} "${RELEASE_FRAGMENTS}/${name} has ${top_count} items of the top level instead of one (put the others in its nested items)" PARENT_SCOPE)
+            return()
+        endif ()
+
         if (items STREQUAL "")
             set(items "${item}")
         else ()

@@ -165,6 +165,16 @@ class FragmentsTest(unittest.TestCase):
         with self.assertRaisesRegex(ReleaseError, "release-notes/MDAPI-1.md is empty"):
             release.add_fragments(notes(ITEMS, OLD), {"MDAPI-1.md": " \r\n\n"})
 
+    def test_one_item_of_the_top_level(self):
+        for text, count in (("* A.\n* B.\n", 2), ("Text.\n", 0), ("Text.\n* A.\n", 1)):
+            with self.subTest(text), self.assertRaisesRegex(
+                    ReleaseError, f"release-notes/MDAPI-1.md has {count} items of the top level instead of one"):
+                release.add_fragments(notes(ITEMS, OLD), {"MDAPI-1.md": text})
+
+    def test_fragments_of_the_repository(self):
+        # The files of release-notes/ are checked by every pull request, not only by the release.
+        release.add_fragments(OLD, release._fragments())
+
     def test_is_fragment(self):
         self.assertEqual([name for name in ("MDAPI-1.md", "README.md", "notes.txt", "x.md") if release.is_fragment(name)],
                          ["MDAPI-1.md", "x.md"])

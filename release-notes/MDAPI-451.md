@@ -9,6 +9,6 @@
     * `MarketEventSymbols::hasAttributes()`, `buildSpreadSymbol()`, `getExchangesByPattern()`, `EXCHANGES_PATTERN` and
       `SUPPORTED_EXCHANGES`. `getExchangesByPattern()` takes an ECMAScript character class (`std::regex`), not the Java
       regular expression syntax.
-* **\[MDAPI-451]\[C++]** `DXFeedSubscription::OPTIMAL_BATCH_LIMIT` and `MAX_BATCH_LIMIT` are `static constexpr`, so
-  code that binds them by reference (`std::max`, the comparison macros of test frameworks) links with the shared
-  library. Their type and values do not change.
+    * `DXFeedSubscription::OPTIMAL_BATCH_LIMIT` and `MAX_BATCH_LIMIT` are `static constexpr`, so code that binds them by
+      reference (`std::max`, the comparison macros of test frameworks) links with the shared library. Their type and
+      values do not change.

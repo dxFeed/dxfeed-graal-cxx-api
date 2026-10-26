@@ -140,6 +140,13 @@ def add_fragments(text, fragments):
         if not item:
             raise ReleaseError(f"{FRAGMENTS}/{name} is empty")
 
+        # One item of the top level per file: the other changes of the ticket are its nested items.
+        top_items = sum(1 for line in item.split("\n") if line.startswith("* "))
+
+        if top_items != 1 or not item.startswith("* "):
+            raise ReleaseError(f"{FRAGMENTS}/{name} has {top_items} items of the top level instead of one "
+                               "(put the others in its nested items)")
+
         items.append(item)
 
     lines = text.split("\n")
