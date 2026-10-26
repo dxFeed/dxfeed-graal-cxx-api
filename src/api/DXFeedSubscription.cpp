@@ -46,8 +46,7 @@ struct DXFeedSubscription::Impl {
                 sw.stop();
 
                 const auto elapsed = sw.elapsedInNanos().count();
-                const auto perEvent = events.empty() ? static_cast<double>(elapsed)
-                                                     : static_cast<double>(elapsed) / static_cast<double>(events.size());
+                const auto perEvent = static_cast<double>(elapsed) / static_cast<double>(events.size());
                 const auto metricsManager = ApiContext::getInstance()->getManager<MetricsManager>();
 
                 metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Batch(ns)", elapsed);

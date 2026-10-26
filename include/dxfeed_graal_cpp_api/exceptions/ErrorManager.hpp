@@ -36,15 +36,17 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * - The default handler writes one line per error to `stderr`. ErrorManager::setHandler() replaces it, a null
  *   handler turns the output off, ErrorManager::resetHandler() restores the default one.
  * - The handler is called on the thread where the error happened, without the locks of ErrorManager held: it may
- *   read the journal and change the handler. Keep it short, it delays the thread that reported the error (for
- *   example, the delivery of the events of a subscription). An exception of the handler is ignored; an error
- *   reported from inside the handler goes to the journal only.
+ *   read the journal and change the handler. Errors of several threads call it at the same time, so it must be
+ *   thread-safe. Keep it short, it delays the thread that reported the error (for example, the delivery of the
+ *   events of a subscription). An exception of the handler is ignored; an error reported from inside the handler
+ *   goes to the journal only.
  * - The journal keeps the last ErrorManager::getCapacity() errors (ErrorManager::DEFAULT_CAPACITY by default):
  *   ErrorManager::getErrors(), ErrorManager::getLastError(), ErrorManager::clearErrors().
  *
  * Events of the types that the C++ API does not implement (for example, EventTypeEnum::CONFIGURATION) are skipped
  * in the event callbacks: the other events of the batch are delivered, and one error per type and batch is reported
- * with the number of the skipped events.
+ * with the number of the skipped events. A listener of a subscription is not called when all the events of a batch
+ * are skipped.
  *
  * ErrorManager works during the exit of the process and after dxfcpp::shutdown(): it is never destroyed and does not
  * call the SDK. The handler can be called at exit from a thread of the SDK while the static objects of the program

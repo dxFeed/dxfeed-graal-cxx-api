@@ -9,6 +9,7 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include "../support/TapeSupport.hpp"
+#include "../support/TestSupport.hpp"
 
 #include <dxfg_api.h>
 
@@ -18,20 +19,9 @@
 #include <vector>
 
 using namespace dxfcpp;
+using dxfcpp::test::ErrorManagerGuard;
 
 namespace {
-
-struct ErrorManagerGuard {
-    ErrorManagerGuard() {
-        ErrorManager::setHandler({});
-        ErrorManager::clearErrors();
-    }
-
-    ~ErrorManagerGuard() {
-        ErrorManager::resetHandler();
-        ErrorManager::clearErrors();
-    }
-};
 
 dxfg_quote_t createQuote(const char *symbol) {
     dxfg_quote_t quote{};

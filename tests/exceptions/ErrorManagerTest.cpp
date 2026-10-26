@@ -4,12 +4,15 @@
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "../support/TestSupport.hpp"
+
 #include <atomic>
 #include <chrono>
 #include <cstdio>
 #include <filesystem>
 #include <fstream>
 #include <functional>
+#include <memory>
 #include <mutex>
 #include <sstream>
 #include <stdexcept>
@@ -24,27 +27,18 @@
 #endif
 
 using namespace dxfcpp;
+using dxfcpp::test::ErrorManagerGuard;
 
 namespace {
 
-// Restores the default state of ErrorManager after a test.
-struct ErrorManagerGuard {
-    ErrorManagerGuard() {
-        ErrorManager::setHandler({});
-        ErrorManager::setCapacity(ErrorManager::DEFAULT_CAPACITY);
-        ErrorManager::clearErrors();
-    }
-
-    ~ErrorManagerGuard() {
-        ErrorManager::resetHandler();
-        ErrorManager::setCapacity(ErrorManager::DEFAULT_CAPACITY);
-        ErrorManager::clearErrors();
-    }
-};
-
-// Redirects the file descriptor of stderr to a file while it lives.
+// Redirects the file descriptor of stderr to a file while it lives. The name of the file is unique, so that runs of
+// the test in parallel (for example, of several builds) do not share it.
 struct StderrCapture {
-    StderrCapture() : path_(std::filesystem::temp_directory_path() / "dxfcpp-ErrorManagerTest-stderr.txt") {
+    StderrCapture()
+        : path_(std::filesystem::temp_directory_path() /
+                ("dxfcpp-ErrorManagerTest-stderr-" +
+                 std::to_string(std::chrono::system_clock::now().time_since_epoch().count()) + "-" +
+                 std::to_string(std::hash<std::thread::id>{}(std::this_thread::get_id())) + ".txt")) {
         std::fflush(stderr);
         file_ = std::fopen(path_.string().c_str(), "w");
         REQUIRE(file_ != nullptr);
@@ -421,5 +415,31 @@ TEST_CASE("ErrorManager is safe for concurrent reports, readers and handler chan
     ErrorManager::setCapacity(16);
 
     CHECK(ordered.load());
+    CHECK(handled.load() > 0);
     CHECK(ErrorManager::getErrors().size() <= 16);
+}
+
+TEST_CASE("The replaced handler is destroyed without the locks of ErrorManager") {
+    ErrorManagerGuard guard{};
+
+    // An object captured by the handler reports an error from its destructor, as a logger of the program might.
+    struct ReportOnDestruction {
+        ~ReportOnDestruction() {
+            ErrorManager::report("Handler", "destroyed");
+        }
+    };
+
+    auto capture = std::make_shared<ReportOnDestruction>();
+
+    ErrorManager::setHandler([capture](const ErrorInfo &) {
+    });
+    capture.reset();
+
+    // Under the lock, the report from the destructor would lock the mutex of ErrorManager again.
+    ErrorManager::setHandler({});
+
+    const auto error = ErrorManager::getLastError();
+
+    REQUIRE(error.has_value());
+    CHECK(error->message == "destroyed");
 }

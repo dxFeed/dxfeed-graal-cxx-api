@@ -12,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <exception>
 #include <source_location>
+#include <string_view>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -38,7 +39,8 @@ void runCallback(const char *component, Body &&body,
     try {
         std::forward<Body>(body)();
     } catch (...) {
-        ErrorManager::reportException(component, std::current_exception(), location);
+        // A view of the name: copying it into a string could throw std::bad_alloc out of this noexcept function.
+        ErrorManager::reportException(std::string_view{component}, std::current_exception(), location);
     }
 }
 

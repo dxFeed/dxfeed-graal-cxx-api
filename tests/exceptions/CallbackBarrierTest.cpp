@@ -7,26 +7,13 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 #include <dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp>
 
+#include "../support/TestSupport.hpp"
+
 #include <stdexcept>
 #include <string>
 
 using namespace dxfcpp;
-
-namespace {
-
-struct ErrorManagerGuard {
-    ErrorManagerGuard() {
-        ErrorManager::setHandler({});
-        ErrorManager::clearErrors();
-    }
-
-    ~ErrorManagerGuard() {
-        ErrorManager::resetHandler();
-        ErrorManager::clearErrors();
-    }
-};
-
-} // namespace
+using dxfcpp::test::ErrorManagerGuard;
 
 TEST_CASE("runCallback reports an exception of the body") {
     ErrorManagerGuard guard{};
