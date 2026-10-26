@@ -159,14 +159,10 @@ DXFC_CAPTURE(candleSymbolNul, CandleSymbol::NUL().toString(), "<null>");
 // The objects whose Java objects are created at the first use of a getter are created without Java.
 DXFC_CAPTURE(lazyEmpty, toString(CFI::EMPTY() && PriceIncrements::EMPTY() && AdditionalUnderlyings::EMPTY()), "true");
 
-// The Graal-dependent constants: the Java objects are created by the first use, here at static initialization. With
-// the DLL on Windows a process that used the Graal isolate hangs at exit (the library tears down the isolate when it is
-// unloaded, after the threads of the isolate were terminated), so these checks are left out there. They are also left
-// out by DXFC_STATIC_INIT_NO_GRAAL: then main() checks that the other constants did not create the isolate.
-#if defined(_WIN32) && defined(DXFCPP_USE_DLLS)
-#    define DXFC_GRAAL_CHECKS 0
-#    define DXFC_GRAAL_CONTROL 0
-#elif defined(DXFC_STATIC_INIT_NO_GRAAL)
+// The Graal-dependent constants: the Java objects are created by the first use, here at static initialization. The
+// process must still exit, with the DLL on Windows as well (a hang fails the test by its timeout). These checks are
+// left out by DXFC_STATIC_INIT_NO_GRAAL: then main() checks that the other constants did not create the isolate.
+#if defined(DXFC_STATIC_INIT_NO_GRAAL)
 #    define DXFC_GRAAL_CHECKS 0
 #    define DXFC_GRAAL_CONTROL 1
 #else

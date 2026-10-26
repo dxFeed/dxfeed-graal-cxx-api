@@ -12,4 +12,3 @@
       from `dxFeedGraalCxxApi.dll`: a program that used them with the DLL failed to link.
     * The release workflow checks the archives: no DLL imports the dynamic C runtime, and a program linked in each of
       the two ways runs in Windows Server Core without the Redistributable.
-    * Known issue: a process that uses `dxFeedGraalCxxApi.dll` on Windows does not exit after `main()` returns.

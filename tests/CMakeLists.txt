@@ -259,6 +259,8 @@ foreach (DXFC_STATIC_INIT_VARIANT IN LISTS DXFC_STATIC_INIT_VARIANTS)
     target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
     set_target_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
     add_test(NAME ${DXFC_STATIC_INIT_TARGET} COMMAND ${DXFC_STATIC_INIT_TARGET})
+    # The process exits after it used the Graal isolate: a hang at exit fails the test.
+    set_tests_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES TIMEOUT 60)
 
     if (DXFCXX_SANITIZERS_ENABLED)
         set_tests_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES ENVIRONMENT
