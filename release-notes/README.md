@@ -5,7 +5,8 @@ so pull requests do not conflict there:
 
 - the file is named by the ticket, `MDAPI-455.md`, or, for a change without a ticket, with a short name such as
   `graal-sdk-3.9.1.md`;
-- it holds the item in the Markdown of `ReleaseNotes.md`, nested items included:
+- it holds one item of the top level in the Markdown of `ReleaseNotes.md`; the other changes of the ticket are its
+  nested items, not more items with the same ticket (the release scripts and their tests reject such a file):
 
   ```markdown
   * **\[MDAPI-455]\[C++]** Short description of the change.
