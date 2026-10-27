@@ -47,8 +47,9 @@ void runCallback(const char *component, Body &&body,
 /**
  * Runs a release path that must not throw: a destructor, a deleter, a function that frees native data.
  *
- * An exception of the body is reported to ErrorManager. While the library is shutting down (dxfcpp::shutdown(), the
- * exit of the process) the SDK is not called any more, so an exception then is expected and is not reported.
+ * An exception of the body is reported to ErrorManager. From the start of the shutdown of the library
+ * (dxfcpp::shutdown(), the exit of the process) an exception is expected, since the SDK is being closed or is closed
+ * already, and is not reported.
  *
  * @param component The class that releases, for ErrorInfo::component.
  * @param body The release.

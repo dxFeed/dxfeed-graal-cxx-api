@@ -1,7 +1,8 @@
 # How to develop
 
-Notes for the developers of the library: how the code is layered, how to write a callback of the dxFeed Graal SDK,
-and what to change when a new entity or a new event type is added. How to build and run the tests:
+Notes for the developers of the library: how the code is layered, what it must do at exit, how to write a callback
+of the dxFeed Graal SDK and a release path, what to change when a new entity or a new event type is added, and how
+to test it. How to build and run the tests:
 [HOW_TO_BUILD.md](HOW_TO_BUILD.md); how to release: [HOW_TO_RELEASE.md](HOW_TO_RELEASE.md).
 
 ## Layers
@@ -45,7 +46,34 @@ void addEventListener(const JavaObjectHandle<DXFeedSubscription> &sub,
   copied into C++ values and released at once with the matching `dxfg_*_release` function.
 - After `dxfcpp::shutdown()` or at the exit of the process the isolate does not run any more: the `runIsolated*`
   functions of `internal/Isolate.hpp` return `CEntryPointErrorsEnum::SHUT_DOWN` (or throw it), so a call of the SDK
-  fails instead of hanging.
+  fails instead of hanging. See [Lifetime and exit](#lifetime-and-exit).
+
+## Lifetime and exit
+
+The library stops in one of two ways: `dxfcpp::shutdown()`, or its exit handler, which is registered when the library
+is first used and runs at the exit of the process. From the start of either, `Isolate::isShuttingDown()` is `true`,
+and:
+
+- a call of the SDK fails with `SHUT_DOWN` instead of running (see [Calling the SDK](#calling-the-sdk));
+- a callback returns at once (`runCallback`), and the calls in progress are waited for (at exit, up to 2 seconds);
+- a failed release is not reported (`runRelease`): it is expected while the SDK is being closed.
+
+What follows for the code of the library:
+
+- **The objects of the library outlive the SDK.** The users destroy their endpoints, subscriptions and models after
+  `shutdown()` and at exit, so a destructor must work when the SDK no longer answers: release through `runRelease`,
+  never wait for the SDK, never assume that a release succeeds.
+- **State that callbacks, destructors or reports use at exit is never destroyed.** `ErrorManager` and the managers of
+  `ApiContext` are created on the heap and never deleted (`static auto &x = *new T{...};`), so they work during the
+  destruction of the static objects and after it. Follow this pattern for new state of this kind instead of a static
+  object with a destructor.
+- **No static object whose destructor calls the SDK.** Its order against the exit handler depends on when it was
+  created, and with the library as a DLL built with MinGW or with the static C runtime the handler runs after the
+  static objects of the executable are destroyed.
+- A new behaviour at exit or after `shutdown()` gets a scenario in the exit tests (see [Tests](#tests)): a failure
+  there is a hang, a crash or a report at exit, which a unit test does not see.
+
+The rules for the users are in the documentation of `dxfcpp::shutdown()` (`system/System.hpp`).
 
 ## Callbacks of the Graal SDK
 
@@ -152,6 +180,11 @@ An entity is a C++ class that wraps a Java object of the SDK (`DXFeedSubscriptio
      defined in a `.cpp` file is exported, and no mutable state in the headers outside exported classes (a static of
      a template, of an inline function or an inline variable has its own copy in the DLL and in each executable on
      Windows).
+   - Code defined in a public header (a template, an inline function, such as the destructors of the models) is
+     compiled into the executable of the user, so it may call only exported functions and the members of exported
+     classes: the destructors of the models call `runRelease`, which calls `Isolate::isShuttingDown()` and
+     `ErrorManager`, both exported. A call of a function that is not exported links with the static library and
+     fails only with the DLL on Windows.
    - Keep the Java handle in a `JavaObjectHandle<X>` member.
    - Add the header to the module header, if the module has one (for example `api/ApiModule.hpp`), and to
      `include/dxfeed_graal_cpp_api/api.hpp`.
@@ -223,6 +256,35 @@ example: `git show --stat 1d92540a` (and `aec2a65e` for `MarketMaker` and `TextC
 The SDK may send an event class that this version does not know (a newer SDK): `EventMapper` reads the class as an
 integer and skips such events with a report, so do not cast an unknown value to `dxfg_event_clazz_t` elsewhere.
 
+## Tests
+
+The unit tests use doctest. Each file in `tests/<module>/` is listed in `DXFC_TEST_SOURCES` of `tests/CMakeLists.txt`
+and builds its own executable, `dxFeedGraalCxxApi_<module>_<Name>`. A fix starts with a test that fails without it.
+
+- **Support** (`tests/support/TestSupport.hpp`):
+  - `LocalHubFixture`: a `LOCAL_HUB` endpoint with an in-place executor; `publishAndProcess()` delivers the published
+    events to the listeners of the feed before it returns. No network, no waiting.
+  - `waitUntil()` for the work of other threads.
+  - `LoopbackTcpServer` and `findFreeLoopbackPort()` for a connection without the internet.
+  - `ErrorManagerGuard`: turns the output of `ErrorManager` off and clears its journal for the test, then restores
+    the defaults. Use it in every test that expects a reported error, and check the error by `getLastError()` or
+    `getErrors()`.
+  - `EventFactory` and `TapeSupport` for the round trip of the events through QD (see
+    [Adding an event type](#adding-an-event-type)).
+- **Process tests** check what a unit test cannot: a hang, a crash or a report at the exit of the process.
+  - `tests/exit/ExitTest.cpp`: one scenario per behaviour at exit or after `dxfcpp::shutdown()`. A scenario is a
+    function that returns the exit code (0 when it passes), a branch in `main()` and a name in `DXFC_EXIT_SCENARIOS`.
+    Each scenario runs with the static and the shared library; a hang fails it by its timeout.
+  - `tests/static-init/`: the constants of the library read from the static initializers of the test, which run
+    before those of a statically linked library (with and without the Graal SDK, and with the DLL).
+- **Network tests** (`tests/network/`) run only with `-DDXFCXX_ENABLE_NETWORK_TESTS=ON` and have the label `network`.
+  The other tests do not use the network.
+- **Sanitizers**: build options and the canary tests are in [HOW_TO_BUILD.md](HOW_TO_BUILD.md#sanitizers). Add a
+  suppression to `tests/sanitizers/*.supp` only for a report inside the Graal SDK, with a comment that says why.
+- **Do not depend on one compiler.** For example, `std::source_location::current()` as a default argument gives the
+  first line of a call that spans several lines with GCC and MSVC and the last one with Clang: compare such a line with
+  a range, or write the call on one line.
+
 ## Release notes
 
 A user-visible change adds a file to `release-notes/` instead of editing `ReleaseNotes.md`: `release-notes/MDAPI-NNN.md`
@@ -238,3 +300,7 @@ for a ticket, one item of the top level with nested items for the details. The r
 - Names: classes in `PascalCase`, functions and variables in `camelCase`, data members with a trailing underscore
   (`handle_`), constants in `UPPER_CASE`.
 - Warnings are errors in CI (`-DDXFCXX_WARNINGS_AS_ERRORS=ON`): build with it locally before a PR.
+- CI builds with MSVC, clang-cl, AppleClang, Clang and GCC (`.github/ci/build-matrix.json`), and each compiler has
+  warnings of its own: for example, GCC reports a constructor parameter that shadows a member (`-Wshadow`), and MSVC
+  and Clang may stay silent on the same code.
+  Before a PR, build and run the tests with at least one compiler besides your usual one.
