@@ -510,7 +510,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     Role role_ = Role::FEED;
     std::string name_{};
     JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_{};
-    SimpleHandler<void(State, State)> onStateChange_{};
+    SimpleHandler<void(State, State)> onStateChange_{"DXEndpoint"};
 
     // Throws:
     //   - std::bad_alloc if it was not possible to allocate the required amount of memory

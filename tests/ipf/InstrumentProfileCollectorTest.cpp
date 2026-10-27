@@ -42,3 +42,39 @@ TEST_CASE("InstrumentProfileCollector gives different ids to the update listener
     collector->removeUpdateListener(first);
     collector->removeUpdateListener(second);
 }
+
+// MDAPI-441: the collector calls its listeners without holding its lock, so a listener can remove itself.
+TEST_CASE("A listener of InstrumentProfileCollector can remove itself") {
+    const auto collector = InstrumentProfileCollector::create();
+    std::atomic<std::size_t> listenerId{};
+    std::atomic<bool> removed{false};
+
+    listenerId = collector->addUpdateListener([&](const std::vector<std::shared_ptr<InstrumentProfile>> &) {
+        if (!removed.exchange(true)) {
+            collector->removeUpdateListener(listenerId.load());
+        }
+    });
+
+    const auto profile = InstrumentProfile::create();
+
+    profile->setType("STOCK");
+    profile->setSymbol("AAPL");
+    collector->updateInstrumentProfile(profile);
+
+    CHECK(test::waitUntil([&] {
+        return removed.load();
+    }));
+
+    // The collector still works: a new listener gets the profiles.
+    std::atomic<int> otherCalls{};
+
+    const auto other = collector->addUpdateListener([&](const std::vector<std::shared_ptr<InstrumentProfile>> &) {
+        ++otherCalls;
+    });
+
+    CHECK(test::waitUntil([&] {
+        return otherCalls > 0;
+    }));
+
+    collector->removeUpdateListener(other);
+}

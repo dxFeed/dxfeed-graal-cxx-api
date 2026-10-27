@@ -233,6 +233,10 @@ Isolate::CallbackScope::operator bool() const noexcept {
     return active_;
 }
 
+bool Isolate::isInCallback() noexcept {
+    return threadCallbacksInProgress > 0;
+}
+
 Isolate::Isolate() noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode

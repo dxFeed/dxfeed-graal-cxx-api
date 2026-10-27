@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <atomic>
+#include <future>
 #include <random>
 #include <string>
 #include <thread>
@@ -495,6 +496,45 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestCloseFromListener") {
     std::this_thread::sleep_for(200ms);
 
     REQUIRE_EQ(calls.load(), 1);
+}
+
+// MDAPI-441: close() on another thread returns after the listener call in progress ends.
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestCloseWaitsForListenerCallInProgress") {
+    std::promise<void> entered{};
+    std::promise<void> release{};
+    auto releaseFuture = release.get_future().share();
+    std::atomic<bool> enteredOnce{false};
+    std::atomic<bool> callEnded{false};
+
+    auto model = createBuilder()
+                     ->withAggregationPeriod(50ms)
+                     ->withListener([&](const auto &, const auto &) {
+                         if (!enteredOnce.exchange(true)) {
+                             entered.set_value();
+                             releaseFuture.wait();
+                             callEnded = true;
+                         }
+                     })
+                     ->build();
+
+    publishAndProcess(createOrder(0, Side::BUY, 1, 1, 0));
+    REQUIRE(entered.get_future().wait_for(5s) == std::future_status::ready);
+
+    std::atomic<bool> closeReturned{false};
+    std::atomic<bool> endedBeforeCloseReturned{false};
+    std::thread closer{[&] {
+        model->close();
+        endedBeforeCloseReturned = callEnded.load();
+        closeReturned = true;
+    }};
+
+    std::this_thread::sleep_for(100ms);
+    CHECK_FALSE(closeReturned.load());
+
+    release.set_value();
+    closer.join();
+
+    CHECK(endedBeforeCloseReturned.load());
 }
 
 // A new snapshot of a source (after a reconnection) clears the orders of that source from the book.

@@ -35,7 +35,7 @@ std::string Logging::levelToString(Level level) {
 
 SimpleHandler<void(Logging::Level, std::int64_t /*timestamp*/, const std::string & /*threadName*/,
                    std::int64_t /*threadId*/, const std::string & /*loggerName*/, const std::string & /*message*/)>
-    Logging::handler_{};
+    Logging::handler_{"Logging"};
 
 struct Logging::Impl {
     static JavaObjectHandle<ListenerTag> listenerHandle;

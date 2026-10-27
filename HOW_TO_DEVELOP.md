@@ -110,6 +110,11 @@ Rules:
 4. **Do not keep pointers to the native data** after the callback returns: copy what you need into C++ values.
 5. **Do not hold a lock of the library while calling the user's code**, and do not release a listener under a lock
    that its callback takes: the callback may run on another thread and wait for that lock.
+6. **Call the user's listeners through `SimpleHandler`** (`internal/Handler.hpp`). It calls them on the current
+   thread, outside its lock, reports an exception of each listener to `ErrorManager` with the component given to its
+   constructor, and its `remove()` waits for the call in progress on another thread. A wait of your own for a call in
+   progress (as `MarketDepthModel::close()` does) must be skipped when `ListenerCallScope::isActive()`: from a listener
+   or a callback of the library it would deadlock.
 
 The canonical example, without its metrics, is `DXFeedSubscription::Impl::onEvents` (`src/api/DXFeedSubscription.cpp`):
 
