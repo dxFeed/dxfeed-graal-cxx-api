@@ -142,7 +142,7 @@ const std::string &TextMessage::getEventSymbol() const & noexcept {
         return nulString();
     }
 
-    return eventSymbol_.value();
+    return *eventSymbol_;
 }
 
 const std::optional<std::string> &TextMessage::getEventSymbolOpt() const & noexcept {

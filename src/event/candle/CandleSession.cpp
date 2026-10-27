@@ -156,11 +156,11 @@ std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol)
     }
 
     // As getAttributeForSymbol() (Java Boolean.parseBoolean): only "true" in any case is the regular session.
-    if (!iEquals(a.value(), "true")) {
+    if (!iEquals(*a, "true")) {
         return candle::removeDefaultAttribute(symbol, CandleSession::ATTRIBUTE_KEY, DEFAULT.toString());
     }
 
-    if (a.value() != REGULAR.toString()) {
+    if (*a != REGULAR.toString()) {
         return MarketEventSymbols::changeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY, REGULAR.toString());
     }
 

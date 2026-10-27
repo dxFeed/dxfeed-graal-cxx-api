@@ -291,7 +291,7 @@ Quote &Quote::withSequence(std::int32_t sequence) {
 }
 
 std::int64_t Quote::getTime() const noexcept {
-    return math::floorDiv(std::max(data_.bidTime, data_.askTime), 1000LL) * 1000LL +
+    return math::floorDiv<1000LL>(std::max(data_.bidTime, data_.askTime)) * 1000LL +
            shr(data_.timeMillisSequence, MILLISECONDS_SHIFT);
 }
 

@@ -68,7 +68,9 @@ EventSourceWrapper EventSourceWrapper::fromGraal(void *graalNative) {
     }
 }
 
-void *EventSourceWrapper::toGraal() const noexcept {
+// The bad_variant_access of std::visit of a valueless variant: data_ never is one, it is set only by noexcept
+// functions, where a throwing copy terminates.
+void *EventSourceWrapper::toGraal() const noexcept { // NOLINT(bugprone-exception-escape)
     return std::visit(
         [](const auto &eventSource) {
             return eventSource.toGraal();
@@ -108,12 +110,15 @@ bool EventSourceWrapper::isOrderSource() const noexcept {
 }
 
 std::optional<IndexedEventSource> EventSourceWrapper::asIndexedEventSource() const noexcept {
-    return isIndexedEventSource() ? std::make_optional<IndexedEventSource>(std::get<IndexedEventSource>(data_))
-                                  : std::nullopt;
+    const auto *value = std::get_if<IndexedEventSource>(&data_);
+
+    return value ? std::make_optional<IndexedEventSource>(*value) : std::nullopt;
 }
 
 std::optional<OrderSource> EventSourceWrapper::asOrderSource() const noexcept {
-    return isOrderSource() ? std::make_optional<OrderSource>(std::get<OrderSource>(data_)) : std::nullopt;
+    const auto *value = std::get_if<OrderSource>(&data_);
+
+    return value ? std::make_optional<OrderSource>(*value) : std::nullopt;
 }
 
 const EventSourceWrapper::DataType &EventSourceWrapper::getData() const noexcept {

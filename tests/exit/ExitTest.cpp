@@ -7,6 +7,7 @@
 // at exit. Usage: <executable> <scenario>.
 
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include <dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp>
 
 #include <atomic>
 #include <chrono>
@@ -399,6 +400,40 @@ int errorManagerAtExit() {
     return 0;
 }
 
+/// Releases after dxfcpp::shutdown() (a model closed by its destructor, runRelease, DXFCPP_FINALLY) report nothing,
+/// even when they fail: the library is shutting down.
+int releaseAfterShutdown() {
+    static auto &handled = *new std::atomic<std::uint64_t>{};
+
+    ErrorManager::setHandler([](const ErrorInfo &) {
+        handled.fetch_add(1);
+    });
+
+    auto endpoint = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);
+    auto model = IndexedTxModel<Order>::newBuilder()->withSymbol("EXIT_TEST")->withFeed(endpoint->getFeed())->build();
+
+    shutdown();
+
+    model.reset();
+    runRelease("ExitTest", [] {
+        throw std::runtime_error("release after shutdown()");
+    });
+
+    {
+        DXFCPP_FINALLY([] {
+            throw std::runtime_error("finally after shutdown()");
+        });
+    }
+
+    if (handled.load() != 0 || ErrorManager::getLastError()) {
+        std::fputs("A release after shutdown() was reported to ErrorManager\n", stderr);
+
+        return 3;
+    }
+
+    return 0;
+}
+
 } // namespace
 
 int main(int argc, char *argv[]) {
@@ -409,7 +444,7 @@ int main(int argc, char *argv[]) {
 
     if (argc != 2) {
         std::fputs("Usage: <executable> endpoint | late-callback | callback-in-progress | ipf-live | ipf-live-close | "
-                   "shutdown | error-manager\n",
+                   "shutdown | error-manager | release-after-shutdown\n",
                    stderr);
 
         return 1;
@@ -444,6 +479,10 @@ int main(int argc, char *argv[]) {
 
         if (scenario == "error-manager") {
             return errorManagerAtExit();
+        }
+
+        if (scenario == "release-after-shutdown") {
+            return releaseAfterShutdown();
         }
     } catch (const std::exception &e) {
         std::fprintf(stderr, "Exception: %s\n", e.what());

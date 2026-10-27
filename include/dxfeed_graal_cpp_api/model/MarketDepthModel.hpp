@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/market/Order.hpp"
 #include "../event/market/OrderBase.hpp"
+#include "../internal/CallbackBarrier.hpp"
 #include "../internal/Timer.hpp"
 #include "./IndexedTxModel.hpp"
 #include "./MarketDepthModelListener.hpp"
@@ -739,8 +740,10 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         listener_ = builder->listener_;
     }
 
-    ~MarketDepthModel() override {
-        close();
+    ~MarketDepthModel() noexcept override {
+        runRelease("MarketDepthModel", [this] {
+            close();
+        });
     }
 
     /**

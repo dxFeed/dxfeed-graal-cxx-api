@@ -52,8 +52,11 @@ void checkSameConstants(std::span<const std::reference_wrapper<const T>> values,
     }
 }
 
-// An Enum: the names, the collection of the elements and the lookup by code.
+// An Enum: the names, the collection of the elements and the lookup by code. A code without an element gives the
+// element with code 0, which every Enum has: valueOf() does not throw (the getters of the events are noexcept).
 template <typename T> void checkEnum(const std::vector<Element<T>> &expected) {
+    static_assert(noexcept(T::valueOf(0)));
+
     checkSameConstants<T>(T::ALL, expected);
 
     std::set<typename T::CodeType> codes{};
@@ -68,6 +71,11 @@ template <typename T> void checkEnum(const std::vector<Element<T>> &expected) {
     }
 
     CHECK(codes.size() == expected.size());
+    REQUIRE(codes.contains(typename T::CodeType{}));
+
+    const auto &zero = T::valueOf(0);
+
+    CHECK(&T::valueOf(*codes.rbegin() + 1) == &zero);
 }
 
 } // namespace

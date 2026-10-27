@@ -10,6 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventTypeEnum.hpp"
 #include "../event/TimeSeriesEvent.hpp"
+#include "../internal/CallbackBarrier.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "./TxModelListener.hpp"
@@ -346,7 +347,9 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
 
     /// Calls @ref TimeSeriesTxModel::close "close" method and destructs this model.
     ~TimeSeriesTxModel() noexcept override {
-        close();
+        runRelease("TimeSeriesTxModel", [this] {
+            close();
+        });
     }
 
     /**

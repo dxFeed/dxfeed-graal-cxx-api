@@ -169,7 +169,7 @@ std::optional<std::string> MarketEventSymbols::getAttributeInternal(const std::s
 
         auto j = getNextKeyInternal(symbol, i);
 
-        if (key == currentKey.value()) {
+        if (key == *currentKey) {
             return getValueInternal(symbol, i, j);
         }
 
@@ -196,7 +196,7 @@ std::string MarketEventSymbols::removeAttributeInternal(std::string symbol, std:
 
         auto j = getNextKeyInternal(symbol, i);
 
-        if (key == currentKey.value()) {
+        if (key == *currentKey) {
             symbol = dropKeyAndValueInternal(symbol, lengthWithoutAttributes, i, j);
         } else {
             i = j;
@@ -224,7 +224,7 @@ std::string MarketEventSymbols::addAttributeInternal(std::string symbol, std::si
 
         const auto j = getNextKeyInternal(symbol, i);
 
-        if (const auto cmp = currentKey.value().compare(key); cmp == 0) {
+        if (const auto cmp = currentKey->compare(key); cmp == 0) {
             if (added) {
                 // drop, since we've already added this key
                 symbol = dropKeyAndValueInternal(symbol, lengthWithoutAttributes, i, j);

@@ -10,9 +10,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./Common.hpp"
 
 #include <cstdint>
+#include <exception>
 #include <functional>
 #include <span>
-#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -26,7 +26,7 @@ DXFCPP_BEGIN_NAMESPACE
  * of global variables.
  *
  * @tparam Child The enum type: declares `static const std::span<const std::reference_wrapper<const Child>> ALL`,
- * all elements of the enum.
+ * all elements of the enum, one of them with code `0` (the default of the bit field of an event).
  * @tparam Code The type of the element code.
  */
 template <typename Child, typename Code> struct Enum {
@@ -114,10 +114,10 @@ template <typename Child, typename Code> struct Enum {
      * Returns enum element by integer code bit pattern.
      *
      * @param code integer code.
-     * @return enum element; the element with code `0` when no element has the specified code.
-     * @throws std::out_of_range if no element has the specified code or code `0`.
+     * @return enum element; the element with code `0` when no element has the specified code, as the Java API reads
+     * the bit fields of the events.
      */
-    template <Integral OtherCodeType> static const Child &valueOf(OtherCodeType code) {
+    template <Integral OtherCodeType> static const Child &valueOf(OtherCodeType code) noexcept {
         if (const auto *found = find(convertToInnerCodeType(code))) {
             return *found;
         }
@@ -126,7 +126,8 @@ template <typename Child, typename Code> struct Enum {
             return *found;
         }
 
-        throw std::out_of_range("Enum::valueOf: unknown code");
+        // Unreachable: every enum has an element with code 0 (tests/event/ConstantsTest.cpp checks it).
+        std::terminate();
     }
 
     private:

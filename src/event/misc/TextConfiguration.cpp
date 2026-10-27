@@ -141,7 +141,7 @@ const std::string &TextConfiguration::getEventSymbol() const & noexcept {
         return nulString();
     }
 
-    return eventSymbol_.value();
+    return *eventSymbol_;
 }
 
 const std::optional<std::string> &TextConfiguration::getEventSymbolOpt() const & noexcept {
@@ -238,7 +238,7 @@ const std::string &TextConfiguration::getText() const & noexcept {
         return nulString();
     }
 
-    return text_.value();
+    return *text_;
 }
 
 const std::optional<std::string> &TextConfiguration::getTextOpt() const & noexcept {

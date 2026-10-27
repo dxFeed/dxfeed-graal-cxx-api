@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/market/OrderSource.hpp"
+#include "../internal/CallbackBarrier.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "./TxModelListener.hpp"
 
@@ -393,7 +394,9 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
 
     /// Calls @ref IndexedTxModel::close "close" method and destructs this model.
     ~IndexedTxModel() noexcept override {
-        close();
+        runRelease("IndexedTxModel", [this] {
+            close();
+        });
     }
 
     /**

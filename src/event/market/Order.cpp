@@ -271,7 +271,7 @@ const std::string &Order::getMarketMaker() const & noexcept {
         return nulString();
     }
 
-    return orderData_.marketMaker.value();
+    return *orderData_.marketMaker;
 }
 
 const std::optional<std::string> &Order::getMarketMakerOpt() const & noexcept {

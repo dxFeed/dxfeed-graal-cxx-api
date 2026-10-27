@@ -497,19 +497,15 @@ DXEndpoint::~DXEndpoint() noexcept {
     }
 
     if (handle_ && stateChangeListenerHandle_) {
-        try {
+        runRelease("DXEndpoint", [&] {
             isolated::api::IsolatedDXEndpoint::removeStateChangeListener(handle_, stateChangeListenerHandle_);
-        } catch (...) {
-            // Destructors must not propagate errors during process shutdown.
-        }
+        });
     }
 
     if (handle_) {
-        try {
+        runRelease("DXEndpoint", [&] {
             isolated::api::IsolatedDXEndpoint::close(handle_);
-        } catch (...) {
-            // Destructors must not propagate errors during process shutdown.
-        }
+        });
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)

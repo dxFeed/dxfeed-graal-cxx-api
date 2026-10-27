@@ -14,6 +14,9 @@
       delivery: the event is skipped, the other events of the batch are delivered, and one error per type and batch is
       reported with the number of the skipped events. A listener of a subscription is not called for a batch whose
       events are all skipped.
+    * The destructors and the functions that free the native data of the SDK no longer throw: a failure of them (for
+      example, of the `close()` that the destructors of `DXFeedSubscription` and of the models call) goes to
+      `ErrorManager`, except while the library is shutting down.
     * `JavaException` got `getJavaClassName()`, `getJavaMessage()` and `getJavaStackTrace()`.
     * **\[BREAKING]** Removed `ErrorHandlingManager` and `Error` (`internal/managers/ErrorHandlingManager.hpp`): they
       were not used. Use `ErrorManager`.

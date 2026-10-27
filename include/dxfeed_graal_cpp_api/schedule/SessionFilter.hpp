@@ -118,7 +118,7 @@ struct DXFCPP_EXPORT SessionFilter final {
      * @return `true` if specified session is accepted
      */
     template <typename Session> bool accept(Session session) const noexcept {
-        return (!type_ || type_.value() == session.getType()) && (!trading_ || trading_.value() == session.isTrading());
+        return (!type_ || *type_ == session.getType()) && (!trading_ || *trading_ == session.isTrading());
     }
 
     bool operator==(const SessionFilter &sessionFilter) const noexcept;
@@ -141,11 +141,11 @@ template <> struct std::hash<dxfcpp::SessionFilter> {
         std::size_t result = 0;
 
         if (sessionFilter.getType()) {
-            dxfcpp::hashCombine(result, sessionFilter.getType().value());
+            dxfcpp::hashCombine(result, *sessionFilter.getType());
         }
 
         if (sessionFilter.getTrading()) {
-            dxfcpp::hashCombine(result, sessionFilter.getTrading().value());
+            dxfcpp::hashCombine(result, *sessionFilter.getTrading());
         }
 
         return result;

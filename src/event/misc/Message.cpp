@@ -133,7 +133,7 @@ const std::string &Message::getEventSymbol() const & noexcept {
         return nulString();
     }
 
-    return eventSymbol_.value();
+    return *eventSymbol_;
 }
 
 const std::optional<std::string> &Message::getEventSymbolOpt() const & noexcept {
