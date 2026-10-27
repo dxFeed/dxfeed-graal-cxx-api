@@ -61,7 +61,7 @@ getLastEventIfSubscribed(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &fee
 
     auto graalSymbol = symbol.toGraalUnique();
 
-    const auto e = static_cast<void *>(runGraalFunctionAndThrowIfNullptr(
+    const auto e = static_cast<void *>(runGraalFunctionNullableOrThrow(
         dxfg_DXFeed_getLastEventIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
         static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get())));
 
@@ -87,7 +87,7 @@ std::vector<std::shared_ptr<EventType>> getIndexedEventsIfSubscribed(const JavaO
 
     auto graalSymbol = symbol.toGraalUnique();
 
-    const auto list = static_cast<void *>(runGraalFunctionAndThrowIfNullptr(
+    const auto list = static_cast<void *>(runGraalFunctionNullableOrThrow(
         dxfg_DXFeed_getIndexedEventsIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
         static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get()),
         source.toString().c_str()));
@@ -115,9 +115,9 @@ std::vector<std::shared_ptr<EventType>> getTimeSeriesIfSubscribed(const JavaObje
     auto graalSymbol = symbol.toGraalUnique();
 
     const auto list = static_cast<void *>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_DXFeed_getTimeSeriesIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
-                                          static_cast<dxfg_event_clazz_t>(eventType.getId()),
-                                          static_cast<dxfg_symbol_t *>(graalSymbol.get()), fromTime, toTime));
+        runGraalFunctionNullableOrThrow(dxfg_DXFeed_getTimeSeriesIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
+                                        static_cast<dxfg_event_clazz_t>(eventType.getId()),
+                                        static_cast<dxfg_symbol_t *>(graalSymbol.get()), fromTime, toTime));
 
     auto u = event::IsolatedEventTypeList::toUnique(list);
 

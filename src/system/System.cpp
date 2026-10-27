@@ -5,6 +5,7 @@
 
 #include "../../include/dxfeed_graal_c_api/api.h"
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 
 #include <dxfg_api.h>
 #include <string>
@@ -16,6 +17,19 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
+namespace isolated {
+bool setSystemProperty(graal_isolatethread_t *thread, const char *key, const char *value) noexcept {
+    if (static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(thread, key, value)) ==
+        CEntryPointErrorsEnum::NO_ERROR) {
+        return true;
+    }
+
+    clearThreadException(thread);
+
+    return false;
+}
+} // namespace isolated
+
 bool System::setProperty(const StringLike &key, const StringLike &value) {
     // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
@@ -25,9 +39,8 @@ bool System::setProperty(const StringLike &key, const StringLike &value) {
 
     auto result = runIsolatedOrElse(
         [key = key, value = value](auto threadHandle) {
-            return static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(
-                       static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
-                   CEntryPointErrorsEnum::NO_ERROR;
+            return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(),
+                                               value.c_str());
         },
         false);
 
@@ -48,13 +61,18 @@ std::string System::getProperty(const StringLike &key) {
 
     auto result = runIsolatedOrElse(
         [key = key](auto threadHandle) {
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
             std::string resultString{};
 
-            if (auto property =
-                    dxfg_system_get_property(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str());
-                property != nullptr) {
+            // NULL is also the result for a property that is not set.
+            if (auto property = dxfg_system_get_property(thread, key.c_str()); property != nullptr) {
                 resultString = property;
-                dxfg_system_release_property(static_cast<graal_isolatethread_t *>(threadHandle), property);
+
+                if (dxfg_system_release_property(thread, property) != 0) {
+                    isolated::clearThreadException(thread);
+                }
+            } else {
+                isolated::clearThreadException(thread);
             }
 
             return resultString;

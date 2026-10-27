@@ -150,11 +150,15 @@ TEST_CASE_FIXTURE(PromisesFixture, "A cancelled getLastEventPromise removes its 
     const auto promise = feed->getLastEventPromise<Trade>("T");
     assertAdded("T");
     REQUIRE_FALSE(promise->isDone());
+    // A pending promise has no exception: the SDK returns NULL, which is not an error.
+    REQUIRE_FALSE(promise->hasException());
+    REQUIRE(promise->getException().getJavaClassName().empty());
 
     promise->cancel();
     assertRemoved("T");
     REQUIRE(promise->isDone());
     REQUIRE(promise->isCancelled());
+    REQUIRE(promise->getException().getJavaClassName().find("CancellationException") != std::string::npos);
 }
 
 TEST_CASE_FIXTURE(PromisesFixture, "getLastEventsPromises and Promises::allOf complete when all events are published") {

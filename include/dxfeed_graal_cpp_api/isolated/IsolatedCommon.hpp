@@ -77,8 +77,32 @@ inline std::string_view toString(dxfg_event_clazz_t eventClazz) {
     }
 }
 
+/**
+ * Reads and clears the Java exception that a failed SDK function left in the thread. It is for a direct call that turns
+ * a failure into a result instead of an exception: the SDK keeps the exception until it is read, so a later, unrelated
+ * call would get it otherwise.
+ *
+ * @param thread The isolate thread of the current thread.
+ */
+void clearThreadException(graal_isolatethread_t *thread) noexcept;
+
+/**
+ * Sets a system property of the SDK (`dxfg_system_set_property`). A failure is a result: the Java exception of the
+ * failed call is cleared.
+ *
+ * @param thread The isolate thread of the current thread.
+ * @param key The name of the property.
+ * @param value The value of the property.
+ * @return `true` if the property is set.
+ */
+bool setSystemProperty(graal_isolatethread_t *thread, const char *key, const char *value) noexcept;
+
 constexpr auto throwIfNullptr = [](auto v) {
     return JavaException::throwIfNullptr(v);
+};
+
+constexpr auto nullableOrThrow = [](auto v) {
+    return JavaException::nullableOrThrow(v);
 };
 
 constexpr auto throwIfLessThanZero = [](auto v) {
@@ -97,14 +121,6 @@ constexpr auto throwIfMinusInf = [](auto v) {
     return JavaException::throwIfMinusInf(v);
 };
 
-constexpr auto runGraalFunction(auto graalFunction, auto &&...params) {
-    return runIsolatedThrow(
-        [](auto threadHandle, auto &&function, auto &&...functionParams) {
-            return function(static_cast<graal_isolatethread_t *>(threadHandle), functionParams...);
-        },
-        graalFunction, params...);
-}
-
 constexpr auto runGraalFunctionAndThrow(auto resultCheckerConverter, auto graalFunction, auto &&...params) {
     return runIsolatedThrow(
         [](auto threadHandle, auto &&checkerConverter, auto &&function, auto &&...functionParams) {
@@ -115,6 +131,10 @@ constexpr auto runGraalFunctionAndThrow(auto resultCheckerConverter, auto graalF
 
 constexpr auto runGraalFunctionAndThrowIfNullptr(auto graalFunction, auto &&...params) {
     return runGraalFunctionAndThrow(throwIfNullptr, graalFunction, params...);
+}
+
+constexpr auto runGraalFunctionNullableOrThrow(auto graalFunction, auto &&...params) {
+    return runGraalFunctionAndThrow(nullableOrThrow, graalFunction, params...);
 }
 
 constexpr auto runGraalFunctionAndThrowIfLessThanZero(auto graalFunction, auto &&...params) {

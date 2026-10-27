@@ -217,8 +217,8 @@ findFirstSession(/* dxfg_day_t* */ const JavaObjectHandle<Day> &day,
     }
 
     return JavaObjectHandle<Session>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_Day_findFirstSession, static_cast<dxfg_day_t *>(day.get()),
-                                          static_cast<dxfg_session_filter_t *>(filter.get()))};
+        runGraalFunctionNullableOrThrow(dxfg_Day_findFirstSession, static_cast<dxfg_day_t *>(day.get()),
+                                        static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
 /* dxfg_session_t* */ JavaObjectHandle<Session>
@@ -235,8 +235,8 @@ findLastSession(/* dxfg_day_t* */ const JavaObjectHandle<Day> &day,
     }
 
     return JavaObjectHandle<Session>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_Day_findLastSession, static_cast<dxfg_day_t *>(day.get()),
-                                          static_cast<dxfg_session_filter_t *>(filter.get()))};
+        runGraalFunctionNullableOrThrow(dxfg_Day_findLastSession, static_cast<dxfg_day_t *>(day.get()),
+                                        static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
 /* dxfg_day_t* */ JavaObjectHandle<Day>
@@ -284,7 +284,7 @@ findPrevDay(/* dxfg_day_t* */ const JavaObjectHandle<Day> &day,
             "Unable to execute function `dxfg_Day_findPrevDay`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<Day>{runGraalFunctionAndThrowIfNullptr(
+    return JavaObjectHandle<Day>{runGraalFunctionNullableOrThrow(
         dxfg_Day_findPrevDay, static_cast<dxfg_day_t *>(day.get()), static_cast<dxfg_day_filter_t *>(filter.get()))};
 }
 
@@ -301,7 +301,7 @@ findNextDay(/* dxfg_day_t* */ const JavaObjectHandle<Day> &day,
             "Unable to execute function `dxfg_Day_findNextDay`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<Day>{runGraalFunctionAndThrowIfNullptr(
+    return JavaObjectHandle<Day>{runGraalFunctionNullableOrThrow(
         dxfg_Day_findNextDay, static_cast<dxfg_day_t *>(day.get()), static_cast<dxfg_day_filter_t *>(filter.get()))};
 }
 

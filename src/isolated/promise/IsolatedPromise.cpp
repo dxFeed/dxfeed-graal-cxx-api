@@ -10,6 +10,7 @@
 
 #include <dxfg_api.h>
 
+#include <cstdint>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -58,8 +59,13 @@ std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_ev
             "Unable to execute function `dxfg_Promise_EventType_getResult`. The `promise` is nullptr");
     }
 
-    auto *graalEvent = runGraalFunctionAndThrowIfNullptr(dxfg_Promise_EventType_getResult,
-                                                         static_cast<dxfg_promise_event_t *>(promise));
+    auto *graalEvent =
+        runGraalFunctionNullableOrThrow(dxfg_Promise_EventType_getResult, static_cast<dxfg_promise_event_t *>(promise));
+
+    // NULL: the promise has no result, there is nothing to release.
+    if (graalEvent == nullptr) {
+        return {};
+    }
 
     auto result = EventMapper::fromGraal(graalEvent);
 
@@ -91,8 +97,23 @@ JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void *
             "Unable to execute function `dxfg_Promise_getException`. The `promise` is nullptr");
     }
 
-    auto *graalException =
-        runGraalFunctionAndThrowIfNullptr(dxfg_Promise_getException, static_cast<dxfg_promise_t *>(promise));
+    // The error value of this function is `(dxfg_exception_t *)-1`: NULL means that the promise has no exception.
+    auto *graalException = runGraalFunctionAndThrow(
+        [](dxfg_exception_t *result) {
+            if (result == dxfcpp::bit_cast<dxfg_exception_t *>(std::intptr_t{-1})) {
+                JavaException::throwIfJavaThreadExceptionExists();
+
+                throw RuntimeException("dxfg_Promise_getException failed without a Java exception");
+            }
+
+            return result;
+        },
+        dxfg_Promise_getException, static_cast<dxfg_promise_t *>(promise));
+
+    // NULL: the promise has no exception, there is nothing to release.
+    if (graalException == nullptr) {
+        return JavaException::create(nullptr);
+    }
 
     return JavaException::createAndRelease(graalException);
 }

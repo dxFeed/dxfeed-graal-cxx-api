@@ -25,6 +25,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  *
  * - **A call that fails** throws an exception to its caller: JavaException when the Java code of the dxFeed Graal
  *   SDK throws, GraalException when the call cannot enter the isolate, InvalidArgumentException, RuntimeException.
+ *   The Java exception belongs to the call that failed, a later call does not get it, even when the failure is
+ *   reported by a result (System::setProperty() returns `false`). When an SDK function that has no null result returns
+ *   null without a Java exception, the call throws RuntimeException.
  * - **An error without a caller** goes to ErrorManager. Such an error happens in the code that the library runs on
  *   its own: a callback of the dxFeed Graal SDK (events of a subscription, a state change of an endpoint or of an
  *   instrument profile connection, a change of a subscription, instrument profiles of a collector, the events of a

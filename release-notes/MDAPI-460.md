@@ -18,5 +18,16 @@
       example, of the `close()` that the destructors of `DXFeedSubscription` and of the models call) goes to
       `ErrorManager`, except while the library is shutting down.
     * `JavaException` got `getJavaClassName()`, `getJavaMessage()` and `getJavaStackTrace()`.
+    * The Java exception of a failed call of the SDK no longer reaches a later, unrelated call: it was left in the
+      thread when the failure was reported by a result (`System::setProperty()`, `System::getProperty()`) or ignored
+      (`DXFeed::attachSubscription()`, `detachSubscription()`, `detachSubscriptionAndClear()`, the release of a handle).
+    * `DXFeed::attachSubscription()`, `detachSubscription()`, `detachSubscriptionAndClear()` and `dxfcpp::gc()` throw
+      `JavaException` when the SDK fails, instead of ignoring the failure.
+    * A null result without a Java exception from an SDK function that has no null result throws `RuntimeException`
+      instead of giving an empty object. The functions that have nothing to return keep giving an empty result: the
+      `find*` functions of `Day`, `Session` and `Schedule`, the `*IfSubscribed` functions of `DXFeed`,
+      `DXFeedSubscription::getAggregationPeriod()`, `AuthToken::createBasicTokenOrNull()` /
+      `createBearerTokenOrNull()` / `getUser()` / `getPassword()`, `Promise::getResult()` / `getException()`.
+    * `Promise::getException()` no longer reads an invalid pointer when the SDK fails.
     * **\[BREAKING]** Removed `ErrorHandlingManager` and `Error` (`internal/managers/ErrorHandlingManager.hpp`): they
       were not used. Use `ErrorManager`.

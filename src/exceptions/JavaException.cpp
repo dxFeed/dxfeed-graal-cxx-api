@@ -5,6 +5,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -47,6 +48,21 @@ void releaseException(void *exceptionHandle) noexcept {
 }
 
 } // namespace
+
+namespace isolated {
+
+void clearThreadException(graal_isolatethread_t *thread) noexcept {
+    auto *exception = dxfg_get_and_clear_thread_exception_t(thread);
+
+    if (exception == nullptr) {
+        return;
+    }
+
+    releaseStackTraceMethodNames(thread, exception);
+    dxfg_Exception_release(thread, exception);
+}
+
+} // namespace isolated
 
 struct JavaException::JavaData {
     std::string className;
@@ -108,6 +124,10 @@ void JavaException::throwIfJavaThreadExceptionExists() {
     auto javaException = createAndRelease(exception);
 
     throw javaException; // NOLINT(*-throw-by-value-catch-by-reference)
+}
+
+void JavaException::throwUnexpectedNullResult() {
+    throw RuntimeException("Unexpected null result of a dxFeed Graal SDK function without a Java exception");
 }
 
 void JavaException::throwException() {

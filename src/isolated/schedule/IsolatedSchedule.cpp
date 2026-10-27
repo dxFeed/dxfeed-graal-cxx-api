@@ -146,7 +146,7 @@ findNearestSessionByTime(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule>
             "Unable to execute function `dxfg_Schedule_findNearestSessionByTime`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<Session>{runGraalFunctionAndThrowIfNullptr(
+    return JavaObjectHandle<Session>{runGraalFunctionNullableOrThrow(
         dxfg_Schedule_findNearestSessionByTime, static_cast<dxfg_schedule_t *>(schedule.get()), time,
         static_cast<dxfg_session_filter_t *>(filter.get()))};
 }

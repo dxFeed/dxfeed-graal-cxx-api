@@ -35,14 +35,14 @@ void DXFeed::attachSubscription(const std::shared_ptr<DXFeedSubscription> &subsc
         return;
     }
 
-    if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_attachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      subHandle) == 0;
-            },
-            false)) {
-    }
+    // After the shutdown of the library there is nothing to attach or detach.
+    ignoreUnused(runIsolatedOrElse(
+        [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+         subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+            return JavaException::throwIfMinusOne(
+                dxfg_DXFeed_attachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle, subHandle));
+        },
+        0));
 }
 
 void DXFeed::detachSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) const {
@@ -55,14 +55,14 @@ void DXFeed::detachSubscription(const std::shared_ptr<DXFeedSubscription> &subsc
         return;
     }
 
-    if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      subHandle) == 0;
-            },
-            false)) {
-    }
+    // After the shutdown of the library there is nothing to attach or detach.
+    ignoreUnused(runIsolatedOrElse(
+        [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+         subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+            return JavaException::throwIfMinusOne(
+                dxfg_DXFeed_detachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle, subHandle));
+        },
+        0));
 }
 
 void DXFeed::detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription> &subscription) const {
@@ -75,14 +75,14 @@ void DXFeed::detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription
         return;
     }
 
-    if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscriptionAndClear(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                              handle, subHandle) == 0;
-            },
-            false)) {
-    }
+    // After the shutdown of the library there is nothing to attach or detach.
+    ignoreUnused(runIsolatedOrElse(
+        [handle = static_cast<dxfg_feed_t *>(handle_.get()),
+         subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+            return JavaException::throwIfMinusOne(dxfg_DXFeed_detachSubscriptionAndClear(
+                static_cast<graal_isolatethread_t *>(threadHandle), handle, subHandle));
+        },
+        0));
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) const {

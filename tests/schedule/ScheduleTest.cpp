@@ -230,3 +230,18 @@ TEST_CASE("Schedule::getDefinition() of Schedule::UTC() and Schedule::NYSE() as 
     CHECK(Schedule::UTC()->getDefinition() == "UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)");
     CHECK(Schedule::NYSE()->getDefinition() == "XNYS()");
 }
+
+// NULL is the normal result of the find functions of the SDK when nothing is found: no exception.
+TEST_CASE("The find functions give nullptr when nothing is found") {
+    const auto schedule = gmt("0=");
+    const auto day = schedule->getDayById(42);
+    const auto session = day->getFirstSession(SessionFilter::ANY);
+
+    CHECK(day->findFirstSession(SessionFilter::TRADING) == nullptr);
+    CHECK(day->findLastSession(SessionFilter::TRADING) == nullptr);
+    CHECK(day->findPrevDay(DayFilter::TRADING) == nullptr);
+    CHECK(day->findNextDay(DayFilter::TRADING) == nullptr);
+    CHECK(session->findPrevSession(SessionFilter::TRADING) == nullptr);
+    CHECK(session->findNextSession(SessionFilter::TRADING) == nullptr);
+    CHECK(schedule->findNearestSessionByTime(now(), SessionFilter::TRADING) == nullptr);
+}

@@ -29,11 +29,11 @@ std::int32_t equals(/* dxfg_java_object_handler* */ void *object, /* dxfg_java_o
 /* int32_t */ std::size_t hashCode(/* dxfg_java_object_handler* */ void *object);
 
 // int32_t dxfg_JavaObjectHandler_release(graal_isolatethread_t *thread, dxfg_java_object_handler *handler);
-bool release(void *handle);
+bool release(void *handle) noexcept;
 
 namespace List {
 // int32_t dxfg_CList_JavaObjectHandler_release(graal_isolatethread_t *thread, dxfg_java_object_handler_list *list);
-bool release(void *handle);
+bool release(void *handle) noexcept;
 }
 
 } // namespace IsolatedObject
