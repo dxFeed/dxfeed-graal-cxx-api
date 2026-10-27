@@ -9,7 +9,7 @@ to test it. How to build and run the tests:
 
 | Layer | Where | What it does |
 |---|---|---|
-| Public API | `include/dxfeed_graal_cpp_api/<module>/X.hpp`, `src/<module>/X.cpp` | The classes of the users, as in the Java API. They never call `dxfg_*` functions. |
+| Public API | `include/dxfeed_graal_cpp_api/<module>/X.hpp`, `src/<module>/X.cpp` | The classes of the users, as in the Java API. They call `dxfg_*` functions through the isolated layer; only a few low-level calls are direct (`System`, `DXFeed` attach and detach). |
 | Isolated layer | `include/dxfeed_graal_cpp_api/isolated/<module>/IsolatedX.hpp`, `src/isolated/<module>/IsolatedX.cpp` | One C++ function per `dxfg_*` function: checks the handles, calls the SDK in the isolate thread, turns the result into a C++ value or an exception. |
 | Handles | `JavaObjectHandle<T>` (`internal/JavaObjectHandle.hpp`) | Owns a Java object of the SDK and releases it (`dxfg_JavaObjectHandler_release`). |
 | Entities and managers | `EntityManager<T>`, `ApiContext` (`internal/managers`, `internal/context`) | Find a C++ object by its id in a callback. |
@@ -42,6 +42,14 @@ void addEventListener(const JavaObjectHandle<DXFeedSubscription> &sub,
   and throw `JavaException` when the result means an error: `...IfNullptr` for functions that return a pointer,
   `...IfLessThanZero` and `...IfMinusOne` for the status codes, `...IfMinusMin`, `...IfMinusInf` for numbers. Pick
   the one that matches what the C API documents for the function.
+- A pointer: `...IfNullptr` when the function returns `NULL` only on error (`NULL` without a Java exception then
+  throws `RuntimeException`), `runGraalFunctionNullableOrThrow` when `NULL` is also a normal result ("NULL if no
+  session is found"). Read the header of the SDK and the Java entry point: a few functions have another error value
+  (`dxfg_Promise_getException` returns `(dxfg_exception_t *)-1`).
+- A failed function of the SDK leaves its Java exception in the thread until it is read, and a successful call does
+  not clear it. So the result of every call is checked right away: through a helper, or, in a direct call that turns
+  the failure into a result (`System::setProperty()` returns `false`), with `isolated::clearThreadException()`.
+  Otherwise a later, unrelated call that checks its result gets this exception.
 - A function that creates a Java object returns `JavaObjectHandle<T>`. Strings and lists that the SDK returns are
   copied into C++ values and released at once with the matching `dxfg_*_release` function.
 - After `dxfcpp::shutdown()` or at the exit of the process the isolate does not run any more: the `runIsolated*`

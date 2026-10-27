@@ -184,8 +184,8 @@ getAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSu
             "Unable to execute function `dxfg_DXFeedSubscription_getAggregationPeriod`. The `sub` handle is invalid");
     }
 
-    return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeedSubscription_getAggregationPeriod, static_cast<dxfg_subscription_t *>(sub.get())));
+    return JavaObjectHandle<TimePeriod>(runGraalFunctionNullableOrThrow(dxfg_DXFeedSubscription_getAggregationPeriod,
+                                                                        static_cast<dxfg_subscription_t *>(sub.get())));
 }
 
 /* int32_t */ void setAggregationPeriod(/* dxfg_subscription_t * */ const JavaObjectHandle<DXFeedSubscription> &sub,

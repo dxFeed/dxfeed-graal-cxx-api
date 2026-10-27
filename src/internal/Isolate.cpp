@@ -3,6 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 
 #include <atomic>
 #include <chrono>
@@ -337,9 +338,8 @@ void Isolate::init(Isolate &isolate) noexcept {
 
     for (auto &&[k, v] : config) {
         isolate.runIsolated([key = k, value = v](auto threadHandle) {
-            return static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(
-                       static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
-                   CEntryPointErrorsEnum::NO_ERROR;
+            return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(),
+                                               value.c_str());
         });
     }
 }
@@ -398,7 +398,13 @@ void Isolate::shutdown() {
         // progress, and the listener is not called afterwards.
         JavaObjectHandleRegistry::getInstance().releaseAll();
         ignoreUnused(getInstance().runIsolated([](auto threadHandle) {
-            return dxfg_system_close_all_and_await_termination(static_cast<graal_isolatethread_t *>(threadHandle));
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+            if (dxfg_system_close_all_and_await_termination(thread) != 0) {
+                isolated::clearThreadException(thread);
+            }
+
+            return 0;
         }));
         // The handles created while the endpoints were closing.
         JavaObjectHandleRegistry::getInstance().releaseAll();

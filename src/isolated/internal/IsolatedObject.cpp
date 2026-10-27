@@ -4,6 +4,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
 
@@ -58,30 +59,44 @@ std::int32_t equals(/* dxfg_java_object_handler* */ void *object, /* dxfg_java_o
         runGraalFunctionAndThrowIfMinusMin(dxfg_Object_hashCode, static_cast<dxfg_java_object_handler *>(object)));
 }
 
-bool release(void *handle) {
+bool release(void *handle) noexcept {
     if (!handle) {
         return false;
     }
 
-    return runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            return dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                  static_cast<dxfg_java_object_handler *>(handle)) == 0;
-        },
-        false);
+    bool released = false;
+
+    runRelease("JavaObjectHandle", [handle, &released] {
+        released = runIsolatedOrElse(
+            [handle](auto threadHandle) {
+                return JavaException::throwIfMinusOne(
+                           dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
+                                                          static_cast<dxfg_java_object_handler *>(handle))) == 0;
+            },
+            false);
+    });
+
+    return released;
 }
 
-bool List::release(void *handle) {
+bool List::release(void *handle) noexcept {
     if (!handle) {
         return false;
     }
 
-    return runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            return dxfg_CList_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                        static_cast<dxfg_java_object_handler_list *>(handle)) == 0;
-        },
-        false);
+    bool released = false;
+
+    runRelease("JavaObjectHandle", [handle, &released] {
+        released = runIsolatedOrElse(
+            [handle](auto threadHandle) {
+                return JavaException::throwIfMinusOne(dxfg_CList_JavaObjectHandler_release(
+                           static_cast<graal_isolatethread_t *>(threadHandle),
+                           static_cast<dxfg_java_object_handler_list *>(handle))) == 0;
+            },
+            false);
+    });
+
+    return released;
 }
 
 } // namespace IsolatedObject

@@ -70,15 +70,31 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
 
     static void throwException();
 
+    /**
+     * Checks the result of an SDK function that does not return `NULL` as a normal result.
+     *
+     * @param v The result.
+     * @return The result if it is not `nullptr`.
+     * @throws JavaException The thread has a Java exception: the function failed.
+     * @throws RuntimeException The result is `nullptr` without a Java exception.
+     */
     template <typename T> static constexpr T *throwIfNullptr(T *v) {
         if (v == nullptr) {
             throwIfJavaThreadExceptionExists();
+            throwUnexpectedNullResult();
         }
 
         return v;
     }
 
-    template <typename T> static constexpr const T *throwIfNullptr(const T *v) {
+    /**
+     * Checks the result of an SDK function for which `NULL` is a normal result (for example, nothing is found).
+     *
+     * @param v The result.
+     * @return The result, `nullptr` included.
+     * @throws JavaException The result is `nullptr` and the thread has a Java exception: the function failed.
+     */
+    template <typename T> static constexpr T *nullableOrThrow(T *v) {
         if (v == nullptr) {
             throwIfJavaThreadExceptionExists();
         }
@@ -130,6 +146,8 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
     }
 
     private:
+    [[noreturn]] static void throwUnexpectedNullResult();
+
     struct JavaData;
 
     std::shared_ptr<const JavaData> javaData_;

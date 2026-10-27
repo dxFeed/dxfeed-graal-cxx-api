@@ -38,7 +38,7 @@ createBasicToken(/* const char* */ const StringLike &userPassword) {
 createBasicTokenOrNull(/* const char* */ const StringLike &user,
                        /* const char* */ const StringLike &password) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicTokenOrNull, user.c_str(), password.c_str()));
+        runGraalFunctionNullableOrThrow(dxfg_AuthToken_createBasicTokenOrNull, user.c_str(), password.c_str()));
 }
 
 /// dxfg_AuthToken_createBearerToken
@@ -51,7 +51,7 @@ createBasicTokenOrNull(/* const char* */ const StringLike &user,
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
 createBearerTokenOrNull(/* const char* */ const StringLike &token) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerTokenOrNull, token.c_str()));
+        runGraalFunctionNullableOrThrow(dxfg_AuthToken_createBearerTokenOrNull, token.c_str()));
 }
 
 /// dxfg_AuthToken_createCustomToken
@@ -82,7 +82,7 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
     }
 
     const auto user = internal::IsolatedString::toUnique(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_getUser, static_cast<dxfg_auth_token_t *>(authToken.get())));
+        runGraalFunctionNullableOrThrow(dxfg_AuthToken_getUser, static_cast<dxfg_auth_token_t *>(authToken.get())));
     return dxfcpp::toString(user.get());
 }
 
@@ -93,8 +93,8 @@ getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> 
             "Unable to execute function `dxfg_AuthToken_getPassword`. The `authToken` handle is invalid");
     }
 
-    const auto password = internal::IsolatedString::toUnique(runGraalFunctionAndThrowIfNullptr(
-        dxfg_AuthToken_getPassword, static_cast<dxfg_auth_token_t *>(authToken.get())));
+    const auto password = internal::IsolatedString::toUnique(
+        runGraalFunctionNullableOrThrow(dxfg_AuthToken_getPassword, static_cast<dxfg_auth_token_t *>(authToken.get())));
     return dxfcpp::toString(password.get());
 }
 

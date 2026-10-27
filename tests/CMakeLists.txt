@@ -62,6 +62,7 @@ set(DXFC_TEST_SOURCES
         exceptions/CallbackBarrierTest.cpp
         exceptions/ErrorManagerTest.cpp
         exceptions/ExceptionsTest.cpp
+        exceptions/JavaExceptionStateTest.cpp
         exceptions/ReleaseTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
         glossary/PriceIncrementsTest.cpp

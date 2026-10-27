@@ -11,7 +11,7 @@
 DXFCPP_BEGIN_NAMESPACE
 
 void gc() {
-    isolated::runGraalFunction(dxfg_gc);
+    isolated::runGraalFunctionAndThrowIfMinusOne(dxfg_gc);
 }
 
 namespace isolated::internal::IsolatedTools {

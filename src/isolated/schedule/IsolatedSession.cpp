@@ -141,8 +141,8 @@ findPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session,
     }
 
     return JavaObjectHandle<Session>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_Session_findPrevSession, static_cast<dxfg_session_t *>(session.get()),
-                                          static_cast<dxfg_session_filter_t *>(filter.get()))};
+        runGraalFunctionNullableOrThrow(dxfg_Session_findPrevSession, static_cast<dxfg_session_t *>(session.get()),
+                                        static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
 /* dxfg_session_t* */ JavaObjectHandle<Session>
@@ -159,8 +159,8 @@ findNextSession(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session,
     }
 
     return JavaObjectHandle<Session>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_Session_findNextSession, static_cast<dxfg_session_t *>(session.get()),
-                                          static_cast<dxfg_session_filter_t *>(filter.get()))};
+        runGraalFunctionNullableOrThrow(dxfg_Session_findNextSession, static_cast<dxfg_session_t *>(session.get()),
+                                        static_cast<dxfg_session_filter_t *>(filter.get()))};
 }
 
 std::size_t hashCode(/* dxfg_session_t* */ const JavaObjectHandle<Session> &session) {
