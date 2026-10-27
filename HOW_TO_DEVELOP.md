@@ -109,8 +109,34 @@ caller: the exceptions of the callbacks and of the code the library runs on its 
 code that has none calls `runCallback`, or `ErrorManager::report()` / `ErrorManager::reportException()` directly.
 `ErrorManager` never calls the SDK and is never destroyed, so it is safe at exit and after `dxfcpp::shutdown()`.
 
-Destructors, deleters and the release functions of the handles are `noexcept`: they must not throw, and they must
-not call code that can throw without catching it.
+### Release paths and `noexcept` functions
+
+Destructors, deleters, the release functions of the handles and every `noexcept` function must not throw: an
+exception that leaves them terminates the process. In order of preference:
+
+1. **Call only code that does not throw.** For example, `operator*` after a check instead of `std::optional::value()`,
+   `std::get_if` instead of `std::get`, no `fmt` in a `noexcept` `toString()`.
+2. **Wrap a release that calls the SDK in `runRelease`** (`internal/CallbackBarrier.hpp`): it is `noexcept` and
+   reports an exception of the body to `ErrorManager`, except while the library is shutting down (then the failure is
+   expected and is not reported). The destructors of the entities and models do so:
+
+   ```cpp
+   ~IndexedTxModel() noexcept override {
+       runRelease("IndexedTxModel", [this] {
+           close();
+       });
+   }
+   ```
+
+   Do not write an empty `catch (...)`: a failure that nobody sees is a bug that nobody fixes.
+3. **`DXFCPP_FINALLY`** (`internal/Common.hpp`) runs its body at the end of the scope; an exception of the body goes
+   to `ErrorManager` in the same way.
+4. **`NOLINT(bugprone-exception-escape)`** only for a proven false positive, with a comment that says why the call
+   cannot throw.
+
+`bugprone-exception-escape` of clang-tidy fails the static analysis job of CI. It sees only the bodies in the same
+translation unit: a call to a function defined in another `.cpp`, a virtual call or a `std::function` is taken as
+non-throwing, so a clean run does not prove the rules above; follow them by hand.
 
 ## Adding an entity
 
