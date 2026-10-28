@@ -126,7 +126,8 @@ void DXFeed::releaseSubscription(const DXFeedSubscription *subscription) const {
 }
 
 void DXFeed::releaseSubscriptions() const {
-    auto released = std::make_shared<std::unordered_map<const DXFeedSubscription *, std::shared_ptr<DXFeedSubscription>>>();
+    auto released =
+        std::make_shared<std::unordered_map<const DXFeedSubscription *, std::shared_ptr<DXFeedSubscription>>>();
 
     {
         std::lock_guard guard{subscriptionsMutex_};

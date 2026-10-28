@@ -13,8 +13,9 @@
 #include <config/config.hpp>
 #include <cstdlib>
 #include <deque>
-#include <memory>
 #include <dxfg_api.h>
+#include <exception>
+#include <memory>
 #include <mutex>
 #include <optional>
 #include <string>
@@ -452,6 +453,8 @@ void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept {
         return;
     }
 
+    std::exception_ptr error{};
+
     if (ListenerCallScope::isActive()) {
         auto &queue = getReleaseQueue();
         std::lock_guard lock{queue.mutex};
@@ -469,8 +472,13 @@ void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept {
                 return;
             } catch (...) {
                 // The thread could not be started or the queue could not grow: the object is released at once.
+                error = std::current_exception();
             }
         }
+    }
+
+    if (error) {
+        ErrorManager::reportException("Isolate", error);
     }
 
     object.reset();

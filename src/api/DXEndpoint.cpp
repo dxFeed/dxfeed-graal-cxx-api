@@ -139,7 +139,7 @@ struct DXEndpoint::Impl {
             throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
         }
 
-        auto& instance = registry.instances[role];
+        auto &instance = registry.instances[role];
 
         if (!instance) {
             instance = create(role);

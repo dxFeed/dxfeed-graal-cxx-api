@@ -14,10 +14,10 @@
 #endif
 #include "../../include/dxfeed_graal_cpp_api/internal/StopWatch.hpp"
 
-#include <dxfg_api.h>
-#include <fmt/format.h>
 #include <algorithm>
+#include <dxfg_api.h>
 #include <exception>
+#include <fmt/format.h>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -306,7 +306,8 @@ void DXFeedSubscription::close() const {
     // Releasing the native listener waits for its calls in progress on the other threads, which cannot reach the
     // listeners anymore.
     if (eventListenerHandle) {
-        releaseOutsideCallbacks(std::make_shared<JavaObjectHandle<DXFeedEventListener>>(std::move(eventListenerHandle)));
+        releaseOutsideCallbacks(
+            std::make_shared<JavaObjectHandle<DXFeedEventListener>>(std::move(eventListenerHandle)));
     }
 
     std::vector<std::weak_ptr<const DXFeed>> feeds{};
