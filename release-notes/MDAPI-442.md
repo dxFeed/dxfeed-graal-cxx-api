@@ -1,0 +1,15 @@
+* **\[MDAPI-442]\[C++]** Closed subscriptions and endpoints are released, as in the Java API: an application that
+  creates and closes them no longer grows in memory, and the listeners of a subscription are not called after
+  `close()` returns.
+    * An attached subscription is owned by its feed until it is closed or detached, or the endpoint is closed: a
+      subscription without a pointer of the user receives events until then. A subscription without a feed is closed
+      with its last pointer.
+    * A created endpoint lives until `close()` or `closeAndAwaitTermination()`; then it is released with its feed and
+      publisher when the user releases it. The default endpoints stay for the whole process.
+    * `DXFeedSubscription::close()` returns after the calls of its listeners in progress on other threads end; called
+      from a listener, it does not wait. A subscription or an endpoint can be closed from a listener of a subscription.
+    * `CLOSED` is the last state notification of an endpoint. The methods of a closed subscription do nothing.
+    * `DXEndpoint::executor()` called after `getFeed()` applies to the next events of the existing subscriptions, as
+      in the Java API.
+    * The ids of the entities are unique when the library is linked dynamically: a subscription created from a header
+      template and one created in the library could get the same id, and the events of the first went to the second.

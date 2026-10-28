@@ -678,9 +678,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Changes the executor that is used for notifications (events, state changes, etc.) of this endpoint.
      *
-     * Call it right after the endpoint is created, before DXEndpoint::getFeed() and DXEndpoint::getPublisher():
-     * called later, it leaves the feed with the default executor, which is shut down, and the last event promises
-     * (DXFeed::getLastEventPromise(), etc.) never complete.
+     * Call it right after the endpoint is created, before DXEndpoint::getFeed() and DXEndpoint::getPublisher().
+     * Called later, it applies to the next notifications of the existing and new subscriptions, but the last event
+     * promises (DXFeed::getLastEventPromise(), etc.) keep the default executor, which is shut down, and never complete.
      *
      * @deprecated Use DXEndpoint::Builder::withExecutor(): the builder sets the executor before the endpoint exists.
      *

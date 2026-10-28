@@ -4,6 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
 #    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
@@ -12,6 +13,7 @@
 #include <dxfg_api.h>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -47,6 +49,10 @@ void DXFeed::attachSubscription(const std::shared_ptr<DXFeedSubscription> &subsc
 
     {
         std::lock_guard guard{subscriptionsMutex_};
+
+        if (closed_) {
+            return;
+        }
 
         subscriptions_.insert_or_assign(subscription.get(), subscription);
     }
@@ -119,6 +125,25 @@ void DXFeed::releaseSubscription(const DXFeedSubscription *subscription) const {
     }
 }
 
+void DXFeed::releaseSubscriptions() const {
+    auto released = std::make_shared<std::unordered_map<const DXFeedSubscription *, std::shared_ptr<DXFeedSubscription>>>();
+
+    {
+        std::lock_guard guard{subscriptionsMutex_};
+
+        closed_ = true;
+        released->swap(subscriptions_);
+    }
+
+    for (const auto &[_, subscription] : *released) {
+        subscription->removeFeed(this);
+    }
+
+    // Called from a callback (the CLOSED notification, close() of the endpoint from a listener), the subscriptions are
+    // released on another thread: the destructor of a subscription closes it.
+    releaseOutsideCallbacks(std::move(released));
+}
+
 std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -183,9 +208,6 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
     }
 
     std::shared_ptr<DXFeed> feed{new DXFeed{}};
-
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeed>>()->registerEntity(feed);
-    ignoreUnused(id);
 
     feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
 

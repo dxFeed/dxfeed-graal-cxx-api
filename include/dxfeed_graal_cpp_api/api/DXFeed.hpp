@@ -157,14 +157,18 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     private:
     JavaObjectHandle<DXFeed> handle_{};
 
-    // The attached subscriptions: the feed owns them until they are detached or closed.
+    // The attached subscriptions: the feed owns them until they are detached or closed, or the endpoint is closed.
     mutable std::mutex subscriptionsMutex_{};
     mutable std::unordered_map<const DXFeedSubscription *, std::shared_ptr<DXFeedSubscription>> subscriptions_{};
+    mutable bool closed_{}; // the endpoint is closed: the feed owns no subscriptions. Guarded by subscriptionsMutex_.
 
     static std::shared_ptr<DXFeed> create(void *feedHandle);
 
     // Stops owning the subscription. The subscription is released outside of the mutex: its destructor closes it.
     void releaseSubscription(const DXFeedSubscription *subscription) const;
+
+    // The endpoint is closed: stops owning all the subscriptions and does not own the ones attached later.
+    void releaseSubscriptions() const;
 
     void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
 

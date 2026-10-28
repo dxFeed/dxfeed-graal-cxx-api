@@ -1,11 +1,13 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <future>
 #include <latch>
 #include <memory>
+#include <mutex>
 #include <set>
 #include <thread>
 #include <vector>
@@ -25,6 +27,14 @@ using Events = std::vector<std::shared_ptr<EventType>>;
 
 auto subscriptionManager() {
     return ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>();
+}
+
+auto endpointManager() {
+    return ApiContext::getInstance()->getManager<WeakEntityManager<DXEndpoint>>();
+}
+
+std::shared_ptr<DXEndpoint> localHub() {
+    return DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB)->build();
 }
 
 std::shared_ptr<Quote> quote(double bidPrice) {
@@ -287,4 +297,223 @@ TEST_CASE_FIXTURE(test::LocalHubFixture, "The methods of a closed subscription d
     publishAndProcess(quote(10.5));
 
     CHECK(calls.load() == 0);
+}
+
+TEST_CASE("Closed endpoints are released and do not stay in the registry") {
+    const auto initialSize = endpointManager()->size();
+    std::vector<std::weak_ptr<DXEndpoint>> endpoints{};
+
+    // A Java endpoint takes milliseconds to create: 500 are enough to see a leak.
+    for (int i = 0; i < 500; ++i) {
+        const auto endpoint = localHub();
+
+        ignoreUnused(endpoint->getFeed());
+        ignoreUnused(endpoint->getPublisher());
+        endpoint->close();
+
+        if (i % 50 == 0) {
+            endpoints.push_back(endpoint);
+        }
+    }
+
+    // The CLOSED notification may come after close() returns and keep the endpoint for a while.
+    CHECK(test::waitUntil([&] {
+        return std::ranges::all_of(endpoints, [](const auto &endpoint) {
+            return endpoint.expired();
+        });
+    }));
+    CHECK(test::waitUntil([&] {
+        return endpointManager()->size() == initialSize;
+    }));
+}
+
+TEST_CASE("An endpoint closed by closeAndAwaitTermination() is released") {
+    auto endpoint = localHub();
+    const std::weak_ptr<DXEndpoint> weak = endpoint;
+
+    ignoreUnused(endpoint->getFeed());
+    endpoint->closeAndAwaitTermination();
+    endpoint.reset();
+
+    CHECK(test::waitUntil([&] {
+        return weak.expired();
+    }));
+}
+
+TEST_CASE("A created endpoint without a pointer of the user lives until it is closed") {
+    std::weak_ptr<DXEndpoint> weak = localHub();
+
+    CHECK_FALSE(weak.expired());
+
+    weak.lock()->close();
+
+    CHECK(test::waitUntil([&] {
+        return weak.expired();
+    }));
+}
+
+TEST_CASE("A default endpoint stays the default one after it is closed") {
+    const auto endpoint = DXEndpoint::getInstance(DXEndpoint::Role::LOCAL_HUB);
+
+    endpoint->close();
+
+    CHECK(DXEndpoint::getInstance(DXEndpoint::Role::LOCAL_HUB) == endpoint);
+}
+
+TEST_CASE("The methods of a closed endpoint do nothing") {
+    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
+    std::atomic<int> calls{0};
+
+    endpoint->close();
+
+    REQUIRE(test::waitUntil([&] {
+        return endpoint->isClosed();
+    }));
+    CHECK_NOTHROW(endpoint->addStateChangeListener([&](DXEndpoint::State, DXEndpoint::State) {
+        calls++;
+    }));
+    CHECK_NOTHROW(endpoint->connect("127.0.0.1:1"));
+    CHECK_NOTHROW(endpoint->reconnect());
+    CHECK_NOTHROW(endpoint->disconnect());
+
+    std::this_thread::sleep_for(100ms);
+
+    CHECK(calls.load() == 0);
+    CHECK(endpoint->getState() == DXEndpoint::State::CLOSED);
+}
+
+TEST_CASE("CLOSED is the last state notification of an endpoint") {
+    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
+    std::mutex mutex{};
+    std::vector<DXEndpoint::State> states{};
+
+    endpoint->addStateChangeListener([&](DXEndpoint::State, DXEndpoint::State newState) {
+        std::lock_guard guard{mutex};
+
+        states.push_back(newState);
+    });
+
+    test::LoopbackTcpServer server{};
+
+    endpoint->connect(server.getAddress());
+    endpoint->close();
+    endpoint->reconnect();
+
+    REQUIRE(test::waitUntil([&] {
+        std::lock_guard guard{mutex};
+
+        return !states.empty() && states.back() == DXEndpoint::State::CLOSED;
+    }));
+
+    std::this_thread::sleep_for(100ms);
+
+    std::lock_guard guard{mutex};
+
+    CHECK(std::ranges::count(states, DXEndpoint::State::CLOSED) == 1);
+    CHECK(states.back() == DXEndpoint::State::CLOSED);
+}
+
+TEST_CASE("An attached subscription without a pointer of the user is released when its endpoint is closed") {
+    test::LocalHubFixture hub{};
+    std::atomic<int> calls{0};
+    std::weak_ptr<DXFeedSubscription> weak{};
+
+    {
+        const auto subscription = hub.feed->createSubscription(Quote::TYPE);
+
+        subscription->addEventListener([&](const Events &) {
+            calls++;
+        });
+        subscription->addSymbols("AAPL");
+        weak = subscription;
+    }
+
+    hub.publishAndProcess(quote(10.5));
+    REQUIRE(calls.load() == 1);
+
+    hub.endpoint->close();
+    hub.publishAndProcess(quote(11.5));
+
+    CHECK(calls.load() == 1);
+    CHECK(test::waitUntil([&] {
+        return weak.expired();
+    }));
+}
+
+TEST_CASE("A subscription of the user stays valid after its endpoint is closed") {
+    test::LocalHubFixture hub{};
+    const auto subscription = hub.feed->createSubscription(Quote::TYPE);
+
+    hub.endpoint->close();
+
+    CHECK_NOTHROW(subscription->addSymbols("AAPL"));
+    CHECK_NOTHROW(subscription->getSymbols());
+    CHECK_NOTHROW(subscription->close());
+}
+
+TEST_CASE_FIXTURE(test::LocalHubFixture, "An endpoint can be closed from a listener of its subscription") {
+    const auto subscription = feed->createSubscription(Quote::TYPE);
+    std::atomic<int> calls{0};
+
+    subscription->addEventListener([&](const Events &) {
+        calls++;
+        endpoint->close();
+    });
+    subscription->addSymbols("AAPL");
+
+    REQUIRE(returnsInTime([this] {
+        publishAndProcess(quote(10.5));
+        publishAndProcess(quote(11.5));
+    }));
+
+    CHECK(calls.load() == 1);
+    CHECK(endpoint->isClosed());
+}
+
+TEST_CASE("The subscriptions of a publisher are released when its endpoint is closed") {
+    test::LocalHubFixture hub{};
+    std::weak_ptr<ObservableSubscription> weak{};
+
+    {
+        const auto subscription = hub.publisher->getSubscription(Quote::TYPE);
+
+        CHECK(hub.publisher->getSubscription(Quote::TYPE) == subscription);
+        weak = subscription;
+    }
+
+    REQUIRE_FALSE(weak.expired());
+
+    hub.endpoint->close();
+
+    CHECK(test::waitUntil([&] {
+        return weak.expired();
+    }));
+}
+
+TEST_CASE("executor() called after getFeed() applies to the next events of the existing subscriptions") {
+    const auto endpoint = localHub();
+    const auto feed = endpoint->getFeed();
+    const auto publisher = endpoint->getPublisher();
+    const auto subscription = feed->createSubscription(Quote::TYPE);
+    const auto executor = InPlaceExecutor::create();
+    std::atomic<int> calls{0};
+    std::atomic<std::thread::id> listenerThread{};
+
+    subscription->addEventListener([&](const Events &) {
+        listenerThread = std::this_thread::get_id();
+        calls++;
+    });
+    subscription->addSymbols("AAPL");
+    endpoint->executor(executor);
+    publisher->publishEvents(quote(10.5));
+
+    REQUIRE(test::waitUntil([&] {
+        executor->processAllPendingTasks();
+
+        return calls.load() > 0;
+    }));
+
+    CHECK(listenerThread.load() == std::this_thread::get_id());
+
+    endpoint->close();
 }
