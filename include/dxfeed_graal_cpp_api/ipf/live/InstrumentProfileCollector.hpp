@@ -172,6 +172,8 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * @param listener The profile update listener. The listener can be callable with signature: `void(const
      * std::vector<std::shared_ptr<InstrumentProfile>&)`
      * @return The listener id
+     * @throws InvalidArgumentException if the listener ids of this collector are exhausted (about 2^32 listeners were
+     * added on a 64-bit platform)
      */
     template <typename InstrumentProfileUpdateListener>
     std::size_t addUpdateListener(InstrumentProfileUpdateListener listener)
