@@ -131,6 +131,27 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
         }
     }
 
+    // A removed listener is not called anymore.
+    static void markRemoved(Listener &listener) {
+        std::lock_guard guard{listener.mutex};
+
+        listener.removed = true;
+    }
+
+    // Waits for the calls of a removed listener in progress on the other threads, unless the current thread calls a
+    // listener or a callback of the library (see ListenerCallScope).
+    static void waitForCalls(Listener &listener) {
+        if (ListenerCallScope::isActive()) {
+            return;
+        }
+
+        std::unique_lock lock{listener.mutex};
+
+        listener.callsEnded.wait(lock, [&listener] {
+            return listener.calls == 0;
+        });
+    }
+
     std::size_t addImpl(ListenerType &&listener, bool lowPriority) {
         std::lock_guard guard{mutex_};
 
@@ -314,14 +335,36 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
             }
         }
 
-        std::unique_lock lock{removed->mutex};
+        markRemoved(*removed);
+        waitForCalls(*removed);
+    }
 
-        removed->removed = true;
+    /**
+     * Removes all the listeners.
+     *
+     * The listeners are not called after this function returns, as after remove(). The handler can be used again.
+     */
+    void removeAll() {
+        std::shared_ptr<const List> removed{};
 
-        if (!ListenerCallScope::isActive()) {
-            removed->callsEnded.wait(lock, [&removed] {
-                return removed->calls == 0;
-            });
+        {
+            std::lock_guard guard{mutex_};
+
+            removed = std::exchange(listeners_, nullptr);
+            mainListenersCount_ = 0;
+        }
+
+        if (!removed) {
+            return;
+        }
+
+        // All are marked first: a listener that follows the one in progress in a notification is not called.
+        for (const auto &listener : *removed) {
+            markRemoved(*listener);
+        }
+
+        for (const auto &listener : *removed) {
+            waitForCalls(*listener);
         }
     }
 

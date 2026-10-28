@@ -31,7 +31,8 @@ void DXFeed::attachSubscription(const std::shared_ptr<DXFeedSubscription> &subsc
         Debugger::debug(toString() + "::attachSubscription(" + subscription->toString() + ")");
     }
 
-    if (!handle_ || !subscription || !subscription->handle_) {
+    // A closed subscription is not attached.
+    if (!handle_ || !subscription || !subscription->handle_ || subscription->closed_) {
         return;
     }
 
@@ -43,6 +44,20 @@ void DXFeed::attachSubscription(const std::shared_ptr<DXFeedSubscription> &subsc
                 dxfg_DXFeed_attachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle, subHandle));
         },
         0));
+
+    {
+        std::lock_guard guard{subscriptionsMutex_};
+
+        subscriptions_.insert_or_assign(subscription.get(), subscription);
+    }
+
+    subscription->addFeed(sharedAs<const DXFeed>());
+
+    // close() takes the feeds of the subscription after it sets the flag, so a subscription closed meanwhile either is
+    // released by close() or is seen closed here.
+    if (subscription->closed_) {
+        releaseSubscription(subscription.get());
+    }
 }
 
 void DXFeed::detachSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) const {
@@ -63,6 +78,9 @@ void DXFeed::detachSubscription(const std::shared_ptr<DXFeedSubscription> &subsc
                 dxfg_DXFeed_detachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle, subHandle));
         },
         0));
+
+    subscription->removeFeed(this);
+    releaseSubscription(subscription.get());
 }
 
 void DXFeed::detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription> &subscription) const {
@@ -83,6 +101,22 @@ void DXFeed::detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription
                 static_cast<graal_isolatethread_t *>(threadHandle), handle, subHandle));
         },
         0));
+
+    subscription->removeFeed(this);
+    releaseSubscription(subscription.get());
+}
+
+void DXFeed::releaseSubscription(const DXFeedSubscription *subscription) const {
+    std::shared_ptr<DXFeedSubscription> released{};
+
+    {
+        std::lock_guard guard{subscriptionsMutex_};
+
+        if (const auto found = subscriptions_.find(subscription); found != subscriptions_.end()) {
+            released = std::move(found->second);
+            subscriptions_.erase(found);
+        }
+    }
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) const {
@@ -125,9 +159,7 @@ DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) const {
 
     auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(
         eventType, isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, eventType));
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
-
-    ignoreUnused(id);
+    DXFeedSubscription::registerSubscription(sub);
     attachSubscription(sub);
 
     return sub;

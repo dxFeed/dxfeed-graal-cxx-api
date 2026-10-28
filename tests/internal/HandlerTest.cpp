@@ -299,6 +299,85 @@ TEST_CASE("SimpleHandler::remove() inside a callback of the library does not wai
     CHECK(removed.get());
 }
 
+TEST_CASE("SimpleHandler::removeAll() on another thread returns after the calls in progress end") {
+    IntHandler handler{};
+    std::promise<void> entered{};
+    std::promise<void> release{};
+    auto releaseFuture = release.get_future().share();
+    std::atomic<bool> callEnded{false};
+    std::atomic<bool> removeReturned{false};
+    std::atomic<bool> endedBeforeRemoveReturned{false};
+    std::atomic<int> calls{0};
+
+    handler.add([&](int) {
+        calls++;
+        entered.set_value();
+        releaseFuture.wait();
+        callEnded = true;
+    });
+    handler.addLowPriority([&](int) {
+        calls++;
+    });
+
+    std::thread notifier{[&] {
+        handler.handle(1);
+    }};
+
+    if (entered.get_future().wait_for(5s) != std::future_status::ready) {
+        release.set_value();
+        notifier.join();
+        FAIL("the listener was not called");
+    }
+
+    std::thread remover{[&] {
+        handler.removeAll();
+        endedBeforeRemoveReturned = callEnded.load();
+        removeReturned = true;
+    }};
+
+    std::this_thread::sleep_for(100ms);
+    CHECK_FALSE(removeReturned.load());
+
+    release.set_value();
+    remover.join();
+    notifier.join();
+
+    CHECK(removeReturned.load());
+    CHECK(endedBeforeRemoveReturned.load());
+
+    // The low priority listener was removed before the notification reached it.
+    CHECK(calls.load() == 1);
+
+    handler.handle(2);
+    CHECK(calls.load() == 1);
+}
+
+TEST_CASE("SimpleHandler::removeAll() from a listener does not wait and the listeners are not called anymore") {
+    IntHandler handler{};
+    int calls = 0;
+
+    handler.add([&](int) {
+        calls++;
+        handler.removeAll();
+    });
+    handler.add([&](int) {
+        calls++;
+    });
+
+    handler.handle(1);
+    handler.handle(2);
+
+    CHECK(calls == 1);
+
+    // The handler can be used again.
+    handler.add([&](int) {
+        calls++;
+    });
+    handler.handle(3);
+
+    CHECK(calls == 2);
+}
+
 // Each listener removes the other while the other is called on another thread: a wait in remove() would deadlock.
 TEST_CASE("Two listeners of SimpleHandler can remove each other on two threads") {
     IntHandler handler{};

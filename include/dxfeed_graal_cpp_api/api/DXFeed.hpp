@@ -18,7 +18,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <iterator>
 #include <memory>
+#include <mutex>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 
 /**
@@ -150,10 +152,19 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct IndexedTxModelImpl;
     friend struct IndexedEventTxModelImpl;
     friend struct SubscriptionController;
+    friend class DXFeedSubscription;
 
     private:
     JavaObjectHandle<DXFeed> handle_{};
+
+    // The attached subscriptions: the feed owns them until they are detached or closed.
+    mutable std::mutex subscriptionsMutex_{};
+    mutable std::unordered_map<const DXFeedSubscription *, std::shared_ptr<DXFeedSubscription>> subscriptions_{};
+
     static std::shared_ptr<DXFeed> create(void *feedHandle);
+
+    // Stops owning the subscription. The subscription is released outside of the mutex: its destructor closes it.
+    void releaseSubscription(const DXFeedSubscription *subscription) const;
 
     void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
 
@@ -516,10 +527,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         auto list = EventClassList::create(begin, end);
         auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(
             begin, end, std::move(createTimeSeriesSubscriptionHandleFromEventClassList(list)));
-        auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
-
-        dxfcpp::ignoreUnused(id);
-
+        DXFeedSubscription::registerSubscription(sub);
         attachSubscription(sub);
 
         return sub;

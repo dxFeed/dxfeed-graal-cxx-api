@@ -16,8 +16,11 @@
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
+#include <algorithm>
+#include <exception>
 #include <memory>
 #include <utility>
+#include <vector>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -31,7 +34,12 @@ struct DXFeedSubscription::Impl {
             const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
 
             if (const auto sub =
-                    ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getEntity(id)) {
+                    ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>()->getEntity(id)) {
+                // The batch came after close(): it is dropped.
+                if (sub->closed_) {
+                    return;
+                }
+
 #if defined(DXFCXX_ENABLE_METRICS)
                 sw.start();
 #endif
@@ -92,8 +100,13 @@ void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) {
 bool DXFeedSubscription::tryToSetEventListenerHandle() {
     std::lock_guard lock{eventListenerMutex_};
 
+    // close() sets the flag before it takes the native listener under this mutex.
+    if (closed_) {
+        return false;
+    }
+
     if (!eventListenerHandle_) {
-        const auto idOpt = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->getId(
+        const auto idOpt = ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>()->getId(
             sharedAs<DXFeedSubscription>());
 
         if (!idOpt) {
@@ -178,20 +191,47 @@ std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(const EventTypeEn
     }
 
     auto sub = createShared(eventType);
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
-    ignoreUnused(id);
+    registerSubscription(sub);
 
     return sub;
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(std::initializer_list<EventTypeEnum> eventTypes) {
     auto sub = createShared(eventTypes);
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
 
-    ignoreUnused(id);
+    registerSubscription(sub);
 
     return sub;
+}
+
+void DXFeedSubscription::registerSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) {
+    // The registry does not own the subscription: its owners are the user and the feeds it is attached to.
+    ignoreUnused(
+        ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>()->registerEntity(subscription));
+}
+
+void DXFeedSubscription::addFeed(const std::shared_ptr<const DXFeed> &feed) const {
+    std::lock_guard guard{feedsMutex_};
+
+    // Attached to the same feed again.
+    if (std::ranges::any_of(feeds_, [&feed](const auto &weakFeed) {
+            return weakFeed.lock() == feed;
+        })) {
+        return;
+    }
+
+    feeds_.push_back(feed);
+}
+
+void DXFeedSubscription::removeFeed(const DXFeed *feed) const {
+    std::lock_guard guard{feedsMutex_};
+
+    std::erase_if(feeds_, [feed](const auto &weakFeed) {
+        const auto locked = weakFeed.lock();
+
+        return !locked || locked.get() == feed;
+    });
 }
 
 void DXFeedSubscription::attach(std::shared_ptr<DXFeed> feed) {
@@ -218,7 +258,7 @@ bool DXFeedSubscription::isClosed() {
         Debugger::debug(toString() + "::isClosed()");
     }
 
-    return isolated::api::IsolatedDXFeedSubscription::isClosed(handle_);
+    return closed_ || isolated::api::IsolatedDXFeedSubscription::isClosed(handle_);
 }
 
 void DXFeedSubscription::close() const {
@@ -227,9 +267,71 @@ void DXFeedSubscription::close() const {
         Debugger::debug(toString() + "::close()");
     }
 
-    std::lock_guard guard{changeListenersMutex_};
-    isolated::api::IsolatedDXFeedSubscription::close(handle_);
-    changeListeners_.clear();
+    // The batches that come from now on are dropped.
+    if (closed_.exchange(true)) {
+        return;
+    }
+
+    // Keeps the subscription alive until the end: the feeds may hold its last pointers. Empty in the destructor.
+    const auto self = sharedAs<const DXFeedSubscription>();
+    std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners{};
+    // The listeners and the owners are released even if the Java close fails; its error is thrown at the end.
+    std::exception_ptr error{};
+
+    {
+        // A change listener that the Java close notifies may add or remove change listeners: the mutex is recursive.
+        // It is not held below, where close() waits for the event listeners, which may take it.
+        std::lock_guard guard{changeListenersMutex_};
+
+        try {
+            isolated::api::IsolatedDXFeedSubscription::close(handle_);
+        } catch (...) {
+            error = std::current_exception();
+        }
+
+        changeListeners = std::move(changeListeners_);
+        changeListeners_.clear();
+    }
+
+    onEvent_.removeAll();
+
+    JavaObjectHandle<DXFeedEventListener> eventListenerHandle{};
+
+    {
+        std::lock_guard guard{eventListenerMutex_};
+
+        eventListenerHandle = std::move(eventListenerHandle_);
+    }
+
+    // Releasing the native listener waits for its calls in progress on the other threads, which cannot reach the
+    // listeners anymore.
+    if (eventListenerHandle) {
+        releaseOutsideCallbacks(std::make_shared<JavaObjectHandle<DXFeedEventListener>>(std::move(eventListenerHandle)));
+    }
+
+    std::vector<std::weak_ptr<const DXFeed>> feeds{};
+
+    {
+        std::lock_guard guard{feedsMutex_};
+
+        feeds = std::move(feeds_);
+        feeds_.clear();
+    }
+
+    for (const auto &weakFeed : feeds) {
+        if (const auto feed = weakFeed.lock()) {
+            feed->releaseSubscription(this);
+        }
+    }
+
+    if (self) {
+        ignoreUnused(ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>()->unregisterEntity(
+            std::const_pointer_cast<DXFeedSubscription>(self)));
+    }
+
+    if (error) {
+        std::rethrow_exception(error);
+    }
 }
 
 std::unordered_set<EventTypeEnum> DXFeedSubscription::getEventTypes() {
@@ -340,7 +442,7 @@ DXFeedSubscription::OnEventHandler &DXFeedSubscription::onEvent() {
 std::size_t DXFeedSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
     std::lock_guard guard{changeListenersMutex_};
 
-    if (isClosed()) {
+    if (closed_ || isClosed()) {
         return FAKE_CHANGE_LISTENER_ID;
     }
 
