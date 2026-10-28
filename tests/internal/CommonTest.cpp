@@ -5,9 +5,12 @@
 #include <dxfeed_graal_cpp_api/internal/Common.hpp>
 
 #include <bit>
+#include <climits>
+#include <cstddef>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+#include <utility>
 
 using namespace dxfcpp;
 
@@ -180,4 +183,17 @@ TEST_CASE("getBits and setBits should read and replace a bit field") {
     CHECK(setBits(std::int32_t{0x12345678}, 0xFF, 8, 0x1AB) == 0x1234AB78);
     CHECK(setBits(std::int64_t{-1}, 0xFF, 56, 0) == 0x00FFFFFFFFFFFFFF);
     CHECK(setBits(std::uint16_t{0}, std::uint16_t{0x3}, std::uint16_t{14}, std::uint16_t{0x3}) == 0xC000);
+}
+
+// The user data of a native listener of InstrumentProfileCollector packs two ids into one pointer, half of its bits
+// each: an id that does not fit its half would change the other one, and the notification would go to another listener.
+TEST_CASE("pack and unpack should keep two values that fit half of std::size_t, pack should reject the others") {
+    constexpr auto halfBits = sizeof(std::size_t) * CHAR_BIT / 2;
+    constexpr auto max = (std::size_t{1} << halfBits) - 1;
+
+    CHECK(unpack(pack(std::size_t{1}, std::size_t{2})) == std::pair<std::size_t, std::size_t>{1, 2});
+    CHECK(unpack(pack(max, max)) == std::pair{max, max});
+    CHECK_THROWS_AS(pack(std::size_t{1}, max + 1), InvalidArgumentException);
+    CHECK_THROWS_AS(pack(max + 1, std::size_t{1}), InvalidArgumentException);
+    CHECK_THROWS_AS(pack(-1, 1), InvalidArgumentException);
 }

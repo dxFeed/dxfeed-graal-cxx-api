@@ -748,10 +748,20 @@ template <class T> constexpr void hashCombine(std::size_t &seed, const T &v) noe
     seed = hashMix(seed + 0x9e3779b9 + std::hash<T>()(v));
 }
 
-template <Integral T, Integral U> constexpr std::size_t pack(T t, U u) noexcept {
+/**
+ * Packs two values into one std::size_t, half of its bits each: `t` into the high half, `u` into the low one.
+ *
+ * @throws InvalidArgumentException if a value is negative or does not fit its half: it would change the other value.
+ */
+template <Integral T, Integral U> constexpr std::size_t pack(T t, U u) {
     constexpr auto sizeOfSize = sizeof(std::size_t) * CHAR_BIT;
+    constexpr auto maxHalf = shr(~std::size_t{}, sizeOfSize / 2);
 
-    return orOp(shl(t, sizeOfSize / 2), u);
+    if (std::cmp_less(t, 0) || std::cmp_greater(t, maxHalf) || std::cmp_less(u, 0) || std::cmp_greater(u, maxHalf)) {
+        throw InvalidArgumentException("pack: a value does not fit half of std::size_t");
+    }
+
+    return orOp(shl(static_cast<std::size_t>(t), sizeOfSize / 2), static_cast<std::size_t>(u));
 }
 
 constexpr std::pair<std::size_t, std::size_t> unpack(std::size_t v) noexcept {

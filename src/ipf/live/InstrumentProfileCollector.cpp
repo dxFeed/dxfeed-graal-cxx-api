@@ -97,13 +97,17 @@ std::size_t InstrumentProfileCollector::addUpdateListenerImpl(std::shared_ptr<Up
     releaseRemovedListenerHandles();
 
     std::size_t id{};
+    std::size_t userData{};
 
     // The listener is in the map before the native listener is added: the collector notifies it at once (on its
     // executor) if it has profiles.
     {
         std::lock_guard guard{listenersMutex_};
 
-        id = ++lastListenerId_;
+        id = lastListenerId_ + 1;
+        // The user data of the native listener: pack() throws before anything changes if an id does not fit.
+        userData = pack(id_.getValue(), id);
+        lastListenerId_ = id;
         updateListeners_.emplace(id, UpdateListenerEntry{std::move(listener), {}});
     }
 
@@ -113,8 +117,7 @@ std::size_t InstrumentProfileCollector::addUpdateListenerImpl(std::shared_ptr<Up
 
     try {
         auto handle = isolated::ipf::live::IsolatedInstrumentProfileUpdateListener::create(
-            dxfcpp::bit_cast<void *>(&Impl::onInstrumentProfilesUpdate),
-            dxfcpp::bit_cast<void *>(pack(id_.getValue(), id)));
+            dxfcpp::bit_cast<void *>(&Impl::onInstrumentProfilesUpdate), dxfcpp::bit_cast<void *>(userData));
 
         if (!handle) {
             return id;
