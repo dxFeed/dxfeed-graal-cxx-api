@@ -68,3 +68,37 @@ TEST_CASE("WeakEntityManager keeps an entity alive for the duration of an acquir
     CHECK(destroyed.load());
     CHECK_FALSE(manager.getEntity(id));
 }
+
+TEST_CASE("EntityManager::size() counts registered entities") {
+    EntityManager<WeakManagerTestEntity> manager;
+    std::atomic_bool destroyed{false};
+    auto entity = std::make_shared<WeakManagerTestEntity>(destroyed);
+
+    CHECK(manager.size() == 0);
+
+    const auto id = manager.registerEntity(entity);
+
+    CHECK(manager.size() == 1);
+    CHECK(manager.unregisterEntity(id));
+    CHECK(manager.size() == 0);
+}
+
+TEST_CASE("WeakEntityManager::size() counts only live entities") {
+    WeakEntityManager<WeakManagerTestEntity> manager;
+    std::atomic_bool firstDestroyed{false};
+    std::atomic_bool secondDestroyed{false};
+    auto first = std::make_shared<WeakManagerTestEntity>(firstDestroyed);
+    auto second = std::make_shared<WeakManagerTestEntity>(secondDestroyed);
+
+    CHECK(manager.size() == 0);
+
+    ignoreUnused(manager.registerEntity(first));
+    const auto secondId = manager.registerEntity(second);
+
+    CHECK(manager.size() == 2);
+
+    first.reset();
+
+    CHECK(manager.size() == 1);
+    CHECK(manager.getEntity(secondId) == second);
+}

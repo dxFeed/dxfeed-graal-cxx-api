@@ -164,6 +164,12 @@ struct EntityManager : private NonCopyable<EntityManager<EntityType_, EntityIdTy
 
         return idsByEntities_.contains(entity);
     }
+
+    std::size_t size() {
+        std::lock_guard lockGuard{mutex_};
+
+        return entitiesById_.size();
+    }
 };
 
 /**
@@ -383,6 +389,27 @@ class WeakEntityManager : private NonCopyable<WeakEntityManager<EntityType_, Ent
     /** @return `true` if the entity is currently registered and alive. */
     bool contains(const std::shared_ptr<EntityType> &entity) {
         return getId(entity).has_value();
+    }
+
+    /**
+     * Removes expired entries and returns the number of live registrations.
+     *
+     * @return The number of registered entities that are still alive.
+     */
+    std::size_t size() {
+        std::lock_guard lockGuard{mutex_};
+
+        for (auto entry = entitiesById_.begin(); entry != entitiesById_.end();) {
+            if (entry->second.entity.expired()) {
+                const auto expired = entry++;
+
+                eraseEntry(expired);
+            } else {
+                ++entry;
+            }
+        }
+
+        return entitiesById_.size();
     }
 };
 
