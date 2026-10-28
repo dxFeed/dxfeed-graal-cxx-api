@@ -65,7 +65,9 @@ DXFCPP_BEGIN_NAMESPACE
 
 Isolate::IsolateThread::IsolateThread(GraalIsolateThreadHandle threadHandle) noexcept
     : handle{threadHandle}, tid{std::this_thread::get_id()} {
-    this->idx = Id<IsolateThread>::getNext().getValue();
+    static std::atomic<std::size_t> lastIdx{0};
+
+    this->idx = ++lastIdx;
 
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode

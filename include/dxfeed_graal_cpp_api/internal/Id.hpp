@@ -24,12 +24,6 @@ template <typename T> struct Id {
     }
 
     public:
-    static Id<T> getNext() {
-        static std::atomic<ValueType> value(1);
-
-        return Id<T>{value++};
-    }
-
     [[nodiscard]] ValueType getValue() const {
         return value_;
     }

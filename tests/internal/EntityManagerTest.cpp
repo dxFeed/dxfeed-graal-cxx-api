@@ -7,7 +7,9 @@
 #include <atomic>
 #include <future>
 #include <memory>
+#include <set>
 #include <thread>
+#include <vector>
 
 using namespace dxfcpp;
 
@@ -101,4 +103,36 @@ TEST_CASE("WeakEntityManager::size() counts only live entities") {
 
     CHECK(manager.size() == 1);
     CHECK(manager.getEntity(secondId) == second);
+}
+
+TEST_CASE("WeakEntityManager gives unique ids to entities registered concurrently") {
+    constexpr std::size_t threadCount = 8;
+    constexpr std::size_t entitiesPerThread = 1000;
+    WeakEntityManager<WeakManagerTestEntity> manager;
+    std::atomic_bool destroyed{false};
+    std::vector<std::vector<std::shared_ptr<WeakManagerTestEntity>>> entities(threadCount);
+    std::vector<std::vector<std::size_t>> ids(threadCount);
+    std::vector<std::thread> threads{};
+
+    for (std::size_t t = 0; t < threadCount; ++t) {
+        threads.emplace_back([&, t] {
+            for (std::size_t i = 0; i < entitiesPerThread; ++i) {
+                entities[t].push_back(std::make_shared<WeakManagerTestEntity>(destroyed));
+                ids[t].push_back(manager.registerEntity(entities[t].back()).getValue());
+            }
+        });
+    }
+
+    for (auto &thread : threads) {
+        thread.join();
+    }
+
+    std::set<std::size_t> uniqueIds{};
+
+    for (const auto &threadIds : ids) {
+        uniqueIds.insert(threadIds.begin(), threadIds.end());
+    }
+
+    CHECK(uniqueIds.size() == threadCount * entitiesPerThread);
+    CHECK(manager.size() == threadCount * entitiesPerThread);
 }

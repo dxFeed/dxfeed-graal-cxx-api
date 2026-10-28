@@ -52,11 +52,11 @@ struct EntityManager : private NonCopyable<EntityManager<EntityType_, EntityIdTy
             return it->second;
         }
 
-        auto id = Id<EntityIdType>::getNext();
+        // The manager is one per process, so its counter gives unique ids to all modules that register entities.
+        auto id = Id<EntityIdType>::from(++lastId_);
 
         entitiesById_[id] = entity;
         idsByEntities_.emplace(std::make_pair(entity, id));
-        lastId_ = id.getValue();
 
         return id;
     }
@@ -237,10 +237,10 @@ class WeakEntityManager : private NonCopyable<WeakEntityManager<EntityType_, Ent
             idsByEntities_.erase(reverse);
         }
 
-        const auto id = Id<EntityIdType>::getNext();
+        // The manager is one per process, so its counter gives unique ids to all modules that register entities.
+        const auto id = Id<EntityIdType>::from(++lastId_);
         entitiesById_.emplace(id, Entry{entity, address});
         idsByEntities_.emplace(address, id);
-        lastId_ = id.getValue();
 
         return id;
     }
