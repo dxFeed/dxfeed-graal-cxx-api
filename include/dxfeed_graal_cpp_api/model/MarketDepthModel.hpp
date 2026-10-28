@@ -545,9 +545,9 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
 
     private:
     mutable std::recursive_mutex mtx_{};
-    // Serializes the listener calls. The listener is called without mtx_: the handler runs it on another thread and
-    // waits, so a listener that calls the model (close() included) would otherwise deadlock.
-    std::recursive_mutex notifyMtx_{};
+    // Serializes the listener calls (the event thread and the timer thread), and close() waits on it for the call in
+    // progress. The listener is called without mtx_, so it can call the model (close() included).
+    mutable std::recursive_mutex notifyMtx_{};
     std::unordered_map<std::int64_t, std::shared_ptr<O>> ordersByIndex_{};
     SortedOrderSet<BuyLess> buyOrders_{};
     SortedOrderSet<SellLess> sellOrders_{};
@@ -823,19 +823,32 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
     /**
      * Closes this model and makes it <i>permanently detached</i>.
      *
-     * A pending aggregated notification is cancelled, and no new listener call starts after this method returns; a call
-     * that has already started is not waited for. The method can be called from the listener.
+     * A pending aggregated notification is cancelled, and the listener is not called after this method returns: it
+     * waits for the listener call in progress on another thread. The method can be called from the listener; called
+     * from a listener or a callback of the library, it does not wait (see ListenerCallScope).
      */
     void close() const {
-        std::lock_guard guard(mtx_);
+        bool closing = false;
 
-        if (closed_) {
-            return;
+        {
+            std::lock_guard guard(mtx_);
+
+            if (!closed_) {
+                closed_ = true;
+                closing = true;
+                tryCancelTask();
+            }
         }
 
-        closed_ = true;
-        tryCancelTask();
-        indexedTxModel_->close();
+        if (closing) {
+            indexedTxModel_->close();
+        }
+
+        // A repeated close() waits too: the first one may not have waited yet.
+        if (!ListenerCallScope::isActive()) {
+            // A call that started before closed_ was set ends before the lock is taken.
+            std::lock_guard notifyGuard(notifyMtx_);
+        }
     }
 };
 

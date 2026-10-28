@@ -69,11 +69,20 @@ struct InstrumentProfileCollector::Impl {
 
             if (collector) {
                 auto &&apiProfiles = NonOwningInstrumentProfileIterator{profiles}.collect();
+                std::shared_ptr<UpdateListener> listener{};
 
-                std::lock_guard guard{collector->listenersMutex_};
+                {
+                    std::lock_guard guard{collector->listenersMutex_};
 
-                if (collector->onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
-                    collector->onInstrumentProfilesUpdateHandlers_[listenerId](apiProfiles);
+                    if (const auto found = collector->updateListeners_.find(listenerId);
+                        found != collector->updateListeners_.end()) {
+                        listener = found->second.listener;
+                    }
+                }
+
+                // Without the lock: the listener may add or remove the listeners of this collector.
+                if (listener) {
+                    listener->handler(apiProfiles);
                 }
             }
         });
@@ -84,55 +93,104 @@ InstrumentProfileCollector::InstrumentProfileCollector() : id_{Id<InstrumentProf
     handle_ = isolated::ipf::live::IsolatedInstrumentProfileCollector::create();
 }
 
-void InstrumentProfileCollector::addListenerHandle(std::size_t id) {
+std::size_t InstrumentProfileCollector::addUpdateListenerImpl(std::shared_ptr<UpdateListener> listener) {
+    releaseRemovedListenerHandles();
+
+    std::size_t id{};
+
+    // The listener is in the map before the native listener is added: the collector notifies it at once (on its
+    // executor) if it has profiles.
+    {
+        std::lock_guard guard{listenersMutex_};
+
+        id = ++lastListenerId_;
+        updateListeners_.emplace(id, UpdateListenerEntry{std::move(listener), {}});
+    }
+
     if (!handle_) {
-        return;
+        return id;
     }
 
-    listenerHandles_.emplace(
-        id, isolated::ipf::live::IsolatedInstrumentProfileUpdateListener::create(
-                dxfcpp::bit_cast<void *>(&Impl::onInstrumentProfilesUpdate),
-                dxfcpp::bit_cast<void *>(pack(id_.getValue(), id))));
+    try {
+        auto handle = isolated::ipf::live::IsolatedInstrumentProfileUpdateListener::create(
+            dxfcpp::bit_cast<void *>(&Impl::onInstrumentProfilesUpdate),
+            dxfcpp::bit_cast<void *>(pack(id_.getValue(), id)));
 
-    if (!listenerHandles_[id]) {
-        return;
+        if (!handle) {
+            return id;
+        }
+
+        isolated::ipf::live::IsolatedInstrumentProfileCollector::addUpdateListener(handle_, handle);
+
+        {
+            std::lock_guard guard{listenersMutex_};
+
+            if (const auto found = updateListeners_.find(id); found != updateListeners_.end()) {
+                found->second.handle = std::move(handle);
+
+                return id;
+            }
+        }
+
+        // The listener was removed while it was being added (by itself, for example).
+        isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, handle);
+        releaseListenerHandle(std::move(handle));
+    } catch (...) {
+        std::lock_guard guard{listenersMutex_};
+
+        updateListeners_.erase(id);
+
+        throw;
     }
 
-    isolated::ipf::live::IsolatedInstrumentProfileCollector::addUpdateListener(handle_, listenerHandles_[id]);
+    return id;
 }
 
-void InstrumentProfileCollector::removeListenerHandle(std::size_t id) {
-    if (!handle_) {
+void InstrumentProfileCollector::releaseListenerHandle(JavaObjectHandle<InstrumentProfileUpdateListener> &&handle) {
+    // Inside a callback, the native listener may be the one that is calling: it is released later, by the next call
+    // from outside a callback or with the collector.
+    if (ListenerCallScope::isActive()) {
+        std::lock_guard guard{listenersMutex_};
+
+        removedListenerHandles_.emplace_back(std::move(handle));
+
         return;
     }
 
-    if (!listenerHandles_.contains(id) || !listenerHandles_[id]) {
-        return;
-    }
-
-    isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, listenerHandles_[id]);
+    handle = JavaObjectHandle<InstrumentProfileUpdateListener>{};
 }
 
-void InstrumentProfileCollector::removeUpdateListenerImpl(std::size_t listenerId) {
-    removeListenerHandle(listenerId);
+void InstrumentProfileCollector::releaseRemovedListenerHandles() noexcept {
+    if (ListenerCallScope::isActive()) {
+        return;
+    }
 
-    // The handler holds only this listener.
-    onInstrumentProfilesUpdateHandlers_.erase(listenerId);
+    std::vector<JavaObjectHandle<InstrumentProfileUpdateListener>> handles{};
+
+    {
+        std::lock_guard guard{listenersMutex_};
+
+        handles.swap(removedListenerHandles_);
+    }
+
+    // The handles are released here, outside the lock.
 }
 
 InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
-    std::lock_guard guard{listenersMutex_};
+    std::unordered_map<std::size_t, UpdateListenerEntry> listeners{};
 
-    std::vector<std::size_t> listenerIds{};
-    listenerIds.reserve(onInstrumentProfilesUpdateHandlers_.size());
+    {
+        std::lock_guard guard{listenersMutex_};
 
-    std::transform(onInstrumentProfilesUpdateHandlers_.cbegin(), onInstrumentProfilesUpdateHandlers_.cend(),
-                   std::back_inserter(listenerIds), [](const auto &idAndHandler) {
-                       return idAndHandler.first;
-                   });
+        listeners.swap(updateListeners_);
+    }
 
-    for (const auto id : listenerIds) {
-        removeUpdateListenerImpl(id);
+    for (const auto &[id, entry] : listeners) {
+        runRelease("InstrumentProfileCollector", [this, &entry] {
+            if (handle_ && entry.handle) {
+                isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, entry.handle);
+            }
+        });
     }
 }
 
@@ -176,10 +234,41 @@ std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() co
 }
 
 void InstrumentProfileCollector::removeUpdateListener(std::size_t listenerId) {
-    std::lock_guard guard{listenersMutex_};
+    releaseRemovedListenerHandles();
 
-    if (onInstrumentProfilesUpdateHandlers_.contains(listenerId)) {
-        removeUpdateListenerImpl(listenerId);
+    UpdateListenerEntry entry{};
+
+    {
+        std::lock_guard guard{listenersMutex_};
+
+        const auto found = updateListeners_.find(listenerId);
+
+        if (found == updateListeners_.end()) {
+            return;
+        }
+
+        entry = std::move(found->second);
+        updateListeners_.erase(found);
+    }
+
+    if (handle_ && entry.handle) {
+        try {
+            isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, entry.handle);
+        } catch (...) {
+            // The native listener is still added: the listener stays, so that the call can be repeated.
+            std::lock_guard guard{listenersMutex_};
+
+            updateListeners_.emplace(listenerId, std::move(entry));
+
+            throw;
+        }
+    }
+
+    // Waits for the call of the listener in progress on another thread (see SimpleHandler::remove()).
+    entry.listener->handler.remove(entry.listener->handlerListenerId);
+
+    if (entry.handle) {
+        releaseListenerHandle(std::move(entry.handle));
     }
 }
 

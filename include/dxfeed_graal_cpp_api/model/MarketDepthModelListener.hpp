@@ -40,7 +40,7 @@ struct /* DXFCPP_EXPORT */ MarketDepthModelListener final : RequireMakeShared<Ma
                            const std::vector<std::shared_ptr<O>> & /* sell */);
 
     protected:
-    SimpleHandler<Signature> onEventsReceived_{};
+    SimpleHandler<Signature> onEventsReceived_{"MarketDepthModelListener"};
     mutable std::recursive_mutex mutex_{};
 
     public:

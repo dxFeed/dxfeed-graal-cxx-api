@@ -50,10 +50,27 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     Id<InstrumentProfileCollector> id_;
     JavaObjectHandle<InstrumentProfileCollector> handle_;
 
+    // An update listener: a handler of its own with the one listener. A callback calls it by a shared pointer, without
+    // the lock.
+    struct UpdateListener final {
+        SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> handler{
+            "InstrumentProfileCollector"};
+        std::size_t handlerListenerId{};
+    };
+
+    // An update listener and the native listener that calls it. The native listener is released by the collector, not
+    // by the last owner of the listener, which can be a callback of this native listener.
+    struct UpdateListenerEntry final {
+        std::shared_ptr<UpdateListener> listener{};
+        JavaObjectHandle<InstrumentProfileUpdateListener> handle{};
+    };
+
+    // Guards the containers only: the listeners and the native functions are called without it.
     std::mutex listenersMutex_{};
-    std::unordered_map<std::size_t, JavaObjectHandle<InstrumentProfileUpdateListener>> listenerHandles_{};
-    std::unordered_map<std::size_t, SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)>>
-        onInstrumentProfilesUpdateHandlers_{};
+    std::unordered_map<std::size_t, UpdateListenerEntry> updateListeners_{};
+    // The native listeners removed from a callback: they are released by the next addition or removal of a listener
+    // from outside a callback, or with the collector, not inside the callback.
+    std::vector<JavaObjectHandle<InstrumentProfileUpdateListener>> removedListenerHandles_{};
     // The ids of the update listeners, unique within this collector. Each listener has a handler of its own, so the ids
     // of the handlers (unique within a handler) cannot identify the listeners.
     std::size_t lastListenerId_{};
@@ -62,10 +79,9 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
 
     struct Impl;
 
-    void addListenerHandle(std::size_t id);
-    void removeListenerHandle(std::size_t id);
-
-    void removeUpdateListenerImpl(std::size_t listenerId);
+    std::size_t addUpdateListenerImpl(std::shared_ptr<UpdateListener> listener);
+    void releaseListenerHandle(JavaObjectHandle<InstrumentProfileUpdateListener> &&handle);
+    void releaseRemovedListenerHandles() noexcept;
 
     public:
     /// The alias to a type of shared pointer to the InstrumentProfileCollector object
@@ -165,18 +181,11 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
         }
 #endif
     {
-        std::lock_guard guard{listenersMutex_};
+        auto updateListener = std::make_shared<UpdateListener>();
 
-        SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> h{};
+        updateListener->handlerListenerId = updateListener->handler.add(listener);
 
-        h.add(listener);
-
-        const auto id = ++lastListenerId_;
-
-        onInstrumentProfilesUpdateHandlers_.try_emplace(id, std::move(h));
-        addListenerHandle(id);
-
-        return id;
+        return addUpdateListenerImpl(std::move(updateListener));
     }
 
     /**

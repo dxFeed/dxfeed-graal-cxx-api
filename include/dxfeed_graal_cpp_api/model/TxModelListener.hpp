@@ -60,7 +60,7 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
     JavaObjectHandle<TxModelListenerTag> handle_;
     SimpleHandler<void(const IndexedEventSource & /* source */,
                        const std::vector<std::shared_ptr<EventType>> & /* events */, bool /* isSnapshot */)>
-        onEventsReceived_{};
+        onEventsReceived_{"TxModelListener"};
 
     struct Impl;
 

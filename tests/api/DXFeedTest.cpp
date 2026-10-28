@@ -231,3 +231,33 @@ TEST_CASE_FIXTURE(test::LocalHubFixture, "setAggregationPeriod accepts TimePerio
     subscription->setAggregationPeriod(TimePeriod::ZERO);
     CHECK(subscription->getAggregationPeriod().getTime() == 0);
 }
+
+// MDAPI-441: the listeners of a subscription are called on the executor thread (with InPlaceExecutor, the thread that
+// processes the tasks), and a listener can remove itself.
+TEST_CASE_FIXTURE(test::LocalHubFixture, "A subscription calls its listeners on the executor thread") {
+    const auto subscription = feed->createSubscription(Quote::TYPE);
+    std::vector<std::thread::id> listenerThreads{};
+    std::size_t selfId{};
+    int selfCalls = 0;
+
+    subscription->addEventListener([&](const std::vector<std::shared_ptr<EventType>> &) {
+        listenerThreads.push_back(std::this_thread::get_id());
+    });
+    selfId = subscription->addEventListener([&](const std::vector<std::shared_ptr<EventType>> &) {
+        selfCalls++;
+        subscription->removeEventListener(selfId);
+    });
+    subscription->addSymbols("AAPL");
+
+    for (const auto bidPrice : {10.5, 11.5}) {
+        auto quote = std::make_shared<Quote>("AAPL");
+
+        quote->setBidPrice(bidPrice);
+        publishAndProcess(std::vector{quote});
+    }
+
+    REQUIRE(listenerThreads.size() == 2);
+    CHECK(listenerThreads[0] == std::this_thread::get_id());
+    CHECK(listenerThreads[1] == std::this_thread::get_id());
+    CHECK(selfCalls == 1);
+}

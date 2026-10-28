@@ -350,6 +350,7 @@ endif ()
 
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
+        src/internal/Handler.cpp
         src/internal/Isolate.cpp
         src/internal/JavaObjectHandle.cpp
         src/internal/EventClassList.cpp

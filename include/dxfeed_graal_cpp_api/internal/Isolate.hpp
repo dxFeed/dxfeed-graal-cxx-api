@@ -110,6 +110,11 @@ class DXFCPP_EXPORT Isolate final {
     };
 
     /**
+     * @return `true` if a Graal callback of the library is in progress on the current thread (see CallbackScope).
+     */
+    static bool isInCallback() noexcept;
+
+    /**
      * Returns `true` when the library is shut down: dxfcpp::shutdown() has completed, or the process is exiting.
      * The isolate is not entered anymore: runIsolated() and runIsolatedOrElse() return
      * CEntryPointErrorsEnum::SHUT_DOWN (the fallback value), runIsolatedThrow() throws it as a GraalException.

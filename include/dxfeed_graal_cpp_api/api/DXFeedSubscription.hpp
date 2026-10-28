@@ -75,7 +75,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 
     std::mutex eventListenerMutex_{};
     JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
-    OnEventHandler onEvent_{};
+    OnEventHandler onEvent_{"DXFeedSubscription"};
     mutable std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners_;
     mutable std::recursive_mutex changeListenersMutex_{};
 

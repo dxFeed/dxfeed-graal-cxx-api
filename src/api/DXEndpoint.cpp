@@ -571,7 +571,12 @@ const std::string &DXEndpoint::getName() const & noexcept {
 }
 
 void DXEndpoint::removeStateChangeListener(std::size_t listenerId) noexcept {
-    onStateChange_ -= listenerId;
+    try {
+        onStateChange_ -= listenerId;
+    } catch (...) {
+        // SimpleHandler::remove() copies the list of listeners: it can fail to allocate.
+        ErrorManager::reportException("DXEndpoint", std::current_exception());
+    }
 }
 
 SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &DXEndpoint::onStateChange() noexcept {

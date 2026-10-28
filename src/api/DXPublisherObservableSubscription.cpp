@@ -58,10 +58,10 @@ bool DXPublisherObservableSubscription::containsEventType(const EventTypeEnum &e
     return isolated::api::IsolatedDXPublisherObservableSubscription::containsEventType(handle_, eventType);
 }
 
+// The native functions are called without listenersMutex_: the SDK may call the bridge (releaseChangeListenerAfterClose
+// takes the lock) on another thread while it holds its own locks.
 std::size_t
 DXPublisherObservableSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
-    std::lock_guard guard{listenersMutex_};
-
     if (isClosed()) {
         return FAKE_LISTENER_ID;
     }
@@ -94,18 +94,30 @@ DXPublisherObservableSubscription::addChangeListener(std::shared_ptr<ObservableS
             }
         });
 
-    listeners_.emplace(id, ListenerRegistration{listener, bridge});
+    {
+        std::lock_guard guard{listenersMutex_};
+
+        listeners_.emplace(id, ListenerRegistration{listener, bridge});
+    }
 
     try {
         isolated::api::IsolatedDXPublisherObservableSubscription::addChangeListener(
             handle_, bridge->getHandle(ObservableSubscriptionChangeListener::Key{}));
     } catch (...) {
+        std::lock_guard guard{listenersMutex_};
+
         listeners_.erase(id);
+
         throw;
     }
 
-    if (isClosed() || !listeners_.contains(id)) {
+    const auto closed = isClosed();
+    std::lock_guard guard{listenersMutex_};
+
+    // Closed while the listener was being added: the SDK may have called the bridge already, which removed it.
+    if (closed || !listeners_.contains(id)) {
         listeners_.erase(id);
+
         return FAKE_LISTENER_ID;
     }
 
@@ -113,19 +125,35 @@ DXPublisherObservableSubscription::addChangeListener(std::shared_ptr<ObservableS
 }
 
 void DXPublisherObservableSubscription::removeChangeListener(std::size_t changeListenerId) {
-    std::lock_guard guard{listenersMutex_};
-
     if (changeListenerId == FAKE_LISTENER_ID) {
         return;
     }
 
-    if (const auto found = listeners_.find(changeListenerId); found != listeners_.end()) {
-        const auto bridge = found->second.bridge;
+    ListenerRegistration registration{};
 
+    {
+        std::lock_guard guard{listenersMutex_};
+
+        const auto found = listeners_.find(changeListenerId);
+
+        if (found == listeners_.end()) {
+            return;
+        }
+
+        registration = std::move(found->second);
+        listeners_.erase(found);
+    }
+
+    try {
         isolated::api::IsolatedDXPublisherObservableSubscription::removeChangeListener(
-            handle_, bridge->getHandle(ObservableSubscriptionChangeListener::Key{}));
+            handle_, registration.bridge->getHandle(ObservableSubscriptionChangeListener::Key{}));
+    } catch (...) {
+        // The listener stays registered in the SDK: keep it, as before the call.
+        std::lock_guard guard{listenersMutex_};
 
-        listeners_.erase(changeListenerId);
+        listeners_.emplace(changeListenerId, std::move(registration));
+
+        throw;
     }
 }
 
