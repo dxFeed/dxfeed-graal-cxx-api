@@ -1,6 +1,7 @@
 * **\[MDAPI-442]\[C++]** Closed subscriptions and endpoints are released, as in the Java API: an application that
   creates and closes them no longer grows in memory, and the listeners of a subscription are not called after
   `close()` returns.
+    * The code that uses the API stays the same: only the behaviour after `close()` changes.
     * An attached subscription is owned by its feed until it is closed or detached, or the endpoint is closed: a
       subscription without a pointer of the user receives events until then. A subscription without a feed is closed
       with its last pointer.
