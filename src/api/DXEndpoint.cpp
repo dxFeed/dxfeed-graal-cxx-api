@@ -13,10 +13,13 @@
 #    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
 #endif
 
+#include <atomic>
 #include <dxfg_api.h>
 #include <filesystem>
 #include <memory>
+#include <mutex>
 #include <string>
+#include <unordered_map>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -25,6 +28,11 @@ struct DXEndpoint::Impl {
     struct Registry {
         std::mutex mutex;
         std::unordered_map<Role, std::shared_ptr<DXEndpoint>> instances;
+
+        // The created endpoints: the library owns them until they are closed. A separate mutex: getInstance() creates
+        // the default endpoint under the mutex of the instances.
+        std::mutex liveMutex;
+        std::unordered_map<const DXEndpoint *, std::shared_ptr<DXEndpoint>> live;
     };
 
     static Registry& getRegistry() {
@@ -34,11 +42,59 @@ struct DXEndpoint::Impl {
         return registry;
     }
 
+    static auto getManager() {
+        return ApiContext::getInstance()->getManager<WeakEntityManager<DXEndpoint>>();
+    }
+
+    // The endpoint is closed: the library stops owning it, its feed stops owning the attached subscriptions, its
+    // publisher releases its subscriptions. Runs once, whichever way the endpoint was closed (close(),
+    // closeAndAwaitTermination(), the CLOSED notification).
+    static void onClosed(const DXEndpoint &endpoint) {
+        auto &impl = *endpoint.impl_;
+
+        if (impl.closed_.exchange(true)) {
+            return;
+        }
+
+        std::shared_ptr<DXFeed> feed{};
+        std::shared_ptr<DXPublisher> publisher{};
+
+        {
+            std::lock_guard lock{impl.mutex_};
+
+            feed = impl.feed_;
+            publisher = impl.publisher_;
+        }
+
+        if (feed) {
+            feed->releaseSubscriptions();
+        }
+
+        if (publisher) {
+            publisher->releaseSubscriptions();
+        }
+
+        std::shared_ptr<DXEndpoint> released{};
+
+        {
+            auto &registry = getRegistry();
+            std::lock_guard lock{registry.liveMutex};
+
+            if (const auto found = registry.live.find(&endpoint); found != registry.live.end()) {
+                released = std::move(found->second);
+                registry.live.erase(found);
+            }
+        }
+
+        // The last pointer released inside a callback would remove the state listener that is being called.
+        releaseOutsideCallbacks(std::move(released));
+    }
+
     static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
                                  dxfg_endpoint_state_t newState, void *userData) {
         runCallback("DXEndpoint", [&] {
             const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
-            const auto endpoint = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getEntity(id);
+            auto endpoint = getManager()->getEntity(id);
 
             if constexpr (Debugger::isDebug) {
                 // ReSharper disable once CppDFAUnreachableCode
@@ -46,15 +102,25 @@ struct DXEndpoint::Impl {
                                 ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr"));
             }
 
-            if (endpoint) {
+            if (!endpoint) {
+                return;
+            }
+
+            // CLOSED is the last notification.
+            const bool closing = newState == DXFG_ENDPOINT_STATE_CLOSED;
+
+            if (closing ? !endpoint->impl_->closedNotified_.exchange(true) : !endpoint->impl_->closedNotified_) {
                 endpoint->onStateChange_(isolated::api::IsolatedDXEndpoint::graalStateToState(oldState),
                                          isolated::api::IsolatedDXEndpoint::graalStateToState(newState));
 
-                if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
-                    // TODO: fix endpoint lifetime
-                    // ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->unregisterEntity(id);
+                if (closing) {
+                    endpoint->onStateChange_.removeAll();
+                    onClosed(*endpoint);
+                    ignoreUnused(getManager()->unregisterEntity(id));
                 }
             }
+
+            releaseOutsideCallbacks(std::move(endpoint));
         });
     }
 
@@ -64,16 +130,16 @@ struct DXEndpoint::Impl {
             Debugger::debug("DXEndpoint::Impl::getInstance(role = " + roleToString(role) + ")");
         }
 
-        auto &[mutex, instances] = getRegistry();
+        auto &registry = getRegistry();
 
-        std::lock_guard lock(mutex);
+        std::lock_guard lock(registry.mutex);
 
         // The default endpoint created earlier is closed and released.
         if (Isolate::isShutDown()) {
             throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
         }
 
-        auto& instance = instances[role];
+        auto &instance = registry.instances[role];
 
         if (!instance) {
             instance = create(role);
@@ -81,6 +147,10 @@ struct DXEndpoint::Impl {
 
         return instance;
     }
+
+    Id<DXEndpoint>::ValueType id_{};
+    std::atomic<bool> closed_{false};         // onClosed() has run
+    std::atomic<bool> closedNotified_{false}; // CLOSED was passed to the state listeners
 
     mutable std::mutex mutex_{};
     std::shared_ptr<DXFeed> feed_{};
@@ -120,11 +190,19 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, Role role,
     }
 
     auto endpoint = createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY));
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->registerEntity(endpoint);
+    const auto id = Impl::getManager()->registerEntity(endpoint);
 
+    endpoint->impl_->id_ = id.getValue();
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
     isolated::api::IsolatedDXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
+
+    {
+        auto &registry = Impl::getRegistry();
+        std::lock_guard lock{registry.liveMutex};
+
+        registry.live.emplace(endpoint.get(), endpoint);
+    }
 
     return endpoint;
 }
@@ -215,6 +293,7 @@ void DXEndpoint::closeAndAwaitTermination() const {
     }
 
     isolated::api::IsolatedDXEndpoint::closeAndAwaitTermination(handle_);
+    Impl::onClosed(*this);
 }
 
 std::shared_ptr<DXFeed> DXEndpoint::getFeed() const {
@@ -383,7 +462,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     loadDefaultPropertiesImpl();
 
     if (auto name = properties_.contains(NAME_PROPERTY) ? properties_.at(NAME_PROPERTY) : std::string{}; name.empty()) {
-        const std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId() + 1;
+        const std::size_t id = Impl::getManager()->getLastId() + 1;
 
         name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY : std::string("-") + std::to_string(id));
 
@@ -508,6 +587,11 @@ DXEndpoint::~DXEndpoint() noexcept {
         });
     }
 
+    // The CLOSED notification may not have come.
+    runRelease("DXEndpoint", [&] {
+        ignoreUnused(Impl::getManager()->unregisterEntity(Id<DXEndpoint>::from(impl_->id_)));
+    });
+
 #if defined(DXFCXX_ENABLE_METRICS)
     ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", -1);
 #endif
@@ -590,6 +674,7 @@ void DXEndpoint::close() const {
     }
 
     isolated::api::IsolatedDXEndpoint::close(handle_);
+    Impl::onClosed(*this);
 }
 
 std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() const {

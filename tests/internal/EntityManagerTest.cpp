@@ -7,7 +7,9 @@
 #include <atomic>
 #include <future>
 #include <memory>
+#include <set>
 #include <thread>
+#include <vector>
 
 using namespace dxfcpp;
 
@@ -67,4 +69,75 @@ TEST_CASE("WeakEntityManager keeps an entity alive for the duration of an acquir
 
     CHECK(destroyed.load());
     CHECK_FALSE(manager.getEntity(id));
+}
+
+TEST_CASE("EntityManager::size() counts registered entities") {
+    EntityManager<WeakManagerTestEntity> manager;
+    std::atomic_bool destroyed{false};
+    auto entity = std::make_shared<WeakManagerTestEntity>(destroyed);
+
+    CHECK(manager.size() == 0);
+
+    const auto id = manager.registerEntity(entity);
+
+    CHECK(manager.size() == 1);
+    CHECK(manager.unregisterEntity(id));
+    CHECK(manager.size() == 0);
+}
+
+TEST_CASE("WeakEntityManager::size() counts registrations until they are removed") {
+    WeakEntityManager<WeakManagerTestEntity> manager;
+    std::atomic_bool firstDestroyed{false};
+    std::atomic_bool secondDestroyed{false};
+    auto first = std::make_shared<WeakManagerTestEntity>(firstDestroyed);
+    auto second = std::make_shared<WeakManagerTestEntity>(secondDestroyed);
+
+    CHECK(manager.size() == 0);
+
+    const auto firstId = manager.registerEntity(first);
+    const auto secondId = manager.registerEntity(second);
+
+    CHECK(manager.size() == 2);
+
+    first.reset();
+
+    // The registration of a destroyed entity stays until it is unregistered or a lookup of its id removes it.
+    CHECK(manager.size() == 2);
+    CHECK_FALSE(manager.getEntity(firstId));
+    CHECK(manager.size() == 1);
+    CHECK(manager.getEntity(secondId) == second);
+    CHECK(manager.unregisterEntity(secondId));
+    CHECK(manager.size() == 0);
+}
+
+TEST_CASE("WeakEntityManager gives unique ids to entities registered concurrently") {
+    constexpr std::size_t threadCount = 8;
+    constexpr std::size_t entitiesPerThread = 1000;
+    WeakEntityManager<WeakManagerTestEntity> manager;
+    std::atomic_bool destroyed{false};
+    std::vector<std::vector<std::shared_ptr<WeakManagerTestEntity>>> entities(threadCount);
+    std::vector<std::vector<std::size_t>> ids(threadCount);
+    std::vector<std::thread> threads{};
+
+    for (std::size_t t = 0; t < threadCount; ++t) {
+        threads.emplace_back([&, t] {
+            for (std::size_t i = 0; i < entitiesPerThread; ++i) {
+                entities[t].push_back(std::make_shared<WeakManagerTestEntity>(destroyed));
+                ids[t].push_back(manager.registerEntity(entities[t].back()).getValue());
+            }
+        });
+    }
+
+    for (auto &thread : threads) {
+        thread.join();
+    }
+
+    std::set<std::size_t> uniqueIds{};
+
+    for (const auto &threadIds : ids) {
+        uniqueIds.insert(threadIds.begin(), threadIds.end());
+    }
+
+    CHECK(uniqueIds.size() == threadCount * entitiesPerThread);
+    CHECK(manager.size() == threadCount * entitiesPerThread);
 }

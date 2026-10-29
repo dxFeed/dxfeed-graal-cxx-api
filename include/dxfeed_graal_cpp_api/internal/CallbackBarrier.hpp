@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./Isolate.hpp"
 
 #include <exception>
+#include <memory>
 #include <source_location>
 #include <string_view>
 #include <utility>
@@ -66,6 +67,19 @@ void runRelease(const char *component, Body &&body,
         }
     }
 }
+
+/**
+ * Releases an object that holds a native listener outside of the callbacks of the library.
+ *
+ * Releasing the last handle of a native listener waits for its calls in progress on the other threads. Inside a
+ * listener or a callback of the library (ListenerCallScope::isActive()) such a wait could deadlock: two listeners that
+ * close the subscriptions of each other on two threads would wait for each other. So there the object is passed to the
+ * release thread of the library, which is in no callback; elsewhere it is released at once. From the start of the
+ * shutdown of the library it is released at once.
+ *
+ * @param object The object to release.
+ */
+DXFCPP_EXPORT void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept;
 
 DXFCPP_END_NAMESPACE
 

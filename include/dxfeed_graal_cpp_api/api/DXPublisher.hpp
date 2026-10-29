@@ -11,8 +11,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/JavaObjectHandle.hpp"
 #include "./DXFeedSubscription.hpp"
 
+#include <cstdint>
 #include <memory>
 #include <mutex>
+#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_api
@@ -69,11 +71,16 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     private:
     mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<DXPublisher> handle_;
-    std::unordered_map<std::reference_wrapper<const dxfcpp::EventTypeEnum>, std::shared_ptr<ObservableSubscription>>
-        subscriptions_{};
+
+    // The subscriptions by the id of the event type. Guarded by mutex_.
+    mutable std::unordered_map<std::uint32_t, std::shared_ptr<ObservableSubscription>> subscriptions_{};
+    mutable bool closed_{}; // the endpoint is closed. Guarded by mutex_.
 
     static std::shared_ptr<DXPublisher> create(void *handle);
     void publishEventsImpl(void *graalEventsList) const;
+
+    // The endpoint is closed: releases the subscriptions.
+    void releaseSubscriptions() const;
 
     protected:
     DXPublisher() noexcept;

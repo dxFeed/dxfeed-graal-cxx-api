@@ -52,11 +52,11 @@ struct EntityManager : private NonCopyable<EntityManager<EntityType_, EntityIdTy
             return it->second;
         }
 
-        auto id = Id<EntityIdType>::getNext();
+        // The manager is one per process, so its counter gives unique ids to all modules that register entities.
+        auto id = Id<EntityIdType>::from(++lastId_);
 
         entitiesById_[id] = entity;
         idsByEntities_.emplace(std::make_pair(entity, id));
-        lastId_ = id.getValue();
 
         return id;
     }
@@ -164,6 +164,12 @@ struct EntityManager : private NonCopyable<EntityManager<EntityType_, EntityIdTy
 
         return idsByEntities_.contains(entity);
     }
+
+    std::size_t size() {
+        std::lock_guard lockGuard{mutex_};
+
+        return entitiesById_.size();
+    }
 };
 
 /**
@@ -231,10 +237,10 @@ class WeakEntityManager : private NonCopyable<WeakEntityManager<EntityType_, Ent
             idsByEntities_.erase(reverse);
         }
 
-        const auto id = Id<EntityIdType>::getNext();
+        // The manager is one per process, so its counter gives unique ids to all modules that register entities.
+        const auto id = Id<EntityIdType>::from(++lastId_);
         entitiesById_.emplace(id, Entry{entity, address});
         idsByEntities_.emplace(address, id);
-        lastId_ = id.getValue();
 
         return id;
     }
@@ -383,6 +389,18 @@ class WeakEntityManager : private NonCopyable<WeakEntityManager<EntityType_, Ent
     /** @return `true` if the entity is currently registered and alive. */
     bool contains(const std::shared_ptr<EntityType> &entity) {
         return getId(entity).has_value();
+    }
+
+    /**
+     * Returns the number of registrations, including those of destroyed entities that are not removed yet: a
+     * registration that outlives its entity is a leak, unless a lookup of its id removes it.
+     *
+     * @return The number of registrations.
+     */
+    std::size_t size() {
+        std::lock_guard lockGuard{mutex_};
+
+        return entitiesById_.size();
     }
 };
 

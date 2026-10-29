@@ -2,14 +2,20 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Handler.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <config/config.hpp>
 #include <cstdlib>
+#include <deque>
 #include <dxfg_api.h>
+#include <exception>
+#include <memory>
 #include <mutex>
 #include <optional>
 #include <string>
@@ -65,7 +71,9 @@ DXFCPP_BEGIN_NAMESPACE
 
 Isolate::IsolateThread::IsolateThread(GraalIsolateThreadHandle threadHandle) noexcept
     : handle{threadHandle}, tid{std::this_thread::get_id()} {
-    this->idx = Id<IsolateThread>::getNext().getValue();
+    static std::atomic<std::size_t> lastIdx{0};
+
+    this->idx = ++lastIdx;
 
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -383,6 +391,99 @@ bool Isolate::isShutDown() noexcept {
     return shutDown.load(std::memory_order_acquire);
 }
 
+namespace {
+
+// The objects that releaseOutsideCallbacks() passes to the release thread. Never destroyed: the thread waits on it
+// until the process ends.
+struct ReleaseQueue {
+    std::mutex mutex{};
+    std::condition_variable changed{};
+    std::deque<std::shared_ptr<void>> objects{};
+    bool started{};
+    bool releasing{};
+    bool stopped{};
+};
+
+ReleaseQueue &getReleaseQueue() noexcept {
+    static auto &queue = *new ReleaseQueue{};
+
+    return queue;
+}
+
+// The release thread is not joined: after stopReleaseThread() it waits forever, so it does not leave the isolate while
+// the library is shutting down.
+void runReleaseThread() noexcept {
+    auto &queue = getReleaseQueue();
+    std::unique_lock lock{queue.mutex};
+
+    while (true) {
+        queue.changed.wait(lock, [&queue] {
+            return !queue.objects.empty();
+        });
+
+        auto object = std::move(queue.objects.front());
+
+        queue.objects.pop_front();
+        queue.releasing = true;
+        lock.unlock();
+        object.reset();
+        lock.lock();
+        queue.releasing = false;
+        queue.changed.notify_all();
+    }
+}
+
+// Releases the queued objects (they hold native handles) before the handles are released by the shutdown. The objects
+// passed later are released at once. Waits no longer than for the callbacks: the release waits for the calls of the
+// listener in progress, and the shutdown may be called from a listener.
+void stopReleaseThread() noexcept {
+    auto &queue = getReleaseQueue();
+    std::unique_lock lock{queue.mutex};
+
+    queue.stopped = true;
+    queue.changed.wait_for(lock, CALLBACKS_TIMEOUT, [&queue] {
+        return queue.objects.empty() && !queue.releasing;
+    });
+}
+
+} // namespace
+
+void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept {
+    if (!object) {
+        return;
+    }
+
+    std::exception_ptr error{};
+
+    if (ListenerCallScope::isActive()) {
+        auto &queue = getReleaseQueue();
+        std::lock_guard lock{queue.mutex};
+
+        if (!queue.stopped) {
+            try {
+                if (!queue.started) {
+                    std::thread{runReleaseThread}.detach();
+                    queue.started = true;
+                }
+
+                queue.objects.push_back(std::move(object));
+                queue.changed.notify_all();
+
+                return;
+            } catch (...) {
+                // The thread could not be started or the queue could not grow: the object is released at once.
+                error = std::current_exception();
+            }
+        }
+    }
+
+    if (error) {
+        ErrorManager::reportException("Isolate", error);
+    }
+
+    object.reset();
+}
+
 void Isolate::shutdown() {
     // A concurrent call waits for the first one. Never destroyed: shutdown() may be called from a static destructor.
     static auto &mutex = *new std::mutex{};
@@ -396,6 +497,7 @@ void Isolate::shutdown() {
     // The new callbacks return at once.
     shuttingDown = true;
     waitForCallbacks();
+    stopReleaseThread();
 
     if (isCreated()) {
         // Releasing the last handle of a native listener deactivates it: the release waits for its callbacks in

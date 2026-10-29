@@ -30,15 +30,24 @@ std::shared_ptr<ApiContext> ApiContext::getInstance() noexcept {
     return instance;
 }
 
+namespace {
+
+/// The managers of the process by the name of their type.
+struct ManagerRegistry {
+    std::mutex mutex{};
+    std::unordered_map<std::string, std::shared_ptr<void>> managers{};
+};
+
+} // namespace
+
 std::shared_ptr<void> ApiContext::getManagerImpl(const char *typeName,
                                                  std::shared_ptr<void> (*create)()) const noexcept {
     // The registry owns the managers and is never deleted: the Graal callbacks look the entities up in the managers
     // until the process ends, and the entities are not destroyed at exit (their destructors would call Graal).
-    static auto &mutex = *new std::mutex{};
-    static auto &managers = *new std::unordered_map<std::string, std::shared_ptr<void>>{};
+    static auto &registry = *new ManagerRegistry{};
 
-    std::lock_guard lock(mutex);
-    auto &manager = managers[typeName];
+    std::lock_guard lock(registry.mutex);
+    auto &manager = registry.managers[typeName];
 
     if (!manager) {
         manager = create();

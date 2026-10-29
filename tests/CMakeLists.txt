@@ -45,6 +45,7 @@ set(DXFC_TEST_SOURCES
         api/EqualityTest.cpp
         api/EventsTest.cpp
         api/ExportsTest.cpp
+        api/LifetimeTest.cpp
         api/MarketEventSymbolsTest.cpp
         api/MarketMakerTest.cpp
         api/NuamEventsTest.cpp

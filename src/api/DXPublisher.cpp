@@ -5,12 +5,12 @@
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisher.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
 #    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
 #endif
 
-#include <functional>
 #include <memory>
 #include <string>
 #include <utility>
@@ -34,9 +34,6 @@ std::shared_ptr<DXPublisher> DXPublisher::create(void *handle) {
 
     std::shared_ptr<DXPublisher> publisher{new DXPublisher{}};
 
-    auto id = ApiContext::getInstance()->getManager<EntityManager<DXPublisher>>()->registerEntity(publisher);
-    ignoreUnused(id);
-
     publisher->handle_ = JavaObjectHandle<DXPublisher>(handle);
 
     return publisher;
@@ -50,16 +47,38 @@ void DXPublisher::publishEvents(std::shared_ptr<EventType> event) const {
 std::shared_ptr<ObservableSubscription> DXPublisher::getSubscription(const EventTypeEnum &eventType) {
     std::lock_guard guard{mutex_};
 
-    if (subscriptions_.contains(eventType)) {
-        return subscriptions_.at(eventType);
+    if (const auto found = subscriptions_.find(eventType.getId()); found != subscriptions_.end()) {
+        return found->second;
     }
 
     auto sub = DXPublisherObservableSubscription::create(
         isolated::api::IsolatedDXPublisher::getSubscription(handle_, eventType));
 
-    subscriptions_.emplace(std::cref(eventType), sub);
+    // The subscriptions of a closed endpoint are closed: they are not kept.
+    if (!closed_) {
+        subscriptions_.emplace(eventType.getId(), sub);
+    }
 
     return sub;
+}
+
+void DXPublisher::releaseSubscriptions() const {
+    auto released = std::make_shared<decltype(subscriptions_)>();
+
+    {
+        std::lock_guard guard{mutex_};
+
+        closed_ = true;
+        released->swap(subscriptions_);
+    }
+
+    if (released->empty()) {
+        return;
+    }
+
+    // Called from a callback, the subscriptions are released on another thread: a subscription removes its native
+    // listeners.
+    releaseOutsideCallbacks(std::move(released));
 }
 
 std::string DXPublisher::toString() const {

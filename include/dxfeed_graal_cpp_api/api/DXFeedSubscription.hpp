@@ -21,11 +21,13 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../util/TimePeriodInfo.hpp"
 #include "./osub/ObservableSubscription.hpp"
 
+#include <atomic>
 #include <concepts>
 #include <memory>
 #include <mutex>
 #include <type_traits>
 #include <unordered_set>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_api
@@ -73,14 +75,30 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     std::unordered_set<EventTypeEnum> eventTypes_;
     JavaObjectHandle<DXFeedSubscription> handle_;
 
-    std::mutex eventListenerMutex_{};
-    JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
-    OnEventHandler onEvent_{"DXFeedSubscription"};
+    // Set first by close(): the callbacks drop the batches of a closed subscription, its methods do nothing.
+    mutable std::atomic<bool> closed_{false};
+
+    // The id of the registration for the callbacks (see registerSubscription()); close() removes the registration.
+    Id<DXFeedSubscription>::ValueType id_{};
+
+    mutable std::mutex eventListenerMutex_{};
+    mutable JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
+    mutable OnEventHandler onEvent_{"DXFeedSubscription"};
     mutable std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners_;
     mutable std::recursive_mutex changeListenersMutex_{};
 
+    // The feeds that own this subscription while it is attached to them (see DXFeed::attachSubscription()).
+    mutable std::mutex feedsMutex_{};
+    mutable std::vector<std::weak_ptr<const DXFeed>> feeds_{};
+
     static JavaObjectHandle<DXFeedSubscription>
     createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
+
+    // Registers a new subscription for the callbacks of its native listener.
+    static void registerSubscription(const std::shared_ptr<DXFeedSubscription> &subscription);
+
+    void addFeed(const std::shared_ptr<const DXFeed> &feed) const;
+    void removeFeed(const DXFeed *feed) const;
 
     void setEventListenerHandle(Id<DXFeedSubscription> id);
 
@@ -220,9 +238,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         }
 
         auto sub = createShared(begin, end);
-        auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
-
-        dxfcpp::ignoreUnused(id);
+        registerSubscription(sub);
 
         return sub;
     }
@@ -261,9 +277,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     template <typename EventTypesCollection>
     static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) {
         auto sub = createShared(std::forward<EventTypesCollection>(eventTypes));
-        auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
-
-        dxfcpp::ignoreUnused(id);
+        registerSubscription(sub);
 
         return sub;
     }
@@ -297,6 +311,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * while holding the lock for this subscription. This method clears lists of all installed
      * event listeners and subscription change listeners and makes sure that no more listeners
      * can be added.
+     *
+     * The subscription is detached from all the feeds, which do not own it anymore. After this method returns, the
+     * event listeners are not called; called from a listener or a callback of the library, it does not wait for the
+     * calls in progress on the other threads. Adding a listener to a closed subscription or attaching it to a feed does
+     * nothing, as a second close() does. A subscription that is attached to no feed is closed when its last pointer is
+     * released.
      */
     void close() const;
 
