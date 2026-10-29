@@ -30,7 +30,30 @@
  *   OnDemandService.
  * - A listener that keeps a pointer to the entity it listens to keeps that entity: keep a `std::weak_ptr` in it.
  *
+ * An endpoint is not closed with its last pointer, as in the Java API, where an endpoint is not closed by the garbage
+ * collector. `DXEndpoint::create()->connect(address)->getFeed()` keeps no pointer to the endpoint, and the feed does
+ * not own its endpoint: closing it there would leave the feed without data and without an error. The last pointer can
+ * also be released in a listener on a thread of the library or at the exit of the process, where close() could block
+ * or fail.
+ *
  * AutoClose closes an entity when it goes out of scope, as try-with-resources does in Java.
+ *
+ * **Closing elsewhere.** To close an entity in another scope or on another thread, keep a `std::shared_ptr` to it and
+ * call close() there: close() can be called from any thread and more than once. Or move the AutoClose there: return
+ * it from a function, keep it in a member of the owner or move it into a lambda.
+ *
+ * ```cpp
+ * struct Session {
+ *     dxfcpp::AutoClose<dxfcpp::DXEndpoint> endpoint; // Closed when the Session is destroyed.
+ * };
+ *
+ * std::thread worker{[endpoint = dxfcpp::AutoClose{dxfcpp::DXEndpoint::create()->connect(address)}] {
+ *     // ...
+ * }}; // The endpoint is closed when the thread ends.
+ * ```
+ *
+ * One AutoClose must not be used from two threads at once, as one `std::shared_ptr` must not; moving it to another
+ * thread is fine.
  *
  * **close().** DXFeedSubscription::close() returns after the calls of its listeners in progress on other threads
  * end; called from a listener of the library, it does not wait. A batch of events that the Java code delivers after

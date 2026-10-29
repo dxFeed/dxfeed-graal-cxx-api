@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <stdexcept>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -58,6 +59,21 @@ TEST_CASE("AutoClose closes the entity once") {
             CHECK(second.get() == entity);
         }
 
+        CHECK(entity->closes == 1);
+    }
+
+    SUBCASE("on another thread after a move into it") {
+        const auto entity = std::make_shared<Closable>();
+
+        bool moved{};
+
+        std::thread worker{[&moved, autoClose = AutoClose{entity}] {
+            moved = static_cast<bool>(autoClose);
+        }};
+
+        worker.join();
+
+        CHECK(moved);
         CHECK(entity->closes == 1);
     }
 
