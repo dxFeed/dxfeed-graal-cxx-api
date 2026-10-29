@@ -169,14 +169,19 @@ InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
     }
 
     for (auto &[id, entry] : listeners) {
-        runRelease("InstrumentProfileCollector", [this, &entry] {
-            if (handle_ && entry.handle) {
-                isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, entry.handle);
-            }
+        if (!entry.handle) {
+            continue;
+        }
 
-            if (entry.handle) {
-                releaseListenerHandle(std::move(entry.handle));
-            }
+        if (handle_) {
+            runRelease("InstrumentProfileCollector", [this, &entry] {
+                isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, entry.handle);
+            });
+        }
+
+        // Even if the native listener was not removed.
+        runRelease("InstrumentProfileCollector", [&entry] {
+            releaseListenerHandle(std::move(entry.handle));
         });
     }
 }

@@ -129,8 +129,9 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
 
     /**
      * Returns DXEndpoint that is associated with this on-demand service.
+     * The endpoint owns its service: when the endpoint is closed and released, this method returns an empty pointer.
      *
-     * @return DXEndpoint that is associated with this on-demand service.
+     * @return DXEndpoint that is associated with this on-demand service or an empty pointer.
      */
     std::shared_ptr<DXEndpoint> getEndpoint() const noexcept;
 
