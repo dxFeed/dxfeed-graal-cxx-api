@@ -85,7 +85,7 @@ TEST_CASE("EntityManager::size() counts registered entities") {
     CHECK(manager.size() == 0);
 }
 
-TEST_CASE("WeakEntityManager::size() counts only live entities") {
+TEST_CASE("WeakEntityManager::size() counts registrations until they are removed") {
     WeakEntityManager<WeakManagerTestEntity> manager;
     std::atomic_bool firstDestroyed{false};
     std::atomic_bool secondDestroyed{false};
@@ -94,15 +94,20 @@ TEST_CASE("WeakEntityManager::size() counts only live entities") {
 
     CHECK(manager.size() == 0);
 
-    ignoreUnused(manager.registerEntity(first));
+    const auto firstId = manager.registerEntity(first);
     const auto secondId = manager.registerEntity(second);
 
     CHECK(manager.size() == 2);
 
     first.reset();
 
+    // The registration of a destroyed entity stays until it is unregistered or a lookup of its id removes it.
+    CHECK(manager.size() == 2);
+    CHECK_FALSE(manager.getEntity(firstId));
     CHECK(manager.size() == 1);
     CHECK(manager.getEntity(secondId) == second);
+    CHECK(manager.unregisterEntity(secondId));
+    CHECK(manager.size() == 0);
 }
 
 TEST_CASE("WeakEntityManager gives unique ids to entities registered concurrently") {

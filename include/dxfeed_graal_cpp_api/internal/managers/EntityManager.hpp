@@ -392,22 +392,13 @@ class WeakEntityManager : private NonCopyable<WeakEntityManager<EntityType_, Ent
     }
 
     /**
-     * Removes expired entries and returns the number of live registrations.
+     * Returns the number of registrations, including those of destroyed entities that are not removed yet: a
+     * registration that outlives its entity is a leak, unless a lookup of its id removes it.
      *
-     * @return The number of registered entities that are still alive.
+     * @return The number of registrations.
      */
     std::size_t size() {
         std::lock_guard lockGuard{mutex_};
-
-        for (auto entry = entitiesById_.begin(); entry != entitiesById_.end();) {
-            if (entry->second.entity.expired()) {
-                const auto expired = entry++;
-
-                eraseEntry(expired);
-            } else {
-                ++entry;
-            }
-        }
 
         return entitiesById_.size();
     }

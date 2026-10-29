@@ -78,6 +78,9 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     // Set first by close(): the callbacks drop the batches of a closed subscription, its methods do nothing.
     mutable std::atomic<bool> closed_{false};
 
+    // The id of the registration for the callbacks (see registerSubscription()); close() removes the registration.
+    Id<DXFeedSubscription>::ValueType id_{};
+
     mutable std::mutex eventListenerMutex_{};
     mutable JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
     mutable OnEventHandler onEvent_{"DXFeedSubscription"};

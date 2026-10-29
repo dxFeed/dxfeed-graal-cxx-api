@@ -209,7 +209,7 @@ std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(std::initializer_
 
 void DXFeedSubscription::registerSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) {
     // The registry does not own the subscription: its owners are the user and the feeds it is attached to.
-    ignoreUnused(Impl::getManager()->registerEntity(subscription));
+    subscription->id_ = Impl::getManager()->registerEntity(subscription).getValue();
 }
 
 void DXFeedSubscription::addFeed(const std::shared_ptr<const DXFeed> &feed) const {
@@ -324,9 +324,8 @@ void DXFeedSubscription::close() const {
         }
     }
 
-    if (self) {
-        ignoreUnused(Impl::getManager()->unregisterEntity(std::const_pointer_cast<DXFeedSubscription>(self)));
-    }
+    // By id: in the destructor there is no pointer to the subscription.
+    ignoreUnused(Impl::getManager()->unregisterEntity(Id<DXFeedSubscription>::from(id_)));
 
     if (error) {
         std::rethrow_exception(error);
@@ -441,7 +440,7 @@ DXFeedSubscription::OnEventHandler &DXFeedSubscription::onEvent() {
 std::size_t DXFeedSubscription::addChangeListener(std::shared_ptr<ObservableSubscriptionChangeListener> listener) {
     std::lock_guard guard{changeListenersMutex_};
 
-    if (closed_ || isClosed()) {
+    if (isClosed()) {
         return FAKE_CHANGE_LISTENER_ID;
     }
 

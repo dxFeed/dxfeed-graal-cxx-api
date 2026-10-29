@@ -146,6 +146,58 @@ TEST_CASE_FIXTURE(test::LocalHubFixture, "A detached subscription is released wi
     CHECK(weak.expired());
 }
 
+TEST_CASE_FIXTURE(test::LocalHubFixture, "A subscription detached and cleared is released with its last pointer") {
+    const auto initialSize = subscriptionManager()->size();
+    auto subscription = feed->createSubscription(Quote::TYPE);
+    const std::weak_ptr<DXFeedSubscription> weak = subscription;
+
+    subscription->addSymbols("AAPL");
+    feed->detachSubscriptionAndClear(subscription);
+    subscription.reset();
+
+    CHECK(weak.expired());
+    CHECK(subscriptionManager()->size() == initialSize);
+}
+
+TEST_CASE_FIXTURE(test::LocalHubFixture, "A subscription attached twice to a feed is released by one detach") {
+    auto subscription = feed->createSubscription(Quote::TYPE);
+    const std::weak_ptr<DXFeedSubscription> weak = subscription;
+
+    feed->attachSubscription(subscription);
+    feed->detachSubscription(subscription);
+    subscription.reset();
+
+    CHECK(weak.expired());
+}
+
+TEST_CASE_FIXTURE(test::LocalHubFixture, "A subscription created on the feed of a closed endpoint is not owned by it") {
+    endpoint->close();
+
+    auto subscription = feed->createSubscription(Quote::TYPE);
+    const std::weak_ptr<DXFeedSubscription> weak = subscription;
+
+    subscription.reset();
+
+    CHECK(weak.expired());
+}
+
+TEST_CASE_FIXTURE(test::LocalHubFixture, "A subscription attached to two feeds is owned until both release it") {
+    // With the in-place executor the CLOSED notification waits, so close() releases the subscriptions on this thread.
+    const test::LocalHubFixture other{};
+    auto subscription = feed->createSubscription(Quote::TYPE);
+    const std::weak_ptr<DXFeedSubscription> weak = subscription;
+
+    other.feed->attachSubscription(subscription);
+    feed->detachSubscription(subscription);
+    subscription.reset();
+
+    CHECK_FALSE(weak.expired());
+
+    other.endpoint->close();
+
+    CHECK(weak.expired());
+}
+
 TEST_CASE_FIXTURE(test::LocalHubFixture, "A closed subscription is released by its feed") {
     auto subscription = feed->createSubscription(Quote::TYPE);
     const std::weak_ptr<DXFeedSubscription> weak = subscription;
