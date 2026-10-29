@@ -81,9 +81,14 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
     /// The alias to a type of unique pointer to the OnDemandService object
     using Unique = std::unique_ptr<OnDemandService>;
 
+    friend struct DXEndpoint;
+
     private:
     JavaObjectHandle<OnDemandService> handle_{};
-    std::shared_ptr<DXEndpoint> endpoint_{};
+    // The endpoint owns its service.
+    std::weak_ptr<DXEndpoint> endpoint_{};
+
+    static std::shared_ptr<OnDemandService> create(const std::shared_ptr<DXEndpoint> &endpoint);
 
     protected:
     OnDemandService() noexcept;
@@ -124,8 +129,9 @@ struct DXFCPP_EXPORT OnDemandService : SharedEntity {
 
     /**
      * Returns DXEndpoint that is associated with this on-demand service.
+     * The endpoint owns its service: when the endpoint is closed and released, this method returns an empty pointer.
      *
-     * @return DXEndpoint that is associated with this on-demand service.
+     * @return DXEndpoint that is associated with this on-demand service or an empty pointer.
      */
     std::shared_ptr<DXEndpoint> getEndpoint() const noexcept;
 

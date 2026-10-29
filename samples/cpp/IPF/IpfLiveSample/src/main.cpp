@@ -60,7 +60,14 @@ int main(int argc, char *argv[]) {
         std::mutex mutex{};
 
         // It is possible to add listener after connection is started - updates will not be missed in this case
-        collector->addUpdateListener([&profiles, &mutex, self = collector](auto &&instruments) {
+        // The listener does not own the collector: the collector owns the listener
+        collector->addUpdateListener([&profiles, &mutex, weakCollector = std::weak_ptr(collector)](auto &&instruments) {
+            const auto self = weakCollector.lock();
+
+            if (!self) {
+                return;
+            }
+
             std::cout << "\nInstrument Profiles:" << std::endl;
             // We can observe REMOVED elements - need to add necessary filtering
             // See documentation for `InstrumentProfileCollector` for more details

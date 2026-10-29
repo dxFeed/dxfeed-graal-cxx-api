@@ -4,8 +4,6 @@
 #include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfileReader.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/auth/AuthToken.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfile.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfileReader.hpp"
 
@@ -13,17 +11,12 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-InstrumentProfileReader::InstrumentProfileReader() : id_{Id<InstrumentProfileReader>::UNKNOWN} {
+InstrumentProfileReader::InstrumentProfileReader() {
     handle_ = isolated::ipf::IsolatedInstrumentProfileReader::create();
 }
 
 InstrumentProfileReader::Ptr InstrumentProfileReader::create() {
-    auto reader = std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
-
-    reader->id_ =
-        ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileReader>>()->registerEntity(reader);
-
-    return reader;
+    return std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
 }
 
 std::int64_t InstrumentProfileReader::getLastModified() const {

@@ -43,7 +43,6 @@ struct AuthToken;
  * </ul>
  */
 class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
-    Id<InstrumentProfileReader> id_;
     JavaObjectHandle<InstrumentProfileReader> handle_{};
 
     InstrumentProfileReader();

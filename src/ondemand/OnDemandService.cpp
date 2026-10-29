@@ -4,8 +4,6 @@
 #include "../../include/dxfeed_graal_cpp_api/ondemand/OnDemandService.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/ondemand/IsolatedOnDemandService.hpp"
 
 #include <memory>
@@ -38,10 +36,11 @@ std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DX
         Debugger::debug("OnDemandService::getInstance(" + endpoint->toString() + ")");
     }
 
-    std::shared_ptr<OnDemandService> onDemandService{new OnDemandService{}};
+    return endpoint->getOnDemandService();
+}
 
-    auto id = ApiContext::getInstance()->getManager<EntityManager<OnDemandService>>()->registerEntity(onDemandService);
-    ignoreUnused(id);
+std::shared_ptr<OnDemandService> OnDemandService::create(const std::shared_ptr<DXEndpoint> &endpoint) {
+    std::shared_ptr<OnDemandService> onDemandService{new OnDemandService{}};
 
     onDemandService->endpoint_ = endpoint;
     onDemandService->handle_ = isolated::ondemand::IsolatedOnDemandService::getInstance(endpoint->handle_);
@@ -50,7 +49,7 @@ std::shared_ptr<OnDemandService> OnDemandService::getInstance(std::shared_ptr<DX
 }
 
 std::shared_ptr<DXEndpoint> OnDemandService::getEndpoint() const noexcept {
-    return endpoint_;
+    return endpoint_.lock();
 }
 
 bool OnDemandService::isReplaySupported() const {

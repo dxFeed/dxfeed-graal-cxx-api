@@ -104,6 +104,7 @@ InstrumentProfileConnection::createConnection(const StringLike &address,
         ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->registerEntity(connection);
     connection->handle_ =
         isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address, collector->handle_);
+    connection->collector_ = std::move(collector);
     connection->stateChangeListenerHandle_ = isolated::ipf::live::IsolatedIpfPropertyChangeListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onStateChange),
         dxfcpp::bit_cast<void *>(connection->id_.getValue()));

@@ -20,6 +20,10 @@ struct dxfg_event_type_list;
 DXFCPP_BEGIN_NAMESPACE
 
 struct TxModelListenerCommon::Impl {
+    static auto getManager() {
+        return ApiContext::getInstance()->getManager<WeakEntityManager<TxModelListenerCommon, TxModelListenerTag>>();
+    }
+
     // typedef void (*dxfg_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,
     // dxfg_indexed_event_source_t* source, dxfg_event_type_list* events, int32_t isSnapshot, void* user_data);
     static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_indexed_event_source_t *source,
@@ -30,9 +34,7 @@ struct TxModelListenerCommon::Impl {
             }
 
             auto id = Id<TxModelListenerTag>::from(userData);
-            auto listener = ApiContext::getInstance()
-                                ->getManager<EntityManager<TxModelListenerCommon, TxModelListenerTag>>()
-                                ->getEntity(id);
+            auto listener = getManager()->getEntity(id);
 
             if (!listener) {
                 return;
@@ -48,6 +50,15 @@ TxModelListenerCommon::TxModelListenerCommon() : handle_{}, impl_{std::make_uniq
 }
 
 TxModelListenerCommon::~TxModelListenerCommon() noexcept {
+    runRelease("TxModelListener", [this] {
+        ignoreUnused(Impl::getManager()->unregisterEntity(Id<TxModelListenerTag>::from(id_)));
+
+        // Releasing the native listener waits for its calls in progress on the other threads, which cannot reach
+        // this listener anymore.
+        if (handle_) {
+            releaseOutsideCallbacks(std::make_shared<JavaObjectHandle<TxModelListenerTag>>(std::move(handle_)));
+        }
+    });
 }
 
 const JavaObjectHandle<TxModelListenerTag> &TxModelListenerCommon::getHandle() const {
@@ -68,11 +79,12 @@ bool TxModelListenerCommon::operator==(const TxModelListenerCommon &other) const
     return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
-void TxModelListenerCommon::createHandle(Id<TxModelListenerTag> id) {
+void TxModelListenerCommon::createHandle() {
     std::lock_guard guard{mutex_};
 
+    id_ = Impl::getManager()->registerEntity(sharedAs<TxModelListenerCommon>()).getValue();
     handle_ = isolated::model::IsolatedTxModelListener::create(dxfcpp::bit_cast<void *>(&Impl::onEventsReceived),
-                                                               dxfcpp::bit_cast<void *>(id.getValue()));
+                                                               dxfcpp::bit_cast<void *>(id_));
 }
 
 DXFCPP_END_NAMESPACE

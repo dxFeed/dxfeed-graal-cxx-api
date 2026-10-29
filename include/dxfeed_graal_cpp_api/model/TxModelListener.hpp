@@ -65,8 +65,10 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
     struct Impl;
 
     std::unique_ptr<Impl> impl_;
+    Id<TxModelListenerTag>::ValueType id_{};
 
-    void createHandle(Id<TxModelListenerTag> id);
+    // Registers this listener for the lookup by its callback and creates the native listener.
+    void createHandle();
 };
 
 /**
@@ -107,9 +109,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModelListener final : TxModelListenerCommon,
                               const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
                onEventsReceived) {
         auto listener = RequireMakeShared<IndexedTxModelListener<E>>::createShared();
-        listener->createHandle(ApiContext::getInstance()
-                                   ->getManager<EntityManager<TxModelListenerCommon, TxModelListenerTag>>()
-                                   ->registerEntity(listener));
+        listener->createHandle();
 
         listener->onEventsReceived_ +=
             [l = onEventsReceived](const IndexedEventSource &source,
@@ -182,9 +182,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModelListener final : TxModelListenerComm
     create(std::function<void(const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
                onEventsReceived) {
         auto listener = RequireMakeShared<TimeSeriesTxModelListener<E>>::createShared();
-        listener->createHandle(ApiContext::getInstance()
-                                   ->getManager<EntityManager<TxModelListenerCommon, TxModelListenerTag>>()
-                                   ->registerEntity(listener));
+        listener->createHandle();
 
         listener->onEventsReceived_ +=
             [l = onEventsReceived](const IndexedEventSource &, const std::vector<std::shared_ptr<EventType>> &events,

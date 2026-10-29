@@ -69,6 +69,8 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     Id<InstrumentProfileConnection> id_;
     JavaObjectHandle<InstrumentProfileConnection> handle_{};
     JavaObjectHandle<IpfPropertyChangeListener> stateChangeListenerHandle_{};
+    // The collector that the connection updates, as in the Java API.
+    InstrumentProfileCollector::Ptr collector_{};
     SimpleHandler<void(State, State)> onStateChange_{"InstrumentProfileConnection"};
 
     InstrumentProfileConnection() noexcept;

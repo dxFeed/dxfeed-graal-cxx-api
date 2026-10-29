@@ -8,6 +8,7 @@
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
+#include "../../include/dxfeed_graal_cpp_api/ondemand/OnDemandService.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
 #    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
@@ -155,6 +156,7 @@ struct DXEndpoint::Impl {
     mutable std::mutex mutex_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
+    std::shared_ptr<OnDemandService> onDemandService_{};
 
     std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint> &handle) {
         std::lock_guard lock{mutex_};
@@ -312,6 +314,16 @@ std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() const {
     }
 
     return impl_->getPublisher(handle_);
+}
+
+std::shared_ptr<OnDemandService> DXEndpoint::getOnDemandService() {
+    std::lock_guard lock{impl_->mutex_};
+
+    if (impl_->onDemandService_) {
+        return impl_->onDemandService_;
+    }
+
+    return impl_->onDemandService_ = OnDemandService::create(sharedAs<DXEndpoint>());
 }
 
 std::optional<TimePeriod> DXEndpoint::getRequestedAggregationPeriod() const {

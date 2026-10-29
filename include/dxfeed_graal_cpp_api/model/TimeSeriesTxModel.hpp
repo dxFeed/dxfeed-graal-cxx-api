@@ -177,7 +177,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withBatchProcessing(bool isBatchProcessing) const {
-            return this->createShared(std::move(withBatchProcessingImpl(handle_, isBatchProcessing)));
+            return this->createShared(std::move(withBatchProcessingImpl(handle_, isBatchProcessing)), listener_);
         }
 
         /**
@@ -199,7 +199,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const {
-            return this->createShared(std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)));
+            return this->createShared(std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)), listener_);
         }
 
         /**
@@ -211,7 +211,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withFeed(const std::shared_ptr<DXFeed> &feed) const {
-            return this->createShared(std::move(withFeedImpl(handle_, feed)));
+            return this->createShared(std::move(withFeedImpl(handle_, feed)), listener_);
         }
 
         /**
@@ -222,7 +222,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const {
-            return this->createShared(std::move(withSymbolImpl(handle_, symbol)));
+            return this->createShared(std::move(withSymbolImpl(handle_, symbol)), listener_);
         }
 
         /**
@@ -299,7 +299,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withFromTime(std::int64_t fromTime) const {
-            return this->createShared(std::move(withFromTimeImpl(handle_, fromTime)));
+            return this->createShared(std::move(withFromTimeImpl(handle_, fromTime)), listener_);
         }
 
         /**
