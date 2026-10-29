@@ -76,10 +76,14 @@ int main(int argc, char *argv[]) {
         }
 
         // Create an endpoint and connect to a specified address.
-        const auto endpoint = DXEndpoint::create()->connect(address);
+        // AutoClose closes the endpoint at the end of the scope: a created endpoint is not closed when its last pointer
+        // is released.
+        const AutoClose endpoint{DXEndpoint::create()->connect(address)};
 
         // Create a subscription with specified types attached to the feed.
-        const auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
+        // AutoClose closes the subscription at the end of the scope before the endpoint, and close() waits for the
+        // listener calls in progress: the listener does not use ioMtx after it is destroyed.
+        const AutoClose sub{endpoint->getFeed()->createSubscription(parsedTypes)};
 
         // Add an event listener.
         sub->addEventListener([&ioMtx](const auto &events) {

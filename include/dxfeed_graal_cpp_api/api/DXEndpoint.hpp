@@ -822,6 +822,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * The endpoint @ref getState() "state" immediately becomes @ref State::CLOSED "CLOSED".
      * All resources associated with this endpoint are released.
+     * A created endpoint lives until it is closed: see @ref entity_lifetime "Lifetime of the entities" and AutoClose.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#close--)
      *
