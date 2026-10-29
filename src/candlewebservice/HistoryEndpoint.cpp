@@ -4,8 +4,6 @@
 #include "../../include/dxfeed_graal_cpp_api/candlewebservice/HistoryEndpoint.hpp"
 
 #include "../../include/dxfeed_graal_c_api/api.h"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/candlewebservice/IsolatedHistoryEndpoint.hpp"
 
 #include <memory>
@@ -72,21 +70,11 @@ std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withFormat(F
 }
 
 std::shared_ptr<HistoryEndpoint> HistoryEndpoint::Builder::build() const {
-    auto endpoint = HistoryEndpoint::createShared(
-        isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::build(handle_));
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<HistoryEndpoint>>()->registerEntity(endpoint);
-    ignoreUnused(id);
-
-    return endpoint;
+    return HistoryEndpoint::createShared(isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::build(handle_));
 }
 
 std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::newBuilder() {
-    auto builder = Builder::createShared(
-        isolated::candlewebservice::IsolatedHistoryEndpoint::newBuilder());
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<Builder>>()->registerEntity(builder);
-    ignoreUnused(id);
-
-    return builder;
+    return Builder::createShared(isolated::candlewebservice::IsolatedHistoryEndpoint::newBuilder());
 }
 
 DXFCPP_END_NAMESPACE

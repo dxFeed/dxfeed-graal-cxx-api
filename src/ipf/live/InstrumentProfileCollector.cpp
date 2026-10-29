@@ -53,14 +53,17 @@ struct NonOwningInstrumentProfileIterator {
 };
 
 struct InstrumentProfileCollector::Impl {
+    static auto getManager() {
+        return ApiContext::getInstance()->getManager<WeakEntityManager<InstrumentProfileCollector>>();
+    }
+
     static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
                                            void *userData) {
         runCallback("InstrumentProfileCollector", [&] {
             auto [collectorId, listenerId] = unpack(dxfcpp::bit_cast<std::size_t>(userData));
 
             const auto id = Id<InstrumentProfileCollector>::from(collectorId);
-            const auto collector =
-                ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileCollector>>()->getEntity(id);
+            const auto collector = Impl::getManager()->getEntity(id);
 
             if constexpr (Debugger::isDebug) {
                 Debugger::debug("InstrumentProfileCollector::Impl::onInstrumentProfilesUpdate2: id = " +
@@ -94,8 +97,6 @@ InstrumentProfileCollector::InstrumentProfileCollector() : id_{Id<InstrumentProf
 }
 
 std::size_t InstrumentProfileCollector::addUpdateListenerImpl(std::shared_ptr<UpdateListener> listener) {
-    releaseRemovedListenerHandles();
-
     std::size_t id{};
     std::size_t userData{};
 
@@ -150,36 +151,15 @@ std::size_t InstrumentProfileCollector::addUpdateListenerImpl(std::shared_ptr<Up
 }
 
 void InstrumentProfileCollector::releaseListenerHandle(JavaObjectHandle<InstrumentProfileUpdateListener> &&handle) {
-    // Inside a callback, the native listener may be the one that is calling: it is released later, by the next call
-    // from outside a callback or with the collector.
-    if (ListenerCallScope::isActive()) {
-        std::lock_guard guard{listenersMutex_};
-
-        removedListenerHandles_.emplace_back(std::move(handle));
-
-        return;
-    }
-
-    handle = JavaObjectHandle<InstrumentProfileUpdateListener>{};
-}
-
-void InstrumentProfileCollector::releaseRemovedListenerHandles() noexcept {
-    if (ListenerCallScope::isActive()) {
-        return;
-    }
-
-    std::vector<JavaObjectHandle<InstrumentProfileUpdateListener>> handles{};
-
-    {
-        std::lock_guard guard{listenersMutex_};
-
-        handles.swap(removedListenerHandles_);
-    }
-
-    // The handles are released here, outside the lock.
+    // Inside a callback, the native listener may be the one that is calling.
+    releaseOutsideCallbacks(std::make_shared<JavaObjectHandle<InstrumentProfileUpdateListener>>(std::move(handle)));
 }
 
 InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
+    runRelease("InstrumentProfileCollector", [this] {
+        ignoreUnused(Impl::getManager()->unregisterEntity(id_));
+    });
+
     std::unordered_map<std::size_t, UpdateListenerEntry> listeners{};
 
     {
@@ -188,10 +168,14 @@ InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
         listeners.swap(updateListeners_);
     }
 
-    for (const auto &[id, entry] : listeners) {
+    for (auto &[id, entry] : listeners) {
         runRelease("InstrumentProfileCollector", [this, &entry] {
             if (handle_ && entry.handle) {
                 isolated::ipf::live::IsolatedInstrumentProfileCollector::removeUpdateListener(handle_, entry.handle);
+            }
+
+            if (entry.handle) {
+                releaseListenerHandle(std::move(entry.handle));
             }
         });
     }
@@ -200,8 +184,7 @@ InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
 InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() {
     auto collector = std::shared_ptr<InstrumentProfileCollector>(new InstrumentProfileCollector());
 
-    collector->id_ =
-        ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileCollector>>()->registerEntity(collector);
+    collector->id_ = Impl::getManager()->registerEntity(collector);
 
     return collector;
 }
@@ -237,8 +220,6 @@ std::shared_ptr<IterableInstrumentProfile> InstrumentProfileCollector::view() co
 }
 
 void InstrumentProfileCollector::removeUpdateListener(std::size_t listenerId) {
-    releaseRemovedListenerHandles();
-
     UpdateListenerEntry entry{};
 
     {

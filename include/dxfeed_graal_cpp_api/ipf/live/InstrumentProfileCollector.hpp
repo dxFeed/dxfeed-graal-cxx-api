@@ -68,9 +68,6 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     // Guards the containers only: the listeners and the native functions are called without it.
     std::mutex listenersMutex_{};
     std::unordered_map<std::size_t, UpdateListenerEntry> updateListeners_{};
-    // The native listeners removed from a callback: they are released by the next addition or removal of a listener
-    // from outside a callback, or with the collector, not inside the callback.
-    std::vector<JavaObjectHandle<InstrumentProfileUpdateListener>> removedListenerHandles_{};
     // The ids of the update listeners, unique within this collector. Each listener has a handler of its own, so the ids
     // of the handlers (unique within a handler) cannot identify the listeners.
     std::size_t lastListenerId_{};
@@ -80,8 +77,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     struct Impl;
 
     std::size_t addUpdateListenerImpl(std::shared_ptr<UpdateListener> listener);
-    void releaseListenerHandle(JavaObjectHandle<InstrumentProfileUpdateListener> &&handle);
-    void releaseRemovedListenerHandles() noexcept;
+    static void releaseListenerHandle(JavaObjectHandle<InstrumentProfileUpdateListener> &&handle);
 
     public:
     /// The alias to a type of shared pointer to the InstrumentProfileCollector object

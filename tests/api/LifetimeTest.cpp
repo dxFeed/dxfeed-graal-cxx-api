@@ -16,6 +16,7 @@
 
 #include <doctest.h>
 
+#include "../support/TapeSupport.hpp"
 #include "../support/TestSupport.hpp"
 
 using namespace dxfcpp;
@@ -575,4 +576,169 @@ TEST_CASE("executor() called after getFeed() applies to the next events of the e
     CHECK(listenerThread.load() == std::this_thread::get_id());
 
     endpoint->close();
+}
+
+TEST_CASE("Instrument profile readers are released with their last pointer") {
+    std::vector<std::weak_ptr<InstrumentProfileReader>> readers{};
+
+    for (int i = 0; i < 100; ++i) {
+        readers.push_back(InstrumentProfileReader::create());
+    }
+
+    CHECK(std::ranges::all_of(readers, [](const auto &reader) {
+        return reader.expired();
+    }));
+}
+
+TEST_CASE("History endpoints and their builders are released with their last pointer") {
+    std::vector<std::weak_ptr<HistoryEndpoint::Builder>> builders{};
+    std::vector<std::weak_ptr<HistoryEndpoint>> endpoints{};
+
+    for (int i = 0; i < 100; ++i) {
+        const auto builder = HistoryEndpoint::newBuilder()->withAddress("https://localhost:1");
+
+        builders.push_back(builder);
+        endpoints.push_back(builder->build());
+    }
+
+    CHECK(std::ranges::all_of(builders, [](const auto &builder) {
+        return builder.expired();
+    }));
+    CHECK(std::ranges::all_of(endpoints, [](const auto &endpoint) {
+        return endpoint.expired();
+    }));
+}
+
+TEST_CASE("Closed transaction models are released with their listeners") {
+    const test::LocalHubFixture hub{};
+    std::vector<std::weak_ptr<TxModelListenerCommon>> listeners{};
+    std::vector<std::weak_ptr<IndexedTxModel<Order>>> indexedModels{};
+    std::vector<std::weak_ptr<TimeSeriesTxModel<Candle>>> timeSeriesModels{};
+
+    for (int i = 0; i < 100; ++i) {
+        const auto indexedListener = IndexedTxModelListener<Order>::create(
+            [](const IndexedEventSource &, const std::vector<std::shared_ptr<Order>> &, bool) {
+            });
+        const auto indexedModel = IndexedTxModel<Order>::newBuilder()
+                                      ->withFeed(hub.feed)
+                                      ->withSymbol("AAPL")
+                                      ->withListener(indexedListener)
+                                      ->build();
+        const auto timeSeriesListener =
+            TimeSeriesTxModelListener<Candle>::create([](const std::vector<std::shared_ptr<Candle>> &, bool) {
+            });
+        const auto timeSeriesModel = TimeSeriesTxModel<Candle>::newBuilder()
+                                         ->withFeed(hub.feed)
+                                         ->withSymbol("AAPL{=d}")
+                                         ->withFromTime(0)
+                                         ->withListener(timeSeriesListener)
+                                         ->build();
+
+        indexedModel->close();
+        timeSeriesModel->close();
+        listeners.push_back(indexedListener);
+        listeners.push_back(timeSeriesListener);
+        indexedModels.push_back(indexedModel);
+        timeSeriesModels.push_back(timeSeriesModel);
+    }
+
+    CHECK(std::ranges::all_of(indexedModels, [](const auto &model) {
+        return model.expired();
+    }));
+    CHECK(std::ranges::all_of(timeSeriesModels, [](const auto &model) {
+        return model.expired();
+    }));
+    CHECK(std::ranges::all_of(listeners, [](const auto &listener) {
+        return listener.expired();
+    }));
+}
+
+TEST_CASE("A transaction model keeps a listener set before the feed") {
+    const test::LocalHubFixture hub{};
+    std::atomic<int> calls{0};
+
+    // The listener is not kept by the user: the model owns it.
+    const auto model =
+        IndexedTxModel<Order>::newBuilder()
+            ->withListener([&](const IndexedEventSource &, const std::vector<std::shared_ptr<Order>> &, bool) {
+                calls++;
+            })
+            ->withFeed(hub.feed)
+            ->withSymbol("AAPL")
+            ->build();
+    const auto order = std::make_shared<Order>("AAPL");
+
+    order->setIndex(0);
+    order->setSize(100);
+    order->setOrderSide(Side::BUY);
+    order->setEventFlags(0x04 | 0x08); // SNAPSHOT_BEGIN | SNAPSHOT_END
+    hub.publishAndProcess(order);
+
+    CHECK(test::waitUntil([&] {
+        hub.process();
+
+        return calls.load() > 0;
+    }));
+
+    model->close();
+}
+
+TEST_CASE("Instrument profile collectors are released with their last pointer") {
+    std::vector<std::weak_ptr<InstrumentProfileCollector>> collectors{};
+
+    for (int i = 0; i < 100; ++i) {
+        const auto collector = InstrumentProfileCollector::create();
+
+        ignoreUnused(collector->addUpdateListener([](const std::vector<std::shared_ptr<InstrumentProfile>> &) {
+        }));
+        collectors.push_back(collector);
+    }
+
+    CHECK(test::waitUntil([&] {
+        return std::ranges::all_of(collectors, [](const auto &collector) {
+            return collector.expired();
+        });
+    }));
+}
+
+TEST_CASE("A collector kept only by its connection receives the profiles") {
+    std::atomic<int> profiles{0};
+    std::weak_ptr<InstrumentProfileCollector> weak{};
+    std::shared_ptr<InstrumentProfileConnection> connection{};
+
+    {
+        const auto collector = InstrumentProfileCollector::create();
+
+        ignoreUnused(collector->addUpdateListener([&](const std::vector<std::shared_ptr<InstrumentProfile>> &update) {
+            profiles += static_cast<int>(update.size());
+        }));
+        weak = collector;
+        connection =
+            InstrumentProfileConnection::createConnection(test::testDataPath("ipf/option-chains.ipf"), collector);
+    }
+
+    connection->start();
+
+    CHECK(test::waitUntil([&] {
+        return profiles.load() > 0;
+    }));
+
+    connection->close();
+    connection.reset();
+
+    CHECK(test::waitUntil([&] {
+        return weak.expired();
+    }));
+}
+
+TEST_CASE("getLastEventPromise of a closed endpoint is cancelled") {
+    const auto endpoint = localHub();
+    const auto feed = endpoint->getFeed();
+
+    endpoint->close();
+
+    const auto promise = feed->getLastEventPromise<Quote>("AAPL");
+
+    CHECK(promise->isDone());
+    CHECK(promise->isCancelled());
 }

@@ -12,5 +12,9 @@
     * `CLOSED` is the last state notification of an endpoint. The methods of a closed subscription do nothing.
     * `DXEndpoint::executor()` called after `getFeed()` applies to the next events of the existing subscriptions, as
       in the Java API.
+    * `OnDemandService::getInstance(endpoint)` returns the one service of the endpoint, as in the Java API; the
+      service is released with its endpoint.
+    * Transaction models, `InstrumentProfileCollector`, `InstrumentProfileReader` and `HistoryEndpoint` are released
+      with their last pointer. A model owns its listener; an `InstrumentProfileConnection` owns its collector.
     * The ids of the entities are unique when the library is linked dynamically: a subscription created from a header
       template and one created in the library could get the same id, and the events of the first went to the second.
