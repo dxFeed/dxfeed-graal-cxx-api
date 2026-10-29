@@ -30,11 +30,7 @@ void TextMessage::fillData(void *graalNative) {
     eventTime_ = graalMessage->event_time;
     timeSequence_ = graalMessage->time_sequence;
 
-    if (graalMessage->text != nullptr) {
-        setText(dxfcpp::toString(dxfcpp::bit_cast<const char *>(graalMessage->text)));
-    } else {
-        setText(String::NUL);
-    }
+    text_ = toStringOpt(graalMessage->text);
 }
 
 void TextMessage::fillGraalData(void *graalNative) const {
@@ -217,6 +213,14 @@ TextMessage &TextMessage::withSequence(std::int32_t sequence) {
 }
 
 const std::string &TextMessage::getText() const & {
+    if (!text_) {
+        return nulString();
+    }
+
+    return *text_;
+}
+
+const std::optional<std::string> &TextMessage::getTextOpt() const & noexcept {
     return text_;
 }
 
@@ -232,9 +236,9 @@ TextMessage &TextMessage::withText(const StringLike &text) noexcept {
 }
 
 std::string TextMessage::toString() const {
-    return fmt::format("TextMessage{{{}, eventTime={}, time={}, sequence={}, text={}}}", getEventSymbol(),
+    return fmt::format("TextMessage{{{}, eventTime={}, time={}, sequence={}, text='{}'}}", getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), text_);
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), text_.value_or("null"));
 }
 
 DXFCPP_END_NAMESPACE

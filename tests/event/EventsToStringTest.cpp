@@ -15,19 +15,6 @@ using namespace dxfcpp;
 //
 // Not compared: `Profile` shares and freeFloat, which Java prints as `WideDecimal` (`1000` rather than `1000.0`).
 
-namespace {
-
-// Java prints the tradeId of Trade, TradeETH and TimeAndSale, the C++ API does not have it yet.
-std::string withoutTradeId(std::string javaString) {
-    const std::string tradeId = ", tradeId=0";
-
-    javaString.erase(javaString.find(tradeId), tradeId.size());
-
-    return javaString;
-}
-
-} // namespace
-
 TEST_CASE("Quote::toString() is the same as in Java") {
     Quote quote("AAPL");
 
@@ -51,9 +38,9 @@ TEST_CASE("Trade::toString() and TradeETH::toString() are the same as in Java") 
     trade.setDayTurnover(2.5E8);
 
     CHECK(trade.toString() ==
-          withoutTradeId("Trade{AAPL, eventTime=0, time=0, timeNanoPart=0, sequence=0, exchange=\\0, tradeId=0, "
-                         "price=150.25, change=-9.0E-4, size=1.0E-5, day=19700101, dayVolume=1.2345678E7, "
-                         "dayTurnover=2.5E8, direction=UNDEFINED, ETH=false}"));
+          "Trade{AAPL, eventTime=0, time=0, timeNanoPart=0, sequence=0, exchange=\\0, tradeId=0, price=150.25, "
+          "change=-9.0E-4, size=1.0E-5, day=19700101, dayVolume=1.2345678E7, dayTurnover=2.5E8, direction=UNDEFINED, "
+          "ETH=false}");
 
     TradeETH tradeEth("AAPL");
 
@@ -62,9 +49,40 @@ TEST_CASE("Trade::toString() and TradeETH::toString() are the same as in Java") 
     tradeEth.setDayTurnover(1.0E21);
 
     CHECK(tradeEth.toString() ==
-          withoutTradeId("TradeETH{AAPL, eventTime=0, time=0, timeNanoPart=0, sequence=0, exchange=\\0, tradeId=0, "
-                         "price=1.0E7, change=NaN, size=NaN, day=19700101, dayVolume=0.001, dayTurnover=1.0E21, "
-                         "direction=UNDEFINED, ETH=false}"));
+          "TradeETH{AAPL, eventTime=0, time=0, timeNanoPart=0, sequence=0, exchange=\\0, tradeId=0, price=1.0E7, "
+          "change=NaN, size=NaN, day=19700101, dayVolume=0.001, dayTurnover=1.0E21, direction=UNDEFINED, ETH=false}");
+}
+
+TEST_CASE("Default Trade, TradeETH and TimeAndSale print as in Java") {
+    CHECK(Trade("AAPL").toString() ==
+          "Trade{AAPL, eventTime=0, time=0, timeNanoPart=0, sequence=0, exchange=\\0, tradeId=0, price=NaN, "
+          "change=NaN, size=NaN, day=19700101, dayVolume=NaN, dayTurnover=NaN, direction=UNDEFINED, ETH=false}");
+    CHECK(TradeETH("AAPL").toString() ==
+          "TradeETH{AAPL, eventTime=0, time=0, timeNanoPart=0, sequence=0, exchange=\\0, tradeId=0, price=NaN, "
+          "change=NaN, size=NaN, day=19700101, dayVolume=NaN, dayTurnover=NaN, direction=UNDEFINED, ETH=false}");
+    CHECK(TimeAndSale("AAPL").toString() ==
+          "TimeAndSale{AAPL, eventTime=0, eventFlags=0x0, time=0, timeNanoPart=0, sequence=0, exchange=\\0, "
+          "tradeId=0, price=NaN, size=NaN, bid=NaN, ask=NaN, ESC='null', TTE=\\0, side=UNDEFINED, spread=false, "
+          "ETH=false, validTick=false, type=NEW}");
+}
+
+TEST_CASE("The trade id is printed as a signed decimal, as in Java") {
+    Trade trade("AAPL");
+    TimeAndSale timeAndSale("AAPL");
+
+    trade.setTradeId(12345);
+    timeAndSale.setTradeId(-1);
+
+    CHECK(trade.toString().find(", exchange=\\0, tradeId=12345, price=NaN, ") != std::string::npos);
+    CHECK(timeAndSale.toString().find(", exchange=\\0, tradeId=-1, price=NaN, ") != std::string::npos);
+
+    trade.setTradeId(std::numeric_limits<std::int64_t>::min());
+
+    CHECK(trade.toString().find(", tradeId=-9223372036854775808, ") != std::string::npos);
+}
+
+TEST_CASE("TextMessage::toString() prints a null text as in Java") {
+    CHECK(TextMessage("AAPL").toString() == "TextMessage{AAPL, eventTime=0, time=0, sequence=0, text='null'}");
 }
 
 TEST_CASE("TimeAndSale::toString() is the same as in Java") {
@@ -76,9 +94,9 @@ TEST_CASE("TimeAndSale::toString() is the same as in Java") {
     timeAndSale.setAskPrice(1.0E21);
 
     CHECK(timeAndSale.toString() ==
-          withoutTradeId("TimeAndSale{AAPL, eventTime=0, eventFlags=0x0, time=0, timeNanoPart=0, sequence=0, "
-                         "exchange=\\0, tradeId=0, price=2.5E8, size=1.0E-5, bid=9.0E-4, ask=1.0E21, ESC='null', "
-                         "TTE=\\0, side=UNDEFINED, spread=false, ETH=false, validTick=false, type=NEW}"));
+          "TimeAndSale{AAPL, eventTime=0, eventFlags=0x0, time=0, timeNanoPart=0, sequence=0, exchange=\\0, "
+          "tradeId=0, price=2.5E8, size=1.0E-5, bid=9.0E-4, ask=1.0E21, ESC='null', TTE=\\0, side=UNDEFINED, "
+          "spread=false, ETH=false, validTick=false, type=NEW}");
 }
 
 TEST_CASE("OptionSale::toString() is the same as in Java") {

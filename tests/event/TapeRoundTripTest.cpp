@@ -8,7 +8,6 @@
 //  - Java -> C++: the golden tape is read into C++ events.
 //  - Java -> C++ -> Java: every column of the golden tape survives reading into C++ and writing back.
 //  - Defaults: default-constructed C++ events are written as the Java API writes default-constructed events.
-// Known defects are listed below; the tests for them are `may_fail` until the defects are fixed.
 
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
@@ -22,17 +21,6 @@
 using namespace dxfcpp;
 
 namespace {
-
-// Trade, TradeETH, TimeAndSale and their Nuam subclasses have no trade id in the C++ API (static analysis report,
-// EVT-2).
-const std::vector<std::string> KNOWN_ROUND_TRIP_DEFECTS{"Trade.TradeId", "TradeETH.TradeId", "TimeAndSale.TradeId",
-                                                        "NuamTrade.TradeId", "NuamTimeAndSale.TradeId"};
-
-// Java defaults: the day volume and turnover of Trade, TradeETH and NuamTrade are NaN, the text of TextMessage is null
-// (static analysis report, EVT-16).
-const std::vector<std::string> KNOWN_DEFAULTS_DEFECTS{
-    "Trade.DayVolume",     "Trade.DayTurnover",     "TradeETH.DayVolume", "TradeETH.DayTurnover",
-    "NuamTrade.DayVolume", "NuamTrade.DayTurnover", "TextMessage.Text"};
 
 std::vector<std::string> goldenRoundTripDifferences() {
     const auto golden = test::testDataPath("tapes/all-events.txt");
@@ -66,18 +54,31 @@ TEST_CASE("The golden tape is read as the events of the factory") {
                       test::readTape(test::testDataPath("tapes/all-events.txt"), {test::tapeCandleSymbol()}));
 }
 
-TEST_CASE("Every column of the golden tape survives reading into C++ and writing back, except known defects") {
-    test::checkDifferences(goldenRoundTripDifferences(), KNOWN_ROUND_TRIP_DEFECTS, false);
+TEST_CASE("Every column of the golden tape survives reading into C++ and writing back") {
+    test::checkDifferences(goldenRoundTripDifferences(), {}, false);
 }
 
-TEST_CASE("Every column of the golden tape survives reading into C++ and writing back (EVT-2)" * doctest::may_fail()) {
-    test::checkDifferences(goldenRoundTripDifferences(), KNOWN_ROUND_TRIP_DEFECTS, true);
+TEST_CASE("Default events are written as the Java API writes them") {
+    test::checkDifferences(defaultsDifferences(), {}, false);
 }
 
-TEST_CASE("Default events are written as the Java API writes them, except known defects") {
-    test::checkDifferences(defaultsDifferences(), KNOWN_DEFAULTS_DEFECTS, false);
-}
+TEST_CASE("A null TextMessage text stays null after a round trip through a text tape, an empty one stays empty") {
+    const auto path = test::temporaryFilePath("text-message.txt");
 
-TEST_CASE("Default events are written as the Java API writes them (EVT-16)" * doctest::may_fail()) {
-    test::checkDifferences(defaultsDifferences(), KNOWN_DEFAULTS_DEFECTS, true);
+    test::writeTextTape(path,
+                        {std::make_shared<TextMessage>("NULL-TEXT"), std::make_shared<TextMessage>("EMPTY-TEXT", "")});
+
+    const auto events = test::readTape(path);
+
+    REQUIRE(events.size() == 2);
+
+    const auto nullText = events[0]->sharedAs<TextMessage>();
+    const auto emptyText = events[1]->sharedAs<TextMessage>();
+
+    REQUIRE(nullText);
+    REQUIRE(emptyText);
+    CHECK(nullText->getEventSymbol() == "NULL-TEXT");
+    CHECK(!nullText->getTextOpt());
+    CHECK(emptyText->getEventSymbol() == "EMPTY-TEXT");
+    CHECK(emptyText->getTextOpt() == std::optional<std::string>{""});
 }

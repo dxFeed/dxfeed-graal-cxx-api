@@ -37,6 +37,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     trade->setTime(T + 3'456);
     trade->setSequence(9);
     trade->setExchangeCode('Q');
+    trade->setTradeId(7001);
     trade->setPrice(100.5);
     trade->setSize(10);
     trade->setTickDirection(Direction::UP);
@@ -52,6 +53,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     tradeEth->setTime(T + 4'567);
     tradeEth->setSequence(11);
     tradeEth->setExchangeCode('P');
+    tradeEth->setTradeId(7002);
     tradeEth->setPrice(101.75);
     tradeEth->setSize(20);
     tradeEth->setTickDirection(Direction::DOWN);
@@ -67,6 +69,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     timeAndSale->setTime(T + 5'678);
     timeAndSale->setSequence(13);
     timeAndSale->setExchangeCode('T');
+    timeAndSale->setTradeId(7003);
     timeAndSale->setPrice(102.5);
     timeAndSale->setSize(30);
     timeAndSale->setBidPrice(102.25);
@@ -312,8 +315,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     events.push_back(orderImbalanceNuam);
 
     // The Nuam events; the order comes twice, on the NUAM and on the lowercase nuam source (they are different
-    // sources). TradeId of NuamTrade and NuamTimeAndSale is Java-only (7004 and 7005 in the golden tape), as for Trade
-    // and TimeAndSale.
+    // sources).
     auto nuamOrder = std::make_shared<NuamOrder>(TAPE_SYMBOL);
     nuamOrder->setEventTime(T + 21);
     nuamOrder->setIndex(25);
@@ -383,6 +385,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     nuamTrade->setTime(T + 23'678);
     nuamTrade->setSequence(49);
     nuamTrade->setExchangeCode('Y');
+    nuamTrade->setTradeId(7004);
     nuamTrade->setPrice(130.25);
     nuamTrade->setChange(-0.75);
     nuamTrade->setSize(15);
@@ -403,6 +406,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     nuamTimeAndSale->setTime(T + 24'789);
     nuamTimeAndSale->setSequence(51);
     nuamTimeAndSale->setExchangeCode('X');
+    nuamTimeAndSale->setTradeId(7005);
     nuamTimeAndSale->setPrice(131.5);
     nuamTimeAndSale->setSize(25);
     nuamTimeAndSale->setBidPrice(131.25);

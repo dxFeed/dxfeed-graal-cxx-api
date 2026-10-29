@@ -26,6 +26,7 @@ void TradeBase::fillData(void *graalNative) noexcept {
         .timeSequence = graalTradeBase->time_sequence,
         .timeNanoPart = graalTradeBase->time_nano_part,
         .exchangeCode = graalTradeBase->exchange_code,
+        .tradeId = graalTradeBase->trade_id,
         .price = graalTradeBase->price,
         .change = graalTradeBase->change,
         .size = graalTradeBase->size,
@@ -55,6 +56,7 @@ void TradeBase::fillGraalData(void *graalNative) const noexcept {
     graalTradeBase->day_volume = tradeBaseData_.dayVolume;
     graalTradeBase->day_turnover = tradeBaseData_.dayTurnover;
     graalTradeBase->flags = tradeBaseData_.flags;
+    graalTradeBase->trade_id = tradeBaseData_.tradeId;
 }
 
 void TradeBase::assign(std::shared_ptr<EventType> event) {
@@ -140,6 +142,14 @@ void TradeBase::setExchangeCode(std::int16_t exchangeCode) noexcept {
     tradeBaseData_.exchangeCode = exchangeCode;
 }
 
+std::int64_t TradeBase::getTradeId() const noexcept {
+    return tradeBaseData_.tradeId;
+}
+
+void TradeBase::setTradeId(std::int64_t tradeId) noexcept {
+    tradeBaseData_.tradeId = tradeId;
+}
+
 double TradeBase::getPrice() const noexcept {
     return tradeBaseData_.price;
 }
@@ -206,12 +216,12 @@ void TradeBase::setChange(double change) noexcept {
 
 std::string TradeBase::baseFieldsToString() const {
     return fmt::format(
-        "{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, price={}, "
+        "{}, eventTime={}, time={}, timeNanoPart={}, sequence={}, exchange={}, tradeId={}, price={}, "
         "change={}, size={}, day={}, dayVolume={}, dayTurnover={}, "
         "direction={}, ETH={}",
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
         TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(), getSequence(),
-        encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getChange()),
+        encodeChar(getExchangeCode()), getTradeId(), dxfcpp::toString(getPrice()), dxfcpp::toString(getChange()),
         dxfcpp::toString(getSize()), day_util::getYearMonthDayByDayId(getDayId()), dxfcpp::toString(getDayVolume()),
         dxfcpp::toString(getDayTurnover()), getTickDirection().toString(), isExtendedTradingHours());
 }

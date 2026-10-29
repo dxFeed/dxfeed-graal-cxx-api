@@ -33,6 +33,7 @@ void TimeAndSale::fillData(void *graalNative) noexcept {
         .index = graalTimeAndSale->index,
         .timeNanoPart = graalTimeAndSale->time_nano_part,
         .exchangeCode = graalTimeAndSale->exchange_code,
+        .tradeId = graalTimeAndSale->trade_id,
         .price = graalTimeAndSale->price,
         .size = graalTimeAndSale->size,
         .bidPrice = graalTimeAndSale->bid_price,
@@ -66,6 +67,7 @@ void TimeAndSale::fillGraalData(void *graalNative) const noexcept {
     graalTimeAndSale->flags = data_.flags;
     graalTimeAndSale->buyer = createCString(data_.buyer);
     graalTimeAndSale->seller = createCString(data_.seller);
+    graalTimeAndSale->trade_id = data_.tradeId;
 }
 
 void TimeAndSale::freeGraalData(void *graalNative) noexcept {
@@ -227,6 +229,14 @@ void TimeAndSale::setExchangeCode(std::int16_t exchangeCode) noexcept {
     data_.exchangeCode = exchangeCode;
 }
 
+std::int64_t TimeAndSale::getTradeId() const noexcept {
+    return data_.tradeId;
+}
+
+void TimeAndSale::setTradeId(std::int64_t tradeId) noexcept {
+    data_.tradeId = tradeId;
+}
+
 double TimeAndSale::getPrice() const noexcept {
     return data_.price;
 }
@@ -372,12 +382,12 @@ void TimeAndSale::setSeller(const StringLike &seller) noexcept {
 std::string TimeAndSale::baseFieldsToString() const {
     return fmt::format(
         "{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
-        "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
+        "exchange={}, tradeId={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
         "validTick={}, type={}{}{}",
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
         getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
-        getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()),
-        dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
+        getSequence(), encodeChar(getExchangeCode()), getTradeId(), dxfcpp::toString(getPrice()),
+        dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
         getExchangeSaleConditionsOpt().value_or("null"), encodeChar(getTradeThroughExempt()),
         getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
         getBuyerOpt() ? fmt::format(", buyer='{}'", *getBuyerOpt()) : std::string{},
