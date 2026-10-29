@@ -15,6 +15,8 @@
 #include "../support/EventFactory.hpp"
 #include "../support/TapeSupport.hpp"
 
+#include <cstdint>
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -60,6 +62,24 @@ TEST_CASE("Every column of the golden tape survives reading into C++ and writing
 
 TEST_CASE("Default events are written as the Java API writes them") {
     test::checkDifferences(defaultsDifferences(), {}, false);
+}
+
+TEST_CASE("The limits of the trade id survive a round trip through a text tape") {
+    const auto path = test::temporaryFilePath("trade-id.txt");
+    auto trade = std::make_shared<Trade>("TRADE");
+    auto timeAndSale = std::make_shared<TimeAndSale>("TIME-AND-SALE");
+
+    trade->setTradeId(std::numeric_limits<std::int64_t>::min());
+    timeAndSale->setTradeId(std::numeric_limits<std::int64_t>::max());
+    test::writeTextTape(path, {trade, timeAndSale});
+
+    const auto events = test::readTape(path);
+
+    REQUIRE(events.size() == 2);
+    REQUIRE(events[0]->sharedAs<Trade>());
+    REQUIRE(events[1]->sharedAs<TimeAndSale>());
+    CHECK(events[0]->sharedAs<Trade>()->getTradeId() == std::numeric_limits<std::int64_t>::min());
+    CHECK(events[1]->sharedAs<TimeAndSale>()->getTradeId() == std::numeric_limits<std::int64_t>::max());
 }
 
 TEST_CASE("A null TextMessage text stays null after a round trip through a text tape, an empty one stays empty") {
