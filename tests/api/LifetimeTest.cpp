@@ -414,12 +414,19 @@ TEST_CASE("A default endpoint stays the default one after it is closed") {
 
 TEST_CASE("The methods of a closed endpoint do nothing") {
     const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
+    std::atomic<bool> closedNotified{false};
     std::atomic<int> calls{0};
 
+    endpoint->addStateChangeListener([&](DXEndpoint::State, DXEndpoint::State newState) {
+        if (newState == DXEndpoint::State::CLOSED) {
+            closedNotified = true;
+        }
+    });
     endpoint->close();
 
+    // As in the Java API, a listener added before the CLOSED notification is delivered receives it.
     REQUIRE(test::waitUntil([&] {
-        return endpoint->isClosed();
+        return closedNotified.load();
     }));
     CHECK_NOTHROW(endpoint->addStateChangeListener([&](DXEndpoint::State, DXEndpoint::State) {
         calls++;
