@@ -72,6 +72,10 @@ void DXPublisher::releaseSubscriptions() const {
         released->swap(subscriptions_);
     }
 
+    if (released->empty()) {
+        return;
+    }
+
     // Called from a callback, the subscriptions are released on another thread: a subscription removes its native
     // listeners.
     releaseOutsideCallbacks(std::move(released));

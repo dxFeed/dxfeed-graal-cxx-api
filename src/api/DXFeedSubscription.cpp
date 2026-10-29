@@ -25,6 +25,10 @@
 DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeedSubscription::Impl {
+    static auto getManager() {
+        return ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>();
+    }
+
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
         runCallback("DXFeedSubscription", [&] {
 #if defined(DXFCXX_ENABLE_METRICS)
@@ -33,8 +37,7 @@ struct DXFeedSubscription::Impl {
 
             const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
 
-            if (const auto sub =
-                    ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>()->getEntity(id)) {
+            if (const auto sub = Impl::getManager()->getEntity(id)) {
                 // The batch came after close(): it is dropped.
                 if (sub->closed_) {
                     return;
@@ -106,8 +109,7 @@ bool DXFeedSubscription::tryToSetEventListenerHandle() {
     }
 
     if (!eventListenerHandle_) {
-        const auto idOpt = ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>()->getId(
-            sharedAs<DXFeedSubscription>());
+        const auto idOpt = Impl::getManager()->getId(sharedAs<DXFeedSubscription>());
 
         if (!idOpt) {
             return false;
@@ -207,8 +209,7 @@ std::shared_ptr<DXFeedSubscription> DXFeedSubscription::create(std::initializer_
 
 void DXFeedSubscription::registerSubscription(const std::shared_ptr<DXFeedSubscription> &subscription) {
     // The registry does not own the subscription: its owners are the user and the feeds it is attached to.
-    ignoreUnused(
-        ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>()->registerEntity(subscription));
+    ignoreUnused(Impl::getManager()->registerEntity(subscription));
 }
 
 void DXFeedSubscription::addFeed(const std::shared_ptr<const DXFeed> &feed) const {
@@ -289,8 +290,7 @@ void DXFeedSubscription::close() const {
             error = std::current_exception();
         }
 
-        changeListeners = std::move(changeListeners_);
-        changeListeners_.clear();
+        changeListeners = std::exchange(changeListeners_, {});
     }
 
     onEvent_.removeAll();
@@ -315,8 +315,7 @@ void DXFeedSubscription::close() const {
     {
         std::lock_guard guard{feedsMutex_};
 
-        feeds = std::move(feeds_);
-        feeds_.clear();
+        feeds = std::exchange(feeds_, {});
     }
 
     for (const auto &weakFeed : feeds) {
@@ -326,8 +325,7 @@ void DXFeedSubscription::close() const {
     }
 
     if (self) {
-        ignoreUnused(ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>()->unregisterEntity(
-            std::const_pointer_cast<DXFeedSubscription>(self)));
+        ignoreUnused(Impl::getManager()->unregisterEntity(std::const_pointer_cast<DXFeedSubscription>(self)));
     }
 
     if (error) {

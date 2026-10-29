@@ -123,6 +123,8 @@ void DXFeed::releaseSubscription(const DXFeedSubscription *subscription) const {
             subscriptions_.erase(found);
         }
     }
+
+    // The subscription is released here, outside the mutex: the destructor of the last reference closes it.
 }
 
 void DXFeed::releaseSubscriptions() const {
@@ -134,6 +136,10 @@ void DXFeed::releaseSubscriptions() const {
 
         closed_ = true;
         released->swap(subscriptions_);
+    }
+
+    if (released->empty()) {
+        return;
     }
 
     for (const auto &[_, subscription] : *released) {
