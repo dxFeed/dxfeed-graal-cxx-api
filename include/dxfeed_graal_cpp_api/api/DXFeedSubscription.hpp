@@ -316,7 +316,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * event listeners are not called; called from a listener or a callback of the library, it does not wait for the
      * calls in progress on the other threads. Adding a listener to a closed subscription or attaching it to a feed does
      * nothing, as a second close() does. A subscription that is attached to no feed is closed when its last pointer is
-     * released.
+     * released. See @ref entity_lifetime "Lifetime of the entities" and AutoClose.
      */
     void close() const;
 

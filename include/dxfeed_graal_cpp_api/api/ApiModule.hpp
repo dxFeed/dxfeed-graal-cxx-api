@@ -13,6 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * \ingroup dxfcpp_modules
  */
 
+#include "./AutoClose.hpp"
 #include "./DXEndpoint.hpp"
 #include "./DXFeed.hpp"
 #include "./DXFeedSubscription.hpp"
