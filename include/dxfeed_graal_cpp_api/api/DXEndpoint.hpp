@@ -522,6 +522,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
 
     void executorImpl(const JavaObjectHandle<ExecutorTag> &executor) const;
 
+    // Returns the on-demand service of this endpoint: one instance, created on the first call.
+    std::shared_ptr<OnDemandService> getOnDemandService();
+
     struct Impl;
 
     std::unique_ptr<Impl> impl_;

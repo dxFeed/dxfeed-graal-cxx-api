@@ -80,6 +80,7 @@ set(DXFC_TEST_SOURCES
         model/TimeSeriesTxModelTest.cpp
         model/TxModelTapeTest.cpp
         model/MarketDepthModelTest.cpp
+        ondemand/OnDemandServiceTest.cpp
         orcs/PriceLevelServiceTest.cpp
         promise/PromisesTest.cpp
         schedule/ScheduleTest.cpp
