@@ -631,9 +631,9 @@ struct JavaInt {
     /**
      * Wraps a value.
      *
-     * @param value The value.
+     * @param i The value.
      */
-    constexpr JavaInt(std::int32_t value) noexcept : value{value} { // NOLINT(*-explicit-constructor)
+    constexpr JavaInt(std::int32_t i) noexcept : value{i} { // NOLINT(*-explicit-constructor)
     }
 
     /// @return The sum of the values, wrapped around.

@@ -310,8 +310,8 @@ struct Tables {
         maxDoubles[0] = std::numeric_limits<double>::infinity();
 
         for (int rank = 1; rank < 256; rank++) {
-            divisors[rank] = strtodC("1E" + std::to_string(rank - BIAS));
-            maxDoubles[rank] = maxDoubleValue * strtodC("1E" + std::to_string(BIAS - rank));
+            divisors[static_cast<std::size_t>(rank)] = strtodC("1E" + std::to_string(rank - BIAS));
+            maxDoubles[static_cast<std::size_t>(rank)] = maxDoubleValue * strtodC("1E" + std::to_string(BIAS - rank));
         }
     }
 };
@@ -324,7 +324,7 @@ const Tables &tables() noexcept {
 
 // Long.signum(value) & 3 of Java: the index of NaN, an infinity or a negative infinity in NF_WIDE and NF_STRING.
 std::size_t signumIndex(std::int64_t value) noexcept {
-    return value > 0 ? 1 : value < 0 ? 3 : 0;
+    return value > 0 ? 1U : value < 0 ? 3U : 0U;
 }
 
 std::int64_t neg(std::int64_t wide) noexcept {
@@ -386,7 +386,7 @@ std::int64_t composeNonFitting(std::int64_t significand, int rank, int targetRan
     reduction = std::max(reduction, rank - 255);
 
     if (reduction > 0) {
-        significand = div10(significand, LONG_POWERS[reduction]);
+        significand = div10(significand, LONG_POWERS[static_cast<std::size_t>(reduction)]);
         rank -= reduction;
     }
 
@@ -403,7 +403,7 @@ int findRank(double value) noexcept {
     int rank = value > maxDoubles[128] ? 0 : 128;
 
     for (int step = 64; step > 0; step /= 2) {
-        rank += value > maxDoubles[rank + step] ? 0 : step;
+        rank += value > maxDoubles[static_cast<std::size_t>(rank + step)] ? 0 : step;
     }
 
     return rank;
@@ -416,7 +416,7 @@ std::int64_t composeNonNegative(double value, int targetRank) noexcept {
         return POSITIVE_INFINITY;
     }
 
-    return composeFitting(longCast(value * tables().divisors[rank] + 0.5), rank, targetRank);
+    return composeFitting(longCast(value * tables().divisors[static_cast<std::size_t>(rank)] + 0.5), rank, targetRank);
 }
 
 std::int64_t composeWide(double value) noexcept {
@@ -440,7 +440,7 @@ std::int64_t toIntegerString(std::int64_t significand, int rank) noexcept {
     if (rank > BIAS) {
         // fractional number with possible zero fraction and more trailing zeroes
         if (rank - BIAS <= EXACT_LONG_POWERS) {
-            const auto pow10 = LONG_POWERS[rank - BIAS];
+            const auto pow10 = LONG_POWERS[static_cast<std::size_t>(rank - BIAS)];
             const auto result = significand / pow10;
 
             if (result * pow10 == significand && result % SCIENTIFIC_MODULO != 0) {
@@ -453,7 +453,7 @@ std::int64_t toIntegerString(std::int64_t significand, int rank) noexcept {
         static_assert(MAX_TRAILING_ZEROES <= EXACT_LONG_POWERS);
 
         // integer number with possible trailing zeroes; the product wraps around as in Java and is checked
-        const auto pow10 = LONG_POWERS[BIAS - rank];
+        const auto pow10 = LONG_POWERS[static_cast<std::size_t>(BIAS - rank)];
         const auto result =
             static_cast<std::int64_t>(static_cast<std::uint64_t>(significand) * static_cast<std::uint64_t>(pow10));
 
