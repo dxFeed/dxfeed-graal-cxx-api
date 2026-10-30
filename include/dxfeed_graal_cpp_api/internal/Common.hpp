@@ -620,6 +620,59 @@ template <Integral T> constexpr static T abs(T a) {
     return a < 0 ? -a : a;
 }
 
+/**
+ * An int32 value with the arithmetic of the Java `int`: a sum, a difference, a product or a negation wraps around
+ * modulo 2^32 instead of overflowing; a quotient and a remainder are those of the signed values.
+ */
+struct JavaInt {
+    /// The value.
+    std::int32_t value;
+
+    /**
+     * Wraps a value.
+     *
+     * @param value The value.
+     */
+    constexpr JavaInt(std::int32_t value) noexcept : value{value} { // NOLINT(*-explicit-constructor)
+    }
+
+    /// @return The sum of the values, wrapped around.
+    friend constexpr JavaInt operator+(JavaInt a, JavaInt b) noexcept {
+        return wrap(static_cast<std::uint32_t>(a.value) + static_cast<std::uint32_t>(b.value));
+    }
+
+    /// @return The difference of the values, wrapped around.
+    friend constexpr JavaInt operator-(JavaInt a, JavaInt b) noexcept {
+        return wrap(static_cast<std::uint32_t>(a.value) - static_cast<std::uint32_t>(b.value));
+    }
+
+    /// @return The product of the values, wrapped around.
+    friend constexpr JavaInt operator*(JavaInt a, JavaInt b) noexcept {
+        return wrap(static_cast<std::uint32_t>(a.value) * static_cast<std::uint32_t>(b.value));
+    }
+
+    /// @return The quotient of the values, rounded toward zero (the divisor must be neither 0 nor -1).
+    friend constexpr JavaInt operator/(JavaInt a, JavaInt b) noexcept {
+        return a.value / b.value;
+    }
+
+    /// @return The remainder of the values, with the sign of the dividend.
+    friend constexpr JavaInt operator%(JavaInt a, JavaInt b) noexcept {
+        return a.value % b.value;
+    }
+
+    /// @return The negated value, wrapped around: `-Integer.MIN_VALUE` is `Integer.MIN_VALUE`.
+    constexpr JavaInt operator-() const noexcept {
+        return wrap(0U - static_cast<std::uint32_t>(value));
+    }
+
+    private:
+    // C++20 defines the conversion of an unsigned value to a signed one as the wrap around modulo 2^32.
+    static constexpr JavaInt wrap(std::uint32_t value) noexcept {
+        return static_cast<std::int32_t>(value);
+    }
+};
+
 } // namespace math_util
 
 namespace day_util {
@@ -634,34 +687,39 @@ DXFCXX_DISABLE_GCC_WARNINGS_POP()
  * The result is equal to `yearSign * (abs(year) * 10000 + month * 100 + day)`, where year,
  * month, and day are in Gregorian calendar, month is between 1 and 12 inclusive, and day is counted from 1.
  *
+ * Any day id gives the result of Java: the arithmetic wraps around as that of the Java `int`.
+ *
  * @param dayId The day id
  * @return integer date
  */
 constexpr static std::int32_t getYearMonthDayByDayId(std::int32_t dayId) {
-    std::int32_t j = dayId + 2472632; // this shifts the epoch back to astronomical year -4800
-    std::int32_t g = math_util::div(j, 146097);
-    std::int32_t dg = j - g * 146097;
-    std::int32_t c = (dg / 36524 + 1) * 3 / 4;
-    std::int32_t dc = dg - c * 36524;
-    std::int32_t b = dc / 1461;
-    std::int32_t db = dc - b * 1461;
-    std::int32_t a = (db / 365 + 1) * 3 / 4;
-    std::int32_t da = db - a * 365;
-    std::int32_t y = g * 400 + c * 100 + b * 4 +
-                     a; // this is the integer number of full years elapsed since March 1, 4801 BC at 00:00 UTC
-    std::int32_t m = (da * 5 + 308) / 153 -
-                     2; // this is the integer number of full months elapsed since the last March 1 at 00:00 UTC
-    std::int32_t d =
-        da - (m + 4) * 153 / 5 + 122; // this is the number of days elapsed since day 1 of the month at 00:00 UTC
-    std::int32_t yyyy = y - 4800 + (m + 2) / 12;
-    std::int32_t mm = (m + 2) % 12 + 1;
-    std::int32_t dd = d + 1;
-    std::int32_t yyyymmdd = math_util::abs(yyyy) * 10000 + mm * 100 + dd;
+    using math_util::JavaInt;
 
-    return yyyy >= 0 ? yyyymmdd : -yyyymmdd;
+    JavaInt j = JavaInt{dayId} + 2472632; // this shifts the epoch back to astronomical year -4800
+    JavaInt g = math_util::div(j.value, 146097);
+    JavaInt dg = j - g * 146097;
+    JavaInt c = (dg / 36524 + 1) * 3 / 4;
+    JavaInt dc = dg - c * 36524;
+    JavaInt b = dc / 1461;
+    JavaInt db = dc - b * 1461;
+    JavaInt a = (db / 365 + 1) * 3 / 4;
+    JavaInt da = db - a * 365;
+    // this is the integer number of full years elapsed since March 1, 4801 BC at 00:00 UTC
+    JavaInt y = g * 400 + c * 100 + b * 4 + a;
+    // this is the integer number of full months elapsed since the last March 1 at 00:00 UTC
+    JavaInt m = (da * 5 + 308) / 153 - 2;
+    // this is the number of days elapsed since day 1 of the month at 00:00 UTC
+    JavaInt d = da - (m + 4) * 153 / 5 + 122;
+    JavaInt yyyy = y - 4800 + (m + 2) / 12;
+    JavaInt mm = (m + 2) % 12 + 1;
+    JavaInt dd = d + 1;
+    // Math.abs(Integer.MIN_VALUE) is Integer.MIN_VALUE
+    JavaInt yyyymmdd = (yyyy.value < 0 ? -yyyy : yyyy) * 10000 + mm * 100 + dd;
+
+    return yyyy.value >= 0 ? yyyymmdd.value : (-yyyymmdd).value;
 }
 
-std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day);
+DXFCPP_EXPORT std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day);
 
 } // namespace day_util
 

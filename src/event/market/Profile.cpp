@@ -6,6 +6,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../internal/utils/JavaUtils.hpp"
 #include "../../internal/utils/StringConstants.hpp"
 
 #include <dxfg_api.h>
@@ -324,8 +325,8 @@ std::string Profile::toString() const {
         dxfcpp::toString(getLowLimitPrice()), dxfcpp::toString(getHigh52WeekPrice()),
         dxfcpp::toString(getLow52WeekPrice()), dxfcpp::toString(getBeta()), dxfcpp::toString(getEarningsPerShare()),
         dxfcpp::toString(getDividendFrequency()), dxfcpp::toString(getExDividendAmount()),
-        day_util::getYearMonthDayByDayId(getExDividendDayId()), dxfcpp::toString(getShares()),
-        dxfcpp::toString(getFreeFloat()));
+        day_util::getYearMonthDayByDayId(getExDividendDayId()), java::wideDecimalToString(getShares()),
+        java::wideDecimalToString(getFreeFloat()));
 }
 
 DXFCPP_END_NAMESPACE

@@ -23,14 +23,21 @@ std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::
         throw InvalidArgumentException("invalid month " + std::to_string(month));
     }
 
-    std::int32_t dayOfYear = DAY_OF_YEAR[month] + day - 1;
+    // The arithmetic of the Java int: any year and day give the result of Java.
+    using math_util::JavaInt;
+
+    JavaInt dayOfYear = JavaInt{DAY_OF_YEAR[month]} + day - 1;
 
     if (month > 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-        dayOfYear++;
+        dayOfYear = dayOfYear + 1;
     }
 
-    return year * 365 + math_util::div(year - 1, 4) - math_util::div(year - 1, 100) + math_util::div(year - 1, 400) +
-           dayOfYear - 719527;
+    const JavaInt y = year;
+    const auto previous = (y - 1).value;
+
+    return (y * 365 + math_util::div(previous, 4) - math_util::div(previous, 100) + math_util::div(previous, 400) +
+            dayOfYear - 719527)
+        .value;
 }
 } // namespace day_util
 

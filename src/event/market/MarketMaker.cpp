@@ -444,7 +444,7 @@ std::string MarketMaker::toString() const {
         "marketMaker='{}', bidTime={}, bidPrice={}, bidSize={}, bidCount={}, askTime={}, askPrice={}, "
         "askSize={}, askCount={}}}",
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getSource().toString(), getEventFlagsMask().getMask(), getIndex(),
+        getSource().toString(), getEventFlagsMask().getMask(), static_cast<std::uint64_t>(getIndex()),
         TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), encodeChar(getExchangeCode()), orNull(getMarketMakerOpt()),
         TimeFormat::DEFAULT_WITH_MILLIS.format(getBidTime()), java::doubleToString(getBidPrice()),
         java::doubleToString(getBidSize()), getBidCount(), TimeFormat::DEFAULT_WITH_MILLIS.format(getAskTime()),

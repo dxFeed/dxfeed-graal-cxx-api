@@ -693,6 +693,11 @@ set(DXFCXX_MSVC_LIKE_C "$<AND:$<COMPILE_LANGUAGE:C>,$<BOOL:${MSVC}>>")
 set(DXFCXX_GCC_LIKE_CXX "$<AND:$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>")
 set(DXFCXX_GCC_LIKE_C "$<AND:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>")
 
+# The wide decimal conversion rounds a product before adding to it, as Java does; a fused multiply-add (aarch64)
+# would change the last digit.
+set_source_files_properties(src/internal/utils/JavaUtils.cpp PROPERTIES
+        COMPILE_OPTIONS "$<${DXFCXX_GCC_LIKE_CXX}:-ffp-contract=off>")
+
 #A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
 set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
 

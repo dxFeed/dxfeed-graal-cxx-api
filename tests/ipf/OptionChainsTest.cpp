@@ -181,7 +181,7 @@ TEST_CASE("OptionChainsBuilder builds the chains of the IPF file as the Java API
     }
 }
 
-TEST_CASE("OptionSeries::toString() matches the Java API (EVT-17)" * doctest::may_fail()) {
+TEST_CASE("OptionSeries::toString() matches the Java API") {
     auto builder = OptionChainsBuilder<InstrumentProfile>::build(readProfiles());
     auto chain = builder.getChains().at("TEST");
     const auto series = chain.getSeries();
@@ -193,4 +193,53 @@ TEST_CASE("OptionSeries::toString() matches the Java API (EVT-17)" * doctest::ma
 
     CHECK(actual == std::vector<std::string>{TEST_NOV17_MINI.javaToString, TEST_NOV17.javaToString,
                                              TEST_NOV24_WEEKLY.javaToString, TEST_DEC15.javaToString});
+}
+
+namespace {
+
+// The string of the one series that the builder makes of an option with the attributes set by the function.
+template <typename Set> std::string seriesToString(Set set) {
+    OptionChainsBuilder<InstrumentProfile> builder{};
+
+    builder.setUnderlying("TEST");
+    builder.setStrike(100.0);
+    builder.setCFI("OCXXXX");
+    set(builder);
+    builder.addOption(InstrumentProfile::create());
+
+    auto chain = builder.getChains().at("TEST");
+    const auto series = chain.getSeries();
+
+    REQUIRE(series.size() == 1);
+
+    return series.begin()->toString();
+}
+
+} // namespace
+
+TEST_CASE("OptionSeries::toString() prints the dates as yyyyMMdd, the doubles as Java and omits the unset fields") {
+    const auto expiration = day_util::getDayIdByYearMonthDay(2026, 11, 20);
+
+    CHECK(seriesToString([&](auto &b) {
+              b.setExpiration(expiration);
+              b.setLastTrade(day_util::getDayIdByYearMonthDay(2026, 11, 19));
+              b.setMultiplier(100.0);
+              b.setSPC(0.5);
+              b.setAdditionalUnderlyings("GOOG 2");
+              b.setMMY("202611");
+              b.setOptionType("STAN");
+              b.setExpirationStyle("Regular");
+              b.setSettlementStyle("Close");
+          }) == "expiration=20261120, lastTrade=20261119, multiplier=100.0, spc=0.5, additionalUnderlyings=GOOG 2, "
+                "mmy=202611, optionType=STAN, expirationStyle=Regular, settlementStyle=Close, cfi=OXXXXX");
+    CHECK(seriesToString([&](auto &b) {
+              b.setCFI("OC");
+              b.setExpiration(expiration);
+              b.setMultiplier(1.0e7);
+              b.setSPC(1.0e-4);
+          }) == "expiration=20261120, multiplier=1.0E7, spc=1.0E-4, cfi=OX");
+    CHECK(seriesToString([&](auto &b) {
+              b.setExpiration(expiration);
+              b.setMultiplier(100.0);
+          }) == "expiration=20261120, multiplier=100.0, cfi=OXXXXX");
 }

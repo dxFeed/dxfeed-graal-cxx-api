@@ -12,8 +12,6 @@ using namespace dxfcpp;
 
 // The expected strings are the output of Java `toString()` of the same events (dxFeed Java API 3.356). Change them only
 // from a new run of the Java probe, not by hand. The times are zero, so the time zone does not matter.
-//
-// Not compared: `Profile` shares and freeFloat, which Java prints as `WideDecimal` (`1000` rather than `1000.0`).
 
 TEST_CASE("Quote::toString() is the same as in Java") {
     Quote quote("AAPL");
@@ -144,6 +142,96 @@ TEST_CASE("Profile::toString() is the same as in Java") {
           "haltStartTime=0, haltEndTime=0, highLimitPrice=1.0E7, lowLimitPrice=NaN, high52WeekPrice=NaN, "
           "low52WeekPrice=NaN, beta=9.0E-4, earningsPerShare=1.0E-5, dividendFrequency=NaN, exDividendAmount=NaN, "
           "exDividendDay=19700101, shares=NaN, freeFloat=NaN}");
+
+    Profile shares("AAPL");
+
+    shares.setShares(1.0E7);
+    shares.setFreeFloat(9.0E-4);
+
+    CHECK(shares.toString() ==
+          "Profile{AAPL, eventTime=0, description='null', SSR=UNDEFINED, status=UNDEFINED, statusReason='null', "
+          "haltStartTime=0, haltEndTime=0, highLimitPrice=NaN, lowLimitPrice=NaN, high52WeekPrice=NaN, "
+          "low52WeekPrice=NaN, beta=NaN, earningsPerShare=NaN, dividendFrequency=NaN, exDividendAmount=NaN, "
+          "exDividendDay=19700101, shares=1E7, freeFloat=0.0009}");
+}
+
+TEST_CASE("Profile::toString() prints shares and freeFloat as the Java WideDecimal") {
+    const auto sharesOf = [](double shares) {
+        Profile profile("AAPL");
+
+        profile.setShares(shares);
+
+        const auto s = profile.toString();
+        const auto begin = s.find("shares=") + 7;
+
+        return s.substr(begin, s.find(", freeFloat=") - begin);
+    };
+
+    CHECK(sharesOf(1000.0) == "1000");
+    CHECK(sharesOf(1.0E7) == "1E7");
+    CHECK(sharesOf(1.0E6) == "1000000");
+    CHECK(sharesOf(1.0E9) == "1E9");
+    CHECK(sharesOf(12345678901234.0) == "12345678901234");
+    CHECK(sharesOf(1.23E15) == "1.23E15");
+    CHECK(sharesOf(9.0E-4) == "0.0009");
+    CHECK(sharesOf(1.0E-7) == "0.0000001");
+    CHECK(sharesOf(1.0E-12) == "1E-12");
+    CHECK(sharesOf(1.0 / 3.0) == "0.333333333333333");
+    CHECK(sharesOf(1234567.8912345679) == "1234567.891234568");
+    CHECK(sharesOf(-1000.0) == "-1000");
+    CHECK(sharesOf(-9.0E-4) == "-0.0009");
+    CHECK(sharesOf(-1.5) == "-1.5");
+    CHECK(sharesOf(-1.0E-12) == "-1E-12");
+    CHECK(sharesOf(-0.333333333333333) == "-0.333333333333333");
+    CHECK(sharesOf(9.007199254740992E15) == "9007199254740992");
+    CHECK(sharesOf(3.602879701896397E16) == "36028797018963970");
+    CHECK(sharesOf(1.2345678901234568E17) == "123456789012345680");
+    CHECK(sharesOf(1.0E17) == "1E17");
+    CHECK(sharesOf(1.0E18) == "1E18");
+    CHECK(sharesOf(9.3E18) == "9.3E18");
+    CHECK(sharesOf(9.223372036854776E18) == "9223372036854776000");
+    CHECK(sharesOf(1.2345678901234567E19) == "12345678901234570000");
+    CHECK(sharesOf(1.0E20) == "1E20");
+    CHECK(sharesOf(-1.0E20) == "-1E20");
+    CHECK(sharesOf(1.0E100) == "1E100");
+    CHECK(sharesOf(-1.7E308) == "-Infinity");
+    CHECK(sharesOf(0.0) == "0");
+    CHECK(sharesOf(std::numeric_limits<double>::quiet_NaN()) == "NaN");
+    CHECK(sharesOf(std::numeric_limits<double>::infinity()) == "Infinity");
+    CHECK(sharesOf(-std::numeric_limits<double>::infinity()) == "-Infinity");
+    CHECK(sharesOf(4.9E-324) == "0");
+    CHECK(sharesOf(1.7E308) == "Infinity");
+}
+
+TEST_CASE("A negative index is printed as an unsigned hexadecimal number, as Java Long.toHexString prints it") {
+    const auto contains = [](const std::string &s, const std::string &part) {
+        return s.find(part) != std::string::npos;
+    };
+
+    OptionSale sale(".AAPL");
+    Series series("AAPL");
+    Order order("AAPL");
+
+    sale.setIndex(-1);
+    series.setIndex(-1);
+    order.setIndex(0x4e545612345678);
+
+    CHECK(contains(sale.toString(), ", index=0xffffffffffffffff, "));
+    CHECK(contains(series.toString(), ", index=0xffffffffffffffff, "));
+    CHECK(contains(order.toString(), ", index=0x4e545612345678, "));
+}
+
+TEST_CASE("TimeAndSale::toString() prints the buyer and the seller after the type, as Java, only if they are set") {
+    TimeAndSale emptyBuyer("AAPL");
+    TimeAndSale both("AAPL");
+
+    emptyBuyer.setBuyer("");
+    both.setBuyer("B1");
+    both.setSeller("S'1");
+
+    CHECK(emptyBuyer.toString().ends_with(", type=NEW, buyer=''}"));
+    CHECK(both.toString().ends_with(", type=NEW, buyer='B1', seller='S'1'}"));
+    CHECK(TimeAndSale("AAPL").toString().ends_with(", type=NEW}"));
 }
 
 TEST_CASE("Order::toString() is the same as in Java") {
