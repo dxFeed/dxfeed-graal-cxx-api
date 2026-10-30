@@ -369,7 +369,8 @@ endif ()
 foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
     set(DXFC_ISOLATE_ARGS_TARGET dxFeedGraalCxxApi_IsolateArgs_${DXFC_ISOLATE_ARGS_VARIANT})
     set(DXFC_ISOLATE_ARGS_SCENARIOS args-visible setter-twice setter-empty setter-after-creation setter-nul
-            setter-concurrent env-non-ascii bad-value unknown-option repeat-same system-property error-shutdown)
+            setter-concurrent env-non-ascii bad-value unknown-option repeat-same concurrent-first setter-after-failure
+            system-property error-shutdown)
 
     # SIGPIPE: the handlers of the signals of the isolate are for Linux and macOS.
     if (NOT WIN32)

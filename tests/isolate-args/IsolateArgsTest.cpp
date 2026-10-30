@@ -346,6 +346,59 @@ void repeatSame() {
     }
 }
 
+// The threads race for the very first call, which fails the creation: each gets the same message.
+void concurrentFirst() {
+    check(System::setIsolateArguments({"-Xmx64q"}), "the setter returned false before the creation");
+
+    constexpr std::size_t threadCount = 8;
+
+    std::atomic<bool> go{false};
+    std::atomic<std::size_t> ready{0};
+    std::vector<std::string> messages(threadCount);
+    std::vector<std::thread> threads;
+
+    for (std::size_t i = 0; i < threadCount; i++) {
+        threads.emplace_back([&, i] {
+            ready++;
+
+            while (!go.load()) {
+                std::this_thread::yield();
+            }
+
+            try {
+                messages[i] = firstCreateError();
+            } catch (const std::exception &e) {
+                messages[i] = std::string("exception: ") + e.what();
+            }
+        });
+    }
+
+    while (ready.load() < threadCount) {
+        std::this_thread::yield();
+    }
+
+    go = true;
+
+    for (auto &thread : threads) {
+        thread.join();
+    }
+
+    expectCreationError(messages[0], "64q");
+
+    for (std::size_t i = 1; i < threadCount; i++) {
+        check(messages[i] == messages[0],
+              "the message of the thread " + std::to_string(i) + " differs: " + messages[i]);
+    }
+}
+
+// After the failed creation the setter returns false: the creation has started, and it is not retried.
+void setterAfterFailure() {
+    check(System::setIsolateArguments({"-Xmx64q"}), "the setter returned false before the creation");
+    expectCreationError(firstCreateError(), "64q");
+    check(!System::setIsolateArguments({"-Xmx64m"}), "the setter returned true after the failed creation");
+    expectCreationError(firstCreateError(), "64q");
+}
+
 // A quote that is not closed in the variable fails the creation. The message names the variable and the reason.
 void envUnmatchedQuote() {
     expectArgumentsVariable("-Dp=\"a");
@@ -397,7 +450,7 @@ void systemProperty() {
     check(dxfc_system_set_property("x", "y") == DXFC_EC_ERROR, "dxfc_system_set_property() did not return the error");
 }
 
-// The first call is of the C API: the error does not leave it as an exception.
+// The first call is of the C API: the error does not leave it as an exception. The next functions get the same error.
 void cApi() {
     expectArgumentsVariable("-Xmx64q");
 
@@ -405,6 +458,20 @@ void cApi() {
 
     check(dxfc_dxendpoint_create(nullptr, &endpoint) == DXFC_EC_ERROR, "dxfc_dxendpoint_create() did not fail");
     check(endpoint == nullptr, "dxfc_dxendpoint_create() returned a handle");
+    check(dxfc_dxendpoint_create2(DXFC_DXENDPOINT_ROLE_FEED, nullptr, &endpoint) == DXFC_EC_ERROR,
+          "dxfc_dxendpoint_create2() did not fail");
+    check(endpoint == nullptr, "dxfc_dxendpoint_create2() returned a handle");
+    check(dxfc_dxendpoint_get_instance(nullptr, &endpoint) == DXFC_EC_ERROR,
+          "dxfc_dxendpoint_get_instance() did not fail");
+    check(endpoint == nullptr, "dxfc_dxendpoint_get_instance() returned a handle");
+    check(dxfc_dxendpoint_get_instance2(DXFC_DXENDPOINT_ROLE_FEED, nullptr, &endpoint) == DXFC_EC_ERROR,
+          "dxfc_dxendpoint_get_instance2() did not fail");
+    check(endpoint == nullptr, "dxfc_dxendpoint_get_instance2() returned a handle");
+
+    dxfc_dxendpoint_builder_t builder = nullptr;
+
+    check(dxfc_dxendpoint_new_builder(&builder) == DXFC_EC_ERROR, "dxfc_dxendpoint_new_builder() did not fail");
+    check(builder == nullptr, "dxfc_dxendpoint_new_builder() returned a handle");
 }
 
 // The process shuts the library down and exits after the failed creation: no hang, no crash.
@@ -489,6 +556,10 @@ int main(int argc, char *argv[]) {
             unknownOption();
         } else if (scenario == "repeat-same") {
             repeatSame();
+        } else if (scenario == "concurrent-first") {
+            concurrentFirst();
+        } else if (scenario == "setter-after-failure") {
+            setterAfterFailure();
         } else if (scenario == "env-unmatched-quote") {
             envUnmatchedQuote();
         } else if (scenario == "env-argfile") {

@@ -105,6 +105,7 @@ struct DXFCPP_EXPORT System {
      * @param key The name of the system property (UTF-8 string).
      * @param value The value of the system property (UTF-8 string).
      * @return true if the setting of the JVM system property succeeded.
+     * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
     static bool setProperty(const StringLike &key, const StringLike &value);
 
@@ -112,6 +113,7 @@ struct DXFCPP_EXPORT System {
      * Sets the JVM system properties to the Properties argument.
      * @tparam Properties The properties' type (std::map, std::unordered_map etc).
      * @param properties The new system properties.
+     * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
     template <typename Properties> static void setProperties(Properties &&properties) {
         for (auto &&[k, v] : properties) {
@@ -124,7 +126,8 @@ struct DXFCPP_EXPORT System {
      * prefix.
      *
      * @param key The name of the system property (UTF-8 string).
-     * @return The value of a JVM system property (UTF-8 string), or an empty string.
+     * @return The value of a JVM system property (UTF-8 string), or an empty string if the property is not set.
+     * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
     static std::string getProperty(const StringLike &key);
 
