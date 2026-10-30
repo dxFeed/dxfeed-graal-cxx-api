@@ -155,7 +155,7 @@ NuamTrade makeFromJavaCase(const events_java_parity::NuamTradeCase &javaCase) {
     trade.setSequence(javaCase.sequence);
     trade.setTimeNanoPart(javaCase.timeNanoPart);
     trade.setExchangeCode(static_cast<std::int16_t>(javaCase.exchangeCode));
-    // The tradeId of the Java class has no counterpart in the C++ Trade: the cases keep it 0.
+    trade.setTradeId(javaCase.tradeId);
     trade.setPrice(javaCase.price);
     trade.setChange(javaCase.change);
     trade.setSize(javaCase.size);
@@ -186,7 +186,7 @@ NuamTimeAndSale makeFromJavaCase(const events_java_parity::NuamTimeAndSaleCase &
     sale.setSequence(javaCase.sequence);
     sale.setTimeNanoPart(javaCase.timeNanoPart);
     sale.setExchangeCode(static_cast<std::int16_t>(javaCase.exchangeCode));
-    // The tradeId of the Java class has no counterpart in the C++ TimeAndSale: the cases keep it 0.
+    sale.setTradeId(javaCase.tradeId);
     sale.setPrice(javaCase.price);
     sale.setSize(javaCase.size);
     sale.setBidPrice(javaCase.bidPrice);
@@ -216,11 +216,8 @@ NuamTimeAndSale makeFromJavaCase(const events_java_parity::NuamTimeAndSaleCase &
     return sale;
 }
 
-// Compares toString() of the event made from every case with what Java prints for it. The Java classes of NuamTrade
-// and NuamTimeAndSale also print the tradeId of their Java base class, which the C++ classes do not have: it is
-// removed from the Java text (the cases keep it 0).
-template <typename Cases>
-void checkToStringParity(const std::string &className, const Cases &cases, bool stripTradeId) {
+// Compares toString() of the event made from every case with what Java prints for it.
+template <typename Cases> void checkToStringParity(const std::string &className, const Cases &cases) {
     // The zone must be UTC here (UtcTimeZoneListener), otherwise every comparison below fails on the time text.
     REQUIRE(TimeFormat::DEFAULT_WITH_MILLIS.format(1'700'000'000'123LL) == "20231114-221320.123");
 
@@ -235,14 +232,6 @@ void checkToStringParity(const std::string &className, const Cases &cases, bool 
 
             REQUIRE(expected.rfind(javaNull, 0) == 0);
             expected.replace(0, javaNull.size(), className + "{" + String::NUL + ",");
-        }
-
-        if (stripTradeId) {
-            const std::string tradeId = ", tradeId=0";
-            const auto position = expected.find(tradeId);
-
-            REQUIRE(position != std::string::npos);
-            expected.erase(position, tradeId.size());
         }
 
         CHECK(makeFromJavaCase(javaCase).toString() == expected);
@@ -279,15 +268,15 @@ TEST_CASE("NuamTimeAndSale has the flags of the Java class") {
 }
 
 TEST_CASE("NuamOrder::toString() prints the fields as the Java API does") {
-    checkToStringParity("NuamOrder", events_java_parity::NUAM_ORDER, false);
+    checkToStringParity("NuamOrder", events_java_parity::NUAM_ORDER);
 }
 
 TEST_CASE("NuamTrade::toString() prints the fields as the Java API does") {
-    checkToStringParity("NuamTrade", events_java_parity::NUAM_TRADE, true);
+    checkToStringParity("NuamTrade", events_java_parity::NUAM_TRADE);
 }
 
 TEST_CASE("NuamTimeAndSale::toString() prints the fields as the Java API does") {
-    checkToStringParity("NuamTimeAndSale", events_java_parity::NUAM_TIME_AND_SALE, true);
+    checkToStringParity("NuamTimeAndSale", events_java_parity::NUAM_TIME_AND_SALE);
 }
 
 namespace {

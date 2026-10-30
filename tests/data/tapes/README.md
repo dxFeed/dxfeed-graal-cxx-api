@@ -6,7 +6,7 @@ writes these files the same way.
 
 | File | Content | Used by |
 |---|---|---|
-| `all-events.txt` | One event of each of the 24 event types (`OrderImbalance` on two sources, NTV and NUAM, `NuamOrder` on two sources, NUAM and nuam), every transferred field has its own value (the events of `test::createTapeEvents()`, plus the Java-only fields: `TradeId` of `Trade`, `TradeETH`, `TimeAndSale`, `NuamTrade` and `NuamTimeAndSale`, and the `Message` attachment) | `tests/event/TapeRoundTripTest.cpp` |
+| `all-events.txt` | One event of each of the 24 event types (`OrderImbalance` on two sources, NTV and NUAM, `NuamOrder` on two sources, NUAM and nuam), every transferred field has its own value (the events of `test::createTapeEvents()`, plus the Java-only field: the `Message` attachment) | `tests/event/TapeRoundTripTest.cpp` |
 | `configuration.txt` | Three `Configuration` events (a type that the C++ API does not implement) and one `Quote`, written by hand | `tests/event/UnsupportedEventTest.cpp` |
 | `defaults.txt` | Default-constructed events of the 24 types, written by the Java API | `tests/event/TapeRoundTripTest.cpp` |
 | `edge-values.txt` | The edge values of `test::createEdgeEvents()` (NaN, ±0.0, infinities, number limits, special strings, all enum values, all 256 values of the event flags byte), written by the Java API from the same values | `tests/event/EdgeValuesTapeTest.cpp` |
@@ -25,8 +25,7 @@ writes these files the same way.
 - `NuamOrder` is written per source as well: `NuamOrder#NUAM`, `NuamOrder#nuam` (the lowercase source is another
   source) and the plain `NuamOrder` for the DEFAULT source. `Flags` packs the enum fields as in `Order`, `NuamFlags`
   packs the time in force and the order type. `NuamTrade` and `NuamTimeAndSale` are plain records that
-  repeat the columns of `Trade` and `TimeAndSale` (including `TradeId`, which the C++ API does not have) and add
-  their own.
+  repeat the columns of `Trade` and `TimeAndSale` (including `TradeId`) and add their own.
 - `MarketMaker` is a plain record keyed by the symbol, the exchange code and the market maker id (`ExchangeCode`,
   `MarketMaker`); the default scheme writes `BidTime` and `AskTime` in seconds. `TextConfiguration` packs
   `<milliseconds>:<sequence>` in `Sequence`, as `TextMessage` does.

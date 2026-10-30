@@ -45,7 +45,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     std::optional<std::string> eventSymbol_{};
     std::int64_t eventTime_{};
     std::int64_t timeSequence_{};
-    std::string text_{};
+    std::optional<std::string> text_{};
 
     void fillData(void *graalNative);
     void fillGraalData(void *graalNative) const;
@@ -239,9 +239,16 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     /**
      * Returns text.
      *
-     * @return text.
+     * @return text or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getText() const &;
+
+    /**
+     * Returns text.
+     *
+     * @return text or std::nullopt
+     */
+    const std::optional<std::string> &getTextOpt() const & noexcept;
 
     /**
      * Changes text.

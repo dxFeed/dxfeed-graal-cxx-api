@@ -63,12 +63,13 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
         std::int64_t timeSequence{};
         std::int32_t timeNanoPart{};
         std::int16_t exchangeCode{};
+        std::int64_t tradeId{};
         double price = math::NaN;
         double change = math::NaN;
         double size = math::NaN;
         std::int32_t dayId{};
-        double dayVolume{};
-        double dayTurnover{};
+        double dayVolume = math::NaN;
+        double dayTurnover = math::NaN;
         std::int32_t flags{};
     };
 
@@ -206,6 +207,21 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      * @param exchangeCode exchange code of the last trade.
      */
     void setExchangeCode(std::int16_t exchangeCode) noexcept;
+
+    /**
+     * Returns trade ID of the last trade. Trade ID is set for the events with a trade-related action (execution,
+     * correction, cancellation).
+     *
+     * @return trade ID or 0 if not available.
+     */
+    std::int64_t getTradeId() const noexcept;
+
+    /**
+     * Changes trade ID of the last trade.
+     *
+     * @param tradeId trade ID.
+     */
+    void setTradeId(std::int64_t tradeId) noexcept;
 
     /**
      * Returns price of the last trade.

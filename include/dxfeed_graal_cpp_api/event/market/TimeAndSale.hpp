@@ -103,6 +103,7 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
         std::int64_t index{};
         std::int32_t timeNanoPart{};
         std::int16_t exchangeCode{};
+        std::int64_t tradeId{};
         double price = math::NaN;
         double size = math::NaN;
         double bidPrice = math::NaN;
@@ -310,6 +311,21 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
      * @param exchangeCode exchange code of this time and sale event.
      */
     void setExchangeCode(std::int16_t exchangeCode) noexcept;
+
+    /**
+     * Returns trade ID of this time and sale event. Trade ID is set for the events with a trade-related action
+     * (execution, correction, cancellation).
+     *
+     * @return trade ID or 0 if not available.
+     */
+    std::int64_t getTradeId() const noexcept;
+
+    /**
+     * Changes trade ID of this time and sale event.
+     *
+     * @param tradeId trade ID.
+     */
+    void setTradeId(std::int64_t tradeId) noexcept;
 
     /**
      * Returns price of this time and sale event.
