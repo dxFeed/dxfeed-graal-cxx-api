@@ -4,9 +4,11 @@
 // The arguments of the Graal isolate: they are given before the isolate is created, so each scenario is a separate
 // process. A scenario that fails returns a non-zero code and writes the reason to stderr. Usage: <executable> <scenario>.
 
+#include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <atomic>
+#include <csignal>
 #include <cstdio>
 #include <cstdlib>
 #include <exception>
@@ -16,6 +18,10 @@
 #include <string_view>
 #include <thread>
 #include <vector>
+
+#ifndef _WIN32
+#    include <signal.h>
+#endif
 
 using namespace dxfcpp;
 using namespace std::literals;
@@ -272,6 +278,177 @@ void envNonAscii() {
     }
 }
 
+bool contains(const std::string &text, std::string_view part) {
+    return text.find(part) != std::string::npos;
+}
+
+// The message of the GraalException of the first call that needs the isolate. The call must throw it.
+std::string firstCreateError() {
+    try {
+        const auto endpoint = DXEndpoint::create();
+    } catch (const GraalException &e) {
+        return e.what();
+    }
+
+    throw std::runtime_error("DXEndpoint::create() did not throw GraalException");
+}
+
+// The message tells that the creation failed with the code 22, and has no part of the value that caused it.
+void expectCreationError(const std::string &message, std::string_view forbidden) {
+    const std::string codeText = CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED);
+
+    check(contains(message, "22"), "no code 22 in the message: " + message);
+    check(contains(message, codeText), "no text of the code in the message: " + message);
+    check(!contains(message, forbidden), "the message has the value of the argument: " + message);
+}
+
+// A wrong value of an argument fails the creation: the first call throws, and the message has the code but not the value.
+void badValue() {
+    check(System::setIsolateArguments({"-Xmx64q"}), "the setter returned false before the creation");
+    expectCreationError(firstCreateError(), "64q");
+}
+
+// An unknown option of the isolate fails the creation as well.
+void unknownOption() {
+    check(System::setIsolateArguments({"-XX:+NoSuchOption"}), "the setter returned false before the creation");
+    expectCreationError(firstCreateError(), "NoSuchOption");
+}
+
+// The creation is not retried: the next calls, on this thread and on the others, get the same message.
+void repeatSame() {
+    check(System::setIsolateArguments({"-Xmx64q"}), "the setter returned false before the creation");
+
+    const auto first = firstCreateError();
+
+    expectCreationError(first, "64q");
+    check(firstCreateError() == first, "the second message differs");
+
+    constexpr std::size_t threadCount = 4;
+    std::vector<std::string> messages(threadCount);
+    std::vector<std::thread> threads;
+
+    for (std::size_t i = 0; i < threadCount; i++) {
+        threads.emplace_back([&messages, i] {
+            try {
+                messages[i] = firstCreateError();
+            } catch (const std::exception &e) {
+                messages[i] = std::string("exception: ") + e.what();
+            }
+        });
+    }
+
+    for (auto &thread : threads) {
+        thread.join();
+    }
+
+    for (std::size_t i = 0; i < threadCount; i++) {
+        check(messages[i] == first, "the message of the thread " + std::to_string(i) + " differs: " + messages[i]);
+    }
+}
+
+// A quote that is not closed in the variable fails the creation. The message names the variable and the reason.
+void envUnmatchedQuote() {
+    expectArgumentsVariable("-Dp=\"a");
+
+    const auto message = firstCreateError();
+
+    expectCreationError(message, "-Dp");
+    check(contains(message, ARGUMENTS_VARIABLE), "the message does not name the variable: " + message);
+    check(contains(message, "quote"), "the message does not name the reason: " + message);
+}
+
+// An argument file is not supported.
+void envArgFile() {
+    expectArgumentsVariable("@args.txt");
+
+    const auto message = firstCreateError();
+
+    expectCreationError(message, "args.txt");
+    check(contains(message, ARGUMENTS_VARIABLE), "the message does not name the variable: " + message);
+    check(contains(message, "@file"), "the message does not name the reason: " + message);
+}
+
+// The system properties throw after the failed creation, the C functions return the error.
+void systemProperty() {
+    check(System::setIsolateArguments({"-Xmx64q"}), "the setter returned false before the creation");
+
+    bool getThrown = false;
+    bool setThrown = false;
+
+    try {
+        System::getProperty("x");
+    } catch (const GraalException &) {
+        getThrown = true;
+    }
+
+    try {
+        System::setProperty("x", "y");
+    } catch (const GraalException &) {
+        setThrown = true;
+    }
+
+    check(getThrown, "System::getProperty() did not throw GraalException");
+    check(setThrown, "System::setProperty() did not throw GraalException");
+
+    char buffer[16] = {'z', 0};
+
+    check(dxfc_system_get_property("x", buffer, sizeof(buffer)) == DXFC_EC_ERROR,
+          "dxfc_system_get_property() did not return the error");
+    check(dxfc_system_set_property("x", "y") == DXFC_EC_ERROR, "dxfc_system_set_property() did not return the error");
+}
+
+// The first call is of the C API: the error does not leave it as an exception.
+void cApi() {
+    expectArgumentsVariable("-Xmx64q");
+
+    dxfc_dxendpoint_t endpoint = nullptr;
+
+    check(dxfc_dxendpoint_create(nullptr, &endpoint) == DXFC_EC_ERROR, "dxfc_dxendpoint_create() did not fail");
+    check(endpoint == nullptr, "dxfc_dxendpoint_create() returned a handle");
+}
+
+// The process shuts the library down and exits after the failed creation: no hang, no crash.
+void errorShutdown() {
+    check(System::setIsolateArguments({"-Xmx64q"}), "the setter returned false before the creation");
+    expectCreationError(firstCreateError(), "64q");
+    dxfcpp::shutdown();
+}
+
+#ifndef _WIN32
+// The handler of SIGPIPE that the isolate installs: its presence after the creation, without raising the signal.
+bool sigpipeHandlerInstalled() {
+    struct sigaction action {};
+
+    check(sigaction(SIGPIPE, nullptr, &action) == 0, "sigaction() failed");
+
+    return action.sa_handler != SIG_DFL;
+}
+
+void setSigpipeDefault() {
+    struct sigaction action {};
+
+    action.sa_handler = SIG_DFL;
+    sigemptyset(&action.sa_mask);
+
+    check(sigaction(SIGPIPE, &action, nullptr) == 0, "sigaction() failed");
+}
+
+// By default the isolate installs its handlers of the signals.
+void signals() {
+    setSigpipeDefault();
+    check(System::getProperty("mdapi428.warm").empty(), "unexpected property");
+    check(sigpipeHandlerInstalled(), "the isolate did not install the handler of SIGPIPE");
+}
+
+// With -XX:-EnableSignalHandling the handlers are not installed.
+void signalsDisabled() {
+    setSigpipeDefault();
+    check(System::setIsolateArguments({"-XX:-EnableSignalHandling"}), "the setter returned false");
+    check(System::getProperty("mdapi428.warm").empty(), "unexpected property");
+    check(!sigpipeHandlerInstalled(), "the isolate installed the handler of SIGPIPE");
+}
+#endif
+
 } // namespace
 
 int main(int argc, char *argv[]) {
@@ -306,6 +483,28 @@ int main(int argc, char *argv[]) {
             envQuoted();
         } else if (scenario == "env-non-ascii") {
             envNonAscii();
+        } else if (scenario == "bad-value") {
+            badValue();
+        } else if (scenario == "unknown-option") {
+            unknownOption();
+        } else if (scenario == "repeat-same") {
+            repeatSame();
+        } else if (scenario == "env-unmatched-quote") {
+            envUnmatchedQuote();
+        } else if (scenario == "env-argfile") {
+            envArgFile();
+        } else if (scenario == "system-property") {
+            systemProperty();
+        } else if (scenario == "c-api") {
+            cApi();
+        } else if (scenario == "error-shutdown") {
+            errorShutdown();
+#ifndef _WIN32
+        } else if (scenario == "signals") {
+            signals();
+        } else if (scenario == "signals-disabled") {
+            signalsDisabled();
+#endif
         } else {
             std::fprintf(stderr, "Unknown scenario: %s\n", argv[1]);
 

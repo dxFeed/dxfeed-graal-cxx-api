@@ -31,6 +31,15 @@ struct DXFCPP_EXPORT GraalException : RuntimeException {
      */
     explicit GraalException(CEntryPointErrorsEnum entryPointErrorsEnum);
 
+    /**
+     * Constructs an exception of the failed creation of the GraalVM isolate. The message has the code, its text and
+     * the details.
+     *
+     * @param entryPointErrorsEnum The error code returned by GraalVM, or the code of the failure of the isolate arguments.
+     * @param details The reason of the failure. It must not contain the values of the isolate arguments.
+     */
+    GraalException(CEntryPointErrorsEnum entryPointErrorsEnum, std::string details);
+
     GraalException(const GraalException &other) noexcept;
 
     GraalException &operator=(const GraalException &other) = default;

@@ -38,9 +38,18 @@ std::string validUtf8Prefix(std::string_view s) {
     return std::string{s.begin(), utf8::find_invalid(s.begin(), s.end())};
 }
 
+// The creation of the isolate failed: GraalException with the code and the reason, instead of the fallback value that
+// hides the failure.
+void throwIfIsolateFailed() {
+    ignoreUnused(Isolate::getInstance());
+    Isolate::throwCreationError();
+}
+
 } // namespace
 
 bool System::setProperty(const StringLike &key, const StringLike &value) {
+    throwIfIsolateFailed();
+
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "')");
@@ -62,6 +71,8 @@ bool System::setProperty(const StringLike &key, const StringLike &value) {
 }
 
 std::string System::getProperty(const StringLike &key) {
+    throwIfIsolateFailed();
+
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("System::getProperty(key = " + key + ")");
@@ -106,12 +117,28 @@ void shutdown() {
 DXFCPP_END_NAMESPACE
 
 dxfc_error_code_t dxfc_system_set_property(const char *key, const char *value) {
-    return dxfcpp::System::setProperty(key, value) ? DXFC_EC_SUCCESS : DXFC_EC_ERROR;
+    try {
+        return dxfcpp::System::setProperty(key, value) ? DXFC_EC_SUCCESS : DXFC_EC_ERROR;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 }
 
 // ReSharper disable once CppDFAConstantFunctionResult
 dxfc_error_code_t dxfc_system_get_property(const char *key, char *buffer, size_t bufferSize) {
-    auto value = dxfcpp::System::getProperty(key);
+    std::string value;
+
+    try {
+        value = dxfcpp::System::getProperty(key);
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
+        if (buffer != nullptr && bufferSize > 0ULL) {
+            buffer[0] = '\0';
+        }
+
+        return DXFC_EC_ERROR;
+    }
 
     if (buffer != nullptr && bufferSize > 0ULL) {
         auto size = std::min(value.size(), bufferSize - 1);

@@ -167,6 +167,21 @@ IsolateArguments &isolateArguments() noexcept {
     return result;
 }
 
+// The failure of the creation of the isolate (Isolate::getCreationError()): the constructor writes it once, the details
+// first and the code after them, before the first call that needs the isolate returns. Never destroyed, as the isolate.
+constinit std::atomic<CEntryPointErrorsEnum> creationErrorCode{CEntryPointErrorsEnum::NO_ERROR};
+
+std::string &creationErrorDetails() noexcept {
+    static auto &result = *new std::string{};
+
+    return result;
+}
+
+void failCreation(CEntryPointErrorsEnum code, std::string details) noexcept {
+    creationErrorDetails() = std::move(details);
+    creationErrorCode.store(code, std::memory_order_release);
+}
+
 // The Graal callbacks return at once (Isolate::isShuttingDown()).
 constinit std::atomic<bool> shuttingDown{false};
 
@@ -284,8 +299,6 @@ Isolate::Isolate() noexcept {
 
     // The arguments of the variable go after the arguments of the code: the last value of an option wins. An unset,
     // empty or whitespace-only variable gives no arguments.
-    bool environmentError = false;
-
     if (const auto variable = getEnvironmentVariable(ISOLATE_ARGUMENTS_VARIABLE); variable) {
         auto parsed = parseIsolateArguments(*variable);
 
@@ -293,19 +306,22 @@ Isolate::Isolate() noexcept {
             arguments.insert(arguments.end(), std::make_move_iterator(parsed.arguments.begin()),
                              std::make_move_iterator(parsed.arguments.end()));
         } else {
-            // TODO(U5): a variable that cannot be parsed is the creation error: the SDK must not be called, and the
-            // calls of the API throw. For now the isolate is created without the arguments of the variable.
-            // The reason and the value are not printed.
-            environmentError = true;
+            // The SDK is not called with a part of the arguments. The reason of the tokenizer has the position, not the
+            // value: the value may have secrets.
+            failCreation(CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED,
+                         std::string(ISOLATE_ARGUMENTS_VARIABLE) + ": " + parsed.error);
         }
     }
 
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("Isolate::Isolate(): " + std::to_string(arguments.size()) + " argument(s)" +
-                        (environmentError ? ", the variable is not parsed" : ""));
-    } else {
-        ignoreUnused(environmentError);
+                        (getCreationError() != CEntryPointErrorsEnum::NO_ERROR ? ", the variable is not parsed" : ""));
+    }
+
+    // The SDK is not called: the isolate does not exist.
+    if (getCreationError() != CEntryPointErrorsEnum::NO_ERROR) {
+        return;
     }
 
     graal_isolate_t *graalIsolateHandle{};
@@ -342,6 +358,9 @@ Isolate::Isolate() noexcept {
 
         handle_ = graalIsolateHandle;
         currentIsolateThread().handle = graalIsolateThreadHandle;
+    } else {
+        // The SDK prints the reason of an invalid argument to the standard error output.
+        failCreation(result, "See the standard error output of the process for the reason.");
     }
 
     if constexpr (Debugger::traceIsolates) {
@@ -355,6 +374,13 @@ CEntryPointErrorsEnum Isolate::attach() const noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::attach()");
+    }
+
+    // There is no isolate to attach to after a failed creation. The callers check it before: it is a protection.
+    if (!handle_) {
+        const auto creationError = getCreationError();
+
+        return creationError != CEntryPointErrorsEnum::NO_ERROR ? creationError : CEntryPointErrorsEnum::NULL_ARGUMENT;
     }
 
     // We will not re-attach.
@@ -403,6 +429,10 @@ GraalIsolateThreadHandle Isolate::get() const noexcept {
         Debugger::trace(toString() + "::get()");
     }
 
+    if (!handle_) {
+        return nullptr;
+    }
+
     // ReSharper disable once CppRedundantCastExpression
     return static_cast<void *>(graal_get_current_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_)));
 }
@@ -447,7 +477,11 @@ Isolate &Isolate::getInstance() noexcept {
     static std::once_flag flag{};
 
     std::call_once(flag, []() {
-        init(instance);
+        // There is no isolate to set the properties of after a failed creation.
+        if (getCreationError() == CEntryPointErrorsEnum::NO_ERROR) {
+            init(instance);
+        }
+
         registerExitHandler();
     });
 
@@ -461,6 +495,16 @@ Isolate &Isolate::getInstance() noexcept {
 
 bool Isolate::isCreated() noexcept {
     return isolateCreated.load();
+}
+
+CEntryPointErrorsEnum Isolate::getCreationError() noexcept {
+    return creationErrorCode.load(std::memory_order_acquire);
+}
+
+void Isolate::throwCreationError() {
+    if (const auto code = getCreationError(); code != CEntryPointErrorsEnum::NO_ERROR) {
+        throw GraalException(code, creationErrorDetails());
+    }
 }
 
 bool Isolate::setArguments(std::vector<std::string> arguments) {
