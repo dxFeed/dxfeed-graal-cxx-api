@@ -339,6 +339,27 @@ endforeach ()
 # The arguments of the Graal isolate, with each kind of linking, as above. The arguments must be given before the
 # isolate is created, so each scenario is a separate process. DXFCPP_ISOLATE_ARGUMENTS of the environment that runs ctest
 # is removed: a scenario that does not check it must not see it.
+# A test of a scenario: the environment of ctest has no DXFCPP_ISOLATE_ARGUMENTS, then the optional third argument
+# (the value) is set. The unset goes first, the set after it.
+function (dxfc_add_isolate_args_test target scenario)
+    set(env_arguments --unset=DXFCPP_ISOLATE_ARGUMENTS)
+
+    if (ARGC GREATER 2)
+        list(APPEND env_arguments "DXFCPP_ISOLATE_ARGUMENTS=${ARGV2}")
+    endif ()
+
+    set(test ${target}_${scenario})
+    add_test(NAME ${test} COMMAND ${CMAKE_COMMAND} -E env ${env_arguments} $<TARGET_FILE:${target}> ${scenario})
+    set_tests_properties(${test} PROPERTIES TIMEOUT 60)
+
+    if (DXFCXX_SANITIZERS_ENABLED)
+        set_property(TEST ${test} APPEND PROPERTY ENVIRONMENT
+                "UBSAN_OPTIONS=print_stacktrace=1"
+                "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
+                "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+    endif ()
+endfunction ()
+
 set(DXFC_ISOLATE_ARGS_VARIANTS static)
 
 if (NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
@@ -348,7 +369,7 @@ endif ()
 foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
     set(DXFC_ISOLATE_ARGS_TARGET dxFeedGraalCxxApi_IsolateArgs_${DXFC_ISOLATE_ARGS_VARIANT})
     set(DXFC_ISOLATE_ARGS_SCENARIOS args-visible setter-twice setter-empty setter-after-creation setter-nul
-            setter-concurrent)
+            setter-concurrent env-non-ascii)
     add_executable(${DXFC_ISOLATE_ARGS_TARGET} isolate-args/IsolateArgsTest.cpp)
     list(APPEND DXFC_TEST_TARGETS ${DXFC_ISOLATE_ARGS_TARGET})
     target_include_directories(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
@@ -369,19 +390,14 @@ foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
     set_target_properties(${DXFC_ISOLATE_ARGS_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 
     foreach (DXFC_ISOLATE_ARGS_SCENARIO IN LISTS DXFC_ISOLATE_ARGS_SCENARIOS)
-        set(DXFC_ISOLATE_ARGS_TEST ${DXFC_ISOLATE_ARGS_TARGET}_${DXFC_ISOLATE_ARGS_SCENARIO})
-        add_test(NAME ${DXFC_ISOLATE_ARGS_TEST}
-                COMMAND ${CMAKE_COMMAND} -E env --unset=DXFCPP_ISOLATE_ARGUMENTS
-                $<TARGET_FILE:${DXFC_ISOLATE_ARGS_TARGET}> ${DXFC_ISOLATE_ARGS_SCENARIO})
-        set_tests_properties(${DXFC_ISOLATE_ARGS_TEST} PROPERTIES TIMEOUT 60)
-
-        if (DXFCXX_SANITIZERS_ENABLED)
-            set_property(TEST ${DXFC_ISOLATE_ARGS_TEST} APPEND PROPERTY ENVIRONMENT
-                    "UBSAN_OPTIONS=print_stacktrace=1"
-                    "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
-                    "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
-        endif ()
+        dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} ${DXFC_ISOLATE_ARGS_SCENARIO})
     endforeach ()
+
+    # The scenarios that check the variable: the value is exactly what the process must receive (the scenario checks it).
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-applied "-Dmdapi428.e=env")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-wins "-Dmdapi428.p=env")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-whitespace "  \t  ")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-quoted "-Dmdapi428.q=\"a b\"")
 endforeach ()
 
 # The libraries that the tests and the canary load, copied next to them once (see dxfcxx_copy_runtime).

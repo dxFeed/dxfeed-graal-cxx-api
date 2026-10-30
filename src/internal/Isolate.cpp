@@ -17,6 +17,7 @@
 #include <deque>
 #include <dxfg_api.h>
 #include <exception>
+#include <iterator>
 #include <memory>
 #include <mutex>
 #include <optional>
@@ -150,6 +151,9 @@ namespace {
 // destruction of its statics.
 constinit std::atomic<bool> isolateCreated{false};
 
+// The environment variable with the arguments of the isolate, added after the arguments of the code.
+constexpr const char *ISOLATE_ARGUMENTS_VARIABLE = "DXFCPP_ISOLATE_ARGUMENTS";
+
 // The arguments of the isolate and the mutex that orders the setter against the creation. Never destroyed: the setter may
 // be called from a static initializer, and the isolate is created at any moment up to the exit of the process.
 struct IsolateArguments {
@@ -278,9 +282,30 @@ Isolate::Isolate() noexcept {
         arguments = state.arguments;
     }
 
+    // The arguments of the variable go after the arguments of the code: the last value of an option wins. An unset,
+    // empty or whitespace-only variable gives no arguments.
+    bool environmentError = false;
+
+    if (const auto variable = getEnvironmentVariable(ISOLATE_ARGUMENTS_VARIABLE); variable) {
+        auto parsed = parseIsolateArguments(*variable);
+
+        if (parsed.ok()) {
+            arguments.insert(arguments.end(), std::make_move_iterator(parsed.arguments.begin()),
+                             std::make_move_iterator(parsed.arguments.end()));
+        } else {
+            // TODO(U5): a variable that cannot be parsed is the creation error: the SDK must not be called, and the
+            // calls of the API throw. For now the isolate is created without the arguments of the variable.
+            // The reason and the value are not printed.
+            environmentError = true;
+        }
+    }
+
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::trace("Isolate::Isolate(): " + std::to_string(arguments.size()) + " argument(s)");
+        Debugger::trace("Isolate::Isolate(): " + std::to_string(arguments.size()) + " argument(s)" +
+                        (environmentError ? ", the variable is not parsed" : ""));
+    } else {
+        ignoreUnused(environmentError);
     }
 
     graal_isolate_t *graalIsolateHandle{};

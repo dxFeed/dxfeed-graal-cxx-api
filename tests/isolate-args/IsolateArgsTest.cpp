@@ -8,7 +8,9 @@
 
 #include <atomic>
 #include <cstdio>
+#include <cstdlib>
 #include <exception>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -155,6 +157,121 @@ void setterConcurrent() {
     check(!System::setIsolateArguments({"-Dmdapi428.late=1"}), "the setter returned true after the creation");
 }
 
+constexpr const char *ARGUMENTS_VARIABLE = "DXFCPP_ISOLATE_ARGUMENTS";
+
+// The variable as the process sees it, or `nullopt` if it is not set.
+std::optional<std::string> readArgumentsVariable() {
+#ifdef _WIN32
+    std::size_t size = 0;
+
+    if (getenv_s(&size, nullptr, 0, ARGUMENTS_VARIABLE) != 0 || size == 0) {
+        return std::nullopt;
+    }
+
+    std::string result(size, '\0');
+
+    if (getenv_s(&size, result.data(), size, ARGUMENTS_VARIABLE) != 0) {
+        return std::nullopt;
+    }
+
+    result.resize(size - 1);
+
+    return result;
+#else
+    const char *value = std::getenv(ARGUMENTS_VARIABLE);
+
+    return value ? std::optional<std::string>{value} : std::nullopt;
+#endif
+}
+
+std::string hex(const std::string &s) {
+    std::string result;
+    char buffer[4];
+
+    for (const auto c : s) {
+        std::snprintf(buffer, sizeof(buffer), "%02X", static_cast<unsigned>(static_cast<unsigned char>(c)));
+        result += buffer;
+        result += ' ';
+    }
+
+    return result;
+}
+
+// The test is only valid if the variable reached the process exactly: a value lost on the way by ctest or the shell is
+// not a defect of the library. The message has the lengths and the bytes of the value of the test, not of the user.
+void expectArgumentsVariable(const std::string &expected) {
+    const auto actual = readArgumentsVariable();
+
+    check(actual.has_value(), "the variable is not set");
+    check(*actual == expected, "the variable is " + std::to_string(actual->size()) + " bytes instead of " +
+                                   std::to_string(expected.size()) + ": " + hex(*actual));
+}
+
+// The argument of the variable reaches the isolate.
+void envApplied() {
+    expectArgumentsVariable("-Dmdapi428.e=env");
+    check(System::getProperty("mdapi428.e") == "env",
+          "the property is '" + System::getProperty("mdapi428.e") + "' instead of 'env'");
+}
+
+// The variable comes after the arguments of the code and wins for the same option.
+void envWins() {
+    check(System::setIsolateArguments({"-Dmdapi428.p=code"}), "the setter returned false before the creation");
+    expectArgumentsVariable("-Dmdapi428.p=env");
+    check(System::getProperty("mdapi428.p") == "env",
+          "the property is '" + System::getProperty("mdapi428.p") + "' instead of 'env'");
+}
+
+// A variable of whitespace gives no arguments and no error.
+void envWhitespace() {
+    expectArgumentsVariable("  \t  ");
+    check(System::setProperty("mdapi428.w", "1"), "the isolate does not work");
+    check(Isolate::isCreated(), "the isolate was not created");
+    check(System::getProperty("mdapi428.w") == "1", "the isolate does not work");
+}
+
+// The quotes group the value with spaces and are removed.
+void envQuoted() {
+    expectArgumentsVariable("-Dmdapi428.q=\"a b\"");
+    check(System::getProperty("mdapi428.q") == "a b",
+          "the property is '" + System::getProperty("mdapi428.q") + "' instead of 'a b'");
+}
+
+// A non-ASCII value (UTF-8). The variable is set by the scenario itself, before the first call: the way a process
+// gets a non-ASCII environment differs by the platform, and ctest does not pass it reliably on Windows.
+void envNonAscii() {
+    // Cyrillic and a Latin letter with an accent, in UTF-8.
+    const std::string value = "\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82-\xC3\xA9";
+    bool utf8Variable = true;
+#ifdef _WIN32
+    // The environment of Windows is UTF-16.
+    check(_wputenv_s(L"DXFCPP_ISOLATE_ARGUMENTS", L"-Dmdapi428.u=\x41F\x440\x438\x432\x435\x442-\xE9") == 0,
+          "the variable cannot be set");
+
+    // The library reads the variable with getenv_s, in the ANSI code page of the system. With UTF-8 as the code page
+    // the value is kept; with another one (1251, 1252) the characters outside of it are lost: the documented limit.
+    const auto received = readArgumentsVariable();
+
+    utf8Variable = received && *received == "-Dmdapi428.u=" + value;
+
+    if (!utf8Variable) {
+        std::printf("NOTE the ANSI code page does not keep the UTF-8 value of the variable: %zu bytes\n",
+                    received ? received->size() : 0);
+    }
+#else
+    check(setenv(ARGUMENTS_VARIABLE, ("-Dmdapi428.u=" + value).c_str(), 1) == 0, "the variable cannot be set");
+#endif
+    const auto property = System::getProperty("mdapi428.u");
+
+    if (utf8Variable) {
+        check(property == value, "the property is " + std::to_string(property.size()) + " bytes instead of " +
+                                     std::to_string(value.size()) + ": " + hex(property));
+    } else {
+        // The creation succeeded and the isolate works.
+        check(Isolate::isCreated() && System::setProperty("mdapi428.w", "1"), "the isolate does not work");
+    }
+}
+
 } // namespace
 
 int main(int argc, char *argv[]) {
@@ -179,6 +296,16 @@ int main(int argc, char *argv[]) {
             setterNul();
         } else if (scenario == "setter-concurrent") {
             setterConcurrent();
+        } else if (scenario == "env-applied") {
+            envApplied();
+        } else if (scenario == "env-wins") {
+            envWins();
+        } else if (scenario == "env-whitespace") {
+            envWhitespace();
+        } else if (scenario == "env-quoted") {
+            envQuoted();
+        } else if (scenario == "env-non-ascii") {
+            envNonAscii();
         } else {
             std::fprintf(stderr, "Unknown scenario: %s\n", argv[1]);
 
