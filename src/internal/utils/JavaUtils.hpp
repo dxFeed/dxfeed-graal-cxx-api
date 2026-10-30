@@ -41,6 +41,14 @@ std::string doubleToString(double value);
  */
 std::string longOrDoubleToString(double value);
 
+/**
+ * Formats a double as Java `WideDecimal.toString(WideDecimal.composeWide(value))` does: the value is rounded to a
+ * decimal with a significand below 2^51 (`0.333333333333333`), then written without a fraction when it is an integer
+ * (`1000`), with up to 6 zeroes after the point (`0.0009`) or up to 6 trailing zeroes (`1000000`), otherwise in the
+ * `1E7` notation; `NaN`, `Infinity` and `-Infinity` for the special values, `Infinity` for a value out of range.
+ */
+std::string wideDecimalToString(double value);
+
 } // namespace java
 
 DXFCPP_END_NAMESPACE

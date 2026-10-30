@@ -311,18 +311,18 @@ template <typename T> class OptionSeries final {
     std::string toString() const {
         std::ostringstream ss{};
 
-        ss << "expiration=" << expiration_;
+        ss << "expiration=" << day_util::getYearMonthDayByDayId(expiration_);
 
         if (lastTrade_ != 0) {
-            ss << ", lastTrade=" << lastTrade_;
+            ss << ", lastTrade=" << day_util::getYearMonthDayByDayId(lastTrade_);
         }
 
         if (!math::exactlyEquals(multiplier_, 0.0)) {
-            ss << ", multiplier=" << multiplier_;
+            ss << ", multiplier=" << dxfcpp::toString(multiplier_);
         }
 
         if (!math::exactlyEquals(spc_, 0.0)) {
-            ss << ", spc=" << spc_;
+            ss << ", spc=" << dxfcpp::toString(spc_);
         }
 
         if (!additionalUnderlyings_.empty()) {

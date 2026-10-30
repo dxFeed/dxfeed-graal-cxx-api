@@ -5,6 +5,8 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
 
+#include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstdlib>
 #include <limits>
@@ -263,6 +265,271 @@ std::string longOrDoubleToString(double value) {
 
     return math::exactlyEquals(value, static_cast<double>(longValue)) ? std::to_string(longValue)
                                                                       : doubleToString(value);
+}
+
+namespace {
+
+// A port of the conversion of a double and of the formatting of com.devexperts.util.WideDecimal (dxlib). A wide
+// decimal is a long with the significand in the higher 56 bits and the rank (128 + the number of digits after the
+// point) in the lower 8 bits; rank 0 is NaN or an infinity, by the sign of the significand.
+namespace wide {
+
+constexpr std::int64_t MAX_SIGNIFICAND = std::numeric_limits<std::int64_t>::max() >> 8;
+constexpr std::int64_t MIN_SIGNIFICAND = std::numeric_limits<std::int64_t>::min() >> 8;
+constexpr int BIAS = 128;
+constexpr int MAX_LEADING_ZEROES = 6;
+constexpr int MAX_TRAILING_ZEROES = 6;
+constexpr int EXACT_LONG_POWERS = 18; // max power of 10 that fits into long exactly
+constexpr std::int64_t NaN = 0;
+constexpr std::int64_t POSITIVE_INFINITY = 0x100;
+constexpr std::int64_t NEGATIVE_INFINITY = -0x100;
+constexpr std::array<std::int64_t, 4> NF_WIDE{NaN, POSITIVE_INFINITY, NaN, NEGATIVE_INFINITY};
+constexpr std::array<const char *, 4> NF_STRING{"NaN", "Infinity", "NaN", "-Infinity"};
+
+constexpr std::array<std::int64_t, EXACT_LONG_POWERS + 1> LONG_POWERS = [] {
+    std::array<std::int64_t, EXACT_LONG_POWERS + 1> powers{1};
+
+    for (std::size_t i = 1; i < powers.size(); i++) {
+        powers[i] = powers[i - 1] * 10;
+    }
+
+    return powers;
+}();
+
+constexpr std::int64_t SCIENTIFIC_MODULO = LONG_POWERS[MAX_TRAILING_ZEROES + 1];
+
+// DIVISORS[rank] is 1e(rank - 128) and MAX_DOUBLES[rank] is 2^51 * 1e(128 - rank), both parsed as Java parses them;
+// DIVISORS[0] is 0 and MAX_DOUBLES[0] is infinity.
+struct Tables {
+    std::array<double, 256> divisors{};
+    std::array<double, 256> maxDoubles{};
+
+    Tables() noexcept {
+        constexpr auto maxDoubleValue = static_cast<double>(std::int64_t{1} << 51);
+
+        maxDoubles[0] = std::numeric_limits<double>::infinity();
+
+        for (int rank = 1; rank < 256; rank++) {
+            divisors[static_cast<std::size_t>(rank)] = strtodC("1E" + std::to_string(rank - BIAS));
+            maxDoubles[static_cast<std::size_t>(rank)] = maxDoubleValue * strtodC("1E" + std::to_string(BIAS - rank));
+        }
+    }
+};
+
+const Tables &tables() noexcept {
+    static const Tables instance{};
+
+    return instance;
+}
+
+// Long.signum(value) & 3 of Java: the index of NaN, an infinity or a negative infinity in NF_WIDE and NF_STRING.
+std::size_t signumIndex(std::int64_t value) noexcept {
+    return value > 0 ? 1U : value < 0 ? 3U : 0U;
+}
+
+std::int64_t neg(std::int64_t wide) noexcept {
+    return static_cast<std::int64_t>((static_cast<std::uint64_t>(wide) ^ ~std::uint64_t{0xFF}) + 0x100);
+}
+
+// Divides the significand by a power of 10 (10+) with rounding, without overflows near the limits.
+std::int64_t div10(std::int64_t significand, std::int64_t pow10) noexcept {
+    return significand >= 0 ? (significand / (pow10 >> 1) + 1) >> 1 : ((significand + 1) / (pow10 >> 1)) >> 1;
+}
+
+std::int64_t composeFitting(std::int64_t significand, int rank, int targetRank) noexcept {
+    if (significand == 0) {
+        return targetRank;
+    }
+
+    while (rank > targetRank && significand % 10 == 0) {
+        significand /= 10;
+        rank--;
+    }
+
+    while (rank < targetRank && MIN_SIGNIFICAND / 10 <= significand && significand <= MAX_SIGNIFICAND / 10) {
+        significand *= 10;
+        rank++;
+    }
+
+    if (rank == BIAS + 1 && targetRank == BIAS && MIN_SIGNIFICAND / 10 <= significand &&
+        significand <= MAX_SIGNIFICAND / 10) {
+        significand *= 10;
+        rank++;
+    }
+
+    return (significand << 8) | rank;
+}
+
+std::int64_t composeNonFitting(std::int64_t significand, int rank, int targetRank) noexcept {
+    if (rank <= 0) {
+        return NF_WIDE[signumIndex(significand)];
+    }
+
+    if (rank > 255 + EXACT_LONG_POWERS) {
+        return targetRank;
+    }
+
+    int reduction = 3;
+
+    if (MIN_SIGNIFICAND <= significand && significand <= MAX_SIGNIFICAND) {
+        reduction = 0;
+    } else if (MIN_SIGNIFICAND * 10 - 5 <= significand && significand < MAX_SIGNIFICAND * 10 + 5) {
+        reduction = 1;
+    } else if (MIN_SIGNIFICAND * 100 - 50 <= significand && significand < MAX_SIGNIFICAND * 100 + 50) {
+        reduction = 2;
+    }
+
+    if (rank <= reduction) {
+        return NF_WIDE[signumIndex(significand)];
+    }
+
+    reduction = std::max(reduction, rank - 255);
+
+    if (reduction > 0) {
+        significand = div10(significand, LONG_POWERS[static_cast<std::size_t>(reduction)]);
+        rank -= reduction;
+    }
+
+    return composeFitting(significand, rank, targetRank);
+}
+
+std::int64_t composeLong(std::int64_t value) noexcept {
+    return MIN_SIGNIFICAND <= value && value <= MAX_SIGNIFICAND ? (value << 8) | BIAS
+                                                                : composeNonFitting(value, BIAS, BIAS);
+}
+
+int findRank(double value) noexcept {
+    const auto &maxDoubles = tables().maxDoubles;
+    int rank = value > maxDoubles[128] ? 0 : 128;
+
+    for (int step = 64; step > 0; step /= 2) {
+        rank += value > maxDoubles[static_cast<std::size_t>(rank + step)] ? 0 : step;
+    }
+
+    return rank;
+}
+
+std::int64_t composeNonNegative(double value, int targetRank) noexcept {
+    const int rank = findRank(value);
+
+    if (rank <= 0) {
+        return POSITIVE_INFINITY;
+    }
+
+    return composeFitting(longCast(value * tables().divisors[static_cast<std::size_t>(rank)] + 0.5), rank, targetRank);
+}
+
+std::int64_t composeWide(double value) noexcept {
+    if (const auto longValue = longCast(value); math::exactlyEquals(value, static_cast<double>(longValue))) {
+        return composeLong(longValue);
+    }
+
+    if (value >= 0) {
+        return composeNonNegative(value, BIAS);
+    }
+
+    if (value < 0) {
+        return neg(composeNonNegative(-value, BIAS));
+    }
+
+    return NaN;
+}
+
+// The significand as an integer without a fraction, or 0 if the number has a fraction or needs the E notation.
+std::int64_t toIntegerString(std::int64_t significand, int rank) noexcept {
+    if (rank > BIAS) {
+        // fractional number with possible zero fraction and more trailing zeroes
+        if (rank - BIAS <= EXACT_LONG_POWERS) {
+            const auto pow10 = LONG_POWERS[static_cast<std::size_t>(rank - BIAS)];
+            const auto result = significand / pow10;
+
+            if (result * pow10 == significand && result % SCIENTIFIC_MODULO != 0) {
+                return result;
+            }
+        }
+    } else if (rank == BIAS) {
+        return significand % SCIENTIFIC_MODULO == 0 ? 0 : significand;
+    } else if (BIAS - rank <= MAX_TRAILING_ZEROES) {
+        static_assert(MAX_TRAILING_ZEROES <= EXACT_LONG_POWERS);
+
+        // integer number with possible trailing zeroes; the product wraps around as in Java and is checked
+        const auto pow10 = LONG_POWERS[static_cast<std::size_t>(BIAS - rank)];
+        const auto result =
+            static_cast<std::int64_t>(static_cast<std::uint64_t>(significand) * static_cast<std::uint64_t>(pow10));
+
+        if (result / pow10 == significand && result % SCIENTIFIC_MODULO != 0) {
+            return result;
+        }
+    }
+
+    return 0;
+}
+
+std::string toFractionalOrScientificString(std::int64_t significand, int rank) {
+    // remove trailing zeroes
+    while (significand % 10 == 0) {
+        significand /= 10;
+        rank--;
+    }
+
+    // the position of the first digit, after a potential '-' sign
+    const int firstDigit = significand < 0 ? 1 : 0;
+    std::string result = std::to_string(significand);
+
+    // use plain decimal number notation unless scientific notation is triggered
+    if (rank > BIAS) {
+        // fractional number
+        const int dotPosition = static_cast<int>(result.size()) - (rank - BIAS);
+
+        if (dotPosition > firstDigit) {
+            return result.insert(static_cast<std::size_t>(dotPosition), 1, '.');
+        }
+
+        if (firstDigit - dotPosition <= MAX_LEADING_ZEROES) {
+            return result.insert(static_cast<std::size_t>(firstDigit),
+                                 "0." + std::string(static_cast<std::size_t>(firstDigit - dotPosition), '0'));
+        }
+    } else if (BIAS - rank <= MAX_TRAILING_ZEROES) {
+        // integer number
+        return result.append(static_cast<std::size_t>(BIAS - rank), '0');
+    }
+
+    // use scientific notation
+    const int digits = static_cast<int>(result.size()) - firstDigit;
+
+    if (digits != 1) {
+        result.insert(static_cast<std::size_t>(firstDigit) + 1, 1, '.');
+    }
+
+    return result + "E" + std::to_string(BIAS - rank + digits - 1);
+}
+
+std::string toString(std::int64_t wide) {
+    const auto significand = wide >> 8;
+    const auto rank = static_cast<int>(wide & 0xFF);
+
+    if (rank == 0) {
+        return NF_STRING[signumIndex(significand)];
+    }
+
+    if (significand == 0) {
+        return "0";
+    }
+
+    // if value is an integer number - use faster formatting method
+    if (const auto integer = toIntegerString(significand, rank); integer != 0) {
+        return std::to_string(integer);
+    }
+
+    return toFractionalOrScientificString(significand, rank);
+}
+
+} // namespace wide
+
+} // namespace
+
+std::string wideDecimalToString(double value) {
+    return wide::toString(wide::composeWide(value));
 }
 
 } // namespace java

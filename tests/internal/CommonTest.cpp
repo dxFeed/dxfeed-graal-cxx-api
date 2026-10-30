@@ -197,3 +197,45 @@ TEST_CASE("pack and unpack should keep two values that fit half of std::size_t, 
     CHECK_THROWS_AS(pack(max + 1, std::size_t{1}), InvalidArgumentException);
     CHECK_THROWS_AS(pack(-1, 1), InvalidArgumentException);
 }
+
+// The expected values are the results of the Java DayUtil, whose int arithmetic wraps around modulo 2^32.
+TEST_CASE("day_util should give the results of the Java DayUtil for any int32, the limits included") {
+    constexpr auto min = std::numeric_limits<std::int32_t>::min();
+    constexpr auto max = std::numeric_limits<std::int32_t>::max();
+
+    // A constant evaluation rejects an overflow, so these also check that there is none.
+    static_assert(day_util::getYearMonthDayByDayId(0) == 19700101);
+    static_assert(day_util::getYearMonthDayByDayId(max) == 1353131522);
+    static_assert(day_util::getYearMonthDayByDayId(min) == 1353131521);
+
+    SUBCASE("getYearMonthDayByDayId") {
+        CHECK(day_util::getYearMonthDayByDayId(0) == 19700101);
+        CHECK(day_util::getYearMonthDayByDayId(-1) == 19691231);
+        CHECK(day_util::getYearMonthDayByDayId(18000) == 20190414);
+        CHECK(day_util::getYearMonthDayByDayId(19782) == 20240229);
+        CHECK(day_util::getYearMonthDayByDayId(19783) == 20240301);
+        CHECK(day_util::getYearMonthDayByDayId(-25508) == 19000301);
+        CHECK(day_util::getYearMonthDayByDayId(-2472632) == -48000301);
+        CHECK(day_util::getYearMonthDayByDayId(max) == 1353131522);
+        CHECK(day_util::getYearMonthDayByDayId(min) == 1353131521);
+        CHECK(day_util::getYearMonthDayByDayId(2000000000) == -1056734742);
+        CHECK(day_util::getYearMonthDayByDayId(-2000000000) == 1096123621);
+    }
+
+    SUBCASE("getDayIdByYearMonthDay") {
+        CHECK(day_util::getDayIdByYearMonthDay(2026, 10, 29) == 20755);
+        CHECK(day_util::getDayIdByYearMonthDay(0, 1, 1) == -719528);
+        CHECK(day_util::getDayIdByYearMonthDay(2024, 2, 29) == 19782);
+        CHECK(day_util::getDayIdByYearMonthDay(2024, 3, 1) == 19783);
+        CHECK(day_util::getDayIdByYearMonthDay(2023, 3, 1) == 19417);
+        CHECK(day_util::getDayIdByYearMonthDay(2000, 3, 1) == 11017);
+        CHECK(day_util::getDayIdByYearMonthDay(1900, 3, 1) == -25508);
+        CHECK(day_util::getDayIdByYearMonthDay(1900, 2, 29) == -25508);
+        CHECK(day_util::getDayIdByYearMonthDay(max, 12, 31) == -1627438392);
+        CHECK(day_util::getDayIdByYearMonthDay(min, 1, 1) == -1627438391);
+        CHECK(day_util::getDayIdByYearMonthDay(2000, 1, max) == -2147472693);
+        CHECK_THROWS_WITH_AS(day_util::getDayIdByYearMonthDay(1970, 13, 1), "invalid month 13",
+                             InvalidArgumentException);
+        CHECK_THROWS_WITH_AS(day_util::getDayIdByYearMonthDay(1970, 0, 1), "invalid month 0", InvalidArgumentException);
+    }
+}

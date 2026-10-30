@@ -19,3 +19,11 @@
     * Exchange codes from 0x80 to 0xFF set as `char` are kept as Latin-1 characters, as in Java (they became 0).
     * `System::setProperty()` and `System::getProperty()` cut a key or a value that is not valid UTF-8 to its longest
       valid prefix (the native SDK replaced the invalid bytes with U+FFFD).
+    * `OptionSeries::toString()` prints the expiration and the last trade day as `yyyyMMdd` and the multiplier and
+      the SPC as Java does (`1.0E7`); they were printed as day ids and in the C++ notation.
+    * `day_util::getYearMonthDayByDayId()` and `day_util::getDayIdByYearMonthDay()` give the results of Java for any
+      `int32` value, the limits included (an overflow was undefined behaviour). `day_util::getDayIdByYearMonthDay()` is
+      exported from the shared library (code linked to it could not call the function).
+    * `Profile::toString()` prints `shares` and `freeFloat` as Java does (`shares=1E7, freeFloat=0.0009`), and a
+      negative `index` of `OptionSale` and `Series` is printed as an unsigned hexadecimal number
+      (`index=0xffffffffffffffff`), as in Java.

@@ -321,7 +321,7 @@ std::string OrderBase::baseFieldsToString() const {
         "timeNanoPart={}, action={}, actionTime={}, orderId={}, auxOrderId={}, price={}, "
         "size={}, executedSize={}, count={}, exchange={}, side={}, scope={}, tradeId={}, tradePrice={}, tradeSize={}",
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getSource().toString(), getEventFlagsMask().getMask(), getIndex(),
+        getSource().toString(), getEventFlagsMask().getMask(), static_cast<std::uint64_t>(getIndex()),
         TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), getTimeNanoPart(), getAction().toString(),
         TimeFormat::DEFAULT_WITH_MILLIS.format(getActionTime()), getOrderId(), getAuxOrderId(),
         dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()), dxfcpp::toString(getExecutedSize()), getCount(),
