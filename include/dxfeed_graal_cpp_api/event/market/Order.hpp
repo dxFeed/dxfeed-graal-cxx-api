@@ -416,6 +416,16 @@ class DXFCPP_EXPORT Order : public OrderBase {
     void setMarketMaker(const StringLike &marketMaker) noexcept;
 
     /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * `setMarketMaker(other.getMarketMakerOpt())` copies it from another event, null included.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     */
+    template <OptionalString S> void setMarketMaker(S &&marketMaker) noexcept {
+        orderData_.marketMaker = std::forward<S>(marketMaker);
+    }
+
+    /**
      * Changes market maker or other aggregate identifier of this order.
      * Returns the current order.
      *
@@ -423,6 +433,19 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @return The current order.
      */
     virtual Order &withMarketMaker(const StringLike &marketMaker) noexcept;
+
+    /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> Order &withMarketMaker(S &&marketMaker) noexcept {
+        setMarketMaker(std::forward<S>(marketMaker));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.

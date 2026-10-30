@@ -404,6 +404,16 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     void setSpreadSymbol(const StringLike &spreadSymbol) noexcept;
 
     /**
+     * Changes the spread symbol of this event, or makes it null with `std::nullopt`.
+     * `setSpreadSymbol(other.getSpreadSymbolOpt())` copies it from another event, null included.
+     *
+     * @param spreadSymbol the spread symbol of this event or `std::nullopt`.
+     */
+    template <OptionalString S> void setSpreadSymbol(S &&spreadSymbol) noexcept {
+        spreadOrderData_.spreadSymbol = std::forward<S>(spreadSymbol);
+    }
+
+    /**
      * Changes spread symbol of this event.
      * Returns the current spread order.
      *
@@ -411,6 +421,19 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @return The current spread order.
      */
     SpreadOrder &withSpreadSymbol(const StringLike &spreadSymbol) noexcept;
+
+    /**
+     * Changes the spread symbol of this event, or makes it null with `std::nullopt`.
+     * Returns the current spread order.
+     *
+     * @param spreadSymbol the spread symbol of this event or `std::nullopt`.
+     * @return The current spread order.
+     */
+    template <OptionalString S> SpreadOrder &withSpreadSymbol(S &&spreadSymbol) noexcept {
+        setSpreadSymbol(std::forward<S>(spreadSymbol));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.

@@ -258,6 +258,16 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     void setText(const StringLike &text);
 
     /**
+     * Changes the text, or makes it null with `std::nullopt`.
+     * `setText(other.getTextOpt())` copies it from another event, null included.
+     *
+     * @param text the text or `std::nullopt`.
+     */
+    template <OptionalString S> void setText(S &&text) {
+        text_ = std::forward<S>(text);
+    }
+
+    /**
      * Changes text and returns the current message.
      *
      * @param text text.
@@ -265,6 +275,19 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @return The current message.
      */
     TextMessage &withText(const StringLike &text) noexcept;
+
+    /**
+     * Changes the text, or makes it null with `std::nullopt`.
+     * Returns the current text message.
+     *
+     * @param text the text or `std::nullopt`.
+     * @return The current text message.
+     */
+    template <OptionalString S> TextMessage &withText(S &&text) noexcept {
+        setText(std::forward<S>(text));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.

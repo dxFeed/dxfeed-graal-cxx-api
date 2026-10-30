@@ -113,7 +113,25 @@ TEST_CASE("System properties can be set, as well as get their values. Multi-thre
     CHECK(dxfcpp::System::getProperty("PropertyName") == "123");
 }
 
-TEST_CASE("Invalid UTF8" * doctest::may_fail()) {
-    dxfcpp::System::setProperty("\xe2\x28\xa1", "\xe2\x28\xa1");
-    REQUIRE(dxfcpp::System::getProperty("\xe2\x28\xa1") == "\xe2\x28\xa1");
+TEST_CASE("A key or a value with invalid UTF-8 is cut to its longest valid prefix") {
+    SUBCASE("A value") {
+        REQUIRE(dxfcpp::System::setProperty("InvalidUtf8Value", "abc\xe2\x28\xa1"));
+        CHECK(dxfcpp::System::getProperty("InvalidUtf8Value") == "abc");
+    }
+
+    SUBCASE("A key") {
+        REQUIRE(dxfcpp::System::setProperty("InvalidUtf8Key\xe2\x28\xa1", "value"));
+        CHECK(dxfcpp::System::getProperty("InvalidUtf8Key") == "value");
+        CHECK(dxfcpp::System::getProperty("InvalidUtf8Key\xe2\x28\xa1") == "value");
+    }
+
+    SUBCASE("A value without a valid prefix") {
+        REQUIRE(dxfcpp::System::setProperty("InvalidUtf8Only", "\xe2\x28\xa1"));
+        CHECK(dxfcpp::System::getProperty("InvalidUtf8Only").empty());
+    }
+
+    SUBCASE("A valid multibyte value") {
+        REQUIRE(dxfcpp::System::setProperty("ValidUtf8", "Значение"));
+        CHECK(dxfcpp::System::getProperty("ValidUtf8") == "Значение");
+    }
 }

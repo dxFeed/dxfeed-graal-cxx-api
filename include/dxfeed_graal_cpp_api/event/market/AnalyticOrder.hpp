@@ -368,6 +368,19 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      */
     AnalyticOrder &withMarketMaker(const StringLike &marketMaker) noexcept override;
 
+    /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> AnalyticOrder &withMarketMaker(S &&marketMaker) noexcept {
+        Order::setMarketMaker(std::forward<S>(marketMaker));
+
+        return *this;
+    }
+
     // AnalyticOrder methods
 
     /**

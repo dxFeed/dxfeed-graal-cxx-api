@@ -168,6 +168,16 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
     void setAttachment(const StringLike &attachment);
 
     /**
+     * Changes the attachment, or makes it null with `std::nullopt`.
+     * `setAttachment(other.getAttachmentOpt())` copies it from another event, null included.
+     *
+     * @param attachment the attachment or `std::nullopt`.
+     */
+    template <OptionalString S> void setAttachment(S &&attachment) {
+        attachment_ = std::forward<S>(attachment);
+    }
+
+    /**
      * Changes attachment and returns the current message.
      *
      * @param attachment attachment.
@@ -175,6 +185,19 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      * @return The current message.
      */
     Message &withAttachment(const StringLike &attachment) noexcept;
+
+    /**
+     * Changes the attachment, or makes it null with `std::nullopt`.
+     * Returns the current message.
+     *
+     * @param attachment the attachment or `std::nullopt`.
+     * @return The current message.
+     */
+    template <OptionalString S> Message &withAttachment(S &&attachment) noexcept {
+        setAttachment(std::forward<S>(attachment));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.

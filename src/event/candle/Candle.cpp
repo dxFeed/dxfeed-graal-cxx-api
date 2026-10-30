@@ -39,7 +39,9 @@ void Candle::fillData(void *graalNative) {
 
     const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
-    setEventSymbol(CandleSymbol::valueOf(dxfcpp::toString(graalCandle->event_symbol)));
+    if (graalCandle->event_symbol != nullptr) {
+        setEventSymbol(CandleSymbol::valueOf(graalCandle->event_symbol));
+    }
 
     data_ = {
         .eventTime = graalCandle->event_time,
@@ -67,7 +69,7 @@ void Candle::fillGraalData(void *graalNative) const {
     const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     graalCandle->event_type.clazz = DXFG_EVENT_CANDLE;
-    graalCandle->event_symbol = createCString(eventSymbol_ ? eventSymbol_->toString() : std::string{String::NUL});
+    graalCandle->event_symbol = eventSymbol_ ? createCString(eventSymbol_->toString()) : nullptr;
     graalCandle->event_time = data_.eventTime;
     graalCandle->event_flags = data_.eventFlags;
     graalCandle->index = data_.index;

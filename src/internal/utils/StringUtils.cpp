@@ -253,17 +253,9 @@ detail::IsIEqual::IsIEqual(const std::locale &locale) : locale_{locale} {
 }
 
 char utf16to8(std::int16_t in) noexcept {
-    try {
-        std::string out{};
-        auto utf16in = {in};
+    const auto code = static_cast<std::uint16_t>(in);
 
-        utf8::utf16to8(std::begin(utf16in), std::end(utf16in), std::back_inserter(out));
-
-        return out.empty() ? char{} : out[0];
-    } catch (...) {
-        // TODO: error handling
-        return char{};
-    }
+    return code <= 0xFF ? static_cast<char>(static_cast<unsigned char>(code)) : char{};
 }
 
 std::string utf16toUtf8String(std::int16_t in) noexcept {
@@ -307,17 +299,7 @@ std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept {
 }
 
 std::int16_t utf8to16(char in) noexcept {
-    try {
-        std::u16string out{};
-        auto utf8in = {in};
-
-        utf8::utf8to16(std::begin(utf8in), std::end(utf8in), std::back_inserter(out));
-
-        return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
-    } catch (...) {
-        // TODO: error handling
-        return std::int16_t{};
-    }
+    return static_cast<std::int16_t>(static_cast<unsigned char>(in));
 }
 
 std::string formatTimeStamp(std::int64_t timestamp) {
@@ -360,10 +342,6 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
 }
 
 char *createCString(const StringLike &s) {
-    if (s == String::NUL) {
-        return nullptr;
-    }
-
     char *cString = new char[s.size() + 1];
 
     auto sw = std::string_view(s);

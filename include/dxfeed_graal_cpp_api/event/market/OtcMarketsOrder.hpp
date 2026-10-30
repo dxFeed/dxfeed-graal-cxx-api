@@ -433,6 +433,19 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      */
     OtcMarketsOrder &withMarketMaker(const StringLike& marketMaker) noexcept override;
 
+    /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> OtcMarketsOrder &withMarketMaker(S &&marketMaker) noexcept {
+        Order::setMarketMaker(std::forward<S>(marketMaker));
+
+        return *this;
+    }
+
     // OtcMarketsOrder methods
 
     /**

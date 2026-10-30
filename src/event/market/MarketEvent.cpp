@@ -21,7 +21,7 @@ void MarketEvent::fillData(void *graalNative) noexcept {
 
     const auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
 
-    setEventSymbol(dxfcpp::toString(graalMarketEvent->event_symbol));
+    eventSymbol_ = toStringOpt(graalMarketEvent->event_symbol);
     setEventTime(graalMarketEvent->event_time);
 }
 
@@ -32,7 +32,7 @@ void MarketEvent::fillGraalData(void *graalNative) const noexcept {
 
     const auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
 
-    graalMarketEvent->event_symbol = createCString(getEventSymbol());
+    graalMarketEvent->event_symbol = createCString(getEventSymbolOpt());
     graalMarketEvent->event_time = getEventTime();
 }
 

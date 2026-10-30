@@ -448,6 +448,19 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      */
     NuamOrder &withMarketMaker(const StringLike &marketMaker) noexcept override;
 
+    /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> NuamOrder &withMarketMaker(S &&marketMaker) noexcept {
+        Order::setMarketMaker(std::forward<S>(marketMaker));
+
+        return *this;
+    }
+
     // NuamOrder methods
 
     /**
@@ -564,6 +577,16 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
     void setClientOrderId(const StringLike &clientOrderId) noexcept;
 
     /**
+     * Changes the client-generated order identity, or makes it null with `std::nullopt`.
+     * `setClientOrderId(other.getClientOrderIdOpt())` copies it from another event, null included.
+     *
+     * @param clientOrderId the client-generated order identity or `std::nullopt`.
+     */
+    template <OptionalString S> void setClientOrderId(S &&clientOrderId) noexcept {
+        nuamOrderData_.clientOrderId = std::forward<S>(clientOrderId);
+    }
+
+    /**
      * Changes the client-generated order identity.
      * Returns the current Nuam order.
      *
@@ -571,6 +594,19 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @return The current Nuam order.
      */
     NuamOrder &withClientOrderId(const StringLike &clientOrderId) noexcept;
+
+    /**
+     * Changes the client-generated order identity, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param clientOrderId the client-generated order identity or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> NuamOrder &withClientOrderId(S &&clientOrderId) noexcept {
+        setClientOrderId(std::forward<S>(clientOrderId));
+
+        return *this;
+    }
 
     /**
      * Returns the account to use for this order.
@@ -594,6 +630,16 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
     void setCustomerAccount(const StringLike &customerAccount) noexcept;
 
     /**
+     * Changes the account to use for this order, or makes it null with `std::nullopt`.
+     * `setCustomerAccount(other.getCustomerAccountOpt())` copies it from another event, null included.
+     *
+     * @param customerAccount the account to use for this order or `std::nullopt`.
+     */
+    template <OptionalString S> void setCustomerAccount(S &&customerAccount) noexcept {
+        nuamOrderData_.customerAccount = std::forward<S>(customerAccount);
+    }
+
+    /**
      * Changes the account to use for this order.
      * Returns the current Nuam order.
      *
@@ -601,6 +647,19 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @return The current Nuam order.
      */
     NuamOrder &withCustomerAccount(const StringLike &customerAccount) noexcept;
+
+    /**
+     * Changes the account to use for this order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param customerAccount the account to use for this order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> NuamOrder &withCustomerAccount(S &&customerAccount) noexcept {
+        setCustomerAccount(std::forward<S>(customerAccount));
+
+        return *this;
+    }
 
     /**
      * Returns the free-text information filled in by the client entering the transaction.
@@ -625,6 +684,16 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
     void setCustomerInfo(const StringLike &customerInfo) noexcept;
 
     /**
+     * Changes the free-text information filled in by the client, or makes it null with `std::nullopt`.
+     * `setCustomerInfo(other.getCustomerInfoOpt())` copies it from another event, null included.
+     *
+     * @param customerInfo the free-text information filled in by the client or `std::nullopt`.
+     */
+    template <OptionalString S> void setCustomerInfo(S &&customerInfo) noexcept {
+        nuamOrderData_.customerInfo = std::forward<S>(customerInfo);
+    }
+
+    /**
      * Changes the free-text information filled in by the client entering the transaction.
      * Returns the current Nuam order.
      *
@@ -632,6 +701,19 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @return The current Nuam order.
      */
     NuamOrder &withCustomerInfo(const StringLike &customerInfo) noexcept;
+
+    /**
+     * Changes the free-text information filled in by the client, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param customerInfo the free-text information filled in by the client or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> NuamOrder &withCustomerInfo(S &&customerInfo) noexcept {
+        setCustomerInfo(std::forward<S>(customerInfo));
+
+        return *this;
+    }
 
     /**
      * Returns the exchange-specific information that can be included with an order (it may contain unprintable
@@ -661,6 +743,16 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
     void setExchangeInfo(const StringLike &exchangeInfo) noexcept;
 
     /**
+     * Changes the exchange-specific information of the order, or makes it null with `std::nullopt`.
+     * `setExchangeInfo(other.getExchangeInfoOpt())` copies it from another event, null included.
+     *
+     * @param exchangeInfo the exchange-specific information of the order or `std::nullopt`.
+     */
+    template <OptionalString S> void setExchangeInfo(S &&exchangeInfo) noexcept {
+        nuamOrderData_.exchangeInfo = std::forward<S>(exchangeInfo);
+    }
+
+    /**
      * Changes the exchange-specific information that can be included with an order (it may contain unprintable
      * characters). Returns the current Nuam order.
      *
@@ -669,6 +761,19 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @return The current Nuam order.
      */
     NuamOrder &withExchangeInfo(const StringLike &exchangeInfo) noexcept;
+
+    /**
+     * Changes the exchange-specific information of the order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param exchangeInfo the exchange-specific information of the order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> NuamOrder &withExchangeInfo(S &&exchangeInfo) noexcept {
+        setExchangeInfo(std::forward<S>(exchangeInfo));
+
+        return *this;
+    }
 
     /**
      * Returns the time in force of this order, that is how long the order remains active in the order book if it is not

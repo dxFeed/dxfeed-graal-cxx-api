@@ -519,6 +519,16 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     void setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept;
 
     /**
+     * Changes the sale conditions, or makes it null with `std::nullopt`.
+     * `setExchangeSaleConditions(other.getExchangeSaleConditionsOpt())` copies it from another event, null included.
+     *
+     * @param exchangeSaleConditions the sale conditions or `std::nullopt`.
+     */
+    template <OptionalString S> void setExchangeSaleConditions(S &&exchangeSaleConditions) noexcept {
+        data_.exchangeSaleConditions = std::forward<S>(exchangeSaleConditions);
+    }
+
+    /**
      * Changes sale conditions provided for this event by data feed.
      * Returns the current option sale.
      *
@@ -526,6 +536,19 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @return The current option sale.
      */
     OptionSale &withExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept;
+
+    /**
+     * Changes the sale conditions, or makes it null with `std::nullopt`.
+     * Returns the current option sale.
+     *
+     * @param exchangeSaleConditions the sale conditions or `std::nullopt`.
+     * @return The current option sale.
+     */
+    template <OptionalString S> OptionSale &withExchangeSaleConditions(S &&exchangeSaleConditions) noexcept {
+        setExchangeSaleConditions(std::forward<S>(exchangeSaleConditions));
+
+        return *this;
+    }
 
     /**
      * Returns TradeThroughExempt flag of this option sale event.
@@ -782,6 +805,16 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
     void setOptionSymbol(const StringLike &optionSymbol) noexcept;
 
     /**
+     * Changes the option symbol of this event, or makes it null with `std::nullopt`.
+     * `setOptionSymbol(other.getOptionSymbolOpt())` copies it from another event, null included.
+     *
+     * @param optionSymbol the option symbol of this event or `std::nullopt`.
+     */
+    template <OptionalString S> void setOptionSymbol(S &&optionSymbol) noexcept {
+        data_.optionSymbol = std::forward<S>(optionSymbol);
+    }
+
+    /**
      * Changes option symbol of this event.
      * Returns the current option sale.
      *
@@ -789,6 +822,19 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @return The current option sale.
      */
     OptionSale &withOptionSymbol(const StringLike &optionSymbol) noexcept;
+
+    /**
+     * Changes the option symbol of this event, or makes it null with `std::nullopt`.
+     * Returns the current option sale.
+     *
+     * @param optionSymbol the option symbol of this event or `std::nullopt`.
+     * @return The current option sale.
+     */
+    template <OptionalString S> OptionSale &withOptionSymbol(S &&optionSymbol) noexcept {
+        setOptionSymbol(std::forward<S>(optionSymbol));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.
