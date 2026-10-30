@@ -408,6 +408,16 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
     void setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept;
 
     /**
+     * Changes the sale conditions, or makes it null with `std::nullopt`.
+     * `setExchangeSaleConditions(other.getExchangeSaleConditionsOpt())` copies it from another event, null included.
+     *
+     * @param exchangeSaleConditions the sale conditions or `std::nullopt`.
+     */
+    template <OptionalString S> void setExchangeSaleConditions(S &&exchangeSaleConditions) noexcept {
+        data_.exchangeSaleConditions = std::forward<S>(exchangeSaleConditions);
+    }
+
+    /**
      * Returns TradeThroughExempt flag of this time and sale event.
      *
      * @return TradeThroughExempt flag of this time and sale event.
@@ -538,6 +548,16 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
     void setBuyer(const StringLike &buyer) noexcept;
 
     /**
+     * Changes the buyer of this time and sale event, or makes it null with `std::nullopt`.
+     * `setBuyer(other.getBuyerOpt())` copies it from another event, null included.
+     *
+     * @param buyer the buyer of this time and sale event or `std::nullopt`.
+     */
+    template <OptionalString S> void setBuyer(S &&buyer) noexcept {
+        data_.buyer = std::forward<S>(buyer);
+    }
+
+    /**
      * Returns seller of this time and sale event.
      *
      * @return seller of this time and sale event or dxfcpp::String::NUL (`std::string{"<null>"}`).
@@ -557,6 +577,16 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
      * @param seller seller of this time and sale event.
      */
     void setSeller(const StringLike &seller) noexcept;
+
+    /**
+     * Changes the seller of this time and sale event, or makes it null with `std::nullopt`.
+     * `setSeller(other.getSellerOpt())` copies it from another event, null included.
+     *
+     * @param seller the seller of this time and sale event or `std::nullopt`.
+     */
+    template <OptionalString S> void setSeller(S &&seller) noexcept {
+        data_.seller = std::forward<S>(seller);
+    }
 
     /**
      * Returns a string representation of the current object.

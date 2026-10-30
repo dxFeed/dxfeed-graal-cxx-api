@@ -23,7 +23,8 @@ DXFCPP_BEGIN_NAMESPACE
  */
 struct DXFCPP_EXPORT System {
     /**
-     * Sets the JVM system property indicated by the specified key.
+     * Sets the JVM system property indicated by the specified key. A key or a value that is not valid UTF-8 is cut to its
+     * longest valid prefix.
      *
      * @param key The name of the system property (UTF-8 string).
      * @param value The value of the system property (UTF-8 string).
@@ -43,7 +44,8 @@ struct DXFCPP_EXPORT System {
     }
 
     /**
-     * Gets the system property indicated by the specified key.
+     * Gets the system property indicated by the specified key. A key that is not valid UTF-8 is cut to its longest valid
+     * prefix.
      *
      * @param key The name of the system property (UTF-8 string).
      * @return The value of a JVM system property (UTF-8 string), or an empty string.

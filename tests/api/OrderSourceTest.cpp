@@ -120,6 +120,8 @@ TEST_CASE("OrderBase::setExchangeCode throws InvalidArgumentException for a code
     auto order = Order("AAPL");
 
     CHECK_THROWS_AS(order.setExchangeCode(std::int16_t{0xE2}), InvalidArgumentException);
+    CHECK_THROWS_AS(order.setExchangeCode(std::int16_t{0x0100}), InvalidArgumentException);
+    CHECK_THROWS_AS(order.setExchangeCode(std::int16_t{0x0151}), InvalidArgumentException);
     CHECK_THROWS_AS(order.setExchangeCode(static_cast<char>(0xE2)), InvalidArgumentException);
 
     order.setExchangeCode(std::int16_t{'Q'});

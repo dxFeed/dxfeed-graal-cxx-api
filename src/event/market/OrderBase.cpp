@@ -291,6 +291,11 @@ void OrderBase::setExchangeCode(char exchangeCode) {
 }
 
 void OrderBase::setExchangeCode(std::int16_t exchangeCode) {
+    // The whole code is checked: utf16to8() gives 0 for a code above U+00FF.
+    if ((static_cast<std::uint16_t>(exchangeCode) & ~EXCHANGE_MASK) != 0) {
+        throw InvalidArgumentException("Invalid exchangeCode: " + encodeChar(exchangeCode));
+    }
+
     setExchangeCode(utf16to8(exchangeCode));
 }
 

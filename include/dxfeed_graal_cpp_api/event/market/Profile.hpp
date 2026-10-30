@@ -148,6 +148,16 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     void setDescription(const StringLike &description) noexcept;
 
     /**
+     * Changes the description of the security instrument, or makes it null with `std::nullopt`.
+     * `setDescription(other.getDescriptionOpt())` copies it from another event, null included.
+     *
+     * @param description the description of the security instrument or `std::nullopt`.
+     */
+    template <OptionalString S> void setDescription(S &&description) noexcept {
+        data_.description = std::forward<S>(description);
+    }
+
+    /**
      * Returns short sale restriction of the security instrument.
      *
      * @return short sale restriction of the security instrument.
@@ -209,6 +219,16 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      * @param statusReason description of the reason that trading was halted.
      */
     void setStatusReason(const StringLike &statusReason) noexcept;
+
+    /**
+     * Changes the description of the reason that trading was halted, or makes it null with `std::nullopt`.
+     * `setStatusReason(other.getStatusReasonOpt())` copies it from another event, null included.
+     *
+     * @param statusReason the description of the reason that trading was halted or `std::nullopt`.
+     */
+    template <OptionalString S> void setStatusReason(S &&statusReason) noexcept {
+        data_.statusReason = std::forward<S>(statusReason);
+    }
 
     /**
      * Returns starting time of the trading halt interval.

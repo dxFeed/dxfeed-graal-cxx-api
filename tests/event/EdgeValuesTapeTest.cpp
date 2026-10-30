@@ -8,7 +8,7 @@
 // int32 limits become 0).
 //  - C++ -> QD: the edge events written by C++ make the same tape as Java.
 //  - Java -> C++ -> Java: the golden tape read into C++ and written back is the tape of the same round trip in Java.
-// Known defects are listed below; the tests for them are `may_fail` until the defects are fixed.
+// The differences that the Java API makes itself are listed below.
 
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
@@ -25,41 +25,10 @@ using namespace dxfcpp;
 
 namespace {
 
-// The string "<null>" is String::NUL in the C++ API, so it is passed to Java as null, and a null string comes back as
-// "<null>" (static analysis report, EVT-18). EDGE-ZERO is the value set with the "<null>" strings.
-const std::vector<std::string> KNOWN_NULL_STRING_DEFECTS{"Profile.Description@EDGE-ZERO",
-                                                         "Profile.StatusReason@EDGE-ZERO",
-                                                         "SpreadOrder#ISE.SpreadSymbol@EDGE-ZERO",
-                                                         "OptionSale.OptionSymbol@EDGE-ZERO",
-                                                         "TextMessage.Text@EDGE-ZERO",
-                                                         "Message.Message@EDGE-ZERO",
-                                                         "NuamOrder#nuam.ClientOrderId@EDGE-ZERO",
-                                                         "NuamOrder#nuam.CustomerAccount@EDGE-ZERO",
-                                                         "NuamOrder#nuam.CustomerInfo@EDGE-ZERO",
-                                                         "NuamOrder#nuam.ExchangeInfo@EDGE-ZERO",
-                                                         "TextConfiguration.Text@EDGE-ZERO"};
-
-// Not a null string, and only on reading: the Java API itself reads the int64 minimum of TradeStatTime as that minimum
-// plus the current time in milliseconds (the golden round trip has the value of the day it was written), so it is never
-// equal.
-const std::vector<std::string> KNOWN_ROUND_TRIP_DEFECTS = [] {
-    auto known = KNOWN_NULL_STRING_DEFECTS;
-
-    known.insert(known.end(), {"NuamTrade.TradeStatTime@EDGE-NEG-INF", "NuamTrade.TradeStatTime@EDGE-LOWEST"});
-
-    return known;
-}();
-
-// The null strings for writing, and the QD short strings, which Java truncates to "ull>".
-const std::vector<std::string> KNOWN_WRITE_DEFECTS = [] {
-    auto known = KNOWN_NULL_STRING_DEFECTS;
-
-    known.insert(known.end(), {"TimeAndSale.SaleConditions@EDGE-ZERO", "NuamTimeAndSale.SaleConditions@EDGE-ZERO",
-                               "OptionSale.ExchangeSaleConditions@EDGE-ZERO", "Order#NTV.MarketMaker@EDGE-ZERO",
-                               "OtcMarketsOrder#pink.MarketMaker@EDGE-ZERO"});
-
-    return known;
-}();
+// Only on reading: the Java API itself reads the int64 minimum of TradeStatTime as that minimum plus the current time in
+// milliseconds (the golden round trip has the value of the day it was written), so it is never equal.
+const std::vector<std::string> JAVA_ROUND_TRIP_DIFFERENCES{"NuamTrade.TradeStatTime@EDGE-NEG-INF",
+                                                           "NuamTrade.TradeStatTime@EDGE-LOWEST"};
 
 std::vector<std::string> writeDifferences() {
     const auto written = test::temporaryFilePath("edge-values.txt");
@@ -80,21 +49,12 @@ std::vector<std::string> roundTripDifferences() {
 
 } // namespace
 
-TEST_CASE("Edge values are written as the Java API writes them, except known defects") {
-    test::checkDifferences(writeDifferences(), KNOWN_WRITE_DEFECTS, false);
+TEST_CASE("Edge values are written as the Java API writes them") {
+    test::checkDifferences(writeDifferences(), {}, false);
 }
 
-TEST_CASE("Edge values are written as the Java API writes them (EVT-18)" * doctest::may_fail()) {
-    test::checkDifferences(writeDifferences(), KNOWN_WRITE_DEFECTS, true);
-}
-
-TEST_CASE("The edge-value golden tape read into C++ and written back is the Java round trip, except known defects") {
-    test::checkDifferences(roundTripDifferences(), KNOWN_ROUND_TRIP_DEFECTS, false);
-}
-
-TEST_CASE("The edge-value golden tape read into C++ and written back is the Java round trip (EVT-18)" *
-          doctest::may_fail()) {
-    test::checkDifferences(roundTripDifferences(), KNOWN_ROUND_TRIP_DEFECTS, true);
+TEST_CASE("The edge-value golden tape read into C++ and written back is the Java round trip") {
+    test::checkDifferences(roundTripDifferences(), JAVA_ROUND_TRIP_DIFFERENCES, false);
 }
 
 // A char above ASCII ('\xC4'). The Java API writes (char) 0xC4 as `\u00C4`, packs it into the flags of TimeAndSale (the
@@ -138,9 +98,7 @@ TEST_CASE("A trade through exempt above ASCII is written as the Java API writes 
     CHECK_THROWS(Order("CHAR").setExchangeCode('\xC4'));
 }
 
-// setExchangeCode(char) converts the char as a UTF-8 code unit (utf8to16), so a byte above 0x7F becomes 0
-// (static analysis report, EVT-19).
-TEST_CASE("An exchange code above ASCII is written as the Java API writes (char) 0xC4 (EVT-19)" * doctest::may_fail()) {
+TEST_CASE("An exchange code above ASCII is written as the Java API writes (char) 0xC4") {
     auto records = writeCharAboveAscii();
 
     CHECK(records["Quote"].fields["BidExchangeCode"] == "\\u00C4");

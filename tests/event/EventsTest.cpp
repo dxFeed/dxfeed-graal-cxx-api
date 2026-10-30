@@ -11,6 +11,30 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
+TEST_CASE("An exchange code above ASCII is kept as a Latin-1 character and printed as Java prints it") {
+    Quote quote{"AAPL"};
+    Trade trade{"AAPL"};
+    TimeAndSale timeAndSale{"AAPL"};
+    OptionSale optionSale{"AAPL"};
+    MarketMaker marketMaker{"AAPL"};
+
+    quote.setBidExchangeCode('\xE2');
+    quote.setAskExchangeCode('\xFF');
+    trade.setExchangeCode('\xC4');
+    timeAndSale.setExchangeCode('\xC4');
+    optionSale.setExchangeCode('\x80');
+    marketMaker.setExchangeCode('\xE2');
+
+    CHECK(quote.getBidExchangeCode() == 0xE2);
+    CHECK(quote.getAskExchangeCode() == 0xFF);
+    CHECK(trade.getExchangeCode() == 0xC4);
+    CHECK(timeAndSale.getExchangeCode() == 0xC4);
+    CHECK(optionSale.getExchangeCode() == 0x80);
+    CHECK(marketMaker.getExchangeCode() == 0xE2);
+    CHECK(quote.toString().find("bidExchange=\\u00e2, ") != std::string::npos);
+    CHECK(quote.toString().find("askExchange=\\u00ff, ") != std::string::npos);
+}
+
 TEST_CASE("The Candle::assign method must set all fields") {
     auto c1 = std::make_shared<Candle>(CandleSymbol::valueOf("AAPL&Q"));
     c1->setEventTime(100);

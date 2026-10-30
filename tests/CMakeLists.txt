@@ -58,6 +58,7 @@ set(DXFC_TEST_SOURCES
         event/EdgeValuesTapeTest.cpp
         event/EventsTest.cpp
         event/EventsToStringTest.cpp
+        event/StringFieldsTest.cpp
         event/EventTypeTest.cpp
         event/TapeRoundTripTest.cpp
         event/UnsupportedEventTest.cpp
@@ -72,6 +73,7 @@ set(DXFC_TEST_SOURCES
         internal/ConstStringTest.cpp
         internal/EntityManagerTest.cpp
         internal/HandlerTest.cpp
+        internal/StringUtilsTest.cpp
         ipf/InstrumentProfileCollectorTest.cpp
         ipf/InstrumentProfileTest.cpp
         ipf/OptionChainsTest.cpp
@@ -119,8 +121,8 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp)
     endif ()
 
-    # The test builds the lists of events of the C API of the dxFeed Graal SDK by hand.
-    if (DXFC_TEST_SOURCE STREQUAL "event/UnsupportedEventTest.cpp")
+    # The tests build or read the structures of the C API of the dxFeed Graal SDK by hand.
+    if (DXFC_TEST_SOURCE MATCHES "^event/(UnsupportedEvent|StringFields)Test\\.cpp$")
         target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE
                 $<TARGET_PROPERTY:DxFeedGraalNativeSdk,INTERFACE_INCLUDE_DIRECTORIES>)
     endif ()

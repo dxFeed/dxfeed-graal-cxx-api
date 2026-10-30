@@ -306,12 +306,35 @@ class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::st
     void setText(const StringLike &text) noexcept;
 
     /**
+     * Changes the text, or makes it null with `std::nullopt`.
+     * `setText(other.getTextOpt())` copies it from another event, null included.
+     *
+     * @param text the text or `std::nullopt`.
+     */
+    template <OptionalString S> void setText(S &&text) noexcept {
+        text_ = std::forward<S>(text);
+    }
+
+    /**
      * Changes the text and returns the current text configuration event.
      *
      * @param text The text.
      * @return The current text configuration event.
      */
     TextConfiguration &withText(const StringLike &text) noexcept;
+
+    /**
+     * Changes the text, or makes it null with `std::nullopt`.
+     * Returns the current text configuration.
+     *
+     * @param text the text or `std::nullopt`.
+     * @return The current text configuration.
+     */
+    template <OptionalString S> TextConfiguration &withText(S &&text) noexcept {
+        setText(std::forward<S>(text));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.

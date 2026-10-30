@@ -15,6 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string>
 #include <thread>
 #include <type_traits>
+#include <utility>
 #include <vector>
 
 #if !defined(_LIBCPP_VERSION)
@@ -142,6 +143,14 @@ struct DXFCPP_EXPORT String {
     static constexpr char NUL[] = "<null>";
 };
 
+/**
+ * The argument of the overloads of the string setters of events that also set null: `std::optional<std::string>` or
+ * `std::nullopt`. Other arguments, e.g. strings and string literals, select the overloads that take dxfcpp::StringLike.
+ */
+template <typename T>
+concept OptionalString = std::is_same_v<std::remove_cvref_t<T>, std::optional<std::string>> ||
+                         std::is_same_v<std::remove_cvref_t<T>, std::nullopt_t>;
+
 DXFCPP_EXPORT std::string toString(bool b) noexcept; // NOLINT(*-redundant-declaration)
 
 DXFCPP_EXPORT std::string toString(const char *chars) noexcept; // NOLINT(*-redundant-declaration)
@@ -261,10 +270,10 @@ toStringAny(T &&) {
 #endif
 
 /**
- * Tries to convert UTF16 char to ASCII (part of UTF8) char.
+ * Converts a UTF-16 code unit up to U+00FF to the char of the same Latin-1 code, as Java casts a char to a byte.
  *
- * @param in The UTF16 char
- * @return ASCII char
+ * @param in The UTF-16 code unit.
+ * @return The char, or 0 if the code unit is above U+00FF.
  */
 DXFCPP_EXPORT char utf16to8(std::int16_t in) noexcept; // NOLINT(*-redundant-declaration)
 
@@ -294,10 +303,10 @@ DXFCPP_EXPORT std::string
 utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
- * Tries to convert ASCII (part of UTF8) char to UTF16 char.
+ * Converts a char to the UTF-16 code unit of the same Latin-1 code (0x00-0xFF), as Java stores a char code.
  *
- * @param in The ASCII char
- * @return The UTF16 char
+ * @param in The char.
+ * @return The UTF-16 code unit.
  */
 DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept; // NOLINT(*-redundant-declaration)
 

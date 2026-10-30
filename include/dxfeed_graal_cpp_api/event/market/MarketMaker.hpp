@@ -354,6 +354,19 @@ class DXFCPP_EXPORT MarketMaker final : public MarketEvent, public IndexedEvent 
     void setMarketMaker(const StringLike &marketMaker);
 
     /**
+     * Changes the market maker or the other aggregate identifier, or makes it null with `std::nullopt`.
+     * `setMarketMaker(other.getMarketMakerOpt())` copies it from another event, null included.
+     * Null is stored as an empty identifier, as in Java: getMarketMakerOpt() returns `std::nullopt` for both.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier or `std::nullopt`.
+     * @throws InvalidArgumentException if the identifier is longer than 8 characters, has a character above U+00FF or
+     * is not valid UTF-8.
+     */
+    template <OptionalString S> void setMarketMaker(S &&marketMaker) {
+        setMarketMaker(std::optional<std::string>{std::forward<S>(marketMaker)}.value_or(String::EMPTY));
+    }
+
+    /**
      * Changes market maker or other aggregate identifier of this market maker event.
      * Returns the current market maker.
      *
@@ -363,6 +376,21 @@ class DXFCPP_EXPORT MarketMaker final : public MarketEvent, public IndexedEvent 
      * is not valid UTF-8.
      */
     MarketMaker &withMarketMaker(const StringLike &marketMaker);
+
+    /**
+     * Changes the market maker or the other aggregate identifier, or makes it null with `std::nullopt`.
+     * Returns the current market maker.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier or `std::nullopt`.
+     * @return The current market maker.
+     * @throws InvalidArgumentException if the identifier is longer than 8 characters, has a character above U+00FF or
+     * is not valid UTF-8.
+     */
+    template <OptionalString S> MarketMaker &withMarketMaker(S &&marketMaker) {
+        setMarketMaker(std::forward<S>(marketMaker));
+
+        return *this;
+    }
 
     /**
      * Returns time of the last bid change of this market maker event.
