@@ -290,6 +290,13 @@ and builds its own executable, `dxFeedGraalCxxApi_<module>_<Name>`. A fix starts
     Each scenario runs with the static and the shared library; a hang fails it by its timeout.
   - `tests/static-init/`: the constants of the library read from the static initializers of the test, which run
     before those of a statically linked library (with and without the Graal SDK, and with the DLL).
+  - `tests/isolate-args/IsolateArgsTest.cpp`: the `IsolateArgs` family, the arguments of the Graal isolate (the setter,
+    the `DXFCPP_ISOLATE_ARGUMENTS` variable, the error of the creation, the signals). The arguments are applied when the
+    isolate is created, so each scenario is a process of its own: a name in `DXFC_ISOLATE_ARGS_SCENARIOS`, or a call of
+    `dxfc_add_isolate_args_test()` with the value of the variable, and a branch in `main()`. Every test runs through
+    `cmake -E env --unset=DXFCPP_ISOLATE_ARGUMENTS`, so the variable of the environment that runs ctest does not reach a
+    scenario that does not check it; a scenario that needs it gets its value after the unset, and checks that the value
+    arrived as it is. A scenario fails by a non-zero exit code. The scenarios that read signals are for Linux and macOS.
 - **Network tests** (`tests/network/`) run only with `-DDXFCXX_ENABLE_NETWORK_TESTS=ON` and have the label `network`.
   The other tests do not use the network.
 - **Sanitizers**: build options and the canary tests are in [HOW_TO_BUILD.md](HOW_TO_BUILD.md#sanitizers). Add a

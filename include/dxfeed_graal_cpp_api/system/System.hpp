@@ -13,6 +13,81 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <vector>
 
 /**
+ * @page isolate_arguments Isolate arguments
+ *
+ * The library runs the Java code of the dxFeed Graal SDK in a Graal isolate, which it creates by the first call that
+ * needs Java. The isolate takes arguments as a native executable takes its command line: the sizes of the heap, the
+ * system properties that must be set before the first Java code runs (System::setProperty() works later), the options
+ * of the runtime. There are two ways to give them, and both must be used before the isolate is created:
+ *
+ * - System::setIsolateArguments() in the code of the application;
+ * - the `DXFCPP_ISOLATE_ARGUMENTS` environment variable, which needs no change of the code (also for the C API).
+ *
+ * **Order.** The arguments of the variable go after the arguments of the code. When an option is repeated, the last
+ * value wins for `-D` and `-XX:`, so the variable overrides the code. When the isolate is created, the library sets the
+ * properties of the `DXFEED_*` environment variables and of the `dxfeed.system.properties` file as system properties:
+ * they override a `-D` argument with the same name.
+ *
+ * **Static initializers.** A static initializer of the application that uses the library creates the isolate before
+ * `main()`: a call of System::setIsolateArguments() from `main()` then returns `false`. Such uses are, for example,
+ * `TimePeriod::ZERO.getTime()`, `CFI::EMPTY()->getCode()`, DXEndpoint::create() and System::getProperty(). The setter
+ * itself may be called from a static initializer (it does not create the isolate), but the order of the static
+ * initializers of different files is not defined, so in such an application use the variable.
+ *
+ * **The variable** is split into arguments as `JDK_JAVA_OPTIONS` of the JDK is:
+ *
+ * - the whitespace characters (space, `\t`, `\n`, `\v`, `\f`, `\r`) separate the arguments, whatever the locale;
+ * - a part in `'...'` or in `"..."` keeps its whitespace characters, and the quotes are removed: `-Dmy.prop="a b"`
+ *   gives `-Dmy.prop=a b`. The quote of the other kind inside the part is an ordinary character;
+ * - there are no escape sequences: the backslash is an ordinary character, so `-Dmy.dir=C:\data` is passed as is;
+ * - an unset, empty or whitespace-only variable gives no arguments;
+ * - an unmatched quote, and an argument that starts with `@` (an argument file), are errors: the creation of the
+ *   isolate fails (see below), and the message names the variable and the reason, not the value.
+ *
+ * The same value in the shells:
+ *
+ * ```sh
+ * # bash, zsh
+ * export DXFCPP_ISOLATE_ARGUMENTS='-Dmy.prop="a b" -Xmx512m'
+ * ```
+ *
+ * ```powershell
+ * # PowerShell
+ * $env:DXFCPP_ISOLATE_ARGUMENTS = '-Dmy.prop="a b" -Xmx512m'
+ * ```
+ *
+ * ```bat
+ * rem cmd.exe: the quotes stay in the value
+ * set DXFCPP_ISOLATE_ARGUMENTS=-Dmy.prop="a b" -Xmx512m
+ * ```
+ *
+ * On Windows the variable is read in the ANSI code page of the system. A non-ASCII value reaches the isolate intact
+ * only when the system code page is UTF-8; otherwise the characters outside the code page may be replaced. Use ASCII
+ * in the variable, or System::setIsolateArguments(): it passes the UTF-8 strings as they are.
+ *
+ * **Useful arguments** (checked with the dxFeed Graal SDK 3.11.0, which ignores an argument that does not start with
+ * `-`):
+ *
+ * - `-Xmx<size>`, `-Xms<size>`, `-Xmn<size>`: the maximum, the initial and the young generation size of the heap, for
+ *   example `-Xmx512m`, `-Xmx2g`;
+ * - `-D<name>=<value>`: a system property that is set before the first Java code runs;
+ * - `-XX:-EnableSignalHandling`: Linux and macOS, the isolate does not install its handlers of `SIGPIPE` and
+ *   `SIGXFSZ`.
+ *
+ * **Signals (Linux and macOS).** By default, when the action of `SIGPIPE` or `SIGXFSZ` is the default one at the
+ * creation of the isolate, the SDK installs a handler that does nothing, so a write to a closed socket by a connector
+ * of an endpoint fails with `EPIPE` instead of killing the process. A handler or `SIG_IGN` that the application set
+ * before the first call is kept. With `-XX:-EnableSignalHandling` the SDK installs no handlers: set `SIG_IGN` for
+ * `SIGPIPE` yourself before the first call, otherwise a write to a closed socket kills the process.
+ *
+ * **Errors.** An argument that the SDK does not accept (for example `-Xmx64q` or an unknown `-XX:` option) makes it
+ * print the reason to the standard error output, and the creation of the isolate fails with the code 22
+ * (`ARGUMENT_PARSING_FAILED`). The library does not try again. The calls that need Java throw GraalException with the
+ * code and the reason, the C API functions return `DXFC_EC_ERROR`: see @ref error_handling "Error handling". The values
+ * of the arguments are never in the messages.
+ */
+
+/**
  * \defgroup dxfcpp_system "System" Module
  * \ingroup dxfcpp_modules
  * @{
@@ -54,9 +129,10 @@ struct DXFCPP_EXPORT System {
     static std::string getProperty(const StringLike &key);
 
     /**
-     * Sets the arguments that the Graal isolate is created with, for example `-Dname=value`, `-Xmx512m` or
-     * `-XX:TearDownWarningSeconds=10`. Call it before the first call of the library that needs Java; it does not create
-     * the isolate itself. A repeated call replaces the arguments, an empty vector clears them.
+     * Sets the arguments that the Graal isolate is created with, for example `-Dmy.prop=value` or `-Xmx512m`. Call it
+     * before the first call of the library that needs Java; it does not create the isolate itself. A repeated call
+     * replaces the arguments, an empty vector clears them. The `DXFCPP_ISOLATE_ARGUMENTS` environment variable adds
+     * arguments after these. The arguments, the variable and the errors: @ref isolate_arguments "Isolate arguments".
      *
      * @param arguments The isolate arguments (UTF-8 strings).
      * @return `true` if the arguments are stored; `false` if the creation of the isolate has already started, then

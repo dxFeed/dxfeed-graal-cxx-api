@@ -37,6 +37,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  *   the SDK (for example, the destructor of a subscription or of a model that closes it) does not throw. From the
  *   start of the shutdown of the library (dxfcpp::shutdown(), the exit of the process) a failure of a release is not
  *   reported: the SDK is being closed or is closed already.
+ * - **A failed creation of the Graal isolate** (an invalid argument of System::setIsolateArguments() or of the
+ *   `DXFCPP_ISOLATE_ARGUMENTS` environment variable, see @ref isolate_arguments "Isolate arguments") is reported to the
+ *   caller of the first call that needs Java and of every next one: GraalException with the numeric code, its text and
+ *   the reason. The library does not try to create the isolate again. System::getProperty() and System::setProperty()
+ *   throw it too, instead of returning an empty string or `false`; the functions of the C API return `DXFC_EC_ERROR`.
+ *   The messages never contain the values of the arguments.
  *
  * ErrorManager passes each error to the handler and keeps the last errors in a journal:
  *
