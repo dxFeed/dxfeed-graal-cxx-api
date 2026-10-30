@@ -15,8 +15,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <functional>
 #include <mutex>
+#include <string>
 #include <thread>
 #include <variant>
+#include <vector>
 
 #ifdef NO_ERROR
 #    undef NO_ERROR
@@ -83,6 +85,16 @@ class DXFCPP_EXPORT Isolate final {
      * @return `true` if the Graal isolate was created or is being created.
      */
     static bool isCreated() noexcept;
+
+    /**
+     * Stores the arguments that the isolate is created with (see System::setIsolateArguments()). It does not create
+     * the isolate; it is safe to call from a static initializer and concurrently with the creation.
+     *
+     * @param arguments The new arguments; an empty vector clears them.
+     * @return `false` if the creation of the isolate has started (nothing changes), `true` otherwise.
+     * @throws InvalidArgumentException if an argument contains a NUL character (nothing changes).
+     */
+    static bool setArguments(std::vector<std::string> arguments);
 
     /**
      * Returns `true` when the library is shutting down: dxfcpp::shutdown() was called, or the process is exiting.

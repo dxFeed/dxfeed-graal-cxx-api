@@ -44,3 +44,10 @@ TEST_CASE_FIXTURE(test::LocalHubFixture, "DXFeedTimeSeriesSubscription is export
 
     CHECK(subscription->getFromTime() == 42);
 }
+
+TEST_CASE("System::setIsolateArguments is exported") {
+    // Empty arguments change nothing; the result tells whether the isolate was created before the call.
+    const bool created = Isolate::isCreated();
+
+    CHECK(System::setIsolateArguments({}) == !created);
+}

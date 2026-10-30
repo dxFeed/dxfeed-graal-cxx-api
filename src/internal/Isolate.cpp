@@ -3,6 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
+#include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/Handler.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
@@ -12,6 +13,7 @@
 #include <condition_variable>
 #include <config/config.hpp>
 #include <cstdlib>
+#include <cstring>
 #include <deque>
 #include <dxfg_api.h>
 #include <exception>
@@ -21,6 +23,7 @@
 #include <string>
 #include <thread>
 #include <utility>
+#include <vector>
 
 #ifdef _WIN32
 #    ifndef WIN32_LEAN_AND_MEAN
@@ -147,6 +150,19 @@ namespace {
 // destruction of its statics.
 constinit std::atomic<bool> isolateCreated{false};
 
+// The arguments of the isolate and the mutex that orders the setter against the creation. Never destroyed: the setter may
+// be called from a static initializer, and the isolate is created at any moment up to the exit of the process.
+struct IsolateArguments {
+    std::mutex mutex{};
+    std::vector<std::string> arguments{};
+};
+
+IsolateArguments &isolateArguments() noexcept {
+    static auto &result = *new IsolateArguments{};
+
+    return result;
+}
+
 // The Graal callbacks return at once (Isolate::isShuttingDown()).
 constinit std::atomic<bool> shuttingDown{false};
 
@@ -251,13 +267,52 @@ Isolate::Isolate() noexcept {
         Debugger::trace("Isolate::Isolate()");
     }
 
-    isolateCreated.store(true);
+    std::vector<std::string> arguments{};
+
+    {
+        auto &state = isolateArguments();
+        std::lock_guard lock(state.mutex);
+
+        // From now on the setter returns false: the arguments are final.
+        isolateCreated.store(true);
+        arguments = state.arguments;
+    }
+
+    if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::trace("Isolate::Isolate(): " + std::to_string(arguments.size()) + " argument(s)");
+    }
 
     graal_isolate_t *graalIsolateHandle{};
     graal_isolatethread_t *graalIsolateThreadHandle{};
 
+    // The parameters only when there are arguments: otherwise the defaults of the SDK, as before. The strings live until
+    // the call returns.
+    std::string programName{"dxfcpp"};
+    std::vector<char *> argv{};
+    graal_create_isolate_params_t params;
+    graal_create_isolate_params_t *paramsPointer = nullptr;
+
+    if (!arguments.empty()) {
+        argv.reserve(arguments.size() + 1);
+        // The SDK skips the first one: it is the name of the program.
+        argv.push_back(programName.data());
+
+        for (auto &argument : arguments) {
+            argv.push_back(argument.data());
+        }
+
+        std::memset(&params, 0, sizeof(params));
+        params.version = __graal_create_isolate_params_version;
+        params.argc = static_cast<int>(argv.size());
+        params.argv = argv.data();
+        // An unknown option fails the creation instead of being silently dropped.
+        params.ignore_unrecognized_args = 0;
+        paramsPointer = &params;
+    }
+
     if (const auto result = static_cast<CEntryPointErrorsEnum>(
-            graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle));
+            graal_create_isolate(paramsPointer, &graalIsolateHandle, &graalIsolateThreadHandle));
         result == CEntryPointErrorsEnum::NO_ERROR) {
 
         handle_ = graalIsolateHandle;
@@ -381,6 +436,27 @@ Isolate &Isolate::getInstance() noexcept {
 
 bool Isolate::isCreated() noexcept {
     return isolateCreated.load();
+}
+
+bool Isolate::setArguments(std::vector<std::string> arguments) {
+    // A string with a NUL would be cut by the C string of argv without a word. The value is not in the message.
+    for (std::size_t i = 0; i < arguments.size(); i++) {
+        if (arguments[i].find('\0') != std::string::npos) {
+            throw InvalidArgumentException("The isolate argument #" + std::to_string(i) +
+                                           " contains a NUL character.");
+        }
+    }
+
+    auto &state = isolateArguments();
+    std::lock_guard lock(state.mutex);
+
+    if (isolateCreated.load()) {
+        return false;
+    }
+
+    state.arguments = std::move(arguments);
+
+    return true;
 }
 
 bool Isolate::isShuttingDown() noexcept {

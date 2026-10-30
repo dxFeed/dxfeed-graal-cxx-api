@@ -95,6 +95,10 @@ std::string System::getProperty(const StringLike &key) {
     return result;
 }
 
+bool System::setIsolateArguments(std::vector<std::string> arguments) {
+    return Isolate::setArguments(std::move(arguments));
+}
+
 void shutdown() {
     Isolate::shutdown();
 }

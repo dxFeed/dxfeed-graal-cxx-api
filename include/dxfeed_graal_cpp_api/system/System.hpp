@@ -10,6 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 
 #include <string>
+#include <vector>
 
 /**
  * \defgroup dxfcpp_system "System" Module
@@ -51,6 +52,18 @@ struct DXFCPP_EXPORT System {
      * @return The value of a JVM system property (UTF-8 string), or an empty string.
      */
     static std::string getProperty(const StringLike &key);
+
+    /**
+     * Sets the arguments that the Graal isolate is created with, for example `-Dname=value`, `-Xmx512m` or
+     * `-XX:TearDownWarningSeconds=10`. Call it before the first call of the library that needs Java; it does not create
+     * the isolate itself. A repeated call replaces the arguments, an empty vector clears them.
+     *
+     * @param arguments The isolate arguments (UTF-8 strings).
+     * @return `true` if the arguments are stored; `false` if the creation of the isolate has already started, then
+     * nothing changes.
+     * @throws InvalidArgumentException if an argument contains a NUL character; the stored arguments do not change.
+     */
+    static bool setIsolateArguments(std::vector<std::string> arguments);
 };
 
 /**
