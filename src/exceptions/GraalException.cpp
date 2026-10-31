@@ -24,7 +24,7 @@ GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum)
     : RuntimeException(createMessage(entryPointErrorsEnum)) {
 }
 
-GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum, std::string details)
+GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum, const std::string &details)
     : RuntimeException(createCreationMessage(entryPointErrorsEnum, details)) {
 }
 
