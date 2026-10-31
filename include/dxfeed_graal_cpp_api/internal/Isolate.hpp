@@ -15,8 +15,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <functional>
 #include <mutex>
+#include <string>
 #include <thread>
 #include <variant>
+#include <vector>
 
 #ifdef NO_ERROR
 #    undef NO_ERROR
@@ -80,9 +82,37 @@ class DXFCPP_EXPORT Isolate final {
      * Returns `true` if the Graal isolate was created: the first call into Graal (Java) has happened. It does not
      * create the isolate.
      *
-     * @return `true` if the Graal isolate was created or is being created.
+     * @return `true` if the Graal isolate was created or is being created. It is `true` after a failed creation too
+     * (see getCreationError()).
      */
     static bool isCreated() noexcept;
+
+    /**
+     * Returns the code of the failed creation of the isolate, or CEntryPointErrorsEnum::NO_ERROR. The creation fails
+     * if the SDK returns an error (the code of the SDK), or if DXFCPP_ISOLATE_ARGUMENTS cannot be parsed
+     * (CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED). There is no second attempt: after a failure the isolate is never
+     * entered, and runIsolatedThrow() throws GraalException, runIsolated() and runIsolatedOrElse() return the code and
+     * the fallback value. The creation is finished when getInstance() returns, so call it after getInstance(): before
+     * the creation the result is NO_ERROR.
+     */
+    static CEntryPointErrorsEnum getCreationError() noexcept;
+
+    /**
+     * Throws GraalException of the failed creation of the isolate (see getCreationError()), with the same message on
+     * every call. The message has the code, its text and the reason, and never the values of the isolate arguments.
+     * Does nothing if the creation did not fail.
+     */
+    static void throwCreationError();
+
+    /**
+     * Stores the arguments that the isolate is created with (see System::setIsolateArguments()). It does not create
+     * the isolate; it is safe to call from a static initializer and concurrently with the creation.
+     *
+     * @param arguments The new arguments; an empty vector clears them.
+     * @return `false` if the creation of the isolate has started (nothing changes), `true` otherwise.
+     * @throws InvalidArgumentException if an argument contains a NUL character (nothing changes).
+     */
+    static bool setArguments(std::vector<std::string> arguments);
 
     /**
      * Returns `true` when the library is shutting down: dxfcpp::shutdown() was called, or the process is exiting.
@@ -136,6 +166,11 @@ class DXFCPP_EXPORT Isolate final {
             return CEntryPointErrorsEnum::SHUT_DOWN;
         }
 
+        // The creation failed: there is no isolate to enter.
+        if (const auto creationError = getCreationError(); creationError != CEntryPointErrorsEnum::NO_ERROR) {
+            return creationError;
+        }
+
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
         if (auto currentThreadHandle = get(); currentThreadHandle != nullptr) {
             return std::invoke(std::forward<F>(f), currentThreadHandle);
@@ -165,6 +200,10 @@ class DXFCPP_EXPORT Isolate final {
 
         if (isShutDown()) {
             throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
+        }
+
+        if (getCreationError() != CEntryPointErrorsEnum::NO_ERROR) {
+            throwCreationError();
         }
 
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
@@ -197,6 +236,11 @@ class DXFCPP_EXPORT Isolate final {
 
         if (isShutDown()) {
             return CEntryPointErrorsEnum::SHUT_DOWN;
+        }
+
+        // The creation failed: there is no isolate to enter.
+        if (const auto creationError = getCreationError(); creationError != CEntryPointErrorsEnum::NO_ERROR) {
+            return creationError;
         }
 
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)
@@ -232,6 +276,10 @@ class DXFCPP_EXPORT Isolate final {
 
         if (isShutDown()) {
             throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
+        }
+
+        if (getCreationError() != CEntryPointErrorsEnum::NO_ERROR) {
+            throwCreationError();
         }
 
         // Perhaps the code is already running within the GraalVM thread (for example, we are in a listener)

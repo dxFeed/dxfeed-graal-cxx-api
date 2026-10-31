@@ -103,6 +103,11 @@ struct DestructionObserver {
             expected                                                                                                   \
     }
 
+// The setter of the isolate arguments works from a static initializer and does not create the isolate. It must stay
+// before the captures that use Java: the first of them creates the isolate. main() checks that the argument is applied.
+DXFC_CAPTURE(isolateArgumentsSetter, toString(System::setIsolateArguments({"-Dmdapi428.s=static"})), "true");
+DXFC_CAPTURE(isolateNotCreatedBySetter, toString(Isolate::isCreated()), "false");
+
 DXFC_CAPTURE(candleSymbol, CandleSymbol::valueOf("TEST", CandlePeriod::valueOf(1, CandleType::MINUTE)).toString(),
              "TEST{=m}");
 DXFC_CAPTURE(candleTypeName, CandleType::MINUTE.toString(), "m");
@@ -205,7 +210,7 @@ int main() {
     }
 
     // All the variables above were initialized.
-    constexpr std::size_t expectedChecks = DXFC_GRAAL_CHECKS ? 53 : 47;
+    constexpr std::size_t expectedChecks = DXFC_GRAAL_CHECKS ? 55 : 49;
 
     if (checks().size() != expectedChecks) {
         std::printf("FAIL %zu checks instead of %zu\n", checks().size(), expectedChecks);
@@ -229,6 +234,13 @@ int main() {
         failures += 1;
     }
 #endif
+
+    // The argument given by the static initializer reached the isolate (this creates the isolate if it does not exist).
+    const auto property = System::getProperty("mdapi428.s");
+
+    std::printf("%s isolate argument of the static initializer: '%s'\n", property == "static" ? "OK  " : "FAIL",
+                property.c_str());
+    failures += property == "static" ? 0 : 1;
 
     std::printf("%d of %zu checks failed\n", failures, checks().size());
 

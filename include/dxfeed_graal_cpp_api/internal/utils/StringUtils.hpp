@@ -427,6 +427,40 @@ DXFCPP_EXPORT std::string joinStr(const std::vector<StringLike> &v, const String
 
 DXFCPP_EXPORT bool toBool(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
 
+/**
+ * The result of parseIsolateArguments(): the arguments, or the reason why the text cannot be parsed.
+ */
+struct DXFCPP_EXPORT IsolateArgumentsParseResult {
+    /// The arguments. Empty if the text has no arguments or if there is an error.
+    std::vector<std::string> arguments{};
+
+    /// The reason of the error. Empty on success. Never contains the text that was parsed.
+    std::string error{};
+
+    /// @return `true` if the text was parsed without an error.
+    bool ok() const noexcept {
+        return error.empty();
+    }
+};
+
+/**
+ * Splits the text into the arguments of the isolate by the rules of the `JDK_JAVA_OPTIONS` environment variable.
+ *
+ * - The arguments are separated by the ASCII whitespaces (space, `\t`, `\n`, `\v`, `\f`, `\r`), regardless of the locale.
+ * - A group in `'...'` or `"..."` keeps the whitespaces, the quotes are removed. A quote in the middle of an argument
+ * joins the group with the rest of the argument: `-Dname="a b"` gives `-Dname=a b`, `a""b` gives `ab`. The quote of the
+ * other kind inside a group is an ordinary character. `""` alone gives one empty argument.
+ * - There are no escape sequences: the backslash is an ordinary character. The bytes above 0x7F are kept as is.
+ * - An unmatched quote is an error. The message has the quote and its 0-based byte offset.
+ * - An argument that starts with `@` outside the quotes (an argument file) is not supported and is an error.
+ *
+ * The error message never contains the text, as it can have secrets.
+ *
+ * @param text The text to split, e.g. the value of the `DXFCPP_ISOLATE_ARGUMENTS` environment variable.
+ * @return The arguments, or the reason of the error.
+ */
+DXFCPP_EXPORT IsolateArgumentsParseResult parseIsolateArguments(std::string_view text);
+
 DXFCPP_END_NAMESPACE
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

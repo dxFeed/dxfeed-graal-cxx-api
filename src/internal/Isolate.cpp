@@ -3,6 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
+#include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/Handler.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
@@ -12,15 +13,18 @@
 #include <condition_variable>
 #include <config/config.hpp>
 #include <cstdlib>
+#include <cstring>
 #include <deque>
 #include <dxfg_api.h>
 #include <exception>
+#include <iterator>
 #include <memory>
 #include <mutex>
 #include <optional>
 #include <string>
 #include <thread>
 #include <utility>
+#include <vector>
 
 #ifdef _WIN32
 #    ifndef WIN32_LEAN_AND_MEAN
@@ -147,6 +151,37 @@ namespace {
 // destruction of its statics.
 constinit std::atomic<bool> isolateCreated{false};
 
+// The environment variable with the arguments of the isolate, added after the arguments of the code.
+constexpr const char *ISOLATE_ARGUMENTS_VARIABLE = "DXFCPP_ISOLATE_ARGUMENTS";
+
+// The arguments of the isolate and the mutex that orders the setter against the creation. Never destroyed: the setter may
+// be called from a static initializer, and the isolate is created at any moment up to the exit of the process.
+struct IsolateArguments {
+    std::mutex mutex{};
+    std::vector<std::string> arguments{};
+};
+
+IsolateArguments &isolateArguments() noexcept {
+    static auto &result = *new IsolateArguments{};
+
+    return result;
+}
+
+// The failure of the creation of the isolate (Isolate::getCreationError()): the constructor writes it once, the details
+// first and the code after them, before the first call that needs the isolate returns. Never destroyed, as the isolate.
+constinit std::atomic<CEntryPointErrorsEnum> creationErrorCode{CEntryPointErrorsEnum::NO_ERROR};
+
+std::string &creationErrorDetails() noexcept {
+    static auto &result = *new std::string{};
+
+    return result;
+}
+
+void failCreation(CEntryPointErrorsEnum code, std::string details) noexcept {
+    creationErrorDetails() = std::move(details);
+    creationErrorCode.store(code, std::memory_order_release);
+}
+
 // The Graal callbacks return at once (Isolate::isShuttingDown()).
 constinit std::atomic<bool> shuttingDown{false};
 
@@ -251,17 +286,81 @@ Isolate::Isolate() noexcept {
         Debugger::trace("Isolate::Isolate()");
     }
 
-    isolateCreated.store(true);
+    std::vector<std::string> arguments{};
+
+    {
+        auto &state = isolateArguments();
+        std::lock_guard lock(state.mutex);
+
+        // From now on the setter returns false: the arguments are final.
+        isolateCreated.store(true);
+        arguments = state.arguments;
+    }
+
+    // The arguments of the variable go after the arguments of the code: the last value of an option wins. An unset,
+    // empty or whitespace-only variable gives no arguments.
+    if (const auto variable = getEnvironmentVariable(ISOLATE_ARGUMENTS_VARIABLE); variable) {
+        auto parsed = parseIsolateArguments(*variable);
+
+        if (parsed.ok()) {
+            arguments.insert(arguments.end(), std::make_move_iterator(parsed.arguments.begin()),
+                             std::make_move_iterator(parsed.arguments.end()));
+        } else {
+            // The SDK is not called with a part of the arguments. The reason of the tokenizer has the position, not the
+            // value: the value may have secrets.
+            failCreation(CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED,
+                         std::string(ISOLATE_ARGUMENTS_VARIABLE) + ": " + parsed.error);
+        }
+    }
+
+    if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::trace("Isolate::Isolate(): " + std::to_string(arguments.size()) + " argument(s)" +
+                        (getCreationError() != CEntryPointErrorsEnum::NO_ERROR ? ", the variable is not parsed" : ""));
+    }
+
+    // The SDK is not called: the isolate does not exist.
+    if (getCreationError() != CEntryPointErrorsEnum::NO_ERROR) {
+        return;
+    }
 
     graal_isolate_t *graalIsolateHandle{};
     graal_isolatethread_t *graalIsolateThreadHandle{};
 
+    // The parameters only when there are arguments: otherwise the defaults of the SDK, as before. The strings live until
+    // the call returns.
+    std::string programName{"dxfcpp"};
+    std::vector<char *> argv{};
+    graal_create_isolate_params_t params;
+    graal_create_isolate_params_t *paramsPointer = nullptr;
+
+    if (!arguments.empty()) {
+        argv.reserve(arguments.size() + 1);
+        // The SDK skips the first one: it is the name of the program.
+        argv.push_back(programName.data());
+
+        for (auto &argument : arguments) {
+            argv.push_back(argument.data());
+        }
+
+        std::memset(&params, 0, sizeof(params));
+        params.version = __graal_create_isolate_params_version;
+        params.argc = static_cast<int>(argv.size());
+        params.argv = argv.data();
+        // An unknown option fails the creation instead of being silently dropped.
+        params.ignore_unrecognized_args = 0;
+        paramsPointer = &params;
+    }
+
     if (const auto result = static_cast<CEntryPointErrorsEnum>(
-            graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle));
+            graal_create_isolate(paramsPointer, &graalIsolateHandle, &graalIsolateThreadHandle));
         result == CEntryPointErrorsEnum::NO_ERROR) {
 
         handle_ = graalIsolateHandle;
         currentIsolateThread().handle = graalIsolateThreadHandle;
+    } else {
+        // The SDK prints the reason of an invalid argument to the standard error output.
+        failCreation(result, "See the standard error output of the process for the reason.");
     }
 
     if constexpr (Debugger::traceIsolates) {
@@ -275,6 +374,13 @@ CEntryPointErrorsEnum Isolate::attach() const noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::attach()");
+    }
+
+    // There is no isolate to attach to after a failed creation. The callers check it before: it is a protection.
+    if (!handle_) {
+        const auto creationError = getCreationError();
+
+        return creationError != CEntryPointErrorsEnum::NO_ERROR ? creationError : CEntryPointErrorsEnum::NULL_ARGUMENT;
     }
 
     // We will not re-attach.
@@ -323,6 +429,10 @@ GraalIsolateThreadHandle Isolate::get() const noexcept {
         Debugger::trace(toString() + "::get()");
     }
 
+    if (!handle_) {
+        return nullptr;
+    }
+
     // ReSharper disable once CppRedundantCastExpression
     return static_cast<void *>(graal_get_current_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_)));
 }
@@ -367,7 +477,11 @@ Isolate &Isolate::getInstance() noexcept {
     static std::once_flag flag{};
 
     std::call_once(flag, []() {
-        init(instance);
+        // There is no isolate to set the properties of after a failed creation.
+        if (getCreationError() == CEntryPointErrorsEnum::NO_ERROR) {
+            init(instance);
+        }
+
         registerExitHandler();
     });
 
@@ -381,6 +495,37 @@ Isolate &Isolate::getInstance() noexcept {
 
 bool Isolate::isCreated() noexcept {
     return isolateCreated.load();
+}
+
+CEntryPointErrorsEnum Isolate::getCreationError() noexcept {
+    return creationErrorCode.load(std::memory_order_acquire);
+}
+
+void Isolate::throwCreationError() {
+    if (const auto code = getCreationError(); code != CEntryPointErrorsEnum::NO_ERROR) {
+        throw GraalException(code, creationErrorDetails());
+    }
+}
+
+bool Isolate::setArguments(std::vector<std::string> arguments) {
+    // A string with a NUL would be cut by the C string of argv without a word. The value is not in the message.
+    for (std::size_t i = 0; i < arguments.size(); i++) {
+        if (arguments[i].find('\0') != std::string::npos) {
+            throw InvalidArgumentException("The isolate argument #" + std::to_string(i) +
+                                           " contains a NUL character.");
+        }
+    }
+
+    auto &state = isolateArguments();
+    std::lock_guard lock(state.mutex);
+
+    if (isolateCreated.load()) {
+        return false;
+    }
+
+    state.arguments = std::move(arguments);
+
+    return true;
 }
 
 bool Isolate::isShuttingDown() noexcept {

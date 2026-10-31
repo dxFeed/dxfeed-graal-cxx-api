@@ -3,10 +3,29 @@
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/GraalException.hpp"
 
+#include <string>
+#include <type_traits>
+
 DXFCPP_BEGIN_NAMESPACE
+
+namespace {
+
+std::string createCreationMessage(CEntryPointErrorsEnum entryPointErrorsEnum, const std::string &details) {
+    const auto text = CEntryPointErrorsEnumToStr(entryPointErrorsEnum);
+
+    return "Failed to create the GraalVM isolate, error " +
+           std::to_string(static_cast<std::underlying_type_t<CEntryPointErrorsEnum>>(entryPointErrorsEnum)) + ": " +
+           (text ? text : "unknown error.") + " " + details;
+}
+
+} // namespace
 
 GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum)
     : RuntimeException(createMessage(entryPointErrorsEnum)) {
+}
+
+GraalException::GraalException(CEntryPointErrorsEnum entryPointErrorsEnum, const std::string &details)
+    : RuntimeException(createCreationMessage(entryPointErrorsEnum, details)) {
 }
 
 GraalException::GraalException(const GraalException &other) noexcept : RuntimeException(other) {

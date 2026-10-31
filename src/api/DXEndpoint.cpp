@@ -813,19 +813,24 @@ static dxfc_dxendpoint_state_t stateToCApiState(DXEndpoint::State state) {
 DXFCPP_END_NAMESPACE
 
 dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t *builderHandle) {
-    if (!builderHandle) {
+    try {
+        if (!builderHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result = dxfcpp::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *builderHandle = static_cast<dxfc_dxendpoint_builder_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    const auto result = dxfcpp::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *builderHandle = static_cast<dxfc_dxendpoint_builder_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t builderHandle,
@@ -965,97 +970,117 @@ dxfc_error_code_t dxfc_dxendpoint_builder_free(dxfc_dxendpoint_builder_t builder
 }
 
 dxfc_error_code_t dxfc_dxendpoint_get_instance(void *userData, DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
-    if (!endpointHandle) {
+    try {
+        if (!endpointHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        auto endpoint = dxfcpp::DXEndpoint::getInstance();
+
+        if (!endpoint) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result =
+            dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    auto endpoint = dxfcpp::DXEndpoint::getInstance();
-
-    if (!endpoint) {
-        return DXFC_EC_ERROR;
-    }
-
-    const auto result =
-        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, void *userData,
                                                 DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
-    if (!endpointHandle) {
+    try {
+        if (!endpointHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        auto endpoint = dxfcpp::DXEndpoint::getInstance(dxfcpp::cApiRoleToRole(role));
+
+        if (!endpoint) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result =
+            dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    auto endpoint = dxfcpp::DXEndpoint::getInstance(dxfcpp::cApiRoleToRole(role));
-
-    if (!endpoint) {
-        return DXFC_EC_ERROR;
-    }
-
-    const auto result =
-        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_create(void *userData, DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
-    if (!endpointHandle) {
+    try {
+        if (!endpointHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        auto endpoint = dxfcpp::DXEndpoint::create();
+
+        if (!endpoint) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result =
+            dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    auto endpoint = dxfcpp::DXEndpoint::create();
-
-    if (!endpoint) {
-        return DXFC_EC_ERROR;
-    }
-
-    const auto result =
-        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *userData,
                                           DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
-    if (!endpointHandle) {
+    try {
+        if (!endpointHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::cApiRoleToRole(role));
+
+        if (!endpoint) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result =
+            dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::cApiRoleToRole(role));
-
-    if (!endpoint) {
-        return DXFC_EC_ERROR;
-    }
-
-    const auto result =
-        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpointHandle) {

@@ -336,6 +336,79 @@ foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
     endforeach ()
 endforeach ()
 
+# A test of a scenario: the environment of ctest has no DXFCPP_ISOLATE_ARGUMENTS, then the optional third argument
+# (the value) is set. The unset goes first, the set after it.
+function (dxfc_add_isolate_args_test target scenario)
+    set(env_arguments --unset=DXFCPP_ISOLATE_ARGUMENTS)
+
+    if (ARGC GREATER 2)
+        list(APPEND env_arguments "DXFCPP_ISOLATE_ARGUMENTS=${ARGV2}")
+    endif ()
+
+    set(test ${target}_${scenario})
+    add_test(NAME ${test} COMMAND ${CMAKE_COMMAND} -E env ${env_arguments} $<TARGET_FILE:${target}> ${scenario})
+    set_tests_properties(${test} PROPERTIES TIMEOUT 60)
+
+    if (DXFCXX_SANITIZERS_ENABLED)
+        set_property(TEST ${test} APPEND PROPERTY ENVIRONMENT
+                "UBSAN_OPTIONS=print_stacktrace=1"
+                "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
+                "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+    endif ()
+endfunction ()
+
+# The arguments of the Graal isolate, with each kind of linking, as above. The arguments must be given before the
+# isolate is created, so each scenario is a separate process. DXFCPP_ISOLATE_ARGUMENTS of the environment that runs ctest
+# is removed: a scenario that does not check it must not see it.
+set(DXFC_ISOLATE_ARGS_VARIANTS static)
+
+if (NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+    list(APPEND DXFC_ISOLATE_ARGS_VARIANTS shared)
+endif ()
+
+foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
+    set(DXFC_ISOLATE_ARGS_TARGET dxFeedGraalCxxApi_IsolateArgs_${DXFC_ISOLATE_ARGS_VARIANT})
+    set(DXFC_ISOLATE_ARGS_SCENARIOS args-visible setter-twice setter-empty setter-after-creation setter-nul
+            setter-concurrent env-non-ascii bad-value unknown-option repeat-same concurrent-first setter-after-failure
+            system-property error-shutdown)
+
+    # SIGPIPE: the handlers of the signals of the isolate are for Linux and macOS.
+    if (NOT WIN32)
+        list(APPEND DXFC_ISOLATE_ARGS_SCENARIOS signals signals-disabled)
+    endif ()
+    add_executable(${DXFC_ISOLATE_ARGS_TARGET} isolate-args/IsolateArgsTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_ISOLATE_ARGS_TARGET})
+    target_include_directories(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+
+    if (DXFC_ISOLATE_ARGS_VARIANT STREQUAL "shared")
+        target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE dxfcxx)
+        target_compile_definitions(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE DXFCPP_USE_DLLS)
+    else ()
+        target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE dxfcxx::static)
+
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_ISOLATE_ARGS_TARGET} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_ISOLATE_ARGS_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+
+    foreach (DXFC_ISOLATE_ARGS_SCENARIO IN LISTS DXFC_ISOLATE_ARGS_SCENARIOS)
+        dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} ${DXFC_ISOLATE_ARGS_SCENARIO})
+    endforeach ()
+
+    # The scenarios that check the variable: the value is exactly what the process must receive (the scenario checks it).
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-applied "-Dmdapi428.e=env")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-wins "-Dmdapi428.p=env")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-whitespace "  \t  ")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-quoted "-Dmdapi428.q=\"a b\"")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-unmatched-quote "-Dp=\"a")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-argfile "@args.txt")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} c-api "-Xmx64q")
+endforeach ()
+
 # The libraries that the tests and the canary load, copied next to them once (see dxfcxx_copy_runtime).
 set(DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx::graal>)
 set(DXFC_TEST_RUNTIME_DEPENDS "")

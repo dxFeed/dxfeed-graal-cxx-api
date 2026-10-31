@@ -50,7 +50,7 @@ void runCallback(const char *component, Body &&body,
  *
  * An exception of the body is reported to ErrorManager. From the start of the shutdown of the library
  * (dxfcpp::shutdown(), the exit of the process) an exception is expected, since the SDK is being closed or is closed
- * already, and is not reported.
+ * already, and is not reported. It is not reported after a failed creation of the isolate either.
  *
  * @param component The class that releases, for ErrorInfo::component.
  * @param body The release.
@@ -62,7 +62,8 @@ void runRelease(const char *component, Body &&body,
     try {
         std::forward<Body>(body)();
     } catch (...) {
-        if (!Isolate::isShuttingDown()) {
+        // After a failed creation of the isolate the objects cannot be released by Java either, as after the shutdown.
+        if (!Isolate::isShuttingDown() && Isolate::getCreationError() == CEntryPointErrorsEnum::NO_ERROR) {
             ErrorManager::reportException(std::string_view{component}, std::current_exception(), location);
         }
     }

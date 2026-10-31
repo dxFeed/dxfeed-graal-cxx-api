@@ -391,6 +391,61 @@ bool toBool(const StringLike &s) noexcept {
     return iEquals(s, "true") || iEquals(s, "yes") || iEquals(s, "y") || iEquals(s, "on");
 }
 
+IsolateArgumentsParseResult parseIsolateArguments(std::string_view text) {
+    // Without std::isspace: it depends on the locale.
+    auto isSpace = [](char c) {
+        return c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r';
+    };
+
+    IsolateArgumentsParseResult result{};
+    const auto size = text.size();
+    std::size_t i = 0;
+
+    while (i < size) {
+        if (isSpace(text[i])) {
+            i++;
+
+            continue;
+        }
+
+        if (text[i] == '@') {
+            result.arguments.clear();
+            result.error = "argument files (@file) are not supported, found at offset " + std::to_string(i);
+
+            return result;
+        }
+
+        std::string argument{};
+
+        while (i < size && !isSpace(text[i])) {
+            const auto c = text[i];
+
+            if (c != '\'' && c != '"') {
+                argument += c;
+                i++;
+
+                continue;
+            }
+
+            const auto end = text.find(c, i + 1);
+
+            if (end == std::string_view::npos) {
+                result.arguments.clear();
+                result.error = std::string{"unmatched quote "} + c + " at offset " + std::to_string(i);
+
+                return result;
+            }
+
+            argument.append(text.substr(i + 1, end - i - 1));
+            i = end + 1;
+        }
+
+        result.arguments.push_back(std::move(argument));
+    }
+
+    return result;
+}
+
 DXFCPP_END_NAMESPACE
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
 DXFCXX_DISABLE_GCC_WARNINGS_POP()

@@ -41,6 +41,18 @@ extern "C" {
 /**
  * @file
  * @brief dxFeed Native C API enums, structs and functions declarations
+ *
+ * The Graal isolate of the library takes arguments (the sizes of the heap, the system properties that must be set
+ * before the first Java code runs, the options of the runtime). The C API has no function to set them yet: use the
+ * `DXFCPP_ISOLATE_ARGUMENTS` environment variable, set before the first call of the library. The value is split into
+ * arguments by the whitespace characters; a part in `'...'` or in `"..."` keeps them and loses the quotes, for example
+ * `-Dmy.prop="a b" -Xmx512m`; there are no escape sequences; an unmatched quote and an argument that starts with `@`
+ * are errors. When the isolate cannot be created (an invalid argument; the SDK prints the reason to the standard error
+ * output), dxfc_system_set_property(), dxfc_system_get_property(), dxfc_dxendpoint_new_builder(),
+ * dxfc_dxendpoint_get_instance(), dxfc_dxendpoint_get_instance2(), dxfc_dxendpoint_create() and
+ * dxfc_dxendpoint_create2() return DXFC_EC_ERROR; the other functions need a handle that these return. The creation
+ * is not retried. The rules, the table of the arguments and the examples for the shells are in the C++ documentation
+ * of the library, the page "Isolate arguments".
  */
 
 /**
