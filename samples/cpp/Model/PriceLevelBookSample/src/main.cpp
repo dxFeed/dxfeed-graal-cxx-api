@@ -37,7 +37,7 @@ int main(int /*argc*/, char * /*argv*/[]) {
                     }
 
                     std::cout << fmt::format("{:=^66}\n", "");
-                    std::cout << fmt::format("{:^31} || {:^31}\n", "ASK", "BID");
+                    std::cout << fmt::format("{:^31} || {:^31}\n", "BID", "ASK");
                     std::cout << fmt::format("{0:^15}|{1:^15} || {0:^15}|{1:^15}\n", "Price", "Size");
                     std::cout << fmt::format("{:-^66}\n", "");
 
