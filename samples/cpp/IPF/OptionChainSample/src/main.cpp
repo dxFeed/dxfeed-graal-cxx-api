@@ -126,7 +126,7 @@ Examples:
                 }
 
                 std::printf("    %10.3f %10.3f %10.3f %10.3f %10.3f\n", callQuote->getBidPrice(),
-                            callQuote->getAskPrice(), strike, putQuote->getAskPrice(), putQuote->getBidPrice());
+                            callQuote->getAskPrice(), strike, putQuote->getBidPrice(), putQuote->getAskPrice());
             }
         }
     } catch (const RuntimeException &e) {

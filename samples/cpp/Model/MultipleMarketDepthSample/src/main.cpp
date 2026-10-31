@@ -65,9 +65,8 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
         std::cout << fmt::format("Press [ENTER] to print {} order book manually.", symbol.toString()) << std::endl;
 
-        while (true) {
-            std::cin.ignore();
-
+        // Stops at the end of the input or on a read error.
+        while (std::cin.ignore().good()) {
             if (auto [ok, book] = model->tryGetBook(symbol); ok) {
                 std::lock_guard lock{ioMutex};
                 std::cout << "=============================Print manually=============================" << std::endl;

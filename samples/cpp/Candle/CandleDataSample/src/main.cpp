@@ -23,7 +23,7 @@ Where:
     password   - User password.
     baseSymbol - Base symbol name for Candle or TnS to get events for (e.g. "IBM", "AAPL", "MSFT").
     fromTime   - Is from-time for history subscription in standard formats.
-                 Same examples of valid from-time:
+                 Some examples of valid from-time:
                      20070101-123456
                      20070101-123456.123
                      2005-12-31 21:00:00

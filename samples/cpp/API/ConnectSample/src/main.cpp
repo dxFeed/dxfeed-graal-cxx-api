@@ -32,7 +32,7 @@ Where:
     symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").
               for Candle event specify symbol with aggregation like in "AAPL{=d}"
     time    - Is from-time for history subscription in standard formats.
-              Same examples of valid from-time:
+              Some examples of valid from-time:
                   20070101-123456
                   20070101-123456.123
                   2005-12-31 21:00:00

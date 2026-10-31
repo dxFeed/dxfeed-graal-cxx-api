@@ -40,6 +40,13 @@ void testQuotePromises(const std::string &symbol) {
     for (const auto &promise : *promises) {
         const auto q = promise.getResult();
 
+        // The result is null when the quote did not arrive before the timeout.
+        if (!q) {
+            std::cout << "No quote for " + symbol + "\n";
+
+            continue;
+        }
+
         std::cout << "Mid = " + std::to_string((q->getBidPrice() + q->getAskPrice()) / 2) + "\n";
     }
 }
