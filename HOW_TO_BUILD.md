@@ -107,3 +107,12 @@ cmake --build . --target dxfcxx_header_check
 
 `DXFCXX_BUILD_HEADER_CHECK` compiles every public header on its own to check that it includes everything it uses.
 Build with `DXFCXX_USE_PRECOMPILED_HEADERS=OFF`, since precompiled headers hide missing includes.
+
+The installed headers are checked separately: each one must compile with the include directory of the installation as
+the only include directory (on Windows, also after `<windows.h>`).
+
+```shell
+cmake --install . --prefix install
+cmake -S ../.github/ci/installed-headers-check -B installed-headers-check -DDXFCXX_INSTALL_PREFIX=$PWD/install
+cmake --build installed-headers-check
+```

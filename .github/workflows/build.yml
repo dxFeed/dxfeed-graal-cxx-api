@@ -321,6 +321,22 @@ jobs:
       - name: Build without precompiled headers
         run: cmake --build ${{github.workspace}}/build --config Debug -j 4
 
+      # The headers a user gets: each installed header must compile with only the include directory of the
+      # installation (and, on Windows, after <windows.h>).
+      - name: Install
+        run: cmake --install ${{github.workspace}}/build --config Debug --prefix ${{github.workspace}}/build/install
+
+      - name: Configure the installed headers check
+        run: >
+          cmake -S ${{github.workspace}}/.github/ci/installed-headers-check
+          -B ${{github.workspace}}/build/installed-headers-check
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_INSTALL_PREFIX=${{github.workspace}}/build/install
+
+      - name: Check that installed headers compile on their own
+        run: cmake --build ${{github.workspace}}/build/installed-headers-check --config Debug -j 4
+
   # Smoke tests against demo.dxfeed.com (CTest label "network"). They depend on an external service, so a failure
   # does not fail the workflow; the other unit tests do not use external network.
   network-tests:
