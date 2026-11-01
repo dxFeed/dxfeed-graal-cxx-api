@@ -13,7 +13,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/EventClassList.hpp"
 #include "../internal/Handler.hpp"
-#include "../internal/Id.hpp"
 #include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "../util/TimePeriod.hpp"
@@ -22,6 +21,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <atomic>
 #include <concepts>
+#include <cstddef>
 #include <memory>
 #include <mutex>
 #include <type_traits>
@@ -78,7 +78,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     mutable std::atomic<bool> closed_{false};
 
     // The id of the registration for the callbacks (see registerSubscription()); close() removes the registration.
-    Id<DXFeedSubscription>::ValueType id_{};
+    std::size_t id_{};
 
     mutable std::mutex eventListenerMutex_{};
     mutable JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
@@ -99,7 +99,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     void addFeed(const std::shared_ptr<const DXFeed> &feed) const;
     void removeFeed(const DXFeed *feed) const;
 
-    void setEventListenerHandle(Id<DXFeedSubscription> id);
+    void setEventListenerHandle(std::size_t id);
 
     bool tryToSetEventListenerHandle();
 

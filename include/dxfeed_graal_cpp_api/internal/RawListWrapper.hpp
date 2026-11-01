@@ -7,11 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "./utils/StringUtils.hpp"
 #include "./Common.hpp"
 
 #include <cstdint>
-#include <string>
 #include <type_traits>
 
 DXFCPP_BEGIN_NAMESPACE

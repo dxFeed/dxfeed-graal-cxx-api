@@ -7,6 +7,7 @@
 #include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Id.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
@@ -95,9 +96,9 @@ DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique
     return isolated::api::IsolatedDXFeedSubscription::create(list);
 }
 
-void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) {
+void DXFeedSubscription::setEventListenerHandle(std::size_t id) {
     eventListenerHandle_ = isolated::api::IsolatedDXFeedSubscription::DXFeedEventListener::create(
-        dxfcpp::bit_cast<void *>(&Impl::onEvents), dxfcpp::bit_cast<void *>(id.getValue()));
+        dxfcpp::bit_cast<void *>(&Impl::onEvents), dxfcpp::bit_cast<void *>(id));
 
     isolated::api::IsolatedDXFeedSubscription::addEventListener(handle_, eventListenerHandle_);
 }
@@ -117,7 +118,7 @@ bool DXFeedSubscription::tryToSetEventListenerHandle() {
             return false;
         }
 
-        setEventListenerHandle(idOpt.value());
+        setEventListenerHandle(idOpt.value().getValue());
     }
 
     return true;

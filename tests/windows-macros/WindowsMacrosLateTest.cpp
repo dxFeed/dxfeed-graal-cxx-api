@@ -9,7 +9,8 @@
 
 #include <cstdio>
 
-#if !defined(min) || !defined(max) || !defined(NO_ERROR) || !defined(DELETE) || !defined(ERROR)
+#if !defined(min) || !defined(max) || !defined(NO_ERROR) || !defined(DELETE) || !defined(ERROR) || !defined(TRUE) ||   \
+    !defined(FALSE)
 #    error windows.h included after the API headers must define its macros
 #endif
 

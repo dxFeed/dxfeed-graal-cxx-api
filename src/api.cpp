@@ -25,6 +25,7 @@ ApiContext::~ApiContext() noexcept {
 
 ApiContext &ApiContext::getInstance() noexcept {
     // Never deleted: the Graal callbacks may use the context until the process ends.
+    // NOLINTNEXTLINE(bugprone-unhandled-exception-at-new): the function is noexcept, out of memory ends the process.
     static auto &instance = *new ApiContext{};
 
     return instance;
