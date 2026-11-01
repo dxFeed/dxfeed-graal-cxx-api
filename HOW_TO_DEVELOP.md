@@ -123,7 +123,7 @@ static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *g
     runCallback("DXFeedSubscription", [&] {
         const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
 
-        const auto manager = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>();
+        const auto manager = ApiContext::getInstance().getManager<EntityManager<DXFeedSubscription>>();
 
         if (const auto sub = manager->getEntity(id)) {
             auto &&events = EventMapper::fromGraalListSkippingErrors(static_cast<void *>(graalNativeEvents));

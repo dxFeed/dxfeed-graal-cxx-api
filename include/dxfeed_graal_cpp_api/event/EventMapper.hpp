@@ -32,11 +32,6 @@ struct DXFCPP_EXPORT EventMapper {
     static void freeGraal(void *graalNativeEvent);
 
     template <typename EventIt> static void *toGraalList(EventIt begin, EventIt end) {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("EventMapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto size = calculateGraalListSize(std::distance(begin, end));
 
         // Zero size is needed, for example, to clear the list of symbols.

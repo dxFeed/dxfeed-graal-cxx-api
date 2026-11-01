@@ -681,6 +681,12 @@ target_include_directories(${PROJECT_NAME}_static SYSTEM PRIVATE third_party/ran
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
+# The public headers leave the windows.h macros to the user; the library sources get windows.h without min/max.
+if (WIN32)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+    target_compile_definitions(${PROJECT_NAME}_static PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+endif ()
+
 # fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
 set(DXFCXX_MSVC_COMPILE_OPTIONS /W4 /bigobj /utf-8)
 set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS /PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>)

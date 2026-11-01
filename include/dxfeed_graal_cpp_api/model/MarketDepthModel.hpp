@@ -413,7 +413,7 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         bool isDepthLimitUnbounded() const {
             auto temp = depthLimit_.load();
 
-            return temp == 0 || temp == std::numeric_limits<decltype(temp)>::max();
+            return temp == 0 || temp == (std::numeric_limits<decltype(temp)>::max)();
         }
 
         bool isOrderCountWithinDepthLimit() const {
@@ -438,7 +438,7 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
             isChanged_ = false;
             snapshot_.clear();
 
-            const auto limit = isDepthLimitUnbounded() ? std::numeric_limits<std::size_t>::max() : depthLimit_.load();
+            const auto limit = isDepthLimitUnbounded() ? (std::numeric_limits<std::size_t>::max)() : depthLimit_.load();
             std::size_t i = 0;
 
             for (auto it = orders_.begin(); i < limit && it != orders_.end(); ++it) {

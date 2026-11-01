@@ -409,6 +409,27 @@ foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
     dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} c-api "-Xmx64q")
 endforeach ()
 
+# The API headers included after and before windows.h, without NOMINMAX and WIN32_LEAN_AND_MEAN: the macros of the user
+# stay defined, the names they hide are reachable.
+if (WIN32)
+    set(DXFC_WINDOWS_MACROS_TARGET dxFeedGraalCxxApi_WindowsMacros)
+    add_executable(${DXFC_WINDOWS_MACROS_TARGET}
+            windows-macros/WindowsMacrosTest.cpp windows-macros/WindowsMacrosLateTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_WINDOWS_MACROS_TARGET})
+    target_include_directories(${DXFC_WINDOWS_MACROS_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+    target_link_libraries(${DXFC_WINDOWS_MACROS_TARGET} PRIVATE dxfcxx::static)
+
+    if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+        set_target_properties(${DXFC_WINDOWS_MACROS_TARGET} PROPERTIES
+                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    endif ()
+
+    target_link_libraries(${DXFC_WINDOWS_MACROS_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_WINDOWS_MACROS_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+    add_test(NAME ${DXFC_WINDOWS_MACROS_TARGET} COMMAND ${DXFC_WINDOWS_MACROS_TARGET})
+    set_tests_properties(${DXFC_WINDOWS_MACROS_TARGET} PROPERTIES TIMEOUT 60)
+endif ()
+
 # The libraries that the tests and the canary load, copied next to them once (see dxfcxx_copy_runtime).
 set(DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx::graal>)
 set(DXFC_TEST_RUNTIME_DEPENDS "")

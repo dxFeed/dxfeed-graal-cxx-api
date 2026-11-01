@@ -70,6 +70,9 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      */
     static const DXFCPP_EXPORT OrderAction MODIFY;
 
+// windows.h defines DELETE as a macro: it is hidden here and restored after the declaration.
+#pragma push_macro("DELETE")
+#undef DELETE
     /**
      * Order is fully canceled and removed from Order Book.
      * Order's @ref Order::getSize() "size" will be equal to 0.
@@ -82,6 +85,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * </ul>
      */
     static const DXFCPP_EXPORT OrderAction DELETE;
+#pragma pop_macro("DELETE")
 
     /**
      * Size is changed (usually reduced) due to partial order execution.

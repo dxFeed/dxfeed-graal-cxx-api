@@ -1081,11 +1081,6 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @throws GraalException
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
-            if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperties(properties[" +
-                                std::to_string(properties.size()) + "])");
-            }
-
             for (auto &&[k, v] : properties) {
                 withProperty(k, v);
             }

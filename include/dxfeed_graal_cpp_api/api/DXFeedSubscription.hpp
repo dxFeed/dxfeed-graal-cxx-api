@@ -14,8 +14,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/EventClassList.hpp"
 #include "../internal/Handler.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "../internal/context/ApiContext.hpp"
-#include "../internal/managers/EntityManager.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "../util/TimePeriod.hpp"
 #include "../util/TimePeriodInfo.hpp"
@@ -23,6 +21,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <atomic>
 #include <concepts>
+#include <cstddef>
 #include <memory>
 #include <mutex>
 #include <type_traits>
@@ -61,7 +60,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     /**
      * The maximum events' batch limit for a single notification in OnEventHandler.
      */
-    static constexpr std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
+    static constexpr std::int32_t MAX_BATCH_LIMIT = (std::numeric_limits<std::int32_t>::max)();
 
     protected:
     friend struct DXFeed;
@@ -79,7 +78,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     mutable std::atomic<bool> closed_{false};
 
     // The id of the registration for the callbacks (see registerSubscription()); close() removes the registration.
-    Id<DXFeedSubscription>::ValueType id_{};
+    std::size_t id_{};
 
     mutable std::mutex eventListenerMutex_{};
     mutable JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
@@ -100,7 +99,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     void addFeed(const std::shared_ptr<const DXFeed> &feed) const;
     void removeFeed(const DXFeed *feed) const;
 
-    void setEventListenerHandle(Id<DXFeedSubscription> id);
+    void setEventListenerHandle(std::size_t id);
 
     bool tryToSetEventListenerHandle();
 
@@ -121,11 +120,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) : DXFeedSubscription() {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         eventTypes_ = std::unordered_set<EventTypeEnum>{begin, end};
 
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
@@ -141,11 +135,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end, JavaObjectHandle<DXFeedSubscription> &&handle)
         : DXFeedSubscription() {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         eventTypes_ = std::unordered_set<EventTypeEnum>{begin, end};
         handle_ = std::move(handle);
     }
@@ -232,11 +221,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         }
 #endif
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         auto sub = createShared(begin, end);
         registerSubscription(sub);
 
@@ -378,11 +362,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         setSymbolsImpl(list.get());
@@ -453,11 +432,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         addSymbolsImpl(list.get());
@@ -525,11 +499,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         removeSymbolsImpl(list.get());
@@ -837,7 +806,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
  */
 class DXFCPP_EXPORT DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSubscription>,
                                                    public DXFeedSubscription {
-    std::atomic<std::int64_t> fromTime_{std::numeric_limits<std::int64_t>::max()};
+    std::atomic<std::int64_t> fromTime_{(std::numeric_limits<std::int64_t>::max)()};
 
     static void registerEntity();
 

@@ -6,6 +6,9 @@
 #include "../../include/dxfeed_graal_c_api/api.h"
 #include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
 #include "../../include/dxfeed_graal_cpp_api/ondemand/OnDemandService.hpp"
@@ -44,7 +47,7 @@ struct DXEndpoint::Impl {
     }
 
     static auto getManager() {
-        return ApiContext::getInstance()->getManager<WeakEntityManager<DXEndpoint>>();
+        return ApiContext::getInstance().getManager<WeakEntityManager<DXEndpoint>>();
     }
 
     // The endpoint is closed: the library stops owning it, its feed stops owning the attached subscriptions, its
@@ -493,7 +496,7 @@ DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", 1);
 #endif
 }
 
@@ -504,7 +507,7 @@ DXEndpoint::Builder::~Builder() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", -1);
 #endif
 }
 
@@ -563,7 +566,7 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag) : role_{}, impl_(std::make_u
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
 #endif
 }
 
@@ -577,7 +580,7 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint>
     handle_ = std::move(handle);
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
 #endif
 }
 
@@ -605,7 +608,7 @@ DXEndpoint::~DXEndpoint() noexcept {
     });
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", -1);
 #endif
 }
 
@@ -697,14 +700,12 @@ struct BuilderHandle {};
 
 namespace BuilderRegistry {
 static std::shared_ptr<DXEndpoint::Builder> get(BuilderHandle *handle) {
-    return ApiContext::getInstance()->getManager<EntityManager<DXEndpoint::Builder>>()->getEntity(handle);
+    return ApiContext::getInstance().getManager<EntityManager<DXEndpoint::Builder>>()->getEntity(handle);
 }
 
 static BuilderHandle *add(const std::shared_ptr<DXEndpoint::Builder> &builder) noexcept {
-    return dxfcpp::bit_cast<BuilderHandle *>(ApiContext::getInstance()
-                                                 ->getManager<EntityManager<DXEndpoint::Builder>>()
-                                                 ->registerEntity(builder)
-                                                 .getValue());
+    return dxfcpp::bit_cast<BuilderHandle *>(
+        ApiContext::getInstance().getManager<EntityManager<DXEndpoint::Builder>>()->registerEntity(builder).getValue());
 }
 
 static bool remove(BuilderHandle *handle) {
@@ -714,7 +715,7 @@ static bool remove(BuilderHandle *handle) {
         return false;
     }
 
-    return ApiContext::getInstance()->getManager<EntityManager<DXEndpoint::Builder>>()->unregisterEntity(handle);
+    return ApiContext::getInstance().getManager<EntityManager<DXEndpoint::Builder>>()->unregisterEntity(handle);
 }
 } // namespace BuilderRegistry
 
@@ -736,12 +737,12 @@ struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
 
 namespace EndpointWrapperRegistry {
 static std::shared_ptr<EndpointWrapper> get(EndpointWrapperHandle *handle) {
-    return ApiContext::getInstance()->getManager<EntityManager<EndpointWrapper>>()->getEntity(handle);
+    return ApiContext::getInstance().getManager<EntityManager<EndpointWrapper>>()->getEntity(handle);
 }
 
 static EndpointWrapperHandle *add(const std::shared_ptr<EndpointWrapper> &endpointWrapper) noexcept {
     return dxfcpp::bit_cast<EndpointWrapperHandle *>(ApiContext::getInstance()
-                                                         ->getManager<EntityManager<EndpointWrapper>>()
+                                                         .getManager<EntityManager<EndpointWrapper>>()
                                                          ->registerEntity(endpointWrapper)
                                                          .getValue());
 }
@@ -753,7 +754,7 @@ static bool remove(EndpointWrapperHandle *handle) {
         return false;
     }
 
-    return ApiContext::getInstance()->getManager<EntityManager<EndpointWrapper>>()->unregisterEntity(handle);
+    return ApiContext::getInstance().getManager<EntityManager<EndpointWrapper>>()->unregisterEntity(handle);
 }
 } // namespace EndpointWrapperRegistry
 

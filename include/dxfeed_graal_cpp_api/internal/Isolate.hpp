@@ -20,9 +20,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <variant>
 #include <vector>
 
-#ifdef NO_ERROR
-#    undef NO_ERROR
-#endif
+// windows.h defines NO_ERROR as a macro: it is hidden in this header and restored at its end.
+#pragma push_macro("NO_ERROR")
+#undef NO_ERROR
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -157,11 +157,6 @@ class DXFCPP_EXPORT Isolate final {
     template <typename F>
     auto runIsolated(F &&f)
         -> std::variant<CEntryPointErrorsEnum, std::invoke_result_t<F &&, GraalIsolateThreadHandle>> {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
-        }
-
         if (isShutDown()) {
             return CEntryPointErrorsEnum::SHUT_DOWN;
         }
@@ -177,13 +172,6 @@ class DXFCPP_EXPORT Isolate final {
         }
 
         if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
-            if constexpr (Debugger::traceIsolates) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
-                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
-                                CEntryPointErrorsEnumToStr(result));
-            }
-
             // TODO: Store "silent" errors
 
             return result;
@@ -193,11 +181,6 @@ class DXFCPP_EXPORT Isolate final {
     }
 
     template <typename F> auto runIsolatedThrow(F &&f) -> std::invoke_result_t<F &&, GraalIsolateThreadHandle> {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() + ")");
-        }
-
         if (isShutDown()) {
             throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
         }
@@ -212,13 +195,6 @@ class DXFCPP_EXPORT Isolate final {
         }
 
         if (const auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
-            if constexpr (Debugger::traceIsolates) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() +
-                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
-                                CEntryPointErrorsEnumToStr(result));
-            }
-
             throw GraalException(result);
         }
 
@@ -229,11 +205,6 @@ class DXFCPP_EXPORT Isolate final {
     auto runIsolated(F &&f, Arg &&arg, Args &&...args)
         -> std::variant<CEntryPointErrorsEnum,
                         std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...>> {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() + ")");
-        }
-
         if (isShutDown()) {
             return CEntryPointErrorsEnum::SHUT_DOWN;
         }
@@ -250,13 +221,6 @@ class DXFCPP_EXPORT Isolate final {
         }
 
         if (auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
-            if constexpr (Debugger::traceIsolates) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::trace(toString() + "::runIsolated(" + typeid(f).name() +
-                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
-                                CEntryPointErrorsEnumToStr(result));
-            }
-
             // TODO: Store "silent" errors
 
             return result;
@@ -269,11 +233,6 @@ class DXFCPP_EXPORT Isolate final {
     template <typename F, typename Arg, typename... Args>
     auto runIsolatedThrow(F &&f, Arg &&arg, Args &&...args)
         -> std::invoke_result_t<F &&, GraalIsolateThreadHandle, Arg &&, Args &&...> {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() + ")");
-        }
-
         if (isShutDown()) {
             throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
         }
@@ -289,13 +248,6 @@ class DXFCPP_EXPORT Isolate final {
         }
 
         if (const auto result = attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
-            if constexpr (Debugger::traceIsolates) {
-                // ReSharper disable once CppDFAUnreachableCode
-                Debugger::trace(toString() + "::runIsolatedThrow(" + typeid(f).name() +
-                                "): result != CEntryPointErrorsEnum::NO_ERROR -> " +
-                                CEntryPointErrorsEnumToStr(result));
-            }
-
             throw GraalException(result);
         }
 
@@ -374,5 +326,7 @@ auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
 DXFCPP_EXPORT void gc();
 
 DXFCPP_END_NAMESPACE
+
+#pragma pop_macro("NO_ERROR")
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

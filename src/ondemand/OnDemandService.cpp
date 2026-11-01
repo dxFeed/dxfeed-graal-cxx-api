@@ -4,6 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/ondemand/OnDemandService.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/ondemand/IsolatedOnDemandService.hpp"
 
 #include <memory>

@@ -4,6 +4,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/OtcMarketsOrder.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>

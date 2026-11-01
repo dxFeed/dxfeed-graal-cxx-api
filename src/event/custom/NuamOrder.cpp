@@ -4,6 +4,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/custom/NuamOrder.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
 #include "../../internal/utils/StringConstants.hpp"

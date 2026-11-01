@@ -8,10 +8,10 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../entity/SharedEntity.hpp"
-#include "../../internal/Id.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
 #include "../../internal/Handler.hpp"
 
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -94,7 +94,7 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<Ob
 
     private:
     mutable std::recursive_mutex mutex_{};
-    Id<ObservableSubscriptionChangeListener> id_{Id<ObservableSubscriptionChangeListener>::UNKNOWN};
+    std::size_t id_{static_cast<std::size_t>(-1)};
     JavaObjectHandle<ObservableSubscriptionChangeListener> handle_{};
     SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded_{
         "ObservableSubscriptionChangeListener"};

@@ -7,9 +7,10 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/IndexedEventSource.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/Id.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Id.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTimeSeriesTxModel.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTxModelListener.hpp"
@@ -21,7 +22,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct TxModelListenerCommon::Impl {
     static auto getManager() {
-        return ApiContext::getInstance()->getManager<WeakEntityManager<TxModelListenerCommon, TxModelListenerTag>>();
+        return ApiContext::getInstance().getManager<WeakEntityManager<TxModelListenerCommon, TxModelListenerTag>>();
     }
 
     // typedef void (*dxfg_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,

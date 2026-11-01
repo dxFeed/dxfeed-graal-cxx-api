@@ -6,6 +6,8 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisher.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
 #    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
@@ -98,7 +100,7 @@ DXPublisher::DXPublisher() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", 1);
 #endif
 }
 
@@ -109,7 +111,7 @@ DXPublisher::~DXPublisher() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", -1);
 #endif
 }
 

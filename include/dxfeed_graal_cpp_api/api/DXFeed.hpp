@@ -8,11 +8,8 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../event/LastingEvent.hpp"
-#include "../internal/CEntryPointErrors.hpp"
 #include "../internal/Common.hpp"
-#include "../internal/Isolate.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "../internal/managers/EntityManager.hpp"
 #include "../promise/Promise.hpp"
 #include "./DXFeedSubscription.hpp"
 
@@ -403,11 +400,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      */
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("{}::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         auto sub = DXFeedSubscription::create(begin, end);
 
         attachSubscription(sub);
@@ -453,14 +445,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      */
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypesCollection &eventTypes) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            auto begin = std::begin(eventTypes);
-            auto end = std::end(eventTypes);
-
-            Debugger::debug(toString() + "::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         auto sub = DXFeedSubscription::create(eventTypes);
 
         attachSubscription(sub);
@@ -516,11 +500,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin,
                                                                                EventTypeIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("{}::createTimeSeriesSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         for (EventTypeIt iter = begin; iter != end; ++iter) {
             if (!iter->isTimeSeries()) {
                 throw InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
@@ -579,16 +558,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedTimeSeriesSubscription>
     createTimeSeriesSubscription(const EventTypesCollection &eventTypes) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            auto dbgBegin = std::begin(eventTypes);
-            auto dbgEnd = std::end(eventTypes);
-
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() +
-                            "::createTimeSeriesSubscription(eventTypes = " + namesToString(dbgBegin, dbgEnd) + ")");
-        }
-
         auto begin = std::begin(eventTypes);
         auto end = std::end(eventTypes);
 
@@ -1046,7 +1015,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<TimeSeriesEvent> E>
     std::vector<std::shared_ptr<E>> getTimeSeriesIfSubscribed(const SymbolWrapper &symbol,
                                                               std::int64_t fromTime) const {
-        return getTimeSeriesIfSubscribed<E>(symbol, fromTime, std::numeric_limits<std::int64_t>::max());
+        return getTimeSeriesIfSubscribed<E>(symbol, fromTime, (std::numeric_limits<std::int64_t>::max)());
     }
 
     /**

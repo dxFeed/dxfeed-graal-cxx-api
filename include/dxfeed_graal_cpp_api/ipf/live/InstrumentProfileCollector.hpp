@@ -9,12 +9,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../entity/SharedEntity.hpp"
 #include "../../internal/Common.hpp"
-#include "../../internal/Id.hpp"
 #include "../../internal/JavaObjectHandle.hpp"
 #include "../InstrumentProfile.hpp"
 #include "./IterableInstrumentProfile.hpp"
 #include "../../internal/Handler.hpp"
 
+#include <cstddef>
 #include <mutex>
 #include <unordered_map>
 
@@ -47,7 +47,7 @@ class InstrumentProfileConnection;
 class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     friend InstrumentProfileConnection;
 
-    Id<InstrumentProfileCollector> id_;
+    std::size_t id_{static_cast<std::size_t>(-1)};
     JavaObjectHandle<InstrumentProfileCollector> handle_;
 
     // An update listener: a handler of its own with the one listener. A callback calls it by a shared pointer, without

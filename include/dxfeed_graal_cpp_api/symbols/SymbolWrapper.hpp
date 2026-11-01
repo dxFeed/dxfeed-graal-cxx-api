@@ -74,10 +74,6 @@ struct DXFCPP_EXPORT SymbolWrapper final {
 
         public:
         template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) {
-            if constexpr (Debugger::isDebug) {
-                Debugger::debug("SymbolWrapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
-            }
-
             auto size = calculateGraalListSize(std::distance(begin, end));
 
             // Zero size is needed, for example, to clear the list of symbols.
@@ -159,10 +155,6 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      */
     template <ConvertibleToStringSymbol Symbol>
     SymbolWrapper(Symbol &&symbol) noexcept : SymbolWrapper(StringSymbol(std::forward<Symbol>(symbol))) {
-        if constexpr (Debugger::isDebug) {
-            // Could be "perfectly" moved, so it won't show up in the logs
-            Debugger::debug("SymbolWrapper(symbol = " + toStringAny(symbol) + ")");
-        }
     }
 
     /**

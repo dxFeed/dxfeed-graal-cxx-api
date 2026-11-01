@@ -27,11 +27,11 @@ namespace {
 using Events = std::vector<std::shared_ptr<EventType>>;
 
 auto subscriptionManager() {
-    return ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>();
+    return ApiContext::getInstance().getManager<WeakEntityManager<DXFeedSubscription>>();
 }
 
 auto endpointManager() {
-    return ApiContext::getInstance()->getManager<WeakEntityManager<DXEndpoint>>();
+    return ApiContext::getInstance().getManager<WeakEntityManager<DXEndpoint>>();
 }
 
 std::shared_ptr<DXEndpoint> localHub() {

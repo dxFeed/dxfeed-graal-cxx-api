@@ -7,12 +7,15 @@
 #include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/Id.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
 #    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
 #endif
 #include "../../include/dxfeed_graal_cpp_api/internal/StopWatch.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 
 #include <algorithm>
 #include <dxfg_api.h>
@@ -26,7 +29,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct DXFeedSubscription::Impl {
     static auto getManager() {
-        return ApiContext::getInstance()->getManager<WeakEntityManager<DXFeedSubscription>>();
+        return ApiContext::getInstance().getManager<WeakEntityManager<DXFeedSubscription>>();
     }
 
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
@@ -58,7 +61,7 @@ struct DXFeedSubscription::Impl {
 
                 const auto elapsed = sw.elapsedInNanos().count();
                 const auto perEvent = static_cast<double>(elapsed) / static_cast<double>(events.size());
-                const auto metricsManager = ApiContext::getInstance()->getManager<MetricsManager>();
+                const auto metricsManager = ApiContext::getInstance().getManager<MetricsManager>();
 
                 metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Batch(ns)", elapsed);
                 metricsManager->set("DXFCXX.Sub.onEvents.fromGraalList.Event(ns)", perEvent);
@@ -93,9 +96,9 @@ DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique
     return isolated::api::IsolatedDXFeedSubscription::create(list);
 }
 
-void DXFeedSubscription::setEventListenerHandle(Id<DXFeedSubscription> id) {
+void DXFeedSubscription::setEventListenerHandle(std::size_t id) {
     eventListenerHandle_ = isolated::api::IsolatedDXFeedSubscription::DXFeedEventListener::create(
-        dxfcpp::bit_cast<void *>(&Impl::onEvents), dxfcpp::bit_cast<void *>(id.getValue()));
+        dxfcpp::bit_cast<void *>(&Impl::onEvents), dxfcpp::bit_cast<void *>(id));
 
     isolated::api::IsolatedDXFeedSubscription::addEventListener(handle_, eventListenerHandle_);
 }
@@ -115,7 +118,7 @@ bool DXFeedSubscription::tryToSetEventListenerHandle() {
             return false;
         }
 
-        setEventListenerHandle(idOpt.value());
+        setEventListenerHandle(idOpt.value().getValue());
     }
 
     return true;
@@ -135,7 +138,7 @@ void DXFeedSubscription::removeSymbolsImpl(void *graalSymbolList) const {
 
 DXFeedSubscription::DXFeedSubscription() : impl_(std::make_unique<Impl>()) {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", 1);
 #endif
 }
 
@@ -182,7 +185,7 @@ DXFeedSubscription::~DXFeedSubscription() {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeedSubscription", -1);
 #endif
 }
 
@@ -491,7 +494,7 @@ DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
     RequireMakeShared<DXFeedTimeSeriesSubscription>::LockExternalConstructionTag) {
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add(
         "Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
 #endif
 }
@@ -502,7 +505,7 @@ DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(
     : DXFeedSubscription(eventType, std::move(handle)) {
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add(
         "Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
 #endif
 }
@@ -528,14 +531,14 @@ void DXFeedTimeSeriesSubscription::setFromTime(std::chrono::milliseconds fromTim
 
 DXFeedTimeSeriesSubscription::~DXFeedTimeSeriesSubscription() {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add(
         "Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", -1);
 #endif
 }
 
 void DXFeedTimeSeriesSubscription::registerEntity() {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add(
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add(
         "Entity.DXFeedSubscription.DXFeedTimeSeriesSubscription", 1);
 #endif
 }

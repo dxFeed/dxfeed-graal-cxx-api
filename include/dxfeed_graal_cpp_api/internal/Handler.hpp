@@ -100,7 +100,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
     // After the listeners are swapped, both handlers continue after the larger of the two counters, so that no id that
     // is in use in either handler is given out again. Called with the mutexes of both handlers held.
     template <typename OtherHandler> void syncLastIds(OtherHandler &other) noexcept {
-        const auto last = std::max(lastId_, other.lastId_);
+        const auto last = (std::max)(lastId_, other.lastId_);
 
         lastId_ = last;
         other.lastId_ = last;
