@@ -8,6 +8,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 
 #include "../../internal/utils/CandleUtils.hpp"
+#include "../../internal/Common.hpp"
 
 #include <array>
 #include <functional>

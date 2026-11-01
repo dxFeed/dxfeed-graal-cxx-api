@@ -8,6 +8,7 @@
 #include "../../include/dxfeed_graal_cpp_api/glossary/CFI.hpp"
 #include "../isolated/internal/IsolatedObject.hpp"
 #include "../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
+#include "./Common.hpp"
 
 #include <mutex>
 

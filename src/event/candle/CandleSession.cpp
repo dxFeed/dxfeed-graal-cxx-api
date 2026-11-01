@@ -12,6 +12,7 @@
 #include <string>
 
 #include "../../internal/utils/CandleUtils.hpp"
+#include "../../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

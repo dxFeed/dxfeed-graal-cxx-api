@@ -4,6 +4,7 @@
 #include <dxfg_api.h>
 
 #include "../../include/dxfeed_graal_cpp_api/event/EventSourceWrapper.hpp"
+#include "../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

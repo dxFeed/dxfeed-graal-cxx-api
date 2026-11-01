@@ -7,6 +7,7 @@
 #include <fmt/format.h>
 
 #include "../../internal/utils/CandleUtils.hpp"
+#include "../../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
