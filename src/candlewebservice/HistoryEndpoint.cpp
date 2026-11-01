@@ -4,7 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/candlewebservice/HistoryEndpoint.hpp"
 
 #include "../../include/dxfeed_graal_c_api/api.h"
-#include "../../include/dxfeed_graal_cpp_api/isolated/candlewebservice/IsolatedHistoryEndpoint.hpp"
+#include "../isolated/candlewebservice/IsolatedHistoryEndpoint.hpp"
 
 #include <memory>
 #include <utility>

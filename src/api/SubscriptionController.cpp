@@ -5,7 +5,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedSubscriptionController.hpp"
+#include "../isolated/api/IsolatedSubscriptionController.hpp"
 
 #include <utility>
 

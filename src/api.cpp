@@ -5,6 +5,8 @@
 #include "../include/dxfeed_graal_cpp_api/api.hpp"
 #include "../include/dxfeed_graal_cpp_api/entity/SharedEntity.hpp"
 #include "../include/dxfeed_graal_cpp_api/event/EventType.hpp"
+#include "internal/Metrics.hpp"
+#include "internal/context/ApiContext.hpp"
 
 #include <memory>
 #include <mutex>

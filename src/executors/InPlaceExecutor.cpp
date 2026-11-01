@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/executors/InPlaceExecutor.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/executors/IsolatedInPlaceExecutor.hpp"
+#include "../isolated/executors/IsolatedInPlaceExecutor.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

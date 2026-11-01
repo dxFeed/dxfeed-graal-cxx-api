@@ -6,16 +6,16 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/Id.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeedSubscription.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../internal/Id.hpp"
+#include "../internal/context/ApiContext.hpp"
+#include "../internal/managers/EntityManager.hpp"
+#include "../isolated/api/IsolatedDXFeedSubscription.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
-#    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#    include "../internal/Metrics.hpp"
 #endif
-#include "../../include/dxfeed_graal_cpp_api/internal/StopWatch.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
+#include "../internal/StopWatch.hpp"
+#include "../internal/utils/debug/Debug.hpp"
 
 #include <algorithm>
 #include <dxfg_api.h>

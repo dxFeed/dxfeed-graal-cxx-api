@@ -32,7 +32,7 @@
 #include "../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
+#include "../internal/utils/debug/Debug.hpp"
 
 #include <cstdint>
 #include <cstring>

@@ -4,8 +4,8 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleAlignment.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/resources/Strings.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
+#include "../../internal/resources/Strings.hpp"
+#include "../../internal/utils/StringUtils.hpp"
 
 #include <fmt/format.h>
 

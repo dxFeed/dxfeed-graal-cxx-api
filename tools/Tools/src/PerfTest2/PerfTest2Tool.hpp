@@ -5,8 +5,8 @@
 
 #include "../../../../include/dxfeed_graal_cpp_api/event/market/Profile.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/event/market/Summary.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../../../src/internal/Isolate.hpp"
+#include "../../../../src/internal/context/ApiContext.hpp"
 #include "../Args/Args.hpp"
 #include <chrono>
 #include <cstdint>

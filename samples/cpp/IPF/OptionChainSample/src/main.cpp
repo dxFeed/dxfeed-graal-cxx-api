@@ -100,8 +100,7 @@ Examples:
         }
 
         // ignore timeout and continue to print retrieved quotes even on timeout
-        auto ok = Promises::allOf(promises)->awaitWithoutException(10s);
-        ignoreUnused(ok);
+        [[maybe_unused]] auto ok = Promises::allOf(promises)->awaitWithoutException(10s);
 
         std::cout << "Printing option series ...\n";
 

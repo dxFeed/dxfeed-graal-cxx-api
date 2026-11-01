@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/glossary/CFI.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/glossary/IsolatedCFI.hpp"
+#include "../isolated/glossary/IsolatedCFI.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

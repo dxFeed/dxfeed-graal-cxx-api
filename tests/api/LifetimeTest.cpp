@@ -13,6 +13,9 @@
 #include <vector>
 
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../src/internal/Common.hpp"
+#include "../../src/internal/context/ApiContext.hpp"
+#include "../../src/internal/managers/EntityManager.hpp"
 
 #include <doctest.h>
 

@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/glossary/AdditionalUnderlyings.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/glossary/IsolatedAdditionalUnderlyings.hpp"
+#include "../isolated/glossary/IsolatedAdditionalUnderlyings.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

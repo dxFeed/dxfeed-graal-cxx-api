@@ -16,6 +16,20 @@ using namespace std::literals;
 
 namespace otp = portals::legacy;
 
+// The exchange code as printable text: a printable ASCII character as is, the others as an escape sequence.
+std::string encodeExchangeCode(std::int16_t exchangeCode) {
+    if (exchangeCode >= 32 && exchangeCode <= 126) {
+        return std::string(1, static_cast<char>(exchangeCode));
+    }
+
+    if (exchangeCode == 0) {
+        return "\\0";
+    }
+
+    // The code is a UTF-16 unit: 0x8000-0xFFFF are negative int16 values.
+    return fmt::format("\\u{:04x}", static_cast<std::uint16_t>(exchangeCode));
+}
+
 auto drawHeader() {
     std::cout << fmt::format("{:=^78}\n", "");
     std::cout << fmt::format("{:^38}||{:^38}\n", "BID", "ASK");
@@ -29,7 +43,7 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
     for (std::size_t i = 0; i < depth; i++) {
         if (i < buy.size()) {
             std::cout << otp::moveTo(5 + i, 0) + fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}",
-                                                             encodeChar(buy[i]->getExchangeCode()),
+                                                             encodeExchangeCode(buy[i]->getExchangeCode()),
                                                              buy[i]->getSource().toString(), buy[i]->getMarketMaker(),
                                                              toString(buy[i]->getPrice()), toString(buy[i]->getSize()));
         }
@@ -38,7 +52,8 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
 
         if (i < sell.size()) {
             std::cout << otp::moveTo(5 + i, 41) +
-                             fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}", encodeChar(sell[i]->getExchangeCode()),
+                             fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}",
+                                         encodeExchangeCode(sell[i]->getExchangeCode()),
                                          sell[i]->getSource().toString(), sell[i]->getMarketMaker(),
                                          toString(sell[i]->getPrice()), toString(sell[i]->getSize()));
         }

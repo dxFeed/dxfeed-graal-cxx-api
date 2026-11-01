@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedTimeFormat.hpp"
+#include "../isolated/internal/IsolatedTimeFormat.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

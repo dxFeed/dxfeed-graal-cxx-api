@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfile.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfile.hpp"
+#include "../isolated/ipf/IsolatedInstrumentProfile.hpp"
 
 #include <dxfg_api.h>
 #include <memory>

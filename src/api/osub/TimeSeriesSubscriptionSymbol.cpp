@@ -3,7 +3,7 @@
 
 #include "../../../include/dxfeed_graal_c_api/api.h"
 #include "../../../include/dxfeed_graal_cpp_api/api.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
 
 #include <dxfg_api.h>
 

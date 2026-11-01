@@ -22,7 +22,7 @@
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
-#include <dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp>
+#include "../../src/isolated/util/IsolatedTimePeriod.hpp"
 
 #include <doctest.h>
 

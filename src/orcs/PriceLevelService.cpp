@@ -3,8 +3,8 @@
 
 #include "../../include/dxfeed_graal_cpp_api/orcs/PriceLevelService.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/orcs/IsolatedPriceLevelService.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../isolated/orcs/IsolatedPriceLevelService.hpp"
 
 #include <memory>
 #include <utility>

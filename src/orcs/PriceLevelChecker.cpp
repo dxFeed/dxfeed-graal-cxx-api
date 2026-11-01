@@ -4,7 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/orcs/PriceLevelChecker.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/orcs/IsolatedPriceLevelService.hpp"
+#include "../isolated/orcs/IsolatedPriceLevelService.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

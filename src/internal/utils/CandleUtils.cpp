@@ -3,7 +3,7 @@
 
 #include "CandleUtils.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+#include "../Common.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp"
 

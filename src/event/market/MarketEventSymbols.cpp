@@ -4,7 +4,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+#include "../../internal/Common.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
 
 #include <algorithm>

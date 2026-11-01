@@ -5,8 +5,8 @@
 #include "../../include/dxfeed_graal_cpp_api/model/TimeSeriesTxModel.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTimeSeriesTxModel.hpp"
+#include "../isolated/event/IsolatedEventType.hpp"
+#include "../isolated/model/IsolatedTimeSeriesTxModel.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

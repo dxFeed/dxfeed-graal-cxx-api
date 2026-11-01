@@ -3,7 +3,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS // NOLINT(*-reserved-identifier)
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
+#include "StringUtils.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 

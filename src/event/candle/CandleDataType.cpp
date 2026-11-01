@@ -3,7 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleDataType.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+#include "../../internal/Common.hpp"
 
 #include "../../internal/utils/CandleUtils.hpp"
 

@@ -3,11 +3,11 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/ipf/live/InstrumentProfileCollector.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
+#include "../../internal/CallbackBarrier.hpp"
+#include "../../internal/context/ApiContext.hpp"
+#include "../../internal/managers/EntityManager.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
 
 #include <cstring>
 #include <dxfg_api.h>

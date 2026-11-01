@@ -7,7 +7,7 @@
 #include "../../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/util/CmdArgsUtils.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/utils/EnumUtils.hpp"
+#include "../../../../src/internal/utils/EnumUtils.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #include "../Args/Args.hpp"
 #include <fmt/format.h>

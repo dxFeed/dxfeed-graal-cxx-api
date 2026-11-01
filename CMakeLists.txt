@@ -763,8 +763,8 @@ target_link_options(${PROJECT_NAME}_static
 )
 
 if (DXFCXX_USE_PRECOMPILED_HEADERS)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
-    target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE src/internal/PrecompiledHeaders.hpp)
+    target_precompile_headers(${PROJECT_NAME}_static PRIVATE src/internal/PrecompiledHeaders.hpp)
 endif ()
 
 target_link_libraries(${PROJECT_NAME}

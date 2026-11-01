@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandlePrice.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/resources/Strings.hpp"
+#include "../../internal/resources/Strings.hpp"
 
 #include <fmt/format.h>
 

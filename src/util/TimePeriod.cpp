@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/util/TimePeriod.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
+#include "../isolated/util/IsolatedTimePeriod.hpp"
 
 #include <utility>
 

@@ -5,7 +5,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp"
+#include "../isolated/schedule/IsolatedSession.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/Day.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/SessionType.hpp"

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <doctest.h>
-#include <dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp>
+#include "../../src/internal/managers/EntityManager.hpp"
 
 #include <atomic>
 #include <future>

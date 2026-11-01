@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../src/internal/Common.hpp"
 
 #include <doctest.h>
 #include <nanobench.h>

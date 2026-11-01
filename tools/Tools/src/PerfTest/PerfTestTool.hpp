@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "../../../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
+#include "../../../../src/internal/Isolate.hpp"
+#include "../../../../src/internal/Metrics.hpp"
+#include "../../../../src/internal/context/ApiContext.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
 #include "../Args/Args.hpp"
 #include <chrono>

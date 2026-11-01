@@ -6,7 +6,7 @@
 #include "../Args/Args.hpp"
 
 #include "../../../../include/dxfeed_graal_cpp_api/api.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp"
+#include "../../../../src/isolated/internal/IsolatedTools.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")

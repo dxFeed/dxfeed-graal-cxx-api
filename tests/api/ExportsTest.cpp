@@ -5,6 +5,8 @@
 // DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON (the dynamic-link-tests CI job) a missing export is a link error of this test.
 
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../src/internal/Isolate.hpp"
+#include "../../src/internal/utils/StringUtils.hpp"
 
 #include <doctest.h>
 
