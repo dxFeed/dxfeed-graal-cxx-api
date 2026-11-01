@@ -273,8 +273,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
     SetupStaticRuntimeMSVC(console ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
-# bits (header-only): the bit operations of the library headers. EXCLUDE_FROM_ALL (CMake 3.28+) disables its own install
-# rules; its headers are installed with the library below.
+# bits (header-only): the bit operations of the library sources, a private dependency. EXCLUDE_FROM_ALL (CMake 3.28+)
+# disables its own install rules.
 if (NOT DEFINED FETCHCONTENT_SOURCE_DIR_BITS AND
         EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}/CMakeLists.txt")
     set(FETCHCONTENT_SOURCE_DIR_BITS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}")
@@ -360,6 +360,7 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/StopWatch.cpp
         src/internal/TimeFormat.cpp
         src/internal/Timer.cpp
+        src/internal/context/ApiContext.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources
@@ -768,19 +769,15 @@ if (DXFCXX_USE_PRECOMPILED_HEADERS)
 endif ()
 
 target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-        bits::bits
         PRIVATE
         dxfcxx_warnings
-        DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
+        DxFeedGraalNativeSdk bits::bits utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
 )
 
 target_link_libraries(${PROJECT_NAME}_static
-        PUBLIC
-        bits::bits
         PRIVATE
         dxfcxx_warnings
-        DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
+        DxFeedGraalNativeSdk bits::bits utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
 )
 
 if (DXFCXX_FEATURE_STACKTRACE)
@@ -947,8 +944,6 @@ if (DXFCXX_INSTALL)
         install(TARGETS ${PROJECT_NAME})
         install(TARGETS ${PROJECT_NAME}_static)
         install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
-        # The public headers include <bits/bits.hpp>.
-        install(DIRECTORY "${bits_SOURCE_DIR}/include/" DESTINATION "include")
 
         # The -static-mt archives: _static.lib links either with the SDK import library and DLL, or with the static
         # library of the SDK and the Windows libraries of link-flags.txt.

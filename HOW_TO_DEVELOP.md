@@ -10,9 +10,9 @@ to test it. How to build and run the tests:
 | Layer | Where | What it does |
 |---|---|---|
 | Public API | `include/dxfeed_graal_cpp_api/<module>/X.hpp`, `src/<module>/X.cpp` | The classes of the users, as in the Java API. They call `dxfg_*` functions through the isolated layer; only a few low-level calls are direct (`System`, `DXFeed` attach and detach). |
-| Isolated layer | `include/dxfeed_graal_cpp_api/isolated/<module>/IsolatedX.hpp`, `src/isolated/<module>/IsolatedX.cpp` | One C++ function per `dxfg_*` function: checks the handles, calls the SDK in the isolate thread, turns the result into a C++ value or an exception. |
+| Isolated layer | `src/isolated/<module>/IsolatedX.hpp`, `src/isolated/<module>/IsolatedX.cpp` | One C++ function per `dxfg_*` function: checks the handles, calls the SDK in the isolate thread, turns the result into a C++ value or an exception. |
 | Handles | `JavaObjectHandle<T>` (`detail/JavaObjectHandle.hpp`) | Owns a Java object of the SDK and releases it (`dxfg_JavaObjectHandler_release`). |
-| Entities and managers | `EntityManager<T>`, `ApiContext` (`internal/managers`, `internal/context`) | Find a C++ object by its id in a callback. |
+| Entities and managers | `EntityManager<T>`, `ApiContext` (`src/internal/managers`, `src/internal/context`) | Find a C++ object by its id in a callback. |
 | Graal SDK | `DxFeedGraalNativeSdk` (C API `dxfg_*`) | The Java API compiled by GraalVM Native Image. |
 
 A call goes public class → isolated function → `dxfg_*`. A callback goes the other way: the SDK calls a static
@@ -38,7 +38,7 @@ void addEventListener(const JavaObjectHandle<DXFeedSubscription> &sub,
 }
 ```
 
-- The `runGraalFunctionAndThrow*` helpers of `isolated/IsolatedCommon.hpp` run the function in the isolate thread
+- The `runGraalFunctionAndThrow*` helpers of `src/isolated/IsolatedCommon.hpp` run the function in the isolate thread
   and throw `JavaException` when the result means an error: `...IfNullptr` for functions that return a pointer,
   `...IfLessThanZero` and `...IfMinusOne` for the status codes, `...IfMinusMin`, `...IfMinusInf` for numbers. Pick
   the one that matches what the C API documents for the function.
@@ -53,7 +53,7 @@ void addEventListener(const JavaObjectHandle<DXFeedSubscription> &sub,
 - A function that creates a Java object returns `JavaObjectHandle<T>`. Strings and lists that the SDK returns are
   copied into C++ values and released at once with the matching `dxfg_*_release` function.
 - After `dxfcpp::shutdown()` or at the exit of the process the isolate does not run any more: the `runIsolated*`
-  functions of `internal/Isolate.hpp` return `CEntryPointErrorsEnum::SHUT_DOWN` (or throw it), so a call of the SDK
+  functions of `src/internal/Isolate.hpp` return `CEntryPointErrorsEnum::SHUT_DOWN` (or throw it), so a call of the SDK
   fails instead of hanging. See [Lifetime and exit](#lifetime-and-exit).
 
 ## Lifetime and exit
@@ -91,7 +91,7 @@ exception thrown out of it terminates the process, and nobody waits for its resu
 
 Rules:
 
-1. **Wrap the whole body in `runCallback`** (`internal/CallbackBarrier.hpp`). It is `noexcept`. It returns at once
+1. **Wrap the whole body in `runCallback`** (`src/internal/CallbackBarrier.hpp`). It is `noexcept`. It returns at once
    when the isolate is shutting down (`Isolate::CallbackScope`: the exit of the process and `dxfcpp::shutdown()`
    wait for the callbacks in progress), and it reports any exception of the body to `ErrorManager` with the name of
    the component and the source location. Do not swallow exceptions inside the body: catch only what the callback
@@ -157,7 +157,7 @@ exception that leaves them terminates the process. In order of preference:
 
 1. **Call only code that does not throw.** For example, `operator*` after a check instead of `std::optional::value()`,
    `std::get_if` instead of `std::get`, no `fmt` in a `noexcept` `toString()`.
-2. **Wrap a release that calls the SDK in `runRelease`** (`internal/CallbackBarrier.hpp`): it is `noexcept` and
+2. **Wrap a release that calls the SDK in `runRelease`** (`detail/CallbackBarrier.hpp`): it is `noexcept` and
    reports an exception of the body to `ErrorManager`, except while the library is shutting down (then the failure is
    expected and is not reported). The destructors of the entities and models do so:
 
@@ -170,7 +170,7 @@ exception that leaves them terminates the process. In order of preference:
    ```
 
    Do not write an empty `catch (...)`: a failure that nobody sees is a bug that nobody fixes.
-3. **`DXFCPP_FINALLY`** (`internal/Common.hpp`) runs its body at the end of the scope; an exception of the body goes
+3. **`DXFCPP_FINALLY`** (`src/internal/Common.hpp`) runs its body at the end of the scope; an exception of the body goes
    to `ErrorManager` in the same way.
 4. **`NOLINT(bugprone-exception-escape)`** only for a proven false positive, with a comment that says why the call
    cannot throw.
@@ -207,7 +207,7 @@ An entity is a C++ class that wraps a Java object of the SDK (`DXFeedSubscriptio
    class (the builder and the listener of a model: `IndexedEventTxModelBuilderTag`,
    `IndexedEventTxModelListenerTag`), and add `template struct JavaObjectHandle<X>;` in
    `src/internal/JavaObjectHandle.cpp`, next to the others.
-3. **Isolated layer**: `isolated/<module>/IsolatedX.hpp` and `src/isolated/<module>/IsolatedX.cpp` with one function
+3. **Isolated layer**: `src/isolated/<module>/IsolatedX.hpp` and `src/isolated/<module>/IsolatedX.cpp` with one function
    per `dxfg_*` function the class uses (see [Calling the SDK](#calling-the-sdk)).
 4. **Callbacks**: if the SDK calls the entity back, register it in `EntityManager<X>` when it is created
    (`registerEntity`), pass its id as the user data and write the callback as in
@@ -246,7 +246,7 @@ example: `git show --stat 1d92540a` (and `aec2a65e` for `MarketMaker` and `TextC
    of that file (the list of all types, by name, by class name, by `dxfg_event_clazz_t`).
 3. **`EventMapper`** (`src/event/EventMapper.cpp`): the include and the `case DXFG_EVENT_X` in `fromGraal` and in
    `freeGraal`. Without them the event is skipped in the callbacks and reported to `ErrorManager`.
-4. **`isolated/IsolatedCommon.hpp`**: the name of `DXFG_EVENT_X` in `toString(dxfg_event_clazz_t)`.
+4. **`src/isolated/IsolatedCommon.hpp`**: the name of `DXFG_EVENT_X` in `toString(dxfg_event_clazz_t)`.
 5. **`OrderSource`**, if the event is published per order source as in Java: its flag in the masks of the sources and
    in `OrderSource::getEventTypeMask` (`src/event/market/OrderSource.cpp`), otherwise `isPublishable()` throws for the
    new type; `tests/api/OrderSourceTest.cpp`.
