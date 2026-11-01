@@ -54,7 +54,7 @@ struct NonOwningInstrumentProfileIterator {
 
 struct InstrumentProfileCollector::Impl {
     static auto getManager() {
-        return ApiContext::getInstance()->getManager<WeakEntityManager<InstrumentProfileCollector>>();
+        return ApiContext::getInstance().getManager<WeakEntityManager<InstrumentProfileCollector>>();
     }
 
     static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,

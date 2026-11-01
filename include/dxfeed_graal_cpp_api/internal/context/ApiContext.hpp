@@ -18,7 +18,7 @@ class DXFCPP_EXPORT ApiContext {
     public:
     ~ApiContext() noexcept;
 
-    static std::shared_ptr<ApiContext> getInstance() noexcept;
+    static ApiContext &getInstance() noexcept;
 
     template <typename Manager> std::shared_ptr<Manager> getManager() const noexcept {
         // One manager of each type for all the modules: the library registers and owns it (getManagerImpl). A static

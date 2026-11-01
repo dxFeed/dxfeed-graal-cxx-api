@@ -93,7 +93,7 @@ struct PerfTest2Tool {
                              formatDouble(eventsPerSecond), formatDouble(listenerCallsPerSecond),
                              formatDouble(eventsPerSecond / listenerCallsPerSecond), currentMemoryUsage,
                              peakMemoryUsage_, currentCpuUsage * 100.0, peakCpuUsage_ * 100.0, runningDiff_.elapsed(),
-                             ApiContext::getInstance()->getManager<MetricsManager>()->getAsI64("Entity.Event").value);
+                             ApiContext::getInstance().getManager<MetricsManager>()->getAsI64("Entity.Event").value);
             } else {
                 fmt::print("\n{}\n", Platform::getPlatformInfo());
                 std::cout << "----------------------------------------------------\n";
@@ -108,7 +108,7 @@ struct PerfTest2Tool {
                 fmt::print("  Running time                   : {:%H:%M:%S}\n", runningDiff_.elapsed());
                 std::cout << "----------------------------------------------------\n";
 #if defined(DXFCXX_ENABLE_METRICS)
-                fmt::print("{}\n", ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->dump());
+                fmt::print("{}\n", ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->dump());
 #endif
             }
 

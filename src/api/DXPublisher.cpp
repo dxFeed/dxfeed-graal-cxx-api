@@ -98,7 +98,7 @@ DXPublisher::DXPublisher() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", 1);
 #endif
 }
 
@@ -109,7 +109,7 @@ DXPublisher::~DXPublisher() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXPublisher", -1);
 #endif
 }
 

@@ -21,7 +21,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 struct TxModelListenerCommon::Impl {
     static auto getManager() {
-        return ApiContext::getInstance()->getManager<WeakEntityManager<TxModelListenerCommon, TxModelListenerTag>>();
+        return ApiContext::getInstance().getManager<WeakEntityManager<TxModelListenerCommon, TxModelListenerTag>>();
     }
 
     // typedef void (*dxfg_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,

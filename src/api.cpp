@@ -23,9 +23,9 @@ ApiContext::ApiContext() noexcept {
 ApiContext::~ApiContext() noexcept {
 }
 
-std::shared_ptr<ApiContext> ApiContext::getInstance() noexcept {
+ApiContext &ApiContext::getInstance() noexcept {
     // Never deleted: the Graal callbacks may use the context until the process ends.
-    static const auto &instance = *new std::shared_ptr<ApiContext>(new ApiContext{});
+    static auto &instance = *new ApiContext{};
 
     return instance;
 }
@@ -56,30 +56,27 @@ std::shared_ptr<void> ApiContext::getManagerImpl(const char *typeName,
     return manager;
 }
 
-auto C = ApiContext::getInstance();
-auto MM = ApiContext::getInstance()->getManager<MetricsManager>();
-
 SharedEntity::SharedEntity() {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity", 1);
 #endif
 }
 
 SharedEntity::~SharedEntity() noexcept {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity", -1);
 #endif
 }
 
 EventType::EventType() {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.Event", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.Event", 1);
 #endif
 }
 
 EventType::~EventType() noexcept {
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.Event", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.Event", -1);
 #endif
 }
 

@@ -269,7 +269,7 @@ DXFeed::DXFeed() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", 1);
 #endif
 }
 
@@ -280,7 +280,7 @@ DXFeed::~DXFeed() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", -1);
 #endif
 }
 
