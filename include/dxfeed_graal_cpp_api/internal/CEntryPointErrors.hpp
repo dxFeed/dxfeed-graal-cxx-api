@@ -9,9 +9,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 
-#ifdef NO_ERROR
-#    undef NO_ERROR
-#endif
+// windows.h defines NO_ERROR as a macro: it is hidden in this header and restored at its end.
+#pragma push_macro("NO_ERROR")
+#undef NO_ERROR
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -212,5 +212,7 @@ constexpr const char *CEntryPointErrorsEnumToStr(CEntryPointErrorsEnum enumValue
 }
 
 DXFCPP_END_NAMESPACE
+
+#pragma pop_macro("NO_ERROR")
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

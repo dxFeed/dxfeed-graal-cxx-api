@@ -115,12 +115,21 @@ constexpr To bit_cast(const From &from)
     return to;
 }
 
+// windows.h defines TRUE and FALSE as macros: they are hidden here and restored after the enum.
+#pragma push_macro("TRUE")
+#pragma push_macro("FALSE")
+#undef TRUE
+#undef FALSE
+
 /// Lightweight implementation of "nullable bool"
 enum class Tristate : std::uint8_t {
     FALSE = 0,
     TRUE = 1,
     NONE = 2,
 };
+
+#pragma pop_macro("FALSE")
+#pragma pop_macro("TRUE")
 
 #define DXFCPP_MACRO_CONCAT(a, b) DXFCPP_MACRO_CONCAT_INNER(a, b)
 #define DXFCPP_MACRO_CONCAT_INNER(a, b) a##b
@@ -171,8 +180,8 @@ template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
             return 0;
         }
 
-        if (initSize > std::numeric_limits<SizeType>::max()) {
-            return std::numeric_limits<SizeType>::max();
+        if (initSize > (std::numeric_limits<SizeType>::max)()) {
+            return (std::numeric_limits<SizeType>::max)();
         }
 
         return initSize;
@@ -199,7 +208,7 @@ template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
         using SizeType = decltype(ListType::size);
         using ElementType = std::remove_pointer_t<decltype(ListType::elements)>;
 
-        if (graalList == nullptr || elementIdx < 0 || elementIdx >= std::numeric_limits<SizeType>::max() ||
+        if (graalList == nullptr || elementIdx < 0 || elementIdx >= (std::numeric_limits<SizeType>::max)() ||
             element == nullptr) {
             return false;
         }
@@ -213,7 +222,7 @@ template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
         using ListType = GraalList;
         using SizeType = decltype(ListType::size);
 
-        if (graalList == nullptr || count < 0 || count >= std::numeric_limits<SizeType>::max()) {
+        if (graalList == nullptr || count < 0 || count >= (std::numeric_limits<SizeType>::max)()) {
             return false;
         }
 
@@ -291,7 +300,7 @@ namespace detail {
 // floorDiv() for y != 0.
 static constexpr std::int64_t floorDivNonZero(std::int64_t x, std::int64_t y) noexcept {
     // INT64_MIN / -1 overflows (undefined behavior in C++); Java wraps the result to INT64_MIN.
-    if (x == std::numeric_limits<std::int64_t>::min() && y == -1) {
+    if (x == (std::numeric_limits<std::int64_t>::min)() && y == -1) {
         return x;
     }
 
@@ -449,8 +458,8 @@ inline std::int32_t doubleCompare(double a, double b) noexcept {
  *         @c false otherwise.
  */
 inline bool isInt64(double value) noexcept {
-    return std::isfinite(value) && value >= static_cast<double>(std::numeric_limits<std::int64_t>::min()) &&
-           value < -static_cast<double>(std::numeric_limits<std::int64_t>::min()) && value == std::trunc(value);
+    return std::isfinite(value) && value >= static_cast<double>((std::numeric_limits<std::int64_t>::min)()) &&
+           value < -static_cast<double>((std::numeric_limits<std::int64_t>::min)()) && value == std::trunc(value);
 }
 
 /**
@@ -486,10 +495,10 @@ inline bool approximatelyEquals(T a, U b, double relativeTolerance, double absol
     }
 
     const auto difference = std::abs(first - second);
-    const auto scale = std::max(std::abs(first), std::abs(second));
+    const auto scale = (std::max)(std::abs(first), std::abs(second));
 
-    return difference <= std::max(static_cast<CommonType>(absoluteTolerance),
-                                  static_cast<CommonType>(relativeTolerance) * scale);
+    return difference <=
+           (std::max)(static_cast<CommonType>(absoluteTolerance), static_cast<CommonType>(relativeTolerance) * scale);
 }
 
 DXFCXX_DISABLE_CLANG_WARNINGS_POP()
@@ -576,11 +585,11 @@ static constexpr std::int32_t getMillisFromTime(std::int64_t timeMillis) noexcep
 static constexpr std::int32_t getSecondsFromTime(std::int64_t timeMillis) noexcept {
     if (timeMillis >= 0) {
         return static_cast<std::int32_t>(
-            std::min(timeMillis / SECOND, static_cast<std::int64_t>(std::numeric_limits<std::int32_t>::max())));
+            (std::min)(timeMillis / SECOND, static_cast<std::int64_t>((std::numeric_limits<std::int32_t>::max)())));
     }
 
-    return static_cast<std::int32_t>(
-        std::max((timeMillis + 1) / SECOND - 1, static_cast<std::int64_t>(std::numeric_limits<std::int32_t>::min())));
+    return static_cast<std::int32_t>((std::max)((timeMillis + 1) / SECOND - 1,
+                                                static_cast<std::int64_t>((std::numeric_limits<std::int32_t>::min)())));
 }
 } // namespace time_util
 
@@ -821,7 +830,8 @@ constexpr std::pair<std::size_t, std::size_t> unpack(std::size_t v) noexcept {
 template <typename T, typename U> T fitToType(const U &size) {
     static_assert(sizeof(T) <= sizeof(U));
 
-    return static_cast<T>(static_cast<U>(std::numeric_limits<T>::max()) < size ? std::numeric_limits<T>::max() : size);
+    return static_cast<T>(static_cast<U>((std::numeric_limits<T>::max)()) < size ? (std::numeric_limits<T>::max)()
+                                                                                 : size);
 }
 
 /**

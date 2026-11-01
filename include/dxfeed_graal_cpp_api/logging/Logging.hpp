@@ -42,8 +42,12 @@ struct DXFCPP_EXPORT Logging final {
         /// Is a message level indicating a potential problem.
         WARN,
 
+// windows.h defines ERROR as a macro: it is hidden here and restored after the enumerator.
+#pragma push_macro("ERROR")
+#undef ERROR
         /// Is a message level indicating a serious failure.
         ERROR,
+#pragma pop_macro("ERROR")
 
         /// Is a special level that can be used to turn off logging.
         OFF,

@@ -239,7 +239,7 @@ template <typename T> class OptionSeries final {
         const auto it = std::lower_bound(strikesVector.begin(), strikesVector.end(), strike);
         const auto index = static_cast<std::size_t>(std::distance(strikesVector.begin(), it));
         const std::size_t fromIndex = (index < n / 2) ? 0 : (index - n / 2);
-        const std::size_t toIndex = std::min(strikesVector.size(), fromIndex + n);
+        const std::size_t toIndex = (std::min)(strikesVector.size(), fromIndex + n);
 
         return std::vector<double>(strikesVector.begin() + static_cast<std::ptrdiff_t>(fromIndex),
                                    strikesVector.begin() + static_cast<std::ptrdiff_t>(toIndex));

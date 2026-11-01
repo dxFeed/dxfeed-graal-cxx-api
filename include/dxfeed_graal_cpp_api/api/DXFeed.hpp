@@ -1015,7 +1015,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<TimeSeriesEvent> E>
     std::vector<std::shared_ptr<E>> getTimeSeriesIfSubscribed(const SymbolWrapper &symbol,
                                                               std::int64_t fromTime) const {
-        return getTimeSeriesIfSubscribed<E>(symbol, fromTime, std::numeric_limits<std::int64_t>::max());
+        return getTimeSeriesIfSubscribed<E>(symbol, fromTime, (std::numeric_limits<std::int64_t>::max)());
     }
 
     /**

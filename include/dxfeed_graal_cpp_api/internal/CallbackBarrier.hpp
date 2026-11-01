@@ -16,6 +16,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <string_view>
 #include <utility>
 
+// windows.h defines NO_ERROR as a macro: it is hidden in this header and restored at its end.
+#pragma push_macro("NO_ERROR")
+#undef NO_ERROR
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -83,5 +87,7 @@ void runRelease(const char *component, Body &&body,
 DXFCPP_EXPORT void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept;
 
 DXFCPP_END_NAMESPACE
+
+#pragma pop_macro("NO_ERROR")
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

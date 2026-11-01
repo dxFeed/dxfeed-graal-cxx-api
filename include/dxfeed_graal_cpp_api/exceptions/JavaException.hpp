@@ -130,7 +130,7 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
     }
 
     template <typename T> static constexpr T throwIfMinusMin(T v) {
-        if (v == std::numeric_limits<T>::min()) {
+        if (v == (std::numeric_limits<T>::min)()) {
             throwIfJavaThreadExceptionExists();
         }
 

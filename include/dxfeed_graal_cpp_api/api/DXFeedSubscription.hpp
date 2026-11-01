@@ -60,7 +60,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     /**
      * The maximum events' batch limit for a single notification in OnEventHandler.
      */
-    static constexpr std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
+    static constexpr std::int32_t MAX_BATCH_LIMIT = (std::numeric_limits<std::int32_t>::max)();
 
     protected:
     friend struct DXFeed;
@@ -806,7 +806,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
  */
 class DXFCPP_EXPORT DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSubscription>,
                                                    public DXFeedSubscription {
-    std::atomic<std::int64_t> fromTime_{std::numeric_limits<std::int64_t>::max()};
+    std::atomic<std::int64_t> fromTime_{(std::numeric_limits<std::int64_t>::max)()};
 
     static void registerEntity();
 

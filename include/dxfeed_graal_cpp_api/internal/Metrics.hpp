@@ -30,8 +30,8 @@ struct DXFCPP_EXPORT MetricsManager : private NonCopyable<MetricsManager> {
     template <typename T> struct Stats {
         std::uint64_t count{1};
         T value{};
-        T minValue{std::numeric_limits<T>::max()};
-        T maxValue{std::numeric_limits<T>::min()};
+        T minValue{(std::numeric_limits<T>::max)()};
+        T maxValue{(std::numeric_limits<T>::min)()};
         T avgValue{};
     };
 
@@ -46,8 +46,8 @@ struct DXFCPP_EXPORT MetricsManager : private NonCopyable<MetricsManager> {
 
     template <typename T> void recalculateStatsImpl(Stats<T> &stats, T value) {
         stats.value = value;
-        stats.minValue = std::min(stats.minValue, value);
-        stats.maxValue = std::max(stats.maxValue, value);
+        stats.minValue = (std::min)(stats.minValue, value);
+        stats.maxValue = (std::max)(stats.maxValue, value);
         stats.avgValue = static_cast<T>((static_cast<double>(stats.avgValue) * static_cast<double>(stats.count) +
                                          static_cast<double>(stats.value)) /
                                         (static_cast<double>(stats.count) + 1.0));
