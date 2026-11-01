@@ -3,13 +3,14 @@
 
 #pragma once
 
-#include "../Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../event/EventSourceWrapper.hpp"
-#include "../../event/EventTypeEnum.hpp"
-#include "../../symbols/SymbolWrapper.hpp"
+#include "../detail/StringLike.hpp"
+#include "../event/EventSourceWrapper.hpp"
+#include "../event/EventTypeEnum.hpp"
+#include "../symbols/SymbolWrapper.hpp"
 
 #include <cstdint>
 #include <optional>

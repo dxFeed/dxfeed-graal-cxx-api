@@ -11,7 +11,7 @@ to test it. How to build and run the tests:
 |---|---|---|
 | Public API | `include/dxfeed_graal_cpp_api/<module>/X.hpp`, `src/<module>/X.cpp` | The classes of the users, as in the Java API. They call `dxfg_*` functions through the isolated layer; only a few low-level calls are direct (`System`, `DXFeed` attach and detach). |
 | Isolated layer | `include/dxfeed_graal_cpp_api/isolated/<module>/IsolatedX.hpp`, `src/isolated/<module>/IsolatedX.cpp` | One C++ function per `dxfg_*` function: checks the handles, calls the SDK in the isolate thread, turns the result into a C++ value or an exception. |
-| Handles | `JavaObjectHandle<T>` (`internal/JavaObjectHandle.hpp`) | Owns a Java object of the SDK and releases it (`dxfg_JavaObjectHandler_release`). |
+| Handles | `JavaObjectHandle<T>` (`detail/JavaObjectHandle.hpp`) | Owns a Java object of the SDK and releases it (`dxfg_JavaObjectHandler_release`). |
 | Entities and managers | `EntityManager<T>`, `ApiContext` (`internal/managers`, `internal/context`) | Find a C++ object by its id in a callback. |
 | Graal SDK | `DxFeedGraalNativeSdk` (C API `dxfg_*`) | The Java API compiled by GraalVM Native Image. |
 
@@ -110,7 +110,7 @@ Rules:
 4. **Do not keep pointers to the native data** after the callback returns: copy what you need into C++ values.
 5. **Do not hold a lock of the library while calling the user's code**, and do not release a listener under a lock
    that its callback takes: the callback may run on another thread and wait for that lock.
-6. **Call the user's listeners through `SimpleHandler`** (`internal/Handler.hpp`). It calls them on the current
+6. **Call the user's listeners through `SimpleHandler`** (`util/Handler.hpp`). It calls them on the current
    thread, outside its lock, reports an exception of each listener to `ErrorManager` with the component given to its
    constructor, and its `remove()` waits for the call in progress on another thread. A wait of your own for a call in
    progress (as `MarketDepthModel::close()` does) must be skipped when `ListenerCallScope::isActive()`: from a listener
@@ -189,7 +189,7 @@ An entity is a C++ class that wraps a Java object of the SDK (`DXFeedSubscriptio
    - Derive from `SharedEntity` (`entity/SharedEntity.hpp`), or from `RequireMakeShared<X>`, which brings
      `SharedEntity`, for a class that is created only through `std::make_shared`: its constructor takes a
      `LockExternalConstructionTag` (see `DXFeedSubscription`).
-   - Mark the class `DXFCPP_EXPORT` and follow the rules next to the macro in `internal/Conf.hpp`: every function
+   - Mark the class `DXFCPP_EXPORT` and follow the rules next to the macro in `detail/Conf.hpp`: every function
      defined in a `.cpp` file is exported, and no mutable state in the headers outside exported classes (a static of
      a template, of an inline function or an inline variable has its own copy in the DLL and in each executable on
      Windows).

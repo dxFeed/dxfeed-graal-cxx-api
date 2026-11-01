@@ -7,7 +7,7 @@
 // The sanitizer canary tests call them and expect the sanitizer report: this proves that the sanitizer is active and
 // that the LIBRARY code (not only the test code) is instrumented. Not part of the public API; not installed.
 
-#include "../../include/dxfeed_graal_cpp_api/internal/Conf.hpp"
+#include "../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

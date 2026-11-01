@@ -3,16 +3,17 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventType.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/TimeSeriesEvent.hpp"
-#include "../internal/Handler.hpp"
-#include "../internal/JavaObjectHandle.hpp"
+#include "../util/Handler.hpp"
 
 #include <cstddef>
 #include <functional>

@@ -3,7 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/OrderBase.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>

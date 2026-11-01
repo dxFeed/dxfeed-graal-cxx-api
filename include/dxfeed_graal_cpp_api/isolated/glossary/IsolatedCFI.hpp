@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 #include "../../glossary/CFI.hpp"
 

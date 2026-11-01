@@ -1,6 +1,9 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+// This header is not part of the API. It is installed only because public headers need it; its contents may change
+// without notice.
+
 #pragma once
 
 #ifndef DXFCXX_VERSION

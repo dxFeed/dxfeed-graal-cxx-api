@@ -3,16 +3,18 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/CallbackBarrier.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/Math.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/market/Order.hpp"
 #include "../event/market/OrderBase.hpp"
-#include "../internal/CallbackBarrier.hpp"
-#include "../internal/Timer.hpp"
+#include "../util/Timer.hpp"
 #include "./IndexedTxModel.hpp"
 #include "./MarketDepthModelListener.hpp"
 

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <doctest.h>
-#include <dxfeed_graal_cpp_api/internal/utils/ConstString.hpp>
+#include <dxfeed_graal_cpp_api/detail/ConstString.hpp>
 
 #include <functional>
 #include <string>

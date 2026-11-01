@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 
-#include "../../internal/TimeFormat.hpp"
+#include "../../util/TimeFormat.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

@@ -3,10 +3,11 @@
 
 #pragma once
 
-#include "./Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/CallbackBarrier.hpp"
 #include "../exceptions/ErrorManager.hpp"
 #include "./Isolate.hpp"
 
@@ -46,30 +47,6 @@ void runCallback(const char *component, Body &&body,
     } catch (...) {
         // A view of the name: copying it into a string could throw std::bad_alloc out of this noexcept function.
         ErrorManager::reportException(std::string_view{component}, std::current_exception(), location);
-    }
-}
-
-/**
- * Runs a release path that must not throw: a destructor, a deleter, a function that frees native data.
- *
- * An exception of the body is reported to ErrorManager. From the start of the shutdown of the library
- * (dxfcpp::shutdown(), the exit of the process) an exception is expected, since the SDK is being closed or is closed
- * already, and is not reported. It is not reported after a failed creation of the isolate either.
- *
- * @param component The class that releases, for ErrorInfo::component.
- * @param body The release.
- * @param location The source location of the release, for ErrorInfo::location.
- */
-template <typename Body>
-void runRelease(const char *component, Body &&body,
-                const std::source_location &location = std::source_location::current()) noexcept {
-    try {
-        std::forward<Body>(body)();
-    } catch (...) {
-        // After a failed creation of the isolate the objects cannot be released by Java either, as after the shutdown.
-        if (!Isolate::isShuttingDown() && Isolate::getCreationError() == CEntryPointErrorsEnum::NO_ERROR) {
-            ErrorManager::reportException(std::string_view{component}, std::current_exception(), location);
-        }
     }
 }
 

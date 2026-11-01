@@ -1,13 +1,16 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+// Types declared here appear in public signatures and may be used through them; their names and this header's location
+// are not a stable API.
+
 #pragma once
 
 #include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "./Common.hpp"
+#include "./Concepts.hpp"
 
 #include <cstdint>
 #include <exception>

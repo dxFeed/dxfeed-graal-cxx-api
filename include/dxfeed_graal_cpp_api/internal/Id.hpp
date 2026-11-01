@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "./Conf.hpp"
+#include "../detail/Conf.hpp"
 #include "./Common.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)

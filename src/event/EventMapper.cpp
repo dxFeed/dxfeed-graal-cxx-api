@@ -29,7 +29,7 @@
 #include "../../include/dxfeed_graal_cpp_api/event/option/TheoPrice.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/option/Underlying.hpp"
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"

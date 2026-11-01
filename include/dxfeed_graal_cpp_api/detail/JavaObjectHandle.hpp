@@ -1,15 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+// This header is not part of the API. It is installed only because public headers need it; its contents may change
+// without notice.
+
 #pragma once
 
 #include "./Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
-
-#include "./utils/StringUtils.hpp"
-
-#include "./Common.hpp"
 
 #include <atomic>
 #include <memory>
@@ -18,6 +17,18 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
+
+// The tags of the handles of the native listeners: JavaObjectHandle<DXFeedEventListener> and so on.
+struct DXFeedEventListener {};
+
+struct DXEndpointStateChangeListener {};
+
+struct IpfPropertyChangeListener {};
+
+struct InstrumentProfileUpdateListener {};
+
+// Defined in the library: the text of a pointer (see StringUtils.hpp for the other overloads of toString()).
+DXFCPP_EXPORT std::string toString(void *ptr); // NOLINT(*-redundant-declaration)
 
 struct DXFCPP_EXPORT JavaObject {
     static std::string toString(void *handle);

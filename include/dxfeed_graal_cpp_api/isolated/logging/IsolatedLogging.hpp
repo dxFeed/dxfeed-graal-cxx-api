@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/JavaObjectHandle.hpp"
+#include "../../detail/JavaObjectHandle.hpp"
 #include "../../logging/Logging.hpp"
 
 DXFCPP_BEGIN_NAMESPACE

@@ -5,7 +5,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 
 #include "JavaUtils.hpp"
 #include "StringConstants.hpp"

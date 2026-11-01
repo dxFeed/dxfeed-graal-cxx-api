@@ -3,16 +3,17 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringLike.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"
-#include "../TimeSeriesEvent.hpp"
 #include "../market/MarketEvent.hpp"
+#include "../TimeSeriesEvent.hpp"
 
 #include <cstdint>
 #include <memory>

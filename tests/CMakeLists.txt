@@ -89,7 +89,9 @@ set(DXFC_TEST_SOURCES
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp
-        tools/ToolsArgsTest.cpp)
+        tools/ToolsArgsTest.cpp
+        util/ToStringDoubleTest.cpp
+        util/UtilHeadersTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
 if (DXFCXX_BUILD_BENCHMARKS)

@@ -4,7 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/schedule/Schedule.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
 #include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfile.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSchedule.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/Day.hpp"

@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "./Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../exceptions/GraalException.hpp"
-#include "./CEntryPointErrors.hpp"
+#include "../detail/CEntryPointErrors.hpp"
 #include "./Common.hpp"
 #include "./Id.hpp"
 #include "./utils/StringUtils.hpp"

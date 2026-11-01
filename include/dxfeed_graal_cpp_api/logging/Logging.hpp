@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/Common.hpp"
-#include "../internal/Handler.hpp"
+#include "../detail/StringLike.hpp"
+#include "../util/Handler.hpp"
 
 /**
  * \defgroup dxfcpp_logging "Logging" Module

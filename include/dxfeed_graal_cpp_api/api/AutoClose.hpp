@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
-#include "../internal/CallbackBarrier.hpp"
+#include "../detail/CallbackBarrier.hpp"
 
 #include <memory>
 #include <utility>

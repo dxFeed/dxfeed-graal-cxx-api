@@ -26,7 +26,7 @@ endif ()
 set(RELEASE_NOTES "ReleaseNotes.md")
 set(RELEASE_CMAKE "CMakeLists.txt")
 set(RELEASE_DOXYFILE "docs/Doxyfile")
-set(RELEASE_CONF "include/dxfeed_graal_cpp_api/internal/Conf.hpp")
+set(RELEASE_CONF "include/dxfeed_graal_cpp_api/detail/Conf.hpp")
 set(RELEASE_FRAGMENTS "release-notes") # the unreleased items, one file per ticket: release-notes/README.md
 set(RELEASE_PRE_RELEASE_ORDER alpha beta pre rc)
 
