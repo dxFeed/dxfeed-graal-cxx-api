@@ -13,9 +13,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <cstdint>
 #include <string>
 
-DXFCPP_BEGIN_NAMESPACE
+/**
+ * \addtogroup dxfcpp_util
+ * @{
+ */
 
-struct StringLike;
+DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Utility class for parsing and formatting dates and times in ISO-compatible format.
@@ -31,7 +34,11 @@ struct DXFCPP_EXPORT TimeFormat {
      * An instance of TimeFormat that corresponds to default timezone as returned by TimeZone::getDefault() method.
      */
     static const TimeFormat DEFAULT;
+
+    /// The same as DEFAULT, with milliseconds.
     static const TimeFormat DEFAULT_WITH_MILLIS;
+
+    /// The same as DEFAULT, with milliseconds and the timezone.
     static const TimeFormat DEFAULT_WITH_MILLIS_WITH_TIMEZONE;
 
     /**
@@ -57,6 +64,7 @@ struct DXFCPP_EXPORT TimeFormat {
     TimeFormat &operator=(const TimeFormat &) = delete;
     TimeFormat &operator=(const TimeFormat &&) noexcept = delete;
 
+    /// @return The handle of the Java object of this time format, for the library's own use.
     const JavaObjectHandle<TimeFormat> &getHandle() const;
 
     /**
@@ -132,5 +140,7 @@ struct DXFCPP_EXPORT TimeFormat {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

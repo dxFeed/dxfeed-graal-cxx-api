@@ -490,8 +490,6 @@ DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wunused-variable")
 constexpr std::int32_t DAY_OF_YEAR[] = {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 DXFCXX_DISABLE_GCC_WARNINGS_POP()
 
-DXFCPP_EXPORT std::int32_t getDayIdByYearMonthDay(std::int32_t year, std::int32_t month, std::int32_t day);
-
 } // namespace day_util
 
 // The bit operations of the bits library: shifts with a defined result for any shift (0 or -1 for the type width or

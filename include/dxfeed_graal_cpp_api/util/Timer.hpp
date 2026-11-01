@@ -13,6 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <thread>
 #include <type_traits>
 
+/**
+ * \addtogroup dxfcpp_util
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /// A simple thread-safe timer.
@@ -47,10 +52,32 @@ struct DXFCPP_EXPORT Timer final {
     }
 
     public:
+    /**
+     * Sleeps for the specified time or until the timer is stopped.
+     *
+     * @param ms The time to sleep.
+     */
     void interruptableSleep(std::chrono::milliseconds ms) const;
 
+    /**
+     * Sleeps for the specified number of milliseconds or until the timer is stopped.
+     *
+     * @param ms The number of milliseconds to sleep.
+     */
     void interruptableSleep(std::uint64_t ms) const;
 
+    /**
+     * Runs the function on a separate thread after the delay and then with the period until the timer is stopped or
+     * the function throws.
+     *
+     * @tparam F The type of the function.
+     * @tparam Delay The type of the delay: a `std::chrono::duration` or a number of milliseconds.
+     * @tparam Period The type of the period: a `std::chrono::duration` or a number of milliseconds.
+     * @param f The function.
+     * @param delay The delay before the first run.
+     * @param period The period between the runs.
+     * @return The running timer.
+     */
     template <typename F, typename Delay, typename Period>
     static std::shared_ptr<Timer> schedule(F &&f, Delay &&delay, Period &&period) {
         auto t = std::shared_ptr<Timer>(new Timer());
@@ -76,6 +103,15 @@ struct DXFCPP_EXPORT Timer final {
         return t;
     }
 
+    /**
+     * Runs the function once on a separate thread after the delay, unless the timer is stopped before.
+     *
+     * @tparam F The type of the function.
+     * @tparam Delay The type of the delay: a `std::chrono::duration` or a number of milliseconds.
+     * @param f The function.
+     * @param delay The delay before the run.
+     * @return The running timer.
+     */
     template <typename F, typename Delay> static std::shared_ptr<Timer> runOnce(F &&f, Delay &&delay) {
         auto t = std::shared_ptr<Timer>(new Timer());
 
@@ -94,11 +130,17 @@ struct DXFCPP_EXPORT Timer final {
         return t;
     }
 
+    /// Stops the timer: the function is not run any more and the sleeping thread wakes up.
     void stop();
 
+    /**
+     * @return `true` if the timer has not been stopped and its function may still run.
+     */
     bool isRunning();
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

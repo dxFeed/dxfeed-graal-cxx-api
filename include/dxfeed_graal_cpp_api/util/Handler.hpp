@@ -20,6 +20,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <vector>
 
+/**
+ * \addtogroup dxfcpp_util
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
 /**
@@ -379,5 +384,7 @@ template <typename... ArgTypes> struct SimpleHandler<void(ArgTypes...)> final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

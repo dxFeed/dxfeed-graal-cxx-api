@@ -10,8 +10,9 @@
       dependency now. `api.hpp` includes only the public headers. `DXFCPP_DEBUG` and `DXFCPP_TRACE_ISOLATES` no
       longer change the public headers.
     * New public headers in `util/`: `TimeFormat.hpp`, `Timer.hpp`, `Handler.hpp` and `CmdArgsUtils.hpp` (moved from
-      `internal/`), `Tristate.hpp`, `Time.hpp` (`now()`) and `StringUtils.hpp` (`toString(double)`). Code that
-      included them from `internal/` includes them from `util/`; the namespace of the classes is the same.
+      `internal/`), `Tristate.hpp`, `Time.hpp` (`now()`, `day_util::getDayIdByYearMonthDay()`) and `StringUtils.hpp`
+      (`toString(double)`). Code that included them from `internal/` includes them from `util/`; the namespace of the
+      classes is the same.
     * The installed `detail/` headers (`Conf.hpp`, `Enum.hpp`, `StringLike.hpp`, `JavaObjectHandle.hpp` and others)
       are not API: they are installed only because the public headers need them. The types they declare appear in
       public signatures (`StringLike`, the base of the enumerations), but their names and headers may change.

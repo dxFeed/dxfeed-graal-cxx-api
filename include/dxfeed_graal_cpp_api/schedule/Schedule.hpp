@@ -26,8 +26,6 @@ struct SessionFilter;
 struct InstrumentProfile;
 struct Day;
 struct Session;
-struct StringLike;
-
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
  * and different classes of financial instruments. Each instance of schedule covers separate trading schedule

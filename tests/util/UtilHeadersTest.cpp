@@ -92,3 +92,8 @@ TEST_CASE("now() is the time in milliseconds since the epoch") {
     // 2023-11-14, as a lower bound.
     CHECK(now() > 1'700'000'000'000LL);
 }
+
+TEST_CASE("day_util::getDayIdByYearMonthDay() is the number of days since the epoch") {
+    CHECK(day_util::getDayIdByYearMonthDay(1970, 1, 1) == 0);
+    CHECK(day_util::getDayIdByYearMonthDay(2009, 1, 17) == 14261);
+}

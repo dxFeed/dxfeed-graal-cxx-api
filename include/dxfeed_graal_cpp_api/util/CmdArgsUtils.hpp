@@ -18,8 +18,17 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <type_traits>
 #include <unordered_set>
 
+/**
+ * \addtogroup dxfcpp_util
+ * @{
+ */
+
 DXFCPP_BEGIN_NAMESPACE
 
+/**
+ * Parsers of the command line style arguments: lists of symbols, candle symbols, event types, event sources and
+ * properties, as the samples and tools accept them.
+ */
 struct DXFCPP_EXPORT CmdArgsUtils final {
     /**
      * Parses an input string and returns a set of symbols.
@@ -146,5 +155,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
 };
 
 DXFCPP_END_NAMESPACE
+
+/// @}
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()
