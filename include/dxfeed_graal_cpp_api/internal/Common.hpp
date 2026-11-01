@@ -28,8 +28,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <utility>
 #include <variant>
 
-#include "utils/debug/Debug.hpp"
-
 #include <bits/bits.hpp>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -41,23 +39,15 @@ template <template <class...> class C, typename... Ts> struct IsInstanceImpl<C<T
 } // namespace detail
 
 template <typename T, template <class...> class C> constexpr bool isInstanceOf = detail::IsInstanceImpl<T, C>::value;
-template <typename T, template <class...> class C>
-concept InstanceOf = isInstanceOf<T, C>;
 
 template <typename T>
 concept Integral = std::is_integral_v<T>;
-
-template <typename T>
-concept EnumConcept = std::is_enum_v<T>;
 
 template <class From, class To>
 concept ConvertibleTo = std::is_convertible_v<From, To> && requires { static_cast<To>(std::declval<From>()); };
 
 template <class T, class U>
 concept Derived = std::is_base_of_v<U, T>;
-
-template <class T, class U>
-concept Extends = Derived<T, U>;
 
 template <class T, class U>
 concept BaseOf = Derived<U, T>;

@@ -6,6 +6,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
 
 #include <cstring>
@@ -92,7 +93,7 @@ struct InstrumentProfileCollector::Impl {
     }
 };
 
-InstrumentProfileCollector::InstrumentProfileCollector() : id_{Id<InstrumentProfileCollector>::UNKNOWN} {
+InstrumentProfileCollector::InstrumentProfileCollector() {
     handle_ = isolated::ipf::live::IsolatedInstrumentProfileCollector::create();
 }
 
@@ -107,7 +108,7 @@ std::size_t InstrumentProfileCollector::addUpdateListenerImpl(std::shared_ptr<Up
 
         id = lastListenerId_ + 1;
         // The user data of the native listener: pack() throws before anything changes if an id does not fit.
-        userData = pack(id_.getValue(), id);
+        userData = pack(id_, id);
         lastListenerId_ = id;
         updateListeners_.emplace(id, UpdateListenerEntry{std::move(listener), {}});
     }
@@ -157,7 +158,7 @@ void InstrumentProfileCollector::releaseListenerHandle(JavaObjectHandle<Instrume
 
 InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
     runRelease("InstrumentProfileCollector", [this] {
-        ignoreUnused(Impl::getManager()->unregisterEntity(id_));
+        ignoreUnused(Impl::getManager()->unregisterEntity(Id<InstrumentProfileCollector>::from(id_)));
     });
 
     std::unordered_map<std::size_t, UpdateListenerEntry> listeners{};
@@ -189,7 +190,7 @@ InstrumentProfileCollector::~InstrumentProfileCollector() noexcept {
 InstrumentProfileCollector::Ptr InstrumentProfileCollector::create() {
     auto collector = std::shared_ptr<InstrumentProfileCollector>(new InstrumentProfileCollector());
 
-    collector->id_ = Impl::getManager()->registerEntity(collector);
+    collector->id_ = Impl::getManager()->registerEntity(collector).getValue();
 
     return collector;
 }

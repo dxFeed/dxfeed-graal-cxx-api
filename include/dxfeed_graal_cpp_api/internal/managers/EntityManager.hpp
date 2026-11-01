@@ -10,6 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../Common.hpp"
 #include "../Id.hpp"
 #include "../NonCopyable.hpp"
+#include "../utils/debug/Debug.hpp"
 
 #include <memory>
 #include <mutex>

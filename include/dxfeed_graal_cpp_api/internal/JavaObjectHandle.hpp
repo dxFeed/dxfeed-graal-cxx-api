@@ -8,9 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "./utils/StringUtils.hpp"
-#include "./utils/debug/Debug.hpp"
 
-#include "../isolated/internal/IsolatedObject.hpp"
 #include "./Common.hpp"
 
 #include <atomic>
@@ -27,6 +25,20 @@ struct DXFCPP_EXPORT JavaObject {
     static std::size_t hashCode(void *handle) noexcept;
 
     static bool equals(void *objectHandle1, void *objectHandle2);
+
+    /**
+     * Releases a Java object handle. Does nothing for a null handle; the result of the release is ignored.
+     *
+     * @param handle The Java object handle.
+     */
+    static void release(void *handle) noexcept;
+
+    /**
+     * Releases a Java object list handle. Does nothing for a null handle; the result of the release is ignored.
+     *
+     * @param handle The Java object list handle.
+     */
+    static void releaseList(void *handle) noexcept;
 };
 
 class JavaObjectHandleState;
@@ -128,32 +140,10 @@ class DXFCPP_EXPORT JavaObjectHandleState final {
 };
 
 template <typename T> struct JavaObjectHandle final {
-#if DXFCPP_DEBUG == 1
-    static std::string getDebugName() {
-        return typeid(JavaObjectHandle<T>).name();
-    }
-#endif
-
     using Type = T;
 
     static DXFCPP_EXPORT void deleter(void *handle) noexcept {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
-        }
-
-        if (!handle) {
-            return;
-        }
-
-        const auto result = isolated::internal::IsolatedObject::release(handle);
-        ignoreUnused(result);
-
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
-                            dxfcpp::toString(result));
-        }
+        JavaObject::release(handle);
     }
 
     using Impl = JavaObjectHandleState;
@@ -163,10 +153,6 @@ template <typename T> struct JavaObjectHandle final {
     }
 
     explicit JavaObjectHandle(void *handle) noexcept : impl_{handle, &deleter} {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
-        }
     }
 
     JavaObjectHandle(const JavaObjectHandle &) = delete;
@@ -314,42 +300,15 @@ template <typename T> class LazyJavaObjectHandle final {
 };
 
 template <typename T> struct JavaObjectHandleList final {
-#if DXFCPP_DEBUG == 1
-    static auto getDebugName() {
-        return std::string("JavaObjectHandleList<") + typeid(T).name() + ">";
-    }
-#endif
-
     using Type = T;
 
     static DXFCPP_EXPORT void deleter(void *handle) noexcept {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ")");
-        }
-
-        if (!handle) {
-            return;
-        }
-
-        const auto result = isolated::internal::IsolatedObject::List::release(handle);
-        ignoreUnused(result);
-
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(getDebugName() + "::deleter(handle = " + dxfcpp::toString(handle) + ") -> " +
-                            dxfcpp::toString(result));
-        }
+        JavaObject::releaseList(handle);
     }
 
     using Impl = JavaObjectHandleState;
 
-    explicit JavaObjectHandleList(void *handle = nullptr) noexcept
-        : impl_{handle, &deleter} {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(getDebugName() + "(handle = " + dxfcpp::toString(handle) + ")");
-        }
+    explicit JavaObjectHandleList(void *handle = nullptr) noexcept : impl_{handle, &deleter} {
     }
 
     JavaObjectHandleList(const JavaObjectHandleList &) = delete;

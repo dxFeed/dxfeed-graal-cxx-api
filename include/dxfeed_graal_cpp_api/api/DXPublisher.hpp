@@ -205,11 +205,6 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @param end The end of the events' collection.
      */
     template <typename EventIt> void publishEvents(EventIt begin, EventIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::publishEvents(events = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = EventMapper::toGraalListUnique(begin, end);
 
         publishEventsImpl(list.get());

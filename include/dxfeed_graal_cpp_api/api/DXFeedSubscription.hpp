@@ -13,9 +13,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Common.hpp"
 #include "../internal/EventClassList.hpp"
 #include "../internal/Handler.hpp"
+#include "../internal/Id.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "../internal/context/ApiContext.hpp"
-#include "../internal/managers/EntityManager.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "../util/TimePeriod.hpp"
 #include "../util/TimePeriodInfo.hpp"
@@ -121,11 +120,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) : DXFeedSubscription() {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         eventTypes_ = std::unordered_set<EventTypeEnum>{begin, end};
 
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
@@ -141,11 +135,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end, JavaObjectHandle<DXFeedSubscription> &&handle)
         : DXFeedSubscription() {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         eventTypes_ = std::unordered_set<EventTypeEnum>{begin, end};
         handle_ = std::move(handle);
     }
@@ -232,11 +221,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         }
 #endif
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         auto sub = createShared(begin, end);
         registerSubscription(sub);
 
@@ -378,11 +362,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         setSymbolsImpl(list.get());
@@ -453,11 +432,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         addSymbolsImpl(list.get());
@@ -525,11 +499,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         removeSymbolsImpl(list.get());

@@ -12,11 +12,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../event/IndexedEvent.hpp"
 #include "../event/TimeSeriesEvent.hpp"
 #include "../internal/Handler.hpp"
-#include "../internal/Id.hpp"
 #include "../internal/JavaObjectHandle.hpp"
-#include "../internal/context/ApiContext.hpp"
-#include "../internal/managers/EntityManager.hpp"
 
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -65,7 +63,7 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
     struct Impl;
 
     std::unique_ptr<Impl> impl_;
-    Id<TxModelListenerTag>::ValueType id_{};
+    std::size_t id_{};
 
     // Registers this listener for the lookup by its callback and creates the native listener.
     void createHandle();

@@ -2,10 +2,11 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/Handler.hpp"
 #include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 #include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
 
 #include <atomic>

@@ -9,7 +9,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../entity/SharedEntity.hpp"
 #include "../../internal/Common.hpp"
-#include "../../internal/Id.hpp"
 #include "../../internal/JavaObjectHandle.hpp"
 #include "./InstrumentProfileCollector.hpp"
 #include "../../internal/Handler.hpp"
@@ -66,7 +65,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     };
 
     private:
-    Id<InstrumentProfileConnection> id_;
+    std::size_t id_{static_cast<std::size_t>(-1)};
     JavaObjectHandle<InstrumentProfileConnection> handle_{};
     JavaObjectHandle<IpfPropertyChangeListener> stateChangeListenerHandle_{};
     // The collector that the connection updates, as in the Java API.

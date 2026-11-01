@@ -198,6 +198,50 @@ TEST_CASE("The event flags keep their values and names") {
     }
 }
 
+TEST_CASE("The event flag operators and in() keep the results for the flag with the high bit 0x80") {
+    const auto &high = EventFlag::REMOVE_SYMBOL; // 0x80
+    const auto &low = EventFlag::TX_PENDING;     // 0x01
+
+    // 0x80 | 0x01 = 0x81, 0x81 & 0x80 = 0x80, 0x7F & 0x80 = 0
+    CHECK((high | 0x01u) == 0x81u);
+    CHECK((0x01u | high) == 0x81u);
+    CHECK((high | std::int32_t{0x01}) == std::int32_t{0x81});
+    CHECK((std::int32_t{0x01} | high) == std::int32_t{0x81});
+
+    CHECK((high & 0x81u) == 0x80u);
+    CHECK((0x81u & high) == 0x80u);
+    CHECK((high & 0x7Fu) == 0u);
+    CHECK((0x7Fu & high) == 0u);
+    CHECK((high & std::int32_t{0x81}) == std::int32_t{0x80});
+    CHECK((std::int32_t{0x81} & high) == std::int32_t{0x80});
+
+    // The int32 operand -1 is 0xFFFFFFFF: -1 | 0x80 = -1, -1 & 0x80 = 0x80.
+    CHECK((high | std::int32_t{-1}) == std::int32_t{-1});
+    CHECK((std::int32_t{-1} | high) == std::int32_t{-1});
+    CHECK((high & std::int32_t{-1}) == std::int32_t{0x80});
+    CHECK((std::int32_t{-1} & high) == std::int32_t{0x80});
+    CHECK((high | 0xFFFFFF00u) == 0xFFFFFF80u);
+    CHECK((high & 0xFFFFFF80u) == 0x80u);
+
+    CHECK(high.in(0x81u));
+    CHECK(high.in(0x80u));
+    CHECK_FALSE(high.in(0x7Fu));
+    CHECK_FALSE(high.in(0u));
+    CHECK(low.in(0x81u));
+    CHECK_FALSE(EventFlag::SNAPSHOT_MODE.in(0x81u));
+
+    const auto mask = high | low;
+
+    CHECK(mask.getMask() == 0x81u);
+    CHECK(mask.contains(high));
+    CHECK(mask.contains(low));
+    CHECK_FALSE(mask.contains(EventFlag::SNAPSHOT_MODE));
+    CHECK(high.in(mask));
+    CHECK(low.in(mask));
+    CHECK_FALSE(EventFlag::SNAPSHOT_MODE.in(mask));
+    CHECK(mask.toString() == "TX_PENDING|REMOVE_SYMBOL(0x81)");
+}
+
 TEST_CASE("The candle attribute collections are their constants, which are parsed back") {
     checkSameConstants<CandleType>(
         CandleType::VALUES,

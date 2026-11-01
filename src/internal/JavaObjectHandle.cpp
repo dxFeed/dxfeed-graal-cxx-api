@@ -215,6 +215,24 @@ bool JavaObject::equals(void *objectHandle1, void *objectHandle2) {
     return isolated::internal::IsolatedObject::equals(objectHandle1, objectHandle2) == 1;
 }
 
+void JavaObject::release(void *handle) noexcept {
+    if (!handle) {
+        return;
+    }
+
+    const auto result = isolated::internal::IsolatedObject::release(handle);
+    ignoreUnused(result);
+}
+
+void JavaObject::releaseList(void *handle) noexcept {
+    if (!handle) {
+        return;
+    }
+
+    const auto result = isolated::internal::IsolatedObject::List::release(handle);
+    ignoreUnused(result);
+}
+
 template struct JavaObjectHandle<DXEndpoint>;
 template struct JavaObjectHandle<DXEndpoint::Builder>;
 template struct JavaObjectHandle<DXEndpointStateChangeListener>;

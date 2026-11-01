@@ -3,6 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/api/osub/IndexedEventSubscriptionSymbol.hpp"
 
+#include "../../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
 
 #include <dxfg_api.h>
