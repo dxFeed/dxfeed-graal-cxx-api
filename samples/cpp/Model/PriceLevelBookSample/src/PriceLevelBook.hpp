@@ -300,15 +300,11 @@ template <dxfcpp::Derived<dxfcpp::OrderBase> O> struct PriceLevelBook : dxfcpp::
         void clearBySource(const dxfcpp::IndexedEventSource &source) {
             std::lock_guard lock(mutex_);
 
-            std::size_t size = priceLevels_.size();
+            const auto erased = std::erase_if(priceLevels_, [&source](const std::shared_ptr<PriceLevel> &level) {
+                return level->getEventSource() == source;
+            });
 
-            for (auto it = priceLevels_.begin(); it != priceLevels_.end(); ++it) {
-                if ((*it)->getEventSource() == source) {
-                    it = priceLevels_.erase(it);
-                }
-            }
-
-            isChanged_ = priceLevels_.size() != size;
+            isChanged_ = erased != 0;
         }
 
         /**

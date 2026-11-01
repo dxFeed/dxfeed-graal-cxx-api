@@ -18,7 +18,7 @@ namespace otp = portals::legacy;
 
 auto drawHeader() {
     std::cout << fmt::format("{:=^78}\n", "");
-    std::cout << fmt::format("{:^38}||{:^38}\n", "ASK", "BID");
+    std::cout << fmt::format("{:^38}||{:^38}\n", "BID", "ASK");
     std::cout << fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}||{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}\n", "EX",
                              "Source", "MM", "Price", "Size");
     std::cout << fmt::format("{:-^78}\n", "");
@@ -47,7 +47,7 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
 
 int main(int /*argc*/, char * /*argv*/[]) {
     otp::VirtualTerminal::enable();
-    otp::hideCursor();
+    std::cout << otp::hideCursor();
 
     try {
         const auto address = "demo.dxfeed.com:7300";
@@ -84,11 +84,12 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
         std::cin.get();
     } catch (const RuntimeException &e) {
+        std::cout << otp::showCursor();
         std::cerr << e << '\n';
 
         return 1;
     }
 
-    otp::showCursor();
+    std::cout << otp::showCursor();
     return 0;
 }

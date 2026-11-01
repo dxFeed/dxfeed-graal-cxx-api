@@ -23,7 +23,7 @@ Where:
                  the price levels in seconds).
     source     - The order source to retrieve, for example "NTV".
     from       - Is from-time for the request in standard formats.
-                 Same examples of valid from-time:
+                 Some examples of valid from-time:
                      20070101-123456
                      20070101-123456.123
                      2005-12-31 21:00:00
