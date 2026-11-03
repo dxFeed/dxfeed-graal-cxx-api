@@ -26,11 +26,6 @@ permissions:
   pages: write
   id-token: write
 
-# Retries and a network timeout (seconds) for apt-get; the steps that install packages also have a time limit,
-# so a stalled mirror or PPA fails the step instead of holding the job.
-env:
-  APT_OPTIONS: -o Acquire::Retries=3 -o Acquire::http::Timeout=60 -o Acquire::https::Timeout=60
-
 jobs:
   get_version:
     name: Get Version
@@ -97,18 +92,22 @@ jobs:
             xcode: '16.4'
             cc: 'clang'
             cxx: 'clang++'
-          - name: ubuntu-24.04-gcc-14
+          # Linux: Oracle Linux 8 (glibc 2.28) with GCC Toolset 14. The packages need glibc 2.28 and the libstdc++ of
+          # GCC 8; the toolset links the newer parts of libstdc++ statically.
+          - name: oraclelinux-8-gcc-toolset-14
             image: ubuntu-24.04
+            container: oraclelinux:8
             os: linux
             cores: 4
-            cc: 'gcc-14'
-            cxx: 'g++-14'
-          - name: ubuntu-24.04-arm-gcc-14
+            cc: 'gcc'
+            cxx: 'g++'
+          - name: oraclelinux-8-arm-gcc-toolset-14
             image: ubuntu-24.04-arm
+            container: oraclelinux:8
             os: linux
             cores: 4
-            cc: 'gcc-14'
-            cxx: 'g++-14'
+            cc: 'gcc'
+            cxx: 'g++'
           - name: macos-15-xcode-16-4
             image: macos-15
             os: macos
@@ -118,9 +117,22 @@ jobs:
             cxx: 'clang++'
         buildType: [ Release, Debug, RelWithDebInfo ]
     runs-on: ${{ matrix.config.image }}
+    # Empty for Windows and macOS: the job runs on the runner. In a container, ${{github.workspace}} is the path on the
+    # runner, not in the container, so the steps use paths relative to the workspace.
+    container: ${{ matrix.config.container }}
     timeout-minutes: 90
 
     steps:
+      # Before the checkout: git for it and for the dependencies that CMake fetches.
+      - name: Install Linux build dependencies
+        if: ${{ contains(matrix.config.os, 'linux') }}
+        timeout-minutes: 15
+        run: |
+          dnf -y install dnf-plugins-core
+          dnf config-manager --set-enabled ol8_codeready_builder
+          dnf -y install gcc-toolset-14-gcc-c++ gcc-toolset-14-binutils cmake git make unzip
+          echo "/opt/rh/gcc-toolset-14/root/usr/bin" >> "$GITHUB_PATH"
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{needs.get_version.outputs.tag_name}}
@@ -132,32 +144,32 @@ jobs:
       - name: Install Linux UI dependencies
         if: ${{ contains(matrix.config.os, 'linux') && !contains(matrix.buildType, 'Deb') }}
         timeout-minutes: 10
-        run: |
-          sudo apt-get $APT_OPTIONS update
-          sudo apt-get $APT_OPTIONS install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
+        run: >
+          dnf -y install mesa-libGL-devel libX11-devel libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel
+          libXext-devel wayland-devel libxkbcommon-devel
 
       - name: Prepare build [Lib]
         run: |
           ls
-          mkdir ${{github.workspace}}/build-${{matrix.buildType}}
+          mkdir build-${{matrix.buildType}}
 
       - name: Prepare build [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
         run: |
           ls
-          mkdir ${{github.workspace}}/build-${{matrix.buildType}}-mt
+          mkdir build-${{matrix.buildType}}-mt
 
       - name: Prepare build [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
         run: |
           ls
-          mkdir ${{github.workspace}}/build-Samples          
-          mkdir ${{github.workspace}}/build-Tools          
+          mkdir build-Samples          
+          mkdir build-Tools          
 
       - name: Configure CMake [Lib]
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
-          cmake -B ${{github.workspace}}/build-${{matrix.buildType}}
+          cmake -B build-${{matrix.buildType}}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}"
           -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
@@ -172,7 +184,7 @@ jobs:
       - name: Configure CMake [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
-          cmake -B ${{github.workspace}}/build-${{matrix.buildType}}-mt
+          cmake -B build-${{matrix.buildType}}-mt
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}"
           -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}-static-mt"
@@ -188,7 +200,7 @@ jobs:
       - name: Configure CMake [Samples][Tools]
         if: ${{ contains(matrix.config.os, 'windows') && !contains(matrix.buildType, 'Deb') }}
         run: >
-          cmake -B ${{github.workspace}}/build-Samples
+          cmake -B build-Samples
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}"
           -DDXFCXX_PACKAGE_SUFFIX="-Samples"
@@ -200,7 +212,7 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
-          cmake -B ${{github.workspace}}/build-Tools
+          cmake -B build-Tools
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}"
           -DDXFCXX_PACKAGE_SUFFIX="-Tools"
@@ -214,7 +226,7 @@ jobs:
       - name: Configure CMake [Lib]
         if: ${{ contains(matrix.config.os, 'macos') }}
         run: >
-          cmake -B ${{github.workspace}}/build-${{matrix.buildType}}
+          cmake -B build-${{matrix.buildType}}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
@@ -231,7 +243,7 @@ jobs:
       - name: Configure CMake [Samples][Tools]
         if: ${{ contains(matrix.config.os, 'macos') && !contains(matrix.buildType, 'Deb') }}
         run: >
-          cmake -B ${{github.workspace}}/build-Samples
+          cmake -B build-Samples
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
@@ -245,7 +257,7 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
-          cmake -B ${{github.workspace}}/build-Tools
+          cmake -B build-Tools
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
@@ -258,13 +270,16 @@ jobs:
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
+      # CMAKE_INSTALL_LIBDIR: GNUInstallDirs picks lib64 on Oracle Linux; the packages keep lib/, as on the other
+      # systems.
       - name: Configure CMake [Lib]
         if: ${{ contains(matrix.config.os, 'linux') }}
         run: >
-          cmake -B ${{github.workspace}}/build-${{matrix.buildType}}
+          cmake -B build-${{matrix.buildType}}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DCMAKE_INSTALL_LIBDIR=lib
           -DDXFCXX_VERSION=${{needs.get_version.outputs.version}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
           -DDXFCXX_BUILD_UNIT_TESTS=OFF
@@ -278,10 +293,11 @@ jobs:
       - name: Configure CMake [Samples][Tools]
         if: ${{ contains(matrix.config.os, 'linux') && !contains(matrix.buildType, 'Deb') }}
         run: >
-          cmake -B ${{github.workspace}}/build-Samples
+          cmake -B build-Samples
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DCMAKE_INSTALL_LIBDIR=lib
           -DDXFCXX_VERSION=${{needs.get_version.outputs.version}}
           -DDXFCXX_PACKAGE_SUFFIX=-Samples
           -DDXFCXX_BUILD_UNIT_TESTS=OFF
@@ -292,10 +308,11 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
-          cmake -B ${{github.workspace}}/build-Tools
+          cmake -B build-Tools
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DCMAKE_INSTALL_LIBDIR=lib
           -DDXFCXX_VERSION=${{needs.get_version.outputs.version}}
           -DDXFCXX_PACKAGE_SUFFIX=-Tools
           -DDXFCXX_BUILD_UNIT_TESTS=OFF
@@ -308,13 +325,13 @@ jobs:
       - name: Build [Lib]
         if: ${{ !contains(matrix.config.os, 'win') }}
         run: >
-          cmake --build ${{github.workspace}}/build-${{matrix.buildType}}
+          cmake --build build-${{matrix.buildType}}
           --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
 
       - name: Build [Lib]
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
-          cmake --build ${{github.workspace}}/build-${{matrix.buildType}}
+          cmake --build build-${{matrix.buildType}}
           --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
           --
           /p:CL_MPCount=${{matrix.config.cores}}
@@ -322,7 +339,7 @@ jobs:
       - name: Build [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
-          cmake --build ${{github.workspace}}/build-${{matrix.buildType}}-mt
+          cmake --build build-${{matrix.buildType}}-mt
           --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
           --
           /p:CL_MPCount=${{matrix.config.cores}}
@@ -330,41 +347,41 @@ jobs:
       - name: Build [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') && !contains(matrix.config.os, 'win') }}
         run: |
-          cmake --build ${{github.workspace}}/build-Samples --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
-          cmake --build ${{github.workspace}}/build-Tools --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
+          cmake --build build-Samples --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
+          cmake --build build-Tools --config ${{matrix.buildType}} -j ${{matrix.config.cores}}
 
       - name: Build [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') && contains(matrix.config.os, 'win') }}
         run: >
-          cmake --build ${{github.workspace}}/build-Samples
+          cmake --build build-Samples
           --config ${{matrix.buildType}}
           -j ${{matrix.config.cores}}
           --
           /p:CL_MPCount=${{matrix.config.cores}}
 
-          cmake --build ${{github.workspace}}/build-Tools
+          cmake --build build-Tools
           --config ${{matrix.buildType}}
           -j ${{matrix.config.cores}}
           --
           /p:CL_MPCount=${{matrix.config.cores}}
 
       - name: Pack [Lib]
-        working-directory: "${{github.workspace}}/build-${{matrix.buildType}}"
+        working-directory: "build-${{matrix.buildType}}"
         run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Pack [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
-        working-directory: "${{github.workspace}}/build-${{matrix.buildType}}-mt"
+        working-directory: "build-${{matrix.buildType}}-mt"
         run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Pack [Samples]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
-        working-directory: ${{github.workspace}}/build-Samples
+        working-directory: build-Samples
         run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Pack [Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
-        working-directory: ${{github.workspace}}/build-Tools
+        working-directory: build-Tools
         run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Upload [Lib]
@@ -589,12 +606,63 @@ jobs:
           "if (Test-Path C:\Windows\System32\vcruntime140.dll) { Write-Output 'FAIL: the image has the Redistributable'; exit 1 };
           & C:\ci\run.ps1 C:\check; if ($LASTEXITCODE -ne 0) { exit 1 }; exit 0"
 
+  # The Linux packages load on the oldest systems they support: .github/ci/linux-packages-check/check.sh runs ldd on
+  # every library and executable of the packages and starts a sample, in minimal images of those systems.
+  check_linux_packages:
+    name: "${{ matrix.config.name }}: Check the packages on ${{ matrix.system }}"
+    needs: [ get_version, build_package_and_upload ]
+    strategy:
+      matrix:
+        config:
+          - name: oraclelinux-8-gcc-toolset-14
+            image: ubuntu-24.04
+          - name: oraclelinux-8-arm-gcc-toolset-14
+            image: ubuntu-24.04-arm
+        system: [ 'oraclelinux:8-slim', 'ubuntu:22.04' ]
+    runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{needs.get_version.outputs.tag_name}}
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          path: packages
+          pattern: artifacts-*-${{ matrix.config.name }}-*
+          merge-multiple: true
+
+      - name: Unpack
+        run: |
+          # The Samples and Tools archives are in build-Samples/ and build-Tools/, as the build job uploads them. Without
+          # nullglob, a missing archive leaves the pattern, and unzip or tar fails the step.
+          mkdir unpacked
+          for z in packages/*.zip; do unzip -q "$z" -d unpacked; done
+          for t in packages/build-Samples/*.tar.gz packages/build-Tools/*.tar.gz; do
+            tar -xzf "$t" -C unpacked
+          done
+          ls unpacked
+
+      - name: Check
+        run: >
+          docker run --rm
+          -v "${{github.workspace}}/unpacked:/packages:ro"
+          -v "${{github.workspace}}/.github/ci/linux-packages-check:/ci:ro"
+          ${{ matrix.system }}
+          bash /ci/check.sh /packages
+
   publish_release:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     name: Publish Release
-    needs: [ get_version, build_package_and_upload, build_full_src_bundle_and_upload, build_docs_and_upload_and_deploy_gh_pages, check_static_mt ]
+    needs:
+      - get_version
+      - build_package_and_upload
+      - build_full_src_bundle_and_upload
+      - build_docs_and_upload_and_deploy_gh_pages
+      - check_static_mt
+      - check_linux_packages
     permissions:
       actions: read
       contents: write
