@@ -7,6 +7,7 @@
 
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../src/internal/Common.hpp"
 
 #include "../support/TapeSupport.hpp"
 

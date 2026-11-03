@@ -5,12 +5,12 @@
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisher.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../internal/context/ApiContext.hpp"
+#include "../internal/utils/debug/Debug.hpp"
+#include "../isolated/api/IsolatedDXPublisher.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
-#    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#    include "../internal/Metrics.hpp"
 #endif
 
 #include <memory>

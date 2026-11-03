@@ -3,10 +3,10 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
+#include "../../internal/CallbackBarrier.hpp"
+#include "../../internal/context/ApiContext.hpp"
+#include "../../internal/managers/EntityManager.hpp"
+#include "../../isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
 
 #include <dxfg_api.h>
 

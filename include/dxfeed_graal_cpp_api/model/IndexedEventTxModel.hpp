@@ -3,21 +3,22 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../api/SubscriptionController.hpp"
 #include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
+#include "../api/SubscriptionController.hpp"
+#include "../detail/CallbackBarrier.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringLike.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/IndexedEventSource.hpp"
-#include "../internal/CallbackBarrier.hpp"
-#include "../internal/JavaObjectHandle.hpp"
-#include "../internal/utils/StringUtils.hpp"
 #include "../util/TimePeriod.hpp"
 
 #include <chrono>

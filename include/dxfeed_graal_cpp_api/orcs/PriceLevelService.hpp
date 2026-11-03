@@ -3,16 +3,17 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringLike.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/candle/CandleSymbol.hpp"
 #include "../event/market/Order.hpp"
 #include "../event/market/OrderSource.hpp"
 #include "../event/market/Quote.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 #include "./AuthOrderSource.hpp"
 
 #include <atomic>

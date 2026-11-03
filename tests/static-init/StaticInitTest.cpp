@@ -6,6 +6,7 @@
 // functions that use them must not depend on dynamic initialization.
 
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../src/internal/Isolate.hpp"
 
 #include <cmath>
 #include <cstdint>

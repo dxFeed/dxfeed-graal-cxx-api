@@ -1,11 +1,11 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedSubscriptionController.hpp"
+#include "IsolatedSubscriptionController.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
+#include "../IsolatedCommon.hpp"
+#include "../util/IsolatedTimePeriod.hpp"
 
 #include <dxfg_api.h>
 

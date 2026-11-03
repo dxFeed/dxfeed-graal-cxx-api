@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../event/LastingEvent.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 #include "../promise/Promise.hpp"
 #include "./DXFeedSubscription.hpp"
 

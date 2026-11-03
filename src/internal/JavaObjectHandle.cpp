@@ -1,13 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/candlewebservice/HistoryEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/glossary/CFI.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp"
+#include "../isolated/internal/IsolatedObject.hpp"
 #include "../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
+#include "./Common.hpp"
 
 #include <mutex>
 

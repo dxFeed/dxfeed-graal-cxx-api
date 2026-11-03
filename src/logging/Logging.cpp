@@ -3,9 +3,9 @@
 
 #include "../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/logging/IsolatedLogging.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../isolated/event/IsolatedEventType.hpp"
+#include "../isolated/logging/IsolatedLogging.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 
 #include <dxfg_api.h>

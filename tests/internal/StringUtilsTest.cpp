@@ -3,6 +3,7 @@
 
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../src/internal/utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <optional>

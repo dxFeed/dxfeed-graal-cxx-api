@@ -3,7 +3,7 @@
 
 #include "JavaUtils.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+#include "../Common.hpp"
 
 #include <algorithm>
 #include <array>

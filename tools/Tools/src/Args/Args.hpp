@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "../../../../include/dxfeed_graal_cpp_api/internal/Conf.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "../../../../src/internal/utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <fmt/chrono.h>

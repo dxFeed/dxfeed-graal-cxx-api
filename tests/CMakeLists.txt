@@ -89,7 +89,9 @@ set(DXFC_TEST_SOURCES
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp
-        tools/ToolsArgsTest.cpp)
+        tools/ToolsArgsTest.cpp
+        util/ToStringDoubleTest.cpp
+        util/UtilHeadersTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
 if (DXFCXX_BUILD_BENCHMARKS)
@@ -132,7 +134,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     target_compile_options(${DXFC_TEST_BASENAME} PRIVATE ${DXFCXX_DOCTEST_COMPILE_OPTIONS})
     target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE
             DXFCXX_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data" DXFCXX_TEST_TEMP_DIR="${DXFC_TEST_TEMP_DIR}")
-    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only)
+    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only bits::bits)
 
     if (WIN32)
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE ws2_32)
@@ -272,7 +274,7 @@ foreach (DXFC_STATIC_INIT_VARIANT IN LISTS DXFC_STATIC_INIT_VARIANTS)
         endif ()
     endif ()
 
-    target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
     set_target_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
     add_test(NAME ${DXFC_STATIC_INIT_TARGET} COMMAND ${DXFC_STATIC_INIT_TARGET})
     # The process exits after it used the Graal isolate: a hang at exit fails the test.
@@ -321,7 +323,7 @@ foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
         target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE ws2_32)
     endif ()
 
-    target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
     set_target_properties(${DXFC_EXIT_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 
     foreach (DXFC_EXIT_SCENARIO IN LISTS DXFC_EXIT_SCENARIOS)
@@ -392,7 +394,7 @@ foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
         endif ()
     endif ()
 
-    target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
     set_target_properties(${DXFC_ISOLATE_ARGS_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 
     foreach (DXFC_ISOLATE_ARGS_SCENARIO IN LISTS DXFC_ISOLATE_ARGS_SCENARIOS)

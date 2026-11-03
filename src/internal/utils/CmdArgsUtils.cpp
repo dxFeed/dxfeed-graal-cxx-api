@@ -3,9 +3,9 @@
 
 #define _CRT_SECURE_NO_WARNINGS // NOLINT(*-reserved-identifier)
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/utils/CmdArgsUtils.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/CmdArgsUtils.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp"
+#include "../../isolated/internal/IsolatedTools.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
 

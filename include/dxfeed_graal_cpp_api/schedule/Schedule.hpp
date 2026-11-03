@@ -3,13 +3,17 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/JavaObjectHandle.hpp"
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringLike.hpp"
 
+#include <cstdint>
 #include <memory>
+#include <string>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_schedule
@@ -22,8 +26,6 @@ struct SessionFilter;
 struct InstrumentProfile;
 struct Day;
 struct Session;
-struct StringLike;
-
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
  * and different classes of financial instruments. Each instance of schedule covers separate trading schedule

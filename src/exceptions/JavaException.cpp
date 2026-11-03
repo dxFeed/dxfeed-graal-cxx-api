@@ -3,9 +3,9 @@
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/JavaException.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../internal/Isolate.hpp"
+#include "../isolated/IsolatedCommon.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>

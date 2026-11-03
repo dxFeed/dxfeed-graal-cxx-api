@@ -7,8 +7,9 @@
 #include "../../../../include/dxfeed_graal_cpp_api/event/market/TimeAndSale.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/event/market/Trade.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/event/market/TradeETH.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/Platform.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/StopWatch.hpp"
+#include "../../../../src/internal/Common.hpp"
+#include "../../../../src/internal/Platform.hpp"
+#include "../../../../src/internal/StopWatch.hpp"
 #include "../Args/Args.hpp"
 #include <chrono>
 #include <cstdint>

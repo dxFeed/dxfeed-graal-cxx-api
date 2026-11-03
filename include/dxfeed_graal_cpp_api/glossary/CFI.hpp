@@ -3,15 +3,21 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringLike.hpp"
 #include "../entity/SharedEntity.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 
+#include <cstddef>
+#include <cstdint>
+#include <functional>
+#include <memory>
 #include <ostream>
+#include <string>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_glossary

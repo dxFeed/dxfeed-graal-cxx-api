@@ -5,6 +5,26 @@
 
 #include <iostream>
 
+// The names of the event types (sorted by name), separated by commas.
+template <typename EventTypesMap>
+std::string joinEventTypeNames(const EventTypesMap &eventTypes, bool onlyMarket = false) {
+    std::string result;
+
+    for (const auto &[name, eventType] : eventTypes) {
+        if (onlyMarket && !eventType.get().isMarket()) {
+            continue;
+        }
+
+        if (!result.empty()) {
+            result += ",";
+        }
+
+        result += name;
+    }
+
+    return result;
+}
+
 void printUsage() {
     const auto usageString = R"(
 Usage:
@@ -12,8 +32,8 @@ IpfSample <type> <ipf-file>
 
 Where:
     type     - Is dxfeed event type ()" +
-                             dxfcpp::enum_utils::getMarketEventTypeEnumNamesList() + " or " +
-                             dxfcpp::enum_utils::getMarketEventTypeEnumClassNamesList() + R"().
+                             joinEventTypeNames(dxfcpp::EventTypeEnum::ALL_BY_NAME, true) + " or " +
+                             joinEventTypeNames(dxfcpp::EventTypeEnum::ALL_BY_CLASS_NAME, true) + R"().
     ipf-file - Is name of instrument profiles file.
 
 Examples:

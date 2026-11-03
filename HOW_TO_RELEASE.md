@@ -13,7 +13,7 @@ Two scripts prepare the release, with the same arguments and the same result; ta
 - `scripts/release.py`: Python 3: `python3 scripts/release.py ...` (`py -3` on Windows)
 
 They set the version in `CMakeLists.txt` (`DXFCXX_VERSION`), `docs/Doxyfile` (`PROJECT_NUMBER`) and
-`include/dxfeed_graal_cpp_api/internal/Conf.hpp` (`inline namespace vN`), move the unreleased items of
+`include/dxfeed_graal_cpp_api/detail/Conf.hpp` (`inline namespace vN`), move the unreleased items of
 `release-notes/*.md` to `ReleaseNotes.md` and put the heading of the version above them, commit `vX.Y.Z` and tag it. Run them on the branch that is released (`main`, or `release/vN` for
 a new major version) with a clean working tree. The same can be done by hand, see below. `v8.2.0` is an example.
 
@@ -111,7 +111,7 @@ cmake -P scripts/release.cmake v8.2.0-draft1 --cleanup
    unreleased items (for a release after a pre-release: replace the heading of the pre-release, see the table).
 2. `CMakeLists.txt`: `set(DXFCXX_VERSION "v8.2.0" CACHE STRING ...)`.
 3. `docs/Doxyfile`: `PROJECT_NUMBER = v8.2.0`.
-4. For a new major version only: `include/dxfeed_graal_cpp_api/internal/Conf.hpp`: `inline namespace v9 {`.
+4. For a new major version only: `include/dxfeed_graal_cpp_api/detail/Conf.hpp`: `inline namespace v9 {`.
 5. Commit these files and the removal with the message `v8.2.0`, tag the commit (`git tag v8.2.0`), push the branch (`main` or
    `release/vN`), then the tag.
 

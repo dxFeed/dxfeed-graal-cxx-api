@@ -4,17 +4,17 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 
 #include "../../include/dxfeed_graal_c_api/api.h"
-#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/utils/debug/Debug.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/util/IsolatedTimePeriod.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../internal/Isolate.hpp"
+#include "../internal/context/ApiContext.hpp"
+#include "../internal/managers/EntityManager.hpp"
+#include "../internal/utils/debug/Debug.hpp"
+#include "../isolated/api/IsolatedDXEndpoint.hpp"
+#include "../isolated/util/IsolatedTimePeriod.hpp"
 #include "../../include/dxfeed_graal_cpp_api/ondemand/OnDemandService.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
-#    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#    include "../internal/Metrics.hpp"
 #endif
 
 #include <atomic>

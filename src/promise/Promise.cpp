@@ -3,8 +3,8 @@
 
 #include "../../include/dxfeed_graal_cpp_api/promise/Promise.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/promise/IsolatedPromise.hpp"
+#include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
+#include "../isolated/promise/IsolatedPromise.hpp"
 
 #include <dxfg_api.h>
 #include <memory>

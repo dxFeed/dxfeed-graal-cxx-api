@@ -3,17 +3,18 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../auth/AuthToken.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringLike.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"
 #include "../event/TimeSeriesEvent.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 
 #include <memory>

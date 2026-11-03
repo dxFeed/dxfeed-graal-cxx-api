@@ -3,17 +3,20 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/StringLike.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/Common.hpp"
 #include "../EventType.hpp"
 #include "../EventTypeEnum.hpp"
 
 #include <cstdint>
+#include <memory>
+#include <optional>
 #include <string>
+#include <utility>
 
 /**
  * \addtogroup dxfcpp_misc

@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/glossary/PriceIncrements.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/glossary/IsolatedPriceIncrements.hpp"
+#include "../isolated/glossary/IsolatedPriceIncrements.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

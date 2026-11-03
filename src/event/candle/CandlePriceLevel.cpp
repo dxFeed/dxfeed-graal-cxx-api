@@ -3,7 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandlePriceLevel.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
+#include "../../internal/Common.hpp"
 
 #include "../../internal/utils/CandleUtils.hpp"
 #include "../../internal/utils/JavaUtils.hpp"

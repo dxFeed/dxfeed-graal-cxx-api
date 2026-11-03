@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/orcs/AuthOrderSource.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/orcs/IsolatedPriceLevelService.hpp"
+#include "../isolated/orcs/IsolatedPriceLevelService.hpp"
 
 #include <utility>
 

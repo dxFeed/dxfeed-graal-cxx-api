@@ -4,12 +4,13 @@
 #include "../../include/dxfeed_graal_cpp_api/schedule/Day.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedDay.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp"
+#include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
+#include "../isolated/schedule/IsolatedDay.hpp"
+#include "../isolated/schedule/IsolatedSession.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/Schedule.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/Session.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
+#include "../internal/Common.hpp"
 
 #include <dxfg_api.h>
 

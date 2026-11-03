@@ -4,8 +4,8 @@
 #include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfileReader.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/auth/AuthToken.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfile.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfileReader.hpp"
+#include "../isolated/ipf/IsolatedInstrumentProfile.hpp"
+#include "../isolated/ipf/IsolatedInstrumentProfileReader.hpp"
 
 #include <memory>
 

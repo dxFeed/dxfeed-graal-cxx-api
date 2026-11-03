@@ -3,13 +3,14 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/Concepts.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/market/OrderBase.hpp"
-#include "../internal/Handler.hpp"
+#include "../util/Handler.hpp"
 
 #include <memory>
 #include <mutex>

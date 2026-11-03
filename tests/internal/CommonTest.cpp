@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <doctest.h>
-#include <dxfeed_graal_cpp_api/internal/Common.hpp>
+#include "../../src/internal/Common.hpp"
 
 #include <bit>
 #include <climits>

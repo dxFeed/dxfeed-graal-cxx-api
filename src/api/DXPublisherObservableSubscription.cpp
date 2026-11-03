@@ -4,8 +4,8 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXPublisherObservableSubscription.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXPublisherObservableSubscription.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../isolated/api/IsolatedDXPublisherObservableSubscription.hpp"
 
 #include <memory>
 

@@ -3,7 +3,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleSession.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSession.hpp"
+#include "../../isolated/schedule/IsolatedSession.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/schedule/SessionType.hpp"
 
@@ -12,6 +12,7 @@
 #include <string>
 
 #include "../../internal/utils/CandleUtils.hpp"
+#include "../../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

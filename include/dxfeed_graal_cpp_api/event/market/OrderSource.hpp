@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/utils/ConstantMap.hpp"
-#include "../../internal/utils/StringUtils.hpp"
+#include "../../detail/ConstantMap.hpp"
+#include "../../detail/StringLike.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 

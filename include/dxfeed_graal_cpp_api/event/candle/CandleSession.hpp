@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/utils/ConstantMap.hpp"
-#include "../../internal/utils/StringUtils.hpp"
+#include "../../detail/ConstantMap.hpp"
+#include "../../detail/StringLike.hpp"
 #include "../../schedule/SessionFilter.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"

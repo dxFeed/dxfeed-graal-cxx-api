@@ -1,14 +1,14 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../../include/dxfeed_graal_cpp_api/isolated/orcs/IsolatedPriceLevelService.hpp"
+#include "IsolatedPriceLevelService.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/event/EventSourceWrapper.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
+#include "../../internal/CallbackBarrier.hpp"
+#include "../IsolatedCommon.hpp"
+#include "../event/IsolatedEventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
 
 #include <dxfg_api.h>

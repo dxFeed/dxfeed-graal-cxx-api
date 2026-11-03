@@ -25,7 +25,7 @@ int main(int /* argc */, char * /* argv */[]) {
 
         sub->addEventListener<Quote>([](auto &&events) {
             for (auto &&quote : events) {
-                std::cout << dxfcpp::formatTimeStampWithMillisWithTimeZone(quote->getEventTime()) + " : " +
+                std::cout << TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(quote->getEventTime()) + " : " +
                                  quote->getEventSymbol() + " bid " + dxfcpp::toString(quote->getBidPrice()) +
                                  " / ask " + dxfcpp::toString(quote->getAskPrice())
                           << std::endl;
@@ -44,7 +44,8 @@ int main(int /* argc */, char * /* argv */[]) {
         // replaying events until end time reached
         while (onDemand->getTime() < to) {
             std::cout << "Current state is "s + DXEndpoint::stateToString(onDemand->getEndpoint()->getState()) + "," +
-                             " on-demand time is " + formatTimeStampWithMillisWithTimeZone(onDemand->getTime())
+                             " on-demand time is " +
+                             TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(onDemand->getTime())
                       << std::endl;
 
             std::this_thread::sleep_for(1s);

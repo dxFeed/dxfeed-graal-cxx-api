@@ -3,14 +3,15 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
-#include "../internal/utils/ConstString.hpp"
+#include "../detail/Conf.hpp"
+#include "../detail/ConstString.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/JavaObjectHandle.hpp"
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/Math.hpp"
+#include "../detail/StringLike.hpp"
 #include "./SessionType.hpp"
-#include "../internal/Common.hpp"
 
 
 /**

@@ -47,9 +47,9 @@ endif ()
 
 if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
     target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process console::console fmt::fmt-header-only)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process console::console fmt::fmt-header-only bits::bits)
 else ()
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only bits::bits)
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
         if (DXFCXX_LINK_STATIC_RUNTIME)

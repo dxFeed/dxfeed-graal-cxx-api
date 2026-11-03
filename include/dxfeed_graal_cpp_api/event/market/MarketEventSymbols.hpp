@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
-#include "../../internal/utils/StringUtils.hpp"
+#include "../../detail/Conf.hpp"
+#include "../../detail/StringLike.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 

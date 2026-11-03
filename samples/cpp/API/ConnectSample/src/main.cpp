@@ -17,6 +17,26 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
+// The names of the event types (sorted by name), separated by commas.
+template <typename EventTypesMap>
+std::string joinEventTypeNames(const EventTypesMap &eventTypes, bool onlyMarket = false) {
+    std::string result;
+
+    for (const auto &[name, eventType] : eventTypes) {
+        if (onlyMarket && !eventType.get().isMarket()) {
+            continue;
+        }
+
+        if (!result.empty()) {
+            result += ",";
+        }
+
+        result += name;
+    }
+
+    return result;
+}
+
 void printUsage() {
     const auto usageString = R"(
 Usage:
@@ -27,8 +47,8 @@ Where:
               To pass an authorization token, add to the address: "[login=entitle:<token>]",
               e.g.: demo.dxfeed.com:7300[login=entitle:<token>]
     types   - Is comma-separated list of dxfeed event types ()" +
-                             enum_utils::getEventTypeEnumNamesList() + " or " +
-                             enum_utils::getEventTypeEnumClassNamesList() + R"().
+                             joinEventTypeNames(EventTypeEnum::ALL_BY_NAME) + " or " +
+                             joinEventTypeNames(EventTypeEnum::ALL_BY_CLASS_NAME) + R"().
     symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").
               for Candle event specify symbol with aggregation like in "AAPL{=d}"
     time    - Is from-time for history subscription in standard formats.

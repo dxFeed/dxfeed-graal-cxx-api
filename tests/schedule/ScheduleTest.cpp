@@ -8,6 +8,8 @@
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../src/internal/Common.hpp"
+#include "../../src/internal/utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")

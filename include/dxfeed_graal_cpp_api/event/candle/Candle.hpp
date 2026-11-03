@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
 #include "../EventType.hpp"
 #include "../LastingEvent.hpp"
 #include "../TimeSeriesEvent.hpp"
@@ -15,6 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 
 /**

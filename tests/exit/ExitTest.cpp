@@ -7,7 +7,7 @@
 // at exit. Usage: <executable> <scenario>.
 
 #include <dxfeed_graal_cpp_api/api.hpp>
-#include <dxfeed_graal_cpp_api/internal/CallbackBarrier.hpp>
+#include "../../src/internal/CallbackBarrier.hpp"
 
 #include <atomic>
 #include <chrono>

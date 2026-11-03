@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../include/dxfeed_graal_cpp_api/internal/Timer.hpp"
+#include "../../include/dxfeed_graal_cpp_api/util/Timer.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 

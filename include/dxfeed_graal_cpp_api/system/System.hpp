@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/Common.hpp"
+#include "../detail/StringLike.hpp"
+
 
 #include <string>
 #include <vector>

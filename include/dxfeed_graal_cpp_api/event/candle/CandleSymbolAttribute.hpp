@@ -3,9 +3,11 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../../detail/StringLike.hpp"
 
 #include <string>
 
@@ -15,8 +17,6 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  */
 
 DXFCPP_BEGIN_NAMESPACE
-
-struct StringLike;
 
 /**
  * Attribute of the CandleSymbol.

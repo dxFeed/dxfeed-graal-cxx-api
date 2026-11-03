@@ -34,7 +34,7 @@ ctest -C Release -L network
 With `-DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON` the tests are linked with the shared library instead of the static one,
 as an application that uses the DLL. This finds what works only with the static library: a function that is not
 exported (a link error) and state that the public headers keep outside the library (on Windows, the DLL and each
-executable have their own copies of it). The rules for the public headers are in `include/dxfeed_graal_cpp_api/internal/Conf.hpp`
+executable have their own copies of it). The rules for the public headers are in `include/dxfeed_graal_cpp_api/detail/Conf.hpp`
 next to `DXFCPP_EXPORT`.
 
 ## UI Samples

@@ -31,7 +31,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 NOTES = "ReleaseNotes.md"
 CMAKE = "CMakeLists.txt"
 DOXYFILE = "docs/Doxyfile"
-CONF = "include/dxfeed_graal_cpp_api/internal/Conf.hpp"
+CONF = "include/dxfeed_graal_cpp_api/detail/Conf.hpp"
 FRAGMENTS = "release-notes"  # the unreleased items, one file per ticket: release-notes/README.md
 
 PRE_RELEASE_ORDER = ("alpha", "beta", "pre", "rc")

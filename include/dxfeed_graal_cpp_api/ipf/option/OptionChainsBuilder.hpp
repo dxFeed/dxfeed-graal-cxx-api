@@ -3,15 +3,21 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/StringLike.hpp"
+#include "../InstrumentProfile.hpp"
 #include "./OptionChain.hpp"
 #include "./OptionSeries.hpp"
-#include "../InstrumentProfile.hpp"
 
+#include <cmath>
+#include <cstdint>
+#include <iterator>
+#include <memory>
+#include <string>
+#include <type_traits>
 #include <unordered_map>
 
 /**

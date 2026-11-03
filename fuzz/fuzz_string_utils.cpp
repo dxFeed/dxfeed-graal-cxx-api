@@ -3,6 +3,7 @@
 
 // Fuzz internal string / time utilities (StringUtils.hpp). Most are declared noexcept.
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../src/internal/utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <cstring>
