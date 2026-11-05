@@ -37,7 +37,8 @@ toStringOpt(const char *chars) noexcept; // NOLINT(*-redundant-declaration)
 
 DXFCPP_INTERNAL_EXPORT std::string toString(std::thread::id theadId); // NOLINT(*-redundant-declaration)
 
-DXFCPP_INTERNAL_EXPORT std::string toString(void *ptr); // NOLINT(*-redundant-declaration)
+// Part of the API (detail/JavaObjectHandle.hpp): MSVC rejects a redeclaration with another linkage.
+DXFCPP_EXPORT std::string toString(void *ptr); // NOLINT(*-redundant-declaration)
 
 // template <typename T> std::string toStringAny(T &&t);
 
