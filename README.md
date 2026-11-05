@@ -158,7 +158,8 @@ x64 and aarch64 (arm64) versions are prebuilt.
 
 #### libc compatibility
 
-- [glibc][glibc]: 2.35+ (from Ubuntu 22.04)
+- [glibc][glibc]: 2.28+ and the `libstdc++` of GCC 8+: Oracle Linux / RHEL 8+, Debian 10+, Ubuntu 20.04+. Every
+  release is checked on Oracle Linux 8 and Ubuntu 22.04.
 - [musl][musl]: temporarily unsupported
 
 #### libpthread compatibility
