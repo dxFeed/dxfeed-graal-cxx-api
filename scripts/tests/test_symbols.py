@@ -145,7 +145,9 @@ class NmTest(unittest.TestCase):
 
 
 class PeTest(unittest.TestCase):
-    NAMES = ["??0Quote@v8@dxfcpp@@QEAA@XZ", "?getCount@Candle@v8@dxfcpp@@QEBA_JXZ", "dxfc_system_set_property"]
+    NAMES = ["??0Quote@v8@dxfcpp@@QEAA@XZ", "?getCount@Candle@v8@dxfcpp@@QEBA_JXZ",
+             "?setHandler@ErrorManager@v8@dxfcpp@@SAXV?$function@$$A6AXAEBUErrorInfo@v8@dxfcpp@@@Z@std@@@Z",
+             "dxfc_system_set_property"]
 
     def test_export_names(self):
         self.assertEqual(symbols.pe_export_names(pe_with_exports(self.NAMES)), self.NAMES)
@@ -155,11 +157,21 @@ class PeTest(unittest.TestCase):
         with self.assertRaises(SymbolsError):
             symbols.pe_export_names(b"MZ" + bytes(0x3A) + b"\x40\0\0\0" + b"XXXX")
 
+    def test_ms_keywords(self):
+        undecorated = ("class dxfcpp::S const & __ptr64 __cdecl dxfcpp::f(class std::function<void __cdecl(struct "
+                       "dxfcpp::E const & __ptr64)>,char const * __ptr64)const __ptr64&")
+        self.assertEqual(symbols.MS_KEYWORDS.sub("", undecorated),
+                         "class dxfcpp::S const & dxfcpp::f(class std::function<void (struct dxfcpp::E const &)>,"
+                         "char const *)const&")
+
     @unittest.skipUnless(platform.system() == "Windows", "dbghelp")
     def test_undecorate(self):
-        # UnDecorateSymbolName ends a const member function with a space, which an editor would trim from the list.
+        # UnDecorateSymbolName ends a const member function with a space, which an editor would trim from the list;
+        # the parameters of a function type are kept by every version of dbghelp.
         self.assertEqual(symbols.demangle_msvc(self.NAMES),
                          ["dxfcpp::v8::Quote::Quote(void)", "__int64 dxfcpp::v8::Candle::getCount(void)const",
+                          "static void dxfcpp::v8::ErrorManager::setHandler(class std::function<void (struct "
+                          "dxfcpp::v8::ErrorInfo const &)>)",
                           "dxfc_system_set_property"])
 
 

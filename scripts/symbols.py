@@ -46,8 +46,14 @@ OPERATORS = sorted(["<=>", "<<=", ">>=", "->*", "()", "[]", "<<", ">>", "<=", ">
                     "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "->", "+", "-", "*", "/", "%", "^", "&", "|", "~",
                     "!", "=", "<", ">", ","], key=len, reverse=True)
 
-# UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_ACCESS_SPECIFIERS: no __cdecl, __ptr64, public:.
-UNDNAME_FLAGS = 0x0002 | 0x0080
+# UNDNAME_NO_ACCESS_SPECIFIERS: no public:. The Microsoft keywords are removed by MS_KEYWORDS, not by
+# UNDNAME_NO_MS_KEYWORDS: some versions of dbghelp (10.0.22621, 10.0.25921) drop the parameters of a function type
+# with that flag ("std::function<void >"), so the list would depend on the version of Windows.
+UNDNAME_FLAGS = 0x0080
+
+# The Microsoft keywords of the undecorated names: the calling conventions with the space after them ("void __cdecl(",
+# "void __cdecl f"), the pointer modifiers with the space before them ("const & __ptr64)").
+MS_KEYWORDS = re.compile(r"__(?:cdecl|stdcall|fastcall|thiscall|vectorcall|clrcall)\b ?| __(?:ptr64|ptr32)\b")
 
 
 class SymbolsError(Exception):
@@ -146,7 +152,7 @@ def demangle_msvc(names):
     for name in names:
         if name.startswith("?") and undecorate(name.encode("ascii"), buffer, len(buffer), UNDNAME_FLAGS):
             # A const member function ends with a space ("...(void)const "), which an editor would trim from the list.
-            demangled.append(buffer.value.decode("ascii").rstrip())
+            demangled.append(MS_KEYWORDS.sub("", buffer.value.decode("ascii")).rstrip())
         else:
             demangled.append(name)
     return demangled

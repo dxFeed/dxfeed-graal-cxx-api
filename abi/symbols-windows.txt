@@ -333,7 +333,7 @@ class dxfcpp::v8::OrderImbalance & dxfcpp::v8::OrderImbalance::withSource(class 
 class dxfcpp::v8::OrderImbalance & dxfcpp::v8::OrderImbalance::withTime(__int64)
 class dxfcpp::v8::OrderImbalance & dxfcpp::v8::OrderImbalance::withTimeSequence(__int64)
 class dxfcpp::v8::OrderSource & dxfcpp::v8::OrderSource::operator=(class dxfcpp::v8::OrderSource const &)
-class dxfcpp::v8::OrderSource const & dxfcpp::v8::OrderImbalance::getSource(void)const &
+class dxfcpp::v8::OrderSource const & dxfcpp::v8::OrderImbalance::getSource(void)const&
 class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::operator=(class dxfcpp::v8::OtcMarketsOrder &&)
 class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::operator=(class dxfcpp::v8::OtcMarketsOrder const &)
 class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::withAutoExecution(bool)
@@ -436,30 +436,30 @@ class std::_String_view_iterator<struct std::char_traits<char> > dxfcpp::v8::Str
 class std::_String_view_iterator<struct std::char_traits<char> > dxfcpp::v8::StringLike::cend(void)const
 class std::_String_view_iterator<struct std::char_traits<char> > dxfcpp::v8::StringLike::end(void)const
 class std::basic_ostream<char,struct std::char_traits<char> > & operator<<(class std::basic_ostream<char,struct std::char_traits<char> > &,struct dxfcpp::v8::RuntimeException const &)
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::CandleSymbol::getBaseSymbol(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::CandleSymbol::toString(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::DXEndpoint::getName(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::JavaException::getJavaClassName(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::JavaException::getJavaMessage(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::JavaException::getJavaStackTrace(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Message::getAttachment(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::NuamOrder::getClientOrderId(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::NuamOrder::getCustomerAccount(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::NuamOrder::getCustomerInfo(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::NuamOrder::getExchangeInfo(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::OptionSale::getExchangeSaleConditions(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::OptionSale::getOptionSymbol(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Order::getMarketMaker(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Profile::getDescription(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Profile::getStatusReason(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::RuntimeException::getStackTrace(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::SpreadOrder::getSpreadSymbol(void)const &
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::CandleSymbol::getBaseSymbol(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::CandleSymbol::toString(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::DXEndpoint::getName(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::JavaException::getJavaClassName(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::JavaException::getJavaMessage(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::JavaException::getJavaStackTrace(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Message::getAttachment(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::NuamOrder::getClientOrderId(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::NuamOrder::getCustomerAccount(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::NuamOrder::getCustomerInfo(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::NuamOrder::getExchangeInfo(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::OptionSale::getExchangeSaleConditions(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::OptionSale::getOptionSymbol(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Order::getMarketMaker(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Profile::getDescription(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Profile::getStatusReason(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::RuntimeException::getStackTrace(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::SpreadOrder::getSpreadSymbol(void)const&
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::StringSymbol::getData(void)const
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TextConfiguration::getText(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TextMessage::getText(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TimeAndSale::getBuyer(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TimeAndSale::getExchangeSaleConditions(void)const &
-class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TimeAndSale::getSeller(void)const &
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TextConfiguration::getText(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TextMessage::getText(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TimeAndSale::getBuyer(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TimeAndSale::getExchangeSaleConditions(void)const&
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TimeAndSale::getSeller(void)const&
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::AdditionalUnderlyings::getText(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::AuthToken::getHttpAuthorization(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::AuthToken::getPassword(void)const
@@ -558,37 +558,37 @@ class std::basic_string_view<char,struct std::char_traits<char> > dxfcpp::v8::In
 class std::basic_string_view<char,struct std::char_traits<char> > dxfcpp::v8::StringLike::toStringView(void)const
 class std::chrono::duration<__int64,struct std::ratio<1,1000> > dxfcpp::v8::InstrumentProfileCollector::getLastUpdateTimeAsDuration(void)const
 class std::chrono::duration<__int64,struct std::ratio<1,1000> > dxfcpp::v8::InstrumentProfileConnection::getUpdatePeriodAsDuration(void)const
-class std::optional<bool> const & dxfcpp::v8::SessionFilter::getTrading(void)const &
+class std::optional<bool> const & dxfcpp::v8::SessionFilter::getTrading(void)const&
 class std::optional<class dxfcpp::v8::IndexedEventSource> dxfcpp::v8::EventSourceWrapper::asIndexedEventSource(void)const
 class std::optional<class dxfcpp::v8::IndexedEventSubscriptionSymbol> dxfcpp::v8::SymbolWrapper::asIndexedEventSubscriptionSymbol(void)const
 class std::optional<class dxfcpp::v8::OrderSource> dxfcpp::v8::EventSourceWrapper::asOrderSource(void)const
 class std::optional<class dxfcpp::v8::TimeSeriesSubscriptionSymbol> dxfcpp::v8::SymbolWrapper::asTimeSeriesSubscriptionSymbol(void)const
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Message::getAttachmentOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::NuamOrder::getClientOrderIdOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::NuamOrder::getCustomerAccountOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::NuamOrder::getCustomerInfoOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::NuamOrder::getExchangeInfoOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::OptionSale::getExchangeSaleConditionsOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::OptionSale::getOptionSymbolOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Order::getMarketMakerOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Profile::getDescriptionOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Profile::getStatusReasonOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::SpreadOrder::getSpreadSymbolOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TextConfiguration::getTextOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TextMessage::getTextOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TimeAndSale::getBuyerOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TimeAndSale::getExchangeSaleConditionsOpt(void)const &
-class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TimeAndSale::getSellerOpt(void)const &
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Message::getAttachmentOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::NuamOrder::getClientOrderIdOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::NuamOrder::getCustomerAccountOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::NuamOrder::getCustomerInfoOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::NuamOrder::getExchangeInfoOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::OptionSale::getExchangeSaleConditionsOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::OptionSale::getOptionSymbolOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Order::getMarketMakerOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Profile::getDescriptionOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Profile::getStatusReasonOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::SpreadOrder::getSpreadSymbolOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TextConfiguration::getTextOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TextMessage::getTextOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TimeAndSale::getBuyerOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TimeAndSale::getExchangeSaleConditionsOpt(void)const&
+class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TimeAndSale::getSellerOpt(void)const&
 class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > dxfcpp::v8::MarketMaker::getMarketMakerOpt(void)const
-class std::optional<struct dxfcpp::v8::CandleAlignment> const & dxfcpp::v8::CandleSymbol::getAlignment(void)const &
-class std::optional<struct dxfcpp::v8::CandleDataType> const & dxfcpp::v8::CandleSymbol::getDataType(void)const &
-class std::optional<struct dxfcpp::v8::CandleExchange> const & dxfcpp::v8::CandleSymbol::getExchange(void)const &
-class std::optional<struct dxfcpp::v8::CandlePeriod> const & dxfcpp::v8::CandleSymbol::getPeriod(void)const &
-class std::optional<struct dxfcpp::v8::CandlePrice> const & dxfcpp::v8::CandleSymbol::getPrice(void)const &
-class std::optional<struct dxfcpp::v8::CandlePriceLevel> const & dxfcpp::v8::CandleSymbol::getPriceLevel(void)const &
-class std::optional<struct dxfcpp::v8::CandleSession> const & dxfcpp::v8::CandleSymbol::getSession(void)const &
+class std::optional<struct dxfcpp::v8::CandleAlignment> const & dxfcpp::v8::CandleSymbol::getAlignment(void)const&
+class std::optional<struct dxfcpp::v8::CandleDataType> const & dxfcpp::v8::CandleSymbol::getDataType(void)const&
+class std::optional<struct dxfcpp::v8::CandleExchange> const & dxfcpp::v8::CandleSymbol::getExchange(void)const&
+class std::optional<struct dxfcpp::v8::CandlePeriod> const & dxfcpp::v8::CandleSymbol::getPeriod(void)const&
+class std::optional<struct dxfcpp::v8::CandlePrice> const & dxfcpp::v8::CandleSymbol::getPrice(void)const&
+class std::optional<struct dxfcpp::v8::CandlePriceLevel> const & dxfcpp::v8::CandleSymbol::getPriceLevel(void)const&
+class std::optional<struct dxfcpp::v8::CandleSession> const & dxfcpp::v8::CandleSymbol::getSession(void)const&
 class std::optional<struct dxfcpp::v8::CandleSymbol> dxfcpp::v8::SymbolWrapper::asCandleSymbol(void)const
-class std::optional<struct dxfcpp::v8::SessionType> const & dxfcpp::v8::SessionFilter::getType(void)const &
+class std::optional<struct dxfcpp::v8::SessionType> const & dxfcpp::v8::SessionFilter::getType(void)const&
 class std::optional<struct dxfcpp::v8::TimePeriod> dxfcpp::v8::DXEndpoint::getRequestedAggregationPeriod(void)const
 class std::optional<struct dxfcpp::v8::WildcardSymbol> dxfcpp::v8::SymbolWrapper::asWildcardSymbol(void)const
 class std::shared_ptr<class dxfcpp::v8::DXEndpoint::Builder> dxfcpp::v8::DXEndpoint::Builder::withName(struct dxfcpp::v8::StringLike const &)
@@ -2284,7 +2284,7 @@ static void dxfcpp::v8::WildcardSymbol::freeGraal(void *)
 struct CandleSymbol::dxfcpp::CandleSymbol dxfcpp::v8::literals::operator "" _c(char const *,unsigned __int64)
 struct WildcardSymbol::dxfcpp::WildcardSymbol dxfcpp::v8::literals::operator "" _wcs(char const *,unsigned __int64)
 struct WildcardSymbol::dxfcpp::WildcardSymbol dxfcpp::v8::literals::operator "" _ws(char const *,unsigned __int64)
-struct dxfcpp::v8::AuctionType const & dxfcpp::v8::OrderImbalance::getAuctionType(void)const &
+struct dxfcpp::v8::AuctionType const & dxfcpp::v8::OrderImbalance::getAuctionType(void)const&
 struct dxfcpp::v8::CandleAlignment & dxfcpp::v8::CandleAlignment::operator=(struct dxfcpp::v8::CandleAlignment &&)
 struct dxfcpp::v8::CandleAlignment & dxfcpp::v8::CandleAlignment::operator=(struct dxfcpp::v8::CandleAlignment const &)
 struct dxfcpp::v8::CandleDataType & dxfcpp::v8::CandleDataType::operator=(struct dxfcpp::v8::CandleDataType &&)
@@ -2304,11 +2304,11 @@ struct dxfcpp::v8::CandleSymbol & dxfcpp::v8::CandleSymbol::operator=(struct dxf
 struct dxfcpp::v8::CandleSymbolAttribute & dxfcpp::v8::CandleSymbolAttribute::operator=(struct dxfcpp::v8::CandleSymbolAttribute const &)
 struct dxfcpp::v8::CandleType & dxfcpp::v8::CandleType::operator=(struct dxfcpp::v8::CandleType &&)
 struct dxfcpp::v8::CandleType & dxfcpp::v8::CandleType::operator=(struct dxfcpp::v8::CandleType const &)
-struct dxfcpp::v8::CandleType const & dxfcpp::v8::CandlePeriod::getType(void)const &
+struct dxfcpp::v8::CandleType const & dxfcpp::v8::CandlePeriod::getType(void)const&
 struct dxfcpp::v8::CmdArgsUtils & dxfcpp::v8::CmdArgsUtils::operator=(struct dxfcpp::v8::CmdArgsUtils &&)
 struct dxfcpp::v8::CmdArgsUtils & dxfcpp::v8::CmdArgsUtils::operator=(struct dxfcpp::v8::CmdArgsUtils const &)
 struct dxfcpp::v8::Day & dxfcpp::v8::Day::operator=(struct dxfcpp::v8::Day &&)
-struct dxfcpp::v8::Direction const & dxfcpp::v8::TradeBase::getTickDirection(void)const &
+struct dxfcpp::v8::Direction const & dxfcpp::v8::TradeBase::getTickDirection(void)const&
 struct dxfcpp::v8::Entity & dxfcpp::v8::Entity::operator=(struct dxfcpp::v8::Entity const &)
 struct dxfcpp::v8::ErrorInfo & dxfcpp::v8::ErrorInfo::operator=(struct dxfcpp::v8::ErrorInfo &&)
 struct dxfcpp::v8::ErrorInfo & dxfcpp::v8::ErrorInfo::operator=(struct dxfcpp::v8::ErrorInfo const &)
@@ -2324,8 +2324,8 @@ struct dxfcpp::v8::EventTypeWithSymbol<class std::basic_string<char,struct std::
 struct dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol> & dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol>::operator=(struct dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol> &&)
 struct dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol> & dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol>::operator=(struct dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol> const &)
 struct dxfcpp::v8::GraalException & dxfcpp::v8::GraalException::operator=(struct dxfcpp::v8::GraalException const &)
-struct dxfcpp::v8::IcebergType const & dxfcpp::v8::AnalyticOrder::getIcebergType(void)const &
-struct dxfcpp::v8::ImbalanceSide const & dxfcpp::v8::OrderImbalance::getImbalanceSide(void)const &
+struct dxfcpp::v8::IcebergType const & dxfcpp::v8::AnalyticOrder::getIcebergType(void)const&
+struct dxfcpp::v8::ImbalanceSide const & dxfcpp::v8::OrderImbalance::getImbalanceSide(void)const&
 struct dxfcpp::v8::IndexedEvent & dxfcpp::v8::IndexedEvent::operator=(struct dxfcpp::v8::IndexedEvent const &)
 struct dxfcpp::v8::IndexedEventTxModelBuilderTag & dxfcpp::v8::IndexedEventTxModelBuilderTag::operator=(struct dxfcpp::v8::IndexedEventTxModelBuilderTag &&)
 struct dxfcpp::v8::IndexedEventTxModelBuilderTag & dxfcpp::v8::IndexedEventTxModelBuilderTag::operator=(struct dxfcpp::v8::IndexedEventTxModelBuilderTag const &)
@@ -2350,13 +2350,13 @@ struct dxfcpp::v8::JavaObject & dxfcpp::v8::JavaObject::operator=(struct dxfcpp:
 struct dxfcpp::v8::JavaObject & dxfcpp::v8::JavaObject::operator=(struct dxfcpp::v8::JavaObject const &)
 struct dxfcpp::v8::JavaObjectHandle<class dxfcpp::v8::DXFeedSubscription> dxfcpp::v8::DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(class std::unique_ptr<struct dxfcpp::v8::EventClassList,struct std::default_delete<struct dxfcpp::v8::EventClassList> > const &)const
 struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::AdditionalUnderlyings> const & dxfcpp::v8::AdditionalUnderlyings::getHandle(void)const
-struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::AuthToken> const & dxfcpp::v8::AuthToken::getHandle(void)const &
+struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::AuthToken> const & dxfcpp::v8::AuthToken::getHandle(void)const&
 struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::CFI> const & dxfcpp::v8::CFI::getHandle(void)const
-struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::DayFilter> const & dxfcpp::v8::DayFilter::getHandle(void)const &
+struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::DayFilter> const & dxfcpp::v8::DayFilter::getHandle(void)const&
 struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::ExecutorTag> const & dxfcpp::v8::InPlaceExecutor::getHandle(void)const
 struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::ObservableSubscriptionChangeListener> const & dxfcpp::v8::ObservableSubscriptionChangeListener::getHandle(class dxfcpp::v8::ObservableSubscriptionChangeListener::Key)const
 struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::PriceIncrements> const & dxfcpp::v8::PriceIncrements::getHandle(void)const
-struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::SessionFilter> const & dxfcpp::v8::SessionFilter::getHandle(void)const &
+struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::SessionFilter> const & dxfcpp::v8::SessionFilter::getHandle(void)const&
 struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::TimeFormat> const & dxfcpp::v8::TimeFormat::getHandle(void)const
 struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::TimePeriod> const & dxfcpp::v8::TimePeriod::getHandle(void)const
 struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::TxModelListenerTag> const & dxfcpp::v8::TxModelListenerCommon::getHandle(void)const
@@ -2368,15 +2368,15 @@ struct dxfcpp::v8::MarketEvent & dxfcpp::v8::MarketEvent::operator=(struct dxfcp
 struct dxfcpp::v8::MarketEvent & dxfcpp::v8::MarketEvent::operator=(struct dxfcpp::v8::MarketEvent const &)
 struct dxfcpp::v8::MarketEventSymbols & dxfcpp::v8::MarketEventSymbols::operator=(struct dxfcpp::v8::MarketEventSymbols &&)
 struct dxfcpp::v8::MarketEventSymbols & dxfcpp::v8::MarketEventSymbols::operator=(struct dxfcpp::v8::MarketEventSymbols const &)
-struct dxfcpp::v8::NuamOrderType const & dxfcpp::v8::NuamOrder::getOrderType(void)const &
-struct dxfcpp::v8::NuamTimeInForceType const & dxfcpp::v8::NuamOrder::getTimeInForce(void)const &
+struct dxfcpp::v8::NuamOrderType const & dxfcpp::v8::NuamOrder::getOrderType(void)const&
+struct dxfcpp::v8::NuamTimeInForceType const & dxfcpp::v8::NuamOrder::getTimeInForce(void)const&
 struct dxfcpp::v8::ObservableSubscription & dxfcpp::v8::ObservableSubscription::operator=(struct dxfcpp::v8::ObservableSubscription const &)
-struct dxfcpp::v8::OrderAction const & dxfcpp::v8::OrderBase::getAction(void)const &
-struct dxfcpp::v8::OtcMarketsPriceType const & dxfcpp::v8::OtcMarketsOrder::getOtcMarketsPriceType(void)const &
+struct dxfcpp::v8::OrderAction const & dxfcpp::v8::OrderBase::getAction(void)const&
+struct dxfcpp::v8::OtcMarketsPriceType const & dxfcpp::v8::OtcMarketsOrder::getOtcMarketsPriceType(void)const&
 struct dxfcpp::v8::PriceLevelChecker & dxfcpp::v8::PriceLevelChecker::operator=(struct dxfcpp::v8::PriceLevelChecker &&)
 struct dxfcpp::v8::PriceLevelChecker & dxfcpp::v8::PriceLevelChecker::operator=(struct dxfcpp::v8::PriceLevelChecker const &)
-struct dxfcpp::v8::PriceType const & dxfcpp::v8::Summary::getDayClosePriceType(void)const &
-struct dxfcpp::v8::PriceType const & dxfcpp::v8::Summary::getPrevDayClosePriceType(void)const &
+struct dxfcpp::v8::PriceType const & dxfcpp::v8::Summary::getDayClosePriceType(void)const&
+struct dxfcpp::v8::PriceType const & dxfcpp::v8::Summary::getPrevDayClosePriceType(void)const&
 struct dxfcpp::v8::Promises & dxfcpp::v8::Promises::operator=(struct dxfcpp::v8::Promises &&)
 struct dxfcpp::v8::Promises & dxfcpp::v8::Promises::operator=(struct dxfcpp::v8::Promises const &)
 struct dxfcpp::v8::RequireMakeShared<class dxfcpp::v8::DXEndpoint::Builder> & dxfcpp::v8::RequireMakeShared<class dxfcpp::v8::DXEndpoint::Builder>::operator=(struct dxfcpp::v8::RequireMakeShared<class dxfcpp::v8::DXEndpoint::Builder> &&)
@@ -2417,17 +2417,17 @@ struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController> 
 struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController> & dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController>::operator=(struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController> const &)
 struct dxfcpp::v8::RuntimeException & dxfcpp::v8::RuntimeException::operator=(struct dxfcpp::v8::RuntimeException const &)
 struct dxfcpp::v8::Schedule & dxfcpp::v8::Schedule::operator=(struct dxfcpp::v8::Schedule &&)
-struct dxfcpp::v8::Scope const & dxfcpp::v8::OrderBase::getScope(void)const &
+struct dxfcpp::v8::Scope const & dxfcpp::v8::OrderBase::getScope(void)const&
 struct dxfcpp::v8::Session & dxfcpp::v8::Session::operator=(struct dxfcpp::v8::Session &&)
-struct dxfcpp::v8::SessionFilter const & dxfcpp::v8::CandleSession::getSessionFilter(void)const &
+struct dxfcpp::v8::SessionFilter const & dxfcpp::v8::CandleSession::getSessionFilter(void)const&
 struct dxfcpp::v8::SessionType & dxfcpp::v8::SessionType::operator=(struct dxfcpp::v8::SessionType &&)
 struct dxfcpp::v8::SessionType & dxfcpp::v8::SessionType::operator=(struct dxfcpp::v8::SessionType const &)
-struct dxfcpp::v8::SessionType const & dxfcpp::v8::Session::getType(void)const &
+struct dxfcpp::v8::SessionType const & dxfcpp::v8::Session::getType(void)const&
 struct dxfcpp::v8::SharedEntity & dxfcpp::v8::SharedEntity::operator=(struct dxfcpp::v8::SharedEntity const &)
-struct dxfcpp::v8::ShortSaleRestriction const & dxfcpp::v8::Profile::getShortSaleRestriction(void)const &
-struct dxfcpp::v8::Side const & dxfcpp::v8::OptionSale::getAggressorSide(void)const &
-struct dxfcpp::v8::Side const & dxfcpp::v8::OrderBase::getOrderSide(void)const &
-struct dxfcpp::v8::Side const & dxfcpp::v8::TimeAndSale::getAggressorSide(void)const &
+struct dxfcpp::v8::ShortSaleRestriction const & dxfcpp::v8::Profile::getShortSaleRestriction(void)const&
+struct dxfcpp::v8::Side const & dxfcpp::v8::OptionSale::getAggressorSide(void)const&
+struct dxfcpp::v8::Side const & dxfcpp::v8::OrderBase::getOrderSide(void)const&
+struct dxfcpp::v8::Side const & dxfcpp::v8::TimeAndSale::getAggressorSide(void)const&
 struct dxfcpp::v8::SimpleHandler<void (class std::vector<class std::shared_ptr<struct dxfcpp::v8::EventType>,class std::allocator<class std::shared_ptr<struct dxfcpp::v8::EventType> > > const &)> & dxfcpp::v8::DXFeedSubscription::onEvent(void)
 struct dxfcpp::v8::SimpleHandler<void (enum dxfcpp::v8::DXEndpoint::State,enum dxfcpp::v8::DXEndpoint::State)> & dxfcpp::v8::DXEndpoint::onStateChange(void)
 struct dxfcpp::v8::SimpleHandler<void (enum dxfcpp::v8::InstrumentProfileConnection::State,enum dxfcpp::v8::InstrumentProfileConnection::State)> & dxfcpp::v8::InstrumentProfileConnection::onStateChange(void)
@@ -2443,8 +2443,8 @@ struct dxfcpp::v8::SymbolWrapper & dxfcpp::v8::SymbolWrapper::operator=(struct d
 struct dxfcpp::v8::SymbolWrapper & dxfcpp::v8::SymbolWrapper::operator=(struct dxfcpp::v8::SymbolWrapper const &)
 struct dxfcpp::v8::System & dxfcpp::v8::System::operator=(struct dxfcpp::v8::System &&)
 struct dxfcpp::v8::System & dxfcpp::v8::System::operator=(struct dxfcpp::v8::System const &)
-struct dxfcpp::v8::TimeAndSaleType const & dxfcpp::v8::OptionSale::getType(void)const &
-struct dxfcpp::v8::TimeAndSaleType const & dxfcpp::v8::TimeAndSale::getType(void)const &
+struct dxfcpp::v8::TimeAndSaleType const & dxfcpp::v8::OptionSale::getType(void)const&
+struct dxfcpp::v8::TimeAndSaleType const & dxfcpp::v8::TimeAndSale::getType(void)const&
 struct dxfcpp::v8::TimePeriod dxfcpp::v8::DXFeedSubscription::getAggregationPeriod(void)const
 struct dxfcpp::v8::TimePeriod dxfcpp::v8::SubscriptionController::getAggregationPeriod(void)const
 struct dxfcpp::v8::TimePeriodInfo & dxfcpp::v8::TimePeriodInfo::operator=(struct dxfcpp::v8::TimePeriodInfo &&)
@@ -2461,7 +2461,7 @@ struct dxfcpp::v8::TimeSeriesTxModelImpl::Builder & dxfcpp::v8::TimeSeriesTxMode
 struct dxfcpp::v8::TimeSeriesTxModelImpl::Builder & dxfcpp::v8::TimeSeriesTxModelImpl::Builder::operator=(struct dxfcpp::v8::TimeSeriesTxModelImpl::Builder const &)
 struct dxfcpp::v8::TimeSeriesTxModelTag & dxfcpp::v8::TimeSeriesTxModelTag::operator=(struct dxfcpp::v8::TimeSeriesTxModelTag &&)
 struct dxfcpp::v8::TimeSeriesTxModelTag & dxfcpp::v8::TimeSeriesTxModelTag::operator=(struct dxfcpp::v8::TimeSeriesTxModelTag const &)
-struct dxfcpp::v8::TradingStatus const & dxfcpp::v8::Profile::getTradingStatus(void)const &
+struct dxfcpp::v8::TradingStatus const & dxfcpp::v8::Profile::getTradingStatus(void)const&
 struct dxfcpp::v8::TxModelListenerTag & dxfcpp::v8::TxModelListenerTag::operator=(struct dxfcpp::v8::TxModelListenerTag &&)
 struct dxfcpp::v8::TxModelListenerTag & dxfcpp::v8::TxModelListenerTag::operator=(struct dxfcpp::v8::TxModelListenerTag const &)
 struct dxfcpp::v8::WildcardSymbol & dxfcpp::v8::WildcardSymbol::operator=(struct dxfcpp::v8::WildcardSymbol &&)
@@ -2550,14 +2550,14 @@ virtual class dxfcpp::v8::EventFlagsMask dxfcpp::v8::Series::getEventFlagsMask(v
 virtual class dxfcpp::v8::EventFlagsMask dxfcpp::v8::TheoPrice::getEventFlagsMask(void)const
 virtual class dxfcpp::v8::EventFlagsMask dxfcpp::v8::TimeAndSale::getEventFlagsMask(void)const
 virtual class dxfcpp::v8::EventFlagsMask dxfcpp::v8::Underlying::getEventFlagsMask(void)const
-virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::Greeks::getSource(void)const &
-virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::MarketMaker::getSource(void)const &
-virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::OptionSale::getSource(void)const &
-virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::Series::getSource(void)const &
-virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::TheoPrice::getSource(void)const &
-virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::TimeAndSale::getSource(void)const &
-virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::TimeSeriesEvent::getSource(void)const &
-virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::Underlying::getSource(void)const &
+virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::Greeks::getSource(void)const&
+virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::MarketMaker::getSource(void)const&
+virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::OptionSale::getSource(void)const&
+virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::Series::getSource(void)const&
+virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::TheoPrice::getSource(void)const&
+virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::TimeAndSale::getSource(void)const&
+virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::TimeSeriesEvent::getSource(void)const&
+virtual class dxfcpp::v8::IndexedEventSource const & dxfcpp::v8::Underlying::getSource(void)const&
 virtual class dxfcpp::v8::NuamOrder & dxfcpp::v8::NuamOrder::withAction(struct dxfcpp::v8::OrderAction const &)
 virtual class dxfcpp::v8::NuamOrder & dxfcpp::v8::NuamOrder::withActionTime(__int64)
 virtual class dxfcpp::v8::NuamOrder & dxfcpp::v8::NuamOrder::withAuxOrderId(__int64)
@@ -2610,7 +2610,7 @@ virtual class dxfcpp::v8::Order & dxfcpp::v8::Order::withTimeNanos(__int64)
 virtual class dxfcpp::v8::Order & dxfcpp::v8::Order::withTradeId(__int64)
 virtual class dxfcpp::v8::Order & dxfcpp::v8::Order::withTradePrice(double)
 virtual class dxfcpp::v8::Order & dxfcpp::v8::Order::withTradeSize(double)
-virtual class dxfcpp::v8::OrderSource const & dxfcpp::v8::OrderBase::getSource(void)const &
+virtual class dxfcpp::v8::OrderSource const & dxfcpp::v8::OrderBase::getSource(void)const&
 virtual class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::withAction(struct dxfcpp::v8::OrderAction const &)
 virtual class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::withActionTime(__int64)
 virtual class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::withAuxOrderId(__int64)
@@ -2637,10 +2637,10 @@ virtual class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::withTim
 virtual class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::withTradeId(__int64)
 virtual class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::withTradePrice(double)
 virtual class dxfcpp::v8::OtcMarketsOrder & dxfcpp::v8::OtcMarketsOrder::withTradeSize(double)
-virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::MarketEvent::getEventSymbol(void)const &
-virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Message::getEventSymbol(void)const &
-virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TextConfiguration::getEventSymbol(void)const &
-virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TextMessage::getEventSymbol(void)const &
+virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::MarketEvent::getEventSymbol(void)const&
+virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::Message::getEventSymbol(void)const&
+virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TextConfiguration::getEventSymbol(void)const&
+virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const & dxfcpp::v8::TextMessage::getEventSymbol(void)const&
 virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::AdditionalUnderlyings::toString(void)const
 virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::AnalyticOrder::toString(void)const
 virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::CFI::Attribute::toString(void)const
@@ -2688,11 +2688,11 @@ virtual class std::basic_string<char,struct std::char_traits<char>,class std::al
 virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::TradeETH::toString(void)const
 virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::TxModelListenerCommon::toString(void)const
 virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::Underlying::toString(void)const
-virtual class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::MarketEvent::getEventSymbolOpt(void)const &
-virtual class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Message::getEventSymbolOpt(void)const &
-virtual class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TextConfiguration::getEventSymbolOpt(void)const &
-virtual class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TextMessage::getEventSymbolOpt(void)const &
-virtual class std::optional<struct dxfcpp::v8::CandleSymbol> const & dxfcpp::v8::Candle::getEventSymbolOpt(void)const &
+virtual class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::MarketEvent::getEventSymbolOpt(void)const&
+virtual class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::Message::getEventSymbolOpt(void)const&
+virtual class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TextConfiguration::getEventSymbolOpt(void)const&
+virtual class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TextMessage::getEventSymbolOpt(void)const&
+virtual class std::optional<struct dxfcpp::v8::CandleSymbol> const & dxfcpp::v8::Candle::getEventSymbolOpt(void)const&
 virtual class std::unique_ptr<class dxfcpp::v8::IndexedEventSource,struct std::default_delete<class dxfcpp::v8::IndexedEventSource> > const & dxfcpp::v8::IndexedEventSubscriptionSymbol::getSource(void)const
 virtual class std::unique_ptr<struct dxfcpp::v8::SymbolWrapper,struct std::default_delete<struct dxfcpp::v8::SymbolWrapper> > const & dxfcpp::v8::IndexedEventSubscriptionSymbol::getEventSymbol(void)const
 virtual class std::unordered_set<class dxfcpp::v8::EventTypeEnum,struct std::hash<class dxfcpp::v8::EventTypeEnum>,struct std::equal_to<class dxfcpp::v8::EventTypeEnum>,class std::allocator<class dxfcpp::v8::EventTypeEnum> > dxfcpp::v8::DXFeedSubscription::getEventTypes(void)
@@ -2791,7 +2791,7 @@ virtual int dxfcpp::v8::Series::getEventFlags(void)const
 virtual int dxfcpp::v8::TheoPrice::getEventFlags(void)const
 virtual int dxfcpp::v8::TimeAndSale::getEventFlags(void)const
 virtual int dxfcpp::v8::Underlying::getEventFlags(void)const
-virtual struct dxfcpp::v8::CandleSymbol const & dxfcpp::v8::Candle::getEventSymbol(void)const &
+virtual struct dxfcpp::v8::CandleSymbol const & dxfcpp::v8::Candle::getEventSymbol(void)const&
 virtual unsigned __int64 dxfcpp::v8::DXFeedSubscription::addChangeListener(class std::shared_ptr<struct dxfcpp::v8::ObservableSubscriptionChangeListener>)
 virtual unsigned __int64 dxfcpp::v8::DXPublisherObservableSubscription::addChangeListener(class std::shared_ptr<struct dxfcpp::v8::ObservableSubscriptionChangeListener>)
 virtual void * dxfcpp::v8::AnalyticOrder::toGraal(void)const
