@@ -46,7 +46,6 @@ if (TARGET dxfcxx_warnings)
 endif ()
 
 if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process console::console fmt::fmt-header-only bits::bits)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only bits::bits)

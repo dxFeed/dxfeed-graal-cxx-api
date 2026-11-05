@@ -63,6 +63,10 @@ jobs:
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
     runs-on: ${{ matrix.config.image }}
     timeout-minutes: 90
+    env:
+      # The rows that make the packages (Release, NO_SAN) export only the API. The others also export the internal
+      # classes, so the shared variants of the StaticInit, Exit and IsolateArgs tests run in Debug and with sanitizers.
+      EXPORT_INTERNALS: ${{ (matrix.buildType == 'Release' && matrix.sanitizers == 'NO_SAN') && 'OFF' || 'ON' }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -120,6 +124,7 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
+          -DDXFCXX_EXPORT_INTERNALS=${{ env.EXPORT_INTERNALS }}
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'linux') }}
@@ -134,6 +139,7 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
+          -DDXFCXX_EXPORT_INTERNALS=${{ env.EXPORT_INTERNALS }}
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'win') }}
@@ -147,6 +153,7 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
+          -DDXFCXX_EXPORT_INTERNALS=${{ env.EXPORT_INTERNALS }}
 
       - name: Configure CMake (Win MT)
         if: ${{ contains(matrix.config.os, 'win') }}
@@ -215,12 +222,85 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # release.py, release.cmake (in a git repository) and their agreement
-      - name: Test scripts/release.py and scripts/release.cmake
+      # release.py, release.cmake (in a git repository) and their agreement; symbols.py
+      - name: Test scripts/release.py, scripts/release.cmake and scripts/symbols.py
         run: python3 -m unittest discover -s scripts/tests -v
 
       - name: Test the functions of scripts/release.cmake
         run: cmake -P scripts/tests/test_release.cmake
+
+  # The exported symbols of the Release library (as in the packages: no DXFCXX_EXPORT_INTERNALS) against the list of its
+  # OS, abi/symbols-<os>.txt. On a difference the list of the library is uploaded as the artifact symbols-<os>.
+  symbols:
+    needs: plan
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: ubuntu-24.04-gcc-14
+            image: ubuntu-24.04
+            os: linux
+            cc: 'gcc-14'
+            cxx: 'g++-14'
+            library: build/libdxFeedGraalCxxApi.so
+          - name: macos-15-xcode-16-4
+            image: macos-15
+            os: macos
+            xcode: '16.4'
+            cc: 'clang'
+            cxx: 'clang++'
+            library: build/libdxFeedGraalCxxApi.dylib
+          - name: win2022-vs2022
+            image: windows-2022
+            os: windows
+            cc: 'cl'
+            cxx: 'cl'
+            library: build/Release/dxFeedGraalCxxApi.dll
+
+    name: "${{ matrix.config.name }}-Release-symbols"
+    runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Select Xcode version
+        if: ${{ matrix.config.os == 'macos' }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
+
+      - name: Build the shared library
+        run: cmake --build ${{github.workspace}}/build --config Release --target dxFeedGraalCxxApi -j 4
+
+      - name: Compare the exported symbols with abi/symbols-${{ matrix.config.os }}.txt
+        shell: bash
+        run: |
+          python=python3
+          [ "$RUNNER_OS" = Windows ] && python=python
+          list=abi/symbols-${{ matrix.config.os }}.txt
+          if ! "$python" scripts/symbols.py compare ${{ matrix.config.library }} "$list"; then
+            "$python" scripts/symbols.py extract ${{ matrix.config.library }} > symbols-${{ matrix.config.os }}.txt
+            exit 1
+          fi
+
+      - name: Upload the list of the library
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: symbols-${{ matrix.config.os }}
+          path: symbols-${{ matrix.config.os }}.txt
+          if-no-files-found: ignore
 
   tsan:
     needs: plan
@@ -246,6 +326,7 @@ jobs:
           -DDXFCXX_BUILD_SAMPLES=OFF
           -DDXFCXX_BUILD_TOOLS=OFF
           -DDXFCXX_ENABLE_TSAN=ON
+          -DDXFCXX_EXPORT_INTERNALS=ON
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build -j 4
@@ -369,9 +450,9 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: ctest -L network --extra-verbose --output-on-failure
 
-  # Unit tests linked against the shared library. On Windows they are expected to fail until the DLL-boundary defects
-  # are fixed: today most test executables do not link because StringLike is not exported, and entities registered
-  # from inline/template code land in a separate registry per module. Linux and macOS pass; see MDAPI-427.
+  # Unit tests, samples and Tools linked against the shared library, as applications that use the DLL: a class or
+  # function of the public API without DXFCPP_EXPORT is a link error here (the library is built with hidden visibility).
+  # The library also exports its internal classes (DXFCXX_EXPORT_INTERNALS) because the tests and the Tools use them.
   dynamic-link-tests:
     needs: plan
     strategy:
@@ -383,6 +464,11 @@ jobs:
             os: windows
             cc: 'cl'
             cxx: 'cl'
+          - name: ubuntu-24.04-gcc-14
+            image: ubuntu-24.04
+            os: linux
+            cc: 'gcc-14'
+            cxx: 'g++-14'
           - name: ubuntu-24.04-clang-18
             image: ubuntu-24.04
             os: linux
@@ -397,8 +483,7 @@ jobs:
 
     name: "${{ matrix.config.name }}-Release-dynamic-link-tests"
     runs-on: ${{ matrix.config.image }}
-    timeout-minutes: 45
-    continue-on-error: true
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -415,8 +500,9 @@ jobs:
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF
-          -DDXFCXX_BUILD_SAMPLES=OFF
-          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=OFF
+          -DDXFCXX_DYNAMICALLY_LINK_SAMPLES=ON
+          -DDXFCXX_DYNAMICALLY_LINK_TOOLS=ON
           -DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON
 
       - name: Build

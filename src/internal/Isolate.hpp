@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -31,9 +32,9 @@ using GraalIsolateThreadHandle = void *;
 using ConstGraalIsolateThreadHandle = const void *;
 
 /// It's a wrapper around the Graal VM Isolate. It allows calling published Graal (Java) methods in isolation.
-class DXFCPP_EXPORT Isolate final {
+class DXFCPP_INTERNAL_EXPORT Isolate final {
     /// It's a wrapper around the Graal VM Isolate's thread.
-    struct DXFCPP_EXPORT IsolateThread final {
+    struct DXFCPP_INTERNAL_EXPORT IsolateThread final {
         GraalIsolateThreadHandle handle{};
         std::thread::id tid{};
         std::size_t idx{};
@@ -125,7 +126,7 @@ class DXFCPP_EXPORT Isolate final {
      * `false` (the library is shutting down). The exit handler and dxfcpp::shutdown() wait for the callbacks in
      * progress on the other threads.
      */
-    class DXFCPP_EXPORT CallbackScope {
+    class DXFCPP_INTERNAL_EXPORT CallbackScope {
         bool active_;
 
       public:
@@ -323,7 +324,7 @@ auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
                                                     std::forward<Args>(args)...);
 }
 
-DXFCPP_EXPORT void gc();
+DXFCPP_INTERNAL_EXPORT void gc();
 
 DXFCPP_END_NAMESPACE
 

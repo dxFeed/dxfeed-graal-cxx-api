@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "../InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -12,7 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-class DXFCPP_EXPORT ApiContext {
+class DXFCPP_INTERNAL_EXPORT ApiContext {
     ApiContext() noexcept;
 
     public:

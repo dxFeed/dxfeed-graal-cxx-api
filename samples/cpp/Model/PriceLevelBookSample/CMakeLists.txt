@@ -36,7 +36,6 @@ endif ()
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx fmt::fmt-header-only)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static fmt::fmt-header-only)

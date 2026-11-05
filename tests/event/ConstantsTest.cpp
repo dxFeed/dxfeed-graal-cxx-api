@@ -623,7 +623,7 @@ TEST_CASE("LazyJavaObjectHandle calls the initializer again after a failure and 
     CHECK(&handle.get() == &handle.get());
 }
 
-// The internal functions are not exported from the shared library.
+// IsolatedTimePeriod of the isolated layer is not exported from the shared library, even with DXFCXX_EXPORT_INTERNALS.
 #ifndef DXFCPP_USE_DLLS
 TEST_CASE("LazyJavaObjectHandle that is not a constant releases the Java object created by the initializer") {
     // As the EMPTY() objects of CFI, PriceIncrements and AdditionalUnderlyings.

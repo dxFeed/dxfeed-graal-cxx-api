@@ -37,6 +37,12 @@ exported (a link error) and state that the public headers keep outside the libra
 executable have their own copies of it). The rules for the public headers are in `include/dxfeed_graal_cpp_api/detail/Conf.hpp`
 next to `DXFCPP_EXPORT`.
 
+The shared library exports only what `DXFCPP_EXPORT` marks (hidden visibility with gcc and clang). The tests and the
+Tools also use internal classes of `src/`, marked `DXFCPP_INTERNAL_EXPORT`: the option `DXFCXX_EXPORT_INTERNALS`
+exports them too. It is ON when the tests or the Tools are linked dynamically (`DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS`,
+`DXFCXX_DYNAMICALLY_LINK_TOOLS`), and the shared variants of the static-init, exit and isolate-args tests are built
+only with it. Do not ship a library built with it: its symbols differ from `abi/symbols-<os>.txt`.
+
 ## UI Samples
 
 `DXFCXX_BUILD_UI_SAMPLES` controls the UI samples (Dear ImGui, GLFW, OpenGL):
