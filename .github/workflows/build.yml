@@ -366,7 +366,7 @@ jobs:
 
     name: "${{ matrix.config.name }}-Debug-headers-no-pch"
     runs-on: ${{ matrix.config.image }}
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -395,6 +395,7 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_USE_PRECOMPILED_HEADERS=OFF
           -DDXFCXX_BUILD_HEADER_CHECK=ON
+          -DDXFCXX_FEATURE_STACKTRACE=ON
 
       - name: Check that public headers are self-contained
         run: cmake --build ${{github.workspace}}/build --config Debug --target dxfcxx_header_check -j 4
@@ -417,6 +418,55 @@ jobs:
 
       - name: Check that installed headers compile on their own
         run: cmake --build ${{github.workspace}}/build/installed-headers-check --config Debug -j 4
+
+      # The ways to use the API (.github/ci/package-consumer-check): the installed CMake package, and the sources as a
+      # subproject added by add_subdirectory and by FetchContent. Each builds and runs programs with dxfcxx::static and
+      # dxfcxx::dxfcxx. The subprojects take the SDK downloaded by the build above.
+      - name: Configure the consumer of the installed package
+        run: >
+          cmake -S ${{github.workspace}}/.github/ci/package-consumer-check
+          -B ${{github.workspace}}/build/consumer-package
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_CONSUMER_MODE=package
+          -DCMAKE_PREFIX_PATH=${{github.workspace}}/build/install
+
+      - name: Build and run the consumer of the installed package
+        run: >
+          cmake --build ${{github.workspace}}/build/consumer-package --config Debug -j 4
+          && ctest --test-dir ${{github.workspace}}/build/consumer-package -C Debug --output-on-failure
+
+      - name: Configure the consumer of the sources (add_subdirectory)
+        run: >
+          cmake -S ${{github.workspace}}/.github/ci/package-consumer-check
+          -B ${{github.workspace}}/build/consumer-subdirectory
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_CONSUMER_MODE=subdirectory
+          -DDXFCXX_SOURCE_DIR=${{github.workspace}}
+          -DFETCHCONTENT_SOURCE_DIR_DXFEEDGRAALNATIVESDK=${{github.workspace}}/build/_deps/dxfeedgraalnativesdk-src
+
+      - name: Build and run the consumer of the sources (add_subdirectory)
+        run: >
+          cmake --build ${{github.workspace}}/build/consumer-subdirectory --config Debug -j 4
+          && ctest --test-dir ${{github.workspace}}/build/consumer-subdirectory -C Debug --output-on-failure
+
+      - name: Configure the consumer of the sources (FetchContent)
+        run: >
+          cmake -S ${{github.workspace}}/.github/ci/package-consumer-check
+          -B ${{github.workspace}}/build/consumer-fetchcontent
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_CONSUMER_MODE=fetchcontent
+          -DDXFCXX_SOURCE_DIR=${{github.workspace}}
+          -DFETCHCONTENT_SOURCE_DIR_DXFEEDGRAALNATIVESDK=${{github.workspace}}/build/_deps/dxfeedgraalnativesdk-src
+
+      - name: Build and run the consumer of the sources (FetchContent)
+        run: >
+          cmake --build ${{github.workspace}}/build/consumer-fetchcontent --config Debug -j 4
+          && ctest --test-dir ${{github.workspace}}/build/consumer-fetchcontent -C Debug --output-on-failure
 
   # Smoke tests against demo.dxfeed.com (CTest label "network"). They depend on an external service, so a failure
   # does not fail the workflow; the other unit tests do not use external network.

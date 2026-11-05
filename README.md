@@ -30,6 +30,8 @@ the [Overview](#overview) section.<br>
 - [Documentation](#documentation)
 - [Requirements](#requirements)
 - [Installation](#installation)
+  * [With CMake](#with-cmake)
+  * [Without CMake](#without-cmake)
   * [Windows without the Visual C++ Redistributable](#windows-without-the-visual-c-redistributable)
 - [Usage](#usage)
   * [How to connect to QD endpoint](#how-to-connect-to-qd-endpoint)
@@ -184,10 +186,69 @@ A symlink on `libpthread.so`, `libpthread.so.0`, or `libcoreclr.so` must exist.
 Examples of how to install the library and integrate with the library can be
 found [here](https://github.com/dxFeed/dxfeed-graal-cxx-api-samples).
 
-The API is delivered as a dynamic library (`dxFeedGraalCxxApi.so|dll|dylib`) and a static
-one (`dxFeedGraalCxxApi_static.a|lib`).
-Also, it depends on `DxFeedGraalNativeSdk.so|dll|dylib`. Please place it nearby or available on `PATH` (Or
-use `RPATH`, `LD_LIBRARY_PATH`).
+The API is delivered as a shared library and a static one, built from the sources or unpacked from the `Lib` archive
+of a release:
+
+| File                     | Windows                                                | Linux                                    | macOS                                     |
+|--------------------------|--------------------------------------------------------|------------------------------------------|-------------------------------------------|
+| Shared library           | `bin\dxFeedGraalCxxApi.dll`, `lib\dxFeedGraalCxxApi.lib` | `lib/libdxFeedGraalCxxApi.so.<major>`    | `lib/libdxFeedGraalCxxApi.<major>.dylib`  |
+| Static library           | `lib\dxFeedGraalCxxApi_static.lib`                     | `lib/libdxFeedGraalCxxApi_static.a`      | `lib/libdxFeedGraalCxxApi_static.a`       |
+| dxFeed Graal Native SDK  | `bin\DxFeedGraalNativeSdk.dll`, `lib\DxFeedGraalNativeSdk.lib` | `lib/libDxFeedGraalNativeSdk.so` | `lib/libDxFeedGraalNativeSdk.dylib`       |
+
+Both libraries load the library of the dxFeed Graal Native SDK at run time: ship it with your program, next to it or
+in the search path of the dynamic loader (`PATH`, `RPATH`/`RUNPATH`, `LD_LIBRARY_PATH`), and the shared library of
+the API too when you use it. The major version in the name of the shared library changes with every incompatible
+change of its interface. Neither library passes its compiler options to your code: compile it with your own.
+
+### With CMake
+
+The targets are the same in all the ways below: `dxfcxx::dxfcxx` (the shared library), `dxfcxx::static` (the static
+library) and `dxfcxx::graal` (the SDK library). They give your target the include directory and the definitions it
+needs, such as `DXFCPP_USE_DLLS` with the shared library.
+
+An installed or unpacked package (`CMAKE_PREFIX_PATH` points to it):
+
+```cmake
+find_package(dxFeedGraalCxxApi CONFIG REQUIRED)
+target_link_libraries(app PRIVATE dxfcxx::dxfcxx) # or dxfcxx::static
+```
+
+The sources, by `FetchContent` or as a directory of your project:
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(dxFeedGraalCxxApi URL https://github.com/dxFeed/dxfeed-graal-cxx-api/archive/refs/tags/<version>.zip)
+FetchContent_MakeAvailable(dxFeedGraalCxxApi)
+# or: add_subdirectory(dxfeed-graal-cxx-api)
+target_link_libraries(app PRIVATE dxfcxx::static) # or dxfcxx::dxfcxx
+```
+
+As a subproject, the API builds no tests, samples or tools and installs nothing (`-DDXFCXX_INSTALL=ON` installs it with
+your project). The `-static-mt` packages have no `dxfcxx::dxfcxx` (see below).
+
+On Windows, copy the DLLs next to your program:
+
+```cmake
+add_custom_command(TARGET app POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_RUNTIME_DLLS:app> $<TARGET_FILE_DIR:app> COMMAND_EXPAND_LISTS)
+```
+
+On Linux and macOS, the programs of your build tree find the libraries by `RUNPATH`; install them with your program and
+set its `INSTALL_RPATH` (for example, `$ORIGIN/../lib`).
+
+### Without CMake
+
+Add the `include` directory to the include path and link the libraries of the table above:
+
+- The shared library: define `DXFCPP_USE_DLLS` (required on Windows, and on Linux and macOS when your code is compiled
+  with `-fvisibility=hidden`), link `lib\dxFeedGraalCxxApi.lib` (Windows) or `-ldxFeedGraalCxxApi` (Linux, macOS),
+  ship the shared library and the SDK library.
+- The static library: do not define `DXFCPP_USE_DLLS`, link the static library and the SDK library
+  (`lib\DxFeedGraalNativeSdk.lib`, `-lDxFeedGraalNativeSdk`), and `-lpthread` on Linux; ship the SDK library.
+- A package built with `DXFCXX_FEATURE_STACKTRACE=ON` (the releases) links its static library with Boost.Stacktrace:
+  link `lib/libboost_stacktrace_backtrace.a -ldl -lbacktrace` (Linux), `lib/libboost_stacktrace_addr2line.a -ldl`
+  (macOS) or `lib\boost_stacktrace_windbg.lib ole32.lib dbgeng.lib` (Windows) too, whichever is in `lib`.
+- MSVC: compile with `/std:c++20 /EHsc`; `/utf-8` is not needed.
 
 ### Windows without the Visual C++ Redistributable
 
@@ -210,6 +271,9 @@ Do not link with `dxFeedGraalCxxApi.dll` of these archives: with the static C ru
 their own C runtime, and the interface of the C++ API passes standard library objects (`std::string`,
 `std::shared_ptr`, etc.) between them. The `Debug` C runtime stops on such objects with a debug heap assertion.
 
+With CMake, `find_package(dxFeedGraalCxxApi CONFIG)` gives `dxfcxx::static` (the first way) and `dxfcxx::graal`; set
+`CMAKE_MSVC_RUNTIME_LIBRARY` to `MultiThreaded$<$<CONFIG:Debug>:Debug>` in your project.
+
 For example, a `build.cmd` run from the x64 Native Tools Command Prompt (`%1` is the unpacked archive):
 
 ```bat
@@ -217,12 +281,12 @@ For example, a `build.cmd` run from the x64 Native Tools Command Prompt (`%1` is
 set "A=%~f1"
 
 rem Static C++ API, SDK DLL
-cl /nologo /std:c++20 /MT /EHsc /utf-8 /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
+cl /nologo /std:c++20 /MT /EHsc /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
     "%A%\lib\DxFeedGraalNativeSdk.lib" /Fe:main.exe || exit /b 1
 copy /y "%A%\bin\DxFeedGraalNativeSdk.dll" . >nul
 
 rem Single exe
-cl /nologo /std:c++20 /MT /EHsc /utf-8 /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
+cl /nologo /std:c++20 /MT /EHsc /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
     "%A%\lib\DxFeedGraalNativeSdk_static.lib" @"%A%\lib\link-flags.txt" /Fe:main-single.exe
 ```
 

@@ -31,7 +31,7 @@ if "%~3"=="dumpbin-only" exit /b 0
 
 set "MT=/MT"
 echo %ARCHIVE% | findstr /i /c:"-Debug-" >nul && set "MT=/MTd"
-set "CL_FLAGS=/nologo /std:c++20 %MT% /EHsc /O2 /utf-8 /I "%ARCHIVE%\include""
+set "CL_FLAGS=/nologo /std:c++20 %MT% /EHsc /O2 /I "%ARCHIVE%\include""
 
 for %%w in (static single) do (
     if exist "%OUT%\%%w" rmdir /s /q "%OUT%\%%w"
