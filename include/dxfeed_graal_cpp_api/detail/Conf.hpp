@@ -67,6 +67,11 @@
 //   inline variable have a copy in every module that uses them on Windows (the DLL and each executable), so the code
 //   inlined into the application and the code of the library see different objects. Keep such state in a .cpp file of
 //   the library (see ApiContext::getManager) or make it a member of an object.
+// - The shared library is built with hidden visibility (gcc, clang): only what DXFCPP_EXPORT marks is exported. The
+//   CMake target passes DXFCPP_USE_DLLS to its users, so the users also see the exported classes as visible; a user
+//   built with -fvisibility=hidden then shares their typeinfo and vtables (exceptions, dynamic_cast) with the library.
+// - The internal classes and functions in src/ use DXFCPP_INTERNAL_EXPORT (src/internal/InternalExport.hpp), not
+//   DXFCPP_EXPORT: they are exported only for the tests and the Tools (DXFCXX_EXPORT_INTERNALS).
 #ifndef DXFCPP_EXPORT
 #    if defined(DXFCPP_USE_DLLS) && defined(_MSC_VER)
 #        if defined(LIBDXFCPP_EXPORTS)
@@ -78,7 +83,7 @@
 #            define DXFCPP_EXPORT_TEMPLATE_DECLARE
 #            define DXFCPP_EXPORT_TEMPLATE_DEFINE __declspec(dllimport)
 #        endif // defined(LIBDXFCPP_EXPORTS)
-#    elif defined(DXFCPP_USE_DLLS) && defined(LIBDXFCPP_EXPORTS)
+#    elif defined(DXFCPP_USE_DLLS) && (defined(LIBDXFCPP_EXPORTS) || !defined(_WIN32))
 #        define DXFCPP_EXPORT __attribute__((visibility("default")))
 #        define DXFCPP_EXPORT_TEMPLATE_DECLARE __attribute__((visibility("default")))
 #        define DXFCPP_EXPORT_TEMPLATE_DEFINE

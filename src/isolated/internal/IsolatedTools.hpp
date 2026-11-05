@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "../../internal/InternalExport.hpp"
 #include "../../internal/utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
@@ -24,9 +25,11 @@ namespace isolated::internal::IsolatedTools {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-DXFCPP_EXPORT std::unordered_set<std::string> /* dxfg_string_list* */ parseSymbols(const StringLike& symbolList);
+DXFCPP_INTERNAL_EXPORT std::unordered_set<std::string> /* dxfg_string_list* */
+parseSymbols(const StringLike& symbolList);
 
-DXFCPP_EXPORT std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(const StringLike& symbolList);
+DXFCPP_INTERNAL_EXPORT std::vector<std::string> /* dxfg_string_list* */
+parseSymbolsAndSaveOrder(const StringLike& symbolList);
 
 /**
  * Calls the Graal SDK function `dxfg_Tools_main` in isolation.
@@ -35,7 +38,7 @@ DXFCPP_EXPORT std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSa
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-DXFCPP_EXPORT void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string> &args);
+DXFCPP_INTERNAL_EXPORT void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string> &args);
 
 } // namespace isolated::internal::IsolatedTools
 

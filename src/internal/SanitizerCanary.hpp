@@ -8,19 +8,20 @@
 // that the LIBRARY code (not only the test code) is instrumented. Not part of the public API; not installed.
 
 #include "../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "InternalExport.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace internal::sanitizer_canary {
 
 /// Writes one element past the end of a heap array (AddressSanitizer: heap-buffer-overflow).
-DXFCPP_EXPORT int heapBufferOverflow();
+DXFCPP_INTERNAL_EXPORT int heapBufferOverflow();
 
 /// Returns `value + 1` without an overflow check (UndefinedBehaviorSanitizer: signed integer overflow for INT_MAX).
-DXFCPP_EXPORT int signedOverflow(int value);
+DXFCPP_INTERNAL_EXPORT int signedOverflow(int value);
 
 /// Increments a global counter from two threads without synchronization (ThreadSanitizer: data race).
-DXFCPP_EXPORT int dataRace();
+DXFCPP_INTERNAL_EXPORT int dataRace();
 
 } // namespace internal::sanitizer_canary
 

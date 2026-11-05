@@ -27,7 +27,7 @@ extern "C" {
 #            define DXFCPP_EXPORT_TEMPLATE_DECLARE
 #            define DXFCPP_EXPORT_TEMPLATE_DEFINE __declspec(dllimport)
 #        endif // defined(LIBDXFCPP_EXPORTS)
-#    elif defined(DXFCPP_USE_DLLS) && defined(LIBDXFCPP_EXPORTS)
+#    elif defined(DXFCPP_USE_DLLS) && (defined(LIBDXFCPP_EXPORTS) || !defined(_WIN32))
 #        define DXFCPP_EXPORT __attribute__((visibility("default")))
 #        define DXFCPP_EXPORT_TEMPLATE_DECLARE __attribute__((visibility("default")))
 #        define DXFCPP_EXPORT_TEMPLATE_DEFINE

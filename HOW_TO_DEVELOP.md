@@ -218,7 +218,8 @@ An entity is a C++ class that wraps a Java object of the SDK (`DXFeedSubscriptio
    `dxFeedGraalCxxApi_Api_Sources`).
 6. **Tests**: a test file in `tests/<module>/`, added to the list in `tests/CMakeLists.txt`. Test the static and the
    dynamic library (`-DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON`): a missing `DXFCPP_EXPORT` is a link error only with
-   the DLL.
+   the DLL. A new public class changes the exported symbols: update the lists (see
+   [Exported symbols](#exported-symbols)).
 7. **Docs**: Doxygen comments in the public header, as in the Java API. When the entity is something the users start
    with, a sample: `samples/cpp/<group>/<Name>Sample/` with its `CMakeLists.txt`, `dxfeed.system.properties` and
    `src/main.cpp`, an `add_subdirectory` in the samples block of the root `CMakeLists.txt` and a line in the list of
@@ -304,6 +305,32 @@ and builds its own executable, `dxFeedGraalCxxApi_<module>_<Name>`. A fix starts
 - **Do not depend on one compiler.** For example, `std::source_location::current()` as a default argument gives the
   first line of a call that spans several lines with GCC and MSVC and the last one with Clang: compare such a line with
   a range, or write the call on one line.
+
+## Exported symbols
+
+The shared library is built with hidden visibility: with gcc and clang it exports only what is marked.
+
+- A class or function of a public header (`include/`) that users call is `DXFCPP_EXPORT` (the rules are next to the
+  macro in `include/dxfeed_graal_cpp_api/detail/Conf.hpp`).
+- A class or function of `src/` that the tests or the Tools use is `DXFCPP_INTERNAL_EXPORT`
+  (`src/internal/InternalExport.hpp`): it is exported only by a build with `DXFCXX_EXPORT_INTERNALS`, never by a
+  release package (see [HOW_TO_BUILD.md](HOW_TO_BUILD.md)).
+- Nothing else is exported: no `DXFCPP_EXPORT` in `src/`.
+
+The exported symbols are listed in `abi/symbols-linux.txt`, `abi/symbols-macos.txt` and `abi/symbols-windows.txt`:
+the own symbols demangled one per line and the number of the `std::` instantiations. The `symbols` CI job compares
+the Release library (without `DXFCXX_EXPORT_INTERNALS`) with the list of its OS and fails on any difference, so a
+change of the public API shows in the pull request as a diff of the list. Update the list of your OS after building
+the library in Release:
+
+```shell
+python3 scripts/symbols.py compare --update build/libdxFeedGraalCxxApi.so abi/symbols-linux.txt
+```
+
+The lists come from the compilers of the job: gcc 14 on Linux (as the release packages), Apple clang on macOS,
+Visual Studio 2022 on Windows. Another compiler exports other implicit symbols (clang on Linux adds construction
+vtables, for example), so update the list with the same one, or take it from the artifact `symbols-<os>` of the
+failed job. A removed or changed line is a breaking change of the ABI: it needs a new major version.
 
 ## Release notes
 

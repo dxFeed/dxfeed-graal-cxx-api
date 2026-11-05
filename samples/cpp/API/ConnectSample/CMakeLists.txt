@@ -38,7 +38,6 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE ../../../../third_party/range-v3-0.12/include)
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)

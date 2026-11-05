@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "../InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -11,8 +12,8 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace internal::resources {
 
-struct DXFCPP_EXPORT Strings {
-    struct DXFCPP_EXPORT Events {
+struct DXFCPP_INTERNAL_EXPORT Strings {
+    struct DXFCPP_INTERNAL_EXPORT Events {
         static constexpr auto UNABLE_TO_CREATE = "Unable to create {}. The `{}` parameter is nullptr";
         static constexpr auto UNABLE_TO_CREATE2 = "Unable to create {}. Wrong event class {}({})! Expected: {}";
         static constexpr auto UNABLE_TO_FREE = "Unable to free {}'s Graal data. Wrong event class {}({})! Expected: {}";

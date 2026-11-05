@@ -146,7 +146,6 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx)
-        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static)
 
@@ -206,7 +205,6 @@ if (DXFCXX_SANITIZERS_ENABLED)
 
     if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
         target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx)
-        target_compile_definitions(${DXFC_CANARY_TARGET} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx::static)
 
@@ -244,11 +242,13 @@ if (DXFCXX_SANITIZERS_ENABLED)
 endif ()
 
 # The library constants read from the global initializers of a user translation unit, with each kind of linking.
-# The shared variant is not built with the static C runtime: the library and the test would have separate heaps. The
-# static_nograal variant reads only the constants that do not need Java and checks that the Graal isolate is not created.
+# The shared variant is not built with the static C runtime: the library and the test would have separate heaps. It
+# uses the internal Isolate, so it is built only when the shared library exports the internals (DXFCXX_EXPORT_INTERNALS,
+# the dynamic-link-tests CI jobs). The static_nograal variant reads only the constants that do not need Java and checks
+# that the Graal isolate is not created.
 set(DXFC_STATIC_INIT_VARIANTS static static_nograal)
 
-if (NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+if (DXFCXX_EXPORT_INTERNALS AND NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
     list(APPEND DXFC_STATIC_INIT_VARIANTS shared)
 endif ()
 
@@ -260,7 +260,6 @@ foreach (DXFC_STATIC_INIT_VARIANT IN LISTS DXFC_STATIC_INIT_VARIANTS)
 
     if (DXFC_STATIC_INIT_VARIANT STREQUAL "shared")
         target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx)
-        target_compile_definitions(${DXFC_STATIC_INIT_TARGET} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx::static)
 
@@ -287,10 +286,10 @@ foreach (DXFC_STATIC_INIT_VARIANT IN LISTS DXFC_STATIC_INIT_VARIANTS)
 endforeach ()
 
 # The process exits while the Graal threads are running, with each kind of linking; a hang at exit fails the test by its
-# timeout. The shared variant is not built with the static C runtime, as above.
+# timeout. The shared variant is built as above: without the static C runtime and with the internals exported.
 set(DXFC_EXIT_VARIANTS static)
 
-if (NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+if (DXFCXX_EXPORT_INTERNALS AND NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
     list(APPEND DXFC_EXIT_VARIANTS shared)
 endif ()
 
@@ -309,7 +308,6 @@ foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
 
     if (DXFC_EXIT_VARIANT STREQUAL "shared")
         target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE dxfcxx)
-        target_compile_definitions(${DXFC_EXIT_TARGET} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE dxfcxx::static)
 
@@ -364,7 +362,7 @@ endfunction ()
 # is removed: a scenario that does not check it must not see it.
 set(DXFC_ISOLATE_ARGS_VARIANTS static)
 
-if (NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+if (DXFCXX_EXPORT_INTERNALS AND NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
     list(APPEND DXFC_ISOLATE_ARGS_VARIANTS shared)
 endif ()
 
@@ -384,7 +382,6 @@ foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
 
     if (DXFC_ISOLATE_ARGS_VARIANT STREQUAL "shared")
         target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE dxfcxx)
-        target_compile_definitions(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE dxfcxx::static)
 

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -14,7 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 /// A simple thread-safe stopwatch.
-struct DXFCPP_EXPORT StopWatch final {
+struct DXFCPP_INTERNAL_EXPORT StopWatch final {
     private:
     mutable std::mutex mutex_{};
     std::chrono::milliseconds elapsed_{};

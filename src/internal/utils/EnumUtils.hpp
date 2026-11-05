@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "../InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -19,7 +20,7 @@ namespace enum_utils {
  * @param separator The list separator
  * @return A separated list of names
  */
-DXFCPP_EXPORT std::string getEventTypeEnumNamesList(std::string separator = std::string(",")) noexcept;
+DXFCPP_INTERNAL_EXPORT std::string getEventTypeEnumNamesList(std::string separator = std::string(",")) noexcept;
 
 /**
  * Returns a separated list of names of Market EventTypeEnum elements (QUOTE, TIME_AND_SALE etc).
@@ -27,7 +28,7 @@ DXFCPP_EXPORT std::string getEventTypeEnumNamesList(std::string separator = std:
  * @param separator The list separator
  * @return A separated list of names
  */
-DXFCPP_EXPORT std::string getMarketEventTypeEnumNamesList(std::string separator = std::string(",")) noexcept;
+DXFCPP_INTERNAL_EXPORT std::string getMarketEventTypeEnumNamesList(std::string separator = std::string(",")) noexcept;
 
 /**
  * Returns a separated list of class names of EventTypeEnum elements (Candle, Quote, TimeAndSale etc).
@@ -35,7 +36,7 @@ DXFCPP_EXPORT std::string getMarketEventTypeEnumNamesList(std::string separator 
  * @param separator The list separator
  * @return A separated list of class names
  */
-DXFCPP_EXPORT std::string getEventTypeEnumClassNamesList(std::string separator = std::string(",")) noexcept;
+DXFCPP_INTERNAL_EXPORT std::string getEventTypeEnumClassNamesList(std::string separator = std::string(",")) noexcept;
 
 /**
  * Returns a separated list of class names of Market EventTypeEnum elements (Quote, TimeAndSale etc).
@@ -43,7 +44,8 @@ DXFCPP_EXPORT std::string getEventTypeEnumClassNamesList(std::string separator =
  * @param separator The list separator
  * @return A separated list of class names
  */
-DXFCPP_EXPORT std::string getMarketEventTypeEnumClassNamesList(std::string separator = std::string(",")) noexcept;
+DXFCPP_INTERNAL_EXPORT std::string
+getMarketEventTypeEnumClassNamesList(std::string separator = std::string(",")) noexcept;
 
 } // namespace enum_utils
 

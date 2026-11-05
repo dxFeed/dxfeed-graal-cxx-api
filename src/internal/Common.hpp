@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "InternalExport.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/detail/Concepts.hpp"
 #include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
@@ -96,7 +97,7 @@ constexpr To bit_cast(const From &from)
 namespace detail {
 // Reports the exception being handled, thrown by the body of DXFCPP_FINALLY, to ErrorManager (not while the library is
 // shutting down: the SDK is not called any more then).
-DXFCPP_EXPORT void reportScopeExitException(const std::source_location &location) noexcept;
+DXFCPP_INTERNAL_EXPORT void reportScopeExitException(const std::source_location &location) noexcept;
 
 template <typename Func> struct OnScopeExit {
     Func func;

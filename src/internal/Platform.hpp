@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -12,7 +13,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct DXFCPP_EXPORT Platform final {
+struct DXFCPP_INTERNAL_EXPORT Platform final {
     static std::size_t getLogicalCoresCount() noexcept;
 
     static std::string getPlatformInfo() noexcept;

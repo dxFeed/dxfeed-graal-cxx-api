@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "../InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -27,15 +28,16 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-DXFCPP_EXPORT std::string toString(bool b) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string toString(bool b) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string toString(const char *chars) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string toString(const char *chars) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::optional<std::string> toStringOpt(const char *chars) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::optional<std::string>
+toStringOpt(const char *chars) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string toString(std::thread::id theadId); // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string toString(std::thread::id theadId); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string toString(void *ptr); // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string toString(void *ptr); // NOLINT(*-redundant-declaration)
 
 // template <typename T> std::string toStringAny(T &&t);
 
@@ -149,7 +151,7 @@ toStringAny(T &&) {
  * @param in The UTF-16 code unit.
  * @return The char, or 0 if the code unit is above U+00FF.
  */
-DXFCPP_EXPORT char utf16to8(std::int16_t in) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT char utf16to8(std::int16_t in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * Converts UTF16 char to UTF8 string
@@ -157,7 +159,7 @@ DXFCPP_EXPORT char utf16to8(std::int16_t in) noexcept; // NOLINT(*-redundant-dec
  * @param in The UTF16 char
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string utf16toUtf8String(std::int16_t in) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string utf16toUtf8String(std::int16_t in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * Converts UTF16 string to UTF8 string
@@ -165,7 +167,8 @@ DXFCPP_EXPORT std::string utf16toUtf8String(std::int16_t in) noexcept; // NOLINT
  * @param in The UTF16 string
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string &in) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string
+utf16toUtf8String(const std::u16string &in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * Converts vector of UTF16 chars to UTF8 string
@@ -173,7 +176,7 @@ DXFCPP_EXPORT std::string utf16toUtf8String(const std::u16string &in) noexcept; 
  * @param in The UTF16 string
  * @return UTF8 string
  */
-DXFCPP_EXPORT std::string
+DXFCPP_INTERNAL_EXPORT std::string
 utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
@@ -182,20 +185,21 @@ utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept; // NOLINT(*-red
  * @param in The char.
  * @return The UTF-16 code unit.
  */
-DXFCPP_EXPORT std::int16_t utf8to16(char in) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::int16_t utf8to16(char in) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStamp(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string formatTimeStamp(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStampWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string
+formatTimeStampWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStampFast(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string formatTimeStampFast(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string formatTimeStampWithMillis(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::string
+DXFCPP_INTERNAL_EXPORT std::string
 formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT char *createCString(const StringLike &s); // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT char *createCString(const StringLike &s); // NOLINT(*-redundant-declaration)
 
 template <typename S> char *createCString(const std::optional<S> &s) {
     if (!s) {
@@ -241,7 +245,7 @@ std::string elementsToString(It begin, It end, const std::string &prefix = "[", 
     return result + postfix;
 }
 
-DXFCPP_EXPORT std::string encodeChar(std::int16_t c); // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string encodeChar(std::int16_t c); // NOLINT(*-redundant-declaration)
 
 inline std::string encodeChar(char c) {
     return encodeChar(static_cast<std::int16_t>(static_cast<unsigned char>(c)));
@@ -249,7 +253,7 @@ inline std::string encodeChar(char c) {
 
 namespace detail {
 
-class IsIEqual {
+class DXFCPP_INTERNAL_EXPORT IsIEqual {
     std::locale locale_;
 
     public:
@@ -276,13 +280,13 @@ bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
     return (secondIt == std::end(second)) && (firstIt == std::end(first));
 }
 
-DXFCPP_EXPORT inline bool iEquals(const StringLike &first, const StringLike &second) noexcept {
+DXFCPP_INTERNAL_EXPORT inline bool iEquals(const StringLike &first, const StringLike &second) noexcept {
     const auto &locale = std::locale();
 
     return equals(first, second, detail::IsIEqual(locale));
 }
 
-DXFCPP_EXPORT inline std::size_t icHash(const StringLike &s) noexcept {
+DXFCPP_INTERNAL_EXPORT inline std::size_t icHash(const StringLike &s) noexcept {
     const auto &locale = std::locale();
     std::string result{};
 
@@ -293,18 +297,18 @@ DXFCPP_EXPORT inline std::size_t icHash(const StringLike &s) noexcept {
     return std::hash<std::string>()(result);
 }
 
-DXFCPP_EXPORT std::string trimStr(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string trimStr(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_EXPORT std::vector<std::string> splitStr(const StringLike &s, char sep = ',') noexcept;
+DXFCPP_INTERNAL_EXPORT std::vector<std::string> splitStr(const StringLike &s, char sep = ',') noexcept;
 
-DXFCPP_EXPORT std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep = ", ") noexcept;
+DXFCPP_INTERNAL_EXPORT std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep = ", ") noexcept;
 
-DXFCPP_EXPORT bool toBool(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT bool toBool(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * The result of parseIsolateArguments(): the arguments, or the reason why the text cannot be parsed.
  */
-struct DXFCPP_EXPORT IsolateArgumentsParseResult {
+struct DXFCPP_INTERNAL_EXPORT IsolateArgumentsParseResult {
     /// The arguments. Empty if the text has no arguments or if there is an error.
     std::vector<std::string> arguments{};
 
@@ -333,7 +337,7 @@ struct DXFCPP_EXPORT IsolateArgumentsParseResult {
  * @param text The text to split, e.g. the value of the `DXFCPP_ISOLATE_ARGUMENTS` environment variable.
  * @return The arguments, or the reason of the error.
  */
-DXFCPP_EXPORT IsolateArgumentsParseResult parseIsolateArguments(std::string_view text);
+DXFCPP_INTERNAL_EXPORT IsolateArgumentsParseResult parseIsolateArguments(std::string_view text);
 
 DXFCPP_END_NAMESPACE
 

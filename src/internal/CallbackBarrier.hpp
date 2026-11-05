@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -61,7 +62,7 @@ void runCallback(const char *component, Body &&body,
  *
  * @param object The object to release.
  */
-DXFCPP_EXPORT void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept;
+DXFCPP_INTERNAL_EXPORT void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept;
 
 DXFCPP_END_NAMESPACE
 

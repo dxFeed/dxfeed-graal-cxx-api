@@ -4,6 +4,7 @@
 #pragma once
 
 #include "../../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "../../InternalExport.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -36,7 +37,7 @@ static inline std::string getDebugName() {
     return {};
 }
 
-struct DXFCPP_EXPORT Debugger {
+struct DXFCPP_INTERNAL_EXPORT Debugger {
     static constexpr bool isDebug = false;
     static constexpr bool traceIsolates = false;
     static constexpr bool traceLists = false;
@@ -49,7 +50,7 @@ struct DXFCPP_EXPORT Debugger {
 
 #else
 
-struct DXFCPP_EXPORT Debugger {
+struct DXFCPP_INTERNAL_EXPORT Debugger {
     static constexpr bool isDebug = true;
 #    if DXFCPP_TRACE_ISOLATES == 1
     static constexpr bool traceIsolates = true;

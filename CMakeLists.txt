@@ -88,6 +88,10 @@ set_property(CACHE DXFCXX_BUILD_UI_SAMPLES PROPERTY STRINGS AUTO ON OFF)
 option(DXFCXX_SAMPLE_GLFW_BUILD_WAYLAND "Require the GLFW Wayland backend of the UI samples (it is built whenever found)" OFF)
 option(DXFCXX_BUILD_TOOLS "Build tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_DYNAMICALLY_LINK_TOOLS "Dynamically link tools" OFF)
+option(DXFCXX_EXPORT_INTERNALS "Export the internal classes of the library (DXFCPP_INTERNAL_EXPORT) from the shared library for the tests and the Tools of the build tree; ON with DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS or DXFCXX_DYNAMICALLY_LINK_TOOLS" OFF)
+if ((DXFCXX_BUILD_UNIT_TESTS AND DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS) OR (DXFCXX_BUILD_TOOLS AND DXFCXX_DYNAMICALLY_LINK_TOOLS))
+    set(DXFCXX_EXPORT_INTERNALS ON)
+endif ()
 option(DXFCXX_BUILD_DOC "Build documentation" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL "Prepare install" ON)
 option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
@@ -682,8 +686,22 @@ endif ()
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
+# DXFCPP_USE_DLLS is PUBLIC: the users of the shared library get dllimport (MSVC) or default visibility (gcc, clang)
+# from DXFCPP_EXPORT without defining anything themselves.
+target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCPP_USE_DLLS)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-        DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
+        LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
+if (DXFCXX_EXPORT_INTERNALS)
+    # Only the targets of the build tree (tests, Tools) get the definition, never the users of the installed package.
+    target_compile_definitions(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:DXFCXX_EXPORT_INTERNALS>)
+endif ()
+# Only DXFCPP_EXPORT is exported. MinGW keeps exporting everything: its import side has no DXFCPP_EXPORT attribute.
+if (NOT MINGW)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+            CXX_VISIBILITY_PRESET hidden
+            C_VISIBILITY_PRESET hidden
+            VISIBILITY_INLINES_HIDDEN ON)
+endif ()
 
 target_include_directories(${PROJECT_NAME}_static PUBLIC include)
 target_include_directories(${PROJECT_NAME}_static SYSTEM PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
