@@ -511,9 +511,9 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * Returns maturity month-year as provided for corresponding FIX tag (200).
      * It can use several different formats depending on data source:
      * <ul>
-     * <li>YYYYMM – if only year and month are specified
-     * <li>YYYYMMDD – if full date is specified
-     * <li>YYYYMMwN – if week number (within a month) is specified
+     * <li>YYYYMM - if only year and month are specified
+     * <li>YYYYMMDD - if full date is specified
+     * <li>YYYYMMwN - if week number (within a month) is specified
      * </ul>
      *
      * @return The maturity month-year as provided for corresponding FIX tag (200).
@@ -524,9 +524,9 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * Changes maturity month-year as provided for corresponding FIX tag (200).
      * It can use several different formats depending on data source:
      * <ul>
-     * <li>YYYYMM – if only year and month are specified
-     * <li>YYYYMMDD – if full date is specified
-     * <li>YYYYMMwN – if week number (within a month) is specified
+     * <li>YYYYMM - if only year and month are specified
+     * <li>YYYYMMDD - if full date is specified
+     * <li>YYYYMMwN - if week number (within a month) is specified
      * </ul>
      *
      * @param mmy The maturity month-year as provided for corresponding FIX tag (200).

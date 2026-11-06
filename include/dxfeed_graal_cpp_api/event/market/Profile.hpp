@@ -334,14 +334,14 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     void setBeta(double beta) noexcept;
 
     /**
-     * Returns earnings per share (the company’s profits divided by the number of shares).
+     * Returns earnings per share (the company's profits divided by the number of shares).
      *
      * @return earnings per share
      */
     double getEarningsPerShare() const noexcept;
 
     /**
-     * Changes Earnings per share (the company’s profits divided by the number of shares).
+     * Changes Earnings per share (the company's profits divided by the number of shares).
      *
      * @param earningsPerShare earnings per share
      */

@@ -4,7 +4,7 @@
 # Checks that the installation has no internal headers and no third-party headers, then compiles every installed C++
 # header of the library on its own, with the include directory of the installation as the only include directory: a
 # header that needs a third-party library or a header that is not installed fails here.
-# On Windows each header is also compiled after <windows.h> (without NOMINMAX).
+# On Windows each header is also compiled after <windows.h> (without NOMINMAX). The headers must be ASCII.
 # Usage: cmake -S .github/ci/installed-headers-check -B <dir> -DDXFCXX_INSTALL_PREFIX=<prefix>
 #        cmake --build <dir>
 
@@ -34,6 +34,27 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 file(GLOB_RECURSE DXFCXX_INSTALLED_HEADERS RELATIVE "${DXFCXX_INSTALLED_INCLUDE_DIR}"
         "${DXFCXX_INSTALLED_INCLUDE_DIR}/dxfeed_graal_cpp_api/*.hpp")
 
+# The headers are ASCII: MSVC reads a source without a BOM in the code page of the system unless the user compiles with
+# /utf-8, and reports C4819 or misreads a string literal. The bytes of each header (of the C API too) are checked as
+# they are, so a byte that is not valid UTF-8 is found as well.
+file(GLOB_RECURSE DXFCXX_ALL_INSTALLED_HEADERS RELATIVE "${DXFCXX_INSTALLED_INCLUDE_DIR}"
+        "${DXFCXX_INSTALLED_INCLUDE_DIR}/*.h" "${DXFCXX_INSTALLED_INCLUDE_DIR}/*.hpp")
+set(DXFCXX_NOT_ASCII_HEADERS "")
+
+foreach (header ${DXFCXX_ALL_INSTALLED_HEADERS})
+    file(READ "${DXFCXX_INSTALLED_INCLUDE_DIR}/${header}" content)
+    string(REGEX MATCH "[^\t\n\r -~]" notAscii "${content}")
+
+    if (NOT notAscii STREQUAL "")
+        list(APPEND DXFCXX_NOT_ASCII_HEADERS "${header}")
+    endif ()
+endforeach ()
+
+if (DXFCXX_NOT_ASCII_HEADERS)
+    list(JOIN DXFCXX_NOT_ASCII_HEADERS "\n  " notAsciiList)
+    message(FATAL_ERROR "Installed headers with non-ASCII characters:\n  ${notAsciiList}")
+endif ()
+
 set(DXFCXX_CHECK_SOURCES "")
 
 foreach (header ${DXFCXX_INSTALLED_HEADERS})
@@ -57,5 +78,6 @@ add_library(dxfcxx_installed_headers_check OBJECT ${DXFCXX_CHECK_SOURCES})
 target_include_directories(dxfcxx_installed_headers_check PRIVATE "${DXFCXX_INSTALLED_INCLUDE_DIR}")
 
 if (MSVC)
-    target_compile_options(dxfcxx_installed_headers_check PRIVATE /EHsc /utf-8 /permissive- /Zc:__cplusplus)
+    # No /utf-8: the headers compile in the default code page of the system, as the users compile them.
+    target_compile_options(dxfcxx_installed_headers_check PRIVATE /EHsc /permissive- /Zc:__cplusplus)
 endif ()

@@ -41,6 +41,13 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../third_party/range-v3-0.12/include)
 
+# The definitions of the library are PRIVATE: the version in the name of the tools and the metrics are set here.
+target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_VERSION="${DXFCXX_VERSION}")
+
+if (DXFCXX_ENABLE_METRICS)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_ENABLE_METRICS=1)
+endif ()
+
 if (TARGET dxfcxx_warnings)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx_warnings)
 endif ()
@@ -69,7 +76,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E
 
 if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx>
+            ${DXFCXX_SHARED_LIBRARY_RUNTIME_FILE}
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif ()
 

@@ -1,0 +1,51 @@
+# Copyright (c) 2026 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+# The CMake package of the dxFeed Graal C++ API:
+#
+#   find_package(dxFeedGraalCxxApi CONFIG REQUIRED)
+#   target_link_libraries(app PRIVATE dxfcxx::dxfcxx) # the shared library (not in the -static-mt packages)
+#   target_link_libraries(app PRIVATE dxfcxx::static) # the static library
+#
+# dxfcxx::graal is the library of the dxFeed Graal Native SDK, which both libraries load: the programs need its file
+# (and the file of the shared library) next to them or in the search path of the dynamic loader.
+
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(Threads)
+
+# The library of the dxFeed Graal Native SDK, under the name the targets of the package link to.
+if (NOT TARGET DxFeedGraalNativeSdk)
+    add_library(DxFeedGraalNativeSdk SHARED IMPORTED)
+
+    if (WIN32)
+        set_target_properties(DxFeedGraalNativeSdk PROPERTIES
+                IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_BINDIR@/DxFeedGraalNativeSdk.dll"
+                IMPORTED_IMPLIB "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@/DxFeedGraalNativeSdk.lib")
+    else ()
+        set_target_properties(DxFeedGraalNativeSdk PROPERTIES
+                IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@/@DXFCXX_GRAAL_LIBRARY_FILE_NAME@"
+                IMPORTED_NO_SONAME TRUE)
+    endif ()
+endif ()
+
+if (NOT TARGET dxfcxx::graal)
+    add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
+endif ()
+
+# The static library of Boost.Stacktrace, when the static library of the API captures stack traces.
+set(_dxfcxx_stacktrace_library "@DXFCXX_STACKTRACE_LIBRARY_FILE_NAME@")
+
+if (_dxfcxx_stacktrace_library AND NOT TARGET dxfcxx::boost_stacktrace)
+    add_library(dxfcxx::boost_stacktrace STATIC IMPORTED)
+    set_target_properties(dxfcxx::boost_stacktrace PROPERTIES
+            IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@/${_dxfcxx_stacktrace_library}"
+            INTERFACE_LINK_LIBRARIES "@DXFCXX_STACKTRACE_SYSTEM_LIBRARIES@")
+endif ()
+
+unset(_dxfcxx_stacktrace_library)
+
+include("${CMAKE_CURRENT_LIST_DIR}/dxFeedGraalCxxApiTargets.cmake")
+
+check_required_components(dxFeedGraalCxxApi)

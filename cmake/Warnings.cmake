@@ -1,14 +1,19 @@
 # Copyright (c) 2026 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
-# The compiler warnings of this project's own code (the libraries, tests, samples, tools, fuzzers) on top of the
-# warnings of the libraries (-Wall -Wextra -pedantic, /W4). They come from the dxfcxx_warnings interface target, which
-# is linked PRIVATE, so they do not reach the projects that use the library. MSVC: C4365 is the signed/unsigned
-# conversion warning (-Wsign-conversion); the shadowing warnings C4456-C4459 are in /W4 already.
+# The compiler warnings of this project's own code (the libraries, tests, samples, tools, fuzzers): -Wall -Wextra
+# -pedantic (/W4) and a few more. They come from the dxfcxx_warnings interface target, which is linked PRIVATE, so they
+# do not reach the projects that use the library. MSVC: C4365 is the signed/unsigned conversion warning
+# (-Wsign-conversion); the shadowing warnings C4456-C4459 are in /W4 already.
 option(DXFCXX_WARNINGS_AS_ERRORS
         "Treat the compiler warnings of this project's own code as errors (not of the dependencies)" OFF)
 
 add_library(dxfcxx_warnings INTERFACE)
+# The base warning level and the options that the project's own sources need: /utf-8 (UTF-8 sources), /bigobj (fatal
+# error C1128: number of sections exceeded object file format limit). clang-cl takes the MSVC options.
+target_compile_options(dxfcxx_warnings INTERFACE
+        "$<$<AND:$<COMPILE_LANGUAGE:CXX>,$<BOOL:${MSVC}>>:/W4;/bigobj;/utf-8>"
+        "$<$<AND:$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>:-Wall;-Wextra;-pedantic>")
 target_compile_options(dxfcxx_warnings INTERFACE
         "$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Wshadow;-Wsign-conversion;-Wfloat-equal;-Wextra-semi>"
         "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/w44365>")

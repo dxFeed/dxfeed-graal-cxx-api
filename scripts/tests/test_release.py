@@ -196,6 +196,14 @@ class SetVersionsTest(unittest.TestCase):
         self.assertIn("PROJECT_NUMBER         = v9.0.0-rc1\n", result[release.DOXYFILE])
         self.assertIn("inline namespace v9 {", result[release.CONF])
 
+    def test_places_of_the_repository(self):
+        # Every file of the repository keeps exactly one place of the version (CMakeLists.txt parses it before
+        # project()).
+        files = {path: (release.ROOT / path).read_text(encoding="utf-8") for path in self.FILES}
+        result, _ = release.set_versions(files, Version.parse("v9.1.2"))
+
+        self.assertIn('set(DXFCXX_VERSION "v9.1.2" CACHE', result[release.CMAKE])
+
     def test_missing_place(self):
         with self.assertRaises(ReleaseError):
             release.set_versions({**self.FILES, release.DOXYFILE: "PROJECT_NAME = x\n"}, Version.parse("v8.2.0"))

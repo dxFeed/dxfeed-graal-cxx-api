@@ -216,7 +216,7 @@ AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map
     } else {
         static_assert(
             std::is_convertible_v<KeyType, std::string_view> || requires { KeyType{}.toStdString(); },
-            "AdditionalUnderlyings::valueOf(): unsupported key type — must be convertible to std::string_view or "
+            "AdditionalUnderlyings::valueOf(): unsupported key type - must be convertible to std::string_view or "
             "provide .toStdString()");
 
         return {};

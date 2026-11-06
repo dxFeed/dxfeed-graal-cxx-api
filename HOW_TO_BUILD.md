@@ -91,6 +91,25 @@ Sanitized builds also add the `dxFeedGraalCxxApi_SanitizerCanary_<asan|ubsan|tsa
 defective library function and pass only if the sanitizer reports it, so a sanitizer that is silently not applied to the
 library makes them fail.
 
+## Hardening
+
+The libraries are built with the hardening options of the compiler and the linker (`DXFCXX_HARDENING`, ON by default):
+
+- GCC and Clang on Linux and macOS: `-D_FORTIFY_SOURCE=3` (glibc before 2.34 takes it as 2),
+  `-fstack-protector-strong`, `-fstack-clash-protection` (Linux), `-fcf-protection=full` (x86_64); the shared library
+  is linked with `-z relro -z now` (Linux).
+- MSVC: `/guard:cf`, `/sdl`, `/CETCOMPAT` (x64). With `/sdl` the DLL also exports the compiler-generated
+  `__autoclassinit2` members of its classes, which `abi/symbols-windows.txt` lists. A DLL built with
+  `DXFCXX_HARDENING=OFF` lacks them; programs that use the DLL do not call them.
+
+The options are used in the optimized configurations only (Release, RelWithDebInfo, MinSizeRel; not in Debug or a
+build without a build type), not in sanitized builds, and are not passed to the projects that use the library. MinGW
+builds are not hardened.
+
+```shell
+cmake -DDXFCXX_HARDENING=OFF ..
+```
+
 ## Warnings
 
 This project's own code (the libraries, tests, samples, tools, fuzzers) is compiled with `-Wshadow`,

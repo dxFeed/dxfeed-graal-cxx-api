@@ -1,6 +1,6 @@
 # Exported symbols of the shared library (windows), made by scripts/symbols.py compare --update.
 # Own symbols one per line; the std:: instantiations only as their number.
-std-total: 32
+std-total: 33
 __int64 dxfcpp::v8::Candle::getCount(void)const
 __int64 dxfcpp::v8::CandlePeriod::getPeriodIntervalMillis(void)const
 __int64 dxfcpp::v8::CandleType::getPeriodIntervalMillis(void)const
@@ -2971,6 +2971,7 @@ void dxfcpp::v8::Candle::setTime(__int64)
 void dxfcpp::v8::Candle::setVWAP(double)
 void dxfcpp::v8::Candle::setVolume(double)
 void dxfcpp::v8::CandleSymbol::initTransientFields(bool)
+void dxfcpp::v8::DXEndpoint::Builder::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::DXEndpoint::Builder::`vbase destructor'(void)
 void dxfcpp::v8::DXEndpoint::Builder::loadDefaultPropertiesImpl(void)
 void dxfcpp::v8::DXEndpoint::Builder::withExecutorImpl(struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::ExecutorTag> const &)const
@@ -2993,6 +2994,7 @@ void dxfcpp::v8::DXFeed::detachSubscription(class std::shared_ptr<class dxfcpp::
 void dxfcpp::v8::DXFeed::detachSubscriptionAndClear(class std::shared_ptr<class dxfcpp::v8::DXFeedSubscription> const &)const
 void dxfcpp::v8::DXFeed::releaseSubscription(class dxfcpp::v8::DXFeedSubscription const *)const
 void dxfcpp::v8::DXFeed::releaseSubscriptions(void)const
+void dxfcpp::v8::DXFeedSubscription::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::DXFeedSubscription::`vbase destructor'(void)
 void dxfcpp::v8::DXFeedSubscription::addFeed(class std::shared_ptr<struct dxfcpp::v8::DXFeed const > const &)const
 void dxfcpp::v8::DXFeedSubscription::addSymbols(class std::initializer_list<struct dxfcpp::v8::SymbolWrapper>)const
@@ -3014,6 +3016,7 @@ void dxfcpp::v8::DXFeedSubscription::setEventListenerHandle(unsigned __int64)
 void dxfcpp::v8::DXFeedSubscription::setEventsBatchLimit(int)const
 void dxfcpp::v8::DXFeedSubscription::setSymbols(class std::initializer_list<struct dxfcpp::v8::SymbolWrapper>)const
 void dxfcpp::v8::DXFeedSubscription::setSymbolsImpl(void *)const
+void dxfcpp::v8::DXFeedTimeSeriesSubscription::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::DXFeedTimeSeriesSubscription::`vbase destructor'(void)
 void dxfcpp::v8::DXFeedTimeSeriesSubscription::setFromTime(__int64)
 void dxfcpp::v8::DXFeedTimeSeriesSubscription::setFromTime(class std::chrono::duration<__int64,struct std::ratio<1,1000> >)
@@ -3024,6 +3027,7 @@ void dxfcpp::v8::DXPublisher::releaseSubscriptions(void)const
 void dxfcpp::v8::DXPublisherObservableSubscription::`vbase destructor'(void)
 void dxfcpp::v8::DXPublisherObservableSubscription::releaseChangeListenerAfterClose(unsigned __int64)
 void dxfcpp::v8::EventClassList::set(unsigned __int64,unsigned int)const
+void dxfcpp::v8::EventFlag::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::Greeks::setDelta(double)
 void dxfcpp::v8::Greeks::setGamma(double)
 void dxfcpp::v8::Greeks::setPrice(double)
@@ -3037,6 +3041,7 @@ void dxfcpp::v8::HistoryEndpoint::Builder::`vbase destructor'(void)
 void dxfcpp::v8::HistoryEndpoint::`vbase destructor'(void)
 void dxfcpp::v8::InPlaceExecutor::`vbase destructor'(void)
 void dxfcpp::v8::InPlaceExecutor::processAllPendingTasks(void)const
+void dxfcpp::v8::IndexedEventSubscriptionSymbol::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::InstrumentProfile::`vbase destructor'(void)
 void dxfcpp::v8::InstrumentProfile::setAdditionalUnderlyings(struct dxfcpp::v8::StringLike const &)const
 void dxfcpp::v8::InstrumentProfile::setBaseCurrency(struct dxfcpp::v8::StringLike const &)const
@@ -3072,15 +3077,19 @@ void dxfcpp::v8::InstrumentProfile::setSymbol(struct dxfcpp::v8::StringLike cons
 void dxfcpp::v8::InstrumentProfile::setTradingHours(struct dxfcpp::v8::StringLike const &)const
 void dxfcpp::v8::InstrumentProfile::setType(struct dxfcpp::v8::StringLike const &)const
 void dxfcpp::v8::InstrumentProfile::setUnderlying(struct dxfcpp::v8::StringLike const &)const
+void dxfcpp::v8::InstrumentProfileCollector::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::InstrumentProfileCollector::removeUpdateListener(unsigned __int64)
 void dxfcpp::v8::InstrumentProfileCollector::updateInstrumentProfile(class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile>)const
+void dxfcpp::v8::InstrumentProfileConnection::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::InstrumentProfileConnection::close(void)const
 void dxfcpp::v8::InstrumentProfileConnection::removeStateChangeListener(unsigned __int64)
 void dxfcpp::v8::InstrumentProfileConnection::setUpdatePeriod(__int64)const
 void dxfcpp::v8::InstrumentProfileConnection::setUpdatePeriod(class std::chrono::duration<__int64,struct std::ratio<1,1000> >)const
 void dxfcpp::v8::InstrumentProfileConnection::start(void)const
+void dxfcpp::v8::InstrumentProfileField::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::IterableInstrumentProfile::`default constructor closure'(void)
 void dxfcpp::v8::JavaObjectHandleRegistry::releaseAll(void)
+void dxfcpp::v8::JavaObjectHandleState::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::JavaObjectHandleState::moveFrom(class dxfcpp::v8::JavaObjectHandleState &)
 void dxfcpp::v8::JavaObjectHandleState::reset(void *)
 void dxfcpp::v8::MarketMaker::setAskCount(__int64)
@@ -3321,6 +3330,7 @@ void dxfcpp::v8::TimeAndSale::setTradeId(__int64)
 void dxfcpp::v8::TimeAndSale::setTradeThroughExempt(char)
 void dxfcpp::v8::TimeAndSale::setType(struct dxfcpp::v8::TimeAndSaleType const &)
 void dxfcpp::v8::TimeAndSale::setValidTick(bool)
+void dxfcpp::v8::TimeSeriesSubscriptionSymbol::__autoclassinit2(unsigned __int64)
 void dxfcpp::v8::Timer::interruptableSleep(class std::chrono::duration<__int64,struct std::ratio<1,1000> >)const
 void dxfcpp::v8::Timer::interruptableSleep(unsigned __int64)const
 void dxfcpp::v8::Timer::stop(void)
