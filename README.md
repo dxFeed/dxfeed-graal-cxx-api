@@ -195,6 +195,10 @@ of a release:
 | Static library           | `lib\dxFeedGraalCxxApi_static.lib`                     | `lib/libdxFeedGraalCxxApi_static.a`      | `lib/libdxFeedGraalCxxApi_static.a`       |
 | dxFeed Graal Native SDK  | `bin\DxFeedGraalNativeSdk.dll`, `lib\DxFeedGraalNativeSdk.lib` | `lib/libDxFeedGraalNativeSdk.so` | `lib/libDxFeedGraalNativeSdk.dylib`       |
 
+The archives of a release use `lib/`. Installed from the sources, the libraries go to the `CMAKE_INSTALL_LIBDIR` of
+`GNUInstallDirs`, which is `lib64` on the Red Hat family of Linux distributions; `-DCMAKE_INSTALL_LIBDIR=lib` keeps
+`lib/`.
+
 Both libraries load the library of the dxFeed Graal Native SDK at run time: ship it with your program, next to it or
 in the search path of the dynamic loader (`PATH`, `RPATH`/`RUNPATH`, `LD_LIBRARY_PATH`), and the shared library of
 the API too when you use it. The major version in the name of the shared library changes with every incompatible

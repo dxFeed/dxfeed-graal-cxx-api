@@ -348,6 +348,9 @@ jobs:
 
   # The exported symbols of the Release library (as in the packages: no DXFCXX_EXPORT_INTERNALS) against the list of its
   # OS, abi/symbols-<os>.txt. On a difference the list of the library is uploaded as the artifact symbols-<os>.
+  # The compilers are those of the packages (release.yml): Linux in oraclelinux:8 with gcc-toolset-14, so the list is
+  # the one of the library that is shipped. The steps use paths relative to the workspace: in a container,
+  # ${{github.workspace}} is the path on the runner.
   symbols:
     needs: plan
     if: ${{ needs.plan.outputs.code == 'true' }}
@@ -355,11 +358,13 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - name: ubuntu-24.04-gcc-14
+          - name: oraclelinux-8-gcc-toolset-14
             image: ubuntu-24.04
+            container: oraclelinux:8
             os: linux
-            cc: 'gcc-14'
-            cxx: 'g++-14'
+            cc: 'gcc'
+            cxx: 'g++'
+            python: python3.11
             library: build/libdxFeedGraalCxxApi.so
           - name: macos-15-xcode-16-4
             image: macos-15
@@ -367,19 +372,30 @@ jobs:
             xcode: '16.4'
             cc: 'clang'
             cxx: 'clang++'
+            python: python3
             library: build/libdxFeedGraalCxxApi.dylib
           - name: win2022-vs2022
             image: windows-2022
             os: windows
             cc: 'cl'
             cxx: 'cl'
+            python: python
             library: build/Release/dxFeedGraalCxxApi.dll
 
     name: "${{ matrix.config.name }}-Release-symbols"
     runs-on: ${{ matrix.config.image }}
+    container: ${{ matrix.config.container }}
     timeout-minutes: 45
 
     steps:
+      # Before the checkout: git for it and for the dependencies that CMake fetches.
+      - name: Install Linux build dependencies
+        if: ${{ matrix.config.os == 'linux' }}
+        timeout-minutes: 15
+        run: |
+          dnf -y install gcc-toolset-14-gcc-c++ gcc-toolset-14-binutils cmake git make python3.11
+          echo "/opt/rh/gcc-toolset-14/root/usr/bin" >> "$GITHUB_PATH"
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Select Xcode version
@@ -388,7 +404,7 @@ jobs:
 
       - name: Configure CMake
         run: >
-          cmake -B ${{github.workspace}}/build
+          cmake -B build
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
@@ -399,13 +415,12 @@ jobs:
           -DDXFCXX_FEATURE_STACKTRACE=ON
 
       - name: Build the shared library
-        run: cmake --build ${{github.workspace}}/build --config Release --target dxFeedGraalCxxApi -j 4
+        run: cmake --build build --config Release --target dxFeedGraalCxxApi -j 4
 
       - name: Compare the exported symbols with abi/symbols-${{ matrix.config.os }}.txt
         shell: bash
         run: |
-          python=python3
-          [ "$RUNNER_OS" = Windows ] && python=python
+          python=${{ matrix.config.python }}
           list=abi/symbols-${{ matrix.config.os }}.txt
           if ! "$python" scripts/symbols.py compare ${{ matrix.config.library }} "$list"; then
             "$python" scripts/symbols.py extract ${{ matrix.config.library }} > symbols-${{ matrix.config.os }}.txt

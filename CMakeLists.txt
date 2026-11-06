@@ -800,7 +800,10 @@ endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS ${DXFCXX_GCC_LIKE_COMPILE_OPTIONS} "-Wa,--noexecstack")
-    set(DXFCXX_GCC_LIKE_LINK_OPTIONS ${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack")
+    # The GCC of Red Hat's gcc-toolset (Oracle Linux 8, the Linux packages) links the parts of its libstdc++ that the
+    # system one lacks from libstdc++_nonshared.a into the library; they are not part of the API and stay hidden.
+    set(DXFCXX_GCC_LIKE_LINK_OPTIONS ${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack"
+            "-Wl,--exclude-libs,libstdc++_nonshared.a")
 endif ()
 
 target_compile_options(${PROJECT_NAME}

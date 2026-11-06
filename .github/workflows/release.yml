@@ -120,7 +120,7 @@ jobs:
     # Empty for Windows and macOS: the job runs on the runner. In a container, ${{github.workspace}} is the path on the
     # runner, not in the container, so the steps use paths relative to the workspace.
     container: ${{ matrix.config.container }}
-    timeout-minutes: 90
+    timeout-minutes: 150
 
     steps:
       # Before the checkout: git for it and for the dependencies that CMake fetches.
@@ -173,7 +173,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}"
           -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}"
-          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_UNIT_TESTS=ON
           -DDXFCXX_BUILD_SAMPLES=OFF
           -DDXFCXX_BUILD_TOOLS=OFF
           -DDXFCXX_INSTALL_SAMPLES=OFF
@@ -188,7 +188,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_VERSION="${{needs.get_version.outputs.version}}"
           -DDXFCXX_PACKAGE_SUFFIX="-${{matrix.buildType}}-static-mt"
-          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_UNIT_TESTS=ON
           -DDXFCXX_BUILD_SAMPLES=OFF
           -DDXFCXX_BUILD_TOOLS=OFF
           -DDXFCXX_INSTALL_SAMPLES=OFF
@@ -232,7 +232,7 @@ jobs:
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_VERSION=${{needs.get_version.outputs.version}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
-          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_UNIT_TESTS=ON
           -DDXFCXX_BUILD_SAMPLES=OFF
           -DDXFCXX_BUILD_TOOLS=OFF
           -DDXFCXX_INSTALL_SAMPLES=OFF
@@ -282,7 +282,7 @@ jobs:
           -DCMAKE_INSTALL_LIBDIR=lib
           -DDXFCXX_VERSION=${{needs.get_version.outputs.version}}
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
-          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_UNIT_TESTS=ON
           -DDXFCXX_BUILD_SAMPLES=OFF
           -DDXFCXX_BUILD_TOOLS=OFF
           -DDXFCXX_INSTALL_SAMPLES=OFF
@@ -364,6 +364,19 @@ jobs:
           -j ${{matrix.config.cores}}
           --
           /p:CL_MPCount=${{matrix.config.cores}}
+
+      # The tests of the build that is packed: a failed test stops the release before anything is published. The tests
+      # link the library statically; the network tests (label "network") are left to the scheduled runs of build.yml.
+      - name: Test [Lib]
+        run: >
+          ctest --test-dir build-${{matrix.buildType}} -C ${{matrix.buildType}} -LE network
+          --output-on-failure --parallel ${{matrix.config.cores}}
+
+      - name: Test [Lib][Win with static with MT]
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          ctest --test-dir build-${{matrix.buildType}}-mt -C ${{matrix.buildType}} -LE network
+          --output-on-failure --parallel ${{matrix.config.cores}}
 
       - name: Pack [Lib]
         working-directory: "build-${{matrix.buildType}}"
@@ -475,14 +488,11 @@ jobs:
           path: |
             ${{github.workspace}}/docs/*.zip
 
+      # Deployed by deploy_gh_pages, after the release is published.
       - name: Upload docs as gh pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: ${{github.workspace}}/docs/html
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
 
   build_full_src_bundle_and_upload:
     name: "${{ matrix.config.name }}: Build Full Source Bundle & Upload"
@@ -651,6 +661,113 @@ jobs:
           ${{ matrix.system }}
           bash /ci/check.sh /packages
 
+  # The Release packages as their users get them: a CMake project finds the unpacked package and builds and runs
+  # programs with its libraries (.github/ci/package-consumer-check), the shared library exports the symbols of
+  # abi/symbols-<os>.txt (the std:: total is checked by build.yml, on the compiler the lists are made with), and it has
+  # its version in the name and the hardening of a Release build (.github/ci/library-check).
+  check_packages:
+    name: "${{ matrix.config.name }}: Check the Release packages"
+    needs: [ get_version, build_package_and_upload ]
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: win-vs2022
+            image: windows-2022
+            os: windows
+            python: python
+            library: bin/dxFeedGraalCxxApi.dll
+          - name: macos-15-intel-xcode-16-4
+            image: macos-15-intel
+            os: macos
+            xcode: '16.4'
+            python: python3
+            library: lib/libdxFeedGraalCxxApi.dylib
+          - name: oraclelinux-8-gcc-toolset-14
+            image: ubuntu-24.04
+            container: oraclelinux:8
+            os: linux
+            python: python3.11
+            cmakeArgs: -DCMAKE_CXX_COMPILER=g++
+            library: lib/libdxFeedGraalCxxApi.so
+          - name: oraclelinux-8-arm-gcc-toolset-14
+            image: ubuntu-24.04-arm
+            container: oraclelinux:8
+            os: linux
+            python: python3.11
+            cmakeArgs: -DCMAKE_CXX_COMPILER=g++
+            library: lib/libdxFeedGraalCxxApi.so
+          - name: macos-15-xcode-16-4
+            image: macos-15
+            os: macos
+            xcode: '16.4'
+            python: python3
+            library: lib/libdxFeedGraalCxxApi.dylib
+    runs-on: ${{ matrix.config.image }}
+    container: ${{ matrix.config.container }}
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Install Linux dependencies
+        if: ${{ matrix.config.os == 'linux' }}
+        timeout-minutes: 15
+        run: |
+          dnf -y install gcc-toolset-14-gcc-c++ gcc-toolset-14-binutils cmake git make unzip python3.11 binutils
+          echo "/opt/rh/gcc-toolset-14/root/usr/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{needs.get_version.outputs.tag_name}}
+
+      - name: Select Xcode version
+        if: ${{ matrix.config.os == 'macos' }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
+
+      # artifacts-lib-<config>-Release and, on Windows, artifacts-lib-<config>-Release-mt.
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          path: packages
+          pattern: artifacts-lib-${{ matrix.config.name }}-Release*
+          merge-multiple: true
+
+      # unzip keeps the links of the versioned library names; Windows has no unzip, but no links either.
+      - name: Unpack
+        run: |
+          mkdir unpacked
+          for z in packages/*.zip; do
+            if [ "$RUNNER_OS" = Windows ]; then tar -xf "$z" -C unpacked; else unzip -q "$z" -d unpacked; fi
+          done
+          ls unpacked
+
+      # pwd -W: the path for CMake on Windows (C:/...), not the one of the shell (/c/...).
+      - name: Build and run the consumer of the package
+        run: |
+          package=$(echo "$(pwd -W 2>/dev/null || pwd)"/unpacked/*-Release)
+          cmake -S .github/ci/package-consumer-check -B consumer ${{ matrix.config.cmakeArgs }} \
+            -DCMAKE_BUILD_TYPE=Release -DDXFCXX_CONSUMER_MODE=package "-DCMAKE_PREFIX_PATH=$package"
+          cmake --build consumer --config Release
+          ctest --test-dir consumer -C Release --output-on-failure
+
+      - name: Build and run the consumer of the -static-mt package
+        if: ${{ matrix.config.os == 'windows' }}
+        run: |
+          package=$(echo "$(pwd -W)"/unpacked/*-Release-static-mt)
+          cmake -S .github/ci/package-consumer-check -B consumer-mt -DDXFCXX_CONSUMER_MODE=package \
+            "-DCMAKE_PREFIX_PATH=$package" -DDXFCXX_CONSUMER_EXPECT_SHARED=OFF \
+            '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>'
+          cmake --build consumer-mt --config Release
+          ctest --test-dir consumer-mt -C Release --output-on-failure
+
+      - name: Compare the exported symbols with abi/symbols-${{ matrix.config.os }}.txt
+        run: >
+          ${{ matrix.config.python }} scripts/symbols.py compare --no-std-total
+          unpacked/*-Release/${{ matrix.config.library }} abi/symbols-${{ matrix.config.os }}.txt
+
+      - name: Check the version and the hardening of the shared library
+        run: bash .github/ci/library-check/check.sh unpacked/*-Release "${{ needs.get_version.outputs.version }}"
+
   publish_release:
     if: ${{ inputs.publish || contains(github.event_name, 'push')}}
     runs-on: ubuntu-latest
@@ -663,6 +780,7 @@ jobs:
       - build_docs_and_upload_and_deploy_gh_pages
       - check_static_mt
       - check_linux_packages
+      - check_packages
     permissions:
       actions: read
       contents: write
@@ -703,4 +821,17 @@ jobs:
           name: ${{ needs.get_version.outputs.version }}
           body_path: release-notes.md
           draft: ${{ contains(needs.get_version.outputs.version, 'draft') }}
+
+  # GitHub Pages get the documentation of a published release only: not of a draft (a trial run) and not of a release
+  # that failed its checks. The site is built by build_docs_and_upload_and_deploy_gh_pages (the github-pages artifact).
+  deploy_gh_pages:
+    name: Deploy the documentation to GitHub Pages
+    needs: [ get_version, publish_release ]
+    if: ${{ !contains(needs.get_version.outputs.version, 'draft') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
           
