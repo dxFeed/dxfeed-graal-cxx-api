@@ -898,6 +898,9 @@ jobs:
             artifacts/build-Tools/*.tar.gz
             artifacts/build-bundle/*.zip
             artifacts/abi-x86_64-linux.xml
+          # A missing file fails the release rather than publishing it without: the ABI XML of this release is the
+          # reference of the next ones.
+          fail_on_unmatched_files: true
           prerelease: >
             ${{ contains(needs.get_version.outputs.version, 'alpha')
             || contains(needs.get_version.outputs.version, 'beta') 
