@@ -350,6 +350,8 @@ jobs:
 
   # The exported symbols of the Release library (as in the packages: no DXFCXX_EXPORT_INTERNALS) against the list of its
   # OS, abi/symbols-<os>.txt. On a difference the list of the library is uploaded as the artifact symbols-<os>.
+  # macOS x86-64 has its own list: AppleClang exports there the typeinfo of the classes without a key function, which
+  # arm64 keeps hidden.
   # The compilers are those of the packages (release.yml): Linux in oraclelinux:8 with gcc-toolset-14, so the list is
   # the one of the library that is shipped. The steps use paths relative to the workspace: in a container,
   # ${{github.workspace}} is the path on the runner.
@@ -368,6 +370,7 @@ jobs:
             cxx: 'g++'
             python: python3.11
             library: build/libdxFeedGraalCxxApi.so
+            symbols: linux
           - name: macos-15-xcode-16-4
             image: macos-15
             os: macos
@@ -376,6 +379,16 @@ jobs:
             cxx: 'clang++'
             python: python3
             library: build/libdxFeedGraalCxxApi.dylib
+            symbols: macos
+          - name: macos-15-intel-xcode-16-4
+            image: macos-15-intel
+            os: macos
+            xcode: '16.4'
+            cc: 'clang'
+            cxx: 'clang++'
+            python: python3
+            library: build/libdxFeedGraalCxxApi.dylib
+            symbols: macos-x86_64
           - name: win2022-vs2022
             image: windows-2022
             os: windows
@@ -383,6 +396,7 @@ jobs:
             cxx: 'cl'
             python: python
             library: build/Release/dxFeedGraalCxxApi.dll
+            symbols: windows
 
     name: "${{ matrix.config.name }}-Release-symbols"
     runs-on: ${{ matrix.config.image }}
@@ -419,13 +433,13 @@ jobs:
       - name: Build the shared library
         run: cmake --build build --config Release --target dxFeedGraalCxxApi -j 4
 
-      - name: Compare the exported symbols with abi/symbols-${{ matrix.config.os }}.txt
+      - name: Compare the exported symbols with abi/symbols-${{ matrix.config.symbols }}.txt
         shell: bash
         run: |
           python=${{ matrix.config.python }}
-          list=abi/symbols-${{ matrix.config.os }}.txt
+          list=abi/symbols-${{ matrix.config.symbols }}.txt
           if ! "$python" scripts/symbols.py compare ${{ matrix.config.library }} "$list"; then
-            "$python" scripts/symbols.py extract ${{ matrix.config.library }} > symbols-${{ matrix.config.os }}.txt
+            "$python" scripts/symbols.py extract ${{ matrix.config.library }} > symbols-${{ matrix.config.symbols }}.txt
             exit 1
           fi
 
@@ -433,8 +447,8 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: symbols-${{ matrix.config.os }}
-          path: symbols-${{ matrix.config.os }}.txt
+          name: symbols-${{ matrix.config.symbols }}
+          path: symbols-${{ matrix.config.symbols }}.txt
           if-no-files-found: ignore
 
   # The reference of the ABI check (scripts/abi_check.sh): the latest published release of the major of this branch
