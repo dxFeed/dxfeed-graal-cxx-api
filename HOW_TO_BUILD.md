@@ -99,7 +99,8 @@ The libraries are built with the hardening options of the compiler and the linke
   `-fstack-protector-strong`, `-fstack-clash-protection` (Linux), `-fcf-protection=full` (x86_64); the shared library
   is linked with `-z relro -z now` (Linux).
 - MSVC: `/guard:cf`, `/sdl`, `/CETCOMPAT` (x64). With `/sdl` the DLL also exports the compiler-generated
-  `__autoclassinit2` members of its classes, which `abi/symbols-windows.txt` lists.
+  `__autoclassinit2` members of its classes, which `abi/symbols-windows.txt` lists. A DLL built with
+  `DXFCXX_HARDENING=OFF` lacks them; programs that use the DLL do not call them.
 
 The options are used in the optimized configurations only (Release, RelWithDebInfo, MinSizeRel; not in Debug or a
 build without a build type), not in sanitized builds, and are not passed to the projects that use the library. MinGW
