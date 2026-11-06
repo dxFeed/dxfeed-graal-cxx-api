@@ -505,7 +505,14 @@ void setSigpipeDefault() {
 void signals() {
     setSigpipeDefault();
     check(System::getProperty("mdapi428.warm").empty(), "unexpected property");
+#    if defined(__APPLE__) && defined(__x86_64__)
+    // MDAPI-500, SDK defect MDAPI-501: the macOS x86-64 library of the SDK is built with an older GraalVM, which
+    // installs the handlers only in a startup hook that a shared library never runs. When an SDK with the fix comes,
+    // this fails: remove the exception and the one of System::setIsolateArguments() in System.hpp.
+    check(!sigpipeHandlerInstalled(), "the isolate installed the handler of SIGPIPE on macOS x86-64: the SDK is fixed");
+#    else
     check(sigpipeHandlerInstalled(), "the isolate did not install the handler of SIGPIPE");
+#    endif
 }
 
 // With -XX:-EnableSignalHandling the handlers are not installed.
