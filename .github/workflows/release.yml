@@ -897,15 +897,14 @@ jobs:
         with:
           files: |
             artifacts/*.zip
-            artifacts/*.tar.gz
             artifacts/build-Samples/*.zip
             artifacts/build-Samples/*.tar.gz
             artifacts/build-Tools/*.zip
             artifacts/build-Tools/*.tar.gz
-            artifacts/build-bundle/*.zip
             artifacts/abi-x86_64-linux.xml
-          # A missing file fails the release rather than publishing it without: the ABI XML of this release is the
-          # reference of the next ones.
+          # A pattern without files fails the release rather than publishing it without them: the ABI XML of this
+          # release is the reference of the next ones. The packages of the libraries and the full source bundle are the
+          # zip files of artifacts/.
           fail_on_unmatched_files: true
           prerelease: >
             ${{ contains(needs.get_version.outputs.version, 'alpha')
