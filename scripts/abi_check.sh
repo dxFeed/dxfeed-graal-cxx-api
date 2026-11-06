@@ -113,12 +113,13 @@ cmd_baseline() {
     rm -f "$out"
 
     # Published stable releases of the major, the highest version first. A pre-release (-rc, -beta) may change its
-    # ABI before the release, a draft is not published.
+    # ABI before the release, a draft is not published. Each key is reversed by its own r: a key with its own n does
+    # not take a global -r.
     local tags
     tags="$(gh release list --repo "$repo" --limit 1000 --json tagName,isDraft,isPrerelease \
         --jq '.[] | select(.isDraft == false and .isPrerelease == false) | .tagName')" ||
         die "gh release list failed for $repo"
-    tags="$(printf '%s\n' "$tags" | grep -E "^v${major}\.[0-9]+\.[0-9]+$" | sort -t. -k1.2,1n -k2,2n -k3,3n -r || true)"
+    tags="$(printf '%s\n' "$tags" | grep -E "^v${major}\.[0-9]+\.[0-9]+$" | sort -t. -k1.2,1nr -k2,2nr -k3,3nr || true)"
 
     local tag assets
     for tag in $tags; do

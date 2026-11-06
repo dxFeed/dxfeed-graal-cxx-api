@@ -93,7 +93,8 @@ unreleased items) is an error.
 
 ### Draft
 
-Run a draft before each release, on the commit that is released, and release only after a green draft run.
+Run a draft before each release, on the commit the release is made from (the commit `vX.Y.Z` only adds the version
+and the notes to it), and release only after a green draft run.
 `vX.Y.Z-draftN` is a trial run of the `release` workflow: no commit, only the tag on the current commit (`--push`
 pushes it):
 

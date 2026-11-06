@@ -409,13 +409,13 @@ jobs:
       - name: Test [Lib]
         run: >
           ctest --test-dir build-${{matrix.buildType}} -C ${{matrix.buildType}} -LE network
-          --output-on-failure --parallel ${{matrix.config.cores}}
+          --output-on-failure --parallel ${{matrix.config.cores}} --no-tests=error
 
       - name: Test [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
           ctest --test-dir build-${{matrix.buildType}}-mt -C ${{matrix.buildType}} -LE network
-          --output-on-failure --parallel ${{matrix.config.cores}}
+          --output-on-failure --parallel ${{matrix.config.cores}} --no-tests=error
 
       # The ABI of the Linux x86-64 shared library (RelWithDebInfo has the debug info that libabigail needs): an
       # incompatible change within the major version fails the job, and so the publication. The XML is published as the
@@ -812,12 +812,17 @@ jobs:
           pattern: artifacts-lib-${{ matrix.config.name }}-Release*
           merge-multiple: true
 
-      # unzip keeps the links of the versioned library names; Windows has no unzip, but no links either.
+      # unzip keeps the links of the versioned library names. Windows packages have no links; there the tar of Windows
+      # (bsdtar) unpacks them: the tar of Git Bash, found first in the path, is GNU tar, which does not read zip.
       - name: Unpack
         run: |
           mkdir unpacked
           for z in packages/*.zip; do
-            if [ "$RUNNER_OS" = Windows ]; then tar -xf "$z" -C unpacked; else unzip -q "$z" -d unpacked; fi
+            if [ "$RUNNER_OS" = Windows ]; then
+              /c/Windows/System32/tar.exe -xf "$z" -C unpacked
+            else
+              unzip -q "$z" -d unpacked
+            fi
           done
           ls unpacked
 
@@ -828,7 +833,7 @@ jobs:
           cmake -S .github/ci/package-consumer-check -B consumer ${{ matrix.config.cmakeArgs }} \
             -DCMAKE_BUILD_TYPE=Release -DDXFCXX_CONSUMER_MODE=package "-DCMAKE_PREFIX_PATH=$package"
           cmake --build consumer --config Release
-          ctest --test-dir consumer -C Release --output-on-failure
+          ctest --test-dir consumer -C Release --output-on-failure --no-tests=error
 
       - name: Build and run the consumer of the -static-mt package
         if: ${{ matrix.config.os == 'windows' }}
@@ -838,7 +843,7 @@ jobs:
             "-DCMAKE_PREFIX_PATH=$package" -DDXFCXX_CONSUMER_EXPECT_SHARED=OFF \
             '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded$<$<CONFIG:Debug>:Debug>'
           cmake --build consumer-mt --config Release
-          ctest --test-dir consumer-mt -C Release --output-on-failure
+          ctest --test-dir consumer-mt -C Release --output-on-failure --no-tests=error
 
       - name: Compare the exported symbols with abi/symbols-${{ matrix.config.os }}.txt
         run: >

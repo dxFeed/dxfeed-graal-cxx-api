@@ -109,7 +109,9 @@ jobs:
                 esac
 
                 case "$file" in
-                  scripts/* | .github/workflows/build.yml) scripts=true ;;
+                  # The tests of the scripts also read the release notes and the places of the version.
+                  scripts/* | .github/workflows/build.yml | release-notes/* | ReleaseNotes.md | CMakeLists.txt | \
+                    docs/Doxyfile | include/dxfeed_graal_cpp_api/detail/Conf.hpp) scripts=true ;;
                 esac
               done <<< "$files"
             else

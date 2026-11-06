@@ -198,6 +198,16 @@ class ListTest(unittest.TestCase):
         self.assertEqual(differences[-1], "std-total: list 7, library 8")
         self.assertEqual(symbols.compare(expected, ({"dxfcpp::a()", "dxfcpp::b()"}, 8), check_std_total=False), [])
 
+    def test_compare_ignores_the_inline_namespace_of_the_major_version(self):
+        # The release commit of a new major version renames the inline namespace; the list was made before it.
+        expected = ({"dxfcpp::v8::A::f(dxfcpp::v8::B const&)", "vtable for dxfcpp::v8::A", "dxfc_a"}, 7)
+        actual = ({"dxfcpp::v9::A::f(dxfcpp::v9::B const&)", "vtable for dxfcpp::v9::A", "dxfc_a"}, 7)
+        self.assertEqual(symbols.compare(expected, actual), [])
+        differences = symbols.compare(expected, ({"dxfcpp::v9::A::f(dxfcpp::v9::B const&)", "dxfc_a"}, 7))
+        self.assertEqual(differences[-1], "-vtable for dxfcpp::v*::A")
+        # Only the namespace directly in dxfcpp is the version: a name with a v-number elsewhere still counts.
+        self.assertIn("+dxfcpp::v*::v2::f()", symbols.compare(({"dxfc_a"}, 7), ({"dxfc_a", "dxfcpp::v9::v2::f()"}, 7)))
+
 
 class MainTest(unittest.TestCase):
     def run_main(self, *args):

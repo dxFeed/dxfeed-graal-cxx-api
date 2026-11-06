@@ -47,7 +47,14 @@ for package in "$root"/*/; do
         [[ "$(head -c 4 "$file" | od -An -tx1 | tr -d ' \n')" == "7f454c46" ]] || continue
         # Static libraries and object files are not ELF on their own (ar archives), shared objects and
         # executables are; ldd prints "not a dynamic executable" for a static executable.
-        missing="$(env -u LD_LIBRARY_PATH ldd "$file" 2>&1 | grep 'not found')"
+        # Any other failure of ldd (no ldd, a file it cannot run) fails too, rather than counting the file as checked.
+        if output="$(env -u LD_LIBRARY_PATH ldd "$file" 2>&1)"; then
+            missing="$(echo "$output" | grep 'not found')"
+        elif [[ "$output" == *"not a dynamic executable"* ]]; then
+            missing=""
+        else
+            missing="ldd failed: $output"
+        fi
         checked=$((checked + 1))
         if [[ -n "$missing" ]]; then
             fail "${file#"$root"/}"
