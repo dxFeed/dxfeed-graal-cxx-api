@@ -15,6 +15,11 @@ on:
 permissions:
   contents: read
 
+# A newer run of a pull request (a push) cancels the older one; the other events are never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 # Retries and a network timeout (seconds) for apt-get; the steps that install packages also have a time limit,
 # so a stalled mirror or PPA fails the step instead of holding the job.
 env:

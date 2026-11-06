@@ -7,14 +7,28 @@
 # The corpus found by earlier runs is kept in the cache.
 name: Fuzzing
 
+# A pull request runs it only when something that the targets are built from changes.
 on:
   pull_request:
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'fuzz/**'
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'third_party/**'
+      - '.github/workflows/fuzz.yml'
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+# A newer run of a pull request (a push) cancels the older one; the nightly and the manual runs are never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   fuzz:
