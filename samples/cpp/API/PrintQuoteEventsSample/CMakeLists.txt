@@ -72,14 +72,15 @@ if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
 endif ()
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
-    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR}/API/${PROJECT_NAME})
-    install(FILES "dxfeed.system.properties" DESTINATION ${CMAKE_INSTALL_BINDIR}/API/${PROJECT_NAME})
+    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
+    # The samples are installed together in bin/; this is the one dxfeed.system.properties there (the demo feed).
+    install(FILES "dxfeed.system.properties" DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     if (WIN32)
-        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR}/API/${PROJECT_NAME})
+        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
 
         if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
-            install(FILES $<TARGET_FILE:dxfcxx> DESTINATION ${CMAKE_INSTALL_BINDIR}/API/${PROJECT_NAME})
+            install(FILES $<TARGET_FILE:dxfcxx> DESTINATION ${CMAKE_INSTALL_BINDIR})
         endif ()
     endif ()
 endif ()

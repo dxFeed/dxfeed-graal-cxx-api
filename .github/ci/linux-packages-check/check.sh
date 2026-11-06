@@ -2,14 +2,18 @@
 # Copyright (c) 2026 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
-# Checks that the unpacked Linux packages load on the system it runs on (an older distribution in a container):
-# ldd finds every library and symbol version that the libraries and executables of the packages need, and
-# WriteTapeFileSample starts the Graal isolate and writes a tape file.
+# Checks that the unpacked Linux packages load on the system it runs on (an older distribution in a container), as
+# users run them, without LD_LIBRARY_PATH:
+# - ldd finds every library and symbol version that the libraries and executables of the packages need (the RUNPATH
+#   of the executables in bin/ reaches lib/ of their package);
+# - the versioned shared library is a chain of symbolic links: lib<name>.so -> lib<name>.so.<major> -> the file;
+# - the samples are directly in bin/, with one dxfeed.system.properties;
+# - WriteTapeFileSample starts the Graal isolate and writes a tape file; ConvertTapeFileSample and ScheduleSample run
+#   on the data files installed next to them.
 #
 # Usage: check.sh <directory with the unpacked packages>
 #
-# Every package is a directory with lib/ and/or bin/. ldd gets its lib/ as the library path (the RUNPATH of the samples
-# in subdirectories of bin/ does not reach lib/); WriteTapeFileSample, in bin/, starts without it, as users start it.
+# Every package is a directory with lib/ and/or bin/.
 
 set -u
 shopt -s globstar nullglob
@@ -17,6 +21,11 @@ shopt -s globstar nullglob
 root="${1:?usage: check.sh <directory with the unpacked packages>}"
 failed=0
 checked=0
+
+fail() {
+    echo "FAIL: $*"
+    failed=$((failed + 1))
+}
 
 head -n 1 /etc/os-release 2>/dev/null
 ldd --version | head -n 1
@@ -38,36 +47,68 @@ for package in "$root"/*/; do
         [[ "$(head -c 4 "$file" | od -An -tx1 | tr -d ' \n')" == "7f454c46" ]] || continue
         # Static libraries and object files are not ELF on their own (ar archives), shared objects and
         # executables are; ldd prints "not a dynamic executable" for a static executable.
-        missing="$(LD_LIBRARY_PATH="$package/lib" ldd "$file" 2>&1 | grep 'not found')"
+        missing="$(env -u LD_LIBRARY_PATH ldd "$file" 2>&1 | grep 'not found')"
         checked=$((checked + 1))
         if [[ -n "$missing" ]]; then
-            echo "FAIL: ${file#"$root"/}"
+            fail "${file#"$root"/}"
             echo "$missing" | sed 's/^/    /'
-            failed=$((failed + 1))
         fi
     done
 done
 
 echo "ldd: $checked files checked, $failed with missing libraries or symbol versions"
 
-started=0
-for sample in "$root"/*/bin/WriteTapeFileSample; do
-    [[ -f "$sample" ]] || continue
-    started=1
-    work="$(mktemp -d)"
-    if (cd "$work" && timeout 120 "$sample") &&
-        grep -q 'TEST1' "$work/WriteTapeFile.out.txt"; then
-        echo "WriteTapeFileSample: wrote $work/WriteTapeFile.out.txt"
+# The versioned shared library of the C++ API: the name the linker takes is a link to the SONAME, which is a link to
+# the file.
+links=0
+for so in "$root"/*/lib/libdxFeedGraalCxxApi.so; do
+    links=1
+    soname="$(readlink "$so")"
+    if [[ ! -L "$so" || ! "$soname" =~ ^libdxFeedGraalCxxApi\.so\.[0-9]+$ ]]; then
+        fail "${so#"$root"/} is not a link to libdxFeedGraalCxxApi.so.<major>"
+    elif [[ ! -L "$(dirname "$so")/$soname" || ! -f "$so" ]]; then
+        fail "${so#"$root"/}: $soname is not a link to the library file"
     else
-        echo "FAIL: ${sample#"$root"/} did not write the tape file"
-        failed=$((failed + 1))
+        echo "${so#"$root"/} -> $soname -> $(readlink "$(dirname "$so")/$soname")"
     fi
-    break
+done
+[[ "$links" -eq 1 ]] || fail "no lib/libdxFeedGraalCxxApi.so under $root"
+
+samples=""
+for sample in "$root"/*/bin/WriteTapeFileSample; do
+    [[ -f "$sample" ]] && samples="$(dirname "$sample")" && break
 done
 
-if [[ "$started" -eq 0 ]]; then
-    echo "FAIL: no WriteTapeFileSample under $root"
-    failed=$((failed + 1))
+if [[ -z "$samples" ]]; then
+    fail "no bin/WriteTapeFileSample under $root"
+else
+    nested="$(find "$samples" -mindepth 2 -type f | head -n 5)"
+    [[ -z "$nested" ]] || fail "files in subdirectories of ${samples#"$root"/}:"$'\n'"$nested"
+    [[ -f "$samples/dxfeed.system.properties" ]] || fail "no dxfeed.system.properties in ${samples#"$root"/}"
+
+    # The packages are read-only: the samples write into a temporary directory.
+    work="$(mktemp -d)"
+    if (cd "$work" && timeout 120 "$samples/WriteTapeFileSample") && grep -q 'TEST1' "$work/WriteTapeFile.out.txt"; then
+        echo "WriteTapeFileSample: wrote $work/WriteTapeFile.out.txt"
+    else
+        fail "WriteTapeFileSample did not write the tape file"
+    fi
+
+    if (cd "$work" && timeout 120 "$samples/ConvertTapeFileSample" \
+        "file:$samples/ConvertTapeFile.in[readAs=stream_data,speed=max]" \
+        "tape:ConvertTapeFile.out[saveAs=stream_data,format=text]") && [[ -s "$work/ConvertTapeFile.out" ]]; then
+        echo "ConvertTapeFileSample: converted bin/ConvertTapeFile.in"
+    else
+        fail "ConvertTapeFileSample did not convert bin/ConvertTapeFile.in"
+    fi
+
+    if (cd "$work" && timeout 120 "$samples/ScheduleSample" "$samples/schedule.properties" "$samples/sample.ipf.zip" \
+        IBM 2011-05-26-14:15:00) > "$work/schedule.txt" 2>&1; then
+        echo "ScheduleSample: $(head -n 1 "$work/schedule.txt")"
+    else
+        fail "ScheduleSample did not run on bin/schedule.properties and bin/sample.ipf.zip"
+        sed 's/^/    /' "$work/schedule.txt"
+    fi
 fi
 
 if [[ "$checked" -eq 0 ]]; then
@@ -75,4 +116,5 @@ if [[ "$checked" -eq 0 ]]; then
     exit 1
 fi
 
+echo "failed checks: $failed"
 [[ "$failed" -eq 0 ]]

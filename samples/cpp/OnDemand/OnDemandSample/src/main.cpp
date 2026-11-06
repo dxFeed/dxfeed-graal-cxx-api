@@ -16,6 +16,13 @@ int main(int /* argc */, char * /* argv */[]) {
     using namespace std::literals;
 
     try {
+        // The on-demand service of the demo feed. The properties are set here rather than in dxfeed.system.properties:
+        // the samples share one such file in bin/, with the address of the demo feed.
+        System::setProperty(DXEndpoint::DXFEED_ADDRESS_PROPERTY, "(ondemand:demo.dxfeed.com:7680)");
+        System::setProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true");
+        System::setProperty(DXEndpoint::DXFEED_USER_PROPERTY, "demo");
+        System::setProperty(DXEndpoint::DXFEED_PASSWORD_PROPERTY, "demo");
+
         // get on-demand-only data feed
         const auto onDemand = OnDemandService::getInstance();
         const auto feed = onDemand->getEndpoint()->getFeed();

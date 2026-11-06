@@ -62,7 +62,6 @@ endif ()
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
-        ${CMAKE_CURRENT_SOURCE_DIR}/dxfeed.system.properties
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
@@ -72,14 +71,13 @@ if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
 endif ()
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
-    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR}/OnDemand/${PROJECT_NAME})
-    install(FILES "dxfeed.system.properties" DESTINATION ${CMAKE_INSTALL_BINDIR}/OnDemand/${PROJECT_NAME})
+    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     if (WIN32)
-        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR}/OnDemand/${PROJECT_NAME})
+        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
 
         if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
-            install(FILES $<TARGET_FILE:dxfcxx> DESTINATION ${CMAKE_INSTALL_BINDIR}/OnDemand/${PROJECT_NAME})
+            install(FILES $<TARGET_FILE:dxfcxx> DESTINATION ${CMAKE_INSTALL_BINDIR})
         endif ()
     endif ()
 endif ()
