@@ -72,9 +72,48 @@ jobs:
           path: release-notes.md
           if-no-files-found: error
 
+  # The reference of the ABI check (scripts/abi_check.sh): the ABI of the latest published release of the same major
+  # (none until the first release of a major). Here, not in the container of the build: gh is on the runner, not in
+  # oraclelinux:8.
+  abi_baseline:
+    name: "ABI reference"
+    needs: [ get_version ]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      found: ${{ steps.baseline.outputs.found }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{needs.get_version.outputs.tag_name}}
+          sparse-checkout: |
+            /scripts/abi_check.sh
+            /abi/
+          sparse-checkout-cone-mode: false
+
+      - name: Find the reference
+        id: baseline
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.get_version.outputs.version }}
+        run: |
+          major=${VERSION#v}
+          major=${major%%.*}
+          # The tag of this release is excluded: a repeated run must not compare the release with itself.
+          bash scripts/abi_check.sh baseline "$major" abi-reference.xml "$VERSION"
+          if [ -f abi-reference.xml ]; then found=true; else found=false; fi
+          echo "found=$found" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the reference
+        if: ${{ steps.baseline.outputs.found == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: abi-reference
+          path: abi-reference.xml
+
   build_package_and_upload:
     name: "${{ matrix.config.name }}-${{matrix.buildType}}: Build, Package & Upload"
-    needs: [ get_version ]
+    needs: [ get_version, abi_baseline ]
     strategy:
       matrix:
         config:
@@ -377,6 +416,47 @@ jobs:
         run: >
           ctest --test-dir build-${{matrix.buildType}}-mt -C ${{matrix.buildType}} -LE network
           --output-on-failure --parallel ${{matrix.config.cores}}
+
+      # The ABI of the Linux x86-64 shared library (RelWithDebInfo has the debug info that libabigail needs): an
+      # incompatible change within the major version fails the job, and so the publication. The XML is published as the
+      # asset abi-x86_64-linux.xml, the reference of the next releases of the major. The container's shell is sh, so
+      # the commands call bash.
+      - name: Install libabigail
+        if: ${{ matrix.config.name == 'oraclelinux-8-gcc-toolset-14' && matrix.buildType == 'RelWithDebInfo' }}
+        timeout-minutes: 10
+        run: |
+          dnf -y install oracle-epel-release-el8
+          dnf -y install libabigail
+
+      - name: Dump the ABI
+        if: ${{ matrix.config.name == 'oraclelinux-8-gcc-toolset-14' && matrix.buildType == 'RelWithDebInfo' }}
+        run: >
+          bash scripts/abi_check.sh dump
+          "$(readlink -f build-RelWithDebInfo/libdxFeedGraalCxxApi.so)" include abi-x86_64-linux.xml
+
+      - name: Download the ABI reference
+        if: >-
+          ${{ matrix.config.name == 'oraclelinux-8-gcc-toolset-14' && matrix.buildType == 'RelWithDebInfo'
+          && needs.abi_baseline.outputs.found == 'true' }}
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: abi-reference
+
+      - name: Compare the ABI with the latest release of the major
+        if: >-
+          ${{ matrix.config.name == 'oraclelinux-8-gcc-toolset-14' && matrix.buildType == 'RelWithDebInfo'
+          && needs.abi_baseline.outputs.found == 'true' }}
+        run: >
+          bash scripts/abi_check.sh compare abi-reference.xml
+          "$(readlink -f build-RelWithDebInfo/libdxFeedGraalCxxApi.so)" include
+
+      - name: Upload the ABI
+        if: ${{ matrix.config.name == 'oraclelinux-8-gcc-toolset-14' && matrix.buildType == 'RelWithDebInfo' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: artifacts-abi-${{matrix.config.name}}-${{matrix.buildType}}
+          path: abi-x86_64-linux.xml
+          if-no-files-found: error
 
       - name: Pack [Lib]
         working-directory: "build-${{matrix.buildType}}"
@@ -812,6 +892,7 @@ jobs:
             artifacts/build-Tools/*.zip
             artifacts/build-Tools/*.tar.gz
             artifacts/build-bundle/*.zip
+            artifacts/abi-x86_64-linux.xml
           prerelease: >
             ${{ contains(needs.get_version.outputs.version, 'alpha')
             || contains(needs.get_version.outputs.version, 'beta') 

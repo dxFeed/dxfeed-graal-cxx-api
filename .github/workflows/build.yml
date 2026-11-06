@@ -435,6 +435,103 @@ jobs:
           path: symbols-${{ matrix.config.os }}.txt
           if-no-files-found: ignore
 
+  # The reference of the ABI check (scripts/abi_check.sh): the latest published release of the major of this branch
+  # with the asset abi-x86_64-linux.xml (none until the first release of a major: a notice, the abi job only dumps).
+  abi_baseline:
+    needs: plan
+    if: ${{ needs.plan.outputs.code == 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      found: ${{ steps.baseline.outputs.found }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: |
+            /scripts/abi_check.sh
+            /abi/
+            /CMakeLists.txt
+          sparse-checkout-cone-mode: false
+
+      - name: Find the reference
+        id: baseline
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash scripts/abi_check.sh baseline "$(bash scripts/abi_check.sh major)" abi-reference.xml
+          if [ -f abi-reference.xml ]; then found=true; else found=false; fi
+          echo "found=$found" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the reference
+        if: ${{ steps.baseline.outputs.found == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: abi-reference
+          path: abi-reference.xml
+
+  # The ABI of the shared library as the release builds it (Oracle Linux 8, gcc-toolset-14, RelWithDebInfo, the
+  # options of the Linux [Lib] build of release.yml) against the latest release of the major: an incompatible change
+  # fails, additions pass with the report in the summary of the run. Without a reference the job only dumps the ABI,
+  # so that a broken dump is found here and not on the day of the release.
+  abi:
+    needs: [ plan, abi_baseline ]
+    if: ${{ needs.plan.outputs.code == 'true' }}
+    name: "oraclelinux-8-gcc-toolset-14-RelWithDebInfo-abi"
+    runs-on: ubuntu-24.04
+    container: oraclelinux:8
+    timeout-minutes: 60
+
+    steps:
+      # Before the checkout: git for it and for the dependencies that CMake fetches.
+      - name: Install build dependencies
+        timeout-minutes: 15
+        run: |
+          dnf -y install dnf-plugins-core oracle-epel-release-el8
+          dnf config-manager --set-enabled ol8_codeready_builder
+          dnf -y install gcc-toolset-14-gcc-c++ gcc-toolset-14-binutils cmake git make unzip libabigail
+          echo "/opt/rh/gcc-toolset-14/root/usr/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Configure CMake
+        run: >
+          cmake -B build
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=g++
+          -DCMAKE_INSTALL_LIBDIR=lib
+          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_INSTALL_SAMPLES=OFF
+          -DDXFCXX_INSTALL_TOOLS=OFF
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
+
+      - name: Build the shared library
+        run: cmake --build build --target dxFeedGraalCxxApi -j 4
+
+      - name: Dump the ABI
+        run: bash scripts/abi_check.sh dump "$(readlink -f build/libdxFeedGraalCxxApi.so)" include abi-x86_64-linux.xml
+
+      - name: Download the ABI reference
+        if: ${{ needs.abi_baseline.outputs.found == 'true' }}
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: abi-reference
+
+      - name: Compare the ABI with the latest release of the major
+        if: ${{ needs.abi_baseline.outputs.found == 'true' }}
+        run: bash scripts/abi_check.sh compare abi-reference.xml "$(readlink -f build/libdxFeedGraalCxxApi.so)" include
+
+      - name: Upload the ABI
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: abi-x86_64-linux
+          path: abi-x86_64-linux.xml
+          if-no-files-found: ignore
+
   tsan:
     needs: plan
     if: ${{ needs.plan.outputs.code == 'true' }}
