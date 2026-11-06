@@ -23,6 +23,8 @@
     * Added as a subproject, the API no longer adds install rules or a CPack configuration to the project and no
       longer overrides its `BOOST_RUNTIME_LINK`; `-DDXFCXX_INSTALL=ON` installs it with the project.
     * The public headers contain only ASCII characters.
+    * Within a major version the shared library keeps its ABI on Linux: each release is checked against the previous
+      one of the major and publishes its ABI as the asset `abi-x86_64-linux.xml`.
     * The Samples packages have all the samples directly in `bin/`, with one `dxfeed.system.properties`; the samples
       that were in subdirectories of `bin/` no longer need `LD_LIBRARY_PATH` to start on Linux. OnDemandSample sets
       the address of the on-demand service in code.
