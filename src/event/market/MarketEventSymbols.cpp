@@ -28,10 +28,9 @@ bool MarketEventSymbols::hasExchangeCode(const StringLike &symbol) noexcept {
 char MarketEventSymbols::getExchangeCode(const StringLike &symbol) noexcept {
     const std::string_view s = symbol;
     const std::string str{s};
+    const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
 
-    return hasExchangeCodeInternal(str, getLengthWithoutAttributesInternal(str))
-               ? s[getLengthWithoutAttributesInternal(str) - 1]
-               : '\0';
+    return hasExchangeCodeInternal(str, lengthWithoutAttributes) ? s[lengthWithoutAttributes - 1] : '\0';
 }
 
 std::string MarketEventSymbols::changeExchangeCode(const StringLike &symbol, char exchangeCode) noexcept {
@@ -82,7 +81,7 @@ std::optional<std::string> MarketEventSymbols::getAttributeStringByKey(const Str
 
 std::string MarketEventSymbols::changeAttributeStringByKey(const StringLike &symbol, const StringLike &key,
                                                            const StringLike &value) noexcept {
-    const std::string str{std::string_view{symbol}};
+    std::string str{std::string_view{symbol}};
     const std::string keyStr{std::string_view{key}};
     const std::string valueStr{std::string_view{value}};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
@@ -91,13 +90,14 @@ std::string MarketEventSymbols::changeAttributeStringByKey(const StringLike &sym
         return str + ATTRIBUTES_OPEN + keyStr + ATTRIBUTE_VALUE + valueStr + ATTRIBUTES_CLOSE;
     }
 
-    return addAttributeInternal(str, lengthWithoutAttributes, keyStr, valueStr);
+    return addAttributeInternal(std::move(str), lengthWithoutAttributes, keyStr, valueStr);
 }
 
 std::string MarketEventSymbols::removeAttributeStringByKey(const StringLike &symbol, const StringLike &key) noexcept {
-    const std::string str{std::string_view{symbol}};
+    std::string str{std::string_view{symbol}};
+    const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
 
-    return removeAttributeInternal(str, getLengthWithoutAttributesInternal(str), std::string{std::string_view{key}});
+    return removeAttributeInternal(std::move(str), lengthWithoutAttributes, std::string{std::string_view{key}});
 }
 
 bool MarketEventSymbols::hasExchangeCodeInternal(const std::string &symbol, std::size_t length) noexcept {

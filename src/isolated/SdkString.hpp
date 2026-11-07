@@ -43,8 +43,7 @@ class SdkString final {
     }
 
     /// Copies a NUL-terminated string; a null pointer is an empty string.
-    explicit SdkString(const char *s)
-        : owned_{s == nullptr ? std::string_view{} : std::string_view{s}}, ptr_{owned_.c_str()} {
+    explicit SdkString(const char *s) : SdkString{s == nullptr ? std::string_view{} : std::string_view{s}} {
     }
 
     /// Borrows the characters of the string, which is already NUL-terminated. The string must outlive this object.
