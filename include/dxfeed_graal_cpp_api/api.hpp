@@ -22,6 +22,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "./detail/JavaObjectHandle.hpp"
 #include "./detail/Math.hpp"
 #include "./detail/StringLike.hpp"
+#include "./detail/StringParam.hpp"
 #include "./entity/EntityModule.hpp"
 #include "./event/EventModule.hpp"
 #include "./exceptions/ExceptionsModule.hpp"

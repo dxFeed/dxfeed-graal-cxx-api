@@ -1096,8 +1096,8 @@ RECURSIVE              = YES
 # Note that relative paths are relative to the directory from which Doxygen is
 # run.
 
-# detail/ is not API: only StringLike.hpp and Enum.hpp are documented, since their types appear in public
-# signatures.
+# detail/ is not API: only StringLike.hpp, StringParam.hpp and Enum.hpp are documented, since their types appear in
+# public signatures.
 EXCLUDE                = ../include/dxfeed_graal_cpp_api/detail/CEntryPointErrors.hpp \
                          ../include/dxfeed_graal_cpp_api/detail/CallbackBarrier.hpp \
                          ../include/dxfeed_graal_cpp_api/detail/Concepts.hpp \
