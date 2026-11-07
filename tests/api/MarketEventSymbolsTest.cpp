@@ -56,6 +56,25 @@ TEST_CASE("Test a broken symbol") {
     checkNonAttributedSymbol("{}B");
 }
 
+TEST_CASE("A null pointer is an empty symbol, and an embedded NUL is an ordinary character") {
+    const char *nullSymbol = nullptr;
+
+    REQUIRE("" == MarketEventSymbols::getBaseSymbol(nullSymbol));
+    REQUIRE(false == MarketEventSymbols::hasExchangeCode(nullSymbol));
+    REQUIRE("MSFT" == MarketEventSymbols::changeBaseSymbol(nullSymbol, "MSFT"));
+    REQUIRE("{key=val}" == MarketEventSymbols::changeAttributeStringByKey(nullSymbol, "key", "val"));
+
+    const std::string symbol{"A\0B&N{key=v\0l}", 14};
+
+    REQUIRE(std::string{"A\0B", 3} == MarketEventSymbols::getBaseSymbol(symbol));
+    REQUIRE(true == MarketEventSymbols::hasExchangeCode(symbol));
+    REQUIRE('N' == MarketEventSymbols::getExchangeCode(symbol));
+    REQUIRE(std::string{"MSFT&N{key=v\0l}", 15} == MarketEventSymbols::changeBaseSymbol(symbol, "MSFT"));
+    REQUIRE(std::string{"v\0l", 3} == MarketEventSymbols::getAttributeStringByKey(symbol, "key"));
+    REQUIRE(std::string{"A\0B&N", 5} == MarketEventSymbols::removeAttributeStringByKey(symbol, "key"));
+    REQUIRE(std::string{"A\0B&N{key=x}", 12} == MarketEventSymbols::changeAttributeStringByKey(symbol, "key", "x"));
+}
+
 TEST_CASE("Test regional") {
     auto s = "GE&N";
 

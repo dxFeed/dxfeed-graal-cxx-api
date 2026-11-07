@@ -9,6 +9,8 @@
 
 #include <dxfg_api.h>
 
+#include <deque>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::glossary::IsolatedAdditionalUnderlyings {
@@ -35,13 +37,16 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(std::string_view value) {
 // int32_t dxfg_AdditionalUnderlyings_valueOf2(graal_isolatethread_t *thread, const dxfg_string_to_double_map_entry_t
 // *mapEntries, int32_t size, DXFG_OUT dxfg_additional_underlyings_t **additionalUnderlyings);
 JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<const char *, double>> &mapLikeEntries) {
+    // The keys must outlive the call. SdkString can be neither copied nor moved; a deque keeps its elements in place.
+    std::deque<SdkString> keys{};
     std::vector<dxfg_string_to_double_map_entry_t> graalMapEntries{};
     dxfg_additional_underlyings_t *isolatedAdditionalUnderlyings{};
 
     graalMapEntries.reserve(mapLikeEntries.size());
 
     for (const auto &[key, value] : mapLikeEntries) {
-        graalMapEntries.push_back(dxfg_string_to_double_map_entry_t{key, value});
+        keys.emplace_back(key);
+        graalMapEntries.push_back(dxfg_string_to_double_map_entry_t{keys.back().c_str(), value});
     }
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf2, graalMapEntries.data(),
