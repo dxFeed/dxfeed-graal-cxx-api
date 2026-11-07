@@ -172,6 +172,9 @@ jobs:
         run: |
           if [ "$RUNNER_OS" = macOS ]; then
             HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache
+            # ccache brings fmt, and on Intel runners its headers land in /usr/local/include, where they shadow the
+            # fmt of this project. Unlinking keeps the keg that ccache uses.
+            if brew list --formula fmt >/dev/null 2>&1; then brew unlink fmt; fi
           else
             sudo apt-get $APT_OPTIONS update
             sudo apt-get $APT_OPTIONS install -y ccache
@@ -671,6 +674,9 @@ jobs:
         run: |
           if [ "$RUNNER_OS" = macOS ]; then
             HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache
+            # ccache brings fmt, and on Intel runners its headers land in /usr/local/include, where they shadow the
+            # fmt of this project. Unlinking keeps the keg that ccache uses.
+            if brew list --formula fmt >/dev/null 2>&1; then brew unlink fmt; fi
           else
             sudo apt-get $APT_OPTIONS update
             sudo apt-get $APT_OPTIONS install -y ccache
@@ -872,6 +878,9 @@ jobs:
         run: |
           if [ "$RUNNER_OS" = macOS ]; then
             HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache
+            # ccache brings fmt, and on Intel runners its headers land in /usr/local/include, where they shadow the
+            # fmt of this project. Unlinking keeps the keg that ccache uses.
+            if brew list --formula fmt >/dev/null 2>&1; then brew unlink fmt; fi
           else
             sudo apt-get $APT_OPTIONS update
             sudo apt-get $APT_OPTIONS install -y ccache
