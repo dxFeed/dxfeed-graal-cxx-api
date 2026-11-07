@@ -1,6 +1,6 @@
 # Exported symbols of the shared library (linux), made by scripts/symbols.py compare --update.
 # Own symbols one per line; the std:: instantiations only as their number.
-std-total: 348
+std-total: 342
 VTT for dxfcpp::v8::AdditionalUnderlyings
 VTT for dxfcpp::v8::AuthOrderSource
 VTT for dxfcpp::v8::CFI
@@ -2064,7 +2064,6 @@ dxfcpp::v8::SpreadOrder::withTimeNanos(long)
 dxfcpp::v8::SpreadOrder::withTradeId(long)
 dxfcpp::v8::SpreadOrder::withTradePrice(double)
 dxfcpp::v8::SpreadOrder::withTradeSize(double)
-dxfcpp::v8::String::EMPTY
 dxfcpp::v8::String::NUL
 dxfcpp::v8::StringHash::operator()(char const*) const
 dxfcpp::v8::StringHash::operator()(dxfcpp::v8::StringLike const&) const

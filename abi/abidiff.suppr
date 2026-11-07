@@ -1,0 +1,27 @@
+# Copyright (c) 2026 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+# Suppressions of scripts/abi_check.sh (abidiff --suppressions): changes that are not the ABI of the library.
+#
+# Both sides of a comparison are made in the same environment (Oracle Linux 8, GCC Toolset 14), so the standard
+# library does not change between them; the instantiations of its templates that the library exports (in the
+# symbol list of abi/symbols-linux.txt they are only counted: `std-total`) change their symbol names with any
+# change of the public types and are not an interface of the library. The layout of a standard type that is a member
+# of a public type is still compared through the public type.
+
+[suppress_function]
+  name_regexp = ^std::
+
+[suppress_function]
+  name_regexp = ^__gnu_cxx::
+
+[suppress_variable]
+  name_regexp = ^std::
+
+[suppress_variable]
+  name_regexp = ^__gnu_cxx::
+
+# The run-time type information and the virtual tables of the standard classes are emitted into the library by the
+# compiler (VTT, typeinfo, vtable symbols of std:: classes); they are not declared in the public headers.
+[suppress_variable]
+  symbol_name_regexp = ^_ZT[VTIS]N?St

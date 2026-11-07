@@ -659,13 +659,13 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF)
     set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
-    set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path/../../../${CMAKE_INSTALL_LIBDIR};@loader_path;@executable_path;@executable_path/../Frameworks")
+    set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path;@executable_path;@executable_path/../Frameworks")
 elseif (UNIX)
     set(CMAKE_SKIP_BUILD_RPATH ON)
     set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF)
     set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../../../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
 endif ()
 
 add_library(${PROJECT_NAME}_static STATIC
@@ -800,7 +800,10 @@ endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS ${DXFCXX_GCC_LIKE_COMPILE_OPTIONS} "-Wa,--noexecstack")
-    set(DXFCXX_GCC_LIKE_LINK_OPTIONS ${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack")
+    # The GCC of Red Hat's gcc-toolset (Oracle Linux 8, the Linux packages) links the parts of its libstdc++ that the
+    # system one lacks from libstdc++_nonshared.a into the library; they are not part of the API and stay hidden.
+    set(DXFCXX_GCC_LIKE_LINK_OPTIONS ${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack"
+            "-Wl,--exclude-libs,libstdc++_nonshared.a")
 endif ()
 
 target_compile_options(${PROJECT_NAME}

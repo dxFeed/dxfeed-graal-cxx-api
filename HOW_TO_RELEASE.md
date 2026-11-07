@@ -93,16 +93,87 @@ unreleased items) is an error.
 
 ### Draft
 
+Run a draft before each release, on the commit the release is made from (the commit `vX.Y.Z` only adds the version
+and the notes to it), and release only after a green draft run.
 `vX.Y.Z-draftN` is a trial run of the `release` workflow: no commit, only the tag on the current commit (`--push`
-pushes it). The draft GitHub release shows the unreleased items (with those of `release-notes/`) as a preview of the
-notes; Jira is not touched (only
-published releases are synchronized). Remove the draft release and its tag afterwards, also after a failed run (it
-has no release, but the tag is on origin). Each step says whether it deleted or found nothing; the release needs the
-GitHub CLI (`gh`), without it the tags are deleted and the release, if any, is deleted by hand:
+pushes it):
+
+```shell
+cmake -P scripts/release.cmake v8.2.0-draft1 --push
+```
+
+The draft GitHub release shows the unreleased items (with those of `release-notes/`) as a preview of the notes; Jira
+is not touched (only published releases are synchronized) and GitHub Pages are not updated. Remove the draft release
+and its tag afterwards, also after a failed run (it has no release, but the tag is on origin). Each step says whether
+it deleted or found nothing; the release needs the GitHub CLI (`gh`), without it the tags are deleted and the release,
+if any, is deleted by hand:
 
 ```shell
 cmake -P scripts/release.cmake v8.2.0-draft1 --cleanup
 ```
+
+### What the workflow checks
+
+The release is published only when all of these pass (the `publish_release` job needs them):
+
+- the tests of each library build, before it is packed (`ctest` without the network tests, which the nightly runs of
+  the `CI` workflow cover);
+- `check_packages`: a CMake project finds each Release package and builds and runs programs with its libraries
+  (`.github/ci/package-consumer-check`, on Windows also with the `-static-mt` package); the shared library exports the
+  symbols of `abi/symbols-<os>.txt`, has its version in the name (the SONAME on Linux, the install name on macOS) and
+  the hardening of a Release build (`.github/ci/library-check`);
+- `check_static_mt`: the `-static-mt` packages need no Visual C++ Redistributable;
+- `check_linux_packages`: the libraries, the samples and the tools of the Linux packages load on Oracle Linux 8 and
+  Ubuntu 22.04, and the samples run from `bin/`;
+- the ABI check (in the Oracle Linux 8 RelWithDebInfo build), see below.
+
+GitHub Pages get the documentation after the release is published.
+
+### The ABI check
+
+`scripts/abi_check.sh` compares the ABI of the Linux x86-64 shared library (libabigail: the types and functions of the
+public headers) with the asset `abi-x86_64-linux.xml` of the latest published release of the same major (not a draft,
+not a pre-release). Each release publishes this asset for the next ones; until the first release of a major there is
+nothing to compare with, and the check prints a notice. The `abi` job of the `CI` workflow runs the same check on every
+change of the code, so a red check is usually seen in the pull request that causes it.
+
+A removed or changed function, a new virtual function or a changed layout of a public type (its size, data members,
+bases) fails the check; additions pass, with the report in the summary of the run. When it fails:
+
+- the change is not intended: undo it, or make it compatible (a new function instead of a changed one);
+- it is intended: it is a breaking change and goes to the next major version (`release/vN`);
+- the report shows a change that is not the ABI of the library: add a suppression to `abi/abidiff.suppr`, with a
+  comment that says why, in a pull request.
+
+### A failed release run
+
+The tag is on origin, the release is not published and GitHub Pages are not updated.
+
+- A failure of the infrastructure (a runner, a download): rerun the failed jobs of the run (`gh run rerun <run id>
+  --failed`, or "Re-run failed jobs" on the page of the run); the tag stays.
+- A defect: fix it on the branch (a pull request, as usual) and run a draft on the fixed commit. Then move the tag of
+  the release to the fixed commit, which starts the workflow again (the commit `vX.Y.Z` stays in the history):
+
+  ```shell
+  git fetch origin
+  ```
+
+  ```shell
+  git push origin --delete v8.2.0
+  ```
+
+  ```shell
+  git tag -f v8.2.0 origin/main
+  ```
+
+  ```shell
+  git push origin v8.2.0
+  ```
+
+  For `release/vN` tag `origin/release/vN` instead of `origin/main`. The notes are those of `ReleaseNotes.md` at the
+  tag; a release note added by the fix goes to the next version.
+
+Never move the tag of a published release: it may be downloaded already. Release the next version instead.
 
 ### By hand
 

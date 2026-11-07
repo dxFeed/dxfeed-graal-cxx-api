@@ -1,0 +1,2942 @@
+# Exported symbols of the shared library (macos), made by scripts/symbols.py compare --update.
+# Own symbols one per line; the std:: instantiations only as their number.
+std-total: 193
+VTT for dxfcpp::v8::AdditionalUnderlyings
+VTT for dxfcpp::v8::AuthOrderSource
+VTT for dxfcpp::v8::CFI
+VTT for dxfcpp::v8::CFI::Attribute
+VTT for dxfcpp::v8::CFI::Value
+VTT for dxfcpp::v8::DXEndpoint
+VTT for dxfcpp::v8::DXEndpoint::Builder
+VTT for dxfcpp::v8::DXFeedSubscription
+VTT for dxfcpp::v8::DXFeedTimeSeriesSubscription
+VTT for dxfcpp::v8::DXPublisherObservableSubscription
+VTT for dxfcpp::v8::HistoryEndpoint
+VTT for dxfcpp::v8::HistoryEndpoint::Builder
+VTT for dxfcpp::v8::InPlaceExecutor
+VTT for dxfcpp::v8::InstrumentProfile
+VTT for dxfcpp::v8::ObservableSubscriptionChangeListener
+VTT for dxfcpp::v8::PriceIncrements
+VTT for dxfcpp::v8::PriceLevelService
+VTT for dxfcpp::v8::SubscriptionController
+VTT for dxfcpp::v8::TxModelListenerCommon
+construction vtable for dxfcpp::v8::DXFeedSubscription-in-dxfcpp::v8::DXFeedTimeSeriesSubscription
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::AdditionalUnderlyings>-in-dxfcpp::v8::AdditionalUnderlyings
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::AuthOrderSource>-in-dxfcpp::v8::AuthOrderSource
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::CFI::Attribute>-in-dxfcpp::v8::CFI::Attribute
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::CFI::Value>-in-dxfcpp::v8::CFI::Value
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::CFI>-in-dxfcpp::v8::CFI
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXEndpoint::Builder>-in-dxfcpp::v8::DXEndpoint::Builder
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXEndpoint>-in-dxfcpp::v8::DXEndpoint
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedSubscription>-in-dxfcpp::v8::DXFeedSubscription
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedSubscription>-in-dxfcpp::v8::DXFeedTimeSeriesSubscription
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedTimeSeriesSubscription>-in-dxfcpp::v8::DXFeedTimeSeriesSubscription
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXPublisherObservableSubscription>-in-dxfcpp::v8::DXPublisherObservableSubscription
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::HistoryEndpoint::Builder>-in-dxfcpp::v8::HistoryEndpoint::Builder
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::HistoryEndpoint>-in-dxfcpp::v8::HistoryEndpoint
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::InPlaceExecutor>-in-dxfcpp::v8::InPlaceExecutor
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::InstrumentProfile>-in-dxfcpp::v8::InstrumentProfile
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::ObservableSubscriptionChangeListener>-in-dxfcpp::v8::ObservableSubscriptionChangeListener
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::PriceIncrements>-in-dxfcpp::v8::PriceIncrements
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::PriceLevelService>-in-dxfcpp::v8::PriceLevelService
+construction vtable for dxfcpp::v8::RequireMakeShared<dxfcpp::v8::SubscriptionController>-in-dxfcpp::v8::SubscriptionController
+dxfc_dxendpoint_add_state_change_listener
+dxfc_dxendpoint_await_not_connected
+dxfc_dxendpoint_await_processed
+dxfc_dxendpoint_builder_build
+dxfc_dxendpoint_builder_free
+dxfc_dxendpoint_builder_supports_property
+dxfc_dxendpoint_builder_with_name
+dxfc_dxendpoint_builder_with_properties
+dxfc_dxendpoint_builder_with_property
+dxfc_dxendpoint_builder_with_role
+dxfc_dxendpoint_close
+dxfc_dxendpoint_close_and_await_termination
+dxfc_dxendpoint_connect
+dxfc_dxendpoint_create
+dxfc_dxendpoint_create2
+dxfc_dxendpoint_disconnect
+dxfc_dxendpoint_disconnect_and_clear
+dxfc_dxendpoint_free
+dxfc_dxendpoint_get_feed
+dxfc_dxendpoint_get_instance
+dxfc_dxendpoint_get_instance2
+dxfc_dxendpoint_get_publisher
+dxfc_dxendpoint_get_role
+dxfc_dxendpoint_get_state
+dxfc_dxendpoint_new_builder
+dxfc_dxendpoint_password
+dxfc_dxendpoint_reconnect
+dxfc_dxendpoint_remove_state_change_listener
+dxfc_dxendpoint_user
+dxfc_system_get_property
+dxfc_system_set_property
+dxfcpp::v8::AdditionalUnderlyings::AdditionalUnderlyings(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::AdditionalUnderlyings>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::AdditionalUnderlyings> (*)())
+dxfcpp::v8::AdditionalUnderlyings::AdditionalUnderlyings(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::AdditionalUnderlyings>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::AdditionalUnderlyings>&&)
+dxfcpp::v8::AdditionalUnderlyings::EMPTY()
+dxfcpp::v8::AdditionalUnderlyings::getMap() const
+dxfcpp::v8::AdditionalUnderlyings::getSPC(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::AdditionalUnderlyings::getSPC(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AdditionalUnderlyings::getText() const
+dxfcpp::v8::AdditionalUnderlyings::hashCode() const
+dxfcpp::v8::AdditionalUnderlyings::operator==(dxfcpp::v8::AdditionalUnderlyings const&) const
+dxfcpp::v8::AdditionalUnderlyings::toString() const
+dxfcpp::v8::AdditionalUnderlyings::valueOf(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AdditionalUnderlyings::valueOfImpl(std::__1::vector<std::__1::pair<char const*, double>, std::__1::allocator<std::__1::pair<char const*, double>>> const&)
+dxfcpp::v8::AdditionalUnderlyings::~AdditionalUnderlyings()
+dxfcpp::v8::AnalyticOrder::AnalyticOrder()
+dxfcpp::v8::AnalyticOrder::AnalyticOrder(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AnalyticOrder::TYPE
+dxfcpp::v8::AnalyticOrder::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::AnalyticOrder::fillData(void*)
+dxfcpp::v8::AnalyticOrder::fillGraalData(void*) const
+dxfcpp::v8::AnalyticOrder::freeGraal(void*)
+dxfcpp::v8::AnalyticOrder::fromGraal(void*)
+dxfcpp::v8::AnalyticOrder::getIcebergExecutedSize() const
+dxfcpp::v8::AnalyticOrder::getIcebergHiddenSize() const
+dxfcpp::v8::AnalyticOrder::getIcebergPeakSize() const
+dxfcpp::v8::AnalyticOrder::getIcebergType() const &
+dxfcpp::v8::AnalyticOrder::setIcebergExecutedSize(double)
+dxfcpp::v8::AnalyticOrder::setIcebergHiddenSize(double)
+dxfcpp::v8::AnalyticOrder::setIcebergPeakSize(double)
+dxfcpp::v8::AnalyticOrder::setIcebergType(dxfcpp::v8::IcebergType const&)
+dxfcpp::v8::AnalyticOrder::toGraal() const
+dxfcpp::v8::AnalyticOrder::toString() const
+dxfcpp::v8::AnalyticOrder::withAction(dxfcpp::v8::OrderAction const&)
+dxfcpp::v8::AnalyticOrder::withActionTime(long long)
+dxfcpp::v8::AnalyticOrder::withAuxOrderId(long long)
+dxfcpp::v8::AnalyticOrder::withCount(long long)
+dxfcpp::v8::AnalyticOrder::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::AnalyticOrder::withEventFlags(int)
+dxfcpp::v8::AnalyticOrder::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AnalyticOrder::withEventTime(long long)
+dxfcpp::v8::AnalyticOrder::withExchangeCode(char)
+dxfcpp::v8::AnalyticOrder::withExchangeCode(short)
+dxfcpp::v8::AnalyticOrder::withExecutedSize(double)
+dxfcpp::v8::AnalyticOrder::withIcebergExecutedSize(double)
+dxfcpp::v8::AnalyticOrder::withIcebergHiddenSize(double)
+dxfcpp::v8::AnalyticOrder::withIcebergPeakSize(double)
+dxfcpp::v8::AnalyticOrder::withIcebergType(dxfcpp::v8::IcebergType const&)
+dxfcpp::v8::AnalyticOrder::withIndex(long long)
+dxfcpp::v8::AnalyticOrder::withMarketMaker(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AnalyticOrder::withOrderId(long long)
+dxfcpp::v8::AnalyticOrder::withOrderSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::AnalyticOrder::withPrice(double)
+dxfcpp::v8::AnalyticOrder::withScope(dxfcpp::v8::Scope const&)
+dxfcpp::v8::AnalyticOrder::withSequence(int)
+dxfcpp::v8::AnalyticOrder::withSize(double)
+dxfcpp::v8::AnalyticOrder::withSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::AnalyticOrder::withTime(long long)
+dxfcpp::v8::AnalyticOrder::withTimeNanoPart(int)
+dxfcpp::v8::AnalyticOrder::withTimeNanos(long long)
+dxfcpp::v8::AnalyticOrder::withTradeId(long long)
+dxfcpp::v8::AnalyticOrder::withTradePrice(double)
+dxfcpp::v8::AnalyticOrder::withTradeSize(double)
+dxfcpp::v8::AuctionType::ALL
+dxfcpp::v8::AuctionType::CLOSING
+dxfcpp::v8::AuctionType::OPENING
+dxfcpp::v8::AuctionType::OTHER
+dxfcpp::v8::AuctionType::REOPENING
+dxfcpp::v8::AuctionType::UNDEFINED
+dxfcpp::v8::AuthOrderSource::AuthOrderSource(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::AuthOrderSource>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::AuthOrderSource>&&)
+dxfcpp::v8::AuthOrderSource::getByIds() const
+dxfcpp::v8::AuthOrderSource::getByOrderSources() const
+dxfcpp::v8::AuthOrderSource::~AuthOrderSource()
+dxfcpp::v8::AuthToken::AuthToken(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::AuthToken>&&, bool)
+dxfcpp::v8::AuthToken::NULL_TOKEN
+dxfcpp::v8::AuthToken::createBasicToken(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AuthToken::createBasicToken(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AuthToken::createBasicTokenOrNull(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AuthToken::createBearerToken(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AuthToken::createBearerTokenOrNull(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AuthToken::createCustomToken(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::AuthToken::getHttpAuthorization() const
+dxfcpp::v8::AuthToken::getPassword() const
+dxfcpp::v8::AuthToken::getScheme() const
+dxfcpp::v8::AuthToken::getUser() const
+dxfcpp::v8::AuthToken::getValue() const
+dxfcpp::v8::AuthToken::hashCode() const
+dxfcpp::v8::AuthToken::operator==(dxfcpp::v8::AuthToken const&) const
+dxfcpp::v8::AuthToken::toString() const
+dxfcpp::v8::AuthToken::valueOf(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CFI::Attribute::Attribute(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::CFI::Attribute>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::CFI::Attribute>&&)
+dxfcpp::v8::CFI::Attribute::getDescription() const
+dxfcpp::v8::CFI::Attribute::getName() const
+dxfcpp::v8::CFI::Attribute::getValues() const
+dxfcpp::v8::CFI::Attribute::hashCode() const
+dxfcpp::v8::CFI::Attribute::operator==(dxfcpp::v8::CFI::Attribute const&) const
+dxfcpp::v8::CFI::Attribute::toString() const
+dxfcpp::v8::CFI::Attribute::~Attribute()
+dxfcpp::v8::CFI::CFI(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::CFI>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::CFI> (*)())
+dxfcpp::v8::CFI::CFI(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::CFI>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::CFI>&&)
+dxfcpp::v8::CFI::EMPTY()
+dxfcpp::v8::CFI::Value::Value(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::CFI::Value>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::CFI::Value>&&)
+dxfcpp::v8::CFI::Value::getAttribute() const
+dxfcpp::v8::CFI::Value::getCode() const
+dxfcpp::v8::CFI::Value::getCodeChar() const
+dxfcpp::v8::CFI::Value::getDescription() const
+dxfcpp::v8::CFI::Value::getName() const
+dxfcpp::v8::CFI::Value::hashCode() const
+dxfcpp::v8::CFI::Value::operator==(dxfcpp::v8::CFI::Value const&) const
+dxfcpp::v8::CFI::Value::toString() const
+dxfcpp::v8::CFI::Value::~Value()
+dxfcpp::v8::CFI::decipher() const
+dxfcpp::v8::CFI::describe() const
+dxfcpp::v8::CFI::getCategory() const
+dxfcpp::v8::CFI::getCategoryChar() const
+dxfcpp::v8::CFI::getCode() const
+dxfcpp::v8::CFI::getGroup() const
+dxfcpp::v8::CFI::getGroupChar() const
+dxfcpp::v8::CFI::getIntCode() const
+dxfcpp::v8::CFI::hashCode() const
+dxfcpp::v8::CFI::isDebtInstrument() const
+dxfcpp::v8::CFI::isEntitlement() const
+dxfcpp::v8::CFI::isEquity() const
+dxfcpp::v8::CFI::isFuture() const
+dxfcpp::v8::CFI::isOption() const
+dxfcpp::v8::CFI::isOther() const
+dxfcpp::v8::CFI::operator==(dxfcpp::v8::CFI const&) const
+dxfcpp::v8::CFI::toString() const
+dxfcpp::v8::CFI::valueOf(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CFI::valueOf(int)
+dxfcpp::v8::CFI::~CFI()
+dxfcpp::v8::Candle::Candle()
+dxfcpp::v8::Candle::Candle(dxfcpp::v8::CandleSymbol)
+dxfcpp::v8::Candle::TYPE
+dxfcpp::v8::Candle::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Candle::fillData(void*)
+dxfcpp::v8::Candle::fillGraalData(void*) const
+dxfcpp::v8::Candle::freeGraal(void*)
+dxfcpp::v8::Candle::freeGraalData(void*)
+dxfcpp::v8::Candle::fromGraal(void*)
+dxfcpp::v8::Candle::getAskVolume() const
+dxfcpp::v8::Candle::getBidVolume() const
+dxfcpp::v8::Candle::getClose() const
+dxfcpp::v8::Candle::getCount() const
+dxfcpp::v8::Candle::getEventFlags() const
+dxfcpp::v8::Candle::getEventFlagsMask() const
+dxfcpp::v8::Candle::getEventSymbol() const &
+dxfcpp::v8::Candle::getEventSymbolOpt() const &
+dxfcpp::v8::Candle::getEventTime() const
+dxfcpp::v8::Candle::getHigh() const
+dxfcpp::v8::Candle::getImpVolatility() const
+dxfcpp::v8::Candle::getIndex() const
+dxfcpp::v8::Candle::getLow() const
+dxfcpp::v8::Candle::getOpen() const
+dxfcpp::v8::Candle::getOpenInterest() const
+dxfcpp::v8::Candle::getSequence() const
+dxfcpp::v8::Candle::getTime() const
+dxfcpp::v8::Candle::getVWAP() const
+dxfcpp::v8::Candle::getVolume() const
+dxfcpp::v8::Candle::setAskVolume(double)
+dxfcpp::v8::Candle::setBidVolume(double)
+dxfcpp::v8::Candle::setClose(double)
+dxfcpp::v8::Candle::setCount(long long)
+dxfcpp::v8::Candle::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::Candle::setEventFlags(int)
+dxfcpp::v8::Candle::setEventSymbol(dxfcpp::v8::CandleSymbol const&)
+dxfcpp::v8::Candle::setEventTime(long long)
+dxfcpp::v8::Candle::setHigh(double)
+dxfcpp::v8::Candle::setImpVolatility(double)
+dxfcpp::v8::Candle::setIndex(long long)
+dxfcpp::v8::Candle::setLow(double)
+dxfcpp::v8::Candle::setOpen(double)
+dxfcpp::v8::Candle::setOpenInterest(double)
+dxfcpp::v8::Candle::setSequence(int)
+dxfcpp::v8::Candle::setTime(long long)
+dxfcpp::v8::Candle::setVWAP(double)
+dxfcpp::v8::Candle::setVolume(double)
+dxfcpp::v8::Candle::toGraal() const
+dxfcpp::v8::Candle::toString() const
+dxfcpp::v8::Candle::withAskVolume(double)
+dxfcpp::v8::Candle::withBidVolume(double)
+dxfcpp::v8::Candle::withClose(double)
+dxfcpp::v8::Candle::withCount(long long)
+dxfcpp::v8::Candle::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::Candle::withEventFlags(int)
+dxfcpp::v8::Candle::withEventSymbol(dxfcpp::v8::CandleSymbol const&)
+dxfcpp::v8::Candle::withEventTime(long long)
+dxfcpp::v8::Candle::withHigh(double)
+dxfcpp::v8::Candle::withImpVolatility(double)
+dxfcpp::v8::Candle::withIndex(long long)
+dxfcpp::v8::Candle::withLow(double)
+dxfcpp::v8::Candle::withOpen(double)
+dxfcpp::v8::Candle::withOpenInterest(double)
+dxfcpp::v8::Candle::withSequence(int)
+dxfcpp::v8::Candle::withTime(long long)
+dxfcpp::v8::Candle::withVWAP(double)
+dxfcpp::v8::Candle::withVolume(double)
+dxfcpp::v8::CandleAlignment::ATTRIBUTE_KEY
+dxfcpp::v8::CandleAlignment::BY_STRING
+dxfcpp::v8::CandleAlignment::CandleAlignment()
+dxfcpp::v8::CandleAlignment::DEFAULT
+dxfcpp::v8::CandleAlignment::MIDNIGHT
+dxfcpp::v8::CandleAlignment::SESSION
+dxfcpp::v8::CandleAlignment::VALUES
+dxfcpp::v8::CandleAlignment::changeAttributeForSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::CandleAlignment::getAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleAlignment::normalizeAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleAlignment::operator==(dxfcpp::v8::CandleAlignment const&) const
+dxfcpp::v8::CandleAlignment::parse(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleAlignment::toString() const
+dxfcpp::v8::CandleDataType::ALL
+dxfcpp::v8::CandleDataType::ATTRIBUTE_KEY
+dxfcpp::v8::CandleDataType::CandleDataType()
+dxfcpp::v8::CandleDataType::DEFAULT
+dxfcpp::v8::CandleDataType::ETH
+dxfcpp::v8::CandleDataType::RTH
+dxfcpp::v8::CandleDataType::SOURCE
+dxfcpp::v8::CandleDataType::THO
+dxfcpp::v8::CandleDataType::UNDEFINED
+dxfcpp::v8::CandleDataType::changeAttributeForSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::CandleDataType::getAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleDataType::getValue() const
+dxfcpp::v8::CandleDataType::normalizeAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleDataType::operator==(dxfcpp::v8::CandleDataType const&) const
+dxfcpp::v8::CandleDataType::parse(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleDataType::toString() const
+dxfcpp::v8::CandleDataType::valueOf(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleExchange::COMPOSITE
+dxfcpp::v8::CandleExchange::CandleExchange()
+dxfcpp::v8::CandleExchange::DEFAULT
+dxfcpp::v8::CandleExchange::changeAttributeForSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::CandleExchange::getAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleExchange::getExchangeCode() const
+dxfcpp::v8::CandleExchange::operator==(dxfcpp::v8::CandleExchange const&) const
+dxfcpp::v8::CandleExchange::toString() const
+dxfcpp::v8::CandleExchange::valueOf(char)
+dxfcpp::v8::CandlePeriod::ATTRIBUTE_KEY
+dxfcpp::v8::CandlePeriod::CandlePeriod()
+dxfcpp::v8::CandlePeriod::CandlePeriod(double, dxfcpp::v8::CandleType const&)
+dxfcpp::v8::CandlePeriod::DAY
+dxfcpp::v8::CandlePeriod::DEFAULT
+dxfcpp::v8::CandlePeriod::TICK
+dxfcpp::v8::CandlePeriod::changeAttributeForSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::CandlePeriod::getAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePeriod::getPeriodIntervalMillis() const
+dxfcpp::v8::CandlePeriod::getType() const &
+dxfcpp::v8::CandlePeriod::getValue() const
+dxfcpp::v8::CandlePeriod::normalizeAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePeriod::operator==(dxfcpp::v8::CandlePeriod const&) const
+dxfcpp::v8::CandlePeriod::parse(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePeriod::toString() const
+dxfcpp::v8::CandlePeriod::valueOf(double, dxfcpp::v8::CandleType const&)
+dxfcpp::v8::CandlePrice::ASK
+dxfcpp::v8::CandlePrice::ATTRIBUTE_KEY
+dxfcpp::v8::CandlePrice::BID
+dxfcpp::v8::CandlePrice::BY_STRING
+dxfcpp::v8::CandlePrice::CandlePrice()
+dxfcpp::v8::CandlePrice::DEFAULT
+dxfcpp::v8::CandlePrice::LAST
+dxfcpp::v8::CandlePrice::MARK
+dxfcpp::v8::CandlePrice::SETTLEMENT
+dxfcpp::v8::CandlePrice::VALUES
+dxfcpp::v8::CandlePrice::changeAttributeForSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::CandlePrice::getAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePrice::normalizeAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePrice::operator==(dxfcpp::v8::CandlePrice const&) const
+dxfcpp::v8::CandlePrice::parse(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePrice::toString() const
+dxfcpp::v8::CandlePriceLevel::ATTRIBUTE_KEY
+dxfcpp::v8::CandlePriceLevel::CandlePriceLevel()
+dxfcpp::v8::CandlePriceLevel::DEFAULT
+dxfcpp::v8::CandlePriceLevel::changeAttributeForSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::CandlePriceLevel::getAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePriceLevel::getValue() const
+dxfcpp::v8::CandlePriceLevel::normalizeAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePriceLevel::operator==(dxfcpp::v8::CandlePriceLevel const&) const
+dxfcpp::v8::CandlePriceLevel::parse(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandlePriceLevel::toString() const
+dxfcpp::v8::CandlePriceLevel::valueOf(double)
+dxfcpp::v8::CandleSession::ANY
+dxfcpp::v8::CandleSession::ATTRIBUTE_KEY
+dxfcpp::v8::CandleSession::BY_STRING
+dxfcpp::v8::CandleSession::CandleSession()
+dxfcpp::v8::CandleSession::DEFAULT
+dxfcpp::v8::CandleSession::REGULAR
+dxfcpp::v8::CandleSession::VALUES
+dxfcpp::v8::CandleSession::changeAttributeForSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::CandleSession::getAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleSession::getSessionFilter() const &
+dxfcpp::v8::CandleSession::normalizeAttributeForSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleSession::operator==(dxfcpp::v8::CandleSession const&) const
+dxfcpp::v8::CandleSession::parse(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleSession::toString() const
+dxfcpp::v8::CandleSymbol::CandleSymbol()
+dxfcpp::v8::CandleSymbol::CandleSymbol(dxfcpp::v8::CandleSymbol const&)
+dxfcpp::v8::CandleSymbol::CandleSymbol(dxfcpp::v8::CandleSymbol&&)
+dxfcpp::v8::CandleSymbol::CandleSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleSymbol::CandleSymbol(dxfcpp::v8::StringLike const&, std::__1::variant<dxfcpp::v8::CandleExchange, dxfcpp::v8::CandlePrice, dxfcpp::v8::CandleSession, dxfcpp::v8::CandlePeriod, dxfcpp::v8::CandleAlignment, dxfcpp::v8::CandlePriceLevel, dxfcpp::v8::CandleDataType> const&)
+dxfcpp::v8::CandleSymbol::NUL()
+dxfcpp::v8::CandleSymbol::changeAttribute(dxfcpp::v8::StringLike const&, std::__1::variant<dxfcpp::v8::CandleExchange, dxfcpp::v8::CandlePrice, dxfcpp::v8::CandleSession, dxfcpp::v8::CandlePeriod, dxfcpp::v8::CandleAlignment, dxfcpp::v8::CandlePriceLevel, dxfcpp::v8::CandleDataType> const&)
+dxfcpp::v8::CandleSymbol::freeGraal(void*)
+dxfcpp::v8::CandleSymbol::fromGraal(void*)
+dxfcpp::v8::CandleSymbol::getAlignment() const &
+dxfcpp::v8::CandleSymbol::getBaseSymbol() const &
+dxfcpp::v8::CandleSymbol::getDataType() const &
+dxfcpp::v8::CandleSymbol::getExchange() const &
+dxfcpp::v8::CandleSymbol::getPeriod() const &
+dxfcpp::v8::CandleSymbol::getPrice() const &
+dxfcpp::v8::CandleSymbol::getPriceLevel() const &
+dxfcpp::v8::CandleSymbol::getSession() const &
+dxfcpp::v8::CandleSymbol::initTransientFields(bool)
+dxfcpp::v8::CandleSymbol::normalize(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleSymbol::operator<(dxfcpp::v8::CandleSymbol const&) const
+dxfcpp::v8::CandleSymbol::operator=(dxfcpp::v8::CandleSymbol const&)
+dxfcpp::v8::CandleSymbol::operator=(dxfcpp::v8::CandleSymbol&&)
+dxfcpp::v8::CandleSymbol::operator==(dxfcpp::v8::CandleSymbol const&) const
+dxfcpp::v8::CandleSymbol::toGraal() const
+dxfcpp::v8::CandleSymbol::toString() const &
+dxfcpp::v8::CandleSymbol::valueOf(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleSymbol::valueOf(dxfcpp::v8::StringLike const&, std::__1::variant<dxfcpp::v8::CandleExchange, dxfcpp::v8::CandlePrice, dxfcpp::v8::CandleSession, dxfcpp::v8::CandlePeriod, dxfcpp::v8::CandleAlignment, dxfcpp::v8::CandlePriceLevel, dxfcpp::v8::CandleDataType> const&)
+dxfcpp::v8::CandleSymbol::valueOf(dxfcpp::v8::StringLike const&, std::initializer_list<std::__1::variant<dxfcpp::v8::CandleExchange, dxfcpp::v8::CandlePrice, dxfcpp::v8::CandleSession, dxfcpp::v8::CandlePeriod, dxfcpp::v8::CandleAlignment, dxfcpp::v8::CandlePriceLevel, dxfcpp::v8::CandleDataType>>)
+dxfcpp::v8::CandleSymbol::~CandleSymbol()
+dxfcpp::v8::CandleType::BY_STRING
+dxfcpp::v8::CandleType::CandleType()
+dxfcpp::v8::CandleType::DAY
+dxfcpp::v8::CandleType::HOUR
+dxfcpp::v8::CandleType::MINUTE
+dxfcpp::v8::CandleType::MONTH
+dxfcpp::v8::CandleType::OPTEXP
+dxfcpp::v8::CandleType::PRICE
+dxfcpp::v8::CandleType::PRICE_MOMENTUM
+dxfcpp::v8::CandleType::PRICE_RENKO
+dxfcpp::v8::CandleType::SECOND
+dxfcpp::v8::CandleType::TICK
+dxfcpp::v8::CandleType::VALUES
+dxfcpp::v8::CandleType::VOLUME
+dxfcpp::v8::CandleType::WEEK
+dxfcpp::v8::CandleType::YEAR
+dxfcpp::v8::CandleType::getName() const
+dxfcpp::v8::CandleType::getPeriodIntervalMillis() const
+dxfcpp::v8::CandleType::operator==(dxfcpp::v8::CandleType const&) const
+dxfcpp::v8::CandleType::parse(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CandleType::toString() const
+dxfcpp::v8::CmdArgsUtils::parseCandleSymbols(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CmdArgsUtils::parseEventSources(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CmdArgsUtils::parseProperties(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CmdArgsUtils::parseSymbols(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CmdArgsUtils::parseSymbolsAndSaveOrder(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::CmdArgsUtils::parseTypes(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::DXEndpoint::Builder::Builder(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXEndpoint::Builder>::LockExternalConstructionTag)
+dxfcpp::v8::DXEndpoint::Builder::build()
+dxfcpp::v8::DXEndpoint::Builder::create()
+dxfcpp::v8::DXEndpoint::Builder::loadDefaultPropertiesImpl()
+dxfcpp::v8::DXEndpoint::Builder::supportsProperty(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::DXEndpoint::Builder::withExecutorImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::ExecutorTag> const&) const
+dxfcpp::v8::DXEndpoint::Builder::withName(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::DXEndpoint::Builder::withProperty(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::DXEndpoint::Builder::withRole(dxfcpp::v8::DXEndpoint::Role)
+dxfcpp::v8::DXEndpoint::Builder::~Builder()
+dxfcpp::v8::DXEndpoint::DXEndpoint(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXEndpoint>::LockExternalConstructionTag)
+dxfcpp::v8::DXEndpoint::DXEndpoint(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXEndpoint>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXEndpoint>&&, dxfcpp::v8::DXEndpoint::Role, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>)
+dxfcpp::v8::DXEndpoint::DXFEED_PROPERTIES_PROPERTY
+dxfcpp::v8::DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY
+dxfcpp::v8::DXEndpoint::NAME_PROPERTY
+dxfcpp::v8::DXEndpoint::awaitNotConnected() const
+dxfcpp::v8::DXEndpoint::awaitProcessed() const
+dxfcpp::v8::DXEndpoint::close() const
+dxfcpp::v8::DXEndpoint::closeAndAwaitTermination() const
+dxfcpp::v8::DXEndpoint::connect(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::DXEndpoint::create()
+dxfcpp::v8::DXEndpoint::create(dxfcpp::v8::DXEndpoint::Role)
+dxfcpp::v8::DXEndpoint::create(void*, dxfcpp::v8::DXEndpoint::Role, std::__1::unordered_map<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::hash<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>, std::__1::equal_to<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>, std::__1::allocator<std::__1::pair<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>>> const&)
+dxfcpp::v8::DXEndpoint::disconnect() const
+dxfcpp::v8::DXEndpoint::disconnectAndClear() const
+dxfcpp::v8::DXEndpoint::executorImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::ExecutorTag> const&) const
+dxfcpp::v8::DXEndpoint::getAggregationPeriodInfo() const
+dxfcpp::v8::DXEndpoint::getEventTypes() const
+dxfcpp::v8::DXEndpoint::getFeed() const
+dxfcpp::v8::DXEndpoint::getInstance()
+dxfcpp::v8::DXEndpoint::getInstance(dxfcpp::v8::DXEndpoint::Role)
+dxfcpp::v8::DXEndpoint::getName() const &
+dxfcpp::v8::DXEndpoint::getOnDemandService()
+dxfcpp::v8::DXEndpoint::getPublisher() const
+dxfcpp::v8::DXEndpoint::getRequestedAggregationPeriod() const
+dxfcpp::v8::DXEndpoint::getRole() const
+dxfcpp::v8::DXEndpoint::getState() const
+dxfcpp::v8::DXEndpoint::isClosed() const
+dxfcpp::v8::DXEndpoint::newBuilder()
+dxfcpp::v8::DXEndpoint::onStateChange()
+dxfcpp::v8::DXEndpoint::password(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::DXEndpoint::reconnect() const
+dxfcpp::v8::DXEndpoint::removeStateChangeListener(unsigned long)
+dxfcpp::v8::DXEndpoint::roleToString(dxfcpp::v8::DXEndpoint::Role)
+dxfcpp::v8::DXEndpoint::setRequestedAggregationPeriod(dxfcpp::v8::TimePeriod const&) const
+dxfcpp::v8::DXEndpoint::setRequestedAggregationPeriod(long long) const
+dxfcpp::v8::DXEndpoint::setRequestedAggregationPeriod(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>) const
+dxfcpp::v8::DXEndpoint::setRequestedAggregationPeriod(std::__1::nullopt_t) const
+dxfcpp::v8::DXEndpoint::stateToString(dxfcpp::v8::DXEndpoint::State)
+dxfcpp::v8::DXEndpoint::toString() const
+dxfcpp::v8::DXEndpoint::user(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::DXEndpoint::~DXEndpoint()
+dxfcpp::v8::DXFeed::DXFeed()
+dxfcpp::v8::DXFeed::attachSubscription(std::__1::shared_ptr<dxfcpp::v8::DXFeedSubscription> const&) const
+dxfcpp::v8::DXFeed::create(void*)
+dxfcpp::v8::DXFeed::createSubscription(dxfcpp::v8::EventTypeEnum const&) const
+dxfcpp::v8::DXFeed::createSubscription(std::initializer_list<dxfcpp::v8::EventTypeEnum>) const
+dxfcpp::v8::DXFeed::createTimeSeriesSubscription(dxfcpp::v8::EventTypeEnum const&) const
+dxfcpp::v8::DXFeed::createTimeSeriesSubscription(std::initializer_list<dxfcpp::v8::EventTypeEnum>) const
+dxfcpp::v8::DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(std::__1::unique_ptr<dxfcpp::v8::EventClassList, std::__1::default_delete<dxfcpp::v8::EventClassList>> const&) const
+dxfcpp::v8::DXFeed::detachSubscription(std::__1::shared_ptr<dxfcpp::v8::DXFeedSubscription> const&) const
+dxfcpp::v8::DXFeed::detachSubscriptionAndClear(std::__1::shared_ptr<dxfcpp::v8::DXFeedSubscription> const&) const
+dxfcpp::v8::DXFeed::getIndexedEventsIfSubscribedImpl(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&, dxfcpp::v8::IndexedEventSource const&) const
+dxfcpp::v8::DXFeed::getIndexedEventsPromiseImpl(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&, dxfcpp::v8::IndexedEventSource const&) const
+dxfcpp::v8::DXFeed::getInstance()
+dxfcpp::v8::DXFeed::getLastEventIfSubscribedImpl(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&) const
+dxfcpp::v8::DXFeed::getLastEventPromiseImpl(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&) const
+dxfcpp::v8::DXFeed::getLastEventsPromisesImpl(dxfcpp::v8::EventTypeEnum const&, void*) const
+dxfcpp::v8::DXFeed::getTimeSeriesIfSubscribedImpl(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&, long long, long long) const
+dxfcpp::v8::DXFeed::getTimeSeriesPromiseImpl(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&, long long, long long) const
+dxfcpp::v8::DXFeed::releaseSubscription(dxfcpp::v8::DXFeedSubscription const*) const
+dxfcpp::v8::DXFeed::releaseSubscriptions() const
+dxfcpp::v8::DXFeed::toString() const
+dxfcpp::v8::DXFeed::~DXFeed()
+dxfcpp::v8::DXFeedSubscription::DXFeedSubscription()
+dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXFeedSubscription>&&)
+dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedSubscription>::LockExternalConstructionTag)
+dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedSubscription>::LockExternalConstructionTag, dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedSubscription>::LockExternalConstructionTag, std::initializer_list<dxfcpp::v8::EventTypeEnum>)
+dxfcpp::v8::DXFeedSubscription::addChangeListener(std::__1::shared_ptr<dxfcpp::v8::ObservableSubscriptionChangeListener>)
+dxfcpp::v8::DXFeedSubscription::addFeed(std::__1::shared_ptr<dxfcpp::v8::DXFeed const> const&) const
+dxfcpp::v8::DXFeedSubscription::addSymbols(dxfcpp::v8::SymbolWrapper const&) const
+dxfcpp::v8::DXFeedSubscription::addSymbols(std::initializer_list<dxfcpp::v8::SymbolWrapper>) const
+dxfcpp::v8::DXFeedSubscription::addSymbolsImpl(void*) const
+dxfcpp::v8::DXFeedSubscription::attach(std::__1::shared_ptr<dxfcpp::v8::DXFeed>)
+dxfcpp::v8::DXFeedSubscription::clear() const
+dxfcpp::v8::DXFeedSubscription::close() const
+dxfcpp::v8::DXFeedSubscription::containsEventType(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::DXFeedSubscription::create(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::DXFeedSubscription::create(std::initializer_list<dxfcpp::v8::EventTypeEnum>)
+dxfcpp::v8::DXFeedSubscription::createSubscriptionHandleFromEventClassList(std::__1::unique_ptr<dxfcpp::v8::EventClassList, std::__1::default_delete<dxfcpp::v8::EventClassList>> const&)
+dxfcpp::v8::DXFeedSubscription::detach(std::__1::shared_ptr<dxfcpp::v8::DXFeed>)
+dxfcpp::v8::DXFeedSubscription::getAggregationPeriod() const
+dxfcpp::v8::DXFeedSubscription::getAggregationPeriodInfo() const
+dxfcpp::v8::DXFeedSubscription::getDecoratedSymbols() const
+dxfcpp::v8::DXFeedSubscription::getEventTypes()
+dxfcpp::v8::DXFeedSubscription::getEventsBatchLimit() const
+dxfcpp::v8::DXFeedSubscription::getSymbols() const
+dxfcpp::v8::DXFeedSubscription::getTotalDroppedEvents() const
+dxfcpp::v8::DXFeedSubscription::isClosed()
+dxfcpp::v8::DXFeedSubscription::lastChangeListenerId_
+dxfcpp::v8::DXFeedSubscription::onEvent()
+dxfcpp::v8::DXFeedSubscription::registerSubscription(std::__1::shared_ptr<dxfcpp::v8::DXFeedSubscription> const&)
+dxfcpp::v8::DXFeedSubscription::removeChangeListener(unsigned long)
+dxfcpp::v8::DXFeedSubscription::removeEventListener(unsigned long)
+dxfcpp::v8::DXFeedSubscription::removeFeed(dxfcpp::v8::DXFeed const*) const
+dxfcpp::v8::DXFeedSubscription::removeSymbols(dxfcpp::v8::SymbolWrapper const&) const
+dxfcpp::v8::DXFeedSubscription::removeSymbols(std::initializer_list<dxfcpp::v8::SymbolWrapper>) const
+dxfcpp::v8::DXFeedSubscription::removeSymbolsImpl(void*) const
+dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(dxfcpp::v8::TimePeriod const&) const
+dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(long long) const
+dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>) const
+dxfcpp::v8::DXFeedSubscription::setEventListenerHandle(unsigned long)
+dxfcpp::v8::DXFeedSubscription::setEventsBatchLimit(int) const
+dxfcpp::v8::DXFeedSubscription::setSymbols(std::initializer_list<dxfcpp::v8::SymbolWrapper>) const
+dxfcpp::v8::DXFeedSubscription::setSymbolsImpl(void*) const
+dxfcpp::v8::DXFeedSubscription::toString() const
+dxfcpp::v8::DXFeedSubscription::tryToSetEventListenerHandle()
+dxfcpp::v8::DXFeedSubscription::~DXFeedSubscription()
+dxfcpp::v8::DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedTimeSeriesSubscription>::LockExternalConstructionTag)
+dxfcpp::v8::DXFeedTimeSeriesSubscription::DXFeedTimeSeriesSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedTimeSeriesSubscription>::LockExternalConstructionTag, dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXFeedSubscription>&&)
+dxfcpp::v8::DXFeedTimeSeriesSubscription::getFromTime()
+dxfcpp::v8::DXFeedTimeSeriesSubscription::registerEntity()
+dxfcpp::v8::DXFeedTimeSeriesSubscription::setFromTime(long long)
+dxfcpp::v8::DXFeedTimeSeriesSubscription::setFromTime(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>)
+dxfcpp::v8::DXFeedTimeSeriesSubscription::toString() const
+dxfcpp::v8::DXFeedTimeSeriesSubscription::~DXFeedTimeSeriesSubscription()
+dxfcpp::v8::DXPublisher::DXPublisher()
+dxfcpp::v8::DXPublisher::create(void*)
+dxfcpp::v8::DXPublisher::getInstance()
+dxfcpp::v8::DXPublisher::getSubscription(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::DXPublisher::publishEvents(std::__1::shared_ptr<dxfcpp::v8::EventType>) const
+dxfcpp::v8::DXPublisher::publishEventsImpl(void*) const
+dxfcpp::v8::DXPublisher::releaseSubscriptions() const
+dxfcpp::v8::DXPublisher::toString() const
+dxfcpp::v8::DXPublisher::~DXPublisher()
+dxfcpp::v8::DXPublisherObservableSubscription::DXPublisherObservableSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXPublisherObservableSubscription>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXPublisherObservableSubscription>&&)
+dxfcpp::v8::DXPublisherObservableSubscription::addChangeListener(std::__1::shared_ptr<dxfcpp::v8::ObservableSubscriptionChangeListener>)
+dxfcpp::v8::DXPublisherObservableSubscription::containsEventType(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::DXPublisherObservableSubscription::create(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXPublisherObservableSubscription>&&)
+dxfcpp::v8::DXPublisherObservableSubscription::getEventTypes()
+dxfcpp::v8::DXPublisherObservableSubscription::isClosed()
+dxfcpp::v8::DXPublisherObservableSubscription::lastListenerId_
+dxfcpp::v8::DXPublisherObservableSubscription::releaseChangeListenerAfterClose(unsigned long)
+dxfcpp::v8::DXPublisherObservableSubscription::removeChangeListener(unsigned long)
+dxfcpp::v8::DXPublisherObservableSubscription::~DXPublisherObservableSubscription()
+dxfcpp::v8::Day::Day(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Day>&&)
+dxfcpp::v8::Day::containsTime(long long) const
+dxfcpp::v8::Day::create(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Day>&&)
+dxfcpp::v8::Day::findFirstSession(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Day::findLastSession(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Day::findNextDay(dxfcpp::v8::DayFilter const&) const
+dxfcpp::v8::Day::findPrevDay(dxfcpp::v8::DayFilter const&) const
+dxfcpp::v8::Day::getDayId() const
+dxfcpp::v8::Day::getDayOfMonth() const
+dxfcpp::v8::Day::getDayOfWeek() const
+dxfcpp::v8::Day::getEndTime() const
+dxfcpp::v8::Day::getFirstSession(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Day::getLastSession(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Day::getMonthOfYear() const
+dxfcpp::v8::Day::getNextDay(dxfcpp::v8::DayFilter const&) const
+dxfcpp::v8::Day::getPrevDay(dxfcpp::v8::DayFilter const&) const
+dxfcpp::v8::Day::getResetTime() const
+dxfcpp::v8::Day::getSchedule() const
+dxfcpp::v8::Day::getSessionByTime(long long) const
+dxfcpp::v8::Day::getSessions() const
+dxfcpp::v8::Day::getStartTime() const
+dxfcpp::v8::Day::getYear() const
+dxfcpp::v8::Day::getYearMonthDay() const
+dxfcpp::v8::Day::hashCode() const
+dxfcpp::v8::Day::isHoliday() const
+dxfcpp::v8::Day::isShortDay() const
+dxfcpp::v8::Day::isTrading() const
+dxfcpp::v8::Day::operator==(dxfcpp::v8::Day const&) const
+dxfcpp::v8::Day::operator==(std::__1::shared_ptr<dxfcpp::v8::Day> const&) const
+dxfcpp::v8::Day::toString() const
+dxfcpp::v8::DayFilter::ANY
+dxfcpp::v8::DayFilter::FRIDAY
+dxfcpp::v8::DayFilter::HOLIDAY
+dxfcpp::v8::DayFilter::MONDAY
+dxfcpp::v8::DayFilter::NON_TRADING
+dxfcpp::v8::DayFilter::SATURDAY
+dxfcpp::v8::DayFilter::SHORT_DAY
+dxfcpp::v8::DayFilter::SUNDAY
+dxfcpp::v8::DayFilter::THURSDAY
+dxfcpp::v8::DayFilter::TRADING
+dxfcpp::v8::DayFilter::TUESDAY
+dxfcpp::v8::DayFilter::WEDNESDAY
+dxfcpp::v8::DayFilter::WEEK_DAY
+dxfcpp::v8::DayFilter::WEEK_END
+dxfcpp::v8::DayFilter::getCode() const
+dxfcpp::v8::DayFilter::getDayOfWeekMask() const
+dxfcpp::v8::DayFilter::getHandle() const &
+dxfcpp::v8::DayFilter::getName() const
+dxfcpp::v8::DayFilter::isHoliday() const
+dxfcpp::v8::DayFilter::isShortDay() const
+dxfcpp::v8::DayFilter::isTrading() const
+dxfcpp::v8::Direction::ALL
+dxfcpp::v8::Direction::DOWN
+dxfcpp::v8::Direction::UNDEFINED
+dxfcpp::v8::Direction::UP
+dxfcpp::v8::Direction::ZERO
+dxfcpp::v8::Direction::ZERO_DOWN
+dxfcpp::v8::Direction::ZERO_UP
+dxfcpp::v8::ErrorInfo::toString() const
+dxfcpp::v8::ErrorManager::clearErrors()
+dxfcpp::v8::ErrorManager::defaultHandler(dxfcpp::v8::ErrorInfo const&)
+dxfcpp::v8::ErrorManager::getCapacity()
+dxfcpp::v8::ErrorManager::getErrors()
+dxfcpp::v8::ErrorManager::getLastError()
+dxfcpp::v8::ErrorManager::report(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&, std::__1::source_location const&)
+dxfcpp::v8::ErrorManager::reportException(dxfcpp::v8::StringLike const&, std::exception_ptr const&, std::__1::source_location const&)
+dxfcpp::v8::ErrorManager::resetHandler()
+dxfcpp::v8::ErrorManager::setCapacity(unsigned long)
+dxfcpp::v8::ErrorManager::setHandler(std::__1::function<void (dxfcpp::v8::ErrorInfo const&)>)
+dxfcpp::v8::EventClassList::EventClassList()
+dxfcpp::v8::EventClassList::create(unsigned long)
+dxfcpp::v8::EventClassList::getHandle() const
+dxfcpp::v8::EventClassList::isEmpty() const
+dxfcpp::v8::EventClassList::set(unsigned long, unsigned int) const
+dxfcpp::v8::EventClassList::size() const
+dxfcpp::v8::EventClassList::~EventClassList()
+dxfcpp::v8::EventFlag::EventFlag()
+dxfcpp::v8::EventFlag::REMOVE_EVENT
+dxfcpp::v8::EventFlag::REMOVE_SYMBOL
+dxfcpp::v8::EventFlag::SNAPSHOT_BEGIN
+dxfcpp::v8::EventFlag::SNAPSHOT_END
+dxfcpp::v8::EventFlag::SNAPSHOT_MODE
+dxfcpp::v8::EventFlag::SNAPSHOT_SNIP
+dxfcpp::v8::EventFlag::TX_PENDING
+dxfcpp::v8::EventFlag::getFlag() const
+dxfcpp::v8::EventFlag::getName() const
+dxfcpp::v8::EventFlag::in(unsigned int) const
+dxfcpp::v8::EventFlag::toString() const
+dxfcpp::v8::EventFlagsMask::EventFlagsMask()
+dxfcpp::v8::EventFlagsMask::EventFlagsMask(std::initializer_list<dxfcpp::v8::EventFlag>)
+dxfcpp::v8::EventFlagsMask::contains(dxfcpp::v8::EventFlag const&) const
+dxfcpp::v8::EventFlagsMask::toString() const
+dxfcpp::v8::EventMapper::calculateGraalListSize(long)
+dxfcpp::v8::EventMapper::freeGraal(void*)
+dxfcpp::v8::EventMapper::freeGraalList(void*)
+dxfcpp::v8::EventMapper::freeGraalListElements(void*, long)
+dxfcpp::v8::EventMapper::fromGraal(void*)
+dxfcpp::v8::EventMapper::fromGraalList(void*)
+dxfcpp::v8::EventMapper::fromGraalListSkippingErrors(void*)
+dxfcpp::v8::EventMapper::newGraalList(long)
+dxfcpp::v8::EventMapper::setGraalListElement(void*, long, void*)
+dxfcpp::v8::EventPromiseImpl::EventPromiseImpl(void*, bool)
+dxfcpp::v8::EventPromiseImpl::getResult() const
+dxfcpp::v8::EventPromiseImpl::~EventPromiseImpl()
+dxfcpp::v8::EventSourceWrapper::EventSourceWrapper()
+dxfcpp::v8::EventSourceWrapper::EventSourceWrapper(dxfcpp::v8::EventSourceWrapper const&)
+dxfcpp::v8::EventSourceWrapper::EventSourceWrapper(dxfcpp::v8::EventSourceWrapper&&)
+dxfcpp::v8::EventSourceWrapper::EventSourceWrapper(dxfcpp::v8::IndexedEventSource const&)
+dxfcpp::v8::EventSourceWrapper::EventSourceWrapper(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::EventSourceWrapper::ListUtils::calculateGraalListSize(long)
+dxfcpp::v8::EventSourceWrapper::ListUtils::freeGraalList(void*)
+dxfcpp::v8::EventSourceWrapper::ListUtils::freeGraalListElements(void*, long)
+dxfcpp::v8::EventSourceWrapper::ListUtils::fromGraalList(void*)
+dxfcpp::v8::EventSourceWrapper::ListUtils::newGraalList(long)
+dxfcpp::v8::EventSourceWrapper::ListUtils::setGraalListElement(void*, long, void*)
+dxfcpp::v8::EventSourceWrapper::asIndexedEventSource() const
+dxfcpp::v8::EventSourceWrapper::asOrderSource() const
+dxfcpp::v8::EventSourceWrapper::freeGraal(void*)
+dxfcpp::v8::EventSourceWrapper::fromGraal(void*)
+dxfcpp::v8::EventSourceWrapper::getData() const
+dxfcpp::v8::EventSourceWrapper::isIndexedEventSource() const
+dxfcpp::v8::EventSourceWrapper::isOrderSource() const
+dxfcpp::v8::EventSourceWrapper::operator=(dxfcpp::v8::EventSourceWrapper const&)
+dxfcpp::v8::EventSourceWrapper::operator=(dxfcpp::v8::EventSourceWrapper&&)
+dxfcpp::v8::EventSourceWrapper::toGraal() const
+dxfcpp::v8::EventSourceWrapper::toGraalUnique() const
+dxfcpp::v8::EventSourceWrapper::toString() const
+dxfcpp::v8::EventSourceWrapper::toStringUnderlying() const
+dxfcpp::v8::EventSourceWrapper::~EventSourceWrapper()
+dxfcpp::v8::EventType::EventType()
+dxfcpp::v8::EventType::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::EventType::getEventTime() const
+dxfcpp::v8::EventType::setEventTime(long long)
+dxfcpp::v8::EventType::toString() const
+dxfcpp::v8::EventType::~EventType()
+dxfcpp::v8::EventTypeEnum::ALL
+dxfcpp::v8::EventTypeEnum::ALL_BY_CLASS_NAME
+dxfcpp::v8::EventTypeEnum::ALL_BY_ID
+dxfcpp::v8::EventTypeEnum::ALL_BY_NAME
+dxfcpp::v8::EventTypeEnum::ANALYTIC_ORDER
+dxfcpp::v8::EventTypeEnum::CANDLE
+dxfcpp::v8::EventTypeEnum::CONFIGURATION
+dxfcpp::v8::EventTypeEnum::EventTypeEnum()
+dxfcpp::v8::EventTypeEnum::GREEKS
+dxfcpp::v8::EventTypeEnum::INVALID_EVENT_TYPE
+dxfcpp::v8::EventTypeEnum::MARKET_MAKER
+dxfcpp::v8::EventTypeEnum::MESSAGE
+dxfcpp::v8::EventTypeEnum::NUAM_ORDER
+dxfcpp::v8::EventTypeEnum::NUAM_TIME_AND_SALE
+dxfcpp::v8::EventTypeEnum::NUAM_TRADE
+dxfcpp::v8::EventTypeEnum::OPTION_SALE
+dxfcpp::v8::EventTypeEnum::ORDER
+dxfcpp::v8::EventTypeEnum::ORDER_IMBALANCE
+dxfcpp::v8::EventTypeEnum::OTC_MARKETS_ORDER
+dxfcpp::v8::EventTypeEnum::PROFILE
+dxfcpp::v8::EventTypeEnum::QUOTE
+dxfcpp::v8::EventTypeEnum::SERIES
+dxfcpp::v8::EventTypeEnum::SPREAD_ORDER
+dxfcpp::v8::EventTypeEnum::SUMMARY
+dxfcpp::v8::EventTypeEnum::TEXT_CONFIGURATION
+dxfcpp::v8::EventTypeEnum::TEXT_MESSAGE
+dxfcpp::v8::EventTypeEnum::THEO_PRICE
+dxfcpp::v8::EventTypeEnum::TIME_AND_SALE
+dxfcpp::v8::EventTypeEnum::TRADE
+dxfcpp::v8::EventTypeEnum::TRADE_ETH
+dxfcpp::v8::EventTypeEnum::UNDERLYING
+dxfcpp::v8::EventTypeEnum::getClassName() const
+dxfcpp::v8::EventTypeEnum::getId() const
+dxfcpp::v8::EventTypeEnum::getName() const
+dxfcpp::v8::EventTypeEnum::isIndexed() const
+dxfcpp::v8::EventTypeEnum::isLasting() const
+dxfcpp::v8::EventTypeEnum::isMarket() const
+dxfcpp::v8::EventTypeEnum::isOnlyIndexed() const
+dxfcpp::v8::EventTypeEnum::isTimeSeries() const
+dxfcpp::v8::EventTypeEnum::operator<(dxfcpp::v8::EventTypeEnum const&) const
+dxfcpp::v8::EventTypeEnum::operator<(std::__1::reference_wrapper<dxfcpp::v8::EventTypeEnum const> const&) const
+dxfcpp::v8::EventTypeEnum::operator==(dxfcpp::v8::EventTypeEnum const&) const
+dxfcpp::v8::EventTypeEnum::operator==(std::__1::reference_wrapper<dxfcpp::v8::EventTypeEnum const> const&) const
+dxfcpp::v8::EventsPromiseImpl::EventsPromiseImpl(void*, bool)
+dxfcpp::v8::EventsPromiseImpl::getResult() const
+dxfcpp::v8::EventsPromiseImpl::~EventsPromiseImpl()
+dxfcpp::v8::GraalException::GraalException(dxfcpp::v8::CEntryPointErrorsEnum)
+dxfcpp::v8::GraalException::GraalException(dxfcpp::v8::CEntryPointErrorsEnum, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)
+dxfcpp::v8::GraalException::GraalException(dxfcpp::v8::GraalException const&)
+dxfcpp::v8::GraalException::createMessage(dxfcpp::v8::CEntryPointErrorsEnum)
+dxfcpp::v8::Greeks::Greeks()
+dxfcpp::v8::Greeks::Greeks(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Greeks::TYPE
+dxfcpp::v8::Greeks::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Greeks::fillData(void*)
+dxfcpp::v8::Greeks::fillGraalData(void*) const
+dxfcpp::v8::Greeks::freeGraal(void*)
+dxfcpp::v8::Greeks::fromGraal(void*)
+dxfcpp::v8::Greeks::getDelta() const
+dxfcpp::v8::Greeks::getEventFlags() const
+dxfcpp::v8::Greeks::getEventFlagsMask() const
+dxfcpp::v8::Greeks::getGamma() const
+dxfcpp::v8::Greeks::getIndex() const
+dxfcpp::v8::Greeks::getPrice() const
+dxfcpp::v8::Greeks::getRho() const
+dxfcpp::v8::Greeks::getSequence() const
+dxfcpp::v8::Greeks::getSource() const &
+dxfcpp::v8::Greeks::getTheta() const
+dxfcpp::v8::Greeks::getTime() const
+dxfcpp::v8::Greeks::getVega() const
+dxfcpp::v8::Greeks::getVolatility() const
+dxfcpp::v8::Greeks::setDelta(double)
+dxfcpp::v8::Greeks::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::Greeks::setEventFlags(int)
+dxfcpp::v8::Greeks::setGamma(double)
+dxfcpp::v8::Greeks::setIndex(long long)
+dxfcpp::v8::Greeks::setPrice(double)
+dxfcpp::v8::Greeks::setRho(double)
+dxfcpp::v8::Greeks::setSequence(int)
+dxfcpp::v8::Greeks::setTheta(double)
+dxfcpp::v8::Greeks::setTime(long long)
+dxfcpp::v8::Greeks::setVega(double)
+dxfcpp::v8::Greeks::setVolatility(double)
+dxfcpp::v8::Greeks::toGraal() const
+dxfcpp::v8::Greeks::toString() const
+dxfcpp::v8::HistoryEndpoint::Builder::Builder(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::HistoryEndpoint::Builder>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::HistoryEndpoint::Builder>&&)
+dxfcpp::v8::HistoryEndpoint::Builder::build() const
+dxfcpp::v8::HistoryEndpoint::Builder::withAddress(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::HistoryEndpoint::Builder::withAuthToken(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::HistoryEndpoint::Builder::withCompression(dxfcpp::v8::HistoryEndpoint::Compression)
+dxfcpp::v8::HistoryEndpoint::Builder::withFormat(dxfcpp::v8::HistoryEndpoint::Format)
+dxfcpp::v8::HistoryEndpoint::Builder::withPassword(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::HistoryEndpoint::Builder::withUserName(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::HistoryEndpoint::Builder::~Builder()
+dxfcpp::v8::HistoryEndpoint::HistoryEndpoint(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::HistoryEndpoint>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::HistoryEndpoint>&&)
+dxfcpp::v8::HistoryEndpoint::getTimeSeriesImpl(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&, long long, long long) const
+dxfcpp::v8::HistoryEndpoint::newBuilder()
+dxfcpp::v8::HistoryEndpoint::~HistoryEndpoint()
+dxfcpp::v8::IcebergType::ALL
+dxfcpp::v8::IcebergType::NATIVE
+dxfcpp::v8::IcebergType::SYNTHETIC
+dxfcpp::v8::IcebergType::UNDEFINED
+dxfcpp::v8::ImbalanceSide::ALL
+dxfcpp::v8::ImbalanceSide::BUY
+dxfcpp::v8::ImbalanceSide::INSUFFICIENT_ORDERS
+dxfcpp::v8::ImbalanceSide::NO_IMBALANCE
+dxfcpp::v8::ImbalanceSide::PAUSED
+dxfcpp::v8::ImbalanceSide::SELL
+dxfcpp::v8::ImbalanceSide::UNDEFINED
+dxfcpp::v8::InPlaceExecutor::InPlaceExecutor(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::InPlaceExecutor>::LockExternalConstructionTag)
+dxfcpp::v8::InPlaceExecutor::create()
+dxfcpp::v8::InPlaceExecutor::getHandle() const
+dxfcpp::v8::InPlaceExecutor::processAllPendingTasks() const
+dxfcpp::v8::InPlaceExecutor::~InPlaceExecutor()
+dxfcpp::v8::IndexedEvent::REMOVE_EVENT
+dxfcpp::v8::IndexedEvent::SNAPSHOT_BEGIN
+dxfcpp::v8::IndexedEvent::SNAPSHOT_END
+dxfcpp::v8::IndexedEvent::SNAPSHOT_MODE
+dxfcpp::v8::IndexedEvent::SNAPSHOT_SNIP
+dxfcpp::v8::IndexedEvent::TX_PENDING
+dxfcpp::v8::IndexedEvent::~IndexedEvent()
+dxfcpp::v8::IndexedEventSource::DEFAULT
+dxfcpp::v8::IndexedEventSource::IndexedEventSource()
+dxfcpp::v8::IndexedEventSource::IndexedEventSource(dxfcpp::v8::IndexedEventSource const&)
+dxfcpp::v8::IndexedEventSource::IndexedEventSource(dxfcpp::v8::IndexedEventSource const&, bool)
+dxfcpp::v8::IndexedEventSource::IndexedEventSource(int, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::IndexedEventSource::IndexedEventSource(int, dxfcpp::v8::StringLike const&, bool)
+dxfcpp::v8::IndexedEventSource::freeGraal(void*)
+dxfcpp::v8::IndexedEventSource::fromGraal(void*)
+dxfcpp::v8::IndexedEventSource::id() const
+dxfcpp::v8::IndexedEventSource::name() const
+dxfcpp::v8::IndexedEventSource::operator<(dxfcpp::v8::IndexedEventSource const&) const
+dxfcpp::v8::IndexedEventSource::operator=(dxfcpp::v8::IndexedEventSource const&)
+dxfcpp::v8::IndexedEventSource::operator==(dxfcpp::v8::IndexedEventSource const&) const
+dxfcpp::v8::IndexedEventSource::toGraal() const
+dxfcpp::v8::IndexedEventSource::toGraalUnique() const
+dxfcpp::v8::IndexedEventSource::toString() const
+dxfcpp::v8::IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol()
+dxfcpp::v8::IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(dxfcpp::v8::IndexedEventSubscriptionSymbol const&)
+dxfcpp::v8::IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(dxfcpp::v8::IndexedEventSubscriptionSymbol&&)
+dxfcpp::v8::IndexedEventSubscriptionSymbol::IndexedEventSubscriptionSymbol(dxfcpp::v8::SymbolWrapper const&, dxfcpp::v8::IndexedEventSource const&)
+dxfcpp::v8::IndexedEventSubscriptionSymbol::freeGraal(void*)
+dxfcpp::v8::IndexedEventSubscriptionSymbol::fromGraal(void*)
+dxfcpp::v8::IndexedEventSubscriptionSymbol::getEventSymbol() const
+dxfcpp::v8::IndexedEventSubscriptionSymbol::getSource() const
+dxfcpp::v8::IndexedEventSubscriptionSymbol::operator<(dxfcpp::v8::IndexedEventSubscriptionSymbol const&) const
+dxfcpp::v8::IndexedEventSubscriptionSymbol::operator=(dxfcpp::v8::IndexedEventSubscriptionSymbol const&)
+dxfcpp::v8::IndexedEventSubscriptionSymbol::operator=(dxfcpp::v8::IndexedEventSubscriptionSymbol&&)
+dxfcpp::v8::IndexedEventSubscriptionSymbol::operator==(dxfcpp::v8::IndexedEventSubscriptionSymbol const&) const
+dxfcpp::v8::IndexedEventSubscriptionSymbol::toGraal() const
+dxfcpp::v8::IndexedEventSubscriptionSymbol::toString() const
+dxfcpp::v8::IndexedEventSubscriptionSymbol::~IndexedEventSubscriptionSymbol()
+dxfcpp::v8::IndexedEventTxModelImpl::buildImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&)
+dxfcpp::v8::IndexedEventTxModelImpl::closeImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelTag> const&)
+dxfcpp::v8::IndexedEventTxModelImpl::getIndexedEventSubscriptionSymbolImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelTag> const&)
+dxfcpp::v8::IndexedEventTxModelImpl::getSourceImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelTag> const&)
+dxfcpp::v8::IndexedEventTxModelImpl::getSubscriptionControllerImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelTag> const&)
+dxfcpp::v8::IndexedEventTxModelImpl::getSymbolImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelTag> const&)
+dxfcpp::v8::IndexedEventTxModelImpl::isClosedImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelTag> const&)
+dxfcpp::v8::IndexedEventTxModelImpl::newBuilderImpl(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::IndexedEventTxModelImpl::withAggregationPeriodImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&, long long)
+dxfcpp::v8::IndexedEventTxModelImpl::withEventsBatchLimitImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&, int)
+dxfcpp::v8::IndexedEventTxModelImpl::withExecutorImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&, void*)
+dxfcpp::v8::IndexedEventTxModelImpl::withFeedImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&, std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&)
+dxfcpp::v8::IndexedEventTxModelImpl::withListenerImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&, std::__1::function<void (std::__1::vector<std::__1::shared_ptr<dxfcpp::v8::EventType>, std::__1::allocator<std::__1::shared_ptr<dxfcpp::v8::EventType>>> const&, bool)>)
+dxfcpp::v8::IndexedEventTxModelImpl::withSourceImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&, dxfcpp::v8::EventSourceWrapper const&)
+dxfcpp::v8::IndexedEventTxModelImpl::withSymbolImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&, dxfcpp::v8::IndexedEventSubscriptionSymbol const&)
+dxfcpp::v8::IndexedEventTxModelImpl::withSymbolImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag> const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::IndexedTxModelImpl::Builder::buildImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelBuilderTag> const&)
+dxfcpp::v8::IndexedTxModelImpl::Builder::withBatchProcessingImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelBuilderTag> const&, bool)
+dxfcpp::v8::IndexedTxModelImpl::Builder::withFeedImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelBuilderTag> const&, std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&)
+dxfcpp::v8::IndexedTxModelImpl::Builder::withListenerImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelBuilderTag> const&, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TxModelListenerTag> const&)
+dxfcpp::v8::IndexedTxModelImpl::Builder::withSnapshotProcessingImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelBuilderTag> const&, bool)
+dxfcpp::v8::IndexedTxModelImpl::Builder::withSourcesImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelBuilderTag> const&, void*)
+dxfcpp::v8::IndexedTxModelImpl::Builder::withSymbolImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelBuilderTag> const&, dxfcpp::v8::SymbolWrapper const&)
+dxfcpp::v8::IndexedTxModelImpl::attachImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelTag> const&, std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&)
+dxfcpp::v8::IndexedTxModelImpl::closeImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelTag> const&)
+dxfcpp::v8::IndexedTxModelImpl::detachImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelTag> const&, std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&)
+dxfcpp::v8::IndexedTxModelImpl::getSourcesImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelTag> const&)
+dxfcpp::v8::IndexedTxModelImpl::isBatchProcessingImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelTag> const&)
+dxfcpp::v8::IndexedTxModelImpl::isSnapshotProcessingImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelTag> const&)
+dxfcpp::v8::IndexedTxModelImpl::newBuilderImpl(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::IndexedTxModelImpl::setSourcesImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelTag> const&, void*)
+dxfcpp::v8::InstrumentProfile::InstrumentProfile(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::InstrumentProfile>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::InstrumentProfile>&&)
+dxfcpp::v8::InstrumentProfile::List::fromGraal(void*)
+dxfcpp::v8::InstrumentProfile::create()
+dxfcpp::v8::InstrumentProfile::create(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::InstrumentProfile>&&)
+dxfcpp::v8::InstrumentProfile::create(std::__1::shared_ptr<dxfcpp::v8::InstrumentProfile>)
+dxfcpp::v8::InstrumentProfile::getAdditionalUnderlyings() const
+dxfcpp::v8::InstrumentProfile::getBaseCurrency() const
+dxfcpp::v8::InstrumentProfile::getCFI() const
+dxfcpp::v8::InstrumentProfile::getCUSIP() const
+dxfcpp::v8::InstrumentProfile::getCountry() const
+dxfcpp::v8::InstrumentProfile::getCurrency() const
+dxfcpp::v8::InstrumentProfile::getDateField(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::getDescription() const
+dxfcpp::v8::InstrumentProfile::getExchangeData() const
+dxfcpp::v8::InstrumentProfile::getExchanges() const
+dxfcpp::v8::InstrumentProfile::getExpiration() const
+dxfcpp::v8::InstrumentProfile::getExpirationStyle() const
+dxfcpp::v8::InstrumentProfile::getField(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::getICB() const
+dxfcpp::v8::InstrumentProfile::getISIN() const
+dxfcpp::v8::InstrumentProfile::getLastTrade() const
+dxfcpp::v8::InstrumentProfile::getLocalDescription() const
+dxfcpp::v8::InstrumentProfile::getLocalSymbol() const
+dxfcpp::v8::InstrumentProfile::getMMY() const
+dxfcpp::v8::InstrumentProfile::getMultiplier() const
+dxfcpp::v8::InstrumentProfile::getNonEmptyCustomFieldNames() const
+dxfcpp::v8::InstrumentProfile::getNumericField(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::getOPOL() const
+dxfcpp::v8::InstrumentProfile::getOptionType() const
+dxfcpp::v8::InstrumentProfile::getPriceIncrements() const
+dxfcpp::v8::InstrumentProfile::getProduct() const
+dxfcpp::v8::InstrumentProfile::getSEDOL() const
+dxfcpp::v8::InstrumentProfile::getSIC() const
+dxfcpp::v8::InstrumentProfile::getSPC() const
+dxfcpp::v8::InstrumentProfile::getSettlementStyle() const
+dxfcpp::v8::InstrumentProfile::getStrike() const
+dxfcpp::v8::InstrumentProfile::getSymbol() const
+dxfcpp::v8::InstrumentProfile::getTradingHours() const
+dxfcpp::v8::InstrumentProfile::getType() const
+dxfcpp::v8::InstrumentProfile::getUnderlying() const
+dxfcpp::v8::InstrumentProfile::hashCode() const
+dxfcpp::v8::InstrumentProfile::operator==(dxfcpp::v8::InstrumentProfile const&) const
+dxfcpp::v8::InstrumentProfile::setAdditionalUnderlyings(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setBaseCurrency(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setCFI(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setCUSIP(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setCountry(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setCurrency(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setDateField(dxfcpp::v8::StringLike const&, int) const
+dxfcpp::v8::InstrumentProfile::setDescription(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setExchangeData(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setExchanges(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setExpiration(int) const
+dxfcpp::v8::InstrumentProfile::setExpirationStyle(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setField(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setICB(int) const
+dxfcpp::v8::InstrumentProfile::setISIN(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setLastTrade(int) const
+dxfcpp::v8::InstrumentProfile::setLocalDescription(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setLocalSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setMMY(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setMultiplier(double) const
+dxfcpp::v8::InstrumentProfile::setNumericField(dxfcpp::v8::StringLike const&, double) const
+dxfcpp::v8::InstrumentProfile::setOPOL(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setOptionType(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setPriceIncrements(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setProduct(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setSEDOL(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setSIC(int) const
+dxfcpp::v8::InstrumentProfile::setSPC(double) const
+dxfcpp::v8::InstrumentProfile::setSettlementStyle(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setStrike(double) const
+dxfcpp::v8::InstrumentProfile::setSymbol(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setTradingHours(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setType(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::setUnderlying(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfile::toString() const
+dxfcpp::v8::InstrumentProfile::~InstrumentProfile()
+dxfcpp::v8::InstrumentProfileCollector::InstrumentProfileCollector()
+dxfcpp::v8::InstrumentProfileCollector::addUpdateListenerImpl(std::__1::shared_ptr<dxfcpp::v8::InstrumentProfileCollector::UpdateListener>)
+dxfcpp::v8::InstrumentProfileCollector::create()
+dxfcpp::v8::InstrumentProfileCollector::getLastUpdateTime() const
+dxfcpp::v8::InstrumentProfileCollector::getLastUpdateTimeAsDuration() const
+dxfcpp::v8::InstrumentProfileCollector::releaseListenerHandle(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::InstrumentProfileUpdateListener>&&)
+dxfcpp::v8::InstrumentProfileCollector::removeUpdateListener(unsigned long)
+dxfcpp::v8::InstrumentProfileCollector::updateInstrumentProfile(std::__1::shared_ptr<dxfcpp::v8::InstrumentProfile>) const
+dxfcpp::v8::InstrumentProfileCollector::view() const
+dxfcpp::v8::InstrumentProfileCollector::~InstrumentProfileCollector()
+dxfcpp::v8::InstrumentProfileConnection::InstrumentProfileConnection()
+dxfcpp::v8::InstrumentProfileConnection::close() const
+dxfcpp::v8::InstrumentProfileConnection::createConnection(dxfcpp::v8::StringLike const&, std::__1::shared_ptr<dxfcpp::v8::InstrumentProfileCollector>)
+dxfcpp::v8::InstrumentProfileConnection::getAddress() const
+dxfcpp::v8::InstrumentProfileConnection::getLastModified() const
+dxfcpp::v8::InstrumentProfileConnection::getState() const
+dxfcpp::v8::InstrumentProfileConnection::getUpdatePeriod() const
+dxfcpp::v8::InstrumentProfileConnection::getUpdatePeriodAsDuration() const
+dxfcpp::v8::InstrumentProfileConnection::onStateChange()
+dxfcpp::v8::InstrumentProfileConnection::removeStateChangeListener(unsigned long)
+dxfcpp::v8::InstrumentProfileConnection::setUpdatePeriod(long long) const
+dxfcpp::v8::InstrumentProfileConnection::setUpdatePeriod(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>) const
+dxfcpp::v8::InstrumentProfileConnection::start() const
+dxfcpp::v8::InstrumentProfileConnection::stateToString(dxfcpp::v8::InstrumentProfileConnection::State)
+dxfcpp::v8::InstrumentProfileConnection::waitUntilCompleted(long long) const
+dxfcpp::v8::InstrumentProfileConnection::waitUntilCompleted(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>) const
+dxfcpp::v8::InstrumentProfileConnection::~InstrumentProfileConnection()
+dxfcpp::v8::InstrumentProfileField::ADDITIONAL_UNDERLYINGS
+dxfcpp::v8::InstrumentProfileField::BASE_CURRENCY
+dxfcpp::v8::InstrumentProfileField::CFI
+dxfcpp::v8::InstrumentProfileField::COUNTRY
+dxfcpp::v8::InstrumentProfileField::CURRENCY
+dxfcpp::v8::InstrumentProfileField::CUSIP
+dxfcpp::v8::InstrumentProfileField::DESCRIPTION
+dxfcpp::v8::InstrumentProfileField::EXCHANGES
+dxfcpp::v8::InstrumentProfileField::EXCHANGE_DATA
+dxfcpp::v8::InstrumentProfileField::EXPIRATION
+dxfcpp::v8::InstrumentProfileField::EXPIRATION_STYLE
+dxfcpp::v8::InstrumentProfileField::ICB
+dxfcpp::v8::InstrumentProfileField::ISIN
+dxfcpp::v8::InstrumentProfileField::LAST_TRADE
+dxfcpp::v8::InstrumentProfileField::LOCAL_DESCRIPTION
+dxfcpp::v8::InstrumentProfileField::LOCAL_SYMBOL
+dxfcpp::v8::InstrumentProfileField::MMY
+dxfcpp::v8::InstrumentProfileField::MULTIPLIER
+dxfcpp::v8::InstrumentProfileField::OPOL
+dxfcpp::v8::InstrumentProfileField::OPTION_TYPE
+dxfcpp::v8::InstrumentProfileField::PRICE_INCREMENTS
+dxfcpp::v8::InstrumentProfileField::PRODUCT
+dxfcpp::v8::InstrumentProfileField::SEDOL
+dxfcpp::v8::InstrumentProfileField::SETTLEMENT_STYLE
+dxfcpp::v8::InstrumentProfileField::SIC
+dxfcpp::v8::InstrumentProfileField::SPC
+dxfcpp::v8::InstrumentProfileField::STRIKE
+dxfcpp::v8::InstrumentProfileField::SYMBOL
+dxfcpp::v8::InstrumentProfileField::TRADING_HOURS
+dxfcpp::v8::InstrumentProfileField::TYPE
+dxfcpp::v8::InstrumentProfileField::UNDERLYING
+dxfcpp::v8::InstrumentProfileField::find(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::InstrumentProfileField::getFieldEnum() const
+dxfcpp::v8::InstrumentProfileField::getName() const
+dxfcpp::v8::InstrumentProfileField::getTypeEnum() const
+dxfcpp::v8::InstrumentProfileField::isNumericField() const
+dxfcpp::v8::InstrumentProfileReader::InstrumentProfileReader()
+dxfcpp::v8::InstrumentProfileReader::create()
+dxfcpp::v8::InstrumentProfileReader::getLastModified() const
+dxfcpp::v8::InstrumentProfileReader::readFromFile(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfileReader::readFromFile(dxfcpp::v8::StringLike const&, dxfcpp::v8::AuthToken const&) const
+dxfcpp::v8::InstrumentProfileReader::readFromFile(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::InstrumentProfileReader::resolveSourceURL(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::InstrumentProfileReader::wasComplete() const
+dxfcpp::v8::InstrumentProfileType::ALL
+dxfcpp::v8::InstrumentProfileType::BOND
+dxfcpp::v8::InstrumentProfileType::CERTIFICATE
+dxfcpp::v8::InstrumentProfileType::CFD
+dxfcpp::v8::InstrumentProfileType::CURRENCY
+dxfcpp::v8::InstrumentProfileType::ETF
+dxfcpp::v8::InstrumentProfileType::FOREX
+dxfcpp::v8::InstrumentProfileType::FUTURE
+dxfcpp::v8::InstrumentProfileType::INDEX
+dxfcpp::v8::InstrumentProfileType::MONEY_MARKET_FUND
+dxfcpp::v8::InstrumentProfileType::MUTUAL_FUND
+dxfcpp::v8::InstrumentProfileType::OPTION
+dxfcpp::v8::InstrumentProfileType::OTHER
+dxfcpp::v8::InstrumentProfileType::PRODUCT
+dxfcpp::v8::InstrumentProfileType::REMOVED
+dxfcpp::v8::InstrumentProfileType::SPREAD
+dxfcpp::v8::InstrumentProfileType::STOCK
+dxfcpp::v8::InstrumentProfileType::WARRANT
+dxfcpp::v8::InvalidArgumentException::InvalidArgumentException(dxfcpp::v8::InvalidArgumentException const&)
+dxfcpp::v8::InvalidArgumentException::InvalidArgumentException(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::IterableInstrumentProfile::IterableInstrumentProfile(void*)
+dxfcpp::v8::IterableInstrumentProfile::create(void*)
+dxfcpp::v8::IterableInstrumentProfile::hasNext() const
+dxfcpp::v8::IterableInstrumentProfile::next() const
+dxfcpp::v8::JavaException::JavaException(dxfcpp::v8::JavaException const&)
+dxfcpp::v8::JavaException::JavaException(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::JavaException::create(void*)
+dxfcpp::v8::JavaException::createAndRelease(void*)
+dxfcpp::v8::JavaException::getJavaClassName() const &
+dxfcpp::v8::JavaException::getJavaMessage() const &
+dxfcpp::v8::JavaException::getJavaStackTrace() const &
+dxfcpp::v8::JavaException::throwException()
+dxfcpp::v8::JavaException::throwIfJavaThreadExceptionExists()
+dxfcpp::v8::JavaException::throwUnexpectedNullResult()
+dxfcpp::v8::JavaObject::equals(void*, void*)
+dxfcpp::v8::JavaObject::hashCode(void*)
+dxfcpp::v8::JavaObject::release(void*)
+dxfcpp::v8::JavaObject::releaseList(void*)
+dxfcpp::v8::JavaObject::toString(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::AdditionalUnderlyings>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::AuthOrderSource>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::AuthToken>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::CFI::Attribute>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::CFI::Value>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::CFI>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXEndpoint::Builder>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXEndpoint>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXFeed>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXFeedSubscription>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXPublisher>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DXPublisherObservableSubscription>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Day>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::DayFilter>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::EventPromiseImpl>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::EventsPromiseImpl>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::HistoryEndpoint::Builder>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::HistoryEndpoint>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelBuilderTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelListenerTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedEventTxModelTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelBuilderTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IndexedTxModelTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::InstrumentProfile>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::InstrumentProfileCollector>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::InstrumentProfileConnection>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::InstrumentProfileReader>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::IterableInstrumentProfile>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Logging::ListenerTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::ObservableSubscriptionChangeListener>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::OnDemandService>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::PriceIncrements>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::PriceLevelService>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::PromiseImpl>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Schedule>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Session>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::SessionFilter>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::SubscriptionController>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeFormat>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimePeriod>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelBuilderTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TxModelListenerTag>::deleter(void*)
+dxfcpp::v8::JavaObjectHandleList<dxfcpp::v8::PromiseListImpl>::deleter(void*)
+dxfcpp::v8::JavaObjectHandleRegistry::getInstance()
+dxfcpp::v8::JavaObjectHandleRegistry::linkHandle(dxfcpp::v8::JavaObjectHandleState&)
+dxfcpp::v8::JavaObjectHandleRegistry::moveHandle(dxfcpp::v8::JavaObjectHandleState&, dxfcpp::v8::JavaObjectHandleState&)
+dxfcpp::v8::JavaObjectHandleRegistry::registerHandle(dxfcpp::v8::JavaObjectHandleState&)
+dxfcpp::v8::JavaObjectHandleRegistry::releaseAll()
+dxfcpp::v8::JavaObjectHandleRegistry::resetHandle(dxfcpp::v8::JavaObjectHandleState&, void*)
+dxfcpp::v8::JavaObjectHandleRegistry::unlinkHandle(dxfcpp::v8::JavaObjectHandleState&)
+dxfcpp::v8::JavaObjectHandleState::JavaObjectHandleState(void*, void (*)(void*) noexcept)
+dxfcpp::v8::JavaObjectHandleState::moveFrom(dxfcpp::v8::JavaObjectHandleState&)
+dxfcpp::v8::JavaObjectHandleState::reset(void*)
+dxfcpp::v8::JavaObjectHandleState::~JavaObjectHandleState()
+dxfcpp::v8::ListenerCallScope::ListenerCallScope()
+dxfcpp::v8::ListenerCallScope::isActive()
+dxfcpp::v8::ListenerCallScope::~ListenerCallScope()
+dxfcpp::v8::Logging::Impl::listenerHandle
+dxfcpp::v8::Logging::handler_
+dxfcpp::v8::Logging::init(dxfcpp::v8::Logging::Level)
+dxfcpp::v8::Logging::init(dxfcpp::v8::StringLike const&, dxfcpp::v8::Logging::Level)
+dxfcpp::v8::Logging::init(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&, dxfcpp::v8::Logging::Level, dxfcpp::v8::Logging::Level)
+dxfcpp::v8::Logging::levelToString(dxfcpp::v8::Logging::Level)
+dxfcpp::v8::MarketEvent::MarketEvent()
+dxfcpp::v8::MarketEvent::MarketEvent(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEvent::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::MarketEvent::fillData(void*)
+dxfcpp::v8::MarketEvent::fillGraalData(void*) const
+dxfcpp::v8::MarketEvent::freeGraalData(void*)
+dxfcpp::v8::MarketEvent::getEventSymbol() const &
+dxfcpp::v8::MarketEvent::getEventSymbolOpt() const &
+dxfcpp::v8::MarketEvent::getEventTime() const
+dxfcpp::v8::MarketEvent::setEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEvent::setEventTime(long long)
+dxfcpp::v8::MarketEventSymbols::EXCHANGES_PATTERN
+dxfcpp::v8::MarketEventSymbols::addAttributeInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, unsigned long, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)
+dxfcpp::v8::MarketEventSymbols::buildSpreadSymbol(std::__1::map<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, double, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>, std::__1::allocator<std::__1::pair<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const, double>>> const&)
+dxfcpp::v8::MarketEventSymbols::changeAttributeStringByKey(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEventSymbols::changeBaseSymbol(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEventSymbols::changeExchangeCode(dxfcpp::v8::StringLike const&, char)
+dxfcpp::v8::MarketEventSymbols::dropKeyAndValueInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long, unsigned long, unsigned long)
+dxfcpp::v8::MarketEventSymbols::getAttributeInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)
+dxfcpp::v8::MarketEventSymbols::getAttributeStringByKey(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEventSymbols::getBaseSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEventSymbols::getBaseSymbolInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long)
+dxfcpp::v8::MarketEventSymbols::getExchangeCode(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEventSymbols::getExchangesByPattern(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEventSymbols::getKeyInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long)
+dxfcpp::v8::MarketEventSymbols::getLengthWithoutAttributesInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)
+dxfcpp::v8::MarketEventSymbols::getNextKeyInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long)
+dxfcpp::v8::MarketEventSymbols::getValueInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long, unsigned long)
+dxfcpp::v8::MarketEventSymbols::hasAttributes(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEventSymbols::hasAttributesInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)
+dxfcpp::v8::MarketEventSymbols::hasExchangeCode(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketEventSymbols::hasExchangeCodeInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&, unsigned long)
+dxfcpp::v8::MarketEventSymbols::removeAttributeInternal(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, unsigned long, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)
+dxfcpp::v8::MarketEventSymbols::removeAttributeStringByKey(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketMaker::MarketMaker()
+dxfcpp::v8::MarketMaker::MarketMaker(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketMaker::TYPE
+dxfcpp::v8::MarketMaker::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::MarketMaker::fillData(void*)
+dxfcpp::v8::MarketMaker::fillGraalData(void*) const
+dxfcpp::v8::MarketMaker::freeGraal(void*)
+dxfcpp::v8::MarketMaker::freeGraalData(void*)
+dxfcpp::v8::MarketMaker::fromGraal(void*)
+dxfcpp::v8::MarketMaker::getAskCount() const
+dxfcpp::v8::MarketMaker::getAskPrice() const
+dxfcpp::v8::MarketMaker::getAskSize() const
+dxfcpp::v8::MarketMaker::getAskTime() const
+dxfcpp::v8::MarketMaker::getBidCount() const
+dxfcpp::v8::MarketMaker::getBidPrice() const
+dxfcpp::v8::MarketMaker::getBidSize() const
+dxfcpp::v8::MarketMaker::getBidTime() const
+dxfcpp::v8::MarketMaker::getEventFlags() const
+dxfcpp::v8::MarketMaker::getEventFlagsMask() const
+dxfcpp::v8::MarketMaker::getExchangeCode() const
+dxfcpp::v8::MarketMaker::getExchangeCodeString() const
+dxfcpp::v8::MarketMaker::getIndex() const
+dxfcpp::v8::MarketMaker::getMarketMaker() const
+dxfcpp::v8::MarketMaker::getMarketMakerOpt() const
+dxfcpp::v8::MarketMaker::getSource() const &
+dxfcpp::v8::MarketMaker::getTime() const
+dxfcpp::v8::MarketMaker::setAskCount(long long)
+dxfcpp::v8::MarketMaker::setAskPrice(double)
+dxfcpp::v8::MarketMaker::setAskSize(double)
+dxfcpp::v8::MarketMaker::setAskTime(long long)
+dxfcpp::v8::MarketMaker::setBidCount(long long)
+dxfcpp::v8::MarketMaker::setBidPrice(double)
+dxfcpp::v8::MarketMaker::setBidSize(double)
+dxfcpp::v8::MarketMaker::setBidTime(long long)
+dxfcpp::v8::MarketMaker::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::MarketMaker::setEventFlags(int)
+dxfcpp::v8::MarketMaker::setExchangeCode(char)
+dxfcpp::v8::MarketMaker::setExchangeCode(short)
+dxfcpp::v8::MarketMaker::setIndex(long long)
+dxfcpp::v8::MarketMaker::setMarketMaker(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketMaker::toGraal() const
+dxfcpp::v8::MarketMaker::toString() const
+dxfcpp::v8::MarketMaker::withAskCount(long long)
+dxfcpp::v8::MarketMaker::withAskPrice(double)
+dxfcpp::v8::MarketMaker::withAskSize(double)
+dxfcpp::v8::MarketMaker::withAskTime(long long)
+dxfcpp::v8::MarketMaker::withBidCount(long long)
+dxfcpp::v8::MarketMaker::withBidPrice(double)
+dxfcpp::v8::MarketMaker::withBidSize(double)
+dxfcpp::v8::MarketMaker::withBidTime(long long)
+dxfcpp::v8::MarketMaker::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::MarketMaker::withEventFlags(int)
+dxfcpp::v8::MarketMaker::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::MarketMaker::withEventTime(long long)
+dxfcpp::v8::MarketMaker::withExchangeCode(char)
+dxfcpp::v8::MarketMaker::withExchangeCode(short)
+dxfcpp::v8::MarketMaker::withIndex(long long)
+dxfcpp::v8::MarketMaker::withMarketMaker(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Message::Message()
+dxfcpp::v8::Message::Message(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Message::Message(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Message::TYPE
+dxfcpp::v8::Message::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Message::fillData(void*)
+dxfcpp::v8::Message::fillGraalData(void*) const
+dxfcpp::v8::Message::freeGraal(void*)
+dxfcpp::v8::Message::freeGraalData(void*)
+dxfcpp::v8::Message::fromGraal(void*)
+dxfcpp::v8::Message::getAttachment() const &
+dxfcpp::v8::Message::getAttachmentOpt() const &
+dxfcpp::v8::Message::getEventSymbol() const &
+dxfcpp::v8::Message::getEventSymbolOpt() const &
+dxfcpp::v8::Message::getEventTime() const
+dxfcpp::v8::Message::setAttachment(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Message::setEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Message::setEventTime(long long)
+dxfcpp::v8::Message::toGraal() const
+dxfcpp::v8::Message::toString() const
+dxfcpp::v8::Message::withAttachment(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Message::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Message::withEventTime(long long)
+dxfcpp::v8::NuamOrder::NuamOrder()
+dxfcpp::v8::NuamOrder::NuamOrder(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::TYPE
+dxfcpp::v8::NuamOrder::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::NuamOrder::fillData(void*)
+dxfcpp::v8::NuamOrder::fillGraalData(void*) const
+dxfcpp::v8::NuamOrder::freeGraal(void*)
+dxfcpp::v8::NuamOrder::freeGraalData(void*)
+dxfcpp::v8::NuamOrder::fromGraal(void*)
+dxfcpp::v8::NuamOrder::getActorId() const
+dxfcpp::v8::NuamOrder::getClientOrderId() const &
+dxfcpp::v8::NuamOrder::getClientOrderIdOpt() const &
+dxfcpp::v8::NuamOrder::getCustomerAccount() const &
+dxfcpp::v8::NuamOrder::getCustomerAccountOpt() const &
+dxfcpp::v8::NuamOrder::getCustomerInfo() const &
+dxfcpp::v8::NuamOrder::getCustomerInfoOpt() const &
+dxfcpp::v8::NuamOrder::getDisplayQuantity() const
+dxfcpp::v8::NuamOrder::getExchangeInfo() const &
+dxfcpp::v8::NuamOrder::getExchangeInfoOpt() const &
+dxfcpp::v8::NuamOrder::getLeavesQuantity() const
+dxfcpp::v8::NuamOrder::getMatchedQuantity() const
+dxfcpp::v8::NuamOrder::getOnBehalfOfSubmitterId() const
+dxfcpp::v8::NuamOrder::getOrderQuantity() const
+dxfcpp::v8::NuamOrder::getOrderType() const &
+dxfcpp::v8::NuamOrder::getParticipantId() const
+dxfcpp::v8::NuamOrder::getRefreshQuantity() const
+dxfcpp::v8::NuamOrder::getSubmitterId() const
+dxfcpp::v8::NuamOrder::getTimeInForce() const &
+dxfcpp::v8::NuamOrder::getTimeInForceData() const
+dxfcpp::v8::NuamOrder::getTriggerOrderBookId() const
+dxfcpp::v8::NuamOrder::getTriggerPrice() const
+dxfcpp::v8::NuamOrder::getTriggerSessionType() const
+dxfcpp::v8::NuamOrder::setActorId(int)
+dxfcpp::v8::NuamOrder::setClientOrderId(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::setCustomerAccount(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::setCustomerInfo(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::setDisplayQuantity(double)
+dxfcpp::v8::NuamOrder::setExchangeInfo(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::setLeavesQuantity(double)
+dxfcpp::v8::NuamOrder::setMatchedQuantity(double)
+dxfcpp::v8::NuamOrder::setOnBehalfOfSubmitterId(int)
+dxfcpp::v8::NuamOrder::setOrderQuantity(double)
+dxfcpp::v8::NuamOrder::setOrderType(dxfcpp::v8::NuamOrderType const&)
+dxfcpp::v8::NuamOrder::setParticipantId(int)
+dxfcpp::v8::NuamOrder::setRefreshQuantity(double)
+dxfcpp::v8::NuamOrder::setSubmitterId(int)
+dxfcpp::v8::NuamOrder::setTimeInForce(dxfcpp::v8::NuamTimeInForceType const&)
+dxfcpp::v8::NuamOrder::setTimeInForceData(int)
+dxfcpp::v8::NuamOrder::setTriggerOrderBookId(int)
+dxfcpp::v8::NuamOrder::setTriggerPrice(double)
+dxfcpp::v8::NuamOrder::setTriggerSessionType(int)
+dxfcpp::v8::NuamOrder::toGraal() const
+dxfcpp::v8::NuamOrder::toString() const
+dxfcpp::v8::NuamOrder::withAction(dxfcpp::v8::OrderAction const&)
+dxfcpp::v8::NuamOrder::withActionTime(long long)
+dxfcpp::v8::NuamOrder::withActorId(int)
+dxfcpp::v8::NuamOrder::withAuxOrderId(long long)
+dxfcpp::v8::NuamOrder::withClientOrderId(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::withCount(long long)
+dxfcpp::v8::NuamOrder::withCustomerAccount(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::withCustomerInfo(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::withDisplayQuantity(double)
+dxfcpp::v8::NuamOrder::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::NuamOrder::withEventFlags(int)
+dxfcpp::v8::NuamOrder::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::withEventTime(long long)
+dxfcpp::v8::NuamOrder::withExchangeCode(char)
+dxfcpp::v8::NuamOrder::withExchangeCode(short)
+dxfcpp::v8::NuamOrder::withExchangeInfo(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::withExecutedSize(double)
+dxfcpp::v8::NuamOrder::withIndex(long long)
+dxfcpp::v8::NuamOrder::withLeavesQuantity(double)
+dxfcpp::v8::NuamOrder::withMarketMaker(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamOrder::withMatchedQuantity(double)
+dxfcpp::v8::NuamOrder::withOnBehalfOfSubmitterId(int)
+dxfcpp::v8::NuamOrder::withOrderId(long long)
+dxfcpp::v8::NuamOrder::withOrderQuantity(double)
+dxfcpp::v8::NuamOrder::withOrderSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::NuamOrder::withOrderType(dxfcpp::v8::NuamOrderType const&)
+dxfcpp::v8::NuamOrder::withParticipantId(int)
+dxfcpp::v8::NuamOrder::withPrice(double)
+dxfcpp::v8::NuamOrder::withRefreshQuantity(double)
+dxfcpp::v8::NuamOrder::withScope(dxfcpp::v8::Scope const&)
+dxfcpp::v8::NuamOrder::withSequence(int)
+dxfcpp::v8::NuamOrder::withSize(double)
+dxfcpp::v8::NuamOrder::withSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::NuamOrder::withSubmitterId(int)
+dxfcpp::v8::NuamOrder::withTime(long long)
+dxfcpp::v8::NuamOrder::withTimeInForce(dxfcpp::v8::NuamTimeInForceType const&)
+dxfcpp::v8::NuamOrder::withTimeInForceData(int)
+dxfcpp::v8::NuamOrder::withTimeNanoPart(int)
+dxfcpp::v8::NuamOrder::withTimeNanos(long long)
+dxfcpp::v8::NuamOrder::withTradeId(long long)
+dxfcpp::v8::NuamOrder::withTradePrice(double)
+dxfcpp::v8::NuamOrder::withTradeSize(double)
+dxfcpp::v8::NuamOrder::withTriggerOrderBookId(int)
+dxfcpp::v8::NuamOrder::withTriggerPrice(double)
+dxfcpp::v8::NuamOrder::withTriggerSessionType(int)
+dxfcpp::v8::NuamOrderType::ALL
+dxfcpp::v8::NuamOrderType::BEST_ORDER
+dxfcpp::v8::NuamOrderType::IMBALANCE
+dxfcpp::v8::NuamOrderType::LIMIT
+dxfcpp::v8::NuamOrderType::MARKET
+dxfcpp::v8::NuamOrderType::MARKET_TO_LIMIT
+dxfcpp::v8::NuamOrderType::UNDEFINED
+dxfcpp::v8::NuamTimeAndSale::NuamTimeAndSale()
+dxfcpp::v8::NuamTimeAndSale::NuamTimeAndSale(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamTimeAndSale::TYPE
+dxfcpp::v8::NuamTimeAndSale::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::NuamTimeAndSale::fillData(void*)
+dxfcpp::v8::NuamTimeAndSale::fillGraalData(void*) const
+dxfcpp::v8::NuamTimeAndSale::freeGraal(void*)
+dxfcpp::v8::NuamTimeAndSale::fromGraal(void*)
+dxfcpp::v8::NuamTimeAndSale::getMatchId() const
+dxfcpp::v8::NuamTimeAndSale::setMatchId(long long)
+dxfcpp::v8::NuamTimeAndSale::toGraal() const
+dxfcpp::v8::NuamTimeAndSale::toString() const
+dxfcpp::v8::NuamTimeInForceType::ALL
+dxfcpp::v8::NuamTimeInForceType::FILL_OR_KILL
+dxfcpp::v8::NuamTimeInForceType::GOOD_TIL_SESSION
+dxfcpp::v8::NuamTimeInForceType::GTC
+dxfcpp::v8::NuamTimeInForceType::IMMEDIATE_OR_CANCEL
+dxfcpp::v8::NuamTimeInForceType::NUMBER_OF_DAYS
+dxfcpp::v8::NuamTimeInForceType::REST_OF_DAY
+dxfcpp::v8::NuamTimeInForceType::UNDEFINED
+dxfcpp::v8::NuamTrade::NuamTrade()
+dxfcpp::v8::NuamTrade::NuamTrade(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::NuamTrade::TYPE
+dxfcpp::v8::NuamTrade::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::NuamTrade::fillData(void*)
+dxfcpp::v8::NuamTrade::fillGraalData(void*) const
+dxfcpp::v8::NuamTrade::freeGraal(void*)
+dxfcpp::v8::NuamTrade::fromGraal(void*)
+dxfcpp::v8::NuamTrade::getLastPriceForAll() const
+dxfcpp::v8::NuamTrade::getLastSignificantPrice() const
+dxfcpp::v8::NuamTrade::getNumberOfTrades() const
+dxfcpp::v8::NuamTrade::getTradeStatTime() const
+dxfcpp::v8::NuamTrade::getVWAP() const
+dxfcpp::v8::NuamTrade::setLastPriceForAll(double)
+dxfcpp::v8::NuamTrade::setLastSignificantPrice(double)
+dxfcpp::v8::NuamTrade::setNumberOfTrades(int)
+dxfcpp::v8::NuamTrade::setTradeStatTime(long long)
+dxfcpp::v8::NuamTrade::setVWAP(double)
+dxfcpp::v8::NuamTrade::toGraal() const
+dxfcpp::v8::NuamTrade::toString() const
+dxfcpp::v8::ObservableSubscriptionChangeListener::ObservableSubscriptionChangeListener(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::ObservableSubscriptionChangeListener>::LockExternalConstructionTag)
+dxfcpp::v8::ObservableSubscriptionChangeListener::create(std::__1::function<void (std::__1::unordered_set<dxfcpp::v8::SymbolWrapper, std::__1::hash<dxfcpp::v8::SymbolWrapper>, std::__1::equal_to<dxfcpp::v8::SymbolWrapper>, std::__1::allocator<dxfcpp::v8::SymbolWrapper>> const&)>)
+dxfcpp::v8::ObservableSubscriptionChangeListener::create(std::__1::function<void (std::__1::unordered_set<dxfcpp::v8::SymbolWrapper, std::__1::hash<dxfcpp::v8::SymbolWrapper>, std::__1::equal_to<dxfcpp::v8::SymbolWrapper>, std::__1::allocator<dxfcpp::v8::SymbolWrapper>> const&)>, std::__1::function<void (std::__1::unordered_set<dxfcpp::v8::SymbolWrapper, std::__1::hash<dxfcpp::v8::SymbolWrapper>, std::__1::equal_to<dxfcpp::v8::SymbolWrapper>, std::__1::allocator<dxfcpp::v8::SymbolWrapper>> const&)>, std::__1::function<void ()>)
+dxfcpp::v8::ObservableSubscriptionChangeListener::getHandle(dxfcpp::v8::ObservableSubscriptionChangeListener::Key) const
+dxfcpp::v8::ObservableSubscriptionChangeListener::notifySubscriptionClosed(dxfcpp::v8::ObservableSubscriptionChangeListener::Key)
+dxfcpp::v8::ObservableSubscriptionChangeListener::notifySymbolsAdded(dxfcpp::v8::ObservableSubscriptionChangeListener::Key, std::__1::unordered_set<dxfcpp::v8::SymbolWrapper, std::__1::hash<dxfcpp::v8::SymbolWrapper>, std::__1::equal_to<dxfcpp::v8::SymbolWrapper>, std::__1::allocator<dxfcpp::v8::SymbolWrapper>> const&)
+dxfcpp::v8::ObservableSubscriptionChangeListener::notifySymbolsRemoved(dxfcpp::v8::ObservableSubscriptionChangeListener::Key, std::__1::unordered_set<dxfcpp::v8::SymbolWrapper, std::__1::hash<dxfcpp::v8::SymbolWrapper>, std::__1::equal_to<dxfcpp::v8::SymbolWrapper>, std::__1::allocator<dxfcpp::v8::SymbolWrapper>> const&)
+dxfcpp::v8::ObservableSubscriptionChangeListener::~ObservableSubscriptionChangeListener()
+dxfcpp::v8::OnDemandService::OnDemandService()
+dxfcpp::v8::OnDemandService::create(std::__1::shared_ptr<dxfcpp::v8::DXEndpoint> const&)
+dxfcpp::v8::OnDemandService::getEndpoint() const
+dxfcpp::v8::OnDemandService::getInstance()
+dxfcpp::v8::OnDemandService::getInstance(std::__1::shared_ptr<dxfcpp::v8::DXEndpoint>)
+dxfcpp::v8::OnDemandService::getSpeed() const
+dxfcpp::v8::OnDemandService::getTime() const
+dxfcpp::v8::OnDemandService::isClear() const
+dxfcpp::v8::OnDemandService::isReplay() const
+dxfcpp::v8::OnDemandService::isReplaySupported() const
+dxfcpp::v8::OnDemandService::pause() const
+dxfcpp::v8::OnDemandService::replay(long long) const
+dxfcpp::v8::OnDemandService::replay(long long, double) const
+dxfcpp::v8::OnDemandService::setSpeed(double) const
+dxfcpp::v8::OnDemandService::stopAndClear() const
+dxfcpp::v8::OnDemandService::stopAndResume() const
+dxfcpp::v8::OnDemandService::~OnDemandService()
+dxfcpp::v8::OptionSale::OptionSale()
+dxfcpp::v8::OptionSale::OptionSale(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OptionSale::TYPE
+dxfcpp::v8::OptionSale::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::OptionSale::fillData(void*)
+dxfcpp::v8::OptionSale::fillGraalData(void*) const
+dxfcpp::v8::OptionSale::freeGraal(void*)
+dxfcpp::v8::OptionSale::freeGraalData(void*)
+dxfcpp::v8::OptionSale::fromGraal(void*)
+dxfcpp::v8::OptionSale::getAggressorSide() const &
+dxfcpp::v8::OptionSale::getAskPrice() const
+dxfcpp::v8::OptionSale::getBidPrice() const
+dxfcpp::v8::OptionSale::getDelta() const
+dxfcpp::v8::OptionSale::getEventFlags() const
+dxfcpp::v8::OptionSale::getEventFlagsMask() const
+dxfcpp::v8::OptionSale::getExchangeCode() const
+dxfcpp::v8::OptionSale::getExchangeCodeString() const
+dxfcpp::v8::OptionSale::getExchangeSaleConditions() const &
+dxfcpp::v8::OptionSale::getExchangeSaleConditionsOpt() const &
+dxfcpp::v8::OptionSale::getIndex() const
+dxfcpp::v8::OptionSale::getOptionSymbol() const &
+dxfcpp::v8::OptionSale::getOptionSymbolOpt() const &
+dxfcpp::v8::OptionSale::getPrice() const
+dxfcpp::v8::OptionSale::getSequence() const
+dxfcpp::v8::OptionSale::getSize() const
+dxfcpp::v8::OptionSale::getSource() const &
+dxfcpp::v8::OptionSale::getTime() const
+dxfcpp::v8::OptionSale::getTimeNanoPart() const
+dxfcpp::v8::OptionSale::getTimeNanos() const
+dxfcpp::v8::OptionSale::getTimeSequence() const
+dxfcpp::v8::OptionSale::getTradeThroughExempt() const
+dxfcpp::v8::OptionSale::getType() const &
+dxfcpp::v8::OptionSale::getUnderlyingPrice() const
+dxfcpp::v8::OptionSale::getVolatility() const
+dxfcpp::v8::OptionSale::isCancel() const
+dxfcpp::v8::OptionSale::isCorrection() const
+dxfcpp::v8::OptionSale::isExtendedTradingHours() const
+dxfcpp::v8::OptionSale::isNew() const
+dxfcpp::v8::OptionSale::isSpreadLeg() const
+dxfcpp::v8::OptionSale::isValidTick() const
+dxfcpp::v8::OptionSale::setAggressorSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::OptionSale::setAskPrice(double)
+dxfcpp::v8::OptionSale::setBidPrice(double)
+dxfcpp::v8::OptionSale::setDelta(double)
+dxfcpp::v8::OptionSale::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::OptionSale::setEventFlags(int)
+dxfcpp::v8::OptionSale::setExchangeCode(char)
+dxfcpp::v8::OptionSale::setExchangeCode(short)
+dxfcpp::v8::OptionSale::setExchangeSaleConditions(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OptionSale::setExtendedTradingHours(bool)
+dxfcpp::v8::OptionSale::setIndex(long long)
+dxfcpp::v8::OptionSale::setOptionSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OptionSale::setPrice(double)
+dxfcpp::v8::OptionSale::setSequence(int)
+dxfcpp::v8::OptionSale::setSize(double)
+dxfcpp::v8::OptionSale::setSpreadLeg(bool)
+dxfcpp::v8::OptionSale::setTime(long long)
+dxfcpp::v8::OptionSale::setTimeNanoPart(int)
+dxfcpp::v8::OptionSale::setTimeNanos(long long)
+dxfcpp::v8::OptionSale::setTimeSequence(long long)
+dxfcpp::v8::OptionSale::setTradeThroughExempt(char)
+dxfcpp::v8::OptionSale::setType(dxfcpp::v8::TimeAndSaleType const&)
+dxfcpp::v8::OptionSale::setUnderlyingPrice(double)
+dxfcpp::v8::OptionSale::setValidTick(bool)
+dxfcpp::v8::OptionSale::setVolatility(double)
+dxfcpp::v8::OptionSale::toGraal() const
+dxfcpp::v8::OptionSale::toString() const
+dxfcpp::v8::OptionSale::withAggressorSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::OptionSale::withAskPrice(double)
+dxfcpp::v8::OptionSale::withBidPrice(double)
+dxfcpp::v8::OptionSale::withDelta(double)
+dxfcpp::v8::OptionSale::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::OptionSale::withEventFlags(int)
+dxfcpp::v8::OptionSale::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OptionSale::withEventTime(long long)
+dxfcpp::v8::OptionSale::withExchangeCode(char)
+dxfcpp::v8::OptionSale::withExchangeCode(short)
+dxfcpp::v8::OptionSale::withExchangeSaleConditions(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OptionSale::withExtendedTradingHours(bool)
+dxfcpp::v8::OptionSale::withIndex(long long)
+dxfcpp::v8::OptionSale::withOptionSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OptionSale::withPrice(double)
+dxfcpp::v8::OptionSale::withSequence(int)
+dxfcpp::v8::OptionSale::withSize(double)
+dxfcpp::v8::OptionSale::withSpreadLeg(bool)
+dxfcpp::v8::OptionSale::withTime(long long)
+dxfcpp::v8::OptionSale::withTimeNanoPart(int)
+dxfcpp::v8::OptionSale::withTimeNanos(long long)
+dxfcpp::v8::OptionSale::withTimeSequence(long long)
+dxfcpp::v8::OptionSale::withTradeThroughExempt(char)
+dxfcpp::v8::OptionSale::withType(dxfcpp::v8::TimeAndSaleType const&)
+dxfcpp::v8::OptionSale::withUnderlyingPrice(double)
+dxfcpp::v8::OptionSale::withValidTick(bool)
+dxfcpp::v8::OptionSale::withVolatility(double)
+dxfcpp::v8::Order::Order()
+dxfcpp::v8::Order::Order(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Order::TYPE
+dxfcpp::v8::Order::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Order::fillData(void*)
+dxfcpp::v8::Order::fillGraalData(void*) const
+dxfcpp::v8::Order::freeGraal(void*)
+dxfcpp::v8::Order::freeGraalData(void*)
+dxfcpp::v8::Order::fromGraal(void*)
+dxfcpp::v8::Order::getMarketMaker() const &
+dxfcpp::v8::Order::getMarketMakerOpt() const &
+dxfcpp::v8::Order::setMarketMaker(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Order::toGraal() const
+dxfcpp::v8::Order::toString() const
+dxfcpp::v8::Order::withAction(dxfcpp::v8::OrderAction const&)
+dxfcpp::v8::Order::withActionTime(long long)
+dxfcpp::v8::Order::withAuxOrderId(long long)
+dxfcpp::v8::Order::withCount(long long)
+dxfcpp::v8::Order::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::Order::withEventFlags(int)
+dxfcpp::v8::Order::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Order::withEventTime(long long)
+dxfcpp::v8::Order::withExchangeCode(char)
+dxfcpp::v8::Order::withExchangeCode(short)
+dxfcpp::v8::Order::withExecutedSize(double)
+dxfcpp::v8::Order::withIndex(long long)
+dxfcpp::v8::Order::withMarketMaker(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Order::withOrderId(long long)
+dxfcpp::v8::Order::withOrderSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::Order::withPrice(double)
+dxfcpp::v8::Order::withScope(dxfcpp::v8::Scope const&)
+dxfcpp::v8::Order::withSequence(int)
+dxfcpp::v8::Order::withSize(double)
+dxfcpp::v8::Order::withSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::Order::withTime(long long)
+dxfcpp::v8::Order::withTimeNanoPart(int)
+dxfcpp::v8::Order::withTimeNanos(long long)
+dxfcpp::v8::Order::withTradeId(long long)
+dxfcpp::v8::Order::withTradePrice(double)
+dxfcpp::v8::Order::withTradeSize(double)
+dxfcpp::v8::OrderAction::ALL
+dxfcpp::v8::OrderAction::BUST
+dxfcpp::v8::OrderAction::DELETE
+dxfcpp::v8::OrderAction::EXECUTE
+dxfcpp::v8::OrderAction::MODIFY
+dxfcpp::v8::OrderAction::NEW
+dxfcpp::v8::OrderAction::PARTIAL
+dxfcpp::v8::OrderAction::REPLACE
+dxfcpp::v8::OrderAction::TRADE
+dxfcpp::v8::OrderAction::UNDEFINED
+dxfcpp::v8::OrderBase::OrderBase()
+dxfcpp::v8::OrderBase::OrderBase(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OrderBase::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::OrderBase::baseFieldsToString() const
+dxfcpp::v8::OrderBase::fillData(void*)
+dxfcpp::v8::OrderBase::fillGraalData(void*) const
+dxfcpp::v8::OrderBase::getAction() const &
+dxfcpp::v8::OrderBase::getActionTime() const
+dxfcpp::v8::OrderBase::getAuxOrderId() const
+dxfcpp::v8::OrderBase::getCount() const
+dxfcpp::v8::OrderBase::getEventFlags() const
+dxfcpp::v8::OrderBase::getEventFlagsMask() const
+dxfcpp::v8::OrderBase::getExchangeCode() const
+dxfcpp::v8::OrderBase::getExchangeCodeString() const
+dxfcpp::v8::OrderBase::getExecutedSize() const
+dxfcpp::v8::OrderBase::getIndex() const
+dxfcpp::v8::OrderBase::getOrderId() const
+dxfcpp::v8::OrderBase::getOrderSide() const &
+dxfcpp::v8::OrderBase::getPrice() const
+dxfcpp::v8::OrderBase::getScope() const &
+dxfcpp::v8::OrderBase::getSequence() const
+dxfcpp::v8::OrderBase::getSize() const
+dxfcpp::v8::OrderBase::getSource() const &
+dxfcpp::v8::OrderBase::getTime() const
+dxfcpp::v8::OrderBase::getTimeNanoPart() const
+dxfcpp::v8::OrderBase::getTimeNanos() const
+dxfcpp::v8::OrderBase::getTimeSequence() const
+dxfcpp::v8::OrderBase::getTradeId() const
+dxfcpp::v8::OrderBase::getTradePrice() const
+dxfcpp::v8::OrderBase::getTradeSize() const
+dxfcpp::v8::OrderBase::hasSize() const
+dxfcpp::v8::OrderBase::setAction(dxfcpp::v8::OrderAction const&)
+dxfcpp::v8::OrderBase::setActionTime(long long)
+dxfcpp::v8::OrderBase::setAuxOrderId(long long)
+dxfcpp::v8::OrderBase::setCount(long long)
+dxfcpp::v8::OrderBase::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::OrderBase::setEventFlags(int)
+dxfcpp::v8::OrderBase::setExchangeCode(char)
+dxfcpp::v8::OrderBase::setExchangeCode(short)
+dxfcpp::v8::OrderBase::setExecutedSize(double)
+dxfcpp::v8::OrderBase::setIndex(long long)
+dxfcpp::v8::OrderBase::setOrderId(long long)
+dxfcpp::v8::OrderBase::setOrderSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::OrderBase::setPrice(double)
+dxfcpp::v8::OrderBase::setScope(dxfcpp::v8::Scope const&)
+dxfcpp::v8::OrderBase::setSequence(int)
+dxfcpp::v8::OrderBase::setSize(double)
+dxfcpp::v8::OrderBase::setSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::OrderBase::setTime(long long)
+dxfcpp::v8::OrderBase::setTimeNanoPart(int)
+dxfcpp::v8::OrderBase::setTimeNanos(long long)
+dxfcpp::v8::OrderBase::setTimeSequence(long long)
+dxfcpp::v8::OrderBase::setTradeId(long long)
+dxfcpp::v8::OrderBase::setTradePrice(double)
+dxfcpp::v8::OrderBase::setTradeSize(double)
+dxfcpp::v8::OrderImbalance::OrderImbalance()
+dxfcpp::v8::OrderImbalance::OrderImbalance(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OrderImbalance::TYPE
+dxfcpp::v8::OrderImbalance::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::OrderImbalance::fillData(void*)
+dxfcpp::v8::OrderImbalance::fillGraalData(void*) const
+dxfcpp::v8::OrderImbalance::freeGraal(void*)
+dxfcpp::v8::OrderImbalance::freeGraalData(void*)
+dxfcpp::v8::OrderImbalance::fromGraal(void*)
+dxfcpp::v8::OrderImbalance::getAuctionType() const &
+dxfcpp::v8::OrderImbalance::getFarPrice() const
+dxfcpp::v8::OrderImbalance::getImbalanceSide() const &
+dxfcpp::v8::OrderImbalance::getImbalanceSize() const
+dxfcpp::v8::OrderImbalance::getNearPrice() const
+dxfcpp::v8::OrderImbalance::getPairedSize() const
+dxfcpp::v8::OrderImbalance::getRefPrice() const
+dxfcpp::v8::OrderImbalance::getSequence() const
+dxfcpp::v8::OrderImbalance::getSource() const &
+dxfcpp::v8::OrderImbalance::getTime() const
+dxfcpp::v8::OrderImbalance::getTimeSequence() const
+dxfcpp::v8::OrderImbalance::setAuctionType(dxfcpp::v8::AuctionType const&)
+dxfcpp::v8::OrderImbalance::setFarPrice(double)
+dxfcpp::v8::OrderImbalance::setImbalanceSide(dxfcpp::v8::ImbalanceSide const&)
+dxfcpp::v8::OrderImbalance::setImbalanceSize(double)
+dxfcpp::v8::OrderImbalance::setNearPrice(double)
+dxfcpp::v8::OrderImbalance::setPairedSize(double)
+dxfcpp::v8::OrderImbalance::setRefPrice(double)
+dxfcpp::v8::OrderImbalance::setSequence(int)
+dxfcpp::v8::OrderImbalance::setSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::OrderImbalance::setTime(long long)
+dxfcpp::v8::OrderImbalance::setTimeSequence(long long)
+dxfcpp::v8::OrderImbalance::toGraal() const
+dxfcpp::v8::OrderImbalance::toString() const
+dxfcpp::v8::OrderImbalance::withAuctionType(dxfcpp::v8::AuctionType const&)
+dxfcpp::v8::OrderImbalance::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OrderImbalance::withEventTime(long long)
+dxfcpp::v8::OrderImbalance::withFarPrice(double)
+dxfcpp::v8::OrderImbalance::withImbalanceSide(dxfcpp::v8::ImbalanceSide const&)
+dxfcpp::v8::OrderImbalance::withImbalanceSize(double)
+dxfcpp::v8::OrderImbalance::withNearPrice(double)
+dxfcpp::v8::OrderImbalance::withPairedSize(double)
+dxfcpp::v8::OrderImbalance::withRefPrice(double)
+dxfcpp::v8::OrderImbalance::withSequence(int)
+dxfcpp::v8::OrderImbalance::withSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::OrderImbalance::withTime(long long)
+dxfcpp::v8::OrderImbalance::withTimeSequence(long long)
+dxfcpp::v8::OrderSource::ABE
+dxfcpp::v8::OrderSource::AGGREGATE
+dxfcpp::v8::OrderSource::AGGREGATE_ASK
+dxfcpp::v8::OrderSource::AGGREGATE_BID
+dxfcpp::v8::OrderSource::ARCA
+dxfcpp::v8::OrderSource::BATE
+dxfcpp::v8::OrderSource::BI20
+dxfcpp::v8::OrderSource::BOSS
+dxfcpp::v8::OrderSource::BXTR
+dxfcpp::v8::OrderSource::BYX
+dxfcpp::v8::OrderSource::BZX
+dxfcpp::v8::OrderSource::C2OX
+dxfcpp::v8::OrderSource::CEDX
+dxfcpp::v8::OrderSource::CEUX
+dxfcpp::v8::OrderSource::CFE
+dxfcpp::v8::OrderSource::CHIX
+dxfcpp::v8::OrderSource::COMPOSITE
+dxfcpp::v8::OrderSource::COMPOSITE_ASK
+dxfcpp::v8::OrderSource::COMPOSITE_BID
+dxfcpp::v8::OrderSource::DEA
+dxfcpp::v8::OrderSource::DEFAULT
+dxfcpp::v8::OrderSource::DEX
+dxfcpp::v8::OrderSource::EDX
+dxfcpp::v8::OrderSource::ERIS
+dxfcpp::v8::OrderSource::ESPD
+dxfcpp::v8::OrderSource::FAIR
+dxfcpp::v8::OrderSource::GLBX
+dxfcpp::v8::OrderSource::ICE
+dxfcpp::v8::OrderSource::IGC
+dxfcpp::v8::OrderSource::ISE
+dxfcpp::v8::OrderSource::IST
+dxfcpp::v8::OrderSource::MEMX
+dxfcpp::v8::OrderSource::MOON
+dxfcpp::v8::OrderSource::NEO
+dxfcpp::v8::OrderSource::NFX
+dxfcpp::v8::OrderSource::NTV
+dxfcpp::v8::OrderSource::NUAM
+dxfcpp::v8::OrderSource::OCEA
+dxfcpp::v8::OrderSource::OTCM
+dxfcpp::v8::OrderSource::OrderSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::OrderSource::OrderSource(int, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OrderSource::PREDEFINED_
+dxfcpp::v8::OrderSource::PREDEFINED_SOURCES
+dxfcpp::v8::OrderSource::PredefinedSources::ENTRIES
+dxfcpp::v8::OrderSource::REGIONAL
+dxfcpp::v8::OrderSource::REGIONAL_ASK
+dxfcpp::v8::OrderSource::REGIONAL_BID
+dxfcpp::v8::OrderSource::SMFE
+dxfcpp::v8::OrderSource::XEUR
+dxfcpp::v8::OrderSource::XNFI
+dxfcpp::v8::OrderSource::arca
+dxfcpp::v8::OrderSource::boss
+dxfcpp::v8::OrderSource::bzx
+dxfcpp::v8::OrderSource::cedx
+dxfcpp::v8::OrderSource::decodeName(int)
+dxfcpp::v8::OrderSource::dex
+dxfcpp::v8::OrderSource::edx
+dxfcpp::v8::OrderSource::fullOrderBook()
+dxfcpp::v8::OrderSource::getEventTypeMask(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::OrderSource::glbx
+dxfcpp::v8::OrderSource::iex
+dxfcpp::v8::OrderSource::igc
+dxfcpp::v8::OrderSource::isFullOrderBook() const
+dxfcpp::v8::OrderSource::isPublishable(dxfcpp::v8::EventTypeEnum const&) const
+dxfcpp::v8::OrderSource::isSpecialSourceId(int)
+dxfcpp::v8::OrderSource::memx
+dxfcpp::v8::OrderSource::moon
+dxfcpp::v8::OrderSource::neo
+dxfcpp::v8::OrderSource::ntv
+dxfcpp::v8::OrderSource::nuam
+dxfcpp::v8::OrderSource::ocea
+dxfcpp::v8::OrderSource::otcm
+dxfcpp::v8::OrderSource::pink
+dxfcpp::v8::OrderSource::publishable(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::OrderSource::publishableByFlag(unsigned int)
+dxfcpp::v8::OrderSource::smfe
+dxfcpp::v8::OrderSource::throwInvalidName(char const*)
+dxfcpp::v8::OrderSource::valueOf(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OrderSource::valueOf(int)
+dxfcpp::v8::OrderSource::xeur
+dxfcpp::v8::OtcMarketsOrder::OtcMarketsOrder()
+dxfcpp::v8::OtcMarketsOrder::OtcMarketsOrder(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OtcMarketsOrder::TYPE
+dxfcpp::v8::OtcMarketsOrder::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::OtcMarketsOrder::fillData(void*)
+dxfcpp::v8::OtcMarketsOrder::fillGraalData(void*) const
+dxfcpp::v8::OtcMarketsOrder::freeGraal(void*)
+dxfcpp::v8::OtcMarketsOrder::fromGraal(void*)
+dxfcpp::v8::OtcMarketsOrder::getOtcMarketsPriceType() const &
+dxfcpp::v8::OtcMarketsOrder::getQuoteAccessPayment() const
+dxfcpp::v8::OtcMarketsOrder::isAutoExecution() const
+dxfcpp::v8::OtcMarketsOrder::isNmsConditional() const
+dxfcpp::v8::OtcMarketsOrder::isOpen() const
+dxfcpp::v8::OtcMarketsOrder::isSaturated() const
+dxfcpp::v8::OtcMarketsOrder::isUnsolicited() const
+dxfcpp::v8::OtcMarketsOrder::setAutoExecution(bool)
+dxfcpp::v8::OtcMarketsOrder::setNmsConditional(bool)
+dxfcpp::v8::OtcMarketsOrder::setOpen(bool)
+dxfcpp::v8::OtcMarketsOrder::setOtcMarketsPriceType(dxfcpp::v8::OtcMarketsPriceType const&)
+dxfcpp::v8::OtcMarketsOrder::setQuoteAccessPayment(int)
+dxfcpp::v8::OtcMarketsOrder::setSaturated(bool)
+dxfcpp::v8::OtcMarketsOrder::setUnsolicited(bool)
+dxfcpp::v8::OtcMarketsOrder::toGraal() const
+dxfcpp::v8::OtcMarketsOrder::toString() const
+dxfcpp::v8::OtcMarketsOrder::withAction(dxfcpp::v8::OrderAction const&)
+dxfcpp::v8::OtcMarketsOrder::withActionTime(long long)
+dxfcpp::v8::OtcMarketsOrder::withAutoExecution(bool)
+dxfcpp::v8::OtcMarketsOrder::withAuxOrderId(long long)
+dxfcpp::v8::OtcMarketsOrder::withCount(long long)
+dxfcpp::v8::OtcMarketsOrder::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::OtcMarketsOrder::withEventFlags(int)
+dxfcpp::v8::OtcMarketsOrder::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OtcMarketsOrder::withEventTime(long long)
+dxfcpp::v8::OtcMarketsOrder::withExchangeCode(char)
+dxfcpp::v8::OtcMarketsOrder::withExchangeCode(short)
+dxfcpp::v8::OtcMarketsOrder::withExecutedSize(double)
+dxfcpp::v8::OtcMarketsOrder::withIndex(long long)
+dxfcpp::v8::OtcMarketsOrder::withMarketMaker(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::OtcMarketsOrder::withNmsConditional(bool)
+dxfcpp::v8::OtcMarketsOrder::withOpen(bool)
+dxfcpp::v8::OtcMarketsOrder::withOrderId(long long)
+dxfcpp::v8::OtcMarketsOrder::withOrderSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::OtcMarketsOrder::withOtcMarketsPriceType(dxfcpp::v8::OtcMarketsPriceType const&)
+dxfcpp::v8::OtcMarketsOrder::withPrice(double)
+dxfcpp::v8::OtcMarketsOrder::withQuoteAccessPayment(int)
+dxfcpp::v8::OtcMarketsOrder::withSaturated(bool)
+dxfcpp::v8::OtcMarketsOrder::withScope(dxfcpp::v8::Scope const&)
+dxfcpp::v8::OtcMarketsOrder::withSequence(int)
+dxfcpp::v8::OtcMarketsOrder::withSize(double)
+dxfcpp::v8::OtcMarketsOrder::withSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::OtcMarketsOrder::withTime(long long)
+dxfcpp::v8::OtcMarketsOrder::withTimeNanoPart(int)
+dxfcpp::v8::OtcMarketsOrder::withTimeNanos(long long)
+dxfcpp::v8::OtcMarketsOrder::withTradeId(long long)
+dxfcpp::v8::OtcMarketsOrder::withTradePrice(double)
+dxfcpp::v8::OtcMarketsOrder::withTradeSize(double)
+dxfcpp::v8::OtcMarketsOrder::withUnsolicited(bool)
+dxfcpp::v8::OtcMarketsPriceType::ACTUAL
+dxfcpp::v8::OtcMarketsPriceType::ALL
+dxfcpp::v8::OtcMarketsPriceType::UNPRICED
+dxfcpp::v8::OtcMarketsPriceType::WANTED
+dxfcpp::v8::PriceIncrements::EMPTY()
+dxfcpp::v8::PriceIncrements::PriceIncrements(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::PriceIncrements>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::PriceIncrements> (*)())
+dxfcpp::v8::PriceIncrements::PriceIncrements(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::PriceIncrements>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::PriceIncrements>&&)
+dxfcpp::v8::PriceIncrements::getPriceIncrement() const
+dxfcpp::v8::PriceIncrements::getPriceIncrement(double) const
+dxfcpp::v8::PriceIncrements::getPriceIncrement(double, int) const
+dxfcpp::v8::PriceIncrements::getPriceIncrements() const
+dxfcpp::v8::PriceIncrements::getPricePrecision() const
+dxfcpp::v8::PriceIncrements::getPricePrecision(double) const
+dxfcpp::v8::PriceIncrements::getText() const
+dxfcpp::v8::PriceIncrements::hashCode() const
+dxfcpp::v8::PriceIncrements::incrementPrice(double, int) const
+dxfcpp::v8::PriceIncrements::incrementPrice(double, int, double) const
+dxfcpp::v8::PriceIncrements::operator==(dxfcpp::v8::PriceIncrements const&) const
+dxfcpp::v8::PriceIncrements::roundPrice(double) const
+dxfcpp::v8::PriceIncrements::roundPrice(double, dxfcpp::v8::RoundingMode) const
+dxfcpp::v8::PriceIncrements::roundPrice(double, int) const
+dxfcpp::v8::PriceIncrements::toString() const
+dxfcpp::v8::PriceIncrements::valueOf(double)
+dxfcpp::v8::PriceIncrements::valueOf(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::PriceIncrements::valueOf(std::__1::vector<double, std::__1::allocator<double>> const&)
+dxfcpp::v8::PriceIncrements::valueOf(std::initializer_list<double>)
+dxfcpp::v8::PriceIncrements::~PriceIncrements()
+dxfcpp::v8::PriceLevelChecker::validate(std::__1::vector<std::__1::shared_ptr<dxfcpp::v8::Order>, std::__1::allocator<std::__1::shared_ptr<dxfcpp::v8::Order>>> const&, std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>, bool)
+dxfcpp::v8::PriceLevelService::PriceLevelService(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::PriceLevelService>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::PriceLevelService>&&)
+dxfcpp::v8::PriceLevelService::close()
+dxfcpp::v8::PriceLevelService::create(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::PriceLevelService::getAuthOrderSource() const
+dxfcpp::v8::PriceLevelService::getOrders(dxfcpp::v8::CandleSymbol const&, dxfcpp::v8::OrderSource const&, long long, long long) const
+dxfcpp::v8::PriceLevelService::getOrders(dxfcpp::v8::CandleSymbol const&, dxfcpp::v8::OrderSource const&, long long, long long, dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::PriceLevelService::getQuotes(dxfcpp::v8::CandleSymbol const&, long long, long long) const
+dxfcpp::v8::PriceLevelService::getQuotes(dxfcpp::v8::CandleSymbol const&, long long, long long, dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::PriceLevelService::~PriceLevelService()
+dxfcpp::v8::PriceType::ALL
+dxfcpp::v8::PriceType::FINAL
+dxfcpp::v8::PriceType::INDICATIVE
+dxfcpp::v8::PriceType::PRELIMINARY
+dxfcpp::v8::PriceType::REGULAR
+dxfcpp::v8::Profile::Profile()
+dxfcpp::v8::Profile::Profile(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Profile::TYPE
+dxfcpp::v8::Profile::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Profile::fillData(void*)
+dxfcpp::v8::Profile::fillGraalData(void*) const
+dxfcpp::v8::Profile::freeGraal(void*)
+dxfcpp::v8::Profile::freeGraalData(void*)
+dxfcpp::v8::Profile::fromGraal(void*)
+dxfcpp::v8::Profile::getBeta() const
+dxfcpp::v8::Profile::getDescription() const &
+dxfcpp::v8::Profile::getDescriptionOpt() const &
+dxfcpp::v8::Profile::getDividendFrequency() const
+dxfcpp::v8::Profile::getEarningsPerShare() const
+dxfcpp::v8::Profile::getExDividendAmount() const
+dxfcpp::v8::Profile::getExDividendDayId() const
+dxfcpp::v8::Profile::getFreeFloat() const
+dxfcpp::v8::Profile::getHaltEndTime() const
+dxfcpp::v8::Profile::getHaltStartTime() const
+dxfcpp::v8::Profile::getHigh52WeekPrice() const
+dxfcpp::v8::Profile::getHighLimitPrice() const
+dxfcpp::v8::Profile::getLow52WeekPrice() const
+dxfcpp::v8::Profile::getLowLimitPrice() const
+dxfcpp::v8::Profile::getShares() const
+dxfcpp::v8::Profile::getShortSaleRestriction() const &
+dxfcpp::v8::Profile::getStatusReason() const &
+dxfcpp::v8::Profile::getStatusReasonOpt() const &
+dxfcpp::v8::Profile::getTradingStatus() const &
+dxfcpp::v8::Profile::isShortSaleRestricted() const
+dxfcpp::v8::Profile::isTradingHalted() const
+dxfcpp::v8::Profile::setBeta(double)
+dxfcpp::v8::Profile::setDescription(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Profile::setDividendFrequency(double)
+dxfcpp::v8::Profile::setEarningsPerShare(double)
+dxfcpp::v8::Profile::setExDividendAmount(double)
+dxfcpp::v8::Profile::setExDividendDayId(int)
+dxfcpp::v8::Profile::setFreeFloat(double)
+dxfcpp::v8::Profile::setHaltEndTime(long long)
+dxfcpp::v8::Profile::setHaltStartTime(long long)
+dxfcpp::v8::Profile::setHigh52WeekPrice(double)
+dxfcpp::v8::Profile::setHighLimitPrice(double)
+dxfcpp::v8::Profile::setLow52WeekPrice(double)
+dxfcpp::v8::Profile::setLowLimitPrice(double)
+dxfcpp::v8::Profile::setShares(double)
+dxfcpp::v8::Profile::setShortSaleRestriction(dxfcpp::v8::ShortSaleRestriction const&)
+dxfcpp::v8::Profile::setStatusReason(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Profile::setTradingStatus(dxfcpp::v8::TradingStatus const&)
+dxfcpp::v8::Profile::toGraal() const
+dxfcpp::v8::Profile::toString() const
+dxfcpp::v8::PromiseImpl::PromiseImpl(void*)
+dxfcpp::v8::PromiseImpl::await() const
+dxfcpp::v8::PromiseImpl::await(int) const
+dxfcpp::v8::PromiseImpl::awaitWithoutException(int) const
+dxfcpp::v8::PromiseImpl::cancel() const
+dxfcpp::v8::PromiseImpl::getException() const
+dxfcpp::v8::PromiseImpl::hasException() const
+dxfcpp::v8::PromiseImpl::hasResult() const
+dxfcpp::v8::PromiseImpl::isCancelled() const
+dxfcpp::v8::PromiseImpl::isDone() const
+dxfcpp::v8::PromiseListImpl::PromiseListImpl(void*)
+dxfcpp::v8::PromiseListImpl::getElement(void*, unsigned long)
+dxfcpp::v8::PromiseListImpl::getSize(void*)
+dxfcpp::v8::PromiseListImpl::~PromiseListImpl()
+dxfcpp::v8::Promises::allOfImpl(std::__1::vector<void*, std::__1::allocator<void*>> const&)
+dxfcpp::v8::Quote::Quote()
+dxfcpp::v8::Quote::Quote(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Quote::TYPE
+dxfcpp::v8::Quote::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Quote::fillData(void*)
+dxfcpp::v8::Quote::fillGraalData(void*) const
+dxfcpp::v8::Quote::freeGraal(void*)
+dxfcpp::v8::Quote::fromGraal(void*)
+dxfcpp::v8::Quote::getAskExchangeCode() const
+dxfcpp::v8::Quote::getAskExchangeCodeString() const
+dxfcpp::v8::Quote::getAskPrice() const
+dxfcpp::v8::Quote::getAskSize() const
+dxfcpp::v8::Quote::getAskTime() const
+dxfcpp::v8::Quote::getBidExchangeCode() const
+dxfcpp::v8::Quote::getBidExchangeCodeString() const
+dxfcpp::v8::Quote::getBidPrice() const
+dxfcpp::v8::Quote::getBidSize() const
+dxfcpp::v8::Quote::getBidTime() const
+dxfcpp::v8::Quote::getSequence() const
+dxfcpp::v8::Quote::getTime() const
+dxfcpp::v8::Quote::getTimeNanoPart() const
+dxfcpp::v8::Quote::getTimeNanos() const
+dxfcpp::v8::Quote::recomputeTimeMillisPart()
+dxfcpp::v8::Quote::setAskExchangeCode(char)
+dxfcpp::v8::Quote::setAskExchangeCode(short)
+dxfcpp::v8::Quote::setAskPrice(double)
+dxfcpp::v8::Quote::setAskSize(double)
+dxfcpp::v8::Quote::setAskTime(long long)
+dxfcpp::v8::Quote::setBidExchangeCode(char)
+dxfcpp::v8::Quote::setBidExchangeCode(short)
+dxfcpp::v8::Quote::setBidPrice(double)
+dxfcpp::v8::Quote::setBidSize(double)
+dxfcpp::v8::Quote::setBidTime(long long)
+dxfcpp::v8::Quote::setSequence(int)
+dxfcpp::v8::Quote::setTimeNanoPart(int)
+dxfcpp::v8::Quote::toGraal() const
+dxfcpp::v8::Quote::toString() const
+dxfcpp::v8::Quote::withAskExchangeCode(char)
+dxfcpp::v8::Quote::withAskExchangeCode(short)
+dxfcpp::v8::Quote::withAskPrice(double)
+dxfcpp::v8::Quote::withAskSize(double)
+dxfcpp::v8::Quote::withAskTime(long long)
+dxfcpp::v8::Quote::withBidExchangeCode(char)
+dxfcpp::v8::Quote::withBidExchangeCode(short)
+dxfcpp::v8::Quote::withBidPrice(double)
+dxfcpp::v8::Quote::withBidSize(double)
+dxfcpp::v8::Quote::withBidTime(long long)
+dxfcpp::v8::Quote::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Quote::withEventTime(long long)
+dxfcpp::v8::Quote::withSequence(int)
+dxfcpp::v8::Quote::withTimeNanoPart(int)
+dxfcpp::v8::RuntimeException::RuntimeException(dxfcpp::v8::RuntimeException const&)
+dxfcpp::v8::RuntimeException::RuntimeException(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::RuntimeException::getStackTrace() const &
+dxfcpp::v8::Schedule::NYSE()
+dxfcpp::v8::Schedule::Schedule(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Schedule>&&)
+dxfcpp::v8::Schedule::UTC()
+dxfcpp::v8::Schedule::create(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Schedule>&&)
+dxfcpp::v8::Schedule::downloadDefaults(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Schedule::findNearestSessionByTime(long long, dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Schedule::getDayById(int) const
+dxfcpp::v8::Schedule::getDayByTime(long long) const
+dxfcpp::v8::Schedule::getDayByYearMonthDay(int) const
+dxfcpp::v8::Schedule::getDefinition() const
+dxfcpp::v8::Schedule::getInstance(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Schedule::getInstance(std::__1::shared_ptr<dxfcpp::v8::InstrumentProfile> const&)
+dxfcpp::v8::Schedule::getInstance(std::__1::shared_ptr<dxfcpp::v8::InstrumentProfile> const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Schedule::getName() const
+dxfcpp::v8::Schedule::getNearestSessionByTime(long long, dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Schedule::getSessionByTime(long long) const
+dxfcpp::v8::Schedule::getTimeZoneDisplayName() const
+dxfcpp::v8::Schedule::getTimeZoneId() const
+dxfcpp::v8::Schedule::getTradingVenues(std::__1::shared_ptr<dxfcpp::v8::InstrumentProfile> const&)
+dxfcpp::v8::Schedule::setDefaults(std::__1::vector<char, std::__1::allocator<char>> const&)
+dxfcpp::v8::Scope::AGGREGATE
+dxfcpp::v8::Scope::ALL
+dxfcpp::v8::Scope::COMPOSITE
+dxfcpp::v8::Scope::ORDER
+dxfcpp::v8::Scope::REGIONAL
+dxfcpp::v8::Series::Series()
+dxfcpp::v8::Series::Series(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Series::TYPE
+dxfcpp::v8::Series::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Series::fillData(void*)
+dxfcpp::v8::Series::fillGraalData(void*) const
+dxfcpp::v8::Series::freeGraal(void*)
+dxfcpp::v8::Series::fromGraal(void*)
+dxfcpp::v8::Series::getCallVolume() const
+dxfcpp::v8::Series::getDividend() const
+dxfcpp::v8::Series::getEventFlags() const
+dxfcpp::v8::Series::getEventFlagsMask() const
+dxfcpp::v8::Series::getExpiration() const
+dxfcpp::v8::Series::getForwardPrice() const
+dxfcpp::v8::Series::getIndex() const
+dxfcpp::v8::Series::getInterest() const
+dxfcpp::v8::Series::getOptionVolume() const
+dxfcpp::v8::Series::getPutCallRatio() const
+dxfcpp::v8::Series::getPutVolume() const
+dxfcpp::v8::Series::getSequence() const
+dxfcpp::v8::Series::getTime() const
+dxfcpp::v8::Series::getTimeSequence() const
+dxfcpp::v8::Series::getVolatility() const
+dxfcpp::v8::Series::setCallVolume(double)
+dxfcpp::v8::Series::setDividend(double)
+dxfcpp::v8::Series::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::Series::setEventFlags(int)
+dxfcpp::v8::Series::setExpiration(int)
+dxfcpp::v8::Series::setForwardPrice(double)
+dxfcpp::v8::Series::setIndex(long long)
+dxfcpp::v8::Series::setInterest(double)
+dxfcpp::v8::Series::setPutCallRatio(double)
+dxfcpp::v8::Series::setPutVolume(double)
+dxfcpp::v8::Series::setSequence(int)
+dxfcpp::v8::Series::setTime(long long)
+dxfcpp::v8::Series::setTimeSequence(long long)
+dxfcpp::v8::Series::setVolatility(double)
+dxfcpp::v8::Series::toGraal() const
+dxfcpp::v8::Series::toString() const
+dxfcpp::v8::Series::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::Series::withEventFlags(int)
+dxfcpp::v8::Series::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Series::withEventTime(long long)
+dxfcpp::v8::Series::withIndex(long long)
+dxfcpp::v8::Series::withSequence(int)
+dxfcpp::v8::Series::withTime(long long)
+dxfcpp::v8::Session::Session(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Session>&&)
+dxfcpp::v8::Session::containsTime(long long) const
+dxfcpp::v8::Session::create(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Session>&&)
+dxfcpp::v8::Session::findNextSession(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Session::findPrevSession(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Session::getDay() const
+dxfcpp::v8::Session::getEndTime() const
+dxfcpp::v8::Session::getNextSession(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Session::getPrevSession(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::Session::getStartTime() const
+dxfcpp::v8::Session::getType() const &
+dxfcpp::v8::Session::hashCode() const
+dxfcpp::v8::Session::isEmpty() const
+dxfcpp::v8::Session::isTrading() const
+dxfcpp::v8::Session::operator==(dxfcpp::v8::Session const&) const
+dxfcpp::v8::Session::toString() const
+dxfcpp::v8::SessionFilter::AFTER_MARKET
+dxfcpp::v8::SessionFilter::ANY
+dxfcpp::v8::SessionFilter::NON_TRADING
+dxfcpp::v8::SessionFilter::NO_TRADING
+dxfcpp::v8::SessionFilter::PRE_MARKET
+dxfcpp::v8::SessionFilter::REGULAR
+dxfcpp::v8::SessionFilter::SessionFilter()
+dxfcpp::v8::SessionFilter::SessionFilter(dxfcpp::v8::SessionFilterEnum, dxfcpp::v8::StringLike const&, std::__1::optional<dxfcpp::v8::SessionType>, std::__1::optional<bool>)
+dxfcpp::v8::SessionFilter::TRADING
+dxfcpp::v8::SessionFilter::getHandle() const &
+dxfcpp::v8::SessionFilter::getTrading() const &
+dxfcpp::v8::SessionFilter::getType() const &
+dxfcpp::v8::SessionFilter::operator==(dxfcpp::v8::SessionFilter const&) const
+dxfcpp::v8::SessionFilter::toString() const
+dxfcpp::v8::SessionType::AFTER_MARKET
+dxfcpp::v8::SessionType::NO_TRADING
+dxfcpp::v8::SessionType::PRE_MARKET
+dxfcpp::v8::SessionType::REGULAR
+dxfcpp::v8::SessionType::SessionType()
+dxfcpp::v8::SessionType::getCode() const
+dxfcpp::v8::SessionType::getName() const
+dxfcpp::v8::SessionType::isTrading() const
+dxfcpp::v8::SessionType::operator==(dxfcpp::v8::SessionType const&) const
+dxfcpp::v8::SessionType::toString() const
+dxfcpp::v8::SharedEntity::SharedEntity()
+dxfcpp::v8::SharedEntity::~SharedEntity()
+dxfcpp::v8::ShortSaleRestriction::ACTIVE
+dxfcpp::v8::ShortSaleRestriction::ALL
+dxfcpp::v8::ShortSaleRestriction::INACTIVE
+dxfcpp::v8::ShortSaleRestriction::UNDEFINED
+dxfcpp::v8::Side::ALL
+dxfcpp::v8::Side::BUY
+dxfcpp::v8::Side::SELL
+dxfcpp::v8::Side::UNDEFINED
+dxfcpp::v8::SpreadOrder::SpreadOrder()
+dxfcpp::v8::SpreadOrder::SpreadOrder(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::SpreadOrder::TYPE
+dxfcpp::v8::SpreadOrder::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::SpreadOrder::fillData(void*)
+dxfcpp::v8::SpreadOrder::fillGraalData(void*) const
+dxfcpp::v8::SpreadOrder::freeGraal(void*)
+dxfcpp::v8::SpreadOrder::freeGraalData(void*)
+dxfcpp::v8::SpreadOrder::fromGraal(void*)
+dxfcpp::v8::SpreadOrder::getSpreadSymbol() const &
+dxfcpp::v8::SpreadOrder::getSpreadSymbolOpt() const &
+dxfcpp::v8::SpreadOrder::setSpreadSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::SpreadOrder::toGraal() const
+dxfcpp::v8::SpreadOrder::toString() const
+dxfcpp::v8::SpreadOrder::withAction(dxfcpp::v8::OrderAction const&)
+dxfcpp::v8::SpreadOrder::withActionTime(long long)
+dxfcpp::v8::SpreadOrder::withAuxOrderId(long long)
+dxfcpp::v8::SpreadOrder::withCount(long long)
+dxfcpp::v8::SpreadOrder::withEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::SpreadOrder::withEventFlags(int)
+dxfcpp::v8::SpreadOrder::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::SpreadOrder::withEventTime(long long)
+dxfcpp::v8::SpreadOrder::withExchangeCode(char)
+dxfcpp::v8::SpreadOrder::withExchangeCode(short)
+dxfcpp::v8::SpreadOrder::withExecutedSize(double)
+dxfcpp::v8::SpreadOrder::withIndex(long long)
+dxfcpp::v8::SpreadOrder::withOrderId(long long)
+dxfcpp::v8::SpreadOrder::withOrderSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::SpreadOrder::withPrice(double)
+dxfcpp::v8::SpreadOrder::withScope(dxfcpp::v8::Scope const&)
+dxfcpp::v8::SpreadOrder::withSequence(int)
+dxfcpp::v8::SpreadOrder::withSize(double)
+dxfcpp::v8::SpreadOrder::withSource(dxfcpp::v8::OrderSource const&)
+dxfcpp::v8::SpreadOrder::withSpreadSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::SpreadOrder::withTime(long long)
+dxfcpp::v8::SpreadOrder::withTimeNanoPart(int)
+dxfcpp::v8::SpreadOrder::withTimeNanos(long long)
+dxfcpp::v8::SpreadOrder::withTradeId(long long)
+dxfcpp::v8::SpreadOrder::withTradePrice(double)
+dxfcpp::v8::SpreadOrder::withTradeSize(double)
+dxfcpp::v8::String::EMPTY
+dxfcpp::v8::String::NUL
+dxfcpp::v8::StringHash::operator()(char const*) const
+dxfcpp::v8::StringHash::operator()(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::StringHash::operator()(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) const
+dxfcpp::v8::StringHash::operator()(std::__1::basic_string_view<char, std::__1::char_traits<char>>) const
+dxfcpp::v8::StringLike::StringLike()
+dxfcpp::v8::StringLike::StringLike(char const*)
+dxfcpp::v8::StringLike::StringLike(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::StringLike::StringLike(dxfcpp::v8::StringLike&&)
+dxfcpp::v8::StringLike::StringLike(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)
+dxfcpp::v8::StringLike::StringLike(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>&&)
+dxfcpp::v8::StringLike::StringLike(std::__1::basic_string_view<char, std::__1::char_traits<char>>)
+dxfcpp::v8::StringLike::begin() const
+dxfcpp::v8::StringLike::c_str() const
+dxfcpp::v8::StringLike::cbegin() const
+dxfcpp::v8::StringLike::cend() const
+dxfcpp::v8::StringLike::data() const
+dxfcpp::v8::StringLike::empty() const
+dxfcpp::v8::StringLike::end() const
+dxfcpp::v8::StringLike::ends_with(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::StringLike::length() const
+dxfcpp::v8::StringLike::operator double() const
+dxfcpp::v8::StringLike::operator std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>() const
+dxfcpp::v8::StringLike::operator std::__1::basic_string_view<char, std::__1::char_traits<char>>() const
+dxfcpp::v8::StringLike::operator=(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::StringLike::operator=(dxfcpp::v8::StringLike&&)
+dxfcpp::v8::StringLike::operator==(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::StringLike::size() const
+dxfcpp::v8::StringLike::substr(unsigned long, unsigned long) const
+dxfcpp::v8::StringLike::toString() const
+dxfcpp::v8::StringLike::toStringView() const
+dxfcpp::v8::StringSymbol::StringSymbol()
+dxfcpp::v8::StringSymbol::StringSymbol(char const*)
+dxfcpp::v8::StringSymbol::StringSymbol(dxfcpp::v8::StringSymbol const&)
+dxfcpp::v8::StringSymbol::StringSymbol(dxfcpp::v8::StringSymbol&&)
+dxfcpp::v8::StringSymbol::StringSymbol(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>)
+dxfcpp::v8::StringSymbol::StringSymbol(std::__1::basic_string_view<char, std::__1::char_traits<char>>)
+dxfcpp::v8::StringSymbol::freeGraal(void*)
+dxfcpp::v8::StringSymbol::fromGraal(void*)
+dxfcpp::v8::StringSymbol::getData() const
+dxfcpp::v8::StringSymbol::operator<(dxfcpp::v8::StringSymbol const&) const
+dxfcpp::v8::StringSymbol::operator=(dxfcpp::v8::StringSymbol const&)
+dxfcpp::v8::StringSymbol::operator=(dxfcpp::v8::StringSymbol&&)
+dxfcpp::v8::StringSymbol::operator==(dxfcpp::v8::StringSymbol const&) const
+dxfcpp::v8::StringSymbol::toGraal() const
+dxfcpp::v8::StringSymbol::toString() const
+dxfcpp::v8::StringSymbol::~StringSymbol()
+dxfcpp::v8::SubscriptionController::SubscriptionController(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::SubscriptionController>::LockExternalConstructionTag, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::SubscriptionController>&&)
+dxfcpp::v8::SubscriptionController::attach(std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&) const
+dxfcpp::v8::SubscriptionController::detach(std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&) const
+dxfcpp::v8::SubscriptionController::getAggregationPeriod() const
+dxfcpp::v8::SubscriptionController::getEventsBatchLimit() const
+dxfcpp::v8::SubscriptionController::setAggregationPeriod(dxfcpp::v8::TimePeriod const&) const
+dxfcpp::v8::SubscriptionController::setAggregationPeriod(long long) const
+dxfcpp::v8::SubscriptionController::setAggregationPeriod(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>) const
+dxfcpp::v8::SubscriptionController::setEventsBatchLimit(int) const
+dxfcpp::v8::SubscriptionController::setExecutor(std::nullptr_t) const
+dxfcpp::v8::SubscriptionController::setExecutorImpl(void*) const
+dxfcpp::v8::SubscriptionController::~SubscriptionController()
+dxfcpp::v8::Summary::Summary()
+dxfcpp::v8::Summary::Summary(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Summary::TYPE
+dxfcpp::v8::Summary::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Summary::fillData(void*)
+dxfcpp::v8::Summary::fillGraalData(void*) const
+dxfcpp::v8::Summary::freeGraal(void*)
+dxfcpp::v8::Summary::fromGraal(void*)
+dxfcpp::v8::Summary::getDayClosePrice() const
+dxfcpp::v8::Summary::getDayClosePriceType() const &
+dxfcpp::v8::Summary::getDayHighPrice() const
+dxfcpp::v8::Summary::getDayId() const
+dxfcpp::v8::Summary::getDayLowPrice() const
+dxfcpp::v8::Summary::getDayOpenPrice() const
+dxfcpp::v8::Summary::getOpenInterest() const
+dxfcpp::v8::Summary::getPrevDayClosePrice() const
+dxfcpp::v8::Summary::getPrevDayClosePriceType() const &
+dxfcpp::v8::Summary::getPrevDayId() const
+dxfcpp::v8::Summary::getPrevDayVolume() const
+dxfcpp::v8::Summary::setDayClosePrice(double)
+dxfcpp::v8::Summary::setDayClosePriceType(dxfcpp::v8::PriceType const&)
+dxfcpp::v8::Summary::setDayHighPrice(double)
+dxfcpp::v8::Summary::setDayId(int)
+dxfcpp::v8::Summary::setDayLowPrice(double)
+dxfcpp::v8::Summary::setDayOpenPrice(double)
+dxfcpp::v8::Summary::setOpenInterest(long long)
+dxfcpp::v8::Summary::setPrevDayClosePrice(double)
+dxfcpp::v8::Summary::setPrevDayClosePriceType(dxfcpp::v8::PriceType const&)
+dxfcpp::v8::Summary::setPrevDayId(int)
+dxfcpp::v8::Summary::setPrevDayVolume(double)
+dxfcpp::v8::Summary::toGraal() const
+dxfcpp::v8::Summary::toString() const
+dxfcpp::v8::SymbolWrapper::SymbolListUtils::calculateGraalListSize(long)
+dxfcpp::v8::SymbolWrapper::SymbolListUtils::freeGraalList(void*)
+dxfcpp::v8::SymbolWrapper::SymbolListUtils::freeGraalListElements(void*, long)
+dxfcpp::v8::SymbolWrapper::SymbolListUtils::fromGraalList(void*)
+dxfcpp::v8::SymbolWrapper::SymbolListUtils::newGraalList(long)
+dxfcpp::v8::SymbolWrapper::SymbolListUtils::setGraalListElement(void*, long, void*)
+dxfcpp::v8::SymbolWrapper::SymbolListUtils::toGraalListUnique(std::initializer_list<dxfcpp::v8::SymbolWrapper>)
+dxfcpp::v8::SymbolWrapper::SymbolWrapper()
+dxfcpp::v8::SymbolWrapper::SymbolWrapper(dxfcpp::v8::CandleSymbol const&)
+dxfcpp::v8::SymbolWrapper::SymbolWrapper(dxfcpp::v8::IndexedEventSubscriptionSymbol const&)
+dxfcpp::v8::SymbolWrapper::SymbolWrapper(dxfcpp::v8::StringSymbol const&)
+dxfcpp::v8::SymbolWrapper::SymbolWrapper(dxfcpp::v8::SymbolWrapper const&)
+dxfcpp::v8::SymbolWrapper::SymbolWrapper(dxfcpp::v8::SymbolWrapper&&)
+dxfcpp::v8::SymbolWrapper::SymbolWrapper(dxfcpp::v8::TimeSeriesSubscriptionSymbol const&)
+dxfcpp::v8::SymbolWrapper::SymbolWrapper(dxfcpp::v8::WildcardSymbol const&)
+dxfcpp::v8::SymbolWrapper::asCandleSymbol() const
+dxfcpp::v8::SymbolWrapper::asIndexedEventSubscriptionSymbol() const
+dxfcpp::v8::SymbolWrapper::asStringSymbol() const
+dxfcpp::v8::SymbolWrapper::asTimeSeriesSubscriptionSymbol() const
+dxfcpp::v8::SymbolWrapper::asWildcardSymbol() const
+dxfcpp::v8::SymbolWrapper::freeGraal(void*)
+dxfcpp::v8::SymbolWrapper::fromGraal(void*)
+dxfcpp::v8::SymbolWrapper::getData() const
+dxfcpp::v8::SymbolWrapper::isCandleSymbol() const
+dxfcpp::v8::SymbolWrapper::isIndexedEventSubscriptionSymbol() const
+dxfcpp::v8::SymbolWrapper::isStringSymbol() const
+dxfcpp::v8::SymbolWrapper::isTimeSeriesSubscriptionSymbol() const
+dxfcpp::v8::SymbolWrapper::isWildcardSymbol() const
+dxfcpp::v8::SymbolWrapper::operator<(dxfcpp::v8::SymbolWrapper const&) const
+dxfcpp::v8::SymbolWrapper::operator=(dxfcpp::v8::SymbolWrapper const&)
+dxfcpp::v8::SymbolWrapper::operator=(dxfcpp::v8::SymbolWrapper&&)
+dxfcpp::v8::SymbolWrapper::operator==(dxfcpp::v8::SymbolWrapper const&) const
+dxfcpp::v8::SymbolWrapper::toGraal() const
+dxfcpp::v8::SymbolWrapper::toGraalUnique() const
+dxfcpp::v8::SymbolWrapper::toString() const
+dxfcpp::v8::SymbolWrapper::toStringUnderlying() const
+dxfcpp::v8::SymbolWrapper::~SymbolWrapper()
+dxfcpp::v8::System::getProperty(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::System::setIsolateArguments(std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>>)
+dxfcpp::v8::System::setProperty(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextConfiguration::TYPE
+dxfcpp::v8::TextConfiguration::TextConfiguration()
+dxfcpp::v8::TextConfiguration::TextConfiguration(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextConfiguration::TextConfiguration(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextConfiguration::TextConfiguration(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&, int)
+dxfcpp::v8::TextConfiguration::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::TextConfiguration::fillData(void*)
+dxfcpp::v8::TextConfiguration::fillGraalData(void*) const
+dxfcpp::v8::TextConfiguration::freeGraal(void*)
+dxfcpp::v8::TextConfiguration::freeGraalData(void*)
+dxfcpp::v8::TextConfiguration::fromGraal(void*)
+dxfcpp::v8::TextConfiguration::getEventSymbol() const &
+dxfcpp::v8::TextConfiguration::getEventSymbolOpt() const &
+dxfcpp::v8::TextConfiguration::getEventTime() const
+dxfcpp::v8::TextConfiguration::getSequence() const
+dxfcpp::v8::TextConfiguration::getText() const &
+dxfcpp::v8::TextConfiguration::getTextOpt() const &
+dxfcpp::v8::TextConfiguration::getTime() const
+dxfcpp::v8::TextConfiguration::getTimeSequence() const
+dxfcpp::v8::TextConfiguration::getVersion() const
+dxfcpp::v8::TextConfiguration::setEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextConfiguration::setEventTime(long long)
+dxfcpp::v8::TextConfiguration::setSequence(int)
+dxfcpp::v8::TextConfiguration::setText(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextConfiguration::setTime(long long)
+dxfcpp::v8::TextConfiguration::setTimeSequence(long long)
+dxfcpp::v8::TextConfiguration::setVersion(int)
+dxfcpp::v8::TextConfiguration::toGraal() const
+dxfcpp::v8::TextConfiguration::toString() const
+dxfcpp::v8::TextConfiguration::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextConfiguration::withEventTime(long long)
+dxfcpp::v8::TextConfiguration::withSequence(int)
+dxfcpp::v8::TextConfiguration::withText(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextConfiguration::withTime(long long)
+dxfcpp::v8::TextConfiguration::withVersion(int)
+dxfcpp::v8::TextMessage::TYPE
+dxfcpp::v8::TextMessage::TextMessage()
+dxfcpp::v8::TextMessage::TextMessage(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextMessage::TextMessage(dxfcpp::v8::StringLike const&, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextMessage::TextMessage(dxfcpp::v8::StringLike const&, long long, dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextMessage::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::TextMessage::fillData(void*)
+dxfcpp::v8::TextMessage::fillGraalData(void*) const
+dxfcpp::v8::TextMessage::freeGraal(void*)
+dxfcpp::v8::TextMessage::freeGraalData(void*)
+dxfcpp::v8::TextMessage::fromGraal(void*)
+dxfcpp::v8::TextMessage::getEventSymbol() const &
+dxfcpp::v8::TextMessage::getEventSymbolOpt() const &
+dxfcpp::v8::TextMessage::getEventTime() const
+dxfcpp::v8::TextMessage::getSequence() const
+dxfcpp::v8::TextMessage::getText() const &
+dxfcpp::v8::TextMessage::getTextOpt() const &
+dxfcpp::v8::TextMessage::getTime() const
+dxfcpp::v8::TextMessage::getTimeSequence() const
+dxfcpp::v8::TextMessage::setEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextMessage::setEventTime(long long)
+dxfcpp::v8::TextMessage::setSequence(int)
+dxfcpp::v8::TextMessage::setText(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextMessage::setTime(long long)
+dxfcpp::v8::TextMessage::setTimeSequence(long long)
+dxfcpp::v8::TextMessage::toGraal() const
+dxfcpp::v8::TextMessage::toString() const
+dxfcpp::v8::TextMessage::withEventSymbol(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextMessage::withEventTime(long long)
+dxfcpp::v8::TextMessage::withSequence(int)
+dxfcpp::v8::TextMessage::withText(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TextMessage::withTime(long long)
+dxfcpp::v8::TheoPrice::TYPE
+dxfcpp::v8::TheoPrice::TheoPrice()
+dxfcpp::v8::TheoPrice::TheoPrice(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TheoPrice::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::TheoPrice::fillData(void*)
+dxfcpp::v8::TheoPrice::fillGraalData(void*) const
+dxfcpp::v8::TheoPrice::freeGraal(void*)
+dxfcpp::v8::TheoPrice::fromGraal(void*)
+dxfcpp::v8::TheoPrice::getDelta() const
+dxfcpp::v8::TheoPrice::getDividend() const
+dxfcpp::v8::TheoPrice::getEventFlags() const
+dxfcpp::v8::TheoPrice::getEventFlagsMask() const
+dxfcpp::v8::TheoPrice::getGamma() const
+dxfcpp::v8::TheoPrice::getIndex() const
+dxfcpp::v8::TheoPrice::getInterest() const
+dxfcpp::v8::TheoPrice::getPrice() const
+dxfcpp::v8::TheoPrice::getSequence() const
+dxfcpp::v8::TheoPrice::getSource() const &
+dxfcpp::v8::TheoPrice::getTime() const
+dxfcpp::v8::TheoPrice::getUnderlyingPrice() const
+dxfcpp::v8::TheoPrice::setDelta(double)
+dxfcpp::v8::TheoPrice::setDividend(double)
+dxfcpp::v8::TheoPrice::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::TheoPrice::setEventFlags(int)
+dxfcpp::v8::TheoPrice::setGamma(double)
+dxfcpp::v8::TheoPrice::setIndex(long long)
+dxfcpp::v8::TheoPrice::setInterest(double)
+dxfcpp::v8::TheoPrice::setPrice(double)
+dxfcpp::v8::TheoPrice::setSequence(int)
+dxfcpp::v8::TheoPrice::setTime(long long)
+dxfcpp::v8::TheoPrice::setUnderlyingPrice(double)
+dxfcpp::v8::TheoPrice::toGraal() const
+dxfcpp::v8::TheoPrice::toString() const
+dxfcpp::v8::TimeAndSale::TYPE
+dxfcpp::v8::TimeAndSale::TimeAndSale()
+dxfcpp::v8::TimeAndSale::TimeAndSale(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TimeAndSale::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::TimeAndSale::baseFieldsToString() const
+dxfcpp::v8::TimeAndSale::fillData(void*)
+dxfcpp::v8::TimeAndSale::fillGraalData(void*) const
+dxfcpp::v8::TimeAndSale::freeGraal(void*)
+dxfcpp::v8::TimeAndSale::freeGraalData(void*)
+dxfcpp::v8::TimeAndSale::fromGraal(void*)
+dxfcpp::v8::TimeAndSale::getAggressorSide() const &
+dxfcpp::v8::TimeAndSale::getAskPrice() const
+dxfcpp::v8::TimeAndSale::getBidPrice() const
+dxfcpp::v8::TimeAndSale::getBuyer() const &
+dxfcpp::v8::TimeAndSale::getBuyerOpt() const &
+dxfcpp::v8::TimeAndSale::getEventFlags() const
+dxfcpp::v8::TimeAndSale::getEventFlagsMask() const
+dxfcpp::v8::TimeAndSale::getExchangeCode() const
+dxfcpp::v8::TimeAndSale::getExchangeCodeString() const
+dxfcpp::v8::TimeAndSale::getExchangeSaleConditions() const &
+dxfcpp::v8::TimeAndSale::getExchangeSaleConditionsOpt() const &
+dxfcpp::v8::TimeAndSale::getIndex() const
+dxfcpp::v8::TimeAndSale::getPrice() const
+dxfcpp::v8::TimeAndSale::getSeller() const &
+dxfcpp::v8::TimeAndSale::getSellerOpt() const &
+dxfcpp::v8::TimeAndSale::getSequence() const
+dxfcpp::v8::TimeAndSale::getSize() const
+dxfcpp::v8::TimeAndSale::getSource() const &
+dxfcpp::v8::TimeAndSale::getTime() const
+dxfcpp::v8::TimeAndSale::getTimeNanoPart() const
+dxfcpp::v8::TimeAndSale::getTimeNanos() const
+dxfcpp::v8::TimeAndSale::getTradeId() const
+dxfcpp::v8::TimeAndSale::getTradeThroughExempt() const
+dxfcpp::v8::TimeAndSale::getType() const &
+dxfcpp::v8::TimeAndSale::isCancel() const
+dxfcpp::v8::TimeAndSale::isCorrection() const
+dxfcpp::v8::TimeAndSale::isExtendedTradingHours() const
+dxfcpp::v8::TimeAndSale::isNew() const
+dxfcpp::v8::TimeAndSale::isSpreadLeg() const
+dxfcpp::v8::TimeAndSale::isValidTick() const
+dxfcpp::v8::TimeAndSale::setAggressorSide(dxfcpp::v8::Side const&)
+dxfcpp::v8::TimeAndSale::setAskPrice(double)
+dxfcpp::v8::TimeAndSale::setBidPrice(double)
+dxfcpp::v8::TimeAndSale::setBuyer(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TimeAndSale::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::TimeAndSale::setEventFlags(int)
+dxfcpp::v8::TimeAndSale::setExchangeCode(char)
+dxfcpp::v8::TimeAndSale::setExchangeCode(short)
+dxfcpp::v8::TimeAndSale::setExchangeSaleConditions(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TimeAndSale::setExtendedTradingHours(bool)
+dxfcpp::v8::TimeAndSale::setIndex(long long)
+dxfcpp::v8::TimeAndSale::setPrice(double)
+dxfcpp::v8::TimeAndSale::setSeller(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TimeAndSale::setSequence(int)
+dxfcpp::v8::TimeAndSale::setSize(double)
+dxfcpp::v8::TimeAndSale::setSpreadLeg(bool)
+dxfcpp::v8::TimeAndSale::setTime(long long)
+dxfcpp::v8::TimeAndSale::setTimeNanoPart(int)
+dxfcpp::v8::TimeAndSale::setTimeNanos(long long)
+dxfcpp::v8::TimeAndSale::setTradeId(long long)
+dxfcpp::v8::TimeAndSale::setTradeThroughExempt(char)
+dxfcpp::v8::TimeAndSale::setType(dxfcpp::v8::TimeAndSaleType const&)
+dxfcpp::v8::TimeAndSale::setValidTick(bool)
+dxfcpp::v8::TimeAndSale::toGraal() const
+dxfcpp::v8::TimeAndSale::toString() const
+dxfcpp::v8::TimeAndSaleType::ALL
+dxfcpp::v8::TimeAndSaleType::CANCEL
+dxfcpp::v8::TimeAndSaleType::CORRECTION
+dxfcpp::v8::TimeAndSaleType::NEW
+dxfcpp::v8::TimeFormat::DEFAULT
+dxfcpp::v8::TimeFormat::DEFAULT_WITH_MILLIS
+dxfcpp::v8::TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE
+dxfcpp::v8::TimeFormat::GMT
+dxfcpp::v8::TimeFormat::format(long long) const
+dxfcpp::v8::TimeFormat::getHandle() const
+dxfcpp::v8::TimeFormat::parse(dxfcpp::v8::StringLike const&) const
+dxfcpp::v8::TimePeriod::TimePeriod(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimePeriod>&&)
+dxfcpp::v8::TimePeriod::TimePeriod(dxfcpp::v8::TimePeriod::ConstructionKey, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimePeriod>&&)
+dxfcpp::v8::TimePeriod::UNLIMITED
+dxfcpp::v8::TimePeriod::ZERO
+dxfcpp::v8::TimePeriod::getHandle() const
+dxfcpp::v8::TimePeriod::getNanos() const
+dxfcpp::v8::TimePeriod::getSeconds() const
+dxfcpp::v8::TimePeriod::getTime() const
+dxfcpp::v8::TimePeriod::valueOf(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TimePeriod::valueOf(long long)
+dxfcpp::v8::TimePeriod::valueOf(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>)
+dxfcpp::v8::TimePeriodInfo::EMPTY
+dxfcpp::v8::TimePeriodInfo::UNKNOWN
+dxfcpp::v8::TimePeriodInfo::toString() const
+dxfcpp::v8::TimePeriodInfo::valueOf(long long, long long)
+dxfcpp::v8::TimeSeriesEvent::getEventId() const
+dxfcpp::v8::TimeSeriesEvent::getIndex() const
+dxfcpp::v8::TimeSeriesEvent::getSource() const &
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol()
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(dxfcpp::v8::SymbolWrapper const&, long long)
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(dxfcpp::v8::TimeSeriesSubscriptionSymbol const&)
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::TimeSeriesSubscriptionSymbol(dxfcpp::v8::TimeSeriesSubscriptionSymbol&&)
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::freeGraal(void*)
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::fromGraal(void*)
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::getFromTime() const
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::operator<(dxfcpp::v8::TimeSeriesSubscriptionSymbol const&) const
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::operator=(dxfcpp::v8::TimeSeriesSubscriptionSymbol const&)
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::operator=(dxfcpp::v8::TimeSeriesSubscriptionSymbol&&)
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::operator==(dxfcpp::v8::TimeSeriesSubscriptionSymbol const&) const
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::toGraal() const
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::toString() const
+dxfcpp::v8::TimeSeriesSubscriptionSymbol::~TimeSeriesSubscriptionSymbol()
+dxfcpp::v8::TimeSeriesTxModelImpl::Builder::buildImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelBuilderTag> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::Builder::withBatchProcessingImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelBuilderTag> const&, bool)
+dxfcpp::v8::TimeSeriesTxModelImpl::Builder::withFeedImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelBuilderTag> const&, std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::Builder::withFromTimeImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelBuilderTag> const&, long long)
+dxfcpp::v8::TimeSeriesTxModelImpl::Builder::withListenerImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelBuilderTag> const&, dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TxModelListenerTag> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::Builder::withSnapshotProcessingImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelBuilderTag> const&, bool)
+dxfcpp::v8::TimeSeriesTxModelImpl::Builder::withSymbolImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelBuilderTag> const&, dxfcpp::v8::SymbolWrapper const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::attachImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelTag> const&, std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::closeImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelTag> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::detachImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelTag> const&, std::__1::shared_ptr<dxfcpp::v8::DXFeed> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::getFromTimeImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelTag> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::isBatchProcessingImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelTag> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::isSnapshotProcessingImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelTag> const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::newBuilderImpl(dxfcpp::v8::EventTypeEnum const&)
+dxfcpp::v8::TimeSeriesTxModelImpl::setFromTimeImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::TimeSeriesTxModelTag> const&, long long)
+dxfcpp::v8::Timer::Timer()
+dxfcpp::v8::Timer::interruptableSleep(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>) const
+dxfcpp::v8::Timer::interruptableSleep(unsigned long long) const
+dxfcpp::v8::Timer::isRunning()
+dxfcpp::v8::Timer::stop()
+dxfcpp::v8::Trade::TYPE
+dxfcpp::v8::Trade::Trade()
+dxfcpp::v8::Trade::Trade(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Trade::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Trade::fillData(void*)
+dxfcpp::v8::Trade::fillGraalData(void*) const
+dxfcpp::v8::Trade::freeGraal(void*)
+dxfcpp::v8::Trade::fromGraal(void*)
+dxfcpp::v8::Trade::toGraal() const
+dxfcpp::v8::Trade::toString() const
+dxfcpp::v8::TradeBase::TradeBase()
+dxfcpp::v8::TradeBase::TradeBase(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::TradeBase::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::TradeBase::baseFieldsToString() const
+dxfcpp::v8::TradeBase::fillData(void*)
+dxfcpp::v8::TradeBase::fillGraalData(void*) const
+dxfcpp::v8::TradeBase::getChange() const
+dxfcpp::v8::TradeBase::getDayId() const
+dxfcpp::v8::TradeBase::getDayTurnover() const
+dxfcpp::v8::TradeBase::getDayVolume() const
+dxfcpp::v8::TradeBase::getExchangeCode() const
+dxfcpp::v8::TradeBase::getExchangeCodeString() const
+dxfcpp::v8::TradeBase::getPrice() const
+dxfcpp::v8::TradeBase::getSequence() const
+dxfcpp::v8::TradeBase::getSize() const
+dxfcpp::v8::TradeBase::getTickDirection() const &
+dxfcpp::v8::TradeBase::getTime() const
+dxfcpp::v8::TradeBase::getTimeNanoPart() const
+dxfcpp::v8::TradeBase::getTimeNanos() const
+dxfcpp::v8::TradeBase::getTimeSequence() const
+dxfcpp::v8::TradeBase::getTradeId() const
+dxfcpp::v8::TradeBase::isExtendedTradingHours() const
+dxfcpp::v8::TradeBase::setChange(double)
+dxfcpp::v8::TradeBase::setDayId(int)
+dxfcpp::v8::TradeBase::setDayTurnover(double)
+dxfcpp::v8::TradeBase::setDayVolume(double)
+dxfcpp::v8::TradeBase::setExchangeCode(char)
+dxfcpp::v8::TradeBase::setExchangeCode(short)
+dxfcpp::v8::TradeBase::setExtendedTradingHours(bool)
+dxfcpp::v8::TradeBase::setPrice(double)
+dxfcpp::v8::TradeBase::setSequence(int)
+dxfcpp::v8::TradeBase::setSize(double)
+dxfcpp::v8::TradeBase::setTickDirection(dxfcpp::v8::Direction const&)
+dxfcpp::v8::TradeBase::setTime(long long)
+dxfcpp::v8::TradeBase::setTimeNanoPart(int)
+dxfcpp::v8::TradeBase::setTimeNanos(long long)
+dxfcpp::v8::TradeBase::setTimeSequence(long long)
+dxfcpp::v8::TradeBase::setTradeId(long long)
+dxfcpp::v8::TradeETH::TYPE
+dxfcpp::v8::TradeETH::TradeETH()
+dxfcpp::v8::TradeETH::TradeETH(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>)
+dxfcpp::v8::TradeETH::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::TradeETH::fillData(void*)
+dxfcpp::v8::TradeETH::fillGraalData(void*) const
+dxfcpp::v8::TradeETH::freeGraal(void*)
+dxfcpp::v8::TradeETH::fromGraal(void*)
+dxfcpp::v8::TradeETH::toGraal() const
+dxfcpp::v8::TradeETH::toString() const
+dxfcpp::v8::TradingStatus::ACTIVE
+dxfcpp::v8::TradingStatus::ALL
+dxfcpp::v8::TradingStatus::HALTED
+dxfcpp::v8::TradingStatus::UNDEFINED
+dxfcpp::v8::TxModelListenerCommon::TxModelListenerCommon()
+dxfcpp::v8::TxModelListenerCommon::createHandle()
+dxfcpp::v8::TxModelListenerCommon::getHandle() const
+dxfcpp::v8::TxModelListenerCommon::hashCode() const
+dxfcpp::v8::TxModelListenerCommon::operator==(dxfcpp::v8::TxModelListenerCommon const&) const
+dxfcpp::v8::TxModelListenerCommon::toString() const
+dxfcpp::v8::TxModelListenerCommon::~TxModelListenerCommon()
+dxfcpp::v8::Underlying::TYPE
+dxfcpp::v8::Underlying::Underlying()
+dxfcpp::v8::Underlying::Underlying(dxfcpp::v8::StringLike const&)
+dxfcpp::v8::Underlying::assign(std::__1::shared_ptr<dxfcpp::v8::EventType>)
+dxfcpp::v8::Underlying::fillData(void*)
+dxfcpp::v8::Underlying::fillGraalData(void*) const
+dxfcpp::v8::Underlying::freeGraal(void*)
+dxfcpp::v8::Underlying::fromGraal(void*)
+dxfcpp::v8::Underlying::getBackVolatility() const
+dxfcpp::v8::Underlying::getCallVolume() const
+dxfcpp::v8::Underlying::getEventFlags() const
+dxfcpp::v8::Underlying::getEventFlagsMask() const
+dxfcpp::v8::Underlying::getFrontVolatility() const
+dxfcpp::v8::Underlying::getIndex() const
+dxfcpp::v8::Underlying::getOptionVolume() const
+dxfcpp::v8::Underlying::getPutCallRatio() const
+dxfcpp::v8::Underlying::getPutVolume() const
+dxfcpp::v8::Underlying::getSequence() const
+dxfcpp::v8::Underlying::getSource() const &
+dxfcpp::v8::Underlying::getTime() const
+dxfcpp::v8::Underlying::getVolatility() const
+dxfcpp::v8::Underlying::setBackVolatility(double)
+dxfcpp::v8::Underlying::setCallVolume(double)
+dxfcpp::v8::Underlying::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+dxfcpp::v8::Underlying::setEventFlags(int)
+dxfcpp::v8::Underlying::setFrontVolatility(double)
+dxfcpp::v8::Underlying::setIndex(long long)
+dxfcpp::v8::Underlying::setPutCallRatio(double)
+dxfcpp::v8::Underlying::setPutVolume(double)
+dxfcpp::v8::Underlying::setSequence(int)
+dxfcpp::v8::Underlying::setTime(long long)
+dxfcpp::v8::Underlying::setVolatility(double)
+dxfcpp::v8::Underlying::toGraal() const
+dxfcpp::v8::Underlying::toString() const
+dxfcpp::v8::VoidPromiseImpl::VoidPromiseImpl(void*, bool)
+dxfcpp::v8::VoidPromiseImpl::getResult() const
+dxfcpp::v8::VoidPromiseImpl::~VoidPromiseImpl()
+dxfcpp::v8::WildcardSymbol::ALL
+dxfcpp::v8::WildcardSymbol::WildcardSymbol()
+dxfcpp::v8::WildcardSymbol::WildcardSymbol(dxfcpp::v8::WildcardSymbol const&)
+dxfcpp::v8::WildcardSymbol::WildcardSymbol(dxfcpp::v8::WildcardSymbol&&)
+dxfcpp::v8::WildcardSymbol::freeGraal(void*)
+dxfcpp::v8::WildcardSymbol::fromGraal(void*)
+dxfcpp::v8::WildcardSymbol::getSymbol() const
+dxfcpp::v8::WildcardSymbol::operator<(dxfcpp::v8::WildcardSymbol const&) const
+dxfcpp::v8::WildcardSymbol::operator=(dxfcpp::v8::WildcardSymbol const&)
+dxfcpp::v8::WildcardSymbol::operator=(dxfcpp::v8::WildcardSymbol&&)
+dxfcpp::v8::WildcardSymbol::operator==(dxfcpp::v8::WildcardSymbol const&) const
+dxfcpp::v8::WildcardSymbol::toGraal() const
+dxfcpp::v8::WildcardSymbol::toString() const
+dxfcpp::v8::day_util::getDayIdByYearMonthDay(int, int, int)
+dxfcpp::v8::detail::isReleaseExceptionReported()
+dxfcpp::v8::literals::operator"" _c(char const*, unsigned long)
+dxfcpp::v8::literals::operator"" _et(char const*, unsigned long)
+dxfcpp::v8::literals::operator"" _wcs(char const*, unsigned long)
+dxfcpp::v8::literals::operator"" _ws(char const*, unsigned long)
+dxfcpp::v8::shutdown()
+dxfcpp::v8::toString(double)
+dxfcpp::v8::toString(void*)
+non-virtual thunk to dxfcpp::v8::Candle::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::Candle::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::Candle::getIndex() const
+non-virtual thunk to dxfcpp::v8::Candle::getTime() const
+non-virtual thunk to dxfcpp::v8::Candle::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::Candle::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::Candle::setIndex(long long)
+non-virtual thunk to dxfcpp::v8::DXFeedSubscription::addChangeListener(std::__1::shared_ptr<dxfcpp::v8::ObservableSubscriptionChangeListener>)
+non-virtual thunk to dxfcpp::v8::DXFeedSubscription::containsEventType(dxfcpp::v8::EventTypeEnum const&)
+non-virtual thunk to dxfcpp::v8::DXFeedSubscription::getEventTypes()
+non-virtual thunk to dxfcpp::v8::DXFeedSubscription::isClosed()
+non-virtual thunk to dxfcpp::v8::DXFeedSubscription::removeChangeListener(unsigned long)
+non-virtual thunk to dxfcpp::v8::DXFeedSubscription::~DXFeedSubscription()
+non-virtual thunk to dxfcpp::v8::DXFeedTimeSeriesSubscription::toString() const
+non-virtual thunk to dxfcpp::v8::DXFeedTimeSeriesSubscription::~DXFeedTimeSeriesSubscription()
+non-virtual thunk to dxfcpp::v8::DXPublisherObservableSubscription::addChangeListener(std::__1::shared_ptr<dxfcpp::v8::ObservableSubscriptionChangeListener>)
+non-virtual thunk to dxfcpp::v8::DXPublisherObservableSubscription::containsEventType(dxfcpp::v8::EventTypeEnum const&)
+non-virtual thunk to dxfcpp::v8::DXPublisherObservableSubscription::getEventTypes()
+non-virtual thunk to dxfcpp::v8::DXPublisherObservableSubscription::isClosed()
+non-virtual thunk to dxfcpp::v8::DXPublisherObservableSubscription::removeChangeListener(unsigned long)
+non-virtual thunk to dxfcpp::v8::DXPublisherObservableSubscription::~DXPublisherObservableSubscription()
+non-virtual thunk to dxfcpp::v8::Greeks::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::Greeks::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::Greeks::getIndex() const
+non-virtual thunk to dxfcpp::v8::Greeks::getSource() const &
+non-virtual thunk to dxfcpp::v8::Greeks::getTime() const
+non-virtual thunk to dxfcpp::v8::Greeks::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::Greeks::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::Greeks::setIndex(long long)
+non-virtual thunk to dxfcpp::v8::MarketMaker::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::MarketMaker::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::MarketMaker::getIndex() const
+non-virtual thunk to dxfcpp::v8::MarketMaker::getSource() const &
+non-virtual thunk to dxfcpp::v8::MarketMaker::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::MarketMaker::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::MarketMaker::setIndex(long long)
+non-virtual thunk to dxfcpp::v8::OptionSale::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::OptionSale::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::OptionSale::getIndex() const
+non-virtual thunk to dxfcpp::v8::OptionSale::getSource() const &
+non-virtual thunk to dxfcpp::v8::OptionSale::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::OptionSale::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::OptionSale::setIndex(long long)
+non-virtual thunk to dxfcpp::v8::OrderBase::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::OrderBase::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::OrderBase::getIndex() const
+non-virtual thunk to dxfcpp::v8::OrderBase::getSource() const &
+non-virtual thunk to dxfcpp::v8::OrderBase::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::OrderBase::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::OrderBase::setIndex(long long)
+non-virtual thunk to dxfcpp::v8::Series::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::Series::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::Series::getIndex() const
+non-virtual thunk to dxfcpp::v8::Series::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::Series::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::Series::setIndex(long long)
+non-virtual thunk to dxfcpp::v8::TheoPrice::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::TheoPrice::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::TheoPrice::getIndex() const
+non-virtual thunk to dxfcpp::v8::TheoPrice::getSource() const &
+non-virtual thunk to dxfcpp::v8::TheoPrice::getTime() const
+non-virtual thunk to dxfcpp::v8::TheoPrice::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::TheoPrice::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::TheoPrice::setIndex(long long)
+non-virtual thunk to dxfcpp::v8::TimeAndSale::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::TimeAndSale::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::TimeAndSale::getIndex() const
+non-virtual thunk to dxfcpp::v8::TimeAndSale::getSource() const &
+non-virtual thunk to dxfcpp::v8::TimeAndSale::getTime() const
+non-virtual thunk to dxfcpp::v8::TimeAndSale::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::TimeAndSale::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::TimeAndSale::setIndex(long long)
+non-virtual thunk to dxfcpp::v8::Underlying::getEventFlags() const
+non-virtual thunk to dxfcpp::v8::Underlying::getEventFlagsMask() const
+non-virtual thunk to dxfcpp::v8::Underlying::getIndex() const
+non-virtual thunk to dxfcpp::v8::Underlying::getSource() const &
+non-virtual thunk to dxfcpp::v8::Underlying::getTime() const
+non-virtual thunk to dxfcpp::v8::Underlying::setEventFlags(dxfcpp::v8::EventFlagsMask const&)
+non-virtual thunk to dxfcpp::v8::Underlying::setEventFlags(int)
+non-virtual thunk to dxfcpp::v8::Underlying::setIndex(long long)
+operator<<(std::__1::basic_ostream<char, std::__1::char_traits<char>>&, dxfcpp::v8::RuntimeException const&)
+typeinfo for dxfcpp::v8::AdditionalUnderlyings
+typeinfo for dxfcpp::v8::AnalyticOrder
+typeinfo for dxfcpp::v8::AuthOrderSource
+typeinfo for dxfcpp::v8::CFI
+typeinfo for dxfcpp::v8::CFI::Attribute
+typeinfo for dxfcpp::v8::CFI::Value
+typeinfo for dxfcpp::v8::Candle
+typeinfo for dxfcpp::v8::CandleAlignment
+typeinfo for dxfcpp::v8::CandleDataType
+typeinfo for dxfcpp::v8::CandleExchange
+typeinfo for dxfcpp::v8::CandlePeriod
+typeinfo for dxfcpp::v8::CandlePrice
+typeinfo for dxfcpp::v8::CandlePriceLevel
+typeinfo for dxfcpp::v8::CandleSession
+typeinfo for dxfcpp::v8::CandleSymbol
+typeinfo for dxfcpp::v8::CandleSymbolAttribute
+typeinfo for dxfcpp::v8::DXEndpoint
+typeinfo for dxfcpp::v8::DXEndpoint::Builder
+typeinfo for dxfcpp::v8::DXFeed
+typeinfo for dxfcpp::v8::DXFeedSubscription
+typeinfo for dxfcpp::v8::DXFeedTimeSeriesSubscription
+typeinfo for dxfcpp::v8::DXPublisher
+typeinfo for dxfcpp::v8::DXPublisherObservableSubscription
+typeinfo for dxfcpp::v8::Entity
+typeinfo for dxfcpp::v8::EventType
+typeinfo for dxfcpp::v8::EventTypeWithSymbol<dxfcpp::v8::CandleSymbol>
+typeinfo for dxfcpp::v8::EventTypeWithSymbol<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>
+typeinfo for dxfcpp::v8::GraalException
+typeinfo for dxfcpp::v8::Greeks
+typeinfo for dxfcpp::v8::HistoryEndpoint
+typeinfo for dxfcpp::v8::HistoryEndpoint::Builder
+typeinfo for dxfcpp::v8::InPlaceExecutor
+typeinfo for dxfcpp::v8::IndexedEvent
+typeinfo for dxfcpp::v8::IndexedEventSubscriptionSymbol
+typeinfo for dxfcpp::v8::InstrumentProfile
+typeinfo for dxfcpp::v8::InstrumentProfileCollector
+typeinfo for dxfcpp::v8::InstrumentProfileConnection
+typeinfo for dxfcpp::v8::InstrumentProfileReader
+typeinfo for dxfcpp::v8::InvalidArgumentException
+typeinfo for dxfcpp::v8::JavaException
+typeinfo for dxfcpp::v8::LastingEvent
+typeinfo for dxfcpp::v8::MarketEvent
+typeinfo for dxfcpp::v8::MarketMaker
+typeinfo for dxfcpp::v8::Message
+typeinfo for dxfcpp::v8::NuamOrder
+typeinfo for dxfcpp::v8::NuamTimeAndSale
+typeinfo for dxfcpp::v8::NuamTrade
+typeinfo for dxfcpp::v8::ObservableSubscription
+typeinfo for dxfcpp::v8::ObservableSubscriptionChangeListener
+typeinfo for dxfcpp::v8::OnDemandService
+typeinfo for dxfcpp::v8::OptionSale
+typeinfo for dxfcpp::v8::Order
+typeinfo for dxfcpp::v8::OrderBase
+typeinfo for dxfcpp::v8::OrderImbalance
+typeinfo for dxfcpp::v8::OtcMarketsOrder
+typeinfo for dxfcpp::v8::PriceIncrements
+typeinfo for dxfcpp::v8::PriceLevelService
+typeinfo for dxfcpp::v8::Profile
+typeinfo for dxfcpp::v8::Quote
+typeinfo for dxfcpp::v8::RuntimeException
+typeinfo for dxfcpp::v8::Series
+typeinfo for dxfcpp::v8::SharedEntity
+typeinfo for dxfcpp::v8::SpreadOrder
+typeinfo for dxfcpp::v8::SubscriptionController
+typeinfo for dxfcpp::v8::Summary
+typeinfo for dxfcpp::v8::TextConfiguration
+typeinfo for dxfcpp::v8::TextMessage
+typeinfo for dxfcpp::v8::TheoPrice
+typeinfo for dxfcpp::v8::TimeAndSale
+typeinfo for dxfcpp::v8::TimeSeriesEvent
+typeinfo for dxfcpp::v8::TimeSeriesSubscriptionSymbol
+typeinfo for dxfcpp::v8::Trade
+typeinfo for dxfcpp::v8::TradeBase
+typeinfo for dxfcpp::v8::TradeETH
+typeinfo for dxfcpp::v8::TxModelListenerCommon
+typeinfo for dxfcpp::v8::Underlying
+typeinfo name for dxfcpp::v8::AdditionalUnderlyings
+typeinfo name for dxfcpp::v8::AnalyticOrder
+typeinfo name for dxfcpp::v8::AuthOrderSource
+typeinfo name for dxfcpp::v8::CFI
+typeinfo name for dxfcpp::v8::CFI::Attribute
+typeinfo name for dxfcpp::v8::CFI::Value
+typeinfo name for dxfcpp::v8::Candle
+typeinfo name for dxfcpp::v8::CandleAlignment
+typeinfo name for dxfcpp::v8::CandleDataType
+typeinfo name for dxfcpp::v8::CandleExchange
+typeinfo name for dxfcpp::v8::CandlePeriod
+typeinfo name for dxfcpp::v8::CandlePrice
+typeinfo name for dxfcpp::v8::CandlePriceLevel
+typeinfo name for dxfcpp::v8::CandleSession
+typeinfo name for dxfcpp::v8::CandleSymbol
+typeinfo name for dxfcpp::v8::CandleSymbolAttribute
+typeinfo name for dxfcpp::v8::DXEndpoint
+typeinfo name for dxfcpp::v8::DXEndpoint::Builder
+typeinfo name for dxfcpp::v8::DXFeed
+typeinfo name for dxfcpp::v8::DXFeedSubscription
+typeinfo name for dxfcpp::v8::DXFeedTimeSeriesSubscription
+typeinfo name for dxfcpp::v8::DXPublisher
+typeinfo name for dxfcpp::v8::DXPublisherObservableSubscription
+typeinfo name for dxfcpp::v8::Entity
+typeinfo name for dxfcpp::v8::EventType
+typeinfo name for dxfcpp::v8::EventTypeWithSymbol<dxfcpp::v8::CandleSymbol>
+typeinfo name for dxfcpp::v8::EventTypeWithSymbol<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>
+typeinfo name for dxfcpp::v8::GraalException
+typeinfo name for dxfcpp::v8::Greeks
+typeinfo name for dxfcpp::v8::HistoryEndpoint
+typeinfo name for dxfcpp::v8::HistoryEndpoint::Builder
+typeinfo name for dxfcpp::v8::InPlaceExecutor
+typeinfo name for dxfcpp::v8::IndexedEvent
+typeinfo name for dxfcpp::v8::IndexedEventSubscriptionSymbol
+typeinfo name for dxfcpp::v8::InstrumentProfile
+typeinfo name for dxfcpp::v8::InstrumentProfileCollector
+typeinfo name for dxfcpp::v8::InstrumentProfileConnection
+typeinfo name for dxfcpp::v8::InstrumentProfileReader
+typeinfo name for dxfcpp::v8::InvalidArgumentException
+typeinfo name for dxfcpp::v8::JavaException
+typeinfo name for dxfcpp::v8::LastingEvent
+typeinfo name for dxfcpp::v8::MarketEvent
+typeinfo name for dxfcpp::v8::MarketMaker
+typeinfo name for dxfcpp::v8::Message
+typeinfo name for dxfcpp::v8::NuamOrder
+typeinfo name for dxfcpp::v8::NuamTimeAndSale
+typeinfo name for dxfcpp::v8::NuamTrade
+typeinfo name for dxfcpp::v8::ObservableSubscription
+typeinfo name for dxfcpp::v8::ObservableSubscriptionChangeListener
+typeinfo name for dxfcpp::v8::OnDemandService
+typeinfo name for dxfcpp::v8::OptionSale
+typeinfo name for dxfcpp::v8::Order
+typeinfo name for dxfcpp::v8::OrderBase
+typeinfo name for dxfcpp::v8::OrderImbalance
+typeinfo name for dxfcpp::v8::OtcMarketsOrder
+typeinfo name for dxfcpp::v8::PriceIncrements
+typeinfo name for dxfcpp::v8::PriceLevelService
+typeinfo name for dxfcpp::v8::Profile
+typeinfo name for dxfcpp::v8::Quote
+typeinfo name for dxfcpp::v8::RuntimeException
+typeinfo name for dxfcpp::v8::Series
+typeinfo name for dxfcpp::v8::SharedEntity
+typeinfo name for dxfcpp::v8::SpreadOrder
+typeinfo name for dxfcpp::v8::SubscriptionController
+typeinfo name for dxfcpp::v8::Summary
+typeinfo name for dxfcpp::v8::TextConfiguration
+typeinfo name for dxfcpp::v8::TextMessage
+typeinfo name for dxfcpp::v8::TheoPrice
+typeinfo name for dxfcpp::v8::TimeAndSale
+typeinfo name for dxfcpp::v8::TimeSeriesEvent
+typeinfo name for dxfcpp::v8::TimeSeriesSubscriptionSymbol
+typeinfo name for dxfcpp::v8::Trade
+typeinfo name for dxfcpp::v8::TradeBase
+typeinfo name for dxfcpp::v8::TradeETH
+typeinfo name for dxfcpp::v8::TxModelListenerCommon
+typeinfo name for dxfcpp::v8::Underlying
+virtual thunk to dxfcpp::v8::AdditionalUnderlyings::toString() const
+virtual thunk to dxfcpp::v8::AdditionalUnderlyings::~AdditionalUnderlyings()
+virtual thunk to dxfcpp::v8::AuthOrderSource::~AuthOrderSource()
+virtual thunk to dxfcpp::v8::CFI::Attribute::toString() const
+virtual thunk to dxfcpp::v8::CFI::Attribute::~Attribute()
+virtual thunk to dxfcpp::v8::CFI::Value::toString() const
+virtual thunk to dxfcpp::v8::CFI::Value::~Value()
+virtual thunk to dxfcpp::v8::CFI::toString() const
+virtual thunk to dxfcpp::v8::CFI::~CFI()
+virtual thunk to dxfcpp::v8::DXEndpoint::Builder::~Builder()
+virtual thunk to dxfcpp::v8::DXEndpoint::toString() const
+virtual thunk to dxfcpp::v8::DXEndpoint::~DXEndpoint()
+virtual thunk to dxfcpp::v8::DXFeedSubscription::toString() const
+virtual thunk to dxfcpp::v8::DXFeedSubscription::~DXFeedSubscription()
+virtual thunk to dxfcpp::v8::DXFeedTimeSeriesSubscription::toString() const
+virtual thunk to dxfcpp::v8::DXFeedTimeSeriesSubscription::~DXFeedTimeSeriesSubscription()
+virtual thunk to dxfcpp::v8::DXPublisherObservableSubscription::~DXPublisherObservableSubscription()
+virtual thunk to dxfcpp::v8::HistoryEndpoint::Builder::~Builder()
+virtual thunk to dxfcpp::v8::HistoryEndpoint::~HistoryEndpoint()
+virtual thunk to dxfcpp::v8::InPlaceExecutor::~InPlaceExecutor()
+virtual thunk to dxfcpp::v8::InstrumentProfile::toString() const
+virtual thunk to dxfcpp::v8::InstrumentProfile::~InstrumentProfile()
+virtual thunk to dxfcpp::v8::ObservableSubscriptionChangeListener::~ObservableSubscriptionChangeListener()
+virtual thunk to dxfcpp::v8::PriceIncrements::toString() const
+virtual thunk to dxfcpp::v8::PriceIncrements::~PriceIncrements()
+virtual thunk to dxfcpp::v8::PriceLevelService::~PriceLevelService()
+virtual thunk to dxfcpp::v8::SubscriptionController::~SubscriptionController()
+virtual thunk to dxfcpp::v8::TxModelListenerCommon::toString() const
+virtual thunk to dxfcpp::v8::TxModelListenerCommon::~TxModelListenerCommon()
+void* dxfcpp::v8::EventSourceWrapper::ListUtils::toGraalList<dxfcpp::v8::EventSourceWrapper const*>(dxfcpp::v8::EventSourceWrapper const*, dxfcpp::v8::EventSourceWrapper const*)
+void* dxfcpp::v8::SymbolWrapper::SymbolListUtils::toGraalList<dxfcpp::v8::SymbolWrapper const*>(dxfcpp::v8::SymbolWrapper const*, dxfcpp::v8::SymbolWrapper const*)
+vtable for dxfcpp::v8::AdditionalUnderlyings
+vtable for dxfcpp::v8::AnalyticOrder
+vtable for dxfcpp::v8::AuthOrderSource
+vtable for dxfcpp::v8::CFI
+vtable for dxfcpp::v8::CFI::Attribute
+vtable for dxfcpp::v8::CFI::Value
+vtable for dxfcpp::v8::Candle
+vtable for dxfcpp::v8::CandleAlignment
+vtable for dxfcpp::v8::CandleDataType
+vtable for dxfcpp::v8::CandleExchange
+vtable for dxfcpp::v8::CandlePeriod
+vtable for dxfcpp::v8::CandlePrice
+vtable for dxfcpp::v8::CandlePriceLevel
+vtable for dxfcpp::v8::CandleSession
+vtable for dxfcpp::v8::CandleSymbol
+vtable for dxfcpp::v8::DXEndpoint
+vtable for dxfcpp::v8::DXEndpoint::Builder
+vtable for dxfcpp::v8::DXFeed
+vtable for dxfcpp::v8::DXFeedSubscription
+vtable for dxfcpp::v8::DXFeedTimeSeriesSubscription
+vtable for dxfcpp::v8::DXPublisher
+vtable for dxfcpp::v8::DXPublisherObservableSubscription
+vtable for dxfcpp::v8::EventType
+vtable for dxfcpp::v8::Greeks
+vtable for dxfcpp::v8::HistoryEndpoint
+vtable for dxfcpp::v8::HistoryEndpoint::Builder
+vtable for dxfcpp::v8::InPlaceExecutor
+vtable for dxfcpp::v8::IndexedEvent
+vtable for dxfcpp::v8::IndexedEventSubscriptionSymbol
+vtable for dxfcpp::v8::InstrumentProfile
+vtable for dxfcpp::v8::InstrumentProfileCollector
+vtable for dxfcpp::v8::InstrumentProfileConnection
+vtable for dxfcpp::v8::MarketEvent
+vtable for dxfcpp::v8::MarketMaker
+vtable for dxfcpp::v8::Message
+vtable for dxfcpp::v8::NuamOrder
+vtable for dxfcpp::v8::NuamTimeAndSale
+vtable for dxfcpp::v8::NuamTrade
+vtable for dxfcpp::v8::ObservableSubscriptionChangeListener
+vtable for dxfcpp::v8::OnDemandService
+vtable for dxfcpp::v8::OptionSale
+vtable for dxfcpp::v8::Order
+vtable for dxfcpp::v8::OrderBase
+vtable for dxfcpp::v8::OrderImbalance
+vtable for dxfcpp::v8::OtcMarketsOrder
+vtable for dxfcpp::v8::PriceIncrements
+vtable for dxfcpp::v8::PriceLevelService
+vtable for dxfcpp::v8::Profile
+vtable for dxfcpp::v8::Quote
+vtable for dxfcpp::v8::Series
+vtable for dxfcpp::v8::SharedEntity
+vtable for dxfcpp::v8::SpreadOrder
+vtable for dxfcpp::v8::SubscriptionController
+vtable for dxfcpp::v8::Summary
+vtable for dxfcpp::v8::TextConfiguration
+vtable for dxfcpp::v8::TextMessage
+vtable for dxfcpp::v8::TheoPrice
+vtable for dxfcpp::v8::TimeAndSale
+vtable for dxfcpp::v8::TimeSeriesEvent
+vtable for dxfcpp::v8::TimeSeriesSubscriptionSymbol
+vtable for dxfcpp::v8::Trade
+vtable for dxfcpp::v8::TradeBase
+vtable for dxfcpp::v8::TradeETH
+vtable for dxfcpp::v8::TxModelListenerCommon
+vtable for dxfcpp::v8::Underlying

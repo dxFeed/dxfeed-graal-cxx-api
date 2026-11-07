@@ -13,12 +13,15 @@
 The username for free demo services is "demo" and password is "demo".
   Access to the free demo services is configured by default in the provided `dxfeed.system.properties` file.
 
+The Samples packages have all the samples in `bin/`, with one `dxfeed.system.properties` (the demo feed) and the data
+files of the samples; run the samples from `bin/`. OnDemandSample sets the address of the on-demand service in code.
+
 ## DXFeedTimeAndSalesSample
 
 The cross-platform UI sample in `cpp/UI/DXFeedTimeAndSalesSample` uses Dear ImGui, GLFW, and OpenGL. CMake uses the
 pinned UI sources from `third_party` when they are present (for example, in the Full Source Bundle) and downloads them
-otherwise. The data endpoint is selected through the sample's
-`dxfeed.system.properties` file, which is copied next to the executable.
+otherwise. The data endpoint is selected through the `dxfeed.system.properties` file of the working directory: the
+build copies the sample's file next to the executable.
 
 The sample is built when its dependencies are found (on Linux, the OpenGL and the X11 or Wayland development
 packages); see `DXFCXX_BUILD_UI_SAMPLES` in [How To Build](../HOW_TO_BUILD.md#ui-samples).

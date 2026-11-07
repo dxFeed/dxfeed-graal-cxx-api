@@ -9,12 +9,15 @@
     {"name": "ubuntu-24.04-clang-18", "image": "ubuntu-24.04", "os": "linux", "cores": 4, "cc": "clang-18", "cxx": "clang++-18"},
     {"name": "ubuntu-24.04-gcc-16", "image": "ubuntu-24.04", "os": "linux", "cores": 4, "cc": "gcc-16", "cxx": "g++-16", "gcc_version": "16"},
     {"name": "ubuntu-24.04-gcc-14", "image": "ubuntu-24.04", "os": "linux", "cores": 4, "cc": "gcc-14", "cxx": "g++-14"},
+    {"name": "ubuntu-24.04-arm-gcc-14", "image": "ubuntu-24.04-arm", "os": "linux", "cores": 4, "cc": "gcc-14", "cxx": "g++-14", "install_gcc": "14"},
     {"name": "ubuntu-22.04-gcc-11", "image": "ubuntu-22.04", "os": "linux", "cores": 4, "cc": "gcc-11", "cxx": "g++-11"},
     {"name": "macos-15-xcode-16-4", "image": "macos-15", "os": "macos", "cores": 3, "xcode": "16.4", "cc": "clang", "cxx": "clang++"}
   ],
   "buildTypes": ["Release", "Debug"],
   "sanitizers": ["NO_SAN", "ASAN", "UBSAN"],
   "exclude": [
+    {"name": "ubuntu-24.04-arm-gcc-14", "sanitizers": "ASAN", "reason": "arm64 checks the build and the tests; the sanitizers are checked on x86-64"},
+    {"name": "ubuntu-24.04-arm-gcc-14", "sanitizers": "UBSAN", "reason": "arm64 checks the build and the tests; the sanitizers are checked on x86-64"},
     {"name": "win2022-vs2022", "sanitizers": "UBSAN", "reason": "MSVC does not support UndefinedBehaviorSanitizer"},
     {"name": "win2025-vs2026", "sanitizers": "UBSAN", "reason": "MSVC does not support UndefinedBehaviorSanitizer"},
     {"name": "win2022-vs2022-clang-cl", "sanitizers": "ASAN", "reason": "the sanitizers are checked with MSVC and on Linux"},
@@ -29,6 +32,7 @@
     {"name": "ubuntu-24.04-clang-22", "buildType": "Release", "sanitizers": "NO_SAN"},
     {"name": "ubuntu-24.04-clang-22", "buildType": "Debug", "sanitizers": "ASAN"},
     {"name": "ubuntu-24.04-clang-22", "buildType": "Debug", "sanitizers": "UBSAN"},
+    {"name": "ubuntu-24.04-arm-gcc-14", "buildType": "Release", "sanitizers": "NO_SAN"},
     {"name": "ubuntu-22.04-gcc-11", "buildType": "Release", "sanitizers": "NO_SAN"},
     {"name": "win2022-vs2022", "buildType": "Release", "sanitizers": "NO_SAN"},
     {"name": "win2022-vs2022", "buildType": "Debug", "sanitizers": "ASAN"},

@@ -55,6 +55,10 @@ UNDNAME_FLAGS = 0x0080
 # "void __cdecl f"), the pointer modifiers with the space before them ("const & __ptr64)").
 MS_KEYWORDS = re.compile(r"__(?:cdecl|stdcall|fastcall|thiscall|vectorcall|clrcall)\b ?| __(?:ptr64|ptr32)\b")
 
+# The inline namespace of the major version (dxfcpp::v8::). The release of a new major version renames it in its
+# release commit, so the lists, made before it, are compared without it.
+INLINE_NAMESPACE = re.compile(r"\bdxfcpp::v\d+::")
+
 
 class SymbolsError(Exception):
     pass
@@ -265,9 +269,15 @@ def parse_list(text):
 
 
 def compare(expected, actual, check_std_total=True):
-    """The differences as lines: a unified diff of the own symbols and the std:: totals; empty when equal."""
+    """The differences as lines: a unified diff of the own symbols (the inline namespace of the major version shown as
+    dxfcpp::v*::) and the std:: totals; empty when equal."""
     (expected_own, expected_std), (actual_own, actual_std) = expected, actual
-    lines = list(difflib.unified_diff(sorted(expected_own), sorted(actual_own), "list", "library", lineterm="", n=0))
+
+    def without_major(names):
+        return sorted({INLINE_NAMESPACE.sub("dxfcpp::v*::", name) for name in names})
+
+    lines = list(difflib.unified_diff(without_major(expected_own), without_major(actual_own), "list", "library",
+                                      lineterm="", n=0))
     if check_std_total and expected_std != actual_std:
         lines.append(f"std-total: list {expected_std}, library {actual_std}")
     return lines
