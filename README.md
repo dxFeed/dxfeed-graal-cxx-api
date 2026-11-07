@@ -195,7 +195,8 @@ of a release:
 | Static library           | `lib\dxFeedGraalCxxApi_static.lib`                     | `lib/libdxFeedGraalCxxApi_static.a`      | `lib/libdxFeedGraalCxxApi_static.a`       |
 | dxFeed Graal Native SDK  | `bin\DxFeedGraalNativeSdk.dll`, `lib\DxFeedGraalNativeSdk.lib` | `lib/libDxFeedGraalNativeSdk.so` | `lib/libDxFeedGraalNativeSdk.dylib`       |
 
-The archives of a release use `lib/`. Installed from the sources, the libraries go to the `CMAKE_INSTALL_LIBDIR` of
+The archives of a release are `.tar.gz` on Linux and macOS, which keeps the unversioned library names as links, and
+`.zip` on Windows. They use `lib/`. Installed from the sources, the libraries go to the `CMAKE_INSTALL_LIBDIR` of
 `GNUInstallDirs`, which is `lib64` on the Red Hat family of Linux distributions; `-DCMAKE_INSTALL_LIBDIR=lib` keeps
 `lib/`.
 

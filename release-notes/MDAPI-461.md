@@ -10,6 +10,8 @@
     * The shared library has a version: `libdxFeedGraalCxxApi.so.9` (SONAME) on Linux, `libdxFeedGraalCxxApi.9.dylib`
       on macOS, with the unversioned name as a link to it. Programs need the versioned file next to them or in the
       library path.
+    * The `Lib` archives of a release for Linux and macOS are `.tar.gz` instead of `.zip`: tar keeps the links of the
+      versioned library names for every unpacking tool. Windows archives stay `.zip`.
     * The packages contain a CMake package: `find_package(dxFeedGraalCxxApi CONFIG)` gives the targets `dxfcxx::dxfcxx`
       (the shared library), `dxfcxx::static` and `dxfcxx::graal`; the same targets exist when the API is added by
       `add_subdirectory` or `FetchContent`. The targets require C++20 from the targets that link them. A package of

@@ -458,9 +458,11 @@ jobs:
           path: abi-x86_64-linux.xml
           if-no-files-found: error
 
+      # tar.gz on Linux and macOS: it keeps the links of the versioned library names for every unpacking tool (zip
+      # keeps them only for unzip and bsdtar, not for Python zipfile or Midnight Commander).
       - name: Pack [Lib]
         working-directory: "build-${{matrix.buildType}}"
-        run: cpack -G ZIP -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
+        run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Pack [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
@@ -481,7 +483,10 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: artifacts-lib-${{matrix.config.name}}-${{matrix.buildType}}
-          path: build-${{matrix.buildType}}/*.zip
+          path: |
+            build-${{matrix.buildType}}/*.zip
+            build-${{matrix.buildType}}/*.tar.gz
+          if-no-files-found: error
 
       - name: Upload [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
@@ -725,10 +730,9 @@ jobs:
       - name: Unpack
         run: |
           # The Samples and Tools archives are in build-Samples/ and build-Tools/, as the build job uploads them. Without
-          # nullglob, a missing archive leaves the pattern, and unzip or tar fails the step.
+          # nullglob, a missing archive leaves the pattern, and tar fails the step.
           mkdir unpacked
-          for z in packages/*.zip; do unzip -q "$z" -d unpacked; done
-          for t in packages/build-Samples/*.tar.gz packages/build-Tools/*.tar.gz; do
+          for t in packages/*.tar.gz packages/build-Samples/*.tar.gz packages/build-Tools/*.tar.gz; do
             tar -xzf "$t" -C unpacked
           done
           ls unpacked
@@ -800,7 +804,7 @@ jobs:
         if: ${{ matrix.config.os == 'linux' }}
         timeout-minutes: 15
         run: |
-          dnf -y install gcc-toolset-14-gcc-c++ gcc-toolset-14-binutils cmake git make unzip python3.11 binutils
+          dnf -y install gcc-toolset-14-gcc-c++ gcc-toolset-14-binutils cmake git make tar gzip python3.11 binutils
           echo "/opt/rh/gcc-toolset-14/root/usr/bin" >> "$GITHUB_PATH"
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -818,18 +822,17 @@ jobs:
           pattern: artifacts-lib-${{ matrix.config.name }}-Release*
           merge-multiple: true
 
-      # unzip keeps the links of the versioned library names. Windows packages have no links; there the tar of Windows
-      # (bsdtar) unpacks them: the tar of Git Bash, found first in the path, is GNU tar, which does not read zip.
+      # Linux and macOS packages are tar.gz, with the links of the versioned library names. Windows packages are zip;
+      # there the tar of Windows (bsdtar) unpacks them: the tar of Git Bash, found first in the path, is GNU tar, which
+      # does not read zip. Without nullglob, a missing package leaves the pattern, and tar fails the step.
       - name: Unpack
         run: |
           mkdir unpacked
-          for z in packages/*.zip; do
-            if [ "$RUNNER_OS" = Windows ]; then
-              /c/Windows/System32/tar.exe -xf "$z" -C unpacked
-            else
-              unzip -q "$z" -d unpacked
-            fi
-          done
+          if [ "$RUNNER_OS" = Windows ]; then
+            for z in packages/*.zip; do /c/Windows/System32/tar.exe -xf "$z" -C unpacked; done
+          else
+            for t in packages/*.tar.gz; do tar -xzf "$t" -C unpacked; done
+          fi
           ls unpacked
 
       # pwd -W: the path for CMake on Windows (C:/...), not the one of the shell (/c/...).
@@ -897,14 +900,15 @@ jobs:
         with:
           files: |
             artifacts/*.zip
+            artifacts/*.tar.gz
             artifacts/build-Samples/*.zip
             artifacts/build-Samples/*.tar.gz
             artifacts/build-Tools/*.zip
             artifacts/build-Tools/*.tar.gz
             artifacts/abi-x86_64-linux.xml
           # A pattern without files fails the release rather than publishing it without them: the ABI XML of this
-          # release is the reference of the next ones. The packages of the libraries and the full source bundle are the
-          # zip files of artifacts/.
+          # release is the reference of the next ones. The packages of the libraries are in artifacts/ (tar.gz on Linux
+          # and macOS, zip on Windows), with the full source bundle and the documentation (zip).
           fail_on_unmatched_files: true
           prerelease: >
             ${{ contains(needs.get_version.outputs.version, 'alpha')
