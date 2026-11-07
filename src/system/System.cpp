@@ -51,13 +51,17 @@ void throwIfIsolateFailed() {
 bool System::setProperty(const StringLike &key, const StringLike &value) {
     throwIfIsolateFailed();
 
+    const std::string_view keyView = key;
+    const std::string_view valueView = value;
+
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "')");
+        Debugger::debug("System::setProperty(key = '" + std::string{keyView} + "', value = '" + std::string{valueView} +
+                        "')");
     }
 
     auto result = runIsolatedOrElse(
-        [key = validUtf8Prefix(key), value = validUtf8Prefix(value)](auto threadHandle) {
+        [key = validUtf8Prefix(keyView), value = validUtf8Prefix(valueView)](auto threadHandle) {
             return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(),
                                                value.c_str());
         },
@@ -65,7 +69,8 @@ bool System::setProperty(const StringLike &key, const StringLike &value) {
 
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("System::setProperty(key = '" + key + "', value = '" + value + "') -> " + toString(result));
+        Debugger::debug("System::setProperty(key = '" + std::string{keyView} + "', value = '" + std::string{valueView} +
+                        "') -> " + toString(result));
     }
 
     return result;
@@ -74,13 +79,15 @@ bool System::setProperty(const StringLike &key, const StringLike &value) {
 std::string System::getProperty(const StringLike &key) {
     throwIfIsolateFailed();
 
+    const std::string_view keyView = key;
+
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("System::getProperty(key = " + key + ")");
+        Debugger::debug("System::getProperty(key = " + std::string{keyView} + ")");
     }
 
     auto result = runIsolatedOrElse(
-        [key = validUtf8Prefix(key)](auto threadHandle) {
+        [key = validUtf8Prefix(keyView)](auto threadHandle) {
             auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
             std::string resultString{};
 
@@ -101,7 +108,7 @@ std::string System::getProperty(const StringLike &key) {
 
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("System::getProperty(key = '" + key + "') -> '" + result + "'");
+        Debugger::debug("System::getProperty(key = '" + std::string{keyView} + "') -> '" + result + "'");
     }
 
     return result;

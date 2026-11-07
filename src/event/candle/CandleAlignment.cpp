@@ -53,10 +53,11 @@ std::reference_wrapper<const CandleAlignment> CandleAlignment::getAttributeForSy
 }
 
 std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbol) {
+    const std::string_view s = symbol;
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY);
 
     if (!a) {
-        return symbol;
+        return std::string{s};
     }
 
     try {
@@ -71,11 +72,11 @@ std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbo
                                                                   other.get().toString());
         }
 
-        return symbol;
+        return std::string{s};
     } catch (const InvalidArgumentException &) {
-        return symbol;
+        return std::string{s};
     } catch (const std::invalid_argument &) {
-        return symbol;
+        return std::string{s};
     }
 }
 

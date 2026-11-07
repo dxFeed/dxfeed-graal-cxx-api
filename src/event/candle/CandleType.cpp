@@ -26,12 +26,14 @@ std::string CandleType::toString() const {
 }
 
 std::reference_wrapper<const CandleType> CandleType::parse(const StringLike &s) {
-    if (s.empty()) {
+    const std::string_view sv = s;
+
+    if (sv.empty()) {
         throw InvalidArgumentException("Missing candle type");
     }
 
     for (const auto &typeRef : VALUES) {
-        if (typeRef.get().string_ == std::string_view{s}) {
+        if (typeRef.get().string_ == sv) {
             return typeRef;
         }
     }
@@ -40,17 +42,17 @@ std::reference_wrapper<const CandleType> CandleType::parse(const StringLike &s) 
         const auto name = typeRef.get().getName();
 
         // Tick|TICK|tick, Minute|MINUTE|minute, Second|SECOND|second, etc
-        if (name.length() >= s.length() && iEquals(name.substr(0, s.length()), s)) {
+        if (name.length() >= sv.length() && iEquals(name.substr(0, sv.length()), sv)) {
             return typeRef;
         }
 
         // Ticks, Minutes, Seconds, etc.
-        if (s.ends_with("s") && iEquals(name, s.substr(0, s.length() - 1))) {
+        if (sv.ends_with("s") && iEquals(name, sv.substr(0, sv.length() - 1))) {
             return typeRef;
         }
     }
 
-    throw InvalidArgumentException("Unknown candle type: " + s);
+    throw InvalidArgumentException("Unknown candle type: " + std::string{sv});
 }
 
 bool CandleType::operator==(const CandleType &candleType) const noexcept {

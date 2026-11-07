@@ -281,13 +281,13 @@ bool equals(const Range1 &first, const Range2 &second, Predicate cmp) {
     return (secondIt == std::end(second)) && (firstIt == std::end(first));
 }
 
-DXFCPP_INTERNAL_EXPORT inline bool iEquals(const StringLike &first, const StringLike &second) noexcept {
+DXFCPP_INTERNAL_EXPORT inline bool iEquals(std::string_view first, std::string_view second) noexcept {
     const auto &locale = std::locale();
 
     return equals(first, second, detail::IsIEqual(locale));
 }
 
-DXFCPP_INTERNAL_EXPORT inline std::size_t icHash(const StringLike &s) noexcept {
+DXFCPP_INTERNAL_EXPORT inline std::size_t icHash(std::string_view s) noexcept {
     const auto &locale = std::locale();
     std::string result{};
 
@@ -298,13 +298,14 @@ DXFCPP_INTERNAL_EXPORT inline std::size_t icHash(const StringLike &s) noexcept {
     return std::hash<std::string>()(result);
 }
 
-DXFCPP_INTERNAL_EXPORT std::string trimStr(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT std::string trimStr(std::string_view s) noexcept; // NOLINT(*-redundant-declaration)
 
-DXFCPP_INTERNAL_EXPORT std::vector<std::string> splitStr(const StringLike &s, char sep = ',') noexcept;
+DXFCPP_INTERNAL_EXPORT std::vector<std::string> splitStr(std::string_view s, char sep = ',') noexcept;
 
-DXFCPP_INTERNAL_EXPORT std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep = ", ") noexcept;
+DXFCPP_INTERNAL_EXPORT std::string joinStr(const std::vector<std::string_view> &v,
+                                           std::string_view sep = ", ") noexcept;
 
-DXFCPP_INTERNAL_EXPORT bool toBool(const StringLike &s) noexcept; // NOLINT(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT bool toBool(std::string_view s) noexcept; // NOLINT(*-redundant-declaration)
 
 /**
  * The result of parseIsolateArguments(): the arguments, or the reason why the text cannot be parsed.

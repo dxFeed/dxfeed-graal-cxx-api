@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 using namespace dxfcpp;
@@ -208,4 +209,70 @@ TEST_CASE("parseIsolateArguments() does not support argument files, but accepts 
 
     CHECK(result.ok());
     CHECK(result.arguments == Arguments{"@f"});
+}
+
+TEST_CASE("trimStr() removes the leading and trailing space, tab, vertical tab, CR and LF") {
+    CHECK(trimStr("") == "");
+    CHECK(trimStr(" \t\v\r\n") == "");
+    CHECK(trimStr("abc") == "abc");
+    CHECK(trimStr("  a b \r\n") == "a b");
+    CHECK(trimStr("\t\vabc") == "abc");
+    CHECK(trimStr(std::string{"x "}) == "x");
+    CHECK(trimStr(std::string_view{" y"}) == "y");
+}
+
+TEST_CASE("splitStr() splits by the separator and keeps the empty parts") {
+    using Parts = std::vector<std::string>;
+
+    CHECK(splitStr("a,b,c") == Parts{"a", "b", "c"});
+    CHECK(splitStr("a,,c") == Parts{"a", "", "c"});
+    CHECK(splitStr("a;b", ';') == Parts{"a", "b"});
+    CHECK(splitStr("abc") == Parts{"abc"});
+    CHECK(splitStr(" a , b ") == Parts{" a ", " b "});
+    // A trailing empty part is dropped (range-v3 split).
+    CHECK(splitStr(",") == Parts{""});
+    CHECK(splitStr("a,") == Parts{"a"});
+    CHECK(splitStr("").empty());
+}
+
+TEST_CASE("joinStr() joins the strings by the separator, \", \" by default") {
+    using namespace std::literals;
+
+    CHECK(joinStr({}) == "");
+    CHECK(joinStr({"a"sv}) == "a");
+    CHECK(joinStr({"a"sv, "b"sv, "c"sv}) == "a, b, c");
+    CHECK(joinStr({"a"sv, "b"sv, "c"sv}, "-") == "a-b-c");
+    CHECK(joinStr({"a"sv, ""sv, "c"sv}, "") == "ac");
+    CHECK(joinStr({""sv, ""sv}) == ", ");
+}
+
+TEST_CASE("toBool() is true for true, yes, y and on in any case, otherwise false") {
+    CHECK(toBool("true"));
+    CHECK(toBool("TRUE"));
+    CHECK(toBool("Yes"));
+    CHECK(toBool("y"));
+    CHECK(toBool("On"));
+    CHECK(toBool(std::string{"yes"}));
+
+    CHECK_FALSE(toBool(""));
+    CHECK_FALSE(toBool(" "));
+    CHECK_FALSE(toBool("no"));
+    CHECK_FALSE(toBool("off"));
+    CHECK_FALSE(toBool("truee"));
+    CHECK_FALSE(toBool(" true"));
+}
+
+TEST_CASE("iEquals() and icHash() ignore the case") {
+    CHECK(iEquals("", ""));
+    CHECK(iEquals("ABC", "abc"));
+    CHECK(iEquals(std::string{"Abc"}, std::string_view{"aBC"}));
+    CHECK_FALSE(iEquals("a", "ab"));
+    CHECK_FALSE(iEquals("ab", "a"));
+    CHECK_FALSE(iEquals("abc", "abd"));
+    CHECK_FALSE(iEquals("a", ""));
+
+    CHECK(icHash("") == icHash(""));
+    CHECK(icHash("ABC") == icHash("abc"));
+    CHECK(icHash(std::string{"MiXeD"}) == icHash("mixed"));
+    CHECK(icHash("abc") != icHash("abd"));
 }

@@ -351,7 +351,7 @@ char *createCString(const StringLike &s) {
     return cString;
 }
 
-std::string trimStr(const StringLike &s) noexcept {
+std::string trimStr(std::string_view s) noexcept {
     auto trimPredicate = [](auto c) {
         return c == ' ' || c == '\t' || c == '\v' || c == '\r' || c == '\n';
     };
@@ -368,26 +368,26 @@ inline auto split = [](const std::string &s, char sep = ',') noexcept {
     return s | ranges::views::split(sep) | transformToString;
 };
 
-std::vector<std::string> splitStr(const StringLike &s, char sep) noexcept {
-    return split(s, sep) | ranges::to<std::vector<std::string>>();
+std::vector<std::string> splitStr(std::string_view s, char sep) noexcept {
+    return split(std::string{s}, sep) | ranges::to<std::vector<std::string>>();
 }
 
-std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep) noexcept {
+std::string joinStr(const std::vector<std::string_view> &v, std::string_view sep) noexcept {
     // Without fmt: its formatting is not noexcept.
     std::string result{};
 
     for (std::size_t i = 0; i < v.size(); i++) {
         if (i > 0) {
-            result += sep.toStringView();
+            result += sep;
         }
 
-        result += v[i].toStringView();
+        result += v[i];
     }
 
     return result;
 }
 
-bool toBool(const StringLike &s) noexcept {
+bool toBool(std::string_view s) noexcept {
     return iEquals(s, "true") || iEquals(s, "yes") || iEquals(s, "y") || iEquals(s, "on");
 }
 

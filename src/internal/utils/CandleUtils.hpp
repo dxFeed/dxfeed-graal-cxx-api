@@ -23,7 +23,7 @@ namespace candle {
  * @param defaultValue The string of the default value of the attribute.
  * @return The normalized symbol.
  */
-std::string removeDefaultAttribute(const StringLike &symbol, const StringLike &key, const StringLike &defaultValue);
+std::string removeDefaultAttribute(std::string_view symbol, std::string_view key, std::string_view defaultValue);
 
 } // namespace candle
 
