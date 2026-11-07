@@ -143,7 +143,6 @@ const std::optional<std::string> &Message::getEventSymbolOpt() const & noexcept 
 }
 
 void Message::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    // TODO: check invalid utf-8 [EN-8233]
     eventSymbol_ = std::string(eventSymbol);
 }
 

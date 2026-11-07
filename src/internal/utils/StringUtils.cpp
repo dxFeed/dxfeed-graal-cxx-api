@@ -341,11 +341,10 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
     return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(timestamp);
 }
 
-char *createCString(const StringLike &s) {
+char *createCString(std::string_view s) {
     char *cString = new char[s.size() + 1];
 
-    auto sw = std::string_view(s);
-    std::copy(sw.begin(), sw.end(), cString);
+    std::copy(s.begin(), s.end(), cString);
     cString[s.size()] = '\0';
 
     return cString;

@@ -16,10 +16,10 @@ void gc() {
 
 namespace isolated::internal::IsolatedTools {
 std::unordered_set<std::string> /* dxfg_string_list* */
-parseSymbols(const StringLike& symbolList) {
+parseSymbols(std::string_view symbolList) {
     std::unordered_set<std::string> result{};
 
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.c_str());
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, SdkString{symbolList}.c_str());
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
@@ -30,10 +30,10 @@ parseSymbols(const StringLike& symbolList) {
     return result;
 }
 
-std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(const StringLike& symbolList) {
+std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList) {
     std::vector<std::string> result{};
 
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.c_str());
+    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, SdkString{symbolList}.c_str());
 
     if (graalStringList->size > 0) {
         result.reserve(static_cast<std::size_t>(graalStringList->size));

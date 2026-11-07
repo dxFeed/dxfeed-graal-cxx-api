@@ -25,7 +25,7 @@ void release(void *source);
 namespace IsolatedEventType {
 
 // dxfg_EventType_new
-/* dxfg_event_type_t* */ void *create(const StringLike &symbolName,
+/* dxfg_event_type_t* */ void *create(std::string_view symbolName,
                                       /* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
 
 // dxfg_EventType_release

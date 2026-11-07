@@ -200,7 +200,18 @@ DXFCPP_INTERNAL_EXPORT std::string formatTimeStampWithMillis(std::int64_t timest
 DXFCPP_INTERNAL_EXPORT std::string
 formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
 
-DXFCPP_INTERNAL_EXPORT char *createCString(const StringLike &s); // NOLINT(*-redundant-declaration)
+/**
+ * Copies the characters of the string and a terminating NUL into a new array (`new char[]`) for a field of an SDK
+ * structure that outlives the call, and the structure's destructor frees it.
+ *
+ * It is the second way, next to `isolated::SdkString` (for the call itself), in which a user string reaches the SDK.
+ * An embedded NUL stays in the copy, and the SDK reads up to it. Overload for `std::optional` returns nullptr for an
+ * empty optional.
+ *
+ * @param s The characters to copy
+ * @return The new NUL-terminated array
+ */
+DXFCPP_INTERNAL_EXPORT char *createCString(std::string_view s); // NOLINT(*-redundant-declaration)
 
 template <typename S> char *createCString(const std::optional<S> &s) {
     if (!s) {

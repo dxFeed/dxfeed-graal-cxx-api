@@ -16,7 +16,7 @@ namespace isolated::candlewebservice::IsolatedHistoryEndpoint {
 
 namespace Builder {
 
-void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &address) {
+void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, std::string_view address) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withAddress`. The `builder` handle is invalid");
@@ -24,10 +24,10 @@ void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, cons
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withAddress,
                                            static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
-                                           address.c_str());
+                                           SdkString{address}.c_str());
 }
 
-void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &userName) {
+void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, std::string_view userName) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withUserName`. The `builder` handle is invalid");
@@ -35,10 +35,10 @@ void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, con
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withUserName,
                                            static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
-                                           userName.c_str());
+                                           SdkString{userName}.c_str());
 }
 
-void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &password) {
+void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, std::string_view password) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withPassword`. The `builder` handle is invalid");
@@ -46,10 +46,10 @@ void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, con
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withPassword,
                                            static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
-                                           password.c_str());
+                                           SdkString{password}.c_str());
 }
 
-void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, const StringLike &authToken) {
+void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, std::string_view authToken) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_HistoryEndpoint_Builder_withAuthToken`. The `builder` handle is invalid");
@@ -57,7 +57,7 @@ void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, co
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_HistoryEndpoint_Builder_withAuthToken,
                                            static_cast<dxfg_history_endpoint_builder_t *>(builder.get()),
-                                           authToken.c_str());
+                                           SdkString{authToken}.c_str());
 }
 
 void withCompression(const JavaObjectHandle<HistoryEndpoint::Builder> &builder,

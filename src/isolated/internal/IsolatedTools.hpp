@@ -26,10 +26,10 @@ namespace isolated::internal::IsolatedTools {
  * @throws GraalException if something happened with the GraalVM.
  */
 DXFCPP_INTERNAL_EXPORT std::unordered_set<std::string> /* dxfg_string_list* */
-parseSymbols(const StringLike& symbolList);
+parseSymbols(std::string_view symbolList);
 
 DXFCPP_INTERNAL_EXPORT std::vector<std::string> /* dxfg_string_list* */
-parseSymbolsAndSaveOrder(const StringLike& symbolList);
+parseSymbolsAndSaveOrder(std::string_view symbolList);
 
 /**
  * Calls the Graal SDK function `dxfg_Tools_main` in isolation.

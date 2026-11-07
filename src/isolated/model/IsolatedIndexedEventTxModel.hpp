@@ -58,7 +58,7 @@ void withSymbol(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder,
 
 // int32_t dxfg_IndexedEventTxModel_Builder_withSymbol2(graal_isolatethread_t *thread,
 // dxfg_indexed_event_tx_model_builder_t *builder, const char *symbol);
-void withSymbol(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder, const StringLike &symbol);
+void withSymbol(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder, std::string_view symbol);
 
 // int32_t dxfg_IndexedEventTxModel_Builder_withSource(graal_isolatethread_t *thread,
 // dxfg_indexed_event_tx_model_builder_t *builder, dxfg_indexed_event_source_t *source);

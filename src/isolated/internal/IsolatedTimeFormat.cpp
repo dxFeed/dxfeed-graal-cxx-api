@@ -45,15 +45,14 @@ withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<TimeFormat> &timeFor
         dxfg_TimeFormat_withMillis, static_cast<dxfg_time_format_t *>(timeFormat.get())));
 }
 
-std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<TimeFormat> &timeFormat,
-                   const StringLike& value) {
+std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<TimeFormat> &timeFormat, std::string_view value) {
     if (!timeFormat) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_TimeFormat_parse`. The `timeFormat` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_TimeFormat_parse,
-                                              static_cast<dxfg_time_format_t *>(timeFormat.get()), value.c_str());
+    return runGraalFunctionAndThrowIfMinusOne(
+        dxfg_TimeFormat_parse, static_cast<dxfg_time_format_t *>(timeFormat.get()), SdkString{value}.c_str());
 }
 
 std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<TimeFormat> &timeFormat,

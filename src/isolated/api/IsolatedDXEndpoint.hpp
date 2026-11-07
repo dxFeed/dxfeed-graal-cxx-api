@@ -78,7 +78,7 @@ void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaOb
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                        const StringLike &user);
+                        std::string_view user);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_password` in isolation.
@@ -90,7 +90,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-                            const StringLike &password);
+                            std::string_view password);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_connect` in isolation.
@@ -101,7 +101,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const StringLike &address);
+void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, std::string_view address);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_reconnect` in isolation.
@@ -302,7 +302,7 @@ withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoi
  */
 void /* int32_t */
 withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-             const StringLike &key, const StringLike &value);
+             std::string_view key, std::string_view value);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withProperties` in isolation.
@@ -314,7 +314,7 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
  */
 void /* int32_t */
 withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-               const StringLike &filePath);
+               std::string_view filePath);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_supportsProperty` in isolation.
@@ -326,7 +326,7 @@ withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DX
  */
 bool /* int32_t */
 supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-                 const StringLike &key);
+                 std::string_view key);
 
 /**
  * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withExecutor` in isolation.

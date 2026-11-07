@@ -461,8 +461,8 @@ void Isolate::init(Isolate &isolate) noexcept {
 
     for (auto &&[k, v] : config) {
         isolate.runIsolated([key = k, value = v](auto threadHandle) {
-            return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(),
-                                               value.c_str());
+            return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle),
+                                               isolated::SdkString{key}.c_str(), isolated::SdkString{value}.c_str());
         });
     }
 }

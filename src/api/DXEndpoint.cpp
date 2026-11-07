@@ -221,21 +221,18 @@ DXEndpoint::State DXEndpoint::getState() const {
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(const StringLike &user) {
-    // TODO: check invalid utf-8 [EN-8233]
     isolated::api::IsolatedDXEndpoint::user(handle_, user);
 
     return sharedAs<DXEndpoint>();
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::password(const StringLike &password) {
-    // TODO: check invalid utf-8 [EN-8233]
     isolated::api::IsolatedDXEndpoint::password(handle_, password);
 
     return sharedAs<DXEndpoint>();
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::connect(const StringLike &address) {
-    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + address + ")");
@@ -434,7 +431,6 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(Role role) {
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const StringLike &key, const StringLike &value) {
-    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperty(key = " + key +
@@ -459,7 +455,6 @@ void DXEndpoint::Builder::withExecutorImpl(const JavaObjectHandle<ExecutorTag> &
 }
 
 bool DXEndpoint::Builder::supportsProperty(const StringLike &key) const {
-    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::supportsProperty(key = " + key + ")");
@@ -512,7 +507,6 @@ DXEndpoint::Builder::~Builder() noexcept {
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const StringLike &name) {
-    // TODO: check invalid utf-8 [EN-8233]
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");

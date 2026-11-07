@@ -29,3 +29,22 @@ TEST_CASE("InstrumentProfile::setDateField() should store a date") {
         CHECK(profile->getExpiration() == dayId);
     }
 }
+
+TEST_CASE("InstrumentProfile::setField() and getField() round-trip a string through the SDK") {
+    const auto profile = InstrumentProfile::create();
+
+    SUBCASE("Custom field") {
+        profile->setField("TEST_FIELD", "test value");
+
+        CHECK(profile->getField("TEST_FIELD") == "test value");
+    }
+
+    SUBCASE("Standard field, std::string and non-ASCII UTF-8") {
+        // "Privet" in Cyrillic, written as UTF-8 bytes.
+        const std::string utf8 = "\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82";
+
+        profile->setField("DESCRIPTION", utf8);
+
+        CHECK(profile->getField("DESCRIPTION") == utf8);
+    }
+}

@@ -9,6 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/JavaException.hpp"
 #include "../internal/Isolate.hpp"
+#include "SdkString.hpp"
 
 #include <dxfg_api.h>
 

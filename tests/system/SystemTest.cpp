@@ -101,6 +101,57 @@ TEST_CASE("If the system property does not exist, then an empty string should be
     CHECK(dxfcpp::System::getProperty("UnknownPropertyName").empty());
 }
 
+TEST_CASE("System properties round-trip through the SDK for every kind of string argument") {
+    // "Privet" in Cyrillic, written as UTF-8 bytes.
+    const std::string utf8 = "\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82";
+
+    SUBCASE("const char *") {
+        const char *value = "const-char-pointer";
+
+        REQUIRE(dxfcpp::System::setProperty("dxfcpp.test.sdkstring.ptr", value));
+        CHECK(dxfcpp::System::getProperty("dxfcpp.test.sdkstring.ptr") == "const-char-pointer");
+    }
+
+    SUBCASE("std::string") {
+        const std::string value = "std-string";
+
+        REQUIRE(dxfcpp::System::setProperty("dxfcpp.test.sdkstring.str", value));
+        CHECK(dxfcpp::System::getProperty("dxfcpp.test.sdkstring.str") == value);
+    }
+
+    SUBCASE("std::string_view") {
+        const std::string_view value{"string-view-with-tail", 11};
+
+        REQUIRE(dxfcpp::System::setProperty("dxfcpp.test.sdkstring.view", value));
+        CHECK(dxfcpp::System::getProperty("dxfcpp.test.sdkstring.view") == "string-view");
+    }
+
+    SUBCASE("a literal") {
+        REQUIRE(dxfcpp::System::setProperty("dxfcpp.test.sdkstring.literal", "literal"));
+        CHECK(dxfcpp::System::getProperty("dxfcpp.test.sdkstring.literal") == "literal");
+    }
+
+    SUBCASE("a char buffer") {
+        char buffer[16] = "buffer";
+
+        REQUIRE(dxfcpp::System::setProperty("dxfcpp.test.sdkstring.buffer", buffer));
+        CHECK(dxfcpp::System::getProperty("dxfcpp.test.sdkstring.buffer") == "buffer");
+    }
+
+    SUBCASE("non-ASCII UTF-8") {
+        REQUIRE(dxfcpp::System::setProperty("dxfcpp.test.sdkstring.utf8", utf8));
+        CHECK(dxfcpp::System::getProperty("dxfcpp.test.sdkstring.utf8") == utf8);
+    }
+
+    SUBCASE("a null const char * value is an empty value") {
+        const char *value = nullptr;
+
+        REQUIRE(dxfcpp::System::setProperty("dxfcpp.test.sdkstring.null", "not empty"));
+        REQUIRE(dxfcpp::System::setProperty("dxfcpp.test.sdkstring.null", value));
+        CHECK(dxfcpp::System::getProperty("dxfcpp.test.sdkstring.null").empty());
+    }
+}
+
 TEST_CASE("System properties can be set, as well as get their values. Multi-thread") {
     bool ok = false;
     // TODO: move to jthread on clang

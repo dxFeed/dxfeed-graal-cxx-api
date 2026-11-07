@@ -74,6 +74,7 @@ set(DXFC_TEST_SOURCES
         internal/ConstStringTest.cpp
         internal/EntityManagerTest.cpp
         internal/HandlerTest.cpp
+        internal/SdkStringTest.cpp
         internal/StringUtilsTest.cpp
         ipf/InstrumentProfileCollectorTest.cpp
         ipf/InstrumentProfileTest.cpp

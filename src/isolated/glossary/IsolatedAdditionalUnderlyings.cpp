@@ -23,10 +23,10 @@ JavaObjectHandle<AdditionalUnderlyings> EMPTY() {
 
 // int32_t dxfg_AdditionalUnderlyings_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT
 // dxfg_additional_underlyings_t **additionalUnderlyings);
-JavaObjectHandle<AdditionalUnderlyings> valueOf(const StringLike &value) {
+JavaObjectHandle<AdditionalUnderlyings> valueOf(std::string_view value) {
     dxfg_additional_underlyings_t *isolatedAdditionalUnderlyings{};
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf, value.c_str(),
+    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf, SdkString{value}.c_str(),
                                        &isolatedAdditionalUnderlyings);
 
     return JavaObjectHandle<AdditionalUnderlyings>{isolatedAdditionalUnderlyings};
@@ -52,10 +52,11 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<cons
 
 // int32_t dxfg_AdditionalUnderlyings_getSPC(graal_isolatethread_t *thread, const char *text, const char *symbol,
 // DXFG_OUT double *spc);
-double getSPC(const StringLike &text, const StringLike &symbol) {
+double getSPC(std::string_view text, std::string_view symbol) {
     double spc{};
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getSPC, text.c_str(), symbol.c_str(), &spc);
+    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getSPC, SdkString{text}.c_str(),
+                                       SdkString{symbol}.c_str(), &spc);
 
     return spc;
 }
@@ -116,7 +117,7 @@ std::unordered_map<std::string, double> getMap(const JavaObjectHandle<Additional
 
 // int32_t dxfg_AdditionalUnderlyings_getSPC2(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
 // *additionalUnderlyings, const char *symbol, DXFG_OUT double *spc);
-double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, const StringLike &symbol) {
+double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, std::string_view symbol) {
     if (!additionalUnderlyings) {
         throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getSPC2`. The "
                                        "`additionalUnderlyings` handle is invalid");
@@ -126,7 +127,7 @@ double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyin
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_AdditionalUnderlyings_getSPC2,
                                            static_cast<dxfg_additional_underlyings_t *>(additionalUnderlyings.get()),
-                                           symbol.c_str(), &result);
+                                           SdkString{symbol}.c_str(), &result);
 
     return result;
 }

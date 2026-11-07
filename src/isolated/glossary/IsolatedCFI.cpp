@@ -23,10 +23,10 @@ JavaObjectHandle<CFI> EMPTY() {
 }
 
 // int32_t dxfg_CFI_valueOf(graal_isolatethread_t *thread, const char *code, DXFG_OUT dxfg_cfi_t **cfi);
-JavaObjectHandle<CFI> valueOf(const StringLike &code) {
+JavaObjectHandle<CFI> valueOf(std::string_view code) {
     dxfg_cfi_t *isolatedCfi{};
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_valueOf, code.c_str(), &isolatedCfi);
+    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_valueOf, SdkString{code}.c_str(), &isolatedCfi);
 
     return JavaObjectHandle<CFI>{isolatedCfi};
 }

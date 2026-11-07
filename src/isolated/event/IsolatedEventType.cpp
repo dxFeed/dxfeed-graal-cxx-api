@@ -29,10 +29,10 @@ void release(void *source) {
 namespace IsolatedEventType {
 
 // dxfg_EventType_new
-/* dxfg_event_type_t* */ void *create(const StringLike &symbolName,
+/* dxfg_event_type_t* */ void *create(std::string_view symbolName,
                                       /* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_EventType_new, symbolName.c_str(), static_cast<dxfg_event_clazz_t>(eventType.getId())));
+        dxfg_EventType_new, SdkString{symbolName}.c_str(), static_cast<dxfg_event_clazz_t>(eventType.getId())));
 }
 
 // dxfg_EventType_release

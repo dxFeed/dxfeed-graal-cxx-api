@@ -62,8 +62,8 @@ bool System::setProperty(const StringLike &key, const StringLike &value) {
 
     auto result = runIsolatedOrElse(
         [key = validUtf8Prefix(keyView), value = validUtf8Prefix(valueView)](auto threadHandle) {
-            return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(),
-                                               value.c_str());
+            return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle),
+                                               isolated::SdkString{key}.c_str(), isolated::SdkString{value}.c_str());
         },
         false);
 
@@ -92,7 +92,8 @@ std::string System::getProperty(const StringLike &key) {
             std::string resultString{};
 
             // NULL is also the result for a property that is not set.
-            if (auto property = dxfg_system_get_property(thread, key.c_str()); property != nullptr) {
+            if (auto property = dxfg_system_get_property(thread, isolated::SdkString{key}.c_str());
+                property != nullptr) {
                 resultString = validUtf8Prefix(property);
 
                 if (dxfg_system_release_property(thread, property) != 0) {
