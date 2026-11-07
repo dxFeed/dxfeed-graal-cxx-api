@@ -4,8 +4,9 @@
 # Builds one target of the compile-fail directory and checks the outcome.
 #   -DBUILD_DIR=<build tree> -DTARGET=<target> [-DCONFIG=<config>] [-DEXPECT=fail|pass] [-DMARKER=<text>]
 # EXPECT=fail (default): the build must fail, and some diagnostic line (an "error" or its "note", as Clang explains the
-#   rejected conversion in a note) must mention MARKER (default StringParam). A missing include file mentions
-#   StringParam.hpp too, so that name is not counted: a broken harness cannot pass vacuously.
+#   rejected conversion in a note; MSBuild prints a note of clang-cl as "message") must mention MARKER (default
+#   StringParam). A missing include file mentions StringParam.hpp too, so that name is not counted: a broken harness
+#   cannot pass vacuously.
 # EXPECT=pass: the build must succeed (a positive control of the same harness).
 if (NOT DEFINED EXPECT)
     set(EXPECT fail)
@@ -38,10 +39,12 @@ if (exit_code EQUAL 0)
 endif ()
 
 string(REPLACE "${MARKER}.hpp" "" cleaned "${output}")
-string(REGEX MATCH "[^\n]*([eE][rR][rR][oO][rR]|[nN][oO][tT][eE])[^\n]*${MARKER}[^\n]*" diagnostic "${cleaned}")
+string(REGEX MATCH "[^\n]*([eE][rR][rR][oO][rR]|[nN][oO][tT][eE]|[mM][eE][sS][sS][aA][gG][eE])[^\n]*${MARKER}[^\n]*"
+        diagnostic "${cleaned}")
 
 if (NOT diagnostic)
-    message(FATAL_ERROR "${TARGET}: the build failed (${exit_code}), but no error or note line mentions ${MARKER}:\n${output}")
+    message(FATAL_ERROR
+            "${TARGET}: the build failed (${exit_code}), but no error, note or message line mentions ${MARKER}:\n${output}")
 endif ()
 
 message(STATUS "${TARGET}: compile error as expected: ${diagnostic}")
