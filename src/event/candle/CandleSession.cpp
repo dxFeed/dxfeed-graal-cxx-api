@@ -43,7 +43,7 @@ SessionFilter::SessionFilter() noexcept {
 }
 
 SessionFilter::SessionFilter(SessionFilterEnum code, StringParam name, std::optional<SessionType> type,
-                             std::optional<bool> trading) noexcept
+                             std::optional<bool> trading)
     : code_{code}, name_{ConstString::copyOf(name.view())}, type_{type}, trading_{trading} {
 }
 

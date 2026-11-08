@@ -28,6 +28,8 @@ static_assert(!noexcept(std::declval<TimeAndSale &>().setBuyer(std::string{})));
 static_assert(!noexcept(std::declval<Message &>().setAttachment(std::string{})));
 static_assert(!noexcept(Quote{std::string{}}));
 static_assert(!noexcept(TradeETH{std::string{}}));
+static_assert(!std::is_nothrow_constructible_v<SessionFilter, SessionFilterEnum, StringParam,
+                                               std::optional<SessionType>, std::optional<bool>>);
 
 // A user event that overrides a virtual function with a string parameter.
 struct UserOrder final : Order {
