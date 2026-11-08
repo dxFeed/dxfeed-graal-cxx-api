@@ -59,36 +59,35 @@ void executor(const JavaObjectHandle<DXEndpoint> &endpoint, const JavaObjectHand
     DXFCXX_DISABLE_MSC_WARNINGS_POP()
 }
 
-void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint,
-                        const StringLike& user) {
+void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint, std::string_view user) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_user`. The `endpoint` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_user, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           user.c_str());
+                                           SdkString{user}.c_str());
 }
 
 void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint,
-                            const StringLike& password) {
+                            std::string_view password) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_password`. The `endpoint` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_password, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           password.c_str());
+                                           SdkString{password}.c_str());
 }
 
-void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint, const StringLike& address) {
+void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint, std::string_view address) {
     if (!endpoint) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_connect`. The `endpoint` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_connect, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           address.c_str());
+                                           SdkString{address}.c_str());
 }
 
 void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
@@ -316,35 +315,36 @@ withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Buil
 
 // dxfg_DXEndpoint_Builder_withProperty
 void /* int32_t */
-withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
-             const StringLike& key, const StringLike& value) {
+withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder, std::string_view key,
+             std::string_view value) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_Builder_withProperty`. The `builder` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperty,
-                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()), key.c_str(),
-                                           value.c_str());
+                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()),
+                                           SdkString{key}.c_str(), SdkString{value}.c_str());
 }
 
 // dxfg_DXEndpoint_Builder_withProperties
 void /* int32_t */
 withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
-               const StringLike& filePath) {
+               std::string_view filePath) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_Builder_withProperties`. The `builder` handle is invalid");
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperties,
-                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()), filePath.c_str());
+                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()),
+                                           SdkString{filePath}.c_str());
 }
 
 // dxfg_DXEndpoint_Builder_supportsProperty
 bool /* int32_t */
 supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
-                 const StringLike& key) {
+                 std::string_view key) {
     if (!builder) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_DXEndpoint_Builder_supportsProperty`. The `builder` handle is invalid");
@@ -352,7 +352,7 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoi
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_supportsProperty,
                                                   static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                                  key.c_str()) == 1;
+                                                  SdkString{key}.c_str()) == 1;
 }
 
 // dxfg_DXEndpoint_Builder_withExecutor

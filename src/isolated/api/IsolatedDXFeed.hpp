@@ -57,7 +57,7 @@ std::vector<std::shared_ptr<EventType>> getTimeSeriesIfSubscribed(const JavaObje
 
 // dxfg_DXFeed_getLastEvent2
 /* int32_t */ std::shared_ptr<EventType> getLastEvent(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
-                                                      /* dxfg_event_type_t * */ const StringLike &symbolName,
+                                                      /* dxfg_event_type_t * */ std::string_view symbolName,
                                                       const EventTypeEnum &eventType);
 
 /*

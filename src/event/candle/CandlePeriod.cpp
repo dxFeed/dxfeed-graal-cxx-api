@@ -57,26 +57,27 @@ bool CandlePeriod::operator==(const CandlePeriod &candlePeriod) const {
 }
 
 CandlePeriod CandlePeriod::parse(const StringLike &s) {
-    if (s == CandleType::DAY.toString()) {
+    const std::string_view sv = s;
+
+    if (sv == CandleType::DAY.toString()) {
         return DAY;
     }
 
-    if (s == CandleType::TICK.toString()) {
+    if (sv == CandleType::TICK.toString()) {
         return TICK;
     }
 
-    const auto sw = s.operator std::string_view();
     std::size_t i = 0;
 
-    for (; i < sw.length(); i++) {
-        auto c = sw[i];
+    for (; i < sv.length(); i++) {
+        auto c = sv[i];
 
         if ((c < '0' || c > '9') && c != '.' && c != '-' && c != '+' && c != 'e' && c != 'E')
             break;
     }
 
-    const auto valueStr = sw.substr(0, i);
-    const auto typeStr = sw.substr(i);
+    const auto valueStr = sv.substr(0, i);
+    const auto typeStr = sv.substr(i);
     const auto value = valueStr.empty() ? std::optional<double>{1.0} : java::parseDouble(valueStr);
 
     if (!value) {
@@ -107,10 +108,11 @@ CandlePeriod CandlePeriod::getAttributeForSymbol(const StringLike &symbol) {
 }
 
 std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) {
+    const std::string_view sv = symbol;
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY);
 
     if (!a) {
-        return symbol;
+        return std::string{sv};
     }
 
     try {
@@ -125,11 +127,11 @@ std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) 
                                                                   other.toString());
         }
 
-        return symbol;
+        return std::string{sv};
     } catch (const InvalidArgumentException &) {
-        return symbol;
+        return std::string{sv};
     } catch (const std::invalid_argument &) {
-        return symbol;
+        return std::string{sv};
     }
 }
 

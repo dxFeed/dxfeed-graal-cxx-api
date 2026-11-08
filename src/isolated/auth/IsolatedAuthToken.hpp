@@ -19,32 +19,29 @@ struct AuthToken;
 namespace isolated::auth::IsolatedAuthToken {
 
 /// dxfg_AuthToken_valueOf
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ const StringLike &string);
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ std::string_view string);
 
 /// dxfg_AuthToken_createBasicToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBasicToken(/* const char* */ const StringLike &userPassword);
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view userPassword);
 
 /// dxfg_AuthToken_createBasicToken2
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBasicToken(/* const char* */ const StringLike &user, /* const char* */ const StringLike &password);
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view user,
+                                                                      /* const char* */ std::string_view password);
 
 /// dxfg_AuthToken_createBasicTokenOrNull
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBasicTokenOrNull(/* const char* */ const StringLike &user,
-                       /* const char* */ const StringLike &password);
+createBasicTokenOrNull(/* const char* */ std::string_view user,
+                       /* const char* */ std::string_view password);
 
 /// dxfg_AuthToken_createBearerToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBearerToken(/* const char* */ const StringLike &token);
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerToken(/* const char* */ std::string_view token);
 
 /// dxfg_AuthToken_createBearerTokenOrNull
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBearerTokenOrNull(/* const char* */ const StringLike &token);
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerTokenOrNull(/* const char* */ std::string_view token);
 
 /// dxfg_AuthToken_createCustomToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createCustomToken(/* const char* */ const StringLike &scheme, /* const char* */ const StringLike &value);
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createCustomToken(/* const char* */ std::string_view scheme,
+                                                                       /* const char* */ std::string_view value);
 
 /// dxfg_AuthToken_getHttpAuthorization
 /* const char* */ std::string

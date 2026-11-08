@@ -148,7 +148,6 @@ const std::optional<std::string> &TextMessage::getEventSymbolOpt() const & noexc
 }
 
 void TextMessage::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    // TODO: check invalid utf-8 [EN-8233]
     eventSymbol_ = std::string(eventSymbol);
 }
 
@@ -227,7 +226,6 @@ const std::optional<std::string> &TextMessage::getTextOpt() const & noexcept {
 }
 
 void TextMessage::setText(const StringLike &text) {
-    // TODO: check invalid utf-8 [EN-8233]
     text_ = std::string(text);
 }
 

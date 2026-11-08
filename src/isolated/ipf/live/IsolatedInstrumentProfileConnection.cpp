@@ -18,7 +18,7 @@ namespace isolated::ipf::live {
 namespace IsolatedInstrumentProfileConnection {
 
 /* dxfg_ipf_connection_t* */ JavaObjectHandle<InstrumentProfileConnection> createConnection(
-    const StringLike &address,
+    std::string_view address,
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
@@ -27,7 +27,7 @@ namespace IsolatedInstrumentProfileConnection {
     }
 
     return JavaObjectHandle<InstrumentProfileConnection>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileConnection_createConnection, address.c_str(),
+        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileConnection_createConnection, SdkString{address}.c_str(),
                                           static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get()))};
 }
 

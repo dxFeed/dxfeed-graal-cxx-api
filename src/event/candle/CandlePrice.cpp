@@ -56,10 +56,11 @@ std::reference_wrapper<const CandlePrice> CandlePrice::getAttributeForSymbol(con
 }
 
 std::string CandlePrice::normalizeAttributeForSymbol(const StringLike &symbol) {
+    const std::string_view sv = symbol;
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePrice::ATTRIBUTE_KEY);
 
     if (!a) {
-        return symbol;
+        return std::string{sv};
     }
 
     try {
@@ -74,11 +75,11 @@ std::string CandlePrice::normalizeAttributeForSymbol(const StringLike &symbol) {
                                                                   other.get().toString());
         }
 
-        return symbol;
+        return std::string{sv};
     } catch (const InvalidArgumentException &) {
-        return symbol;
+        return std::string{sv};
     } catch (const std::invalid_argument &) {
-        return symbol;
+        return std::string{sv};
     }
 }
 

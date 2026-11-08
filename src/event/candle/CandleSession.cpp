@@ -140,7 +140,7 @@ std::reference_wrapper<const CandleSession> CandleSession::parse(const StringLik
         }
     }
 
-    throw InvalidArgumentException("Unknown candle session: " + s);
+    throw InvalidArgumentException("Unknown candle session: " + std::string{std::string_view{s}});
 }
 
 std::reference_wrapper<const CandleSession> CandleSession::getAttributeForSymbol(const StringLike &symbol) {
@@ -150,10 +150,11 @@ std::reference_wrapper<const CandleSession> CandleSession::getAttributeForSymbol
 }
 
 std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol) noexcept {
+    const std::string_view sv = symbol;
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY);
 
     if (!a) {
-        return symbol;
+        return std::string{sv};
     }
 
     // As getAttributeForSymbol() (Java Boolean.parseBoolean): only "true" in any case is the regular session.
@@ -165,6 +166,6 @@ std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol)
         return MarketEventSymbols::changeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY, REGULAR.toString());
     }
 
-    return symbol;
+    return std::string{sv};
 }
 DXFCPP_END_NAMESPACE

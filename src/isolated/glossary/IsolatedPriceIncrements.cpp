@@ -25,10 +25,10 @@ JavaObjectHandle<PriceIncrements> EMPTY() {
 
 // int32_t dxfg_PriceIncrements_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT
 // dxfg_price_increments_t **priceIncrements);
-JavaObjectHandle<PriceIncrements> valueOf(const StringLike &text) {
+JavaObjectHandle<PriceIncrements> valueOf(std::string_view text) {
     dxfg_price_increments_t *isolatedPriceIncrements{};
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_valueOf, text.c_str(), &isolatedPriceIncrements);
+    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_valueOf, SdkString{text}.c_str(), &isolatedPriceIncrements);
 
     return JavaObjectHandle<PriceIncrements>{isolatedPriceIncrements};
 }

@@ -90,7 +90,7 @@ std::vector<std::shared_ptr<EventType>> getIndexedEventsIfSubscribed(const JavaO
     const auto list = static_cast<void *>(runGraalFunctionNullableOrThrow(
         dxfg_DXFeed_getIndexedEventsIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
         static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get()),
-        source.toString().c_str()));
+        SdkString{source.toString()}.c_str()));
 
     if (!list) {
         return {};
@@ -126,7 +126,7 @@ std::vector<std::shared_ptr<EventType>> getTimeSeriesIfSubscribed(const JavaObje
 
 // dxfg_DXFeed_getLastEvent2
 /* int32_t */ std::shared_ptr<EventType> getLastEvent(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
-                                                      /* dxfg_event_type_t * */ const StringLike &symbolName,
+                                                      /* dxfg_event_type_t * */ std::string_view symbolName,
                                                       const EventTypeEnum &eventType) {
     if (!feed) {
         throw InvalidArgumentException(

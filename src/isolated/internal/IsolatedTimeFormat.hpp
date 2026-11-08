@@ -24,7 +24,7 @@ withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat
 /* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
 withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat);
 std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
-                   const StringLike& value);
+                   std::string_view value);
 std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
                    std::int64_t value);
 

@@ -85,16 +85,17 @@ CandleDataType CandleDataType::getAttributeForSymbol(const StringLike &symbol) {
 }
 
 std::string CandleDataType::normalizeAttributeForSymbol(const StringLike &symbol) {
+    const std::string_view sv = symbol;
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleDataType::ATTRIBUTE_KEY);
 
     if (!a) {
-        return symbol;
+        return std::string{sv};
     }
 
     // Any other value is kept as is: parsing does not change it.
     return parse(a.value()) == DEFAULT
                ? candle::removeDefaultAttribute(symbol, CandleDataType::ATTRIBUTE_KEY, DEFAULT.toString())
-               : std::string(symbol);
+               : std::string{sv};
 }
 
 DXFCPP_END_NAMESPACE

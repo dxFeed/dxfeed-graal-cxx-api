@@ -15,50 +15,49 @@ DXFCPP_BEGIN_NAMESPACE
 namespace isolated::auth::IsolatedAuthToken {
 
 /// dxfg_AuthToken_valueOf
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ const StringLike &string) {
-    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_valueOf, string.c_str()));
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ std::string_view string) {
+    return JavaObjectHandle<AuthToken>(
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_valueOf, SdkString{string}.c_str()));
 }
 
 /// dxfg_AuthToken_createBasicToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBasicToken(/* const char* */ const StringLike &userPassword) {
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view userPassword) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken, userPassword.c_str()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken, SdkString{userPassword}.c_str()));
 }
 
 /// dxfg_AuthToken_createBasicToken2
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ const StringLike &user,
-                                                                      /* const char* */ const StringLike &password) {
-    return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBasicToken2, user.c_str(), password.c_str()));
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view user,
+                                                                      /* const char* */ std::string_view password) {
+    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_AuthToken_createBasicToken2, SdkString{user}.c_str(), SdkString{password}.c_str()));
 }
 
 /// dxfg_AuthToken_createBasicTokenOrNull
 /* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBasicTokenOrNull(/* const char* */ const StringLike &user,
-                       /* const char* */ const StringLike &password) {
-    return JavaObjectHandle<AuthToken>(
-        runGraalFunctionNullableOrThrow(dxfg_AuthToken_createBasicTokenOrNull, user.c_str(), password.c_str()));
+createBasicTokenOrNull(/* const char* */ std::string_view user,
+                       /* const char* */ std::string_view password) {
+    return JavaObjectHandle<AuthToken>(runGraalFunctionNullableOrThrow(
+        dxfg_AuthToken_createBasicTokenOrNull, SdkString{user}.c_str(), SdkString{password}.c_str()));
 }
 
 /// dxfg_AuthToken_createBearerToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerToken(/* const char* */ const StringLike &token) {
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerToken(/* const char* */ std::string_view token) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerToken, token.c_str()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createBearerToken, SdkString{token}.c_str()));
 }
 
 /// dxfg_AuthToken_createBearerTokenOrNull
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
-createBearerTokenOrNull(/* const char* */ const StringLike &token) {
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerTokenOrNull(/* const char* */ std::string_view token) {
     return JavaObjectHandle<AuthToken>(
-        runGraalFunctionNullableOrThrow(dxfg_AuthToken_createBearerTokenOrNull, token.c_str()));
+        runGraalFunctionNullableOrThrow(dxfg_AuthToken_createBearerTokenOrNull, SdkString{token}.c_str()));
 }
 
 /// dxfg_AuthToken_createCustomToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createCustomToken(/* const char* */ const StringLike &scheme,
-                                                                       /* const char* */ const StringLike &value) {
-    return JavaObjectHandle<AuthToken>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_AuthToken_createCustomToken, scheme.c_str(), value.c_str()));
+/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createCustomToken(/* const char* */ std::string_view scheme,
+                                                                       /* const char* */ std::string_view value) {
+    return JavaObjectHandle<AuthToken>(runGraalFunctionAndThrowIfNullptr(
+        dxfg_AuthToken_createCustomToken, SdkString{scheme}.c_str(), SdkString{value}.c_str()));
 }
 
 /// dxfg_AuthToken_getHttpAuthorization

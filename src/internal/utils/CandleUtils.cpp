@@ -11,7 +11,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace candle {
 
-std::string removeDefaultAttribute(const StringLike &symbol, const StringLike &key, const StringLike &defaultValue) {
+std::string removeDefaultAttribute(std::string_view symbol, std::string_view key, std::string_view defaultValue) {
     auto removed = MarketEventSymbols::removeAttributeStringByKey(symbol, key);
 
     if (MarketEventSymbols::getBaseSymbol(removed) == MarketEventSymbols::getBaseSymbol(symbol) &&

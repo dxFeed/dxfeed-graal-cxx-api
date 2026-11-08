@@ -26,18 +26,18 @@ bool wasComplete(
 
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLike &address);
+             std::string_view address);
 
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLike &address, const StringLike &user, const StringLike &password);
+             std::string_view address, std::string_view user, std::string_view password);
 
 /// dxfg_InstrumentProfileReader_readFromFile3
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLike &address, const JavaObjectHandle<AuthToken> &token);
+             std::string_view address, const JavaObjectHandle<AuthToken> &token);
 
-std::string resolveSourceURL(const StringLike &address);
+std::string resolveSourceURL(std::string_view address);
 } // namespace isolated::ipf::IsolatedInstrumentProfileReader
 
 DXFCPP_END_NAMESPACE

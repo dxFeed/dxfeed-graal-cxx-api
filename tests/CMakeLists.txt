@@ -53,6 +53,7 @@ set(DXFC_TEST_SOURCES
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderImbalanceTest.cpp
         api/OrderSourceTest.cpp
+        api/StringParamTest.cpp
         api/TextConfigurationTest.cpp
         event/ConstantsTest.cpp
         event/EdgeValuesTapeTest.cpp
@@ -73,6 +74,7 @@ set(DXFC_TEST_SOURCES
         internal/ConstStringTest.cpp
         internal/EntityManagerTest.cpp
         internal/HandlerTest.cpp
+        internal/SdkStringTest.cpp
         internal/StringUtilsTest.cpp
         ipf/InstrumentProfileCollectorTest.cpp
         ipf/InstrumentProfileTest.cpp
@@ -428,6 +430,9 @@ if (WIN32)
     add_test(NAME ${DXFC_WINDOWS_MACROS_TARGET} COMMAND ${DXFC_WINDOWS_MACROS_TARGET})
     set_tests_properties(${DXFC_WINDOWS_MACROS_TARGET} PROPERTIES TIMEOUT 60)
 endif ()
+
+# Calls that must not compile (see compile-fail/CMakeLists.txt).
+add_subdirectory(compile-fail)
 
 # The libraries that the tests and the canary load, copied next to them once (see dxfcxx_copy_runtime).
 set(DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx::graal>)

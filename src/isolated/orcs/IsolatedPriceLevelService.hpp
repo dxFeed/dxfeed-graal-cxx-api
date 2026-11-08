@@ -23,14 +23,14 @@ namespace isolated::orcs::IsolatedPriceLevelService {
 
 // int32_t dxfg_PriceLevelService_new(graal_isolatethread_t *thread, const char *address,
 // DXFG_OUT dxfg_price_level_service_t **service);
-JavaObjectHandle<PriceLevelService> create(const StringLike &address);
+JavaObjectHandle<PriceLevelService> create(std::string_view address);
 
 // int32_t dxfg_PriceLevelService_getOrders(graal_isolatethread_t *thread, dxfg_price_level_service_t *service,
 // dxfg_symbol_t *candleSymbol, dxfg_indexed_event_source_t *orderSource, int64_t from, int64_t to, const char *caller,
 // DXFG_OUT dxfg_event_type_list **orders);
 std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, const OrderSource &orderSource,
-                                                  std::int64_t from, std::int64_t to, const StringLike &caller);
+                                                  std::int64_t from, std::int64_t to, std::string_view caller);
 
 // int32_t dxfg_PriceLevelService_getOrders2(graal_isolatethread_t *thread, dxfg_price_level_service_t *service,
 // dxfg_symbol_t *candleSymbol, dxfg_indexed_event_source_t *orderSource, int64_t from, int64_t to,
@@ -43,7 +43,7 @@ std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLe
 // dxfg_symbol_t *candleSymbol, int64_t from, int64_t to, const char *caller, DXFG_OUT dxfg_event_type_list **quotes);
 std::vector<std::shared_ptr<EventType>> getQuotes(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, std::int64_t from, std::int64_t to,
-                                                  const StringLike &caller);
+                                                  std::string_view caller);
 
 // int32_t dxfg_PriceLevelService_getQuotes2(graal_isolatethread_t *thread, dxfg_price_level_service_t *service,
 // dxfg_symbol_t *candleSymbol, int64_t from, int64_t to, DXFG_OUT dxfg_event_type_list **quotes);

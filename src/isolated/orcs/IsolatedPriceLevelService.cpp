@@ -34,17 +34,17 @@ std::vector<std::shared_ptr<EventType>> toEvents(dxfg_event_type_list *events) {
 
 } // namespace
 
-JavaObjectHandle<PriceLevelService> create(const StringLike &address) {
+JavaObjectHandle<PriceLevelService> create(std::string_view address) {
     dxfg_price_level_service_t *service{};
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_PriceLevelService_new, address.c_str(), &service);
+    runGraalFunctionAndThrowIfLessThanZero(dxfg_PriceLevelService_new, SdkString{address}.c_str(), &service);
 
     return JavaObjectHandle<PriceLevelService>{&service->handler};
 }
 
 std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, const OrderSource &orderSource,
-                                                  std::int64_t from, std::int64_t to, const StringLike &caller) {
+                                                  std::int64_t from, std::int64_t to, std::string_view caller) {
     checkService(service, "dxfg_PriceLevelService_getOrders");
 
     dxfg_event_type_list *orders{};
@@ -53,7 +53,7 @@ std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLe
         dxfg_PriceLevelService_getOrders, static_cast<dxfg_price_level_service_t *>(service.get()),
         static_cast<dxfg_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()),
         static_cast<dxfg_indexed_event_source_t *>(EventSourceWrapper(orderSource).toGraalUnique().get()), from, to,
-        caller.c_str(), &orders);
+        SdkString{caller}.c_str(), &orders);
 
     return toEvents(orders);
 }
@@ -76,15 +76,15 @@ std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLe
 
 std::vector<std::shared_ptr<EventType>> getQuotes(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, std::int64_t from, std::int64_t to,
-                                                  const StringLike &caller) {
+                                                  std::string_view caller) {
     checkService(service, "dxfg_PriceLevelService_getQuotes");
 
     dxfg_event_type_list *quotes{};
 
     runGraalFunctionAndThrowIfLessThanZero(
         dxfg_PriceLevelService_getQuotes, static_cast<dxfg_price_level_service_t *>(service.get()),
-        static_cast<dxfg_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()), from, to, caller.c_str(),
-        &quotes);
+        static_cast<dxfg_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()), from, to,
+        SdkString{caller}.c_str(), &quotes);
 
     return toEvents(quotes);
 }

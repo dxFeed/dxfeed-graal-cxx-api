@@ -9,6 +9,8 @@
 
 #include <dxfg_api.h>
 
+#include <deque>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::glossary::IsolatedAdditionalUnderlyings {
@@ -23,10 +25,10 @@ JavaObjectHandle<AdditionalUnderlyings> EMPTY() {
 
 // int32_t dxfg_AdditionalUnderlyings_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT
 // dxfg_additional_underlyings_t **additionalUnderlyings);
-JavaObjectHandle<AdditionalUnderlyings> valueOf(const StringLike &value) {
+JavaObjectHandle<AdditionalUnderlyings> valueOf(std::string_view value) {
     dxfg_additional_underlyings_t *isolatedAdditionalUnderlyings{};
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf, value.c_str(),
+    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf, SdkString{value}.c_str(),
                                        &isolatedAdditionalUnderlyings);
 
     return JavaObjectHandle<AdditionalUnderlyings>{isolatedAdditionalUnderlyings};
@@ -35,13 +37,16 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const StringLike &value) {
 // int32_t dxfg_AdditionalUnderlyings_valueOf2(graal_isolatethread_t *thread, const dxfg_string_to_double_map_entry_t
 // *mapEntries, int32_t size, DXFG_OUT dxfg_additional_underlyings_t **additionalUnderlyings);
 JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<const char *, double>> &mapLikeEntries) {
+    // The keys must outlive the call. SdkString can be neither copied nor moved; a deque keeps its elements in place.
+    std::deque<SdkString> keys{};
     std::vector<dxfg_string_to_double_map_entry_t> graalMapEntries{};
     dxfg_additional_underlyings_t *isolatedAdditionalUnderlyings{};
 
     graalMapEntries.reserve(mapLikeEntries.size());
 
     for (const auto &[key, value] : mapLikeEntries) {
-        graalMapEntries.push_back(dxfg_string_to_double_map_entry_t{key, value});
+        keys.emplace_back(key);
+        graalMapEntries.push_back(dxfg_string_to_double_map_entry_t{keys.back().c_str(), value});
     }
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf2, graalMapEntries.data(),
@@ -52,10 +57,11 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<cons
 
 // int32_t dxfg_AdditionalUnderlyings_getSPC(graal_isolatethread_t *thread, const char *text, const char *symbol,
 // DXFG_OUT double *spc);
-double getSPC(const StringLike &text, const StringLike &symbol) {
+double getSPC(std::string_view text, std::string_view symbol) {
     double spc{};
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getSPC, text.c_str(), symbol.c_str(), &spc);
+    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getSPC, SdkString{text}.c_str(),
+                                       SdkString{symbol}.c_str(), &spc);
 
     return spc;
 }
@@ -116,7 +122,7 @@ std::unordered_map<std::string, double> getMap(const JavaObjectHandle<Additional
 
 // int32_t dxfg_AdditionalUnderlyings_getSPC2(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
 // *additionalUnderlyings, const char *symbol, DXFG_OUT double *spc);
-double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, const StringLike &symbol) {
+double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, std::string_view symbol) {
     if (!additionalUnderlyings) {
         throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getSPC2`. The "
                                        "`additionalUnderlyings` handle is invalid");
@@ -126,7 +132,7 @@ double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyin
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_AdditionalUnderlyings_getSPC2,
                                            static_cast<dxfg_additional_underlyings_t *>(additionalUnderlyings.get()),
-                                           symbol.c_str(), &result);
+                                           SdkString{symbol}.c_str(), &result);
 
     return result;
 }

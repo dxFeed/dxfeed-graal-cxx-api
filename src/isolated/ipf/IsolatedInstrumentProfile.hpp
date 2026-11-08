@@ -32,7 +32,7 @@ getType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 // dxfg_InstrumentProfile_setType
 /* std::int32_t */ void
 setType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-        const StringLike &value);
+        std::string_view value);
 
 // dxfg_InstrumentProfile_getSymbol
 /* const char* */ std::string
@@ -41,7 +41,7 @@ getSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProf
 // dxfg_InstrumentProfile_setSymbol
 /* std::int32_t */ void
 setSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-          const StringLike &value);
+          std::string_view value);
 
 // dxfg_InstrumentProfile_getDescription
 /* const char* */ std::string
@@ -50,7 +50,7 @@ getDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrumen
 // dxfg_InstrumentProfile_setDescription
 /* std::int32_t */ void
 setDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-               const StringLike &value);
+               std::string_view value);
 
 // dxfg_InstrumentProfile_getLocalSymbol
 /* const char* */ std::string
@@ -59,7 +59,7 @@ getLocalSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrumen
 // dxfg_InstrumentProfile_setLocalSymbol
 /* std::int32_t */ void
 setLocalSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-               const StringLike &value);
+               std::string_view value);
 
 // dxfg_InstrumentProfile_getLocalDescription
 /* const char* */ std::string
@@ -68,7 +68,7 @@ getLocalDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Inst
 // dxfg_InstrumentProfile_setLocalDescription
 /* std::int32_t */ void
 setLocalDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                    const StringLike &value);
+                    std::string_view value);
 
 // dxfg_InstrumentProfile_getCountry
 /* const char* */ std::string
@@ -77,7 +77,7 @@ getCountry(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPro
 // dxfg_InstrumentProfile_setCountry
 /* std::int32_t */ void
 setCountry(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-           const StringLike &value);
+           std::string_view value);
 
 // dxfg_InstrumentProfile_getOPOL
 /* const char* */ std::string
@@ -86,7 +86,7 @@ getOPOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 // dxfg_InstrumentProfile_setOPOL
 /* std::int32_t */ void
 setOPOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-        const StringLike &value);
+        std::string_view value);
 
 // dxfg_InstrumentProfile_getExchangeData
 /* const char* */ std::string
@@ -95,7 +95,7 @@ getExchangeData(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 // dxfg_InstrumentProfile_setExchangeData
 /* std::int32_t */ void
 setExchangeData(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                const StringLike &value);
+                std::string_view value);
 
 // dxfg_InstrumentProfile_getExchanges
 /* const char* */ std::string
@@ -104,7 +104,7 @@ getExchanges(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentP
 // dxfg_InstrumentProfile_setExchanges
 /* std::int32_t */ void
 setExchanges(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-             const StringLike &value);
+             std::string_view value);
 
 // dxfg_InstrumentProfile_getCurrency
 /* const char* */ std::string
@@ -113,7 +113,7 @@ getCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPr
 // dxfg_InstrumentProfile_setCurrency
 /* std::int32_t */ void
 setCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-            const StringLike &value);
+            std::string_view value);
 
 // dxfg_InstrumentProfile_getBaseCurrency
 /* const char* */ std::string
@@ -122,7 +122,7 @@ getBaseCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 // dxfg_InstrumentProfile_setBaseCurrency
 /* std::int32_t */ void
 setBaseCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                const StringLike &value);
+                std::string_view value);
 
 // dxfg_InstrumentProfile_getCFI
 /* const char* */ std::string
@@ -131,7 +131,7 @@ getCFI(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile
 // dxfg_InstrumentProfile_setCFI
 /* std::int32_t */ void
 setCFI(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-       const StringLike &value);
+       std::string_view value);
 
 // dxfg_InstrumentProfile_getISIN
 /* const char* */ std::string
@@ -140,7 +140,7 @@ getISIN(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 // dxfg_InstrumentProfile_setISIN
 /* std::int32_t */ void
 setISIN(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-        const StringLike &value);
+        std::string_view value);
 
 // dxfg_InstrumentProfile_getSEDOL
 /* const char* */ std::string
@@ -149,7 +149,7 @@ getSEDOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 // dxfg_InstrumentProfile_setSEDOL
 /* std::int32_t */ void
 setSEDOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-         const StringLike &value);
+         std::string_view value);
 
 // dxfg_InstrumentProfile_getCUSIP
 /* const char* */ std::string
@@ -158,7 +158,7 @@ getCUSIP(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 // dxfg_InstrumentProfile_setCUSIP
 /* std::int32_t */ void
 setCUSIP(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-         const StringLike &value);
+         std::string_view value);
 
 // dxfg_InstrumentProfile_getICB
 std::int32_t getICB(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile);
@@ -191,7 +191,7 @@ getProduct(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPro
 // dxfg_InstrumentProfile_setProduct
 /* std::int32_t */ void
 setProduct(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-           const StringLike &value);
+           std::string_view value);
 
 // dxfg_InstrumentProfile_getUnderlying
 /* const char* */ std::string
@@ -200,7 +200,7 @@ getUnderlying(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrument
 // dxfg_InstrumentProfile_setUnderlying
 /* std::int32_t */ void
 setUnderlying(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-              const StringLike &value);
+              std::string_view value);
 
 // dxfg_InstrumentProfile_getSPC
 double getSPC(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile);
@@ -216,7 +216,7 @@ getAdditionalUnderlyings(/* dxfg_instrument_profile_t* */ const JavaObjectHandle
 // dxfg_InstrumentProfile_setAdditionalUnderlyings
 /* std::int32_t */ void
 setAdditionalUnderlyings(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                         const StringLike &value);
+                         std::string_view value);
 
 // dxfg_InstrumentProfile_getMMY
 /* const char* */ std::string
@@ -225,7 +225,7 @@ getMMY(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile
 // dxfg_InstrumentProfile_setMMY
 /* std::int32_t */ void
 setMMY(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-       const StringLike &value);
+       std::string_view value);
 
 // dxfg_InstrumentProfile_getExpiration
 std::int32_t
@@ -259,7 +259,7 @@ getOptionType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrument
 // dxfg_InstrumentProfile_setOptionType
 /* std::int32_t */ void
 setOptionType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-              const StringLike &value);
+              std::string_view value);
 
 // dxfg_InstrumentProfile_getExpirationStyle
 /* const char* */ std::string
@@ -268,7 +268,7 @@ getExpirationStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 // dxfg_InstrumentProfile_setExpirationStyle
 /* std::int32_t */ void
 setExpirationStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                   const StringLike &value);
+                   std::string_view value);
 
 // dxfg_InstrumentProfile_getSettlementStyle
 /* const char* */ std::string
@@ -277,7 +277,7 @@ getSettlementStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 // dxfg_InstrumentProfile_setSettlementStyle
 /* std::int32_t */ void
 setSettlementStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                   const StringLike &value);
+                   std::string_view value);
 
 // dxfg_InstrumentProfile_getPriceIncrements
 /* const char* */ std::string
@@ -286,7 +286,7 @@ getPriceIncrements(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 // dxfg_InstrumentProfile_setPriceIncrements
 /* std::int32_t */ void
 setPriceIncrements(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                   const StringLike &value);
+                   std::string_view value);
 
 // dxfg_InstrumentProfile_getTradingHours
 /* const char* */ std::string
@@ -295,35 +295,35 @@ getTradingHours(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 // dxfg_InstrumentProfile_setTradingHours
 /* std::int32_t */ void
 setTradingHours(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                const StringLike &value);
+                std::string_view value);
 
 // dxfg_InstrumentProfile_getField
 /* const char* */ std::string
 getField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-         const StringLike &name);
+         std::string_view name);
 
 // dxfg_InstrumentProfile_setField
 /* std::int32_t */ void
 setField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-         const StringLike &name, const StringLike &value);
+         std::string_view name, std::string_view value);
 
 // dxfg_InstrumentProfile_getNumericField
 double getNumericField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                       const StringLike &name);
+                       std::string_view name);
 
 // dxfg_InstrumentProfile_setNumericField
 /* std::int32_t */ void
 setNumericField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                const StringLike &name, double value);
+                std::string_view name, double value);
 
 // dxfg_InstrumentProfile_getDateField
 std::int32_t getDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-                          const StringLike &name);
+                          std::string_view name);
 
 // dxfg_InstrumentProfile_setDateField
 /* std::int32_t */ void
 setDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
-             const StringLike &name, std::int32_t value);
+             std::string_view name, std::int32_t value);
 
 // dxfg_InstrumentProfile_getNonEmptyCustomFieldNames
 /* dxfg_string_list* */ std::vector<std::string> getNonEmptyCustomFieldNames(

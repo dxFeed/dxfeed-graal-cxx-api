@@ -42,7 +42,7 @@ bool wasComplete(
 
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLike &address) {
+             std::string_view address) {
     if (!handle) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile`. The handle is invalid");
@@ -50,12 +50,12 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
         dxfg_InstrumentProfileReader_readFromFile, static_cast<dxfg_instrument_profile_reader_t *>(handle.get()),
-        address.c_str()));
+        SdkString{address}.c_str()));
 }
 
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLike &address, const StringLike &user, const StringLike &password) {
+             std::string_view address, std::string_view user, std::string_view password) {
     if (!handle) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile`. The handle is invalid");
@@ -63,13 +63,13 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
         dxfg_InstrumentProfileReader_readFromFile2, static_cast<dxfg_instrument_profile_reader_t *>(handle.get()),
-        address.c_str(), user.c_str(), password.c_str()));
+        SdkString{address}.c_str(), SdkString{user}.c_str(), SdkString{password}.c_str()));
 }
 
 /// dxfg_InstrumentProfileReader_readFromFile3
 /* dxfg_instrument_profile_list* */ void *
 readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
-             const StringLike &address, const JavaObjectHandle<AuthToken> &token) {
+             std::string_view address, const JavaObjectHandle<AuthToken> &token) {
     if (!handle) {
         throw InvalidArgumentException(
             "Unable to execute function `dxfg_InstrumentProfileReader_readFromFile`. The handle is invalid");
@@ -82,12 +82,12 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
         dxfg_InstrumentProfileReader_readFromFile3, static_cast<dxfg_instrument_profile_reader_t *>(handle.get()),
-        address.c_str(), static_cast<dxfg_auth_token_t *>(token.get())));
+        SdkString{address}.c_str(), static_cast<dxfg_auth_token_t *>(token.get())));
 }
 
-std::string resolveSourceURL(const StringLike &address) {
-    const auto resolvedURL =
-        internal::IsolatedString::toUnique(runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_resolveSourceURL, address.c_str()));
+std::string resolveSourceURL(std::string_view address) {
+    const auto resolvedURL = internal::IsolatedString::toUnique(
+        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_resolveSourceURL, SdkString{address}.c_str()));
 
     return dxfcpp::toString(resolvedURL.get());
 }

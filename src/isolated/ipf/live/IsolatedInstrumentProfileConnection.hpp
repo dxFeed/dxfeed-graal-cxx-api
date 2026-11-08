@@ -19,7 +19,7 @@ namespace isolated::ipf::live {
 namespace IsolatedInstrumentProfileConnection {
 
 /* dxfg_ipf_connection_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileConnection> createConnection(
-    const StringLike &address,
+    std::string_view address,
     /* dxfg_ipf_collector_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileCollector> &instrumentProfileCollector);
 
 std::string getAddress(/* dxfg_ipf_connection_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfileConnection>
