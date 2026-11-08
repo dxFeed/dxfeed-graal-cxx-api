@@ -342,6 +342,8 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
 }
 
 char *createCString(std::string_view s) {
+    // TODO: check invalid utf-8 [MDAPI-32, EN-8233]
+
     char *cString = new char[s.size() + 1];
 
     std::copy(s.begin(), s.end(), cString);

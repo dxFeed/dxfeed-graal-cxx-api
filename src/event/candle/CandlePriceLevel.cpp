@@ -34,11 +34,11 @@ std::string CandlePriceLevel::changeAttributeForSymbol(const StringLike &symbol)
 }
 
 CandlePriceLevel CandlePriceLevel::parse(const StringLike &s) {
-    const std::string_view sw = s;
-    const auto value = java::parseDouble(sw);
+    const std::string_view sv = s;
+    const auto value = java::parseDouble(sv);
 
     if (!value) {
-        throw InvalidArgumentException("Incorrect candle price level: " + std::string{sw});
+        throw InvalidArgumentException("Incorrect candle price level: " + std::string{sv});
     }
 
     return valueOf(*value);
@@ -59,11 +59,11 @@ CandlePriceLevel CandlePriceLevel::getAttributeForSymbol(const StringLike &symbo
 }
 
 std::string CandlePriceLevel::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const std::string_view s = symbol;
+    const std::string_view sv = symbol;
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY);
 
     if (!a) {
-        return std::string{s};
+        return std::string{sv};
     }
 
     try {
@@ -78,11 +78,11 @@ std::string CandlePriceLevel::normalizeAttributeForSymbol(const StringLike &symb
                                                                   other.toString());
         }
 
-        return std::string{s};
+        return std::string{sv};
     } catch (const InvalidArgumentException &) {
-        return std::string{s};
+        return std::string{sv};
     } catch (const std::invalid_argument &) {
-        return std::string{s};
+        return std::string{sv};
     }
 }
 DXFCPP_END_NAMESPACE

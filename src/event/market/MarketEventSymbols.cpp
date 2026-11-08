@@ -26,16 +26,16 @@ bool MarketEventSymbols::hasExchangeCode(const StringLike &symbol) noexcept {
 }
 
 char MarketEventSymbols::getExchangeCode(const StringLike &symbol) noexcept {
-    const std::string_view s = symbol;
-    const std::string str{s};
+    const std::string_view sv = symbol;
+    const std::string str{sv};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
 
-    return hasExchangeCodeInternal(str, lengthWithoutAttributes) ? s[lengthWithoutAttributes - 1] : '\0';
+    return hasExchangeCodeInternal(str, lengthWithoutAttributes) ? sv[lengthWithoutAttributes - 1] : '\0';
 }
 
 std::string MarketEventSymbols::changeExchangeCode(const StringLike &symbol, char exchangeCode) noexcept {
-    const std::string_view s = symbol;
-    const std::string str{s};
+    const std::string_view sv = symbol;
+    const std::string str{sv};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
     std::string result;
 
@@ -45,7 +45,7 @@ std::string MarketEventSymbols::changeExchangeCode(const StringLike &symbol, cha
         result = getBaseSymbolInternal(str, lengthWithoutAttributes) + EXCHANGE_SEPARATOR + exchangeCode;
     }
 
-    return lengthWithoutAttributes == s.length() ? result : result + std::string{s.substr(lengthWithoutAttributes)};
+    return lengthWithoutAttributes == sv.length() ? result : result + std::string{sv.substr(lengthWithoutAttributes)};
 }
 
 std::string MarketEventSymbols::getBaseSymbol(const StringLike &symbol) noexcept {
@@ -55,21 +55,21 @@ std::string MarketEventSymbols::getBaseSymbol(const StringLike &symbol) noexcept
 }
 
 std::string MarketEventSymbols::changeBaseSymbol(const StringLike &symbol, const StringLike &baseSymbol) noexcept {
-    const std::string_view s = symbol;
+    const std::string_view sv = symbol;
     const std::string_view base = baseSymbol;
-    const std::string str{s};
+    const std::string str{sv};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
 
     if (hasExchangeCodeInternal(str, lengthWithoutAttributes)) {
-        return std::string{base} + EXCHANGE_SEPARATOR + s[lengthWithoutAttributes - 1] +
-               std::string{s.substr(lengthWithoutAttributes)};
+        return std::string{base} + EXCHANGE_SEPARATOR + sv[lengthWithoutAttributes - 1] +
+               std::string{sv.substr(lengthWithoutAttributes)};
     }
 
-    if (lengthWithoutAttributes == s.length()) {
+    if (lengthWithoutAttributes == sv.length()) {
         return std::string{base};
     }
 
-    return std::string{base} + std::string{s.substr(lengthWithoutAttributes)};
+    return std::string{base} + std::string{sv.substr(lengthWithoutAttributes)};
 }
 
 std::optional<std::string> MarketEventSymbols::getAttributeStringByKey(const StringLike &symbol,
