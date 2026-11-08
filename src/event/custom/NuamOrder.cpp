@@ -159,10 +159,10 @@ void NuamOrder::assign(std::shared_ptr<EventType> event) {
 NuamOrder::NuamOrder() noexcept {
 }
 
-NuamOrder::NuamOrder(const StringLike &eventSymbol) noexcept : Order(eventSymbol) {
+NuamOrder::NuamOrder(StringParam eventSymbol) : Order(eventSymbol) {
 }
 
-NuamOrder &NuamOrder::withEventSymbol(const StringLike &eventSymbol) noexcept {
+NuamOrder &NuamOrder::withEventSymbol(StringParam eventSymbol) {
     return dynamic_cast<NuamOrder &>(Order::withEventSymbol(eventSymbol));
 }
 
@@ -262,7 +262,7 @@ NuamOrder &NuamOrder::withScope(const Scope &scope) noexcept {
     return dynamic_cast<NuamOrder &>(Order::withScope(scope));
 }
 
-NuamOrder &NuamOrder::withMarketMaker(const StringLike &marketMaker) noexcept {
+NuamOrder &NuamOrder::withMarketMaker(StringParam marketMaker) {
     return dynamic_cast<NuamOrder &>(Order::withMarketMaker(marketMaker));
 }
 
@@ -334,11 +334,11 @@ const std::optional<std::string> &NuamOrder::getClientOrderIdOpt() const & noexc
     return nuamOrderData_.clientOrderId;
 }
 
-void NuamOrder::setClientOrderId(const StringLike &clientOrderId) noexcept {
-    nuamOrderData_.clientOrderId = std::string(clientOrderId);
+void NuamOrder::setClientOrderId(StringParam clientOrderId) {
+    nuamOrderData_.clientOrderId = std::string(clientOrderId.view());
 }
 
-NuamOrder &NuamOrder::withClientOrderId(const StringLike &clientOrderId) noexcept {
+NuamOrder &NuamOrder::withClientOrderId(StringParam clientOrderId) {
     setClientOrderId(clientOrderId);
 
     return *this;
@@ -356,11 +356,11 @@ const std::optional<std::string> &NuamOrder::getCustomerAccountOpt() const & noe
     return nuamOrderData_.customerAccount;
 }
 
-void NuamOrder::setCustomerAccount(const StringLike &customerAccount) noexcept {
-    nuamOrderData_.customerAccount = std::string(customerAccount);
+void NuamOrder::setCustomerAccount(StringParam customerAccount) {
+    nuamOrderData_.customerAccount = std::string(customerAccount.view());
 }
 
-NuamOrder &NuamOrder::withCustomerAccount(const StringLike &customerAccount) noexcept {
+NuamOrder &NuamOrder::withCustomerAccount(StringParam customerAccount) {
     setCustomerAccount(customerAccount);
 
     return *this;
@@ -378,11 +378,11 @@ const std::optional<std::string> &NuamOrder::getCustomerInfoOpt() const & noexce
     return nuamOrderData_.customerInfo;
 }
 
-void NuamOrder::setCustomerInfo(const StringLike &customerInfo) noexcept {
-    nuamOrderData_.customerInfo = std::string(customerInfo);
+void NuamOrder::setCustomerInfo(StringParam customerInfo) {
+    nuamOrderData_.customerInfo = std::string(customerInfo.view());
 }
 
-NuamOrder &NuamOrder::withCustomerInfo(const StringLike &customerInfo) noexcept {
+NuamOrder &NuamOrder::withCustomerInfo(StringParam customerInfo) {
     setCustomerInfo(customerInfo);
 
     return *this;
@@ -400,11 +400,11 @@ const std::optional<std::string> &NuamOrder::getExchangeInfoOpt() const & noexce
     return nuamOrderData_.exchangeInfo;
 }
 
-void NuamOrder::setExchangeInfo(const StringLike &exchangeInfo) noexcept {
-    nuamOrderData_.exchangeInfo = std::string(exchangeInfo);
+void NuamOrder::setExchangeInfo(StringParam exchangeInfo) {
+    nuamOrderData_.exchangeInfo = std::string(exchangeInfo.view());
 }
 
-NuamOrder &NuamOrder::withExchangeInfo(const StringLike &exchangeInfo) noexcept {
+NuamOrder &NuamOrder::withExchangeInfo(StringParam exchangeInfo) {
     setExchangeInfo(exchangeInfo);
 
     return *this;

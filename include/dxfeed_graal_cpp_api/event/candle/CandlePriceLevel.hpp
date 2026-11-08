@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
@@ -90,7 +90,7 @@ struct DXFCPP_EXPORT CandlePriceLevel final : CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price level set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Parses string representation of candle price level into an object.
@@ -100,7 +100,7 @@ struct DXFCPP_EXPORT CandlePriceLevel final : CandleSymbolAttribute {
      * @param s string representation of candle price level.
      * @return candle price level.
      */
-    static CandlePriceLevel parse(const StringLike &s);
+    static CandlePriceLevel parse(StringParam s);
 
     /**
      * Returns candle price level with the given value.
@@ -118,7 +118,7 @@ struct DXFCPP_EXPORT CandlePriceLevel final : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle price level of the given candle symbol string.
      */
-    static CandlePriceLevel getAttributeForSymbol(const StringLike &symbol);
+    static CandlePriceLevel getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle price level attribute.
@@ -126,7 +126,7 @@ struct DXFCPP_EXPORT CandlePriceLevel final : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle price level attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

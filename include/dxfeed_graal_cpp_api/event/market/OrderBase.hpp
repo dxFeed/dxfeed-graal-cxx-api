@@ -9,7 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/JavaObjectHandle.hpp"
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../IndexedEvent.hpp"
 #include "./MarketEvent.hpp"
@@ -181,7 +181,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OrderBase(const StringLike &eventSymbol) noexcept;
+    explicit OrderBase(StringParam eventSymbol);
 
     /**
      * Returns source of this event.

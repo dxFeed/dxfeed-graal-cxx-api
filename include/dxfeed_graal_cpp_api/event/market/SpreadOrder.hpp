@@ -7,7 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./OrderBase.hpp"
 
@@ -153,7 +155,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit SpreadOrder(const StringLike &eventSymbol) noexcept;
+    explicit SpreadOrder(StringParam eventSymbol);
 
     /**
      * Changes event's symbol and returns the current spread order.
@@ -161,7 +163,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param eventSymbol The symbol of this event.
      * @return The current spread order.
      */
-    SpreadOrder &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    SpreadOrder &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes the event's creation time and returns the current spread order.
@@ -401,7 +403,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param spreadSymbol spread symbol of this event.
      */
-    void setSpreadSymbol(const StringLike &spreadSymbol) noexcept;
+    void setSpreadSymbol(StringParam spreadSymbol);
 
     /**
      * Changes the spread symbol of this event, or makes it null with `std::nullopt`.
@@ -420,7 +422,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param spreadSymbol spread symbol of this event.
      * @return The current spread order.
      */
-    SpreadOrder &withSpreadSymbol(const StringLike &spreadSymbol) noexcept;
+    SpreadOrder &withSpreadSymbol(StringParam spreadSymbol);
 
     /**
      * Changes the spread symbol of this event, or makes it null with `std::nullopt`.

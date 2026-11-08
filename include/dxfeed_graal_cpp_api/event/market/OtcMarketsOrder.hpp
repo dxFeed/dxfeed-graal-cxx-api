@@ -7,7 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../detail/Concepts.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./Order.hpp"
 #include "./OtcMarketsPriceType.hpp"
@@ -189,7 +190,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OtcMarketsOrder(const StringLike& eventSymbol) noexcept;
+    explicit OtcMarketsOrder(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -199,7 +200,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param eventSymbol The symbol of this event.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override;
+    OtcMarketsOrder &withEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes event's creation time and returns the current OTC Markets order.
@@ -431,7 +432,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param marketMaker The market maker or another aggregate identifier of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withMarketMaker(const StringLike& marketMaker) noexcept override;
+    OtcMarketsOrder &withMarketMaker(StringParam marketMaker) override;
 
     /**
      * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.

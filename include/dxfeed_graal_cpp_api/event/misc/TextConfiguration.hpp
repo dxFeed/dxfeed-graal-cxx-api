@@ -7,8 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventType.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
@@ -132,7 +134,7 @@ class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::st
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TextConfiguration(const StringLike &eventSymbol) noexcept;
+    explicit TextConfiguration(StringParam eventSymbol);
 
     /**
      * Creates a new text configuration event with the specified event symbol and text.
@@ -140,7 +142,7 @@ class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::st
      * @param eventSymbol The event symbol.
      * @param text The text.
      */
-    TextConfiguration(const StringLike &eventSymbol, const StringLike &text) noexcept;
+    TextConfiguration(StringParam eventSymbol, StringParam text);
 
     /**
      * Creates a new text configuration event with the specified event symbol, text, and version.
@@ -149,7 +151,7 @@ class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::st
      * @param text The text.
      * @param version The version.
      */
-    TextConfiguration(const StringLike &eventSymbol, const StringLike &text, std::int32_t version) noexcept;
+    TextConfiguration(StringParam eventSymbol, StringParam text, std::int32_t version);
 
     /**
      * Returns the symbol of this event.
@@ -170,7 +172,7 @@ class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::st
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const StringLike &eventSymbol) noexcept override;
+    void setEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes the event's symbol and returns the current text configuration event.
@@ -178,7 +180,7 @@ class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::st
      * @param eventSymbol The symbol of this event.
      * @return The current text configuration event.
      */
-    TextConfiguration &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    TextConfiguration &withEventSymbol(StringParam eventSymbol);
 
     ///
     std::int64_t getEventTime() const noexcept override;
@@ -304,7 +306,7 @@ class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::st
      *
      * @param text The text.
      */
-    void setText(const StringLike &text) noexcept;
+    void setText(StringParam text);
 
     /**
      * Changes the text, or makes it null with `std::nullopt`.
@@ -322,7 +324,7 @@ class DXFCPP_EXPORT TextConfiguration final : public EventTypeWithSymbol<std::st
      * @param text The text.
      * @return The current text configuration event.
      */
-    TextConfiguration &withText(const StringLike &text) noexcept;
+    TextConfiguration &withText(StringParam text);
 
     /**
      * Changes the text, or makes it null with `std::nullopt`.

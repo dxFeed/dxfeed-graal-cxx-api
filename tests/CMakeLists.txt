@@ -53,6 +53,7 @@ set(DXFC_TEST_SOURCES
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderImbalanceTest.cpp
         api/OrderSourceTest.cpp
+        api/StringParamApiTest.cpp
         api/StringParamTest.cpp
         api/TextConfigurationTest.cpp
         event/ConstantsTest.cpp
@@ -95,10 +96,6 @@ set(DXFC_TEST_SOURCES
         util/ToStringDoubleTest.cpp
         util/UtilHeadersTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
-
-if (DXFCXX_BUILD_BENCHMARKS)
-    list(APPEND DXFC_TEST_SOURCES bench/StringLikeBench.cpp)
-endif ()
 
 # Tests that need external network access (demo.dxfeed.com). They are labeled "network": `ctest -L network`.
 if (DXFCXX_ENABLE_NETWORK_TESTS)

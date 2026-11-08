@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -89,7 +89,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param scheduleDefinition The schedule definition of the requested schedule
      * @return The default schedule instance for specified schedule definition
      */
-    static Schedule::Ptr getInstance(const StringLike &scheduleDefinition);
+    static Schedule::Ptr getInstance(StringParam scheduleDefinition);
 
     /**
      * Returns schedule instance for a specified instrument profile and trading venue.
@@ -98,7 +98,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param venue The trading venue those schedule is requested
      * @return The schedule instance for a specified instrument profile and trading venue
      */
-    static Schedule::Ptr getInstance(const std::shared_ptr<InstrumentProfile> &profile, const StringLike &venue);
+    static Schedule::Ptr getInstance(const std::shared_ptr<InstrumentProfile> &profile, StringParam venue);
 
     /**
      * Returns trading venues for specified instrument profile.
@@ -119,7 +119,7 @@ struct DXFCPP_EXPORT Schedule {
      *
      * @param downloadConfig download config
      */
-    static void downloadDefaults(const StringLike &downloadConfig);
+    static void downloadDefaults(StringParam downloadConfig);
 
     /**
      * Sets shared defaults that are used by individual schedule instances.
@@ -251,7 +251,7 @@ struct DXFCPP_EXPORT Schedule {
     std::string getTimeZoneId() const;
 
     /**
-     * Returns the definition of this schedule: the string that getInstance(const StringLike &) accepts to return this
+     * Returns the definition of this schedule: the string that getInstance(StringParam) accepts to return this
      * schedule, for example `XNYS()`.
      *
      * @return The definition of this schedule.

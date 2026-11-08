@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 
 #include <string>
 
@@ -28,7 +28,7 @@ struct DXFCPP_EXPORT CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this attribute set.
      */
-    virtual std::string changeAttributeForSymbol(const StringLike &symbol) const = 0;
+    virtual std::string changeAttributeForSymbol(StringParam symbol) const = 0;
 
     protected:
     // Not virtual: an attribute is not deleted through a pointer to this class. The destructor is trivial, so the

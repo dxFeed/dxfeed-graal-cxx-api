@@ -12,7 +12,7 @@ char CandleExchange::getExchangeCode() const noexcept {
     return exchangeCode_;
 }
 
-std::string CandleExchange::changeAttributeForSymbol(const StringLike &symbol) const {
+std::string CandleExchange::changeAttributeForSymbol(StringParam symbol) const {
     return MarketEventSymbols::changeExchangeCode(symbol, exchangeCode_);
 }
 
@@ -28,7 +28,7 @@ CandleExchange CandleExchange::valueOf(char exchangeCode) noexcept {
     return exchangeCode == '\0' ? COMPOSITE : CandleExchange(exchangeCode);
 }
 
-CandleExchange CandleExchange::getAttributeForSymbol(const StringLike &symbol) {
+CandleExchange CandleExchange::getAttributeForSymbol(StringParam symbol) {
     return valueOf(MarketEventSymbols::getExchangeCode(symbol));
 }
 

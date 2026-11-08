@@ -71,7 +71,7 @@ void TradeBase::assign(std::shared_ptr<EventType> event) {
 TradeBase::TradeBase() noexcept {
 }
 
-TradeBase::TradeBase(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+TradeBase::TradeBase(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 std::int64_t TradeBase::getTimeSequence() const noexcept {

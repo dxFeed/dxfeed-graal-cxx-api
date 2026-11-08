@@ -97,7 +97,7 @@ std::string InstrumentProfileConnection::stateToString(State state) noexcept {
 }
 
 InstrumentProfileConnection::Ptr
-InstrumentProfileConnection::createConnection(const StringLike &address,
+InstrumentProfileConnection::createConnection(StringParam address,
                                               InstrumentProfileCollector::Ptr collector) {
     std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 
@@ -106,7 +106,7 @@ InstrumentProfileConnection::createConnection(const StringLike &address,
                           ->registerEntity(connection)
                           .getValue();
     connection->handle_ =
-        isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address, collector->handle_);
+        isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address.view(), collector->handle_);
     connection->collector_ = std::move(collector);
     connection->stateChangeListenerHandle_ = isolated::ipf::live::IsolatedIpfPropertyChangeListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onStateChange), dxfcpp::bit_cast<void *>(connection->id_));

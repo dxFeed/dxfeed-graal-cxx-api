@@ -31,8 +31,8 @@ std::optional<std::string> take(const char *s) {
 } // namespace
 
 TEST_CASE("createCString() copies the text \"<null>\" as text, only an empty optional is null") {
-    CHECK(take(createCString(StringLike{"<null>"})) == "<null>");
-    CHECK(take(createCString(StringLike{""})) == "");
+    CHECK(take(createCString(std::string_view{"<null>"})) == "<null>");
+    CHECK(take(createCString(std::string_view{""})) == "");
     CHECK(take(createCString(std::optional<std::string>{"<null>"})) == "<null>");
     CHECK(take(createCString(std::optional<std::string>{})) == std::nullopt);
 }

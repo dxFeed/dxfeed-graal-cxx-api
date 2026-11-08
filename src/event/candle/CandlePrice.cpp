@@ -14,7 +14,7 @@ DXFCPP_BEGIN_NAMESPACE
 CandlePrice::CandlePrice() noexcept {
 }
 
-std::string CandlePrice::changeAttributeForSymbol(const StringLike &symbol) const {
+std::string CandlePrice::changeAttributeForSymbol(StringParam symbol) const {
     return *this == DEFAULT
                ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandlePrice::ATTRIBUTE_KEY)
                : MarketEventSymbols::changeAttributeStringByKey(symbol, CandlePrice::ATTRIBUTE_KEY, toString());
@@ -28,35 +28,35 @@ bool CandlePrice::operator==(const CandlePrice &candlePrice) const noexcept {
     return string_ == candlePrice.string_;
 }
 
-std::reference_wrapper<const CandlePrice> CandlePrice::parse(const StringLike &s) {
+std::reference_wrapper<const CandlePrice> CandlePrice::parse(StringParam s) {
     if (s.empty()) {
         throw InvalidArgumentException(fmt::format(ires::Strings::Events::MISSING_CANDLE_, "price"));
     }
 
     for (const auto &priceRef : VALUES) {
-        if (priceRef.get().string_ == std::string_view{s}) {
+        if (priceRef.get().string_ == s.view()) {
             return priceRef;
         }
     }
 
     for (const auto &priceRef : VALUES) {
         if (const auto priceStr = priceRef.get().toString();
-            priceStr.length() >= s.length() && iEquals(priceStr.substr(0, s.length()), s)) {
+            priceStr.length() >= s.size() && iEquals(priceStr.substr(0, s.size()), s.view())) {
             return priceRef;
         }
     }
 
-    throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "price", s.toStringView()));
+    throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "price", s.view()));
 }
 
-std::reference_wrapper<const CandlePrice> CandlePrice::getAttributeForSymbol(const StringLike &symbol) {
+std::reference_wrapper<const CandlePrice> CandlePrice::getAttributeForSymbol(StringParam symbol) {
     const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePrice::ATTRIBUTE_KEY);
 
     return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
 }
 
-std::string CandlePrice::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const std::string_view sv = symbol;
+std::string CandlePrice::normalizeAttributeForSymbol(StringParam symbol) {
+    const std::string_view sv = symbol.view();
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePrice::ATTRIBUTE_KEY);
 
     if (!a) {
@@ -67,7 +67,7 @@ std::string CandlePrice::normalizeAttributeForSymbol(const StringLike &symbol) {
         const auto other = parse(a.value());
 
         if (other.get() == DEFAULT) {
-            return candle::removeDefaultAttribute(symbol, CandlePrice::ATTRIBUTE_KEY, DEFAULT.toString());
+            return candle::removeDefaultAttribute(symbol.view(), CandlePrice::ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.get().toString()) {

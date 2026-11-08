@@ -7,9 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/Concepts.hpp"
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEvent.hpp"
 #include "../IndexedEventSource.hpp"
@@ -179,7 +181,7 @@ class DXFCPP_EXPORT MarketMaker final : public MarketEvent, public IndexedEvent 
      *
      * @param eventSymbol The event symbol.
      */
-    explicit MarketMaker(const StringLike &eventSymbol) noexcept;
+    explicit MarketMaker(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -189,7 +191,7 @@ class DXFCPP_EXPORT MarketMaker final : public MarketEvent, public IndexedEvent 
      * @param eventSymbol The symbol of this event.
      * @return The current market maker.
      */
-    MarketMaker &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    MarketMaker &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes event's creation time and returns the current market maker.
@@ -352,7 +354,7 @@ class DXFCPP_EXPORT MarketMaker final : public MarketEvent, public IndexedEvent 
      * @throws InvalidArgumentException if the identifier is longer than 8 characters, has a character above U+00FF or
      * is not valid UTF-8.
      */
-    void setMarketMaker(const StringLike &marketMaker);
+    void setMarketMaker(StringParam marketMaker);
 
     /**
      * Changes the market maker or the other aggregate identifier, or makes it null with `std::nullopt`.
@@ -376,7 +378,7 @@ class DXFCPP_EXPORT MarketMaker final : public MarketEvent, public IndexedEvent 
      * @throws InvalidArgumentException if the identifier is longer than 8 characters, has a character above U+00FF or
      * is not valid UTF-8.
      */
-    MarketMaker &withMarketMaker(const StringLike &marketMaker);
+    MarketMaker &withMarketMaker(StringParam marketMaker);
 
     /**
      * Changes the market maker or the other aggregate identifier, or makes it null with `std::nullopt`.

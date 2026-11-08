@@ -19,22 +19,22 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-bool MarketEventSymbols::hasExchangeCode(const StringLike &symbol) noexcept {
-    const std::string str{std::string_view{symbol}};
+bool MarketEventSymbols::hasExchangeCode(StringParam symbol) noexcept {
+    const std::string str{symbol.view()};
 
     return hasExchangeCodeInternal(str, getLengthWithoutAttributesInternal(str));
 }
 
-char MarketEventSymbols::getExchangeCode(const StringLike &symbol) noexcept {
-    const std::string_view sv = symbol;
+char MarketEventSymbols::getExchangeCode(StringParam symbol) noexcept {
+    const std::string_view sv = symbol.view();
     const std::string str{sv};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
 
     return hasExchangeCodeInternal(str, lengthWithoutAttributes) ? sv[lengthWithoutAttributes - 1] : '\0';
 }
 
-std::string MarketEventSymbols::changeExchangeCode(const StringLike &symbol, char exchangeCode) noexcept {
-    const std::string_view sv = symbol;
+std::string MarketEventSymbols::changeExchangeCode(StringParam symbol, char exchangeCode) noexcept {
+    const std::string_view sv = symbol.view();
     const std::string str{sv};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
     std::string result;
@@ -48,15 +48,15 @@ std::string MarketEventSymbols::changeExchangeCode(const StringLike &symbol, cha
     return lengthWithoutAttributes == sv.length() ? result : result + std::string{sv.substr(lengthWithoutAttributes)};
 }
 
-std::string MarketEventSymbols::getBaseSymbol(const StringLike &symbol) noexcept {
-    const std::string str{std::string_view{symbol}};
+std::string MarketEventSymbols::getBaseSymbol(StringParam symbol) noexcept {
+    const std::string str{symbol.view()};
 
     return getBaseSymbolInternal(str, getLengthWithoutAttributesInternal(str));
 }
 
-std::string MarketEventSymbols::changeBaseSymbol(const StringLike &symbol, const StringLike &baseSymbol) noexcept {
-    const std::string_view sv = symbol;
-    const std::string_view base = baseSymbol;
+std::string MarketEventSymbols::changeBaseSymbol(StringParam symbol, StringParam baseSymbol) noexcept {
+    const std::string_view sv = symbol.view();
+    const std::string_view base = baseSymbol.view();
     const std::string str{sv};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
 
@@ -72,18 +72,17 @@ std::string MarketEventSymbols::changeBaseSymbol(const StringLike &symbol, const
     return std::string{base} + std::string{sv.substr(lengthWithoutAttributes)};
 }
 
-std::optional<std::string> MarketEventSymbols::getAttributeStringByKey(const StringLike &symbol,
-                                                                       const StringLike &key) noexcept {
-    const std::string str{std::string_view{symbol}};
+std::optional<std::string> MarketEventSymbols::getAttributeStringByKey(StringParam symbol, StringParam key) noexcept {
+    const std::string str{symbol.view()};
 
-    return getAttributeInternal(str, getLengthWithoutAttributesInternal(str), std::string{std::string_view{key}});
+    return getAttributeInternal(str, getLengthWithoutAttributesInternal(str), std::string{key.view()});
 }
 
-std::string MarketEventSymbols::changeAttributeStringByKey(const StringLike &symbol, const StringLike &key,
-                                                           const StringLike &value) noexcept {
-    std::string str{std::string_view{symbol}};
-    const std::string keyStr{std::string_view{key}};
-    const std::string valueStr{std::string_view{value}};
+std::string MarketEventSymbols::changeAttributeStringByKey(StringParam symbol, StringParam key,
+                                                           StringParam value) noexcept {
+    std::string str{symbol.view()};
+    const std::string keyStr{key.view()};
+    const std::string valueStr{value.view()};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
 
     if (lengthWithoutAttributes == str.length()) {
@@ -93,11 +92,11 @@ std::string MarketEventSymbols::changeAttributeStringByKey(const StringLike &sym
     return addAttributeInternal(std::move(str), lengthWithoutAttributes, keyStr, valueStr);
 }
 
-std::string MarketEventSymbols::removeAttributeStringByKey(const StringLike &symbol, const StringLike &key) noexcept {
-    std::string str{std::string_view{symbol}};
+std::string MarketEventSymbols::removeAttributeStringByKey(StringParam symbol, StringParam key) noexcept {
+    std::string str{symbol.view()};
     const auto lengthWithoutAttributes = getLengthWithoutAttributesInternal(str);
 
-    return removeAttributeInternal(std::move(str), lengthWithoutAttributes, std::string{std::string_view{key}});
+    return removeAttributeInternal(std::move(str), lengthWithoutAttributes, std::string{key.view()});
 }
 
 bool MarketEventSymbols::hasExchangeCodeInternal(const std::string &symbol, std::size_t length) noexcept {
@@ -272,8 +271,8 @@ std::string MarketEventSymbols::addAttributeInternal(std::string symbol, std::si
     return symbol.substr(0, i - 1) + ATTRIBUTES_SEPARATOR + key + ATTRIBUTE_VALUE + value + symbol.substr(i - 1);
 }
 
-bool MarketEventSymbols::hasAttributes(const StringLike &symbol) noexcept {
-    const std::string str{std::string_view{symbol}};
+bool MarketEventSymbols::hasAttributes(StringParam symbol) noexcept {
+    const std::string str{symbol.view()};
 
     return getLengthWithoutAttributesInternal(str) < str.length();
 }
@@ -385,8 +384,8 @@ bool hasReversedRange(const std::string &pattern) {
 
 } // namespace
 
-std::string MarketEventSymbols::getExchangesByPattern(const StringLike &characterClass) {
-    const std::string_view classView = characterClass;
+std::string MarketEventSymbols::getExchangesByPattern(StringParam characterClass) {
+    const std::string_view classView = characterClass.view();
     std::string pattern{classView};
 
     if (pattern.empty()) {

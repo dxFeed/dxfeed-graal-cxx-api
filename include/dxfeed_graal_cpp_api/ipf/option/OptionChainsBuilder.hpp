@@ -7,7 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../InstrumentProfile.hpp"
 #include "./OptionChain.hpp"
 #include "./OptionSeries.hpp"
@@ -62,8 +63,8 @@ template <class T> class OptionChainsBuilder {
      *
      * @param product The product for futures and options on futures (underlying asset name).
      */
-    void setProduct(const StringLike &product) {
-        product_ = product == String::NUL || product.empty() ? String::EMPTY : std::string(product);
+    void setProduct(StringParam product) {
+        product_ = product.view() == String::NUL || product.empty() ? String::EMPTY : std::string(product.view());
     }
 
     /**
@@ -73,8 +74,9 @@ template <class T> class OptionChainsBuilder {
      *
      * @param underlying The primary underlying symbol for options.
      */
-    void setUnderlying(const StringLike &underlying) {
-        underlying_ = underlying == String::NUL || underlying.empty() ? String::EMPTY : std::string(underlying);
+    void setUnderlying(StringParam underlying) {
+        underlying_ =
+            underlying.view() == String::NUL || underlying.empty() ? String::EMPTY : std::string(underlying.view());
     }
 
     /**
@@ -129,10 +131,10 @@ template <class T> class OptionChainsBuilder {
      *
      * @param additionalUnderlyings The additional underlyings for options, including additional cash.
      */
-    void setAdditionalUnderlyings(const StringLike &additionalUnderlyings) {
-        series_.additionalUnderlyings_ = additionalUnderlyings == String::NUL || additionalUnderlyings.empty()
+    void setAdditionalUnderlyings(StringParam additionalUnderlyings) {
+        series_.additionalUnderlyings_ = additionalUnderlyings.view() == String::NUL || additionalUnderlyings.empty()
                                              ? String::EMPTY
-                                             : std::string(additionalUnderlyings);
+                                             : std::string(additionalUnderlyings.view());
     }
 
     /**
@@ -165,8 +167,9 @@ template <class T> class OptionChainsBuilder {
      *
      * @param optionType The type of option.
      */
-    void setOptionType(const StringLike &optionType) {
-        series_.optionType_ = optionType == String::NUL || optionType.empty() ? String::EMPTY : std::string(optionType);
+    void setOptionType(StringParam optionType) {
+        series_.optionType_ =
+            optionType.view() == String::NUL || optionType.empty() ? String::EMPTY : std::string(optionType.view());
     }
 
     /**
@@ -174,9 +177,10 @@ template <class T> class OptionChainsBuilder {
      *
      * @param expirationStyle The expiration cycle style.
      */
-    void setExpirationStyle(const StringLike &expirationStyle) {
-        series_.expirationStyle_ =
-            expirationStyle == String::NUL || expirationStyle.empty() ? String::EMPTY : std::string(expirationStyle);
+    void setExpirationStyle(StringParam expirationStyle) {
+        series_.expirationStyle_ = expirationStyle.view() == String::NUL || expirationStyle.empty()
+                                       ? String::EMPTY
+                                       : std::string(expirationStyle.view());
     }
 
     /**
@@ -184,9 +188,10 @@ template <class T> class OptionChainsBuilder {
      *
      * @param settlementStyle The settlement price determination style.
      */
-    void setSettlementStyle(const StringLike &settlementStyle) {
-        series_.settlementStyle_ =
-            settlementStyle == String::NUL || settlementStyle.empty() ? String::EMPTY : std::string(settlementStyle);
+    void setSettlementStyle(StringParam settlementStyle) {
+        series_.settlementStyle_ = settlementStyle.view() == String::NUL || settlementStyle.empty()
+                                       ? String::EMPTY
+                                       : std::string(settlementStyle.view());
     }
 
     /**
@@ -201,8 +206,8 @@ template <class T> class OptionChainsBuilder {
      *
      * @param cfi CFI code.
      */
-    void setCFI(const StringLike &cfi) {
-        cfi_ = cfi == String::NUL || cfi.empty() ? String::EMPTY : std::string(cfi);
+    void setCFI(StringParam cfi) {
+        cfi_ = cfi.view() == String::NUL || cfi.empty() ? String::EMPTY : std::string(cfi.view());
         series_.cfi_ = cfi_.size() < 2 ? cfi_ : cfi_[0] + std::string("X") + cfi_.substr(2);
     }
 

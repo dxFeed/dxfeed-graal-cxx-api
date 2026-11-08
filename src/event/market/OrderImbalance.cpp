@@ -132,10 +132,10 @@ void OrderImbalance::assign(std::shared_ptr<EventType> event) {
 OrderImbalance::OrderImbalance() noexcept {
 }
 
-OrderImbalance::OrderImbalance(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+OrderImbalance::OrderImbalance(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-OrderImbalance &OrderImbalance::withEventSymbol(const StringLike &eventSymbol) noexcept {
+OrderImbalance &OrderImbalance::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;

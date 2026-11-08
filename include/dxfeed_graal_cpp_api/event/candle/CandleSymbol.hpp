@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "./CandleAlignment.hpp"
 #include "./CandleDataType.hpp"
 #include "./CandleExchange.hpp"
@@ -106,29 +106,29 @@ struct DXFCPP_EXPORT CandleSymbol {
     std::optional<CandlePriceLevel> priceLevel_{};
     std::optional<CandleDataType> dataType_{};
 
-    static std::string changeAttribute(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute);
+    static std::string changeAttribute(StringParam symbol, const CandleSymbolAttributeVariant &attribute);
 
     template <typename AttributeIt>
-    static std::string changeAttributes(const StringLike &s, AttributeIt begin, AttributeIt end) {
-        auto symbol = std::string(s);
+    static std::string changeAttributes(StringParam symbol, AttributeIt begin, AttributeIt end) {
+        auto result = std::string(symbol.view());
 
         for (auto it = begin; it != end; ++it) {
-            symbol = changeAttribute(symbol, *it);
+            result = changeAttribute(result, *it);
         }
 
-        return symbol;
+        return result;
     }
 
-    static std::string normalize(const StringLike &s);
+    static std::string normalize(StringParam symbol);
 
     void initTransientFields(bool force = false);
 
-    explicit CandleSymbol(const StringLike &symbol);
+    explicit CandleSymbol(StringParam symbol);
 
-    CandleSymbol(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute);
+    CandleSymbol(StringParam symbol, const CandleSymbolAttributeVariant &attribute);
 
     template <typename CandleSymbolAttributeIt>
-    CandleSymbol(const StringLike &symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end)
+    CandleSymbol(StringParam symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end)
         : symbol_{normalize(changeAttributes(symbol, begin, end))} {
         initTransientFields();
     }
@@ -242,7 +242,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param symbol The string symbol.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(const StringLike &symbol);
+    static CandleSymbol valueOf(StringParam symbol);
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attribute set.
@@ -251,7 +251,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param attribute The attribute to set.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute);
+    static CandleSymbol valueOf(StringParam symbol, const CandleSymbolAttributeVariant &attribute);
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attribute set (iterators).
@@ -263,8 +263,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @return
      */
     template <typename CandleSymbolAttributeIt>
-    static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributeIt begin,
-                                CandleSymbolAttributeIt end) {
+    static CandleSymbol valueOf(StringParam symbol, CandleSymbolAttributeIt begin, CandleSymbolAttributeIt end) {
         return CandleSymbol{symbol, begin, end};
     }
 
@@ -276,8 +275,7 @@ struct DXFCPP_EXPORT CandleSymbol {
      * @param attributes More attributes to set.
      * @return The candle symbol object.
      */
-    static CandleSymbol valueOf(const StringLike &symbol,
-                                std::initializer_list<CandleSymbolAttributeVariant> attributes);
+    static CandleSymbol valueOf(StringParam symbol, std::initializer_list<CandleSymbolAttributeVariant> attributes);
 
     /**
      * Converts the given string symbol into the candle symbol object with the specified attributes set.
@@ -292,7 +290,7 @@ struct DXFCPP_EXPORT CandleSymbol {
             { std::begin(attributes) };
             { std::end(attributes) };
         }
-    static CandleSymbol valueOf(const StringLike &symbol, CandleSymbolAttributesCollection &&attributes) {
+    static CandleSymbol valueOf(StringParam symbol, CandleSymbolAttributesCollection &&attributes) {
         return valueOf(symbol, std::begin(attributes), std::end(attributes));
     }
 };

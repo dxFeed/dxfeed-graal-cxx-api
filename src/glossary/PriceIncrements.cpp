@@ -24,8 +24,8 @@ PriceIncrements::PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<P
 PriceIncrements::~PriceIncrements() noexcept {
 }
 
-PriceIncrements::Ptr PriceIncrements::valueOf(const StringLike &text) {
-    return createShared(isolated::glossary::IsolatedPriceIncrements::valueOf(text));
+PriceIncrements::Ptr PriceIncrements::valueOf(StringParam text) {
+    return createShared(isolated::glossary::IsolatedPriceIncrements::valueOf(text.view()));
 }
 
 PriceIncrements::Ptr PriceIncrements::valueOf(double increment) {

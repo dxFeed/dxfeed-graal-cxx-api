@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../market/Trade.hpp"
 
@@ -131,7 +131,7 @@ class DXFCPP_EXPORT NuamTrade final : public Trade {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit NuamTrade(const StringLike &eventSymbol) noexcept;
+    explicit NuamTrade(StringParam eventSymbol);
 
     /**
      * Returns time when trade statistics information was updated. It can be used to distinguish

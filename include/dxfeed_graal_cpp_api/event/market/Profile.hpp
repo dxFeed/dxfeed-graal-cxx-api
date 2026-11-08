@@ -7,8 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/Concepts.hpp"
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
 #include "./MarketEvent.hpp"
@@ -125,7 +127,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Profile(const StringLike &eventSymbol) noexcept;
+    explicit Profile(StringParam eventSymbol);
 
     /**
      * Returns description of the security instrument.
@@ -146,7 +148,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @param description description of the security instrument.
      */
-    void setDescription(const StringLike &description) noexcept;
+    void setDescription(StringParam description);
 
     /**
      * Changes the description of the security instrument, or makes it null with `std::nullopt`.
@@ -219,7 +221,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @param statusReason description of the reason that trading was halted.
      */
-    void setStatusReason(const StringLike &statusReason) noexcept;
+    void setStatusReason(StringParam statusReason);
 
     /**
      * Changes the description of the reason that trading was halted, or makes it null with `std::nullopt`.

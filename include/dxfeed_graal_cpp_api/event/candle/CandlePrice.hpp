@@ -9,7 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../detail/ConstantMap.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
@@ -101,7 +101,7 @@ struct DXFCPP_EXPORT CandlePrice final : CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price type set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Returns string representation of this candle price type.
@@ -122,7 +122,7 @@ struct DXFCPP_EXPORT CandlePrice final : CandleSymbolAttribute {
      * @return The candle price type (reference).
      * @throws InvalidArgumentException if the argument is empty or invalid
      */
-    static std::reference_wrapper<const CandlePrice> parse(const StringLike &s);
+    static std::reference_wrapper<const CandlePrice> parse(StringParam s);
 
     /**
      * Returns the candle price type of the given candle symbol string.
@@ -131,7 +131,7 @@ struct DXFCPP_EXPORT CandlePrice final : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle price type of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandlePrice> getAttributeForSymbol(const StringLike &symbol);
+    static std::reference_wrapper<const CandlePrice> getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle price type attribute.
@@ -139,7 +139,7 @@ struct DXFCPP_EXPORT CandlePrice final : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle price type attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

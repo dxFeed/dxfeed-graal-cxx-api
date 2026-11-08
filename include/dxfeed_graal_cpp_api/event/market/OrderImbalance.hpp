@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./AuctionType.hpp"
@@ -156,7 +156,7 @@ class DXFCPP_EXPORT OrderImbalance final : public MarketEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OrderImbalance(const StringLike &eventSymbol) noexcept;
+    explicit OrderImbalance(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -166,7 +166,7 @@ class DXFCPP_EXPORT OrderImbalance final : public MarketEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current order imbalance.
      */
-    OrderImbalance &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    OrderImbalance &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes event's creation time and returns the current order imbalance.

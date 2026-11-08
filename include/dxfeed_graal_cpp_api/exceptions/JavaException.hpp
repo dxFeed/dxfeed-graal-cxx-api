@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "./RuntimeException.hpp"
 
 #include <limits>
@@ -33,8 +33,8 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
      * @param className Java class name.
      * @param stackTrace Java stack trace.
      */
-    JavaException(const StringLike &message, const StringLike &className,
-                  const StringLike &stackTrace);
+    JavaException(StringParam message, StringParam className,
+                  StringParam stackTrace);
 
     JavaException(const JavaException &other) noexcept;
 

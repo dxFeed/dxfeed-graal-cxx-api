@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/EventTypeEnum.hpp"
 #include "../symbols/SymbolWrapper.hpp"
@@ -38,7 +38,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed symbols
      */
-    static std::unordered_set<SymbolWrapper> parseSymbols(const StringLike &symbols);
+    static std::unordered_set<SymbolWrapper> parseSymbols(StringParam symbols);
 
     /**
      * Parses an input string and returns a set of symbols.
@@ -64,7 +64,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created vector of parsed symbols
      */
-    static std::vector<SymbolWrapper> parseSymbolsAndSaveOrder(const StringLike &symbols);
+    static std::vector<SymbolWrapper> parseSymbolsAndSaveOrder(StringParam symbols);
 
     /**
      * Parses an input string and returns a set of candle symbols.
@@ -72,7 +72,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param symbols The coma-separated list of symbols.
      * @return The created set of parsed candle symbols
      */
-    static std::unordered_set<CandleSymbol> parseCandleSymbols(const StringLike &symbols);
+    static std::unordered_set<CandleSymbol> parseCandleSymbols(StringParam symbols);
 
     /**
      * Parses an input string and returns a set of candle symbols.
@@ -98,7 +98,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @return The created pair: set of parsed types and vector unknown types.
      */
     static std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
-    parseTypes(const StringLike &types);
+    parseTypes(StringParam types);
 
     /**
      * Parses an input string and returns a set of event types.
@@ -124,7 +124,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @param properties The input comma-separated key-value pairs.
      * @return The collection of key-value properties.
      */
-    static std::unordered_map<std::string, std::string> parseProperties(const StringLike &properties) noexcept;
+    static std::unordered_map<std::string, std::string> parseProperties(StringParam properties) noexcept;
 
     /**
      * Parses the input string and returns a collection of key-value properties.
@@ -151,7 +151,7 @@ struct DXFCPP_EXPORT CmdArgsUtils final {
      * @return The set of sources or wrapped IndexedEventSource::DEFAULT if `sources` is empty.
      * @throws InvalidArgumentException if a source name is not valid.
      */
-    static std::unordered_set<EventSourceWrapper> parseEventSources(const StringLike &sources);
+    static std::unordered_set<EventSourceWrapper> parseEventSources(StringParam sources);
 };
 
 DXFCPP_END_NAMESPACE

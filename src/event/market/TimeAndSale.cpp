@@ -147,7 +147,7 @@ void TimeAndSale::assign(std::shared_ptr<EventType> event) {
 TimeAndSale::TimeAndSale() noexcept {
 }
 
-TimeAndSale::TimeAndSale(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+TimeAndSale::TimeAndSale(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 const IndexedEventSource &TimeAndSale::getSource() const & noexcept {
@@ -283,8 +283,8 @@ const std::optional<std::string> &TimeAndSale::getExchangeSaleConditionsOpt() co
     return data_.exchangeSaleConditions;
 }
 
-void TimeAndSale::setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept {
-    data_.exchangeSaleConditions = std::string(exchangeSaleConditions);
+void TimeAndSale::setExchangeSaleConditions(StringParam exchangeSaleConditions) {
+    data_.exchangeSaleConditions = std::string(exchangeSaleConditions.view());
 }
 
 char TimeAndSale::getTradeThroughExempt() const noexcept {
@@ -361,8 +361,8 @@ const std::optional<std::string> &TimeAndSale::getBuyerOpt() const & noexcept {
     return data_.buyer;
 }
 
-void TimeAndSale::setBuyer(const StringLike &buyer) noexcept {
-    data_.buyer = std::string(buyer);
+void TimeAndSale::setBuyer(StringParam buyer) {
+    data_.buyer = std::string(buyer.view());
 }
 
 const std::string &TimeAndSale::getSeller() const & noexcept {
@@ -377,8 +377,8 @@ const std::optional<std::string> &TimeAndSale::getSellerOpt() const & noexcept {
     return data_.seller;
 }
 
-void TimeAndSale::setSeller(const StringLike &seller) noexcept {
-    data_.seller = std::string(seller);
+void TimeAndSale::setSeller(StringParam seller) {
+    data_.seller = std::string(seller.view());
 }
 
 std::string TimeAndSale::baseFieldsToString() const {

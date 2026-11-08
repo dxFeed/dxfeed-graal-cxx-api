@@ -27,14 +27,14 @@ bool CandlePriceLevel::operator==(const CandlePriceLevel &candlePriceLevel) cons
     return math::doubleEquals(value_, candlePriceLevel.getValue());
 }
 
-std::string CandlePriceLevel::changeAttributeForSymbol(const StringLike &symbol) const {
+std::string CandlePriceLevel::changeAttributeForSymbol(StringParam symbol) const {
     return *this == DEFAULT
                ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY)
                : MarketEventSymbols::changeAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY, toString());
 }
 
-CandlePriceLevel CandlePriceLevel::parse(const StringLike &s) {
-    const std::string_view sv = s;
+CandlePriceLevel CandlePriceLevel::parse(StringParam s) {
+    const std::string_view sv = s.view();
     const auto value = java::parseDouble(sv);
 
     if (!value) {
@@ -52,14 +52,14 @@ CandlePriceLevel CandlePriceLevel::valueOf(double value) {
     return std::isnan(value) ? DEFAULT : CandlePriceLevel(value);
 }
 
-CandlePriceLevel CandlePriceLevel::getAttributeForSymbol(const StringLike &symbol) {
+CandlePriceLevel CandlePriceLevel::getAttributeForSymbol(StringParam symbol) {
     const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY);
 
     return !stringOpt ? DEFAULT : parse(stringOpt.value());
 }
 
-std::string CandlePriceLevel::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const std::string_view sv = symbol;
+std::string CandlePriceLevel::normalizeAttributeForSymbol(StringParam symbol) {
+    const std::string_view sv = symbol.view();
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePriceLevel::ATTRIBUTE_KEY);
 
     if (!a) {
@@ -70,7 +70,7 @@ std::string CandlePriceLevel::normalizeAttributeForSymbol(const StringLike &symb
         const auto other = parse(a.value());
 
         if (other == DEFAULT) {
-            return candle::removeDefaultAttribute(symbol, CandlePriceLevel::ATTRIBUTE_KEY, DEFAULT.toString());
+            return candle::removeDefaultAttribute(symbol.view(), CandlePriceLevel::ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.toString()) {

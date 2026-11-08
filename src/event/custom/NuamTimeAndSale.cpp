@@ -106,7 +106,7 @@ void NuamTimeAndSale::assign(std::shared_ptr<EventType> event) {
 NuamTimeAndSale::NuamTimeAndSale() noexcept {
 }
 
-NuamTimeAndSale::NuamTimeAndSale(const StringLike &eventSymbol) noexcept : TimeAndSale(eventSymbol) {
+NuamTimeAndSale::NuamTimeAndSale(StringParam eventSymbol) : TimeAndSale(eventSymbol) {
 }
 
 std::int64_t NuamTimeAndSale::getMatchId() const noexcept {

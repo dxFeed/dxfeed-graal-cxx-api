@@ -8,7 +8,6 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../../include/dxfeed_graal_cpp_api/detail/StringLike.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/util/StringUtils.hpp"
 
 #include <cstdint>

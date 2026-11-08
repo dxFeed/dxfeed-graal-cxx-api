@@ -9,7 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../../detail/ConstantMap.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 
 #include <functional>
 #include <span>
@@ -175,7 +175,7 @@ struct DXFCPP_EXPORT CandleType {
      * @return A candle type.
      * @throws InvalidArgumentException if the argument is empty or invalid
      */
-    static std::reference_wrapper<const CandleType> parse(const StringLike &s);
+    static std::reference_wrapper<const CandleType> parse(StringParam s);
 
     bool operator==(const CandleType &candleType) const noexcept;
 };

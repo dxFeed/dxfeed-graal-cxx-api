@@ -220,25 +220,26 @@ DXEndpoint::State DXEndpoint::getState() const {
     return isolated::api::IsolatedDXEndpoint::getState(handle_);
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::user(const StringLike &user) {
-    isolated::api::IsolatedDXEndpoint::user(handle_, user);
+std::shared_ptr<DXEndpoint> DXEndpoint::user(StringParam user) {
+    isolated::api::IsolatedDXEndpoint::user(handle_, user.view());
 
     return sharedAs<DXEndpoint>();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::password(const StringLike &password) {
-    isolated::api::IsolatedDXEndpoint::password(handle_, password);
+std::shared_ptr<DXEndpoint> DXEndpoint::password(StringParam password) {
+    isolated::api::IsolatedDXEndpoint::password(handle_, password.view());
 
     return sharedAs<DXEndpoint>();
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::connect(const StringLike &address) {
+std::shared_ptr<DXEndpoint> DXEndpoint::connect(StringParam address) {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + address + ")");
+        Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + std::string(address.view()) +
+                        ")");
     }
 
-    isolated::api::IsolatedDXEndpoint::connect(handle_, address);
+    isolated::api::IsolatedDXEndpoint::connect(handle_, address.view());
 
     return sharedAs<DXEndpoint>();
 }
@@ -430,16 +431,16 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(Role role) {
     return sharedAs<Builder>();
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const StringLike &key, const StringLike &value) {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(StringParam key, StringParam value) {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperty(key = " + key +
-                        ", value = " + value + ")");
+        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperty(key = " +
+                        std::string(key.view()) + ", value = " + std::string(value.view()) + ")");
     }
 
-    properties_[key] = value;
+    properties_[std::string(key.view())] = value.view();
 
-    isolated::api::IsolatedDXEndpoint::Builder::withProperty(handle_, key, value);
+    isolated::api::IsolatedDXEndpoint::Builder::withProperty(handle_, key.view(), value.view());
 
     return sharedAs<Builder>();
 }
@@ -454,13 +455,14 @@ void DXEndpoint::Builder::withExecutorImpl(const JavaObjectHandle<ExecutorTag> &
     isolated::api::IsolatedDXEndpoint::Builder::withExecutor(handle_, executor);
 }
 
-bool DXEndpoint::Builder::supportsProperty(const StringLike &key) const {
+bool DXEndpoint::Builder::supportsProperty(StringParam key) const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::supportsProperty(key = " + key + ")");
+        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() +
+                        "}::supportsProperty(key = " + std::string(key.view()) + ")");
     }
 
-    return isolated::api::IsolatedDXEndpoint::Builder::supportsProperty(handle_, key);
+    return isolated::api::IsolatedDXEndpoint::Builder::supportsProperty(handle_, key.view());
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
@@ -506,10 +508,11 @@ DXEndpoint::Builder::~Builder() noexcept {
 #endif
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const StringLike &name) {
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(StringParam name) {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");
+        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + std::string(name.view()) +
+                        ")");
     }
 
     return withProperty(NAME_PROPERTY, name);

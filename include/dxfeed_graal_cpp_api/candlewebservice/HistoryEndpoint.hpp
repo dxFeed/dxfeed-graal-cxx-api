@@ -10,7 +10,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../auth/AuthToken.hpp"
 #include "../detail/Concepts.hpp"
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"
@@ -126,7 +126,7 @@ struct DXFCPP_EXPORT HistoryEndpoint final : RequireMakeShared<HistoryEndpoint> 
          * @param address The address of the endpoint to be set.
          * @return The Builder instance with the updated address value.
          */
-        std::shared_ptr<Builder> withAddress(const StringLike &address);
+        std::shared_ptr<Builder> withAddress(StringParam address);
 
         /**
          * Sets the username for the target endpoint.
@@ -134,7 +134,7 @@ struct DXFCPP_EXPORT HistoryEndpoint final : RequireMakeShared<HistoryEndpoint> 
          * @param userName The username to be set for the endpoint.
          * @return The Builder instance with the updated username value.
          */
-        std::shared_ptr<Builder> withUserName(const StringLike &userName);
+        std::shared_ptr<Builder> withUserName(StringParam userName);
 
         /**
          * Sets the password for the target endpoint.
@@ -142,7 +142,7 @@ struct DXFCPP_EXPORT HistoryEndpoint final : RequireMakeShared<HistoryEndpoint> 
          * @param password The password to be set for the endpoint.
          * @return The Builder instance with the updated password value.
          */
-        std::shared_ptr<Builder> withPassword(const StringLike &password);
+        std::shared_ptr<Builder> withPassword(StringParam password);
 
         /**
          * Sets the authentication token for the target endpoint.
@@ -150,7 +150,7 @@ struct DXFCPP_EXPORT HistoryEndpoint final : RequireMakeShared<HistoryEndpoint> 
          * @param authToken The authentication token to be used for access.
          * @return The Builder instance with the updated authentication token value.
          */
-        std::shared_ptr<Builder> withAuthToken(const StringLike &authToken);
+        std::shared_ptr<Builder> withAuthToken(StringParam authToken);
 
         /**
          * Sets the authentication token for the target endpoint.

@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
 #include "./MarketEvent.hpp"
@@ -116,7 +116,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Summary(const StringLike& eventSymbol) noexcept;
+    explicit Summary(StringParam eventSymbol);
 
     /**
      * Returns the identifier of the day that this summary represents.

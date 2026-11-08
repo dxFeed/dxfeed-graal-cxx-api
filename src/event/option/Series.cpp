@@ -214,10 +214,10 @@ void Series::assign(std::shared_ptr<EventType> event) {
 Series::Series() noexcept {
 }
 
-Series::Series(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Series::Series(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-Series &Series::withEventSymbol(const StringLike &eventSymbol) noexcept {
+Series &Series::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;

@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
@@ -98,7 +98,7 @@ struct DXFCPP_EXPORT CandlePeriod final : public CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this aggregation period set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Returns aggregation period value. For example, the value of `5` with
@@ -138,7 +138,7 @@ struct DXFCPP_EXPORT CandlePeriod final : public CandleSymbolAttribute {
      * @param s The string representation of an aggregation period.
      * @return The aggregation period.
      */
-    static CandlePeriod parse(const StringLike &s);
+    static CandlePeriod parse(StringParam s);
 
     /**
      * Returns candle period with the given value and type.
@@ -156,7 +156,7 @@ struct DXFCPP_EXPORT CandlePeriod final : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle period of the given candle symbol string
      */
-    static CandlePeriod getAttributeForSymbol(const StringLike &symbol);
+    static CandlePeriod getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle period attribute.
@@ -164,7 +164,7 @@ struct DXFCPP_EXPORT CandlePeriod final : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle period attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

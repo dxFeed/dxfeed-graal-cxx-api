@@ -62,13 +62,13 @@ void Logging::init(Level level) {
     System::setProperty("err.level", levelToString(level));
 }
 
-void Logging::init(const StringLike &logFile, Level logLevel) {
+void Logging::init(StringParam logFile, Level logLevel) {
     System::setProperty("log.className", "com.devexperts.logging.InterceptableLogging");
     System::setProperty("log.file", logFile);
     System::setProperty("log.level", levelToString(logLevel));
 }
 
-void Logging::init(const StringLike &logFile, const StringLike &errFile, Level logLevel, Level errFileLevel) {
+void Logging::init(StringParam logFile, StringParam errFile, Level logLevel, Level errFileLevel) {
     System::setProperty("log.className", "com.devexperts.logging.InterceptableLogging");
     System::setProperty("log.file", logFile);
     System::setProperty("log.level", levelToString(logLevel));

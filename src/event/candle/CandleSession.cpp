@@ -42,9 +42,9 @@ bool SessionType::operator==(const SessionType &sessionType) const noexcept {
 SessionFilter::SessionFilter() noexcept {
 }
 
-SessionFilter::SessionFilter(SessionFilterEnum code, const StringLike &name, std::optional<SessionType> type,
+SessionFilter::SessionFilter(SessionFilterEnum code, StringParam name, std::optional<SessionType> type,
                              std::optional<bool> trading) noexcept
-    : code_{code}, name_{ConstString::copyOf(name)}, type_{type}, trading_{trading} {
+    : code_{code}, name_{ConstString::copyOf(name.view())}, type_{type}, trading_{trading} {
 }
 
 bool SessionFilter::operator==(const SessionFilter &sessionFilter) const noexcept {
@@ -108,7 +108,7 @@ const SessionFilter &CandleSession::getSessionFilter() const & noexcept {
     return *sessionFilter_;
 }
 
-std::string CandleSession::changeAttributeForSymbol(const StringLike &symbol) const {
+std::string CandleSession::changeAttributeForSymbol(StringParam symbol) const {
     return *this == DEFAULT
                ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY)
                : MarketEventSymbols::changeAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY, toString());
@@ -122,35 +122,35 @@ bool CandleSession::operator==(const CandleSession &candleSession) const noexcep
     return *sessionFilter_ == candleSession.getSessionFilter() && string_ == candleSession.string_;
 }
 
-std::reference_wrapper<const CandleSession> CandleSession::parse(const StringLike &s) {
+std::reference_wrapper<const CandleSession> CandleSession::parse(StringParam s) {
     if (s.empty()) {
         throw InvalidArgumentException("Missing candle session");
     }
 
     for (const auto &sessionRef : VALUES) {
-        if (sessionRef.get().string_ == std::string_view{s}) {
+        if (sessionRef.get().string_ == s.view()) {
             return sessionRef;
         }
     }
 
     for (const auto &sessionRef : VALUES) {
         if (const auto sessionStr = sessionRef.get().toString();
-            sessionStr.length() >= s.length() && iEquals(sessionStr.substr(0, s.length()), s)) {
+            sessionStr.length() >= s.size() && iEquals(sessionStr.substr(0, s.size()), s.view())) {
             return sessionRef;
         }
     }
 
-    throw InvalidArgumentException("Unknown candle session: " + std::string{std::string_view{s}});
+    throw InvalidArgumentException("Unknown candle session: " + std::string{s.view()});
 }
 
-std::reference_wrapper<const CandleSession> CandleSession::getAttributeForSymbol(const StringLike &symbol) {
+std::reference_wrapper<const CandleSession> CandleSession::getAttributeForSymbol(StringParam symbol) {
     const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY);
 
     return stringOpt && iEquals(stringOpt.value(), "true") ? std::cref(REGULAR) : std::cref(DEFAULT);
 }
 
-std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol) noexcept {
-    const std::string_view sv = symbol;
+std::string CandleSession::normalizeAttributeForSymbol(StringParam symbol) noexcept {
+    const std::string_view sv = symbol.view();
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleSession::ATTRIBUTE_KEY);
 
     if (!a) {
@@ -159,7 +159,7 @@ std::string CandleSession::normalizeAttributeForSymbol(const StringLike &symbol)
 
     // As getAttributeForSymbol() (Java Boolean.parseBoolean): only "true" in any case is the regular session.
     if (!iEquals(*a, "true")) {
-        return candle::removeDefaultAttribute(symbol, CandleSession::ATTRIBUTE_KEY, DEFAULT.toString());
+        return candle::removeDefaultAttribute(symbol.view(), CandleSession::ATTRIBUTE_KEY, DEFAULT.toString());
     }
 
     if (*a != REGULAR.toString()) {

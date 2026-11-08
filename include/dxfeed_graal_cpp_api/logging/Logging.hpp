@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../util/Handler.hpp"
 
 /**
@@ -98,7 +98,7 @@ struct DXFCPP_EXPORT Logging final {
      * @param logFile The logging file.
      * @param logLevel The logging level.
      */
-    static void init(const StringLike &logFile, Level logLevel = Level::INFO);
+    static void init(StringParam logFile, Level logLevel = Level::INFO);
 
     /**
      * Initializes logging, sets the path to the file for logging, to the file for outputting errors and warnings, and
@@ -119,7 +119,7 @@ struct DXFCPP_EXPORT Logging final {
      * @param logLevel The logging level.
      * @param errFileLevel The err file logging level.
      */
-    static void init(const StringLike &logFile, const StringLike &errFile, Level logLevel = Level::INFO,
+    static void init(StringParam logFile, StringParam errFile, Level logLevel = Level::INFO,
                      Level errFileLevel = Level::WARN);
 };
 

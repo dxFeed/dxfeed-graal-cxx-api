@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 
 
 #include <string>
@@ -110,7 +110,7 @@ struct DXFCPP_EXPORT System {
      * @return true if the setting of the JVM system property succeeded.
      * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
-    static bool setProperty(const StringLike &key, const StringLike &value);
+    static bool setProperty(StringParam key, StringParam value);
 
     /**
      * Sets the JVM system properties to the Properties argument.
@@ -132,7 +132,7 @@ struct DXFCPP_EXPORT System {
      * @return The value of a JVM system property (UTF-8 string), or an empty string if the property is not set.
      * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
-    static std::string getProperty(const StringLike &key);
+    static std::string getProperty(StringParam key);
 
     /**
      * Sets the arguments that the Graal isolate is created with, for example `-Dmy.prop=value` or `-Xmx512m`. Call it

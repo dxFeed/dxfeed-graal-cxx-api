@@ -120,7 +120,7 @@ void Greeks::assign(std::shared_ptr<EventType> event) {
 Greeks::Greeks() noexcept {
 }
 
-Greeks::Greeks(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Greeks::Greeks(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 const IndexedEventSource &Greeks::getSource() const & noexcept {

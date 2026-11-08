@@ -122,15 +122,15 @@ void TextMessage::assign(std::shared_ptr<EventType> event) {
 TextMessage::TextMessage() noexcept {
 }
 
-TextMessage::TextMessage(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+TextMessage::TextMessage(StringParam eventSymbol) : eventSymbol_{eventSymbol.view()} {
 }
 
-TextMessage::TextMessage(const StringLike &eventSymbol, const StringLike &text) noexcept
-    : eventSymbol_{eventSymbol}, text_{text} {
+TextMessage::TextMessage(StringParam eventSymbol, StringParam text)
+    : eventSymbol_{eventSymbol.view()}, text_{text.view()} {
 }
 
-TextMessage::TextMessage(const StringLike &eventSymbol, std::int64_t time, const StringLike &text) noexcept
-    : eventSymbol_{eventSymbol}, text_{text} {
+TextMessage::TextMessage(StringParam eventSymbol, std::int64_t time, StringParam text)
+    : eventSymbol_{eventSymbol.view()}, text_{text.view()} {
 
     setTime(time);
 }
@@ -147,11 +147,11 @@ const std::optional<std::string> &TextMessage::getEventSymbolOpt() const & noexc
     return eventSymbol_;
 }
 
-void TextMessage::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    eventSymbol_ = std::string(eventSymbol);
+void TextMessage::setEventSymbol(StringParam eventSymbol) {
+    eventSymbol_ = std::string(eventSymbol.view());
 }
 
-TextMessage &TextMessage::withEventSymbol(const StringLike &eventSymbol) noexcept {
+TextMessage &TextMessage::withEventSymbol(StringParam eventSymbol) {
     TextMessage::setEventSymbol(eventSymbol);
 
     return *this;
@@ -225,11 +225,11 @@ const std::optional<std::string> &TextMessage::getTextOpt() const & noexcept {
     return text_;
 }
 
-void TextMessage::setText(const StringLike &text) {
-    text_ = std::string(text);
+void TextMessage::setText(StringParam text) {
+    text_ = std::string(text.view());
 }
 
-TextMessage &TextMessage::withText(const StringLike &text) noexcept {
+TextMessage &TextMessage::withText(StringParam text) {
     setText(text);
 
     return *this;

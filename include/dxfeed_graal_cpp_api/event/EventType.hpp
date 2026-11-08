@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/Concepts.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/EntityModule.hpp"
 
 #include <cstdint>
@@ -170,7 +170,7 @@ template<> struct EventTypeWithSymbol<std::string> : EventType {
      *
      * @param eventSymbol event symbol.
      */
-    virtual void setEventSymbol(const StringLike &eventSymbol) noexcept = 0;
+    virtual void setEventSymbol(StringParam eventSymbol) = 0;
 };
 
 /**

@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 
 #include <cstdint>
 #include <string>
@@ -128,7 +128,7 @@ struct DXFCPP_EXPORT TimeFormat {
      * @param value String value to parse.
      * @return Date's timestamp parsed from <tt>value</tt> or `0` if <tt>value</tt> has wrong format.
      */
-    std::int64_t parse(const StringLike &value) const;
+    std::int64_t parse(StringParam value) const;
 
     /**
      * Converts timestamp into string according to the format

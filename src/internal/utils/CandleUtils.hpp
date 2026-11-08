@@ -9,8 +9,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-struct StringLike;
-
 namespace candle {
 
 /**

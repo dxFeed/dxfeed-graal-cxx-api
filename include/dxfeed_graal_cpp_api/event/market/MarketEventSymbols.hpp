@@ -4,7 +4,7 @@
 #pragma once
 
 #include "../../detail/Conf.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -63,7 +63,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol The symbol.
      * @return `true` if the specified symbol has the exchange code specification.
      */
-    static bool hasExchangeCode(const StringLike &symbol) noexcept;
+    static bool hasExchangeCode(StringParam symbol) noexcept;
 
     /**
      * Returns exchange code of the specified symbol or <code>'\0'</code> if none is defined.
@@ -71,7 +71,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol The symbol.
      * @return exchange code of the specified symbol or <code>'\0'</code> if none is defined.
      */
-    static char getExchangeCode(const StringLike &symbol) noexcept;
+    static char getExchangeCode(StringParam symbol) noexcept;
 
     /**
      * Changes exchange code of the specified symbol or removes it if the new exchange code is <code>'\0'</code>.
@@ -80,7 +80,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param exchangeCode The new exchange code.
      * @return new symbol with the changed exchange code.
      */
-    static std::string changeExchangeCode(const StringLike &symbol, char exchangeCode) noexcept;
+    static std::string changeExchangeCode(StringParam symbol, char exchangeCode) noexcept;
 
     /**
      * Returns base symbol without exchange code and attributes.
@@ -88,7 +88,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol symbol.
      * @return base symbol without exchange code and attributes.
      */
-    static std::string getBaseSymbol(const StringLike &symbol) noexcept;
+    static std::string getBaseSymbol(StringParam symbol) noexcept;
 
     /**
      * Changes base symbol while leaving exchange code and attributes intact.
@@ -96,7 +96,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param baseSymbol new base symbol.
      * @return new symbol with new base symbol and old symbol's exchange code and attributes.
      */
-    static std::string changeBaseSymbol(const StringLike &symbol, const StringLike &baseSymbol) noexcept;
+    static std::string changeBaseSymbol(StringParam symbol, StringParam baseSymbol) noexcept;
 
     /**
      * Returns value of the attribute with the specified key.
@@ -107,8 +107,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @return value of the attribute with the specified key | `std::nullopt` if the attribute with the specified key is
      * not found.
      */
-    static std::optional<std::string> getAttributeStringByKey(const StringLike &symbol,
-                                                              const StringLike &key) noexcept;
+    static std::optional<std::string> getAttributeStringByKey(StringParam symbol, StringParam key) noexcept;
 
     /**
      * Changes the value of one attribute value while leaving exchange code and other attributes intact.
@@ -119,8 +118,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      *
      * @return new symbol with a key attribute with the specified value and everything else from the old symbol.
      */
-    static std::string changeAttributeStringByKey(const StringLike &symbol, const StringLike &key,
-                                                  const StringLike &value) noexcept;
+    static std::string changeAttributeStringByKey(StringParam symbol, StringParam key, StringParam value) noexcept;
 
     /**
      * Removes one attribute with the specified key while leaving exchange code and other attributes intact.
@@ -129,7 +127,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param key attribute key.
      * @return new symbol without the specified key and everything else from the old symbol.
      */
-    static std::string removeAttributeStringByKey(const StringLike &symbol, const StringLike &key) noexcept;
+    static std::string removeAttributeStringByKey(StringParam symbol, StringParam key) noexcept;
 
     /**
      * Returns `true` if the specified symbol has any attributes.
@@ -137,7 +135,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @param symbol The symbol.
      * @return `true` if the specified symbol has any attributes.
      */
-    static bool hasAttributes(const StringLike &symbol) noexcept;
+    static bool hasAttributes(StringParam symbol) noexcept;
 
     /**
      * Builds the canonical spread symbol for the specified spread components.
@@ -177,7 +175,7 @@ struct DXFCPP_EXPORT MarketEventSymbols {
      * @throws InvalidArgumentException if the character class is not a valid regular expression or the matching
      * exchange codes violate MarketEventSymbols::EXCHANGES_PATTERN.
      */
-    static std::string getExchangesByPattern(const StringLike &characterClass);
+    static std::string getExchangesByPattern(StringParam characterClass);
 
     private:
     static constexpr char EXCHANGE_SEPARATOR = '&';

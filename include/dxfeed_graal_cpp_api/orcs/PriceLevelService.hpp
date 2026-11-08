@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/candle/CandleSymbol.hpp"
 #include "../event/market/Order.hpp"
@@ -72,7 +72,7 @@ struct DXFCPP_EXPORT PriceLevelService final : RequireMakeShared<PriceLevelServi
      * `[login=entitle:<token>]` to the address.
      * @return a new service.
      */
-    static std::shared_ptr<PriceLevelService> create(const StringLike &address);
+    static std::shared_ptr<PriceLevelService> create(StringParam address);
 
     /**
      * Returns the price levels of the given CandleSymbol and OrderSource within the given `from` and `to` times,
@@ -90,7 +90,7 @@ struct DXFCPP_EXPORT PriceLevelService final : RequireMakeShared<PriceLevelServi
      * @return the Order events sorted by time.
      */
     std::vector<std::shared_ptr<Order>> getOrders(const CandleSymbol &candleSymbol, const OrderSource &orderSource,
-                                                  std::int64_t from, std::int64_t to, const StringLike &caller) const;
+                                                  std::int64_t from, std::int64_t to, StringParam caller) const;
 
     /**
      * Returns the price levels of the given CandleSymbol and OrderSource within the given `from` and `to` times,
@@ -101,7 +101,7 @@ struct DXFCPP_EXPORT PriceLevelService final : RequireMakeShared<PriceLevelServi
      * @param from The time in UTC (milliseconds since the Unix epoch) to request from.
      * @param to The time in UTC (milliseconds since the Unix epoch) to request to.
      * @return the Order events sorted by time.
-     * @see getOrders(const CandleSymbol &, const OrderSource &, std::int64_t, std::int64_t, const StringLike &) const
+     * @see getOrders(const CandleSymbol &, const OrderSource &, std::int64_t, std::int64_t, StringParam) const
      */
     std::vector<std::shared_ptr<Order>> getOrders(const CandleSymbol &candleSymbol, const OrderSource &orderSource,
                                                   std::int64_t from, std::int64_t to) const;
@@ -116,7 +116,7 @@ struct DXFCPP_EXPORT PriceLevelService final : RequireMakeShared<PriceLevelServi
      * @return the Quote events sorted by time.
      */
     std::vector<std::shared_ptr<Quote>> getQuotes(const CandleSymbol &candleSymbol, std::int64_t from, std::int64_t to,
-                                                  const StringLike &caller) const;
+                                                  StringParam caller) const;
 
     /**
      * Returns the quotes of the given CandleSymbol within the given `from` and `to` times, sorted by time.

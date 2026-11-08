@@ -63,8 +63,8 @@ void IndexedEventTxModelImpl::withSymbolImpl(const JavaObjectHandle<IndexedEvent
 }
 
 void IndexedEventTxModelImpl::withSymbolImpl(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder,
-                                             const StringLike &symbol) {
-    isolated::model::IsolatedIndexedEventTxModel::Builder::withSymbol(builder, symbol);
+                                             StringParam symbol) {
+    isolated::model::IsolatedIndexedEventTxModel::Builder::withSymbol(builder, symbol.view());
 }
 
 void IndexedEventTxModelImpl::withSourceImpl(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder,

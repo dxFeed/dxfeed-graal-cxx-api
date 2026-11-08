@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -75,7 +75,7 @@ struct DXFCPP_EXPORT TimePeriod {
      * @param value The string representation
      * @return TimePeriod represented with a given string.
      */
-    static TimePeriod valueOf(const StringLike &value);
+    static TimePeriod valueOf(StringParam value);
 
     /**
      * Returns value in milliseconds.

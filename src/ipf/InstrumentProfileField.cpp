@@ -103,9 +103,9 @@ constinit const std::array FIELDS{
 } // namespace
 
 std::optional<std::reference_wrapper<const InstrumentProfileField>>
-InstrumentProfileField::find(const StringLike &name) noexcept {
+InstrumentProfileField::find(StringParam name) noexcept {
     for (const auto &field : FIELDS) {
-        if (field.get().name_ == std::string_view{name}) {
+        if (field.get().name_ == name.view()) {
             return field;
         }
     }

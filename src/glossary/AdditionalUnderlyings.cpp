@@ -31,12 +31,12 @@ AdditionalUnderlyings::AdditionalUnderlyings(LockExternalConstructionTag,
 AdditionalUnderlyings::~AdditionalUnderlyings() noexcept {
 }
 
-AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const StringLike &text) {
-    return createShared(isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(text));
+AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(StringParam text) {
+    return createShared(isolated::glossary::IsolatedAdditionalUnderlyings::valueOf(text.view()));
 }
 
-double AdditionalUnderlyings::getSPC(const StringLike &text, const StringLike &symbol) {
-    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(text, symbol);
+double AdditionalUnderlyings::getSPC(StringParam text, StringParam symbol) {
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(text.view(), symbol.view());
 }
 
 std::string AdditionalUnderlyings::getText() const {
@@ -47,8 +47,8 @@ std::unordered_map<std::string, double> AdditionalUnderlyings::getMap() const {
     return isolated::glossary::IsolatedAdditionalUnderlyings::getMap(getHandle());
 }
 
-double AdditionalUnderlyings::getSPC(const StringLike &symbol) const {
-    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(getHandle(), symbol);
+double AdditionalUnderlyings::getSPC(StringParam symbol) const {
+    return isolated::glossary::IsolatedAdditionalUnderlyings::getSPC(getHandle(), symbol.view());
 }
 
 bool AdditionalUnderlyings::operator==(const AdditionalUnderlyings &other) const {

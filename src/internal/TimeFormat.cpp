@@ -32,8 +32,8 @@ const JavaObjectHandle<TimeFormat> &TimeFormat::getHandle() const {
     return handle_.get();
 }
 
-std::int64_t TimeFormat::parse(const StringLike &value) const {
-    return isolated::internal::IsolatedTimeFormat::parse(getHandle(), value);
+std::int64_t TimeFormat::parse(StringParam value) const {
+    return isolated::internal::IsolatedTimeFormat::parse(getHandle(), value.view());
 }
 
 std::string TimeFormat::format(std::int64_t timestamp) const {

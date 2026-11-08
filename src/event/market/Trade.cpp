@@ -90,7 +90,7 @@ void Trade::assign(std::shared_ptr<EventType> event) {
 Trade::Trade() noexcept {
 }
 
-Trade::Trade(const StringLike &eventSymbol) noexcept : TradeBase(eventSymbol) {
+Trade::Trade(StringParam eventSymbol) : TradeBase(eventSymbol) {
 }
 
 std::string Trade::toString() const {

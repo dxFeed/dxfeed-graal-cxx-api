@@ -14,20 +14,20 @@ DXFCPP_BEGIN_NAMESPACE
 // translation units.
 constinit const AuthToken AuthToken::NULL_TOKEN{};
 
-AuthToken AuthToken::valueOf(const StringLike &string) {
-    return AuthToken(isolated::auth::IsolatedAuthToken::valueOf(string));
+AuthToken AuthToken::valueOf(StringParam string) {
+    return AuthToken(isolated::auth::IsolatedAuthToken::valueOf(string.view()));
 }
 
-AuthToken AuthToken::createBasicToken(const StringLike &userPassword) {
-    return AuthToken(isolated::auth::IsolatedAuthToken::createBasicToken(userPassword));
+AuthToken AuthToken::createBasicToken(StringParam userPassword) {
+    return AuthToken(isolated::auth::IsolatedAuthToken::createBasicToken(userPassword.view()));
 }
 
-AuthToken AuthToken::createBasicToken(const StringLike &user, const StringLike &password) {
-    return AuthToken(isolated::auth::IsolatedAuthToken::createBasicToken(user, password));
+AuthToken AuthToken::createBasicToken(StringParam user, StringParam password) {
+    return AuthToken(isolated::auth::IsolatedAuthToken::createBasicToken(user.view(), password.view()));
 }
 
-AuthToken AuthToken::createBasicTokenOrNull(const StringLike &user, const StringLike &password) {
-    auto handle = isolated::auth::IsolatedAuthToken::createBasicTokenOrNull(user, password);
+AuthToken AuthToken::createBasicTokenOrNull(StringParam user, StringParam password) {
+    auto handle = isolated::auth::IsolatedAuthToken::createBasicTokenOrNull(user.view(), password.view());
 
     if (!handle) {
         return AuthToken(JavaObjectHandle<AuthToken>(), true);
@@ -36,12 +36,12 @@ AuthToken AuthToken::createBasicTokenOrNull(const StringLike &user, const String
     return AuthToken(std::move(handle));
 }
 
-AuthToken AuthToken::createBearerToken(const StringLike &token) {
-    return AuthToken(isolated::auth::IsolatedAuthToken::createBearerToken(token));
+AuthToken AuthToken::createBearerToken(StringParam token) {
+    return AuthToken(isolated::auth::IsolatedAuthToken::createBearerToken(token.view()));
 }
 
-AuthToken AuthToken::createBearerTokenOrNull(const StringLike &token) {
-    auto handle = isolated::auth::IsolatedAuthToken::createBearerTokenOrNull(token);
+AuthToken AuthToken::createBearerTokenOrNull(StringParam token) {
+    auto handle = isolated::auth::IsolatedAuthToken::createBearerTokenOrNull(token.view());
 
     if (!handle) {
         return AuthToken(JavaObjectHandle<AuthToken>(), true);
@@ -50,8 +50,8 @@ AuthToken AuthToken::createBearerTokenOrNull(const StringLike &token) {
     return AuthToken(std::move(handle));
 }
 
-AuthToken AuthToken::createCustomToken(const StringLike &scheme, const StringLike &value) {
-    return AuthToken(isolated::auth::IsolatedAuthToken::createCustomToken(scheme, value));
+AuthToken AuthToken::createCustomToken(StringParam scheme, StringParam value) {
+    return AuthToken(isolated::auth::IsolatedAuthToken::createCustomToken(scheme.view(), value.view()));
 }
 
 std::string AuthToken::getHttpAuthorization() const {

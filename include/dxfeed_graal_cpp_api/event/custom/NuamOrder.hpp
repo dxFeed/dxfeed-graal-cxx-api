@@ -7,8 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/Concepts.hpp"
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../market/Order.hpp"
 #include "./NuamOrderType.hpp"
@@ -205,7 +207,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit NuamOrder(const StringLike &eventSymbol) noexcept;
+    explicit NuamOrder(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -215,7 +217,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @param eventSymbol The symbol of this event.
      * @return The current Nuam order.
      */
-    NuamOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override;
+    NuamOrder &withEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes event's creation time and returns the current Nuam order.
@@ -447,7 +449,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @param marketMaker The market maker or another aggregate identifier of this Nuam order.
      * @return The current Nuam order.
      */
-    NuamOrder &withMarketMaker(const StringLike &marketMaker) noexcept override;
+    NuamOrder &withMarketMaker(StringParam marketMaker) override;
 
     /**
      * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
@@ -575,7 +577,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      *
      * @param clientOrderId the client-generated order identity.
      */
-    void setClientOrderId(const StringLike &clientOrderId) noexcept;
+    void setClientOrderId(StringParam clientOrderId);
 
     /**
      * Changes the client-generated order identity, or makes it null with `std::nullopt`.
@@ -594,7 +596,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @param clientOrderId the client-generated order identity.
      * @return The current Nuam order.
      */
-    NuamOrder &withClientOrderId(const StringLike &clientOrderId) noexcept;
+    NuamOrder &withClientOrderId(StringParam clientOrderId);
 
     /**
      * Changes the client-generated order identity, or makes it null with `std::nullopt`.
@@ -628,7 +630,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      *
      * @param customerAccount the account to use for this order.
      */
-    void setCustomerAccount(const StringLike &customerAccount) noexcept;
+    void setCustomerAccount(StringParam customerAccount);
 
     /**
      * Changes the account to use for this order, or makes it null with `std::nullopt`.
@@ -647,7 +649,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @param customerAccount the account to use for this order.
      * @return The current Nuam order.
      */
-    NuamOrder &withCustomerAccount(const StringLike &customerAccount) noexcept;
+    NuamOrder &withCustomerAccount(StringParam customerAccount);
 
     /**
      * Changes the account to use for this order, or makes it null with `std::nullopt`.
@@ -682,7 +684,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      *
      * @param customerInfo the free-text information filled in by the client entering the transaction.
      */
-    void setCustomerInfo(const StringLike &customerInfo) noexcept;
+    void setCustomerInfo(StringParam customerInfo);
 
     /**
      * Changes the free-text information filled in by the client, or makes it null with `std::nullopt`.
@@ -701,7 +703,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @param customerInfo the free-text information filled in by the client entering the transaction.
      * @return The current Nuam order.
      */
-    NuamOrder &withCustomerInfo(const StringLike &customerInfo) noexcept;
+    NuamOrder &withCustomerInfo(StringParam customerInfo);
 
     /**
      * Changes the free-text information filled in by the client, or makes it null with `std::nullopt`.
@@ -741,7 +743,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * @param exchangeInfo the exchange-specific information that can be included with an order (it may contain
      * unprintable characters).
      */
-    void setExchangeInfo(const StringLike &exchangeInfo) noexcept;
+    void setExchangeInfo(StringParam exchangeInfo);
 
     /**
      * Changes the exchange-specific information of the order, or makes it null with `std::nullopt`.
@@ -761,7 +763,7 @@ class DXFCPP_EXPORT NuamOrder final : public Order {
      * unprintable characters).
      * @return The current Nuam order.
      */
-    NuamOrder &withExchangeInfo(const StringLike &exchangeInfo) noexcept;
+    NuamOrder &withExchangeInfo(StringParam exchangeInfo);
 
     /**
      * Changes the exchange-specific information of the order, or makes it null with `std::nullopt`.

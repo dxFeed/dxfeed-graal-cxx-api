@@ -281,7 +281,7 @@ UserSources &userSources() {
 
 } // namespace
 
-OrderSource::OrderSource(std::int32_t id, const StringLike &name) noexcept : IndexedEventSource(id, name, true) {
+OrderSource::OrderSource(std::int32_t id, StringParam name) : IndexedEventSource(id, name, true) {
 }
 
 OrderSource::OrderSource(const OrderSource &other) noexcept
@@ -383,8 +383,8 @@ const OrderSource &OrderSource::valueOf(std::int32_t sourceId) {
     return sources.try_emplace(sourceId, OrderSource(sourceId, decodeName(sourceId))).first->second;
 }
 
-const OrderSource &OrderSource::valueOf(const StringLike &name) {
-    const std::string_view nameView{name};
+const OrderSource &OrderSource::valueOf(StringParam name) {
+    const std::string_view nameView{name.view()};
 
     for (const auto &source : PREDEFINED) {
         if (source.get().nameView() == nameView) {

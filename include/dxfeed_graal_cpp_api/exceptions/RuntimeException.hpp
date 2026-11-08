@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 
 #include <iosfwd>
 #include <memory>
@@ -31,7 +31,7 @@ struct DXFCPP_EXPORT RuntimeException : std::runtime_error {
      * @param message The exception's message.
      * @param additionalStackTrace The additional stacktrace that will be concatenated with the current stacktrace.
      */
-    explicit RuntimeException(const StringLike &message, const StringLike &additionalStackTrace = "");
+    explicit RuntimeException(StringParam message, StringParam additionalStackTrace = "");
 
     RuntimeException(const RuntimeException &other) noexcept;
 

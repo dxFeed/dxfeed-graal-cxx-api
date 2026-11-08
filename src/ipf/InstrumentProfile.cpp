@@ -23,120 +23,120 @@ std::string InstrumentProfile::getType() const {
     return isolated::ipf::IsolatedInstrumentProfile::getType(handle_);
 }
 
-void InstrumentProfile::setType(const StringLike &type) const {
-    isolated::ipf::IsolatedInstrumentProfile::setType(handle_, type);
+void InstrumentProfile::setType(StringParam type) const {
+    isolated::ipf::IsolatedInstrumentProfile::setType(handle_, type.view());
 }
 
 std::string InstrumentProfile::getSymbol() const {
     return isolated::ipf::IsolatedInstrumentProfile::getSymbol(handle_);
 }
 
-void InstrumentProfile::setSymbol(const StringLike &symbol) const {
-    isolated::ipf::IsolatedInstrumentProfile::setSymbol(handle_, symbol);
+void InstrumentProfile::setSymbol(StringParam symbol) const {
+    isolated::ipf::IsolatedInstrumentProfile::setSymbol(handle_, symbol.view());
 }
 
 std::string InstrumentProfile::getDescription() const {
     return isolated::ipf::IsolatedInstrumentProfile::getDescription(handle_);
 }
 
-void InstrumentProfile::setDescription(const StringLike &description) const {
-    isolated::ipf::IsolatedInstrumentProfile::setDescription(handle_, description);
+void InstrumentProfile::setDescription(StringParam description) const {
+    isolated::ipf::IsolatedInstrumentProfile::setDescription(handle_, description.view());
 }
 
 std::string InstrumentProfile::getLocalSymbol() const {
     return isolated::ipf::IsolatedInstrumentProfile::getLocalSymbol(handle_);
 }
 
-void InstrumentProfile::setLocalSymbol(const StringLike &localSymbol) const {
-    isolated::ipf::IsolatedInstrumentProfile::setLocalSymbol(handle_, localSymbol);
+void InstrumentProfile::setLocalSymbol(StringParam localSymbol) const {
+    isolated::ipf::IsolatedInstrumentProfile::setLocalSymbol(handle_, localSymbol.view());
 }
 
 std::string InstrumentProfile::getLocalDescription() const {
     return isolated::ipf::IsolatedInstrumentProfile::getLocalDescription(handle_);
 }
 
-void InstrumentProfile::setLocalDescription(const StringLike &localDescription) const {
-    isolated::ipf::IsolatedInstrumentProfile::setLocalDescription(handle_, localDescription);
+void InstrumentProfile::setLocalDescription(StringParam localDescription) const {
+    isolated::ipf::IsolatedInstrumentProfile::setLocalDescription(handle_, localDescription.view());
 }
 
 std::string InstrumentProfile::getCountry() const {
     return isolated::ipf::IsolatedInstrumentProfile::getCountry(handle_);
 }
 
-void InstrumentProfile::setCountry(const StringLike &country) const {
-    isolated::ipf::IsolatedInstrumentProfile::setCountry(handle_, country);
+void InstrumentProfile::setCountry(StringParam country) const {
+    isolated::ipf::IsolatedInstrumentProfile::setCountry(handle_, country.view());
 }
 
 std::string InstrumentProfile::getOPOL() const {
     return isolated::ipf::IsolatedInstrumentProfile::getOPOL(handle_);
 }
 
-void InstrumentProfile::setOPOL(const StringLike &opol) const {
-    isolated::ipf::IsolatedInstrumentProfile::setOPOL(handle_, opol);
+void InstrumentProfile::setOPOL(StringParam opol) const {
+    isolated::ipf::IsolatedInstrumentProfile::setOPOL(handle_, opol.view());
 }
 
 std::string InstrumentProfile::getExchangeData() const {
     return isolated::ipf::IsolatedInstrumentProfile::getExchangeData(handle_);
 }
 
-void InstrumentProfile::setExchangeData(const StringLike &exchangeData) const {
-    isolated::ipf::IsolatedInstrumentProfile::setExchangeData(handle_, exchangeData);
+void InstrumentProfile::setExchangeData(StringParam exchangeData) const {
+    isolated::ipf::IsolatedInstrumentProfile::setExchangeData(handle_, exchangeData.view());
 }
 
 std::string InstrumentProfile::getExchanges() const {
     return isolated::ipf::IsolatedInstrumentProfile::getExchanges(handle_);
 }
 
-void InstrumentProfile::setExchanges(const StringLike &exchanges) const {
-    isolated::ipf::IsolatedInstrumentProfile::setExchanges(handle_, exchanges);
+void InstrumentProfile::setExchanges(StringParam exchanges) const {
+    isolated::ipf::IsolatedInstrumentProfile::setExchanges(handle_, exchanges.view());
 }
 
 std::string InstrumentProfile::getCurrency() const {
     return isolated::ipf::IsolatedInstrumentProfile::getCurrency(handle_);
 }
 
-void InstrumentProfile::setCurrency(const StringLike &currency) const {
-    isolated::ipf::IsolatedInstrumentProfile::setCurrency(handle_, currency);
+void InstrumentProfile::setCurrency(StringParam currency) const {
+    isolated::ipf::IsolatedInstrumentProfile::setCurrency(handle_, currency.view());
 }
 
 std::string InstrumentProfile::getBaseCurrency() const {
     return isolated::ipf::IsolatedInstrumentProfile::getBaseCurrency(handle_);
 }
 
-void InstrumentProfile::setBaseCurrency(const StringLike &baseCurrency) const {
-    isolated::ipf::IsolatedInstrumentProfile::setBaseCurrency(handle_, baseCurrency);
+void InstrumentProfile::setBaseCurrency(StringParam baseCurrency) const {
+    isolated::ipf::IsolatedInstrumentProfile::setBaseCurrency(handle_, baseCurrency.view());
 }
 
 std::string InstrumentProfile::getCFI() const {
     return isolated::ipf::IsolatedInstrumentProfile::getCFI(handle_);
 }
 
-void InstrumentProfile::setCFI(const StringLike &cfi) const {
-    isolated::ipf::IsolatedInstrumentProfile::setCFI(handle_, cfi);
+void InstrumentProfile::setCFI(StringParam cfi) const {
+    isolated::ipf::IsolatedInstrumentProfile::setCFI(handle_, cfi.view());
 }
 
 std::string InstrumentProfile::getISIN() const {
     return isolated::ipf::IsolatedInstrumentProfile::getISIN(handle_);
 }
 
-void InstrumentProfile::setISIN(const StringLike &isin) const {
-    isolated::ipf::IsolatedInstrumentProfile::setISIN(handle_, isin);
+void InstrumentProfile::setISIN(StringParam isin) const {
+    isolated::ipf::IsolatedInstrumentProfile::setISIN(handle_, isin.view());
 }
 
 std::string InstrumentProfile::getSEDOL() const {
     return isolated::ipf::IsolatedInstrumentProfile::getSEDOL(handle_);
 }
 
-void InstrumentProfile::setSEDOL(const StringLike &sedol) const {
-    isolated::ipf::IsolatedInstrumentProfile::setSEDOL(handle_, sedol);
+void InstrumentProfile::setSEDOL(StringParam sedol) const {
+    isolated::ipf::IsolatedInstrumentProfile::setSEDOL(handle_, sedol.view());
 }
 
 std::string InstrumentProfile::getCUSIP() const {
     return isolated::ipf::IsolatedInstrumentProfile::getCUSIP(handle_);
 }
 
-void InstrumentProfile::setCUSIP(const StringLike &cusip) const {
-    isolated::ipf::IsolatedInstrumentProfile::setCUSIP(handle_, cusip);
+void InstrumentProfile::setCUSIP(StringParam cusip) const {
+    isolated::ipf::IsolatedInstrumentProfile::setCUSIP(handle_, cusip.view());
 }
 
 std::int32_t InstrumentProfile::getICB() const {
@@ -167,16 +167,16 @@ std::string InstrumentProfile::getProduct() const {
     return isolated::ipf::IsolatedInstrumentProfile::getProduct(handle_);
 }
 
-void InstrumentProfile::setProduct(const StringLike &product) const {
-    isolated::ipf::IsolatedInstrumentProfile::setProduct(handle_, product);
+void InstrumentProfile::setProduct(StringParam product) const {
+    isolated::ipf::IsolatedInstrumentProfile::setProduct(handle_, product.view());
 }
 
 std::string InstrumentProfile::getUnderlying() const {
     return isolated::ipf::IsolatedInstrumentProfile::getUnderlying(handle_);
 }
 
-void InstrumentProfile::setUnderlying(const StringLike &underlying) const {
-    isolated::ipf::IsolatedInstrumentProfile::setUnderlying(handle_, underlying);
+void InstrumentProfile::setUnderlying(StringParam underlying) const {
+    isolated::ipf::IsolatedInstrumentProfile::setUnderlying(handle_, underlying.view());
 }
 
 double InstrumentProfile::getSPC() const {
@@ -191,16 +191,16 @@ std::string InstrumentProfile::getAdditionalUnderlyings() const {
     return isolated::ipf::IsolatedInstrumentProfile::getAdditionalUnderlyings(handle_);
 }
 
-void InstrumentProfile::setAdditionalUnderlyings(const StringLike &additionalUnderlyings) const {
-    isolated::ipf::IsolatedInstrumentProfile::setAdditionalUnderlyings(handle_, additionalUnderlyings);
+void InstrumentProfile::setAdditionalUnderlyings(StringParam additionalUnderlyings) const {
+    isolated::ipf::IsolatedInstrumentProfile::setAdditionalUnderlyings(handle_, additionalUnderlyings.view());
 }
 
 std::string InstrumentProfile::getMMY() const {
     return isolated::ipf::IsolatedInstrumentProfile::getMMY(handle_);
 }
 
-void InstrumentProfile::setMMY(const StringLike &mmy) const {
-    isolated::ipf::IsolatedInstrumentProfile::setMMY(handle_, mmy);
+void InstrumentProfile::setMMY(StringParam mmy) const {
+    isolated::ipf::IsolatedInstrumentProfile::setMMY(handle_, mmy.view());
 }
 
 std::int32_t InstrumentProfile::getExpiration() const {
@@ -231,64 +231,64 @@ std::string InstrumentProfile::getOptionType() const {
     return isolated::ipf::IsolatedInstrumentProfile::getOptionType(handle_);
 }
 
-void InstrumentProfile::setOptionType(const StringLike &optionType) const {
-    isolated::ipf::IsolatedInstrumentProfile::setOptionType(handle_, optionType);
+void InstrumentProfile::setOptionType(StringParam optionType) const {
+    isolated::ipf::IsolatedInstrumentProfile::setOptionType(handle_, optionType.view());
 }
 
 std::string InstrumentProfile::getExpirationStyle() const {
     return isolated::ipf::IsolatedInstrumentProfile::getExpirationStyle(handle_);
 }
 
-void InstrumentProfile::setExpirationStyle(const StringLike &expirationStyle) const {
-    isolated::ipf::IsolatedInstrumentProfile::setExpirationStyle(handle_, expirationStyle);
+void InstrumentProfile::setExpirationStyle(StringParam expirationStyle) const {
+    isolated::ipf::IsolatedInstrumentProfile::setExpirationStyle(handle_, expirationStyle.view());
 }
 
 std::string InstrumentProfile::getSettlementStyle() const {
     return isolated::ipf::IsolatedInstrumentProfile::getSettlementStyle(handle_);
 }
 
-void InstrumentProfile::setSettlementStyle(const StringLike &settlementStyle) const {
-    isolated::ipf::IsolatedInstrumentProfile::setSettlementStyle(handle_, settlementStyle);
+void InstrumentProfile::setSettlementStyle(StringParam settlementStyle) const {
+    isolated::ipf::IsolatedInstrumentProfile::setSettlementStyle(handle_, settlementStyle.view());
 }
 
 std::string InstrumentProfile::getPriceIncrements() const {
     return isolated::ipf::IsolatedInstrumentProfile::getPriceIncrements(handle_);
 }
 
-void InstrumentProfile::setPriceIncrements(const StringLike &priceIncrements) const {
-    isolated::ipf::IsolatedInstrumentProfile::setPriceIncrements(handle_, priceIncrements);
+void InstrumentProfile::setPriceIncrements(StringParam priceIncrements) const {
+    isolated::ipf::IsolatedInstrumentProfile::setPriceIncrements(handle_, priceIncrements.view());
 }
 
 std::string InstrumentProfile::getTradingHours() const {
     return isolated::ipf::IsolatedInstrumentProfile::getTradingHours(handle_);
 }
 
-void InstrumentProfile::setTradingHours(const StringLike &tradingHours) const {
-    isolated::ipf::IsolatedInstrumentProfile::setTradingHours(handle_, tradingHours);
+void InstrumentProfile::setTradingHours(StringParam tradingHours) const {
+    isolated::ipf::IsolatedInstrumentProfile::setTradingHours(handle_, tradingHours.view());
 }
 
-std::string InstrumentProfile::getField(const StringLike &name) const {
-    return isolated::ipf::IsolatedInstrumentProfile::getField(handle_, name);
+std::string InstrumentProfile::getField(StringParam name) const {
+    return isolated::ipf::IsolatedInstrumentProfile::getField(handle_, name.view());
 }
 
-void InstrumentProfile::setField(const StringLike &name, const StringLike &value) const {
-    isolated::ipf::IsolatedInstrumentProfile::setField(handle_, name, value);
+void InstrumentProfile::setField(StringParam name, StringParam value) const {
+    isolated::ipf::IsolatedInstrumentProfile::setField(handle_, name.view(), value.view());
 }
 
-double InstrumentProfile::getNumericField(const StringLike &name) const {
-    return isolated::ipf::IsolatedInstrumentProfile::getNumericField(handle_, name);
+double InstrumentProfile::getNumericField(StringParam name) const {
+    return isolated::ipf::IsolatedInstrumentProfile::getNumericField(handle_, name.view());
 }
 
-void InstrumentProfile::setNumericField(const StringLike &name, double value) const {
-    isolated::ipf::IsolatedInstrumentProfile::setNumericField(handle_, name, value);
+void InstrumentProfile::setNumericField(StringParam name, double value) const {
+    isolated::ipf::IsolatedInstrumentProfile::setNumericField(handle_, name.view(), value);
 }
 
-std::int32_t InstrumentProfile::getDateField(const StringLike &name) const {
-    return isolated::ipf::IsolatedInstrumentProfile::getDateField(handle_, name);
+std::int32_t InstrumentProfile::getDateField(StringParam name) const {
+    return isolated::ipf::IsolatedInstrumentProfile::getDateField(handle_, name.view());
 }
 
-void InstrumentProfile::setDateField(const StringLike &name, std::int32_t value) const {
-    isolated::ipf::IsolatedInstrumentProfile::setDateField(handle_, name, value);
+void InstrumentProfile::setDateField(StringParam name, std::int32_t value) const {
+    isolated::ipf::IsolatedInstrumentProfile::setDateField(handle_, name.view(), value);
 }
 
 std::vector<std::string> InstrumentProfile::getNonEmptyCustomFieldNames() const {

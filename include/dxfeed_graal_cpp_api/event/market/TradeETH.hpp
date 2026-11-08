@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./TradeBase.hpp"
 #include <memory>
@@ -148,7 +149,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TradeETH(std::string eventSymbol) noexcept;
+    explicit TradeETH(StringParam eventSymbol);
 
     /**
      * Returns a string representation of the current object.

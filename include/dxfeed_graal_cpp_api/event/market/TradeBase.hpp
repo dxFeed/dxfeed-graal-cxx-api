@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../LastingEvent.hpp"
 #include "./MarketEvent.hpp"
 
@@ -98,7 +98,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TradeBase(const StringLike& eventSymbol) noexcept;
+    explicit TradeBase(StringParam eventSymbol);
 
     /**
      * Returns time and sequence of the last trade packaged into a single long value.

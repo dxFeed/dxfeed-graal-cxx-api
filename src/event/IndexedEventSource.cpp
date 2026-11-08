@@ -45,12 +45,11 @@ IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) {
 IndexedEventSource::IndexedEventSource() noexcept {
 }
 
-IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name) noexcept
-    : IndexedEventSource(id, name, false) {
+IndexedEventSource::IndexedEventSource(std::int32_t id, StringParam name) : IndexedEventSource(id, name.view(), false) {
 }
 
-IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name, bool orderSource) noexcept
-    : id_{id}, name_{ConstString::copyOf(name)}, orderSource_{orderSource} {
+IndexedEventSource::IndexedEventSource(std::int32_t id, StringParam name, bool orderSource)
+    : id_{id}, name_{ConstString::copyOf(name.view())}, orderSource_{orderSource} {
 }
 
 IndexedEventSource::IndexedEventSource(const IndexedEventSource &other) noexcept : IndexedEventSource(other, false) {

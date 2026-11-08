@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEvent.hpp"
 #include "../IndexedEventSource.hpp"
@@ -147,7 +147,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Series(const StringLike & eventSymbol) noexcept;
+    explicit Series(StringParam eventSymbol);
 
     /**
      * Changes an event's symbol and returns the current series.
@@ -155,7 +155,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current series.
      */
-    Series &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    Series &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes event's creation time and returns the current series.

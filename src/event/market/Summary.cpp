@@ -121,7 +121,7 @@ void Summary::assign(std::shared_ptr<EventType> event) {
 Summary::Summary() noexcept {
 }
 
-Summary::Summary(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Summary::Summary(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 std::int32_t Summary::getDayId() const noexcept {

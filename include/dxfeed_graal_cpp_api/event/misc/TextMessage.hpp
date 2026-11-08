@@ -7,8 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventType.hpp"
 #include "../EventTypeEnum.hpp"
 
@@ -109,7 +111,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * Creates a new message with the specified event symbol.
      * @param eventSymbol event symbol.
      */
-    explicit TextMessage(const StringLike &eventSymbol) noexcept;
+    explicit TextMessage(StringParam eventSymbol);
 
     /**
      * Creates a new message with the specified event symbol and text.
@@ -117,7 +119,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol event symbol.
      * @param text text.
      */
-    TextMessage(const StringLike &eventSymbol, const StringLike &text) noexcept;
+    TextMessage(StringParam eventSymbol, StringParam text);
 
     /**
      * Creates a new message with the specified event symbol, time and text.
@@ -125,7 +127,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param time time.
      * @param text text.
      */
-    TextMessage(const StringLike &eventSymbol, std::int64_t time, const StringLike &text) noexcept;
+    TextMessage(StringParam eventSymbol, std::int64_t time, StringParam text);
 
     /**
      * Returns a symbol of this event.
@@ -146,7 +148,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const StringLike &eventSymbol) noexcept override;
+    void setEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes an event's symbol and returns the current message.
@@ -154,7 +156,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol The symbol of this event.
      * @return The current message.
      */
-    TextMessage &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    TextMessage &withEventSymbol(StringParam eventSymbol);
 
     ///
     std::int64_t getEventTime() const noexcept override;
@@ -258,7 +260,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @param text text.
      */
-    void setText(const StringLike &text);
+    void setText(StringParam text);
 
     /**
      * Changes the text, or makes it null with `std::nullopt`.
@@ -277,7 +279,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @return The current message.
      */
-    TextMessage &withText(const StringLike &text) noexcept;
+    TextMessage &withText(StringParam text);
 
     /**
      * Changes the text, or makes it null with `std::nullopt`.
