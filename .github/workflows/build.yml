@@ -168,15 +168,9 @@ jobs:
       - name: Install ccache
         if: ${{ matrix.config.os != 'windows' }}
         timeout-minutes: 10
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" = macOS ]; then
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache
-          else
-            sudo apt-get $APT_OPTIONS update
-            sudo apt-get $APT_OPTIONS install -y ccache
-          fi
-          ccache --zero-stats
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
 
       - name: Prepare build
         run: |
@@ -574,10 +568,9 @@ jobs:
 
       - name: Install ccache
         timeout-minutes: 10
-        run: |
-          sudo apt-get $APT_OPTIONS update
-          sudo apt-get $APT_OPTIONS install -y ccache
-          ccache --zero-stats
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
 
       # ThreadSanitizer of clang 18 cannot map its shadow memory with the default ASLR entropy of the runner kernel.
       - name: Reduce ASLR entropy for TSan
@@ -667,15 +660,9 @@ jobs:
       - name: Install ccache
         if: ${{ matrix.config.os != 'windows' }}
         timeout-minutes: 10
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" = macOS ]; then
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache
-          else
-            sudo apt-get $APT_OPTIONS update
-            sudo apt-get $APT_OPTIONS install -y ccache
-          fi
-          ccache --zero-stats
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
 
       # Only the Wayland backend of the UI samples here (the build matrix has both X11 and Wayland), so that the
       # Wayland-only configuration is built as well.
@@ -868,15 +855,9 @@ jobs:
       - name: Install ccache
         if: ${{ matrix.config.os != 'windows' }}
         timeout-minutes: 10
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" = macOS ]; then
-            HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache
-          else
-            sudo apt-get $APT_OPTIONS update
-            sudo apt-get $APT_OPTIONS install -y ccache
-          fi
-          ccache --zero-stats
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
 
       - name: Configure CMake
         run: >
