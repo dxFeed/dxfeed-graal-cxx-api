@@ -32,7 +32,7 @@ namespace isolated {
  * A temporary `std::string` is moved into the object.
  */
 class SdkString final {
-    // MDAPI-32: validate UTF-8 here.
+    // TODO: check invalid utf-8 [MDAPI-32, EN-8233]
 
     std::string owned_{};
     const char *ptr_;
