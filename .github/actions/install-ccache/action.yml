@@ -1,0 +1,29 @@
+# Copyright (c) 2026 Devexperts LLC.
+# SPDX-License-Identifier: MPL-2.0
+
+# Installs ccache on a Linux or macOS runner and zeroes its statistics. A fix for the runner images goes here once
+# instead of into every job that builds with ccache.
+name: Install ccache
+description: Install ccache (apt on Linux, Homebrew on macOS) and zero its statistics.
+inputs:
+  apt-options:
+    description: Extra options of apt-get (retries, timeouts).
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        APT_OPTIONS: ${{ inputs.apt-options }}
+      run: |
+        if [ "$RUNNER_OS" = macOS ]; then
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install ccache
+          # ccache brings fmt, and on Intel runners its headers land in /usr/local/include, where they shadow the
+          # fmt of this project. Unlinking keeps the keg that ccache uses.
+          if brew list --formula fmt >/dev/null 2>&1; then brew unlink fmt; fi
+        else
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y ccache
+        fi
+        ccache --zero-stats
