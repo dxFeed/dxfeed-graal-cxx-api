@@ -5,6 +5,7 @@
 
 import contextlib
 import io
+import json
 import pathlib
 import platform
 import shutil
@@ -252,6 +253,272 @@ class MainTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("-dxfc_b", out)
         self.assertIn("+dxfc_c", out)
+
+
+class DifferenceTest(unittest.TestCase):
+    def test_changed_removed_added_by_entity(self):
+        before = ({"dxfcpp::v8::A::f(int)", "dxfcpp::v8::A::g()", "dxfcpp::v8::A::h()", "vtable for dxfcpp::v8::A"}, 7)
+        after = ({"dxfcpp::v9::A::f(long)", "dxfcpp::v9::A::g()", "dxfcpp::v9::A::k()", "vtable for dxfcpp::v9::A"}, 8)
+        difference = symbols.Difference(before, after)
+        self.assertEqual(difference.changed,
+                         [("dxfcpp::v*::A::f", ["dxfcpp::v*::A::f(int)"], ["dxfcpp::v*::A::f(long)"])])
+        self.assertEqual(difference.removed, ["dxfcpp::v*::A::h()"])
+        self.assertEqual(difference.added, ["dxfcpp::v*::A::k()"])
+        self.assertTrue(difference.breaking)
+        self.assertEqual((difference.std_before, difference.std_after), (7, 8))
+
+    def test_overloads_of_a_changed_entity_together(self):
+        difference = symbols.Difference(({"dxfcpp::f(int)", "dxfcpp::f(char)"}, 0),
+                                        ({"dxfcpp::f(int)", "dxfcpp::f(long)", "dxfcpp::f(short)"}, 0))
+        self.assertEqual(difference.changed,
+                         [("dxfcpp::f", ["dxfcpp::f(char)"], ["dxfcpp::f(long)", "dxfcpp::f(short)"])])
+        self.assertEqual((difference.removed, difference.added), ([], []))
+
+    def test_additions_do_not_break(self):
+        difference = symbols.Difference(({"dxfc_a"}, 1), ({"dxfc_a", "dxfc_b"}, 1))
+        self.assertFalse(difference.breaking)
+        self.assertTrue(difference.differs)
+        only_std = symbols.Difference(({"dxfc_a"}, 1), ({"dxfc_a"}, 2))
+        self.assertFalse(only_std.symbols_differ)
+        self.assertTrue(only_std.differs)
+
+    def test_compare_breaking_changes_first(self):
+        lines = symbols.compare(({"dxfcpp::f(int)", "dxfcpp::g()"}, 1), ({"dxfcpp::f(long)", "dxfcpp::h()"}, 2))
+        self.assertEqual(lines, ["Changed signatures (breaking):", "@@ dxfcpp::f @@", "-dxfcpp::f(int)",
+                                 "+dxfcpp::f(long)", "Removed (breaking):", "-dxfcpp::g()", "Added:", "+dxfcpp::h()",
+                                 "std-total: list 1, library 2"])
+
+
+def difference(before, after, std=(5, 5)):
+    return symbols.Difference((set(before), std[0]), (set(after), std[1]))
+
+
+class ReportTest(unittest.TestCase):
+    def test_breaking_change_grouped_by_platforms(self):
+        differences = {
+            "linux": difference({"dxfc_a", "dxfcpp::f(int)", "dxfcpp::g()"}, {"dxfc_a", "dxfcpp::f(long)", "dxfc_new"}),
+            "macos": difference({"dxfc_a", "dxfcpp::f(int)", "dxfcpp::g()"}, {"dxfc_a", "dxfcpp::f(long)", "dxfc_new"}),
+            "windows": difference({"dxfc_a", "void dxfcpp::f(int)"}, {"dxfc_a", "void dxfcpp::f(long)", "dxfc_new"}),
+        }
+        text = symbols.report(differences, accept=symbols.ACCEPT_FROM_CI)
+        self.assertTrue(text.startswith(symbols.REPORT_MARKER + "\n"))
+        self.assertIn("**Breaks the ABI: yes:** exported symbols are removed or changed on all platforms.", text)
+        self.assertIn("| linux | 1 | 1 | 1 | 5 |", text)
+        self.assertIn("@@ dxfcpp::f (linux, macos) @@\n-dxfcpp::f(int)\n+dxfcpp::f(long)\n", text)
+        self.assertIn("@@ dxfcpp::f (windows) @@\n-void dxfcpp::f(int)\n+void dxfcpp::f(long)\n", text)
+        self.assertIn("#### Removed (breaking)\n\n```diff\n@@ linux, macos @@\n-dxfcpp::g()\n```", text)
+        self.assertIn("#### Added\n\n```diff\n@@ all platforms @@\n+dxfc_new\n```", text)
+        self.assertIn("python3 scripts/symbols.py fetch", text)
+        self.assertNotIn("#### ABI check", text)
+
+    def test_unchanged_and_added_only(self):
+        same = {"linux": difference({"dxfc_a"}, {"dxfc_a"}), "windows": difference({"dxfc_a"}, {"dxfc_a"})}
+        text = symbols.report(same, accept=symbols.ACCEPT_FROM_CI)
+        self.assertIn("**Breaks the ABI: no:** the exported symbols are unchanged.", text)
+        self.assertNotIn("####", text)
+        added = {"linux": difference({"dxfc_a"}, {"dxfc_a", "dxfc_b"}, (5, 6))}
+        text = symbols.report(added, accept=symbols.ACCEPT_FROM_CI)
+        self.assertIn("**Breaks the ABI: no:** exported symbols are only added; the number of std:: instantiations "
+                      "changed.", text)
+        self.assertIn("| linux | 0 | 0 | 1 | 5 -> 6 |", text)
+        self.assertIn("#### Accepting the lists", text)
+        only_std = {"linux": difference({"dxfc_a"}, {"dxfc_a"}, (5, 6))}
+        self.assertIn("**Breaks the ABI: no:** the exported symbols are unchanged; the number of std:: instantiations "
+                      "changed.", symbols.report(only_std))
+
+    def test_taken_lists_keep_the_changes_of_the_base(self):
+        # The lists of abi/ match the CI (pending empty), the changes against the base branch are still shown.
+        differences = {"linux": difference({"dxfc_a", "dxfc_b"}, {"dxfc_a"}),
+                       "windows": difference({"dxfc_a"}, {"dxfc_a"})}
+        text = symbols.report(differences, accept=symbols.ACCEPT_FROM_CI, pending=[])
+        self.assertIn("**Breaks the ABI: yes:**", text)
+        self.assertIn("```diff\n@@ linux @@\n-dxfc_b\n```", text)
+        self.assertIn("#### Accepting the lists\n\nThe lists in `abi/` match the libraries of this run.", text)
+        self.assertNotIn("scripts/symbols.py fetch", text)
+        text = symbols.report(differences, accept=symbols.ACCEPT_FROM_CI, pending=["windows"])
+        self.assertIn("The lists of windows in `abi/` differ from the libraries of this run.", text)
+        self.assertIn("scripts/symbols.py fetch", text)
+        self.assertFalse(symbols.report(differences, marker=False).startswith(symbols.REPORT_MARKER))
+
+    def test_missing_list_is_unknown(self):
+        differences = {"linux": difference({"dxfc_a"}, {"dxfc_a"}), "windows": None}
+        self.assertEqual(symbols.verdict_of(differences, None), "unknown")
+        self.assertIn("**Breaks the ABI: unknown:** no list of windows: the symbols job ended before the comparison",
+                      symbols.report(differences))
+        # A breaking change elsewhere decides it.
+        differences["linux"] = difference({"dxfc_a"}, set())
+        self.assertEqual(symbols.verdict_of(differences, None), "yes")
+
+    def test_abi_results(self):
+        same = {"linux": difference({"dxfc_a"}, {"dxfc_a"})}
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory, "abi-report.txt")
+
+            def from_file(text):
+                path.write_text(text, encoding="utf-8")
+                return symbols.AbiResult.from_ci(str(path), "found")
+
+            incompatible = from_file("FAIL: incompatible ABI change (exit code 12): ...\n"
+                                     "Functions changes summary: 1 Removed\n")
+            self.assertEqual(symbols.verdict_of(same, incompatible), "yes")
+            text = symbols.report(same, incompatible)
+            self.assertIn("the ABI check found an incompatible change", text)
+            self.assertIn("FAIL: incompatible ABI change (exit code 12): ...\n\n<details>", text)
+            self.assertIn("```text\nFunctions changes summary: 1 Removed\n```", text)
+            self.assertEqual(symbols.verdict_of(same, from_file("FAIL: the layout of a public type changed\n")), "yes")
+            self.assertEqual(symbols.verdict_of(same, from_file("FAIL: abidiff reported an error (exit code 1)\n")),
+                             "unknown")
+            self.assertEqual(symbols.verdict_of(same, from_file("PASS: the ABI is unchanged (exit code 0)\n")), "no")
+            # A file without a known verdict proves nothing.
+            self.assertEqual(symbols.verdict_of(same, from_file("")), "unknown")
+            self.assertIn("ABI check: no verdict", symbols.report(same, from_file("")))
+            self.assertEqual(symbols.verdict_of(same, from_file("Segmentation fault\n")), "unknown")
+            path.unlink()
+            self.assertEqual(symbols.verdict_of(same, symbols.AbiResult.from_ci(str(path), "found")), "unknown")
+            self.assertEqual(symbols.verdict_of(same, symbols.AbiResult.from_ci(None, "unknown")), "unknown")
+            no_release = symbols.AbiResult.from_ci(None, "none")
+            self.assertEqual(symbols.verdict_of(same, no_release), "no")
+            self.assertIn("Not compared: no published release", symbols.report(same, no_release))
+
+    def test_limit_cuts_the_longest_section_by_groups(self):
+        before = {f"dxfcpp::F{index}::f(int)" for index in range(300)} | {"dxfcpp::removed()"}
+        after = {f"dxfcpp::F{index}::f(long)" for index in range(300)} | {"dxfcpp::added()"}
+        differences = {"linux": difference(before, after)}
+        full = symbols.report(differences, accept=symbols.ACCEPT_FROM_CI)
+        cut = symbols.report(differences, accept=symbols.ACCEPT_FROM_CI, limit=4000)
+        self.assertGreater(len(full), 4000)
+        self.assertLessEqual(len(cut), 4000)
+        self.assertNotIn("more lines are cut", full)
+        self.assertIn("more lines are cut: the full report is the artifact `exported-symbols-report`", cut)
+        self.assertIn("```diff\n@@ linux @@\n-dxfcpp::removed()\n```", cut)
+        self.assertIn("```diff\n@@ linux @@\n+dxfcpp::added()\n```", cut)
+        self.assertIn("#### Accepting the lists", cut)
+        changed = cut.split("#### Changed signatures (breaking)", 1)[1].split("```", 2)[1].splitlines()
+        self.assertFalse(changed[-1].startswith("@@"))  # no header of a group without its lines
+
+
+class ReportMainTest(unittest.TestCase):
+    def test_report_command(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            (root / "abi").mkdir()
+            (root / "ci" / "symbols-linux").mkdir(parents=True)
+            (root / "abi" / "symbols-linux.txt").write_text(symbols.render("linux", {"dxfc_a", "dxfc_b"}, 3))
+            (root / "abi" / "symbols-windows.txt").write_text(symbols.render("windows", {"dxfc_a"}, 0))
+            # The list of Windows is written by the job with CRLF.
+            (root / "ci" / "symbols-linux" / "symbols-linux.txt").write_bytes(
+                symbols.render("linux", {"dxfc_a"}, 3).replace("\n", "\r\n").encode())
+            output = root / "github-output"
+            report = root / "report.md"
+            code = symbols.main(["report", str(root / "ci"), "--abi-dir", str(root / "abi"), "--abi-baseline", "none",
+                                 "--limit", "65000", "--output", str(report), "--github-output", str(output)])
+            self.assertEqual(code, 0)
+            self.assertEqual(output.read_text(encoding="utf-8"), "verdict=yes\ncomment=true\n")
+            text = report.read_text(encoding="utf-8")
+            self.assertIn("| windows | | | | no list |", text)
+            self.assertIn("```diff\n@@ linux @@\n-dxfc_b\n```", text)
+            self.assertIn("Not compared: no published release", text)
+
+    def test_base_dir_and_comment_flag(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            for name in ("base", "abi", "ci"):
+                (root / name).mkdir()
+            (root / "base" / "symbols-linux.txt").write_text(symbols.render("linux", {"dxfc_a", "dxfc_b"}, 3))
+            (root / "abi" / "symbols-linux.txt").write_text(symbols.render("linux", {"dxfc_a"}, 3))
+            (root / "ci" / "symbols-linux.txt").write_text(symbols.render("linux", {"dxfc_a"}, 3))
+            output, report = root / "github-output", root / "report.md"
+
+            def run(*options):
+                output.write_text("")
+                code = symbols.main(["report", str(root / "ci"), "--abi-dir", str(root / "abi"), *options,
+                                     "--output", str(report), "--github-output", str(output)])
+                self.assertEqual(code, 0)
+                return output.read_text(encoding="utf-8"), report.read_text(encoding="utf-8")
+
+            # The taken lists match the CI: against the base branch the change still breaks the ABI.
+            flags, text = run("--base-dir", str(root / "base"))
+            self.assertEqual(flags, "verdict=yes\ncomment=true\n")
+            self.assertIn("The lists in `abi/` match the libraries of this run.", text)
+            # Without the base: nothing changed, no new comment.
+            flags, text = run()
+            self.assertEqual(flags, "verdict=no\ncomment=false\n")
+            self.assertNotIn("####", text)
+
+
+class WorkflowTest(unittest.TestCase):
+    def test_the_job_finds_its_comment_by_the_marker(self):
+        workflow = (SCRIPTS.parent / ".github" / "workflows" / "build.yml").read_text(encoding="utf-8")
+        self.assertIn(f"marker='{symbols.REPORT_MARKER}'", workflow)
+
+
+class FetchTest(unittest.TestCase):
+    def setUp(self):
+        self.directory = pathlib.Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.directory)
+        self.abi = self.directory / "abi"
+        self.abi.mkdir()
+        (self.abi / "symbols-linux.txt").write_text(symbols.render("linux", {"dxfc_a", "dxfc_b"}, 3), newline="\n")
+        (self.abi / "symbols-windows.txt").write_text(symbols.render("windows", {"dxfc_a"}, 0), newline="\n")
+        self.runs = [
+            {"databaseId": 30, "status": "completed", "conclusion": "cancelled", "createdAt": "2026-11-09T12:00:00Z"},
+            {"databaseId": 20, "status": "completed", "conclusion": "failure", "createdAt": "2026-11-09T11:00:00Z"},
+            {"databaseId": 10, "status": "completed", "conclusion": "success", "createdAt": "2026-11-09T10:00:00Z"},
+        ]
+        self.ci_lists = {"linux": symbols.render("linux", {"dxfc_a", "dxfc_c"}, 3).replace("\n", "\r\n"),
+                         "windows": symbols.render("windows", {"dxfc_a"}, 0).replace("\n", "\r\n")}
+        self.downloaded = []
+
+    def fake_command(self, command):
+        if command[:2] == ["git", "rev-parse"]:
+            return "0123456789abcdef\n"
+        if command[:3] == ["gh", "run", "list"]:
+            self.assertIn("0123456789abcdef", command)
+            return json.dumps(self.runs)
+        if command[:3] == ["gh", "run", "download"]:
+            self.downloaded.append(command[3])
+            if not self.ci_lists:
+                raise SymbolsError("gh run download failed: no valid artifacts found to download")
+            target = pathlib.Path(command[command.index("--dir") + 1])
+            for name, text in self.ci_lists.items():
+                (target / f"symbols-{name}").mkdir(parents=True)
+                (target / f"symbols-{name}" / f"symbols-{name}.txt").write_bytes(text.encode())
+            return ""
+        self.fail(f"unexpected command {command}")
+
+    def fetch(self, **options):
+        with unittest.mock.patch.object(symbols, "run_command", self.fake_command):
+            return symbols.fetch(abi_dir=self.abi, **options)
+
+    def test_latest_run_not_cancelled_written_with_lf(self):
+        text = self.fetch()
+        self.assertEqual(self.downloaded, ["20"])
+        self.assertIn("The lists of the CI run 20", text)
+        self.assertIn("**Breaks the ABI: yes:**", text)
+        self.assertNotIn(symbols.REPORT_MARKER, text)
+        self.assertIn("Written: symbols-linux.txt.", text)
+        self.assertEqual((self.abi / "symbols-linux.txt").read_bytes(),
+                         symbols.render("linux", {"dxfc_a", "dxfc_c"}, 3).encode())
+
+    def test_dry_run_and_matching_lists_write_nothing(self):
+        before = (self.abi / "symbols-linux.txt").read_bytes()
+        self.assertIn("Nothing written.", self.fetch(dry_run=True))
+        self.assertEqual((self.abi / "symbols-linux.txt").read_bytes(), before)
+        self.ci_lists["linux"] = before.decode()
+        self.assertIn("The lists match: nothing to write.", self.fetch(run=7))
+        self.assertEqual(self.downloaded, ["20", "7"])
+
+    def test_run_in_progress_and_no_run(self):
+        self.runs = [{"databaseId": 40, "status": "in_progress", "conclusion": "", "createdAt": "2026-11-09T13:00:00Z"}]
+        self.assertIn("the run 40 is not completed", self.fetch())
+        self.runs = []
+        with self.assertRaisesRegex(SymbolsError, "no CI run of the commit 0123456789ab"):
+            self.fetch()
+
+    def test_a_run_without_lists(self):
+        self.ci_lists = {}
+        with self.assertRaisesRegex(SymbolsError, "the run 20 has no lists"):
+            self.fetch()
 
 
 if __name__ == "__main__":

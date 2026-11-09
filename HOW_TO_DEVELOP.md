@@ -317,20 +317,38 @@ The shared library is built with hidden visibility: with gcc and clang it export
   release package (see [HOW_TO_BUILD.md](HOW_TO_BUILD.md)).
 - Nothing else is exported: no `DXFCPP_EXPORT` in `src/`.
 
-The exported symbols are listed in `abi/symbols-linux.txt`, `abi/symbols-macos.txt` and `abi/symbols-windows.txt`:
-the own symbols demangled one per line and the number of the `std::` instantiations. The `symbols` CI job compares
-the Release library (without `DXFCXX_EXPORT_INTERNALS`) with the list of its OS and fails on any difference, so a
-change of the public API shows in the pull request as a diff of the list. Update the list of your OS after building
-the library in Release:
+The exported symbols are listed in `abi/symbols-linux.txt`, `abi/symbols-macos.txt` (arm64),
+`abi/symbols-macos-x86_64.txt` and `abi/symbols-windows.txt`: the own symbols demangled one per line and the number of
+the `std::` instantiations. The `symbols` CI jobs compare the Release library (without `DXFCXX_EXPORT_INTERNALS`) with
+the list of their OS and fail on any difference. The `symbols-report` job puts what changed on all platforms into one
+report: changed signatures (the old and the new one side by side), removed and added symbols, and the verdict whether
+the change breaks the ABI, with the result of the `abi` job (abidiff, Linux). The report is in the summary of the run
+and, in a pull request, in a comment that each run updates; there it compares with the lists of the base branch, so it
+keeps showing the changes after you take the lists. A removed or changed symbol is a breaking change of the ABI:
+it needs a new major version.
+
+When the change is intended, take the lists of the latest CI run of your commit into `abi/` (needs the
+[GitHub CLI](https://cli.github.com/), `gh auth login`), check the report it prints and commit the lists:
 
 ```shell
+python3 scripts/symbols.py fetch
+```
+
+On Windows run `py -3` instead of `python3`. `--dry-run` only prints the report, `--run <id>` takes another run.
+
+Without CI, build the library as the job does and update the list of your OS from it:
+
+```shell
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DDXFCXX_BUILD_DOC=OFF -DDXFCXX_BUILD_UNIT_TESTS=OFF \
+  -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_FEATURE_STACKTRACE=ON
+cmake --build build --config Release --target dxFeedGraalCxxApi
 python3 scripts/symbols.py compare --update build/libdxFeedGraalCxxApi.so abi/symbols-linux.txt
 ```
 
-The lists come from the compilers of the job: gcc 14 on Linux (as the release packages), Apple clang on macOS,
-Visual Studio 2022 on Windows. Another compiler exports other implicit symbols (clang on Linux adds construction
-vtables, for example), so update the list with the same one, or take it from the artifact `symbols-<os>` of the
-failed job. A removed or changed line is a breaking change of the ABI: it needs a new major version.
+The library is `build/libdxFeedGraalCxxApi.dylib` on macOS and `build/Release/dxFeedGraalCxxApi.dll` on Windows. The
+lists come from the compilers of the jobs: gcc-toolset-14 on Oracle Linux 8 (as the release packages), Apple clang of
+Xcode 16.4 on macOS, Visual Studio 2022 on Windows. Another compiler exports other implicit symbols (clang on Linux adds
+construction vtables, for example), so a list made with it differs from the one of the job.
 
 ## Release notes
 
