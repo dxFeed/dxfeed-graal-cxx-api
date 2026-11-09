@@ -34,7 +34,8 @@
 # The report is also appended to $GITHUB_STEP_SUMMARY when it is set.
 #
 # Environment: ABI_ASSET (the asset name, default abi-x86_64-linux.xml), ABI_SUPPRESSIONS (default abi/abidiff.suppr
-# next to this script's repository root), ABI_CURRENT_XML (keep the XML of the compared library there).
+# next to this script's repository root), ABI_CURRENT_XML (keep the XML of the compared library there), ABI_REPORT
+# (compare writes the verdict line and then the report of abidiff there; scripts/symbols.py report reads it).
 
 set -euo pipefail
 
@@ -181,6 +182,10 @@ cmd_compare() {
         verdict="PASS: the ABI is unchanged (exit code $rc)"
     fi
     echo "$verdict"
+
+    if [ -n "${ABI_REPORT:-}" ]; then
+        { echo "$verdict"; cat "$report"; } > "$ABI_REPORT"
+    fi
 
     if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
         {

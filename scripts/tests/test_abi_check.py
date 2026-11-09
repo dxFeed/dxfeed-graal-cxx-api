@@ -7,10 +7,14 @@ import os
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 SCRIPT = pathlib.Path(__file__).resolve().parents[1] / "abi_check.sh"
+sys.path.insert(0, str(SCRIPT.parent))
+
+import symbols  # noqa: E402  (reads the file of ABI_REPORT in the CI report)
 
 # A fake gh: FAKE_RELEASES lists the published stable releases as tag:asset or tag:none (gh release list with --jq
 # prints the tags that pass the filter), and the download writes the tag into a minimal ABI XML.
@@ -77,6 +81,77 @@ class BaselineTest(unittest.TestCase):
         tag, output = self.baseline("v8.1.0:asset v9.0.0:none")
         self.assertIsNone(tag)
         self.assertIn("nothing to compare the ABI with", output)
+
+
+# A fake abidw writes a minimal ABI XML with a type and a function; a fake abidiff prints FAKE_REPORT and exits with
+# FAKE_RC.
+FAKE_ABIDW = r"""#!/bin/bash
+out=""
+while [ $# -gt 0 ]; do [ "$1" = --out-file ] && out="$2"; shift; done
+[ -n "$out" ] || exit 0
+printf '<abi-corpus>\n<class-decl name="A"/>\n<function-decl name="f"/>\n</abi-corpus>\n' > "$out"
+"""
+
+FAKE_ABIDIFF = r"""#!/bin/bash
+[ "${1:-}" = --version ] && exit 0
+printf '%s\n' "$FAKE_REPORT"
+exit "$FAKE_RC"
+"""
+
+
+@unittest.skipUnless(os.name == "posix" and shutil.which("bash"), "abi_check.sh runs in bash on Linux and macOS")
+class CompareTest(unittest.TestCase):
+    def setUp(self):
+        self.directory = pathlib.Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.directory)
+        for name, text in (("abidw", FAKE_ABIDW), ("abidiff", FAKE_ABIDIFF)):
+            tool = self.directory / name
+            tool.write_text(text, encoding="utf-8")
+            tool.chmod(0o755)
+        (self.directory / "include").mkdir()
+        (self.directory / "lib.so").write_bytes(b"")
+        self.reference = self.directory / "reference.xml"
+        self.reference.write_text("<abi-corpus>\n</abi-corpus>\n", encoding="utf-8")
+
+    def compare(self, rc, report):
+        out = self.directory / "abi-report.txt"
+        environment = dict(os.environ, PATH=f"{self.directory}{os.pathsep}{os.environ['PATH']}", FAKE_RC=str(rc),
+                           FAKE_REPORT=report, ABI_REPORT=str(out))
+        for name in ("GITHUB_ACTIONS", "GITHUB_STEP_SUMMARY"):
+            environment.pop(name, None)
+        command = ["bash", str(SCRIPT), "compare", str(self.reference), str(self.directory / "lib.so"),
+                   str(self.directory / "include")]
+        result = subprocess.run(command, capture_output=True, text=True, env=environment)
+        return result.returncode, out.read_text(encoding="utf-8")
+
+    def test_the_report_file_has_the_verdict_and_the_report(self):
+        code, text = self.compare(0, "")
+        self.assertEqual(code, 0)
+        self.assertTrue(text.startswith("PASS: the ABI is unchanged (exit code 0)\n"), text)
+        code, text = self.compare(4, "Functions changes summary: 0 Removed, 0 Changed, 1 Added function")
+        self.assertEqual(code, 0)
+        self.assertEqual(text, "PASS: compatible ABI changes only, additions (exit code 4)\n"
+                               "Functions changes summary: 0 Removed, 0 Changed, 1 Added function\n")
+        code, text = self.compare(12, "Functions changes summary: 1 Removed")
+        self.assertEqual(code, 1)
+        self.assertTrue(text.startswith("FAIL: incompatible ABI change (exit code 12)"), text)
+        code, text = self.compare(4, "  type size changed from 64 to 128 (in bits)")
+        self.assertEqual(code, 1)
+        self.assertTrue(text.startswith("FAIL: the layout of a public type changed"), text)
+
+    def test_symbols_reads_each_verdict(self):
+        # scripts/symbols.py report takes the verdict from the first line of the file.
+        cases = ((0, "", "no"), (12, "Functions changes summary: 1 Removed", "yes"),
+                 (4, "  type size changed from 64 to 128 (in bits)", "yes"), (1, "abidiff: no such file", "unknown"))
+        for rc, report, verdict in cases:
+            self.compare(rc, report)
+            abi = symbols.AbiResult.from_ci(str(self.directory / "abi-report.txt"), "found")
+            self.assertEqual(symbols.verdict_of({}, abi), verdict, abi.verdict)
+
+    def test_an_abidiff_error(self):
+        code, text = self.compare(1, "abidiff: no such file")
+        self.assertEqual(code, 1)
+        self.assertTrue(text.startswith("FAIL: abidiff reported an error (exit code 1)"), text)
 
 
 if __name__ == "__main__":

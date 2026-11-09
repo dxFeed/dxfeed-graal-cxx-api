@@ -343,12 +343,13 @@ jobs:
         run: cmake -P scripts/tests/test_release.cmake
 
   # The exported symbols of the Release library (as in the packages: no DXFCXX_EXPORT_INTERNALS) against the list of its
-  # OS, abi/symbols-<os>.txt. On a difference the list of the library is uploaded as the artifact symbols-<os>.
-  # macOS x86-64 has its own list: AppleClang exports there the typeinfo of the classes without a key function, which
-  # arm64 keeps hidden.
-  # The compilers are those of the packages (release.yml): Linux in oraclelinux:8 with gcc-toolset-14, so the list is
-  # the one of the library that is shipped. The steps use paths relative to the workspace: in a container,
-  # ${{github.workspace}} is the path on the runner.
+  # platform, abi/symbols-<platform>.txt: any difference fails. The list of the library is always uploaded as the
+  # artifact symbols-<platform>: the symbols-report job compares it, `python3 scripts/symbols.py fetch` takes it into
+  # abi/. Each architecture of the packages has its own list. macOS: AppleClang exports on x86-64 the typeinfo of the
+  # classes without a key function, which arm64 keeps hidden, so the std:: total of arm64 is 0.
+  # The compilers are those of the packages (release.yml): Linux (x86-64 and arm64) in oraclelinux:8 with
+  # gcc-toolset-14, so the list is the one of the library that is shipped. The steps use paths relative to the
+  # workspace: in a container, ${{github.workspace}} is the path on the runner.
   symbols:
     needs: plan
     if: ${{ needs.plan.outputs.code == 'true' }}
@@ -365,6 +366,15 @@ jobs:
             python: python3.11
             library: build/libdxFeedGraalCxxApi.so
             symbols: linux
+          - name: oraclelinux-8-arm-gcc-toolset-14
+            image: ubuntu-24.04-arm
+            container: oraclelinux:8
+            os: linux
+            cc: 'gcc'
+            cxx: 'g++'
+            python: python3.11
+            library: build/libdxFeedGraalCxxApi.so
+            symbols: linux-aarch64
           - name: macos-15-xcode-16-4
             image: macos-15
             os: macos
@@ -431,19 +441,18 @@ jobs:
         shell: bash
         run: |
           python=${{ matrix.config.python }}
-          list=abi/symbols-${{ matrix.config.symbols }}.txt
-          if ! "$python" scripts/symbols.py compare ${{ matrix.config.library }} "$list"; then
-            "$python" scripts/symbols.py extract ${{ matrix.config.library }} > symbols-${{ matrix.config.symbols }}.txt
-            exit 1
-          fi
+          "$python" scripts/symbols.py extract ${{ matrix.config.library }} > symbols-${{ matrix.config.symbols }}.txt
+          "$python" scripts/symbols.py compare ${{ matrix.config.library }} abi/symbols-${{ matrix.config.symbols }}.txt
 
       - name: Upload the list of the library
-        if: ${{ failure() }}
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: symbols-${{ matrix.config.symbols }}
+          overwrite: true
           path: symbols-${{ matrix.config.symbols }}.txt
           if-no-files-found: ignore
+          retention-days: 14
 
   # The reference of the ABI check (scripts/abi_check.sh): the latest published release of the major of this branch
   # with the asset abi-x86_64-linux.xml (none until the first release of a major: a notice, the abi job only dumps).
@@ -532,7 +541,20 @@ jobs:
 
       - name: Compare the ABI with the latest release of the major
         if: ${{ needs.abi_baseline.outputs.found == 'true' }}
+        env:
+          ABI_REPORT: abi-report.txt
         run: bash scripts/abi_check.sh compare abi-reference.xml "$(readlink -f build/libdxFeedGraalCxxApi.so)" include
+
+      # The verdict and the report of abidiff for the symbols-report job.
+      - name: Upload the report of the comparison
+        if: ${{ !cancelled() && needs.abi_baseline.outputs.found == 'true' }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: abi-report
+          overwrite: true
+          path: abi-report.txt
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Upload the ABI
         if: ${{ failure() }}
@@ -541,6 +563,102 @@ jobs:
           name: abi-x86_64-linux
           path: abi-x86_64-linux.xml
           if-no-files-found: ignore
+
+  # One report of the symbols jobs of all platforms and of the abi job: what is changed, removed and added, and whether
+  # it breaks the ABI (scripts/symbols.py report). It goes to the summary of the run and the artifact
+  # exported-symbols-report, and in a pull request of this repository to one comment, updated by each run (a new
+  # comment only when something changed). A pull request from a fork has a read-only token: the summary only.
+  symbols-report:
+    needs: [ plan, symbols, abi_baseline, abi ]
+    if: ${{ !cancelled() && needs.plan.outputs.code == 'true' }}
+    name: "symbols-report"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: |
+            /scripts/symbols.py
+            /abi/
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      # The lists of the base branch: the report of a pull request shows its changes after the lists are taken too.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          sparse-checkout: |
+            /abi/
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      # A list or the ABI report is missing when its job ended before it: the report says so.
+      - name: Download the lists of the symbols jobs
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: symbols-*
+          path: ci-lists
+        continue-on-error: true
+
+      - name: Download the report of the ABI check
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: abi-report
+          path: ci-abi
+        continue-on-error: true
+
+      - name: Make the report
+        id: report
+        env:
+          ABI_BASELINE: ${{ needs.abi_baseline.result != 'success' && 'unknown' || (needs.abi_baseline.outputs.found == 'true' && 'found' || 'none') }}
+        run: |
+          mkdir -p ci-lists ci-abi
+          args=(ci-lists --abi-baseline "$ABI_BASELINE")
+          abi_report="$(find ci-abi -name abi-report.txt | head -n 1)"
+          [ -z "$abi_report" ] || args+=(--abi-report "$abi_report")
+          [ ! -d base/abi ] || args+=(--base-dir base/abi)
+          python3 scripts/symbols.py report "${args[@]}" --output exported-symbols-report.md
+          # A comment of a pull request takes 65536 characters.
+          python3 scripts/symbols.py report "${args[@]}" --limit 60000 --output report.md --github-output "$GITHUB_OUTPUT"
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the report
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: exported-symbols-report
+          overwrite: true
+          path: exported-symbols-report.md
+          retention-days: 14
+
+      # The comment is found by the marker of its first line (scripts/symbols.py REPORT_MARKER).
+      - name: Comment on the pull request
+        # Pull requests of forks and of Dependabot get a read-only token.
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
+          COMMENT: ${{ steps.report.outputs.comment }}
+        run: |
+          marker='<!-- exported-symbols-report -->'
+          id="$(gh api --paginate "repos/$REPOSITORY/issues/$PULL_REQUEST/comments" \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id" |
+            head -n 1)"
+          if [ -n "$id" ]; then
+            gh api --method PATCH "repos/$REPOSITORY/issues/comments/$id" -F body=@report.md > /dev/null
+            echo "Updated the comment $id"
+          elif [ "$COMMENT" = true ]; then
+            gh api "repos/$REPOSITORY/issues/$PULL_REQUEST/comments" -F body=@report.md > /dev/null
+            echo "Added a comment"
+          else
+            echo "The exported symbols are unchanged: no comment"
+          fi
 
   tsan:
     needs: plan
