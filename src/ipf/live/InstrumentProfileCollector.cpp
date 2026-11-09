@@ -113,7 +113,7 @@ void InstrumentProfileCollector::removeListenerHandle(std::size_t id) {
 void InstrumentProfileCollector::removeUpdateListenerImpl(std::size_t listenerId) {
     removeListenerHandle(listenerId);
 
-    onInstrumentProfilesUpdateHandlers_[listenerId].remove(listenerId);
+    // The handler holds only this listener.
     onInstrumentProfilesUpdateHandlers_.erase(listenerId);
 }
 

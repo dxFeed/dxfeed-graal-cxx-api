@@ -335,9 +335,9 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: ctest -L network --extra-verbose --output-on-failure
 
-  # Unit tests linked against the shared library. On Windows they are expected to fail until the DLL-boundary defects
-  # are fixed: today most test executables do not link because StringLike is not exported, and entities registered
-  # from inline/template code land in a separate registry per module. Linux and macOS pass; see MDAPI-427.
+  # Unit tests linked against the shared library, as applications that use the DLL: a function of the public API
+  # without DXFCPP_EXPORT is a link error here, and state that the public headers keep outside the library (a copy in
+  # each module on Windows) fails the tests. The rules are in include/dxfeed_graal_cpp_api/internal/Conf.hpp.
   dynamic-link-tests:
     needs: plan
     strategy:
@@ -363,7 +363,6 @@ jobs:
 
     name: "${{ matrix.config.name }}-Release-dynamic-link-tests"
     runs-on: ${{ matrix.config.image }}
-    continue-on-error: true
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

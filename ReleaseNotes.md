@@ -1,3 +1,9 @@
+* **\[MDAPI-512]\[C++]** Fixed the shared library (DLL) on Windows: the listeners of the subscriptions and tx models
+  that the code of the public headers creates were not called, and the listener ids of the application and of the
+  library collided. Applications that use `dxFeedGraalCxxApi.dll` are rebuilt with the new headers: the layout of
+  `Handler`, `SimpleHandler` and `InstrumentProfileCollector` changed.
+    * The managers of the entities are kept in the library, one of each type for the library and the application.
+    * The listener ids are unique within a handler (`Handler`, `SimpleHandler`), not across handlers.
 * **\[MDAPI-445]\[C++]** Fixed: the Linux packages (library, Samples, Tools; x64 and aarch64) did not load on
   Ubuntu 22.04, Debian 12 and Oracle Linux / RHEL 8 and 9: they needed glibc 2.38 and the `libstdc++` of GCC 13.
   * The packages are built on Oracle Linux 8 with GCC Toolset 14 and need glibc 2.28 and the `libstdc++` of GCC 8.

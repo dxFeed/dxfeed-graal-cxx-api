@@ -54,6 +54,9 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     std::unordered_map<std::size_t, JavaObjectHandle<InstrumentProfileUpdateListener>> listenerHandles_{};
     std::unordered_map<std::size_t, SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)>>
         onInstrumentProfilesUpdateHandlers_{};
+    // The ids of the update listeners, unique within this collector. Each listener has a handler of its own, so the ids
+    // of the handlers (unique within a handler) cannot identify the listeners.
+    std::size_t lastListenerId_{};
 
     InstrumentProfileCollector();
 
@@ -165,7 +168,10 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
 
         SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> h{};
 
-        std::size_t id = h.add(listener);
+        h.add(listener);
+
+        const auto id = ++lastListenerId_;
+
         onInstrumentProfilesUpdateHandlers_.try_emplace(id, std::move(h));
         addListenerHandle(id);
 
