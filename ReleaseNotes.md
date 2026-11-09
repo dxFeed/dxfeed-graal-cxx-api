@@ -1,3 +1,9 @@
+* **\[MDAPI-512]\[C++]** Fixed the shared library (DLL) on Windows: the listeners of the subscriptions and tx models
+  that the code of the public headers creates were not called, and the listener ids of the application and of the
+  library collided. Applications that use `dxFeedGraalCxxApi.dll` are rebuilt with the new headers: the layout of
+  `Handler`, `SimpleHandler` and `InstrumentProfileCollector` changed.
+    * The managers of the entities are kept in the library, one of each type for the library and the application.
+    * The listener ids are unique within a handler (`Handler`, `SimpleHandler`), not across handlers.
 * **\[MDAPI-305]\[C++]** The Windows `-static-mt` archives need no Visual C++ Redistributable, and a single exe or
   dll can be built from them. See "Windows without the Visual C++ Redistributable" in `README.md`.
     * The archives take the SDK DLL built with the static C runtime, and the C++ API DLL is built with `/MT` (`/MTd`).
