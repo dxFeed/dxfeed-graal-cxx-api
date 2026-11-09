@@ -170,8 +170,9 @@ endif ()
 
 # The Full Source Bundles have the SDK archives unpacked into third_party/graal-native-sdk-<version>-<archive>. If there
 # is one for the platform, the archive that the options select must be there too.
-set(DXFCXX_BUNDLED_SDK_PREFIX "third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-")
-file(GLOB DXFCXX_BUNDLED_SDK_FILES LIST_DIRECTORIES false
+set(DXFCXX_BUNDLED_SDK_NAME_PREFIX "graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-")
+set(DXFCXX_BUNDLED_SDK_PREFIX "third_party/${DXFCXX_BUNDLED_SDK_NAME_PREFIX}")
+file(GLOB DXFCXX_BUNDLED_SDK_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/third_party" LIST_DIRECTORIES false
         "${CMAKE_CURRENT_SOURCE_DIR}/${DXFCXX_BUNDLED_SDK_PREFIX}${DXFCXX_GRAAL_TARGET_PLATFORM}*/CMakeLists.txt")
 
 if (DXFCXX_BUNDLED_SDK_FILES)
@@ -189,11 +190,11 @@ if (DXFCXX_BUNDLED_SDK_FILES)
     if (DXFCXX_BUNDLED_SDK_MISSING)
         set(DXFCXX_BUNDLED_SDK_ARCHIVES "")
 
+        # graal-native-sdk-<version>-<archive>/CMakeLists.txt -> <archive>
         foreach (DXFCXX_BUNDLED_SDK_FILE IN LISTS DXFCXX_BUNDLED_SDK_FILES)
-            get_filename_component(DXFCXX_BUNDLED_SDK_DIR "${DXFCXX_BUNDLED_SDK_FILE}" DIRECTORY)
-            get_filename_component(DXFCXX_BUNDLED_SDK_DIR "${DXFCXX_BUNDLED_SDK_DIR}" NAME)
-            string(REPLACE "graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-" "" DXFCXX_BUNDLED_SDK_DIR "${DXFCXX_BUNDLED_SDK_DIR}")
-            list(APPEND DXFCXX_BUNDLED_SDK_ARCHIVES ${DXFCXX_BUNDLED_SDK_DIR})
+            string(REPLACE "${DXFCXX_BUNDLED_SDK_NAME_PREFIX}" "" DXFCXX_BUNDLED_SDK_FILE "${DXFCXX_BUNDLED_SDK_FILE}")
+            string(REPLACE "/CMakeLists.txt" "" DXFCXX_BUNDLED_SDK_FILE "${DXFCXX_BUNDLED_SDK_FILE}")
+            list(APPEND DXFCXX_BUNDLED_SDK_ARCHIVES ${DXFCXX_BUNDLED_SDK_FILE})
         endforeach ()
 
         list(SORT DXFCXX_BUNDLED_SDK_ARCHIVES)

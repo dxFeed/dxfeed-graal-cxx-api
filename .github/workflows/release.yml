@@ -528,7 +528,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
           & $configure $bundleRoot "$verifyBuildDir-debug-sdk" -Match 'Graal Native SDK: \S+-amd64-windows-debug\r?\n' `
-            -Options "-DDXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON"
+            -Options "-DDXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON", "-DDXFCXX_BUILD_UNIT_TESTS=OFF", "-DDXFCXX_BUILD_SAMPLES=OFF", `
+              "-DDXFCXX_BUILD_TOOLS=OFF"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
           & $configure $bundleRoot "$verifyBuildDir-static-runtime" -ExpectFailure -Match 'Full-Source-Bundle-static-mt\.zip' `
@@ -571,7 +572,8 @@ jobs:
 
           & $configure $bundleRoot "$verifyBuildDir-debug-sdk" `
             -Match 'Graal Native SDK: \S+-amd64-windows-debug-static-crt\r?\n', 'Graal Native SDK static library: \S+-amd64-windows-debug-static-lib\r?\n' `
-            -Options "-DDXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON"
+            -Options "-DDXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON", "-DDXFCXX_BUILD_UNIT_TESTS=OFF", "-DDXFCXX_BUILD_SAMPLES=OFF", `
+              "-DDXFCXX_BUILD_TOOLS=OFF"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
           & $configure $bundleRoot "$verifyBuildDir-dynamic-runtime" -ExpectFailure -Match 'Full-Source-Bundle\.zip' `
