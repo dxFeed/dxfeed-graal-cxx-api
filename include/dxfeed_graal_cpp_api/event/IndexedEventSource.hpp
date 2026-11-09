@@ -5,7 +5,7 @@
 
 #include "../detail/Conf.hpp"
 #include "../detail/ConstString.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -51,7 +51,7 @@ class DXFCPP_EXPORT IndexedEventSource {
     }
 
     /// Creates a source of an OrderSource by id and name.
-    IndexedEventSource(std::int32_t id, const StringLike &name, bool orderSource) noexcept;
+    IndexedEventSource(std::int32_t id, StringParam name, bool orderSource);
 
     /// Creates a copy of the source for an OrderSource.
     IndexedEventSource(const IndexedEventSource &other, bool orderSource) noexcept;
@@ -103,7 +103,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(std::int32_t id, const StringLike &name) noexcept;
+    IndexedEventSource(std::int32_t id, StringParam name);
 
     /**
      * Creates a copy of the source. A copy of an OrderSource is a source of the IndexedEventSource type.

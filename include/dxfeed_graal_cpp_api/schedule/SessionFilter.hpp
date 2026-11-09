@@ -10,9 +10,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/JavaObjectHandle.hpp"
 #include "../detail/Math.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "./SessionType.hpp"
 
+#include <optional>
 
 /**
  * \addtogroup dxfcpp_schedule
@@ -109,8 +110,8 @@ struct DXFCPP_EXPORT SessionFilter final {
      * @param type required type, `std::nullopt` if not relevant
      * @param trading required trading flag, `std::nullopt` if not relevant
      */
-    SessionFilter(SessionFilterEnum code, const StringLike &name, std::optional<SessionType> type,
-                  std::optional<bool> trading) noexcept;
+    SessionFilter(SessionFilterEnum code, StringParam name, std::optional<SessionType> type,
+                  std::optional<bool> trading);
 
     /**
      * Tests whether or not the specified session is an acceptable result.

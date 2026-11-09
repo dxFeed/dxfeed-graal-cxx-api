@@ -9,7 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/Concepts.hpp"
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
 
 #include <concepts>
@@ -81,7 +81,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param text The textual representation.
      * @throws JavaException("IllegalArgumentException") if text uses wrong format or contains invalid values.
      */
-    static Ptr valueOf(const StringLike &text);
+    static Ptr valueOf(StringParam text);
 
     /**
      * Returns an instance of additional underlyings for specified internal representation.
@@ -95,7 +95,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @throws JavaException("IllegalArgumentException") if data contains invalid values.
      */
     template <typename MapLikeType>
-        requires(!std::convertible_to<MapLikeType, StringLike>)
+        requires(!std::convertible_to<MapLikeType, StringParam>)
     static Ptr valueOf(const MapLikeType &map);
 
     /**
@@ -107,7 +107,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param symbol The underlying symbol.
      * @return SPC by the text and symbol.
      */
-    static double getSPC(const StringLike &text, const StringLike &symbol);
+    static double getSPC(StringParam text, StringParam symbol);
 
     /**
      * Returns textual representation of additional underlyings in the format:
@@ -138,7 +138,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param symbol The underlying symbol.
      * @return The SPC for the symbol.
      */
-    double getSPC(const StringLike &symbol) const;
+    double getSPC(StringParam symbol) const;
 
     /**
      * Returns `true` if this object is equal to `other` object
@@ -180,7 +180,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
 };
 
 template <typename MapLikeType>
-    requires(!std::convertible_to<MapLikeType, StringLike>)
+    requires(!std::convertible_to<MapLikeType, StringParam>)
 AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map) {
     static_assert(MapLike<MapLikeType>, "AdditionalUnderlyings::valueOf(): argument must be a map-like container "
                                         "(e.g. std::map, std::unordered_map, QMap, or std::vector<std::pair<K, V>>)");

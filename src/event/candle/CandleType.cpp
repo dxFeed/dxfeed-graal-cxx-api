@@ -25,8 +25,8 @@ std::string CandleType::toString() const {
     return std::string{string_};
 }
 
-std::reference_wrapper<const CandleType> CandleType::parse(const StringLike &s) {
-    const std::string_view sv = s;
+std::reference_wrapper<const CandleType> CandleType::parse(StringParam s) {
+    const std::string_view sv = s.view();
 
     if (sv.empty()) {
         throw InvalidArgumentException("Missing candle type");

@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 
 
 #include <functional>
@@ -113,7 +113,7 @@ class DXFCPP_EXPORT InstrumentProfileField {
     /**
      * Returns cref to field for specified name or std::nullopt if field is not found.
      */
-    static std::optional<std::reference_wrapper<const InstrumentProfileField>> find(const StringLike &name) noexcept;
+    static std::optional<std::reference_wrapper<const InstrumentProfileField>> find(StringParam name) noexcept;
 
     InstrumentProfileFieldEnum getFieldEnum() const;
 

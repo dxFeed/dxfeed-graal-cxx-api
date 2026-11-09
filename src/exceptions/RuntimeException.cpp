@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <mutex>
+#include <ostream>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -78,9 +79,9 @@ struct RuntimeException::StackTrace {
     std::string text{};
 };
 
-RuntimeException::RuntimeException(const StringLike &message, const StringLike &additionalStackTrace)
-    : std::runtime_error(message.c_str()), stackTrace_(std::make_shared<StackTrace>()) {
-    stackTrace_->additional = additionalStackTrace;
+RuntimeException::RuntimeException(StringParam message, StringParam additionalStackTrace)
+    : std::runtime_error(std::string(message.view())), stackTrace_(std::make_shared<StackTrace>()) {
+    stackTrace_->additional = additionalStackTrace.view();
 #ifdef DXFCXX_FEATURE_STACKTRACE
     stackTrace_->frames = boost::stacktrace::stacktrace();
 #endif

@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "./RuntimeException.hpp"
 
 /**
@@ -21,8 +21,8 @@ DXFCPP_BEGIN_NAMESPACE
  * Thrown to indicate that a method has been passed an illegal or inappropriate argument.
  */
 struct DXFCPP_EXPORT InvalidArgumentException : RuntimeException {
-    explicit InvalidArgumentException(const StringLike &message,
-                                      const StringLike &additionalStackTrace = "");
+    explicit InvalidArgumentException(StringParam message,
+                                      StringParam additionalStackTrace = "");
 
     InvalidArgumentException(const InvalidArgumentException &other) noexcept;
 

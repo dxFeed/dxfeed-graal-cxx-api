@@ -5,7 +5,7 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-InvalidArgumentException::InvalidArgumentException(const StringLike &message, const StringLike &additionalStackTrace)
+InvalidArgumentException::InvalidArgumentException(StringParam message, StringParam additionalStackTrace)
     : RuntimeException(message, additionalStackTrace) {
 }
 

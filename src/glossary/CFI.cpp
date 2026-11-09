@@ -23,8 +23,8 @@ CFI::CFI(LockExternalConstructionTag, JavaObjectHandle<CFI> &&handle) : handle_(
 CFI::~CFI() noexcept {
 }
 
-CFI::Ptr CFI::valueOf(const StringLike &code) {
-    return createShared(isolated::glossary::IsolatedCFI::valueOf(code));
+CFI::Ptr CFI::valueOf(StringParam code) {
+    return createShared(isolated::glossary::IsolatedCFI::valueOf(code.view()));
 }
 
 CFI::Ptr CFI::valueOf(std::int32_t intCode) {

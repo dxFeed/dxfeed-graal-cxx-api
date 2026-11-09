@@ -203,10 +203,10 @@ void MarketMaker::assign(std::shared_ptr<EventType> event) {
 MarketMaker::MarketMaker() noexcept {
 }
 
-MarketMaker::MarketMaker(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+MarketMaker::MarketMaker(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-MarketMaker &MarketMaker::withEventSymbol(const StringLike &eventSymbol) noexcept {
+MarketMaker &MarketMaker::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;
@@ -315,13 +315,13 @@ std::optional<std::string> MarketMaker::getMarketMakerOpt() const {
     return decodeShortString(getBits(data_.index, MMID_MASK, MMID_SHIFT));
 }
 
-void MarketMaker::setMarketMaker(const StringLike &marketMaker) {
+void MarketMaker::setMarketMaker(StringParam marketMaker) {
     // The short string code has up to 8 bytes, but MMID_MASK keeps only the lowest 4 (bits 31..0), i.e. the last 4
     // characters, as in Java: "ABCDEF" is stored as "CDEF". The exchange code bits are left untouched.
-    data_.index = setBits(data_.index, MMID_MASK, MMID_SHIFT, encodeShortString(std::string(marketMaker)));
+    data_.index = setBits(data_.index, MMID_MASK, MMID_SHIFT, encodeShortString(std::string(marketMaker.view())));
 }
 
-MarketMaker &MarketMaker::withMarketMaker(const StringLike &marketMaker) {
+MarketMaker &MarketMaker::withMarketMaker(StringParam marketMaker) {
     setMarketMaker(marketMaker);
 
     return *this;

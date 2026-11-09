@@ -7,7 +7,10 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include <cstddef>
+#include <functional>
 #include <string>
+#include <string_view>
 
 /**
  * \addtogroup dxfcpp_util
@@ -15,6 +18,31 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  */
 
 DXFCPP_BEGIN_NAMESPACE
+
+/// Universal functional object that allows searching std::unordered_map for string-like keys.
+struct DXFCPP_EXPORT StringHash {
+    using HashType = std::hash<std::string_view>;
+    using is_transparent = void;
+
+    std::size_t operator()(const char *str) const;
+    std::size_t operator()(std::string_view sv) const;
+    std::size_t operator()(const std::string &str) const;
+};
+
+/**
+ * Common string constants used across the library.
+ *
+ * `EMPTY` is an empty string value.
+ * `NUL` is a textual placeholder for a missing or null string value
+ * and is intended for logging, debugging, and diagnostic output.
+ */
+struct DXFCPP_EXPORT String {
+    /// Empty string constant: `""`.
+    static constexpr char EMPTY[] = "";
+
+    /// Textual representation of a null / missing string: `"<null>"`.
+    static constexpr char NUL[] = "<null>";
+};
 
 /**
  * Converts a double value to a string in the format of Java `Double.toString`: the shortest decimal representation

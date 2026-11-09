@@ -33,7 +33,7 @@ std::int64_t CandlePeriod::getPeriodIntervalMillis() const noexcept {
     return java::longCast(static_cast<double>(type_.getPeriodIntervalMillis()) * value_);
 }
 
-std::string CandlePeriod::changeAttributeForSymbol(const StringLike &symbol) const {
+std::string CandlePeriod::changeAttributeForSymbol(StringParam symbol) const {
     return *this == DEFAULT
                ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY)
                : MarketEventSymbols::changeAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY, toString());
@@ -56,8 +56,8 @@ bool CandlePeriod::operator==(const CandlePeriod &candlePeriod) const {
     return math::doubleEquals(value_, candlePeriod.getValue()) && type_ == candlePeriod.getType();
 }
 
-CandlePeriod CandlePeriod::parse(const StringLike &s) {
-    const std::string_view sv = s;
+CandlePeriod CandlePeriod::parse(StringParam s) {
+    const std::string_view sv = s.view();
 
     if (sv == CandleType::DAY.toString()) {
         return DAY;
@@ -101,14 +101,14 @@ CandlePeriod CandlePeriod::valueOf(double value, const CandleType &type) {
     return {value, type};
 }
 
-CandlePeriod CandlePeriod::getAttributeForSymbol(const StringLike &symbol) {
+CandlePeriod CandlePeriod::getAttributeForSymbol(StringParam symbol) {
     const auto string = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY);
 
     return !string ? DEFAULT : parse(string.value());
 }
 
-std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const std::string_view sv = symbol;
+std::string CandlePeriod::normalizeAttributeForSymbol(StringParam symbol) {
+    const std::string_view sv = symbol.view();
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY);
 
     if (!a) {
@@ -119,7 +119,7 @@ std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) 
         const auto other = parse(a.value());
 
         if (other == DEFAULT) {
-            return candle::removeDefaultAttribute(symbol, CandlePeriod::ATTRIBUTE_KEY, DEFAULT.toString());
+            return candle::removeDefaultAttribute(symbol.view(), CandlePeriod::ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.toString()) {

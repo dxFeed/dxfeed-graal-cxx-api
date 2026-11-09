@@ -22,8 +22,8 @@ TimePeriod TimePeriod::valueOf(std::chrono::milliseconds value) {
     return valueOf(value.count());
 }
 
-TimePeriod TimePeriod::valueOf(const StringLike &value) {
-    return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value));
+TimePeriod TimePeriod::valueOf(StringParam value) {
+    return TimePeriod(isolated::util::IsolatedTimePeriod::valueOf(value.view()));
 }
 
 std::int64_t TimePeriod::getTime() const {

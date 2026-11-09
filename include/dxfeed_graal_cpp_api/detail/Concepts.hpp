@@ -12,6 +12,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <concepts>
 #include <iterator>
+#include <optional>
+#include <string>
 #include <type_traits>
 #include <utility>
 
@@ -40,6 +42,15 @@ concept MapLike = requires(T t) {
     { std::begin(t) } -> std::input_iterator;
     { std::end(t) } -> std::sentinel_for<decltype(std::begin(t))>;
 } && PairLike<std::remove_cvref_t<decltype(*std::begin(std::declval<T &>()))>>;
+
+/**
+ * The argument of the overloads of the string setters of events that also set null: `std::optional<std::string>` or
+ * `std::nullopt`. Other arguments, e.g. strings and string literals, select the overloads that take
+ * dxfcpp::StringParam.
+ */
+template <typename T>
+concept OptionalString = std::is_same_v<std::remove_cvref_t<T>, std::optional<std::string>> ||
+                         std::is_same_v<std::remove_cvref_t<T>, std::nullopt_t>;
 
 DXFCPP_END_NAMESPACE
 

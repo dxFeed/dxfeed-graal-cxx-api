@@ -152,10 +152,10 @@ void OptionSale::assign(std::shared_ptr<EventType> event) {
 OptionSale::OptionSale() noexcept {
 }
 
-OptionSale::OptionSale(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+OptionSale::OptionSale(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-OptionSale &OptionSale::withEventSymbol(const StringLike &eventSymbol) noexcept {
+OptionSale &OptionSale::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;
@@ -390,11 +390,11 @@ const std::optional<std::string> &OptionSale::getExchangeSaleConditionsOpt() con
     return data_.exchangeSaleConditions;
 }
 
-void OptionSale::setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept {
-    data_.exchangeSaleConditions = std::string(exchangeSaleConditions);
+void OptionSale::setExchangeSaleConditions(StringParam exchangeSaleConditions) {
+    data_.exchangeSaleConditions = std::string(exchangeSaleConditions.view());
 }
 
-OptionSale &OptionSale::withExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept {
+OptionSale &OptionSale::withExchangeSaleConditions(StringParam exchangeSaleConditions) {
     setExchangeSaleConditions(exchangeSaleConditions);
 
     return *this;
@@ -553,11 +553,11 @@ const std::optional<std::string> &OptionSale::getOptionSymbolOpt() const & noexc
     return data_.optionSymbol;
 }
 
-void OptionSale::setOptionSymbol(const StringLike &optionSymbol) noexcept {
-    data_.optionSymbol = std::string(optionSymbol);
+void OptionSale::setOptionSymbol(StringParam optionSymbol) {
+    data_.optionSymbol = std::string(optionSymbol.view());
 }
 
-OptionSale &OptionSale::withOptionSymbol(const StringLike &optionSymbol) noexcept {
+OptionSale &OptionSale::withOptionSymbol(StringParam optionSymbol) {
     setOptionSymbol(optionSymbol);
 
     return *this;

@@ -123,11 +123,11 @@ void Message::assign(std::shared_ptr<EventType> event) {
 Message::Message() noexcept {
 }
 
-Message::Message(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+Message::Message(StringParam eventSymbol) : eventSymbol_{eventSymbol.view()} {
 }
 
-Message::Message(const StringLike &eventSymbol, const StringLike &attachment) noexcept
-    : eventSymbol_{eventSymbol}, attachment_{attachment} {
+Message::Message(StringParam eventSymbol, StringParam attachment)
+    : eventSymbol_{eventSymbol.view()}, attachment_{attachment.view()} {
 }
 
 const std::string &Message::getEventSymbol() const & noexcept {
@@ -142,11 +142,11 @@ const std::optional<std::string> &Message::getEventSymbolOpt() const & noexcept 
     return eventSymbol_;
 }
 
-void Message::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    eventSymbol_ = std::string(eventSymbol);
+void Message::setEventSymbol(StringParam eventSymbol) {
+    eventSymbol_ = std::string(eventSymbol.view());
 }
 
-Message &Message::withEventSymbol(const StringLike &eventSymbol) noexcept {
+Message &Message::withEventSymbol(StringParam eventSymbol) {
     Message::setEventSymbol(eventSymbol);
 
     return *this;
@@ -178,11 +178,11 @@ const std::optional<std::string> &Message::getAttachmentOpt() const & noexcept {
     return attachment_;
 }
 
-void Message::setAttachment(const StringLike &attachment) {
-    attachment_ = std::string(attachment);
+void Message::setAttachment(StringParam attachment) {
+    attachment_ = std::string(attachment.view());
 }
 
-Message &Message::withAttachment(const StringLike &attachment) noexcept {
+Message &Message::withAttachment(StringParam attachment) {
     setAttachment(attachment);
 
     return *this;

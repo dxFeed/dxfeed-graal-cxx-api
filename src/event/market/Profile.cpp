@@ -150,7 +150,7 @@ void Profile::assign(std::shared_ptr<EventType> event) {
 Profile::Profile() noexcept {
 }
 
-Profile::Profile(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Profile::Profile(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 const std::string &Profile::getDescription() const & noexcept {
@@ -165,8 +165,8 @@ const std::optional<std::string> &Profile::getDescriptionOpt() const & noexcept 
     return data_.description;
 }
 
-void Profile::setDescription(const StringLike &description) noexcept {
-    data_.description = std::string(description);
+void Profile::setDescription(StringParam description) {
+    data_.description = std::string(description.view());
 }
 
 const ShortSaleRestriction &Profile::getShortSaleRestriction() const & noexcept {
@@ -205,8 +205,8 @@ const std::optional<std::string> &Profile::getStatusReasonOpt() const & noexcept
     return data_.statusReason;
 }
 
-void Profile::setStatusReason(const StringLike &statusReason) noexcept {
-    data_.statusReason = std::string(statusReason);
+void Profile::setStatusReason(StringParam statusReason) {
+    data_.statusReason = std::string(statusReason.view());
 }
 
 std::int64_t Profile::getHaltStartTime() const noexcept {

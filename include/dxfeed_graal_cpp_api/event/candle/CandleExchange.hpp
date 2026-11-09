@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
@@ -63,7 +63,7 @@ struct DXFCPP_EXPORT CandleExchange final : public CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this exchange set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Returns string representation of this exchange.
@@ -91,7 +91,7 @@ struct DXFCPP_EXPORT CandleExchange final : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return exchange attribute object of the given candle symbol string.
      */
-    static CandleExchange getAttributeForSymbol(const StringLike &symbol);
+    static CandleExchange getAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

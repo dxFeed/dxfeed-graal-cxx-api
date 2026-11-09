@@ -114,10 +114,10 @@ void Order::assign(std::shared_ptr<EventType> event) {
 Order::Order() noexcept {
 }
 
-Order::Order(const StringLike &eventSymbol) noexcept : OrderBase(eventSymbol) {
+Order::Order(StringParam eventSymbol) : OrderBase(eventSymbol) {
 }
 
-Order &Order::withEventSymbol(const StringLike &eventSymbol) noexcept {
+Order &Order::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;
@@ -279,11 +279,11 @@ const std::optional<std::string> &Order::getMarketMakerOpt() const & noexcept {
     return orderData_.marketMaker;
 }
 
-void Order::setMarketMaker(const StringLike &marketMaker) noexcept {
-    orderData_.marketMaker = std::string(marketMaker);
+void Order::setMarketMaker(StringParam marketMaker) {
+    orderData_.marketMaker = std::string(marketMaker.view());
 }
 
-Order &Order::withMarketMaker(const StringLike &marketMaker) noexcept {
+Order &Order::withMarketMaker(StringParam marketMaker) {
     setMarketMaker(marketMaker);
 
     return *this;

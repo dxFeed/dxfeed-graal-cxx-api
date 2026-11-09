@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"
@@ -137,7 +137,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Greeks(const StringLike & eventSymbol) noexcept;
+    explicit Greeks(StringParam eventSymbol);
 
     ///
     const IndexedEventSource &getSource() const & noexcept override;

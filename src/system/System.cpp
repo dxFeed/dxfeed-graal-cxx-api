@@ -48,11 +48,11 @@ void throwIfIsolateFailed() {
 
 } // namespace
 
-bool System::setProperty(const StringLike &key, const StringLike &value) {
+bool System::setProperty(StringParam key, StringParam value) {
     throwIfIsolateFailed();
 
-    const std::string_view keyView = key;
-    const std::string_view valueView = value;
+    const std::string_view keyView = key.view();
+    const std::string_view valueView = value.view();
 
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -76,10 +76,10 @@ bool System::setProperty(const StringLike &key, const StringLike &value) {
     return result;
 }
 
-std::string System::getProperty(const StringLike &key) {
+std::string System::getProperty(StringParam key) {
     throwIfIsolateFailed();
 
-    const std::string_view keyView = key;
+    const std::string_view keyView = key.view();
 
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode

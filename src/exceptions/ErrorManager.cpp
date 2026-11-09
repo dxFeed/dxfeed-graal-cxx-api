@@ -54,14 +54,14 @@ struct InHandlerScope {
     InHandlerScope &operator=(const InHandlerScope &) = delete;
 };
 
-ErrorInfo createInfo(const StringLike &component, const std::source_location &location) {
+ErrorInfo createInfo(StringParam component, const std::source_location &location) {
     ErrorInfo info{};
 
     info.time = std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::system_clock::now().time_since_epoch())
                     .count();
     info.threadId = static_cast<std::uint64_t>(std::hash<std::thread::id>{}(std::this_thread::get_id()));
-    info.component = std::string(std::string_view(component));
+    info.component = std::string(component.view());
 
     const std::string_view file = location.file_name() == nullptr ? "" : location.file_name();
     const auto slash = file.find_last_of("/\\");
@@ -139,19 +139,18 @@ std::string ErrorInfo::toString() const {
     return result;
 }
 
-void ErrorManager::report(const StringLike &component, const StringLike &message,
-                          const std::source_location &location) noexcept {
+void ErrorManager::report(StringParam component, StringParam message, const std::source_location &location) noexcept {
     try {
         auto info = createInfo(component, location);
 
-        info.message = std::string(std::string_view(message));
+        info.message = std::string(message.view());
         dispatch(std::move(info));
     } catch (...) {
         // Reporting must not fail the code that reports: the error is lost.
     }
 }
 
-void ErrorManager::reportException(const StringLike &component, const std::exception_ptr &exception,
+void ErrorManager::reportException(StringParam component, const std::exception_ptr &exception,
                                    const std::source_location &location) noexcept {
     try {
         auto info = createInfo(component, location);

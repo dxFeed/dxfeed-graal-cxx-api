@@ -70,12 +70,12 @@ struct JavaException::JavaData {
     std::string stackTrace;
 };
 
-JavaException::JavaException(const StringLike &message, const StringLike &className, const StringLike &stackTrace)
-    : RuntimeException(fmt::format("Java exception of type '{}' was thrown. {}", className.c_str(), message.c_str()),
+JavaException::JavaException(StringParam message, StringParam className, StringParam stackTrace)
+    : RuntimeException(fmt::format("Java exception of type '{}' was thrown. {}", className.view(), message.view()),
                        stackTrace),
       javaData_(std::make_shared<const JavaData>(
-          JavaData{std::string(std::string_view(className)), std::string(std::string_view(message)),
-                   std::string(std::string_view(stackTrace))})) {
+          JavaData{std::string(className.view()), std::string(message.view()),
+                   std::string(stackTrace.view())})) {
 }
 
 JavaException::JavaException(const JavaException &other) noexcept

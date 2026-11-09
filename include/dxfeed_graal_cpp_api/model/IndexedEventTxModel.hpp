@@ -7,12 +7,12 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../api/SubscriptionController.hpp"
+#include "../api/osub/IndexedEventSubscriptionSymbol.hpp"
 #include "../detail/CallbackBarrier.hpp"
 #include "../detail/Concepts.hpp"
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/EventType.hpp"
@@ -60,8 +60,7 @@ struct DXFCPP_EXPORT IndexedEventTxModelImpl {
     static void withSymbolImpl(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder,
                                const IndexedEventSubscriptionSymbol &symbol);
 
-    static void withSymbolImpl(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder,
-                               const StringLike &symbol);
+    static void withSymbolImpl(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder, StringParam symbol);
 
     static void withSourceImpl(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder,
                                const EventSourceWrapper &source);
@@ -190,7 +189,7 @@ struct /* DXFCPP_EXPORT */ IndexedEventTxModel final : IndexedEventTxModelImpl,
          * @param symbol The symbol.
          * @return this builder.
          */
-        std::shared_ptr<Builder> withSymbol(const StringLike &symbol) {
+        std::shared_ptr<Builder> withSymbol(StringParam symbol) {
             withSymbolImpl(handle_, symbol);
 
             return this->template sharedAs<Builder>();

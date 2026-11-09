@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/ConstantMap.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 
@@ -83,7 +83,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
         : OrderSource(composeId(name.view), name, pubFlags) {
     }
 
-    OrderSource(std::int32_t id, const StringLike &name) noexcept;
+    OrderSource(std::int32_t id, StringParam name);
 
     // A name that is not valid makes a constant not constant-initialized: a compilation error.
     static constexpr std::int32_t composeId(std::string_view name) {
@@ -683,7 +683,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @param name the name of the source.
      * @return order source.
      */
-    static const OrderSource &valueOf(const StringLike &name);
+    static const OrderSource &valueOf(StringParam name);
 
     /**
      * Returns a list of the publishable order sources for the given event type: the sources whose

@@ -110,10 +110,10 @@ void AnalyticOrder::assign(std::shared_ptr<EventType> event) {
 AnalyticOrder::AnalyticOrder() noexcept {
 }
 
-AnalyticOrder::AnalyticOrder(const StringLike &eventSymbol) noexcept : Order(eventSymbol) {
+AnalyticOrder::AnalyticOrder(StringParam eventSymbol) : Order(eventSymbol) {
 }
 
-AnalyticOrder &AnalyticOrder::withEventSymbol(const StringLike &eventSymbol) noexcept {
+AnalyticOrder &AnalyticOrder::withEventSymbol(StringParam eventSymbol) {
     return dynamic_cast<AnalyticOrder &>(Order::withEventSymbol(eventSymbol));
 }
 
@@ -213,7 +213,7 @@ AnalyticOrder &AnalyticOrder::withScope(const Scope &scope) noexcept {
     return dynamic_cast<AnalyticOrder &>(Order::withScope(scope));
 }
 
-AnalyticOrder &AnalyticOrder::withMarketMaker(const StringLike &marketMaker) noexcept {
+AnalyticOrder &AnalyticOrder::withMarketMaker(StringParam marketMaker) {
     return dynamic_cast<AnalyticOrder &>(Order::withMarketMaker(marketMaker));
 }
 

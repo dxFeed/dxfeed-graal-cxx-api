@@ -52,18 +52,18 @@ bool CandleDataType::operator==(const CandleDataType &candleDataType) const noex
     return value_ == candleDataType.value_;
 }
 
-std::string CandleDataType::changeAttributeForSymbol(const StringLike &symbol) const {
+std::string CandleDataType::changeAttributeForSymbol(StringParam symbol) const {
     return *this == DEFAULT
                ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandleDataType::ATTRIBUTE_KEY)
                : MarketEventSymbols::changeAttributeStringByKey(symbol, CandleDataType::ATTRIBUTE_KEY, toString());
 }
 
-CandleDataType CandleDataType::parse(const StringLike &s) {
+CandleDataType CandleDataType::parse(StringParam s) {
     return valueOf(s);
 }
 
-CandleDataType CandleDataType::valueOf(const StringLike &value) {
-    const std::string_view valueView{value};
+CandleDataType CandleDataType::valueOf(StringParam value) {
+    const std::string_view valueView{value.view()};
 
     if (valueView.empty()) {
         return DEFAULT;
@@ -78,14 +78,14 @@ CandleDataType CandleDataType::valueOf(const StringLike &value) {
     return CandleDataType{keepValue(valueView)};
 }
 
-CandleDataType CandleDataType::getAttributeForSymbol(const StringLike &symbol) {
+CandleDataType CandleDataType::getAttributeForSymbol(StringParam symbol) {
     const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandleDataType::ATTRIBUTE_KEY);
 
     return !stringOpt ? DEFAULT : parse(stringOpt.value());
 }
 
-std::string CandleDataType::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const std::string_view sv = symbol;
+std::string CandleDataType::normalizeAttributeForSymbol(StringParam symbol) {
+    const std::string_view sv = symbol.view();
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleDataType::ATTRIBUTE_KEY);
 
     if (!a) {
@@ -94,7 +94,7 @@ std::string CandleDataType::normalizeAttributeForSymbol(const StringLike &symbol
 
     // Any other value is kept as is: parsing does not change it.
     return parse(a.value()) == DEFAULT
-               ? candle::removeDefaultAttribute(symbol, CandleDataType::ATTRIBUTE_KEY, DEFAULT.toString())
+               ? candle::removeDefaultAttribute(symbol.view(), CandleDataType::ATTRIBUTE_KEY, DEFAULT.toString())
                : std::string{sv};
 }
 

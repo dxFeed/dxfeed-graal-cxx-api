@@ -7,7 +7,8 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventType.hpp"
 
 #include <cstdint>
@@ -43,7 +44,7 @@ struct DXFCPP_EXPORT MarketEvent : EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit MarketEvent(const StringLike &eventSymbol) noexcept;
+    explicit MarketEvent(StringParam eventSymbol);
 
     virtual void fillData(void *graalNative) noexcept;
     virtual void fillGraalData(void *graalNative) const noexcept;
@@ -72,7 +73,7 @@ struct DXFCPP_EXPORT MarketEvent : EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const StringLike &eventSymbol) noexcept override;
+    void setEventSymbol(StringParam eventSymbol) override;
 
     ///
     std::int64_t getEventTime() const noexcept override;

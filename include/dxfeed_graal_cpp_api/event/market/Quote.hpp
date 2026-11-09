@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
 #include "./MarketEvent.hpp"
@@ -114,7 +114,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Quote(const StringLike &eventSymbol) noexcept;
+    explicit Quote(StringParam eventSymbol);
 
     /**
      * Changes an event's symbol and returns the current quote.
@@ -122,7 +122,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current quote.
      */
-    Quote &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    Quote &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes event's creation time and returns the current quote.

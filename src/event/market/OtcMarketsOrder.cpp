@@ -105,10 +105,10 @@ void OtcMarketsOrder::assign(std::shared_ptr<EventType> event) {
 OtcMarketsOrder::OtcMarketsOrder() noexcept {
 }
 
-OtcMarketsOrder::OtcMarketsOrder(const StringLike &eventSymbol) noexcept : Order(eventSymbol) {
+OtcMarketsOrder::OtcMarketsOrder(StringParam eventSymbol) : Order(eventSymbol) {
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withEventSymbol(const StringLike &eventSymbol) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withEventSymbol(StringParam eventSymbol) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withEventSymbol(eventSymbol));
 }
 
@@ -208,7 +208,7 @@ OtcMarketsOrder &OtcMarketsOrder::withScope(const Scope &scope) noexcept {
     return dynamic_cast<OtcMarketsOrder &>(Order::withScope(scope));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withMarketMaker(const StringLike &marketMaker) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withMarketMaker(StringParam marketMaker) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withMarketMaker(marketMaker));
 }
 

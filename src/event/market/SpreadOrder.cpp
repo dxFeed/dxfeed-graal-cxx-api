@@ -115,10 +115,10 @@ void SpreadOrder::assign(std::shared_ptr<EventType> event) {
 SpreadOrder::SpreadOrder() noexcept {
 }
 
-SpreadOrder::SpreadOrder(const StringLike &eventSymbol) noexcept : OrderBase(eventSymbol) {
+SpreadOrder::SpreadOrder(StringParam eventSymbol) : OrderBase(eventSymbol) {
 }
 
-SpreadOrder &SpreadOrder::withEventSymbol(const StringLike &eventSymbol) noexcept {
+SpreadOrder &SpreadOrder::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;
@@ -280,11 +280,11 @@ const std::optional<std::string> &SpreadOrder::getSpreadSymbolOpt() const & noex
     return spreadOrderData_.spreadSymbol;
 }
 
-void SpreadOrder::setSpreadSymbol(const StringLike &spreadSymbol) noexcept {
-    spreadOrderData_.spreadSymbol = std::string(spreadSymbol);
+void SpreadOrder::setSpreadSymbol(StringParam spreadSymbol) {
+    spreadOrderData_.spreadSymbol = std::string(spreadSymbol.view());
 }
 
-SpreadOrder &SpreadOrder::withSpreadSymbol(const StringLike &spreadSymbol) noexcept {
+SpreadOrder &SpreadOrder::withSpreadSymbol(StringParam spreadSymbol) {
     setSpreadSymbol(spreadSymbol);
 
     return *this;

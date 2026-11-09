@@ -33,26 +33,26 @@ HistoryEndpoint::Builder::Builder(LockExternalConstructionTag,
 HistoryEndpoint::Builder::~Builder() {
 }
 
-std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAddress(const StringLike &address) {
-    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withAddress(handle_, address);
+std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAddress(StringParam address) {
+    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withAddress(handle_, address.view());
 
     return this->sharedAs<Builder>();
 }
 
-std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withUserName(const StringLike &userName) {
-    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withUserName(handle_, userName);
+std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withUserName(StringParam userName) {
+    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withUserName(handle_, userName.view());
 
     return this->sharedAs<Builder>();
 }
 
-std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withPassword(const StringLike &password) {
-    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withPassword(handle_, password);
+std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withPassword(StringParam password) {
+    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withPassword(handle_, password.view());
 
     return this->sharedAs<Builder>();
 }
 
-std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAuthToken(const StringLike &authToken) {
-    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withAuthToken(handle_, authToken);
+std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAuthToken(StringParam authToken) {
+    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withAuthToken(handle_, authToken.view());
 
     return this->sharedAs<Builder>();
 }

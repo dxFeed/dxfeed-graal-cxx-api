@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../market/TimeAndSale.hpp"
 
@@ -124,7 +124,7 @@ class DXFCPP_EXPORT NuamTimeAndSale final : public TimeAndSale {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit NuamTimeAndSale(const StringLike &eventSymbol) noexcept;
+    explicit NuamTimeAndSale(StringParam eventSymbol);
 
     /**
      * Returns the match ID, which uniquely identifies the match between the buyer

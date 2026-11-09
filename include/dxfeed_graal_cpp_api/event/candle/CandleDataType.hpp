@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
@@ -125,7 +125,7 @@ struct DXFCPP_EXPORT CandleDataType final : CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this data type attribute set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Parses string representation of candle data type attribute into an object (the same as
@@ -134,7 +134,7 @@ struct DXFCPP_EXPORT CandleDataType final : CandleSymbolAttribute {
      * @param s string representation of a candle data type attribute.
      * @return candle data type attribute.
      */
-    static CandleDataType parse(const StringLike &s);
+    static CandleDataType parse(StringParam s);
 
     /**
      * Returns the candle data type with the given value. The value is case-sensitive: the constant if it is equal to
@@ -147,7 +147,7 @@ struct DXFCPP_EXPORT CandleDataType final : CandleSymbolAttribute {
      * @param value string representation of a candle data type attribute.
      * @return candle data type attribute.
      */
-    static CandleDataType valueOf(const StringLike &value);
+    static CandleDataType valueOf(StringParam value);
 
     /**
      * Returns candle data type attribute of the given candle symbol string.
@@ -156,7 +156,7 @@ struct DXFCPP_EXPORT CandleDataType final : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle data type attribute of the given candle symbol string.
      */
-    static CandleDataType getAttributeForSymbol(const StringLike &symbol);
+    static CandleDataType getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle data type attribute.
@@ -164,7 +164,7 @@ struct DXFCPP_EXPORT CandleDataType final : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle data type attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

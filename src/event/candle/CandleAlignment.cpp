@@ -16,7 +16,7 @@ DXFCPP_BEGIN_NAMESPACE
 CandleAlignment::CandleAlignment() noexcept {
 }
 
-std::string CandleAlignment::changeAttributeForSymbol(const StringLike &symbol) const {
+std::string CandleAlignment::changeAttributeForSymbol(StringParam symbol) const {
     return *this == DEFAULT
                ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY)
                : MarketEventSymbols::changeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY, toString());
@@ -30,30 +30,30 @@ bool CandleAlignment::operator==(const CandleAlignment &candleAlignment) const n
     return string_ == candleAlignment.string_;
 }
 
-std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const StringLike &s) {
+std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(StringParam s) {
     for (const auto &alignmentRef : VALUES) {
-        if (alignmentRef.get().string_ == std::string_view{s}) {
+        if (alignmentRef.get().string_ == s.view()) {
             return alignmentRef;
         }
     }
 
     for (const auto &alignmentRef : VALUES) {
-        if (const auto alignmentStr = alignmentRef.get().toString(); iEquals(alignmentStr, s)) {
+        if (const auto alignmentStr = alignmentRef.get().toString(); iEquals(alignmentStr, s.view())) {
             return alignmentRef;
         }
     }
 
-    throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "alignment", s.toStringView()));
+    throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "alignment", s.view()));
 }
 
-std::reference_wrapper<const CandleAlignment> CandleAlignment::getAttributeForSymbol(const StringLike &symbol) {
+std::reference_wrapper<const CandleAlignment> CandleAlignment::getAttributeForSymbol(StringParam symbol) {
     const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY);
 
     return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
 }
 
-std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const std::string_view sv = symbol;
+std::string CandleAlignment::normalizeAttributeForSymbol(StringParam symbol) {
+    const std::string_view sv = symbol.view();
     const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY);
 
     if (!a) {
@@ -64,7 +64,7 @@ std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbo
         const auto other = parse(a.value());
 
         if (other.get() == DEFAULT) {
-            return candle::removeDefaultAttribute(symbol, CandleAlignment::ATTRIBUTE_KEY, DEFAULT.toString());
+            return candle::removeDefaultAttribute(symbol.view(), CandleAlignment::ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.get().toString()) {

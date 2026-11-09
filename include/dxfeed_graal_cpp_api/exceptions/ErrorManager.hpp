@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -137,7 +137,7 @@ struct DXFCPP_EXPORT ErrorManager final {
      * @param message The message of the error.
      * @param location The source location of the report.
      */
-    static void report(const StringLike &component, const StringLike &message,
+    static void report(StringParam component, StringParam message,
                        const std::source_location &location = std::source_location::current()) noexcept;
 
     /**
@@ -149,7 +149,7 @@ struct DXFCPP_EXPORT ErrorManager final {
      * @param exception The exception, usually `std::current_exception()` in a `catch` block.
      * @param location The source location of the report.
      */
-    static void reportException(const StringLike &component, const std::exception_ptr &exception,
+    static void reportException(StringParam component, const std::exception_ptr &exception,
                                 const std::source_location &location = std::source_location::current()) noexcept;
 
     /**

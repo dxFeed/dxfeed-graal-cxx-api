@@ -65,8 +65,8 @@ inline auto toUpper = [](auto &&s) {
            ranges::to<std::string>();
 };
 
-std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const StringLike &symbols) {
-    const auto trimmedSymbols = trimStr(symbols);
+std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(StringParam symbols) {
+    const auto trimmedSymbols = trimStr(symbols.view());
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -81,8 +81,8 @@ std::unordered_set<SymbolWrapper> CmdArgsUtils::parseSymbols(const StringLike &s
     return parsed | ranges::to<std::unordered_set<SymbolWrapper>>();
 }
 
-std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(const StringLike &symbols) {
-    const auto trimmedSymbols = trimStr(symbols);
+std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(StringParam symbols) {
+    const auto trimmedSymbols = trimStr(symbols.view());
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -99,8 +99,8 @@ std::vector<SymbolWrapper> CmdArgsUtils::parseSymbolsAndSaveOrder(const StringLi
     return parsed | ranges::to<std::vector<SymbolWrapper>>();
 }
 
-std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const StringLike &symbols) {
-    const auto trimmedSymbols = trimStr(symbols);
+std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(StringParam symbols) {
+    const auto trimmedSymbols = trimStr(symbols.view());
 
     if (trimmedSymbols.empty()) {
         return {};
@@ -115,8 +115,8 @@ std::unordered_set<CandleSymbol> CmdArgsUtils::parseCandleSymbols(const StringLi
 }
 
 std::pair<std::unordered_set<std::reference_wrapper<const EventTypeEnum>>, std::vector<std::string>>
-CmdArgsUtils::parseTypes(const StringLike &types) {
-    auto trimmedTypes = trimStr(types);
+CmdArgsUtils::parseTypes(StringParam types) {
+    auto trimmedTypes = trimStr(types.view());
 
     if (trimmedTypes.empty()) {
         return {};
@@ -144,8 +144,8 @@ CmdArgsUtils::parseTypes(const StringLike &types) {
     return {result, unknown};
 }
 
-std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const StringLike &properties) noexcept {
-    auto p = trimStr(properties);
+std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(StringParam properties) noexcept {
+    auto p = trimStr(properties.view());
 
     if (p.empty()) {
         return {};
@@ -163,8 +163,8 @@ std::unordered_map<std::string, std::string> CmdArgsUtils::parseProperties(const
            ranges::to<std::unordered_map<std::string, std::string>>();
 }
 
-std::unordered_set<EventSourceWrapper> CmdArgsUtils::parseEventSources(const StringLike &sources) {
-    auto s = trimStr(sources);
+std::unordered_set<EventSourceWrapper> CmdArgsUtils::parseEventSources(StringParam sources) {
+    auto s = trimStr(sources.view());
 
     if (s.empty()) {
         return {EventSourceWrapper{IndexedEventSource::DEFAULT}};

@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/JavaObjectHandle.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../entity/SharedEntity.hpp"
 #include "../../util/Handler.hpp"
 #include "./InstrumentProfileCollector.hpp"
@@ -101,7 +101,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return new instrument profile connection.
      */
-    static Ptr createConnection(const StringLike &address, InstrumentProfileCollector::Ptr collector);
+    static Ptr createConnection(StringParam address, InstrumentProfileCollector::Ptr collector);
 
     /**
      * Returns the address of this instrument profile connection.

@@ -7,7 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventType.hpp"
 #include "../EventTypeEnum.hpp"
 
@@ -95,14 +97,14 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      * Creates a new message with the specified event symbol.
      * @param eventSymbol event symbol.
      */
-    explicit Message(const StringLike &eventSymbol) noexcept;
+    explicit Message(StringParam eventSymbol);
 
     /**
      * Creates a new message with the specified event symbol and attachment.
      * @param eventSymbol event symbol.
      * @param attachment attachment.
      */
-    Message(const StringLike &eventSymbol, const StringLike &attachment) noexcept;
+    Message(StringParam eventSymbol, StringParam attachment);
 
     /**
      * Returns a symbol of this event.
@@ -123,7 +125,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const StringLike &eventSymbol) noexcept override;
+    void setEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes an event's symbol and returns the current message.
@@ -131,7 +133,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol The symbol of this event.
      * @return The current message.
      */
-    Message &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    Message &withEventSymbol(StringParam eventSymbol);
 
     ///
     std::int64_t getEventTime() const noexcept override;
@@ -167,7 +169,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      *
      * @param attachment attachment.
      */
-    void setAttachment(const StringLike &attachment);
+    void setAttachment(StringParam attachment);
 
     /**
      * Changes the attachment, or makes it null with `std::nullopt`.
@@ -186,7 +188,7 @@ class DXFCPP_EXPORT Message : public EventTypeWithSymbol<std::string> {
      *
      * @return The current message.
      */
-    Message &withAttachment(const StringLike &attachment) noexcept;
+    Message &withAttachment(StringParam attachment);
 
     /**
      * Changes the attachment, or makes it null with `std::nullopt`.

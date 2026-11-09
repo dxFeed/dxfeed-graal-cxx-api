@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"
@@ -147,7 +147,7 @@ class DXFCPP_EXPORT TheoPrice final : public MarketEvent, public TimeSeriesEvent
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TheoPrice(const StringLike & eventSymbol) noexcept;
+    explicit TheoPrice(StringParam eventSymbol);
 
     ///
     const IndexedEventSource &getSource() const & noexcept override;

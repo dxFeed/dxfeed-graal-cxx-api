@@ -7,9 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/Concepts.hpp"
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../TimeSeriesEvent.hpp"
@@ -184,7 +186,7 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TimeAndSale(const StringLike &eventSymbol) noexcept;
+    explicit TimeAndSale(StringParam eventSymbol);
 
     ///
     const IndexedEventSource &getSource() const & noexcept override;
@@ -406,7 +408,7 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
      *
      * @param exchangeSaleConditions sale conditions.
      */
-    void setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept;
+    void setExchangeSaleConditions(StringParam exchangeSaleConditions);
 
     /**
      * Changes the sale conditions, or makes it null with `std::nullopt`.
@@ -546,7 +548,7 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
      *
      * @param buyer buyer of this time and sale event.
      */
-    void setBuyer(const StringLike &buyer) noexcept;
+    void setBuyer(StringParam buyer);
 
     /**
      * Changes the buyer of this time and sale event, or makes it null with `std::nullopt`.
@@ -577,7 +579,7 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
      *
      * @param seller seller of this time and sale event.
      */
-    void setSeller(const StringLike &seller) noexcept;
+    void setSeller(StringParam seller);
 
     /**
      * Changes the seller of this time and sale event, or makes it null with `std::nullopt`.

@@ -94,7 +94,7 @@ void TradeETH::assign(std::shared_ptr<EventType> event) {
 TradeETH::TradeETH() noexcept {
 }
 
-TradeETH::TradeETH(std::string eventSymbol) noexcept : TradeBase(std::move(eventSymbol)) {
+TradeETH::TradeETH(StringParam eventSymbol) : TradeBase(eventSymbol) {
 }
 
 std::string TradeETH::toString() const {

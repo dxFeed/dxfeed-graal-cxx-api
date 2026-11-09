@@ -207,7 +207,7 @@ constinit const ConstantMap<std::string_view, CandleSession> CandleSession::BY_S
 
 //------------
 
-std::string CandleSymbol::changeAttribute(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) {
+std::string CandleSymbol::changeAttribute(StringParam symbol, const CandleSymbolAttributeVariant &attribute) {
     return std::visit(
         [&symbol](auto &&a) {
             return a.changeAttributeForSymbol(symbol);
@@ -215,16 +215,16 @@ std::string CandleSymbol::changeAttribute(const StringLike &symbol, const Candle
         attribute);
 }
 
-std::string CandleSymbol::normalize(const StringLike &s) {
-    auto symbol = CandlePrice::normalizeAttributeForSymbol(s);
+std::string CandleSymbol::normalize(StringParam symbol) {
+    auto result = CandlePrice::normalizeAttributeForSymbol(symbol);
 
-    symbol = CandleSession::normalizeAttributeForSymbol(symbol);
-    symbol = CandlePeriod::normalizeAttributeForSymbol(symbol);
-    symbol = CandleAlignment::normalizeAttributeForSymbol(symbol);
-    symbol = CandlePriceLevel::normalizeAttributeForSymbol(symbol);
-    symbol = CandleDataType::normalizeAttributeForSymbol(symbol);
+    result = CandleSession::normalizeAttributeForSymbol(result);
+    result = CandlePeriod::normalizeAttributeForSymbol(result);
+    result = CandleAlignment::normalizeAttributeForSymbol(result);
+    result = CandlePriceLevel::normalizeAttributeForSymbol(result);
+    result = CandleDataType::normalizeAttributeForSymbol(result);
 
-    return symbol;
+    return result;
 }
 
 void CandleSymbol::initTransientFields(bool force) {
@@ -259,11 +259,11 @@ void CandleSymbol::initTransientFields(bool force) {
     }
 }
 
-CandleSymbol::CandleSymbol(const StringLike &symbol) : symbol_{normalize(symbol)} {
+CandleSymbol::CandleSymbol(StringParam symbol) : symbol_{normalize(symbol)} {
     initTransientFields();
 }
 
-CandleSymbol::CandleSymbol(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute)
+CandleSymbol::CandleSymbol(StringParam symbol, const CandleSymbolAttributeVariant &attribute)
     : symbol_{normalize(changeAttribute(symbol, attribute))} {
     // TODO: check attributes
     initTransientFields();
@@ -369,16 +369,15 @@ CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
     return CandleSymbol{graalSymbol->symbol};
 }
 
-CandleSymbol CandleSymbol::valueOf(const StringLike &symbol) {
+CandleSymbol CandleSymbol::valueOf(StringParam symbol) {
     return CandleSymbol{symbol};
 }
 
-CandleSymbol CandleSymbol::valueOf(const StringLike &symbol, const CandleSymbolAttributeVariant &attribute) {
+CandleSymbol CandleSymbol::valueOf(StringParam symbol, const CandleSymbolAttributeVariant &attribute) {
     return CandleSymbol{symbol, attribute};
 }
 
-CandleSymbol CandleSymbol::valueOf(const StringLike &symbol,
-                                   std::initializer_list<CandleSymbolAttributeVariant> attributes) {
+CandleSymbol CandleSymbol::valueOf(StringParam symbol, std::initializer_list<CandleSymbolAttributeVariant> attributes) {
     return valueOf(symbol, attributes.begin(), attributes.end());
 }
 

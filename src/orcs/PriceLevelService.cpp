@@ -21,15 +21,15 @@ PriceLevelService::~PriceLevelService() noexcept {
     });
 }
 
-std::shared_ptr<PriceLevelService> PriceLevelService::create(const StringLike &address) {
-    return createShared(isolated::orcs::IsolatedPriceLevelService::create(address));
+std::shared_ptr<PriceLevelService> PriceLevelService::create(StringParam address) {
+    return createShared(isolated::orcs::IsolatedPriceLevelService::create(address.view()));
 }
 
 std::vector<std::shared_ptr<Order>> PriceLevelService::getOrders(const CandleSymbol &candleSymbol,
                                                                  const OrderSource &orderSource, std::int64_t from,
-                                                                 std::int64_t to, const StringLike &caller) const {
-    return convertEvents<EventType, Order>(
-        isolated::orcs::IsolatedPriceLevelService::getOrders(handle_, candleSymbol, orderSource, from, to, caller));
+                                                                 std::int64_t to, StringParam caller) const {
+    return convertEvents<EventType, Order>(isolated::orcs::IsolatedPriceLevelService::getOrders(
+        handle_, candleSymbol, orderSource, from, to, caller.view()));
 }
 
 std::vector<std::shared_ptr<Order>> PriceLevelService::getOrders(const CandleSymbol &candleSymbol,
@@ -40,9 +40,9 @@ std::vector<std::shared_ptr<Order>> PriceLevelService::getOrders(const CandleSym
 }
 
 std::vector<std::shared_ptr<Quote>> PriceLevelService::getQuotes(const CandleSymbol &candleSymbol, std::int64_t from,
-                                                                 std::int64_t to, const StringLike &caller) const {
+                                                                 std::int64_t to, StringParam caller) const {
     return convertEvents<EventType, Quote>(
-        isolated::orcs::IsolatedPriceLevelService::getQuotes(handle_, candleSymbol, from, to, caller));
+        isolated::orcs::IsolatedPriceLevelService::getQuotes(handle_, candleSymbol, from, to, caller.view()));
 }
 
 std::vector<std::shared_ptr<Quote>> PriceLevelService::getQuotes(const CandleSymbol &candleSymbol, std::int64_t from,

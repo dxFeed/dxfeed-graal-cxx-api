@@ -7,7 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../detail/StringLike.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./OrderBase.hpp"
 
@@ -156,7 +158,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Order(const StringLike &eventSymbol) noexcept;
+    explicit Order(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -166,7 +168,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param eventSymbol The symbol of this event.
      * @return The current order.
      */
-    virtual Order &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    virtual Order &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes the event's creation time and returns the current order.
@@ -413,7 +415,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param marketMaker market maker or the other aggregate identifier of this order.
      */
-    void setMarketMaker(const StringLike &marketMaker) noexcept;
+    void setMarketMaker(StringParam marketMaker);
 
     /**
      * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
@@ -432,7 +434,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param marketMaker The market maker or the other aggregate identifier of this order.
      * @return The current order.
      */
-    virtual Order &withMarketMaker(const StringLike &marketMaker) noexcept;
+    virtual Order &withMarketMaker(StringParam marketMaker);
 
     /**
      * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.

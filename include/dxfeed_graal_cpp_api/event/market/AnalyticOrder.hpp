@@ -7,8 +7,9 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/Concepts.hpp"
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./IcebergType.hpp"
 #include "./Order.hpp"
@@ -125,7 +126,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit AnalyticOrder(const StringLike &eventSymbol) noexcept;
+    explicit AnalyticOrder(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -135,7 +136,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param eventSymbol The symbol of this event.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override;
+    AnalyticOrder &withEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes the event's creation time and returns the current analytic order.
@@ -367,7 +368,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param marketMaker The market maker or another aggregate identifier of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withMarketMaker(const StringLike &marketMaker) noexcept override;
+    AnalyticOrder &withMarketMaker(StringParam marketMaker) override;
 
     /**
      * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.

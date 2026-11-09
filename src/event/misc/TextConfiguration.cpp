@@ -125,16 +125,15 @@ void TextConfiguration::assign(std::shared_ptr<EventType> event) {
 TextConfiguration::TextConfiguration() noexcept {
 }
 
-TextConfiguration::TextConfiguration(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+TextConfiguration::TextConfiguration(StringParam eventSymbol) : eventSymbol_{eventSymbol.view()} {
 }
 
-TextConfiguration::TextConfiguration(const StringLike &eventSymbol, const StringLike &text) noexcept
-    : eventSymbol_{eventSymbol}, text_{text} {
+TextConfiguration::TextConfiguration(StringParam eventSymbol, StringParam text)
+    : eventSymbol_{eventSymbol.view()}, text_{text.view()} {
 }
 
-TextConfiguration::TextConfiguration(const StringLike &eventSymbol, const StringLike &text,
-                                     std::int32_t version) noexcept
-    : eventSymbol_{eventSymbol}, version_{version}, text_{text} {
+TextConfiguration::TextConfiguration(StringParam eventSymbol, StringParam text, std::int32_t version)
+    : eventSymbol_{eventSymbol.view()}, version_{version}, text_{text.view()} {
 }
 
 const std::string &TextConfiguration::getEventSymbol() const & noexcept {
@@ -149,11 +148,11 @@ const std::optional<std::string> &TextConfiguration::getEventSymbolOpt() const &
     return eventSymbol_;
 }
 
-void TextConfiguration::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    eventSymbol_ = std::string(eventSymbol);
+void TextConfiguration::setEventSymbol(StringParam eventSymbol) {
+    eventSymbol_ = std::string(eventSymbol.view());
 }
 
-TextConfiguration &TextConfiguration::withEventSymbol(const StringLike &eventSymbol) noexcept {
+TextConfiguration &TextConfiguration::withEventSymbol(StringParam eventSymbol) {
     TextConfiguration::setEventSymbol(eventSymbol);
 
     return *this;
@@ -246,11 +245,11 @@ const std::optional<std::string> &TextConfiguration::getTextOpt() const & noexce
     return text_;
 }
 
-void TextConfiguration::setText(const StringLike &text) noexcept {
-    text_ = std::string(text);
+void TextConfiguration::setText(StringParam text) {
+    text_ = std::string(text.view());
 }
 
-TextConfiguration &TextConfiguration::withText(const StringLike &text) noexcept {
+TextConfiguration &TextConfiguration::withText(StringParam text) {
     setText(text);
 
     return *this;

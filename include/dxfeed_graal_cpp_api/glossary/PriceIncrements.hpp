@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
 
 #include <cstddef>
@@ -286,7 +286,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * @return The price increments instance.
      * @throws JavaException("IllegalArgumentException") if text uses wrong format or contains invalid values.
      */
-    static Ptr valueOf(const StringLike &text);
+    static Ptr valueOf(StringParam text);
 
     /**
      * Returns an instance of price increments for a specified single increment.

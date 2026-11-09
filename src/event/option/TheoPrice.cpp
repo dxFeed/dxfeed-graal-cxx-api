@@ -119,7 +119,7 @@ void TheoPrice::assign(std::shared_ptr<EventType> event) {
 TheoPrice::TheoPrice() noexcept {
 }
 
-TheoPrice::TheoPrice(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+TheoPrice::TheoPrice(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 const IndexedEventSource &TheoPrice::getSource() const & noexcept {

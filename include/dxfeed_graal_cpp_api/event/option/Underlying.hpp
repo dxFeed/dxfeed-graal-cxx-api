@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"
@@ -142,7 +142,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Underlying(const StringLike & eventSymbol) noexcept;
+    explicit Underlying(StringParam eventSymbol);
 
     ///
     const IndexedEventSource &getSource() const & noexcept override;

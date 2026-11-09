@@ -117,7 +117,7 @@ void NuamTrade::assign(std::shared_ptr<EventType> event) {
 NuamTrade::NuamTrade() noexcept {
 }
 
-NuamTrade::NuamTrade(const StringLike &eventSymbol) noexcept : Trade(eventSymbol) {
+NuamTrade::NuamTrade(StringParam eventSymbol) : Trade(eventSymbol) {
 }
 
 std::int64_t NuamTrade::getTradeStatTime() const noexcept {

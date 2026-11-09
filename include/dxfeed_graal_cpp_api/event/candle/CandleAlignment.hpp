@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../detail/ConstantMap.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
 #include <span>
@@ -83,7 +83,7 @@ struct DXFCPP_EXPORT CandleAlignment final : CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this candle alignment set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Returns string representation of this candle alignment.
@@ -104,7 +104,7 @@ struct DXFCPP_EXPORT CandleAlignment final : CandleSymbolAttribute {
      * @return The candle alignment (reference)
      * @throws InvalidArgumentException if the string representation is invalid.
      */
-    static std::reference_wrapper<const CandleAlignment> parse(const StringLike &s);
+    static std::reference_wrapper<const CandleAlignment> parse(StringParam s);
 
     /**
      * Returns candle alignment of the given candle symbol string.
@@ -113,7 +113,7 @@ struct DXFCPP_EXPORT CandleAlignment final : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle alignment of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(const StringLike &symbol);
+    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle alignment attribute.
@@ -121,7 +121,7 @@ struct DXFCPP_EXPORT CandleAlignment final : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle symbol string with the normalized representation of the candle alignment attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

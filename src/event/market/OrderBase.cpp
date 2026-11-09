@@ -76,7 +76,7 @@ void OrderBase::assign(std::shared_ptr<EventType> event) {
 OrderBase::OrderBase() noexcept {
 }
 
-OrderBase::OrderBase(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+OrderBase::OrderBase(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 const OrderSource &OrderBase::getSource() const & {

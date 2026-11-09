@@ -259,10 +259,10 @@ void Quote::assign(std::shared_ptr<EventType> event) {
 Quote::Quote() noexcept {
 }
 
-Quote::Quote(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Quote::Quote(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-Quote &Quote::withEventSymbol(const StringLike &eventSymbol) noexcept {
+Quote &Quote::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;

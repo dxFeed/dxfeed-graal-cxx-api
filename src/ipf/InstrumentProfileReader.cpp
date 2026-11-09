@@ -27,32 +27,32 @@ bool InstrumentProfileReader::wasComplete() const {
     return isolated::ipf::IsolatedInstrumentProfileReader::wasComplete(handle_);
 }
 
-std::string InstrumentProfileReader::resolveSourceURL(const StringLike &address) {
-    return isolated::ipf::IsolatedInstrumentProfileReader::resolveSourceURL(address);
+std::string InstrumentProfileReader::resolveSourceURL(StringParam address) {
+    return isolated::ipf::IsolatedInstrumentProfileReader::resolveSourceURL(address.view());
 }
 
-std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(const StringLike &address) const {
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(StringParam address) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
-        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address));
+        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address.view()));
     auto result = InstrumentProfile::List::fromGraal(list.get());
 
     return result;
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>>
-InstrumentProfileReader::readFromFile(const StringLike &address, const StringLike &user,
-                                      const StringLike &password) const {
+InstrumentProfileReader::readFromFile(StringParam address, StringParam user, StringParam password) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
-        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, user, password));
+        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address.view(), user.view(),
+                                                                     password.view()));
     auto result = InstrumentProfile::List::fromGraal(list.get());
 
     return result;
 }
 
-std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(const StringLike &address,
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(StringParam address,
                                                                                       const AuthToken &token) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
-        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, token.getHandle()));
+        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address.view(), token.getHandle()));
     auto result = InstrumentProfile::List::fromGraal(list.get());
 
     return result;

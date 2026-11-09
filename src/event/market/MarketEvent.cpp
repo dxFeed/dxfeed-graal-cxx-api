@@ -12,7 +12,7 @@ DXFCPP_BEGIN_NAMESPACE
 MarketEvent::MarketEvent() noexcept {
 }
 
-MarketEvent::MarketEvent(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+MarketEvent::MarketEvent(StringParam eventSymbol) : eventSymbol_{eventSymbol.view()} {
 }
 
 void MarketEvent::fillData(void *graalNative) noexcept {
@@ -66,8 +66,8 @@ const std::optional<std::string> &MarketEvent::getEventSymbolOpt() const & noexc
     return eventSymbol_;
 }
 
-void MarketEvent::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    eventSymbol_ = std::string(eventSymbol);
+void MarketEvent::setEventSymbol(StringParam eventSymbol) {
+    eventSymbol_ = std::string(eventSymbol.view());
 }
 
 std::int64_t MarketEvent::getEventTime() const noexcept {

@@ -50,10 +50,5 @@ extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t *data, std::size_t size
         }
     }
 
-    try {
-        (void)static_cast<double>(StringLike(s));
-    } catch (const std::exception &) {
-    }
-
     return 0;
 }

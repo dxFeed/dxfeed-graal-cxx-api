@@ -119,7 +119,7 @@ void Underlying::assign(std::shared_ptr<EventType> event) {
 Underlying::Underlying() noexcept {
 }
 
-Underlying::Underlying(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Underlying::Underlying(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 const IndexedEventSource &Underlying::getSource() const & noexcept {

@@ -7,9 +7,11 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/Concepts.hpp"
 #include "../../detail/Math.hpp"
-#include "../../detail/StringLike.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEvent.hpp"
 #include "../IndexedEventSource.hpp"
@@ -144,7 +146,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OptionSale(const StringLike &eventSymbol) noexcept;
+    explicit OptionSale(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -154,7 +156,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current option sale.
      */
-    OptionSale &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    OptionSale &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes event's creation time and returns the current option sale.
@@ -517,7 +519,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @param exchangeSaleConditions sale conditions.
      */
-    void setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept;
+    void setExchangeSaleConditions(StringParam exchangeSaleConditions);
 
     /**
      * Changes the sale conditions, or makes it null with `std::nullopt`.
@@ -536,7 +538,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @param exchangeSaleConditions sale conditions.
      * @return The current option sale.
      */
-    OptionSale &withExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept;
+    OptionSale &withExchangeSaleConditions(StringParam exchangeSaleConditions);
 
     /**
      * Changes the sale conditions, or makes it null with `std::nullopt`.
@@ -803,7 +805,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      *
      * @param optionSymbol option symbol of this event.
      */
-    void setOptionSymbol(const StringLike &optionSymbol) noexcept;
+    void setOptionSymbol(StringParam optionSymbol);
 
     /**
      * Changes the option symbol of this event, or makes it null with `std::nullopt`.
@@ -822,7 +824,7 @@ class DXFCPP_EXPORT OptionSale final : public MarketEvent, public IndexedEvent {
      * @param optionSymbol option symbol of this event.
      * @return The current option sale.
      */
-    OptionSale &withOptionSymbol(const StringLike &optionSymbol) noexcept;
+    OptionSale &withOptionSymbol(StringParam optionSymbol);
 
     /**
      * Changes the option symbol of this event, or makes it null with `std::nullopt`.

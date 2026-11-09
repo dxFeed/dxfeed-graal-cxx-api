@@ -17,14 +17,9 @@
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 
-TEST_CASE("StringLike, StringHash and iEquals are exported") {
-    const StringLike fromString = std::string("abc");
-    const StringLike fromChars = "abc";
-
-    CHECK(fromString == fromChars);
-    CHECK(fromString.size() == 3);
-    CHECK(std::string(fromChars.c_str()) == "abc");
+TEST_CASE("StringHash and iEquals are exported") {
     CHECK(StringHash{}("abc") == StringHash{}(std::string("abc")));
+    CHECK(StringHash{}("abc") == StringHash{}(std::string_view("abc")));
     CHECK(iEquals("ABC", "abc"));
 }
 

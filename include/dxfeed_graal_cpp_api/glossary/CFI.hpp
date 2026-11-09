@@ -8,7 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/JavaObjectHandle.hpp"
-#include "../detail/StringLike.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
 
 #include <cstddef>
@@ -69,7 +69,7 @@ struct DXFCPP_EXPORT CFI : RequireMakeShared<CFI> {
      * @return The CFI.
      * @throws JavaException("IllegalArgumentException") if the `code` is invalid.
      */
-    static Ptr valueOf(const StringLike &code);
+    static Ptr valueOf(StringParam code);
 
     /**
      * Returns an instance of CFI for a specified integer representation of CFI code.
