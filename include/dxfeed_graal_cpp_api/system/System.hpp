@@ -132,7 +132,7 @@ struct DXFCPP_EXPORT System {
      * @return The value of a JVM system property (UTF-8 string), or an empty string if the property is not set.
      * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
-    static std::string getProperty(StringParam key);
+    static std::string getProperty(StringParam key, bool temporary = false);
 
     /**
      * Sets the arguments that the Graal isolate is created with, for example `-Dmy.prop=value` or `-Xmx512m`. Call it
@@ -171,7 +171,11 @@ struct DXFCPP_EXPORT System {
  * listeners use them, close the endpoints or call shutdown() before that. With the library as a DLL built with MinGW
  * or with the static C runtime, the handler runs after the static objects of the executable are destroyed.
  */
-DXFCPP_EXPORT void shutdown();
+DXFCPP_EXPORT void temporaryShutdown();
+
+inline void shutdown() {
+    temporaryShutdown();
+}
 
 DXFCPP_END_NAMESPACE
 
