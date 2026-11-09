@@ -445,6 +445,22 @@ class ReportMainTest(unittest.TestCase):
             self.assertEqual(flags, "verdict=no\ncomment=false\n")
             self.assertNotIn("####", text)
 
+    def test_new_platform_without_a_list_in_the_base(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            for name in ("base", "abi", "ci"):
+                (root / name).mkdir()
+            for name in ("base", "abi", "ci"):
+                (root / name / "symbols-linux.txt").write_text(symbols.render("linux", {"dxfc_a"}, 3))
+            for name in ("abi", "ci"):
+                (root / name / "symbols-linux-aarch64.txt").write_text(symbols.render("linux", {"dxfc_a"}, 5))
+            report = root / "report.md"
+            code = symbols.main(["report", str(root / "ci"), "--abi-dir", str(root / "abi"), "--base-dir",
+                                 str(root / "base"), "--output", str(report)])
+            self.assertEqual(code, 0)
+            text = report.read_text(encoding="utf-8")
+            self.assertIn("| linux | 0 | 0 | 0 | 3 |\n| linux-aarch64 | 0 | 0 | 0 | 5 |", text)
+
 
 class WorkflowTest(unittest.TestCase):
     def test_the_job_finds_its_comment_by_the_marker(self):
@@ -507,6 +523,15 @@ class FetchTest(unittest.TestCase):
         self.ci_lists["linux"] = before.decode()
         self.assertIn("The lists match: nothing to write.", self.fetch(run=7))
         self.assertEqual(self.downloaded, ["20", "7"])
+
+    def test_list_of_a_new_platform_written(self):
+        self.ci_lists["linux"] = (self.abi / "symbols-linux.txt").read_text()
+        self.ci_lists["linux-aarch64"] = symbols.render("linux", {"dxfc_a", "dxfc_b"}, 5).replace("\n", "\r\n")
+        text = self.fetch()
+        self.assertIn("New platforms: linux-aarch64.", text)
+        self.assertIn("Written: symbols-linux-aarch64.txt.", text)
+        self.assertEqual((self.abi / "symbols-linux-aarch64.txt").read_bytes(),
+                         symbols.render("linux", {"dxfc_a", "dxfc_b"}, 5).encode())
 
     def test_run_in_progress_and_no_run(self):
         self.runs = [{"databaseId": 40, "status": "in_progress", "conclusion": "", "createdAt": "2026-11-09T13:00:00Z"}]

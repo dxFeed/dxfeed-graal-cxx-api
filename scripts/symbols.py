@@ -547,10 +547,14 @@ def find_lists(directory, recursive=True):
     return {name: lists[name] for name in sorted(lists)}
 
 
-def differences_of(lists, abi_dir):
-    """{platform: Difference or None} of the lists of the CI ({platform: path}) against the lists of abi_dir."""
-    return {name: Difference(read_list(listed), read_list(lists[name])) if name in lists else None
-            for name, listed in find_lists(abi_dir, recursive=False).items()}
+def differences_of(lists, abi_dir, fallback_dir=None):
+    """{platform: Difference or None} of the lists of the CI ({platform: path}) against the lists of abi_dir; a
+    platform without a list in abi_dir is compared with the list of fallback_dir (the lists of a new platform, which
+    the base branch does not have yet)."""
+    listed = dict(find_lists(fallback_dir, recursive=False)) if fallback_dir else {}
+    listed.update(find_lists(abi_dir, recursive=False))
+    return {name: Difference(read_list(listed[name]), read_list(lists[name])) if name in lists else None
+            for name in sorted(listed)}
 
 
 def run_command(command):
@@ -595,9 +599,13 @@ def fetch(run=None, dry_run=False, abi_dir=ROOT / "abi"):
             raise SymbolsError(f"the run {run} has no lists (artifacts symbols-*): its symbols jobs did not run or "
                                "ended before the comparison")
         differences = differences_of(lists, abi_dir)
+        new = [name for name in lists if name not in differences]
         lines = [f"The lists of the CI run {run} against {abi_dir}" + (f" ({note})" if note else "") + ":", ""]
         lines.append(report(differences, marker=False))
-        changed = [name for name, difference in differences.items() if difference is not None and difference.differs]
+        if new:
+            lines.append("New platforms: " + ", ".join(new) + ".")
+        changed = [name for name, difference in differences.items()
+                   if difference is not None and difference.differs] + new
         if dry_run or not changed:
             lines.append("Nothing written." if dry_run else "The lists match: nothing to write.")
         else:
@@ -640,7 +648,7 @@ def main(argv=None):
         if args.command == "report":
             lists = find_lists(args.lists)
             base_dir = args.base_dir or args.abi_dir
-            differences = differences_of(lists, base_dir)
+            differences = differences_of(lists, base_dir, args.abi_dir)
             if not differences:
                 raise SymbolsError(f"{base_dir}: no lists symbols-<os>.txt")
             pending = [name for name, difference in differences_of(lists, args.abi_dir).items()

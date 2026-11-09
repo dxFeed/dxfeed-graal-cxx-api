@@ -343,13 +343,13 @@ jobs:
         run: cmake -P scripts/tests/test_release.cmake
 
   # The exported symbols of the Release library (as in the packages: no DXFCXX_EXPORT_INTERNALS) against the list of its
-  # OS, abi/symbols-<os>.txt: any difference fails. The list of the library is always uploaded as the artifact
-  # symbols-<os>: the symbols-report job compares it, `python3 scripts/symbols.py fetch` takes it into abi/.
-  # macOS x86-64 has its own list: AppleClang exports there the typeinfo of the classes without a key function, which
-  # arm64 keeps hidden.
-  # The compilers are those of the packages (release.yml): Linux in oraclelinux:8 with gcc-toolset-14, so the list is
-  # the one of the library that is shipped. The steps use paths relative to the workspace: in a container,
-  # ${{github.workspace}} is the path on the runner.
+  # platform, abi/symbols-<platform>.txt: any difference fails. The list of the library is always uploaded as the
+  # artifact symbols-<platform>: the symbols-report job compares it, `python3 scripts/symbols.py fetch` takes it into
+  # abi/. Each architecture of the packages has its own list. macOS: AppleClang exports on x86-64 the typeinfo of the
+  # classes without a key function, which arm64 keeps hidden, so the std:: total of arm64 is 0.
+  # The compilers are those of the packages (release.yml): Linux (x86-64 and arm64) in oraclelinux:8 with
+  # gcc-toolset-14, so the list is the one of the library that is shipped. The steps use paths relative to the
+  # workspace: in a container, ${{github.workspace}} is the path on the runner.
   symbols:
     needs: plan
     if: ${{ needs.plan.outputs.code == 'true' }}
@@ -366,6 +366,15 @@ jobs:
             python: python3.11
             library: build/libdxFeedGraalCxxApi.so
             symbols: linux
+          - name: oraclelinux-8-arm-gcc-toolset-14
+            image: ubuntu-24.04-arm
+            container: oraclelinux:8
+            os: linux
+            cc: 'gcc'
+            cxx: 'g++'
+            python: python3.11
+            library: build/libdxFeedGraalCxxApi.so
+            symbols: linux-aarch64
           - name: macos-15-xcode-16-4
             image: macos-15
             os: macos

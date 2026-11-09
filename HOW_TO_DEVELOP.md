@@ -317,9 +317,10 @@ The shared library is built with hidden visibility: with gcc and clang it export
   release package (see [HOW_TO_BUILD.md](HOW_TO_BUILD.md)).
 - Nothing else is exported: no `DXFCPP_EXPORT` in `src/`.
 
-The exported symbols are listed in `abi/symbols-linux.txt`, `abi/symbols-macos.txt` (arm64),
-`abi/symbols-macos-x86_64.txt` and `abi/symbols-windows.txt`: the own symbols demangled one per line and the number of
-the `std::` instantiations. The `symbols` CI jobs compare the Release library (without `DXFCXX_EXPORT_INTERNALS`) with
+The exported symbols are listed in `abi/symbols-linux.txt` (x86-64), `abi/symbols-linux-aarch64.txt`,
+`abi/symbols-macos.txt` (arm64), `abi/symbols-macos-x86_64.txt` and `abi/symbols-windows.txt`: the own symbols demangled
+one per line and the number of the `std::` instantiations (on macOS arm64 it is 0: the compiler keeps their typeinfo
+hidden there). The `symbols` CI jobs compare the Release library (without `DXFCXX_EXPORT_INTERNALS`) with
 the list of their OS and fail on any difference. The `symbols-report` job puts what changed on all platforms into one
 report: changed signatures (the old and the new one side by side), removed and added symbols, and the verdict whether
 the change breaks the ABI, with the result of the `abi` job (abidiff, Linux). The report is in the summary of the run

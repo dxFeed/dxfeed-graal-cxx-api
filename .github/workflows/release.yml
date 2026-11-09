@@ -748,8 +748,8 @@ jobs:
   # The Release packages as their users get them: a CMake project finds the unpacked package and builds and runs
   # programs with its libraries (.github/ci/package-consumer-check), the shared library exports the symbols of
   # abi/symbols-<os>.txt (the std:: total is checked by build.yml, on the compiler the lists are made with), and it has
-  # its version in the name and the hardening of a Release build (.github/ci/library-check). macOS x86-64 has its own
-  # list: AppleClang exports there the typeinfo of the classes without a key function, which arm64 keeps hidden.
+  # its version in the name and the hardening of a Release build (.github/ci/library-check). Each architecture has its
+  # own list (see the symbols job of build.yml).
   check_packages:
     name: "${{ matrix.config.name }}: Check the Release packages"
     needs: [ get_version, build_package_and_upload ]
@@ -785,7 +785,7 @@ jobs:
             python: python3.11
             cmakeArgs: -DCMAKE_CXX_COMPILER=g++
             library: lib/libdxFeedGraalCxxApi.so
-            symbols: linux
+            symbols: linux-aarch64
           - name: macos-15-xcode-16-4
             image: macos-15
             os: macos
