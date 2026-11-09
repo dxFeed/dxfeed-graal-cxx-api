@@ -1,3 +1,17 @@
+* **\[MDAPI-511]\[C++]** The Windows `-static-mt` archives have no `dxFeedGraalCxxApi.dll` and its import library,
+  and the Full Source Bundle is split into two, one for each C runtime of the SDK. See "Full Source Bundles" in
+  `HOW_TO_BUILD.md`.
+    * With the static C runtime, the DLL and the code that uses it each have their own C runtime, and the C++ API
+      passes standard library objects between them; link `dxFeedGraalCxxApi_static.lib`. The DLL is still built with
+      `/MT` (`/MTd`) but not installed: only its C API can be used across this boundary.
+    * `dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle.zip` has the SDK with the dynamic C runtime,
+      Release and Debug. `dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle-static-mt.zip` has the SDK
+      with the static C runtime, Release and Debug, DLL and static library, and builds with
+      `DXFCXX_LINK_STATIC_RUNTIME=ON` by default.
+    * CMake takes the SDK of a bundle that `DXFCXX_LINK_STATIC_RUNTIME` and `DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK`
+      select, as for the downloaded SDK. An option that needs the SDK of the other bundle fails the configuration
+      with the name of that bundle (the v8.1.0 bundle built with `DXFCXX_LINK_STATIC_RUNTIME=ON` and the SDK with the
+      dynamic C runtime, with a warning).
 * **\[MDAPI-512]\[C++]** Fixed the shared library (DLL) on Windows: the listeners of the subscriptions and tx models
   that the code of the public headers creates were not called, and the listener ids of the application and of the
   library collided. Applications that use `dxFeedGraalCxxApi.dll` are rebuilt with the new headers: the layout of
@@ -13,12 +27,10 @@
   * With CMake older than 3.28, the installation no longer contains the CMake package of `bits`.
 * **\[MDAPI-305]\[C++]** The Windows `-static-mt` archives need no Visual C++ Redistributable, and a single exe or
   dll can be built from them. See "Windows without the Visual C++ Redistributable" in `README.md`.
-    * The archives take the SDK DLL built with the static C runtime, and the C++ API DLL is built with `/MT` (`/MTd`).
+    * The archives take the SDK DLL built with the static C runtime.
     * The archives add `lib\DxFeedGraalNativeSdk.lib`, `lib\DxFeedGraalNativeSdk_static.lib` and
       `lib\link-flags.txt`: `dxFeedGraalCxxApi_static.lib` links either with the SDK DLL or with the static SDK
       library into one exe or dll that depends only on Windows DLLs.
-    * Code built with `/MT` shall not link with `dxFeedGraalCxxApi.dll` of these archives: the DLL and the code each
-      have their own C runtime, and the C++ API passes standard library objects between them.
     * The Windows archives are built with Visual Studio 2022 17.14 (v8.1.0 was built with Visual Studio 2026), so
       their static libraries link with Visual Studio 2022 17.14 and newer.
     * `StringLike`, `StringHash`, `EventFlagsMask`, `operator""_c` and `DXFeedTimeSeriesSubscription` are exported
