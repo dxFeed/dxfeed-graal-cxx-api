@@ -76,7 +76,7 @@ bool System::setProperty(StringParam key, StringParam value) {
     return result;
 }
 
-std::string System::getProperty(StringParam key, bool) {
+std::string System::getProperty(StringParam key) {
     throwIfIsolateFailed();
 
     const std::string_view keyView = key.view();
@@ -119,7 +119,7 @@ bool System::setIsolateArguments(std::vector<std::string> arguments) {
     return Isolate::setArguments(std::move(arguments));
 }
 
-void temporaryShutdown() {
+void shutdown() {
     Isolate::shutdown();
 }
 
