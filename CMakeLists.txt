@@ -273,8 +273,9 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
     SetupStaticRuntimeMSVC(console ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
-# bits (header-only): the bit operations of the library headers. EXCLUDE_FROM_ALL (CMake 3.28+) disables its own install
-# rules; its headers are installed with the library below.
+# bits (header-only): the bit operations of the library headers. EXCLUDE_FROM_ALL disables its own install rules
+# (its headers are installed with the library below): FetchContent passes it to add_subdirectory() since CMake 3.28,
+# older versions ignore it there.
 if (NOT DEFINED FETCHCONTENT_SOURCE_DIR_BITS AND
         EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}/CMakeLists.txt")
     set(FETCHCONTENT_SOURCE_DIR_BITS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}")
@@ -286,7 +287,15 @@ FetchContent_Declare(
         GIT_TAG 9b59e45d2cc75303ffc4cc6d5b42363f8ab3508b # v1.0.0
         EXCLUDE_FROM_ALL
 )
-FetchContent_MakeAvailable(bits)
+if (CMAKE_VERSION VERSION_LESS 3.28)
+    FetchContent_GetProperties(bits)
+    if (NOT bits_POPULATED)
+        FetchContent_Populate(bits)
+        add_subdirectory(${bits_SOURCE_DIR} ${bits_BINARY_DIR} EXCLUDE_FROM_ALL)
+    endif ()
+else ()
+    FetchContent_MakeAvailable(bits)
+endif ()
 
 add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
@@ -741,6 +750,12 @@ if (DXFCXX_FEATURE_STACKTRACE)
     target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)
     target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_FEATURE_STACKTRACE)
 endif ()
+
+# Threads: before glibc 2.34, pthread is a separate library (libpthread). PUBLIC: the library and the programs that
+# use std::thread with it link it.
+find_package(Threads REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+target_link_libraries(${PROJECT_NAME}_static PUBLIC Threads::Threads)
 
 # Both library targets are instrumented; PUBLIC propagates the options and the sanitizer runtime to every consumer.
 target_link_libraries(${PROJECT_NAME} PUBLIC dxfcxx_sanitizers)
