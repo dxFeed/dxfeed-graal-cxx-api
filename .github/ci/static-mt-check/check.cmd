@@ -1,7 +1,9 @@
 @echo off
 rem Checks an unpacked -static-mt archive of the C++ API; run from a VS 2022 (17.14+) x64 developer command prompt.
 rem Usage: check.cmd <archive dir> <output dir> [dumpbin-only]
-rem 1. No DLL of the archive imports the dynamic C runtime.
+rem 1. The archive has the SDK DLL and has neither dxFeedGraalCxxApi.dll nor its import library (a DLL with the static
+rem    C runtime has its own heap, and the C++ API passes the objects of the standard library across the DLL boundary).
+rem    No DLL of the archive imports the dynamic C runtime.
 rem 2. main.cpp is linked in the two ways of the archive, each into <output dir>\<way>:
 rem    static - dxFeedGraalCxxApi_static.lib, the SDK import library and the SDK DLL;
 rem    single - dxFeedGraalCxxApi_static.lib and the static library of the SDK: one exe that depends only on system
@@ -18,9 +20,13 @@ if not exist "%ARCHIVE%\lib\dxFeedGraalCxxApi_static.lib" (
 set "CRT_DLLS=msvcp vcruntime api-ms-win-crt ucrtbase concrt"
 set "DUMP=%TEMP%\static-mt-check-dumpbin.txt"
 
-for %%f in (dxFeedGraalCxxApi.dll DxFeedGraalNativeSdk.dll) do (
-    if not exist "%ARCHIVE%\bin\%%f" (
-        echo FAIL: %ARCHIVE%\bin\%%f is missing
+if not exist "%ARCHIVE%\bin\DxFeedGraalNativeSdk.dll" (
+    echo FAIL: %ARCHIVE%\bin\DxFeedGraalNativeSdk.dll is missing
+    exit /b 1
+)
+for %%f in (bin\dxFeedGraalCxxApi.dll lib\dxFeedGraalCxxApi.lib) do (
+    if exist "%ARCHIVE%\%%f" (
+        echo FAIL: %ARCHIVE%\%%f must not be in a -static-mt archive
         exit /b 1
     )
 )

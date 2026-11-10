@@ -495,9 +495,12 @@ jobs:
         run: |
           & "${{github.workspace}}/scripts/make-source-bundle.ps1" "${{needs.get_version.outputs.version}}"
 
+      # Each bundle is unpacked into RUNNER_TEMP/dxfcxx-<bundle>/<bundle name> and configured offline: the options select
+      # the SDK of the bundle, and an option that needs the SDK of the other bundle fails the configuration.
       - name: Verify [Full Source Bundle][Offline]
         shell: pwsh
         run: |
+          $configure = "${{github.workspace}}/.github/ci/source-bundle-check/configure.ps1"
           $bundleZips = @(Get-ChildItem -LiteralPath "${{github.workspace}}/build-bundle" -Filter "*-Full-Source-Bundle.zip")
           if ($bundleZips.Count -ne 1) {
               throw "Expected exactly one full source bundle, found $($bundleZips.Count)"
@@ -512,11 +515,10 @@ jobs:
           if ($bundleRoots.Count -ne 1) {
               throw "Expected exactly one root directory in the source bundle, found $($bundleRoots.Count)"
           }
+          $bundleRoot = $bundleRoots[0].FullName
 
-          cmake -S $bundleRoots[0].FullName -B $verifyBuildDir -A x64 `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DDXFCXX_BUILD_DOC=OFF `
-            -DFETCHCONTENT_FULLY_DISCONNECTED=ON
+          & $configure $bundleRoot $verifyBuildDir -Match 'Graal Native SDK: \S+-amd64-windows\r?\n' `
+            -Options "-DCMAKE_BUILD_TYPE=Release"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
           cmake --build $verifyBuildDir --config Release -j 4
@@ -524,6 +526,71 @@ jobs:
 
           ctest --test-dir $verifyBuildDir -C Release -R DXFeedTimeAndSalesStoreTest --output-on-failure
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          & $configure $bundleRoot "$verifyBuildDir-debug-sdk" -Match 'Graal Native SDK: \S+-amd64-windows-debug\r?\n' `
+            -Options "-DDXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON", "-DDXFCXX_BUILD_UNIT_TESTS=OFF", "-DDXFCXX_BUILD_SAMPLES=OFF", `
+              "-DDXFCXX_BUILD_TOOLS=OFF"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          & $configure $bundleRoot "$verifyBuildDir-static-runtime" -ExpectFailure -Match 'Full-Source-Bundle-static-mt\.zip' `
+            -Options "-DDXFCXX_LINK_STATIC_RUNTIME=ON"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      # The static-mt bundle builds with the static runtime by default; its installation is checked as a -static-mt
+      # archive (the directory name tells check.cmd the Release runtime).
+      - name: Verify [Full Source Bundle static-mt][Offline]
+        shell: pwsh
+        run: |
+          $configure = "${{github.workspace}}/.github/ci/source-bundle-check/configure.ps1"
+          $bundleZips = @(Get-ChildItem -LiteralPath "${{github.workspace}}/build-bundle" -Filter "*-Full-Source-Bundle-static-mt.zip")
+          if ($bundleZips.Count -ne 1) {
+              throw "Expected exactly one static-mt full source bundle, found $($bundleZips.Count)"
+          }
+
+          $verifySourceDir = Join-Path $env:RUNNER_TEMP "dxfcxx-source-bundle-static-mt"
+          $verifyBuildDir = Join-Path $env:RUNNER_TEMP "dxfcxx-source-bundle-static-mt-build"
+          New-Item -ItemType Directory -Path $verifySourceDir | Out-Null
+          Expand-Archive -LiteralPath $bundleZips[0].FullName -DestinationPath $verifySourceDir
+
+          $bundleRoots = @(Get-ChildItem -LiteralPath $verifySourceDir -Directory)
+          if ($bundleRoots.Count -ne 1) {
+              throw "Expected exactly one root directory in the source bundle, found $($bundleRoots.Count)"
+          }
+          $bundleRoot = $bundleRoots[0].FullName
+
+          & $configure $bundleRoot $verifyBuildDir `
+            -Match 'Graal Native SDK: \S+-amd64-windows-static-crt\r?\n', 'Graal Native SDK static library: \S+-amd64-windows-static-lib\r?\n' `
+            -Options "-DCMAKE_BUILD_TYPE=Release", "-DDXFCXX_BUILD_UNIT_TESTS=OFF", "-DDXFCXX_BUILD_SAMPLES=OFF", `
+              "-DDXFCXX_BUILD_TOOLS=OFF", "-DDXFCXX_INSTALL_SAMPLES=OFF", "-DDXFCXX_INSTALL_TOOLS=OFF"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          cmake --build $verifyBuildDir --config Release --target dxFeedGraalCxxApi_static -j 4
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          cmake --install $verifyBuildDir --config Release --prefix "${{github.workspace}}/static-mt-bundle/install-Release-static-mt"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          & $configure $bundleRoot "$verifyBuildDir-debug-sdk" `
+            -Match 'Graal Native SDK: \S+-amd64-windows-debug-static-crt\r?\n', 'Graal Native SDK static library: \S+-amd64-windows-debug-static-lib\r?\n' `
+            -Options "-DDXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON", "-DDXFCXX_BUILD_UNIT_TESTS=OFF", "-DDXFCXX_BUILD_SAMPLES=OFF", `
+              "-DDXFCXX_BUILD_TOOLS=OFF"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+          & $configure $bundleRoot "$verifyBuildDir-dynamic-runtime" -ExpectFailure -Match 'Full-Source-Bundle\.zip' `
+            -Options "-DDXFCXX_LINK_STATIC_RUNTIME=OFF"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Link the check program [Full Source Bundle static-mt]
+        shell: cmd
+        run: |
+          for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do call "%%i\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          call .github\ci\static-mt-check\check.cmd static-mt-bundle\install-Release-static-mt static-mt-bundle\check || exit /b 1
+
+      - name: Run the check program [Full Source Bundle static-mt]
+        shell: pwsh
+        run: |
+          ./.github/ci/static-mt-check/run.ps1 "static-mt-bundle/check"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
 
       - name: Upload [Full Source Bundle]
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
