@@ -307,7 +307,7 @@ jobs:
 
       - name: Upload artifacts
         if: ${{ matrix.buildType == 'Release' && matrix.sanitizers == 'NO_SAN' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: artifacts-${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}
           path: |
@@ -446,7 +446,7 @@ jobs:
 
       - name: Upload the list of the library
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: symbols-${{ matrix.config.symbols }}
           overwrite: true
@@ -483,7 +483,7 @@ jobs:
 
       - name: Upload the reference
         if: ${{ steps.baseline.outputs.found == 'true' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: abi-reference
           path: abi-reference.xml
@@ -548,7 +548,7 @@ jobs:
       # The verdict and the report of abidiff for the symbols-report job.
       - name: Upload the report of the comparison
         if: ${{ !cancelled() && needs.abi_baseline.outputs.found == 'true' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: abi-report
           overwrite: true
@@ -558,7 +558,7 @@ jobs:
 
       - name: Upload the ABI
         if: ${{ failure() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: abi-x86_64-linux
           path: abi-x86_64-linux.xml
@@ -629,7 +629,7 @@ jobs:
           cat report.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the report
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: exported-symbols-report
           overwrite: true
