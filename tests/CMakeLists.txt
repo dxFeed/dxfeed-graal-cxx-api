@@ -122,10 +122,15 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp)
     endif ()
 
-    # The tests build or read the structures of the C API of the dxFeed Graal SDK by hand.
-    if (DXFC_TEST_SOURCE MATCHES "^event/(UnsupportedEvent|StringFields)Test\\.cpp$")
+    # The tests build or read the structures of the C API of the dxFeed Graal SDK by hand, or call it.
+    if (DXFC_TEST_SOURCE MATCHES "^(event/(UnsupportedEvent|StringFields)|exceptions/JavaExceptionState)Test\\.cpp$")
         target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE
                 $<TARGET_PROPERTY:DxFeedGraalNativeSdk,INTERFACE_INCLUDE_DIRECTORIES>)
+    endif ()
+
+    # The test calls the C API: the shared library links the SDK library privately and does not pass it on.
+    if (DXFC_TEST_SOURCE STREQUAL "exceptions/JavaExceptionStateTest.cpp")
+        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE DxFeedGraalNativeSdk)
     endif ()
     list(APPEND DXFC_TEST_TARGETS ${DXFC_TEST_BASENAME})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})

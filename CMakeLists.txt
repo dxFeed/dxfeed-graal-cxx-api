@@ -22,7 +22,13 @@ dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION 
 # The numbers of DXFCXX_VERSION without the suffix (-rcN, -draftN): the version of the package and of the shared library.
 project(dxFeedGraalCxxApi VERSION ${DXFCXX_MAJOR_VERSION}.${DXFCXX_MINOR_VERSION}.${DXFCXX_PATCH_VERSION})
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.11.0" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.15.0" CACHE STRING "")
+
+# The library calls the dxfg_v4_ functions of the SDK; every way of getting the SDK (third_party, DXFG_LOCAL_ARCHIVE_PATH,
+# the stub, DXFEED_GRAAL_NATIVE_SDK_URL, the releases page) is checked here.
+if (DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS "3.15.0")
+    message(FATAL_ERROR "The dxFeed Graal C++ API needs the Graal Native SDK 3.15.0 or newer, not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+endif ()
 set(FMTLIB_VERSION "12.1.0")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -44,20 +50,20 @@ set(BOOST_SHA256 "2e64e5d79a738d0fa6fb546c6e5c2bd28f88d268a2a080546f74e5ff98f29d
 set(GLFW_SHA256 "a133ddc3d3c66143eba9035621db8e0bcf34dba1ee9514a9e23e96afd39fd57a")
 set(IMGUI_SHA256 "e1c46d676c2bcb7ced847ba27f50553e33a19db97b3cadaec7f8be64449139f8")
 # The Graal Native SDK archives of the releases page by platform, for DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION only.
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.11.0")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "31b8c114b3caa949893d778da2145043a8b70302d8df1989c6ad05ddbee931f7")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "b35ef2ae203bccf19b0bd68189c12d8638791121d27008fb4db3e5e765856909")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "c2d63ba80e3c6d36573228d4351ac8488ac44c0181cb31c74893223f781e3821")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "51d631ee51613f97dfd70f7f6d271b7c9233586bc7b0eada718a8b0b96fc09d8")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "e309726b132d1faf010a80d0d24e3d1d6dcbc3a8ecafbdeb2dad1b3d76e0d306")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "71d58ba85ce6b643c061508b0dfffb220ddea9c5005e738ed74f3da9b4351b98")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt "131fe3423d964112f5af1512a2f8f35b0d275320b38ee3480907533b0b430327")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt "29ed130f4c5ae294fadb81f676edeb529baa079d2b76806b588be038aa8c8eb8")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib "a0d0b24856699a9d956655db7a86a1c1086c357f44e57ec26302e1a4e063da27")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib "8a4b420c6186039f3907994e084a84ca5907462fdf2ffb9dde519c5eaaee0e72")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "fce30375ba5f19df9e9b5d5e69ee6bc205ca58c13d3c9d5746a5a487c475028c")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "7fe1e61ed51f1b70b744d06b4f8ead03689e2775a88b33537ee2c5fa64954970")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "209867651f4328d84b60045252fd438b7a369b132db00cc650bade7a7f187ce7")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.15.0")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "cc963025638d21200351f6f6f336fbc7efe6202d1ae7a9379302a4dde6db185d")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "b14d53b01767163f7b97bfa107459ca41caa5b880e8efcf64cbf86d30b3755fa")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "e0664dfdefe97bbd936b877b6a68b6f49ae2e28df2b894f7c3d7f67ff445f5b0")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "31a75eeb609c7295c700a5f39a63d07fe80c525caa46342a43b23626f285b75f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "f62ee1b76e5dc019ee2b3db53dc0c47da3599a52355f4c93871fb584edddad0f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "a815aa25ed29519a21b8d1d5a7342e95abd51a67a8c139d84c6a3cf243387b96")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt "26902e7deab4339735c5d112f55a183494a8bd606f663e220e4e9aebad859c49")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt "0f7febabcc0ecd4fdf961e34dc8979eb5a3da65f059fed94f0c1f4423c2b8fce")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib "02d0167a35d1f744b1241ce4e8e243c20114c8a40b695f181d3effd59742b874")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib "101b53a804ea31892bde5a30d50c32a7dc1dfca5dd1a65b949bd382bcb1e3f7c")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "2197019879a5639fbd0ef407aa1fed424becec954a10c6488817ec7790dfce68")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "31a6fe5c3f3bd549560100da7c0c913b0f11f19120aa574a0f2295b5fbbaa75f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "3ab78762b7eff78129cceff72bded0b3f5c083a277390e59cd1961948930916d")
 
 include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 
@@ -210,10 +216,6 @@ else ()
                 # The static runtime on Windows: the SDK DLL with the static CRT, and the static library of the SDK that
                 # is only installed (both archives define the target DxFeedGraalNativeSdk).
                 if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
-                    if (DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS "3.9.0")
-                        message(FATAL_ERROR "DXFCXX_LINK_STATIC_RUNTIME needs the Graal Native SDK 3.9.0 or newer (the static-crt and static-lib archives), not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
-                    endif ()
-
                     set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-lib)
                     set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-crt)
                 endif ()

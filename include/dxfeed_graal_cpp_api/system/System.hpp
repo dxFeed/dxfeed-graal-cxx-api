@@ -66,7 +66,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * only when the system code page is UTF-8; otherwise the characters outside the code page may be replaced. Use ASCII
  * in the variable, or System::setIsolateArguments(): it passes the UTF-8 strings as they are.
  *
- * **Useful arguments** (checked with the dxFeed Graal SDK 3.11.0, which ignores an argument that does not start with
+ * **Useful arguments** (checked with the dxFeed Graal SDK 3.15.0, which ignores an argument that does not start with
  * `-`):
  *
  * - `-Xmx<size>`, `-Xms<size>`, `-Xmn<size>`: the maximum, the initial and the young generation size of the heap, for
@@ -79,9 +79,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * creation of the isolate, the SDK installs a handler that does nothing, so a write to a closed socket by a connector
  * of an endpoint fails with `EPIPE` instead of killing the process. A handler or `SIG_IGN` that the application set
  * before the first call is kept. With `-XX:-EnableSignalHandling` the SDK installs no handlers: set `SIG_IGN` for
- * `SIGPIPE` yourself before the first call, otherwise a write to a closed socket kills the process. On macOS x86-64
- * the SDK installs no handlers either (its library there is built with an older GraalVM, SDK defect MDAPI-501): set
- * `SIG_IGN` for `SIGPIPE` yourself there too.
+ * `SIGPIPE` yourself before the first call, otherwise a write to a closed socket kills the process.
  *
  * **Errors.** An argument that the SDK does not accept (for example `-Xmx64q` or an unknown `-XX:` option) makes it
  * print the reason to the standard error output, and the creation of the isolate fails with the code 22
