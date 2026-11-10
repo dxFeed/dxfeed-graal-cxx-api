@@ -4,3 +4,6 @@
       certificate chains up to a root that JDK 25.0.5 removed fails the TLS handshake, unless the application sets
       `javax.net.ssl.trustStore`. See the
       [Graal Native SDK release notes](https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/tag/v3.15.0).
+    * macOS x86-64: the Graal isolate installs its handlers of `SIGPIPE` and `SIGXFSZ`, as on the other platforms
+      (SDK 3.14.0+, MDAPI-500, SDK defect MDAPI-501): a write to a closed socket by a connector of an endpoint fails
+      with `EPIPE` instead of killing the process.
