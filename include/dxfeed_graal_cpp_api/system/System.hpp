@@ -66,7 +66,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * only when the system code page is UTF-8; otherwise the characters outside the code page may be replaced. Use ASCII
  * in the variable, or System::setIsolateArguments(): it passes the UTF-8 strings as they are.
  *
- * **Useful arguments** (checked with the dxFeed Graal SDK 3.11.0, which ignores an argument that does not start with
+ * **Useful arguments** (checked with the dxFeed Graal SDK 3.15.0, which ignores an argument that does not start with
  * `-`):
  *
  * - `-Xmx<size>`, `-Xms<size>`, `-Xmn<size>`: the maximum, the initial and the young generation size of the heap, for
