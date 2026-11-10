@@ -16,10 +16,12 @@ namespace IsolatedString {
 
 bool release(const char *string) {
     if (!string) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_String_release`. The `string` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_String_release`. The `string` is nullptr");
     }
 
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_String_release, string) == 0;
+    runGraalV4Function(dxfg_v4_String_release, string);
+
+    return true;
 }
 
 std::unique_ptr<const char, decltype(&release)> toUnique(const char *string) {
@@ -30,14 +32,15 @@ std::unique_ptr<const char, decltype(&release)> toUnique(const char *string) {
 
 namespace IsolatedStringList {
 
-bool release(/* dxfg_string_list* */ void *stringList) {
+bool release(/* dxfg_v4_string_list* */ void *stringList) {
     if (!stringList) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_CList_String_release`. The `stringList` is nullptr");
+            "Unable to execute function `dxfg_v4_string_list_release`. The `stringList` is nullptr");
     }
 
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_String_release,
-                                                  static_cast<dxfg_string_list *>(stringList));
+    runGraalV4Function(dxfg_v4_string_list_release, static_cast<dxfg_v4_string_list *>(stringList));
+
+    return true;
 }
 
 std::unique_ptr<void, decltype(&release)> toUnique(void *stringList) {

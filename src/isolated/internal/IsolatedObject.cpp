@@ -19,7 +19,7 @@ void freeGraal(void *pointer) {
         return;
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_free, pointer);
+    runGraalV4Function(dxfg_v4_free, pointer);
 }
 
 namespace IsolatedObject {
@@ -92,9 +92,12 @@ bool List::release(void *handle) noexcept {
     runRelease("JavaObjectHandle", [handle, &released] {
         released = runIsolatedOrElse(
             [handle](auto threadHandle) {
-                return JavaException::throwIfMinusOne(dxfg_CList_JavaObjectHandler_release(
-                           static_cast<graal_isolatethread_t *>(threadHandle),
-                           static_cast<dxfg_java_object_handler_list *>(handle))) == 0;
+                auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+                throwIfFailed(thread, dxfg_v4_java_object_handler_list_release(
+                                          thread, static_cast<dxfg_v4_java_object_handler_list *>(handle)));
+
+                return true;
             },
             false);
     });

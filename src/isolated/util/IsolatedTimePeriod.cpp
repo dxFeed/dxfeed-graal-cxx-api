@@ -11,51 +11,51 @@
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::util::IsolatedTimePeriod {
-/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> ZERO() {
-    return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_ZERO));
+/* dxfg_v4_time_period_t* */ JavaObjectHandle<TimePeriod> ZERO() {
+    return JavaObjectHandle<TimePeriod>(runGraalV4FunctionWithNonNullResult(dxfg_v4_TimePeriod_ZERO));
 }
 
-/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> UNLIMITED() {
-    return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_UNLIMITED));
+/* dxfg_v4_time_period_t* */ JavaObjectHandle<TimePeriod> UNLIMITED() {
+    return JavaObjectHandle<TimePeriod>(runGraalV4FunctionWithNonNullResult(dxfg_v4_TimePeriod_UNLIMITED));
 }
 
-/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(std::int64_t value) {
-    return JavaObjectHandle<TimePeriod>(runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_valueOf, value));
+/* dxfg_v4_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(std::int64_t value) {
+    return JavaObjectHandle<TimePeriod>(runGraalV4FunctionWithNonNullResult(dxfg_v4_TimePeriod_valueOf, value));
 }
 
-/* dxfg_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(std::string_view value) {
+/* dxfg_v4_time_period_t* */ JavaObjectHandle<TimePeriod> valueOf(std::string_view value) {
     return JavaObjectHandle<TimePeriod>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_TimePeriod_valueOf2, SdkString{value}.c_str()));
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_TimePeriod_valueOfString, SdkString{value}.c_str()));
 }
 
-std::int64_t getTime(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
+std::int64_t getTime(/* dxfg_v4_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
     if (!timePeriod) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_TimePeriod_getTime`. The `timePeriod` handle is invalid");
+            "Unable to execute function `dxfg_v4_TimePeriod_getTime`. The `timePeriod` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_TimePeriod_getTime,
-                                              static_cast<dxfg_time_period_t *>(timePeriod.get()));
+    return runGraalV4FunctionWithResult(dxfg_v4_TimePeriod_getTime,
+                                        static_cast<dxfg_v4_time_period_t *>(timePeriod.get()));
 }
 
-std::int32_t getSeconds(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
+std::int32_t getSeconds(/* dxfg_v4_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
     if (!timePeriod) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_TimePeriod_getSeconds`. The `timePeriod` handle is invalid");
+            "Unable to execute function `dxfg_v4_TimePeriod_getSeconds`. The `timePeriod` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_TimePeriod_getSeconds,
-                                              static_cast<dxfg_time_period_t *>(timePeriod.get()));
+    return runGraalV4FunctionWithResult(dxfg_v4_TimePeriod_getSeconds,
+                                        static_cast<dxfg_v4_time_period_t *>(timePeriod.get()));
 }
 
-std::int64_t getNanos(/* dxfg_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
+std::int64_t getNanos(/* dxfg_v4_time_period_t* */ const JavaObjectHandle<TimePeriod> &timePeriod) {
     if (!timePeriod) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_TimePeriod_getNanos`. The `timePeriod` handle is invalid");
+            "Unable to execute function `dxfg_v4_TimePeriod_getNanos`. The `timePeriod` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_TimePeriod_getNanos,
-                                              static_cast<dxfg_time_period_t *>(timePeriod.get()));
+    return runGraalV4FunctionWithResult(dxfg_v4_TimePeriod_getNanos,
+                                        static_cast<dxfg_v4_time_period_t *>(timePeriod.get()));
 }
 
 } // namespace isolated::util::IsolatedTimePeriod

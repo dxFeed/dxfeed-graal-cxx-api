@@ -12,21 +12,6 @@
 
 DXFCPP_BEGIN_NAMESPACE
 
-// workaround for dxfg_CList_IndexedEventSource_release
-void releaseGraalSources(void *sources) {
-    if (sources == nullptr) {
-        return;
-    }
-
-    if (auto list = dxfcpp::bit_cast<dxfg_indexed_event_source_list *>(sources); list->size > 0) {
-        for (auto i = 0; i < list->size; i++) {
-            isolated::event::IsolatedIndexedEventSource::release(list->elements[i]);
-        }
-    }
-
-    isolated::internal::freeGraal(sources);
-}
-
 JavaObjectHandle<IndexedTxModelBuilderTag>
 IndexedTxModelImpl::Builder::withBatchProcessingImpl(const JavaObjectHandle<IndexedTxModelBuilderTag> &handle,
                                                      bool isBatchProcessing) {
@@ -96,8 +81,9 @@ void IndexedTxModelImpl::closeImpl(const JavaObjectHandle<IndexedTxModelTag> &ha
 
 std::unordered_set<EventSourceWrapper>
 IndexedTxModelImpl::getSourcesImpl(const JavaObjectHandle<IndexedTxModelTag> &handle) {
-    std::unique_ptr<void, decltype(&releaseGraalSources)> graalSources{
-        isolated::model::IsolatedIndexedTxModel::getSources(handle), releaseGraalSources};
+    std::unique_ptr<void, decltype(&isolated::event::IsolatedIndexedEventSourceList::release)> graalSources{
+        isolated::model::IsolatedIndexedTxModel::getSources(handle),
+        isolated::event::IsolatedIndexedEventSourceList::release};
 
     if (graalSources == nullptr) {
         return {};

@@ -11,15 +11,16 @@
 DXFCPP_BEGIN_NAMESPACE
 
 void gc() {
-    isolated::runGraalFunctionAndThrowIfMinusOne(dxfg_gc);
+    isolated::runGraalV4Function(dxfg_v4_gc);
 }
 
 namespace isolated::internal::IsolatedTools {
-std::unordered_set<std::string> /* dxfg_string_list* */
+std::unordered_set<std::string> /* dxfg_v4_string_list* */
 parseSymbols(std::string_view symbolList) {
     std::unordered_set<std::string> result{};
 
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, SdkString{symbolList}.c_str());
+    const auto graalStringList =
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_Tools_parseSymbols, SdkString{symbolList}.c_str());
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
@@ -30,10 +31,11 @@ parseSymbols(std::string_view symbolList) {
     return result;
 }
 
-std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList) {
+std::vector<std::string> /* dxfg_v4_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList) {
     std::vector<std::string> result{};
 
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, SdkString{symbolList}.c_str());
+    const auto graalStringList =
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_Tools_parseSymbols, SdkString{symbolList}.c_str());
 
     if (graalStringList->size > 0) {
         result.reserve(static_cast<std::size_t>(graalStringList->size));
@@ -48,12 +50,12 @@ std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(std::s
     return result;
 }
 
-using NativeStringList = NativeStringListWrapper<dxfg_string_list>;
+using NativeStringList = NativeStringListWrapper<dxfg_v4_string_list>;
 
-void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {
+void /* int32_t */ runTool(/* dxfg_v4_string_list* */ const std::vector<std::string> &args) {
     NativeStringList l{args};
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Tools_main, l.list);
+    runGraalV4Function(dxfg_v4_Tools_main, l.list);
 }
 } // namespace isolated::internal::IsolatedTools
 
