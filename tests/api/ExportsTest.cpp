@@ -8,6 +8,8 @@
 
 #include <doctest.h>
 
+#include <functional>
+#include <set>
 #include <string>
 
 #include "../support/TestSupport.hpp"
@@ -31,6 +33,20 @@ TEST_CASE("EventFlagsMask::contains is exported") {
 
     CHECK(mask.contains(EventFlag::SNAPSHOT_BEGIN));
     CHECK_FALSE(mask.contains(EventFlag::REMOVE_EVENT));
+}
+
+TEST_CASE("The EventTypeEnum operators of reference_wrapper are exported") {
+    const std::reference_wrapper<const EventTypeEnum> quote = std::cref(EventTypeEnum::QUOTE);
+    const std::reference_wrapper<const EventTypeEnum> trade = std::cref(EventTypeEnum::TRADE);
+    // std::set orders its elements with operator<.
+    const std::set<std::reference_wrapper<const EventTypeEnum>> types{quote, trade};
+
+    CHECK_FALSE(quote == trade);
+    CHECK(quote == EventTypeEnum::QUOTE);
+    CHECK((quote < trade) != (trade < quote));
+    CHECK((quote < EventTypeEnum::TRADE) == (quote < trade));
+    CHECK(types.size() == 2);
+    CHECK(types.contains(quote));
 }
 
 TEST_CASE("The _c literal is exported") {

@@ -16,6 +16,9 @@
       certificate chains up to a root that JDK 25.0.5 removed fails the TLS handshake, unless the application sets
       `javax.net.ssl.trustStore`. See the
       [Graal Native SDK release notes](https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/tag/v3.15.0).
+* **\[MDAPI-521]\[C++]** Fixed the shared library (DLL) on Windows: the `==` and `<` operators of
+  `std::reference_wrapper<const EventTypeEnum>` (also used by `std::set` of these references) were not exported, so
+  the code that used them did not link.
 * **\[MDAPI-512]\[C++]** Fixed the shared library (DLL) on Windows: the listeners of the subscriptions and tx models
   that the code of the public headers creates were not called, and the listener ids of the application and of the
   library collided. Applications that use `dxFeedGraalCxxApi.dll` are rebuilt with the new headers: the layout of
