@@ -4,7 +4,9 @@
 # The compiler warnings of this project's own code (the libraries, tests, samples, tools, fuzzers): -Wall -Wextra
 # -pedantic (/W4) and a few more. They come from the dxfcxx_warnings interface target, which is linked PRIVATE, so they
 # do not reach the projects that use the library. MSVC: C4365 is the signed/unsigned conversion warning
-# (-Wsign-conversion); the shadowing warnings C4456-C4459 are in /W4 already.
+# (-Wsign-conversion); the shadowing warnings C4456-C4459 are in /W4 already. /sdl of the hardening options
+# (cmake/Hardening.cmake) makes C4996 (the use of a deprecated function) an error; /w34996 after it makes it a warning
+# again (the options of dxfcxx_warnings come after the target's own ones).
 option(DXFCXX_WARNINGS_AS_ERRORS
         "Treat the compiler warnings of this project's own code as errors (not of the dependencies)" OFF)
 
@@ -16,7 +18,7 @@ target_compile_options(dxfcxx_warnings INTERFACE
         "$<$<AND:$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>:-Wall;-Wextra;-pedantic>")
 target_compile_options(dxfcxx_warnings INTERFACE
         "$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Wshadow;-Wsign-conversion;-Wfloat-equal;-Wextra-semi>"
-        "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/w44365>")
+        "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/w44365;/w34996>")
 
 if (DXFCXX_WARNINGS_AS_ERRORS)
     # GCC reports -Wmaybe-uninitialized in third-party code inlined into ours (range-v3 with ASan in Release), even from
