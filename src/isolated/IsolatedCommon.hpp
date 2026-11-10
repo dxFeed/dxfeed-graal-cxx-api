@@ -13,6 +13,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <dxfg_api.h>
 
+#include <memory>
+#include <optional>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
@@ -77,6 +80,42 @@ inline std::string_view toString(dxfg_event_clazz_t eventClazz) {
         return "UNKNOWN";
     }
 }
+
+/// Releases a Java exception taken from the thread (`dxfg_v4_Exception_release`, the whole chain of causes).
+struct ThreadExceptionDeleter {
+    graal_isolatethread_t *thread;
+
+    void operator()(dxfg_v4_exception_t *exception) const noexcept;
+};
+
+/// The Java exception taken from the thread; it is released on the isolate thread that took it.
+using ThreadException = std::unique_ptr<dxfg_v4_exception_t, ThreadExceptionDeleter>;
+
+/**
+ * Takes and clears the Java exception that a failed SDK function left in the calling thread
+ * (`dxfg_v4_get_and_clear_thread_exception`). Call it on the thread of the failed call, right after the failure: a
+ * successful call does not clear the exception.
+ *
+ * @param thread The isolate thread of the current thread.
+ * @return The exception, an empty pointer if the thread has none, or `std::nullopt` if the SDK failed to take it. The
+ * thread is left without an exception in every case.
+ */
+std::optional<ThreadException> fetchThreadException(graal_isolatethread_t *thread) noexcept;
+
+/**
+ * Throws the Java exception that a failed (`DXFG_EXECUTE_FAIL`) SDK function left in the calling thread. The thread is
+ * left without an exception.
+ *
+ * @param thread The isolate thread of the current thread.
+ * @throws JavaException The Java exception of the thread.
+ * @throws RuntimeException The thread has no Java exception, or the SDK failed to take it.
+ */
+[[noreturn]] void throwThreadException(graal_isolatethread_t *thread);
+
+/**
+ * Throws RuntimeException for a null result of an SDK function that does not return `NULL` as a normal result.
+ */
+[[noreturn]] void throwUnexpectedNullResult();
 
 /**
  * Reads and clears the Java exception that a failed SDK function left in the thread. It is for a direct call that turns
