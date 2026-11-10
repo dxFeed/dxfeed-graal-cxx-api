@@ -71,10 +71,8 @@ bool release(void *handle) noexcept {
             [handle](auto threadHandle) {
                 auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
 
-                if (dxfg_v4_JavaObjectHandler_release(thread, static_cast<dxfg_v4_java_object_handler *>(handle)) !=
-                    DXFG_EXECUTE_SUCCESSFULLY) {
-                    throwThreadException(thread);
-                }
+                throwIfFailed(thread, dxfg_v4_JavaObjectHandler_release(
+                                          thread, static_cast<dxfg_v4_java_object_handler *>(handle)));
 
                 return true;
             },

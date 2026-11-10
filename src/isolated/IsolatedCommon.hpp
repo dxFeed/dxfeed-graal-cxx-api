@@ -116,6 +116,19 @@ std::optional<ThreadException> fetchThreadException(graal_isolatethread_t *threa
 [[noreturn]] void throwThreadException(graal_isolatethread_t *thread);
 
 /**
+ * Checks the status of a dxfg_v4_ function: a status other than `DXFG_EXECUTE_SUCCESSFULLY` throws the Java exception
+ * of the calling thread (throwThreadException()).
+ *
+ * @param thread The isolate thread of the current thread.
+ * @param status The status that the function returned.
+ */
+inline void throwIfFailed(graal_isolatethread_t *thread, std::int32_t status) {
+    if (status != DXFG_EXECUTE_SUCCESSFULLY) {
+        throwThreadException(thread);
+    }
+}
+
+/**
  * Throws RuntimeException for a null result of an SDK function that does not return `NULL` as a normal result.
  */
 [[noreturn]] void throwUnexpectedNullResult();
@@ -220,9 +233,7 @@ inline void runGraalV4Function(auto graalFunction, auto &&...params) {
         [](auto threadHandle, auto &&function, auto &&...functionParams) {
             auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
 
-            if (function(thread, functionParams...) != DXFG_EXECUTE_SUCCESSFULLY) {
-                throwThreadException(thread);
-            }
+            throwIfFailed(thread, function(thread, functionParams...));
         },
         graalFunction, params...);
 }
@@ -240,9 +251,7 @@ inline auto runGraalV4FunctionWithResult(auto graalFunction, auto &&...params) {
             auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
             typename GraalV4Result<std::decay_t<decltype(function)>>::Type result{};
 
-            if (function(thread, functionParams..., &result) != DXFG_EXECUTE_SUCCESSFULLY) {
-                throwThreadException(thread);
-            }
+            throwIfFailed(thread, function(thread, functionParams..., &result));
 
             return result;
         },

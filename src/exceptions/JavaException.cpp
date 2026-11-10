@@ -140,7 +140,7 @@ void JavaException::throwUnexpectedNullResult() {
 
 void JavaException::throwException() {
     // The function always fails: it writes no object.
-    static_cast<void>(isolated::runGraalV4FunctionWithNonNullResult(dxfg_v4_throw_exception));
+    static_cast<void>(isolated::runGraalV4FunctionWithResult(dxfg_v4_throw_exception));
 }
 
 DXFCPP_END_NAMESPACE
