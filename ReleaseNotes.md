@@ -12,6 +12,9 @@
       select, as for the downloaded SDK. An option that needs the SDK of the other bundle fails the configuration
       with the name of that bundle (the v8.1.0 bundle built with `DXFCXX_LINK_STATIC_RUNTIME=ON` and the SDK with the
       dynamic C runtime, with a warning).
+* **\[MDAPI-521]\[C++]** Fixed the shared library (DLL) on Windows: the `==` and `<` operators of
+  `std::reference_wrapper<const EventTypeEnum>` (also used by `std::set` of these references) were not exported, so
+  the code that used them did not link.
 * **\[MDAPI-512]\[C++]** Fixed the shared library (DLL) on Windows: the listeners of the subscriptions and tx models
   that the code of the public headers creates were not called, and the listener ids of the application and of the
   library collided. Applications that use `dxFeedGraalCxxApi.dll` are rebuilt with the new headers: the layout of

@@ -119,21 +119,22 @@ class DXFCPP_EXPORT EventTypeEnum {
 
     bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept;
 
-    friend bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
-                           const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept;
+    // The friend functions are not covered by DXFCPP_EXPORT of the class.
+    friend DXFCPP_EXPORT bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                                         const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept;
 
-    friend bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
-                           const EventTypeEnum &eventTypeEnum2) noexcept;
+    friend DXFCPP_EXPORT bool operator==(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                                         const EventTypeEnum &eventTypeEnum2) noexcept;
 
     bool operator<(const EventTypeEnum &eventTypeEnum) const noexcept;
 
     bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum) const noexcept;
 
-    friend bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
-                          const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept;
+    friend DXFCPP_EXPORT bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                                        const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum2) noexcept;
 
-    friend bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
-                          const EventTypeEnum &eventTypeEnum2) noexcept;
+    friend DXFCPP_EXPORT bool operator<(const std::reference_wrapper<const EventTypeEnum> &eventTypeEnum1,
+                                        const EventTypeEnum &eventTypeEnum2) noexcept;
 
     /**
      * @return `true` if the current enum element is characterizing the Lasting (TICKER) event
