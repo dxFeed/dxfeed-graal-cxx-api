@@ -44,6 +44,32 @@ TEST_CASE("A failure status without a Java exception is a RuntimeException") {
     }
 }
 
+// The calls of the dxfg_v4_ functions. A property that is not set is a NULL result of dxfg_v4_system_get_property.
+TEST_CASE("A dxfg_v4_ call with a result returns NULL as a valid result") {
+    CHECK(isolated::runGraalV4FunctionWithResult(dxfg_v4_system_get_property, "mdapi511.not.set") == nullptr);
+    CHECK_NOTHROW(JavaException::throwIfJavaThreadExceptionExists());
+}
+
+TEST_CASE("A dxfg_v4_ call with a non-null result throws a RuntimeException for NULL") {
+    try {
+        static_cast<void>(
+            isolated::runGraalV4FunctionWithNonNullResult(dxfg_v4_system_get_property, "mdapi511.not.set"));
+        FAIL("no exception");
+    } catch (const JavaException &) {
+        FAIL("a JavaException without a Java exception");
+    } catch (const RuntimeException &e) {
+        CHECK(std::string(e.what()).find("Unexpected null result") != std::string::npos);
+    }
+}
+
+TEST_CASE("A failed dxfg_v4_ call throws its Java exception and leaves none in the thread") {
+    CHECK_THROWS_WITH_AS(isolated::runGraalV4FunctionWithResult(dxfg_v4_throw_exception),
+                         doctest::Contains("recursion"), JavaException);
+    CHECK_THROWS_AS(isolated::runGraalV4Function(dxfg_v4_system_set_property, "", "value"), JavaException);
+    CHECK_NOTHROW(JavaException::throwIfJavaThreadExceptionExists());
+    CHECK_NOTHROW(isolated::runGraalV4Function(dxfg_v4_gc));
+}
+
 TEST_CASE("fetchThreadException takes the Java exception once") {
     runIsolatedThrow([](auto threadHandle) {
         auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);

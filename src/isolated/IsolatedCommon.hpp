@@ -13,8 +13,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <dxfg_api.h>
 
+#include <cstdint>
 #include <memory>
 #include <optional>
+#include <tuple>
+#include <type_traits>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -191,6 +194,77 @@ constexpr auto runGraalFunctionAndThrowIfMinusMin(auto graalFunction, auto &&...
 
 constexpr auto runGraalFunctionAndThrowIfMinusInf(auto graalFunction, auto &&...params) {
     return runGraalFunctionAndThrow(throwIfMinusInf, graalFunction, params...);
+}
+
+// The calls of the dxfg_v4_ functions: each returns DXFG_EXECUTE_SUCCESSFULLY or DXFG_EXECUTE_FAIL and writes its result
+// to the last (out) parameter. Any other status is a failure here too: the functions with positive statuses (await of
+// a promise, the event queue) need a call of their own.
+
+/// The type of the result that a dxfg_v4_ function writes to its last parameter.
+template <typename Function> struct GraalV4Result;
+
+template <typename... Params> struct GraalV4Result<std::int32_t (*)(graal_isolatethread_t *, Params...)> {
+    static_assert(sizeof...(Params) > 0, "the function has no out parameter");
+
+    using Type = std::remove_pointer_t<std::tuple_element_t<sizeof...(Params) - 1, std::tuple<Params...>>>;
+};
+
+/**
+ * Calls a dxfg_v4_ function without a result: `graalFunction(thread, params...)`.
+ *
+ * @throws JavaException The function failed with a Java exception.
+ * @throws RuntimeException The function failed without a Java exception.
+ */
+inline void runGraalV4Function(auto graalFunction, auto &&...params) {
+    runIsolatedThrow(
+        [](auto threadHandle, auto &&function, auto &&...functionParams) {
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+            if (function(thread, functionParams...) != DXFG_EXECUTE_SUCCESSFULLY) {
+                throwThreadException(thread);
+            }
+        },
+        graalFunction, params...);
+}
+
+/**
+ * Calls a dxfg_v4_ function with a result: `graalFunction(thread, params..., &result)`.
+ *
+ * @return The result; `NULL` is a valid result.
+ * @throws JavaException The function failed with a Java exception.
+ * @throws RuntimeException The function failed without a Java exception.
+ */
+inline auto runGraalV4FunctionWithResult(auto graalFunction, auto &&...params) {
+    return runIsolatedThrow(
+        [](auto threadHandle, auto &&function, auto &&...functionParams) {
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+            typename GraalV4Result<std::decay_t<decltype(function)>>::Type result{};
+
+            if (function(thread, functionParams..., &result) != DXFG_EXECUTE_SUCCESSFULLY) {
+                throwThreadException(thread);
+            }
+
+            return result;
+        },
+        graalFunction, params...);
+}
+
+/**
+ * Calls a dxfg_v4_ function whose result is not `NULL` on success (a function that creates an object, for example):
+ * `graalFunction(thread, params..., &result)`.
+ *
+ * @return The result.
+ * @throws JavaException The function failed with a Java exception.
+ * @throws RuntimeException The function failed without a Java exception, or the result is `NULL`.
+ */
+inline auto runGraalV4FunctionWithNonNullResult(auto graalFunction, auto &&...params) {
+    auto result = runGraalV4FunctionWithResult(graalFunction, params...);
+
+    if (result == nullptr) {
+        throwUnexpectedNullResult();
+    }
+
+    return result;
 }
 
 } // namespace isolated

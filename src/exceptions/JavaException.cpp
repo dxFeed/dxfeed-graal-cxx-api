@@ -139,9 +139,8 @@ void JavaException::throwUnexpectedNullResult() {
 }
 
 void JavaException::throwException() {
-    runIsolatedThrow([](auto threadHandle) {
-        return throwIfNullptr(dxfg_throw_exception(static_cast<graal_isolatethread_t *>(threadHandle)));
-    });
+    // The function always fails: it writes no object.
+    static_cast<void>(isolated::runGraalV4FunctionWithNonNullResult(dxfg_v4_throw_exception));
 }
 
 DXFCPP_END_NAMESPACE
