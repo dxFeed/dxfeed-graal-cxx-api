@@ -21,7 +21,7 @@ set(DXFCXX_VERSION "v8.1.0" CACHE STRING "The dxFeed Graal CXX API package versi
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.9.0" CACHE STRING "")
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.15.0" CACHE STRING "")
 set(FMTLIB_VERSION "12.1.0")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -43,20 +43,20 @@ set(BOOST_SHA256 "2e64e5d79a738d0fa6fb546c6e5c2bd28f88d268a2a080546f74e5ff98f29d
 set(GLFW_SHA256 "a133ddc3d3c66143eba9035621db8e0bcf34dba1ee9514a9e23e96afd39fd57a")
 set(IMGUI_SHA256 "e1c46d676c2bcb7ced847ba27f50553e33a19db97b3cadaec7f8be64449139f8")
 # The Graal Native SDK archives of the releases page by platform, for DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION only.
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.9.0")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "a00cb9d9362b82e4e241672f383ac4f51f9523838858ffa988224b01fe625fb9")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "25e706bb02d920f5c9278ff4f32ae6ade80ec500dad324645244baa0446cb522")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "e2471afa26ac4f1a3eca52e734cd4587d5f53cd4dcef3d867e11b44b6729071b")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "9d5a19d1b4a162c3dfdd1276a34c0329957c7d9acd0668fc4b36a4b81046e7cf")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "83e27fa92f10427d926194db4afa4428b9079153b836df052ce071f6b21d563f")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "4d9546107fe1b56e029e1d04f157dafc0c5a177a1cf09c8e543d7f2c78bf9c69")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt "1e793cfe9ce3294edab48da3c953ffec7e9fa215b5582f86d3b60c309627b506")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt "36f194bb780df0f9ec4649ba61b9e79c842c7ab5778e194596c370302afd20b1")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib "1d68afb169fbe91ea6713231f29d94d85516e079419682da8e7d18784dc21689")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib "126470f52ba24d422fb8fafea8755eaeedb16d1b3b10681f9d5b763bdb01bce6")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "b34208de8c9dfe49449101614779c2c886279da19dc473591eaab30c3879fb78")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "e05a0770406e90acb6792af75f17910230d602bb693be7ef6c934c06068d9ddc")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "4b22f687f0be428f4958ae6ed39950f70ccb635f1d9fc44db97ae1aaffb5ba42")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.15.0")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "cc963025638d21200351f6f6f336fbc7efe6202d1ae7a9379302a4dde6db185d")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "b14d53b01767163f7b97bfa107459ca41caa5b880e8efcf64cbf86d30b3755fa")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "e0664dfdefe97bbd936b877b6a68b6f49ae2e28df2b894f7c3d7f67ff445f5b0")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "31a75eeb609c7295c700a5f39a63d07fe80c525caa46342a43b23626f285b75f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "f62ee1b76e5dc019ee2b3db53dc0c47da3599a52355f4c93871fb584edddad0f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "a815aa25ed29519a21b8d1d5a7342e95abd51a67a8c139d84c6a3cf243387b96")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt "26902e7deab4339735c5d112f55a183494a8bd606f663e220e4e9aebad859c49")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt "0f7febabcc0ecd4fdf961e34dc8979eb5a3da65f059fed94f0c1f4423c2b8fce")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib "02d0167a35d1f744b1241ce4e8e243c20114c8a40b695f181d3effd59742b874")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib "101b53a804ea31892bde5a30d50c32a7dc1dfca5dd1a65b949bd382bcb1e3f7c")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "2197019879a5639fbd0ef407aa1fed424becec954a10c6488817ec7790dfce68")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "31a6fe5c3f3bd549560100da7c0c913b0f11f19120aa574a0f2295b5fbbaa75f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "3ab78762b7eff78129cceff72bded0b3f5c083a277390e59cd1961948930916d")
 
 include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 
@@ -717,6 +717,18 @@ target_include_directories(${PROJECT_NAME}_static PUBLIC include)
 target_include_directories(${PROJECT_NAME}_static SYSTEM PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
+
+# The Graal Native SDK marks the dxfg_ functions that have dxfg_v4_ twins deprecated (DXFG_DEPRECATED, SDK 3.12+).
+# The library still calls them, so it compiles without these warnings: GCC and Clang (clang-cl too) get an empty
+# DXFG_DEPRECATED, cl cannot define a function-like macro on the command line and disables its warning C4996 instead.
+# The definition goes through the compile options: CMake drops function-like macros from the compile definitions.
+foreach (DXFCXX_LIBRARY_TARGET IN ITEMS ${PROJECT_NAME} ${PROJECT_NAME}_static)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        target_compile_options(${DXFCXX_LIBRARY_TARGET} PRIVATE /wd4996)
+    else ()
+        target_compile_options(${DXFCXX_LIBRARY_TARGET} PRIVATE "-DDXFG_DEPRECATED(message)=")
+    endif ()
+endforeach ()
 
 # fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
 set(DXFCXX_MSVC_COMPILE_OPTIONS /W4 /bigobj /utf-8)

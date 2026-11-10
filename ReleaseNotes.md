@@ -1,6 +1,6 @@
-* **\[MDAPI-511]\[C++]** The Windows `-static-mt` archives have no `dxFeedGraalCxxApi.dll` and its import library,
-  and the Full Source Bundle is split into two, one for each C runtime of the SDK. See "Full Source Bundles" in
-  `HOW_TO_BUILD.md`.
+* **\[MDAPI-511]\[C++]** Migrated to the Graal Native SDK 3.15.0. The Windows `-static-mt` archives have no
+  `dxFeedGraalCxxApi.dll` and its import library, and the Full Source Bundle is split into two, one for each C runtime
+  of the SDK. See "Full Source Bundles" in `HOW_TO_BUILD.md`.
     * With the static C runtime, the DLL and the code that uses it each have their own C runtime, and the C++ API
       passes standard library objects between them; link `dxFeedGraalCxxApi_static.lib`. The DLL is still built with
       `/MT` (`/MTd`) but not installed: only its C API can be used across this boundary.
@@ -12,6 +12,10 @@
       select, as for the downloaded SDK. An option that needs the SDK of the other bundle fails the configuration
       with the name of that bundle (the v8.1.0 bundle built with `DXFCXX_LINK_STATIC_RUNTIME=ON` and the SDK with the
       dynamic C runtime, with a warning).
+    * The SDK is built with GraalVM 25.5 and trusts the root CAs of its JDK: a connection to a server whose
+      certificate chains up to a root that JDK 25.0.5 removed fails the TLS handshake, unless the application sets
+      `javax.net.ssl.trustStore`. See the
+      [Graal Native SDK release notes](https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/tag/v3.15.0).
 * **\[MDAPI-512]\[C++]** Fixed the shared library (DLL) on Windows: the listeners of the subscriptions and tx models
   that the code of the public headers creates were not called, and the listener ids of the application and of the
   library collided. Applications that use `dxFeedGraalCxxApi.dll` are rebuilt with the new headers: the layout of
