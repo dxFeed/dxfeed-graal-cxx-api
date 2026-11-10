@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/JavaException.hpp"
+#include "../internal/InternalExport.hpp"
 #include "../internal/Isolate.hpp"
 #include "SdkString.hpp"
 
@@ -85,7 +86,7 @@ inline std::string_view toString(dxfg_event_clazz_t eventClazz) {
 }
 
 /// Releases a Java exception taken from the thread (`dxfg_v4_Exception_release`, the whole chain of causes).
-struct ThreadExceptionDeleter {
+struct DXFCPP_INTERNAL_EXPORT ThreadExceptionDeleter {
     graal_isolatethread_t *thread;
 
     void operator()(dxfg_v4_exception_t *exception) const noexcept;
@@ -103,7 +104,7 @@ using ThreadException = std::unique_ptr<dxfg_v4_exception_t, ThreadExceptionDele
  * @return The exception, an empty pointer if the thread has none, or `std::nullopt` if the SDK failed to take it. The
  * thread is left without an exception in every case.
  */
-std::optional<ThreadException> fetchThreadException(graal_isolatethread_t *thread) noexcept;
+DXFCPP_INTERNAL_EXPORT std::optional<ThreadException> fetchThreadException(graal_isolatethread_t *thread) noexcept;
 
 /**
  * Throws the Java exception that a failed (`DXFG_EXECUTE_FAIL`) SDK function left in the calling thread. The thread is
@@ -113,7 +114,7 @@ std::optional<ThreadException> fetchThreadException(graal_isolatethread_t *threa
  * @throws JavaException The Java exception of the thread.
  * @throws RuntimeException The thread has no Java exception, or the SDK failed to take it.
  */
-[[noreturn]] void throwThreadException(graal_isolatethread_t *thread);
+[[noreturn]] DXFCPP_INTERNAL_EXPORT void throwThreadException(graal_isolatethread_t *thread);
 
 /**
  * Checks the status of a dxfg_v4_ function: a status other than `DXFG_EXECUTE_SUCCESSFULLY` throws the Java exception
@@ -131,7 +132,7 @@ inline void throwIfFailed(graal_isolatethread_t *thread, std::int32_t status) {
 /**
  * Throws RuntimeException for a null result of an SDK function that does not return `NULL` as a normal result.
  */
-[[noreturn]] void throwUnexpectedNullResult();
+[[noreturn]] DXFCPP_INTERNAL_EXPORT void throwUnexpectedNullResult();
 
 /**
  * Reads and clears the Java exception that a failed SDK function left in the thread. It is for a direct call that turns
