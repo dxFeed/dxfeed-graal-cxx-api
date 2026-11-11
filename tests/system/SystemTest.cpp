@@ -164,25 +164,38 @@ TEST_CASE("System properties can be set, as well as get their values. Multi-thre
     CHECK(dxfcpp::System::getProperty("PropertyName") == "123");
 }
 
-TEST_CASE("A key or a value with invalid UTF-8 is cut to its longest valid prefix") {
+TEST_CASE("A key or a value with invalid UTF-8 throws and does not change the property") {
+    using dxfcpp::InvalidArgumentException;
+    using dxfcpp::System;
+
     SUBCASE("A value") {
-        REQUIRE(dxfcpp::System::setProperty("InvalidUtf8Value", "abc\xe2\x28\xa1"));
-        CHECK(dxfcpp::System::getProperty("InvalidUtf8Value") == "abc");
+        REQUIRE(System::setProperty("InvalidUtf8Value", "before"));
+        CHECK_THROWS_WITH_AS(System::setProperty("InvalidUtf8Value", "abc\xe2\x28\xa1"),
+                             "System::setProperty(value): invalid UTF-8 at byte 3: 0xE2 0x28",
+                             InvalidArgumentException);
+        CHECK(System::getProperty("InvalidUtf8Value") == "before");
     }
 
     SUBCASE("A key") {
-        REQUIRE(dxfcpp::System::setProperty("InvalidUtf8Key\xe2\x28\xa1", "value"));
-        CHECK(dxfcpp::System::getProperty("InvalidUtf8Key") == "value");
-        CHECK(dxfcpp::System::getProperty("InvalidUtf8Key\xe2\x28\xa1") == "value");
+        CHECK_THROWS_WITH_AS(System::setProperty("InvalidUtf8Key\xff", "value"),
+                             "System::setProperty(key): invalid UTF-8 at byte 14: 0xFF", InvalidArgumentException);
+        CHECK(System::getProperty("InvalidUtf8Key").empty());
+        CHECK_THROWS_WITH_AS(System::getProperty("\xed\xa0\x80"),
+                             "System::getProperty(key): invalid UTF-8 at byte 0: 0xED 0xA0 0x80",
+                             InvalidArgumentException);
     }
 
-    SUBCASE("A value without a valid prefix") {
-        REQUIRE(dxfcpp::System::setProperty("InvalidUtf8Only", "\xe2\x28\xa1"));
-        CHECK(dxfcpp::System::getProperty("InvalidUtf8Only").empty());
+    SUBCASE("The password of the endpoint is named without its bytes") {
+        CHECK_THROWS_WITH_AS(System::setProperty(dxfcpp::DXEndpoint::DXFEED_PASSWORD_PROPERTY, "p\xc3\x28"),
+                             "System::setProperty(value): invalid UTF-8 at byte 1", InvalidArgumentException);
+    }
+
+    SUBCASE("The C API returns an error") {
+        CHECK(dxfc_system_set_property("InvalidUtf8C", "\xc0\xaf") == DXFC_EC_ERROR);
     }
 
     SUBCASE("A valid multibyte value") {
-        REQUIRE(dxfcpp::System::setProperty("ValidUtf8", "Значение"));
-        CHECK(dxfcpp::System::getProperty("ValidUtf8") == "Значение");
+        REQUIRE(System::setProperty("ValidUtf8", "Значение \xF0\x9F\x98\x80"));
+        CHECK(System::getProperty("ValidUtf8") == "Значение \xF0\x9F\x98\x80");
     }
 }

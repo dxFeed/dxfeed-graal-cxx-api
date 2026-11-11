@@ -37,7 +37,8 @@ std::vector<std::shared_ptr<EventType>> toEvents(dxfg_v4_event_type_list *events
 /// dxfg_v4_PriceLevelService_new
 JavaObjectHandle<PriceLevelService> create(std::string_view address) {
     // The handle of the service is taken from the result, so the NULL result is an error.
-    auto *service = runGraalV4FunctionWithNonNullResult(dxfg_v4_PriceLevelService_new, SdkString{address}.c_str());
+    auto *service = runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_PriceLevelService_new, SdkString{address, "PriceLevelService::create(address)"}.c_str());
 
     return JavaObjectHandle<PriceLevelService>{&service->handler};
 }
@@ -52,7 +53,7 @@ std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLe
         dxfg_v4_PriceLevelService_getOrdersWithCaller, static_cast<dxfg_v4_price_level_service_t *>(service.get()),
         static_cast<dxfg_v4_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()),
         static_cast<dxfg_v4_indexed_event_source_t *>(EventSourceWrapper(orderSource).toGraalUnique().get()), from, to,
-        SdkString{caller}.c_str());
+        SdkString{caller, "PriceLevelService::getOrders(caller)"}.c_str());
 
     return toEvents(orders);
 }
@@ -81,7 +82,7 @@ std::vector<std::shared_ptr<EventType>> getQuotes(const JavaObjectHandle<PriceLe
     auto *quotes = runGraalV4FunctionWithResult(
         dxfg_v4_PriceLevelService_getQuotesWithCaller, static_cast<dxfg_v4_price_level_service_t *>(service.get()),
         static_cast<dxfg_v4_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()), from, to,
-        SdkString{caller}.c_str());
+        SdkString{caller, "PriceLevelService::getQuotes(caller)"}.c_str());
 
     return toEvents(quotes);
 }

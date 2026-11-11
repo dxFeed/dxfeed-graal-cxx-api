@@ -460,10 +460,21 @@ void Isolate::init(Isolate &isolate) noexcept {
     config.addSource(otc::EnvSource(ENV_PREFIX));
 
     for (auto &&[k, v] : config) {
-        isolate.runIsolated([key = k, value = v](auto threadHandle) {
-            return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle),
-                                               isolated::SdkString{key}.c_str(), isolated::SdkString{value}.c_str());
-        });
+        try {
+            isolate.runIsolated([&key = k, &value = v](auto threadHandle) {
+                return isolated::setSystemProperty(
+                    static_cast<graal_isolatethread_t *>(threadHandle),
+                    isolated::SdkString{key, "dxfeed.system.properties(key)"}.c_str(),
+                    isolated::SdkString{value, StringLabel::ofPropertyValue("dxfeed.system.properties(value)", key)}
+                        .c_str());
+            });
+        } catch (const InvalidArgumentException &e) {
+            // A property that is not valid UTF-8 is not set: this function cannot throw.
+            if constexpr (Debugger::isDebug) {
+                // ReSharper disable once CppDFAUnreachableCode
+                Debugger::debug(std::string{"Isolate::init(): "} + e.what());
+            }
+        }
     }
 }
 

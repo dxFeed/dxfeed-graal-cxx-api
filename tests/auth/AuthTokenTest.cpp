@@ -134,4 +134,22 @@ TEST_CASE("createCustomToken from an empty scheme or value throws") {
     CHECK_THROWS_AS(AuthToken::createCustomToken("Custom", ""), JavaException);
 }
 
+TEST_CASE("A token string with invalid UTF-8 throws without its bytes") {
+    CHECK_THROWS_WITH_AS(AuthToken::createBasicToken("user", "pass\xC3\x28"),
+                         "AuthToken::createBasicToken(password): invalid UTF-8 at byte 4", InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(AuthToken::createBasicToken("us\xFF:password"),
+                         "AuthToken::createBasicToken(userPassword): invalid UTF-8 at byte 2",
+                         InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(AuthToken::createBearerToken("\xED\xA0\x80"),
+                         "AuthToken::createBearerToken(token): invalid UTF-8 at byte 0", InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(AuthToken::createCustomToken("Custom", "v\xC0\xAF"),
+                         "AuthToken::createCustomToken(value): invalid UTF-8 at byte 1", InvalidArgumentException);
+}
+
+TEST_CASE("The scheme of a custom token is not a secret") {
+    CHECK_THROWS_WITH_AS(AuthToken::createCustomToken("Cus\xFF", "value"),
+                         "AuthToken::createCustomToken(scheme): invalid UTF-8 at byte 3: 0xFF",
+                         InvalidArgumentException);
+}
+
 } // TEST_SUITE

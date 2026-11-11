@@ -50,7 +50,7 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
         dxfg_InstrumentProfileReader_readFromFile, static_cast<dxfg_instrument_profile_reader_t *>(handle.get()),
-        SdkString{address}.c_str()));
+        SdkString{address, "InstrumentProfileReader::readFromFile(address)"}.c_str()));
 }
 
 /* dxfg_instrument_profile_list* */ void *
@@ -63,7 +63,9 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
         dxfg_InstrumentProfileReader_readFromFile2, static_cast<dxfg_instrument_profile_reader_t *>(handle.get()),
-        SdkString{address}.c_str(), SdkString{user}.c_str(), SdkString{password}.c_str()));
+        SdkString{address, "InstrumentProfileReader::readFromFile(address)"}.c_str(),
+        SdkString{user, StringLabel::secretOf("InstrumentProfileReader::readFromFile(user)")}.c_str(),
+        SdkString{password, StringLabel::secretOf("InstrumentProfileReader::readFromFile(password)")}.c_str()));
 }
 
 /// dxfg_InstrumentProfileReader_readFromFile3
@@ -82,12 +84,15 @@ readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<Ins
 
     return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
         dxfg_InstrumentProfileReader_readFromFile3, static_cast<dxfg_instrument_profile_reader_t *>(handle.get()),
-        SdkString{address}.c_str(), static_cast<dxfg_auth_token_t *>(token.get())));
+        SdkString{address, "InstrumentProfileReader::readFromFile(address)"}.c_str(),
+        static_cast<dxfg_auth_token_t *>(token.get())));
 }
 
 std::string resolveSourceURL(std::string_view address) {
     const auto resolvedURL = internal::IsolatedString::toUnique(
-        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_resolveSourceURL, SdkString{address}.c_str()));
+        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileReader_resolveSourceURL,
+                                          SdkString{address, "InstrumentProfileReader::resolveSourceURL(address)"}
+                                              .c_str()));
 
     return dxfcpp::toString(resolvedURL.get());
 }

@@ -69,6 +69,12 @@ concept StringParamPointer =
  * - A `std::string`, a `std::string_view` and a range keep their whole size, including embedded NULs; the type never
  *   truncates. The boundary with the dxFeed Graal SDK reads the characters up to the first NUL.
  *
+ * Encoding: a string that goes to the dxFeed Graal SDK must be valid UTF-8. A byte that cannot start a sequence, a
+ * truncated sequence, an overlong form, an encoded surrogate or a value above U+10FFFF make the function throw
+ * InvalidArgumentException, for example `DXEndpoint::connect(address): invalid UTF-8 at byte 12: 0xC3 0x28`: the
+ * function and its parameter, the offset of the first invalid byte from 0 and the bytes of the invalid sequence. For a
+ * user name, a password or a token, the message has no bytes.
+ *
  * Passing a bare `nullptr` to a function that has another overload with a smart pointer parameter is ambiguous (for
  * example `Schedule::getInstance`): write `static_cast<const char *>(nullptr)`.
  *

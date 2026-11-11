@@ -16,6 +16,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <optional>
 #include <ostream>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <type_traits>
 #include <utility>
@@ -198,6 +199,48 @@ DXFCPP_INTERNAL_EXPORT std::string formatTimeStampWithMillis(std::int64_t timest
 
 DXFCPP_INTERNAL_EXPORT std::string
 formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp); // NOLINT(*-redundant-declaration)
+
+/**
+ * The place of a string that goes to the SDK, named in the error about invalid UTF-8: the public function and its
+ * parameter (`"DXEndpoint::connect(address)"`) or the event type and its field
+ * (`"TimeAndSale::exchangeSaleConditions"`).
+ *
+ * A secret (a user name, a password, a token) is named without its bytes: the error then gives the place and the offset
+ * only.
+ */
+struct StringLabel {
+    std::string_view place;
+    bool secret = false;
+
+    // NOLINTNEXTLINE(*-explicit-constructor, *-explicit-conversions): a literal at the call site is the label
+    constexpr StringLabel(const char *placeName) noexcept : place{placeName} {
+    }
+
+    constexpr StringLabel(std::string_view placeName, bool isSecret) noexcept : place{placeName}, secret{isSecret} {
+    }
+
+    /// @return The label of a secret.
+    static constexpr StringLabel secretOf(std::string_view place) noexcept {
+        return {place, true};
+    }
+
+    /// @return The label of a property value: a secret for the user and the password of the endpoint
+    /// (`DXEndpoint::DXFEED_USER_PROPERTY`, `DXEndpoint::DXFEED_PASSWORD_PROPERTY`).
+    static StringLabel ofPropertyValue(std::string_view place, std::string_view key) noexcept;
+};
+
+/**
+ * Checks that the string is valid UTF-8, before it goes to the SDK.
+ *
+ * Invalid are a byte that cannot start a sequence, a truncated sequence, an overlong form, an encoded surrogate
+ * (U+D800..U+DFFF) and a value above U+10FFFF.
+ *
+ * @param s The string to check
+ * @param label The place of the string
+ * @throws InvalidArgumentException `<place>: invalid UTF-8 at byte <offset>: 0xC3 0x28` with the offset of the first
+ * invalid byte from 0 and up to 4 bytes of the invalid sequence; without the bytes for a secret.
+ */
+DXFCPP_INTERNAL_EXPORT void checkUtf8(std::string_view s, const StringLabel &label); // NOLINT(*-redundant-declaration)
 
 /**
  * Copies the characters of the string and a terminating NUL into a new array (`new char[]`) for a field of an SDK

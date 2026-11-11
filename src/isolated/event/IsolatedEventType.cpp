@@ -45,7 +45,8 @@ namespace IsolatedEventType {
 /* dxfg_v4_event_type_t* */ void *create(std::string_view symbolName,
                                          /* dxfg_v4_event_clazz_t */ const EventTypeEnum &eventType) {
     return dxfcpp::bit_cast<void *>(runGraalV4FunctionWithNonNullResult(
-        dxfg_v4_EventType_new, SdkString{symbolName}.c_str(), static_cast<dxfg_v4_event_clazz_t>(eventType.getId())));
+        dxfg_v4_EventType_new, SdkString{symbolName, "DXFeed::getLastEvent(event)"}.c_str(),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId())));
 }
 
 /// dxfg_v4_EventType_release

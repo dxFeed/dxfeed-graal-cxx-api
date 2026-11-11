@@ -21,7 +21,8 @@ JavaObjectHandle<PriceIncrements> EMPTY() {
 /// dxfg_v4_PriceIncrements_valueOf
 JavaObjectHandle<PriceIncrements> valueOf(std::string_view text) {
     return JavaObjectHandle<PriceIncrements>{
-        runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_valueOf, SdkString{text}.c_str())};
+        runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_valueOf,
+                                     SdkString{text, "PriceIncrements::valueOf(text)"}.c_str())};
 }
 
 /// dxfg_v4_PriceIncrements_valueOfIncrement

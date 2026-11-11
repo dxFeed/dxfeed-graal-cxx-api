@@ -708,7 +708,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @param user The username.
      *
      * @return this DXEndpoint.
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException if the username is not valid UTF-8 (the message names the offset, not the
+     * bytes).
      * @throws JavaException
      * @throws GraalException
      */
@@ -722,7 +723,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @param password The password.
      *
      * @return this DXEndpoint.
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException if the password is not valid UTF-8 (the message names the offset, not the
+     * bytes).
      * @throws JavaException
      * @throws GraalException
      */
@@ -756,7 +758,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @param address The data source address.
      * @return this DXEndpoint.
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException if the address is not valid UTF-8, for example
+     * `DXEndpoint::connect(address): invalid UTF-8 at byte 12: 0xC3 0x28`.
      * @throws JavaException if something happened with the dxFeed API backend or if the address string is malformed.
      * @throws GraalException
      */

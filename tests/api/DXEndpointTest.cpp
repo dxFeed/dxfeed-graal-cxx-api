@@ -212,6 +212,30 @@ TEST_CASE("dxfc_dxendpoint_builder_t: the state follows connect, disconnect and 
     REQUIRE(dxfc_dxendpoint_builder_free(builder) == DXFC_EC_SUCCESS);
 }
 
+TEST_CASE("dxfc_dxendpoint_t: invalid UTF-8 is an error code, not an exception") {
+    dxfc_dxendpoint_builder_t builder{};
+
+    REQUIRE(dxfc_dxendpoint_new_builder(&builder) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_builder_with_role(builder, DXFC_DXENDPOINT_ROLE_FEED) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_builder_with_property(builder, "dxfeed.test.key", "a\xFF") == DXFC_EC_ERROR);
+
+    int supports{};
+
+    REQUIRE(dxfc_dxendpoint_builder_supports_property(builder, "a\xFF", &supports) == DXFC_EC_ERROR);
+
+    dxfc_dxendpoint_t endpoint{};
+
+    REQUIRE(dxfc_dxendpoint_builder_build(builder, nullptr, &endpoint) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_user(endpoint, "a\xFF") == DXFC_EC_ERROR);
+    REQUIRE(dxfc_dxendpoint_password(endpoint, "a\xFF") == DXFC_EC_ERROR);
+    REQUIRE(dxfc_dxendpoint_connect(endpoint, "a\xC3\x28") == DXFC_EC_ERROR);
+    REQUIRE(cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_NOT_CONNECTED);
+
+    REQUIRE(dxfc_dxendpoint_close(endpoint) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_free(endpoint) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_builder_free(builder) == DXFC_EC_SUCCESS);
+}
+
 TEST_CASE("DXFeedSubscription") {
     auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
     auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
@@ -307,4 +331,74 @@ TEST_CASE("DXFeedSubscription batch limits can be bound by reference") {
     CHECK(optimal == 0);
     CHECK(max == std::numeric_limits<std::int32_t>::max());
     CHECK(std::max(DXFeedSubscription::OPTIMAL_BATCH_LIMIT, DXFeedSubscription::MAX_BATCH_LIMIT) == max);
+}
+
+namespace {
+
+// A kind of invalid UTF-8 after a valid prefix: the suffix and the bytes the error names.
+struct InvalidUtf8 {
+    const char *kind;
+    const char *suffix;
+    const char *bytes;
+};
+
+const std::vector<InvalidUtf8> INVALID_UTF8 = {
+    {"a stray byte", "\xFF", "0xFF"},
+    {"a broken sequence", "\xC3\x28", "0xC3 0x28"},
+    {"a truncated sequence", "\xE2\x82", "0xE2 0x82"},
+    {"an overlong form", "\xC0\xAF", "0xC0 0xAF"},
+    {"an encoded surrogate", "\xED\xA0\x80", "0xED 0xA0 0x80"},
+};
+
+// Cyrillic and an emoji (U+1F600).
+constexpr auto VALID_MULTIBYTE = "\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82 \xF0\x9F\x98\x80";
+
+} // namespace
+
+TEST_CASE("DXEndpoint: an API parameter with invalid UTF-8 throws with the place, the offset and the bytes") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    for (const auto &[kind, suffix, bytes] : INVALID_UTF8) {
+        CAPTURE(kind);
+        const auto expected = "DXEndpoint::connect(address): invalid UTF-8 at byte 4: "s + bytes;
+
+        CHECK_THROWS_WITH_AS(endpoint->connect("demo"s + suffix), expected.c_str(), InvalidArgumentException);
+    }
+
+    CHECK(endpoint->getState() == DXEndpoint::State::NOT_CONNECTED);
+    endpoint->close();
+}
+
+TEST_CASE("DXEndpoint: a secret with invalid UTF-8 throws with the place and the offset, without the bytes") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    for (const auto &[kind, suffix, bytes] : INVALID_UTF8) {
+        CAPTURE(kind);
+        CHECK_THROWS_WITH_AS(endpoint->password("p"s + suffix),
+                             "DXEndpoint::password(password): invalid UTF-8 at byte 1", InvalidArgumentException);
+        CHECK_THROWS_WITH_AS(endpoint->user("u"s + suffix), "DXEndpoint::user(user): invalid UTF-8 at byte 1",
+                             InvalidArgumentException);
+    }
+
+    CHECK_NOTHROW(endpoint->user(VALID_MULTIBYTE));
+    CHECK_NOTHROW(endpoint->password(VALID_MULTIBYTE));
+    endpoint->close();
+}
+
+TEST_CASE("DXEndpoint::Builder::withProperty: invalid UTF-8 throws, the user and the password without the bytes") {
+    const auto builder = DXEndpoint::newBuilder();
+
+    CHECK_THROWS_WITH_AS(builder->withProperty(DXEndpoint::DXFEED_PASSWORD_PROPERTY, "p\xC3\x28"),
+                         "DXEndpoint::Builder::withProperty(value): invalid UTF-8 at byte 1", InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(builder->withProperty(DXEndpoint::DXFEED_USER_PROPERTY, "u\xFF"),
+                         "DXEndpoint::Builder::withProperty(value): invalid UTF-8 at byte 1", InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(builder->withProperty("custom.property", "v\xFF"),
+                         "DXEndpoint::Builder::withProperty(value): invalid UTF-8 at byte 1: 0xFF",
+                         InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(builder->withProperty("custom\xFF", "v"),
+                         "DXEndpoint::Builder::withProperty(key): invalid UTF-8 at byte 6: 0xFF",
+                         InvalidArgumentException);
+
+    builder->withProperty("custom.property", VALID_MULTIBYTE);
+    builder->build()->close();
 }

@@ -27,7 +27,9 @@ namespace IsolatedInstrumentProfileConnection {
     }
 
     return JavaObjectHandle<InstrumentProfileConnection>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileConnection_createConnection, SdkString{address}.c_str(),
+        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileConnection_createConnection,
+                                          SdkString{address, "InstrumentProfileConnection::createConnection(address)"}
+                                              .c_str(),
                                           static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get()))};
 }
 

@@ -438,9 +438,10 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(StringPar
                         std::string(key.view()) + ", value = " + std::string(value.view()) + ")");
     }
 
-    properties_[std::string(key.view())] = value.view();
-
+    // The SDK first: a key or a value that is not valid UTF-8 throws and leaves the builder unchanged.
     isolated::api::IsolatedDXEndpoint::Builder::withProperty(handle_, key.view(), value.view());
+
+    properties_[std::string(key.view())] = value.view();
 
     return sharedAs<Builder>();
 }
@@ -859,7 +860,12 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t bu
         return DXFC_EC_ERROR;
     }
 
-    builder->withName(name);
+    try {
+        builder->withName(name);
+    } catch (...) {
+        // For example, the name is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -876,7 +882,12 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_
         return DXFC_EC_ERROR;
     }
 
-    builder->withProperty(key, value);
+    try {
+        builder->withProperty(key, value);
+    } catch (...) {
+        // For example, the key or the value is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -893,16 +904,21 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builde
         return DXFC_EC_ERROR;
     }
 
-    for (std::size_t i = 0; i < size; i++) {
-        if (!properties[i]) {
-            continue;
-        }
+    try {
+        for (std::size_t i = 0; i < size; i++) {
+            if (!properties[i]) {
+                continue;
+            }
 
-        if (!properties[i]->key || !properties[i]->value) {
-            continue;
-        }
+            if (!properties[i]->key || !properties[i]->value) {
+                continue;
+            }
 
-        builder->withProperty(properties[i]->key, properties[i]->value);
+            builder->withProperty(properties[i]->key, properties[i]->value);
+        }
+    } catch (...) {
+        // For example, a key or a value is not valid UTF-8; the properties before it stay set.
+        return DXFC_EC_ERROR;
     }
 
     return DXFC_EC_SUCCESS;
@@ -920,7 +936,12 @@ dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_buil
         return DXFC_EC_ERROR;
     }
 
-    *supports = builder->supportsProperty(key);
+    try {
+        *supports = builder->supportsProperty(key);
+    } catch (...) {
+        // For example, the key is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -1144,7 +1165,12 @@ dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpointHandle, const c
         return DXFC_EC_ERROR;
     }
 
-    endpointWrapper->endpoint->user(user);
+    try {
+        endpointWrapper->endpoint->user(user);
+    } catch (...) {
+        // For example, the user name is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -1161,7 +1187,12 @@ dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpointHandle, con
         return DXFC_EC_ERROR;
     }
 
-    endpointWrapper->endpoint->password(password);
+    try {
+        endpointWrapper->endpoint->password(password);
+    } catch (...) {
+        // For example, the password is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -1178,7 +1209,13 @@ dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpointHandle, cons
         return DXFC_EC_ERROR;
     }
 
-    endpointWrapper->endpoint->connect(address);
+    try {
+        endpointWrapper->endpoint->connect(address);
+    } catch (...) {
+        // For example, the address is not valid UTF-8 or the SDK rejects it: an exception does not leave the C
+        // function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }

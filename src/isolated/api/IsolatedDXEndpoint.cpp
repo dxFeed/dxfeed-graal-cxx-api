@@ -66,7 +66,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_user, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           SdkString{user}.c_str());
+                                           SdkString{user, StringLabel::secretOf("DXEndpoint::user(user)")}.c_str());
 }
 
 void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint,
@@ -77,7 +77,9 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndp
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_password, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           SdkString{password}.c_str());
+                                           SdkString{password,
+                                                     StringLabel::secretOf("DXEndpoint::password(password)")}
+                                               .c_str());
 }
 
 void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint, std::string_view address) {
@@ -87,7 +89,7 @@ void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint
     }
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_connect, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           SdkString{address}.c_str());
+                                           SdkString{address, "DXEndpoint::connect(address)"}.c_str());
 }
 
 void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
@@ -324,7 +326,10 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperty,
                                            static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                           SdkString{key}.c_str(), SdkString{value}.c_str());
+                                           SdkString{key, "DXEndpoint::Builder::withProperty(key)"}.c_str(),
+                                           SdkString{value, StringLabel::ofPropertyValue(
+                                                                "DXEndpoint::Builder::withProperty(value)", key)}
+                                               .c_str());
 }
 
 // dxfg_DXEndpoint_Builder_withProperties
@@ -338,7 +343,8 @@ withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint
 
     runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperties,
                                            static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                           SdkString{filePath}.c_str());
+                                           SdkString{filePath, "DXEndpoint::Builder::withProperties(filePath)"}
+                                               .c_str());
 }
 
 // dxfg_DXEndpoint_Builder_supportsProperty
@@ -352,7 +358,8 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoi
 
     return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_supportsProperty,
                                                   static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                                  SdkString{key}.c_str()) == 1;
+                                                  SdkString{key, "DXEndpoint::Builder::supportsProperty(key)"}
+                                                      .c_str()) == 1;
 }
 
 // dxfg_DXEndpoint_Builder_withExecutor

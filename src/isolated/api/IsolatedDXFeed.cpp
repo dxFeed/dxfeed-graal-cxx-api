@@ -90,7 +90,7 @@ std::vector<std::shared_ptr<EventType>> getIndexedEventsIfSubscribed(const JavaO
     const auto list = static_cast<void *>(runGraalFunctionNullableOrThrow(
         dxfg_DXFeed_getIndexedEventsIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
         static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get()),
-        SdkString{source.toString()}.c_str()));
+        SdkString{source.toString(), "DXFeed::getIndexedEventsIfSubscribed(source)"}.c_str()));
 
     if (!list) {
         return {};

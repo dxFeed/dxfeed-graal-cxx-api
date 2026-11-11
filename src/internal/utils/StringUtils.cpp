@@ -5,6 +5,8 @@
 
 #include "StringUtils.hpp"
 
+#include "../../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 
 #include "JavaUtils.hpp"
@@ -195,6 +197,78 @@ std::string formatTimeStampWithMillis(std::int64_t timestamp) {
 
 std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
     return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(timestamp);
+}
+
+namespace {
+
+bool isContinuationByte(unsigned char b) noexcept {
+    return (b & 0xC0U) == 0x80U;
+}
+
+// The length of the sequence the bit pattern of its lead byte announces; 0 for a continuation byte (0x80-0xBF) and for
+// 0xF8-0xFF. An overlong lead (0xC0, 0xC1) and a lead above U+10FFFF (0xF5-0xF7) keep their length, so their sequence is
+// shown whole.
+std::size_t sequenceLength(unsigned char lead) noexcept {
+    if (lead < 0x80U) {
+        return 1;
+    }
+
+    if ((lead >> 5U) == 0x6U) {
+        return 2;
+    }
+
+    if ((lead >> 4U) == 0xEU) {
+        return 3;
+    }
+
+    if ((lead >> 3U) == 0x1EU) {
+        return 4;
+    }
+
+    return 0;
+}
+
+// The bytes of the invalid sequence at the offset: the lead byte and its continuations, including the first byte that
+// broke the sequence; one byte when sequenceLength() is 0.
+std::string invalidBytes(std::string_view s, std::size_t offset) {
+    const auto lead = static_cast<unsigned char>(s[offset]);
+    const std::size_t length = sequenceLength(lead);
+    std::string result = fmt::format("0x{:02X}", lead);
+
+    for (std::size_t i = offset + 1; i < s.size() && i < offset + length; i++) {
+        const auto b = static_cast<unsigned char>(s[i]);
+
+        result += fmt::format(" 0x{:02X}", b);
+
+        if (!isContinuationByte(b)) {
+            break;
+        }
+    }
+
+    return result;
+}
+
+} // namespace
+
+StringLabel StringLabel::ofPropertyValue(std::string_view place, std::string_view key) noexcept {
+    return {place, key == DXEndpoint::DXFEED_USER_PROPERTY || key == DXEndpoint::DXFEED_PASSWORD_PROPERTY};
+}
+
+void checkUtf8(std::string_view s, const StringLabel &label) {
+    const auto found = utf8::find_invalid(s.begin(), s.end());
+
+    if (found == s.end()) {
+        return;
+    }
+
+    const auto offset = static_cast<std::size_t>(found - s.begin());
+
+    if (label.secret) {
+        throw InvalidArgumentException(fmt::format("{}: invalid UTF-8 at byte {}", label.place, offset));
+    }
+
+    throw InvalidArgumentException(
+        fmt::format("{}: invalid UTF-8 at byte {}: {}", label.place, offset, invalidBytes(s, offset)));
 }
 
 char *createCString(std::string_view s) {

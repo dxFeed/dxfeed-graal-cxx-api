@@ -31,7 +31,8 @@ getInstance(/* dxfg_v4_instrument_profile_t* */ const JavaObjectHandle<Instrumen
 /// dxfg_v4_Schedule_getInstanceByDefinition
 /* dxfg_v4_schedule_t* */ JavaObjectHandle<Schedule> getInstance(std::string_view scheduleDefinition) {
     return JavaObjectHandle<Schedule>{runGraalV4FunctionWithNonNullResult(
-        dxfg_v4_Schedule_getInstanceByDefinition, SdkString{scheduleDefinition}.c_str())};
+        dxfg_v4_Schedule_getInstanceByDefinition,
+        SdkString{scheduleDefinition, "Schedule::getInstance(scheduleDefinition)"}.c_str())};
 }
 
 /// dxfg_v4_Schedule_getInstanceByProfileHandleWithVenue
@@ -46,7 +47,8 @@ getInstance(/* dxfg_v4_instrument_profile_t* */ const JavaObjectHandle<Instrumen
 
     return JavaObjectHandle<Schedule>{runGraalV4FunctionWithNonNullResult(
         dxfg_v4_Schedule_getInstanceByProfileHandleWithVenue,
-        static_cast<dxfg_v4_instrument_profile_t *>(instrumentProfile.get()), SdkString{venue}.c_str())};
+        static_cast<dxfg_v4_instrument_profile_t *>(instrumentProfile.get()),
+        SdkString{venue, "Schedule::getInstance(venue)"}.c_str())};
 }
 
 /// dxfg_v4_Schedule_getTradingVenuesByProfileHandle
@@ -72,7 +74,8 @@ std::vector<std::string> getTradingVenues(
 
 /// dxfg_v4_Schedule_downloadDefaults
 void downloadDefaults(std::string_view downloadConfig) {
-    runGraalV4Function(dxfg_v4_Schedule_downloadDefaults, SdkString{downloadConfig}.c_str());
+    runGraalV4Function(dxfg_v4_Schedule_downloadDefaults,
+                       SdkString{downloadConfig, "Schedule::downloadDefaults(downloadConfig)"}.c_str());
 }
 
 /// dxfg_v4_Schedule_setDefaults
