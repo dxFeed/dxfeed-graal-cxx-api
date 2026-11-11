@@ -69,9 +69,7 @@ EventSourceWrapper EventSourceWrapper::fromGraal(void *graalNative) {
     }
 }
 
-// The bad_variant_access of std::visit of a valueless variant: data_ never is one, it is set only by noexcept
-// functions, where a throwing copy terminates.
-void *EventSourceWrapper::toGraal() const noexcept { // NOLINT(bugprone-exception-escape)
+void *EventSourceWrapper::toGraal() const {
     return std::visit(
         [](const auto &eventSource) {
             return eventSource.toGraal();
@@ -80,7 +78,7 @@ void *EventSourceWrapper::toGraal() const noexcept { // NOLINT(bugprone-exceptio
 }
 
 std::unique_ptr<void, decltype(&EventSourceWrapper::freeGraal)>
-EventSourceWrapper::toGraalUnique() const noexcept { // NOLINT(*-use-nodiscard)
+EventSourceWrapper::toGraalUnique() const { // NOLINT(*-use-nodiscard)
     return {toGraal(), freeGraal};
 }
 

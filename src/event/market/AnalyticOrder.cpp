@@ -5,6 +5,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/EventTypeEnum.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 
 #include <dxfg_api.h>
@@ -30,7 +31,7 @@ void AnalyticOrder::fillData(void *graalNative) noexcept {
                           .icebergFlags = graalAnalyticOrder->iceberg_flags};
 }
 
-void AnalyticOrder::fillGraalData(void *graalNative) const noexcept {
+void AnalyticOrder::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -72,11 +73,12 @@ void *AnalyticOrder::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalAnalyticOrder = new dxfg_analytic_order_t{};
-
-    fillGraalData(graalAnalyticOrder);
-
-    return graalAnalyticOrder;
+    return newGraalEvent<dxfg_analytic_order_t>(
+        DXFG_EVENT_ANALYTIC_ORDER,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void AnalyticOrder::freeGraal(void *graalNative) {

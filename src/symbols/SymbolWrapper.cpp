@@ -43,7 +43,7 @@ std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *g
 SymbolWrapper::SymbolWrapper(const SymbolWrapper &) noexcept = default;
 SymbolWrapper::SymbolWrapper(SymbolWrapper &&) noexcept = default;
 // The bad_variant_access of the visit of a valueless variant: data_ never is one, it is set only by noexcept functions,
-// where a throwing copy terminates (the same for std::visit in toGraal()).
+// where a throwing copy terminates.
 SymbolWrapper &SymbolWrapper::operator=(const SymbolWrapper &) noexcept = default; // NOLINT(bugprone-exception-escape)
 SymbolWrapper &SymbolWrapper::operator=(SymbolWrapper &&) noexcept = default;      // NOLINT(bugprone-exception-escape)
 SymbolWrapper::SymbolWrapper() noexcept {
@@ -158,7 +158,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
     }
 }
 
-void *SymbolWrapper::toGraal() const noexcept { // NOLINT(bugprone-exception-escape): see operator=
+void *SymbolWrapper::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper::toGraal()");
     }
@@ -170,7 +170,7 @@ void *SymbolWrapper::toGraal() const noexcept { // NOLINT(bugprone-exception-esc
         data_);
 }
 
-std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> SymbolWrapper::toGraalUnique() const noexcept {
+std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> SymbolWrapper::toGraalUnique() const {
     return {toGraal(), SymbolWrapper::freeGraal};
 }
 

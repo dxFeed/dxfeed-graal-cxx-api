@@ -100,8 +100,6 @@ TEST_CASE("Release paths are noexcept") {
     static_assert(std::is_nothrow_destructible_v<TimeSeriesTxModel<Candle>>);
     static_assert(std::is_nothrow_destructible_v<MarketDepthModel<Order>>);
     static_assert(std::is_nothrow_destructible_v<SymbolWrapper>);
-    static_assert(noexcept(std::declval<const SymbolWrapper &>().toGraal()));
-    static_assert(noexcept(std::declval<const EventSourceWrapper &>().toGraal()));
     static_assert(noexcept(math::floorDiv<1000>(std::int64_t{})));
     static_assert(noexcept(math::floorMod<1000>(std::int64_t{})));
 }

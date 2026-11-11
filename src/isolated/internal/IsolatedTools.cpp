@@ -56,7 +56,7 @@ std::vector<std::string> /* dxfg_v4_string_list* */ parseSymbolsAndSaveOrder(std
 using NativeStringList = NativeStringListWrapper<dxfg_v4_string_list>;
 
 void /* int32_t */ runTool(/* dxfg_v4_string_list* */ const std::vector<std::string> &args) {
-    NativeStringList l{args};
+    NativeStringList l{args, "IsolatedTools::runTool(args)"};
 
     runGraalV4Function(dxfg_v4_Tools_main, l.list);
 }

@@ -9,6 +9,7 @@
 #include "../../isolated/IsolatedCommon.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
 #include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <algorithm>
 #include <dxfg_api.h>
@@ -109,7 +110,7 @@ void MarketMaker::fillData(void *graalNative) noexcept {
     };
 }
 
-void MarketMaker::fillGraalData(void *graalNative) const noexcept {
+void MarketMaker::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -165,11 +166,12 @@ void *MarketMaker::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalMarketMaker = new dxfg_market_maker_t{};
-
-    fillGraalData(graalMarketMaker);
-
-    return graalMarketMaker;
+    return newGraalEvent<dxfg_market_maker_t>(
+        DXFG_EVENT_MARKET_MAKER,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void MarketMaker::freeGraal(void *graalNative) {

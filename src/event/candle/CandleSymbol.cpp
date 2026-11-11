@@ -333,7 +333,7 @@ void *CandleSymbol::toGraal() const {
         Debugger::debug("CandleSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_)};
+    auto *graalSymbol = new dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_, "CandleSymbol(symbol)")};
 
     return graalSymbol;
 }

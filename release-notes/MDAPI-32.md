@@ -14,3 +14,11 @@
       builder does not change.
     * A property from `dxfeed.system.properties` or a `DXFEED_*` environment variable that is not valid UTF-8 is not
       set.
+    * The string fields and the symbols of events are checked when the events are published
+      (`DXPublisher::publishEvents`, writing to a tape); the message names the event type and the field, for example
+      `TimeAndSale::exchangeSaleConditions: invalid UTF-8 at byte 1: 0xFF`. The setters of events do not check.
+    * Symbols are checked when they go to a subscription (`DXFeedSubscription::addSymbols` and the other functions with
+      symbols): `StringSymbol(symbol)`, `CandleSymbol(symbol)`, `IndexedEventSource(name)`.
+    * `fillGraalData` of the event types, `SymbolWrapper::toGraal`, `SymbolWrapper::toGraalUnique`,
+      `EventSourceWrapper::toGraal`, `EventSourceWrapper::toGraalUnique` and `IndexedEventSource::toGraalUnique` are no
+      longer `noexcept`.

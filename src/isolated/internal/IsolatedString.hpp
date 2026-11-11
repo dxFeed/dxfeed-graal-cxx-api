@@ -48,11 +48,19 @@ std::unique_ptr<void, decltype(&release)> toUnique(void *stringList);
 } // namespace IsolatedStringList
 
 template <typename L> struct NativeStringListWrapper final {
-    explicit NativeStringListWrapper(const std::vector<std::string> &values) {
+    /**
+     * @param values The strings
+     * @param label The place of the strings
+     * @throws InvalidArgumentException if a string is not valid UTF-8; the strings created before it are freed.
+     */
+    NativeStringListWrapper(const std::vector<std::string> &values, const StringLabel &label) {
         if (values.empty()) {
-            list = nullptr;
-        } else {
-            list = new L{};
+            return;
+        }
+
+        list = new L{};
+
+        try {
             list->size = fitToType<decltype(L::size)>(values.size());
             const auto size = static_cast<std::size_t>(list->size);
 
@@ -62,24 +70,37 @@ template <typename L> struct NativeStringListWrapper final {
 
             for (std::size_t i = 0; i < size; i++) {
                 if (!values[i].empty()) {
-                    list->elements[i] = createCString(values[i]);
+                    list->elements[i] = createCString(values[i], label);
                 }
             }
+        } catch (...) {
+            free();
+
+            throw;
         }
     }
 
     ~NativeStringListWrapper() {
+        free();
+    }
+
+    L *list = nullptr;
+
+    private:
+    // The elements that are not created yet are nullptr.
+    void free() noexcept {
         if (list) {
-            for (int i = 0; i < list->size; i++) {
-                delete[] list->elements[i];
+            if (list->elements) {
+                for (int i = 0; i < list->size; i++) {
+                    delete[] list->elements[i];
+                }
             }
 
             delete[] list->elements;
             delete list;
+            list = nullptr;
         }
     }
-
-    L *list = nullptr;
 };
 
 } // namespace isolated::internal

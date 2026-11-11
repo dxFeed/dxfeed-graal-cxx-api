@@ -43,6 +43,9 @@ struct LastingEvent;
 
 /**
  * Subscription for a set of symbols and event types.
+ *
+ * The functions that take symbols throw InvalidArgumentException if a symbol is not valid UTF-8 (see StringParam); the
+ * set of subscribed symbols is not changed then.
  */
 class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscription>, public ObservableSubscription {
     public:

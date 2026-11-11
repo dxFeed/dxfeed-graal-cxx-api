@@ -7,6 +7,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -39,7 +40,7 @@ void Summary::fillData(void *graalNative) noexcept {
     };
 }
 
-void Summary::fillGraalData(void *graalNative) const noexcept {
+void Summary::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -85,11 +86,12 @@ void *Summary::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSummary = new dxfg_summary_t{};
-
-    fillGraalData(graalSummary);
-
-    return graalSummary;
+    return newGraalEvent<dxfg_summary_t>(
+        DXFG_EVENT_SUMMARY,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Summary::freeGraal(void *graalNative) {

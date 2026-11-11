@@ -9,6 +9,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 #include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -40,11 +41,11 @@ void TextConfiguration::fillGraalData(void *graalNative) const {
     const auto graalConfiguration = static_cast<dxfg_text_configuration_t *>(graalNative);
 
     graalConfiguration->event_type.clazz = DXFG_EVENT_TEXT_CONFIGURATION;
-    graalConfiguration->event_symbol = createCString(eventSymbol_);
+    graalConfiguration->event_symbol = createCString(eventSymbol_, "TextConfiguration::eventSymbol");
     graalConfiguration->event_time = eventTime_;
     graalConfiguration->time_sequence = timeSequence_;
     graalConfiguration->version = version_;
-    graalConfiguration->text = createCString(text_);
+    graalConfiguration->text = createCString(text_, "TextConfiguration::text");
 }
 
 void TextConfiguration::freeGraalData(void *graalNative) noexcept {
@@ -84,11 +85,12 @@ void *TextConfiguration::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalConfiguration = new dxfg_text_configuration_t{};
-
-    fillGraalData(graalConfiguration);
-
-    return graalConfiguration;
+    return newGraalEvent<dxfg_text_configuration_t>(
+        DXFG_EVENT_TEXT_CONFIGURATION,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void TextConfiguration::freeGraal(void *graalNative) {

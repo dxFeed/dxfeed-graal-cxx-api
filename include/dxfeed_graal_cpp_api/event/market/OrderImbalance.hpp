@@ -99,7 +99,7 @@ class DXFCPP_EXPORT OrderImbalance final : public MarketEvent {
     Data data_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
     static void freeGraalData(void *graalNative) noexcept;
 
     public:

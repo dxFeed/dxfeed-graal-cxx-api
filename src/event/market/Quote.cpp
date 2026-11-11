@@ -7,6 +7,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <cstdint>
 #include <dxfg_api.h>
@@ -177,7 +178,7 @@ void Quote::fillData(void *graalNative) noexcept {
     };
 }
 
-void Quote::fillGraalData(void *graalNative) const noexcept {
+void Quote::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -223,11 +224,12 @@ void *Quote::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalQuote = new dxfg_quote_t{};
-
-    fillGraalData(graalQuote);
-
-    return graalQuote;
+    return newGraalEvent<dxfg_quote_t>(
+        DXFG_EVENT_QUOTE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Quote::freeGraal(void *graalNative) {

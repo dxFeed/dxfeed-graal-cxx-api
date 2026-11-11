@@ -272,8 +272,8 @@ void checkUtf8(std::string_view s, const StringLabel &label) {
         fmt::format("{}: invalid UTF-8 at byte {}: {}", label.place, offset, invalidBytes(s, offset)));
 }
 
-char *createCString(std::string_view s) {
-    // TODO: check invalid utf-8 [MDAPI-32, EN-8233]
+char *createCString(std::string_view s, const StringLabel &label) {
+    checkUtf8(s, label);
 
     char *cString = new char[s.size() + 1];
 

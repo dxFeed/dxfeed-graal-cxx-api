@@ -246,21 +246,25 @@ DXFCPP_INTERNAL_EXPORT void checkUtf8(std::string_view s, const StringLabel &lab
  * Copies the characters of the string and a terminating NUL into a new array (`new char[]`) for a field of an SDK
  * structure that outlives the call, and the structure's destructor frees it.
  *
- * It is the second way, next to `isolated::SdkString` (for the call itself), in which a user string reaches the SDK.
- * An embedded NUL stays in the copy, and the SDK reads up to it. Overload for `std::optional` returns nullptr for an
- * empty optional.
+ * It is the second way, next to `isolated::SdkString` (for the call itself), in which a user string reaches the SDK,
+ * and it checks the string the same way (checkUtf8()) before anything is allocated. An embedded NUL stays in the copy,
+ * and the SDK reads up to it. Overload for `std::optional` returns nullptr for an empty optional.
  *
  * @param s The characters to copy
+ * @param label The place of the string: the event type and its field (`"TimeAndSale::exchangeSaleConditions"`) or the
+ * symbol (`"StringSymbol(symbol)"`)
  * @return The new NUL-terminated array
+ * @throws InvalidArgumentException if the string is not valid UTF-8.
  */
-DXFCPP_INTERNAL_EXPORT char *createCString(std::string_view s); // NOLINT(*-redundant-declaration)
+// NOLINTNEXTLINE(*-redundant-declaration)
+DXFCPP_INTERNAL_EXPORT char *createCString(std::string_view s, const StringLabel &label);
 
-template <typename S> char *createCString(const std::optional<S> &s) {
+template <typename S> char *createCString(const std::optional<S> &s, const StringLabel &label) {
     if (!s) {
         return nullptr;
     }
 
-    return createCString(*s);
+    return createCString(*s, label);
 }
 
 template <typename It>

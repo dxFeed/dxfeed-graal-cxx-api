@@ -8,6 +8,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -38,7 +39,7 @@ void TheoPrice::fillData(void *graalNative) noexcept {
     };
 }
 
-void TheoPrice::fillGraalData(void *graalNative) const noexcept {
+void TheoPrice::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -82,11 +83,12 @@ void *TheoPrice::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTheoPrice = new dxfg_theo_price_t{};
-
-    fillGraalData(graalTheoPrice);
-
-    return graalTheoPrice;
+    return newGraalEvent<dxfg_theo_price_t>(
+        DXFG_EVENT_THEO_PRICE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void TheoPrice::freeGraal(void *graalNative) {

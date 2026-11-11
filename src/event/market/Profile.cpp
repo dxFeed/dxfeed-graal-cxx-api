@@ -9,6 +9,7 @@
 #include "../../isolated/IsolatedCommon.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
 #include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -47,7 +48,7 @@ void Profile::fillData(void *graalNative) noexcept {
     };
 }
 
-void Profile::fillGraalData(void *graalNative) const noexcept {
+void Profile::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -57,8 +58,8 @@ void Profile::fillGraalData(void *graalNative) const noexcept {
     const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
 
     graalProfile->market_event.event_type.clazz = DXFG_EVENT_PROFILE;
-    graalProfile->description = createCString(data_.description);
-    graalProfile->status_reason = createCString(data_.statusReason);
+    graalProfile->description = createCString(data_.description, "Profile::description");
+    graalProfile->status_reason = createCString(data_.statusReason, "Profile::statusReason");
     graalProfile->halt_start_time = data_.haltStartTime;
     graalProfile->halt_end_time = data_.haltEndTime;
     graalProfile->high_limit_price = data_.highLimitPrice;
@@ -113,11 +114,12 @@ void *Profile::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalProfile = new dxfg_profile_t{};
-
-    fillGraalData(graalProfile);
-
-    return graalProfile;
+    return newGraalEvent<dxfg_profile_t>(
+        DXFG_EVENT_PROFILE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Profile::freeGraal(void *graalNative) {

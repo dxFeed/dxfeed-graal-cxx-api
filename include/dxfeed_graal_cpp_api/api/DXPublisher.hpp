@@ -166,6 +166,8 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      *
      * @tparam EventsCollection The type of events collection (for example, `std::vector<::EventType::Ptr>`)
      * @param events The collection of events to publish.
+     * @throws InvalidArgumentException if a string field or the symbol of an event is not valid UTF-8; nothing is
+     * published then.
      */
     template <typename EventsCollection>
     void publishEvents(EventsCollection &&events) const
@@ -185,6 +187,8 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * Publishes events to the corresponding feed.
      *
      * @param events The collection of events to publish.
+     * @throws InvalidArgumentException if a string field or the symbol of an event is not valid UTF-8; nothing is
+     * published then.
      */
     void publishEvents(std::initializer_list<std::shared_ptr<EventType>> events) const {
         publishEvents(std::begin(events), std::end(events));
@@ -194,6 +198,8 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * Publishes an event to the corresponding feed.
      *
      * @param event The event to publish.
+     * @throws InvalidArgumentException if a string field or the symbol of an event is not valid UTF-8; nothing is
+     * published then.
      */
     void publishEvents(std::shared_ptr<EventType> event) const;
 
@@ -203,6 +209,8 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @tparam EventIt The collection's iterator type
      * @param begin The beginning of the collection of events.
      * @param end The end of the events' collection.
+     * @throws InvalidArgumentException if a string field or the symbol of an event is not valid UTF-8; nothing is
+     * published then.
      */
     template <typename EventIt> void publishEvents(EventIt begin, EventIt end) const {
         auto list = EventMapper::toGraalListUnique(begin, end);

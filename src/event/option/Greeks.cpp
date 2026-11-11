@@ -8,6 +8,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -39,7 +40,7 @@ void Greeks::fillData(void *graalNative) noexcept {
     };
 }
 
-void Greeks::fillGraalData(void *graalNative) const noexcept {
+void Greeks::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -84,11 +85,12 @@ void *Greeks::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalGreeks = new dxfg_greeks_t{};
-
-    fillGraalData(graalGreeks);
-
-    return graalGreeks;
+    return newGraalEvent<dxfg_greeks_t>(
+        DXFG_EVENT_GREEKS,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Greeks::freeGraal(void *graalNative) {

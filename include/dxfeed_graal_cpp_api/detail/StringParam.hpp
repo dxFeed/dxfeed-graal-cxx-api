@@ -73,7 +73,10 @@ concept StringParamPointer =
  * truncated sequence, an overlong form, an encoded surrogate or a value above U+10FFFF make the function throw
  * InvalidArgumentException, for example `DXEndpoint::connect(address): invalid UTF-8 at byte 12: 0xC3 0x28`: the
  * function and its parameter, the offset of the first invalid byte from 0 and the bytes of the invalid sequence. For a
- * user name, a password or a token, the message has no bytes.
+ * user name, a password or a token, the message has no bytes. The string fields of events are checked when the events
+ * are published, not by their setters, and the message names the event type and the field
+ * (`TimeAndSale::exchangeSaleConditions: invalid UTF-8 at byte 1: 0xFF`); symbols are checked when they are added to a
+ * subscription (`StringSymbol(symbol): ...`).
  *
  * Passing a bare `nullptr` to a function that has another overload with a smart pointer parameter is ambiguous (for
  * example `Schedule::getInstance`): write `static_cast<const char *>(nullptr)`.

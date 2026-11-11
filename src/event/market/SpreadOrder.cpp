@@ -8,6 +8,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/utils/StringConstants.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -29,7 +30,7 @@ void SpreadOrder::fillData(void *graalNative) noexcept {
     spreadOrderData_ = {.spreadSymbol = toStringOpt(graalSpreadOrder->spread_symbol)};
 }
 
-void SpreadOrder::fillGraalData(void *graalNative) const noexcept {
+void SpreadOrder::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -39,7 +40,7 @@ void SpreadOrder::fillGraalData(void *graalNative) const noexcept {
     const auto graalSpreadOrder = static_cast<dxfg_spread_order_t *>(graalNative);
 
     graalSpreadOrder->order_base.market_event.event_type.clazz = DXFG_EVENT_SPREAD_ORDER;
-    graalSpreadOrder->spread_symbol = createCString(spreadOrderData_.spreadSymbol);
+    graalSpreadOrder->spread_symbol = createCString(spreadOrderData_.spreadSymbol, "SpreadOrder::spreadSymbol");
 }
 
 void SpreadOrder::freeGraalData(void *graalNative) noexcept {
@@ -78,11 +79,12 @@ void *SpreadOrder::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSpreadOrder = new dxfg_spread_order_t{};
-
-    fillGraalData(graalSpreadOrder);
-
-    return graalSpreadOrder;
+    return newGraalEvent<dxfg_spread_order_t>(
+        DXFG_EVENT_SPREAD_ORDER,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void SpreadOrder::freeGraal(void *graalNative) {

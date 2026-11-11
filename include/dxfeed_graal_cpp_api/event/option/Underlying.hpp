@@ -86,7 +86,7 @@ class DXFCPP_EXPORT Underlying final : public MarketEvent, public TimeSeriesEven
     Data data_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the Underlying object

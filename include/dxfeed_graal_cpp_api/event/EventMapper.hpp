@@ -44,16 +44,23 @@ struct DXFCPP_EXPORT EventMapper {
         std::ptrdiff_t elementIdx = 0;
         bool needToFree = false;
 
-        for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
-            if constexpr (requires { it->toGraal(); }) { // It<EventType>
-                needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
-            } else if constexpr (requires { (*it)->toGraal(); }) { // It<Ptr<EventType>>
-                needToFree = setGraalListElement(list, elementIdx, (*it)->toGraal()) == false;
-            }
+        try {
+            for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
+                if constexpr (requires { it->toGraal(); }) { // It<EventType>
+                    needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
+                } else if constexpr (requires { (*it)->toGraal(); }) { // It<Ptr<EventType>>
+                    needToFree = setGraalListElement(list, elementIdx, (*it)->toGraal()) == false;
+                }
 
-            if (needToFree) {
-                break;
+                if (needToFree) {
+                    break;
+                }
             }
+        } catch (...) {
+            // For example, a string field that is not valid UTF-8: the events converted before are freed.
+            freeGraalListElements(list, elementIdx);
+
+            throw;
         }
 
         if (needToFree) {

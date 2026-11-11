@@ -8,6 +8,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/utils/StringConstants.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -47,7 +48,7 @@ void TimeAndSale::fillData(void *graalNative) noexcept {
     };
 }
 
-void TimeAndSale::fillGraalData(void *graalNative) const noexcept {
+void TimeAndSale::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -65,10 +66,11 @@ void TimeAndSale::fillGraalData(void *graalNative) const noexcept {
     graalTimeAndSale->size = data_.size;
     graalTimeAndSale->bid_price = data_.bidPrice;
     graalTimeAndSale->ask_price = data_.askPrice;
-    graalTimeAndSale->exchange_sale_conditions = createCString(data_.exchangeSaleConditions);
+    graalTimeAndSale->exchange_sale_conditions =
+        createCString(data_.exchangeSaleConditions, "TimeAndSale::exchangeSaleConditions");
     graalTimeAndSale->flags = data_.flags;
-    graalTimeAndSale->buyer = createCString(data_.buyer);
-    graalTimeAndSale->seller = createCString(data_.seller);
+    graalTimeAndSale->buyer = createCString(data_.buyer, "TimeAndSale::buyer");
+    graalTimeAndSale->seller = createCString(data_.seller, "TimeAndSale::seller");
     graalTimeAndSale->trade_id = data_.tradeId;
 }
 
@@ -110,11 +112,12 @@ void *TimeAndSale::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTimeAndSale = new dxfg_time_and_sale_t{};
-
-    fillGraalData(graalTimeAndSale);
-
-    return graalTimeAndSale;
+    return newGraalEvent<dxfg_time_and_sale_t>(
+        DXFG_EVENT_TIME_AND_SALE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void TimeAndSale::freeGraal(void *graalNative) {

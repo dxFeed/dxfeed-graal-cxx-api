@@ -12,7 +12,7 @@ constinit const IndexedEventSource IndexedEventSource::DEFAULT{0, ConstString::L
 
 void *IndexedEventSource::toGraal() const {
     auto *graalSource = new dxfg_indexed_event_source_t{orderSource_ ? ORDER_SOURCE : INDEXED_EVENT_SOURCE, id_,
-                                                        createCString(name_.view())};
+                                                        createCString(name_.view(), "IndexedEventSource(name)")};
 
     return graalSource;
 }
@@ -28,7 +28,7 @@ void IndexedEventSource::freeGraal(void *graalNative) {
     delete graalSource;
 }
 
-std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> IndexedEventSource::toGraalUnique() const noexcept {
+std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> IndexedEventSource::toGraalUnique() const {
     return {toGraal(), freeGraal};
 }
 

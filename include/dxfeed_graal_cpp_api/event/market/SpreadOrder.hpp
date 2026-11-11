@@ -105,7 +105,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     SpreadOrderData spreadOrderData_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
     static void freeGraalData(void *graalNative) noexcept;
 
     public:

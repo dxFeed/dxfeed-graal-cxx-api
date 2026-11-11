@@ -9,6 +9,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/utils/StringConstants.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -44,9 +45,9 @@ void Message::fillGraalData(void *graalNative) const {
     const auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
 
     graalMessage->event_type.clazz = DXFG_EVENT_MESSAGE;
-    graalMessage->event_symbol = createCString(eventSymbol_);
+    graalMessage->event_symbol = createCString(eventSymbol_, "Message::eventSymbol");
     graalMessage->event_time = eventTime_;
-    graalMessage->attachment = dxfcpp::bit_cast<void *>(createCString(attachment_));
+    graalMessage->attachment = dxfcpp::bit_cast<void *>(createCString(attachment_, "Message::attachment"));
 }
 
 void Message::freeGraalData(void *graalNative) noexcept {
@@ -87,11 +88,12 @@ void *Message::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalMessage = new dxfg_message_t{};
-
-    fillGraalData(graalMessage);
-
-    return graalMessage;
+    return newGraalEvent<dxfg_message_t>(
+        DXFG_EVENT_MESSAGE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Message::freeGraal(void *graalNative) {

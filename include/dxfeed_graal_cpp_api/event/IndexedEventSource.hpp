@@ -84,7 +84,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      */
     static void freeGraal(void *graalNative);
 
-    std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept;
+    std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const;
 
     /**
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.

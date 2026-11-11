@@ -94,6 +94,8 @@ struct DXFCPP_EXPORT IndexedTxModelImpl {
  * for subscription, and it must be @ref IndexedTxModel::Builder::withFeed() "attached" to a DXFeed instance to
  * begin operation. For ease of use, some of these configurations can be changed after the model is built, see
  * @ref IndexedTxModel::setSources() "setSources" and @ref IndexedTxModel::attach() "attach" and their overloads.
+ * The functions that take sources throw InvalidArgumentException if the name of a source is not valid UTF-8 (see
+ * StringParam).
  *
  * <p>This model only supports single symbol subscriptions; multiple symbols cannot be configured.
  *
