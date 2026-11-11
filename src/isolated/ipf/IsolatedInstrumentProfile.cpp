@@ -56,7 +56,7 @@ setType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setType,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setType(type)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getSymbol
@@ -85,7 +85,7 @@ setSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProf
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setSymbol,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setSymbol(symbol)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getDescription
@@ -114,7 +114,7 @@ setDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrumen
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setDescription,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setDescription(description)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getLocalSymbol
@@ -143,7 +143,7 @@ setLocalSymbol(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrumen
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setLocalSymbol,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setLocalSymbol(localSymbol)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getLocalDescription
@@ -172,7 +172,8 @@ setLocalDescription(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Inst
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setLocalDescription,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value,
+                                                 "InstrumentProfile::setLocalDescription(localDescription)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getCountry
@@ -201,7 +202,7 @@ setCountry(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPro
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setCountry,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setCountry(country)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getOPOL
@@ -230,7 +231,7 @@ setOPOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setOPOL,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setOPOL(opol)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getExchangeData
@@ -259,7 +260,7 @@ setExchangeData(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setExchangeData,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setExchangeData(exchangeData)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getExchanges
@@ -288,7 +289,7 @@ setExchanges(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentP
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setExchanges,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setExchanges(exchanges)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getCurrency
@@ -317,7 +318,7 @@ setCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPr
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setCurrency,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setCurrency(currency)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getBaseCurrency
@@ -346,7 +347,7 @@ setBaseCurrency(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setBaseCurrency,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setBaseCurrency(baseCurrency)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getCFI
@@ -375,7 +376,7 @@ setCFI(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setCFI,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setCFI(cfi)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getISIN
@@ -404,7 +405,7 @@ setISIN(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfil
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setISIN,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setISIN(isin)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getSEDOL
@@ -433,7 +434,7 @@ setSEDOL(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setSEDOL,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setSEDOL(sedol)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getCUSIP
@@ -462,7 +463,7 @@ setCUSIP(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setCUSIP,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setCUSIP(cusip)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getICB
@@ -563,7 +564,7 @@ setProduct(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentPro
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setProduct,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setProduct(product)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getUnderlying
@@ -592,7 +593,7 @@ setUnderlying(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrument
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setUnderlying,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setUnderlying(underlying)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getSPC
@@ -645,7 +646,9 @@ setAdditionalUnderlyings(/* dxfg_instrument_profile_t* */ const JavaObjectHandle
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setAdditionalUnderlyings,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value,
+                                                 "InstrumentProfile::setAdditionalUnderlyings(additionalUnderlyings)"}
+                                           .c_str());
 }
 
 // dxfg_InstrumentProfile_getMMY
@@ -674,7 +677,7 @@ setMMY(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setMMY,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setMMY(mmy)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getExpiration
@@ -776,7 +779,7 @@ setOptionType(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrument
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setOptionType,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setOptionType(optionType)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getExpirationStyle
@@ -805,7 +808,8 @@ setExpirationStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setExpirationStyle,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value,
+                                                 "InstrumentProfile::setExpirationStyle(expirationStyle)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getSettlementStyle
@@ -834,7 +838,8 @@ setSettlementStyle(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setSettlementStyle,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value,
+                                                 "InstrumentProfile::setSettlementStyle(settlementStyle)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getPriceIncrements
@@ -863,7 +868,8 @@ setPriceIncrements(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instr
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setPriceIncrements,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value,
+                                                 "InstrumentProfile::setPriceIncrements(priceIncrements)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getTradingHours
@@ -892,7 +898,7 @@ setTradingHours(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setTradingHours,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{value}.c_str());
+                                       SdkString{value, "InstrumentProfile::setTradingHours(tradingHours)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getField
@@ -906,7 +912,7 @@ getField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 
     const auto string = internal::IsolatedString::toUnique(runGraalFunctionAndThrowIfNullptr(
         dxfg_InstrumentProfile_getField, static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-        SdkString{name}.c_str()));
+        SdkString{name, "InstrumentProfile::getField(name)"}.c_str()));
     auto result = dxfcpp::toString(string.get());
 
     return result;
@@ -923,7 +929,8 @@ setField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfi
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setField,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{name}.c_str(), SdkString{value}.c_str());
+                                       SdkString{name, "InstrumentProfile::setField(name)"}.c_str(),
+                                       SdkString{value, "InstrumentProfile::setField(value)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_getNumericField
@@ -936,7 +943,7 @@ double getNumericField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<I
 
     return runGraalFunctionAndThrowIfMinusInf(dxfg_InstrumentProfile_getNumericField,
                                               static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                              SdkString{name}.c_str());
+                                              SdkString{name, "InstrumentProfile::getNumericField(name)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_setNumericField
@@ -950,7 +957,7 @@ setNumericField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<Instrume
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setNumericField,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{name}.c_str(), value);
+                                       SdkString{name, "InstrumentProfile::setNumericField(name)"}.c_str(), value);
 }
 
 // dxfg_InstrumentProfile_getDateField
@@ -963,7 +970,7 @@ std::int32_t getDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandl
 
     return runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_getDateField,
                                               static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                              SdkString{name}.c_str());
+                                              SdkString{name, "InstrumentProfile::getDateField(name)"}.c_str());
 }
 
 // dxfg_InstrumentProfile_setDateField
@@ -977,7 +984,7 @@ setDateField(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentP
 
     runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfile_setDateField,
                                        static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-                                       SdkString{name}.c_str(), value);
+                                       SdkString{name, "InstrumentProfile::setDateField(name)"}.c_str(), value);
 }
 
 // dxfg_InstrumentProfile_getNonEmptyCustomFieldNames

@@ -163,7 +163,8 @@ void withSymbol(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder,
 void withSymbol(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder, std::string_view symbol) {
     runGraalFunctionAndThrowIfLessThanZero(dxfg_IndexedEventTxModel_Builder_withSymbol2,
                                            toGraal(builder, "dxfg_IndexedEventTxModel_Builder_withSymbol2"),
-                                           SdkString{symbol}.c_str());
+                                           SdkString{symbol, "IndexedEventTxModel::Builder::withSymbol(symbol)"}
+                                               .c_str());
 }
 
 void withSource(const JavaObjectHandle<IndexedEventTxModelBuilderTag> &builder, const EventSourceWrapper &source) {

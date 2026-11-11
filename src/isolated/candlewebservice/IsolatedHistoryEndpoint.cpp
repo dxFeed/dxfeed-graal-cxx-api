@@ -24,7 +24,8 @@ void withAddress(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, std:
     }
 
     runGraalV4Function(dxfg_v4_HistoryEndpoint_Builder_withAddress,
-                       static_cast<dxfg_v4_history_endpoint_builder_t *>(builder.get()), SdkString{address}.c_str());
+                       static_cast<dxfg_v4_history_endpoint_builder_t *>(builder.get()),
+                       SdkString{address, "HistoryEndpoint::Builder::withAddress(address)"}.c_str());
 }
 
 /// dxfg_v4_HistoryEndpoint_Builder_withUserName
@@ -35,7 +36,9 @@ void withUserName(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, std
     }
 
     runGraalV4Function(dxfg_v4_HistoryEndpoint_Builder_withUserName,
-                       static_cast<dxfg_v4_history_endpoint_builder_t *>(builder.get()), SdkString{userName}.c_str());
+                       static_cast<dxfg_v4_history_endpoint_builder_t *>(builder.get()),
+                       SdkString{userName, StringLabel::secretOf("HistoryEndpoint::Builder::withUserName(userName)")}
+                           .c_str());
 }
 
 /// dxfg_v4_HistoryEndpoint_Builder_withPassword
@@ -46,7 +49,9 @@ void withPassword(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, std
     }
 
     runGraalV4Function(dxfg_v4_HistoryEndpoint_Builder_withPassword,
-                       static_cast<dxfg_v4_history_endpoint_builder_t *>(builder.get()), SdkString{password}.c_str());
+                       static_cast<dxfg_v4_history_endpoint_builder_t *>(builder.get()),
+                       SdkString{password, StringLabel::secretOf("HistoryEndpoint::Builder::withPassword(password)")}
+                           .c_str());
 }
 
 /// dxfg_v4_HistoryEndpoint_Builder_withAuthToken
@@ -57,7 +62,9 @@ void withAuthToken(const JavaObjectHandle<HistoryEndpoint::Builder> &builder, st
     }
 
     runGraalV4Function(dxfg_v4_HistoryEndpoint_Builder_withAuthToken,
-                       static_cast<dxfg_v4_history_endpoint_builder_t *>(builder.get()), SdkString{authToken}.c_str());
+                       static_cast<dxfg_v4_history_endpoint_builder_t *>(builder.get()),
+                       SdkString{authToken, StringLabel::secretOf("HistoryEndpoint::Builder::withAuthToken(authToken)")}
+                           .c_str());
 }
 
 /// dxfg_v4_HistoryEndpoint_Builder_withCompression

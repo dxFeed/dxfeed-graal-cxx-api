@@ -53,7 +53,8 @@ std::int64_t parse(/* dxfg_v4_time_format_t* */ const JavaObjectHandle<TimeForma
     }
 
     return runGraalV4FunctionWithResult(
-        dxfg_v4_TimeFormat_parse, static_cast<dxfg_v4_time_format_t *>(timeFormat.get()), SdkString{value}.c_str());
+        dxfg_v4_TimeFormat_parse, static_cast<dxfg_v4_time_format_t *>(timeFormat.get()),
+        SdkString{value, "TimeFormat::parse(value)"}.c_str());
 }
 
 std::string format(/* dxfg_v4_time_format_t* */ const JavaObjectHandle<TimeFormat> &timeFormat,

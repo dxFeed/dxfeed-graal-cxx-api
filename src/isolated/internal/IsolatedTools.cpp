@@ -20,7 +20,8 @@ parseSymbols(std::string_view symbolList) {
     std::unordered_set<std::string> result{};
 
     const auto graalStringList =
-        runGraalV4FunctionWithNonNullResult(dxfg_v4_Tools_parseSymbols, SdkString{symbolList}.c_str());
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_Tools_parseSymbols,
+                                            SdkString{symbolList, "CmdArgsUtils::parseSymbols(symbols)"}.c_str());
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
@@ -35,7 +36,9 @@ std::vector<std::string> /* dxfg_v4_string_list* */ parseSymbolsAndSaveOrder(std
     std::vector<std::string> result{};
 
     const auto graalStringList =
-        runGraalV4FunctionWithNonNullResult(dxfg_v4_Tools_parseSymbols, SdkString{symbolList}.c_str());
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_Tools_parseSymbols,
+                                            SdkString{symbolList, "CmdArgsUtils::parseSymbolsAndSaveOrder(symbols)"}
+                                                .c_str());
 
     if (graalStringList->size > 0) {
         result.reserve(static_cast<std::size_t>(graalStringList->size));

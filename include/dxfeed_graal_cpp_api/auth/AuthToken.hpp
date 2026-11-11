@@ -66,6 +66,8 @@ struct DXFCPP_EXPORT AuthToken {
      * @param userPassword the string (or c-string or string view) containing the username and password in the format
      * "username:password"
      * @return The constructed AuthToken.
+     * @throws InvalidArgumentException if the userPassword is not valid UTF-8 (the message names the offset, not the
+     * bytes).
      * @throws JavaException("InvalidFormatException") if the userPassword is malformed
      */
     static AuthToken createBasicToken(StringParam userPassword);
@@ -77,6 +79,8 @@ struct DXFCPP_EXPORT AuthToken {
      * @param user The username.
      * @param password The password.
      * @return The constructed AuthToken.
+     * @throws InvalidArgumentException if the username or the password is not valid UTF-8 (the message names the
+     * offset, not the bytes).
      */
     static AuthToken createBasicToken(StringParam user, StringParam password);
 
@@ -95,6 +99,7 @@ struct DXFCPP_EXPORT AuthToken {
      *
      * @param token the access token
      * @return the constructed AuthToken
+     * @throws InvalidArgumentException if the token is not valid UTF-8 (the message names the offset, not the bytes).
      * @throws JavaException("InvalidFormatException") if the token is empty
      */
     static AuthToken createBearerToken(StringParam token);
@@ -113,6 +118,8 @@ struct DXFCPP_EXPORT AuthToken {
      * @param scheme the custom scheme
      * @param value the custom value
      * @return the constructed AuthToken
+     * @throws InvalidArgumentException if the scheme or the value is not valid UTF-8 (for the value the message names
+     * the offset, not the bytes).
      * @throws JavaException("InvalidFormatException") if the scheme or value is empty
      */
     static AuthToken createCustomToken(StringParam scheme, StringParam value);

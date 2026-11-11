@@ -100,12 +100,14 @@ DXFCPP_BEGIN_NAMESPACE
  */
 struct DXFCPP_EXPORT System {
     /**
-     * Sets the JVM system property indicated by the specified key. A key or a value that is not valid UTF-8 is cut to its
-     * longest valid prefix.
+     * Sets the JVM system property indicated by the specified key.
      *
      * @param key The name of the system property (UTF-8 string).
      * @param value The value of the system property (UTF-8 string).
      * @return true if the setting of the JVM system property succeeded.
+     * @throws InvalidArgumentException if the key or the value is not valid UTF-8; the property does not change. For
+     * DXEndpoint::DXFEED_USER_PROPERTY and DXEndpoint::DXFEED_PASSWORD_PROPERTY the message names the offset, not the
+     * bytes of the value.
      * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
     static bool setProperty(StringParam key, StringParam value);
@@ -114,6 +116,7 @@ struct DXFCPP_EXPORT System {
      * Sets the JVM system properties to the Properties argument.
      * @tparam Properties The properties' type (std::map, std::unordered_map etc).
      * @param properties The new system properties.
+     * @throws InvalidArgumentException if a key or a value is not valid UTF-8; the properties before it stay set.
      * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
     template <typename Properties> static void setProperties(Properties &&properties) {
@@ -123,11 +126,11 @@ struct DXFCPP_EXPORT System {
     }
 
     /**
-     * Gets the system property indicated by the specified key. A key that is not valid UTF-8 is cut to its longest valid
-     * prefix.
+     * Gets the system property indicated by the specified key.
      *
      * @param key The name of the system property (UTF-8 string).
      * @return The value of a JVM system property (UTF-8 string), or an empty string if the property is not set.
+     * @throws InvalidArgumentException if the key is not valid UTF-8.
      * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments").
      */
     static std::string getProperty(StringParam key);

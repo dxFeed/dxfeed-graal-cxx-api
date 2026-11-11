@@ -79,6 +79,7 @@ set(DXFC_TEST_SOURCES
         internal/HandlerTest.cpp
         internal/SdkStringTest.cpp
         internal/StringUtilsTest.cpp
+        internal/Utf8CheckTest.cpp
         ipf/InstrumentProfileCollectorTest.cpp
         ipf/InstrumentProfileTest.cpp
         ipf/OptionChainsTest.cpp

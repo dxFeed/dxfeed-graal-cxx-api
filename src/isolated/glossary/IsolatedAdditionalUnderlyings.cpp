@@ -22,7 +22,8 @@ JavaObjectHandle<AdditionalUnderlyings> EMPTY() {
 /// dxfg_v4_AdditionalUnderlyings_valueOf
 JavaObjectHandle<AdditionalUnderlyings> valueOf(std::string_view value) {
     return JavaObjectHandle<AdditionalUnderlyings>{
-        runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_valueOf, SdkString{value}.c_str())};
+        runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_valueOf,
+                                     SdkString{value, "AdditionalUnderlyings::valueOf(text)"}.c_str())};
 }
 
 /// dxfg_v4_AdditionalUnderlyings_valueOfMap
@@ -34,7 +35,7 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<cons
     graalMapEntries.reserve(mapLikeEntries.size());
 
     for (const auto &[key, value] : mapLikeEntries) {
-        keys.emplace_back(key);
+        keys.emplace_back(key, "AdditionalUnderlyings::valueOf(mapLikeEntries)");
         graalMapEntries.push_back(dxfg_v4_string_to_double_map_entry_t{keys.back().c_str(), value});
     }
 
@@ -48,8 +49,9 @@ JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<cons
 
 /// dxfg_v4_AdditionalUnderlyings_getSPCFromText
 double getSPC(std::string_view text, std::string_view symbol) {
-    return runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_getSPCFromText, SdkString{text}.c_str(),
-                                        SdkString{symbol}.c_str());
+    return runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_getSPCFromText,
+                                        SdkString{text, "AdditionalUnderlyings::getSPC(text)"}.c_str(),
+                                        SdkString{symbol, "AdditionalUnderlyings::getSPC(symbol)"}.c_str());
 }
 
 /// dxfg_v4_AdditionalUnderlyings_getText
@@ -109,7 +111,7 @@ double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyin
 
     return runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_getSPC,
                                         static_cast<dxfg_v4_additional_underlyings_t *>(additionalUnderlyings.get()),
-                                        SdkString{symbol}.c_str());
+                                        SdkString{symbol, "AdditionalUnderlyings::getSPC(symbol)"}.c_str());
 }
 
 } // namespace isolated::glossary::IsolatedAdditionalUnderlyings

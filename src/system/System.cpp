@@ -29,7 +29,7 @@ bool setSystemProperty(graal_isolatethread_t *thread, const char *key, const cha
 
 namespace {
 
-// The longest valid UTF-8 prefix of the string: the SDK would replace the invalid bytes with U+FFFD.
+// The longest valid UTF-8 prefix of a property value from the SDK.
 std::string validUtf8Prefix(std::string_view s) {
     return std::string{s.begin(), utf8::find_invalid(s.begin(), s.end())};
 }
@@ -56,9 +56,12 @@ bool System::setProperty(StringParam key, StringParam value) {
     }
 
     auto result = runIsolatedOrElse(
-        [key = validUtf8Prefix(keyView), value = validUtf8Prefix(valueView)](auto threadHandle) {
-            return isolated::setSystemProperty(static_cast<graal_isolatethread_t *>(threadHandle),
-                                               isolated::SdkString{key}.c_str(), isolated::SdkString{value}.c_str());
+        [keyView, valueView](auto threadHandle) {
+            return isolated::setSystemProperty(
+                static_cast<graal_isolatethread_t *>(threadHandle),
+                isolated::SdkString{keyView, "System::setProperty(key)"}.c_str(),
+                isolated::SdkString{valueView, StringLabel::ofPropertyValue("System::setProperty(value)", keyView)}
+                    .c_str());
         },
         false);
 
@@ -82,14 +85,14 @@ std::string System::getProperty(StringParam key) {
     }
 
     auto result = runIsolatedOrElse(
-        [key = validUtf8Prefix(keyView)](auto threadHandle) {
+        [keyView](auto threadHandle) {
             auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
             std::string resultString{};
             const char *property = nullptr;
 
             // A failure is an empty result, as a property that is not set (NULL).
-            if (dxfg_v4_system_get_property(thread, isolated::SdkString{key}.c_str(), &property) !=
-                DXFG_EXECUTE_SUCCESSFULLY) {
+            if (dxfg_v4_system_get_property(thread, isolated::SdkString{keyView, "System::getProperty(key)"}.c_str(),
+                                            &property) != DXFG_EXECUTE_SUCCESSFULLY) {
                 isolated::clearThreadException(thread);
             } else if (property != nullptr) {
                 resultString = validUtf8Prefix(property);

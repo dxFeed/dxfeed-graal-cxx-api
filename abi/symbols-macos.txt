@@ -2123,7 +2123,6 @@ dxfcpp::v8::SpreadOrder::withTimeNanos(long long)
 dxfcpp::v8::SpreadOrder::withTradeId(long long)
 dxfcpp::v8::SpreadOrder::withTradePrice(double)
 dxfcpp::v8::SpreadOrder::withTradeSize(double)
-dxfcpp::v8::String::EMPTY
 dxfcpp::v8::String::NUL
 dxfcpp::v8::StringHash::operator()(char const*) const
 dxfcpp::v8::StringHash::operator()(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&) const

@@ -49,7 +49,8 @@ JavaObjectHandle<CFI> EMPTY() {
 
 /// dxfg_v4_CFI_valueOf
 JavaObjectHandle<CFI> valueOf(std::string_view code) {
-    return JavaObjectHandle<CFI>{runGraalV4FunctionWithResult(dxfg_v4_CFI_valueOf, SdkString{code}.c_str())};
+    return JavaObjectHandle<CFI>{
+        runGraalV4FunctionWithResult(dxfg_v4_CFI_valueOf, SdkString{code, "CFI::valueOf(code)"}.c_str())};
 }
 
 /// dxfg_v4_CFI_valueOfIntCode
