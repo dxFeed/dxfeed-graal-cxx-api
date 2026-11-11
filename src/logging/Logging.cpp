@@ -40,9 +40,9 @@ SimpleHandler<void(Logging::Level, std::int64_t /*timestamp*/, const std::string
 struct Logging::Impl {
     static JavaObjectHandle<ListenerTag> listenerHandle;
 
-    static void onLog(graal_isolatethread_t * /*thread*/, dxfg_logging_level_t level, int64_t timestamp,
+    static void onLog(graal_isolatethread_t * /*thread*/, dxfg_v4_logging_level_t level, int64_t timestamp,
                       const char *threadName, int64_t threadId, const char *loggerName, const char *message,
-                      dxfg_exception_t * /*exception*/, const char * /*formattedMessage*/, void * /*userData*/) {
+                      dxfg_v4_exception_t * /*exception*/, const char * /*formattedMessage*/, void * /*userData*/) {
         runCallback("Logging", [&] {
             const auto orEmpty = [](const char *s) {
                 return s == nullptr ? std::string{} : std::string{s};

@@ -15,197 +15,212 @@ namespace isolated::schedule {
 
 namespace IsolatedSchedule {
 
-/* dxfg_schedule_t* */ JavaObjectHandle<Schedule>
-getInstance(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile) {
+/// dxfg_v4_Schedule_getInstanceByProfileHandle
+/* dxfg_v4_schedule_t* */ JavaObjectHandle<Schedule>
+getInstance(/* dxfg_v4_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile) {
     if (!instrumentProfile) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getInstance`. The `instrumentProfile` handle is invalid");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_Schedule_getInstanceByProfileHandle`. The "
+                                       "`instrumentProfile` handle is invalid");
     }
 
-    return JavaObjectHandle<Schedule>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getInstance, static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()))};
+    return JavaObjectHandle<Schedule>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getInstanceByProfileHandle,
+        static_cast<dxfg_v4_instrument_profile_t *>(instrumentProfile.get()))};
 }
 
-/* dxfg_schedule_t* */ JavaObjectHandle<Schedule> getInstance(std::string_view scheduleDefinition) {
-    return JavaObjectHandle<Schedule>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_Schedule_getInstance2, SdkString{scheduleDefinition}.c_str())};
+/// dxfg_v4_Schedule_getInstanceByDefinition
+/* dxfg_v4_schedule_t* */ JavaObjectHandle<Schedule> getInstance(std::string_view scheduleDefinition) {
+    return JavaObjectHandle<Schedule>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getInstanceByDefinition, SdkString{scheduleDefinition}.c_str())};
 }
 
-/* dxfg_schedule_t* */ JavaObjectHandle<Schedule>
-getInstance(/* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
+/// dxfg_v4_Schedule_getInstanceByProfileHandleWithVenue
+/* dxfg_v4_schedule_t* */ JavaObjectHandle<Schedule>
+getInstance(/* dxfg_v4_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile,
             std::string_view venue) {
     if (!instrumentProfile) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getInstance3`. The `instrumentProfile` handle is invalid");
+        throw InvalidArgumentException("Unable to execute function "
+                                       "`dxfg_v4_Schedule_getInstanceByProfileHandleWithVenue`. The "
+                                       "`instrumentProfile` handle is invalid");
     }
 
-    return JavaObjectHandle<Schedule>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getInstance3, static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get()),
-        SdkString{venue}.c_str())};
+    return JavaObjectHandle<Schedule>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getInstanceByProfileHandleWithVenue,
+        static_cast<dxfg_v4_instrument_profile_t *>(instrumentProfile.get()), SdkString{venue}.c_str())};
 }
 
+/// dxfg_v4_Schedule_getTradingVenuesByProfileHandle
 std::vector<std::string> getTradingVenues(
-    /* dxfg_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile) {
+    /* dxfg_v4_instrument_profile_t* */ const JavaObjectHandle<InstrumentProfile> &instrumentProfile) {
     if (!instrumentProfile) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getTradingVenues`. The `instrumentProfile` handle is invalid");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_Schedule_getTradingVenuesByProfileHandle`. "
+                                       "The `instrumentProfile` handle is invalid");
     }
 
-    auto venues = internal::IsolatedStringList::toUnique(runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getTradingVenues, static_cast<dxfg_instrument_profile_t *>(instrumentProfile.get())));
+    auto venues = internal::IsolatedStringList::toUnique(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getTradingVenuesByProfileHandle,
+        static_cast<dxfg_v4_instrument_profile_t *>(instrumentProfile.get())));
 
     std::vector<std::string> result{};
 
-    for (auto i = 0; i < static_cast<dxfg_string_list *>(venues.get())->size; i++) {
-        result.push_back(dxfcpp::toString(static_cast<dxfg_string_list *>(venues.get())->elements[i]));
+    for (auto i = 0; i < static_cast<dxfg_v4_string_list *>(venues.get())->size; i++) {
+        result.push_back(dxfcpp::toString(static_cast<dxfg_v4_string_list *>(venues.get())->elements[i]));
     }
 
     return result;
 }
 
+/// dxfg_v4_Schedule_downloadDefaults
 void downloadDefaults(std::string_view downloadConfig) {
-    runGraalFunctionAndThrowIfMinusOne(dxfg_Schedule_downloadDefaults, SdkString{downloadConfig}.c_str());
+    runGraalV4Function(dxfg_v4_Schedule_downloadDefaults, SdkString{downloadConfig}.c_str());
 }
 
+/// dxfg_v4_Schedule_setDefaults
 void setDefaults(const std::vector<char> &data) {
-    runGraalFunctionAndThrowIfMinusOne(dxfg_Schedule_setDefaults, data.data(), fitToType<std::int32_t>(data.size()));
+    runGraalV4Function(dxfg_v4_Schedule_setDefaults, data.data(), fitToType<std::int32_t>(data.size()));
 }
 
-/* dxfg_session_t* */ JavaObjectHandle<Session>
-getSessionByTime(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int64_t time) {
+/// dxfg_v4_Schedule_getSessionByTime
+/* dxfg_v4_session_t* */ JavaObjectHandle<Session>
+getSessionByTime(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int64_t time) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getSessionByTime`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getSessionByTime`. The `schedule` handle is invalid");
     }
 
-    return JavaObjectHandle<Session>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getSessionByTime, static_cast<dxfg_schedule_t *>(schedule.get()), time)};
+    return JavaObjectHandle<Session>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getSessionByTime, static_cast<dxfg_v4_schedule_t *>(schedule.get()), time)};
 }
 
-/* dxfg_day_t* */ JavaObjectHandle<Day>
-getDayByTime(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int64_t time) {
+/// dxfg_v4_Schedule_getDayByTime
+/* dxfg_v4_day_t* */ JavaObjectHandle<Day>
+getDayByTime(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int64_t time) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getDayByTime`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getDayByTime`. The `schedule` handle is invalid");
     }
 
-    return JavaObjectHandle<Day>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getDayByTime, static_cast<dxfg_schedule_t *>(schedule.get()), time)};
+    return JavaObjectHandle<Day>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getDayByTime, static_cast<dxfg_v4_schedule_t *>(schedule.get()), time)};
 }
 
-/* dxfg_day_t* */ JavaObjectHandle<Day>
-getDayById(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int32_t dayId) {
+/// dxfg_v4_Schedule_getDayById
+/* dxfg_v4_day_t* */ JavaObjectHandle<Day>
+getDayById(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int32_t dayId) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getDayById`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getDayById`. The `schedule` handle is invalid");
     }
 
-    return JavaObjectHandle<Day>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getDayById, static_cast<dxfg_schedule_t *>(schedule.get()), dayId)};
+    return JavaObjectHandle<Day>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getDayById, static_cast<dxfg_v4_schedule_t *>(schedule.get()), dayId)};
 }
 
-/* dxfg_day_t* */ JavaObjectHandle<Day>
-getDayByYearMonthDay(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule,
+/// dxfg_v4_Schedule_getDayByYearMonthDay
+/* dxfg_v4_day_t* */ JavaObjectHandle<Day>
+getDayByYearMonthDay(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule,
                      std::int32_t yearMonthDay) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getDayByYearMonthDay`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getDayByYearMonthDay`. The `schedule` handle is invalid");
     }
 
-    return JavaObjectHandle<Day>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getDayByYearMonthDay, static_cast<dxfg_schedule_t *>(schedule.get()), yearMonthDay)};
+    return JavaObjectHandle<Day>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getDayByYearMonthDay, static_cast<dxfg_v4_schedule_t *>(schedule.get()), yearMonthDay)};
 }
 
-/* dxfg_session_t* */ JavaObjectHandle<Session>
-getNearestSessionByTime(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int64_t time,
-                        /* dxfg_session_filter_t* */ const JavaObjectHandle<SessionFilter> &filter) {
+/// dxfg_v4_Schedule_getNearestSessionByTime
+/* dxfg_v4_session_t* */ JavaObjectHandle<Session>
+getNearestSessionByTime(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int64_t time,
+                        /* dxfg_v4_session_filter_t* */ const JavaObjectHandle<SessionFilter> &filter) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getNearestSessionByTime`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getNearestSessionByTime`. The `schedule` handle is invalid");
     }
 
     if (!filter) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getNearestSessionByTime`. The `filter` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getNearestSessionByTime`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<Session>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getNearestSessionByTime, static_cast<dxfg_schedule_t *>(schedule.get()), time,
-        static_cast<dxfg_session_filter_t *>(filter.get()))};
+    return JavaObjectHandle<Session>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getNearestSessionByTime, static_cast<dxfg_v4_schedule_t *>(schedule.get()), time,
+        static_cast<dxfg_v4_session_filter_t *>(filter.get()))};
 }
 
-/* dxfg_session_t* */ JavaObjectHandle<Session>
-findNearestSessionByTime(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int64_t time,
-                         /* dxfg_session_filter_t* */ const JavaObjectHandle<SessionFilter> &filter) {
+/// dxfg_v4_Schedule_findNearestSessionByTime
+/* dxfg_v4_session_t* */ JavaObjectHandle<Session>
+findNearestSessionByTime(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule, std::int64_t time,
+                         /* dxfg_v4_session_filter_t* */ const JavaObjectHandle<SessionFilter> &filter) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_findNearestSessionByTime`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_findNearestSessionByTime`. The `schedule` handle is invalid");
     }
 
     if (!filter) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_findNearestSessionByTime`. The `filter` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_findNearestSessionByTime`. The `filter` handle is invalid");
     }
 
-    return JavaObjectHandle<Session>{runGraalFunctionNullableOrThrow(
-        dxfg_Schedule_findNearestSessionByTime, static_cast<dxfg_schedule_t *>(schedule.get()), time,
-        static_cast<dxfg_session_filter_t *>(filter.get()))};
+    return JavaObjectHandle<Session>{runGraalV4FunctionWithResult(
+        dxfg_v4_Schedule_findNearestSessionByTime, static_cast<dxfg_v4_schedule_t *>(schedule.get()), time,
+        static_cast<dxfg_v4_session_filter_t *>(filter.get()))};
 }
 
-std::string getName(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule) {
+/// dxfg_v4_Schedule_getName
+std::string getName(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getName`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getName`. The `schedule` handle is invalid");
     }
 
-    const auto string = internal::IsolatedString::toUnique(
-        runGraalFunctionAndThrowIfNullptr(dxfg_Schedule_getName, static_cast<dxfg_schedule_t *>(schedule.get())));
+    const auto string = internal::IsolatedString::toUnique(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getName, static_cast<dxfg_v4_schedule_t *>(schedule.get())));
 
     auto result = dxfcpp::toString(string.get());
 
     return result;
 }
 
-std::string getTimeZoneDisplayName(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule) {
+/// dxfg_v4_Schedule_getTimeZone
+std::string getTimeZoneDisplayName(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getTimeZone`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getTimeZone`. The `schedule` handle is invalid");
     }
 
-    const auto string = internal::IsolatedString::toUnique(
-        runGraalFunctionAndThrowIfNullptr(dxfg_Schedule_getTimeZone, static_cast<dxfg_schedule_t *>(schedule.get())));
+    const auto string = internal::IsolatedString::toUnique(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getTimeZone, static_cast<dxfg_v4_schedule_t *>(schedule.get())));
 
     auto result = dxfcpp::toString(string.get());
 
     return result;
 }
 
-std::string getTimeZoneId(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule) {
+/// dxfg_v4_Schedule_getTimeZone_getID
+std::string getTimeZoneId(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getTimeZone_getID`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getTimeZone_getID`. The `schedule` handle is invalid");
     }
 
-    const auto string = internal::IsolatedString::toUnique(runGraalFunctionAndThrowIfNullptr(
-        dxfg_Schedule_getTimeZone_getID, static_cast<dxfg_schedule_t *>(schedule.get())));
+    const auto string = internal::IsolatedString::toUnique(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Schedule_getTimeZone_getID, static_cast<dxfg_v4_schedule_t *>(schedule.get())));
 
     auto result = dxfcpp::toString(string.get());
 
     return result;
 }
 
-std::string getDefinition(/* dxfg_schedule_t* */ const JavaObjectHandle<Schedule> &schedule) {
+/// dxfg_v4_Schedule_getDefinition
+std::string getDefinition(/* dxfg_v4_schedule_t* */ const JavaObjectHandle<Schedule> &schedule) {
     if (!schedule) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Schedule_getDefinition`. The `schedule` handle is invalid");
+            "Unable to execute function `dxfg_v4_Schedule_getDefinition`. The `schedule` handle is invalid");
     }
 
-    char *definition{};
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Schedule_getDefinition, static_cast<dxfg_schedule_t *>(schedule.get()),
-                                           &definition);
-
-    const auto string = internal::IsolatedString::toUnique(definition);
+    const auto string = internal::IsolatedString::toUnique(runGraalV4FunctionWithResult(
+        dxfg_v4_Schedule_getDefinition, static_cast<dxfg_v4_schedule_t *>(schedule.get())));
 
     return dxfcpp::toString(string.get());
 }

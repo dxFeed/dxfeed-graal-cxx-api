@@ -247,3 +247,63 @@ TEST_CASE("The find functions give nullptr when nothing is found") {
     CHECK(session->findNextSession(SessionFilter::TRADING) == nullptr);
     CHECK(schedule->findNearestSessionByTime(now(), SessionFilter::TRADING) == nullptr);
 }
+// Day 0 of the UTC schedule is 1970-01-01 (Thursday); the whole day is one trading session (definition of the Java
+// `Schedule.UTC`).
+TEST_CASE("Day getters, navigation and equality on the UTC schedule") {
+    const auto &utc = Schedule::UTC();
+    const auto day = utc->getDayById(0);
+
+    CHECK(day->getDayId() == 0);
+    CHECK(day->getYearMonthDay() == 19700101);
+    CHECK(day->getYear() == 1970);
+    CHECK(day->getMonthOfYear() == 1);
+    CHECK(day->getDayOfMonth() == 1);
+    CHECK(day->getDayOfWeek() == 4);
+    CHECK(day->getStartTime() == 0);
+    CHECK(day->getEndTime() == time_util::DAY);
+    CHECK(day->containsTime(0));
+    CHECK_FALSE(day->containsTime(time_util::DAY));
+    CHECK_FALSE(day->isHoliday());
+    CHECK(day->isTrading());
+
+    CHECK(day->getNextDay(DayFilter::ANY)->getDayId() == 1);
+    CHECK(day->getPrevDay(DayFilter::ANY)->getDayId() == -1);
+    CHECK(day->findNextDay(DayFilter::ANY)->getDayId() == 1);
+    CHECK(utc->getDayByYearMonthDay(19700101)->getDayId() == 0);
+
+    const auto sameDay = utc->getDayByTime(0);
+
+    CHECK(*day == *sameDay);
+    CHECK(day->hashCode() == sameDay->hashCode());
+    CHECK_FALSE(*day == *day->getNextDay(DayFilter::ANY));
+    CHECK(day->getSchedule()->getName() == "UTC");
+    CHECK_FALSE(day->toString().empty());
+
+    const auto sessions = day->getSessions();
+
+    REQUIRE(sessions.size() == 1);
+    CHECK(sessions[0]->getStartTime() == 0);
+    CHECK(sessions[0]->getEndTime() == time_util::DAY);
+    CHECK(sessions[0]->containsTime(0));
+    CHECK(*sessions[0]->getDay() == *day);
+    CHECK(*utc->getSessionByTime(0) == *sessions[0]);
+    CHECK(*utc->getNearestSessionByTime(0, SessionFilter::ANY) == *sessions[0]);
+}
+
+TEST_CASE("Schedule::getInstance() with a broken definition throws") {
+    CHECK_THROWS_AS(Schedule::getInstance("(tz=NoSuchZone"), JavaException);
+
+    // The failure leaves no pending exception behind: the next call succeeds.
+    CHECK(Schedule::getInstance("UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)")->getName() == "UTC");
+}
+
+TEST_CASE("Schedule of an instrument profile and its trading venues") {
+    const auto profile = InstrumentProfile::create();
+
+    profile->setTradingHours("UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)");
+
+    CHECK(Schedule::getTradingVenues(profile) == std::vector<std::string>{"UTC"});
+    CHECK(Schedule::getInstance(profile)->getName() == "UTC");
+    CHECK(Schedule::getInstance(profile, "UTC")->getName() == "UTC");
+    CHECK_THROWS_AS(Schedule::getInstance(profile, "XNYS"), JavaException);
+}

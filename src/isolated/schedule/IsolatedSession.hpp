@@ -15,57 +15,57 @@ namespace isolated::schedule {
 
 namespace IsolatedSessionFilter {
 
-/* dxfg_session_filter_t* */ JavaObjectHandle<dxfcpp::SessionFilter> getInstance(std::uint32_t code);
+/* dxfg_v4_session_filter_t* */ JavaObjectHandle<dxfcpp::SessionFilter> getInstance(std::uint32_t code);
 
 }
 
 namespace IsolatedSession {
 
-/* dxfg_day_t* */ JavaObjectHandle<dxfcpp::Day>
-getDay(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+/* dxfg_v4_day_t* */ JavaObjectHandle<dxfcpp::Day>
+getDay(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
-std::int32_t getType(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+std::int32_t getType(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
-bool isTrading(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+bool isTrading(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
-bool isEmpty(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+bool isEmpty(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
-std::int64_t getStartTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+std::int64_t getStartTime(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
-std::int64_t getEndTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+std::int64_t getEndTime(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
-bool containsTime(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session, std::int64_t time);
+bool containsTime(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session, std::int64_t time);
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
-getPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-               /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
+/* dxfg_v4_session_t* */ JavaObjectHandle<dxfcpp::Session>
+getPrevSession(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
+               /* dxfg_v4_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
-getNextSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-               /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
+/* dxfg_v4_session_t* */ JavaObjectHandle<dxfcpp::Session>
+getNextSession(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
+               /* dxfg_v4_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
-findPrevSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-                /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
+/* dxfg_v4_session_t* */ JavaObjectHandle<dxfcpp::Session>
+findPrevSession(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
+                /* dxfg_v4_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
 
-/* dxfg_session_t* */ JavaObjectHandle<dxfcpp::Session>
-findNextSession(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-                /* dxfg_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
+/* dxfg_v4_session_t* */ JavaObjectHandle<dxfcpp::Session>
+findNextSession(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
+                /* dxfg_v4_session_filter_t* */ const JavaObjectHandle<dxfcpp::SessionFilter> &filter);
 
-std::size_t hashCode(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+std::size_t hashCode(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
-bool equals(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
-            /* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &otherSession);
+bool equals(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session,
+            /* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &otherSession);
 
-std::string toString(/* dxfg_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
+std::string toString(/* dxfg_v4_session_t* */ const JavaObjectHandle<dxfcpp::Session> &session);
 
 } // namespace IsolatedSession
 
 namespace IsolatedSessionList {
 
-bool release(/* dxfg_session_list* */ void *sessionList);
+bool release(/* dxfg_v4_session_list* */ void *sessionList);
 
-std::unique_ptr<void, decltype(&IsolatedSessionList::release)> toUnique(/* dxfg_session_list* */ void *sessionList);
+std::unique_ptr<void, decltype(&IsolatedSessionList::release)> toUnique(/* dxfg_v4_session_list* */ void *sessionList);
 
 } // namespace IsolatedSessionList
 

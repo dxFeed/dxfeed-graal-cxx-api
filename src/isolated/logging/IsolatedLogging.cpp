@@ -12,42 +12,35 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::logging::IsolatedLogging {
 
-// int32_t dxfg_logging_listener_new(graal_isolatethread_t *thread, dxfg_logging_listener_function_t user_func,
-//                                   void *user_data, DXFG_OUT dxfg_logging_listener_t **listener);
+/// dxfg_v4_logging_listener_new
 JavaObjectHandle<Logging::ListenerTag> createListener(void *userFunc, void *userData) {
     if (!userFunc) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_logging_listener_new`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_logging_listener_new`. The "
                                        "`userFunc` is nullptr");
     }
 
-    dxfg_logging_listener_t *isolatedListener{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_logging_listener_new,
-                                       dxfcpp::bit_cast<dxfg_logging_listener_function_t>(userFunc), userData,
-                                       &isolatedListener);
-
-    return JavaObjectHandle<Logging::ListenerTag>(isolatedListener);
+    return JavaObjectHandle<Logging::ListenerTag>(runGraalV4FunctionWithResult(
+        dxfg_v4_logging_listener_new, dxfcpp::bit_cast<dxfg_v4_logging_listener_function_t>(userFunc), userData));
 }
 
-// int32_t dxfg_logging_set_listener(graal_isolatethread_t *thread, dxfg_logging_listener_t *listener);
+/// dxfg_v4_logging_set_listener
 void setListener(const JavaObjectHandle<Logging::ListenerTag> &listener) {
     if (!listener) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_logging_set_listener`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_logging_set_listener`. The "
                                        "`listener` handle is invalid");
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_logging_set_listener,
-                                       dxfcpp::bit_cast<dxfg_logging_listener_t *>(listener.get()));
+    runGraalV4Function(dxfg_v4_logging_set_listener, dxfcpp::bit_cast<dxfg_v4_logging_listener_t *>(listener.get()));
 }
 
-// int32_t dxfg_logging_set_log_level(graal_isolatethread_t *thread, dxfg_logging_level_t level);
+/// dxfg_v4_logging_set_log_level
 void setLogLevel(Logging::Level level) {
-    runGraalFunctionAndThrowIfMinusOne(dxfg_logging_set_log_level, static_cast<dxfg_logging_level_t>(level));
+    runGraalV4Function(dxfg_v4_logging_set_log_level, static_cast<dxfg_v4_logging_level_t>(level));
 }
 
-// int32_t dxfg_logging_set_err_level(graal_isolatethread_t *thread, dxfg_logging_level_t level);
+/// dxfg_v4_logging_set_err_level
 void setErrFileLevel(Logging::Level level) {
-    runGraalFunctionAndThrowIfMinusOne(dxfg_logging_set_err_level, static_cast<dxfg_logging_level_t>(level));
+    runGraalV4Function(dxfg_v4_logging_set_err_level, static_cast<dxfg_v4_logging_level_t>(level));
 }
 
 } // namespace isolated::logging::IsolatedLogging

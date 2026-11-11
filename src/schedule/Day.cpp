@@ -92,7 +92,7 @@ std::vector<std::shared_ptr<Session>> Day::getSessions() const {
         return {};
     }
 
-    const auto *sessionList = dxfcpp::bit_cast<dxfg_session_list *>(graalSessionList.get());
+    const auto *sessionList = dxfcpp::bit_cast<dxfg_v4_session_list *>(graalSessionList.get());
     std::vector<std::shared_ptr<Session>> result;
 
     if (sessionList->size > 0 && sessionList->elements) {

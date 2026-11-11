@@ -31,6 +31,23 @@ TEST_CASE("The on-demand service of an endpoint is one instance") {
     endpoint->close();
 }
 
+// A not connected endpoint has no on-demand provider: the service stays in the live mode.
+TEST_CASE("The on-demand service of a not connected endpoint is in the live mode") {
+    const auto endpoint = onDemandFeed();
+    const auto service = OnDemandService::getInstance(endpoint);
+
+    CHECK_FALSE(service->isReplaySupported());
+    CHECK_FALSE(service->isReplay());
+    CHECK_FALSE(service->isClear());
+    CHECK(service->getTime() == 0);
+    CHECK(service->getSpeed() == 0.0);
+
+    CHECK_NOTHROW(service->stopAndResume());
+    CHECK_FALSE(service->isReplay());
+
+    endpoint->close();
+}
+
 TEST_CASE("Closed endpoints are released with their on-demand services") {
     std::vector<std::weak_ptr<DXEndpoint>> endpoints{};
     std::vector<std::weak_ptr<OnDemandService>> services{};
