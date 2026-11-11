@@ -56,6 +56,7 @@ set(DXFC_TEST_SOURCES
         api/StringParamApiTest.cpp
         api/StringParamTest.cpp
         api/TextConfigurationTest.cpp
+        auth/AuthTokenTest.cpp
         event/ConstantsTest.cpp
         event/EdgeValuesTapeTest.cpp
         event/EventsTest.cpp
@@ -70,6 +71,7 @@ set(DXFC_TEST_SOURCES
         exceptions/JavaExceptionStateTest.cpp
         exceptions/ReleaseTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
+        glossary/CFITest.cpp
         glossary/PriceIncrementsTest.cpp
         internal/CommonTest.cpp
         internal/ConstStringTest.cpp

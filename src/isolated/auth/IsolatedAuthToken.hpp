@@ -17,46 +17,48 @@ struct AuthToken;
 
 namespace isolated::auth::IsolatedAuthToken {
 
-/// dxfg_AuthToken_valueOf
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ std::string_view string);
+/// dxfg_v4_AuthToken_valueOf
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ std::string_view string);
 
-/// dxfg_AuthToken_createBasicToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view userPassword);
+/// dxfg_v4_AuthToken_createBasicToken
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBasicToken(/* const char* */ std::string_view userPassword);
 
-/// dxfg_AuthToken_createBasicToken2
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view user,
-                                                                      /* const char* */ std::string_view password);
+/// dxfg_v4_AuthToken_createBasicTokenWithUserAndPassword
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view user,
+                                                                         /* const char* */ std::string_view password);
 
-/// dxfg_AuthToken_createBasicTokenOrNull
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken>
+/// dxfg_v4_AuthToken_createBasicTokenOrNull
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken>
 createBasicTokenOrNull(/* const char* */ std::string_view user,
                        /* const char* */ std::string_view password);
 
-/// dxfg_AuthToken_createBearerToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerToken(/* const char* */ std::string_view token);
+/// dxfg_v4_AuthToken_createBearerToken
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerToken(/* const char* */ std::string_view token);
 
-/// dxfg_AuthToken_createBearerTokenOrNull
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerTokenOrNull(/* const char* */ std::string_view token);
+/// dxfg_v4_AuthToken_createBearerTokenOrNull
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBearerTokenOrNull(/* const char* */ std::string_view token);
 
-/// dxfg_AuthToken_createCustomToken
-/* dxfg_auth_token_t* */ JavaObjectHandle<AuthToken> createCustomToken(/* const char* */ std::string_view scheme,
-                                                                       /* const char* */ std::string_view value);
+/// dxfg_v4_AuthToken_createCustomToken
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken> createCustomToken(/* const char* */ std::string_view scheme,
+                                                                          /* const char* */ std::string_view value);
 
-/// dxfg_AuthToken_getHttpAuthorization
+/// dxfg_v4_AuthToken_getHttpAuthorization
 /* const char* */ std::string
-getHttpAuthorization(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+getHttpAuthorization(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
 
-/// dxfg_AuthToken_getUser
-/* const char* */ std::string getUser(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+/// dxfg_v4_AuthToken_getUser
+/* const char* */ std::string getUser(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
 
-/// dxfg_AuthToken_getPassword
-/* const char* */ std::string getPassword(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+/// dxfg_v4_AuthToken_getPassword
+/* const char* */ std::string getPassword(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
 
-/// dxfg_AuthToken_getScheme
-/* const char* */ std::string getScheme(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+/// dxfg_v4_AuthToken_getScheme
+/* const char* */ std::string getScheme(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
 
-/// dxfg_AuthToken_getValue
-/* const char* */ std::string getValue(/* dxfg_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+/// dxfg_v4_AuthToken_getValue
+/* const char* */ std::string getValue(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
 
 } // namespace isolated::auth::IsolatedAuthToken
 

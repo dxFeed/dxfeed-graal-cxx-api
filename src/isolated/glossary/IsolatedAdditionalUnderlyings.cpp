@@ -14,127 +14,102 @@
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::glossary::IsolatedAdditionalUnderlyings {
-// dxfg_AdditionalUnderlyings_EMPTY
+/// dxfg_v4_AdditionalUnderlyings_EMPTY
 JavaObjectHandle<AdditionalUnderlyings> EMPTY() {
-    dxfg_additional_underlyings_t *isolatedAdditionalUnderlyings{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_EMPTY, &isolatedAdditionalUnderlyings);
-
-    return JavaObjectHandle<AdditionalUnderlyings>{isolatedAdditionalUnderlyings};
+    return JavaObjectHandle<AdditionalUnderlyings>{runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_EMPTY)};
 }
 
-// int32_t dxfg_AdditionalUnderlyings_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT
-// dxfg_additional_underlyings_t **additionalUnderlyings);
+/// dxfg_v4_AdditionalUnderlyings_valueOf
 JavaObjectHandle<AdditionalUnderlyings> valueOf(std::string_view value) {
-    dxfg_additional_underlyings_t *isolatedAdditionalUnderlyings{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf, SdkString{value}.c_str(),
-                                       &isolatedAdditionalUnderlyings);
-
-    return JavaObjectHandle<AdditionalUnderlyings>{isolatedAdditionalUnderlyings};
+    return JavaObjectHandle<AdditionalUnderlyings>{
+        runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_valueOf, SdkString{value}.c_str())};
 }
 
-// int32_t dxfg_AdditionalUnderlyings_valueOf2(graal_isolatethread_t *thread, const dxfg_string_to_double_map_entry_t
-// *mapEntries, int32_t size, DXFG_OUT dxfg_additional_underlyings_t **additionalUnderlyings);
+/// dxfg_v4_AdditionalUnderlyings_valueOfMap
 JavaObjectHandle<AdditionalUnderlyings> valueOf(const std::vector<std::pair<const char *, double>> &mapLikeEntries) {
     // The keys must outlive the call. SdkString can be neither copied nor moved; a deque keeps its elements in place.
     std::deque<SdkString> keys{};
-    std::vector<dxfg_string_to_double_map_entry_t> graalMapEntries{};
-    dxfg_additional_underlyings_t *isolatedAdditionalUnderlyings{};
+    std::vector<dxfg_v4_string_to_double_map_entry_t> graalMapEntries{};
 
     graalMapEntries.reserve(mapLikeEntries.size());
 
     for (const auto &[key, value] : mapLikeEntries) {
         keys.emplace_back(key);
-        graalMapEntries.push_back(dxfg_string_to_double_map_entry_t{keys.back().c_str(), value});
+        graalMapEntries.push_back(dxfg_v4_string_to_double_map_entry_t{keys.back().c_str(), value});
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_valueOf2, graalMapEntries.data(),
-                                       fitToType<std::int32_t>(graalMapEntries.size()), &isolatedAdditionalUnderlyings);
+    // The list stays with the caller: the SDK only reads it.
+    const dxfg_v4_string_to_double_map_entry_list list{fitToType<std::int32_t>(graalMapEntries.size()),
+                                                       graalMapEntries.data()};
 
-    return JavaObjectHandle<AdditionalUnderlyings>{isolatedAdditionalUnderlyings};
+    return JavaObjectHandle<AdditionalUnderlyings>{
+        runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_valueOfMap, &list)};
 }
 
-// int32_t dxfg_AdditionalUnderlyings_getSPC(graal_isolatethread_t *thread, const char *text, const char *symbol,
-// DXFG_OUT double *spc);
+/// dxfg_v4_AdditionalUnderlyings_getSPCFromText
 double getSPC(std::string_view text, std::string_view symbol) {
-    double spc{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getSPC, SdkString{text}.c_str(),
-                                       SdkString{symbol}.c_str(), &spc);
-
-    return spc;
+    return runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_getSPCFromText, SdkString{text}.c_str(),
+                                        SdkString{symbol}.c_str());
 }
 
-// int32_t dxfg_AdditionalUnderlyings_getText(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
-// *additionalUnderlyings, DXFG_OUT char **text);
+/// dxfg_v4_AdditionalUnderlyings_getText
 std::string getText(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings) {
     if (!additionalUnderlyings) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getText`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_AdditionalUnderlyings_getText`. The "
                                        "`additionalUnderlyings` handle is invalid");
     }
 
-    char *text{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_AdditionalUnderlyings_getText,
-                                       static_cast<dxfg_additional_underlyings_t *>(additionalUnderlyings.get()),
-                                       &text);
-
-    auto uText = internal::IsolatedString::toUnique(text);
+    auto uText = internal::IsolatedString::toUnique(runGraalV4FunctionWithResult(
+        dxfg_v4_AdditionalUnderlyings_getText,
+        static_cast<dxfg_v4_additional_underlyings_t *>(additionalUnderlyings.get())));
     auto result = dxfcpp::toString(uText.get());
 
     return result;
 }
 
-// int32_t dxfg_AdditionalUnderlyings_getMap(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
-// *additionalUnderlyings, DXFG_OUT dxfg_string_to_double_map_entry_t **mapEntries, DXFG_OUT int32_t *size);
+/// dxfg_v4_AdditionalUnderlyings_getMap
 std::unordered_map<std::string, double> getMap(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings) {
     if (!additionalUnderlyings) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getMap`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_AdditionalUnderlyings_getMap`. The "
                                        "`additionalUnderlyings` handle is invalid");
     }
 
     std::unordered_map<std::string, double> result{};
 
-    dxfg_string_to_double_map_entry_t *mapEntries{};
-    std::int32_t size{};
+    auto *map = runGraalV4FunctionWithResult(
+        dxfg_v4_AdditionalUnderlyings_getMap,
+        static_cast<dxfg_v4_additional_underlyings_t *>(additionalUnderlyings.get()));
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_AdditionalUnderlyings_getMap,
-                                           static_cast<dxfg_additional_underlyings_t *>(additionalUnderlyings.get()),
-                                           &mapEntries, &size);
-
-    if (mapEntries == nullptr) {
+    if (map == nullptr) {
         return result;
     }
 
-    if (size > 0) {
-        result.reserve(static_cast<std::size_t>(size));
+    // Frees the keys of the entries, the array of the entries and the list itself.
+    DXFCPP_FINALLY([&] {
+        runGraalV4Function(dxfg_v4_string_to_double_map_entry_list_release, map);
+    });
+
+    if (map->size > 0) {
+        result.reserve(static_cast<std::size_t>(map->size));
     }
 
-    for (std::int32_t i = 0; i < size; i++) {
-        result[dxfcpp::toString(mapEntries[i].key)] = mapEntries[i].value;
+    for (std::int32_t i = 0; i < map->size; i++) {
+        result[dxfcpp::toString(map->elements[i].key)] = map->elements[i].value;
     }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_free_string_to_double_map_entries, mapEntries, size);
 
     return result;
 }
 
-// int32_t dxfg_AdditionalUnderlyings_getSPC2(graal_isolatethread_t *thread, dxfg_additional_underlyings_t
-// *additionalUnderlyings, const char *symbol, DXFG_OUT double *spc);
+/// dxfg_v4_AdditionalUnderlyings_getSPC
 double getSPC(const JavaObjectHandle<AdditionalUnderlyings> &additionalUnderlyings, std::string_view symbol) {
     if (!additionalUnderlyings) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_AdditionalUnderlyings_getSPC2`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_AdditionalUnderlyings_getSPC`. The "
                                        "`additionalUnderlyings` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_AdditionalUnderlyings_getSPC2,
-                                           static_cast<dxfg_additional_underlyings_t *>(additionalUnderlyings.get()),
-                                           SdkString{symbol}.c_str(), &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_AdditionalUnderlyings_getSPC,
+                                        static_cast<dxfg_v4_additional_underlyings_t *>(additionalUnderlyings.get()),
+                                        SdkString{symbol}.c_str());
 }
 
 } // namespace isolated::glossary::IsolatedAdditionalUnderlyings

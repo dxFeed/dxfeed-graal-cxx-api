@@ -13,268 +13,198 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::glossary::IsolatedPriceIncrements {
 
-// int32_t dxfg_PriceIncrements_EMPTY(graal_isolatethread_t *thread, DXFG_OUT dxfg_price_increments_t
-// **emptyPriceIncrements);
+/// dxfg_v4_PriceIncrements_EMPTY
 JavaObjectHandle<PriceIncrements> EMPTY() {
-    dxfg_price_increments_t *isolatedPriceIncrements{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_EMPTY, &isolatedPriceIncrements);
-
-    return JavaObjectHandle<PriceIncrements>{isolatedPriceIncrements};
+    return JavaObjectHandle<PriceIncrements>{runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_EMPTY)};
 }
 
-// int32_t dxfg_PriceIncrements_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT
-// dxfg_price_increments_t **priceIncrements);
+/// dxfg_v4_PriceIncrements_valueOf
 JavaObjectHandle<PriceIncrements> valueOf(std::string_view text) {
-    dxfg_price_increments_t *isolatedPriceIncrements{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_valueOf, SdkString{text}.c_str(), &isolatedPriceIncrements);
-
-    return JavaObjectHandle<PriceIncrements>{isolatedPriceIncrements};
+    return JavaObjectHandle<PriceIncrements>{
+        runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_valueOf, SdkString{text}.c_str())};
 }
 
-// int32_t dxfg_PriceIncrements_valueOf2(graal_isolatethread_t *thread, double increment, DXFG_OUT
-// dxfg_price_increments_t **priceIncrements);
+/// dxfg_v4_PriceIncrements_valueOfIncrement
 JavaObjectHandle<PriceIncrements> valueOf(double increment) {
-    dxfg_price_increments_t *isolatedPriceIncrements{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_valueOf2, increment, &isolatedPriceIncrements);
-
-    return JavaObjectHandle<PriceIncrements>{isolatedPriceIncrements};
+    return JavaObjectHandle<PriceIncrements>{
+        runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_valueOfIncrement, increment)};
 }
 
-// int32_t dxfg_PriceIncrements_valueOf3(graal_isolatethread_t *thread, const double *increments, int32_t size, DXFG_OUT
-// dxfg_price_increments_t **priceIncrements);
+/// dxfg_v4_PriceIncrements_valueOfIncrements
 JavaObjectHandle<PriceIncrements> valueOf(const std::vector<double> &increments) {
-    dxfg_price_increments_t *isolatedPriceIncrements{};
+    // The list stays with the caller: the SDK only reads it.
+    const dxfg_v4_double_list list{fitToType<std::int32_t>(increments.size()), const_cast<double *>(increments.data())};
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_valueOf3, increments.data(),
-                                       fitToType<std::int32_t>(increments.size()), &isolatedPriceIncrements);
-
-    return JavaObjectHandle<PriceIncrements>{isolatedPriceIncrements};
+    return JavaObjectHandle<PriceIncrements>{
+        runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_valueOfIncrements, &list)};
 }
 
-// int32_t dxfg_PriceIncrements_getText(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements,
-// DXFG_OUT char **text);
+/// dxfg_v4_PriceIncrements_getText
 std::string getText(const JavaObjectHandle<PriceIncrements> &priceIncrements) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_getText`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_PriceIncrements_getText`. The "
                                        "`priceIncrements` handle is invalid");
     }
 
-    char *text{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_getText,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), &text);
-
-    auto uText = internal::IsolatedString::toUnique(text);
+    auto uText = internal::IsolatedString::toUnique(runGraalV4FunctionWithResult(
+        dxfg_v4_PriceIncrements_getText, static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get())));
     auto result = dxfcpp::toString(uText.get());
 
     return result;
 }
 
-// int32_t dxfg_PriceIncrements_getPriceIncrements(graal_isolatethread_t *thread, dxfg_price_increments_t
-// *priceIncrements, DXFG_OUT double **increments, DXFG_OUT int32_t *size);
+/// dxfg_v4_PriceIncrements_getPriceIncrements
 std::vector<double> getPriceIncrements(const JavaObjectHandle<PriceIncrements> &priceIncrements) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_getPriceIncrements`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_PriceIncrements_getPriceIncrements`. The "
                                        "`priceIncrements` handle is invalid");
     }
 
-    double *increments{};
-    std::int32_t size{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_getPriceIncrements,
-                                   static_cast<dxfg_price_increments_t *>(priceIncrements.get()), &increments, &size);
+    auto *increments = runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_getPriceIncrements,
+                                                    static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()));
 
     if (increments == nullptr) {
         return {};
     }
 
+    // Frees the array of the values and the list itself.
     DXFCPP_FINALLY([&] {
-        runGraalFunctionAndThrowIfMinusOne(dxfg_free, increments);
+        runGraalV4Function(dxfg_v4_double_list_release, increments);
     });
 
     std::vector<double> result{};
 
-    if (size > 0) {
-        result.reserve(static_cast<std::size_t>(size));
+    if (increments->size > 0) {
+        result.reserve(static_cast<std::size_t>(increments->size));
     }
 
-    for (auto i = 0; i < size; i++) {
-        result.emplace_back(increments[i]);
+    for (std::int32_t i = 0; i < increments->size; i++) {
+        result.emplace_back(increments->elements[i]);
     }
 
     return result;
 }
 
-// int32_t dxfg_PriceIncrements_getPriceIncrement(graal_isolatethread_t *thread, dxfg_price_increments_t
-// *priceIncrements, DXFG_OUT double *priceIncrement);
+/// dxfg_v4_PriceIncrements_getPriceIncrement
 double getPriceIncrement(const JavaObjectHandle<PriceIncrements> &priceIncrements) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_getPriceIncrement`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_PriceIncrements_getPriceIncrement`. The "
                                        "`priceIncrements` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_getPriceIncrement,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()),
-                                       &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_getPriceIncrement,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()));
 }
 
-// int32_t dxfg_PriceIncrements_getPriceIncrement2(graal_isolatethread_t *thread, dxfg_price_increments_t
-// *priceIncrements, double price, DXFG_OUT double *priceIncrement);
+/// dxfg_v4_PriceIncrements_getPriceIncrementForPrice
 double getPriceIncrement(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_getPriceIncrement2`. The "
-                                       "`priceIncrements` handle is invalid");
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_v4_PriceIncrements_getPriceIncrementForPrice`. The "
+            "`priceIncrements` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_getPriceIncrement2,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), price,
-                                       &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_getPriceIncrementForPrice,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()), price);
 }
 
-// int32_t dxfg_PriceIncrements_getPriceIncrement3(graal_isolatethread_t *thread, dxfg_price_increments_t
-// *priceIncrements, double price, int32_t direction, DXFG_OUT double *priceIncrement);
+/// dxfg_v4_PriceIncrements_getPriceIncrementForPriceAndDirection
 double getPriceIncrement(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price,
                          std::int32_t direction) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_getPriceIncrement3`. The "
-                                       "`priceIncrements` handle is invalid");
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_v4_PriceIncrements_getPriceIncrementForPriceAndDirection`. The "
+            "`priceIncrements` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_getPriceIncrement3,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), price, direction,
-                                       &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_getPriceIncrementForPriceAndDirection,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()), price,
+                                        direction);
 }
 
-// int32_t dxfg_PriceIncrements_getPricePrecision(graal_isolatethread_t *thread, dxfg_price_increments_t
-// *priceIncrements, DXFG_OUT int32_t *pricePrecision);
+/// dxfg_v4_PriceIncrements_getPricePrecision
 std::int32_t getPricePrecision(const JavaObjectHandle<PriceIncrements> &priceIncrements) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_getPricePrecision`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_PriceIncrements_getPricePrecision`. The "
                                        "`priceIncrements` handle is invalid");
     }
 
-    std::int32_t result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_getPricePrecision,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_getPricePrecision,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()));
 }
 
-// int32_t dxfg_PriceIncrements_getPricePrecision2(graal_isolatethread_t *thread, dxfg_price_increments_t
-// *priceIncrements, double price, DXFG_OUT int32_t *pricePrecision);
+/// dxfg_v4_PriceIncrements_getPricePrecisionForPrice
 std::int32_t getPricePrecision(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_getPricePrecision2`. The "
-                                       "`priceIncrements` handle is invalid");
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_v4_PriceIncrements_getPricePrecisionForPrice`. The "
+            "`priceIncrements` handle is invalid");
     }
 
-    std::int32_t result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_getPricePrecision2,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), price, &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_getPricePrecisionForPrice,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()), price);
 }
 
-// int32_t dxfg_PriceIncrements_roundPrice(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements,
-// double price, DXFG_OUT double *roundedPrice);
+/// dxfg_v4_PriceIncrements_roundPrice
 double roundPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_roundPrice`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_PriceIncrements_roundPrice`. The "
                                        "`priceIncrements` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_roundPrice,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), price, &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_roundPrice,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()), price);
 }
 
-// int32_t dxfg_PriceIncrements_roundPrice2(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements,
-// double price, int32_t direction, DXFG_OUT double *roundedPrice);
+/// dxfg_v4_PriceIncrements_roundPriceWithDirection
 double roundPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, std::int32_t direction) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_roundPrice2`. The "
-                                       "`priceIncrements` handle is invalid");
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_v4_PriceIncrements_roundPriceWithDirection`. The "
+            "`priceIncrements` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_roundPrice2,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), price, direction,
-                                       &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_roundPriceWithDirection,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()), price,
+                                        direction);
 }
 
-// int32_t dxfg_PriceIncrements_roundPrice3(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements,
-// double price, dxfg_rounding_mode_t roundingMode, DXFG_OUT double *roundedPrice);
+/// dxfg_v4_PriceIncrements_roundPriceWithRoundingMode
 double roundPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, RoundingMode roundingMode) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_roundPrice3`. The "
-                                       "`priceIncrements` handle is invalid");
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_v4_PriceIncrements_roundPriceWithRoundingMode`. The "
+            "`priceIncrements` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_roundPrice3,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), price,
-                                       static_cast<dxfg_rounding_mode_t>(roundingMode), &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_roundPriceWithRoundingMode,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()), price,
+                                        static_cast<dxfg_v4_rounding_mode_t>(roundingMode));
 }
 
-// int32_t dxfg_PriceIncrements_incrementPrice(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements,
-// double price, int32_t direction, DXFG_OUT double *incrementedPrice);
+/// dxfg_v4_PriceIncrements_incrementPrice
 double incrementPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, std::int32_t direction) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_incrementPrice`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_PriceIncrements_incrementPrice`. The "
                                        "`priceIncrements` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_incrementPrice,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), price, direction,
-                                       &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_incrementPrice,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()), price,
+                                        direction);
 }
 
-// int32_t dxfg_PriceIncrements_incrementPrice2(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements,
-// double price, int32_t direction, double step, DXFG_OUT double *incrementedPrice);
+/// dxfg_v4_PriceIncrements_incrementPriceWithStep
 double incrementPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, std::int32_t direction,
                       double step) {
     if (!priceIncrements) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_PriceIncrements_incrementPrice2`. The "
-                                       "`priceIncrements` handle is invalid");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_PriceIncrements_incrementPriceWithStep`. "
+                                       "The `priceIncrements` handle is invalid");
     }
 
-    double result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_PriceIncrements_incrementPrice2,
-                                       static_cast<dxfg_price_increments_t *>(priceIncrements.get()), price, direction,
-                                       step, &result);
-
-    return result;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceIncrements_incrementPriceWithStep,
+                                        static_cast<dxfg_v4_price_increments_t *>(priceIncrements.get()), price,
+                                        direction, step);
 }
 
 } // namespace isolated::glossary::IsolatedPriceIncrements
