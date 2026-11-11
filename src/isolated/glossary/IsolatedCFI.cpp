@@ -13,215 +13,25 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::glossary::IsolatedCFI {
 
-// int32_t dxfg_CFI_EMPTY(graal_isolatethread_t *thread, DXFG_OUT dxfg_cfi_t **emptyCfi);
-JavaObjectHandle<CFI> EMPTY() {
-    dxfg_cfi_t *isolatedCfi{};
+namespace {
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_EMPTY, &isolatedCfi);
-
-    return JavaObjectHandle<CFI>{isolatedCfi};
-}
-
-// int32_t dxfg_CFI_valueOf(graal_isolatethread_t *thread, const char *code, DXFG_OUT dxfg_cfi_t **cfi);
-JavaObjectHandle<CFI> valueOf(std::string_view code) {
-    dxfg_cfi_t *isolatedCfi{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_valueOf, SdkString{code}.c_str(), &isolatedCfi);
-
-    return JavaObjectHandle<CFI>{isolatedCfi};
-}
-
-// int32_t dxfg_CFI_valueOf2(graal_isolatethread_t *thread, int32_t intCode, DXFG_OUT dxfg_cfi_t **cfi);
-JavaObjectHandle<CFI> valueOf(std::int32_t intCode) {
-    dxfg_cfi_t *isolatedCfi{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_valueOf2, intCode, &isolatedCfi);
-
-    return JavaObjectHandle<CFI>{isolatedCfi};
-}
-
-// int32_t dxfg_CFI_getCode(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT char **code);
-std::string getCode(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_getCode`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    char *code{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_getCode, static_cast<dxfg_cfi_t *>(cfi.get()), &code);
-
-    auto uCode = internal::IsolatedString::toUnique(code);
-    auto result = dxfcpp::toString(uCode.get());
-
-    return result;
-}
-
-// int32_t dxfg_CFI_getIntCode(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int32_t *intCode);
-std::int32_t getIntCode(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_getIntCode`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int32_t intCode{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_getIntCode, static_cast<dxfg_cfi_t *>(cfi.get()), &intCode);
-
-    return intCode;
-}
-
-// int32_t dxfg_CFI_getCategory(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int16_t *category);
-std::int16_t getCategory(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_getCategory`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int16_t category{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_getCategory, static_cast<dxfg_cfi_t *>(cfi.get()), &category);
-
-    return category;
-}
-
-// int32_t dxfg_CFI_getGroup(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int16_t *group);
-std::int16_t getGroup(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_getGroup`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int16_t group{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_getGroup, static_cast<dxfg_cfi_t *>(cfi.get()), &group);
-
-    return group;
-}
-
-// int32_t dxfg_CFI_isEquity(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int32_t *isEquity);
-bool isEquity(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_isEquity`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int32_t result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_isEquity, static_cast<dxfg_cfi_t *>(cfi.get()), &result);
-
-    return result != 0;
-}
-
-// int32_t dxfg_CFI_isDebtInstrument(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int32_t
-// *isDebtInstrument);
-bool isDebtInstrument(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_isDebtInstrument`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int32_t result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_isDebtInstrument, static_cast<dxfg_cfi_t *>(cfi.get()), &result);
-
-    return result != 0;
-}
-
-// int32_t dxfg_CFI_isEntitlement(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int32_t *isEntitlement);
-bool isEntitlement(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_isEntitlement`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int32_t result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_isEntitlement, static_cast<dxfg_cfi_t *>(cfi.get()), &result);
-
-    return result != 0;
-}
-
-// int32_t dxfg_CFI_isOption(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int32_t *isOption);
-bool isOption(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_isOption`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int32_t result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_isOption, static_cast<dxfg_cfi_t *>(cfi.get()), &result);
-
-    return result != 0;
-}
-
-// int32_t dxfg_CFI_isFuture(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int32_t *isFuture);
-bool isFuture(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_isFuture`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int32_t result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_isFuture, static_cast<dxfg_cfi_t *>(cfi.get()), &result);
-
-    return result != 0;
-}
-
-// int32_t dxfg_CFI_isOther(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT int32_t *isOther);
-bool isOther(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_isOther`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    std::int32_t result{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_isOther, static_cast<dxfg_cfi_t *>(cfi.get()), &result);
-
-    return result != 0;
-}
-
-// int32_t dxfg_CFI_decipher(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT dxfg_cfi_value_t **values,
-// DXFG_OUT int32_t *size);
-std::vector<void *> decipher(const JavaObjectHandle<CFI> &cfi) {
-    if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_decipher`. The "
-                                       "`cfi` handle is invalid");
-    }
-
-    dxfg_cfi_value_t *values{};
-    std::int32_t size{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_decipher, static_cast<dxfg_cfi_t *>(cfi.get()), &values, &size);
-
-    if (values == nullptr) {
-        return {};
-    }
-
-    DXFCPP_FINALLY([&] {
-        runGraalFunctionAndThrowIfMinusOne(dxfg_JavaObjectHandler_array_release,
-                                           dxfcpp::bit_cast<const dxfg_java_object_handler **>(values), size);
-    });
-
+// Clones the handles of the list: the handles of the list itself are released by dxfg_v4_cfi_value_list_release().
+std::vector<void *> cloneValues(const dxfg_v4_cfi_value_list *values) {
     std::vector<void *> result{};
-    if (size > 0) {
-        result.reserve(static_cast<std::size_t>(size));
+
+    if (values->size > 0) {
+        result.reserve(static_cast<std::size_t>(values->size));
     }
 
     try {
-        for (std::int32_t i = 0; i < size; i++) {
-            dxfg_java_object_handler *clone{};
+        for (std::int32_t i = 0; i < values->size; i++) {
+            auto *clone = runGraalV4FunctionWithResult(dxfg_v4_JavaObjectHandler_clone, &values->elements[i]->handler);
 
-            runGraalFunctionAndThrowIfMinusOne(dxfg_JavaObjectHandler_clone, &values[i].handler, &clone);
             result.emplace_back(clone);
         }
     } catch (...) {
         for (auto &value : result) {
-            runGraalFunctionAndThrowIfMinusOne(dxfg_JavaObjectHandler_release,
-                                               dxfcpp::bit_cast<dxfg_java_object_handler *>(value));
+            runGraalV4Function(dxfg_v4_JavaObjectHandler_release, static_cast<dxfg_v4_java_object_handler *>(value));
         }
 
         throw;
@@ -230,172 +40,257 @@ std::vector<void *> decipher(const JavaObjectHandle<CFI> &cfi) {
     return result;
 }
 
-// int32_t dxfg_CFI_describe(graal_isolatethread_t *thread, dxfg_cfi_t *cfi, DXFG_OUT char **description);
-std::string describe(const JavaObjectHandle<CFI> &cfi) {
+} // namespace
+
+/// dxfg_v4_CFI_EMPTY
+JavaObjectHandle<CFI> EMPTY() {
+    return JavaObjectHandle<CFI>{runGraalV4FunctionWithResult(dxfg_v4_CFI_EMPTY)};
+}
+
+/// dxfg_v4_CFI_valueOf
+JavaObjectHandle<CFI> valueOf(std::string_view code) {
+    return JavaObjectHandle<CFI>{runGraalV4FunctionWithResult(dxfg_v4_CFI_valueOf, SdkString{code}.c_str())};
+}
+
+/// dxfg_v4_CFI_valueOfIntCode
+JavaObjectHandle<CFI> valueOf(std::int32_t intCode) {
+    return JavaObjectHandle<CFI>{runGraalV4FunctionWithResult(dxfg_v4_CFI_valueOfIntCode, intCode)};
+}
+
+/// dxfg_v4_CFI_getCode
+std::string getCode(const JavaObjectHandle<CFI> &cfi) {
     if (!cfi) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_describe`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_getCode`. The "
                                        "`cfi` handle is invalid");
     }
 
-    char *description{};
+    auto uCode = internal::IsolatedString::toUnique(
+        runGraalV4FunctionWithResult(dxfg_v4_CFI_getCode, static_cast<dxfg_v4_cfi_t *>(cfi.get())));
+    auto result = dxfcpp::toString(uCode.get());
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_describe, static_cast<dxfg_cfi_t *>(cfi.get()), &description);
+    return result;
+}
 
-    auto uDescription = internal::IsolatedString::toUnique(description);
+/// dxfg_v4_CFI_getIntCode
+std::int32_t getIntCode(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_getIntCode`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_getIntCode, static_cast<dxfg_v4_cfi_t *>(cfi.get()));
+}
+
+/// dxfg_v4_CFI_getCategory
+std::int16_t getCategory(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_getCategory`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_getCategory, static_cast<dxfg_v4_cfi_t *>(cfi.get()));
+}
+
+/// dxfg_v4_CFI_getGroup
+std::int16_t getGroup(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_getGroup`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_getGroup, static_cast<dxfg_v4_cfi_t *>(cfi.get()));
+}
+
+/// dxfg_v4_CFI_isEquity
+bool isEquity(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_isEquity`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_isEquity, static_cast<dxfg_v4_cfi_t *>(cfi.get())) != 0;
+}
+
+/// dxfg_v4_CFI_isDebtInstrument
+bool isDebtInstrument(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_isDebtInstrument`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_isDebtInstrument, static_cast<dxfg_v4_cfi_t *>(cfi.get())) != 0;
+}
+
+/// dxfg_v4_CFI_isEntitlement
+bool isEntitlement(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_isEntitlement`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_isEntitlement, static_cast<dxfg_v4_cfi_t *>(cfi.get())) != 0;
+}
+
+/// dxfg_v4_CFI_isOption
+bool isOption(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_isOption`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_isOption, static_cast<dxfg_v4_cfi_t *>(cfi.get())) != 0;
+}
+
+/// dxfg_v4_CFI_isFuture
+bool isFuture(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_isFuture`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_isFuture, static_cast<dxfg_v4_cfi_t *>(cfi.get())) != 0;
+}
+
+/// dxfg_v4_CFI_isOther
+bool isOther(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_isOther`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_isOther, static_cast<dxfg_v4_cfi_t *>(cfi.get())) != 0;
+}
+
+/// dxfg_v4_CFI_decipher
+std::vector<void *> decipher(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_decipher`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    auto *values = runGraalV4FunctionWithResult(dxfg_v4_CFI_decipher, static_cast<dxfg_v4_cfi_t *>(cfi.get()));
+
+    if (values == nullptr) {
+        return {};
+    }
+
+    DXFCPP_FINALLY([&] {
+        runGraalV4Function(dxfg_v4_cfi_value_list_release, values);
+    });
+
+    return cloneValues(values);
+}
+
+/// dxfg_v4_CFI_describe
+std::string describe(const JavaObjectHandle<CFI> &cfi) {
+    if (!cfi) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_describe`. The "
+                                       "`cfi` handle is invalid");
+    }
+
+    auto uDescription = internal::IsolatedString::toUnique(
+        runGraalV4FunctionWithResult(dxfg_v4_CFI_describe, static_cast<dxfg_v4_cfi_t *>(cfi.get())));
     auto result = dxfcpp::toString(uDescription.get());
 
     return result;
 }
 
 namespace IsolatedAttribute {
-// int32_t dxfg_CFI_Attribute_getName(graal_isolatethread_t *thread, dxfg_cfi_attribute_t *cfiAttribute, DXFG_OUT char
-// **name);
+/// dxfg_v4_CFI_Attribute_getName
 std::string getName(const JavaObjectHandle<CFI::Attribute> &cfiAttribute) {
     if (!cfiAttribute) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_Attribute_getName`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_Attribute_getName`. The "
                                        "`cfiAttribute` handle is invalid");
     }
 
-    char *name{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_Attribute_getName,
-                                       static_cast<dxfg_cfi_attribute_t *>(cfiAttribute.get()), &name);
-
-    auto uName = internal::IsolatedString::toUnique(name);
+    auto uName = internal::IsolatedString::toUnique(runGraalV4FunctionWithResult(
+        dxfg_v4_CFI_Attribute_getName, static_cast<dxfg_v4_cfi_attribute_t *>(cfiAttribute.get())));
     auto result = dxfcpp::toString(uName.get());
 
     return result;
 }
 
-// int32_t dxfg_CFI_Attribute_getDescription(graal_isolatethread_t *thread, dxfg_cfi_attribute_t *cfiAttribute, DXFG_OUT
-// char **description);
+/// dxfg_v4_CFI_Attribute_getDescription
 std::string getDescription(const JavaObjectHandle<CFI::Attribute> &cfiAttribute) {
     if (!cfiAttribute) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_Attribute_getDescription`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_Attribute_getDescription`. The "
                                        "`cfiAttribute` handle is invalid");
     }
 
-    char *description{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_Attribute_getDescription,
-                                       static_cast<dxfg_cfi_attribute_t *>(cfiAttribute.get()), &description);
-
-    auto uDescription = internal::IsolatedString::toUnique(description);
+    auto uDescription = internal::IsolatedString::toUnique(runGraalV4FunctionWithResult(
+        dxfg_v4_CFI_Attribute_getDescription, static_cast<dxfg_v4_cfi_attribute_t *>(cfiAttribute.get())));
     auto result = dxfcpp::toString(uDescription.get());
 
     return result;
 }
 
-// int32_t dxfg_CFI_Attribute_getValues(graal_isolatethread_t *thread, dxfg_cfi_attribute_t *cfiAttribute, DXFG_OUT
-// dxfg_cfi_value_t **values, DXFG_OUT int32_t *size);
+/// dxfg_v4_CFI_Attribute_getValues
 std::vector<void *> getValues(const JavaObjectHandle<CFI::Attribute> &cfiAttribute) {
     if (!cfiAttribute) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_Attribute_getValues`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_Attribute_getValues`. The "
                                        "`cfiAttribute` handle is invalid");
     }
 
-    dxfg_cfi_value_t *values{};
-    std::int32_t size{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_Attribute_getValues,
-                                       static_cast<dxfg_cfi_attribute_t *>(cfiAttribute.get()), &values, &size);
+    auto *values = runGraalV4FunctionWithResult(dxfg_v4_CFI_Attribute_getValues,
+                                                static_cast<dxfg_v4_cfi_attribute_t *>(cfiAttribute.get()));
 
     if (values == nullptr) {
         return {};
     }
 
     DXFCPP_FINALLY([&] {
-        runGraalFunctionAndThrowIfMinusOne(dxfg_JavaObjectHandler_array_release,
-                                           dxfcpp::bit_cast<const dxfg_java_object_handler **>(values), size);
+        runGraalV4Function(dxfg_v4_cfi_value_list_release, values);
     });
 
-    std::vector<void *> result{};
-    if (size > 0) {
-        result.reserve(static_cast<std::size_t>(size));
-    }
-
-    try {
-        for (std::int32_t i = 0; i < size; i++) {
-            dxfg_java_object_handler *clone{};
-
-            runGraalFunctionAndThrowIfMinusOne(dxfg_JavaObjectHandler_clone, &values[i].handler, &clone);
-            result.emplace_back(clone);
-        }
-    } catch (...) {
-        for (auto &value : result) {
-            runGraalFunctionAndThrowIfMinusOne(dxfg_JavaObjectHandler_release,
-                                               dxfcpp::bit_cast<dxfg_java_object_handler *>(value));
-        }
-
-        throw;
-    }
-
-    return result;
+    return cloneValues(values);
 }
 } // namespace IsolatedAttribute
 
 namespace IsolatedValue {
-// int32_t dxfg_CFI_Value_getAttribute(graal_isolatethread_t *thread, dxfg_cfi_value_t *cfiValue, DXFG_OUT
-// dxfg_cfi_attribute_t **attribute);
+/// dxfg_v4_CFI_Value_getAttribute
 JavaObjectHandle<CFI::Attribute> getAttribute(const JavaObjectHandle<CFI::Value> &cfiValue) {
     if (!cfiValue) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_Value_getAttribute`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_Value_getAttribute`. The "
                                        "`cfiValue` handle is invalid");
     }
 
-    dxfg_cfi_attribute_t *attribute{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_Value_getAttribute, static_cast<dxfg_cfi_value_t *>(cfiValue.get()),
-                                       &attribute);
-
-    return JavaObjectHandle<CFI::Attribute>{attribute};
+    return JavaObjectHandle<CFI::Attribute>{runGraalV4FunctionWithResult(
+        dxfg_v4_CFI_Value_getAttribute, static_cast<dxfg_v4_cfi_value_t *>(cfiValue.get()))};
 }
 
-// int32_t dxfg_CFI_Value_getCode(graal_isolatethread_t *thread, dxfg_cfi_value_t *cfiValue, DXFG_OUT int16_t *code);
+/// dxfg_v4_CFI_Value_getCode
 std::int16_t getCode(const JavaObjectHandle<CFI::Value> &cfiValue) {
     if (!cfiValue) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_Value_getCode`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_Value_getCode`. The "
                                        "`cfiValue` handle is invalid");
     }
 
-    std::int16_t code{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_Value_getCode, static_cast<dxfg_cfi_value_t *>(cfiValue.get()), &code);
-
-    return code;
+    return runGraalV4FunctionWithResult(dxfg_v4_CFI_Value_getCode, static_cast<dxfg_v4_cfi_value_t *>(cfiValue.get()));
 }
 
-// int32_t dxfg_CFI_Value_getName(graal_isolatethread_t *thread, dxfg_cfi_value_t *cfiValue, DXFG_OUT char **name);
+/// dxfg_v4_CFI_Value_getName
 std::string getName(const JavaObjectHandle<CFI::Value> &cfiValue) {
     if (!cfiValue) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_Value_getName`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_Value_getName`. The "
                                        "`cfiValue` handle is invalid");
     }
 
-    char *name{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_Value_getName, static_cast<dxfg_cfi_value_t *>(cfiValue.get()), &name);
-
-    auto uName = internal::IsolatedString::toUnique(name);
+    auto uName = internal::IsolatedString::toUnique(
+        runGraalV4FunctionWithResult(dxfg_v4_CFI_Value_getName, static_cast<dxfg_v4_cfi_value_t *>(cfiValue.get())));
     auto result = dxfcpp::toString(uName.get());
 
     return result;
 }
 
-// int32_t dxfg_CFI_Value_getDescription(graal_isolatethread_t *thread, dxfg_cfi_value_t *cfiValue, DXFG_OUT char
-// **description);
+/// dxfg_v4_CFI_Value_getDescription
 std::string getDescription(const JavaObjectHandle<CFI::Value> &cfiValue) {
     if (!cfiValue) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_CFI_Value_getDescription`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_CFI_Value_getDescription`. The "
                                        "`cfiValue` handle is invalid");
     }
 
-    char *description{};
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CFI_Value_getDescription, static_cast<dxfg_cfi_value_t *>(cfiValue.get()),
-                                       &description);
-
-    auto uDescription = internal::IsolatedString::toUnique(description);
+    auto uDescription = internal::IsolatedString::toUnique(runGraalV4FunctionWithResult(
+        dxfg_v4_CFI_Value_getDescription, static_cast<dxfg_v4_cfi_value_t *>(cfiValue.get())));
     auto result = dxfcpp::toString(uDescription.get());
 
     return result;

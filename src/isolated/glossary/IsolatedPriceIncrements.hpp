@@ -11,54 +11,65 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::glossary::IsolatedPriceIncrements {
 
-// int32_t dxfg_PriceIncrements_EMPTY(graal_isolatethread_t *thread, DXFG_OUT dxfg_price_increments_t **emptyPriceIncrements);
-JavaObjectHandle<PriceIncrements> EMPTY();
+/// dxfg_v4_PriceIncrements_EMPTY
+/* dxfg_v4_price_increments_t* */ JavaObjectHandle<PriceIncrements> EMPTY();
 
-// int32_t dxfg_PriceIncrements_valueOf(graal_isolatethread_t *thread, const char *text, DXFG_OUT dxfg_price_increments_t **priceIncrements);
-JavaObjectHandle<PriceIncrements> valueOf(std::string_view text);
+/// dxfg_v4_PriceIncrements_valueOf
+/* dxfg_v4_price_increments_t* */ JavaObjectHandle<PriceIncrements> valueOf(std::string_view text);
 
-// int32_t dxfg_PriceIncrements_valueOf2(graal_isolatethread_t *thread, double increment, DXFG_OUT dxfg_price_increments_t **priceIncrements);
-JavaObjectHandle<PriceIncrements> valueOf(double increment);
+/// dxfg_v4_PriceIncrements_valueOfIncrement
+/* dxfg_v4_price_increments_t* */ JavaObjectHandle<PriceIncrements> valueOf(double increment);
 
-// int32_t dxfg_PriceIncrements_valueOf3(graal_isolatethread_t *thread, const double *increments, int32_t size, DXFG_OUT dxfg_price_increments_t **priceIncrements);
-JavaObjectHandle<PriceIncrements> valueOf(const std::vector<double> &increments);
+/// dxfg_v4_PriceIncrements_valueOfIncrements
+/* dxfg_v4_price_increments_t* */ JavaObjectHandle<PriceIncrements> valueOf(const std::vector<double> &increments);
 
-// int32_t dxfg_PriceIncrements_getText(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, DXFG_OUT char **text);
-std::string getText(const JavaObjectHandle<PriceIncrements> &priceIncrements);
+/// dxfg_v4_PriceIncrements_getText
+std::string getText(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements);
 
-// int32_t dxfg_PriceIncrements_getPriceIncrements(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, DXFG_OUT double **increments, DXFG_OUT int32_t *size);
-std::vector<double> getPriceIncrements(const JavaObjectHandle<PriceIncrements> &priceIncrements);
+/// dxfg_v4_PriceIncrements_getPriceIncrements
+std::vector<double>
+getPriceIncrements(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements);
 
-// int32_t dxfg_PriceIncrements_getPriceIncrement(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, DXFG_OUT double *priceIncrement);
-double getPriceIncrement(const JavaObjectHandle<PriceIncrements> &priceIncrements);
+/// dxfg_v4_PriceIncrements_getPriceIncrement
+double getPriceIncrement(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements);
 
-// int32_t dxfg_PriceIncrements_getPriceIncrement2(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, double price, DXFG_OUT double *priceIncrement);
-double getPriceIncrement(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price);
+/// dxfg_v4_PriceIncrements_getPriceIncrementForPrice
+double getPriceIncrement(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements,
+                         double price);
 
-// int32_t dxfg_PriceIncrements_getPriceIncrement3(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, double price, int32_t direction, DXFG_OUT double *priceIncrement);
-double getPriceIncrement(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, std::int32_t direction);
+/// dxfg_v4_PriceIncrements_getPriceIncrementForPriceAndDirection
+double getPriceIncrement(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements,
+                         double price, std::int32_t direction);
 
-// int32_t dxfg_PriceIncrements_getPricePrecision(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, DXFG_OUT int32_t *pricePrecision);
-std::int32_t getPricePrecision(const JavaObjectHandle<PriceIncrements> &priceIncrements);
+/// dxfg_v4_PriceIncrements_getPricePrecision
+std::int32_t
+getPricePrecision(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements);
 
-// int32_t dxfg_PriceIncrements_getPricePrecision2(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, double price, DXFG_OUT int32_t *pricePrecision);
-std::int32_t getPricePrecision(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price);
+/// dxfg_v4_PriceIncrements_getPricePrecisionForPrice
+std::int32_t
+getPricePrecision(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements,
+                  double price);
 
-// int32_t dxfg_PriceIncrements_roundPrice(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, double price, DXFG_OUT double *roundedPrice);
-double roundPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price);
+/// dxfg_v4_PriceIncrements_roundPrice
+double roundPrice(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements,
+                  double price);
 
-// int32_t dxfg_PriceIncrements_roundPrice2(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, double price, int32_t direction, DXFG_OUT double *roundedPrice);
-double roundPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, std::int32_t direction);
+/// dxfg_v4_PriceIncrements_roundPriceWithDirection
+double roundPrice(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements,
+                  double price, std::int32_t direction);
 
-// int32_t dxfg_PriceIncrements_roundPrice3(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, double price, dxfg_rounding_mode_t roundingMode, DXFG_OUT double *roundedPrice);
-double roundPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, RoundingMode roundingMode);
+/// dxfg_v4_PriceIncrements_roundPriceWithRoundingMode
+double roundPrice(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements,
+                  double price, RoundingMode roundingMode);
 
-// int32_t dxfg_PriceIncrements_incrementPrice(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, double price, int32_t direction, DXFG_OUT double *incrementedPrice);
-double incrementPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, std::int32_t direction);
+/// dxfg_v4_PriceIncrements_incrementPrice
+double incrementPrice(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements,
+                      double price, std::int32_t direction);
 
-// int32_t dxfg_PriceIncrements_incrementPrice2(graal_isolatethread_t *thread, dxfg_price_increments_t *priceIncrements, double price, int32_t direction, double step, DXFG_OUT double *incrementedPrice);
-double incrementPrice(const JavaObjectHandle<PriceIncrements> &priceIncrements, double price, std::int32_t direction, double step);
+/// dxfg_v4_PriceIncrements_incrementPriceWithStep
+double incrementPrice(/* dxfg_v4_price_increments_t* */ const JavaObjectHandle<PriceIncrements> &priceIncrements,
+                      double price, std::int32_t direction, double step);
 
-}
+} // namespace isolated::glossary::IsolatedPriceIncrements
 
 DXFCPP_END_NAMESPACE
