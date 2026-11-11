@@ -8,6 +8,7 @@
 #include <dxfeed_graal_cpp_api/util/Handler.hpp>
 #include <dxfeed_graal_cpp_api/util/Time.hpp>
 #include <dxfeed_graal_cpp_api/util/TimeFormat.hpp>
+#include <dxfeed_graal_cpp_api/util/TimePeriod.hpp>
 #include <dxfeed_graal_cpp_api/util/Timer.hpp>
 #include <dxfeed_graal_cpp_api/util/Tristate.hpp>
 
@@ -51,6 +52,24 @@ TEST_CASE("TimeFormat formats the time") {
     CHECK(TimeFormat::GMT.format(0) == "0");
     CHECK(!TimeFormat::DEFAULT.format(1'700'000'000'123LL).empty());
     CHECK(!TimeFormat::DEFAULT_WITH_MILLIS.format(1'700'000'000'123LL).empty());
+}
+
+TEST_CASE("TimeFormat parses the formatted time") {
+    constexpr auto time = 1'700'000'000'123LL;
+
+    CHECK(TimeFormat::DEFAULT_WITH_MILLIS.parse(TimeFormat::DEFAULT_WITH_MILLIS.format(time)) == time);
+    CHECK(TimeFormat::DEFAULT_WITH_MILLIS.parse(TimeFormat::DEFAULT_WITH_MILLIS.format(-time)) == -time);
+    CHECK_THROWS(TimeFormat::DEFAULT.parse("not a time"));
+}
+
+TEST_CASE("TimePeriod parses the string and converts the units") {
+    const auto period = TimePeriod::valueOf("1.5s");
+
+    CHECK(period.getTime() == 1'500);
+    CHECK(period.getSeconds() == 1);
+    CHECK(period.getNanos() == 1'500'000'000);
+    CHECK(TimePeriod::valueOf("inf").getTime() == TimePeriod::UNLIMITED.getTime());
+    CHECK(TimePeriod::ZERO.getTime() == 0);
 }
 
 TEST_CASE("Timer runs the task once") {

@@ -17,19 +17,26 @@ namespace isolated::event {
 
 namespace IsolatedIndexedEventSource {
 
-// int32_t dxfg_IndexedEventSource_release(graal_isolatethread_t *thread, dxfg_indexed_event_source_t* source);
+/// dxfg_v4_IndexedEventSource_release; `NULL` is skipped.
 void release(void *source);
 
 } // namespace IsolatedIndexedEventSource
 
+namespace IsolatedIndexedEventSourceList {
+
+/// dxfg_v4_indexed_event_source_list_release: releases the sources of the list with the list; `NULL` is skipped.
+void release(/* dxfg_v4_indexed_event_source_list* */ void *sources);
+
+} // namespace IsolatedIndexedEventSourceList
+
 namespace IsolatedEventType {
 
-// dxfg_EventType_new
-/* dxfg_event_type_t* */ void *create(std::string_view symbolName,
-                                      /* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
+/// dxfg_v4_EventType_new
+/* dxfg_v4_event_type_t* */ void *create(std::string_view symbolName,
+                                         /* dxfg_v4_event_clazz_t */ const EventTypeEnum &eventType);
 
-// dxfg_EventType_release
-/* int32_t */ void release(/* dxfg_event_type_t* */ void *eventType);
+/// dxfg_v4_EventType_release
+/* int32_t */ void release(/* dxfg_v4_event_type_t* */ void *eventType);
 
 std::unique_ptr<void, decltype(&release)> toUnique(void *eventType);
 
@@ -37,8 +44,8 @@ std::unique_ptr<void, decltype(&release)> toUnique(void *eventType);
 
 namespace IsolatedEventTypeList {
 
-// dxfg_CList_EventType_release
-/* int32_t */ void release(/* dxfg_event_type_list* */ void *eventTypes);
+/// dxfg_v4_event_type_list_release
+/* int32_t */ void release(/* dxfg_v4_event_type_list* */ void *eventTypes);
 
 std::unique_ptr<void, decltype(&release)> toUnique(void *eventTypes);
 

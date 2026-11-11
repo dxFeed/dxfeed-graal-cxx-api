@@ -13,16 +13,11 @@
 #include <string_view>
 #include <utf8.h>
 
-#ifdef NO_ERROR
-#    undef NO_ERROR
-#endif
-
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
 bool setSystemProperty(graal_isolatethread_t *thread, const char *key, const char *value) noexcept {
-    if (static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(thread, key, value)) ==
-        CEntryPointErrorsEnum::NO_ERROR) {
+    if (dxfg_v4_system_set_property(thread, key, value) == DXFG_EXECUTE_SUCCESSFULLY) {
         return true;
     }
 
@@ -90,17 +85,18 @@ std::string System::getProperty(StringParam key) {
         [key = validUtf8Prefix(keyView)](auto threadHandle) {
             auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
             std::string resultString{};
+            const char *property = nullptr;
 
-            // NULL is also the result for a property that is not set.
-            if (auto property = dxfg_system_get_property(thread, isolated::SdkString{key}.c_str());
-                property != nullptr) {
+            // A failure is an empty result, as a property that is not set (NULL).
+            if (dxfg_v4_system_get_property(thread, isolated::SdkString{key}.c_str(), &property) !=
+                DXFG_EXECUTE_SUCCESSFULLY) {
+                isolated::clearThreadException(thread);
+            } else if (property != nullptr) {
                 resultString = validUtf8Prefix(property);
 
-                if (dxfg_system_release_property(thread, property) != 0) {
+                if (dxfg_v4_system_release_property(thread, property) != DXFG_EXECUTE_SUCCESSFULLY) {
                     isolated::clearThreadException(thread);
                 }
-            } else {
-                isolated::clearThreadException(thread);
             }
 
             return resultString;

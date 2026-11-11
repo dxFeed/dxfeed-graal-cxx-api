@@ -16,11 +16,10 @@ namespace isolated::executors {
 
 namespace IsolatedInPlaceExecutor {
 
-// dxfg_executor_t *dxfg_ExecutorBaseOnConcurrentLinkedQueue_new(graal_isolatethread_t *thread);
+/// dxfg_v4_ExecutorBaseOnConcurrentLinkedQueue_new
 JavaObjectHandle<ExecutorTag> create();
 
-// int32_t dxfg_ExecutorBaseOnConcurrentLinkedQueue_processAllPendingTasks(graal_isolatethread_t *thread,
-//                                                                         dxfg_executor_t *executor);
+/// dxfg_v4_ExecutorBaseOnConcurrentLinkedQueue_processAllPendingTasks
 void processAllPendingTasks(const JavaObjectHandle<ExecutorTag> &executor);
 
 } // namespace IsolatedInPlaceExecutor

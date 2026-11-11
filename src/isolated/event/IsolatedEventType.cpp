@@ -14,34 +14,48 @@ namespace isolated::event {
 
 namespace IsolatedIndexedEventSource {
 
-// int32_t dxfg_IndexedEventSource_release(graal_isolatethread_t *thread, dxfg_indexed_event_source_t* source);
+/// dxfg_v4_IndexedEventSource_release
 void release(void *source) {
     if (source == nullptr) {
         return;
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_IndexedEventSource_release,
-                                       static_cast<dxfg_indexed_event_source_t *>(source));
+    runGraalV4Function(dxfg_v4_IndexedEventSource_release, static_cast<dxfg_v4_indexed_event_source_t *>(source));
 }
 
 } // namespace IsolatedIndexedEventSource
 
-namespace IsolatedEventType {
+namespace IsolatedIndexedEventSourceList {
 
-// dxfg_EventType_new
-/* dxfg_event_type_t* */ void *create(std::string_view symbolName,
-                                      /* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
-    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_EventType_new, SdkString{symbolName}.c_str(), static_cast<dxfg_event_clazz_t>(eventType.getId())));
-}
-
-// dxfg_EventType_release
-/* int32_t */ void release(/* dxfg_event_type_t* */ void *eventType) {
-    if (!eventType) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_EventType_release`. The `eventType` is null");
+/// dxfg_v4_indexed_event_source_list_release
+void release(void *sources) {
+    if (sources == nullptr) {
+        return;
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_EventType_release, dxfcpp::bit_cast<dxfg_event_type_t *>(eventType));
+    runGraalV4Function(dxfg_v4_indexed_event_source_list_release,
+                       static_cast<dxfg_v4_indexed_event_source_list *>(sources));
+}
+
+} // namespace IsolatedIndexedEventSourceList
+
+namespace IsolatedEventType {
+
+/// dxfg_v4_EventType_new
+/* dxfg_v4_event_type_t* */ void *create(std::string_view symbolName,
+                                         /* dxfg_v4_event_clazz_t */ const EventTypeEnum &eventType) {
+    return dxfcpp::bit_cast<void *>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_EventType_new, SdkString{symbolName}.c_str(), static_cast<dxfg_v4_event_clazz_t>(eventType.getId())));
+}
+
+/// dxfg_v4_EventType_release
+/* int32_t */ void release(/* dxfg_v4_event_type_t* */ void *eventType) {
+    if (!eventType) {
+        throw InvalidArgumentException(
+            "Unable to execute function `dxfg_v4_EventType_release`. The `eventType` is null");
+    }
+
+    runGraalV4Function(dxfg_v4_EventType_release, dxfcpp::bit_cast<dxfg_v4_event_type_t *>(eventType));
 }
 
 std::unique_ptr<void, decltype(&release)> toUnique(void *eventType) {
@@ -51,15 +65,14 @@ std::unique_ptr<void, decltype(&release)> toUnique(void *eventType) {
 } // namespace IsolatedEventType
 
 namespace IsolatedEventTypeList {
-// dxfg_CList_EventType_release
-/* int32_t */ void release(/* dxfg_event_type_list* */ void *eventTypes) {
+/// dxfg_v4_event_type_list_release
+/* int32_t */ void release(/* dxfg_v4_event_type_list* */ void *eventTypes) {
     if (!eventTypes) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_CList_EventType_release`. The `eventTypes` is null");
+            "Unable to execute function `dxfg_v4_event_type_list_release`. The `eventTypes` is null");
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_CList_EventType_release,
-                                       dxfcpp::bit_cast<dxfg_event_type_list *>(eventTypes));
+    runGraalV4Function(dxfg_v4_event_type_list_release, dxfcpp::bit_cast<dxfg_v4_event_type_list *>(eventTypes));
 }
 
 std::unique_ptr<void, decltype(&release)> toUnique(void *eventTypes) {

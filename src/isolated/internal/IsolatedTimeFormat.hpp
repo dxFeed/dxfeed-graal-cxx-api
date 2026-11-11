@@ -17,15 +17,21 @@ namespace isolated::internal {
 
 namespace IsolatedTimeFormat {
 
-/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getDefault();
-/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getGmt();
-/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
-withTimeZone(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat);
-/* dxfg_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
-withMillis(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat);
-std::int64_t parse(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
+/// dxfg_v4_TimeFormat_DEFAULT
+/* dxfg_v4_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getDefault();
+/// dxfg_v4_TimeFormat_GMT
+/* dxfg_v4_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat> getGmt();
+/// dxfg_v4_TimeFormat_withTimeZone
+/* dxfg_v4_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
+withTimeZone(/* dxfg_v4_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat);
+/// dxfg_v4_TimeFormat_withMillis
+/* dxfg_v4_time_format_t* */ JavaObjectHandle<dxfcpp::TimeFormat>
+withMillis(/* dxfg_v4_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat);
+/// dxfg_v4_TimeFormat_parse
+std::int64_t parse(/* dxfg_v4_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
                    std::string_view value);
-std::string format(/* dxfg_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
+/// dxfg_v4_TimeFormat_format
+std::string format(/* dxfg_v4_time_format_t* */ const JavaObjectHandle<dxfcpp::TimeFormat> &timeFormat,
                    std::int64_t value);
 
 } // namespace IsolatedTimeFormat

@@ -17,7 +17,7 @@ namespace isolated::internal {
 
 namespace IsolatedString {
 /**
- * Calls the Graal SDK function `dxfg_String_release` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_String_release` in isolation.
  * @param string The pointer to C-string
  * @return `true` if OK.
  *
@@ -33,7 +33,7 @@ std::unique_ptr<const char, decltype(&release)> toUnique(const char *string);
 
 namespace IsolatedStringList {
 /**
- * Calls the Graal SDK function `dxfg_CList_String_release` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_string_list_release` in isolation.
  * @param stringList The pointer to dxFeed Graal SDK' string list.
  * @return `true` if OK.
  *
@@ -41,7 +41,7 @@ namespace IsolatedStringList {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-bool release(/* dxfg_string_list* */ void *stringList);
+bool release(/* dxfg_v4_string_list* */ void *stringList);
 
 std::unique_ptr<void, decltype(&release)> toUnique(void *stringList);
 

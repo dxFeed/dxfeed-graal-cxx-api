@@ -144,7 +144,7 @@ inline void throwIfFailed(graal_isolatethread_t *thread, std::int32_t status) {
 void clearThreadException(graal_isolatethread_t *thread) noexcept;
 
 /**
- * Sets a system property of the SDK (`dxfg_system_set_property`). A failure is a result: the Java exception of the
+ * Sets a system property of the SDK (`dxfg_v4_system_set_property`). A failure is a result: the Java exception of the
  * failed call is cleared.
  *
  * @param thread The isolate thread of the current thread.
