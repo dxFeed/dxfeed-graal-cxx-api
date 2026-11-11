@@ -5,7 +5,6 @@
 
 #include "StringUtils.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 
@@ -251,7 +250,9 @@ std::string invalidBytes(std::string_view s, std::size_t offset) {
 } // namespace
 
 StringLabel StringLabel::ofPropertyValue(std::string_view place, std::string_view key) noexcept {
-    return {place, key == DXEndpoint::DXFEED_USER_PROPERTY || key == DXEndpoint::DXFEED_PASSWORD_PROPERTY};
+    // The values of DXEndpoint::DXFEED_USER_PROPERTY and DXEndpoint::DXFEED_PASSWORD_PROPERTY (DXEndpointTest checks
+    // that they are secret). Not the constants themselves: a comparison with them makes the shared library export them.
+    return {place, key == "dxfeed.user" || key == "dxfeed.password"};
 }
 
 void checkUtf8(std::string_view s, const StringLabel &label) {
