@@ -26,7 +26,7 @@ void checkService(const JavaObjectHandle<PriceLevelService> &service, const char
     }
 }
 
-std::vector<std::shared_ptr<EventType>> toEvents(dxfg_event_type_list *events) {
+std::vector<std::shared_ptr<EventType>> toEvents(dxfg_v4_event_type_list *events) {
     const auto u = event::IsolatedEventTypeList::toUnique(events);
 
     return EventMapper::fromGraalList(u.get());
@@ -34,91 +34,87 @@ std::vector<std::shared_ptr<EventType>> toEvents(dxfg_event_type_list *events) {
 
 } // namespace
 
+/// dxfg_v4_PriceLevelService_new
 JavaObjectHandle<PriceLevelService> create(std::string_view address) {
-    dxfg_price_level_service_t *service{};
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_PriceLevelService_new, SdkString{address}.c_str(), &service);
+    // The handle of the service is taken from the result, so the NULL result is an error.
+    auto *service = runGraalV4FunctionWithNonNullResult(dxfg_v4_PriceLevelService_new, SdkString{address}.c_str());
 
     return JavaObjectHandle<PriceLevelService>{&service->handler};
 }
 
+/// dxfg_v4_PriceLevelService_getOrdersWithCaller
 std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, const OrderSource &orderSource,
                                                   std::int64_t from, std::int64_t to, std::string_view caller) {
-    checkService(service, "dxfg_PriceLevelService_getOrders");
+    checkService(service, "dxfg_v4_PriceLevelService_getOrdersWithCaller");
 
-    dxfg_event_type_list *orders{};
-
-    runGraalFunctionAndThrowIfLessThanZero(
-        dxfg_PriceLevelService_getOrders, static_cast<dxfg_price_level_service_t *>(service.get()),
-        static_cast<dxfg_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()),
-        static_cast<dxfg_indexed_event_source_t *>(EventSourceWrapper(orderSource).toGraalUnique().get()), from, to,
-        SdkString{caller}.c_str(), &orders);
+    auto *orders = runGraalV4FunctionWithResult(
+        dxfg_v4_PriceLevelService_getOrdersWithCaller, static_cast<dxfg_v4_price_level_service_t *>(service.get()),
+        static_cast<dxfg_v4_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()),
+        static_cast<dxfg_v4_indexed_event_source_t *>(EventSourceWrapper(orderSource).toGraalUnique().get()), from, to,
+        SdkString{caller}.c_str());
 
     return toEvents(orders);
 }
 
+/// dxfg_v4_PriceLevelService_getOrders
 std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, const OrderSource &orderSource,
                                                   std::int64_t from, std::int64_t to) {
-    checkService(service, "dxfg_PriceLevelService_getOrders2");
+    checkService(service, "dxfg_v4_PriceLevelService_getOrders");
 
-    dxfg_event_type_list *orders{};
-
-    runGraalFunctionAndThrowIfLessThanZero(
-        dxfg_PriceLevelService_getOrders2, static_cast<dxfg_price_level_service_t *>(service.get()),
-        static_cast<dxfg_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()),
-        static_cast<dxfg_indexed_event_source_t *>(EventSourceWrapper(orderSource).toGraalUnique().get()), from, to,
-        &orders);
+    auto *orders = runGraalV4FunctionWithResult(
+        dxfg_v4_PriceLevelService_getOrders, static_cast<dxfg_v4_price_level_service_t *>(service.get()),
+        static_cast<dxfg_v4_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()),
+        static_cast<dxfg_v4_indexed_event_source_t *>(EventSourceWrapper(orderSource).toGraalUnique().get()), from,
+        to);
 
     return toEvents(orders);
 }
 
+/// dxfg_v4_PriceLevelService_getQuotesWithCaller
 std::vector<std::shared_ptr<EventType>> getQuotes(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, std::int64_t from, std::int64_t to,
                                                   std::string_view caller) {
-    checkService(service, "dxfg_PriceLevelService_getQuotes");
+    checkService(service, "dxfg_v4_PriceLevelService_getQuotesWithCaller");
 
-    dxfg_event_type_list *quotes{};
-
-    runGraalFunctionAndThrowIfLessThanZero(
-        dxfg_PriceLevelService_getQuotes, static_cast<dxfg_price_level_service_t *>(service.get()),
-        static_cast<dxfg_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()), from, to,
-        SdkString{caller}.c_str(), &quotes);
+    auto *quotes = runGraalV4FunctionWithResult(
+        dxfg_v4_PriceLevelService_getQuotesWithCaller, static_cast<dxfg_v4_price_level_service_t *>(service.get()),
+        static_cast<dxfg_v4_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()), from, to,
+        SdkString{caller}.c_str());
 
     return toEvents(quotes);
 }
 
+/// dxfg_v4_PriceLevelService_getQuotes
 std::vector<std::shared_ptr<EventType>> getQuotes(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, std::int64_t from,
                                                   std::int64_t to) {
-    checkService(service, "dxfg_PriceLevelService_getQuotes2");
+    checkService(service, "dxfg_v4_PriceLevelService_getQuotes");
 
-    dxfg_event_type_list *quotes{};
-
-    runGraalFunctionAndThrowIfLessThanZero(
-        dxfg_PriceLevelService_getQuotes2, static_cast<dxfg_price_level_service_t *>(service.get()),
-        static_cast<dxfg_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()), from, to, &quotes);
+    auto *quotes = runGraalV4FunctionWithResult(
+        dxfg_v4_PriceLevelService_getQuotes, static_cast<dxfg_v4_price_level_service_t *>(service.get()),
+        static_cast<dxfg_v4_symbol_t *>(SymbolWrapper(candleSymbol).toGraalUnique().get()), from, to);
 
     return toEvents(quotes);
 }
 
+/// dxfg_v4_PriceLevelService_getAuthOrderSource
 JavaObjectHandle<AuthOrderSource> getAuthOrderSource(const JavaObjectHandle<PriceLevelService> &service) {
-    checkService(service, "dxfg_PriceLevelService_getAuthOrderSource");
+    checkService(service, "dxfg_v4_PriceLevelService_getAuthOrderSource");
 
-    dxfg_auth_order_source_t *authOrderSource{};
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_PriceLevelService_getAuthOrderSource,
-                                           static_cast<dxfg_price_level_service_t *>(service.get()), &authOrderSource);
+    // The handle of the source is taken from the result, so the NULL result is an error.
+    auto *authOrderSource = runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_PriceLevelService_getAuthOrderSource, static_cast<dxfg_v4_price_level_service_t *>(service.get()));
 
     return JavaObjectHandle<AuthOrderSource>{&authOrderSource->handler};
 }
 
+/// dxfg_v4_PriceLevelService_close
 void close(const JavaObjectHandle<PriceLevelService> &service) {
-    checkService(service, "dxfg_PriceLevelService_close");
+    checkService(service, "dxfg_v4_PriceLevelService_close");
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_PriceLevelService_close,
-                                           static_cast<dxfg_price_level_service_t *>(service.get()));
+    runGraalV4Function(dxfg_v4_PriceLevelService_close, static_cast<dxfg_v4_price_level_service_t *>(service.get()));
 }
 
 } // namespace isolated::orcs::IsolatedPriceLevelService
@@ -128,31 +124,31 @@ namespace isolated::orcs::IsolatedAuthOrderSource {
 namespace {
 
 // A deleter of std::unique_ptr: a failure to free the list must not escape it.
-void freeList(dxfg_symbols_by_order_source_id_map_entry_list_t *list) noexcept {
+void freeList(dxfg_v4_symbols_by_order_source_id_map_entry_list *list) noexcept {
     if (!list) {
         return;
     }
 
     runRelease("PriceLevelService", [&] {
-        runGraalFunctionAndThrowIfLessThanZero(dxfg_symbols_by_order_source_id_map_entry_list_free, list);
+        runGraalV4Function(dxfg_v4_symbols_by_order_source_id_map_entry_list_release, list);
     });
 }
 
 } // namespace
 
+/// dxfg_v4_AuthOrderSource_getByIds
 std::unordered_map<std::int32_t, std::unordered_set<std::string>>
 getByIds(const JavaObjectHandle<AuthOrderSource> &authOrderSource) {
     if (!authOrderSource) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_AuthOrderSource_getByIds`. The `authOrderSource` handle is invalid");
+            "Unable to execute function `dxfg_v4_AuthOrderSource_getByIds`. The `authOrderSource` handle is invalid");
     }
 
-    dxfg_symbols_by_order_source_id_map_entry_list_t *list{};
+    auto *list = runGraalV4FunctionWithResult(dxfg_v4_AuthOrderSource_getByIds,
+                                              static_cast<dxfg_v4_auth_order_source_t *>(authOrderSource.get()));
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_AuthOrderSource_getByIds,
-                                           static_cast<dxfg_auth_order_source_t *>(authOrderSource.get()), &list);
-
-    const std::unique_ptr<dxfg_symbols_by_order_source_id_map_entry_list_t, decltype(&freeList)> u{list, freeList};
+    // Frees the list, its entries and their symbol lists.
+    const std::unique_ptr<dxfg_v4_symbols_by_order_source_id_map_entry_list, decltype(&freeList)> u{list, freeList};
     std::unordered_map<std::int32_t, std::unordered_set<std::string>> result{};
 
     if (!list || list->size <= 0 || !list->elements) {
@@ -186,15 +182,14 @@ getByIds(const JavaObjectHandle<AuthOrderSource> &authOrderSource) {
 
 namespace isolated::orcs::IsolatedPriceLevelChecker {
 
+/// dxfg_v4_PriceLevelChecker_validate
 bool validate(const std::vector<std::shared_ptr<Order>> &orders, std::int64_t timeGapBound, bool printQuotes) {
+    // The list stays with the caller: the SDK only reads it.
     const auto list = EventMapper::toGraalListUnique(orders.begin(), orders.end());
-    std::int32_t isValid{};
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_PriceLevelChecker_validate,
-                                           static_cast<dxfg_event_type_list *>(list.get()), timeGapBound,
-                                           printQuotes ? 1 : 0, &isValid);
-
-    return isValid != 0;
+    return runGraalV4FunctionWithResult(dxfg_v4_PriceLevelChecker_validate,
+                                        static_cast<dxfg_v4_event_type_list *>(list.get()), timeGapBound,
+                                        printQuotes ? 1 : 0) != 0;
 }
 
 } // namespace isolated::orcs::IsolatedPriceLevelChecker

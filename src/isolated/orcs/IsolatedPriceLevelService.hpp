@@ -21,50 +21,51 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::orcs::IsolatedPriceLevelService {
 
-// int32_t dxfg_PriceLevelService_new(graal_isolatethread_t *thread, const char *address,
-// DXFG_OUT dxfg_price_level_service_t **service);
+// int32_t dxfg_v4_PriceLevelService_new(graal_isolatethread_t *thread, const char *address,
+// DXFG_OUT dxfg_v4_price_level_service_t **service);
 JavaObjectHandle<PriceLevelService> create(std::string_view address);
 
-// int32_t dxfg_PriceLevelService_getOrders(graal_isolatethread_t *thread, dxfg_price_level_service_t *service,
-// dxfg_symbol_t *candleSymbol, dxfg_indexed_event_source_t *orderSource, int64_t from, int64_t to, const char *caller,
-// DXFG_OUT dxfg_event_type_list **orders);
+// int32_t dxfg_v4_PriceLevelService_getOrdersWithCaller(graal_isolatethread_t *thread,
+// dxfg_v4_price_level_service_t *service, dxfg_v4_symbol_t *candleSymbol, dxfg_v4_indexed_event_source_t *orderSource,
+// int64_t from, int64_t to, const char *caller, DXFG_OUT dxfg_v4_event_type_list **orders);
 std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, const OrderSource &orderSource,
                                                   std::int64_t from, std::int64_t to, std::string_view caller);
 
-// int32_t dxfg_PriceLevelService_getOrders2(graal_isolatethread_t *thread, dxfg_price_level_service_t *service,
-// dxfg_symbol_t *candleSymbol, dxfg_indexed_event_source_t *orderSource, int64_t from, int64_t to,
-// DXFG_OUT dxfg_event_type_list **orders);
+// int32_t dxfg_v4_PriceLevelService_getOrders(graal_isolatethread_t *thread, dxfg_v4_price_level_service_t *service,
+// dxfg_v4_symbol_t *candleSymbol, dxfg_v4_indexed_event_source_t *orderSource, int64_t from, int64_t to,
+// DXFG_OUT dxfg_v4_event_type_list **orders);
 std::vector<std::shared_ptr<EventType>> getOrders(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, const OrderSource &orderSource,
                                                   std::int64_t from, std::int64_t to);
 
-// int32_t dxfg_PriceLevelService_getQuotes(graal_isolatethread_t *thread, dxfg_price_level_service_t *service,
-// dxfg_symbol_t *candleSymbol, int64_t from, int64_t to, const char *caller, DXFG_OUT dxfg_event_type_list **quotes);
+// int32_t dxfg_v4_PriceLevelService_getQuotesWithCaller(graal_isolatethread_t *thread,
+// dxfg_v4_price_level_service_t *service, dxfg_v4_symbol_t *candleSymbol, int64_t from, int64_t to, const char *caller,
+// DXFG_OUT dxfg_v4_event_type_list **quotes);
 std::vector<std::shared_ptr<EventType>> getQuotes(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, std::int64_t from, std::int64_t to,
                                                   std::string_view caller);
 
-// int32_t dxfg_PriceLevelService_getQuotes2(graal_isolatethread_t *thread, dxfg_price_level_service_t *service,
-// dxfg_symbol_t *candleSymbol, int64_t from, int64_t to, DXFG_OUT dxfg_event_type_list **quotes);
+// int32_t dxfg_v4_PriceLevelService_getQuotes(graal_isolatethread_t *thread, dxfg_v4_price_level_service_t *service,
+// dxfg_v4_symbol_t *candleSymbol, int64_t from, int64_t to, DXFG_OUT dxfg_v4_event_type_list **quotes);
 std::vector<std::shared_ptr<EventType>> getQuotes(const JavaObjectHandle<PriceLevelService> &service,
                                                   const CandleSymbol &candleSymbol, std::int64_t from, std::int64_t to);
 
-// int32_t dxfg_PriceLevelService_getAuthOrderSource(graal_isolatethread_t *thread, dxfg_price_level_service_t *service,
-// DXFG_OUT dxfg_auth_order_source_t **authOrderSource);
+// int32_t dxfg_v4_PriceLevelService_getAuthOrderSource(graal_isolatethread_t *thread,
+// dxfg_v4_price_level_service_t *service, DXFG_OUT dxfg_v4_auth_order_source_t **authOrderSource);
 JavaObjectHandle<AuthOrderSource> getAuthOrderSource(const JavaObjectHandle<PriceLevelService> &service);
 
-// int32_t dxfg_PriceLevelService_close(graal_isolatethread_t *thread, dxfg_price_level_service_t *service);
+// int32_t dxfg_v4_PriceLevelService_close(graal_isolatethread_t *thread, dxfg_v4_price_level_service_t *service);
 void close(const JavaObjectHandle<PriceLevelService> &service);
 
 } // namespace isolated::orcs::IsolatedPriceLevelService
 
 namespace isolated::orcs::IsolatedAuthOrderSource {
 
-// int32_t dxfg_AuthOrderSource_getByIds(graal_isolatethread_t *thread, dxfg_auth_order_source_t *authOrderSource,
-// DXFG_OUT dxfg_symbols_by_order_source_id_map_entry_list_t **symbolsByOrderSourceIdMapEntryList);
-// int32_t dxfg_symbols_by_order_source_id_map_entry_list_free(graal_isolatethread_t *thread,
-// dxfg_symbols_by_order_source_id_map_entry_list_t *list);
+// int32_t dxfg_v4_AuthOrderSource_getByIds(graal_isolatethread_t *thread, dxfg_v4_auth_order_source_t *authOrderSource,
+// DXFG_OUT dxfg_v4_symbols_by_order_source_id_map_entry_list **symbolsByOrderSourceIdMapEntryList);
+// int32_t dxfg_v4_symbols_by_order_source_id_map_entry_list_release(graal_isolatethread_t *thread,
+// dxfg_v4_symbols_by_order_source_id_map_entry_list *list);
 std::unordered_map<std::int32_t, std::unordered_set<std::string>>
 getByIds(const JavaObjectHandle<AuthOrderSource> &authOrderSource);
 
@@ -72,7 +73,7 @@ getByIds(const JavaObjectHandle<AuthOrderSource> &authOrderSource);
 
 namespace isolated::orcs::IsolatedPriceLevelChecker {
 
-// int32_t dxfg_PriceLevelChecker_validate(graal_isolatethread_t *thread, dxfg_event_type_list *orders,
+// int32_t dxfg_v4_PriceLevelChecker_validate(graal_isolatethread_t *thread, dxfg_v4_event_type_list *orders,
 // int64_t timeGapBound, int32_t printQuotes, DXFG_OUT int32_t *isValid);
 bool validate(const std::vector<std::shared_ptr<Order>> &orders, std::int64_t timeGapBound, bool printQuotes);
 
