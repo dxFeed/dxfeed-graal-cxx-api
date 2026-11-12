@@ -6,6 +6,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -29,7 +30,7 @@ void OtcMarketsOrder::fillData(void *graalNative) noexcept {
     };
 }
 
-void OtcMarketsOrder::fillGraalData(void *graalNative) const noexcept {
+void OtcMarketsOrder::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -68,11 +69,12 @@ void *OtcMarketsOrder::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOtcMarketsOrder = new dxfg_otc_markets_order_t{};
-
-    fillGraalData(graalOtcMarketsOrder);
-
-    return graalOtcMarketsOrder;
+    return newGraalEvent<dxfg_otc_markets_order_t>(
+        DXFG_EVENT_OTC_MARKETS_ORDER,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void OtcMarketsOrder::freeGraal(void *graalNative) {

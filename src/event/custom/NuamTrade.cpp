@@ -8,6 +8,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -36,7 +37,7 @@ void NuamTrade::fillData(void *graalNative) noexcept {
     };
 }
 
-void NuamTrade::fillGraalData(void *graalNative) const noexcept {
+void NuamTrade::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -79,11 +80,12 @@ void *NuamTrade::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalNuamTrade = new dxfg_nuam_trade_t{};
-
-    fillGraalData(graalNuamTrade);
-
-    return graalNuamTrade;
+    return newGraalEvent<dxfg_nuam_trade_t>(
+        DXFG_EVENT_NUAM_TRADE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void NuamTrade::freeGraal(void *graalNative) {

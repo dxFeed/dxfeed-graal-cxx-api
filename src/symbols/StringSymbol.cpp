@@ -77,7 +77,7 @@ void *StringSymbol::toGraal() const {
         Debugger::debug("StringSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new dxfg_string_symbol_t{{STRING}, createCString(data_)};
+    auto *graalSymbol = new dxfg_string_symbol_t{{STRING}, createCString(data_, "StringSymbol(symbol)")};
 
     return graalSymbol;
 }

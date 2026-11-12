@@ -39,7 +39,7 @@ void OrderBase::fillData(void *graalNative) noexcept {
     };
 }
 
-void OrderBase::fillGraalData(void *graalNative) const noexcept {
+void OrderBase::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }

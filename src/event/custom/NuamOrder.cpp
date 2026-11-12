@@ -8,6 +8,7 @@
 #include "../../isolated/IsolatedCommon.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
 #include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -50,7 +51,7 @@ void NuamOrder::fillData(void *graalNative) noexcept {
     };
 }
 
-void NuamOrder::fillGraalData(void *graalNative) const noexcept {
+void NuamOrder::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -64,10 +65,10 @@ void NuamOrder::fillGraalData(void *graalNative) const noexcept {
     graalNuamOrder->participant_id = nuamOrderData_.participantId;
     graalNuamOrder->submitter_id = nuamOrderData_.submitterId;
     graalNuamOrder->on_behalf_of_submitter_id = nuamOrderData_.onBehalfOfSubmitterId;
-    graalNuamOrder->client_order_id = createCString(nuamOrderData_.clientOrderId);
-    graalNuamOrder->customer_account = createCString(nuamOrderData_.customerAccount);
-    graalNuamOrder->customer_info = createCString(nuamOrderData_.customerInfo);
-    graalNuamOrder->exchange_info = createCString(nuamOrderData_.exchangeInfo);
+    graalNuamOrder->client_order_id = createCString(nuamOrderData_.clientOrderId, "NuamOrder::clientOrderId");
+    graalNuamOrder->customer_account = createCString(nuamOrderData_.customerAccount, "NuamOrder::customerAccount");
+    graalNuamOrder->customer_info = createCString(nuamOrderData_.customerInfo, "NuamOrder::customerInfo");
+    graalNuamOrder->exchange_info = createCString(nuamOrderData_.exchangeInfo, "NuamOrder::exchangeInfo");
     graalNuamOrder->time_in_force_data = nuamOrderData_.timeInForceData;
     graalNuamOrder->trigger_order_book_id = nuamOrderData_.triggerOrderBookId;
     graalNuamOrder->trigger_price = nuamOrderData_.triggerPrice;
@@ -121,11 +122,12 @@ void *NuamOrder::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalNuamOrder = new dxfg_nuam_order_t{};
-
-    fillGraalData(graalNuamOrder);
-
-    return graalNuamOrder;
+    return newGraalEvent<dxfg_nuam_order_t>(
+        DXFG_EVENT_NUAM_ORDER,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void NuamOrder::freeGraal(void *graalNative) {

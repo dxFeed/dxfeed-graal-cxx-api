@@ -6,6 +6,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -23,7 +24,7 @@ void TradeETH::fillData(void *graalNative) noexcept {
     TradeBase::fillData(graalNative);
 }
 
-void TradeETH::fillGraalData(void *graalNative) const noexcept {
+void TradeETH::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -58,11 +59,12 @@ void *TradeETH::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTradeEth = new dxfg_trade_eth_t{};
-
-    fillGraalData(graalTradeEth);
-
-    return graalTradeEth;
+    return newGraalEvent<dxfg_trade_eth_t>(
+        DXFG_EVENT_TRADE_ETH,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void TradeETH::freeGraal(void *graalNative) {

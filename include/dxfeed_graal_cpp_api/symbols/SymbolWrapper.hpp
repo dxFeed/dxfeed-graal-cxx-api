@@ -86,17 +86,24 @@ struct DXFCPP_EXPORT SymbolWrapper final {
             std::ptrdiff_t elementIdx = 0;
             bool needToFree = false;
 
-            for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
-                if constexpr (requires { it->toGraal(); }) {
-                    needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
-                } else if constexpr (std::is_convertible_v<decltype(*it), SymbolWrapper> ||
-                                     dxfcpp::ConvertibleToSymbolWrapper<decltype(*it)>) {
-                    needToFree = setGraalListElement(list, elementIdx, SymbolWrapper(*it).toGraal()) == false;
-                }
+            try {
+                for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
+                    if constexpr (requires { it->toGraal(); }) {
+                        needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
+                    } else if constexpr (std::is_convertible_v<decltype(*it), SymbolWrapper> ||
+                                         dxfcpp::ConvertibleToSymbolWrapper<decltype(*it)>) {
+                        needToFree = setGraalListElement(list, elementIdx, SymbolWrapper(*it).toGraal()) == false;
+                    }
 
-                if (needToFree) {
-                    break;
+                    if (needToFree) {
+                        break;
+                    }
                 }
+            } catch (...) {
+                // For example, a symbol that is not valid UTF-8: the symbols converted before are freed.
+                freeGraalListElements(list, elementIdx);
+
+                throw;
             }
 
             if (needToFree) {
@@ -217,8 +224,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      * Returns the pointer to the filled structure.
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
+     * @throws InvalidArgumentException if a string of the symbol is not valid UTF-8.
      */
-    void *toGraal() const noexcept;
+    void *toGraal() const;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -226,8 +234,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      * Returns the pointer to the filled structure.
      *
      * @return The smart unique pointer to the filled dxFeed Graal SDK structure
+     * @throws InvalidArgumentException if a string of the symbol is not valid UTF-8.
      */
-    std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const noexcept;
+    std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const;
 
     /**
      * Returns a string representation of the current object.

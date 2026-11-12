@@ -7,6 +7,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/resources/Strings.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 
 #include <cassert>
@@ -69,7 +70,7 @@ void Candle::fillGraalData(void *graalNative) const {
     const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     graalCandle->event_type.clazz = DXFG_EVENT_CANDLE;
-    graalCandle->event_symbol = eventSymbol_ ? createCString(eventSymbol_->toString()) : nullptr;
+    graalCandle->event_symbol = eventSymbol_ ? createCString(eventSymbol_->toString(), "Candle::eventSymbol") : nullptr;
     graalCandle->event_time = data_.eventTime;
     graalCandle->event_flags = data_.eventFlags;
     graalCandle->index = data_.index;
@@ -124,11 +125,12 @@ void *Candle::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalCandle = new dxfg_candle_t{};
-
-    fillGraalData(graalCandle);
-
-    return graalCandle;
+    return newGraalEvent<dxfg_candle_t>(
+        DXFG_EVENT_CANDLE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Candle::assign(std::shared_ptr<EventType> event) {

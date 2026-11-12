@@ -121,7 +121,7 @@ class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
 
     protected:
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
     static void freeGraalData(void *graalNative) noexcept;
 
     /**

@@ -77,7 +77,7 @@ class DXFCPP_EXPORT TradeBase : public MarketEvent, public LastingEvent {
     TradeBaseData tradeBaseData_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /**

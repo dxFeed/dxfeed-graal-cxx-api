@@ -8,6 +8,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -41,7 +42,7 @@ void Series::fillData(void *graalNative) noexcept {
     };
 }
 
-void Series::fillGraalData(void *graalNative) const noexcept {
+void Series::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -178,11 +179,12 @@ void *Series::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSeries = new dxfg_series_t{};
-
-    fillGraalData(graalSeries);
-
-    return graalSeries;
+    return newGraalEvent<dxfg_series_t>(
+        DXFG_EVENT_SERIES,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Series::freeGraal(void *graalNative) {

@@ -5,6 +5,7 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 
 #include <dxfg_api.h>
@@ -28,7 +29,7 @@ void NuamTimeAndSale::fillData(void *graalNative) noexcept {
     nuamTimeAndSaleData_ = {.matchId = graalNuamTimeAndSale->match_id};
 }
 
-void NuamTimeAndSale::fillGraalData(void *graalNative) const noexcept {
+void NuamTimeAndSale::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -67,11 +68,12 @@ void *NuamTimeAndSale::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalNuamTimeAndSale = new dxfg_nuam_time_and_sale_t{};
-
-    fillGraalData(graalNuamTimeAndSale);
-
-    return graalNuamTimeAndSale;
+    return newGraalEvent<dxfg_nuam_time_and_sale_t>(
+        DXFG_EVENT_NUAM_TIME_AND_SALE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void NuamTimeAndSale::freeGraal(void *graalNative) {

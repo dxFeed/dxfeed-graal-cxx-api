@@ -9,6 +9,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 #include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <cstring>
 #include <dxfg_api.h>
@@ -48,7 +49,7 @@ void OptionSale::fillData(void *graalNative) noexcept {
     };
 }
 
-void OptionSale::fillGraalData(void *graalNative) const noexcept {
+void OptionSale::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -67,12 +68,13 @@ void OptionSale::fillGraalData(void *graalNative) const noexcept {
     graalOptionSale->size = data_.size;
     graalOptionSale->bid_price = data_.bidPrice;
     graalOptionSale->ask_price = data_.askPrice;
-    graalOptionSale->exchange_sale_conditions = createCString(data_.exchangeSaleConditions);
+    graalOptionSale->exchange_sale_conditions =
+        createCString(data_.exchangeSaleConditions, "OptionSale::exchangeSaleConditions");
     graalOptionSale->flags = data_.flags;
     graalOptionSale->underlying_price = data_.underlyingPrice;
     graalOptionSale->volatility = data_.volatility;
     graalOptionSale->delta = data_.delta;
-    graalOptionSale->option_symbol = createCString(data_.optionSymbol);
+    graalOptionSale->option_symbol = createCString(data_.optionSymbol, "OptionSale::optionSymbol");
 }
 
 void OptionSale::freeGraalData(void *graalNative) noexcept {
@@ -114,11 +116,12 @@ void *OptionSale::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOptionSale = new dxfg_option_sale_t{};
-
-    fillGraalData(graalOptionSale);
-
-    return graalOptionSale;
+    return newGraalEvent<dxfg_option_sale_t>(
+        DXFG_EVENT_OPTION_SALE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void OptionSale::freeGraal(void *graalNative) {

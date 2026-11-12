@@ -38,7 +38,7 @@ void TradeBase::fillData(void *graalNative) noexcept {
     };
 }
 
-void TradeBase::fillGraalData(void *graalNative) const noexcept {
+void TradeBase::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }

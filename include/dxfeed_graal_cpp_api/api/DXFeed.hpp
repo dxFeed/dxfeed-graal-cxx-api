@@ -136,6 +136,8 @@ concept LastingEventCollection =
  * <h3>Threads and locks</h3>
  *
  * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
+ *
+ * The functions that take symbols throw InvalidArgumentException if a symbol is not valid UTF-8 (see StringParam).
  */
 struct DXFCPP_EXPORT DXFeed : SharedEntity {
     /// The alias to a type of shared pointer to the DXFeed object

@@ -75,7 +75,7 @@ class DXFCPP_EXPORT NuamTimeAndSale final : public TimeAndSale {
     NuamTimeAndSaleData nuamTimeAndSaleData_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the NuamTimeAndSale object

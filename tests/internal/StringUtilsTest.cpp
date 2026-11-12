@@ -31,10 +31,17 @@ std::optional<std::string> take(const char *s) {
 } // namespace
 
 TEST_CASE("createCString() copies the text \"<null>\" as text, only an empty optional is null") {
-    CHECK(take(createCString(std::string_view{"<null>"})) == "<null>");
-    CHECK(take(createCString(std::string_view{""})) == "");
-    CHECK(take(createCString(std::optional<std::string>{"<null>"})) == "<null>");
-    CHECK(take(createCString(std::optional<std::string>{})) == std::nullopt);
+    CHECK(take(createCString(std::string_view{"<null>"}, "Foo::bar")) == "<null>");
+    CHECK(take(createCString(std::string_view{""}, "Foo::bar")) == "");
+    CHECK(take(createCString(std::optional<std::string>{"<null>"}, "Foo::bar")) == "<null>");
+    CHECK(take(createCString(std::optional<std::string>{}, "Foo::bar")) == std::nullopt);
+}
+
+TEST_CASE("createCString() checks the string before it allocates") {
+    CHECK_THROWS_WITH_AS(createCString(std::string_view{"a\xFF"}, "Foo::bar"),
+                         "Foo::bar: invalid UTF-8 at byte 1: 0xFF", InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(createCString(std::optional<std::string>{"\xC0\xAF"}, StringLabel::secretOf("Foo::secret")),
+                         "Foo::secret: invalid UTF-8 at byte 0", InvalidArgumentException);
 }
 
 TEST_CASE("utf8to16() and utf16to8() convert the characters up to U+00FF as Latin-1, as Java converts char and byte") {

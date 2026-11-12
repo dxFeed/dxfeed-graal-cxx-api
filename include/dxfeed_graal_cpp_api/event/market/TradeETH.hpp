@@ -100,7 +100,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
     friend struct EventMapper;
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the TradeETH object

@@ -26,10 +26,14 @@ const std::unique_ptr<IndexedEventSource> &IndexedEventSubscriptionSymbol::getSo
 }
 
 void *IndexedEventSubscriptionSymbol::toGraal() const {
+    // The symbol is owned here until the source is converted: a source name that is not valid UTF-8 throws.
+    auto symbol = eventSymbol_->toGraalUnique();
     auto *graalSymbol = new dxfg_indexed_event_subscription_symbol_t{
         .supper = {.type = INDEXED_EVENT_SUBSCRIPTION},
-        .symbol = static_cast<dxfg_symbol_t *>(eventSymbol_->toGraal()),
+        .symbol = nullptr,
         .source = static_cast<dxfg_indexed_event_source_t *>(source_->toGraal())};
+
+    graalSymbol->symbol = static_cast<dxfg_symbol_t *>(symbol.release());
 
     return graalSymbol;
 }

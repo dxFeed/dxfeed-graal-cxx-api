@@ -8,6 +8,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 #include "../../internal/utils/JavaUtils.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
@@ -40,7 +41,7 @@ void OrderImbalance::fillData(void *graalNative) noexcept {
     };
 }
 
-void OrderImbalance::fillGraalData(void *graalNative) const noexcept {
+void OrderImbalance::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
@@ -94,11 +95,12 @@ void *OrderImbalance::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOrderImbalance = new dxfg_order_imbalance_t{};
-
-    fillGraalData(graalOrderImbalance);
-
-    return graalOrderImbalance;
+    return newGraalEvent<dxfg_order_imbalance_t>(
+        DXFG_EVENT_ORDER_IMBALANCE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void OrderImbalance::freeGraal(void *graalNative) {
