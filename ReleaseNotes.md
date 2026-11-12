@@ -1,3 +1,5 @@
+## v8.2.0
+
 * **\[MDAPI-511]\[C++]** Migrated to the Graal Native SDK 3.16.0. The Windows `-static-mt` archives have no
   `dxFeedGraalCxxApi.dll` and its import library, and the Full Source Bundle is split into two, one for each C runtime
   of the SDK. See "Full Source Bundles" in `HOW_TO_BUILD.md`.
