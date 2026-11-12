@@ -24,9 +24,14 @@ start() {
 
     mkdir -p "$dir"
 
-    if [ -f "$pidFile" ] && isServer "$(cat "$pidFile")"; then
-        echo "The server of a previous run is alive (PID $(cat "$pidFile")): run '$0 stop $dir'"
-        return 1
+    if [ -f "$pidFile" ]; then
+        local previousPid
+        previousPid=$(cat "$pidFile")
+
+        if isServer "$previousPid"; then
+            echo "The server of a previous run is alive (PID $previousPid): run '$0 stop $dir'"
+            return 1
+        fi
     fi
 
     if portIsOpen "$port"; then

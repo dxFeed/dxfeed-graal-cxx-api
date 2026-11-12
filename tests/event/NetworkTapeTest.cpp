@@ -12,6 +12,7 @@
 #include "../support/TapeSupport.hpp"
 
 #include <cstddef>
+#include <memory>
 #include <string>
 #include <vector>
 

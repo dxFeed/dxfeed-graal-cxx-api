@@ -72,11 +72,12 @@ inline std::vector<std::shared_ptr<Order>> createOrders() {
     for (std::int64_t index = count - 1; index >= 0; index--) {
         auto order = std::make_shared<Order>(ORDER_SYMBOL);
         const auto buy = index % 2 == 0;
+        const auto priceStep = 0.25 * static_cast<double>(index);
 
         order->setIndex(index);
         order->setSource(OrderSource::NTV);
         order->setTime(EVENT_TIME + index * 1'000);
-        order->setPrice(buy ? 254.0 - 0.25 * static_cast<double>(index) : 254.5 + 0.25 * static_cast<double>(index));
+        order->setPrice(buy ? 254.0 - priceStep : 254.5 + priceStep);
         order->setSize(static_cast<double>(100 * (index + 1)));
         order->setOrderSide(buy ? Side::BUY : Side::SELL);
         order->setScope(Scope::ORDER);
