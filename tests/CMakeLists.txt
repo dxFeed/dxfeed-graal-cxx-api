@@ -63,6 +63,7 @@ set(DXFC_TEST_SOURCES
         event/EventsToStringTest.cpp
         event/StringFieldsTest.cpp
         event/EventTypeTest.cpp
+        event/NetworkTapeTest.cpp
         event/TapeRoundTripTest.cpp
         event/UnsupportedEventTest.cpp
         exceptions/CallbackBarrierTest.cpp
@@ -104,7 +105,9 @@ set(DXFC_TEST_SOURCES
         util/UtilHeadersTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
-# Tests that need external network access (demo.dxfeed.com). They are labeled "network": `ctest -L network`.
+# Tests over a network connection to a QDS server that sends tests/data/tapes/network.txt. They are labeled "network":
+# `ctest -L network`. On Linux CTest starts the server on 127.0.0.1:DXFCXX_NETWORK_TEST_PORT itself (the fixture below);
+# elsewhere DXFCXX_NETWORK_TEST_ADDRESS must give the address of such a server.
 if (DXFCXX_ENABLE_NETWORK_TESTS)
     list(APPEND DXFC_TEST_SOURCES network/NetworkTest.cpp)
 endif ()
@@ -198,7 +201,9 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     add_test(NAME ${DXFC_TEST_BASENAME} COMMAND ${DXFC_TEST_BASENAME})
 
     if (DXFC_TEST_SOURCE MATCHES "^network/")
-        set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES LABELS network)
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCXX_NETWORK_TEST_PORT=${DXFCXX_NETWORK_TEST_PORT})
+        # More than the sum of the 30-second waits of the cases: without a server the cases fail on their checks.
+        set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES LABELS network TIMEOUT 240)
     endif ()
 
     if (DXFCXX_SANITIZERS_ENABLED)
@@ -206,6 +211,47 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
                 "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
     endif ()
 endforeach ()
+
+# The generator of tests/data/tapes/network.txt, the tape of the network tests (tests/data/tapes/README.md).
+if (DXFCXX_ENABLE_NETWORK_TESTS)
+    set(DXFC_TAPE_GENERATOR_TARGET dxFeedGraalCxxApi_GenerateNetworkTape)
+    add_executable(${DXFC_TAPE_GENERATOR_TARGET} network/GenerateNetworkTape.cpp)
+    target_include_directories(${DXFC_TAPE_GENERATOR_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+
+    if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
+        target_link_libraries(${DXFC_TAPE_GENERATOR_TARGET} PRIVATE dxfcxx)
+    else ()
+        target_link_libraries(${DXFC_TAPE_GENERATOR_TARGET} PRIVATE dxfcxx::static)
+
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_TAPE_GENERATOR_TARGET} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    target_link_libraries(${DXFC_TAPE_GENERATOR_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_TAPE_GENERATOR_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+endif ()
+
+# The local server of the network tests on Linux: a CTest fixture that starts the QDS of the Tools with the tape before
+# the network tests and stops it after them. The label network_server excludes the fixture: `ctest -L network -LE
+# network_server -FA '.*'` runs the tests against the server of DXFCXX_NETWORK_TEST_ADDRESS.
+if (DXFCXX_ENABLE_NETWORK_TESTS AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(DXFC_LOCAL_SERVER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/network/local-server.sh")
+    set(DXFC_LOCAL_SERVER_DIR "${CMAKE_CURRENT_BINARY_DIR}/local-server")
+
+    add_test(NAME dxFeedGraalCxxApi_network_LocalServerStart
+            COMMAND bash "${DXFC_LOCAL_SERVER_SCRIPT}" start $<TARGET_FILE:Tools>
+            "${CMAKE_CURRENT_SOURCE_DIR}/data/tapes/network.txt" ${DXFCXX_NETWORK_TEST_PORT} "${DXFC_LOCAL_SERVER_DIR}")
+    add_test(NAME dxFeedGraalCxxApi_network_LocalServerStop
+            COMMAND bash "${DXFC_LOCAL_SERVER_SCRIPT}" stop "${DXFC_LOCAL_SERVER_DIR}")
+    set_tests_properties(dxFeedGraalCxxApi_network_LocalServerStart PROPERTIES
+            FIXTURES_SETUP network_server LABELS "network;network_server" TIMEOUT 60)
+    set_tests_properties(dxFeedGraalCxxApi_network_LocalServerStop PROPERTIES
+            FIXTURES_CLEANUP network_server LABELS "network;network_server" TIMEOUT 60)
+    set_tests_properties(dxFeedGraalCxxApi_network_NetworkTest PROPERTIES FIXTURES_REQUIRED network_server)
+    add_dependencies(dxFeedGraalCxxApi_network_NetworkTest Tools)
+endif ()
 
 # Sanitizer canaries: a deliberately defective LIBRARY function must produce the report of each active sanitizer.
 # They fail when a sanitizer is silently not applied, or when the library itself is not instrumented.

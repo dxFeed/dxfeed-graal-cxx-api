@@ -299,6 +299,10 @@ and builds its own executable, `dxFeedGraalCxxApi_<module>_<Name>`. A fix starts
     scenario that does not check it; a scenario that needs it gets its value after the unset, and checks that the value
     arrived as it is. A scenario fails by a non-zero exit code. The scenarios that read signals are for Linux and macOS.
 - **Network tests** (`tests/network/`) run only with `-DDXFCXX_ENABLE_NETWORK_TESTS=ON` and have the label `network`.
+  They connect to a local QDS server that sends `tests/data/tapes/network.txt` and compare the events with
+  `tests/network/NetworkTapeData.hpp`; on Linux a CTest fixture (`tests/network/local-server.sh`) starts and stops the
+  server (see [HOW_TO_BUILD.md](HOW_TO_BUILD.md)). The tape is generated from that header; to change the data, edit
+  the header and regenerate the tape ([tests/data/tapes/README.md](tests/data/tapes/README.md#network-tape)).
   The other tests do not use the network.
 - **Sanitizers**: build options and the canary tests are in [HOW_TO_BUILD.md](HOW_TO_BUILD.md#sanitizers). Add a
   suppression to `tests/sanitizers/*.supp` only for a report inside the Graal SDK, with a comment that says why.
