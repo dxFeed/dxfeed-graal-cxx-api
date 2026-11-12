@@ -268,6 +268,34 @@ TEST_CASE("DXEndpoint::getFeed and getPublisher") {
     REQUIRE(DXPublisher::getInstance() == publisher);
 }
 
+TEST_CASE("DXEndpoint::Builder::supportsProperty: a known property is supported, a made-up one is not") {
+    const auto builder = DXEndpoint::newBuilder();
+
+    CHECK(builder->supportsProperty(DXEndpoint::DXFEED_ADDRESS_PROPERTY));
+    CHECK_FALSE(builder->supportsProperty("dxfeed.no.such.property.for.the.test"));
+}
+
+TEST_CASE("DXEndpoint::getEventTypes: a FEED endpoint has event types") {
+    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
+
+    for (int i = 0; i < 5; ++i) {
+        CHECK_FALSE(endpoint->getEventTypes().empty());
+    }
+
+    endpoint->close();
+}
+
+TEST_CASE("DXEndpoint: awaitNotConnected and disconnectAndClear of a not connected endpoint do not throw") {
+    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
+
+    REQUIRE(endpoint->getState() == DXEndpoint::State::NOT_CONNECTED);
+    CHECK_NOTHROW(endpoint->awaitNotConnected());
+    CHECK_NOTHROW(endpoint->disconnectAndClear());
+    CHECK(endpoint->getState() == DXEndpoint::State::NOT_CONNECTED);
+
+    endpoint->close();
+}
+
 TEST_CASE("Test DXEndpoint + multi-thread setProperty") {
     std::thread t{[] {
         System::setProperty("test", "test");

@@ -33,16 +33,8 @@ constexpr DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) noexc
     return DXEndpoint::State::NOT_CONNECTED;
 }
 
-// dxfg_endpoint_t*                dxfg_DXEndpoint_getInstance(graal_isolatethread_t *thread);
-// dxfg_endpoint_t*                dxfg_DXEndpoint_getInstance2(graal_isolatethread_t *thread, dxfg_endpoint_role_t
-// role);
-//
-// dxfg_endpoint_t*                dxfg_DXEndpoint_create(graal_isolatethread_t *thread);
-//
-// dxfg_endpoint_t* dxfg_DXEndpoint_create2(graal_isolatethread_t *thread, dxfg_endpoint_role_t role);
-
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_close` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_close` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @throws InvalidArgumentException if the endpoint handle is invalid.
@@ -52,7 +44,7 @@ constexpr DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) noexc
 void /* int32_t */ close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_closeAndAwaitTermination` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_closeAndAwaitTermination` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @throws InvalidArgumentException if the endpoint handle is invalid.
@@ -62,14 +54,8 @@ void /* int32_t */ close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
 void /* int32_t */
 closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
-// dxfg_endpoint_role_t            dxfg_DXEndpoint_getRole(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint);
-
-// int32_t dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, dxfg_executor_t
-// *executor);
-void executor(const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, const JavaObjectHandle<dxfcpp::ExecutorTag> &ex);
-
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_user` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_user` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @param user The user's name.
@@ -81,7 +67,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
                         std::string_view user);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_password` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_password` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @param password The user's password.
@@ -93,7 +79,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
                             std::string_view password);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_connect` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_connect` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @param address The address.
@@ -104,7 +90,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
 void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, std::string_view address);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_reconnect` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_reconnect` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @throws InvalidArgumentException if the endpoint handle is invalid.
@@ -114,7 +100,7 @@ void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &
 void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_disconnect` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_disconnect` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @throws InvalidArgumentException if the endpoint handle is invalid.
@@ -124,7 +110,7 @@ void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint>
 void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_disconnectAndClear` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_disconnectAndClear` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @throws InvalidArgumentException if the endpoint handle is invalid.
@@ -134,7 +120,7 @@ void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint
 void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_awaitProcessed` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_awaitProcessed` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @throws InvalidArgumentException if the endpoint handle is invalid.
@@ -144,7 +130,7 @@ void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
 void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_awaitNotConnected` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_awaitNotConnected` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @throws InvalidArgumentException if the endpoint handle is invalid.
@@ -193,7 +179,7 @@ void removeStateChangeListener(
         &listener);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_getFeed` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_getFeed` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @return dxFeed Graal SDK DXFeed's handle.
@@ -204,7 +190,7 @@ void removeStateChangeListener(
 void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_getPublisher` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_getPublisher` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @return dxFeed Graal SDK DXPublisher's handle.
@@ -214,9 +200,6 @@ void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle
  */
 void * /* dxfg_publisher_t* */
 getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
-
-// int32_t dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t
-// *endpoint, dxfg_executor_t *executor);
 
 /**
  * Calls the Graal SDK function in isolation to retrieve event types from the endpoint.
@@ -231,7 +214,7 @@ getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> 
 getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_getRequestedAggregationPeriodMillis` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_getRequestedAggregationPeriodMillis` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @return The requested aggregation period in milliseconds, or -1 if no period is requested.
@@ -242,7 +225,7 @@ getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint>
 std::int64_t getRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_setRequestedAggregationPeriodMillis` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_setRequestedAggregationPeriodMillis` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @param period The requested aggregation period in milliseconds; a negative value clears the request.
@@ -254,7 +237,7 @@ void setRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjec
                                          std::int64_t period);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_getAggregationPeriodInfo` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_getAggregationPeriodInfo` in isolation.
  *
  * @param endpoint The endpoint's handle.
  * @return The minimum and the maximum aggregation period in milliseconds, negative if unknown.
@@ -268,7 +251,7 @@ getAggregationPeriodInfo(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoi
 namespace Builder {
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_newBuilder` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_newBuilder` in isolation.
  *
  * @return dxFeed Graal SDK DXEndpoint::Builder's handle.
  * @throws JavaException if something happened with the dxFeed API backend.
@@ -277,7 +260,7 @@ namespace Builder {
 void * /* dxfg_endpoint_builder_t* */ create();
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withRole` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_withRole` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @param role The endpoint's role.
  * @throws InvalidArgumentException if DXEndpoint::Builder's handle is invalid.
@@ -288,11 +271,8 @@ void /* int32_t */
 withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
          /* dxfg_endpoint_role_t */ dxfcpp::DXEndpoint::Role role);
 
-// int32_t dxfg_DXEndpoint_Builder_withName(graal_isolatethread_t *thread, dxfg_endpoint_builder_t
-// *builder, const char *name);
-
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withProperty` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_withProperty` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @param key The endpoint's property key.
  * @param value The endpoint's property value.
@@ -305,7 +285,7 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
              std::string_view key, std::string_view value);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withProperties` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_withProperties` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @param filePath The file with properties.
  * @throws InvalidArgumentException if DXEndpoint::Builder's handle is invalid.
@@ -317,7 +297,7 @@ withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DX
                std::string_view filePath);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_supportsProperty` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_supportsProperty` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @param key The endpoint's the property key to check.
  * @throws InvalidArgumentException if DXEndpoint::Builder's handle is invalid.
@@ -329,7 +309,7 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::
                  std::string_view key);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_withExecutor` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_withExecutor` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @param executor The executor's handle.
  *
@@ -342,7 +322,7 @@ withExecutor(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
              /* dxfg_executor_t * */ const JavaObjectHandle<dxfcpp::ExecutorTag> &executor);
 
 /**
- * Calls the Graal SDK function `dxfg_DXEndpoint_Builder_build` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_build` in isolation.
  * @param builder The DXEndpoint::Builder's handle.
  * @return The DXEndpoint's handle.
  *
@@ -358,7 +338,7 @@ build(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint:
 namespace StateChangeListener {
 
 /**
- * Calls the Graal SDK function `dxfg_PropertyChangeListener_new` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_PropertyChangeListener_new` in isolation.
  * @param userFunc A user function that is used as a callback for the listener.
  * @param userData User data, which is placed each time as a callback parameter when called from the listener.
  * @return The DXEndpointStateChangeListener's handle.

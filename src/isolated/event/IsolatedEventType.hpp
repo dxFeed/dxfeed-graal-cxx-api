@@ -11,6 +11,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../../include/dxfeed_graal_cpp_api/event/EventTypeEnum.hpp"
 #include "../../internal/Common.hpp"
 
+#include <memory>
+#include <unordered_set>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::event {
@@ -50,6 +53,21 @@ namespace IsolatedEventTypeList {
 std::unique_ptr<void, decltype(&release)> toUnique(void *eventTypes);
 
 } // namespace IsolatedEventTypeList
+
+namespace IsolatedEventClazzList {
+
+/**
+ * Takes the event types of a list returned by the SDK and releases the list with dxfg_v4_event_clazz_list_release.
+ * Unknown event type ids are skipped. A failure to release the list is reported by runRelease() on behalf of
+ * `component`, it is not thrown.
+ *
+ * @param list The list (`dxfg_v4_event_clazz_list*`), not `NULL`.
+ * @param component The name of the component that reports a failure to release the list.
+ * @return The known event types of the list.
+ */
+std::unordered_set<EventTypeEnum> takeEventTypes(/* dxfg_v4_event_clazz_list* */ void *list, const char *component);
+
+} // namespace IsolatedEventClazzList
 } // namespace isolated::event
 
 DXFCPP_END_NAMESPACE
