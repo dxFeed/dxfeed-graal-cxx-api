@@ -10,6 +10,7 @@ writes these files the same way.
 | `configuration.txt` | Three `Configuration` events (a type that the C++ API does not implement) and one `Quote`, written by hand | `tests/event/UnsupportedEventTest.cpp` |
 | `defaults.txt` | Default-constructed events of the 24 types, written by the Java API | `tests/event/TapeRoundTripTest.cpp` |
 | `edge-values.txt` | The edge values of `test::createEdgeEvents()` (NaN, ±0.0, infinities, number limits, special strings, all enum values, all 256 values of the event flags byte), written by the Java API from the same values | `tests/event/EdgeValuesTapeTest.cpp` |
+| `network.txt` | The data of the local server of the network tests: quotes of AAPL and IBM, a snapshot of AAPL orders on NTV and three years of daily AAPL candles, generated from `tests/network/NetworkTapeData.hpp` (see below) | `tests/network/NetworkTest.cpp` (through the server), `tests/event/NetworkTapeTest.cpp` |
 | `edge-values-round-trip.txt` | `edge-values.txt` read by the Java API (`STREAM_FEED`) and written back (`PUBLISHER`): QD does not read back every value it writes, e.g. the day ids of the int32 limits become 0 | `tests/event/EdgeValuesTapeTest.cpp` |
 
 ## Format
@@ -72,3 +73,19 @@ changes: a Java program sets the same values on the Java events and writes them 
 `tape:edge-values.txt[format=text]`, then reads that file with a `STREAM_FEED` (`file:...[speed=max]`) and writes the
 events back to `tape:edge-values-round-trip.txt[format=text]`. Run it with `-Duser.timezone=UTC` and convert the line
 endings to LF (on Windows Java writes CRLF).
+
+## Network tape
+
+`network.txt` is written by the C++ API, not by hand: `NetworkTapeData.hpp` describes the events, the generator
+`dxFeedGraalCxxApi_GenerateNetworkTape` (built with `DXFCXX_ENABLE_NETWORK_TESTS=ON`) writes them, and
+`NetworkTapeTest` fails when the file and the description differ. After a change of the description, regenerate the
+file on Linux in UTC, so that the times keep the `+0000` offset:
+
+```shell
+TZ=UTC <build>/tests/dxFeedGraalCxxApi_GenerateNetworkTape tests/data/tapes/network.txt
+```
+
+The tape has no event times (the server reads it with `time=none`). The snapshot flags are part of the data: the
+newest candle has `SNAPSHOT_BEGIN` and the oldest `SNAPSHOT_SNIP` (without the snip the server does not end the snapshot
+of a subscription from a time older than the oldest candle), the first order has `SNAPSHOT_BEGIN` and the last one, with
+the index 0, `SNAPSHOT_END`.
