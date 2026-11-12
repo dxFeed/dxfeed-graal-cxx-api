@@ -81,6 +81,8 @@ set(DXFC_TEST_SOURCES
         internal/StringUtilsTest.cpp
         internal/Utf8CheckTest.cpp
         ipf/InstrumentProfileCollectorTest.cpp
+        ipf/InstrumentProfileConnectionTest.cpp
+        ipf/InstrumentProfileReaderTest.cpp
         ipf/InstrumentProfileTest.cpp
         ipf/OptionChainsTest.cpp
         ipf/OptionSeriesTest.cpp
