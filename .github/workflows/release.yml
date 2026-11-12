@@ -896,7 +896,7 @@ jobs:
         with:
           name: release-notes
 
-      - uses: softprops/action-gh-release@a4f117a9dd5572319a486154ec1147aebabd285c # untagged master commit of 2024-02-05
+      - uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # untagged master commit of 2024-02-05
         with:
           files: |
             artifacts/*.zip
