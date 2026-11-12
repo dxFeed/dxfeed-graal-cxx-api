@@ -276,6 +276,15 @@ jobs:
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_LINK_STATIC_RUNTIME=ON
 
+      # GCC and Clang fail the build on a call of a deprecated SDK function; MSVC does not (C4996 is disabled), so the
+      # sources are checked against the list of the deprecated functions of the SDK that the configuration downloaded.
+      - name: Check for deprecated Graal SDK functions
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          python scripts/check_deprecated_sdk_calls.py
+          ${{github.workspace}}/build/_deps/dxfeedgraalnativesdk-src/dxfg-api.json
+          src include tests samples tools
+
       - name: Build
         if: ${{ !contains(matrix.config.os, 'win') }}
         run: >
@@ -335,8 +344,8 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # release.py, release.cmake (in a git repository) and their agreement; symbols.py
-      - name: Test scripts/release.py, scripts/release.cmake and scripts/symbols.py
+      # release.py, release.cmake (in a git repository) and their agreement; symbols.py; check_deprecated_sdk_calls.py
+      - name: Test scripts/release.py, scripts/release.cmake, scripts/symbols.py and scripts/check_deprecated_sdk_calls.py
         run: python3 -m unittest discover -s scripts/tests -v
 
       - name: Test the functions of scripts/release.cmake

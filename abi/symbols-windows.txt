@@ -2158,7 +2158,6 @@ static void dxfcpp::v8::IndexedTxModelImpl::setSourcesImpl(struct dxfcpp::v8::Ja
 static void dxfcpp::v8::InstrumentProfileCollector::releaseListenerHandle(struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::InstrumentProfileUpdateListener> &&)
 static void dxfcpp::v8::JavaException::throwException(void)
 static void dxfcpp::v8::JavaException::throwIfJavaThreadExceptionExists(void)
-static void dxfcpp::v8::JavaException::throwUnexpectedNullResult(void)
 static void dxfcpp::v8::JavaObject::release(void *)
 static void dxfcpp::v8::JavaObject::releaseList(void *)
 static void dxfcpp::v8::JavaObjectHandle<class dxfcpp::v8::DXEndpoint::Builder>::deleter(void *)

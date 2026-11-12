@@ -196,7 +196,8 @@ TEST_CASE_FIXTURE(PromisesFixture, "getLastEventsPromises and Promises::allOf co
     REQUIRE(quotes[1]->getAskPrice() == 21.0);
 }
 
-// Requires Graal SDK v3.5.0+: before it, dxfg_Promise_awaitWithoutException returned 0 ("completed") on timeout.
+// dxfg_v4_Promise_awaitWithoutException returns DXFG_PROMISE_AWAIT_TIMED_OUT on timeout (the old function of SDK
+// versions before 3.5.0 returned 0, "completed").
 TEST_CASE_FIXTURE(PromisesFixture, "awaitWithoutException returns false and cancels the promise on timeout") {
     const auto promise = feed->getLastEventPromise<Quote>("NO-DATA");
 

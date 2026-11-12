@@ -134,10 +134,6 @@ void JavaException::throwIfJavaThreadExceptionExists() {
     });
 }
 
-void JavaException::throwUnexpectedNullResult() {
-    isolated::throwUnexpectedNullResult();
-}
-
 void JavaException::throwException() {
     // The function always fails: it writes no object.
     static_cast<void>(isolated::runGraalV4FunctionWithResult(dxfg_v4_throw_exception));

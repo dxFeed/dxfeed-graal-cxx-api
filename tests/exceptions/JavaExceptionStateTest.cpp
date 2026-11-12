@@ -91,24 +91,16 @@ TEST_CASE("fetchThreadException takes the Java exception once") {
     });
 }
 
-TEST_CASE("throwIfNullptr throws a RuntimeException for a null result without a Java exception") {
-    int *const result = nullptr;
-
-    CHECK_THROWS_WITH_AS(JavaException::throwIfNullptr(result), doctest::Contains("Unexpected null result"),
+TEST_CASE("An unexpected null result is a RuntimeException, not a JavaException") {
+    CHECK_THROWS_WITH_AS(isolated::throwUnexpectedNullResult(), doctest::Contains("Unexpected null result"),
                          RuntimeException);
 
     try {
-        JavaException::throwIfNullptr(result);
+        isolated::throwUnexpectedNullResult();
     } catch (const JavaException &) {
         FAIL("a JavaException without a Java exception");
     } catch (const RuntimeException &) {
     }
-}
-
-TEST_CASE("nullableOrThrow returns a null result without a Java exception") {
-    int *const result = nullptr;
-
-    CHECK(JavaException::nullableOrThrow(result) == nullptr);
 }
 
 TEST_CASE("A failed call through a helper leaves no Java exception in the thread") {

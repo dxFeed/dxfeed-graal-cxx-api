@@ -10,10 +10,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 #include "../detail/StringParam.hpp"
 #include "./RuntimeException.hpp"
 
-#include <limits>
 #include <memory>
 #include <string>
-#include <type_traits>
 
 /**
  * \addtogroup dxfcpp_exceptions
@@ -70,84 +68,7 @@ struct DXFCPP_EXPORT JavaException : RuntimeException {
 
     static void throwException();
 
-    /**
-     * Checks the result of an SDK function that does not return `NULL` as a normal result.
-     *
-     * @param v The result.
-     * @return The result if it is not `nullptr`.
-     * @throws JavaException The thread has a Java exception: the function failed.
-     * @throws RuntimeException The result is `nullptr` without a Java exception.
-     */
-    template <typename T> static constexpr T *throwIfNullptr(T *v) {
-        if (v == nullptr) {
-            throwIfJavaThreadExceptionExists();
-            throwUnexpectedNullResult();
-        }
-
-        return v;
-    }
-
-    /**
-     * Checks the result of an SDK function for which `NULL` is a normal result (for example, nothing is found).
-     *
-     * @param v The result.
-     * @return The result, `nullptr` included.
-     * @throws JavaException The result is `nullptr` and the thread has a Java exception: the function failed.
-     */
-    template <typename T> static constexpr T *nullableOrThrow(T *v) {
-        if (v == nullptr) {
-            throwIfJavaThreadExceptionExists();
-        }
-
-        return v;
-    }
-
-    template <typename T> static constexpr T throwIfLessThanZero(T v) {
-        if (v < T(0)) {
-            throwIfJavaThreadExceptionExists();
-        }
-
-        return v;
-    }
-
-    // -1 of the C API functions; for an enum (state, error code), -1 of its underlying type.
-    template <typename T> static constexpr bool isMinusOne(T v) noexcept {
-        if constexpr (std::is_enum_v<T>) {
-            using U = std::underlying_type_t<T>;
-
-            return static_cast<U>(v) == static_cast<U>(-1);
-        } else {
-            return v == static_cast<T>(-1);
-        }
-    }
-
-    template <typename T> static constexpr T throwIfMinusOne(T v) {
-        if (isMinusOne(v)) {
-            throwIfJavaThreadExceptionExists();
-        }
-
-        return v;
-    }
-
-    template <typename T> static constexpr T throwIfMinusMin(T v) {
-        if (v == (std::numeric_limits<T>::min)()) {
-            throwIfJavaThreadExceptionExists();
-        }
-
-        return v;
-    }
-
-    template <typename T> static constexpr T throwIfMinusInf(T v) {
-        if (v < std::numeric_limits<T>::lowest()) { // -infinity
-            throwIfJavaThreadExceptionExists();
-        }
-
-        return v;
-    }
-
     private:
-    [[noreturn]] static void throwUnexpectedNullResult();
-
     struct JavaData;
 
     std::shared_ptr<const JavaData> javaData_;

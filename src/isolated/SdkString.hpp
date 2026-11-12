@@ -23,7 +23,7 @@ namespace isolated {
  *
  * Lifetime: the object is used as a temporary inside the call expression,
  * `dxfg_foo(thread, SdkString{value, "Foo::bar(value)"}.c_str())`. The temporary lives until the end of the full
- * expression, and the `runGraalFunction*` helpers call the SDK synchronously, so the pointer is valid for the whole
+ * expression, and the `runGraalV4Function*` helpers call the SDK synchronously, so the pointer is valid for the whole
  * call. Do not keep `c_str()` after the full expression: the object can be neither copied nor moved.
  *
  * Embedded NUL: the SDK reads the characters up to the first NUL, so a string with an embedded NUL is cut there.

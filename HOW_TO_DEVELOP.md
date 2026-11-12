@@ -24,34 +24,32 @@ Write a function of the isolated layer for each `dxfg_*` function, next to the o
 (`src/isolated/api/IsolatedDXFeedSubscription.cpp` is a good example):
 
 ```cpp
+/// dxfg_v4_DXFeedSubscription_addEventListener
 void addEventListener(const JavaObjectHandle<DXFeedSubscription> &sub,
                       const JavaObjectHandle<dxfcpp::DXFeedEventListener> &listener) {
-    if (!sub) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeedSubscription_addEventListener`. The `sub` handle is invalid");
-    }
+    auto *graalSub = toGraal(sub, "dxfg_v4_DXFeedSubscription_addEventListener");
     // ... the same check for `listener`
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXFeedSubscription_addEventListener,
-                                           static_cast<dxfg_subscription_t *>(sub.get()),
-                                           static_cast<dxfg_feed_event_listener_t *>(listener.get()));
+    runGraalV4Function(dxfg_v4_DXFeedSubscription_addEventListener, graalSub,
+                       static_cast<dxfg_v4_feed_event_listener_t *>(listener.get()));
 }
 ```
 
-- The `runGraalFunctionAndThrow*` helpers of `src/isolated/IsolatedCommon.hpp` run the function in the isolate thread
-  and throw `JavaException` when the result means an error: `...IfNullptr` for functions that return a pointer,
-  `...IfLessThanZero` and `...IfMinusOne` for the status codes, `...IfMinusMin`, `...IfMinusInf` for numbers. Pick
-  the one that matches what the C API documents for the function.
-- A pointer: `...IfNullptr` when the function returns `NULL` only on error (`NULL` without a Java exception then
-  throws `RuntimeException`), `runGraalFunctionNullableOrThrow` when `NULL` is also a normal result ("NULL if no
-  session is found"). Read the header of the SDK and the Java entry point: a few functions have another error value
-  (`dxfg_Promise_getException` returns `(dxfg_exception_t *)-1`).
+- Call the `dxfg_v4_*` functions only: the `dxfg_*` functions without `v4_` are deprecated, and GCC and Clang fail
+  the build on them (`-Werror=deprecated-declarations`).
+- A `dxfg_v4_*` function returns a status and writes its result to the last (out) parameter. The helpers of
+  `src/isolated/IsolatedCommon.hpp` run it in the isolate thread and throw `JavaException` when the status means an
+  error: `runGraalV4Function` for a function without a result, `runGraalV4FunctionWithResult` when `NULL` is a normal
+  result ("NULL if no session is found"), `runGraalV4FunctionWithNonNullResult` when it is not (a function that
+  creates an object; `NULL` then throws `RuntimeException`), `runGraalV4FunctionWithStatus` for the few functions
+  with positive statuses (`dxfg_v4_Promise_awaitWithoutException`). Read the header of the SDK to pick one.
+- An experimental function (`DXFG_EXPERIMENTAL`) is called after `Isolate::checkAdvancedRevision()`.
 - A failed function of the SDK leaves its Java exception in the thread until it is read, and a successful call does
-  not clear it. So the result of every call is checked right away: through a helper, or, in a direct call that turns
+  not clear it. So the status of every call is checked right away: through a helper, or, in a direct call that turns
   the failure into a result (`System::setProperty()` returns `false`), with `isolated::clearThreadException()`.
   Otherwise a later, unrelated call that checks its result gets this exception.
 - A function that creates a Java object returns `JavaObjectHandle<T>`. Strings and lists that the SDK returns are
-  copied into C++ values and released at once with the matching `dxfg_*_release` function.
+  copied into C++ values and released at once with the matching `dxfg_v4_*_release` function.
 - After `dxfcpp::shutdown()` or at the exit of the process the isolate does not run any more: the `runIsolated*`
   functions of `src/internal/Isolate.hpp` return `CEntryPointErrorsEnum::SHUT_DOWN` (or throw it), so a call of the SDK
   fails instead of hanging. See [Lifetime and exit](#lifetime-and-exit).

@@ -154,62 +154,6 @@ void clearThreadException(graal_isolatethread_t *thread) noexcept;
  */
 bool setSystemProperty(graal_isolatethread_t *thread, const char *key, const char *value) noexcept;
 
-constexpr auto throwIfNullptr = [](auto v) {
-    return JavaException::throwIfNullptr(v);
-};
-
-constexpr auto nullableOrThrow = [](auto v) {
-    return JavaException::nullableOrThrow(v);
-};
-
-constexpr auto throwIfLessThanZero = [](auto v) {
-    return JavaException::throwIfLessThanZero(v);
-};
-
-constexpr auto throwIfMinusOne = [](auto v) {
-    return JavaException::throwIfMinusOne(v);
-};
-
-constexpr auto throwIfMinusMin = [](auto v) {
-    return JavaException::throwIfMinusMin(v);
-};
-
-constexpr auto throwIfMinusInf = [](auto v) {
-    return JavaException::throwIfMinusInf(v);
-};
-
-constexpr auto runGraalFunctionAndThrow(auto resultCheckerConverter, auto graalFunction, auto &&...params) {
-    return runIsolatedThrow(
-        [](auto threadHandle, auto &&checkerConverter, auto &&function, auto &&...functionParams) {
-            return checkerConverter(function(static_cast<graal_isolatethread_t *>(threadHandle), functionParams...));
-        },
-        resultCheckerConverter, graalFunction, params...);
-}
-
-constexpr auto runGraalFunctionAndThrowIfNullptr(auto graalFunction, auto &&...params) {
-    return runGraalFunctionAndThrow(throwIfNullptr, graalFunction, params...);
-}
-
-constexpr auto runGraalFunctionNullableOrThrow(auto graalFunction, auto &&...params) {
-    return runGraalFunctionAndThrow(nullableOrThrow, graalFunction, params...);
-}
-
-constexpr auto runGraalFunctionAndThrowIfLessThanZero(auto graalFunction, auto &&...params) {
-    return runGraalFunctionAndThrow(throwIfLessThanZero, graalFunction, params...);
-}
-
-constexpr auto runGraalFunctionAndThrowIfMinusOne(auto graalFunction, auto &&...params) {
-    return runGraalFunctionAndThrow(throwIfMinusOne, graalFunction, params...);
-}
-
-constexpr auto runGraalFunctionAndThrowIfMinusMin(auto graalFunction, auto &&...params) {
-    return runGraalFunctionAndThrow(throwIfMinusMin, graalFunction, params...);
-}
-
-constexpr auto runGraalFunctionAndThrowIfMinusInf(auto graalFunction, auto &&...params) {
-    return runGraalFunctionAndThrow(throwIfMinusInf, graalFunction, params...);
-}
-
 // The calls of the dxfg_v4_ functions: each returns DXFG_EXECUTE_SUCCESSFULLY or DXFG_EXECUTE_FAIL and writes its result
 // to the last (out) parameter. Any other status is a failure here too, except for the functions with positive statuses
 // (await of a promise, the event queue), which are called with runGraalV4FunctionWithStatus().
