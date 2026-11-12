@@ -327,13 +327,10 @@ TEST_CASE_FIXTURE(PromisesFixture, "getTimeSeriesPromise completes when the requ
     checkCandle(list[2], CANDLE_TIME, 0);
 }
 
-// DXEndpoint::executor() is deprecated (QD-1795), but works when it is called before DXEndpoint::getFeed().
-TEST_CASE("getLastEventPromise completes with the executor set by DXEndpoint::executor() before getFeed()") {
+TEST_CASE("getLastEventPromise completes with the executor set by DXEndpoint::Builder::withExecutor()") {
     const auto executor = InPlaceExecutor::create();
-    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB)->build();
-
-    endpoint->executor(executor);
-
+    const auto endpoint =
+        DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB)->withExecutor(executor)->build();
     const auto feed = endpoint->getFeed();
     const auto publisher = endpoint->getPublisher();
     const auto promise = feed->getLastEventPromise<Trade>("A");

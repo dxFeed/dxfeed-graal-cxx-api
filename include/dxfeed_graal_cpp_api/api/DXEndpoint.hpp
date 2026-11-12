@@ -520,8 +520,6 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties);
 
-    void executorImpl(const JavaObjectHandle<ExecutorTag> &executor) const;
-
     // Returns the on-demand service of this endpoint: one instance, created on the first call.
     std::shared_ptr<OnDemandService> getOnDemandService();
 
@@ -677,28 +675,6 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @return onStateChange handler with `void(State, State)` signature
      */
     SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &onStateChange() noexcept;
-
-    /**
-     * Changes the executor that is used for notifications (events, state changes, etc.) of this endpoint.
-     *
-     * Call it right after the endpoint is created, before DXEndpoint::getFeed() and DXEndpoint::getPublisher().
-     * Called later, it applies to the next notifications of the existing and new subscriptions, but the last event
-     * promises (DXFeed::getLastEventPromise(), etc.) keep the default executor, which is shut down, and never complete.
-     *
-     * @deprecated Use DXEndpoint::Builder::withExecutor(): the builder sets the executor before the endpoint exists.
-     *
-     * @tparam Executor The executor's type (for example, InPlaceExecutor).
-     * @param executor The executor.
-     * @return this DXEndpoint.
-     * @throws InvalidArgumentException
-     * @throws JavaException
-     * @throws GraalException
-     */
-    template <typename Executor> std::shared_ptr<DXEndpoint> executor(const std::shared_ptr<Executor> &executor) {
-        executorImpl(executor->getHandle());
-
-        return sharedAs<DXEndpoint>();
-    }
 
     /**
      * Changes username for this endpoint.
