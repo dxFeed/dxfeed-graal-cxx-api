@@ -1,6 +1,6 @@
-* **\[MDAPI-511]\[C++]** The Windows `-static-mt` archives have no `dxFeedGraalCxxApi.dll` and its import library,
-  and the Full Source Bundle is split into two, one for each C runtime of the SDK. See "Full Source Bundles" in
-  `HOW_TO_BUILD.md`.
+* **\[MDAPI-511]\[C++]** Migrated to the Graal Native SDK 3.16.0. The Windows `-static-mt` archives have no
+  `dxFeedGraalCxxApi.dll` and its import library, and the Full Source Bundle is split into two, one for each C runtime
+  of the SDK. See "Full Source Bundles" in `HOW_TO_BUILD.md`.
     * With the static C runtime, the DLL and the code that uses it each have their own C runtime, and the C++ API
       passes standard library objects between them; link `dxFeedGraalCxxApi_static.lib`. The DLL is still built with
       `/MT` (`/MTd`) but not installed: only its C API can be used across this boundary.
@@ -12,6 +12,12 @@
       select, as for the downloaded SDK. An option that needs the SDK of the other bundle fails the configuration
       with the name of that bundle (the v8.1.0 bundle built with `DXFCXX_LINK_STATIC_RUNTIME=ON` and the SDK with the
       dynamic C runtime, with a warning).
+    * Fixed: TLS connections trusted certificate authorities that are no longer trusted. The SDK is built with
+      GraalVM 25.5 and trusts the root CAs of its JDK, so it no longer trusts the eMudhra and Comodo roots that
+      JDK 25.0.5 removed and rejects the eMudhra TLS CAs G3B that it blocks (CVE-2026-91403, CVE-2026-114820). A
+      connection to a server whose certificate chains up to one of them now fails the TLS handshake, unless the
+      application sets `javax.net.ssl.trustStore`. See the
+      [Graal Native SDK release notes](https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/tag/v3.15.0).
 * **\[MDAPI-521]\[C++]** Fixed the shared library (DLL) on Windows: the `==` and `<` operators of
   `std::reference_wrapper<const EventTypeEnum>` (also used by `std::set` of these references) were not exported, so
   the code that used them did not link.
