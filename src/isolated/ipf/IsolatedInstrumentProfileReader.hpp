@@ -16,25 +16,25 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::ipf::IsolatedInstrumentProfileReader {
-/* dxfg_instrument_profile_reader_t* */ JavaObjectHandle<InstrumentProfileReader> create();
+/* dxfg_v4_instrument_profile_reader_t* */ JavaObjectHandle<InstrumentProfileReader> create();
 
 std::int64_t getLastModified(
-    /* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle);
+    /* dxfg_v4_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle);
 
 bool wasComplete(
-    /* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle);
+    /* dxfg_v4_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle);
 
-/* dxfg_instrument_profile_list* */ void *
-readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
+/* dxfg_v4_instrument_profile_list* */ void *
+readFromFile(/* dxfg_v4_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
              std::string_view address);
 
-/* dxfg_instrument_profile_list* */ void *
-readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
+/* dxfg_v4_instrument_profile_list* */ void *
+readFromFile(/* dxfg_v4_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
              std::string_view address, std::string_view user, std::string_view password);
 
-/// dxfg_InstrumentProfileReader_readFromFile3
-/* dxfg_instrument_profile_list* */ void *
-readFromFile(/* dxfg_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
+/// dxfg_v4_InstrumentProfileReader_readFromFileWithTokenAsHandles
+/* dxfg_v4_instrument_profile_list* */ void *
+readFromFile(/* dxfg_v4_instrument_profile_reader_t * */ const JavaObjectHandle<InstrumentProfileReader> &handle,
              std::string_view address, const JavaObjectHandle<AuthToken> &token);
 
 std::string resolveSourceURL(std::string_view address);
