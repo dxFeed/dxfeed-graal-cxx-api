@@ -54,7 +54,11 @@ TEST_CASE("InstrumentProfileConnection reads a file into the collector and repor
 
     REQUIRE(connection->waitUntilCompleted(10s));
     CHECK(connection->getState() == State::COMPLETED);
-    CHECK(connection->getLastModified() > 0);
+
+    // The connection can report COMPLETED before it stores the modification time of the file.
+    CHECK(test::waitUntil([&] {
+        return connection->getLastModified() > 0;
+    }));
     CHECK(viewSize(*collector) == 14);
 
     CHECK(test::waitUntil([&] {
