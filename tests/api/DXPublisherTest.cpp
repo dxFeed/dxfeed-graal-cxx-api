@@ -76,6 +76,23 @@ TEST_CASE("DXPublisher::publishEvents") {
 
 // #endif
 
+TEST_CASE("DXPublisher::getSubscription: the observable subscription contains its event type and no other") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::PUBLISHER);
+    const auto subscription = endpoint->getPublisher()->getSubscription(Quote::TYPE);
+
+    CHECK(subscription->containsEventType(Quote::TYPE));
+    CHECK_FALSE(subscription->containsEventType(Trade::TYPE));
+    CHECK_FALSE(subscription->isClosed());
+
+    const auto eventTypes = subscription->getEventTypes();
+
+    CHECK_EQ(eventTypes.size(), 1);
+    CHECK_EQ(eventTypes.count(Quote::TYPE), 1);
+
+    endpoint->closeAndAwaitTermination();
+    CHECK(subscription->isClosed());
+}
+
 namespace {
 
 // A kind of invalid UTF-8 after a valid prefix: the suffix and the bytes the error names.

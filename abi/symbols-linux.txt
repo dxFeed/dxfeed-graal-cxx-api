@@ -424,7 +424,6 @@ dxfcpp::v8::DXEndpoint::create(dxfcpp::v8::DXEndpoint::Role)
 dxfcpp::v8::DXEndpoint::create(void*, dxfcpp::v8::DXEndpoint::Role, std::unordered_map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::hash<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::equal_to<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > const&)
 dxfcpp::v8::DXEndpoint::disconnect() const
 dxfcpp::v8::DXEndpoint::disconnectAndClear() const
-dxfcpp::v8::DXEndpoint::executorImpl(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::ExecutorTag> const&) const
 dxfcpp::v8::DXEndpoint::getAggregationPeriodInfo() const
 dxfcpp::v8::DXEndpoint::getEventTypes() const
 dxfcpp::v8::DXEndpoint::getFeed() const

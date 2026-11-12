@@ -13,34 +13,31 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXPublisher {
 
-void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle<DXPublisher> &publisher,
-                                 /* dxfg_event_type_list * */ void *events) {
+void publishEvents(const JavaObjectHandle<DXPublisher> &publisher, void *events) {
     if (!publisher) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXPublisher_publishEvents`. The `publisher` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXPublisher_publishEvents`. The `publisher` handle is invalid");
     }
 
     if (!events) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXPublisher_publishEvents`. The `events` is nullptr");
+            "Unable to execute function `dxfg_v4_DXPublisher_publishEvents`. The `events` is nullptr");
     }
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXPublisher_publishEvents,
-                                           static_cast<dxfg_publisher_t *>(publisher.get()),
-                                           static_cast<dxfg_event_type_list *>(events));
+    runGraalV4Function(dxfg_v4_DXPublisher_publishEvents, static_cast<dxfg_v4_publisher_t *>(publisher.get()),
+                       static_cast<dxfg_v4_event_type_list *>(events));
 }
 
-JavaObjectHandle<DXPublisherObservableSubscription> /* dxfg_observable_subscription_t * */
-getSubscription(/* dxfg_publisher_t * */ const JavaObjectHandle<DXPublisher> &publisher,
-                /* dxfg_event_clazz_t */ const EventTypeEnum &eventType) {
+JavaObjectHandle<DXPublisherObservableSubscription> getSubscription(const JavaObjectHandle<DXPublisher> &publisher,
+                                                                     const EventTypeEnum &eventType) {
     if (!publisher) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXPublisher_getSubscription`. The `publisher` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXPublisher_getSubscription`. The `publisher` handle is invalid");
     }
 
-    return JavaObjectHandle<DXPublisherObservableSubscription>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXPublisher_getSubscription, static_cast<dxfg_publisher_t *>(publisher.get()),
-        static_cast<dxfg_event_clazz_t>(eventType.getId())));
+    return JavaObjectHandle<DXPublisherObservableSubscription>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXPublisher_getSubscription, static_cast<dxfg_v4_publisher_t *>(publisher.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId())));
 }
 
 } // namespace isolated::api::IsolatedDXPublisher

@@ -553,34 +553,6 @@ TEST_CASE("The subscriptions of a publisher are released when its endpoint is cl
     }));
 }
 
-TEST_CASE("executor() called after getFeed() applies to the next events of the existing subscriptions") {
-    const auto endpoint = localHub();
-    const auto feed = endpoint->getFeed();
-    const auto publisher = endpoint->getPublisher();
-    const auto subscription = feed->createSubscription(Quote::TYPE);
-    const auto executor = InPlaceExecutor::create();
-    std::atomic<int> calls{0};
-    std::atomic<std::thread::id> listenerThread{};
-
-    subscription->addEventListener([&](const Events &) {
-        listenerThread = std::this_thread::get_id();
-        calls++;
-    });
-    subscription->addSymbols("AAPL");
-    endpoint->executor(executor);
-    publisher->publishEvents(quote(10.5));
-
-    REQUIRE(test::waitUntil([&] {
-        executor->processAllPendingTasks();
-
-        return calls.load() > 0;
-    }));
-
-    CHECK(listenerThread.load() == std::this_thread::get_id());
-
-    endpoint->close();
-}
-
 TEST_CASE("Instrument profile readers are released with their last pointer") {
     std::vector<std::weak_ptr<InstrumentProfileReader>> readers{};
 

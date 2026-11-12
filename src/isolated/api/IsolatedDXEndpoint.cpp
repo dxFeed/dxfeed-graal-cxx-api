@@ -6,147 +6,91 @@
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../internal/Common.hpp"
 #include "../IsolatedCommon.hpp"
+#include "../event/IsolatedEventType.hpp"
 
 #include <dxfg_api.h>
+
+#include <memory>
+#include <string>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXEndpoint {
 
-void /* int32_t */
-close(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
+namespace {
+
+dxfg_v4_endpoint_t *toGraal(const JavaObjectHandle<DXEndpoint> &endpoint, const char *function) {
     if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_close`. The `endpoint` handle is invalid");
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `endpoint` handle is invalid");
     }
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_close, static_cast<dxfg_endpoint_t *>(endpoint.get()));
+    return static_cast<dxfg_v4_endpoint_t *>(endpoint.get());
+}
+
+dxfg_v4_endpoint_builder_t *toGraal(const JavaObjectHandle<DXEndpoint::Builder> &builder, const char *function) {
+    if (!builder) {
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `builder` handle is invalid");
+    }
+
+    return static_cast<dxfg_v4_endpoint_builder_t *>(builder.get());
+}
+
+} // namespace
+
+void /* int32_t */
+close(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
+    runGraalV4Function(dxfg_v4_DXEndpoint_close, toGraal(endpoint, "dxfg_v4_DXEndpoint_close"));
 }
 
 void /* int32_t */
 closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_closeAndAwaitTermination`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_closeAndAwaitTermination,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()));
-}
-
-// int32_t dxfg_DXEndpoint_executor(graal_isolatethread_t *thread, dxfg_endpoint_t *endpoint, dxfg_executor_t
-// *executor);
-void executor(const JavaObjectHandle<DXEndpoint> &endpoint, const JavaObjectHandle<ExecutorTag> &ex) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_executor`. The `endpoint` handle is invalid");
-    }
-
-    if (!ex) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_executor`. The `ex` handle is invalid");
-    }
-
-    // Deprecated since SDK 3.9.0 (QD-1795): DXEndpoint::executor() stays for compatibility, the builder uses
-    // dxfg_DXEndpoint_Builder_withExecutor.
-    DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4996)
-    DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wdeprecated-declarations")
-    DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_executor, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           static_cast<dxfg_executor_t *>(ex.get()));
-    DXFCXX_DISABLE_CLANG_WARNINGS_POP()
-    DXFCXX_DISABLE_GCC_WARNINGS_POP()
-    DXFCXX_DISABLE_MSC_WARNINGS_POP()
+    runGraalV4Function(dxfg_v4_DXEndpoint_closeAndAwaitTermination,
+                       toGraal(endpoint, "dxfg_v4_DXEndpoint_closeAndAwaitTermination"));
 }
 
 void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint, std::string_view user) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_user`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_user, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           SdkString{user, StringLabel::secretOf("DXEndpoint::user(user)")}.c_str());
+    runGraalV4Function(dxfg_v4_DXEndpoint_user, toGraal(endpoint, "dxfg_v4_DXEndpoint_user"),
+                       SdkString{user, StringLabel::secretOf("DXEndpoint::user(user)")}.c_str());
 }
 
 void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint,
                             std::string_view password) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_password`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_password, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           SdkString{password,
-                                                     StringLabel::secretOf("DXEndpoint::password(password)")}
-                                               .c_str());
+    runGraalV4Function(dxfg_v4_DXEndpoint_password, toGraal(endpoint, "dxfg_v4_DXEndpoint_password"),
+                       SdkString{password, StringLabel::secretOf("DXEndpoint::password(password)")}.c_str());
 }
 
 void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint, std::string_view address) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_connect`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_connect, static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           SdkString{address, "DXEndpoint::connect(address)"}.c_str());
+    runGraalV4Function(dxfg_v4_DXEndpoint_connect, toGraal(endpoint, "dxfg_v4_DXEndpoint_connect"),
+                       SdkString{address, "DXEndpoint::connect(address)"}.c_str());
 }
 
 void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_reconnect`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_reconnect, static_cast<dxfg_endpoint_t *>(endpoint.get()));
+    runGraalV4Function(dxfg_v4_DXEndpoint_reconnect, toGraal(endpoint, "dxfg_v4_DXEndpoint_reconnect"));
 }
 
 void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_disconnect`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_disconnect, static_cast<dxfg_endpoint_t *>(endpoint.get()));
+    runGraalV4Function(dxfg_v4_DXEndpoint_disconnect, toGraal(endpoint, "dxfg_v4_DXEndpoint_disconnect"));
 }
 
 void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_disconnectAndClear`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_disconnectAndClear,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()));
+    runGraalV4Function(dxfg_v4_DXEndpoint_disconnectAndClear,
+                       toGraal(endpoint, "dxfg_v4_DXEndpoint_disconnectAndClear"));
 }
 
 void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_awaitProcessed`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_awaitProcessed,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()));
+    runGraalV4Function(dxfg_v4_DXEndpoint_awaitProcessed, toGraal(endpoint, "dxfg_v4_DXEndpoint_awaitProcessed"));
 }
 
 void awaitNotConnected(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_awaitNotConnected`. The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_awaitNotConnected,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()));
+    runGraalV4Function(dxfg_v4_DXEndpoint_awaitNotConnected,
+                       toGraal(endpoint, "dxfg_v4_DXEndpoint_awaitNotConnected"));
 }
 
 DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException("Unable to get state. The `endpoint` handle is invalid");
-    }
-
-    return graalStateToState(runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getState,
-                                                                    static_cast<dxfg_endpoint_t *>(endpoint.get())));
+    return graalStateToState(runGraalV4FunctionWithResult(dxfg_v4_DXEndpoint_getState,
+                                                          toGraal(endpoint, "dxfg_v4_DXEndpoint_getState")));
 }
 
 void addStateChangeListener(
@@ -154,17 +98,14 @@ void addStateChangeListener(
     /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<DXEndpointStateChangeListener>
         &listener) {
 
-    if (!endpoint) {
-        throw InvalidArgumentException("Unable to add DXEndpointStateChangeListener. The `endpoint` handle is invalid");
-    }
+    auto *graalEndpoint = toGraal(endpoint, "dxfg_v4_DXEndpoint_addStateChangeListener");
 
     if (!listener) {
         throw InvalidArgumentException("Unable to add DXEndpointStateChangeListener. The `listener` handle is invalid");
     }
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_addStateChangeListener,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           static_cast<dxfg_endpoint_state_change_listener_t *>(listener.get()));
+    runGraalV4Function(dxfg_v4_DXEndpoint_addStateChangeListener, graalEndpoint,
+                       static_cast<dxfg_v4_endpoint_state_change_listener_t *>(listener.get()));
 }
 
 void removeStateChangeListener(
@@ -172,108 +113,56 @@ void removeStateChangeListener(
     /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<DXEndpointStateChangeListener>
         &listener) {
 
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to remove DXEndpointStateChangeListener. The `endpoint` handle is invalid");
-    }
+    auto *graalEndpoint = toGraal(endpoint, "dxfg_v4_DXEndpoint_removeStateChangeListener");
 
     if (!listener) {
         throw InvalidArgumentException(
             "Unable to remove DXEndpointStateChangeListener. The `listener` handle is invalid");
     }
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_removeStateChangeListener,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()),
-                                           static_cast<dxfg_endpoint_state_change_listener_t *>(listener.get()));
+    runGraalV4Function(dxfg_v4_DXEndpoint_removeStateChangeListener, graalEndpoint,
+                       static_cast<dxfg_v4_endpoint_state_change_listener_t *>(listener.get()));
 }
 
 void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_getFeed`. The `endpoint` handle is invalid");
-    }
-
-    return dxfcpp::bit_cast<void *>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_DXEndpoint_getFeed, static_cast<dxfg_endpoint_t *>(endpoint.get())));
+    return dxfcpp::bit_cast<void *>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXEndpoint_getFeed, toGraal(endpoint, "dxfg_v4_DXEndpoint_getFeed")));
 }
 
 void * /* dxfg_publisher_t* */
 getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_getPublisher`. The `endpoint` handle is invalid");
-    }
-
-    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(dxfg_DXEndpoint_getPublisher,
-                                                                      static_cast<dxfg_endpoint_t *>(endpoint.get())));
+    return dxfcpp::bit_cast<void *>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXEndpoint_getPublisher, toGraal(endpoint, "dxfg_v4_DXEndpoint_getPublisher")));
 }
 
 /* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum>
 getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException("Unable to retrieve event types. The `endpoint` handle is invalid");
-    }
-
-    std::unordered_set<EventTypeEnum> result{};
-
-    dxfg_event_clazz_list_t *eventTypesList = runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXEndpoint_getEventTypes, static_cast<dxfg_endpoint_t *>(endpoint.get()));
-
-    if (eventTypesList->size > 0) {
-        for (auto i = 0; i < eventTypesList->size; i++) {
-            dxfg_event_clazz_t ec = *eventTypesList->elements[static_cast<std::size_t>(i)];
-
-            if (auto etIt = EventTypeEnum::ALL_BY_ID.find(static_cast<std::uint32_t>(ec));
-                etIt != EventTypeEnum::ALL_BY_ID.end()) {
-                result.emplace(etIt->second.get());
-            }
-        }
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_EventClazz_release, eventTypesList);
-
-    return result;
+    return event::IsolatedEventClazzList::takeEventTypes(
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_DXEndpoint_getEventTypes,
+                                            toGraal(endpoint, "dxfg_v4_DXEndpoint_getEventTypes")),
+        "DXEndpoint");
 }
 
 std::int64_t getRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_getRequestedAggregationPeriodMillis`. "
-            "The `endpoint` handle is invalid");
-    }
-
-    std::int64_t period{};
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getRequestedAggregationPeriodMillis,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()), &period);
-
-    return period;
+    return runGraalV4FunctionWithResult(dxfg_v4_DXEndpoint_getRequestedAggregationPeriodMillis,
+                                        toGraal(endpoint, "dxfg_v4_DXEndpoint_getRequestedAggregationPeriodMillis"));
 }
 
 void setRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint,
                                          std::int64_t period) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_setRequestedAggregationPeriodMillis`. "
-            "The `endpoint` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_setRequestedAggregationPeriodMillis,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()), period);
+    runGraalV4Function(dxfg_v4_DXEndpoint_setRequestedAggregationPeriodMillis,
+                       toGraal(endpoint, "dxfg_v4_DXEndpoint_setRequestedAggregationPeriodMillis"), period);
 }
 
 std::pair<std::int64_t, std::int64_t>
 getAggregationPeriodInfo(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint) {
-    if (!endpoint) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_getAggregationPeriodInfo`. The `endpoint` handle is invalid");
-    }
+    auto *graalEndpoint = toGraal(endpoint, "dxfg_v4_DXEndpoint_getAggregationPeriodInfo");
 
+    // The helpers take one out-parameter, so the pair is read by hand.
     std::int64_t min{};
     std::int64_t max{};
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_getAggregationPeriodInfo,
-                                           static_cast<dxfg_endpoint_t *>(endpoint.get()), &min, &max);
+    runGraalV4Function(dxfg_v4_DXEndpoint_getAggregationPeriodInfo, graalEndpoint, &min, &max);
 
     return {min, max};
 }
@@ -300,97 +189,60 @@ dxfg_endpoint_role_t roleToGraalRole(DXEndpoint::Role role) {
 namespace Builder {
 
 void * /* dxfg_endpoint_builder_t* */ create() {
-    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(dxfg_DXEndpoint_newBuilder));
+    return dxfcpp::bit_cast<void *>(runGraalV4FunctionWithNonNullResult(dxfg_v4_DXEndpoint_newBuilder));
 }
 
 void /* int32_t */
 withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
          /* dxfg_endpoint_role_t */ DXEndpoint::Role role) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_Builder_withRole`. The `builder` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(
-        dxfg_DXEndpoint_Builder_withRole, static_cast<dxfg_endpoint_builder_t *>(builder.get()), roleToGraalRole(role));
+    runGraalV4Function(dxfg_v4_DXEndpoint_Builder_withRole, toGraal(builder, "dxfg_v4_DXEndpoint_Builder_withRole"),
+                       roleToGraalRole(role));
 }
 
-// dxfg_DXEndpoint_Builder_withProperty
 void /* int32_t */
 withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder, std::string_view key,
              std::string_view value) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_Builder_withProperty`. The `builder` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperty,
-                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                           SdkString{key, "DXEndpoint::Builder::withProperty(key)"}.c_str(),
-                                           SdkString{value, StringLabel::ofPropertyValue(
-                                                                "DXEndpoint::Builder::withProperty(value)", key)}
-                                               .c_str());
+    runGraalV4Function(dxfg_v4_DXEndpoint_Builder_withProperty,
+                       toGraal(builder, "dxfg_v4_DXEndpoint_Builder_withProperty"),
+                       SdkString{key, "DXEndpoint::Builder::withProperty(key)"}.c_str(),
+                       SdkString{value, StringLabel::ofPropertyValue("DXEndpoint::Builder::withProperty(value)", key)}
+                           .c_str());
 }
 
-// dxfg_DXEndpoint_Builder_withProperties
 void /* int32_t */
 withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
                std::string_view filePath) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_Builder_withProperties`. The `builder` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withProperties,
-                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                           SdkString{filePath, "DXEndpoint::Builder::withProperties(filePath)"}
-                                               .c_str());
+    runGraalV4Function(dxfg_v4_DXEndpoint_Builder_withProperties,
+                       toGraal(builder, "dxfg_v4_DXEndpoint_Builder_withProperties"),
+                       SdkString{filePath, "DXEndpoint::Builder::withProperties(filePath)"}.c_str());
 }
 
-// dxfg_DXEndpoint_Builder_supportsProperty
 bool /* int32_t */
 supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
                  std::string_view key) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_Builder_supportsProperty`. The `builder` handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_supportsProperty,
-                                                  static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                                  SdkString{key, "DXEndpoint::Builder::supportsProperty(key)"}
-                                                      .c_str()) == 1;
+    return runGraalV4FunctionWithResult(dxfg_v4_DXEndpoint_Builder_supportsProperty,
+                                        toGraal(builder, "dxfg_v4_DXEndpoint_Builder_supportsProperty"),
+                                        SdkString{key, "DXEndpoint::Builder::supportsProperty(key)"}.c_str()) == 1;
 }
 
-// dxfg_DXEndpoint_Builder_withExecutor
 void /* int32_t */
 withExecutor(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder,
              /* dxfg_executor_t * */ const JavaObjectHandle<ExecutorTag> &executor) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_Builder_withExecutor`. The `builder` handle is invalid");
-    }
+    auto *graalBuilder = toGraal(builder, "dxfg_v4_DXEndpoint_Builder_withExecutor");
 
     if (!executor) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_Builder_withExecutor`. The `executor` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXEndpoint_Builder_withExecutor`. The `executor` handle is invalid");
     }
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_DXEndpoint_Builder_withExecutor,
-                                           static_cast<dxfg_endpoint_builder_t *>(builder.get()),
-                                           static_cast<dxfg_executor_t *>(executor.get()));
+    runGraalV4Function(dxfg_v4_DXEndpoint_Builder_withExecutor, graalBuilder,
+                       static_cast<dxfg_v4_executor_t *>(executor.get()));
 }
 
-// dxfg_DXEndpoint_Builder_build
 void * /* dxfg_endpoint_t* */
 build(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<DXEndpoint::Builder> &builder) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXEndpoint_Builder_build`. The `builder` handle is invalid");
-    }
-
-    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXEndpoint_Builder_build, static_cast<dxfg_endpoint_builder_t *>(builder.get())));
+    return dxfcpp::bit_cast<void *>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXEndpoint_Builder_build, toGraal(builder, "dxfg_v4_DXEndpoint_Builder_build")));
 }
 
 } // namespace Builder
@@ -402,8 +254,8 @@ JavaObjectHandle<DXEndpointStateChangeListener> create(void *userFunc, void *use
             "Unable to create DXEndpointStateChangeListener. The `userFunc` parameter is nullptr");
     }
 
-    return JavaObjectHandle<DXEndpointStateChangeListener>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_PropertyChangeListener_new, dxfcpp::bit_cast<dxfg_endpoint_state_change_listener_func>(userFunc),
+    return JavaObjectHandle<DXEndpointStateChangeListener>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_PropertyChangeListener_new, dxfcpp::bit_cast<dxfg_v4_endpoint_state_change_listener_func>(userFunc),
         userData));
 }
 } // namespace StateChangeListener

@@ -4,6 +4,7 @@
 #include "IsolatedEventType.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../internal/CallbackBarrier.hpp"
 #include "../IsolatedCommon.hpp"
 
 #include <dxfg_api.h>
@@ -80,6 +81,33 @@ std::unique_ptr<void, decltype(&release)> toUnique(void *eventTypes) {
     return {eventTypes, release};
 }
 } // namespace IsolatedEventTypeList
+
+namespace IsolatedEventClazzList {
+
+std::unordered_set<EventTypeEnum> takeEventTypes(/* dxfg_v4_event_clazz_list* */ void *list, const char *component) {
+    auto *eventTypesList = static_cast<dxfg_v4_event_clazz_list *>(list);
+    // A failure to free the list must not replace the result or an exception of the conversion.
+    const auto releaseList = [component](dxfg_v4_event_clazz_list *toRelease) noexcept {
+        runRelease(component, [toRelease] {
+            runGraalV4Function(dxfg_v4_event_clazz_list_release, toRelease);
+        });
+    };
+    const std::unique_ptr<dxfg_v4_event_clazz_list, decltype(releaseList)> guard{eventTypesList, releaseList};
+    std::unordered_set<EventTypeEnum> result{};
+
+    for (std::int32_t i = 0; i < eventTypesList->size; i++) {
+        const auto eventClazz = *eventTypesList->elements[static_cast<std::size_t>(i)];
+
+        if (auto etIt = EventTypeEnum::ALL_BY_ID.find(static_cast<std::uint32_t>(eventClazz));
+            etIt != EventTypeEnum::ALL_BY_ID.end()) {
+            result.emplace(etIt->second.get());
+        }
+    }
+
+    return result;
+}
+
+} // namespace IsolatedEventClazzList
 } // namespace isolated::event
 
 DXFCPP_END_NAMESPACE

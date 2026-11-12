@@ -2960,7 +2960,6 @@ void dxfcpp::v8::DXEndpoint::close(void)const
 void dxfcpp::v8::DXEndpoint::closeAndAwaitTermination(void)const
 void dxfcpp::v8::DXEndpoint::disconnect(void)const
 void dxfcpp::v8::DXEndpoint::disconnectAndClear(void)const
-void dxfcpp::v8::DXEndpoint::executorImpl(struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::ExecutorTag> const &)const
 void dxfcpp::v8::DXEndpoint::reconnect(void)const
 void dxfcpp::v8::DXEndpoint::removeStateChangeListener(unsigned __int64)
 void dxfcpp::v8::DXEndpoint::setRequestedAggregationPeriod(__int64)const
