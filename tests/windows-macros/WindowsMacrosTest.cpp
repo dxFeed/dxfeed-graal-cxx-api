@@ -26,6 +26,13 @@ int main() {
 
     int failures = checkWindowsHeaderAfterApi();
 
+    // ErrorInfo::Level::ERROR is hidden by the ERROR macro here: the default level is checked without naming it.
+    static_assert(ErrorInfo::Level::WARN != ErrorInfo::Level{});
+    if (ErrorInfo{}.level != ErrorInfo::Level{} || ErrorInfo{}.level == ErrorInfo::Level::WARN) {
+        std::puts("The default level of ErrorInfo is wrong");
+        failures++;
+    }
+
     // The names hidden by the macros are reachable when the user hides the macros the same way.
 #pragma push_macro("DELETE")
 #pragma push_macro("ERROR")
@@ -41,6 +48,7 @@ int main() {
     }
 
     static_assert(static_cast<int>(Logging::Level::ERROR) == static_cast<int>(Logging::Level::WARN) + 1);
+    static_assert(ErrorInfo::Level::ERROR == ErrorInfo::Level{} && ErrorInfo::Level::ERROR != ErrorInfo::Level::WARN);
     static_assert(static_cast<int>(Tristate::TRUE) == 1 && static_cast<int>(Tristate::FALSE) == 0);
 #pragma pop_macro("FALSE")
 #pragma pop_macro("TRUE")

@@ -89,11 +89,13 @@ set(DXFC_TEST_SOURCES
         model/IndexedEventTxModelTest.cpp
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp
+        model/TimeSeriesTxModelFromTimeTest.cpp
         model/TxModelTapeTest.cpp
         model/MarketDepthModelTest.cpp
         ondemand/OnDemandServiceTest.cpp
         orcs/PriceLevelServiceTest.cpp
         promise/PromisesTest.cpp
+        promise/PromiseTimeoutTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp

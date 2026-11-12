@@ -43,10 +43,16 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  *   the reason. The library does not try to create the isolate again. System::getProperty() and System::setProperty()
  *   throw it too, instead of returning an empty string or `false`; the functions of the C API return `DXFC_EC_ERROR`.
  *   The messages never contain the values of the arguments.
+ * - **A warning** is reported from inside a call that goes on (for example, a `fromTime` in the future given to a
+ *   TimeSeriesTxModel): the call does not throw and does not change its result. The library reports it with
+ *   ErrorManager::reportWarning(), and it has the level ErrorInfo::Level::WARN, while the errors have
+ *   ErrorInfo::Level::ERROR (ErrorInfo::level). A warning shares the handler, the journal and
+ *   ErrorManager::getLastError() with the errors.
  *
- * ErrorManager passes each error to the handler and keeps the last errors in a journal:
+ * ErrorManager passes each error and warning to the handler and keeps the last ones in a journal:
  *
- * - The default handler writes one line per error to `stderr`. ErrorManager::setHandler() replaces it, a null
+ * - The default handler writes one line per error to `stderr`; a warning is marked with `WARN ` before its number:
+ *   `[dxfcpp] WARN #7 Component (File.cpp:42): message`. ErrorManager::setHandler() replaces it, a null
  *   handler turns the output off, ErrorManager::resetHandler() restores the default one.
  * - The handler is called on the thread where the error happened, without the locks of ErrorManager held: it may
  *   read the journal and change the handler. Errors of several threads call it at the same time, so it must be
@@ -108,9 +114,25 @@ struct DXFCPP_EXPORT ErrorInfo {
     /// The stack trace of the Java exception, or an empty string when the error is not a Java exception.
     std::string javaStackTrace{};
 
+    /// The level of a report.
+    enum class Level {
+        // windows.h defines ERROR as a macro: it is hidden here and restored after the enumerator.
+#pragma push_macro("ERROR")
+#undef ERROR
+        /// A failure: reported by ErrorManager::report() and ErrorManager::reportException(). The default level.
+        ERROR,
+#pragma pop_macro("ERROR")
+
+        /// A warning: reported by ErrorManager::reportWarning(). The call that reported it went on.
+        WARN
+    };
+
+    /// The level of the report, the last member: a value of ErrorInfo without it gets the level of an error.
+    Level level{};
+
     /**
      * Returns a string representation of the error: the component, the location, the Java class (if any) and the
-     * message, in one line.
+     * message, in one line. A warning starts with `WARN `.
      *
      * @return The string representation of the error.
      */
@@ -151,6 +173,17 @@ struct DXFCPP_EXPORT ErrorManager final {
      */
     static void reportException(StringParam component, const std::exception_ptr &exception,
                                 const std::source_location &location = std::source_location::current()) noexcept;
+
+    /**
+     * Reports a warning: adds it to the journal and passes it to the handler like an error, with the level
+     * ErrorInfo::Level::WARN. The ids come from the same counter as the ids of the errors.
+     *
+     * @param component The part of the code that reports the warning.
+     * @param message The message of the warning.
+     * @param location The source location of the report.
+     */
+    static void reportWarning(StringParam component, StringParam message,
+                              const std::source_location &location = std::source_location::current()) noexcept;
 
     /**
      * Sets the handler of the errors.

@@ -522,6 +522,7 @@ set(dxFeedGraalCxxApi_Orcs_Sources
 
 set(dxFeedGraalCxxApi_Promise_Sources
         src/promise/Promise.cpp
+        src/promise/PromiseContext.cpp
         src/promise/Promises.cpp
 )
 

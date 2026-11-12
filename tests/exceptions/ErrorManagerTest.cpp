@@ -318,6 +318,81 @@ TEST_CASE("The default handler writes one line to stderr, a null handler writes 
     }
 }
 
+TEST_CASE("report and reportException give the level of an error") {
+    ErrorManagerGuard guard{};
+
+    ErrorManager::report("C", "plain");
+    ErrorManager::reportException("C", std::make_exception_ptr(std::runtime_error("thrown")));
+
+    const auto errors = ErrorManager::getErrors();
+
+    REQUIRE(errors.size() == 2);
+    CHECK(errors[0].level == ErrorInfo::Level{});
+    CHECK(errors[1].level == ErrorInfo::Level{});
+    CHECK(errors[0].toString().rfind("WARN", 0) == std::string::npos);
+    CHECK(errors[0].toString() == "#" + std::to_string(errors[0].id) + " C (" + errors[0].location + "): plain");
+    CHECK(errors[1].toString() == "#" + std::to_string(errors[1].id) + " C (" + errors[1].location + "): thrown");
+
+    // The positional initialization without the level gives an error.
+    const ErrorInfo positional{1, 0, 0, "Direct", "File.cpp:1", "direct", "", ""};
+
+    CHECK(positional.level == ErrorInfo::Level{});
+    CHECK(positional.toString() == "#1 Direct (File.cpp:1): direct");
+}
+
+TEST_CASE("ErrorManager::reportWarning gives the level WARN and shares the counter, the journal and the handler") {
+    ErrorManagerGuard guard{};
+    std::vector<ErrorInfo> handled{};
+
+    ErrorManager::setHandler([&](const ErrorInfo &error) {
+        handled.push_back(error);
+    });
+
+    ErrorManager::report("C", "error");
+
+    const auto line = __LINE__ + 1;
+    ErrorManager::reportWarning("Warner", "warning message");
+
+    REQUIRE(handled.size() == 2);
+    CHECK(handled[0].level == ErrorInfo::Level{});
+    CHECK(handled[1].level == ErrorInfo::Level::WARN);
+    CHECK(handled[1].level != handled[0].level);
+    CHECK(handled[1].component == "Warner");
+    CHECK(handled[1].message == "warning message");
+    CHECK(handled[1].location == "ErrorManagerTest.cpp:" + std::to_string(line));
+    CHECK(handled[1].threadId == currentThreadId());
+    CHECK(handled[1].id == handled[0].id + 1);
+    CHECK(handled[1].toString() ==
+          "WARN #" + std::to_string(handled[1].id) + " Warner (" + handled[1].location + "): warning message");
+
+    const auto errors = ErrorManager::getErrors();
+
+    REQUIRE(errors.size() == 2);
+    CHECK(errors[1].level == ErrorInfo::Level::WARN);
+    CHECK(errors[1].id == handled[1].id);
+
+    const auto last = ErrorManager::getLastError();
+
+    REQUIRE(last.has_value());
+    CHECK(last->level == ErrorInfo::Level::WARN);
+    CHECK(last->message == "warning message");
+}
+
+TEST_CASE("The default handler writes a warning as one line starting with WARN") {
+    ErrorManagerGuard guard{};
+    StderrCapture capture{};
+
+    ErrorManager::resetHandler();
+    ErrorManager::reportWarning("Warner", "careful");
+
+    const auto output = capture.stop();
+
+    CHECK(output.rfind("[dxfcpp] WARN #", 0) == 0);
+    CHECK(output.find("Warner") != std::string::npos);
+    CHECK(output.find("careful") != std::string::npos);
+    CHECK(output.find('\n') == output.size() - 1);
+}
+
 TEST_CASE("The handler runs on the reporting thread without the locks of ErrorManager") {
     ErrorManagerGuard guard{};
     std::uint64_t handlerThreadId{};
