@@ -13,132 +13,133 @@ DXFCPP_BEGIN_NAMESPACE
 namespace isolated::ipf::live {
 
 namespace IsolatedInstrumentProfileCollector {
-/* dxfg_ipf_collector_t* */ JavaObjectHandle<InstrumentProfileCollector> create() {
+/* dxfg_v4_ipf_collector_t* */ JavaObjectHandle<InstrumentProfileCollector> create() {
     return JavaObjectHandle<InstrumentProfileCollector>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileCollector_new)};
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_InstrumentProfileCollector_new)};
 }
 
 std::int64_t getLastUpdateTime(
-    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector) {
+    /* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_InstrumentProfileCollector_getLastUpdateTime`. The "
+            "Unable to execute function `dxfg_v4_InstrumentProfileCollector_getLastUpdateTime`. The "
             "`instrumentProfileCollector` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfileCollector_getLastUpdateTime,
-                                              static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get()));
+    return runGraalV4FunctionWithResult(dxfg_v4_InstrumentProfileCollector_getLastUpdateTime,
+                                        static_cast<dxfg_v4_ipf_collector_t *>(instrumentProfileCollector.get()));
 }
 
-bool updateInstrumentProfile(
-    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_instrument_profile_t * */ const JavaObjectHandle<InstrumentProfile> &ip) {
+void updateInstrumentProfile(
+    /* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
+    /* dxfg_v4_instrument_profile_t * */ const JavaObjectHandle<InstrumentProfile> &ip) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_InstrumentProfileCollector_updateInstrumentProfile`. The "
+            "Unable to execute function `dxfg_v4_InstrumentProfileCollector_updateInstrumentProfileHandle`. The "
             "`instrumentProfileCollector` handle is invalid");
     }
 
     if (!ip) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_InstrumentProfileCollector_updateInstrumentProfile`. The "
+            "Unable to execute function `dxfg_v4_InstrumentProfileCollector_updateInstrumentProfileHandle`. The "
             "`ip` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfileCollector_updateInstrumentProfile,
-                                              static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get()),
-                                              static_cast<dxfg_instrument_profile_t *>(ip.get())) == 0;
+    runGraalV4Function(dxfg_v4_InstrumentProfileCollector_updateInstrumentProfileHandle,
+                       static_cast<dxfg_v4_ipf_collector_t *>(instrumentProfileCollector.get()),
+                       static_cast<dxfg_v4_instrument_profile_t *>(ip.get()));
 }
 
-/* dxfg_iterable_ip_t* */ void *
-view(/* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector) {
+/* dxfg_v4_iterable_ip_t* */ void *
+view(/* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector) {
     if (!instrumentProfileCollector) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileCollector_view`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_InstrumentProfileCollector_view`. The "
                                        "`instrumentProfileCollector` handle is invalid");
     }
 
-    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_InstrumentProfileCollector_view, static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get())));
+    return dxfcpp::bit_cast<void *>(
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_InstrumentProfileCollector_view,
+                                            static_cast<dxfg_v4_ipf_collector_t *>(instrumentProfileCollector.get())));
 }
 
-bool addUpdateListener(
-    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<InstrumentProfileUpdateListener> &listener) {
+void addUpdateListener(
+    /* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
+    /* dxfg_v4_ipf_update_listener_t* */ const JavaObjectHandle<InstrumentProfileUpdateListener> &listener) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_InstrumentProfileCollector_addUpdateListener`. The "
+            "Unable to execute function `dxfg_v4_InstrumentProfileCollector_addUpdateListener`. The "
             "`instrumentProfileCollector` handle is invalid");
     }
 
     if (!listener) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_InstrumentProfileCollector_addUpdateListener`. The "
+            "Unable to execute function `dxfg_v4_InstrumentProfileCollector_addUpdateListener`. The "
             "`listener` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfileCollector_addUpdateListener,
-                                              static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get()),
-                                              static_cast<dxfg_ipf_update_listener_t *>(listener.get())) == 0;
+    runGraalV4Function(dxfg_v4_InstrumentProfileCollector_addUpdateListener,
+                       static_cast<dxfg_v4_ipf_collector_t *>(instrumentProfileCollector.get()),
+                       static_cast<dxfg_v4_ipf_update_listener_t *>(listener.get()));
 }
 
-bool removeUpdateListener(
-    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<InstrumentProfileUpdateListener> &listener) {
+void removeUpdateListener(
+    /* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
+    /* dxfg_v4_ipf_update_listener_t* */ const JavaObjectHandle<InstrumentProfileUpdateListener> &listener) {
     if (!instrumentProfileCollector) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_InstrumentProfileCollector_removeUpdateListener`. The "
+            "Unable to execute function `dxfg_v4_InstrumentProfileCollector_removeUpdateListener`. The "
             "`instrumentProfileCollector` handle is invalid");
     }
 
     if (!listener) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_InstrumentProfileCollector_removeUpdateListener`. The "
+            "Unable to execute function `dxfg_v4_InstrumentProfileCollector_removeUpdateListener`. The "
             "`listener` handle is invalid");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_InstrumentProfileCollector_removeUpdateListener,
-                                              static_cast<dxfg_ipf_collector_t *>(instrumentProfileCollector.get()),
-                                              static_cast<dxfg_ipf_update_listener_t *>(listener.get())) == 0;
+    runGraalV4Function(dxfg_v4_InstrumentProfileCollector_removeUpdateListener,
+                       static_cast<dxfg_v4_ipf_collector_t *>(instrumentProfileCollector.get()),
+                       static_cast<dxfg_v4_ipf_update_listener_t *>(listener.get()));
 }
 
 } // namespace IsolatedInstrumentProfileCollector
 
 namespace IsolatedInstrumentProfileUpdateListener {
 
-/* dxfg_ipf_update_listener_t* */ JavaObjectHandle<InstrumentProfileUpdateListener>
-create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData) {
+/* dxfg_v4_ipf_update_listener_t* */ JavaObjectHandle<InstrumentProfileUpdateListener>
+create(/* dxfg_v4_ipf_update_listener_function */ void *userFunc, void *userData) {
     if (!userFunc) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_InstrumentProfileUpdateListener_new`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_InstrumentProfileUpdateListener_new`. The "
                                        "`userFunc` is nullptr");
     }
 
-    return JavaObjectHandle<InstrumentProfileUpdateListener>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_InstrumentProfileUpdateListener_new,
-                                          dxfcpp::bit_cast<dxfg_ipf_update_listener_function>(userFunc), userData)};
+    return JavaObjectHandle<InstrumentProfileUpdateListener>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_InstrumentProfileUpdateListener_new, dxfcpp::bit_cast<dxfg_v4_ipf_update_listener_function>(userFunc),
+        userData)};
 }
 
 } // namespace IsolatedInstrumentProfileUpdateListener
 
 namespace IsolatedInstrumentProfileIterator {
 
-bool hasNext(/* dxfg_iterable_ip_t * */ void *iterable) {
+bool hasNext(/* dxfg_v4_iterable_ip_t * */ void *iterable) {
     if (!iterable) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Iterable_InstrumentProfile_hasNext`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_Iterable_InstrumentProfile_hasNext`. The "
                                        "`iterable` is nullptr");
     }
 
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_Iterable_InstrumentProfile_hasNext,
-                                              static_cast<dxfg_iterable_ip_t *>(iterable)) == 1;
+    return runGraalV4FunctionWithResult(dxfg_v4_Iterable_InstrumentProfile_hasNext,
+                                        static_cast<dxfg_v4_iterable_ip_t *>(iterable)) == 1;
 }
 
-/* dxfg_instrument_profile_t* */ void *next(/* dxfg_iterable_ip_t * */ void *iterable) {
+/* dxfg_v4_instrument_profile_t* */ void *next(/* dxfg_v4_iterable_ip_t * */ void *iterable) {
     if (!iterable) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Iterable_InstrumentProfile_next`. The "
-                                       "`iterable` is nullptr");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_Iterable_InstrumentProfile_nextHandle`. "
+                                       "The `iterable` is nullptr");
     }
 
-    return runGraalFunctionAndThrowIfNullptr(dxfg_Iterable_InstrumentProfile_next,
-                                             static_cast<dxfg_iterable_ip_t *>(iterable));
+    return runGraalV4FunctionWithNonNullResult(dxfg_v4_Iterable_InstrumentProfile_nextHandle,
+                                               static_cast<dxfg_v4_iterable_ip_t *>(iterable));
 }
 
 } // namespace IsolatedInstrumentProfileIterator

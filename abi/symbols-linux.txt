@@ -1,6 +1,6 @@
 # Exported symbols of the shared library (linux), made by scripts/symbols.py compare --update.
 # Own symbols one per line; the std:: instantiations only as their number.
-std-total: 342
+std-total: 343
 VTT for dxfcpp::v8::AdditionalUnderlyings
 VTT for dxfcpp::v8::AuthOrderSource
 VTT for dxfcpp::v8::CFI

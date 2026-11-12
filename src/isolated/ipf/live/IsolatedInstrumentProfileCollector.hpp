@@ -17,35 +17,34 @@ namespace isolated::ipf::live {
 
 namespace IsolatedInstrumentProfileCollector {
 
-/* dxfg_ipf_collector_t* */ JavaObjectHandle<InstrumentProfileCollector> create();
+/* dxfg_v4_ipf_collector_t* */ JavaObjectHandle<InstrumentProfileCollector> create();
 std::int64_t getLastUpdateTime(
-    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector);
-bool updateInstrumentProfile(
-    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_instrument_profile_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &ip);
-/* dxfg_iterable_ip_t* */ void *
-view(/* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector);
-bool addUpdateListener(
-    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener);
-bool removeUpdateListener(
-    /* dxfg_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
-    /* dxfg_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener);
+    /* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector);
+void updateInstrumentProfile(
+    /* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
+    /* dxfg_v4_instrument_profile_t * */ const JavaObjectHandle<dxfcpp::InstrumentProfile> &ip);
+/* dxfg_v4_iterable_ip_t* */ void *
+view(/* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector);
+void addUpdateListener(
+    /* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
+    /* dxfg_v4_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener);
+void removeUpdateListener(
+    /* dxfg_v4_ipf_collector_t* */ const JavaObjectHandle<InstrumentProfileCollector> &instrumentProfileCollector,
+    /* dxfg_v4_ipf_update_listener_t* */ const JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener> &listener);
 
 } // namespace IsolatedInstrumentProfileCollector
 
 namespace IsolatedInstrumentProfileUpdateListener {
 
-/* dxfg_ipf_update_listener_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener>
-create(/* dxfg_ipf_update_listener_function */ void *userFunc, void *userData);
-
+/* dxfg_v4_ipf_update_listener_t* */ JavaObjectHandle<dxfcpp::InstrumentProfileUpdateListener>
+create(/* dxfg_v4_ipf_update_listener_function */ void *userFunc, void *userData);
 }
 
 namespace IsolatedInstrumentProfileIterator {
 
-bool hasNext(/* dxfg_iterable_ip_t * */ void *iterable);
+bool hasNext(/* dxfg_v4_iterable_ip_t * */ void *iterable);
 
-/* dxfg_instrument_profile_t* */ void *next(/* dxfg_iterable_ip_t * */ void *iterable);
+/* dxfg_v4_instrument_profile_t* */ void *next(/* dxfg_v4_iterable_ip_t * */ void *iterable);
 
 } // namespace IsolatedInstrumentProfileIterator
 
