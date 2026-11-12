@@ -112,6 +112,12 @@ TEST_CASE("DXFeed::getIndexedEventsIfSubscribed should return an empty vector wh
     REQUIRE(events.empty());
 }
 
+TEST_CASE("DXFeed::getLastEventIfSubscribed should return an empty result when not subscribed") {
+    const auto event = DXFeed::getInstance()->getLastEventIfSubscribed<Quote>("AAPL");
+
+    REQUIRE(!event);
+}
+
 struct DXFeedTestFixture {
     const char *symbol = "TEST";
     DXEndpoint::Ptr endpoint{};

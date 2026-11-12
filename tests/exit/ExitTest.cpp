@@ -437,6 +437,27 @@ int releaseAfterShutdown() {
     return 0;
 }
 
+/// After dxfcpp::shutdown() attaching and detaching a subscription do nothing and do not throw.
+int detachAfterShutdown() {
+    auto endpoint = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);
+    auto feed = endpoint->getFeed();
+    auto subscription = feed->createSubscription(Quote::TYPE);
+
+    shutdown();
+
+    try {
+        feed->detachSubscription(subscription);
+        feed->attachSubscription(subscription);
+        feed->detachSubscriptionAndClear(subscription);
+    } catch (const std::exception &e) {
+        std::fprintf(stderr, "Attach or detach threw after shutdown(): %s\n", e.what());
+
+        return 3;
+    }
+
+    return 0;
+}
+
 } // namespace
 
 int main(int argc, char *argv[]) {
@@ -447,7 +468,7 @@ int main(int argc, char *argv[]) {
 
     if (argc != 2) {
         std::fputs("Usage: <executable> endpoint | late-callback | callback-in-progress | ipf-live | ipf-live-close | "
-                   "shutdown | error-manager | release-after-shutdown\n",
+                   "shutdown | error-manager | release-after-shutdown | detach-after-shutdown\n",
                    stderr);
 
         return 1;
@@ -486,6 +507,10 @@ int main(int argc, char *argv[]) {
 
         if (scenario == "release-after-shutdown") {
             return releaseAfterShutdown();
+        }
+
+        if (scenario == "detach-after-shutdown") {
+            return detachAfterShutdown();
         }
     } catch (const std::exception &e) {
         std::fprintf(stderr, "Exception: %s\n", e.what());
