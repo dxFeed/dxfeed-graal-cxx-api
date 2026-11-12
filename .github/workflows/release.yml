@@ -66,7 +66,7 @@ jobs:
           python3 scripts/release.py --notes "$VERSION" --ref "$TAG" > release-notes.md
           cat release-notes.md
 
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-notes
           path: release-notes.md
@@ -106,7 +106,7 @@ jobs:
 
       - name: Upload the reference
         if: ${{ steps.baseline.outputs.found == 'true' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: abi-reference
           path: abi-reference.xml
@@ -452,7 +452,7 @@ jobs:
 
       - name: Upload the ABI
         if: ${{ matrix.config.name == 'oraclelinux-8-gcc-toolset-14' && matrix.buildType == 'RelWithDebInfo' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: artifacts-abi-${{matrix.config.name}}-${{matrix.buildType}}
           path: abi-x86_64-linux.xml
@@ -480,7 +480,7 @@ jobs:
         run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
       - name: Upload [Lib]
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: artifacts-lib-${{matrix.config.name}}-${{matrix.buildType}}
           path: |
@@ -490,14 +490,14 @@ jobs:
 
       - name: Upload [Lib][Win with static with MT]
         if: ${{ contains(matrix.config.os, 'win') }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: artifacts-lib-${{matrix.config.name}}-${{matrix.buildType}}-mt
           path: build-${{matrix.buildType}}-mt/*.zip
 
       - name: Upload [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: artifacts-samples-and-tools-${{matrix.config.name}}-${{matrix.buildType}}
           path: |
@@ -567,7 +567,7 @@ jobs:
           zip -r ../dxFeedGraalCxxApi-${{needs.get_version.outputs.version}}-Docs.zip .
 
       - name: Upload Docs
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: artifacts-docs
           path: |
@@ -640,7 +640,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Upload [Full Source Bundle]
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: artifacts-full-source-bundle-${{matrix.config.name}}
           path: |
