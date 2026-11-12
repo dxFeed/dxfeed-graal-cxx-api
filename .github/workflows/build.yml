@@ -3,9 +3,9 @@
 
 name: CI
 
-# A pull request runs the short set: the `pullRequest` rows of .github/ci/build-matrix.json and the other jobs except
-# the network tests. The full matrix runs on a push to main or release/*, nightly, on a manual run, and on a pull
-# request with the `full-ci` label (adding the label starts it). A pull request that changes only documentation
+# A pull request runs the short set: the `pullRequest` rows of .github/ci/build-matrix.json and the other jobs,
+# the network tests included. The full matrix runs on a push to main or release/*, nightly, on a manual run, and on a
+# pull request with the `full-ci` label (adding the label starts it). A pull request that changes only documentation
 # (*.md, docs/, release-notes/) skips the compiling jobs, and one that does not touch scripts/ skips the script tests;
 # see the `plan` job.
 on:
@@ -881,10 +881,11 @@ jobs:
         run: ccache --show-stats
 
   # Tests over a network connection (CTest label "network") against a local QDS server that sends a test tape: CTest
-  # starts the server of the Tools before the tests and stops it after them, so no external service is involved.
+  # starts the server of the Tools before the tests and stops it after them, so no external service is involved. They
+  # run on every change of the code, as any change may break the connection or the events.
   network-tests:
     needs: plan
-    if: ${{ needs.plan.outputs.full == 'true' }}
+    if: ${{ needs.plan.outputs.code == 'true' }}
     name: "ubuntu-24.04-clang-18-Release-network-tests"
     runs-on: ubuntu-24.04
     timeout-minutes: 40
@@ -910,7 +911,7 @@ jobs:
 
       - name: Test
         working-directory: ${{github.workspace}}/build
-        run: ctest -L network --extra-verbose --output-on-failure
+        run: ctest -L network --no-tests=error --extra-verbose --output-on-failure
 
   # Unit tests, samples and Tools linked against the shared library, as applications that use the DLL: a class or
   # function of the public API without DXFCPP_EXPORT is a link error here (the library is built with hidden visibility).
