@@ -9,10 +9,12 @@
 #include "utils/debug/Debug.hpp"
 #include "../isolated/IsolatedCommon.hpp"
 
+#include <array>
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
 #include <config/config.hpp>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <deque>
@@ -23,6 +25,7 @@
 #include <mutex>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <utility>
 #include <vector>
@@ -181,6 +184,73 @@ std::string &creationErrorDetails() noexcept {
 void failCreation(CEntryPointErrorsEnum code, std::string details) noexcept {
     creationErrorDetails() = std::move(details);
     creationErrorCode.store(code, std::memory_order_release);
+}
+
+// The oldest Graal Native SDK the library works with (DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION of CMakeLists.txt).
+constexpr const char *MINIMUM_SDK_VERSION = DXFCXX_GRAAL_NATIVE_SDK_MINIMUM_VERSION;
+
+// The advanced revision of the SDK library (Isolate::checkAdvancedRevision()), read once by the constructor; empty if
+// it was not read.
+constinit std::optional<std::int32_t> advancedRevision{};
+
+// Takes the exception of the thread after a failed call on the thread of graal_create_isolate().
+std::string takeThreadExceptionText(graal_isolatethread_t *thread) noexcept {
+    try {
+        dxfg_v4_exception_t *exception{};
+
+        if (dxfg_v4_get_and_clear_thread_exception(thread, &exception) != DXFG_EXECUTE_SUCCESSFULLY ||
+            exception == nullptr) {
+            return "no exception";
+        }
+
+        std::string text = exception->class_name ? exception->class_name : "an exception";
+
+        if (exception->message) {
+            text += ": ";
+            text += exception->message;
+        }
+
+        dxfg_v4_Exception_release(thread, exception);
+
+        return text;
+    } catch (...) {
+        return "no text";
+    }
+}
+
+// Checks the version of the SDK library on the thread of graal_create_isolate() and reads its advanced revision: the
+// library may be replaced at run time. The calls do not go through runGraalV4Function(): the isolate is not ready.
+// Returns the reason of the failure, empty if the library is supported.
+std::optional<std::string> checkLibrary(graal_isolatethread_t *thread) noexcept {
+    try {
+        const char *version{};
+
+        if (dxfg_v4_system_get_version(thread, &version) != DXFG_EXECUTE_SUCCESSFULLY || version == nullptr) {
+            return "Unable to get the version of the Graal Native SDK library (" + takeThreadExceptionText(thread) +
+                   "), the dxFeed Graal C++ API needs " + MINIMUM_SDK_VERSION + " or newer.";
+        }
+
+        const std::string versionText = version;
+
+        dxfg_v4_String_release(thread, version);
+
+        if (!isGraalNativeSdkVersionSupported(versionText, MINIMUM_SDK_VERSION)) {
+            return "The Graal Native SDK library is " + versionText + ", the dxFeed Graal C++ API needs " +
+                   MINIMUM_SDK_VERSION + " or newer.";
+        }
+
+        // An unread revision is not a failure of the creation: only the experimental functions need it.
+        if (std::int32_t revision{};
+            dxfg_v4_system_get_advanced_revision(thread, &revision) == DXFG_EXECUTE_SUCCESSFULLY) {
+            advancedRevision = revision;
+        } else {
+            static_cast<void>(takeThreadExceptionText(thread));
+        }
+
+        return std::nullopt;
+    } catch (...) {
+        return "Unable to check the version of the Graal Native SDK library.";
+    }
 }
 
 // The Graal callbacks return at once (Isolate::isShuttingDown()).
@@ -357,8 +427,14 @@ Isolate::Isolate() noexcept {
             graal_create_isolate(paramsPointer, &graalIsolateHandle, &graalIsolateThreadHandle));
         result == CEntryPointErrorsEnum::NO_ERROR) {
 
-        handle_ = graalIsolateHandle;
-        currentIsolateThread().handle = graalIsolateThreadHandle;
+        if (auto failure = checkLibrary(graalIsolateThreadHandle); failure) {
+            // The isolate is not kept: it is never entered after a failed creation.
+            graal_tear_down_isolate(graalIsolateThreadHandle);
+            failCreation(CEntryPointErrorsEnum::ISOLATE_INITIALIZATION_FAILED, std::move(*failure));
+        } else {
+            handle_ = graalIsolateHandle;
+            currentIsolateThread().handle = graalIsolateThreadHandle;
+        }
     } else {
         // The SDK prints the reason of an invalid argument to the standard error output.
         failCreation(result, "See the standard error output of the process for the reason.");
@@ -517,6 +593,89 @@ void Isolate::throwCreationError() {
     if (const auto code = getCreationError(); code != CEntryPointErrorsEnum::NO_ERROR) {
         throw GraalException(code, creationErrorDetails());
     }
+}
+
+void Isolate::checkAdvancedRevision() {
+    // The revision is read by the creation of the isolate.
+    static_cast<void>(getInstance());
+    throwCreationError();
+    checkGraalNativeSdkAdvancedRevision(advancedRevision, DXFG_V4_ADVANCED_REVISION);
+}
+
+namespace {
+
+// Parses the number at the start of the text and removes it; empty if there is no number or it is too long.
+std::optional<std::int32_t> takeVersionNumber(std::string_view &text) noexcept {
+    constexpr std::size_t MAX_DIGITS = 9;
+    std::size_t length = 0;
+    std::int32_t result = 0;
+
+    while (length < text.size() && text[length] >= '0' && text[length] <= '9') {
+        if (length == MAX_DIGITS) {
+            return std::nullopt;
+        }
+
+        result = result * 10 + (text[length] - '0');
+        length++;
+    }
+
+    if (length == 0) {
+        return std::nullopt;
+    }
+
+    text.remove_prefix(length);
+
+    return result;
+}
+
+// Parses `major.minor.patch` at the start of the text; the rest (`-SNAPSHOT`) is ignored.
+std::optional<std::array<std::int32_t, 3>> parseVersion(std::string_view text) noexcept {
+    std::array<std::int32_t, 3> result{};
+
+    for (std::size_t i = 0; i < result.size(); i++) {
+        if (i > 0) {
+            if (text.empty() || text.front() != '.') {
+                return std::nullopt;
+            }
+
+            text.remove_prefix(1);
+        }
+
+        const auto number = takeVersionNumber(text);
+
+        if (!number) {
+            return std::nullopt;
+        }
+
+        result[i] = *number;
+    }
+
+    return result;
+}
+
+} // namespace
+
+bool isGraalNativeSdkVersionSupported(std::string_view version, std::string_view minimum) noexcept {
+    const auto parsedVersion = parseVersion(version);
+    const auto parsedMinimum = parseVersion(minimum);
+
+    // A version that cannot be parsed passes: the check must not reject a library with an unusual version.
+    if (!parsedVersion || !parsedMinimum) {
+        return true;
+    }
+
+    return *parsedVersion >= *parsedMinimum;
+}
+
+void checkGraalNativeSdkAdvancedRevision(std::optional<std::int32_t> libraryRevision, std::int32_t requiredRevision) {
+    if (libraryRevision == requiredRevision) {
+        return;
+    }
+
+    throw RuntimeException("The experimental functions of the Graal Native SDK library have the advanced revision " +
+                           (libraryRevision ? std::to_string(*libraryRevision) : std::string("unknown")) +
+                           ", the dxFeed Graal C++ API is built for the revision " + std::to_string(requiredRevision) +
+                           ".");
 }
 
 bool Isolate::setArguments(std::vector<std::string> arguments) {

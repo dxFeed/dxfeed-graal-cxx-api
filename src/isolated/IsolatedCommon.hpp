@@ -211,8 +211,8 @@ constexpr auto runGraalFunctionAndThrowIfMinusInf(auto graalFunction, auto &&...
 }
 
 // The calls of the dxfg_v4_ functions: each returns DXFG_EXECUTE_SUCCESSFULLY or DXFG_EXECUTE_FAIL and writes its result
-// to the last (out) parameter. Any other status is a failure here too: the functions with positive statuses (await of
-// a promise, the event queue) need a call of their own.
+// to the last (out) parameter. Any other status is a failure here too, except for the functions with positive statuses
+// (await of a promise, the event queue), which are called with runGraalV4FunctionWithStatus().
 
 /// The type of the result that a dxfg_v4_ function writes to its last parameter.
 template <typename Function> struct GraalV4Result;
@@ -275,6 +275,29 @@ inline auto runGraalV4FunctionWithNonNullResult(auto graalFunction, auto &&...pa
     }
 
     return result;
+}
+
+/**
+ * Calls a dxfg_v4_ function whose non-negative statuses are results (`DXFG_PROMISE_AWAIT_TIMED_OUT` of
+ * `dxfg_v4_Promise_awaitWithoutException`, for example): `graalFunction(thread, params...)`.
+ *
+ * @return The status of the function: `DXFG_EXECUTE_SUCCESSFULLY` or a positive status.
+ * @throws JavaException The function failed (`DXFG_EXECUTE_FAIL`) with a Java exception.
+ * @throws RuntimeException The function failed without a Java exception.
+ */
+inline std::int32_t runGraalV4FunctionWithStatus(auto graalFunction, auto &&...params) {
+    return runIsolatedThrow(
+        [](auto threadHandle, auto &&function, auto &&...functionParams) {
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+            const std::int32_t status = function(thread, functionParams...);
+
+            if (status < DXFG_EXECUTE_SUCCESSFULLY) {
+                throwThreadException(thread);
+            }
+
+            return status;
+        },
+        graalFunction, params...);
 }
 
 } // namespace isolated

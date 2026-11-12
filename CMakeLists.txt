@@ -25,9 +25,11 @@ project(dxFeedGraalCxxApi VERSION ${DXFCXX_MAJOR_VERSION}.${DXFCXX_MINOR_VERSION
 set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.15.0" CACHE STRING "")
 
 # The library calls the dxfg_v4_ functions of the SDK; every way of getting the SDK (third_party, DXFG_LOCAL_ARCHIVE_PATH,
-# the stub, DXFEED_GRAAL_NATIVE_SDK_URL, the releases page) is checked here.
-if (DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS "3.15.0")
-    message(FATAL_ERROR "The dxFeed Graal C++ API needs the Graal Native SDK 3.15.0 or newer, not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+# the stub, DXFEED_GRAAL_NATIVE_SDK_URL, the releases page) is checked here. The library checks the version of the SDK
+# library at run time as well (the creation of the isolate fails with an older one).
+set(DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION "3.15.0")
+if (DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION)
+    message(FATAL_ERROR "The dxFeed Graal C++ API needs the Graal Native SDK ${DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION} or newer, not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
 endif ()
 set(FMTLIB_VERSION "12.1.0")
 set(BOOST_VERSION "1.84.0")
@@ -929,6 +931,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
         DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
         DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
         DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+        DXFCXX_GRAAL_NATIVE_SDK_MINIMUM_VERSION="${DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION}"
 )
 
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
@@ -936,6 +939,7 @@ target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
         DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
         DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+        DXFCXX_GRAAL_NATIVE_SDK_MINIMUM_VERSION="${DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION}"
 )
 
 if (DXFCXX_ENABLE_METRICS)
