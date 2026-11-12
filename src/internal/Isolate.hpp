@@ -14,9 +14,12 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./Id.hpp"
 #include "./utils/StringUtils.hpp"
 
+#include <cstdint>
 #include <functional>
 #include <mutex>
+#include <optional>
 #include <string>
+#include <string_view>
 #include <thread>
 #include <variant>
 #include <vector>
@@ -90,10 +93,11 @@ class DXFCPP_INTERNAL_EXPORT Isolate final {
 
     /**
      * Returns the code of the failed creation of the isolate, or CEntryPointErrorsEnum::NO_ERROR. The creation fails
-     * if the SDK returns an error (the code of the SDK), or if DXFCPP_ISOLATE_ARGUMENTS cannot be parsed
-     * (CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED). There is no second attempt: after a failure the isolate is never
-     * entered, and runIsolatedThrow() throws GraalException, runIsolated() and runIsolatedOrElse() return the code and
-     * the fallback value. The creation is finished when getInstance() returns, so call it after getInstance(): before
+     * if the SDK returns an error (the code of the SDK), if DXFCPP_ISOLATE_ARGUMENTS cannot be parsed
+     * (CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED), or if the SDK library is older than the minimum or its version
+     * cannot be read (CEntryPointErrorsEnum::ISOLATE_INITIALIZATION_FAILED). There is no second attempt: after a
+     * failure the isolate is never entered, and runIsolatedThrow() throws GraalException, runIsolated() and
+     * runIsolatedOrElse() return the code and the fallback value. The creation is finished when getInstance() returns, so call it after getInstance(): before
      * the creation the result is NO_ERROR.
      */
     static CEntryPointErrorsEnum getCreationError() noexcept;
@@ -104,6 +108,16 @@ class DXFCPP_INTERNAL_EXPORT Isolate final {
      * Does nothing if the creation did not fail.
      */
     static void throwCreationError();
+
+    /**
+     * Checks that the experimental functions of the Graal Native SDK library (`DXFG_EXPERIMENTAL`) have the advanced
+     * revision that the library is built for (`DXFG_V4_ADVANCED_REVISION`). The revision is read when the isolate is
+     * created; call it before the first experimental call.
+     *
+     * @throws GraalException if the creation of the isolate failed.
+     * @throws RuntimeException with both revisions if they differ or the revision of the library could not be read.
+     */
+    static void checkAdvancedRevision();
 
     /**
      * Stores the arguments that the isolate is created with (see System::setIsolateArguments()). It does not create
@@ -325,6 +339,29 @@ auto runIsolatedOrElse(F &&f, R defaultValue, Arg &&arg, Args &&...args) {
 }
 
 DXFCPP_INTERNAL_EXPORT void gc();
+
+/**
+ * Tells whether the version of the Graal Native SDK library is not older than the minimum. The versions are compared by
+ * their numbers `major.minor.patch`; the rest of the text (`-SNAPSHOT`) is ignored.
+ *
+ * @param version The version of the library (`dxfg_v4_system_get_version`).
+ * @param minimum The minimum version.
+ * @return `false` if both versions are parsed and `version` is older than `minimum`; `true` otherwise, including a
+ * version that cannot be parsed.
+ */
+DXFCPP_INTERNAL_EXPORT bool isGraalNativeSdkVersionSupported(std::string_view version,
+                                                             std::string_view minimum) noexcept;
+
+/**
+ * Checks the advanced revision of the Graal Native SDK library (see Isolate::checkAdvancedRevision()).
+ *
+ * @param libraryRevision The revision of the library (`dxfg_v4_system_get_advanced_revision`), empty if it could not be
+ * read.
+ * @param requiredRevision The revision the library is built for (`DXFG_V4_ADVANCED_REVISION`).
+ * @throws RuntimeException with both revisions if they differ or `libraryRevision` is empty.
+ */
+DXFCPP_INTERNAL_EXPORT void checkGraalNativeSdkAdvancedRevision(std::optional<std::int32_t> libraryRevision,
+                                                                std::int32_t requiredRevision);
 
 DXFCPP_END_NAMESPACE
 

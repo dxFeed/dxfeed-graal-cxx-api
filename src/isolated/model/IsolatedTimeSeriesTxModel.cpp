@@ -9,243 +9,160 @@
 
 #include <dxfg_api.h>
 
+#include <string>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::model::IsolatedTimeSeriesTxModel {
 
-// dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_newBuilder(graal_isolatethread_t* thread,
-// dxfg_event_clazz_t eventType);
+namespace {
+
+dxfg_v4_time_series_tx_model_t *toGraal(const JavaObjectHandle<TimeSeriesTxModelTag> &model, const char *function) {
+    if (!model) {
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `model` handle is invalid");
+    }
+
+    return static_cast<dxfg_v4_time_series_tx_model_t *>(model.get());
+}
+
+dxfg_v4_time_series_tx_model_builder_t *toGraal(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
+                                                const char *function) {
+    if (!builder) {
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `builder` handle is invalid");
+    }
+
+    return static_cast<dxfg_v4_time_series_tx_model_builder_t *>(builder.get());
+}
+
+dxfg_v4_feed_t *toGraal(const JavaObjectHandle<DXFeed> &feed, const char *function) {
+    if (!feed) {
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `feed` handle is invalid");
+    }
+
+    return static_cast<dxfg_v4_feed_t *>(feed.get());
+}
+
+} // namespace
+
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> newBuilder(const EventTypeEnum &eventType) {
-    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_TimeSeriesTxModel_newBuilder, static_cast<dxfg_event_clazz_t>(eventType.getId()))};
+    Isolate::checkAdvancedRevision();
+
+    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_TimeSeriesTxModel_newBuilder, static_cast<dxfg_v4_event_clazz_t>(eventType.getId()))};
 }
 
-// int64_t dxfg_TimeSeriesTxModel_getFromTime(graal_isolatethread_t* thread, dxfg_time_series_tx_model_t* source);
 std::int64_t getFromTime(const JavaObjectHandle<TimeSeriesTxModelTag> &model) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_getFromTime`. The "
-                                       "`model` handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_TimeSeriesTxModel_getFromTime,
-                                              static_cast<dxfg_time_series_tx_model_t *>(model.get()));
+    return runGraalV4FunctionWithResult(dxfg_v4_TimeSeriesTxModel_getFromTime,
+                                        toGraal(model, "dxfg_v4_TimeSeriesTxModel_getFromTime"));
 }
 
-// int32_t dxfg_TimeSeriesTxModel_setFromTime(graal_isolatethread_t* thread, dxfg_time_series_tx_model_t* source,
-// int64_t fromTime);
 void setFromTime(const JavaObjectHandle<TimeSeriesTxModelTag> &model, std::int64_t fromTime) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_setFromTime`. The "
-                                       "`model` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_TimeSeriesTxModel_setFromTime,
-                                       static_cast<dxfg_time_series_tx_model_t *>(model.get()), fromTime);
+    runGraalV4Function(dxfg_v4_TimeSeriesTxModel_setFromTime, toGraal(model, "dxfg_v4_TimeSeriesTxModel_setFromTime"),
+                       fromTime);
 }
 
-// int32_t dxfg_TimeSeriesTxModel_isBatchProcessing(graal_isolatethread_t* thread, dxfg_time_series_tx_model_t* source);
 bool isBatchProcessing(const JavaObjectHandle<TimeSeriesTxModelTag> &model) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_isBatchProcessing`. The "
-                                       "`model` handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_TimeSeriesTxModel_isBatchProcessing,
-                                              static_cast<dxfg_time_series_tx_model_t *>(model.get())) == 1;
+    return runGraalV4FunctionWithResult(dxfg_v4_TimeSeriesTxModel_isBatchProcessing,
+                                        toGraal(model, "dxfg_v4_TimeSeriesTxModel_isBatchProcessing")) == 1;
 }
 
-// int32_t dxfg_TimeSeriesTxModel_isSnapshotProcessing(graal_isolatethread_t* thread, dxfg_time_series_tx_model_t*
-// source);
 bool isSnapshotProcessing(const JavaObjectHandle<TimeSeriesTxModelTag> &model) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_isSnapshotProcessing`. The "
-                                       "`model` handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_TimeSeriesTxModel_isSnapshotProcessing,
-                                              static_cast<dxfg_time_series_tx_model_t *>(model.get())) == 1;
+    return runGraalV4FunctionWithResult(dxfg_v4_TimeSeriesTxModel_isSnapshotProcessing,
+                                        toGraal(model, "dxfg_v4_TimeSeriesTxModel_isSnapshotProcessing")) == 1;
 }
 
-// int32_t dxfg_TimeSeriesTxModel_attach(graal_isolatethread_t* thread, dxfg_time_series_tx_model_t* source,
-// dxfg_feed_t* feed);
 void attach(const JavaObjectHandle<TimeSeriesTxModelTag> &model, const JavaObjectHandle<DXFeed> &feed) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_attach`. The "
-                                       "`model` handle is invalid");
-    }
-
-    if (!feed) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_attach`. The "
-                                       "`feed` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_TimeSeriesTxModel_attach,
-                                       static_cast<dxfg_time_series_tx_model_t *>(model.get()),
-                                       static_cast<dxfg_feed_t *>(feed.get()));
+    runGraalV4Function(dxfg_v4_TimeSeriesTxModel_attach, toGraal(model, "dxfg_v4_TimeSeriesTxModel_attach"),
+                       toGraal(feed, "dxfg_v4_TimeSeriesTxModel_attach"));
 }
 
-// int32_t dxfg_TimeSeriesTxModel_detach(graal_isolatethread_t* thread, dxfg_time_series_tx_model_t* source,
-// dxfg_feed_t* feed);
 void detach(const JavaObjectHandle<TimeSeriesTxModelTag> &model, const JavaObjectHandle<DXFeed> &feed) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_detach`. The "
-                                       "`model` handle is invalid");
-    }
-
-    if (!feed) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_detach`. The "
-                                       "`feed` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_TimeSeriesTxModel_detach,
-                                       static_cast<dxfg_time_series_tx_model_t *>(model.get()),
-                                       static_cast<dxfg_feed_t *>(feed.get()));
+    runGraalV4Function(dxfg_v4_TimeSeriesTxModel_detach, toGraal(model, "dxfg_v4_TimeSeriesTxModel_detach"),
+                       toGraal(feed, "dxfg_v4_TimeSeriesTxModel_detach"));
 }
 
-// int32_t dxfg_TimeSeriesTxModel_close(graal_isolatethread_t* thread, dxfg_time_series_tx_model_t* source);
 void close(const JavaObjectHandle<TimeSeriesTxModelTag> &model) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_close`. The "
-                                       "`model` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_TimeSeriesTxModel_close,
-                                       static_cast<dxfg_time_series_tx_model_t *>(model.get()));
+    runGraalV4Function(dxfg_v4_TimeSeriesTxModel_close, toGraal(model, "dxfg_v4_TimeSeriesTxModel_close"));
 }
 
 namespace Builder {
 
-// dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withFromTime(graal_isolatethread_t* thread,
-// dxfg_time_series_tx_model_builder_t* source, int64_t fromTime);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withFromTime(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
                                                            std::int64_t fromTime) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withFromTime`. The "
-                                       "`builder` handle is invalid");
+    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_TimeSeriesTxModel_Builder_withFromTime,
+        toGraal(builder, "dxfg_v4_TimeSeriesTxModel_Builder_withFromTime"), fromTime)};
+}
+
+JavaObjectHandle<TimeSeriesTxModelTag> build(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder) {
+    return JavaObjectHandle<TimeSeriesTxModelTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_TimeSeriesTxModel_Builder_build, toGraal(builder, "dxfg_v4_TimeSeriesTxModel_Builder_build"))};
+}
+
+JavaObjectHandle<TimeSeriesTxModelBuilderTag>
+withBatchProcessing(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder, bool isBatchProcessing) {
+    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_TimeSeriesTxModel_Builder_withBatchProcessing,
+        toGraal(builder, "dxfg_v4_TimeSeriesTxModel_Builder_withBatchProcessing"), isBatchProcessing ? 1 : 0)};
+}
+
+JavaObjectHandle<TimeSeriesTxModelBuilderTag>
+withSnapshotProcessing(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder, bool isSnapshotProcessing) {
+    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_TimeSeriesTxModel_Builder_withSnapshotProcessing,
+        toGraal(builder, "dxfg_v4_TimeSeriesTxModel_Builder_withSnapshotProcessing"), isSnapshotProcessing ? 1 : 0)};
+}
+
+JavaObjectHandle<TimeSeriesTxModelBuilderTag> withFeed(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
+                                                       const JavaObjectHandle<DXFeed> &feed) {
+    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_TimeSeriesTxModel_Builder_withFeed,
+                                            toGraal(builder, "dxfg_v4_TimeSeriesTxModel_Builder_withFeed"),
+                                            toGraal(feed, "dxfg_v4_TimeSeriesTxModel_Builder_withFeed"))};
+}
+
+JavaObjectHandle<TimeSeriesTxModelBuilderTag> withSymbol(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
+                                                         const SymbolWrapper &symbol) {
+    auto *graalBuilder = toGraal(builder, "dxfg_v4_TimeSeriesTxModel_Builder_withSymbol");
+    const auto graalSymbol = symbol.toGraalUnique();
+
+    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_TimeSeriesTxModel_Builder_withSymbol, graalBuilder,
+                                            static_cast<dxfg_v4_symbol_t *>(graalSymbol.get()))};
+}
+
+JavaObjectHandle<TimeSeriesTxModelBuilderTag> withListener(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
+                                                           const JavaObjectHandle<TxModelListenerTag> &listener) {
+    auto *graalBuilder = toGraal(builder, "dxfg_v4_TimeSeriesTxModel_Builder_withListener");
+
+    if (!listener) {
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_TimeSeriesTxModel_Builder_withListener`. "
+                                       "The `listener` handle is invalid");
     }
 
     return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{
-        runGraalFunctionAndThrowIfNullptr(dxfg_TimeSeriesTxModel_Builder_withFromTime,
-                                          static_cast<dxfg_time_series_tx_model_builder_t *>(builder.get()), fromTime)};
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_TimeSeriesTxModel_Builder_withListener, graalBuilder,
+                                            static_cast<dxfg_v4_tx_model_listener_t *>(listener.get()))};
 }
 
-// dxfg_time_series_tx_model_t* dxfg_TimeSeriesTxModel_Builder_build(graal_isolatethread_t* thread,
-// dxfg_time_series_tx_model_builder_t* source);
-JavaObjectHandle<TimeSeriesTxModelTag> build(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_build`. The "
-                                       "`builder` handle is invalid");
-    }
-
-    return JavaObjectHandle<TimeSeriesTxModelTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_TimeSeriesTxModel_Builder_build, static_cast<dxfg_time_series_tx_model_builder_t *>(builder.get()))};
-}
-
-// dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withBatchProcessing(graal_isolatethread_t*
-// thread, dxfg_time_series_tx_model_builder_t* source, int32_t isBatchProcessing);
-JavaObjectHandle<TimeSeriesTxModelBuilderTag>
-withBatchProcessing(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder, bool isBatchProcessing) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withBatchProcessing`. The "
-            "`builder` handle is invalid");
-    }
-
-    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_TimeSeriesTxModel_Builder_withBatchProcessing,
-        static_cast<dxfg_time_series_tx_model_builder_t *>(builder.get()), isBatchProcessing ? 1 : 0)};
-}
-
-// dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withSnapshotProcessing(graal_isolatethread_t*
-// thread, dxfg_time_series_tx_model_builder_t* source, int32_t isSnapshotProcessing);
-JavaObjectHandle<TimeSeriesTxModelBuilderTag>
-withSnapshotProcessing(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder, bool isSnapshotProcessing) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withSnapshotProcessing`. The "
-            "`builder` handle is invalid");
-    }
-
-    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_TimeSeriesTxModel_Builder_withSnapshotProcessing,
-        static_cast<dxfg_time_series_tx_model_builder_t *>(builder.get()), isSnapshotProcessing ? 1 : 0)};
-}
-
-// dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withFeed(graal_isolatethread_t* thread,
-// dxfg_time_series_tx_model_builder_t* source, dxfg_feed_t* feed);
-JavaObjectHandle<TimeSeriesTxModelBuilderTag> withFeed(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                       const JavaObjectHandle<DXFeed> &feed) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withFeed`. The "
-                                       "`builder` handle is invalid");
-    }
-
-    if (!feed) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withFeed`. The "
-                                       "`feed` handle is invalid");
-    }
-
-    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_TimeSeriesTxModel_Builder_withFeed, static_cast<dxfg_time_series_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_feed_t *>(feed.get()))};
-}
-
-// dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withSymbol(graal_isolatethread_t* thread,
-// dxfg_time_series_tx_model_builder_t* source, dxfg_symbol_t* symbol);
-JavaObjectHandle<TimeSeriesTxModelBuilderTag> withSymbol(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                         const SymbolWrapper &symbol) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withSymbol`. The "
-                                       "`builder` handle is invalid");
-    }
-
-    auto graalSymbol = symbol.toGraalUnique();
-
-    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_TimeSeriesTxModel_Builder_withSymbol, static_cast<dxfg_time_series_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_symbol_t *>(graalSymbol.get()))};
-}
-
-// dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withListener(graal_isolatethread_t* thread,
-// dxfg_time_series_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
-JavaObjectHandle<TimeSeriesTxModelBuilderTag> withListener(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
-                                                           const JavaObjectHandle<TxModelListenerTag> &listener) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withListener`. The "
-                                       "`builder` handle is invalid");
-    }
-
-    if (!listener) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withListener`. The "
-                                       "`listener` handle is invalid");
-    }
-
-    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_TimeSeriesTxModel_Builder_withListener, static_cast<dxfg_time_series_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_tx_model_listener_t *>(listener.get()))};
-}
-
-// dxfg_time_series_tx_model_builder_t* dxfg_TimeSeriesTxModel_Builder_withExecutor(graal_isolatethread_t* thread,
-// dxfg_time_series_tx_model_builder_t* source, dxfg_executor_t* executor);
 JavaObjectHandle<TimeSeriesTxModelBuilderTag> withExecutor(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &builder,
                                                            void *executor) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withExecutor`. The "
-                                       "`builder` handle is invalid");
-    }
+    auto *graalBuilder = toGraal(builder, "dxfg_v4_TimeSeriesTxModel_Builder_withExecutor");
 
     if (!executor) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_TimeSeriesTxModel_Builder_withExecutor`. The "
-                                       "`executor` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_TimeSeriesTxModel_Builder_withExecutor`. "
+                                       "The `executor` is nullptr");
     }
 
-    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_TimeSeriesTxModel_Builder_withExecutor, static_cast<dxfg_time_series_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_executor_t *>(executor))};
+    return JavaObjectHandle<TimeSeriesTxModelBuilderTag>{
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_TimeSeriesTxModel_Builder_withExecutor, graalBuilder,
+                                            static_cast<dxfg_v4_executor_t *>(executor))};
 }
 
 } // namespace Builder
-
 } // namespace isolated::model::IsolatedTimeSeriesTxModel
 
 DXFCPP_END_NAMESPACE

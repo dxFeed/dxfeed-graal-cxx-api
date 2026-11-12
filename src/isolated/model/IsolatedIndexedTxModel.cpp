@@ -9,247 +9,171 @@
 
 #include <dxfg_api.h>
 
+#include <string>
+
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::model::IsolatedIndexedTxModel {
 
-// dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_newBuilder(graal_isolatethread_t* thread, dxfg_event_clazz_t
-// eventType);
+namespace {
+
+dxfg_v4_indexed_tx_model_t *toGraal(const JavaObjectHandle<IndexedTxModelTag> &model, const char *function) {
+    if (!model) {
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `model` handle is invalid");
+    }
+
+    return static_cast<dxfg_v4_indexed_tx_model_t *>(model.get());
+}
+
+dxfg_v4_indexed_tx_model_builder_t *toGraal(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
+                                            const char *function) {
+    if (!builder) {
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `builder` handle is invalid");
+    }
+
+    return static_cast<dxfg_v4_indexed_tx_model_builder_t *>(builder.get());
+}
+
+dxfg_v4_feed_t *toGraal(const JavaObjectHandle<DXFeed> &feed, const char *function) {
+    if (!feed) {
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `feed` handle is invalid");
+    }
+
+    return static_cast<dxfg_v4_feed_t *>(feed.get());
+}
+
+} // namespace
+
 JavaObjectHandle<IndexedTxModelBuilderTag> newBuilder(const EventTypeEnum &eventType) {
-    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_newBuilder, static_cast<dxfg_event_clazz_t>(eventType.getId()))};
+    Isolate::checkAdvancedRevision();
+
+    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_IndexedTxModel_newBuilder, static_cast<dxfg_v4_event_clazz_t>(eventType.getId()))};
 }
 
-// dxfg_indexed_event_source_list* dxfg_IndexedTxModel_getSources(graal_isolatethread_t* thread,
-// dxfg_indexed_tx_model_t* source);
 void *getSources(const JavaObjectHandle<IndexedTxModelTag> &model) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_getSources`. The "
-                                       "`model` handle is invalid");
-    }
-
-    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_getSources, static_cast<dxfg_indexed_tx_model_t *>(model.get())));
+    return runGraalV4FunctionWithResult(dxfg_v4_IndexedTxModel_getSources,
+                                        toGraal(model, "dxfg_v4_IndexedTxModel_getSources"));
 }
 
-// int32_t dxfg_IndexedTxModel_setSources(graal_isolatethread_t* thread, dxfg_indexed_tx_model_t* source,
-// dxfg_indexed_event_source_list* sources);
 void setSources(const JavaObjectHandle<IndexedTxModelTag> &model, void *sources) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_setSources`. The "
-                                       "`model` handle is invalid");
-    }
+    auto *graalModel = toGraal(model, "dxfg_v4_IndexedTxModel_setSources");
 
     if (!sources) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_setSources`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_IndexedTxModel_setSources`. The "
                                        "`sources` is nullptr");
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_IndexedTxModel_setSources,
-                                       static_cast<dxfg_indexed_tx_model_t *>(model.get()),
-                                       static_cast<dxfg_indexed_event_source_list *>(sources));
+    runGraalV4Function(dxfg_v4_IndexedTxModel_setSources, graalModel,
+                       static_cast<dxfg_v4_indexed_event_source_list *>(sources));
 }
 
-// int32_t dxfg_IndexedTxModel_isBatchProcessing(graal_isolatethread_t* thread, dxfg_indexed_tx_model_t* source);
 bool isBatchProcessing(const JavaObjectHandle<IndexedTxModelTag> &model) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_isBatchProcessing`. The "
-                                       "`model` handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_IndexedTxModel_isBatchProcessing,
-                                              static_cast<dxfg_indexed_tx_model_t *>(model.get())) == 1;
+    return runGraalV4FunctionWithResult(dxfg_v4_IndexedTxModel_isBatchProcessing,
+                                        toGraal(model, "dxfg_v4_IndexedTxModel_isBatchProcessing")) == 1;
 }
 
-// int32_t dxfg_IndexedTxModel_isSnapshotProcessing(graal_isolatethread_t* thread, dxfg_indexed_tx_model_t* source);
 bool isSnapshotProcessing(const JavaObjectHandle<IndexedTxModelTag> &model) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_isSnapshotProcessing`. The "
-                                       "`model` handle is invalid");
-    }
-
-    return runGraalFunctionAndThrowIfMinusOne(dxfg_IndexedTxModel_isSnapshotProcessing,
-                                              static_cast<dxfg_indexed_tx_model_t *>(model.get())) == 1;
+    return runGraalV4FunctionWithResult(dxfg_v4_IndexedTxModel_isSnapshotProcessing,
+                                        toGraal(model, "dxfg_v4_IndexedTxModel_isSnapshotProcessing")) == 1;
 }
 
-// int32_t dxfg_IndexedTxModel_attach(graal_isolatethread_t* thread, dxfg_indexed_tx_model_t* source, dxfg_feed_t*
-// feed);
 void attach(const JavaObjectHandle<IndexedTxModelTag> &model, const JavaObjectHandle<DXFeed> &feed) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_attach`. The "
-                                       "`model` handle is invalid");
-    }
-
-    if (!feed) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_attach`. The "
-                                       "`feed` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_IndexedTxModel_attach, static_cast<dxfg_indexed_tx_model_t *>(model.get()),
-                                       static_cast<dxfg_feed_t *>(feed.get()));
+    runGraalV4Function(dxfg_v4_IndexedTxModel_attach, toGraal(model, "dxfg_v4_IndexedTxModel_attach"),
+                       toGraal(feed, "dxfg_v4_IndexedTxModel_attach"));
 }
 
-// int32_t dxfg_IndexedTxModel_detach(graal_isolatethread_t* thread, dxfg_indexed_tx_model_t* source, dxfg_feed_t*
-// feed);
 void detach(const JavaObjectHandle<IndexedTxModelTag> &model, const JavaObjectHandle<DXFeed> &feed) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_detach`. The "
-                                       "`model` handle is invalid");
-    }
-
-    if (!feed) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_detach`. The "
-                                       "`feed` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_IndexedTxModel_detach, static_cast<dxfg_indexed_tx_model_t *>(model.get()),
-                                       static_cast<dxfg_feed_t *>(feed.get()));
+    runGraalV4Function(dxfg_v4_IndexedTxModel_detach, toGraal(model, "dxfg_v4_IndexedTxModel_detach"),
+                       toGraal(feed, "dxfg_v4_IndexedTxModel_detach"));
 }
 
-// int32_t dxfg_IndexedTxModel_close(graal_isolatethread_t* thread, dxfg_indexed_tx_model_t* source);
 void close(const JavaObjectHandle<IndexedTxModelTag> &model) {
-    if (!model) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_close`. The "
-                                       "`model` handle is invalid");
-    }
-
-    runGraalFunctionAndThrowIfMinusOne(dxfg_IndexedTxModel_close, static_cast<dxfg_indexed_tx_model_t *>(model.get()));
+    runGraalV4Function(dxfg_v4_IndexedTxModel_close, toGraal(model, "dxfg_v4_IndexedTxModel_close"));
 }
 
 namespace Builder {
 
-// dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withSources(graal_isolatethread_t* thread,
-// dxfg_indexed_tx_model_builder_t* source, dxfg_indexed_event_source_list* sources);
 JavaObjectHandle<IndexedTxModelBuilderTag> withSources(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
                                                        void *sources) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withSources`. The "
-                                       "`builder` handle is invalid");
-    }
+    auto *graalBuilder = toGraal(builder, "dxfg_v4_IndexedTxModel_Builder_withSources");
 
     if (!sources) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withSources`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_IndexedTxModel_Builder_withSources`. The "
                                        "`sources` is nullptr");
     }
 
-    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_Builder_withSources, static_cast<dxfg_indexed_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_indexed_event_source_list *>(sources))};
+    return JavaObjectHandle<IndexedTxModelBuilderTag>{
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_IndexedTxModel_Builder_withSources, graalBuilder,
+                                            static_cast<dxfg_v4_indexed_event_source_list *>(sources))};
 }
 
-// dxfg_indexed_tx_model_t* dxfg_IndexedTxModel_Builder_build(graal_isolatethread_t* thread,
-// dxfg_indexed_tx_model_builder_t* source);
 JavaObjectHandle<IndexedTxModelTag> build(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_build`. The "
-                                       "`builder` handle is invalid");
-    }
-
-    return JavaObjectHandle<IndexedTxModelTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_Builder_build, static_cast<dxfg_indexed_tx_model_builder_t *>(builder.get()))};
+    return JavaObjectHandle<IndexedTxModelTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_IndexedTxModel_Builder_build, toGraal(builder, "dxfg_v4_IndexedTxModel_Builder_build"))};
 }
 
-// dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withBatchProcessing(graal_isolatethread_t* thread,
-// dxfg_indexed_tx_model_builder_t* source, int32_t isBatchProcessing);
 JavaObjectHandle<IndexedTxModelBuilderTag>
 withBatchProcessing(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder, bool isBatchProcessing) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_IndexedTxModel_Builder_withBatchProcessing`. The "
-            "`builder` handle is invalid");
-    }
-
-    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_Builder_withBatchProcessing, static_cast<dxfg_indexed_tx_model_builder_t *>(builder.get()),
-        isBatchProcessing ? 1 : 0)};
+    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_IndexedTxModel_Builder_withBatchProcessing,
+        toGraal(builder, "dxfg_v4_IndexedTxModel_Builder_withBatchProcessing"), isBatchProcessing ? 1 : 0)};
 }
 
-// dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withSnapshotProcessing(graal_isolatethread_t*
-// thread, dxfg_indexed_tx_model_builder_t* source, int32_t isSnapshotProcessing);
 JavaObjectHandle<IndexedTxModelBuilderTag>
 withSnapshotProcessing(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder, bool isSnapshotProcessing) {
-    if (!builder) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_IndexedTxModel_Builder_withSnapshotProcessing`. The "
-            "`builder` handle is invalid");
-    }
-
-    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_Builder_withSnapshotProcessing,
-        static_cast<dxfg_indexed_tx_model_builder_t *>(builder.get()), isSnapshotProcessing ? 1 : 0)};
+    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_IndexedTxModel_Builder_withSnapshotProcessing,
+        toGraal(builder, "dxfg_v4_IndexedTxModel_Builder_withSnapshotProcessing"), isSnapshotProcessing ? 1 : 0)};
 }
 
-// dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withFeed(graal_isolatethread_t* thread,
-// dxfg_indexed_tx_model_builder_t* source, dxfg_feed_t* feed);
 JavaObjectHandle<IndexedTxModelBuilderTag> withFeed(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
                                                     const JavaObjectHandle<DXFeed> &feed) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withFeed`. The "
-                                       "`builder` handle is invalid");
-    }
-
-    if (!feed) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withFeed`. The "
-                                       "`feed` handle is invalid");
-    }
-
-    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_Builder_withFeed, static_cast<dxfg_indexed_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_feed_t *>(feed.get()))};
+    return JavaObjectHandle<IndexedTxModelBuilderTag>{
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_IndexedTxModel_Builder_withFeed,
+                                            toGraal(builder, "dxfg_v4_IndexedTxModel_Builder_withFeed"),
+                                            toGraal(feed, "dxfg_v4_IndexedTxModel_Builder_withFeed"))};
 }
 
-// dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withSymbol(graal_isolatethread_t* thread,
-// dxfg_indexed_tx_model_builder_t* source, dxfg_symbol_t* symbol);
 JavaObjectHandle<IndexedTxModelBuilderTag> withSymbol(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
                                                       const SymbolWrapper &symbol) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withSymbol`. The "
-                                       "`builder` handle is invalid");
-    }
+    auto *graalBuilder = toGraal(builder, "dxfg_v4_IndexedTxModel_Builder_withSymbol");
+    const auto graalSymbol = symbol.toGraalUnique();
 
-    auto graalSymbol = symbol.toGraalUnique();
-
-    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_Builder_withSymbol, static_cast<dxfg_indexed_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_symbol_t *>(graalSymbol.get()))};
+    return JavaObjectHandle<IndexedTxModelBuilderTag>{
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_IndexedTxModel_Builder_withSymbol, graalBuilder,
+                                            static_cast<dxfg_v4_symbol_t *>(graalSymbol.get()))};
 }
 
-// dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withListener(graal_isolatethread_t* thread,
-// dxfg_indexed_tx_model_builder_t* source, dxfg_tx_model_listener_t* listener);
 JavaObjectHandle<IndexedTxModelBuilderTag> withListener(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
                                                         const JavaObjectHandle<TxModelListenerTag> &listener) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withListener`. The "
-                                       "`builder` handle is invalid");
-    }
+    auto *graalBuilder = toGraal(builder, "dxfg_v4_IndexedTxModel_Builder_withListener");
 
     if (!listener) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withListener`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_IndexedTxModel_Builder_withListener`. The "
                                        "`listener` handle is invalid");
     }
 
-    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_Builder_withListener, static_cast<dxfg_indexed_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_tx_model_listener_t *>(listener.get()))};
+    return JavaObjectHandle<IndexedTxModelBuilderTag>{
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_IndexedTxModel_Builder_withListener, graalBuilder,
+                                            static_cast<dxfg_v4_tx_model_listener_t *>(listener.get()))};
 }
 
-// dxfg_indexed_tx_model_builder_t* dxfg_IndexedTxModel_Builder_withExecutor(graal_isolatethread_t* thread,
-// dxfg_indexed_tx_model_builder_t* source, dxfg_executor_t* executor);
 JavaObjectHandle<IndexedTxModelBuilderTag> withExecutor(const JavaObjectHandle<IndexedTxModelBuilderTag> &builder,
                                                         void *executor) {
-    if (!builder) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withExecutor`. The "
-                                       "`builder` handle is invalid");
-    }
+    auto *graalBuilder = toGraal(builder, "dxfg_v4_IndexedTxModel_Builder_withExecutor");
 
     if (!executor) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_IndexedTxModel_Builder_withExecutor`. The "
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_IndexedTxModel_Builder_withExecutor`. The "
                                        "`executor` is nullptr");
     }
 
-    return JavaObjectHandle<IndexedTxModelBuilderTag>{runGraalFunctionAndThrowIfNullptr(
-        dxfg_IndexedTxModel_Builder_withExecutor, static_cast<dxfg_indexed_tx_model_builder_t *>(builder.get()),
-        static_cast<dxfg_executor_t *>(executor))};
+    return JavaObjectHandle<IndexedTxModelBuilderTag>{
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_IndexedTxModel_Builder_withExecutor, graalBuilder,
+                                            static_cast<dxfg_v4_executor_t *>(executor))};
 }
 
 } // namespace Builder

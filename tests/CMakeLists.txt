@@ -78,6 +78,7 @@ set(DXFC_TEST_SOURCES
         internal/ConstStringTest.cpp
         internal/EntityManagerTest.cpp
         internal/HandlerTest.cpp
+        internal/IsolateTest.cpp
         internal/SdkStringTest.cpp
         internal/StringUtilsTest.cpp
         internal/Utf8CheckTest.cpp

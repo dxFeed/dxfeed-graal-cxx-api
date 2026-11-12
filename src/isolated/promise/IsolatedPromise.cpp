@@ -11,104 +11,96 @@
 #include <dxfg_api.h>
 
 #include <cstdint>
+#include <string>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::promise::IsolatedPromise {
 
-bool /* int32_t */ isDone(/* dxfg_promise_t * */ void *promise) {
+namespace {
+
+// The handle of an event promise (dxfg_v4_promise_event_t, dxfg_v4_promise_events_t) starts with its
+// dxfg_v4_promise_t, so the same handle is passed to the functions of both types.
+template <typename Promise = dxfg_v4_promise_t> Promise *toGraal(void *promise, const char *function) {
     if (!promise) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_isDone`. The `promise` is nullptr");
+        throw InvalidArgumentException(std::string("Unable to execute function `") + function +
+                                       "`. The `promise` is nullptr");
     }
 
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_isDone, static_cast<dxfg_promise_t *>(promise)) == 1;
+    return static_cast<Promise *>(promise);
 }
 
-bool /* int32_t */ hasResult(/* dxfg_promise_t * */ void *promise) {
-    if (!promise) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_hasResult`. The `promise` is nullptr");
-    }
+} // namespace
 
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_hasResult, static_cast<dxfg_promise_t *>(promise)) == 1;
+bool isDone(/* dxfg_v4_promise_t * */ void *promise) {
+    return runGraalV4FunctionWithResult(dxfg_v4_Promise_isDone, toGraal(promise, "dxfg_v4_Promise_isDone")) == 1;
 }
 
-bool /* int32_t */ hasException(/* dxfg_promise_t * */ void *promise) {
-    if (!promise) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Promise_hasException`. The `promise` is nullptr");
-    }
-
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_hasException, static_cast<dxfg_promise_t *>(promise)) ==
+bool hasResult(/* dxfg_v4_promise_t * */ void *promise) {
+    return runGraalV4FunctionWithResult(dxfg_v4_Promise_hasResult, toGraal(promise, "dxfg_v4_Promise_hasResult")) ==
            1;
 }
 
-bool /* int32_t */ isCancelled(/* dxfg_promise_t * */ void *promise) {
-    if (!promise) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Promise_isCancelled`. The `promise` is nullptr");
-    }
-
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_isCancelled, static_cast<dxfg_promise_t *>(promise)) ==
-           1;
+bool hasException(/* dxfg_v4_promise_t * */ void *promise) {
+    return runGraalV4FunctionWithResult(dxfg_v4_Promise_hasException,
+                                        toGraal(promise, "dxfg_v4_Promise_hasException")) == 1;
 }
 
-std::shared_ptr<EventType> /* dxfg_event_type_t* */ getResult(/* dxfg_promise_event_t * */ void *promise) {
-    if (!promise) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Promise_EventType_getResult`. The `promise` is nullptr");
-    }
+bool isCancelled(/* dxfg_v4_promise_t * */ void *promise) {
+    return runGraalV4FunctionWithResult(dxfg_v4_Promise_isCancelled,
+                                        toGraal(promise, "dxfg_v4_Promise_isCancelled")) == 1;
+}
 
-    auto *graalEvent =
-        runGraalFunctionNullableOrThrow(dxfg_Promise_EventType_getResult, static_cast<dxfg_promise_event_t *>(promise));
+std::shared_ptr<EventType> getResult(/* dxfg_v4_promise_event_t * */ void *promise) {
+    auto *graalEvent = runGraalV4FunctionWithResult(
+        dxfg_v4_Promise_EventType_getResult,
+        toGraal<dxfg_v4_promise_event_t>(promise, "dxfg_v4_Promise_EventType_getResult"));
 
     // NULL: the promise has no result, there is nothing to release.
     if (graalEvent == nullptr) {
         return {};
     }
 
-    auto result = EventMapper::fromGraal(graalEvent);
+    std::shared_ptr<EventType> result{};
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_EventType_release, graalEvent);
+    try {
+        result = EventMapper::fromGraal(graalEvent);
+    } catch (...) {
+        runGraalV4Function(dxfg_v4_EventType_release, graalEvent);
+
+        throw;
+    }
+
+    runGraalV4Function(dxfg_v4_EventType_release, graalEvent);
 
     return result;
 }
 
-std::vector<std::shared_ptr<EventType>> /* dxfg_event_type_list* */
-getResults(/* dxfg_promise_events_t * */ void *promise) {
-    if (!promise) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Promise_List_EventType_getResult`. The `promise` is nullptr");
+std::vector<std::shared_ptr<EventType>> getResults(/* dxfg_v4_promise_events_t * */ void *promise) {
+    // A promise without a result gives an empty list, which is released as well.
+    auto *graalEvents = runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Promise_List_EventType_getResult,
+        toGraal<dxfg_v4_promise_events_t>(promise, "dxfg_v4_Promise_List_EventType_getResult"));
+
+    std::vector<std::shared_ptr<EventType>> result{};
+
+    try {
+        result = EventMapper::fromGraalList(graalEvents);
+    } catch (...) {
+        runGraalV4Function(dxfg_v4_event_type_list_release, graalEvents);
+
+        throw;
     }
 
-    auto *graalEvents = runGraalFunctionAndThrowIfNullptr(dxfg_Promise_List_EventType_getResult,
-                                                          static_cast<dxfg_promise_events_t *>(promise));
-
-    auto result = EventMapper::fromGraalList(graalEvents);
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_CList_EventType_release, graalEvents);
+    runGraalV4Function(dxfg_v4_event_type_list_release, graalEvents);
 
     return result;
 }
 
-JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void *promise) {
-    if (!promise) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Promise_getException`. The `promise` is nullptr");
-    }
-
-    // The error value of this function is `(dxfg_exception_t *)-1`: NULL means that the promise has no exception.
-    auto *graalException = runGraalFunctionAndThrow(
-        [](dxfg_exception_t *result) {
-            if (result == dxfcpp::bit_cast<dxfg_exception_t *>(std::intptr_t{-1})) {
-                JavaException::throwIfJavaThreadExceptionExists();
-
-                throw RuntimeException("dxfg_Promise_getException failed without a Java exception");
-            }
-
-            return result;
-        },
-        dxfg_Promise_getException, static_cast<dxfg_promise_t *>(promise));
+JavaException getException(/* dxfg_v4_promise_t * */ void *promise) {
+    auto *graalException =
+        runGraalV4FunctionWithResult(dxfg_v4_Promise_getException, toGraal(promise, "dxfg_v4_Promise_getException"));
 
     // NULL: the promise has no exception, there is nothing to release.
     if (graalException == nullptr) {
@@ -118,42 +110,25 @@ JavaException /* dxfg_exception_t* */ getException(/* dxfg_promise_t * */ void *
     return JavaException::createAndRelease(graalException);
 }
 
-void /* int32_t */ await(/* dxfg_promise_t * */ void *promise) {
-    if (!promise) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_await`. The `promise` is nullptr");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_await, static_cast<dxfg_promise_t *>(promise));
+void await(/* dxfg_v4_promise_t * */ void *promise) {
+    runGraalV4Function(dxfg_v4_Promise_await, toGraal(promise, "dxfg_v4_Promise_await"));
 }
 
-void /* int32_t */ await(/* dxfg_promise_t * */ void *promise, std::int32_t timeoutInMilliseconds) {
-    if (!promise) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_await2`. The `promise` is nullptr");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_await2, static_cast<dxfg_promise_t *>(promise),
-                                           timeoutInMilliseconds);
+void await(/* dxfg_v4_promise_t * */ void *promise, std::int32_t timeoutInMilliseconds) {
+    runGraalV4Function(dxfg_v4_Promise_awaitWithTimeout, toGraal(promise, "dxfg_v4_Promise_awaitWithTimeout"),
+                       timeoutInMilliseconds);
 }
 
-bool /* int32_t */ awaitWithoutException(/* dxfg_promise_t * */ void *promise, std::int32_t timeoutInMilliseconds) {
-    if (!promise) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_Promise_awaitWithoutException`. The `promise` is nullptr");
-    }
-
-    // DXFG_EXECUTE_SUCCESSFULLY (0): the promise has completed; DXFG_PROMISE_AWAIT_TIMED_OUT (1, Graal SDK v3.5.0+):
-    // the wait timed out and the promise is cancelled. Graal SDK before v3.5.0 returned 0 on timeout as well.
-    return runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_awaitWithoutException,
-                                                  static_cast<dxfg_promise_t *>(promise),
-                                                  timeoutInMilliseconds) == DXFG_EXECUTE_SUCCESSFULLY;
+bool awaitWithoutException(/* dxfg_v4_promise_t * */ void *promise, std::int32_t timeoutInMilliseconds) {
+    // DXFG_EXECUTE_SUCCESSFULLY (0): the promise has completed; DXFG_PROMISE_AWAIT_TIMED_OUT (1): the wait timed out
+    // and the promise is cancelled.
+    return runGraalV4FunctionWithStatus(dxfg_v4_Promise_awaitWithoutException,
+                                        toGraal(promise, "dxfg_v4_Promise_awaitWithoutException"),
+                                        timeoutInMilliseconds) == DXFG_EXECUTE_SUCCESSFULLY;
 }
 
-void /* int32_t */ cancel(/* dxfg_promise_t * */ void *promise) {
-    if (!promise) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Promise_cancel`. The `promise` is nullptr");
-    }
-
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Promise_cancel, static_cast<dxfg_promise_t *>(promise));
+void cancel(/* dxfg_v4_promise_t * */ void *promise) {
+    runGraalV4Function(dxfg_v4_Promise_cancel, toGraal(promise, "dxfg_v4_Promise_cancel"));
 }
 
 // A list of the C API allocated by C++. The owning wrapper frees it; it is not copyable, so that a list is not freed
@@ -245,12 +220,11 @@ struct GraalListWrapper {
     }
 };
 
-// dxfg_promise_t*       dxfg_Promises_allOf(graal_isolatethread_t *thread, dxfg_promise_list *promises);
-void *allOf(const std::vector<void *> &promises) {
-    auto list = GraalListWrapper<dxfg_java_object_handler_list, dxfg_java_object_handler>::create(promises);
+void * /* dxfg_v4_promise_t* */ allOf(const std::vector<void *> &promises) {
+    auto list = GraalListWrapper<dxfg_v4_java_object_handler_list, dxfg_v4_java_object_handler>::create(promises);
 
-    return dxfcpp::bit_cast<void *>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_Promises_allOf, dxfcpp::bit_cast<dxfg_promise_list *>(list.handle)));
+    return runGraalV4FunctionWithNonNullResult(dxfg_v4_Promises_allOf,
+                                               dxfcpp::bit_cast<dxfg_v4_promise_list *>(list.handle));
 }
 
 } // namespace isolated::promise::IsolatedPromise

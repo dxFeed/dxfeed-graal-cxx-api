@@ -13,13 +13,14 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::model::IsolatedTxModelListener {
 
-// typedef void (*dxfg_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,
-// dxfg_indexed_event_source_t* source, dxfg_event_type_list* events, int32_t /* boolean */ isSnapshot, void*
-// user_data);
+// typedef void (*dxfg_v4_TxModelListener_function_eventsReceived)(graal_isolatethread_t *thread,
+// dxfg_v4_indexed_event_source_t *source, dxfg_v4_event_type_list *events, int32_t isSnapshot, void *user_data);
 
-// dxfg_tx_model_listener_t* dxfg_TxModelListener_new(graal_isolatethread_t* thread,
-// dxfg_TxModelListener_function_eventsReceived  function_eventsReceived, void* user_data);
-JavaObjectHandle<TxModelListenerTag> create(void *functionEventsReceived, void *userData);
+// int32_t dxfg_v4_TxModelListener_new(graal_isolatethread_t *thread,
+// dxfg_v4_TxModelListener_function_eventsReceived function_eventsReceived, void *user_data,
+// DXFG_OUT dxfg_v4_tx_model_listener_t **txModelListener);
+JavaObjectHandle<TxModelListenerTag>
+create(void * /* dxfg_v4_TxModelListener_function_eventsReceived */ functionEventsReceived, void *userData);
 
 } // namespace isolated::model::IsolatedTxModelListener
 
