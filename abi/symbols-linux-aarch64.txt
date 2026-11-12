@@ -454,8 +454,12 @@ dxfcpp::v8::DXEndpoint::~DXEndpoint()
 dxfcpp::v8::DXFeed::DXFeed()
 dxfcpp::v8::DXFeed::attachSubscription(std::shared_ptr<dxfcpp::v8::DXFeedSubscription> const&) const
 dxfcpp::v8::DXFeed::create(void*)
+dxfcpp::v8::DXFeed::createIndexedEventsPromiseContext(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&, dxfcpp::v8::IndexedEventSource const&) const
+dxfcpp::v8::DXFeed::createLastEventPromiseContext(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&) const
+dxfcpp::v8::DXFeed::createLastEventsPromisesContexts(dxfcpp::v8::EventTypeEnum const&, std::vector<dxfcpp::v8::SymbolWrapper, std::allocator<dxfcpp::v8::SymbolWrapper> > const&) const
 dxfcpp::v8::DXFeed::createSubscription(dxfcpp::v8::EventTypeEnum const&) const
 dxfcpp::v8::DXFeed::createSubscription(std::initializer_list<dxfcpp::v8::EventTypeEnum>) const
+dxfcpp::v8::DXFeed::createTimeSeriesPromiseContext(dxfcpp::v8::EventTypeEnum const&, dxfcpp::v8::SymbolWrapper const&, long, long) const
 dxfcpp::v8::DXFeed::createTimeSeriesSubscription(dxfcpp::v8::EventTypeEnum const&) const
 dxfcpp::v8::DXFeed::createTimeSeriesSubscription(std::initializer_list<dxfcpp::v8::EventTypeEnum>) const
 dxfcpp::v8::DXFeed::createTimeSeriesSubscriptionHandleFromEventClassList(std::unique_ptr<dxfcpp::v8::EventClassList, std::default_delete<dxfcpp::v8::EventClassList> > const&) const
@@ -612,6 +616,7 @@ dxfcpp::v8::ErrorManager::getErrors()
 dxfcpp::v8::ErrorManager::getLastError()
 dxfcpp::v8::ErrorManager::report(dxfcpp::v8::StringParam, dxfcpp::v8::StringParam, std::source_location const&)
 dxfcpp::v8::ErrorManager::reportException(dxfcpp::v8::StringParam, std::__exception_ptr::exception_ptr const&, std::source_location const&)
+dxfcpp::v8::ErrorManager::reportWarning(dxfcpp::v8::StringParam, dxfcpp::v8::StringParam, std::source_location const&)
 dxfcpp::v8::ErrorManager::resetHandler()
 dxfcpp::v8::ErrorManager::setCapacity(unsigned long)
 dxfcpp::v8::ErrorManager::setHandler(std::function<void (dxfcpp::v8::ErrorInfo const&)>)
@@ -647,7 +652,7 @@ dxfcpp::v8::EventMapper::fromGraalList(void*)
 dxfcpp::v8::EventMapper::fromGraalListSkippingErrors(void*)
 dxfcpp::v8::EventMapper::newGraalList(long)
 dxfcpp::v8::EventMapper::setGraalListElement(void*, long, void*)
-dxfcpp::v8::EventPromiseImpl::EventPromiseImpl(void*, bool)
+dxfcpp::v8::EventPromiseImpl::EventPromiseImpl(void*, bool, std::shared_ptr<dxfcpp::v8::PromiseContext const>)
 dxfcpp::v8::EventPromiseImpl::getResult() const
 dxfcpp::v8::EventPromiseImpl::~EventPromiseImpl()
 dxfcpp::v8::EventSourceWrapper::EventSourceWrapper()
@@ -724,7 +729,7 @@ dxfcpp::v8::EventTypeEnum::operator<(dxfcpp::v8::EventTypeEnum const&) const
 dxfcpp::v8::EventTypeEnum::operator<(std::reference_wrapper<dxfcpp::v8::EventTypeEnum const> const&) const
 dxfcpp::v8::EventTypeEnum::operator==(dxfcpp::v8::EventTypeEnum const&) const
 dxfcpp::v8::EventTypeEnum::operator==(std::reference_wrapper<dxfcpp::v8::EventTypeEnum const> const&) const
-dxfcpp::v8::EventsPromiseImpl::EventsPromiseImpl(void*, bool)
+dxfcpp::v8::EventsPromiseImpl::EventsPromiseImpl(void*, bool, std::shared_ptr<dxfcpp::v8::PromiseContext const>)
 dxfcpp::v8::EventsPromiseImpl::getResult() const
 dxfcpp::v8::EventsPromiseImpl::~EventsPromiseImpl()
 dxfcpp::v8::GraalException::GraalException(dxfcpp::v8::CEntryPointErrorsEnum)
@@ -1834,7 +1839,7 @@ dxfcpp::v8::Profile::setStatusReason(dxfcpp::v8::StringParam)
 dxfcpp::v8::Profile::setTradingStatus(dxfcpp::v8::TradingStatus const&)
 dxfcpp::v8::Profile::toGraal() const
 dxfcpp::v8::Profile::toString[abi:cxx11]() const
-dxfcpp::v8::PromiseImpl::PromiseImpl(void*)
+dxfcpp::v8::PromiseImpl::PromiseImpl(void*, std::shared_ptr<dxfcpp::v8::PromiseContext const>)
 dxfcpp::v8::PromiseImpl::await() const
 dxfcpp::v8::PromiseImpl::await(int) const
 dxfcpp::v8::PromiseImpl::awaitWithoutException(int) const
@@ -2499,7 +2504,7 @@ dxfcpp::v8::Underlying::setTime(long)
 dxfcpp::v8::Underlying::setVolatility(double)
 dxfcpp::v8::Underlying::toGraal() const
 dxfcpp::v8::Underlying::toString[abi:cxx11]() const
-dxfcpp::v8::VoidPromiseImpl::VoidPromiseImpl(void*, bool)
+dxfcpp::v8::VoidPromiseImpl::VoidPromiseImpl(void*, bool, std::shared_ptr<dxfcpp::v8::PromiseContext const>)
 dxfcpp::v8::VoidPromiseImpl::getResult() const
 dxfcpp::v8::VoidPromiseImpl::~VoidPromiseImpl()
 dxfcpp::v8::WildcardSymbol::ALL

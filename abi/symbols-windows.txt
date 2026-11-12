@@ -617,6 +617,9 @@ class std::shared_ptr<struct dxfcpp::v8::HistoryEndpoint> dxfcpp::v8::HistoryEnd
 class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile> dxfcpp::v8::IterableInstrumentProfile::next(void)const
 class std::shared_ptr<struct dxfcpp::v8::ObservableSubscription> dxfcpp::v8::DXPublisher::getSubscription(class dxfcpp::v8::EventTypeEnum const &)
 class std::shared_ptr<struct dxfcpp::v8::OnDemandService> dxfcpp::v8::DXEndpoint::getOnDemandService(void)
+class std::shared_ptr<struct dxfcpp::v8::PromiseContext const > dxfcpp::v8::DXFeed::createIndexedEventsPromiseContext(class dxfcpp::v8::EventTypeEnum const &,struct dxfcpp::v8::SymbolWrapper const &,class dxfcpp::v8::IndexedEventSource const &)const
+class std::shared_ptr<struct dxfcpp::v8::PromiseContext const > dxfcpp::v8::DXFeed::createLastEventPromiseContext(class dxfcpp::v8::EventTypeEnum const &,struct dxfcpp::v8::SymbolWrapper const &)const
+class std::shared_ptr<struct dxfcpp::v8::PromiseContext const > dxfcpp::v8::DXFeed::createTimeSeriesPromiseContext(class dxfcpp::v8::EventTypeEnum const &,struct dxfcpp::v8::SymbolWrapper const &,__int64,__int64)const
 class std::shared_ptr<struct dxfcpp::v8::Schedule> dxfcpp::v8::Day::getSchedule(void)const
 class std::shared_ptr<struct dxfcpp::v8::Session> dxfcpp::v8::Day::findFirstSession(struct dxfcpp::v8::SessionFilter const &)const
 class std::shared_ptr<struct dxfcpp::v8::Session> dxfcpp::v8::Day::findLastSession(struct dxfcpp::v8::SessionFilter const &)const
@@ -653,6 +656,7 @@ class std::vector<class std::shared_ptr<struct dxfcpp::v8::EventType>,class std:
 class std::vector<class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile>,class std::allocator<class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile> > > dxfcpp::v8::InstrumentProfileReader::readFromFile(struct dxfcpp::v8::StringParam)const
 class std::vector<class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile>,class std::allocator<class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile> > > dxfcpp::v8::InstrumentProfileReader::readFromFile(struct dxfcpp::v8::StringParam,struct dxfcpp::v8::AuthToken const &)const
 class std::vector<class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile>,class std::allocator<class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile> > > dxfcpp::v8::InstrumentProfileReader::readFromFile(struct dxfcpp::v8::StringParam,struct dxfcpp::v8::StringParam,struct dxfcpp::v8::StringParam)const
+class std::vector<class std::shared_ptr<struct dxfcpp::v8::PromiseContext const >,class std::allocator<class std::shared_ptr<struct dxfcpp::v8::PromiseContext const > > > dxfcpp::v8::DXFeed::createLastEventsPromisesContexts(class dxfcpp::v8::EventTypeEnum const &,class std::vector<struct dxfcpp::v8::SymbolWrapper,class std::allocator<struct dxfcpp::v8::SymbolWrapper> > const &)const
 class std::vector<class std::shared_ptr<struct dxfcpp::v8::Session>,class std::allocator<class std::shared_ptr<struct dxfcpp::v8::Session> > > dxfcpp::v8::Day::getSessions(void)const
 class std::vector<double,class std::allocator<double> > dxfcpp::v8::PriceIncrements::getPriceIncrements(void)const
 class std::vector<struct dxfcpp::v8::SymbolWrapper,class std::allocator<struct dxfcpp::v8::SymbolWrapper> > dxfcpp::v8::DXFeedSubscription::getDecoratedSymbols(void)const
@@ -1040,7 +1044,7 @@ dxfcpp::v8::EventFlag::EventFlag(unsigned int,class std::basic_string_view<char,
 dxfcpp::v8::EventFlag::EventFlag(void)
 dxfcpp::v8::EventFlagsMask::EventFlagsMask(class std::initializer_list<class dxfcpp::v8::EventFlag>)
 dxfcpp::v8::EventFlagsMask::EventFlagsMask(void)
-dxfcpp::v8::EventPromiseImpl::EventPromiseImpl(void *,bool)
+dxfcpp::v8::EventPromiseImpl::EventPromiseImpl(void *,bool,class std::shared_ptr<struct dxfcpp::v8::PromiseContext const >)
 dxfcpp::v8::EventPromiseImpl::~EventPromiseImpl(void)
 dxfcpp::v8::EventSourceWrapper::EventSourceWrapper(class dxfcpp::v8::IndexedEventSource const &)
 dxfcpp::v8::EventSourceWrapper::EventSourceWrapper(class dxfcpp::v8::OrderSource const &)
@@ -1058,7 +1062,7 @@ dxfcpp::v8::EventTypeWithSymbol<class std::basic_string<char,struct std::char_tr
 dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol>::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol>(struct dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol> &&)
 dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol>::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol>(struct dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol> const &)
 dxfcpp::v8::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol>::EventTypeWithSymbol<struct dxfcpp::v8::CandleSymbol>(void)
-dxfcpp::v8::EventsPromiseImpl::EventsPromiseImpl(void *,bool)
+dxfcpp::v8::EventsPromiseImpl::EventsPromiseImpl(void *,bool,class std::shared_ptr<struct dxfcpp::v8::PromiseContext const >)
 dxfcpp::v8::EventsPromiseImpl::~EventsPromiseImpl(void)
 dxfcpp::v8::GraalException::GraalException(enum dxfcpp::v8::CEntryPointErrorsEnum)
 dxfcpp::v8::GraalException::GraalException(enum dxfcpp::v8::CEntryPointErrorsEnum,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)
@@ -1163,7 +1167,8 @@ dxfcpp::v8::Profile::Profile(class dxfcpp::v8::Profile &&)
 dxfcpp::v8::Profile::Profile(class dxfcpp::v8::Profile const &)
 dxfcpp::v8::Profile::Profile(struct dxfcpp::v8::StringParam)
 dxfcpp::v8::Profile::Profile(void)
-dxfcpp::v8::PromiseImpl::PromiseImpl(void *)
+dxfcpp::v8::PromiseImpl::PromiseImpl(void *,class std::shared_ptr<struct dxfcpp::v8::PromiseContext const >)
+dxfcpp::v8::PromiseImpl::~PromiseImpl(void)
 dxfcpp::v8::PromiseListImpl::PromiseListImpl(void *)
 dxfcpp::v8::PromiseListImpl::~PromiseListImpl(void)
 dxfcpp::v8::Quote::Quote(class dxfcpp::v8::Quote &&)
@@ -1305,7 +1310,7 @@ dxfcpp::v8::Underlying::Underlying(class dxfcpp::v8::Underlying &&)
 dxfcpp::v8::Underlying::Underlying(class dxfcpp::v8::Underlying const &)
 dxfcpp::v8::Underlying::Underlying(struct dxfcpp::v8::StringParam)
 dxfcpp::v8::Underlying::Underlying(void)
-dxfcpp::v8::VoidPromiseImpl::VoidPromiseImpl(void *,bool)
+dxfcpp::v8::VoidPromiseImpl::VoidPromiseImpl(void *,bool,class std::shared_ptr<struct dxfcpp::v8::PromiseContext const >)
 dxfcpp::v8::VoidPromiseImpl::~VoidPromiseImpl(void)
 dxfcpp::v8::WildcardSymbol::WildcardSymbol(class std::basic_string_view<char,struct std::char_traits<char> >)
 dxfcpp::v8::WildcardSymbol::WildcardSymbol(struct dxfcpp::v8::WildcardSymbol &&)
@@ -2127,6 +2132,7 @@ static void dxfcpp::v8::ErrorManager::clearErrors(void)
 static void dxfcpp::v8::ErrorManager::defaultHandler(struct dxfcpp::v8::ErrorInfo const &)
 static void dxfcpp::v8::ErrorManager::report(struct dxfcpp::v8::StringParam,struct dxfcpp::v8::StringParam,struct std::source_location const &)
 static void dxfcpp::v8::ErrorManager::reportException(struct dxfcpp::v8::StringParam,class std::exception_ptr const &,struct std::source_location const &)
+static void dxfcpp::v8::ErrorManager::reportWarning(struct dxfcpp::v8::StringParam,struct dxfcpp::v8::StringParam,struct std::source_location const &)
 static void dxfcpp::v8::ErrorManager::resetHandler(void)
 static void dxfcpp::v8::ErrorManager::setCapacity(unsigned __int64)
 static void dxfcpp::v8::ErrorManager::setHandler(class std::function<void (struct dxfcpp::v8::ErrorInfo const &)>)
