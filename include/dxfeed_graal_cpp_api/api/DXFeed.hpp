@@ -161,7 +161,27 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     mutable std::unordered_map<const DXFeedSubscription *, std::shared_ptr<DXFeedSubscription>> subscriptions_{};
     mutable bool closed_{}; // the endpoint is closed: the feed owns no subscriptions. Guarded by subscriptionsMutex_.
 
+    // The endpoint that created the feed. It is weak (the endpoint owns the feed): the feed only reads the state of the
+    // endpoint to describe a timeout of a promise. Set once by DXEndpoint, before the feed is returned to anyone.
+    std::weak_ptr<const DXEndpoint> endpoint_{};
+
     static std::shared_ptr<DXFeed> create(void *feedHandle);
+
+    // The descriptions of the requests of the promises: they are added to the text of the timeout exception.
+    std::shared_ptr<const PromiseContext> createLastEventPromiseContext(const EventTypeEnum &eventType,
+                                                                        const SymbolWrapper &symbol) const;
+
+    std::vector<std::shared_ptr<const PromiseContext>>
+    createLastEventsPromisesContexts(const EventTypeEnum &eventType, const std::vector<SymbolWrapper> &symbols) const;
+
+    std::shared_ptr<const PromiseContext> createIndexedEventsPromiseContext(const EventTypeEnum &eventType,
+                                                                            const SymbolWrapper &symbol,
+                                                                            const IndexedEventSource &source) const;
+
+    std::shared_ptr<const PromiseContext> createTimeSeriesPromiseContext(const EventTypeEnum &eventType,
+                                                                         const SymbolWrapper &symbol,
+                                                                         std::int64_t fromTime,
+                                                                         std::int64_t toTime) const;
 
     // Stops owning the subscription. The subscription is released outside of the mutex: its destructor closes it.
     void releaseSubscription(const DXFeedSubscription *subscription) const;
@@ -585,13 +605,19 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Note that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
      *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request, the waiting time
+     * and the state of the endpoint.
+     *
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @return The promise for the result of the request.
      */
     template <Derived<LastingEvent> E>
     std::shared_ptr<Promise<std::shared_ptr<E>>> getLastEventPromise(const SymbolWrapper &symbol) const {
-        return std::make_shared<Promise<std::shared_ptr<E>>>(getLastEventPromiseImpl(E::TYPE, symbol));
+        auto context = createLastEventPromiseContext(E::TYPE, symbol);
+
+        return std::make_shared<Promise<std::shared_ptr<E>>>(getLastEventPromiseImpl(E::TYPE, symbol), true,
+                                                             std::move(context));
     }
 
     /**
@@ -631,6 +657,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
      *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request (its own symbol for
+     * each promise), the waiting time and the state of the endpoint.
+     *
      * @tparam E The event type.
      * @tparam SymbolIt The symbols collection's iterator type.
      * @param begin The beginning of the collection of symbols (SymbolWrapper).
@@ -639,9 +668,18 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      */
     template <Derived<LastingEvent> E, typename SymbolIt>
     std::shared_ptr<PromiseList<E>> getLastEventsPromises(SymbolIt begin, SymbolIt end) const {
-        auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
+        // The symbols are walked once (the iterators may be single-pass): the list for the SDK and the descriptions of
+        // the requests are built from the same vector.
+        std::vector<SymbolWrapper> symbols{};
 
-        return PromiseList<E>::create(getLastEventsPromisesImpl(E::TYPE, list.get()));
+        for (auto it = begin; it != end; ++it) {
+            symbols.emplace_back(*it);
+        }
+
+        auto contexts = createLastEventsPromisesContexts(E::TYPE, symbols);
+        auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(symbols.begin(), symbols.end());
+
+        return PromiseList<E>::create(getLastEventsPromisesImpl(E::TYPE, list.get()), contexts);
     }
 
     /**
@@ -678,6 +716,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
+     *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request (its own symbol for
+     * each promise), the waiting time and the state of the endpoint.
      *
      * @tparam E The event type.
      * @tparam SymbolsCollection The symbol collection's type.
@@ -725,6 +766,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
+     *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request (its own symbol for
+     * each promise), the waiting time and the state of the endpoint.
      *
      * @tparam E The event type.
      * @param collection The symbol collection.
@@ -777,6 +821,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * the latter expects events in a different order and with an appropriate flags set. See documentation on a specific
      * event class for details on how they should be published.
      *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request, the waiting time
+     * and the state of the endpoint.
+     *
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @param source The source.
@@ -785,8 +832,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<IndexedEvent> E>
     std::shared_ptr<Promise<std::vector<std::shared_ptr<E>>>>
     getIndexedEventsPromise(const SymbolWrapper &symbol, const IndexedEventSource &source) const {
+        auto context = createIndexedEventsPromiseContext(E::TYPE, symbol, source);
+
         return std::make_shared<Promise<std::vector<std::shared_ptr<E>>>>(
-            getIndexedEventsPromiseImpl(E::TYPE, symbol, source));
+            getIndexedEventsPromiseImpl(E::TYPE, symbol, source), true, std::move(context));
     }
 
     /**
@@ -885,6 +934,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * because the latter expects events in a different order and with an appropriate flags set. See documentation on a
      * specific event class for details on how they should be published.
      *
+     * <p>If EventsPromiseMixin::await() with a timeout times out, the text of the exception names the request, the
+     * waiting time and the state of the endpoint.
+     *
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
@@ -896,8 +948,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<TimeSeriesEvent> E>
     std::shared_ptr<Promise<std::vector<std::shared_ptr<E>>>>
     getTimeSeriesPromise(const SymbolWrapper &symbol, std::int64_t fromTime, std::int64_t toTime) const {
+        auto context = createTimeSeriesPromiseContext(E::TYPE, symbol, fromTime, toTime);
+
         return std::make_shared<Promise<std::vector<std::shared_ptr<E>>>>(
-            getTimeSeriesPromiseImpl(E::TYPE, symbol, fromTime, toTime));
+            getTimeSeriesPromiseImpl(E::TYPE, symbol, fromTime, toTime), true, std::move(context));
     }
 
     /**

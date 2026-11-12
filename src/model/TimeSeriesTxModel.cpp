@@ -5,10 +5,40 @@
 #include "../../include/dxfeed_graal_cpp_api/model/TimeSeriesTxModel.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
+#include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
+#include "../../include/dxfeed_graal_cpp_api/util/Time.hpp"
+#include "../internal/utils/StringUtils.hpp"
 #include "../isolated/event/IsolatedEventType.hpp"
 #include "../isolated/model/IsolatedTimeSeriesTxModel.hpp"
 
+#include <limits>
+
 DXFCPP_BEGIN_NAMESPACE
+
+namespace {
+
+// A fromTime that is now or in the future gives no events until that time: the user gets a warning, not silence.
+// Long.MAX_VALUE means "no subscription" and is not warned about. For an existing model, setting the time that is
+// already set changes nothing, so it is not warned about again.
+void warnIfFromTimeIsNotInPast(std::int64_t fromTime,
+                               const JavaObjectHandle<TimeSeriesTxModelTag> *model = nullptr) noexcept {
+    try {
+        if (fromTime == std::numeric_limits<std::int64_t>::max() || fromTime < now()) {
+            return;
+        }
+
+        if (model != nullptr && isolated::model::IsolatedTimeSeriesTxModel::getFromTime(*model) == fromTime) {
+            return;
+        }
+
+        ErrorManager::reportWarning("TimeSeriesTxModel", "fromTime " + formatTimeStampWithMillis(fromTime) +
+                                                             " is not in the past: no events before this time");
+    } catch (...) {
+        // A warning must not break setting fromTime.
+    }
+}
+
+} // namespace
 
 JavaObjectHandle<TimeSeriesTxModelBuilderTag>
 TimeSeriesTxModelImpl::Builder::withBatchProcessingImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle,
@@ -43,6 +73,8 @@ TimeSeriesTxModelImpl::Builder::withListenerImpl(const JavaObjectHandle<TimeSeri
 JavaObjectHandle<TimeSeriesTxModelBuilderTag>
 TimeSeriesTxModelImpl::Builder::withFromTimeImpl(const JavaObjectHandle<TimeSeriesTxModelBuilderTag> &handle,
                                                  std::int64_t fromTime) {
+    warnIfFromTimeIsNotInPast(fromTime);
+
     return isolated::model::IsolatedTimeSeriesTxModel::Builder::withFromTime(handle, fromTime);
 }
 
@@ -83,6 +115,8 @@ std::int64_t TimeSeriesTxModelImpl::getFromTimeImpl(const JavaObjectHandle<TimeS
 
 void TimeSeriesTxModelImpl::setFromTimeImpl(const JavaObjectHandle<TimeSeriesTxModelTag> &handle,
                                             std::int64_t fromTime) {
+    warnIfFromTimeIsNotInPast(fromTime, &handle);
+
     isolated::model::IsolatedTimeSeriesTxModel::setFromTime(handle, fromTime);
 }
 

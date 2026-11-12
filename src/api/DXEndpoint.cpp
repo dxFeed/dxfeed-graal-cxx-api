@@ -161,14 +161,19 @@ struct DXEndpoint::Impl {
     std::shared_ptr<DXPublisher> publisher_{};
     std::shared_ptr<OnDemandService> onDemandService_{};
 
-    std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint> &handle) {
+    std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint> &handle, std::weak_ptr<const DXEndpoint> endpoint) {
         std::lock_guard lock{mutex_};
 
         if (feed_) {
             return feed_;
         }
 
-        return feed_ = DXFeed::create(isolated::api::IsolatedDXEndpoint::getFeed(handle));
+        auto feed = DXFeed::create(isolated::api::IsolatedDXEndpoint::getFeed(handle));
+
+        // The feed knows its endpoint weakly: it only describes the endpoint in the text of a promise timeout.
+        feed->endpoint_ = std::move(endpoint);
+
+        return feed_ = std::move(feed);
     }
 
     std::shared_ptr<DXPublisher> getPublisher(const JavaObjectHandle<DXEndpoint> &handle) {
@@ -305,7 +310,7 @@ std::shared_ptr<DXFeed> DXEndpoint::getFeed() const {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::getFeed()");
     }
 
-    return impl_->getFeed(handle_);
+    return impl_->getFeed(handle_, sharedAs<const DXEndpoint>());
 }
 
 std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() const {

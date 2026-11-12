@@ -8,6 +8,7 @@
 #include "../internal/context/ApiContext.hpp"
 #include "../internal/utils/debug/Debug.hpp"
 #include "../isolated/api/IsolatedDXFeed.hpp"
+#include "../promise/PromiseContext.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
 #    include "../internal/Metrics.hpp"
 #endif
@@ -239,6 +240,65 @@ void *DXFeed::getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const 
 void *DXFeed::getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
                                        std::int64_t fromTime, std::int64_t toTime) const {
     return isolated::api::IsolatedDXFeed::getTimeSeriesPromise(handle_, eventType, symbol, fromTime, toTime);
+}
+
+namespace {
+
+// The fields every description has; the callers add the source or the time range.
+std::shared_ptr<PromiseContext> makePromiseContext(std::string method, const EventTypeEnum &eventType,
+                                                   const SymbolWrapper &symbol,
+                                                   const std::weak_ptr<const DXEndpoint> &endpoint) {
+    auto context = std::make_shared<PromiseContext>();
+
+    context->method = std::move(method);
+    context->eventType = eventType.getClassName();
+    context->symbol = symbol.toStringUnderlying();
+    context->endpoint = endpoint;
+
+    return context;
+}
+
+} // namespace
+
+std::shared_ptr<const PromiseContext> DXFeed::createLastEventPromiseContext(const EventTypeEnum &eventType,
+                                                                           const SymbolWrapper &symbol) const {
+    return makePromiseContext("getLastEventPromise", eventType, symbol, endpoint_);
+}
+
+std::vector<std::shared_ptr<const PromiseContext>>
+DXFeed::createLastEventsPromisesContexts(const EventTypeEnum &eventType,
+                                         const std::vector<SymbolWrapper> &symbols) const {
+    std::vector<std::shared_ptr<const PromiseContext>> result{};
+
+    result.reserve(symbols.size());
+
+    for (const auto &symbol : symbols) {
+        result.push_back(makePromiseContext("getLastEventsPromises", eventType, symbol, endpoint_));
+    }
+
+    return result;
+}
+
+std::shared_ptr<const PromiseContext> DXFeed::createIndexedEventsPromiseContext(const EventTypeEnum &eventType,
+                                                                               const SymbolWrapper &symbol,
+                                                                               const IndexedEventSource &source) const {
+    auto context = makePromiseContext("getIndexedEventsPromise", eventType, symbol, endpoint_);
+
+    context->source = source.toString();
+
+    return context;
+}
+
+std::shared_ptr<const PromiseContext> DXFeed::createTimeSeriesPromiseContext(const EventTypeEnum &eventType,
+                                                                            const SymbolWrapper &symbol,
+                                                                            std::int64_t fromTime,
+                                                                            std::int64_t toTime) const {
+    auto context = makePromiseContext("getTimeSeriesPromise", eventType, symbol, endpoint_);
+
+    context->fromTime = fromTime;
+    context->toTime = toTime;
+
+    return context;
 }
 
 std::shared_ptr<EventType> DXFeed::getLastEventIfSubscribedImpl(const EventTypeEnum &eventType,

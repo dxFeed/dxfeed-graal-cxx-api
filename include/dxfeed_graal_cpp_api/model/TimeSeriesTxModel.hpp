@@ -296,6 +296,9 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * subscribed. This time can be changed later, after the model has been created, by calling @ref
          * TimeSeriesTxModel::setFromTime() "setFromTime".
          *
+         * <p>A time that is now or in the future is set too, but no events come before it: ErrorManager reports
+         * a warning (ErrorInfo::Level::WARN, component `TimeSeriesTxModel`).
+         *
          * @param fromTime The time in milliseconds, since Unix epoch of January 1, 1970.
          * @return The builder instance.
          */
@@ -309,6 +312,9 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * <p>This time defaults to **`std::chrono::milliseconds(std::numeric_limits<std::int64_t>::max())`**, which
          * means that this model is not subscribed. This time can be changed later, after the model has been created, by
          * calling @ref TimeSeriesTxModel::setFromTime() "setFromTime".
+         *
+         * <p>A time that is now or in the future is set too, but no events come before it: ErrorManager reports
+         * a warning (ErrorInfo::Level::WARN, component `TimeSeriesTxModel`).
          *
          * @param fromTime The duration in milliseconds, since Unix epoch of January 1, 1970.
          * @return The builder instance.
@@ -428,6 +434,8 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
     /**
      * Sets the time from which to subscribe for time-series.
      * If this time has already been set, nothing happens.
+     * A time that is now or in the future is set too, but no events come before it: ErrorManager reports a warning
+     * (ErrorInfo::Level::WARN, component `TimeSeriesTxModel`).
      *
      * @param fromTime The time in milliseconds, since Unix epoch of January 1, 1970.
      */
@@ -438,6 +446,8 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
     /**
      * Sets the time from which to subscribe for time-series.
      * If this time has already been set, nothing happens.
+     * A time that is now or in the future is set too, but no events come before it: ErrorManager reports a warning
+     * (ErrorInfo::Level::WARN, component `TimeSeriesTxModel`).
      *
      * @param fromTime The duration in milliseconds, since Unix epoch of January 1, 1970.
      */

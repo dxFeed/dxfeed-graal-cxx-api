@@ -127,7 +127,7 @@ void replaceHandler(HandlerMode handlerMode, std::shared_ptr<const ErrorManager:
 } // namespace
 
 std::string ErrorInfo::toString() const {
-    auto result = fmt::format("#{} {} ({}): {}{}", id, component, location,
+    auto result = fmt::format("{}#{} {} ({}): {}{}", level == Level::WARN ? "WARN " : "", id, component, location,
                               javaClassName.empty() ? "" : javaClassName + ": ", message);
 
     for (auto &c : result) {
@@ -147,6 +147,19 @@ void ErrorManager::report(StringParam component, StringParam message, const std:
         dispatch(std::move(info));
     } catch (...) {
         // Reporting must not fail the code that reports: the error is lost.
+    }
+}
+
+void ErrorManager::reportWarning(StringParam component, StringParam message,
+                                 const std::source_location &location) noexcept {
+    try {
+        auto info = createInfo(component, location);
+
+        info.level = ErrorInfo::Level::WARN;
+        info.message = std::string(message.view());
+        dispatch(std::move(info));
+    } catch (...) {
+        // Reporting must not fail the code that reports: the warning is lost.
     }
 }
 
