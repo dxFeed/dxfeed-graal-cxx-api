@@ -15,7 +15,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXPublisherObservableSubscription {
 /**
- * Calls the Graal SDK function `dxfg_ObservableSubscription_isClosed` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_ObservableSubscription_isClosed` in isolation.
  *
  * @param sub The subscription's handle.
  * @return Returns `true` if this subscription is closed.
@@ -23,11 +23,10 @@ namespace isolated::api::IsolatedDXPublisherObservableSubscription {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-bool /* int32_t */
-isClosed(/* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub);
+bool isClosed(const JavaObjectHandle<DXPublisherObservableSubscription> &sub);
 
 /**
- * Calls the Graal SDK function `dxfg_ObservableSubscription_getEventTypes` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_ObservableSubscription_getEventTypes` in isolation.
  *
  * @param sub The subscription's handle.
  * @return The event types set.
@@ -35,11 +34,10 @@ isClosed(/* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublish
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-std::unordered_set<EventTypeEnum> /* dxfg_event_clazz_list_t* */ getEventTypes(
-    /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub);
+std::unordered_set<EventTypeEnum> getEventTypes(const JavaObjectHandle<DXPublisherObservableSubscription> &sub);
 
 /**
- * Calls the Graal SDK function `dxfg_ObservableSubscription_containsEventType` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_ObservableSubscription_containsEventType` in isolation.
  *
  * @param sub The subscription's handle.
  * @param eventType The type of event that is checked.
@@ -48,12 +46,10 @@ std::unordered_set<EventTypeEnum> /* dxfg_event_clazz_list_t* */ getEventTypes(
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-bool /* int32_t */ containsEventType(
-    /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
-    /* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
+bool containsEventType(const JavaObjectHandle<DXPublisherObservableSubscription> &sub, const EventTypeEnum &eventType);
 
 /**
- * Calls the Graal SDK function `dxfg_ObservableSubscription_addChangeListener` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_ObservableSubscription_addChangeListener` in isolation.
  *
  * @param sub The subscription's handle.
  * @param listener The listener's handle.
@@ -62,13 +58,11 @@ bool /* int32_t */ containsEventType(
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ addChangeListener(
-    /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
-    /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
-        &listener);
+void addChangeListener(const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
+                       const JavaObjectHandle<ObservableSubscriptionChangeListener> &listener);
 
 /**
- * Calls the Graal SDK function `dxfg_ObservableSubscription_removeChangeListener` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_ObservableSubscription_removeChangeListener` in isolation.
  *
  * @param sub The subscription's handle.
  * @param listener The listener's handle.
@@ -77,10 +71,8 @@ void /* int32_t */ addChangeListener(
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ removeChangeListener(
-    /* dxfg_observable_subscription_t * */ const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
-    /* dxfg_observable_subscription_change_listener_t * */ const JavaObjectHandle<ObservableSubscriptionChangeListener>
-        &listener);
+void removeChangeListener(const JavaObjectHandle<DXPublisherObservableSubscription> &sub,
+                          const JavaObjectHandle<ObservableSubscriptionChangeListener> &listener);
 } // namespace isolated::api::IsolatedDXPublisherObservableSubscription
 
 DXFCPP_END_NAMESPACE

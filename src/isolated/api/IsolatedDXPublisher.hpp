@@ -16,7 +16,7 @@ struct DXPublisherObservableSubscription;
 namespace isolated::api::IsolatedDXPublisher {
 
 /**
- * Calls the Graal SDK function `dxfg_DXPublisher_publishEvents` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXPublisher_publishEvents` in isolation.
  *
  * @param publisher The publisher's handle.
  * @param events Events to be published.
@@ -24,11 +24,10 @@ namespace isolated::api::IsolatedDXPublisher {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle<dxfcpp::DXPublisher> &publisher,
-                                 /* dxfg_event_type_list * */ void *events);
+void publishEvents(const JavaObjectHandle<dxfcpp::DXPublisher> &publisher, void *events);
 
 /**
- * Calls the Graal SDK function `dxfg_DXPublisher_getSubscription` in isolation.
+ * Calls the Graal SDK function `dxfg_v4_DXPublisher_getSubscription` in isolation.
  *
  * @param publisher The publisher's handle.
  * @param eventType The event type.
@@ -37,9 +36,8 @@ void /* int32_t */ publishEvents(/* dxfg_publisher_t * */ const JavaObjectHandle
  * @throws GraalException if something happened with the GraalVM.
  * @return The underlying observable subscription's handle.
  */
-JavaObjectHandle<DXPublisherObservableSubscription> /* dxfg_observable_subscription_t * */
-getSubscription(/* dxfg_publisher_t * */ const JavaObjectHandle<dxfcpp::DXPublisher> &publisher,
-                /* dxfg_event_clazz_t */ const EventTypeEnum &eventType);
+JavaObjectHandle<DXPublisherObservableSubscription>
+getSubscription(const JavaObjectHandle<dxfcpp::DXPublisher> &publisher, const EventTypeEnum &eventType);
 
 } // namespace isolated::api::IsolatedDXPublisher
 

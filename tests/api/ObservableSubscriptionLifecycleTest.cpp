@@ -4,10 +4,15 @@
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <chrono>
 #include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
 #include <unordered_set>
 
 using namespace dxfcpp;
+using namespace std::literals;
 
 namespace {
 
@@ -88,6 +93,83 @@ TEST_CASE("A publisher subscription releases its change listeners when the endpo
     endpoint->closeAndAwaitTermination();
     CHECK_EQ(closeNotifications, 1);
     CHECK(weakListener.expired());
+}
+
+TEST_CASE("A publisher subscription change listener gets added and removed symbols and none after its removal") {
+    auto endpoint = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);
+    auto feedSubscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
+    auto subscription = endpoint->getPublisher()->getSubscription(Quote::TYPE);
+    std::mutex mutex{};
+    std::unordered_set<std::string> current{};
+    std::size_t calls = 0;
+    auto listener = ObservableSubscriptionChangeListener::create(
+        [&](const std::unordered_set<SymbolWrapper> &symbols) {
+            std::lock_guard lock{mutex};
+
+            ++calls;
+
+            for (const auto &symbol : symbols) {
+                current.insert(symbol.toStringUnderlying());
+            }
+        },
+        [&](const std::unordered_set<SymbolWrapper> &symbols) {
+            std::lock_guard lock{mutex};
+
+            ++calls;
+
+            for (const auto &symbol : symbols) {
+                current.erase(symbol.toStringUnderlying());
+            }
+        },
+        [] {});
+    const auto waitFor = [&](auto predicate) {
+        for (int i = 0; i < 500; i++) {
+            {
+                std::lock_guard lock{mutex};
+
+                if (predicate()) {
+                    return true;
+                }
+            }
+
+            std::this_thread::sleep_for(10ms);
+        }
+
+        return false;
+    };
+
+    const auto listenerId = subscription->addChangeListener(listener);
+
+    feedSubscription->addSymbols("AAPL");
+    CHECK(waitFor([&] {
+        return current.count("AAPL") == 1;
+    }));
+
+    feedSubscription->removeSymbols("AAPL");
+    CHECK(waitFor([&] {
+        return current.empty();
+    }));
+
+    subscription->removeChangeListener(listenerId);
+
+    std::size_t callsAfterRemoval{};
+
+    {
+        std::lock_guard lock{mutex};
+
+        callsAfterRemoval = calls;
+    }
+
+    feedSubscription->addSymbols("MSFT");
+    std::this_thread::sleep_for(200ms);
+
+    {
+        std::lock_guard lock{mutex};
+
+        CHECK_EQ(calls, callsAfterRemoval);
+    }
+
+    endpoint->closeAndAwaitTermination();
 }
 
 TEST_CASE("An unused instrument-profile connection is closed and released with its last owner") {
