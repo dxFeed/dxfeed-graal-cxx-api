@@ -880,15 +880,14 @@ jobs:
         if: ${{ always() && matrix.config.os != 'windows' }}
         run: ccache --show-stats
 
-  # Smoke tests against demo.dxfeed.com (CTest label "network"). They depend on an external service, so a failure
-  # does not fail the workflow; the other unit tests do not use external network.
+  # Tests over a network connection (CTest label "network") against a local QDS server that sends a test tape: CTest
+  # starts the server of the Tools before the tests and stops it after them, so no external service is involved.
   network-tests:
     needs: plan
     if: ${{ needs.plan.outputs.full == 'true' }}
     name: "ubuntu-24.04-clang-18-Release-network-tests"
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    continue-on-error: true
+    timeout-minutes: 40
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -902,9 +901,10 @@ jobs:
           -DCMAKE_CXX_COMPILER=clang++-18
           -DDXFCXX_BUILD_DOC=OFF
           -DDXFCXX_BUILD_SAMPLES=OFF
-          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_BUILD_TOOLS=ON
           -DDXFCXX_ENABLE_NETWORK_TESTS=ON
 
+      # The test target depends on the Tools, which run the local server.
       - name: Build
         run: cmake --build ${{github.workspace}}/build -j 4 --target dxFeedGraalCxxApi_network_NetworkTest
 

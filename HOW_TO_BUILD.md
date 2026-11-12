@@ -24,11 +24,21 @@ cd build
 ctest -C Release --extra-verbose --parallel 4
 ```
 
-The unit tests do not need external network: they use a `LOCAL_HUB` endpoint or a loopback TCP server. The smoke tests
-against `demo.dxfeed.com` are built only with `-DDXFCXX_ENABLE_NETWORK_TESTS=ON` and have the CTest label `network`:
+The unit tests do not need external network: they use a `LOCAL_HUB` endpoint or a loopback TCP server. The tests over
+a network connection to a QDS server that sends a test tape (`tests/data/tapes/network.txt`) are built only with
+`-DDXFCXX_ENABLE_NETWORK_TESTS=ON` and have the CTest label `network`:
 
 ```shell
 ctest -C Release -L network
+```
+
+On Linux CTest starts the server itself with the Tools (so `-DDXFCXX_BUILD_TOOLS=ON` is required) on
+`127.0.0.1:17300` and stops it after the tests; `-DDXFCXX_NETWORK_TEST_PORT=<port>` changes the port. On other systems,
+or to run the tests against another server that sends the same tape, set `DXFCXX_NETWORK_TEST_ADDRESS` and exclude the
+local server:
+
+```shell
+DXFCXX_NETWORK_TEST_ADDRESS=host:port ctest -C Release -L network -LE network_server -FA '.*'
 ```
 
 With `-DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON` the tests are linked with the shared library instead of the static one,
