@@ -36,6 +36,7 @@ the [Overview](#overview) section.<br>
 - [Usage](#usage)
   * [How to connect to QD endpoint](#how-to-connect-to-qd-endpoint)
   * [How to connect to dxLink](#how-to-connect-to-dxlink)
+  * [Versions and addresses in the log](#versions-and-addresses-in-the-log)
 - [Tools](#tools)
 - [Samples](#samples)
 - [Current State](#current-state)
@@ -410,6 +411,21 @@ Quote{AAPL, eventTime=0, time=20231130-152903.000, timeNanoPart=0, sequence=0, b
 </details>
 
 To familiarize with the dxLink protocol, please click [here](https://demo.dxfeed.com/market-data/dxlink-ws/debug/#/protocol).
+
+### Versions and addresses in the log
+
+When a question goes to the support, start with these lines of the output of the program:
+
+- `[dxfcpp] INFO #1 DXEndpoint: dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.16.0, Windows x86_64(16 cores)`:
+  the versions and the platform, written to `stderr` once per process when the first
+  endpoint is created (through `ErrorManager`, see its documentation to redirect or turn off the output);
+- `Using QDS-<version>, (C) Devexperts`: the version of QD inside the SDK;
+- `DXEndpoint is loading properties from <file>` and `<name> DXEndpoint with dxfeed.address=<address>`: the
+  properties file (`dxfeed.properties`) and the address that the endpoint uses.
+
+`DXEndpoint::connect` takes a QD address such as `demo.dxfeed.com:7300[login=entitle:token]` or
+`dxlink:wss://...`. An `http(s)://` or `ws(s)://` URL (REST, CometD, IPF) is not an address of an endpoint: `connect`
+throws `InvalidArgumentException` with the expected form.
 
 ## Tools
 

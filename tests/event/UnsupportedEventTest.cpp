@@ -68,6 +68,11 @@ TEST_CASE("A subscription to CONFIGURATION delivers the other events of the batc
     std::size_t skipped = 0;
 
     for (const auto &error : ErrorManager::getErrors()) {
+        // The line of the versions, when the endpoint above is the first one of the process.
+        if (error.level == ErrorInfo::Level::INFO) {
+            continue;
+        }
+
         CHECK(error.component == "EventMapper");
         CHECK(error.message.find("of type CONFIGURATION skipped") != std::string::npos);
         skipped += static_cast<std::size_t>(std::stoul(error.message));

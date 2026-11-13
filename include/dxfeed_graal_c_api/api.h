@@ -465,6 +465,10 @@ DXFCPP_EXPORT dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpo
  * * `:port` to listen for a TCP/IP connection with a plain socket connector (good for up to a
  * few hundred of connections).
  *
+ * <p>An address that starts with `http://`, `https://`, `ws://` or `wss://` is not an address of an endpoint (for
+ * example, the URLs of REST, CometD and IPF services): the function returns DXFC_EC_ERROR. A QD configuration URL
+ * `http(s)://host/path/<name>.config#<name>` is passed to the SDK.
+ *
  * <p>For premium services access credentials must be configured before invocation of the ` connect ` function
  * using @ref dxfc_dxendpoint_user() "user" and @ref dxfc_dxendpoint_password() "password" functions.
  *

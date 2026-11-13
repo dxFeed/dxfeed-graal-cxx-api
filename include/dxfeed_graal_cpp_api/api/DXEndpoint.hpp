@@ -208,6 +208,10 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
      * By default, properties are loaded from a path resource named "dxfeed.properties".
      *
+     * The SDK writes to its log (at the INFO level) the name of the loaded file, `DXEndpoint is loading properties
+     * from <name>`, and the resulting address, `<name> DXEndpoint with dxfeed.address=<address>`: look for these lines
+     * when the endpoint connects to an unexpected address.
+     *
      * @see Builder::withProperty(StringParam, StringParam)
      */
     static constexpr char DXFEED_PROPERTIES_PROPERTY[] = "dxfeed.properties";
@@ -720,6 +724,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * * `host:port` to establish a TCP/IP connection.
      * * `:port` to listen for a TCP/IP connection with a plain socket connector (good for up to a
      * few hundred of connections).
+     * * `host:port[login=entitle:token]` to log in with a token.
+     * * `dxlink:wss://host/path[login=dxlink:token]` to connect to dxLink (an experimental feature of the SDK).
+     *
+     * <p>An address that starts with `http://`, `https://`, `ws://` or `wss://` is not an address of an endpoint
+     * (for example, the URLs of REST, CometD and IPF services): such an address throws InvalidArgumentException before
+     * the SDK is called. A QD configuration URL `http(s)://host/path/<name>.config#<name>` is passed to the SDK.
      *
      * <p>For premium services access credentials must be configured before invocation of `connect` method
      * using @ref user(StringParam) "user" and @ref password(StringParam) "password" methods.
@@ -735,7 +745,8 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @return this DXEndpoint.
      *
      * @throws InvalidArgumentException if the address is not valid UTF-8, for example
-     * `DXEndpoint::connect(address): invalid UTF-8 at byte 12: 0xC3 0x28`.
+     * `DXEndpoint::connect(address): invalid UTF-8 at byte 12: 0xC3 0x28`, or if it is an `http(s)://` or `ws(s)://`
+     * URL; the message names the expected form of the address and does not repeat the address.
      * @throws JavaException if something happened with the dxFeed API backend or if the address string is malformed.
      * @throws GraalException
      */

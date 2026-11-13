@@ -4,6 +4,7 @@
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "../../src/internal/ErrorReporting.hpp"
 #include "../support/TestSupport.hpp"
 
 #include <atomic>
@@ -391,6 +392,78 @@ TEST_CASE("The default handler writes a warning as one line starting with WARN")
     CHECK(output.find("Warner") != std::string::npos);
     CHECK(output.find("careful") != std::string::npos);
     CHECK(output.find('\n') == output.size() - 1);
+}
+
+TEST_CASE("An INFO message of the library has the level INFO and shares the counter, the journal and the handler") {
+    ErrorManagerGuard guard{};
+    std::vector<ErrorInfo> handled{};
+
+    ErrorManager::setHandler([&](const ErrorInfo &error) {
+        handled.push_back(error);
+    });
+
+    ErrorManager::reportWarning("Warner", "warning message");
+
+    const auto line = __LINE__ + 1;
+    detail::reportInfo("Informer", "info message");
+
+    REQUIRE(handled.size() == 2);
+    CHECK(handled[1].level == ErrorInfo::Level::INFO);
+    CHECK(handled[1].level != ErrorInfo::Level::WARN);
+    CHECK(handled[1].level != ErrorInfo::Level{});
+    CHECK(handled[1].component == "Informer");
+    CHECK(handled[1].message == "info message");
+    CHECK(handled[1].location == "ErrorManagerTest.cpp:" + std::to_string(line));
+    CHECK(handled[1].threadId == currentThreadId());
+    CHECK(handled[1].id == handled[0].id + 1);
+    CHECK(handled[1].toString() ==
+          "INFO #" + std::to_string(handled[1].id) + " Informer: info message");
+    CHECK(handled[0].toString().rfind("WARN #", 0) == 0);
+    CHECK(handled[0].toString().find(" (" + handled[0].location + "): ") != std::string::npos);
+
+    const auto errors = ErrorManager::getErrors();
+
+    REQUIRE(errors.size() == 2);
+    CHECK(errors[1].level == ErrorInfo::Level::INFO);
+    CHECK(errors[1].id == handled[1].id);
+
+    const auto last = ErrorManager::getLastError();
+
+    REQUIRE(last.has_value());
+    CHECK(last->level == ErrorInfo::Level::INFO);
+}
+
+TEST_CASE("The default handler writes an INFO message as one line starting with INFO, a null handler writes nothing") {
+    ErrorManagerGuard guard{};
+
+    {
+        StderrCapture capture{};
+
+        ErrorManager::resetHandler();
+        detail::reportInfo("Informer", "versions");
+
+        const auto output = capture.stop();
+
+        CHECK(output.rfind("[dxfcpp] INFO #", 0) == 0);
+        CHECK(output.find("Informer") != std::string::npos);
+        CHECK(output.find("versions") != std::string::npos);
+        CHECK(output.find('\n') == output.size() - 1);
+    }
+
+    {
+        StderrCapture capture{};
+
+        ErrorManager::setHandler({});
+        detail::reportInfo("Informer", "silent");
+
+        CHECK(capture.stop().empty());
+
+        const auto last = ErrorManager::getLastError();
+
+        REQUIRE(last.has_value());
+        CHECK(last->level == ErrorInfo::Level::INFO);
+        CHECK(last->message == "silent");
+    }
 }
 
 TEST_CASE("The handler runs on the reporting thread without the locks of ErrorManager") {
