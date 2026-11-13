@@ -353,7 +353,8 @@ endif ()
 
 foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
     set(DXFC_EXIT_TARGET dxFeedGraalCxxApi_Exit_${DXFC_EXIT_VARIANT})
-    set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown error-manager release-after-shutdown detach-after-shutdown)
+    set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown shutdown-callbacks-in-progress
+            shutdown-from-listener error-manager release-after-shutdown detach-after-shutdown)
 
     # The exit handler of a MinGW DLL runs after the statics of the executable are destroyed, so the checks of the
     # callbacks from such a static do not apply to it.

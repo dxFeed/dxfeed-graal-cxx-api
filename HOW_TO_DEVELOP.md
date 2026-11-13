@@ -61,7 +61,9 @@ is first used and runs at the exit of the process. From the start of either, `Is
 and:
 
 - a call of the SDK fails with `SHUT_DOWN` instead of running (see [Calling the SDK](#calling-the-sdk));
-- a callback returns at once (`runCallback`), and the calls in progress are waited for (at exit, up to 2 seconds);
+- a callback returns at once (`runCallback`), and the calls in progress are waited for (up to 2 seconds); `shutdown()`
+  then calls `dxfg_v4_system_shutdown`, which waits for the calls of the native listeners without a limit, so
+  `shutdown()` from a listener or a callback (`ListenerCallScope::isActive()`) throws instead;
 - a failed release is not reported (`runRelease`): it is expected while the SDK is being closed.
 
 What follows for the code of the library:
