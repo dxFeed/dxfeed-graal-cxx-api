@@ -827,7 +827,7 @@ void Isolate::shutdown() {
         ignoreUnused(getInstance().runIsolated([](auto threadHandle) {
             auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
 
-            if (dxfg_system_close_all_and_await_termination(thread) != 0) {
+            if (dxfg_v4_system_close_all_and_await_termination(thread) != DXFG_EXECUTE_SUCCESSFULLY) {
                 isolated::clearThreadException(thread);
             }
 

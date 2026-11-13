@@ -1050,7 +1050,6 @@ dxfcpp::v8::JavaException::getJavaMessage[abi:cxx11]() const &
 dxfcpp::v8::JavaException::getJavaStackTrace[abi:cxx11]() const &
 dxfcpp::v8::JavaException::throwException()
 dxfcpp::v8::JavaException::throwIfJavaThreadExceptionExists()
-dxfcpp::v8::JavaException::throwUnexpectedNullResult()
 dxfcpp::v8::JavaObject::equals(void*, void*)
 dxfcpp::v8::JavaObject::hashCode(void*)
 dxfcpp::v8::JavaObject::release(void*)
