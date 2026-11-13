@@ -21,16 +21,17 @@ std::string getOSName() noexcept {
 #elif defined(__sun__)
     return "Solaris";
 #elif defined(__APPLE__)
-#    if defined(TARGET_IPHONE_SIMULATOR)
+// TargetConditionals.h defines every TARGET_OS_* macro as 0 or 1: test the values, not defined().
+#    if defined(TARGET_OS_SIMULATOR) && TARGET_OS_SIMULATOR
     return "iOS|tvOS|watchOS-Simulator";
-#    elif defined(TARGET_OS_MACCATALYST)
+#    elif defined(TARGET_OS_MACCATALYST) && TARGET_OS_MACCATALYST
     return "MacOS-Catalyst";
-#    elif defined(TARGET_OS_IPHONE)
+#    elif defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE
     return "iOS|tvOS|watchOS";
-#    elif defined(TARGET_OS_MAC)
+#    elif defined(TARGET_OS_MAC) && TARGET_OS_MAC
     return "MacOS";
 #    else
-#        return "UnknownApple";
+    return "UnknownApple";
 #    endif
 #elif defined(__FreeBSD__)
     return "FreeBSD";

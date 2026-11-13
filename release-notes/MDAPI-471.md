@@ -4,6 +4,8 @@
       the C++ API and of the Graal Native SDK and the platform; the default handler prints it to `stderr`:
       `[dxfcpp] INFO #1 DXEndpoint (DXEndpoint.cpp:NN): dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.16.0,
       Windows x86_64(16 cores)`. The version of QD is in the log of the SDK (`Using QDS-<version>, (C) Devexperts`).
+    * The platform of macOS is named `MacOS`; it was `iOS|tvOS|watchOS-Simulator` (also in the output of the
+      `PerfTest`, `PerfTest2` and `LatencyTest` tools).
     * `ErrorInfo::Level` has a new value `INFO` after `WARN`; only the library reports it. A custom handler and the
       journal get the `INFO` line too: a handler that treats every report as an error should check `level`.
     * **\[BREAKING]** `DXEndpoint::connect` with an address that starts with `http://`, `https://`, `ws://` or `wss://`
