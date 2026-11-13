@@ -48,12 +48,19 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  *   ErrorManager::reportWarning(), and it has the level ErrorInfo::Level::WARN, while the errors have
  *   ErrorInfo::Level::ERROR (ErrorInfo::level). A warning shares the handler, the journal and
  *   ErrorManager::getLastError() with the errors.
+ * - **An INFO message** (ErrorInfo::Level::INFO) is not a problem: the library reports it on its own, once per process,
+ *   when the first endpoint is created (DXEndpoint::create(), DXEndpoint::Builder::build(), DXEndpoint::getInstance(),
+ *   DXFeed::getInstance(), DXPublisher::getInstance()). It names the versions of the dxFeed Graal C++ API and of the
+ *   dxFeed Graal Native SDK and the platform, the first thing to send to the support:
+ *   `[dxfcpp] INFO #1 DXEndpoint (DXEndpoint.cpp:42): dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.16.0,
+ *   Windows x86_64(16 cores)`. The version of QD follows in the log of the SDK: `Using QDS-<version>, (C) Devexperts`.
  *
- * ErrorManager passes each error and warning to the handler and keeps the last ones in a journal:
+ * ErrorManager passes each error, warning and INFO message to the handler and keeps the last ones in a journal:
  *
- * - The default handler writes one line per error to `stderr`; a warning is marked with `WARN ` before its number:
- *   `[dxfcpp] WARN #7 Component (File.cpp:42): message`. ErrorManager::setHandler() replaces it, a null
- *   handler turns the output off, ErrorManager::resetHandler() restores the default one.
+ * - The default handler writes one line per error to `stderr`; a warning is marked with `WARN ` before its number,
+ *   an INFO message with `INFO `: `[dxfcpp] WARN #7 Component (File.cpp:42): message`. ErrorManager::setHandler()
+ *   replaces it, a null handler turns the output off, ErrorManager::resetHandler() restores the default one. A
+ *   handler that logs the errors may check ErrorInfo::level to log the INFO messages at a lower level.
  * - The handler is called on the thread where the error happened, without the locks of ErrorManager held: it may
  *   read the journal and change the handler. Errors of several threads call it at the same time, so it must be
  *   thread-safe. Keep it short, it delays the thread that reported the error (for example, the delivery of the
@@ -124,7 +131,11 @@ struct DXFCPP_EXPORT ErrorInfo {
 #pragma pop_macro("ERROR")
 
         /// A warning: reported by ErrorManager::reportWarning(). The call that reported it went on.
-        WARN
+        WARN,
+
+        /// A message of the library that is not a problem, for example the line of the versions at the creation of
+        /// the first endpoint. Only the library reports it.
+        INFO
     };
 
     /// The level of the report, the last member: a value of ErrorInfo without it gets the level of an error.
@@ -132,7 +143,7 @@ struct DXFCPP_EXPORT ErrorInfo {
 
     /**
      * Returns a string representation of the error: the component, the location, the Java class (if any) and the
-     * message, in one line. A warning starts with `WARN `.
+     * message, in one line. A warning starts with `WARN `, an INFO message with `INFO `.
      *
      * @return The string representation of the error.
      */

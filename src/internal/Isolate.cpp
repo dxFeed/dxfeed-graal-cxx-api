@@ -193,6 +193,14 @@ constexpr const char *MINIMUM_SDK_VERSION = DXFCXX_GRAAL_NATIVE_SDK_MINIMUM_VERS
 // it was not read.
 constinit std::optional<std::int32_t> advancedRevision{};
 
+// The version of the SDK library (Isolate::getGraalNativeSdkVersion()), read once by the constructor; empty if it was
+// not read. Immortal: read by the threads of the SDK during the exit of the process.
+std::string &graalNativeSdkVersion() noexcept {
+    static auto *version = new std::string{};
+
+    return *version;
+}
+
 // Takes the exception of the thread after a failed call on the thread of graal_create_isolate().
 std::string takeThreadExceptionText(graal_isolatethread_t *thread) noexcept {
     try {
@@ -238,6 +246,8 @@ std::optional<std::string> checkLibrary(graal_isolatethread_t *thread) noexcept 
             return "The Graal Native SDK library is " + versionText + ", the dxFeed Graal C++ API needs " +
                    MINIMUM_SDK_VERSION + " or newer.";
         }
+
+        graalNativeSdkVersion() = versionText;
 
         // An unread revision is not a failure of the creation: only the experimental functions need it.
         if (std::int32_t revision{};
@@ -600,6 +610,13 @@ void Isolate::checkAdvancedRevision() {
     static_cast<void>(getInstance());
     throwCreationError();
     checkGraalNativeSdkAdvancedRevision(advancedRevision, DXFG_V4_ADVANCED_REVISION);
+}
+
+std::string Isolate::getGraalNativeSdkVersion() {
+    // The version is read by the creation of the isolate.
+    static_cast<void>(getInstance());
+
+    return graalNativeSdkVersion();
 }
 
 namespace {

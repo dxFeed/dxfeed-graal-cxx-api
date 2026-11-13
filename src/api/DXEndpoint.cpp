@@ -5,7 +5,10 @@
 
 #include "../../include/dxfeed_graal_c_api/api.h"
 #include "../internal/CallbackBarrier.hpp"
+#include "../internal/EndpointAddress.hpp"
+#include "../internal/ErrorReporting.hpp"
 #include "../internal/Isolate.hpp"
+#include "../internal/Platform.hpp"
 #include "../internal/context/ApiContext.hpp"
 #include "../internal/managers/EntityManager.hpp"
 #include "../internal/utils/debug/Debug.hpp"
@@ -17,7 +20,9 @@
 #    include "../internal/Metrics.hpp"
 #endif
 
+#include <algorithm>
 #include <atomic>
+#include <cctype>
 #include <dxfg_api.h>
 #include <filesystem>
 #include <memory>
@@ -27,6 +32,97 @@
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
+
+namespace {
+
+// The line of the versions is reported (reportVersionsOnce()).
+constinit std::atomic<bool> versionsReported{false};
+
+// Set while this thread holds a lock of the endpoints: the line of the versions is reported after the lock is released,
+// because the handler of ErrorManager may create an endpoint itself.
+constinit thread_local bool versionsDeferred = false;
+
+struct DeferVersionsScope {
+    DeferVersionsScope() noexcept : previous_{versionsDeferred} {
+        versionsDeferred = true;
+    }
+
+    ~DeferVersionsScope() noexcept {
+        versionsDeferred = previous_;
+    }
+
+    DeferVersionsScope(const DeferVersionsScope &) = delete;
+    DeferVersionsScope &operator=(const DeferVersionsScope &) = delete;
+
+  private:
+    bool previous_;
+};
+
+// Reports the versions of the C++ API and of the SDK and the platform as an INFO message of ErrorManager, once per
+// process. Called after an endpoint is created, out of the locks of the library.
+void reportVersionsOnce() noexcept {
+    if (versionsDeferred || versionsReported.exchange(true)) {
+        return;
+    }
+
+    try {
+        auto sdkVersion = Isolate::getGraalNativeSdkVersion();
+
+        detail::reportInfo("DXEndpoint", std::string("dxFeed Graal C++ API ") + DXFCXX_VERSION +
+                                             ", dxFeed Graal Native SDK " +
+                                             (sdkVersion.empty() ? std::string("unknown") : std::move(sdkVersion)) +
+                                             ", " + Platform::getPlatformInfo());
+    } catch (...) {
+        // The line is lost; the endpoint is created anyway.
+    }
+}
+
+bool startsWithIgnoreCase(std::string_view text, std::string_view prefix) noexcept {
+    return text.size() >= prefix.size() &&
+           std::equal(prefix.begin(), prefix.end(), text.begin(), [](char a, char b) {
+               return std::tolower(static_cast<unsigned char>(a)) == std::tolower(static_cast<unsigned char>(b));
+           });
+}
+
+bool endsWithIgnoreCase(std::string_view text, std::string_view suffix) noexcept {
+    return text.size() >= suffix.size() && startsWithIgnoreCase(text.substr(text.size() - suffix.size()), suffix);
+}
+
+} // namespace
+
+void detail::checkEndpointAddress(std::string_view address) {
+    // QD trims the address as String.trim() does: the characters up to the space.
+    const auto start = std::find_if(address.begin(), address.end(), [](char c) {
+        return static_cast<unsigned char>(c) > ' ';
+    });
+    const auto text = address.substr(static_cast<std::size_t>(start - address.begin()));
+
+    for (const std::string_view scheme : {"http://", "https://"}) {
+        if (!startsWithIgnoreCase(text, scheme)) {
+            continue;
+        }
+
+        // A configuration URL of QD: http(s)://.../<name>.config#<name>.
+        if (const auto hash = text.find('#'); hash != std::string_view::npos &&
+                                              endsWithIgnoreCase(text.substr(0, hash), ".config")) {
+            return;
+        }
+
+        throw InvalidArgumentException(
+            std::string("DXEndpoint::connect(address): an ") + std::string(scheme) +
+            " URL is not an address of an endpoint. Use a QD address host:port[login=...], for example "
+            "demo.dxfeed.com:7300; the URLs of REST, CometD and IPF services do not work here");
+    }
+
+    for (const std::string_view scheme : {"ws://", "wss://"}) {
+        if (startsWithIgnoreCase(text, scheme)) {
+            throw InvalidArgumentException(
+                std::string("DXEndpoint::connect(address): a ") + std::string(scheme) +
+                " URL is not an address of an endpoint. Use a QD address host:port[login=...], or "
+                "dxlink:wss://host/path[login=dxlink:token] for dxLink");
+        }
+    }
+}
 
 struct DXEndpoint::Impl {
     struct Registry {
@@ -135,21 +231,29 @@ struct DXEndpoint::Impl {
         }
 
         auto &registry = getRegistry();
+        std::shared_ptr<DXEndpoint> result{};
 
-        std::lock_guard lock(registry.mutex);
+        {
+            DeferVersionsScope deferVersions{};
+            std::lock_guard lock(registry.mutex);
 
-        // The default endpoint created earlier is closed and released.
-        if (Isolate::isShutDown()) {
-            throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
+            // The default endpoint created earlier is closed and released.
+            if (Isolate::isShutDown()) {
+                throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
+            }
+
+            auto &instance = registry.instances[role];
+
+            if (!instance) {
+                instance = create(role);
+            }
+
+            result = instance;
         }
 
-        auto &instance = registry.instances[role];
+        reportVersionsOnce();
 
-        if (!instance) {
-            instance = create(role);
-        }
-
-        return instance;
+        return result;
     }
 
     Id<DXEndpoint>::ValueType id_{};
@@ -240,6 +344,7 @@ std::shared_ptr<DXEndpoint> DXEndpoint::connect(StringParam address) {
                         ")");
     }
 
+    detail::checkEndpointAddress(address.view());
     isolated::api::IsolatedDXEndpoint::connect(handle_, address.view());
 
     return sharedAs<DXEndpoint>();
@@ -485,7 +590,13 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
         return newBuilder->build();
     }
 
-    return DXEndpoint::create(isolated::api::IsolatedDXEndpoint::Builder::build(handle_), role_, properties_);
+    auto endpoint =
+        DXEndpoint::create(isolated::api::IsolatedDXEndpoint::Builder::build(handle_), role_, properties_);
+
+    // No lock of the library is held here; a caller that holds one sets DeferVersionsScope.
+    reportVersionsOnce();
+
+    return endpoint;
 }
 
 DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept {

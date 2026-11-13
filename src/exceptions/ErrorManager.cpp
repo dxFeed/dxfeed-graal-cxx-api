@@ -4,6 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/JavaException.hpp"
+#include "../internal/ErrorReporting.hpp"
 
 #include <fmt/format.h>
 
@@ -127,7 +128,8 @@ void replaceHandler(HandlerMode handlerMode, std::shared_ptr<const ErrorManager:
 } // namespace
 
 std::string ErrorInfo::toString() const {
-    auto result = fmt::format("{}#{} {} ({}): {}{}", level == Level::WARN ? "WARN " : "", id, component, location,
+    const auto *prefix = level == Level::WARN ? "WARN " : level == Level::INFO ? "INFO " : "";
+    auto result = fmt::format("{}#{} {} ({}): {}{}", prefix, id, component, location,
                               javaClassName.empty() ? "" : javaClassName + ": ", message);
 
     for (auto &c : result) {
@@ -160,6 +162,18 @@ void ErrorManager::reportWarning(StringParam component, StringParam message,
         dispatch(std::move(info));
     } catch (...) {
         // Reporting must not fail the code that reports: the warning is lost.
+    }
+}
+
+void detail::reportInfo(StringParam component, StringParam message, const std::source_location &location) noexcept {
+    try {
+        auto info = createInfo(component, location);
+
+        info.level = ErrorInfo::Level::INFO;
+        info.message = std::string(message.view());
+        dispatch(std::move(info));
+    } catch (...) {
+        // Reporting must not fail the code that reports: the message is lost.
     }
 }
 

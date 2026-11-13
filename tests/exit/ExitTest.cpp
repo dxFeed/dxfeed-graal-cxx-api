@@ -17,6 +17,7 @@
 #include <cstdlib>
 #include <exception>
 #include <memory>
+#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -438,8 +439,11 @@ int errorManagerAtExit() {
 int releaseAfterShutdown() {
     static auto &handled = *new std::atomic<std::uint64_t>{};
 
-    ErrorManager::setHandler([](const ErrorInfo &) {
-        handled.fetch_add(1);
+    // The INFO line of the versions at the creation of the endpoint is not a report of a release.
+    ErrorManager::setHandler([](const ErrorInfo &error) {
+        if (error.level != ErrorInfo::Level::INFO) {
+            handled.fetch_add(1);
+        }
     });
 
     auto endpoint = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);
@@ -458,8 +462,137 @@ int releaseAfterShutdown() {
         });
     }
 
-    if (handled.load() != 0 || ErrorManager::getLastError()) {
+    const auto last = ErrorManager::getLastError();
+
+    if (handled.load() != 0 || (last && last->level != ErrorInfo::Level::INFO)) {
         std::fputs("A release after shutdown() was reported to ErrorManager\n", stderr);
+
+        return 3;
+    }
+
+    return 0;
+}
+
+// The name of the OS in the line of the versions, empty for an OS the check does not know.
+constexpr std::string_view expectedOsName() {
+#if defined(_WIN32)
+    return "Windows";
+#elif defined(__linux__) && !defined(__ANDROID__)
+    return "Linux";
+#elif defined(__APPLE__)
+    return "Mac";
+#else
+    return "";
+#endif
+}
+
+// Checks the text of the line of the versions; prints the reason and returns false if it is wrong.
+bool checkVersionsLine(const std::string &message) {
+    const auto expectedApi = std::string("dxFeed Graal C++ API ") + DXFC_TEST_CXX_API_VERSION + ", ";
+    constexpr std::string_view sdkPrefix = "dxFeed Graal Native SDK ";
+    const auto sdk = message.find(sdkPrefix);
+
+    if (message.rfind(expectedApi, 0) != 0 || sdk == std::string::npos || sdk + sdkPrefix.size() >= message.size() ||
+        message[sdk + sdkPrefix.size()] < '0' || message[sdk + sdkPrefix.size()] > '9' ||
+        message.find(expectedOsName()) == std::string::npos) {
+        std::fprintf(stderr, "Wrong line of the versions: %s\n", message.c_str());
+
+        return false;
+    }
+
+    return true;
+}
+
+/// The first endpoint of the process reports one INFO line with the versions and the platform; the next endpoints
+/// (created by DXEndpoint::create() and by a Builder) do not repeat it.
+int versionsOnce() {
+    static auto &infos = *new std::vector<ErrorInfo>{};
+    static auto &mutex = *new std::mutex{};
+
+    ErrorManager::setHandler([](const ErrorInfo &error) {
+        if (error.level == ErrorInfo::Level::INFO) {
+            std::lock_guard lock{mutex};
+
+            infos.push_back(error);
+        }
+    });
+
+    auto feed = DXEndpoint::create();
+    auto publisher = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::PUBLISHER)->build();
+    auto hub = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);
+
+    std::lock_guard lock{mutex};
+
+    if (infos.size() != 1) {
+        std::fprintf(stderr, "Expected one INFO line of the versions, got %llu\n",
+                     static_cast<unsigned long long>(infos.size()));
+
+        return 3;
+    }
+
+    if (infos[0].component != "DXEndpoint" || !checkVersionsLine(infos[0].message)) {
+        return 3;
+    }
+
+    return 0;
+}
+
+/// The first endpoint comes from DXEndpoint::getInstance(), and the handler of the INFO line calls
+/// DXFeed::getInstance(): the line is reported out of the lock of the default endpoints, so there is no deadlock, and
+/// the line is reported once.
+int versionsGetInstance() {
+    static auto &infos = *new std::atomic<std::uint64_t>{};
+    static auto &feedFromHandler = *new std::atomic<bool>{};
+
+    ErrorManager::setHandler([](const ErrorInfo &error) {
+        if (error.level == ErrorInfo::Level::INFO) {
+            infos.fetch_add(1);
+            feedFromHandler.store(DXFeed::getInstance() != nullptr);
+        }
+    });
+
+    auto endpoint = DXEndpoint::getInstance();
+
+    if (infos.load() != 1 || !feedFromHandler.load() || DXFeed::getInstance() != endpoint->getFeed()) {
+        std::fprintf(stderr, "Expected one INFO line and the default feed from the handler, got %llu line(s)\n",
+                     static_cast<unsigned long long>(infos.load()));
+
+        return 3;
+    }
+
+    return 0;
+}
+
+/// The default handler writes the line of the versions to stderr: the test checks the output of the process.
+int versionsDefaultHandler() {
+    auto endpoint = DXEndpoint::create();
+
+    return 0;
+}
+
+/// A creation of an endpoint that fails (after dxfcpp::shutdown()) reports no line of the versions.
+int versionsFailedCreation() {
+    static auto &infos = *new std::atomic<std::uint64_t>{};
+
+    ErrorManager::setHandler([](const ErrorInfo &error) {
+        if (error.level == ErrorInfo::Level::INFO) {
+            infos.fetch_add(1);
+        }
+    });
+
+    shutdown();
+
+    try {
+        auto endpoint = DXEndpoint::create();
+
+        std::fputs("DXEndpoint::create() after shutdown() did not throw\n", stderr);
+
+        return 3;
+    } catch (const std::exception &) {
+    }
+
+    if (infos.load() != 0) {
+        std::fputs("A failed creation of an endpoint reported the line of the versions\n", stderr);
 
         return 3;
     }
@@ -592,7 +725,8 @@ int main(int argc, char *argv[]) {
     if (argc != 2) {
         std::fputs("Usage: <executable> endpoint | late-callback | callback-in-progress | ipf-live | ipf-live-close | "
                    "shutdown | shutdown-callbacks-in-progress | shutdown-from-listener | error-manager | "
-                   "release-after-shutdown | detach-after-shutdown\n",
+                   "release-after-shutdown | detach-after-shutdown | versions-once | versions-get-instance | "
+                   "versions-default-handler | versions-failed-creation\n",
                    stderr);
 
         return 1;
@@ -643,6 +777,22 @@ int main(int argc, char *argv[]) {
 
         if (scenario == "detach-after-shutdown") {
             return detachAfterShutdown();
+        }
+
+        if (scenario == "versions-once") {
+            return versionsOnce();
+        }
+
+        if (scenario == "versions-get-instance") {
+            return versionsGetInstance();
+        }
+
+        if (scenario == "versions-default-handler") {
+            return versionsDefaultHandler();
+        }
+
+        if (scenario == "versions-failed-creation") {
+            return versionsFailedCreation();
         }
     } catch (const std::exception &e) {
         std::fprintf(stderr, "Exception: %s\n", e.what());

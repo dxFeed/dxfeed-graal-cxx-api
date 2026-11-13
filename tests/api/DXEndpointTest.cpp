@@ -5,6 +5,8 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "../../src/internal/EndpointAddress.hpp"
+#include "../support/TapeSupport.hpp"
 #include "../support/TestSupport.hpp"
 
 #include <algorithm>
@@ -234,6 +236,108 @@ TEST_CASE("dxfc_dxendpoint_t: invalid UTF-8 is an error code, not an exception")
     REQUIRE(dxfc_dxendpoint_close(endpoint) == DXFC_EC_SUCCESS);
     REQUIRE(dxfc_dxendpoint_free(endpoint) == DXFC_EC_SUCCESS);
     REQUIRE(dxfc_dxendpoint_builder_free(builder) == DXFC_EC_SUCCESS);
+}
+
+namespace {
+
+constexpr std::string_view REJECTED = "InvalidArgumentException: ";
+
+// Returns REJECTED and the message if connect() throws InvalidArgumentException, otherwise a description of what
+// happened.
+std::string connectFailure(const std::shared_ptr<DXEndpoint> &endpoint, const std::string &address) {
+    try {
+        endpoint->connect(address);
+    } catch (const InvalidArgumentException &e) {
+        return std::string(REJECTED) + e.what();
+    } catch (const std::exception &e) {
+        return "another exception: "s + e.what();
+    }
+
+    return "no exception";
+}
+
+bool isRejected(const std::string &failure) {
+    return failure.rfind(REJECTED, 0) == 0;
+}
+
+} // namespace
+
+TEST_CASE("DXEndpoint::connect: an http(s) or ws(s) URL throws InvalidArgumentException with the expected address") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    for (const std::string address : {"https://tools.dxfeed.com/ipf", "https://tools.dxfeed.com/webservice/rest",
+                                      "http://localhost:7300", "  HTTPS://host:443", "\thttps://tools.dxfeed.com/ipf",
+                                      "\r\nhttp://localhost:7300", "https://host/x.config"}) {
+        CAPTURE(address);
+        const auto message = connectFailure(endpoint, address);
+
+        CAPTURE(message);
+        CHECK(isRejected(message));
+        CHECK(message.find("host:port[login=...]") != std::string::npos);
+        CHECK(message.find("REST, CometD and IPF") != std::string::npos);
+    }
+
+    for (const std::string address : {"wss://demo.dxfeed.com/dxlink-ws", "ws://localhost:80", "WSS://host/ws"}) {
+        CAPTURE(address);
+        const auto message = connectFailure(endpoint, address);
+
+        CAPTURE(message);
+        CHECK(isRejected(message));
+        CHECK(message.find("host:port[login=...]") != std::string::npos);
+        CHECK(message.find("dxlink:wss://") != std::string::npos);
+    }
+
+    // The message does not repeat the address: it may have a login or a password.
+    const auto withSecret = connectFailure(endpoint, "https://user:secret@host/x[login=entitle:token]");
+
+    CHECK(isRejected(withSecret));
+    CHECK(withSecret.find("secret") == std::string::npos);
+    CHECK(withSecret.find("token") == std::string::npos);
+
+    CHECK(endpoint->getState() == DXEndpoint::State::NOT_CONNECTED);
+    endpoint->close();
+}
+
+TEST_CASE("DXEndpoint::connect: a QD configuration URL and the QD addresses are not rejected") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    // A local port that nobody listens on: QD may fail to read the file, but not with InvalidArgumentException.
+    CHECK_FALSE(isRejected(connectFailure(endpoint, "http://127.0.0.1:1/x.config#name")));
+    CHECK_FALSE(isRejected(connectFailure(endpoint, "localhost:7300[login=entitle:token]")));
+    endpoint->close();
+
+    const auto tape = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
+
+    CHECK(connectFailure(tape, "file:" + test::testDataPath("tapes/edge-values.txt")) == "no exception");
+    tape->close();
+}
+
+TEST_CASE("The check of the address of DXEndpoint::connect passes the forms that QD accepts") {
+    for (const std::string address :
+         {"localhost:7300", ":7400", "host1:7300,host2:7300", "localhost:7300[login=entitle:token]",
+          "tls+localhost:7300", "ssl+zlib+localhost:7300", "(localhost:7300)(localhost:7301)",
+          "dxlink:wss://demo.dxfeed.com/dxlink-ws", "dxlink:wss://demo.dxfeed.com/dxlink-ws[login=dxlink:token]",
+          "file:///tmp/x.tape", "tape:x.tape", "ondemand:demo.dxfeed.com:7680", "demo.dxfeed.com", "",
+          "https://host/path/x.config#name", " HTTP://host/path/X.CONFIG#name", "localhost:7300,https://host/x",
+          "httpx://host", "http:host:7300"}) {
+        CAPTURE(address);
+        CHECK_NOTHROW(detail::checkEndpointAddress(address));
+    }
+
+    // The configuration URL needs the name after `#`, and the path before it ends with `.config`.
+    CHECK_THROWS_AS(detail::checkEndpointAddress("https://host/x.config"), InvalidArgumentException);
+    CHECK_THROWS_AS(detail::checkEndpointAddress("https://host/x.conf#name"), InvalidArgumentException);
+    CHECK_THROWS_AS(detail::checkEndpointAddress("ws://host/x.config#name"), InvalidArgumentException);
+}
+
+TEST_CASE("dxfc_dxendpoint_connect: an https URL is an error code") {
+    dxfc_dxendpoint_t endpoint{};
+
+    REQUIRE(dxfc_dxendpoint_create(nullptr, &endpoint) == DXFC_EC_SUCCESS);
+    CHECK(dxfc_dxendpoint_connect(endpoint, "https://tools.dxfeed.com/ipf") == DXFC_EC_ERROR);
+    CHECK(cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_NOT_CONNECTED);
+    REQUIRE(dxfc_dxendpoint_close(endpoint) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_free(endpoint) == DXFC_EC_SUCCESS);
 }
 
 TEST_CASE("DXFeedSubscription") {

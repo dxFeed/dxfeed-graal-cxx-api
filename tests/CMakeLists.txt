@@ -354,7 +354,8 @@ endif ()
 foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
     set(DXFC_EXIT_TARGET dxFeedGraalCxxApi_Exit_${DXFC_EXIT_VARIANT})
     set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown shutdown-callbacks-in-progress
-            shutdown-from-listener error-manager release-after-shutdown detach-after-shutdown)
+            shutdown-from-listener error-manager release-after-shutdown detach-after-shutdown versions-once
+            versions-get-instance versions-default-handler versions-failed-creation)
 
     # The exit handler of a MinGW DLL runs after the statics of the executable are destroyed, so the checks of the
     # callbacks from such a static do not apply to it.
@@ -382,11 +383,21 @@ foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
 
     target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
     set_target_properties(${DXFC_EXIT_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+    # The version of the C++ API that the line of the versions names.
+    target_compile_definitions(${DXFC_EXIT_TARGET} PRIVATE DXFC_TEST_CXX_API_VERSION="${DXFCXX_VERSION}")
 
     foreach (DXFC_EXIT_SCENARIO IN LISTS DXFC_EXIT_SCENARIOS)
         set(DXFC_EXIT_TEST ${DXFC_EXIT_TARGET}_${DXFC_EXIT_SCENARIO})
         add_test(NAME ${DXFC_EXIT_TEST} COMMAND ${DXFC_EXIT_TARGET} ${DXFC_EXIT_SCENARIO})
         set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES TIMEOUT 60)
+
+        # The default handler of ErrorManager writes the line of the versions to stderr. A failure of the scenario
+        # prints "Exception:" or a reason without the line.
+        if (DXFC_EXIT_SCENARIO STREQUAL "versions-default-handler")
+            set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES
+                    PASS_REGULAR_EXPRESSION "\\[dxfcpp\\] INFO #[0-9]+ DXEndpoint \\(DXEndpoint\\.cpp:[0-9]+\\): dxFeed Graal C\\+\\+ API "
+                    FAIL_REGULAR_EXPRESSION "Exception:")
+        endif ()
 
         if (DXFCXX_SANITIZERS_ENABLED)
             set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES ENVIRONMENT
