@@ -417,8 +417,9 @@ TEST_CASE("An INFO message of the library has the level INFO and shares the coun
     CHECK(handled[1].threadId == currentThreadId());
     CHECK(handled[1].id == handled[0].id + 1);
     CHECK(handled[1].toString() ==
-          "INFO #" + std::to_string(handled[1].id) + " Informer (" + handled[1].location + "): info message");
+          "INFO #" + std::to_string(handled[1].id) + " Informer: info message");
     CHECK(handled[0].toString().rfind("WARN #", 0) == 0);
+    CHECK(handled[0].toString().find(" (" + handled[0].location + "): ") != std::string::npos);
 
     const auto errors = ErrorManager::getErrors();
 

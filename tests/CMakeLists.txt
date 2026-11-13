@@ -395,7 +395,7 @@ foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
         # prints "Exception:" or a reason without the line.
         if (DXFC_EXIT_SCENARIO STREQUAL "versions-default-handler")
             set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES
-                    PASS_REGULAR_EXPRESSION "\\[dxfcpp\\] INFO #[0-9]+ DXEndpoint \\(DXEndpoint\\.cpp:[0-9]+\\): dxFeed Graal C\\+\\+ API "
+                    PASS_REGULAR_EXPRESSION "\\[dxfcpp\\] INFO #[0-9]+ DXEndpoint: dxFeed Graal C\\+\\+ API "
                     FAIL_REGULAR_EXPRESSION "Exception:")
         endif ()
 

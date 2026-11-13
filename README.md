@@ -416,8 +416,8 @@ To familiarize with the dxLink protocol, please click [here](https://demo.dxfeed
 
 When a question goes to the support, start with these lines of the output of the program:
 
-- `[dxfcpp] INFO #1 DXEndpoint (DXEndpoint.cpp:NN): dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.16.0,
-  Windows x86_64(16 cores)`: the versions and the platform, written to `stderr` once per process when the first
+- `[dxfcpp] INFO #1 DXEndpoint: dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.16.0, Windows x86_64(16 cores)`:
+  the versions and the platform, written to `stderr` once per process when the first
   endpoint is created (through `ErrorManager`, see its documentation to redirect or turn off the output);
 - `Using QDS-<version>, (C) Devexperts`: the version of QD inside the SDK;
 - `DXEndpoint is loading properties from <file>` and `<name> DXEndpoint with dxfeed.address=<address>`: the

@@ -52,8 +52,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  *   when the first endpoint is created (DXEndpoint::create(), DXEndpoint::Builder::build(), DXEndpoint::getInstance(),
  *   DXFeed::getInstance(), DXPublisher::getInstance()). It names the versions of the dxFeed Graal C++ API and of the
  *   dxFeed Graal Native SDK and the platform, the first thing to send to the support:
- *   `[dxfcpp] INFO #1 DXEndpoint (DXEndpoint.cpp:42): dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.16.0,
- *   Windows x86_64(16 cores)`. The version of QD follows in the log of the SDK: `Using QDS-<version>, (C) Devexperts`.
+ *   `[dxfcpp] INFO #1 DXEndpoint: dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.16.0, Windows x86_64(16 cores)`. The version of QD follows in the log of the SDK: `Using QDS-<version>, (C) Devexperts`.
  *
  * ErrorManager passes each error, warning and INFO message to the handler and keeps the last ones in a journal:
  *
@@ -143,7 +142,7 @@ struct DXFCPP_EXPORT ErrorInfo {
 
     /**
      * Returns a string representation of the error: the component, the location, the Java class (if any) and the
-     * message, in one line. A warning starts with `WARN `, an INFO message with `INFO `.
+     * message, in one line. A warning starts with `WARN `, an INFO message with `INFO ` and has no location.
      *
      * @return The string representation of the error.
      */

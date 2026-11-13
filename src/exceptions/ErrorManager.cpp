@@ -129,7 +129,9 @@ void replaceHandler(HandlerMode handlerMode, std::shared_ptr<const ErrorManager:
 
 std::string ErrorInfo::toString() const {
     const auto *prefix = level == Level::WARN ? "WARN " : level == Level::INFO ? "INFO " : "";
-    auto result = fmt::format("{}#{} {} ({}): {}{}", prefix, id, component, location,
+    // The place in the library is useful for an error or a warning only: an INFO message always comes from one place.
+    const auto place = level == Level::INFO ? std::string{} : " (" + location + ")";
+    auto result = fmt::format("{}#{} {}{}: {}{}", prefix, id, component, place,
                               javaClassName.empty() ? "" : javaClassName + ": ", message);
 
     for (auto &c : result) {
