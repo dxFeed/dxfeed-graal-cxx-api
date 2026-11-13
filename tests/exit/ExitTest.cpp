@@ -158,6 +158,16 @@ constinit std::atomic<std::size_t> listenerCalls{};
 constinit std::atomic<bool> slowListener{};
 constinit std::atomic<bool> blockListener{};
 constinit std::atomic<bool> listenerBlocked{};
+// How long the blocked listener of the instrument profiles blocks.
+constinit std::atomic<std::int64_t> blockMilliseconds{500};
+constinit std::atomic<bool> blockEventListener{};
+constinit std::atomic<bool> eventListenerBlocked{};
+
+// The result of dxfcpp::shutdown() called from the event listener.
+enum class ShutdownFromListener : int { NOT_CALLED, REFUSED, RETURNED, OTHER_EXCEPTION };
+
+constinit std::atomic<bool> callShutdownFromListener{};
+constinit std::atomic<ShutdownFromListener> shutdownFromListenerResult{ShutdownFromListener::NOT_CALLED};
 
 /**
  * Created before main(), so destroyed after the exit handler of the library (registered when the library is first
@@ -206,7 +216,26 @@ std::shared_ptr<DXEndpoint> startEvents() {
 
     subscription->addEventListener([](const auto &events) {
         listenerCalls++;
+
+        if (callShutdownFromListener.exchange(false)) {
+            try {
+                shutdown();
+                shutdownFromListenerResult = ShutdownFromListener::RETURNED;
+            } catch (const RuntimeException &) {
+                shutdownFromListenerResult = ShutdownFromListener::REFUSED;
+            } catch (...) {
+                shutdownFromListenerResult = ShutdownFromListener::OTHER_EXCEPTION;
+            }
+        }
+
         received += events.size();
+
+        if (blockEventListener.exchange(false)) {
+            eventListenerBlocked = true;
+            std::this_thread::sleep_for(3s); // longer than the library waits for its own callbacks
+            eventListenerBlocked = false;
+        }
+
         std::this_thread::sleep_for(1ms);
     });
     subscription->addSymbols("EXIT_TEST"s);
@@ -254,8 +283,9 @@ std::shared_ptr<InstrumentProfileConnection> startLiveIpf() {
         listenerCalls++;
 
         if (blockListener.exchange(false)) {
+            // The process exits or the library shuts down meanwhile.
             listenerBlocked = true;
-            std::this_thread::sleep_for(500ms); // the process exits meanwhile
+            std::this_thread::sleep_for(std::chrono::milliseconds(blockMilliseconds.load()));
             listenerBlocked = false;
         }
 
@@ -458,6 +488,99 @@ int detachAfterShutdown() {
     return 0;
 }
 
+/// Publishes quotes until the condition holds or 10 seconds pass; returns whether it holds.
+template <typename Condition> bool publishUntil(const std::shared_ptr<DXEndpoint> &endpoint, Condition condition) {
+    const auto deadline = std::chrono::steady_clock::now() + 10s;
+    const std::vector<std::shared_ptr<EventType>> events{std::make_shared<Quote>("EXIT_TEST")};
+
+    while (!condition() && std::chrono::steady_clock::now() < deadline) {
+        endpoint->getPublisher()->publishEvents(events);
+        std::this_thread::sleep_for(10ms);
+    }
+
+    return condition();
+}
+
+/// Calls dxfcpp::shutdown() while the listeners of a subscription and of the instrument profiles are blocked for longer
+/// than the library waits for its own callbacks: shutdown() returns after their calls complete, and they are not
+/// called afterwards.
+int shutdownWithCallbacksInProgress() {
+    auto endpoint = startEvents();
+    auto connection = startLiveIpf();
+
+    blockMilliseconds = 3000;
+    blockListener = true;
+    blockEventListener = true;
+
+    if (!publishUntil(endpoint, [] {
+            return listenerBlocked.load() && eventListenerBlocked.load();
+        })) {
+        throw std::runtime_error("The listeners were not blocked");
+    }
+
+    shutdown();
+
+    if (listenerBlocked.load() || eventListenerBlocked.load()) {
+        std::fputs("A listener call was in progress after shutdown() returned\n", stderr);
+
+        return 3;
+    }
+
+    const auto calls = listenerCalls.load();
+    std::this_thread::sleep_for(200ms);
+
+    if (listenerCalls.load() != calls) {
+        std::fputs("The listener was called after shutdown()\n", stderr);
+
+        return 3;
+    }
+
+    return 0;
+}
+
+/// Calls dxfcpp::shutdown() from a listener: the call is refused, and the library goes on working until shutdown() is
+/// called outside of the listeners.
+int shutdownFromListener() {
+    callShutdownFromListener = true;
+
+    auto endpoint = startEvents();
+
+    if (!publishUntil(endpoint, [] {
+            return shutdownFromListenerResult.load() != ShutdownFromListener::NOT_CALLED;
+        })) {
+        throw std::runtime_error("The listener did not call shutdown()");
+    }
+
+    if (shutdownFromListenerResult.load() != ShutdownFromListener::REFUSED) {
+        std::fprintf(stderr, "shutdown() from a listener was not refused with RuntimeException: %d\n",
+                     static_cast<int>(shutdownFromListenerResult.load()));
+
+        return 3;
+    }
+
+    const auto calls = listenerCalls.load();
+
+    if (!publishUntil(endpoint, [calls] {
+            return listenerCalls.load() > calls;
+        })) {
+        std::fputs("The listener is not called after the refused shutdown()\n", stderr);
+
+        return 3;
+    }
+
+    shutdown();
+
+    try {
+        DXFeed::getInstance();
+        std::fputs("DXFeed::getInstance() did not throw after shutdown()\n", stderr);
+
+        return 3;
+    } catch (const GraalException &) {
+    }
+
+    return 0;
+}
+
 } // namespace
 
 int main(int argc, char *argv[]) {
@@ -468,7 +591,8 @@ int main(int argc, char *argv[]) {
 
     if (argc != 2) {
         std::fputs("Usage: <executable> endpoint | late-callback | callback-in-progress | ipf-live | ipf-live-close | "
-                   "shutdown | error-manager | release-after-shutdown | detach-after-shutdown\n",
+                   "shutdown | shutdown-callbacks-in-progress | shutdown-from-listener | error-manager | "
+                   "release-after-shutdown | detach-after-shutdown\n",
                    stderr);
 
         return 1;
@@ -499,6 +623,14 @@ int main(int argc, char *argv[]) {
 
         if (scenario == "shutdown") {
             return shutdownWithOpenEntities();
+        }
+
+        if (scenario == "shutdown-callbacks-in-progress") {
+            return shutdownWithCallbacksInProgress();
+        }
+
+        if (scenario == "shutdown-from-listener") {
+            return shutdownFromListener();
         }
 
         if (scenario == "error-manager") {

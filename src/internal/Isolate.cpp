@@ -756,7 +756,7 @@ void runReleaseThread() noexcept {
 
 // Releases the queued objects (they hold native handles) before the handles are released by the shutdown. The objects
 // passed later are released at once. Waits no longer than for the callbacks: the release waits for the calls of the
-// listener in progress, and the shutdown may be called from a listener.
+// listener in progress, which may block.
 void stopReleaseThread() noexcept {
     auto &queue = getReleaseQueue();
     std::unique_lock lock{queue.mutex};
@@ -806,34 +806,45 @@ void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept {
 }
 
 void Isolate::shutdown() {
-    // A concurrent call waits for the first one. Never destroyed: shutdown() may be called from a static destructor.
-    static auto &mutex = *new std::mutex{};
-    std::lock_guard lock(mutex);
-
     // A second call, or the exit handler has run.
     if (isShutDown()) {
         return;
     }
 
-    // The new callbacks return at once.
+    // dxfg_v4_system_shutdown() waits without a limit for the calls of the native listeners in progress and for the
+    // termination of the endpoints, so from a listener it would wait for itself. Checked before the lock: a listener
+    // must not wait for a shutdown in progress on another thread either, as that shutdown waits for the listener.
+    if (ListenerCallScope::isActive()) {
+        throw RuntimeException("dxfcpp::shutdown() cannot be called from a listener or a callback of the library");
+    }
+
+    // A concurrent call waits for the first one. Never destroyed: shutdown() may be called from a static destructor.
+    static auto &mutex = *new std::mutex{};
+    std::lock_guard lock(mutex);
+
+    if (isShutDown()) {
+        return;
+    }
+
+    // The new callbacks return at once. The barrier stays for the callbacks that the SDK does not stop: the handlers
+    // of the promises, the finalizers and the filters.
     shuttingDown = true;
     waitForCallbacks();
     stopReleaseThread();
 
     if (isCreated()) {
-        // Releasing the last handle of a native listener deactivates it: the release waits for its callbacks in
-        // progress, and the listener is not called afterwards.
-        JavaObjectHandleRegistry::getInstance().releaseAll();
+        // Deactivates all the native listeners (waits for their calls in progress, closes the event queues), then
+        // closes all the endpoints and the instrument profile connections and waits for the termination of the
+        // endpoints.
         ignoreUnused(getInstance().runIsolated([](auto threadHandle) {
             auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
 
-            if (dxfg_v4_system_close_all_and_await_termination(thread) != DXFG_EXECUTE_SUCCESSFULLY) {
+            if (dxfg_v4_system_shutdown(thread) != DXFG_EXECUTE_SUCCESSFULLY) {
                 isolated::clearThreadException(thread);
             }
 
             return 0;
         }));
-        // The handles created while the endpoints were closing.
         JavaObjectHandleRegistry::getInstance().releaseAll();
     }
 

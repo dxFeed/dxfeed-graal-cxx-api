@@ -155,15 +155,18 @@ struct DXFCPP_EXPORT System {
  * connections, waits for the termination of the endpoints, and releases the Java objects. Calling it is optional: the
  * process exits without it too.
  *
- * The listeners are not called after shutdown() starts; the listener calls in progress complete before it returns.
- * Afterwards the library does not call Java anymore, and the functions that need Java fail: most throw GraalException;
+ * The listeners are not called after shutdown() starts; the listener calls in progress complete before it returns,
+ * those of the listeners of the endpoints, the subscriptions, the models and the instrument profile connections however
+ * long they take. Afterwards the library does not call Java anymore, and the functions that need Java fail: most throw GraalException;
  * the methods of the objects created before shutdown() (their Java objects are released) throw
  * InvalidArgumentException or do nothing; the functions that report a failure by the result, such as
  * System::getProperty(), return it. The objects of the library can still be destroyed. Call it when the process is
  * about to end: the threads that used the library are not detached from it afterwards.
  *
  * A concurrent call waits for the first one; a second call does nothing, as does a call after the library's exit
- * handler has run. Do not call it from a listener: it waits for the listener calls in progress.
+ * handler has run. Do not call it while holding a lock that a listener may take: it waits for the listener calls in
+ * progress and would deadlock. On Windows do not call it from a destructor of a static object of a DLL or from
+ * `DllMain` at `DLL_PROCESS_DETACH`: the loader lock is held there, and a listener call that waits for it never ends.
  *
  * Note that at exit the library does not close the endpoints and the connections: the process ends their threads.
  * The library's exit handler (registered when the library is first used) stops the listener calls and waits up to
@@ -171,6 +174,9 @@ struct DXFCPP_EXPORT System {
  * the library was first used. The static objects created later are destroyed before the handler runs: if the
  * listeners use them, close the endpoints or call shutdown() before that. With the library as a DLL built with MinGW
  * or with the static C runtime, the handler runs after the static objects of the executable are destroyed.
+ *
+ * @throws RuntimeException if called from a listener or a callback of the library before the library is shut down:
+ * the call would wait for itself. Nothing is stopped then; call shutdown() outside of the listeners.
  */
 DXFCPP_EXPORT void shutdown();
 
