@@ -90,6 +90,8 @@ bool endsWithIgnoreCase(std::string_view text, std::string_view suffix) noexcept
 
 } // namespace
 
+// Doxygen skips src/internal, where this function is declared, and would warn on its definition.
+/// @cond
 void detail::checkEndpointAddress(std::string_view address) {
     // QD trims the address as String.trim() does: the characters up to the space.
     const auto start = std::find_if(address.begin(), address.end(), [](char c) {
@@ -123,6 +125,7 @@ void detail::checkEndpointAddress(std::string_view address) {
         }
     }
 }
+/// @endcond
 
 struct DXEndpoint::Impl {
     struct Registry {
