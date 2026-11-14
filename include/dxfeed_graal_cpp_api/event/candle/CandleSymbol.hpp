@@ -53,9 +53,11 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * | CandleType::PRICE_MOMENTUM   | `pm`   | `AAPL{=0.5pm}` |
  * | CandleType::PRICE_RENKO      | `pr`   | `AAPL{=0.5pr}` |
  *
- * A type may also be written as its name or a prefix of the name (`{=5min}`, `{=day}`), the letters of a prefix in any
- * case. A string that is exactly a type string is taken first, so the case matters for the short ones: `m` and `M` are
- * a minute, a month is `mo`; `pr` is a Renko price, `PR` and `Pr` are a price.
+ * The type strings of the table are the canonical form, CandleSymbol::toString() writes them: a price is `p`. Like
+ * Java, the parser also takes the name of a type or the start of the name in any case (`{=5min}`, `{=day}`). An exact
+ * type string is taken first, and the start of a name is matched against the types in the order of the table, so a
+ * short string in a wrong case gives another type: `M` is a minute (a month is `mo`), `PR` and `Pr` are a price (a
+ * Renko price is `pr`). Both are typical mistakes, see below.
  *
  * <h3>Other attributes</h3>
  *
