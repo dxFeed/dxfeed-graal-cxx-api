@@ -167,6 +167,8 @@ void ErrorManager::reportWarning(StringParam component, StringParam message,
     }
 }
 
+// Doxygen skips src/internal, where this function is declared, and would warn on its definition.
+/// @cond
 void detail::reportInfo(StringParam component, StringParam message, const std::source_location &location) noexcept {
     try {
         auto info = createInfo(component, location);
@@ -178,6 +180,7 @@ void detail::reportInfo(StringParam component, StringParam message, const std::s
         // Reporting must not fail the code that reports: the message is lost.
     }
 }
+/// @endcond
 
 void ErrorManager::reportException(StringParam component, const std::exception_ptr &exception,
                                    const std::source_location &location) noexcept {
