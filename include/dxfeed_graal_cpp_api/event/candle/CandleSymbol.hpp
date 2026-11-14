@@ -24,6 +24,93 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <variant>
 
 /**
+ * @page candle_symbols Candle symbols
+ *
+ * A Candle event is requested with a candle symbol: a market symbol with attributes that say how to build the
+ * candles. The symbol is a CandleSymbol object or its string, `AAPL{=5m,price=bid}`: the base symbol, an optional
+ * `&` with an exchange code letter and an optional list of `key=value` pairs in curly braces. CandleSymbol::valueOf()
+ * and the `_c` literal parse such a string, the overloads of CandleSymbol::valueOf() with attributes build a symbol
+ * from objects: `CandleSymbol::valueOf("AAPL", CandlePeriod::valueOf(5, CandleType::MINUTE))`.
+ *
+ * <h3>Period</h3>
+ *
+ * The period has an empty key, `{=5m}`: an optional value (1 by default, a fraction and the exponential form are
+ * allowed: `{=0.5h}`, `{=1.5E1m}`) and a type. A symbol without a period gives tick candles (CandlePeriod::TICK).
+ *
+ * | Type                         | String | Example        |
+ * |------------------------------|--------|----------------|
+ * | CandleType::TICK             | `t`    | `AAPL{=100t}`  |
+ * | CandleType::SECOND           | `s`    | `AAPL{=30s}`   |
+ * | CandleType::MINUTE           | `m`    | `AAPL{=5m}`    |
+ * | CandleType::HOUR             | `h`    | `AAPL{=h}`     |
+ * | CandleType::DAY              | `d`    | `AAPL{=d}`     |
+ * | CandleType::WEEK             | `w`    | `AAPL{=w}`     |
+ * | CandleType::MONTH            | `mo`   | `AAPL{=mo}`    |
+ * | CandleType::OPTEXP           | `o`    | `AAPL{=o}`     |
+ * | CandleType::YEAR             | `y`    | `AAPL{=y}`     |
+ * | CandleType::VOLUME           | `v`    | `AAPL{=1000v}` |
+ * | CandleType::PRICE            | `p`    | `AAPL{=0.5p}`  |
+ * | CandleType::PRICE_MOMENTUM   | `pm`   | `AAPL{=0.5pm}` |
+ * | CandleType::PRICE_RENKO      | `pr`   | `AAPL{=0.5pr}` |
+ *
+ * A type may also be written as its name or a prefix of the name (`{=5min}`, `{=day}`), the letters of a prefix in any
+ * case. A string that is exactly a type string is taken first, so the case matters for the short ones: `m` and `M` are
+ * a minute, a month is `mo`; `pr` is a Renko price, `PR` and `Pr` are a price.
+ *
+ * <h3>Other attributes</h3>
+ *
+ * | Attribute                           | Key     | Values                                                     |
+ * |-------------------------------------|---------|------------------------------------------------------------|
+ * | @ref CandlePrice "price"            | `price` | `last` (default), `bid`, `ask`, `mark`, `s` (settlement)   |
+ * | @ref CandleSession "session"        | `tho`   | `false` (all sessions, default), `true` (regular hours)    |
+ * | @ref CandleAlignment "alignment"    | `a`     | `m` (at midnight, default), `s` (at the session start)     |
+ * | @ref CandlePriceLevel "price level" | `pl`    | a number, `NaN` by default                                 |
+ * | @ref CandleDataType "data type"     | `dt`    | any string, for example `source`, `tho`, `all`, `rth`, `eth` |
+ * | @ref CandleExchange "exchange"      | `&X`    | after the base symbol, `AAPL&Q{=5m}`; composite by default |
+ *
+ * Examples:
+ *
+ * - `AAPL{=d}`: daily candles.
+ * - `AAPL{=15m,tho=true}`: 15-minute candles of the regular trading hours.
+ * - `AAPL{=h,a=s,tho=true}`: hourly candles that start at the start of the trading session (9:30 am ET), not at 9:00.
+ * - `EUR/USD{=m,price=bid}`: one-minute candles of the bid price.
+ * - `/ES{=d,price=s}`: daily candles of the settlement price.
+ *
+ * <h3>Typical mistakes</h3>
+ *
+ * A wrong candle symbol is valid for the parser and for the feed, so it gives no error, only no candles or other
+ * candles than expected.
+ *
+ * - **No period.** `AAPL` gives tick candles, not daily or minute ones. Write the period: `AAPL{=d}`, `AAPL{=1m}`, or
+ *   `AAPL{=t}` when the tick candles are meant.
+ * - **`M` for a month.** `AAPL{=5M}` is 5 minutes, a month is `AAPL{=mo}`.
+ * - **`PR` for a Renko price.** `AAPL{=2PR}` is a price period, a Renko one is `AAPL{=2pr}`.
+ * - **The price of the trades for an instrument without trades.** The default price is `last`, the price of the
+ *   trades. Forex and other instruments that are quoted, not traded, need `price=bid`, `price=ask` or `price=mark`.
+ * - **The session.** Without `tho=true` the candles are built from the data of all sessions (the default daily candles
+ *   of US equities are special, see CandleSymbol); hourly candles of the regular trading hours that start at the
+ *   start of the session need `a=s` too.
+ * - **A symbol passed as a string.** The string of a tick candle symbol has no period:
+ *   `CandleSymbol::valueOf("AAPL{=t}").toString()` is `AAPL`. Pass the CandleSymbol object, not its string, where a
+ *   symbol is expected.
+ *
+ * How far back the history of the candles goes depends on the period and on the data source: the shorter the period,
+ * the shorter the history.
+ *
+ * <h3>Warnings</h3>
+ *
+ * CandleSymbol::valueOf() of a string and the `_c` literal report a warning for the first three mistakes through
+ * ErrorManager (see @ref error_handling "Error handling"), and the symbol is created as before:
+ *
+ * `[dxfcpp] WARN #1 CandleSymbol (CandleSymbol.cpp:NNN): Candle symbol 'AAPL' has no period and gives tick candles; for
+ * other candles add a period, for example 'AAPL{=1m}' or 'AAPL{=d}', for tick candles write 'AAPL{=t}'`
+ *
+ * A warning is reported once per string, for the first 1000 strings in the process. The symbols of the received
+ * candles, the overloads of CandleSymbol::valueOf() with attributes and a string given to a subscription directly are
+ * not checked.
+ */
+
+/**
  * \addtogroup dxfcpp_candle
  * @{
  */
@@ -91,6 +178,8 @@ using CandleSymbolAttributeVariant = std::variant<CandleExchange, CandlePrice, C
  * CandleSymbol::valueOf() method parses any valid string representation into a candle symbol object. The result of the
  * candle symbol CandleSymbol::toString() method is always normalized: keys are ordered lexicographically, values (except
  * the data type) are in lower-case and are abbreviated to their shortest possible form.
+ *
+ * The page @ref candle_symbols "Candle symbols" lists the attributes, examples and the typical mistakes.
  */
 struct DXFCPP_EXPORT CandleSymbol {
     /// Returns the candle symbol "<null>".
@@ -240,8 +329,12 @@ struct DXFCPP_EXPORT CandleSymbol {
     /**
      * Converts the given string symbol into the candle symbol object.
      *
+     * A string without a period (it gives tick candles) or with a period of the type `M` or `PR` gets a warning through
+     * ErrorManager, once per string, see @ref candle_symbols "Candle symbols". The symbol is created anyway.
+     *
      * @param symbol The string symbol.
      * @return The candle symbol object.
+     * @throws InvalidArgumentException if the string cannot be parsed.
      */
     static CandleSymbol valueOf(StringParam symbol);
 
@@ -299,7 +392,8 @@ struct DXFCPP_EXPORT CandleSymbol {
 inline namespace literals {
 
 /**
- * String literal that helps to construct CandleSymbol from a char array.
+ * String literal that helps to construct CandleSymbol from a char array. It checks the string as
+ * CandleSymbol::valueOf() does.
  *
  * @param string The char array
  * @param length Tha char array's length

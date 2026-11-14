@@ -5,17 +5,23 @@
 #include "../../internal/resources/Strings.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleSymbol.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
 
+#include "../../internal/CandleSymbolHints.hpp"
 #include "../../internal/utils/CandleUtils.hpp"
 #include "../../internal/Common.hpp"
 
 #include <array>
+#include <cstddef>
 #include <functional>
 #include <limits>
+#include <mutex>
+#include <optional>
 #include <span>
 #include <string_view>
 #include <tuple>
+#include <unordered_set>
 
 #include <fmt/format.h>
 #include <dxfg_api.h>
@@ -369,8 +375,151 @@ CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
     return CandleSymbol{graalSymbol->symbol};
 }
 
+namespace {
+
+constexpr auto CANDLE_SYMBOL_HINTS_COMPONENT = "CandleSymbol";
+
+// The number of the candle symbols that get a hint; the last of them gets one more warning that the hints are over.
+constexpr std::size_t MAX_CANDLE_SYMBOL_HINTS = 1000;
+
+// Set by detail::CandleSymbolHintsOff.
+constinit thread_local bool candleSymbolHintsOff = false;
+
+// The candle symbols that got a hint.
+struct HintedCandleSymbols {
+    std::mutex mutex{};
+    std::unordered_set<std::string> symbols{};
+};
+
+// Never destroyed: a candle symbol can be created at the static initialization and destruction of the program.
+HintedCandleSymbols &hintedCandleSymbols() {
+    static auto *const instance = new HintedCandleSymbols{};
+
+    return *instance;
+}
+
+// Returns the type of a candle period that the user likely meant instead of the parsed one, or an empty optional: the
+// type `M` is a minute while a month is `mo`, the type `PR` is a price (the prefix of PRICE) while `pr` is PRICE_RENKO.
+std::optional<std::reference_wrapper<const CandleType>> findLikelyMeantCandleType(std::string_view period,
+                                                                                  const CandleType &type) {
+    // The type follows the value, as in CandlePeriod::parse().
+    const auto typeStart = period.find_first_not_of("0123456789.+-eE");
+
+    if (typeStart == std::string_view::npos) {
+        return std::nullopt;
+    }
+
+    const auto typeString = period.substr(typeStart);
+
+    if (typeString == "M") {
+        return std::cref(CandleType::MONTH);
+    }
+
+    for (const auto &other : CandleType::VALUES) {
+        if (other.get() != type && iEquals(typeString, other.get().toString())) {
+            return other;
+        }
+    }
+
+    return std::nullopt;
+}
+
+// Returns the hint about a likely mistake in the string of a candle symbol, or an empty optional.
+std::optional<std::string> findCandleSymbolHint(std::string_view string, const CandleSymbol &candleSymbol) {
+    if (string.empty()) {
+        return std::nullopt;
+    }
+
+    const auto period = MarketEventSymbols::getAttributeStringByKey(string, CandlePeriod::ATTRIBUTE_KEY);
+
+    if (!period) {
+        // A symbol of the price levels of ORCS has a granularity ("gr") instead of a period.
+        if (MarketEventSymbols::getAttributeStringByKey(string, "gr")) {
+            return std::nullopt;
+        }
+
+        const auto withPeriod = [&string](const char *value) {
+            return MarketEventSymbols::changeAttributeStringByKey(string, CandlePeriod::ATTRIBUTE_KEY, value);
+        };
+
+        return fmt::format("Candle symbol '{}' has no period and gives tick candles; for other candles add a period, "
+                           "for example '{}' or '{}', for tick candles write '{}'",
+                           string, withPeriod("1m"), withPeriod("d"), withPeriod("t"));
+    }
+
+    const auto &parsedPeriod = candleSymbol.getPeriod();
+
+    if (!parsedPeriod) {
+        return std::nullopt;
+    }
+
+    const auto meantType = findLikelyMeantCandleType(*period, parsedPeriod->getType());
+
+    if (!meantType) {
+        return std::nullopt;
+    }
+
+    return fmt::format("Candle symbol '{}': the period '{}' means {} ('{}'); for {} write '{}'", string, *period,
+                       parsedPeriod->getType().getName(), parsedPeriod->toString(), meantType->get().getName(),
+                       CandlePeriod::valueOf(parsedPeriod->getValue(), meantType->get()).toString());
+}
+
+// Reports the hint about the string of a candle symbol as a warning of ErrorManager, once per string, for the first
+// MAX_CANDLE_SYMBOL_HINTS strings.
+void reportCandleSymbolHint(std::string_view string, const CandleSymbol &candleSymbol) {
+    const auto hint = findCandleSymbolHint(string, candleSymbol);
+
+    if (!hint) {
+        return;
+    }
+
+    bool isLast = false;
+
+    {
+        auto &hinted = hintedCandleSymbols();
+        std::lock_guard lock(hinted.mutex);
+
+        if (hinted.symbols.size() >= MAX_CANDLE_SYMBOL_HINTS || !hinted.symbols.emplace(string).second) {
+            return;
+        }
+
+        isLast = hinted.symbols.size() == MAX_CANDLE_SYMBOL_HINTS;
+    }
+
+    // Out of the lock: the handler of ErrorManager may create a candle symbol itself.
+    ErrorManager::reportWarning(CANDLE_SYMBOL_HINTS_COMPONENT, *hint);
+
+    if (isLast) {
+        ErrorManager::reportWarning(CANDLE_SYMBOL_HINTS_COMPONENT,
+                                    fmt::format("Hints were reported for {} candle symbols; the next candle symbols "
+                                                "get no hints",
+                                                MAX_CANDLE_SYMBOL_HINTS));
+    }
+}
+
+} // namespace
+
+detail::CandleSymbolHintsOff::CandleSymbolHintsOff() noexcept : previous_{candleSymbolHintsOff} {
+    candleSymbolHintsOff = true;
+}
+
+detail::CandleSymbolHintsOff::~CandleSymbolHintsOff() noexcept {
+    candleSymbolHintsOff = previous_;
+}
+
 CandleSymbol CandleSymbol::valueOf(StringParam symbol) {
-    return CandleSymbol{symbol};
+    // A string that cannot be parsed throws here, before the hints.
+    auto result = CandleSymbol{symbol};
+
+    if (!candleSymbolHintsOff) {
+        try {
+            reportCandleSymbolHint(symbol.view(), result);
+        } catch (...) {
+            // A hint must not fail the creation of a valid symbol (for example, when the memory is exhausted).
+        }
+    }
+
+    return result;
 }
 
 CandleSymbol CandleSymbol::valueOf(StringParam symbol, const CandleSymbolAttributeVariant &attribute) {
