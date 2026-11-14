@@ -499,6 +499,8 @@ void reportCandleSymbolHint(std::string_view string, const CandleSymbol &candleS
 
 } // namespace
 
+// Doxygen skips src/internal, where this class is declared, and would warn on these definitions.
+/// @cond
 detail::CandleSymbolHintsOff::CandleSymbolHintsOff() noexcept : previous_{candleSymbolHintsOff} {
     candleSymbolHintsOff = true;
 }
@@ -506,6 +508,7 @@ detail::CandleSymbolHintsOff::CandleSymbolHintsOff() noexcept : previous_{candle
 detail::CandleSymbolHintsOff::~CandleSymbolHintsOff() noexcept {
     candleSymbolHintsOff = previous_;
 }
+/// @endcond
 
 CandleSymbol CandleSymbol::valueOf(StringParam symbol) {
     // A string that cannot be parsed throws here, before the hints.
