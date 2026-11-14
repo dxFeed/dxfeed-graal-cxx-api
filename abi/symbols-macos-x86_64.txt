@@ -418,6 +418,8 @@ dxfcpp::v8::CmdArgsUtils::parseProperties(dxfcpp::v8::StringParam)
 dxfcpp::v8::CmdArgsUtils::parseSymbols(dxfcpp::v8::StringParam)
 dxfcpp::v8::CmdArgsUtils::parseSymbolsAndSaveOrder(dxfcpp::v8::StringParam)
 dxfcpp::v8::CmdArgsUtils::parseTypes(dxfcpp::v8::StringParam)
+dxfcpp::v8::ConnectionError::categoryToString(dxfcpp::v8::ConnectionError::Category)
+dxfcpp::v8::ConnectionError::toString() const
 dxfcpp::v8::DXEndpoint::Builder::Builder(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXEndpoint::Builder>::LockExternalConstructionTag)
 dxfcpp::v8::DXEndpoint::Builder::build()
 dxfcpp::v8::DXEndpoint::Builder::create()
@@ -433,6 +435,7 @@ dxfcpp::v8::DXEndpoint::DXEndpoint(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXE
 dxfcpp::v8::DXEndpoint::DXFEED_PROPERTIES_PROPERTY
 dxfcpp::v8::DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY
 dxfcpp::v8::DXEndpoint::NAME_PROPERTY
+dxfcpp::v8::DXEndpoint::addMessageConnectorListener(std::__1::function<void (dxfcpp::v8::MessageConnectorInfo const&)>)
 dxfcpp::v8::DXEndpoint::awaitNotConnected() const
 dxfcpp::v8::DXEndpoint::awaitProcessed() const
 dxfcpp::v8::DXEndpoint::close() const
@@ -444,10 +447,12 @@ dxfcpp::v8::DXEndpoint::create(void*, dxfcpp::v8::DXEndpoint::Role, std::__1::un
 dxfcpp::v8::DXEndpoint::disconnect() const
 dxfcpp::v8::DXEndpoint::disconnectAndClear() const
 dxfcpp::v8::DXEndpoint::getAggregationPeriodInfo() const
+dxfcpp::v8::DXEndpoint::getConnectors() const
 dxfcpp::v8::DXEndpoint::getEventTypes() const
 dxfcpp::v8::DXEndpoint::getFeed() const
 dxfcpp::v8::DXEndpoint::getInstance()
 dxfcpp::v8::DXEndpoint::getInstance(dxfcpp::v8::DXEndpoint::Role)
+dxfcpp::v8::DXEndpoint::getLastConnectionError() const
 dxfcpp::v8::DXEndpoint::getName() const &
 dxfcpp::v8::DXEndpoint::getOnDemandService()
 dxfcpp::v8::DXEndpoint::getPublisher() const
@@ -459,6 +464,7 @@ dxfcpp::v8::DXEndpoint::newBuilder()
 dxfcpp::v8::DXEndpoint::onStateChange()
 dxfcpp::v8::DXEndpoint::password(dxfcpp::v8::StringParam)
 dxfcpp::v8::DXEndpoint::reconnect() const
+dxfcpp::v8::DXEndpoint::removeMessageConnectorListener(unsigned long)
 dxfcpp::v8::DXEndpoint::removeStateChangeListener(unsigned long)
 dxfcpp::v8::DXEndpoint::roleToString(dxfcpp::v8::DXEndpoint::Role)
 dxfcpp::v8::DXEndpoint::setRequestedAggregationPeriod(dxfcpp::v8::TimePeriod const&) const
@@ -1253,6 +1259,9 @@ dxfcpp::v8::Message::toString() const
 dxfcpp::v8::Message::withAttachment(dxfcpp::v8::StringParam)
 dxfcpp::v8::Message::withEventSymbol(dxfcpp::v8::StringParam)
 dxfcpp::v8::Message::withEventTime(long long)
+dxfcpp::v8::MessageConnectorInfo::kindToString(dxfcpp::v8::MessageConnectorInfo::Kind)
+dxfcpp::v8::MessageConnectorInfo::stateToString(dxfcpp::v8::MessageConnectorInfo::State)
+dxfcpp::v8::MessageConnectorInfo::toString() const
 dxfcpp::v8::NuamOrder::NuamOrder()
 dxfcpp::v8::NuamOrder::NuamOrder(dxfcpp::v8::StringParam)
 dxfcpp::v8::NuamOrder::TYPE
