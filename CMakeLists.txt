@@ -432,6 +432,7 @@ set(dxFeedGraalCxxApi_Glossary_Sources
 set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXFeed.cpp
         src/isolated/api/IsolatedDXEndpoint.cpp
+        src/isolated/api/IsolatedMessageConnector.cpp
         src/isolated/api/IsolatedDXFeedSubscription.cpp
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
@@ -468,8 +469,10 @@ set(dxFeedGraalCxxApi_Isolated_Sources
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
+        src/api/ConnectionError.cpp
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
+        src/api/MessageConnectorInfo.cpp
         src/api/DXFeedSubscription.cpp
         src/api/DXPublisherObservableSubscription.cpp
         src/api/DXPublisher.cpp

@@ -23,6 +23,8 @@ struct DXFeedEventListener {};
 
 struct DXEndpointStateChangeListener {};
 
+struct DXEndpointMessageConnectorListener {};
+
 struct IpfPropertyChangeListener {};
 
 struct InstrumentProfileUpdateListener {};

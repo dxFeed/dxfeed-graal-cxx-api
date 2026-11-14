@@ -237,6 +237,7 @@ void JavaObject::releaseList(void *handle) noexcept {
 template struct JavaObjectHandle<DXEndpoint>;
 template struct JavaObjectHandle<DXEndpoint::Builder>;
 template struct JavaObjectHandle<DXEndpointStateChangeListener>;
+template struct JavaObjectHandle<DXEndpointMessageConnectorListener>;
 
 template struct JavaObjectHandle<DXFeed>;
 template struct JavaObjectHandle<DXPublisher>;

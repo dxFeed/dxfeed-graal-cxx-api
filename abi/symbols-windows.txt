@@ -474,6 +474,7 @@ class std::basic_string<char,struct std::char_traits<char>,class std::allocator<
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::CandleSession::toString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::CandleType::getName(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::CandleType::toString(void)const
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::ConnectionError::toString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::Day::toString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::DayFilter::getName(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::ErrorInfo::toString(void)const
@@ -515,6 +516,7 @@ class std::basic_string<char,struct std::char_traits<char>,class std::allocator<
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::InstrumentProfileField::getName(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::MarketMaker::getExchangeCodeString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::MarketMaker::getMarketMaker(void)const
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::MessageConnectorInfo::toString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::OptionSale::getExchangeCodeString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::OrderBase::baseFieldsToString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::OrderBase::getExchangeCodeString(void)const
@@ -576,6 +578,7 @@ class std::optional<struct dxfcpp::v8::CandlePrice> const & dxfcpp::v8::CandleSy
 class std::optional<struct dxfcpp::v8::CandlePriceLevel> const & dxfcpp::v8::CandleSymbol::getPriceLevel(void)const&
 class std::optional<struct dxfcpp::v8::CandleSession> const & dxfcpp::v8::CandleSymbol::getSession(void)const&
 class std::optional<struct dxfcpp::v8::CandleSymbol> dxfcpp::v8::SymbolWrapper::asCandleSymbol(void)const
+class std::optional<struct dxfcpp::v8::ConnectionError> dxfcpp::v8::DXEndpoint::getLastConnectionError(void)const
 class std::optional<struct dxfcpp::v8::SessionType> const & dxfcpp::v8::SessionFilter::getType(void)const&
 class std::optional<struct dxfcpp::v8::TimePeriod> dxfcpp::v8::DXEndpoint::getRequestedAggregationPeriod(void)const
 class std::optional<struct dxfcpp::v8::WildcardSymbol> dxfcpp::v8::SymbolWrapper::asWildcardSymbol(void)const
@@ -659,6 +662,7 @@ class std::vector<class std::shared_ptr<struct dxfcpp::v8::InstrumentProfile>,cl
 class std::vector<class std::shared_ptr<struct dxfcpp::v8::PromiseContext const >,class std::allocator<class std::shared_ptr<struct dxfcpp::v8::PromiseContext const > > > dxfcpp::v8::DXFeed::createLastEventsPromisesContexts(class dxfcpp::v8::EventTypeEnum const &,class std::vector<struct dxfcpp::v8::SymbolWrapper,class std::allocator<struct dxfcpp::v8::SymbolWrapper> > const &)const
 class std::vector<class std::shared_ptr<struct dxfcpp::v8::Session>,class std::allocator<class std::shared_ptr<struct dxfcpp::v8::Session> > > dxfcpp::v8::Day::getSessions(void)const
 class std::vector<double,class std::allocator<double> > dxfcpp::v8::PriceIncrements::getPriceIncrements(void)const
+class std::vector<struct dxfcpp::v8::MessageConnectorInfo,class std::allocator<struct dxfcpp::v8::MessageConnectorInfo> > dxfcpp::v8::DXEndpoint::getConnectors(void)const
 class std::vector<struct dxfcpp::v8::SymbolWrapper,class std::allocator<struct dxfcpp::v8::SymbolWrapper> > dxfcpp::v8::DXFeedSubscription::getDecoratedSymbols(void)const
 class std::vector<struct dxfcpp::v8::SymbolWrapper,class std::allocator<struct dxfcpp::v8::SymbolWrapper> > dxfcpp::v8::DXFeedSubscription::getSymbols(void)const
 const dxfcpp::v8::AdditionalUnderlyings::`vbtable'
@@ -1013,6 +1017,10 @@ dxfcpp::v8::CandleSymbolAttribute::CandleSymbolAttribute(struct dxfcpp::v8::Cand
 dxfcpp::v8::CandleSymbolAttribute::CandleSymbolAttribute(void)
 dxfcpp::v8::CandleType::CandleType(class std::basic_string_view<char,struct std::char_traits<char> >,class std::basic_string_view<char,struct std::char_traits<char> >,__int64)
 dxfcpp::v8::CandleType::CandleType(void)
+dxfcpp::v8::ConnectionError::ConnectionError(struct dxfcpp::v8::ConnectionError &&)
+dxfcpp::v8::ConnectionError::ConnectionError(struct dxfcpp::v8::ConnectionError const &)
+dxfcpp::v8::ConnectionError::ConnectionError(void)
+dxfcpp::v8::ConnectionError::~ConnectionError(void)
 dxfcpp::v8::DXEndpoint::Builder::Builder(struct dxfcpp::v8::RequireMakeShared<class dxfcpp::v8::DXEndpoint::Builder>::LockExternalConstructionTag)
 dxfcpp::v8::DXEndpoint::DXEndpoint(struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::DXEndpoint>::LockExternalConstructionTag)
 dxfcpp::v8::DXEndpoint::DXEndpoint(struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::DXEndpoint>::LockExternalConstructionTag,struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::DXEndpoint> &&,enum dxfcpp::v8::DXEndpoint::Role,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)
@@ -1119,6 +1127,10 @@ dxfcpp::v8::Message::Message(class dxfcpp::v8::Message const &)
 dxfcpp::v8::Message::Message(struct dxfcpp::v8::StringParam)
 dxfcpp::v8::Message::Message(struct dxfcpp::v8::StringParam,struct dxfcpp::v8::StringParam)
 dxfcpp::v8::Message::Message(void)
+dxfcpp::v8::MessageConnectorInfo::MessageConnectorInfo(struct dxfcpp::v8::MessageConnectorInfo &&)
+dxfcpp::v8::MessageConnectorInfo::MessageConnectorInfo(struct dxfcpp::v8::MessageConnectorInfo const &)
+dxfcpp::v8::MessageConnectorInfo::MessageConnectorInfo(void)
+dxfcpp::v8::MessageConnectorInfo::~MessageConnectorInfo(void)
 dxfcpp::v8::NuamOrder::NuamOrder(class dxfcpp::v8::NuamOrder &&)
 dxfcpp::v8::NuamOrder::NuamOrder(class dxfcpp::v8::NuamOrder const &)
 dxfcpp::v8::NuamOrder::NuamOrder(struct dxfcpp::v8::StringParam)
@@ -1444,6 +1456,9 @@ static char const * const dxfcpp::v8::MarketEventSymbols::SUPPORTED_EXCHANGES
 static char const * const dxfcpp::v8::String::EMPTY
 static char const * const dxfcpp::v8::String::NUL
 static char const * const dxfcpp::v8::WildcardSymbol::RESERVED_PREFIX
+static char const * dxfcpp::v8::ConnectionError::categoryToString(enum dxfcpp::v8::ConnectionError::Category)
+static char const * dxfcpp::v8::MessageConnectorInfo::kindToString(enum dxfcpp::v8::MessageConnectorInfo::Kind)
+static char const * dxfcpp::v8::MessageConnectorInfo::stateToString(enum dxfcpp::v8::MessageConnectorInfo::State)
 static char const dxfcpp::v8::MarketEventSymbols::ATTRIBUTES_CLOSE
 static char const dxfcpp::v8::MarketEventSymbols::ATTRIBUTES_OPEN
 static char const dxfcpp::v8::MarketEventSymbols::ATTRIBUTES_SEPARATOR
@@ -2174,6 +2189,7 @@ static void dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::CFI::Attribute>::del
 static void dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::CFI::Value>::deleter(void *)
 static void dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::CFI>::deleter(void *)
 static void dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::DXEndpoint>::deleter(void *)
+static void dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::DXEndpointMessageConnectorListener>::deleter(void *)
 static void dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::DXEndpointStateChangeListener>::deleter(void *)
 static void dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::DXFeed>::deleter(void *)
 static void dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::DXFeedEventListener>::deleter(void *)
@@ -2289,6 +2305,8 @@ struct dxfcpp::v8::CandleType & dxfcpp::v8::CandleType::operator=(struct dxfcpp:
 struct dxfcpp::v8::CandleType const & dxfcpp::v8::CandlePeriod::getType(void)const&
 struct dxfcpp::v8::CmdArgsUtils & dxfcpp::v8::CmdArgsUtils::operator=(struct dxfcpp::v8::CmdArgsUtils &&)
 struct dxfcpp::v8::CmdArgsUtils & dxfcpp::v8::CmdArgsUtils::operator=(struct dxfcpp::v8::CmdArgsUtils const &)
+struct dxfcpp::v8::ConnectionError & dxfcpp::v8::ConnectionError::operator=(struct dxfcpp::v8::ConnectionError &&)
+struct dxfcpp::v8::ConnectionError & dxfcpp::v8::ConnectionError::operator=(struct dxfcpp::v8::ConnectionError const &)
 struct dxfcpp::v8::Day & dxfcpp::v8::Day::operator=(struct dxfcpp::v8::Day &&)
 struct dxfcpp::v8::Direction const & dxfcpp::v8::TradeBase::getTickDirection(void)const&
 struct dxfcpp::v8::Entity & dxfcpp::v8::Entity::operator=(struct dxfcpp::v8::Entity const &)
@@ -2350,6 +2368,8 @@ struct dxfcpp::v8::MarketEvent & dxfcpp::v8::MarketEvent::operator=(struct dxfcp
 struct dxfcpp::v8::MarketEvent & dxfcpp::v8::MarketEvent::operator=(struct dxfcpp::v8::MarketEvent const &)
 struct dxfcpp::v8::MarketEventSymbols & dxfcpp::v8::MarketEventSymbols::operator=(struct dxfcpp::v8::MarketEventSymbols &&)
 struct dxfcpp::v8::MarketEventSymbols & dxfcpp::v8::MarketEventSymbols::operator=(struct dxfcpp::v8::MarketEventSymbols const &)
+struct dxfcpp::v8::MessageConnectorInfo & dxfcpp::v8::MessageConnectorInfo::operator=(struct dxfcpp::v8::MessageConnectorInfo &&)
+struct dxfcpp::v8::MessageConnectorInfo & dxfcpp::v8::MessageConnectorInfo::operator=(struct dxfcpp::v8::MessageConnectorInfo const &)
 struct dxfcpp::v8::NuamOrderType const & dxfcpp::v8::NuamOrder::getOrderType(void)const&
 struct dxfcpp::v8::NuamTimeInForceType const & dxfcpp::v8::NuamOrder::getTimeInForce(void)const&
 struct dxfcpp::v8::ObservableSubscription & dxfcpp::v8::ObservableSubscription::operator=(struct dxfcpp::v8::ObservableSubscription const &)
@@ -2451,6 +2471,7 @@ unsigned __int64 dxfcpp::v8::AuthToken::hashCode(void)const
 unsigned __int64 dxfcpp::v8::CFI::Attribute::hashCode(void)const
 unsigned __int64 dxfcpp::v8::CFI::Value::hashCode(void)const
 unsigned __int64 dxfcpp::v8::CFI::hashCode(void)const
+unsigned __int64 dxfcpp::v8::DXEndpoint::addMessageConnectorListener(class std::function<void (struct dxfcpp::v8::MessageConnectorInfo const &)>)
 unsigned __int64 dxfcpp::v8::DXEndpoint::addStateChangeListener(class std::function<void (enum dxfcpp::v8::DXEndpoint::State,enum dxfcpp::v8::DXEndpoint::State)>)
 unsigned __int64 dxfcpp::v8::Day::hashCode(void)const
 unsigned __int64 dxfcpp::v8::EventClassList::size(void)const
@@ -2960,6 +2981,7 @@ void dxfcpp::v8::DXEndpoint::closeAndAwaitTermination(void)const
 void dxfcpp::v8::DXEndpoint::disconnect(void)const
 void dxfcpp::v8::DXEndpoint::disconnectAndClear(void)const
 void dxfcpp::v8::DXEndpoint::reconnect(void)const
+void dxfcpp::v8::DXEndpoint::removeMessageConnectorListener(unsigned __int64)
 void dxfcpp::v8::DXEndpoint::removeStateChangeListener(unsigned __int64)
 void dxfcpp::v8::DXEndpoint::setRequestedAggregationPeriod(__int64)const
 void dxfcpp::v8::DXEndpoint::setRequestedAggregationPeriod(class std::chrono::duration<__int64,struct std::ratio<1,1000> >)const

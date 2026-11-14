@@ -12,8 +12,11 @@
 #include "../Args/Args.hpp"
 #include <fmt/format.h>
 #include <fmt/std.h>
+#include <cstdint>
 #include <iostream>
 #include <memory>
+#include <string>
+#include <unordered_map>
 #include <variant>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
@@ -147,6 +150,30 @@ struct ConnectTool {
         }
     };
 
+    // Prints each new connection error of the endpoint to stderr: a failed connect attempt or a dropped connection.
+    // The connector listener is called after the error is recorded, one call at a time.
+    static void addConnectionErrorPrinter(const std::shared_ptr<DXEndpoint> &endpoint) noexcept {
+        try {
+            endpoint->addMessageConnectorListener(
+                [lastCounts = std::unordered_map<std::string, std::int64_t>{}](const MessageConnectorInfo &info) mutable {
+                    if (!info.lastError) {
+                        return;
+                    }
+
+                    // The count of the errors of a connector grows with each new error.
+                    auto &lastCount = lastCounts[info.name + " " + info.address];
+
+                    if (info.lastError->count > lastCount) {
+                        lastCount = info.lastError->count;
+                        std::cerr << "Connection error: " << info.lastError->toString() << std::endl;
+                    }
+                });
+        } catch (const RuntimeException &e) {
+            // The tool works without the printer.
+            std::cerr << "The connection errors are not printed: " << e << '\n';
+        }
+    }
+
     static void run(const Args &args) noexcept {
         try {
             using namespace std::literals;
@@ -222,6 +249,7 @@ struct ConnectTool {
                 });
             }
 
+            addConnectionErrorPrinter(endpoint);
             sub->addSymbols(parsedSymbols);
             endpoint->connect(args.address);
             std::this_thread::sleep_for(std::chrono::days(365));

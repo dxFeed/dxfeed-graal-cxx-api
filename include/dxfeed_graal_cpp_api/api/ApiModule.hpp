@@ -14,12 +14,14 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  */
 
 #include "./AutoClose.hpp"
+#include "./ConnectionError.hpp"
 #include "./DXEndpoint.hpp"
 #include "./DXFeed.hpp"
 #include "./DXFeedSubscription.hpp"
 #include "./DXPublisher.hpp"
 #include "./DXPublisherObservableSubscription.hpp"
 #include "./FilteredSubscriptionSymbol.hpp"
+#include "./MessageConnectorInfo.hpp"
 #include "./SubscriptionController.hpp"
 #include "./osub/OsubModule.hpp"
 
