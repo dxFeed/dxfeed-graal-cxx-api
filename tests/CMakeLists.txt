@@ -38,6 +38,8 @@ set(DXFC_TEST_SOURCES
         api/AutoCloseTest.cpp
         api/CandleAttributesTest.cpp
         api/CandleDataTypeTest.cpp
+        api/CandleSymbolHintsLimitTest.cpp
+        api/CandleSymbolHintsTest.cpp
         api/CandleSymbolTest.cpp
         api/DataIntegrityTest.cpp
         api/DXFeedTest.cpp

@@ -44,8 +44,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  *   throw it too, instead of returning an empty string or `false`; the functions of the C API return `DXFC_EC_ERROR`.
  *   The messages never contain the values of the arguments.
  * - **A warning** is reported from inside a call that goes on (for example, a `fromTime` in the future given to a
- *   TimeSeriesTxModel): the call does not throw and does not change its result. The library reports it with
- *   ErrorManager::reportWarning(), and it has the level ErrorInfo::Level::WARN, while the errors have
+ *   TimeSeriesTxModel, a candle symbol string without a period given to CandleSymbol::valueOf(), see
+ *   @ref candle_symbols "Candle symbols"): the call does not throw and does not change its result. The library
+ *   reports it with ErrorManager::reportWarning(), and it has the level ErrorInfo::Level::WARN, while the errors have
  *   ErrorInfo::Level::ERROR (ErrorInfo::level). A warning shares the handler, the journal and
  *   ErrorManager::getLastError() with the errors.
  * - **An INFO message** (ErrorInfo::Level::INFO) is not a problem: the library reports it on its own, once per process,

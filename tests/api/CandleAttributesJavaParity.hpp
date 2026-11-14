@@ -133,6 +133,17 @@ inline const PeriodParseCase PERIOD_PARSE[] = {
     {"0.99999999999999999d", true, 1.0, "DAY", "d", 86400000LL},
     {"1.0000000000000001d", true, 1.0, "DAY", "d", 86400000LL},
     {"3.14159m", true, 3.14159, "MINUTE", "3.14159m", 188495LL},
+    // The exponential form of the value, as Double.parseDouble reads it.
+    {"1e1m", true, 10.0, "MINUTE", "10m", 600000LL},
+    {"1E1m", true, 10.0, "MINUTE", "10m", 600000LL},
+    {"1.5E1m", true, 15.0, "MINUTE", "15m", 900000LL},
+    {"5E-1h", true, 0.5, "HOUR", "0.5h", 1800000LL},
+    {"1E+2s", true, 100.0, "SECOND", "100s", 100000LL},
+    {"2e1d", true, 20.0, "DAY", "20d", 1728000000LL},
+    {"1Em", false, 0.0, "", "", 0},
+    // The prefixes of the names: M is a minute, PR is a price.
+    {"5M", true, 5.0, "MINUTE", "5m", 300000LL},
+    {"2PR", true, 2.0, "PRICE", "2p", 0LL},
 };
 
 struct PeriodValueOfCase {
@@ -484,6 +495,9 @@ inline const SymbolCase SYMBOL_VALUE_OF[] = {
     {"A{=0.5m}", true, "A{=0.5m}", "A", "last", "false", "0.5m", "m", "NaN"},
     {"A{=1.0m}", true, "A{=m}", "A", "last", "false", "m", "m", "NaN"},
     {"A{=1e3m}", true, "A{=1000m}", "A", "last", "false", "1000m", "m", "NaN"},
+    {"A{=1.5E1m}", true, "A{=15m}", "A", "last", "false", "15m", "m", "NaN"},
+    {"A{=5E-1h}", true, "A{=0.5h}", "A", "last", "false", "0.5h", "m", "NaN"},
+    {"A{=1Em}", false, "", "", "", "", "", "", ""},
     {"A{=5x}", false, "", "", "", "", "", "", ""},
     {"A{=}", false, "", "", "", "", "", "", ""},
     {"A{=-1m}", true, "A{=-1m}", "A", "last", "false", "-1m", "m", "NaN"},

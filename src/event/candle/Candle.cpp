@@ -5,6 +5,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/EventTypeEnum.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/CandleSymbolHints.hpp"
 #include "../../internal/resources/Strings.hpp"
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
@@ -41,6 +42,9 @@ void Candle::fillData(void *graalNative) {
     const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
 
     if (graalCandle->event_symbol != nullptr) {
+        // The symbol of an event comes from the SDK, not from the user: it gets no hints.
+        const detail::CandleSymbolHintsOff hintsOff{};
+
         setEventSymbol(CandleSymbol::valueOf(graalCandle->event_symbol));
     }
 

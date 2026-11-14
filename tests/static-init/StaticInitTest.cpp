@@ -162,6 +162,9 @@ DXFC_CAPTURE(eventTypeById, EventTypeEnum::ALL_BY_ID.at(EventTypeEnum::QUOTE.get
 DXFC_CAPTURE(predefinedSources, OrderSource::PREDEFINED_SOURCES.at("NTV").get().name(), "NTV");
 DXFC_CAPTURE(candleSymbolNul, CandleSymbol::NUL().toString(), "<null>");
 
+// A candle symbol without a period reports a warning to ErrorManager (without Java).
+DXFC_CAPTURE(candleSymbolHint, CandleSymbol::valueOf("STATIC").toString(), "STATIC");
+
 // The objects whose Java objects are created at the first use of a getter are created without Java.
 DXFC_CAPTURE(lazyEmpty, toString(CFI::EMPTY() && PriceIncrements::EMPTY() && AdditionalUnderlyings::EMPTY()), "true");
 
@@ -210,8 +213,21 @@ int main() {
         failures += ok ? 0 : 1;
     }
 
+    // The warning about the candle symbol without a period, reported at static initialization, is in the journal.
+    std::size_t candleSymbolWarnings = 0;
+
+    for (const auto &error : ErrorManager::getErrors()) {
+        if (error.component == "CandleSymbol" && error.message.find("'STATIC'") != std::string::npos) {
+            candleSymbolWarnings += 1;
+        }
+    }
+
+    std::printf("%s warning of the candle symbol at static initialization: %zu\n",
+                candleSymbolWarnings == 1 ? "OK  " : "FAIL", candleSymbolWarnings);
+    failures += candleSymbolWarnings == 1 ? 0 : 1;
+
     // All the variables above were initialized.
-    constexpr std::size_t expectedChecks = DXFC_GRAAL_CHECKS ? 55 : 49;
+    constexpr std::size_t expectedChecks = DXFC_GRAAL_CHECKS ? 56 : 50;
 
     if (checks().size() != expectedChecks) {
         std::printf("FAIL %zu checks instead of %zu\n", checks().size(), expectedChecks);
