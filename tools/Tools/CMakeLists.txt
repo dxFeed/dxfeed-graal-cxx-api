@@ -37,9 +37,15 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Tools.cpp
         src/Args/Args.cpp
+        src/Diagnose/NetProbe.cpp
 )
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../third_party/range-v3-0.12/include)
+
+# The network probe of Diagnose uses the sockets.
+if (WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
+endif ()
 
 # The definitions of the library are PRIVATE: the version in the name of the tools and the metrics are set here.
 target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_VERSION="${DXFCXX_VERSION}")

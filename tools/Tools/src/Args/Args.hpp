@@ -668,6 +668,93 @@ struct IgnoreExchangesArg : NamedArg {
     }
 };
 
+struct CompareArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<CompareArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<CompareArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<CompareArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<CompareArg>(args, index);
+    }
+};
+
+struct DurationArg : NamedUnsignedIntArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<DurationArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<DurationArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<DurationArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::size_t>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedUnsignedIntArg::parse<DurationArg>(args, index);
+    }
+};
+
+struct ReportArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<ReportArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<ReportArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<ReportArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<ReportArg>(args, index);
+    }
+};
+
 struct HelpArg : FlagArg {
     const static std::string NAME;
     const static std::string SHORT_NAME;
@@ -758,6 +845,7 @@ using ArgType =
                  tools::SymbolsArg<>, tools::SymbolsArgRequired<>, tools::SymbolsArgRequired<1>, tools::PropertiesArg,
                  tools::FromTimeArg, tools::SourceArg, tools::TapeArg, tools::QuietArg, tools::ForceStreamArg,
                  tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg, tools::IgnoreExchangesArg,
-                 tools::HelpArg, tools::ArticleArgRequired<>, QdsArgs<>>;
+                 tools::CompareArg, tools::DurationArg, tools::ReportArg, tools::HelpArg, tools::ArticleArgRequired<>,
+                 QdsArgs<>>;
 
 } // namespace dxfcpp::tools
