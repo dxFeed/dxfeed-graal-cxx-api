@@ -6,6 +6,11 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/market/Quote.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/market/TimeAndSale.hpp"
+#include "../../include/dxfeed_graal_cpp_api/event/market/TradeBase.hpp"
+#include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
+#include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #include "../internal/CallbackBarrier.hpp"
 #include "../internal/Id.hpp"
 #include "../internal/context/ApiContext.hpp"
@@ -18,16 +23,234 @@
 #include "../internal/utils/debug/Debug.hpp"
 
 #include <algorithm>
+#include <atomic>
+#include <chrono>
+#include <cstdint>
 #include <dxfg_api.h>
 #include <exception>
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 #include <memory>
+#include <mutex>
+#include <optional>
+#include <string>
 #include <utility>
 #include <vector>
 
 DXFCPP_BEGIN_NAMESPACE
 
+namespace {
+
+constexpr auto LISTENER_CHECKS_COMPONENT = "DXFeedSubscription";
+
+// An invalid value of a property is reported once per process. Here, not in DXFeedSubscription::Impl: the static
+// members of a nested class of an exported class would be exported.
+std::atomic<bool> invalidSlowListenerThresholdReported{false};
+std::atomic<bool> invalidEventLagThresholdReported{false};
+std::atomic<bool> invalidWarningPeriodReported{false};
+
+// A time period of a property in milliseconds, or the default when the property is not set. A value that is not a time
+// period is reported as a warning once per process for each property.
+std::int64_t readTimePeriodProperty(const char *name, const char *defaultValue, std::int64_t defaultMillis,
+                                    std::atomic<bool> &invalidValueReported) noexcept {
+    std::string value{};
+
+    try {
+        value = System::getProperty(name);
+    } catch (...) {
+        return defaultMillis;
+    }
+
+    if (value.empty()) {
+        return defaultMillis;
+    }
+
+    try {
+        return TimePeriod::valueOf(value).getTime();
+    } catch (...) {
+        if (!invalidValueReported.exchange(true)) {
+            try {
+                ErrorManager::reportWarning(LISTENER_CHECKS_COMPONENT,
+                                            fmt::format("The value '{}' of the system property {} is not a time "
+                                                        "period (for example 0.1s, 5s or 1m): the default {} is used",
+                                                        value, name, defaultValue));
+            } catch (...) {
+                // No memory for the message: the default is used anyway.
+            }
+        }
+
+        return defaultMillis;
+    }
+}
+
+// The warnings of one check of one subscription: the first excess is reported at once, the next ones at most once per
+// period, with the number of the excesses since the previous warning and the largest of them. Called on the threads of
+// the events; the mutex is taken only on an excess.
+class WarningLimiter {
+    std::mutex mutex_{};
+    std::optional<std::chrono::steady_clock::time_point> lastWarning_{};
+    std::int64_t suppressedCount_{};
+    std::int64_t suppressedMax_{};
+
+  public:
+    struct Suppressed {
+        std::int64_t count{};
+        std::int64_t max{};
+    };
+
+    // Returns the excesses suppressed since the previous warning if a warning is to be reported now.
+    std::optional<Suppressed> onExcess(std::int64_t value, std::int64_t periodMillis) {
+        const auto now = std::chrono::steady_clock::now();
+        std::lock_guard lock{mutex_};
+
+        // In milliseconds: the period may be TimePeriod::UNLIMITED, its nanoseconds do not fit into 64 bits.
+        if (lastWarning_ &&
+            std::chrono::duration_cast<std::chrono::milliseconds>(now - *lastWarning_).count() < periodMillis) {
+            suppressedCount_++;
+            suppressedMax_ = (std::max)(suppressedMax_, value);
+
+            return std::nullopt;
+        }
+
+        const Suppressed suppressed{suppressedCount_, suppressedMax_};
+
+        lastWarning_ = now;
+        suppressedCount_ = 0;
+        suppressedMax_ = 0;
+
+        return suppressed;
+    }
+};
+
+std::string suppressedToString(const WarningLimiter::Suppressed &suppressed, const char *what) {
+    if (suppressed.count == 0) {
+        return {};
+    }
+
+    return fmt::format(" Since the previous warning: {} more {}, the largest {} ms.", suppressed.count, what,
+                       suppressed.max);
+}
+
+// The time of a market action of an event in milliseconds since the epoch, or 0 when the event has none.
+std::int64_t getMarketTime(const EventType &event) noexcept {
+    if (const auto quote = dynamic_cast<const Quote *>(&event)) {
+        return quote->getTime();
+    }
+
+    if (const auto trade = dynamic_cast<const TradeBase *>(&event)) {
+        return trade->getTime();
+    }
+
+    if (const auto timeAndSale = dynamic_cast<const TimeAndSale *>(&event)) {
+        return timeAndSale->getTime();
+    }
+
+    return 0;
+}
+
+} // namespace
+
 struct DXFeedSubscription::Impl {
+    static constexpr auto DEFAULT_SLOW_LISTENER_THRESHOLD = "0.1s";
+    static constexpr std::int64_t DEFAULT_SLOW_LISTENER_THRESHOLD_MILLIS = 100;
+    static constexpr auto DEFAULT_EVENT_LAG_THRESHOLD = "0";
+    static constexpr std::int64_t DEFAULT_EVENT_LAG_THRESHOLD_MILLIS = 0;
+    static constexpr auto DEFAULT_WARNING_PERIOD = "1m";
+    static constexpr std::int64_t DEFAULT_WARNING_PERIOD_MILLIS = 60'000;
+
+    // The checks of the listeners (the page listener_threads in DXFeedSubscription.hpp), read once when the
+    // subscription is created. A threshold of 0 or less turns its check off.
+    const std::int64_t slowListenerThresholdMillis_;
+    const std::int64_t eventLagThresholdMillis_;
+    const std::int64_t warningPeriodMillis_;
+
+    WarningLimiter slowListenerWarnings_{};
+    WarningLimiter eventLagWarnings_{};
+
+    Impl()
+        : slowListenerThresholdMillis_(readTimePeriodProperty(
+              SLOW_LISTENER_THRESHOLD_PROPERTY, DEFAULT_SLOW_LISTENER_THRESHOLD, DEFAULT_SLOW_LISTENER_THRESHOLD_MILLIS,
+              invalidSlowListenerThresholdReported)),
+          eventLagThresholdMillis_(readTimePeriodProperty(EVENT_LAG_THRESHOLD_PROPERTY, DEFAULT_EVENT_LAG_THRESHOLD,
+                                                          DEFAULT_EVENT_LAG_THRESHOLD_MILLIS,
+                                                          invalidEventLagThresholdReported)),
+          warningPeriodMillis_(readTimePeriodProperty(WARNING_PERIOD_PROPERTY, DEFAULT_WARNING_PERIOD,
+                                                      DEFAULT_WARNING_PERIOD_MILLIS, invalidWarningPeriodReported)) {
+    }
+
+    static std::string getName(const DXFeedSubscription &sub) {
+        std::vector<std::string> eventTypeNames{};
+
+        eventTypeNames.reserve(sub.eventTypes_.size());
+
+        for (const auto &eventType : sub.eventTypes_) {
+            eventTypeNames.push_back(eventType.getClassName());
+        }
+
+        std::ranges::sort(eventTypeNames);
+
+        return fmt::format("DXFeedSubscription #{} [{}]", sub.id_, fmt::join(eventTypeNames, ", "));
+    }
+
+    // The age of the newest event with a market time when the batch is received.
+    void checkEventLag(const DXFeedSubscription &sub, const std::vector<std::shared_ptr<EventType>> &events) {
+        // Its history comes with past times.
+        if (dynamic_cast<const DXFeedTimeSeriesSubscription *>(&sub) != nullptr) {
+            return;
+        }
+
+        std::int64_t newestTime = 0;
+
+        for (const auto &event : events) {
+            if (event) {
+                newestTime = (std::max)(newestTime, getMarketTime(*event));
+            }
+        }
+
+        // No event with a time.
+        if (newestTime <= 0) {
+            return;
+        }
+
+        const auto now = std::chrono::duration_cast<std::chrono::milliseconds>(
+                             std::chrono::system_clock::now().time_since_epoch())
+                             .count();
+        const auto lag = now - newestTime;
+
+        if (lag <= eventLagThresholdMillis_) {
+            return;
+        }
+
+        if (const auto suppressed = eventLagWarnings_.onExcess(lag, warningPeriodMillis_)) {
+            ErrorManager::reportWarning(
+                LISTENER_CHECKS_COMPONENT,
+                fmt::format("{}: the newest event of a batch of {} events is {} ms old (the threshold is {} ms, the "
+                            "system property {}).{} The events come late: a listener that blocks, a slow network or "
+                            "a difference between the clocks of this computer and of the source.",
+                            getName(sub), events.size(), lag, eventLagThresholdMillis_, EVENT_LAG_THRESHOLD_PROPERTY,
+                            suppressedToString(*suppressed, "late batches")));
+        }
+    }
+
+    void checkSlowListeners(const DXFeedSubscription &sub, std::chrono::steady_clock::duration elapsed,
+                            std::size_t batchSize) {
+        const auto elapsedMillis = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+
+        if (elapsedMillis <= slowListenerThresholdMillis_) {
+            return;
+        }
+
+        if (const auto suppressed = slowListenerWarnings_.onExcess(elapsedMillis, warningPeriodMillis_)) {
+            ErrorManager::reportWarning(
+                LISTENER_CHECKS_COMPONENT,
+                fmt::format("{}: the listeners took {} ms for a batch of {} events (the threshold is {} ms, the "
+                            "system property {}).{} A listener delays all the events of its subscription: move long "
+                            "work to another thread.",
+                            getName(sub), elapsedMillis, batchSize, slowListenerThresholdMillis_,
+                            SLOW_LISTENER_THRESHOLD_PROPERTY, suppressedToString(*suppressed, "slow batches")));
+        }
+    }
+
     static auto getManager() {
         return ApiContext::getInstance().getManager<WeakEntityManager<DXFeedSubscription>>();
     }
@@ -71,12 +294,37 @@ struct DXFeedSubscription::Impl {
 
 #endif
 
+                auto &impl = *sub->impl_;
+
+                // On receipt, before the listeners. A failed check must not stop the delivery of the batch.
+                if (impl.eventLagThresholdMillis_ > 0) {
+                    try {
+                        impl.checkEventLag(*sub, events);
+                    } catch (...) {
+                    }
+                }
+
+                const auto checkSlowListeners = impl.slowListenerThresholdMillis_ > 0;
+                const auto listenersStart =
+                    checkSlowListeners ? std::chrono::steady_clock::now() : std::chrono::steady_clock::time_point{};
+
 #if defined(DXFCXX_ENABLE_METRICS)
                 sw.restart();
 #endif
                 sub->onEvent_(events);
 #if defined(DXFCXX_ENABLE_METRICS)
                 sw.stop();
+#endif
+
+                if (checkSlowListeners) {
+                    try {
+                        impl.checkSlowListeners(*sub, std::chrono::steady_clock::now() - listenersStart,
+                                                events.size());
+                    } catch (...) {
+                    }
+                }
+
+#if defined(DXFCXX_ENABLE_METRICS)
 
                 const auto elapsed2 = sw.elapsedInNanos().count();
 
