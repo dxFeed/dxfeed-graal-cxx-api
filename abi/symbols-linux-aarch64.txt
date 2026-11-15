@@ -1,6 +1,6 @@
 # Exported symbols of the shared library (linux), made by scripts/symbols.py compare --update.
 # Own symbols one per line; the std:: instantiations only as their number.
-std-total: 343
+std-total: 346
 VTT for dxfcpp::v8::AdditionalUnderlyings
 VTT for dxfcpp::v8::AuthOrderSource
 VTT for dxfcpp::v8::CFI
@@ -428,6 +428,7 @@ dxfcpp::v8::DXEndpoint::create(void*, dxfcpp::v8::DXEndpoint::Role, std::unorder
 dxfcpp::v8::DXEndpoint::disconnect() const
 dxfcpp::v8::DXEndpoint::disconnectAndClear() const
 dxfcpp::v8::DXEndpoint::getAggregationPeriodInfo() const
+dxfcpp::v8::DXEndpoint::getConnectedSince() const
 dxfcpp::v8::DXEndpoint::getConnectors() const
 dxfcpp::v8::DXEndpoint::getEventTypes() const
 dxfcpp::v8::DXEndpoint::getFeed() const
@@ -526,6 +527,7 @@ dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(long) const
 dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(std::chrono::duration<long, std::ratio<1l, 1000l> >) const
 dxfcpp::v8::DXFeedSubscription::setEventListenerHandle(unsigned long)
 dxfcpp::v8::DXFeedSubscription::setEventsBatchLimit(int) const
+dxfcpp::v8::DXFeedSubscription::setSilenceWatchdog(std::chrono::duration<long, std::ratio<1l, 1000l> >, std::function<void (std::shared_ptr<dxfcpp::v8::DXFeedSubscription> const&, std::chrono::duration<long, std::ratio<1l, 1000l> >)>)
 dxfcpp::v8::DXFeedSubscription::setSymbols(std::initializer_list<dxfcpp::v8::SymbolWrapper>) const
 dxfcpp::v8::DXFeedSubscription::setSymbolsImpl(void*) const
 dxfcpp::v8::DXFeedSubscription::toString[abi:cxx11]() const
