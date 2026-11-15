@@ -13,6 +13,7 @@
 #include "../internal/managers/EntityManager.hpp"
 #include "../internal/utils/debug/Debug.hpp"
 #include "../isolated/api/IsolatedDXEndpoint.hpp"
+#include "../isolated/api/IsolatedMessageConnector.hpp"
 #include "../isolated/util/IsolatedTimePeriod.hpp"
 #include "../../include/dxfeed_graal_cpp_api/ondemand/OnDemandService.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
@@ -24,9 +25,11 @@
 #include <atomic>
 #include <cctype>
 #include <dxfg_api.h>
+#include <exception>
 #include <filesystem>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -161,13 +164,31 @@ struct DXEndpoint::Impl {
 
         std::shared_ptr<DXFeed> feed{};
         std::shared_ptr<DXPublisher> publisher{};
+        JavaObjectHandle<DXEndpointMessageConnectorListener> connectorListener{};
 
         {
             std::lock_guard lock{impl.mutex_};
 
             feed = impl.feed_;
             publisher = impl.publisher_;
+            connectorListener = std::move(impl.connectorListenerHandle_);
         }
+
+        // Removed and released out of the lock: the release waits for a call of the listener in progress, and a
+        // listener may take the lock (addMessageConnectorListener(), getFeed()).
+        if (connectorListener) {
+            try {
+                isolated::api::IsolatedMessageConnector::Listener::remove(endpoint.handle_, connectorListener);
+            } catch (...) {
+                ErrorManager::reportException("DXEndpoint", std::current_exception());
+            }
+
+            releaseOutsideCallbacks(
+                std::make_shared<JavaObjectHandle<DXEndpointMessageConnectorListener>>(std::move(connectorListener)));
+        }
+
+        // A listener that holds the endpoint must not keep it alive after the close.
+        impl.onConnectorChange_.removeAll();
 
         if (feed) {
             feed->releaseSubscriptions();
@@ -227,6 +248,43 @@ struct DXEndpoint::Impl {
         });
     }
 
+    // The listener of the message connectors of the SDK: called on the thread of the SDK listeners, one call at a time.
+    // The connector handle is valid during the call only, so the snapshot is taken here.
+    static void onMessageConnectorChange(graal_isolatethread_t * /*thread*/, dxfg_v4_message_connector_t *connector,
+                                         void *userData) {
+        runCallback("DXEndpoint", [&] {
+            const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
+            auto endpoint = getManager()->getEntity(id);
+
+            if (!endpoint) {
+                return;
+            }
+
+            auto &impl = *endpoint->impl_;
+            std::optional<MessageConnectorInfo> info{};
+            std::exception_ptr error{};
+
+            if (!impl.closed_) {
+                try {
+                    info = isolated::api::IsolatedMessageConnector::getInfo(connector);
+                } catch (...) {
+                    error = std::current_exception();
+                }
+            }
+
+            if (info) {
+                impl.onConnectorChange_(*info);
+            }
+
+            // The last pointer released inside the callback would release the listener that is being called.
+            releaseOutsideCallbacks(std::move(endpoint));
+
+            if (error) {
+                std::rethrow_exception(error);
+            }
+        });
+    }
+
     static std::shared_ptr<DXEndpoint> getInstance(Role role) {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
@@ -267,6 +325,12 @@ struct DXEndpoint::Impl {
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
     std::shared_ptr<OnDemandService> onDemandService_{};
+
+    // The listeners of the message connectors. The listener of the SDK that calls them is registered at the first
+    // addMessageConnectorListener(), so no snapshot is read before, and is removed and released when the endpoint is
+    // closed (onClosed()) or destroyed. The handle is guarded by mutex_.
+    SimpleHandler<void(const MessageConnectorInfo &)> onConnectorChange_{"DXEndpoint"};
+    JavaObjectHandle<DXEndpointMessageConnectorListener> connectorListenerHandle_{};
 
     std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint> &handle, std::weak_ptr<const DXEndpoint> endpoint) {
         std::lock_guard lock{mutex_};
@@ -709,6 +773,13 @@ DXEndpoint::~DXEndpoint() noexcept {
         });
     }
 
+    // The endpoint was not closed: the listener of the message connectors is removed here and released with impl_.
+    if (handle_ && impl_->connectorListenerHandle_) {
+        runRelease("DXEndpoint", [&] {
+            isolated::api::IsolatedMessageConnector::Listener::remove(handle_, impl_->connectorListenerHandle_);
+        });
+    }
+
     if (handle_) {
         runRelease("DXEndpoint", [&] {
             isolated::api::IsolatedDXEndpoint::close(handle_);
@@ -793,6 +864,40 @@ void DXEndpoint::removeStateChangeListener(std::size_t listenerId) noexcept {
 
 SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &DXEndpoint::onStateChange() noexcept {
     return onStateChange_;
+}
+
+std::optional<ConnectionError> DXEndpoint::getLastConnectionError() const {
+    return isolated::api::IsolatedMessageConnector::getLastConnectionError(handle_);
+}
+
+std::vector<MessageConnectorInfo> DXEndpoint::getConnectors() const {
+    return isolated::api::IsolatedMessageConnector::getConnectors(handle_);
+}
+
+std::size_t DXEndpoint::addMessageConnectorListener(std::function<void(const MessageConnectorInfo &)> listener) {
+    auto &impl = *impl_;
+    std::lock_guard lock{impl.mutex_};
+
+    // A closed endpoint calls no listener: nothing is registered for it.
+    if (!impl.connectorListenerHandle_ && !impl.closed_) {
+        auto connectorListener = isolated::api::IsolatedMessageConnector::Listener::create(
+            dxfcpp::bit_cast<void *>(&Impl::onMessageConnectorChange), dxfcpp::bit_cast<void *>(impl.id_));
+
+        isolated::api::IsolatedMessageConnector::Listener::add(handle_, connectorListener);
+        impl.connectorListenerHandle_ = std::move(connectorListener);
+    }
+
+    return impl.onConnectorChange_ += std::move(listener);
+}
+
+void DXEndpoint::removeMessageConnectorListener(std::size_t listenerId) noexcept {
+    try {
+        // The listener of the SDK stays registered until the endpoint is closed.
+        impl_->onConnectorChange_ -= listenerId;
+    } catch (...) {
+        // SimpleHandler::remove() copies the list of listeners: it can fail to allocate.
+        ErrorManager::reportException("DXEndpoint", std::current_exception());
+    }
 }
 
 void DXEndpoint::close() const {

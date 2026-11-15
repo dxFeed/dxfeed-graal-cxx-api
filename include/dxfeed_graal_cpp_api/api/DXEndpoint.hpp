@@ -13,16 +13,20 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../util/Handler.hpp"
 #include "../util/TimePeriod.hpp"
 #include "../util/TimePeriodInfo.hpp"
+#include "./ConnectionError.hpp"
 #include "./DXFeed.hpp"
 #include "./DXPublisher.hpp"
+#include "./MessageConnectorInfo.hpp"
 
 #include <chrono>
 #include <cstdint>
+#include <functional>
 #include <optional>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_api
@@ -679,6 +683,83 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @return onStateChange handler with `void(State, State)` signature
      */
     SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &onStateChange() noexcept;
+
+    /**
+     * Returns the last connection error of this endpoint: the newest failed connect attempt or dropped connection of
+     * all its connectors.
+     *
+     * A successful connection clears nothing: the time of the error tells how old it is. The error stays after a
+     * connect to another address and after the endpoint is closed.
+     *
+     * Read the error in a @ref DXEndpoint::addMessageConnectorListener() "connector listener": the error is recorded
+     * before that listener is called. A @ref DXEndpoint::addStateChangeListener() "state change listener" gives no such
+     * order (the state of the endpoint is computed on another thread, so the listener may be called before the error
+     * of that change is recorded), and failed connect attempts do not change the state of the endpoint at all: it stays
+     * @ref State::CONNECTING "CONNECTING" between them. There, compare the time or the count of the error with those
+     * seen before. See @ref connection_troubleshooting "Connection troubleshooting".
+     *
+     * This is an experimental API, it may change in future versions.
+     *
+     * @return The last connection error, or `std::nullopt` when the endpoint has had none.
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM, or the dxFeed Graal Native SDK library does not
+     * match the one the library was built with.
+     */
+    std::optional<ConnectionError> getLastConnectionError() const;
+
+    /**
+     * Returns the snapshots of the message connectors of this endpoint: one for each address it connects to.
+     *
+     * The list is empty when the endpoint is not connected, has the @ref Role::LOCAL_HUB "LOCAL_HUB" role, or is
+     * closed. Each call reads the connectors anew; the values of a snapshot are read one by one (see
+     * MessageConnectorInfo). See @ref connection_troubleshooting "Connection troubleshooting".
+     *
+     * This is an experimental API, it may change in future versions.
+     *
+     * @return The snapshots of the connectors.
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM, or the dxFeed Graal Native SDK library does not
+     * match the one the library was built with.
+     */
+    std::vector<MessageConnectorInfo> getConnectors() const;
+
+    /**
+     * Adds a listener called after the state of a message connector of this endpoint changes, with a snapshot of that
+     * connector taken at the call.
+     *
+     * The listener is called on one thread of the dxFeed Graal Native SDK for all the endpoints, not on the executor of
+     * the endpoint, one call at a time, never inside DXEndpoint::connect(); it should return quickly, since the next call
+     * waits for it. The connection error of a change is recorded before the call, so
+     * MessageConnectorInfo::lastError and DXEndpoint::getLastConnectionError() already return it. Fast changes of one
+     * connector may come as one call, and the first call for a new connector may read
+     * @ref MessageConnectorInfo::State::DISCONNECTED "DISCONNECTED" before a later one reads
+     * @ref MessageConnectorInfo::State::CONNECTING "CONNECTING". The current states are not passed to a listener when
+     * it is added: call DXEndpoint::getConnectors() after adding it. An exception of the listener is reported to
+     * ErrorManager. Once the endpoint is closed no new call starts and the listeners are removed. DXEndpoint::close()
+     * may wait for a call in progress, so the listener must not wait for the thread that closes the endpoint; the call
+     * may also end after DXEndpoint::close() returns.
+     *
+     * The first call registers a listener of the endpoint in the dxFeed Graal Native SDK, so it can fail.
+     *
+     * This is an experimental API, it may change in future versions.
+     *
+     * @param listener The listener to add.
+     * @return The listener id, for DXEndpoint::removeMessageConnectorListener().
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM, or the dxFeed Graal Native SDK library does not
+     * match the one the library was built with.
+     */
+    std::size_t addMessageConnectorListener(std::function<void(const MessageConnectorInfo &)> listener);
+
+    /**
+     * Removes a listener added with DXEndpoint::addMessageConnectorListener(). Outside a listener of the library, waits
+     * for the calls of the listener in progress on the other threads.
+     *
+     * This is an experimental API, it may change in future versions.
+     *
+     * @param listenerId The listener id.
+     */
+    void removeMessageConnectorListener(std::size_t listenerId) noexcept;
 
     /**
      * Changes username for this endpoint.

@@ -51,6 +51,7 @@ set(DXFC_TEST_SOURCES
         api/LifetimeTest.cpp
         api/MarketEventSymbolsTest.cpp
         api/MarketMakerTest.cpp
+        api/MessageConnectorTest.cpp
         api/NuamEventsTest.cpp
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderImbalanceTest.cpp
