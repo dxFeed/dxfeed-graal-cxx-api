@@ -56,6 +56,7 @@ set(DXFC_TEST_SOURCES
         api/ObservableSubscriptionLifecycleTest.cpp
         api/OrderImbalanceTest.cpp
         api/OrderSourceTest.cpp
+        api/SilenceWatchdogTest.cpp
         api/SlowListenerWarningTest.cpp
         api/StringParamApiTest.cpp
         api/StringParamTest.cpp

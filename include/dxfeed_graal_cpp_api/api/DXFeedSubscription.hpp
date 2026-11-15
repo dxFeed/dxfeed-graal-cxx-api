@@ -20,8 +20,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./osub/ObservableSubscription.hpp"
 
 #include <atomic>
+#include <chrono>
 #include <concepts>
 #include <cstddef>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <type_traits>
@@ -67,6 +69,10 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * (never). A subscription reads the properties when it is created (System::setProperty() or the isolate arguments,
  * see @ref isolate_arguments "Isolate arguments"): a change does not affect the subscriptions that exist. A value that
  * is not a time period is reported as a warning once, and the default is used.
+ *
+ * The opposite problem, a subscription that receives no events while its endpoint stays connected, is reported by the
+ * silence watchdog of the subscription, which is off by default: see DXFeedSubscription::setSilenceWatchdog(). Its
+ * function is called on a thread of the library, not of the executor of the endpoint.
  */
 
 /**
@@ -379,6 +385,71 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * released. See @ref entity_lifetime "Lifetime of the entities" and AutoClose.
      */
     void close() const;
+
+    /**
+     * The function that the silence watchdog calls (see setSilenceWatchdog()): the subscription and the time since its
+     * silence began.
+     */
+    using OnSilenceHandler =
+        std::function<void(const std::shared_ptr<DXFeedSubscription> &subscription, std::chrono::milliseconds silence)>;
+
+    /**
+     * Turns the silence watchdog of this subscription on or off. It is off by default.
+     *
+     * When the subscription receives no events for `timeout` while the endpoint of its feed is connected
+     * (DXEndpoint::State::CONNECTED), the library reports a warning through ErrorManager (ErrorInfo::Level::WARN, the
+     * component `DXFeedSubscription`) with the name of the subscription (its number and event types) and the time of
+     * the silence, then calls `onSilence`. This happens once per silence: the next batch of events, a new connection of
+     * the endpoint or an attach to a feed arm the watchdog again. The silence is counted from the latest of these: the
+     * last batch of events, this call, the attach to a feed and the transition of the endpoint to CONNECTED. A
+     * subscription that is attached to no feed, or whose endpoints are not connected, is not watched; with several
+     * connected endpoints the earliest connection counts.
+     *
+     * The data can stop while the connection stays up: the state of the endpoint does not change, and nothing else
+     * tells about it. The watchdog is off by default because a silence is not always a failure: a symbol that does not
+     * trade, a quiet market, the hours outside the trading session and a subscription without symbols receive no events
+     * for a long time. Choose a timeout above the usual pause of the symbols of the subscription, or watch a separate
+     * subscription to a symbol that is always active.
+     *
+     * `onSilence` is called on a thread of the library, one for all the subscriptions, outside of its locks. It may
+     * call the methods of the subscription and of the endpoint, for example reconnect:
+     *
+     * ```cpp
+     * auto endpoint = DXEndpoint::create()->connect("demo.dxfeed.com:7300");
+     * auto sub = endpoint->getFeed()->createSubscription(Quote::TYPE);
+     *
+     * sub->addEventListener<Quote>([](const auto &quotes) { ... });
+     * sub->addSymbols("AAPL");
+     *
+     * // A weak pointer: the subscription must not own its endpoint.
+     * sub->setSilenceWatchdog(std::chrono::seconds(30),
+     *                         [weakEndpoint = std::weak_ptr<DXEndpoint>(endpoint)](const auto &, auto silence) {
+     *                             if (const auto endpoint = weakEndpoint.lock()) {
+     *                                 endpoint->reconnect();
+     *                             }
+     *                         });
+     * ```
+     *
+     * Each new connection arms the watchdog again: if the symbols stay silent, such a function reconnects once per
+     * timeout. Count the reconnects or pause them if this is not wanted.
+     *
+     * `onSilence` should return soon: it delays the watchdog of the other subscriptions and the shutdown of the library
+     * at exit. Like a listener, it must not
+     * call dxfcpp::shutdown(). Its exception is reported through ErrorManager. close() of the subscription and a call
+     * with a zero timeout stop the watchdog, but do not wait for a call of `onSilence` in progress.
+     *
+     * A new call replaces the timeout and the function and arms the watchdog again. On a closed subscription it does
+     * nothing.
+     *
+     * The watchdog receives the events as an event listener does. So, like addEventListener(), on a subscription
+     * without event listeners it must be turned on before symbols are added to the attached subscription.
+     *
+     * @param timeout The silence to report; 0 or less turns the watchdog off.
+     * @param onSilence The function to call, or an empty one for the warning only.
+     * @throws JavaException IllegalStateException if the subscription has no event listeners, is attached and has
+     * symbols. The watchdog does not change then.
+     */
+    void setSilenceWatchdog(std::chrono::milliseconds timeout, OnSilenceHandler onSilence = {});
 
     /**
      * Returns a set of subscribed event types.

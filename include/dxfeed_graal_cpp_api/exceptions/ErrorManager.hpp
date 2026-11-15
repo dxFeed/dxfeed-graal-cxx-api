@@ -46,7 +46,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * - **A warning** is reported from inside a call that goes on (for example, a `fromTime` in the future given to a
  *   TimeSeriesTxModel, a candle symbol string without a period given to CandleSymbol::valueOf(), see
  *   @ref candle_symbols "Candle symbols"; a slow listener of a subscription, see
- *   @ref listener_threads "Listeners and threads"): the call does not throw and does not change its result. The
+ *   @ref listener_threads "Listeners and threads"; a subscription without events while its endpoint is connected,
+ *   when its silence watchdog is on, see DXFeedSubscription::setSilenceWatchdog()): the call does not throw and does
+ *   not change its result. The
  *   library reports it with ErrorManager::reportWarning(), and it has the level ErrorInfo::Level::WARN, while the
  *   errors have ErrorInfo::Level::ERROR (ErrorInfo::level). A warning shares the handler, the journal and
  *   ErrorManager::getLastError() with the errors.

@@ -447,6 +447,7 @@ dxfcpp::v8::DXEndpoint::create(void*, dxfcpp::v8::DXEndpoint::Role, std::__1::un
 dxfcpp::v8::DXEndpoint::disconnect() const
 dxfcpp::v8::DXEndpoint::disconnectAndClear() const
 dxfcpp::v8::DXEndpoint::getAggregationPeriodInfo() const
+dxfcpp::v8::DXEndpoint::getConnectedSince() const
 dxfcpp::v8::DXEndpoint::getConnectors() const
 dxfcpp::v8::DXEndpoint::getEventTypes() const
 dxfcpp::v8::DXEndpoint::getFeed() const
@@ -545,6 +546,7 @@ dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(long long) const
 dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>) const
 dxfcpp::v8::DXFeedSubscription::setEventListenerHandle(unsigned long)
 dxfcpp::v8::DXFeedSubscription::setEventsBatchLimit(int) const
+dxfcpp::v8::DXFeedSubscription::setSilenceWatchdog(std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>, std::__1::function<void (std::__1::shared_ptr<dxfcpp::v8::DXFeedSubscription> const&, std::__1::chrono::duration<long long, std::__1::ratio<1l, 1000l>>)>)
 dxfcpp::v8::DXFeedSubscription::setSymbols(std::initializer_list<dxfcpp::v8::SymbolWrapper>) const
 dxfcpp::v8::DXFeedSubscription::setSymbolsImpl(void*) const
 dxfcpp::v8::DXFeedSubscription::toString() const

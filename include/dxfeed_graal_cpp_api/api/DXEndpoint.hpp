@@ -531,6 +531,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     // Returns the on-demand service of this endpoint: one instance, created on the first call.
     std::shared_ptr<OnDemandService> getOnDemandService();
 
+    // The silence watchdog of a subscription counts the silence only while the endpoint of its feed is connected.
+    friend class DXFeedSubscription;
+
+    // Returns the time of the last transition to CONNECTED, or nothing while the endpoint is not connected.
+    std::optional<std::chrono::steady_clock::time_point> getConnectedSince() const noexcept;
+
     struct Impl;
 
     std::unique_ptr<Impl> impl_;
