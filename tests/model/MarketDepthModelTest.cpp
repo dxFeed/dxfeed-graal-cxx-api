@@ -14,6 +14,8 @@
 
 #include <doctest.h>
 
+#include "../support/TestSupport.hpp"
+
 using namespace std::literals;
 using namespace dxfcpp;
 
@@ -630,4 +632,161 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestModelWithoutListener") {
     publishAndProcess(createOrder(0, Side::BUY, 1, 1, (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END).getMask()));
     publishAndProcess(createOrder(1, Side::SELL, 2, 1, 0));
     model->close();
+}
+
+namespace {
+
+// The warnings of the market depth models.
+std::vector<ErrorInfo> crossedBookWarnings() {
+    std::vector<ErrorInfo> result{};
+
+    for (const auto &error : ErrorManager::getErrors()) {
+        if (error.level == ErrorInfo::Level::WARN && error.component == "MarketDepthModel") {
+            result.push_back(error);
+        }
+    }
+
+    return result;
+}
+
+bool contains(const std::string &string, const std::string &part) {
+    return string.find(part) != std::string::npos;
+}
+
+std::uint32_t snapshot() {
+    return (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END).getMask();
+}
+
+} // namespace
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestCrossedBookWarning") {
+    test::ErrorManagerGuard errorManagerGuard{};
+
+    SUBCASE("One warning per period") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(true)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        REQUIRE(crossedBookWarnings().empty());
+
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+
+        auto warnings = crossedBookWarnings();
+
+        REQUIRE_EQ(warnings.size(), 1u);
+        CHECK(contains(warnings[0].message, symbol_));
+        CHECK(contains(warnings[0].message, "the best bid 101.0 (source DEFAULT)"));
+        CHECK(contains(warnings[0].message, "the best ask 100.0 (source DEFAULT)"));
+
+        publishAndProcess(true, createOrder(1, Side::SELL, 99, 1, 0));
+        publishAndProcess(true, createOrder(1, Side::SELL, 98, 1, 0));
+        CHECK_EQ(crossedBookWarnings().size(), 1u);
+    }
+
+    SUBCASE("Disabled by default") {
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        checkBuySize(1);
+        checkSellSize(1);
+        CHECK(crossedBookWarnings().empty());
+    }
+
+    SUBCASE("Disabled explicitly") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(false)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        CHECK(crossedBookWarnings().empty());
+    }
+
+    SUBCASE("Period 0 reports every crossing") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(true, 0ms)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        publishAndProcess(true, createOrder(1, Side::SELL, 99, 1, 0));
+        CHECK_EQ(crossedBookWarnings().size(), 2u);
+    }
+
+    SUBCASE("The next warning counts the suppressed crossings") {
+        model_->close();
+        // A period long enough for the two transactions on a loaded machine.
+        model_ = createBuilder()->withCrossedBookWarning(true, 1s)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        publishAndProcess(true, createOrder(1, Side::SELL, 99, 1, 0));
+        REQUIRE_EQ(crossedBookWarnings().size(), 1u);
+
+        std::this_thread::sleep_for(1200ms);
+        publishAndProcess(true, createOrder(1, Side::SELL, 98, 1, 0));
+
+        const auto warnings = crossedBookWarnings();
+
+        REQUIRE_EQ(warnings.size(), 2u);
+        CHECK_FALSE(contains(warnings[0].message, "since the previous warning"));
+        CHECK(contains(warnings[1].message, "the best ask 98.0"));
+        CHECK(contains(warnings[1].message, "Transactions with a crossed book since the previous warning: 1."));
+    }
+
+    SUBCASE("A locked book or one side is not a crossing") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(true, 0ms)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(2, Side::BUY, 102, 1, 0));
+        publishAndProcess(true, createOrder(1, Side::SELL, 102, 1, 0));
+        checkBuySize(2);
+        checkSellSize(1);
+        CHECK(crossedBookWarnings().empty());
+    }
+
+    SUBCASE("The depth limit does not hide a crossing") {
+        model_->close();
+        model_ = createBuilder()->withDepthLimit(1)->withCrossedBookWarning(true)->build();
+
+        publishAndProcess(true, {createOrder(2, Side::BUY, 101, 1, EventFlag::SNAPSHOT_BEGIN.getFlag()),
+                                 createOrder(0, Side::BUY, 90, 1, EventFlag::SNAPSHOT_END.getFlag())});
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        checkBuySize(1);
+
+        const auto warnings = crossedBookWarnings();
+
+        REQUIRE_EQ(warnings.size(), 1u);
+        CHECK(contains(warnings[0].message, "the best bid 101.0"));
+    }
+
+    SUBCASE("A warning is reported before an aggregated notification") {
+        model_->close();
+        model_ = createBuilder()->withAggregationPeriod(1h)->withCrossedBookWarning(true)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(false, createOrder(1, Side::SELL, 100, 1, 0));
+        CHECK_EQ(crossedBookWarnings().size(), 1u);
+    }
+
+    SUBCASE("The handler of the warning can close the model") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(true)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+
+        std::size_t handlerCalls = 0;
+
+        // The warning comes before the listener and outside the locks of the model: closing it does not deadlock,
+        // and the listener is not called for the transaction.
+        ErrorManager::setHandler([&](const ErrorInfo &error) {
+            if (error.component == "MarketDepthModel") {
+                handlerCalls++;
+                model_->close();
+            }
+        });
+
+        publishAndProcess(false, createOrder(1, Side::SELL, 100, 1, 0));
+        CHECK_EQ(handlerCalls, 1u);
+    }
+
+    model_->close();
 }
