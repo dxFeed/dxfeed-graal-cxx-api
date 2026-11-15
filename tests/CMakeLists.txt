@@ -288,6 +288,19 @@ if (DXFCXX_BUILD_TOOLS)
             -DARG2=Quote -DARG3=AAPL -DARG4=--duration -DARG5=3 -DEXPECTED_EXIT=5
             "-DEXPECTED_OUTPUT=Verdict: CANNOT RESOLVE" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
     set_tests_properties(dxFeedGraalCxxApi_tools_DiagnoseCannotResolve PROPERTIES TIMEOUT 120)
+
+    # The exit code is checked: the leaks of the Graal isolate at exit are suppressed, as for the other tests.
+    if (DXFCXX_SANITIZERS_ENABLED)
+        foreach (DXFC_DIAGNOSE_TEST dxFeedGraalCxxApi_tools_DiagnoseCannotConnect
+                dxFeedGraalCxxApi_tools_DiagnoseCannotResolve dxFeedGraalCxxApi_network_ToolsDiagnoseData)
+            if (TEST ${DXFC_DIAGNOSE_TEST})
+                set_property(TEST ${DXFC_DIAGNOSE_TEST} APPEND PROPERTY ENVIRONMENT
+                        "UBSAN_OPTIONS=print_stacktrace=1"
+                        "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
+                        "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+            endif ()
+        endforeach ()
+    endif ()
 endif ()
 
 # Sanitizer canaries: a deliberately defective LIBRARY function must produce the report of each active sanitizer.
