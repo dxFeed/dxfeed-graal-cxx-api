@@ -59,7 +59,8 @@ std::string resolveErrorText(int code) {
 bool setNonBlocking(Socket socket) {
     u_long mode = 1;
 
-    return ioctlsocket(socket, FIONBIO, &mode) == 0;
+    // FIONBIO is an unsigned long constant; the command parameter is a long.
+    return ioctlsocket(socket, static_cast<long>(FIONBIO), &mode) == 0;
 }
 
 bool isConnectInProgress(int error) {
