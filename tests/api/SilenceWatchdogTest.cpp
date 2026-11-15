@@ -185,11 +185,21 @@ TEST_CASE("DXFeedSubscription :: silence watchdog :: a new connection or a new c
         return watched->silences.load() == 1;
     }));
 
-    // A new connection: a new silence.
+    // A new connection: a new silence. The endpoint notifies the state asynchronously and skips a state that has passed,
+    // so the next connect() waits for the notification of the disconnect.
+    const auto disconnects = std::make_shared<std::atomic<int>>(0);
+    const auto listenerId =
+        loopback.feedEndpoint->addStateChangeListener([disconnects](DXEndpoint::State, DXEndpoint::State newState) {
+            if (newState == DXEndpoint::State::NOT_CONNECTED) {
+                ++*disconnects;
+            }
+        });
+
     loopback.feedEndpoint->disconnect();
     REQUIRE(test::waitUntil([&] {
-        return loopback.feedEndpoint->getState() == DXEndpoint::State::NOT_CONNECTED;
+        return disconnects->load() > 0;
     }));
+    loopback.feedEndpoint->removeStateChangeListener(listenerId);
     loopback.connectFeed();
 
     REQUIRE(test::waitUntil([&] {
