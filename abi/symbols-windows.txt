@@ -570,6 +570,7 @@ class std::optional<class std::basic_string<char,struct std::char_traits<char>,c
 class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TimeAndSale::getExchangeSaleConditionsOpt(void)const&
 class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > const & dxfcpp::v8::TimeAndSale::getSellerOpt(void)const&
 class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > dxfcpp::v8::MarketMaker::getMarketMakerOpt(void)const
+class std::optional<class std::chrono::time_point<struct std::chrono::steady_clock,class std::chrono::duration<__int64,struct std::ratio<1,1000000000> > > > dxfcpp::v8::DXEndpoint::getConnectedSince(void)const
 class std::optional<struct dxfcpp::v8::CandleAlignment> const & dxfcpp::v8::CandleSymbol::getAlignment(void)const&
 class std::optional<struct dxfcpp::v8::CandleDataType> const & dxfcpp::v8::CandleSymbol::getDataType(void)const&
 class std::optional<struct dxfcpp::v8::CandleExchange> const & dxfcpp::v8::CandleSymbol::getExchange(void)const&
@@ -3015,6 +3016,7 @@ void dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(class std::chrono::dur
 void dxfcpp::v8::DXFeedSubscription::setAggregationPeriod(struct dxfcpp::v8::TimePeriod const &)const
 void dxfcpp::v8::DXFeedSubscription::setEventListenerHandle(unsigned __int64)
 void dxfcpp::v8::DXFeedSubscription::setEventsBatchLimit(int)const
+void dxfcpp::v8::DXFeedSubscription::setSilenceWatchdog(class std::chrono::duration<__int64,struct std::ratio<1,1000> >,class std::function<void (class std::shared_ptr<class dxfcpp::v8::DXFeedSubscription> const &,class std::chrono::duration<__int64,struct std::ratio<1,1000> >)>)
 void dxfcpp::v8::DXFeedSubscription::setSymbols(class std::initializer_list<struct dxfcpp::v8::SymbolWrapper>)const
 void dxfcpp::v8::DXFeedSubscription::setSymbolsImpl(void *)const
 void dxfcpp::v8::DXFeedTimeSeriesSubscription::__autoclassinit2(unsigned __int64)

@@ -3,6 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp"
 
+#include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
@@ -25,6 +26,7 @@
 #include <algorithm>
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <cstdint>
 #include <dxfg_api.h>
 #include <exception>
@@ -34,6 +36,8 @@
 #include <mutex>
 #include <optional>
 #include <string>
+#include <thread>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -148,6 +152,48 @@ std::int64_t getMarketTime(const EventType &event) noexcept {
     return 0;
 }
 
+std::int64_t steadyNowNanos() noexcept {
+    return std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now().time_since_epoch())
+        .count();
+}
+
+// The subscriptions with the silence watchdog on (DXFeedSubscription::setSilenceWatchdog()) and the thread that checks
+// them. One thread for all the subscriptions, started on the first use and never stopped.
+struct SilenceWatchdog {
+    struct Entry {
+        std::weak_ptr<DXFeedSubscription> subscription{};
+        std::chrono::milliseconds timeout{};
+        // Each setSilenceWatchdog() creates a new entry: the results of a check of the replaced one are dropped.
+        std::uint64_t generation{};
+        std::chrono::steady_clock::time_point deadline{};
+        // The start of the silence that has been reported, in nanoseconds of steady_clock (only the thread changes it).
+        std::int64_t reportedSilenceStart{};
+    };
+
+    std::mutex mutex{};
+    std::condition_variable changed{};
+    std::unordered_map<std::size_t, Entry> entries{}; // by the id of the subscription
+    std::uint64_t lastGeneration{};
+    bool started{false};
+
+    // Never destroyed: the detached thread uses it until the end of the process.
+    static SilenceWatchdog &getInstance() {
+        static auto &instance = *new SilenceWatchdog{};
+
+        return instance;
+    }
+
+    // Removes the entry of a subscription. The weak pointer is released under the mutex: no destructor of a subscription
+    // runs here.
+    void remove(std::size_t id) {
+        std::lock_guard lock{mutex};
+
+        if (entries.erase(id) > 0) {
+            changed.notify_all();
+        }
+    }
+};
+
 } // namespace
 
 struct DXFeedSubscription::Impl {
@@ -166,6 +212,19 @@ struct DXFeedSubscription::Impl {
 
     WarningLimiter slowListenerWarnings_{};
     WarningLimiter eventLagWarnings_{};
+
+    // The silence watchdog (setSilenceWatchdog()); the times are nanoseconds of steady_clock. While it is on, the thread
+    // of the events only stores the time of each batch.
+    std::atomic<bool> silenceWatchdogOn_{false};
+    std::atomic<std::int64_t> lastBatchNanos_{0};
+    // The time of setSilenceWatchdog() or of the last attach to a feed.
+    std::atomic<std::int64_t> silenceArmedNanos_{0};
+    // A pointer: the watchdog takes the function under the mutex without a call of the code of the user.
+    std::mutex silenceMutex_{};
+    std::shared_ptr<const OnSilenceHandler> onSilence_{};
+    // Under the mutex: the generation of the entry of the watchdog, 0 while it is off. A check that waited behind
+    // another onSilence reports nothing after the watchdog was turned off or replaced.
+    std::uint64_t silenceGeneration_{};
 
     Impl()
         : slowListenerThresholdMillis_(readTimePeriodProperty(
@@ -255,6 +314,251 @@ struct DXFeedSubscription::Impl {
         return ApiContext::getInstance().getManager<WeakEntityManager<DXFeedSubscription>>();
     }
 
+    // The result of a check of one subscription by the silence watchdog.
+    struct SilenceCheck {
+        std::size_t id{};
+        std::uint64_t generation{};
+        bool remove{};
+        std::chrono::steady_clock::time_point deadline{};
+        std::int64_t reportedSilenceStart{};
+    };
+
+    // The earliest connection among the connected endpoints of the feeds of a subscription.
+    static std::optional<std::chrono::steady_clock::time_point> getConnectedSince(const DXFeedSubscription &sub) {
+        std::vector<std::weak_ptr<const DXFeed>> feeds{};
+
+        {
+            std::lock_guard guard{sub.feedsMutex_};
+
+            feeds = sub.feeds_;
+        }
+
+        std::optional<std::chrono::steady_clock::time_point> result{};
+
+        for (const auto &weakFeed : feeds) {
+            const auto feed = weakFeed.lock();
+
+            if (!feed) {
+                continue;
+            }
+
+            const auto endpoint = feed->endpoint_.lock();
+
+            if (!endpoint) {
+                continue;
+            }
+
+            if (const auto since = endpoint->getConnectedSince(); since && (!result || *since < *result)) {
+                result = since;
+            }
+        }
+
+        return result;
+    }
+
+    // Checks one subscription: reports its silence and calls onSilence once the silence lasts for the timeout.
+    static void checkSilence(const std::shared_ptr<DXFeedSubscription> &sub, std::chrono::milliseconds timeout,
+                             SilenceCheck &check) {
+        auto &impl = *sub->impl_;
+        const auto now = std::chrono::steady_clock::now();
+        const auto connectedSince = getConnectedSince(*sub);
+
+        // Not connected: checked again later for a connection.
+        if (!connectedSince) {
+            check.deadline = now + timeout;
+
+            return;
+        }
+
+        const auto silenceStart = (std::max)(
+            {impl.lastBatchNanos_.load(), impl.silenceArmedNanos_.load(),
+             static_cast<std::int64_t>(
+                 std::chrono::duration_cast<std::chrono::nanoseconds>(connectedSince->time_since_epoch()).count())});
+        const auto silence = std::chrono::nanoseconds{
+            std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count() - silenceStart};
+
+        if (silence < timeout) {
+            check.deadline = now + (timeout - silence);
+
+            return;
+        }
+
+        // Checked again later for a new batch or a new connection.
+        check.deadline = now + timeout;
+
+        if (check.reportedSilenceStart == silenceStart) {
+            return;
+        }
+
+        check.reportedSilenceStart = silenceStart;
+
+        std::shared_ptr<const OnSilenceHandler> onSilence{};
+
+        {
+            std::lock_guard lock{impl.silenceMutex_};
+
+            // Turned off or replaced after the check began.
+            if (impl.silenceGeneration_ != check.generation) {
+                return;
+            }
+
+            onSilence = impl.onSilence_;
+        }
+
+        if (sub->closed_) {
+            return;
+        }
+
+        const auto silenceMillis = std::chrono::duration_cast<std::chrono::milliseconds>(silence);
+
+        try {
+            ErrorManager::reportWarning(
+                LISTENER_CHECKS_COMPONENT,
+                fmt::format("{}: no events for {} ms while the endpoint is connected (the silence watchdog, the timeout "
+                            "is {} ms). The data may have stopped before it reached this endpoint; a symbol that does "
+                            "not trade, a quiet market or a subscription without symbols is silent too.",
+                            getName(*sub), silenceMillis.count(), timeout.count()));
+        } catch (...) {
+            // No memory for the message: onSilence is called anyway.
+        }
+
+        if (onSilence && *onSilence) {
+            try {
+                (*onSilence)(sub, silenceMillis);
+            } catch (...) {
+                ErrorManager::reportException(LISTENER_CHECKS_COMPONENT, std::current_exception());
+            }
+        }
+    }
+
+    // Checks the subscriptions whose deadlines have come.
+    static void checkSilences(SilenceWatchdog &watchdog, std::vector<std::pair<std::size_t, SilenceWatchdog::Entry>> &due,
+                              std::vector<SilenceCheck> &checks) {
+        // Released after the mutex below. The last pointer to a subscription closes it here, in the callback scope: the
+        // close passes the native listener to the release thread (releaseOutsideCallbacks()).
+        std::vector<std::shared_ptr<DXFeedSubscription>> subs{};
+
+        subs.reserve(due.size());
+        checks.reserve(due.size());
+
+        for (const auto &[id, entry] : due) {
+            SilenceCheck check{id, entry.generation, false, entry.deadline, entry.reportedSilenceStart};
+            auto sub = entry.subscription.lock();
+
+            if (!sub || sub->closed_) {
+                check.remove = true;
+            } else {
+                try {
+                    checkSilence(sub, entry.timeout, check);
+                } catch (...) {
+                    ErrorManager::reportException(LISTENER_CHECKS_COMPONENT, std::current_exception());
+                }
+
+                subs.push_back(std::move(sub));
+            }
+
+            checks.push_back(check);
+        }
+
+        std::lock_guard lock{watchdog.mutex};
+
+        for (const auto &check : checks) {
+            const auto found = watchdog.entries.find(check.id);
+
+            // Turned off or replaced during the check.
+            if (found == watchdog.entries.end() || found->second.generation != check.generation) {
+                continue;
+            }
+
+            if (check.remove) {
+                watchdog.entries.erase(found);
+            } else {
+                found->second.deadline = check.deadline;
+                found->second.reportedSilenceStart = check.reportedSilenceStart;
+            }
+        }
+    }
+
+    // The thread of the silence watchdog: sleeps until the nearest deadline or a change of the entries.
+    static void runSilenceWatchdog() noexcept {
+        auto &watchdog = SilenceWatchdog::getInstance();
+        std::vector<std::pair<std::size_t, SilenceWatchdog::Entry>> due{};
+        std::vector<SilenceCheck> checks{};
+
+        for (;;) {
+            try {
+                due.clear();
+                checks.clear();
+
+                {
+                    std::unique_lock lock{watchdog.mutex};
+
+                    for (;;) {
+                        const auto now = std::chrono::steady_clock::now();
+                        std::optional<std::chrono::steady_clock::time_point> nearest{};
+
+                        for (const auto &[id, entry] : watchdog.entries) {
+                            if (!nearest || entry.deadline < *nearest) {
+                                nearest = entry.deadline;
+                            }
+                        }
+
+                        if (nearest && *nearest <= now) {
+                            for (auto &[id, entry] : watchdog.entries) {
+                                if (entry.deadline <= now) {
+                                    // Until the check sets the next deadline: a skipped or failed check (the shutdown
+                                    // of the library, no memory) does not make a busy loop.
+                                    entry.deadline = now + entry.timeout;
+                                    due.emplace_back(id, entry);
+                                }
+                            }
+
+                            break;
+                        }
+
+                        if (nearest) {
+                            watchdog.changed.wait_until(lock, *nearest);
+                        } else {
+                            watchdog.changed.wait(lock);
+                        }
+                    }
+                }
+
+                // Outside the mutex of the watchdog: onSilence may turn the watchdog off or close the subscription. The
+                // shutdown of the library waits for the check in progress and skips the next ones.
+                runCallback(LISTENER_CHECKS_COMPONENT, [&] {
+                    checkSilences(watchdog, due, checks);
+                });
+            } catch (...) {
+                ErrorManager::reportException(LISTENER_CHECKS_COMPONENT, std::current_exception());
+
+                // No memory: waits before the next attempt.
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+        }
+    }
+
+    // Adds or replaces the entry of a subscription and starts the thread on the first use. Returns the generation of the
+    // entry.
+    static std::uint64_t watchSilence(std::size_t id, std::weak_ptr<DXFeedSubscription> sub, std::chrono::milliseconds timeout,
+                             std::chrono::steady_clock::time_point now) {
+        auto &watchdog = SilenceWatchdog::getInstance();
+        std::lock_guard lock{watchdog.mutex};
+
+        if (!watchdog.started) {
+            std::thread{runSilenceWatchdog}.detach();
+            watchdog.started = true;
+        }
+
+        const auto generation = ++watchdog.lastGeneration;
+
+        watchdog.entries.insert_or_assign(
+            id, SilenceWatchdog::Entry{std::move(sub), timeout, generation, now + timeout, 0});
+        watchdog.changed.notify_all();
+
+        return generation;
+    }
+
     static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
         runCallback("DXFeedSubscription", [&] {
 #if defined(DXFCXX_ENABLE_METRICS)
@@ -267,6 +571,13 @@ struct DXFeedSubscription::Impl {
                 // The batch came after close(): it is dropped.
                 if (sub->closed_) {
                     return;
+                }
+
+                auto &impl = *sub->impl_;
+
+                // Before the skipped events: a batch of them is live data too.
+                if (impl.silenceWatchdogOn_.load(std::memory_order_relaxed)) {
+                    impl.lastBatchNanos_.store(steadyNowNanos(), std::memory_order_relaxed);
                 }
 
 #if defined(DXFCXX_ENABLE_METRICS)
@@ -293,8 +604,6 @@ struct DXFeedSubscription::Impl {
                 metricsManager->set(std::format("DXFCXX.Sub.{}.onEvents.fromGraalList.Event(ns)", id.getValue()), perEvent);
 
 #endif
-
-                auto &impl = *sub->impl_;
 
                 // On receipt, before the listeners. A failed check must not stop the delivery of the batch.
                 if (impl.eventLagThresholdMillis_ > 0) {
@@ -345,10 +654,13 @@ DXFeedSubscription::createSubscriptionHandleFromEventClassList(const std::unique
 }
 
 void DXFeedSubscription::setEventListenerHandle(std::size_t id) {
-    eventListenerHandle_ = isolated::api::IsolatedDXFeedSubscription::DXFeedEventListener::create(
+    auto eventListenerHandle = isolated::api::IsolatedDXFeedSubscription::DXFeedEventListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onEvents), dxfcpp::bit_cast<void *>(id));
 
-    isolated::api::IsolatedDXFeedSubscription::addEventListener(handle_, eventListenerHandle_);
+    isolated::api::IsolatedDXFeedSubscription::addEventListener(handle_, eventListenerHandle);
+    // Only when added: after an exception (IllegalStateException of a subscription with symbols), the next call tries
+    // again instead of taking the native listener for added.
+    eventListenerHandle_ = std::move(eventListenerHandle);
 }
 
 bool DXFeedSubscription::tryToSetEventListenerHandle() {
@@ -474,6 +786,9 @@ void DXFeedSubscription::addFeed(const std::shared_ptr<const DXFeed> &feed) cons
     }
 
     feeds_.push_back(feed);
+
+    // The silence is counted from the attach.
+    impl_->silenceArmedNanos_.store(steadyNowNanos());
 }
 
 void DXFeedSubscription::removeFeed(const DXFeed *feed) const {
@@ -526,6 +841,21 @@ void DXFeedSubscription::close() const {
 
     // Keeps the subscription alive until the end: the feeds may hold its last pointers. Empty in the destructor.
     const auto self = sharedAs<const DXFeedSubscription>();
+    // The silence watchdog stops without waiting for a call of onSilence in progress; the function is released at the
+    // end, outside the mutex.
+    std::shared_ptr<const OnSilenceHandler> onSilence{};
+
+    {
+        std::lock_guard lock{impl_->silenceMutex_};
+
+        if (impl_->silenceWatchdogOn_.exchange(false)) {
+            SilenceWatchdog::getInstance().remove(id_);
+        }
+
+        impl_->silenceGeneration_ = 0;
+        onSilence = std::move(impl_->onSilence_);
+    }
+
     std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners{};
     // The listeners and the owners are released even if the Java close fails; its error is thrown at the end.
     std::exception_ptr error{};
@@ -581,6 +911,46 @@ void DXFeedSubscription::close() const {
     if (error) {
         std::rethrow_exception(error);
     }
+}
+
+void DXFeedSubscription::setSilenceWatchdog(std::chrono::milliseconds timeout, OnSilenceHandler onSilence) {
+    // The deadlines in nanoseconds of steady_clock must not overflow: up to 100 years.
+    constexpr auto MAX_TIMEOUT = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::hours{24 * 365 * 100});
+
+    timeout = (std::min)(timeout, MAX_TIMEOUT);
+
+    const auto on = timeout.count() > 0;
+
+    // The batches reach the watchdog through the native listener (Impl::onEvents).
+    if (on && !tryToSetEventListenerHandle()) {
+        return;
+    }
+
+    auto handler = on && onSilence ? std::make_shared<const OnSilenceHandler>(std::move(onSilence))
+                                   : std::shared_ptr<const OnSilenceHandler>{};
+    // Released after the mutex.
+    std::shared_ptr<const OnSilenceHandler> previous{};
+    std::lock_guard lock{impl_->silenceMutex_};
+
+    if (!on || closed_) {
+        if (impl_->silenceWatchdogOn_.exchange(false)) {
+            SilenceWatchdog::getInstance().remove(id_);
+        }
+
+        impl_->silenceGeneration_ = 0;
+        previous = std::move(impl_->onSilence_);
+
+        return;
+    }
+
+    const auto now = std::chrono::steady_clock::now();
+
+    // First: nothing changes if the thread cannot be started.
+    impl_->silenceGeneration_ = Impl::watchSilence(id_, sharedAs<DXFeedSubscription>(), timeout, now);
+
+    impl_->silenceArmedNanos_.store(std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count());
+    previous = std::exchange(impl_->onSilence_, std::move(handler));
+    impl_->silenceWatchdogOn_.store(true);
 }
 
 std::unordered_set<EventTypeEnum> DXFeedSubscription::getEventTypes() {

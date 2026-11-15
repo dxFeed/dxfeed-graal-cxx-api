@@ -24,6 +24,8 @@
 #include <algorithm>
 #include <atomic>
 #include <cctype>
+#include <chrono>
+#include <cstdint>
 #include <dxfg_api.h>
 #include <exception>
 #include <filesystem>
@@ -230,6 +232,9 @@ struct DXEndpoint::Impl {
                 return;
             }
 
+            // Before the listeners: the silence of subscriptions is counted from this transition.
+            endpoint->impl_->onStateNotified(newState == DXFG_ENDPOINT_STATE_CONNECTED);
+
             // CLOSED is the last notification.
             const bool closing = newState == DXFG_ENDPOINT_STATE_CLOSED;
 
@@ -321,6 +326,37 @@ struct DXEndpoint::Impl {
     std::atomic<bool> closed_{false};         // onClosed() has run
     std::atomic<bool> closedNotified_{false}; // CLOSED was passed to the state listeners
 
+    // The time of the last transition to CONNECTED in nanoseconds of steady_clock (see getConnectedSince()).
+    // NOT_NOTIFIED until the first notification of the state, NOT_CONNECTED while the endpoint is not connected.
+    static constexpr std::int64_t NOT_NOTIFIED = 0;
+    static constexpr std::int64_t NOT_CONNECTED = -1;
+    std::atomic<std::int64_t> connectedSince_{NOT_NOTIFIED};
+
+    static std::int64_t steadyNowNanos() noexcept {
+        const std::int64_t now = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                             std::chrono::steady_clock::now().time_since_epoch())
+                             .count();
+
+        // 0 and -1 are reserved.
+        return (std::max)(now, std::int64_t{1});
+    }
+
+    void onStateNotified(bool connected) noexcept {
+        connectedSince_.store(connected ? steadyNowNanos() : NOT_CONNECTED);
+    }
+
+    // The endpoint may have been connected before its state listener was registered (by build()). A notification that
+    // came meanwhile is newer and wins: the state is taken only while no notification has come.
+    void initConnectedSince(bool connected) noexcept {
+        if (!connected) {
+            return;
+        }
+
+        auto expected = NOT_NOTIFIED;
+
+        connectedSince_.compare_exchange_strong(expected, steadyNowNanos());
+    }
+
     mutable std::mutex mutex_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
@@ -378,6 +414,12 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, Role role,
         dxfcpp::bit_cast<void *>(&Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
     isolated::api::IsolatedDXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
 
+    try {
+        endpoint->impl_->initConnectedSince(endpoint->getState() == State::CONNECTED);
+    } catch (...) {
+        // The state comes with the next notification.
+    }
+
     {
         auto &registry = Impl::getRegistry();
         std::lock_guard lock{registry.liveMutex};
@@ -390,6 +432,17 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, Role role,
 
 DXEndpoint::State DXEndpoint::getState() const {
     return isolated::api::IsolatedDXEndpoint::getState(handle_);
+}
+
+std::optional<std::chrono::steady_clock::time_point> DXEndpoint::getConnectedSince() const noexcept {
+    const auto since = impl_->connectedSince_.load();
+
+    if (since <= 0) {
+        return std::nullopt;
+    }
+
+    return std::chrono::steady_clock::time_point{
+        std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::nanoseconds{since})};
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::user(StringParam user) {
