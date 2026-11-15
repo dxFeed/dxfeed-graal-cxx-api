@@ -29,6 +29,47 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include <vector>
 
 /**
+ * @page listener_threads Listeners and threads
+ *
+ * The event listeners of a subscription (DXFeedSubscription::addEventListener()) are called on a thread of the
+ * executor of the endpoint (DXEndpoint::Builder::withExecutor(); by default a pool of `dxfeed.threadPoolSize` threads,
+ * see DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY). The calls for one subscription are serial: the next batch of
+ * events is delivered only after all the listeners have returned from the previous one, so the order of the events is
+ * kept.
+ *
+ * A listener that blocks or works long delays all the events of its subscription. The events wait in the buffers of
+ * the endpoint and of the server: the lasting events (for example Quote) are conflated, the newest values come late,
+ * and the other events may be dropped (DXFeedSubscription::getTotalDroppedEvents()). From the outside it looks like a
+ * delayed feed. A listener should only take the events and return: copy them into a queue of its own and process them
+ * on another thread, do not wait for locks, network or user input in the listener.
+ *
+ * The library checks this and reports warnings through ErrorManager (ErrorInfo::Level::WARN, the component
+ * `DXFeedSubscription`, see @ref error_handling "Error handling"):
+ *
+ * - **A slow listener.** When the listeners of a subscription take longer than the threshold for one batch, a
+ *   warning names the subscription (its number and event types), the time and the size of the batch. The threshold is
+ *   the system property DXFeedSubscription::SLOW_LISTENER_THRESHOLD_PROPERTY, `0.1s` by default; `0` turns the check
+ *   off.
+ * - **Events that lag behind.** When the system property DXFeedSubscription::EVENT_LAG_THRESHOLD_PROPERTY is set
+ *   (it is `0`, off, by default), a warning is reported when the newest event of a batch is older than the threshold
+ *   when the batch is received: the current time minus the time of the event. Only the events with the time of a
+ *   market action are checked: Quote, Trade, TradeETH (TradeBase::getTime()) and TimeAndSale; a zero time is skipped.
+ *   A DXFeedTimeSeriesSubscription is not checked, its history comes with past times. The lag includes the delay
+ *   before the data reaches dxFeed and the difference between the clocks of this computer and of the source; the
+ *   time of Quote and Trade is often in whole seconds; the first Quote or Trade of a symbol that does not trade often
+ *   is old; a replay of recorded data comes with past times. Set the threshold to several seconds.
+ *
+ * Each check of a subscription reports at most one warning per the period DXFeedSubscription::WARNING_PERIOD_PROPERTY
+ * (`1m` by default; `0` reports every excess, `inf` only the first). The first excess is reported at once; the next
+ * warning tells how many excesses were since the previous one and the largest of them.
+ *
+ * The values of the properties are time periods, as TimePeriod::valueOf() reads them: `0.1s`, `5s`, `1m`, `inf`
+ * (never). A subscription reads the properties when it is created (System::setProperty() or the isolate arguments,
+ * see @ref isolate_arguments "Isolate arguments"): a change does not affect the subscriptions that exist. A value that
+ * is not a time period is reported as a warning once, and the default is used.
+ */
+
+/**
  * \addtogroup dxfcpp_api
  * @{
  */
@@ -46,10 +87,42 @@ struct LastingEvent;
  *
  * The functions that take symbols throw InvalidArgumentException if a symbol is not valid UTF-8 (see StringParam); the
  * set of subscribed symbols is not changed then.
+ *
+ * <h3>Threads and locks</h3>
+ *
+ * This class is thread-safe. The event listeners are called on a thread of the executor of the endpoint, one batch at a
+ * time, and must not block: see @ref listener_threads "Listeners and threads".
  */
 class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscription>, public ObservableSubscription {
     public:
     static constexpr std::size_t FAKE_CHANGE_LISTENER_ID{static_cast<std::size_t>(-1)};
+
+    /**
+     * `"dxfcpp.subscription.slowListenerThreshold"`
+     *
+     * The system property with the time that the listeners of a subscription may take for one batch of events; a
+     * longer time is reported as a warning. A time period, `0.1s` by default; `0` turns the check off. Read when a
+     * subscription is created. See @ref listener_threads "Listeners and threads".
+     */
+    static constexpr char SLOW_LISTENER_THRESHOLD_PROPERTY[] = "dxfcpp.subscription.slowListenerThreshold";
+
+    /**
+     * `"dxfcpp.subscription.eventLagThreshold"`
+     *
+     * The system property with the age of the newest event of a received batch above which a warning is reported. A
+     * time period, `0` (the check is off) by default. Read when a subscription is created. See
+     * @ref listener_threads "Listeners and threads".
+     */
+    static constexpr char EVENT_LAG_THRESHOLD_PROPERTY[] = "dxfcpp.subscription.eventLagThreshold";
+
+    /**
+     * `"dxfcpp.subscription.warningPeriod"`
+     *
+     * The system property with the period of the warnings of a slow listener and of lagging events: each check of a
+     * subscription reports at most one warning per period. A time period, `1m` by default. Read when a subscription
+     * is created. See @ref listener_threads "Listeners and threads".
+     */
+    static constexpr char WARNING_PERIOD_PROPERTY[] = "dxfcpp.subscription.warningPeriod";
 
     ///
     using OnEventHandler = SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)>;

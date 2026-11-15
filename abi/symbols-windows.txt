@@ -1451,6 +1451,9 @@ static char const * const dxfcpp::v8::DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_P
 static char const * const dxfcpp::v8::DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX
 static char const * const dxfcpp::v8::DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY
 static char const * const dxfcpp::v8::DXEndpoint::NAME_PROPERTY
+static char const * const dxfcpp::v8::DXFeedSubscription::EVENT_LAG_THRESHOLD_PROPERTY
+static char const * const dxfcpp::v8::DXFeedSubscription::SLOW_LISTENER_THRESHOLD_PROPERTY
+static char const * const dxfcpp::v8::DXFeedSubscription::WARNING_PERIOD_PROPERTY
 static char const * const dxfcpp::v8::MarketEventSymbols::EXCHANGES_PATTERN
 static char const * const dxfcpp::v8::MarketEventSymbols::SUPPORTED_EXCHANGES
 static char const * const dxfcpp::v8::String::EMPTY

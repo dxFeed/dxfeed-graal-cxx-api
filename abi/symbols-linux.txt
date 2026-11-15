@@ -488,6 +488,9 @@ dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::EventTypeEnum con
 dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedSubscription>::LockExternalConstructionTag)
 dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedSubscription>::LockExternalConstructionTag, dxfcpp::v8::EventTypeEnum const&)
 dxfcpp::v8::DXFeedSubscription::DXFeedSubscription(dxfcpp::v8::RequireMakeShared<dxfcpp::v8::DXFeedSubscription>::LockExternalConstructionTag, std::initializer_list<dxfcpp::v8::EventTypeEnum>)
+dxfcpp::v8::DXFeedSubscription::EVENT_LAG_THRESHOLD_PROPERTY
+dxfcpp::v8::DXFeedSubscription::SLOW_LISTENER_THRESHOLD_PROPERTY
+dxfcpp::v8::DXFeedSubscription::WARNING_PERIOD_PROPERTY
 dxfcpp::v8::DXFeedSubscription::addChangeListener(std::shared_ptr<dxfcpp::v8::ObservableSubscriptionChangeListener>)
 dxfcpp::v8::DXFeedSubscription::addFeed(std::shared_ptr<dxfcpp::v8::DXFeed const> const&) const
 dxfcpp::v8::DXFeedSubscription::addSymbols(dxfcpp::v8::SymbolWrapper const&) const
