@@ -8,6 +8,7 @@ first. The reference tables of the connection errors are in the headers, see [Se
 - [No data](#no-data)
 - [Latency](#latency)
 - [Reconnect contract](#reconnect-contract)
+- [Recipes](#recipes)
 - [See also](#see-also)
 
 ## First steps
@@ -157,6 +158,24 @@ What the API does after a lost connection, and what it does not promise.
 - A time-series subscription sends its `fromTime` again, so the history is requested again; what the server returns and
   how it merges with the local history is not guaranteed.
 - A fresh snapshot (for example of an order book) after a reconnect depends on the server and is not guaranteed.
+
+## Recipes
+
+Console samples for frequent tasks. They are built with the library (`DXFCXX_BUILD_SAMPLES`, on by default). With
+`--duration <seconds>` a sample stops by itself, and its exit code tells whether it got what it waited for (0) or not
+(1), so it can be used in a script; without it the sample runs until it is stopped. The commands use the demo feed
+`demo.dxfeed.com:7300`.
+
+| Task | Sample | Command |
+|------|--------|---------|
+| Connect to a list of addresses, log the state changes and the connection errors | [ReconnectSample](samples/cpp/API/ReconnectSample/src/main.cpp) | `ReconnectSample "127.0.0.1:1,demo.dxfeed.com:7300[connectOrder=ordered]" --duration 30` |
+| Get the history of candles | [CandleSample](samples/cpp/Candle/CandleSample/src/main.cpp) | `CandleSample demo.dxfeed.com:7300 AAPL{=d} 2025-12-01 --duration 10` |
+| Build an order book of one source, with the scope of each order | [SimpleOrderBookSample](samples/cpp/Model/SimpleOrderBookSample/src/main.cpp) | `SimpleOrderBookSample AAPL ntv demo.dxfeed.com:7300 --duration 10`; `scope=aggregate` (or `composite`, `regional`, `order`) shows only the orders of that scope |
+| Is the market open now, the sessions and the next holidays | [ScheduleSample](samples/cpp/Schedule/ScheduleSample/src/main.cpp) | `ScheduleSample schedule.properties sample.ipf.zip IBM` (the files are next to the sample) |
+| Load instrument profiles and their live updates | [IpfLiveSample](samples/cpp/IPF/IpfLiveSample/src/main.cpp) | `IpfLiveSample --duration 30`, or a path to an IPF file instead of the service |
+
+In the first command the closed local port `127.0.0.1:1` fails with `CONNECT_FAILED`, and the connection moves to the
+next address of the list.
 
 ## See also
 

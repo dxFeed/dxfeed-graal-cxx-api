@@ -7,3 +7,8 @@
       `NaN` values, the precision of the time, order sources and scope, why an order book can be crossed, candle
       symbols.
     * Both pages are linked from the README and included in the Doxygen documentation.
+    * Recipes: the samples for frequent tasks take an address and `--duration <seconds>`, stop by themselves and tell by
+      the exit code whether they got data. `ReconnectSample` connects to a list of addresses and logs the state of the
+      connectors with the last connection error, `SimpleOrderBookSample` shows the scope of each order and filters by
+      scope, `ScheduleSample` tells whether the market is open at a time, `IpfLiveSample` also reads an IPF file, and
+      `CandleSample` stops after the given time. The section "Recipes" of `TROUBLESHOOTING.md` lists the commands.
