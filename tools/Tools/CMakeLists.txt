@@ -37,9 +37,15 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Tools.cpp
         src/Args/Args.cpp
+        src/Diagnose/NetProbe.cpp
 )
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../third_party/range-v3-0.12/include)
+
+# The network probe of Diagnose uses the sockets.
+if (WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
+endif ()
 
 # The definitions of the library are PRIVATE: the version in the name of the tools and the metrics are set here.
 target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_VERSION="${DXFCXX_VERSION}")
@@ -73,6 +79,15 @@ endif ()
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:dxfcxx::graal>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+
+# The MSVC ASan runtime, so the Tools also start outside a developer prompt (the CTest runs of the Diagnose command).
+dxfcxx_sanitizer_runtime_files(DXFCXX_TOOLS_SANITIZER_RUNTIME_FILES)
+
+if (DXFCXX_TOOLS_SANITIZER_RUNTIME_FILES)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${DXFCXX_TOOLS_SANITIZER_RUNTIME_FILES}
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+endif ()
 
 if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different

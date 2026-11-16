@@ -76,6 +76,27 @@ const std::string IgnoreExchangesArg::HELP_TEXT{R"(
 Comma-separated list of exchange codes (e.g. "Q,Z") whose events are not measured.
 )"};
 
+const std::string CompareArg::NAME{"compare"};
+const std::string CompareArg::SHORT_NAME{};
+const std::string CompareArg::LONG_NAME{"compare"};
+const std::string CompareArg::HELP_TEXT{R"(
+The second address to diagnose after the first one, with a comparison of the two.
+)"};
+
+const std::string DurationArg::NAME{"duration"};
+const std::string DurationArg::SHORT_NAME{};
+const std::string DurationArg::LONG_NAME{"duration"};
+const std::string DurationArg::HELP_TEXT{R"(
+The time to collect the events of one address, in seconds from 1 to 3600 (10 by default).
+)"};
+
+const std::string ReportArg::NAME{"report"};
+const std::string ReportArg::SHORT_NAME{"o"};
+const std::string ReportArg::LONG_NAME{"report"};
+const std::string ReportArg::HELP_TEXT{R"(
+The file to write the report to: the same text as the output, logins, passwords and tokens hidden.
+)"};
+
 const std::string HelpArg::NAME{"help"};
 const std::string HelpArg::SHORT_NAME{"h"};
 const std::string HelpArg::LONG_NAME{"help"};

@@ -106,6 +106,7 @@ set(DXFC_TEST_SOURCES
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp
+        tools/DiagnoseToolTest.cpp
         tools/ToolsArgsTest.cpp
         util/ToStringDoubleTest.cpp
         util/UtilHeadersTest.cpp)
@@ -133,9 +134,11 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp ${DXFC_TEST_SUPPORT_SOURCES})
 
-    # The argument parsing of the tools is compiled into their tests: the tools are an executable.
+    # The argument parsing and the network probe of the tools are compiled into their tests: the tools are an
+    # executable.
     if (DXFC_TEST_SOURCE MATCHES "^tools/")
-        target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp)
+        target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp
+                ../tools/Tools/src/Diagnose/NetProbe.cpp)
     endif ()
 
     # The tests build or read the structures of the C API of the dxFeed Graal SDK by hand, or call it.
@@ -257,6 +260,47 @@ if (DXFCXX_ENABLE_NETWORK_TESTS AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
             FIXTURES_CLEANUP network_server LABELS "network;network_server" TIMEOUT 60)
     set_tests_properties(dxFeedGraalCxxApi_network_NetworkTest PROPERTIES FIXTURES_REQUIRED network_server)
     add_dependencies(dxFeedGraalCxxApi_network_NetworkTest Tools)
+
+    # Diagnose against a live server: the local server sends Quote AAPL.
+    if (DXFCXX_BUILD_TOOLS)
+        add_test(NAME dxFeedGraalCxxApi_network_ToolsDiagnoseData
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=Diagnose
+                -DARG1=127.0.0.1:${DXFCXX_NETWORK_TEST_PORT} -DARG2=Quote -DARG3=AAPL -DARG4=--duration -DARG5=5
+                -DEXPECTED_EXIT=0 "-DEXPECTED_OUTPUT=Verdict: DATA" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        set_tests_properties(dxFeedGraalCxxApi_network_ToolsDiagnoseData PROPERTIES
+                FIXTURES_REQUIRED network_server LABELS network TIMEOUT 120)
+    endif ()
+endif ()
+
+# Diagnose without a network: a closed local port (the password of the address must not be printed) and a host name
+# that never resolves (.invalid, RFC 2606). RunTool.cmake checks both the verdict and the exit code.
+if (DXFCXX_BUILD_TOOLS)
+    add_test(NAME dxFeedGraalCxxApi_tools_DiagnoseCannotConnect
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=Diagnose
+            "-DARG1=127.0.0.1:1[user=diagnose,password=s3cr3t-sentinel]" -DARG2=Quote -DARG3=AAPL -DARG4=--duration
+            -DARG5=3 -DEXPECTED_EXIT=4 "-DEXPECTED_OUTPUT=Verdict: CANNOT CONNECT" -P
+            ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+    set_tests_properties(dxFeedGraalCxxApi_tools_DiagnoseCannotConnect PROPERTIES TIMEOUT 120
+            FAIL_REGULAR_EXPRESSION "s3cr3t-sentinel")
+
+    add_test(NAME dxFeedGraalCxxApi_tools_DiagnoseCannotResolve
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=Diagnose -DARG1=diagnose-test.invalid:7300
+            -DARG2=Quote -DARG3=AAPL -DARG4=--duration -DARG5=3 -DEXPECTED_EXIT=5
+            "-DEXPECTED_OUTPUT=Verdict: CANNOT RESOLVE" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+    set_tests_properties(dxFeedGraalCxxApi_tools_DiagnoseCannotResolve PROPERTIES TIMEOUT 120)
+
+    # The exit code is checked: the leaks of the Graal isolate at exit are suppressed, as for the other tests.
+    if (DXFCXX_SANITIZERS_ENABLED)
+        foreach (DXFC_DIAGNOSE_TEST dxFeedGraalCxxApi_tools_DiagnoseCannotConnect
+                dxFeedGraalCxxApi_tools_DiagnoseCannotResolve dxFeedGraalCxxApi_network_ToolsDiagnoseData)
+            if (TEST ${DXFC_DIAGNOSE_TEST})
+                set_property(TEST ${DXFC_DIAGNOSE_TEST} APPEND PROPERTY ENVIRONMENT
+                        "UBSAN_OPTIONS=print_stacktrace=1"
+                        "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
+                        "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+            endif ()
+        endforeach ()
+    endif ()
 endif ()
 
 # Sanitizer canaries: a deliberately defective LIBRARY function must produce the report of each active sanitizer.

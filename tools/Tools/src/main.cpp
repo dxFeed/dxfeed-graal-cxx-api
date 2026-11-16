@@ -5,6 +5,8 @@
 #include "Dump/DumpTool.hpp"
 #include "Help/HelpTool.hpp"
 #include "Tools.hpp"
+#include <type_traits>
+#include <utility>
 #include <variant>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
@@ -58,10 +60,16 @@ int main(int argc, char *argv[]) {
                 continue;
             }
 
+            // A tool whose run returns an int sets the exit code (Diagnose); the others exit with 0.
+            int exitCode = 0;
+
             std::visit(
-                [&args]<typename Tool>(Tool &&) {
+                [&args, &exitCode]<typename Tool>(Tool &&) {
+                    using T = std::decay_t<Tool>;
+                    constexpr bool returnsExitCode =
+                        std::is_same_v<decltype(T::run(std::declval<const typename T::Args &>())), int>;
+
                     try {
-                        using T = std::decay_t<Tool>;
                         auto parseResult = T::Args::parse(args | ranges::views::drop(1) | ranges::to<std::vector>);
 
                         if (parseResult.isHelp) {
@@ -75,18 +83,30 @@ int main(int argc, char *argv[]) {
                             std::cout << tools::Tools::getName() << "\n";
                             std::cout << tools::HelpTool::generateToolHelpScreen<T>(parseResult.errorString) << "\n";
 
+                            if constexpr (returnsExitCode) {
+                                exitCode = 1;
+                            }
+
                             return;
                         }
 
                         // std::cout << tools::Tools::getName() << "\n";
-                        T::run(parseResult.result);
+                        if constexpr (returnsExitCode) {
+                            exitCode = T::run(parseResult.result);
+                        } else {
+                            T::run(parseResult.result);
+                        }
                     } catch (const RuntimeException &e) {
                         std::cerr << e << '\n';
+
+                        if constexpr (returnsExitCode) {
+                            exitCode = 1;
+                        }
                     }
                 },
                 tool);
 
-            return 0;
+            return exitCode;
         }
 
         std::cout << usage << "\n";

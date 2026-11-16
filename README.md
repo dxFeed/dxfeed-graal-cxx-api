@@ -414,6 +414,26 @@ To familiarize with the dxLink protocol, please click [here](https://demo.dxfeed
 
 ### Versions and addresses in the log
 
+When there is no data, start with the [Diagnose](#tools) command of the Tools: it checks the way to the data step by
+step and prints a verdict.
+
+```shell
+Tools Diagnose demo.dxfeed.com:7300 Quote,Trade AAPL,IBM --report diagnose.txt
+```
+
+It prints the versions, resolves each host to its IP addresses and tries a TCP connect to each, connects an endpoint and
+prints its states and connection errors, subscribes for 10 seconds (`--duration`) and prints the first events, the
+number of events per type, the time of the last event per symbol and the delay of the events. The verdict:
+
+- `DATA`: the events came for all types and symbols; `PARTIAL DATA`: for some of them (the others are listed);
+- `CONNECTED, NO DATA`: connected, but no events: likely not entitled or not in the endpoint filter; check the endpoint
+  IPF (a symbol that does not trade now is silent too);
+- `CANNOT CONNECT`: with the last connection error; `CANNOT RESOLVE`: the host name does not resolve.
+
+`--compare <address2>` runs the same check for a second address and compares the two. `--report <file>` writes the
+output to a file that can be attached to a question to the support: logins, passwords and tokens are hidden. The exit
+code is 0 for `DATA` and 2 to 5 for the other verdicts.
+
 When a question goes to the support, start with these lines of the output of the program:
 
 - `[dxfcpp] INFO #1 DXEndpoint: dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.16.0, Windows x86_64(16 cores)`:
@@ -434,6 +454,9 @@ is a collection of utilities that allow you to subscribe to various market event
 can
 be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases):
 
+* [Diagnose](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Diagnose/DiagnoseTool.hpp)
+  checks the way to the data of an address step by step (DNS, TCP, the endpoint, the events) and prints a verdict with a
+  hint: the first step when there is no data (see [Versions and addresses in the log](#versions-and-addresses-in-the-log))
 * [Connect](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Connect/ConnectTool.hpp)
   connects to the specified address(es) and subscribes to the specified events with the specified symbol
 * [Dump](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Dump/DumpTool.hpp)
