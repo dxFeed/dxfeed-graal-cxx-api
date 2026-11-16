@@ -996,6 +996,8 @@ INPUT                  = ../src \
                          ../README.md \
                          ../DEPENDENCIES.md \
                          ../HOW_TO_BUILD.md \
+                         ../TROUBLESHOOTING.md \
+                         ../DATA_MODEL.md \
                          ../THIRD_PARTY_LICENSES.md
 
 # This tag can be used to specify the character encoding of the source files
