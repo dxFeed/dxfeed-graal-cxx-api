@@ -40,6 +40,8 @@ the [Overview](#overview) section.<br>
 - [Tools](#tools)
 - [Samples](#samples)
 - [Current State](#current-state)
+- [Troubleshooting](TROUBLESHOOTING.md)
+- [Data Model](DATA_MODEL.md)
 - [Dependencies](DEPENDENCIES.md)
 - [How To Build](HOW_TO_BUILD.md)
 - [How To Develop](HOW_TO_DEVELOP.md)
@@ -116,6 +118,8 @@ Below is a scheme of this process:
 Find useful information in our self-service dxFeed Knowledge Base or CXX API documentation:
 
 - [dxFeed Graal C/C++ API documentation](https://dxfeed.github.io/dxfeed-graal-cxx-api/)
+- [Troubleshooting](TROUBLESHOOTING.md): no data, connection errors, latency, what is restored after a reconnect
+- [Data Model](DATA_MODEL.md): conflated events, event flags and snapshots, `NaN`, time precision, order sources
 - [dxFeed Knowledge Base](https://kb.dxfeed.com/index.html?lang=en)
   * [Getting Started](https://kb.dxfeed.com/en/getting-started.html)
   * [Troubleshooting](https://kb.dxfeed.com/en/troubleshooting-guidelines.html)
@@ -432,7 +436,8 @@ number of events per type, the time of the last event per symbol and the delay o
 
 `--compare <address2>` runs the same check for a second address and compares the two. `--report <file>` writes the
 output to a file that can be attached to a question to the support: logins, passwords and tokens are hidden. The exit
-code is 0 for `DATA` and 2 to 5 for the other verdicts.
+code is 0 for `DATA` and 2 to 5 for the other verdicts. The next steps for each verdict, the connection errors and
+what the endpoint restores after a reconnect are in [Troubleshooting](TROUBLESHOOTING.md).
 
 When a question goes to the support, start with these lines of the output of the program:
 
