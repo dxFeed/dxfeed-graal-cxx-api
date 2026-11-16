@@ -303,6 +303,105 @@ if (DXFCXX_BUILD_TOOLS)
     endif ()
 endif ()
 
+# The recipe samples of TROUBLESHOOTING.md, run with a time limit: RunTool.cmake checks the exit code and the output.
+# The offline ones run wherever the samples are built; the others need the local server of the network tests.
+if (DXFCXX_BUILD_SAMPLES)
+    set(DXFC_SAMPLE_TESTS)
+
+    # Is the market open at a time, the session and the holidays (the IBM schedule of the sample IPF file).
+    add_test(NAME dxFeedGraalCxxApi_samples_ScheduleSample
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ScheduleSample>
+            -DARG0=$<TARGET_FILE_DIR:ScheduleSample>/schedule.properties
+            -DARG1=$<TARGET_FILE_DIR:ScheduleSample>/sample.ipf.zip -DARG2=IBM -DARG3=2011-05-26-14:15:00-0400
+            -DEXPECTED_EXIT=0 "-DEXPECTED_OUTPUT=Trading at .*: yes" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+    add_test(NAME dxFeedGraalCxxApi_samples_ScheduleSampleUnknownSymbol
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ScheduleSample>
+            -DARG0=$<TARGET_FILE_DIR:ScheduleSample>/schedule.properties
+            -DARG1=$<TARGET_FILE_DIR:ScheduleSample>/sample.ipf.zip -DARG2=NO-SUCH-SYMBOL -DEXPECTED_EXIT=2
+            "-DEXPECTED_OUTPUT=Could not find profile for NO-SUCH-SYMBOL" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    # Instrument profiles from a file instead of the IPF service.
+    add_test(NAME dxFeedGraalCxxApi_samples_IpfLiveSample
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:IpfLiveSample>
+            -DARG0=${CMAKE_CURRENT_SOURCE_DIR}/data/ipf/option-chains.ipf -DARG1=--duration -DARG2=5 -DEXPECTED_EXIT=0
+            "-DEXPECTED_OUTPUT=Loaded [1-9][0-9]* instrument profiles" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    # The connection log of a closed local port: the error category, and no connection.
+    add_test(NAME dxFeedGraalCxxApi_samples_ReconnectSampleCannotConnect
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ReconnectSample> -DARG0=127.0.0.1:1 -DARG1=--duration
+            -DARG2=5 -DEXPECTED_EXIT=1 "-DEXPECTED_OUTPUT=CONNECT_FAILED" -P
+            ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    # An unknown scope is rejected before connecting.
+    add_test(NAME dxFeedGraalCxxApi_samples_SimpleOrderBookSampleUnknownScope
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:SimpleOrderBookSample> -DARG0=AAPL -DARG1=ntv
+            -DARG2=127.0.0.1:1 -DARG3=scope=nothing -DEXPECTED_EXIT=1 "-DEXPECTED_OUTPUT=Unknown scope: nothing" -P
+            ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    # --duration without a value is rejected, not taken for the address.
+    add_test(NAME dxFeedGraalCxxApi_samples_ReconnectSampleNoDuration
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ReconnectSample> -DARG0=--duration -DEXPECTED_EXIT=1
+            "-DEXPECTED_OUTPUT=No value of --duration" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    list(APPEND DXFC_SAMPLE_TESTS dxFeedGraalCxxApi_samples_ScheduleSample
+            dxFeedGraalCxxApi_samples_ScheduleSampleUnknownSymbol dxFeedGraalCxxApi_samples_IpfLiveSample
+            dxFeedGraalCxxApi_samples_ReconnectSampleCannotConnect
+            dxFeedGraalCxxApi_samples_SimpleOrderBookSampleUnknownScope
+            dxFeedGraalCxxApi_samples_ReconnectSampleNoDuration)
+
+    # Against the local server only: the tests expect the data of its tape.
+    if (DXFCXX_ENABLE_NETWORK_TESTS AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        set(DXFC_LOCAL_SERVER 127.0.0.1:${DXFCXX_NETWORK_TEST_PORT})
+
+        # An address list in the given order: the first address fails, the connection moves to the local server.
+        add_test(NAME dxFeedGraalCxxApi_network_ReconnectSampleFailover
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ReconnectSample>
+                "-DARG0=127.0.0.1:1,${DXFC_LOCAL_SERVER}[connectOrder=ordered,reconnectDelay=100]" -DARG1=--duration
+                -DARG2=10 -DEXPECTED_EXIT=0 "-DEXPECTED_OUTPUT=CONNECT_FAILED" -P
+                ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+        # The history of daily candles.
+        add_test(NAME dxFeedGraalCxxApi_network_CandleSample
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:CandleSample> -DARG0=${DXFC_LOCAL_SERVER}
+                "-DARG1=AAPL{=d}" -DARG2=2024-01-01 -DARG3=--duration -DARG4=10 -DEXPECTED_EXIT=0
+                "-DEXPECTED_OUTPUT=Received [1-9][0-9]* candles" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+        # The order book of one source with the scope of each order; the filter by the scope of these orders keeps
+        # them, by another scope it drops them all. The tape has the orders of the source NTV (individual orders), not
+        # of ntv (price levels).
+        add_test(NAME dxFeedGraalCxxApi_network_SimpleOrderBookSample
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:SimpleOrderBookSample> -DARG0=AAPL -DARG1=NTV
+                -DARG2=${DXFC_LOCAL_SERVER} -DARG3=--duration -DARG4=10 -DEXPECTED_EXIT=0
+                "-DEXPECTED_OUTPUT=Scope: ORDER" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        add_test(NAME dxFeedGraalCxxApi_network_SimpleOrderBookSampleSameScope
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:SimpleOrderBookSample> -DARG0=AAPL -DARG1=NTV
+                -DARG2=${DXFC_LOCAL_SERVER} -DARG3=scope=order -DARG4=--duration -DARG5=10 -DEXPECTED_EXIT=0
+                "-DEXPECTED_OUTPUT=Scope: ORDER" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        add_test(NAME dxFeedGraalCxxApi_network_SimpleOrderBookSampleOtherScope
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:SimpleOrderBookSample> -DARG0=AAPL -DARG1=NTV
+                -DARG2=${DXFC_LOCAL_SERVER} -DARG3=scope=composite -DARG4=--duration -DARG5=5 -DEXPECTED_EXIT=1
+                "-DEXPECTED_OUTPUT=No orders" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+        set(DXFC_NETWORK_SAMPLE_TESTS dxFeedGraalCxxApi_network_ReconnectSampleFailover
+                dxFeedGraalCxxApi_network_CandleSample dxFeedGraalCxxApi_network_SimpleOrderBookSample
+                dxFeedGraalCxxApi_network_SimpleOrderBookSampleSameScope
+                dxFeedGraalCxxApi_network_SimpleOrderBookSampleOtherScope)
+        set_tests_properties(${DXFC_NETWORK_SAMPLE_TESTS} PROPERTIES LABELS network FIXTURES_REQUIRED network_server)
+
+        list(APPEND DXFC_SAMPLE_TESTS ${DXFC_NETWORK_SAMPLE_TESTS})
+    endif ()
+
+    set_tests_properties(${DXFC_SAMPLE_TESTS} PROPERTIES TIMEOUT 120)
+
+    # The exit code is checked: the leaks of the Graal isolate at exit are suppressed, as for the other tests.
+    if (DXFCXX_SANITIZERS_ENABLED)
+        set_property(TEST ${DXFC_SAMPLE_TESTS} APPEND PROPERTY ENVIRONMENT
+                "UBSAN_OPTIONS=print_stacktrace=1"
+                "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
+                "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+    endif ()
+endif ()
+
 # Sanitizer canaries: a deliberately defective LIBRARY function must produce the report of each active sanitizer.
 # They fail when a sanitizer is silently not applied, or when the library itself is not instrumented.
 if (DXFCXX_SANITIZERS_ENABLED)

@@ -3,10 +3,15 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <atomic>
+#include <chrono>
+#include <cstddef>
 #include <cstdint>
 #include <iostream>
+#include <memory>
 #include <optional>
 #include <string>
+#include <thread>
 #include <vector>
 
 using namespace dxfcpp;
@@ -14,7 +19,7 @@ using namespace dxfcpp;
 void printUsage() {
     const auto usageString = R"(
 Usage:
-CandleSample <address> <symbol> [<fromTime>] [<attribute>=<value> ...]
+CandleSample <address> <symbol> [<fromTime>] [<attribute>=<value> ...] [--duration <seconds>]
 
 Where:
     address   - The address to connect to retrieve data (e.g. "demo.dxfeed.com:7300") or a path to a tape file.
@@ -32,10 +37,13 @@ Where:
                     session    - "true" for the regular trading hours only, "false" for any session.
                     alignment  - The alignment: "m" (MIDNIGHT), "s" (SESSION).
                     priceLevel - The price level (e.g. "priceLevel=0.5").
+    duration  - Run for the given number of seconds and exit: the exit code is 0 if a candle was received,
+                1 otherwise. Without it the sample runs until enter is pressed.
 
 Examples:
     CandleSample demo.dxfeed.com:7300 AAPL{=d} 2025-12-01
     CandleSample demo.dxfeed.com:7300 AAPL 2025-12-01 period=5 type=m session=true
+    CandleSample demo.dxfeed.com:7300 AAPL{=d} 2025-12-01 --duration 10
 )";
 
     std::cout << usageString << std::endl;
@@ -61,9 +69,24 @@ int main(int argc, char *argv[]) {
         std::vector<CandleSymbolAttributeVariant> attributes{};
         std::optional<double> periodValue{};
         std::optional<std::string> periodType{};
+        std::optional<std::chrono::duration<double>> duration{};
 
         for (int i = 3; i < argc; i++) {
             const std::string arg = argv[i];
+
+            if (arg == "--duration") {
+                if (i + 1 == argc) {
+                    std::cerr << "No value of --duration\n";
+                    printUsage();
+
+                    return 1;
+                }
+
+                duration = std::chrono::duration<double>(std::stod(argv[++i]));
+
+                continue;
+            }
+
             const auto separator = arg.find('=');
 
             if (separator == std::string::npos) {
@@ -117,15 +140,27 @@ int main(int argc, char *argv[]) {
         const auto endpoint = DXEndpoint::create()->connect(address);
         const auto subscription = endpoint->getFeed()->createSubscription(Candle::TYPE);
 
+        const auto candleCount = std::make_shared<std::atomic<std::size_t>>(std::size_t{0});
+
         // Listener must be attached before symbols are added.
-        subscription->addEventListener<Candle>([](const auto &candles) {
+        subscription->addEventListener<Candle>([candleCount](const auto &candles) {
             for (const auto &candle : candles) {
                 std::cout << candle->toString() + "\n";
             }
+
+            *candleCount += candles.size();
         });
 
         // The history subscription: the candles from the specified time and then the updates.
         subscription->addSymbols(TimeSeriesSubscriptionSymbol(symbol, fromTime));
+
+        if (duration) {
+            std::this_thread::sleep_for(*duration);
+            endpoint->closeAndAwaitTermination();
+            std::cout << "Received " << *candleCount << " candles" << std::endl;
+
+            return *candleCount > 0 ? 0 : 1;
+        }
 
         std::cout << "Press enter to stop" << std::endl;
         std::cin.get();

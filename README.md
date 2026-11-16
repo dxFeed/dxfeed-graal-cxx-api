@@ -499,7 +499,8 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
   demonstrates how to create multiple event listeners and subscribe to `Quote` and `Trade` events
 - [x] [ReconnectSample](samples/cpp/API/ReconnectSample/src/main.cpp)
   demonstrates how to connect to an endpoint, subscribe to market data events, handle reconnections
-  and re-subscribing
+  and re-subscribing, connect to a list of addresses and log the state of the connectors with the last connection
+  error
 
 ### Candle
 
@@ -530,14 +531,15 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 - [x] [IpfSample](samples/cpp/IPF/IpfSample/src/main.cpp)
   is a simple demonstration of how to get Instrument Profiles
 - [x] [IpfLiveSample](samples/cpp/IPF/IpfLiveSample/src/main.cpp)
-  is a simple demonstration of how to get live updates for Instrument Profiles
+  is a simple demonstration of how to get live updates for Instrument Profiles from the IPF service or a file
 - [x] [OptionChainSample](samples/cpp/IPF/OptionChainSample/src/main.cpp)
   demonstrates how to build option chains, and prints quotes for nearby option strikes
 
 ### Model
 
 - [x] [SimpleOrderBookSample](samples/cpp/Model/SimpleOrderBookSample/src/main.cpp)
-  demonstrates how to build an order book of a symbol and an order source with `IndexedEventTxModel`
+  demonstrates how to build an order book of a symbol and an order source with `IndexedEventTxModel`, with the
+  scope of each order and a filter by scope
 - [x] [IncOrderSnapshotSample](samples/cpp/Model/IncOrderSnapshotSample/src/main.cpp)
   demonstrates how to subscribe to the Order event and handle snapshots and updates
 - [x] [MultipleMarketDepthSample](samples/cpp/Model/MultipleMarketDepthSample/src/main.cpp)
@@ -551,7 +553,8 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 ### Schedule
 
 - [x] [ScheduleSample](samples/cpp/Schedule/ScheduleSample/src/main.cpp)
-  demonstrates how to get various scheduling information for instruments
+  demonstrates how to get various scheduling information for instruments: whether the market is open at a time,
+  the sessions and the holidays
 
 ### OnDemand
 

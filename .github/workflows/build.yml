@@ -910,13 +910,16 @@ jobs:
           -DCMAKE_C_COMPILER=clang-18
           -DCMAKE_CXX_COMPILER=clang++-18
           -DDXFCXX_BUILD_DOC=OFF
-          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_SAMPLES=ON
           -DDXFCXX_BUILD_TOOLS=ON
           -DDXFCXX_ENABLE_NETWORK_TESTS=ON
 
-      # The test target depends on the Tools, which run the local server.
+      # The test target depends on the Tools, which run the local server. The recipe samples of TROUBLESHOOTING.md
+      # run against the same server.
       - name: Build
-        run: cmake --build ${{github.workspace}}/build -j 4 --target dxFeedGraalCxxApi_network_NetworkTest
+        run: >
+          cmake --build ${{github.workspace}}/build -j 4 --target dxFeedGraalCxxApi_network_NetworkTest
+          ReconnectSample CandleSample SimpleOrderBookSample
 
       - name: Test
         working-directory: ${{github.workspace}}/build
