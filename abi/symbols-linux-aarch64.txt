@@ -1920,6 +1920,7 @@ dxfcpp::v8::Quote::withTimeNanoPart(int)
 dxfcpp::v8::RuntimeException::RuntimeException(dxfcpp::v8::RuntimeException const&)
 dxfcpp::v8::RuntimeException::RuntimeException(dxfcpp::v8::StringParam, dxfcpp::v8::StringParam)
 dxfcpp::v8::RuntimeException::getStackTrace[abi:cxx11]() const &
+dxfcpp::v8::RuntimeStatistics::toString[abi:cxx11]() const
 dxfcpp::v8::Schedule::NYSE()
 dxfcpp::v8::Schedule::Schedule(dxfcpp::v8::JavaObjectHandle<dxfcpp::v8::Schedule>&&)
 dxfcpp::v8::Schedule::UTC()
@@ -2183,6 +2184,7 @@ dxfcpp::v8::SymbolWrapper::toStringUnderlying[abi:cxx11]() const
 dxfcpp::v8::SymbolWrapper::toString[abi:cxx11]() const
 dxfcpp::v8::SymbolWrapper::~SymbolWrapper()
 dxfcpp::v8::System::getProperty[abi:cxx11](dxfcpp::v8::StringParam)
+dxfcpp::v8::System::getRuntimeStatistics()
 dxfcpp::v8::System::setIsolateArguments(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >)
 dxfcpp::v8::System::setProperty(dxfcpp::v8::StringParam, dxfcpp::v8::StringParam)
 dxfcpp::v8::TextConfiguration::TYPE
