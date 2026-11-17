@@ -110,6 +110,10 @@ Warnings of the library (a suspicious candle symbol, a silent subscription) go t
   (`dxfcpp.subscription.eventLagThreshold`, off by default; set it to several seconds). The period of the repeated
   warnings is `dxfcpp.subscription.warningPeriod`. See the page "Listeners and threads" in
   [DXFeedSubscription.hpp](include/dxfeed_graal_cpp_api/api/DXFeedSubscription.hpp).
+- Pauses of the garbage collector of the isolate delay the events too. `System::getRuntimeStatistics()` returns the
+  heap, the counts and the times of the collections, the threads and the CPU time of the process: log them next to the
+  measured delay and compare two calls. A value that the platform does not give is `-1`; the first call may take some
+  milliseconds, so make it once at start-up.
 
 ## Reconnect contract
 

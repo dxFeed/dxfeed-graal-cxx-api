@@ -1,6 +1,7 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
+#include <chrono>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -198,4 +199,68 @@ TEST_CASE("A key or a value with invalid UTF-8 throws and does not change the pr
         REQUIRE(System::setProperty("ValidUtf8", "Значение \xF0\x9F\x98\x80"));
         CHECK(System::getProperty("ValidUtf8") == "Значение \xF0\x9F\x98\x80");
     }
+}
+
+TEST_CASE("Runtime statistics: a default object has every value not given") {
+    using namespace dxfcpp;
+
+    const RuntimeStatistics statistics{};
+
+    CHECK(statistics.heapUsedBytes == -1);
+    CHECK(statistics.heapCommittedBytes == -1);
+    CHECK(statistics.heapMaxBytes == -1);
+    CHECK(statistics.youngGcCount == -1);
+    CHECK(statistics.youngGcTimeMs == -1);
+    CHECK(statistics.fullGcCount == -1);
+    CHECK(statistics.fullGcTimeMs == -1);
+    CHECK(statistics.threadCount == -1);
+    CHECK(statistics.peakThreadCount == -1);
+    CHECK(statistics.processCpuTimeNs == -1);
+    CHECK(statistics.uptimeMs == -1);
+    CHECK(statistics.allocatedBytes == -1);
+    CHECK(statistics.edenUsedBytes == -1);
+    CHECK(statistics.survivorUsedBytes == -1);
+    CHECK(statistics.oldUsedBytes == -1);
+    CHECK(statistics.daemonThreadCount == -1);
+    CHECK(statistics.totalStartedThreadCount == -1);
+    CHECK(statistics.availableProcessors == -1);
+
+    const auto string = statistics.toString();
+
+    CHECK(string.starts_with("RuntimeStatistics{"));
+    CHECK(string.find("heapUsedBytes = -1") != std::string::npos);
+    CHECK(string.find("availableProcessors = -1}") != std::string::npos);
+}
+
+TEST_CASE("Runtime statistics of the isolate are read on the Serial GC") {
+    using namespace dxfcpp;
+
+    const auto first = System::getRuntimeStatistics();
+
+    CHECK(first.heapUsedBytes > 0);
+    CHECK(first.heapCommittedBytes > 0);
+    CHECK(first.heapMaxBytes > 0);
+    CHECK(first.youngGcCount >= 0);
+    CHECK(first.youngGcTimeMs >= 0);
+    CHECK(first.fullGcCount >= 0);
+    CHECK(first.fullGcTimeMs >= 0);
+    CHECK(first.threadCount > 0);
+    CHECK(first.peakThreadCount > 0);
+    CHECK(first.processCpuTimeNs >= 0);
+    CHECK(first.uptimeMs >= 0);
+    CHECK((first.allocatedBytes == -1 || first.allocatedBytes >= 0));
+    CHECK(first.edenUsedBytes >= 0);
+    CHECK(first.survivorUsedBytes >= 0);
+    CHECK(first.oldUsedBytes >= 0);
+    CHECK(first.daemonThreadCount >= 0);
+    CHECK(first.totalStartedThreadCount > 0);
+    CHECK(first.availableProcessors > 0);
+    CHECK(first.toString().find("heapMaxBytes = " + std::to_string(first.heapMaxBytes)) != std::string::npos);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+    const auto second = System::getRuntimeStatistics();
+
+    CHECK(second.uptimeMs > first.uptimeMs);
+    CHECK(second.heapMaxBytes > 0);
 }

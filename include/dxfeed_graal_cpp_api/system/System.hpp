@@ -8,6 +8,7 @@
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../detail/StringParam.hpp"
+#include "./RuntimeStatistics.hpp"
 
 
 #include <string>
@@ -147,6 +148,24 @@ struct DXFCPP_EXPORT System {
      * @throws InvalidArgumentException if an argument contains a NUL character; the stored arguments do not change.
      */
     static bool setIsolateArguments(std::vector<std::string> arguments);
+
+    /**
+     * Reads the runtime statistics of the Graal isolate of the library and of its process: the heap, the garbage
+     * collections, the threads, the CPU time of the process and the uptime. A value that the platform or the garbage
+     * collector does not give is `-1`, and the call still succeeds (see RuntimeStatistics).
+     *
+     * Reading changes nothing: the counters are cumulative since the isolate started, and the caller computes the
+     * change between two calls. The first call initializes the sources and may take some milliseconds: call it once at
+     * start-up to take the cost out of a measurement. The call creates the isolate if it is not created yet.
+     *
+     * @return The runtime statistics.
+     * @throws RuntimeException if the Graal Native SDK library does not support the runtime statistics (the message
+     * names the feature and the version of the library).
+     * @throws JavaException if the Graal Native SDK failed to read the statistics.
+     * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments") or
+     * the library is shut down (dxfcpp::shutdown()).
+     */
+    static RuntimeStatistics getRuntimeStatistics();
 };
 
 /**

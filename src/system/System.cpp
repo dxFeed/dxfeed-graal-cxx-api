@@ -4,11 +4,15 @@
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 
 #include "../../include/dxfeed_graal_c_api/api.h"
+#include "../../include/dxfeed_graal_cpp_api/exceptions/RuntimeException.hpp"
 #include "../internal/Isolate.hpp"
 #include "../internal/utils/debug/Debug.hpp"
 #include "../isolated/IsolatedCommon.hpp"
 
 #include <dxfg_api.h>
+#include <fmt/format.h>
+
+#include <cstdint>
 #include <string>
 #include <string_view>
 #include <utf8.h>
@@ -42,6 +46,47 @@ void throwIfIsolateFailed() {
 }
 
 } // namespace
+
+// System::getRuntimeStatistics() maps the 18 values one to one.
+static_assert(sizeof(dxfg_v4_runtime_stats_t) == 18 * sizeof(std::int64_t),
+              "dxfg_v4_runtime_stats_t changed: update RuntimeStatistics");
+
+RuntimeStatistics System::getRuntimeStatistics() {
+    throwIfIsolateFailed();
+
+    // Defensive: the minimum version of the SDK supports the feature.
+    if (isolated::runGraalV4FunctionWithResult(dxfg_v4_system_is_feature_supported,
+                                               DXFG_V4_FEATURE_RUNTIME_STATISTICS) == 0) {
+        throw RuntimeException(fmt::format("The runtime statistics (the feature '{}') are not supported by the "
+                                           "Graal Native SDK library {}",
+                                           DXFG_V4_FEATURE_RUNTIME_STATISTICS, Isolate::getGraalNativeSdkVersion()));
+    }
+
+    dxfg_v4_runtime_stats_t stats{};
+
+    isolated::runGraalV4Function(dxfg_v4_system_get_runtime_statistics, &stats);
+
+    return RuntimeStatistics{
+        .heapUsedBytes = stats.heap_used_bytes,
+        .heapCommittedBytes = stats.heap_committed_bytes,
+        .heapMaxBytes = stats.heap_max_bytes,
+        .youngGcCount = stats.young_gc_count,
+        .youngGcTimeMs = stats.young_gc_time_ms,
+        .fullGcCount = stats.full_gc_count,
+        .fullGcTimeMs = stats.full_gc_time_ms,
+        .threadCount = stats.thread_count,
+        .peakThreadCount = stats.peak_thread_count,
+        .processCpuTimeNs = stats.process_cpu_time_ns,
+        .uptimeMs = stats.uptime_ms,
+        .allocatedBytes = stats.allocated_bytes,
+        .edenUsedBytes = stats.eden_used_bytes,
+        .survivorUsedBytes = stats.survivor_used_bytes,
+        .oldUsedBytes = stats.old_used_bytes,
+        .daemonThreadCount = stats.daemon_thread_count,
+        .totalStartedThreadCount = stats.total_started_thread_count,
+        .availableProcessors = stats.available_processors,
+    };
+}
 
 bool System::setProperty(StringParam key, StringParam value) {
     throwIfIsolateFailed();
@@ -116,6 +161,17 @@ std::string System::getProperty(StringParam key) {
 
 bool System::setIsolateArguments(std::vector<std::string> arguments) {
     return Isolate::setArguments(std::move(arguments));
+}
+
+std::string RuntimeStatistics::toString() const {
+    return fmt::format(
+        "RuntimeStatistics{{heapUsedBytes = {}, heapCommittedBytes = {}, heapMaxBytes = {}, youngGcCount = {}, "
+        "youngGcTimeMs = {}, fullGcCount = {}, fullGcTimeMs = {}, threadCount = {}, peakThreadCount = {}, "
+        "processCpuTimeNs = {}, uptimeMs = {}, allocatedBytes = {}, edenUsedBytes = {}, survivorUsedBytes = {}, "
+        "oldUsedBytes = {}, daemonThreadCount = {}, totalStartedThreadCount = {}, availableProcessors = {}}}",
+        heapUsedBytes, heapCommittedBytes, heapMaxBytes, youngGcCount, youngGcTimeMs, fullGcCount, fullGcTimeMs,
+        threadCount, peakThreadCount, processCpuTimeNs, uptimeMs, allocatedBytes, edenUsedBytes, survivorUsedBytes,
+        oldUsedBytes, daemonThreadCount, totalStartedThreadCount, availableProcessors);
 }
 
 void shutdown() {
