@@ -479,6 +479,21 @@ jobs:
         working-directory: build-Tools
         run: cpack -G ${{ contains(matrix.config.os, 'win') && 'ZIP' || 'TGZ' }} -C ${{matrix.buildType}} --config ./dxFeedGraalCxxApiPackConfig.cmake
 
+      # The build-info of the Graal Native SDK archive that each build downloaded (the GraalVM and the JDK that built the
+      # SDK library), next to every archive of the build: publish_release makes the SBOMs with it (scripts/sbom.py).
+      - name: Record the Graal Native SDK of the archives
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          info=_deps/dxfeedgraalnativesdk-src/docs/graal-native-sdk-build-info.properties
+          for dir in "build-${{matrix.buildType}}" "build-${{matrix.buildType}}-mt" build-Samples build-Tools; do
+            for archive in "$dir"/*.zip "$dir"/*.tar.gz; do
+              cp "$dir/$info" "$archive.sdk-build-info.properties"
+              echo "$archive: $(grep -E '^(sdk.version|target|graalvm.version)=' "$dir/$info" | tr '\n' ' ')"
+            done
+          done
+
       - name: Upload [Lib]
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -486,6 +501,7 @@ jobs:
           path: |
             build-${{matrix.buildType}}/*.zip
             build-${{matrix.buildType}}/*.tar.gz
+            build-${{matrix.buildType}}/*.sdk-build-info.properties
           if-no-files-found: error
 
       - name: Upload [Lib][Win with static with MT]
@@ -493,7 +509,9 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: artifacts-lib-${{matrix.config.name}}-${{matrix.buildType}}-mt
-          path: build-${{matrix.buildType}}-mt/*.zip
+          path: |
+            build-${{matrix.buildType}}-mt/*.zip
+            build-${{matrix.buildType}}-mt/*.sdk-build-info.properties
 
       - name: Upload [Samples][Tools]
         if: ${{ !contains(matrix.buildType, 'Deb') }}
@@ -503,8 +521,10 @@ jobs:
           path: |
             build-Samples/*.zip
             build-Samples/*.tar.gz
+            build-Samples/*.sdk-build-info.properties
             build-Tools/*.zip
             build-Tools/*.tar.gz
+            build-Tools/*.sdk-build-info.properties
           if-no-files-found: error
 
   build_docs_and_upload_and_deploy_gh_pages:
@@ -875,11 +895,16 @@ jobs:
       - check_static_mt
       - check_linux_packages
       - check_packages
+    # id-token and attestations: the build provenance attestation of the release files.
     permissions:
       actions: read
       contents: write
+      id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.get_version.outputs.tag_name }}
       - id: download
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
@@ -896,19 +921,58 @@ jobs:
         with:
           name: release-notes
 
+      # A CycloneDX SBOM next to every archive: the C++ dependencies of CMakeLists.txt, the Graal Native SDK with the
+      # GraalVM and the JDK of its build-info and the Java libraries of its pom.xml at its release tag.
+      - name: Make the SBOMs
+        env:
+          VERSION: ${{ needs.get_version.outputs.version }}
+        run: |
+          set -euo pipefail
+          sdk_version=$(python3 -c 'import json; print(json.load(open("deps.json"))["graal-native-sdk"])')
+          curl --fail --silent --show-error --location --retry 3 -o "$RUNNER_TEMP/graal-native-sdk-pom.xml" \
+            "https://raw.githubusercontent.com/dxFeed/dxfeed-graal-native-sdk/v${sdk_version}/pom.xml"
+          python3 scripts/sbom.py --artifacts-dir artifacts --version "$VERSION" \
+            --pom "$RUNNER_TEMP/graal-native-sdk-pom.xml" --timestamp "$(git log -1 --format=%cI)"
+
+      # The SHA-256 of every file of the release, by the file name (the assets of a release have no directories).
+      - name: Make SHA256SUMS
+        working-directory: artifacts
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          for file in *.zip *.tar.gz *.cdx.json abi-x86_64-linux.xml \
+              build-Samples/*.zip build-Samples/*.tar.gz build-Samples/*.cdx.json \
+              build-Tools/*.zip build-Tools/*.tar.gz build-Tools/*.cdx.json; do
+            (cd "$(dirname "$file")" && sha256sum "$(basename "$file")")
+          done | sort -k 2 > SHA256SUMS
+          cat SHA256SUMS
+
+      # The build provenance of every file in SHA256SUMS: gh attestation verify <file> --repo dxFeed/dxfeed-graal-cxx-api.
+      # Forks have no attestations of this repository.
+      - name: Attest the build provenance
+        if: ${{ github.repository == 'dxFeed/dxfeed-graal-cxx-api' }}
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-checksums: artifacts/SHA256SUMS
+
       - uses: softprops/action-gh-release@a4f117a9dd5572319a486154ec1147aebabd285c # untagged master commit of 2024-02-05
         with:
           files: |
             artifacts/*.zip
             artifacts/*.tar.gz
+            artifacts/*.cdx.json
             artifacts/build-Samples/*.zip
             artifacts/build-Samples/*.tar.gz
+            artifacts/build-Samples/*.cdx.json
             artifacts/build-Tools/*.zip
             artifacts/build-Tools/*.tar.gz
+            artifacts/build-Tools/*.cdx.json
             artifacts/abi-x86_64-linux.xml
+            artifacts/SHA256SUMS
           # A pattern without files fails the release rather than publishing it without them: the ABI XML of this
           # release is the reference of the next ones. The packages of the libraries are in artifacts/ (tar.gz on Linux
-          # and macOS, zip on Windows), with the full source bundle and the documentation (zip).
+          # and macOS, zip on Windows), with the full source bundle and the documentation (zip); the SBOM of an archive
+          # is next to it.
           fail_on_unmatched_files: true
           prerelease: >
             ${{ contains(needs.get_version.outputs.version, 'alpha')

@@ -33,6 +33,7 @@ the [Overview](#overview) section.<br>
   * [With CMake](#with-cmake)
   * [Without CMake](#without-cmake)
   * [Windows without the Visual C++ Redistributable](#windows-without-the-visual-c-redistributable)
+  * [Verifying a download](#verifying-a-download)
 - [Usage](#usage)
   * [How to connect to QD endpoint](#how-to-connect-to-qd-endpoint)
   * [How to connect to dxLink](#how-to-connect-to-dxlink)
@@ -298,6 +299,29 @@ copy /y "%A%\bin\DxFeedGraalNativeSdk.dll" . >nul
 rem Single exe
 cl /nologo /std:c++20 /MT /EHsc /I "%A%\include" main.cpp "%A%\lib\dxFeedGraalCxxApi_static.lib" ^
     "%A%\lib\DxFeedGraalNativeSdk_static.lib" @"%A%\lib\link-flags.txt" /Fe:main-single.exe
+```
+
+### Verifying a download
+
+From v9 on, each archive of a release has an SBOM next to it: `<archive name without .zip or .tar.gz>.cdx.json` (CycloneDX 1.6
+JSON). It lists what the archive contains: the C++ libraries of the archive, the Graal Native SDK with the GraalVM and
+the JDK that built it and the Java libraries of the SDK, with their versions, licenses and links.
+
+`SHA256SUMS` of the release has the SHA-256 of every archive and SBOM. Download it to the directory of the archives
+and check them:
+
+```shell
+sha256sum -c SHA256SUMS --ignore-missing    # Linux
+shasum -a 256 -c SHA256SUMS --ignore-missing # macOS
+```
+
+On Windows, compare the output of `Get-FileHash <archive>` (PowerShell) with the line of the archive in `SHA256SUMS`.
+
+The files listed in `SHA256SUMS` also have a build provenance attestation: it shows that the file was built by the
+release workflow of this repository, and from which commit. Check it with the GitHub CLI:
+
+```shell
+gh attestation verify dxFeedGraalCxxApi-<version>-<platform>-Release.tar.gz --repo dxFeed/dxfeed-graal-cxx-api
 ```
 
 ## Usage

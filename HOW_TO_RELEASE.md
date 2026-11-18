@@ -145,6 +145,32 @@ bases) fails the check; additions pass, with the report in the summary of the ru
 - the report shows a change that is not the ABI of the library: add a suppression to `abi/abidiff.suppr`, with a
   comment that says why, in a pull request.
 
+### The SBOMs, the checksums and the attestation
+
+`publish_release` adds three things to the files of the release (see
+[Verifying a download](README.md#verifying-a-download)):
+
+- an SBOM next to each archive, `<name>.cdx.json` (CycloneDX 1.6), made by `scripts/sbom.py`;
+- `SHA256SUMS` with the archives, the SBOMs and `abi-x86_64-linux.xml`;
+- a build provenance attestation of the files of `SHA256SUMS` (`actions/attest-build-provenance`), only in
+  `dxFeed/dxfeed-graal-cxx-api`: a fork has no attestations.
+
+`scripts/sbom.py` takes the C++ dependencies of each kind of archive from its own table (the versions from
+`CMakeLists.txt`), the GraalVM and the JDK from the build-info of the Graal Native SDK archive that the build
+downloaded (each build puts it next to its archives as `<archive>.sdk-build-info.properties`; it is not published),
+and the Java libraries from `pom.xml` of the SDK at the tag of its version. The script stops the release when the
+build-info is missing or does not match the SDK version and the platform of the archive, or when `pom.xml` is of
+another version. Run it locally on the downloaded artifacts of a run:
+
+```shell
+python3 scripts/sbom.py --artifacts-dir artifacts --version v9.0.0 --pom pom.xml --timestamp 2026-01-01T00:00:00Z
+```
+
+A new version of the Graal Native SDK needs no change of the script, only the SHA-256 of its archives in
+`CMakeLists.txt` (without them the script stops). A Samples archive lists Portals only when it has
+`MarketDepthModelSample`, which is built only with a toolchain that can build Portals. A new dependency or a new kind of archive does:
+see [Updating a dependency](DEPENDENCIES.md#updating-a-dependency).
+
 ### A failed release run
 
 The tag is on origin, the release is not published and GitHub Pages are not updated.
@@ -198,7 +224,9 @@ python3 -m unittest discover -s scripts/tests
 cmake -P scripts/tests/test_release.cmake
 ```
 
-The first one also runs `release.cmake` in a git repository and checks that both scripts give the same result.
+The first one also runs `release.cmake` in a git repository and checks that both scripts give the same result, and
+checks `scripts/sbom.py` with the versions of `CMakeLists.txt` and `deps.json` and the licenses of
+`THIRD_PARTY_LICENSES.md`.
 
 ### Build the documentation
 

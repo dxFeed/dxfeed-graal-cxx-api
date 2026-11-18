@@ -58,6 +58,13 @@ Git dependencies are pinned by tag or commit. GitHub Actions in `.github/workflo
 version in a comment; Dependabot (`.github/dependabot.yml`) proposes their updates weekly: the minor and patch
 updates in one pull request, every major update in a pull request of its own.
 
+The SBOMs of the release archives (`scripts/sbom.py`) take the versions from `CMakeLists.txt` (utf8proc from the
+sources of Portals, Doxygen Awesome from this file), so a new version needs no change there. A new dependency that goes into an archive (linked into the library, the samples or the tools, or
+included in the source bundle) needs a row in `DEPENDENCIES` of `scripts/sbom.py` (its CMake variable, repository,
+license and the kinds of archives), besides `deps.json`, this file and `THIRD_PARTY_LICENSES.md`. The tests of the
+scripts (`python3 -m unittest discover -s scripts/tests`) check that the versions agree with `deps.json` and the
+licenses with `THIRD_PARTY_LICENSES.md`.
+
 ## Run-time
 
 - [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.17.0
