@@ -78,11 +78,14 @@ TEST_CASE("MessageConnector: a connected endpoint has one CONNECTED client socke
 
     std::vector<MessageConnectorInfo> connectors{};
 
+    // The state, the addresses and the statistics of a connector are read one after another, not as one snapshot: the
+    // state may already be CONNECTED while the address of the new connection is not yet listed.
     REQUIRE(test::waitUntil([&] {
         connectors = endpoint->getConnectors();
 
         return connectors.size() == 1 && connectors[0].state == MessageConnectorInfo::State::CONNECTED &&
-               connectors[0].connectionCount == 1;
+               connectors[0].connectionCount == 1 && !connectors[0].currentAddresses.empty() &&
+               connectors[0].statistics.activeConnectionCount == 1;
     }));
 
     const auto &connector = connectors[0];
