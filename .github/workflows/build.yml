@@ -89,7 +89,8 @@ jobs:
           
       # The packages of the gcc from the PPA are kept in a cache: when Launchpad is down, every gcc row of the matrix
       # would fail on the install. The PPA is used only when there is no cache or its packages no longer install on the
-      # runner image. Raise the number at the end of the key to take a newer build of the gcc from the PPA.
+      # runner image. Raise the number at the end of the key to take a newer build of the gcc from the PPA. The download
+      # from the PPA (about 300 MB) may take more than 10 minutes when Launchpad is slow, hence the time limit of the step.
       - name: Restore gcc packages
         id: gcc-debs
         if: ${{ matrix.config.gcc_version != '' && matrix.config.gcc_version != null }}
@@ -101,7 +102,7 @@ jobs:
       - name: Install gcc from ubuntu-toolchain-r PPA
         id: install-gcc
         if: ${{ matrix.config.gcc_version != '' && matrix.config.gcc_version != null }}
-        timeout-minutes: 10
+        timeout-minutes: 30
         env:
           GCC_VERSION: ${{ matrix.config.gcc_version }}
           CACHE_HIT: ${{ steps.gcc-debs.outputs.cache-hit }}
