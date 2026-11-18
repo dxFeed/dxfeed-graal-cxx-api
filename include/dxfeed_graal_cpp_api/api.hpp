@@ -42,6 +42,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 #include "./schedule/ScheduleModule.hpp"
 #include "./symbols/StringSymbol.hpp"
 #include "./symbols/SymbolWrapper.hpp"
+#include "./system/RuntimeStatistics.hpp"
 #include "./system/System.hpp"
 #include "./util/CmdArgsUtils.hpp"
 #include "./util/Handler.hpp"

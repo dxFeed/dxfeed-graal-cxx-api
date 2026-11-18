@@ -523,6 +523,7 @@ class std::basic_string<char,struct std::char_traits<char>,class std::allocator<
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::PriceIncrements::getText(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::Quote::getAskExchangeCodeString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::Quote::getBidExchangeCodeString(void)const
+class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::RuntimeStatistics::toString(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::Schedule::getDefinition(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::Schedule::getName(void)const
 class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > dxfcpp::v8::Schedule::getTimeZoneDisplayName(void)const
@@ -1226,6 +1227,7 @@ dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController>::Requir
 dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController>::RequireMakeShared<struct dxfcpp::v8::SubscriptionController>(void)
 dxfcpp::v8::RuntimeException::RuntimeException(struct dxfcpp::v8::RuntimeException const &)
 dxfcpp::v8::RuntimeException::RuntimeException(struct dxfcpp::v8::StringParam,struct dxfcpp::v8::StringParam)
+dxfcpp::v8::RuntimeStatistics::RuntimeStatistics(void)
 dxfcpp::v8::Schedule::Schedule(struct dxfcpp::v8::JavaObjectHandle<struct dxfcpp::v8::Schedule> &&)
 dxfcpp::v8::Schedule::Schedule(struct dxfcpp::v8::Schedule &&)
 dxfcpp::v8::Schedule::~Schedule(void)
@@ -1973,6 +1975,7 @@ static struct dxfcpp::v8::PriceType const dxfcpp::v8::PriceType::FINAL
 static struct dxfcpp::v8::PriceType const dxfcpp::v8::PriceType::INDICATIVE
 static struct dxfcpp::v8::PriceType const dxfcpp::v8::PriceType::PRELIMINARY
 static struct dxfcpp::v8::PriceType const dxfcpp::v8::PriceType::REGULAR
+static struct dxfcpp::v8::RuntimeStatistics dxfcpp::v8::System::getRuntimeStatistics(void)
 static struct dxfcpp::v8::Scope const dxfcpp::v8::Scope::AGGREGATE
 static struct dxfcpp::v8::Scope const dxfcpp::v8::Scope::COMPOSITE
 static struct dxfcpp::v8::Scope const dxfcpp::v8::Scope::ORDER
@@ -2422,6 +2425,8 @@ struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::PriceLevelService> & dxf
 struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController> & dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController>::operator=(struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController> &&)
 struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController> & dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController>::operator=(struct dxfcpp::v8::RequireMakeShared<struct dxfcpp::v8::SubscriptionController> const &)
 struct dxfcpp::v8::RuntimeException & dxfcpp::v8::RuntimeException::operator=(struct dxfcpp::v8::RuntimeException const &)
+struct dxfcpp::v8::RuntimeStatistics & dxfcpp::v8::RuntimeStatistics::operator=(struct dxfcpp::v8::RuntimeStatistics &&)
+struct dxfcpp::v8::RuntimeStatistics & dxfcpp::v8::RuntimeStatistics::operator=(struct dxfcpp::v8::RuntimeStatistics const &)
 struct dxfcpp::v8::Schedule & dxfcpp::v8::Schedule::operator=(struct dxfcpp::v8::Schedule &&)
 struct dxfcpp::v8::Scope const & dxfcpp::v8::OrderBase::getScope(void)const&
 struct dxfcpp::v8::Session & dxfcpp::v8::Session::operator=(struct dxfcpp::v8::Session &&)

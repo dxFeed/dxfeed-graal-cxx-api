@@ -1,4 +1,4 @@
-* **\[MDAPI-511]\[C++]** **\[BREAKING]** The Graal Native SDK 3.16.0 is the minimum version: the configuration fails
+* **\[MDAPI-511]\[C++]** **\[BREAKING]** The Graal Native SDK 3.17.0 is the minimum version: the configuration fails
   with an older `DXFEED_GRAAL_NATIVE_SDK_VERSION`, also with `DXFG_LOCAL_ARCHIVE_PATH`.
     * Fixed: TLS connections trusted certificate authorities that are no longer trusted. The SDK is built with
       GraalVM 25.5 and trusts the root CAs of its JDK, so it no longer trusts the eMudhra and Comodo roots that
