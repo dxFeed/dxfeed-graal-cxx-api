@@ -57,6 +57,10 @@ jobs:
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
     runs-on: ${{ matrix.config.image }}
 
+    env:
+      # The packages of the gcc from the ubuntu-toolchain-r PPA (the rows with gcc_version).
+      GCC_DEB_CACHE: ${{ github.workspace }}/.gcc-debs
+
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -83,12 +87,62 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang-${{ matrix.config.llvm_version }}
           
-      - name: Install gcc from ubuntu-toolchain-r PPA
+      # The packages of the gcc from the PPA are kept in a cache: when Launchpad is down, every gcc row of the matrix
+      # would fail on the install. The PPA is used only when there is no cache or its packages no longer install on the
+      # runner image. Raise the number at the end of the key to take a newer build of the gcc from the PPA.
+      - name: Restore gcc packages
+        id: gcc-debs
         if: ${{ matrix.config.gcc_version != '' && matrix.config.gcc_version != null }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.GCC_DEB_CACHE }}
+          key: gcc-debs-${{ matrix.config.image }}-gcc-${{ matrix.config.gcc_version }}-1
+
+      - name: Install gcc from ubuntu-toolchain-r PPA
+        id: install-gcc
+        if: ${{ matrix.config.gcc_version != '' && matrix.config.gcc_version != null }}
+        timeout-minutes: 10
+        env:
+          GCC_VERSION: ${{ matrix.config.gcc_version }}
+          CACHE_HIT: ${{ steps.gcc-debs.outputs.cache-hit }}
         run: |
-          sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+          packages="gcc-$GCC_VERSION g++-$GCC_VERSION"
+
+          if [ "$CACHE_HIT" = true ]; then
+            if sudo apt-get update && sudo apt-get install -y "$GCC_DEB_CACHE"/*.deb; then
+              echo "gcc $GCC_VERSION is installed from the cached packages"
+              exit 0
+            fi
+
+            echo "::warning::The cached gcc packages do not install; raise the number at the end of the cache key"
+          fi
+
+          sudo add-apt-repository -y -n ppa:ubuntu-toolchain-r/test
           sudo apt-get update
-          sudo apt-get install -y gcc-${{ matrix.config.gcc_version }} g++-${{ matrix.config.gcc_version }}
+          # Only the packages of this install are left in the archive of apt; they are copied before the install, which
+          # may clean the archive.
+          sudo apt-get clean
+          sudo apt-get install -y --download-only $packages
+
+          debs=(/var/cache/apt/archives/*.deb)
+
+          if [ "$CACHE_HIT" != true ] && [ -e "${debs[0]}" ]; then
+            mkdir -p "$GCC_DEB_CACHE"
+            cp "${debs[@]}" "$GCC_DEB_CACHE"/
+            echo "save=true" >> "$GITHUB_OUTPUT"
+          fi
+
+          sudo apt-get install -y $packages
+
+      # Saved at once, not at the end of the job, so that a failed build or test does not lose it. The rows of the
+      # same gcc race for the key: the first one saves, the others only warn.
+      - name: Save gcc packages
+        if: ${{ steps.install-gcc.outputs.save == 'true' }}
+        continue-on-error: true
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.GCC_DEB_CACHE }}
+          key: gcc-debs-${{ matrix.config.image }}-gcc-${{ matrix.config.gcc_version }}-1
 
       - name: Install Linux UI dependencies
         if: ${{ contains(matrix.config.os, 'linux') }}
