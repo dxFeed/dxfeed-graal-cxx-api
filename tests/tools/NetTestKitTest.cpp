@@ -10,12 +10,15 @@
 
 #include "../../tools/Tools/src/Args/Args.hpp"
 #include "../../tools/Tools/src/NetTest/Args.hpp"
+#include "../../tools/Tools/src/NetTest/EventPool.hpp"
 #include "../../tools/Tools/src/NetTest/NetTestTool.hpp"
+#include "../../tools/Tools/src/NetTest/SymbolPool.hpp"
 #include "nettest/KitJson.hpp"
 
 #include <algorithm>
 #include <cstdint>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <optional>
 #include <sstream>
@@ -180,6 +183,43 @@ std::string firstLine(const std::string &text) {
     return text.substr(0, text.find('\n'));
 }
 
+// A 64-bit value of the kit: a hex string.
+std::uint64_t hexValue(const kit::Json &value) {
+    return std::stoull(value.asString(), nullptr, 16);
+}
+
+// The lines of a text without the line ends (the kit files come with CRLF on Windows).
+std::vector<std::string> splitLines(const std::string &text) {
+    std::vector<std::string> lines;
+    std::istringstream in(text);
+    std::string line;
+
+    while (std::getline(in, line)) {
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+
+        if (!line.empty()) {
+            lines.push_back(line);
+        }
+    }
+
+    return lines;
+}
+
+// The IPF reader needs the Graal isolate, which the SDK stub does not have: the tests that read a file skip then.
+bool ipfReadable() {
+#ifdef DXFCXX_NETTEST_SDK_STUB
+    MESSAGE("The IPF reader needs the real SDK: the test is skipped");
+
+    return false;
+#else
+    return true;
+#endif
+}
+
+const std::string IPF_FILE = (std::filesystem::path(DXFCXX_TEST_DATA_DIR) / "ipf" / "option-chains.ipf").string();
+
 } // namespace
 
 TEST_CASE("NetTest kit: the parser gives the settings and the errors of cli-vectors.json") {
@@ -333,4 +373,302 @@ TEST_CASE("NetTest: the system properties keep the command line order") {
     REQUIRE(plain.ok);
     CHECK(endpointNanoTime(plain.settings) == "true");
     CHECK(isNanoTimeOn(plain.settings));
+}
+
+TEST_CASE("NetTest kit: the first generated symbols are those of symbols-generated-10.txt") {
+    const auto directory = kitDirectory();
+
+    if (!directory) {
+        return;
+    }
+
+    const auto expected = splitLines(kit::readText(*directory + "/symbols-generated-10.txt"));
+
+    REQUIRE(expected.size() == 10);
+    CHECK(generateSymbols(10) == expected);
+}
+
+TEST_CASE("NetTest kit: the generated symbols give the draws, samples and hashes of symbols-generated-vectors.json") {
+    const auto directory = kitDirectory();
+
+    if (!directory) {
+        return;
+    }
+
+    const auto vectors = kit::readJson(*directory + "/symbols-generated-vectors.json");
+
+    for (const auto &entry : nonEmpty(vectors["cases"])) {
+        const auto total = entry["total"].asInteger();
+        std::int64_t draws = 0;
+        const auto symbols = generateSymbols(total, &draws);
+
+        CAPTURE(total);
+        REQUIRE(static_cast<std::int64_t>(symbols.size()) == total);
+        CHECK(draws == entry["draws"].asInteger());
+
+        for (const auto &sample : nonEmpty(entry["samples"])) {
+            const auto index = sample["index"].asInteger();
+
+            REQUIRE(index >= 0);
+            REQUIRE(index < total);
+            CHECK(symbols[static_cast<std::size_t>(index)] == sample["symbol"].asString());
+        }
+
+        // FNV-1a 64 of the symbols, each followed by a line feed.
+        std::uint64_t hash = 0xCBF29CE484222325ULL;
+
+        for (const auto &symbol : symbols) {
+            for (const auto byte : symbol + '\n') {
+                hash = (hash ^ static_cast<unsigned char>(byte)) * 0x100000001B3ULL;
+            }
+        }
+
+        CHECK(hash == hexValue(entry["fnv1a64"]));
+    }
+}
+
+TEST_CASE("NetTest: the generated symbols out of the range give an empty set") {
+    CHECK(generateSymbols(0).empty());
+    CHECK(generateSymbols(-1).empty());
+    CHECK(generateSymbols(100'000'001).empty());
+}
+
+TEST_CASE("NetTest kit: the pools of the instances give the table and the first batch of pool-vectors.json") {
+    const auto directory = kitDirectory();
+
+    if (!directory) {
+        return;
+    }
+
+    const auto vectors = kit::readJson(*directory + "/pool-vectors.json");
+
+    for (const auto &instance : nonEmpty(vectors["instances"])) {
+        const auto number = static_cast<std::int32_t>(instance["instance"].asInteger());
+        const auto &events = instance["events"];
+        const auto poolSize = static_cast<std::size_t>(events["pool_size"].asInteger());
+        const auto symbols = std::make_shared<const std::vector<std::string>>(
+            generateSymbols(static_cast<std::int64_t>(poolSize)));
+
+        INFO("instance " << number);
+
+        EventPool pool(number, symbols, EventKind::TRADE, false);
+
+        CHECK(pool.seed() == hexValue(instance["seed"]));
+        CHECK(pool.initialState() == hexValue(instance["initial_state"]));
+        CHECK(pool.size() == poolSize);
+
+        // The first draws make the rows 0 to 3: the price from the first draw of a row, the size from the second.
+        const auto &draws = instance["first_draws"].array;
+        auto state = pool.initialState();
+
+        REQUIRE(draws.size() == 8);
+
+        for (std::size_t at = 0; at < draws.size(); ++at) {
+            CHECK(EventPool::nextDraw(state) == hexValue(draws[at]));
+        }
+
+        for (std::size_t row = 0; row < 4; ++row) {
+            CHECK(pool.prices()[row] == static_cast<double>(100 + hexValue(draws[2 * row]) % 100'000) / 100.0);
+            CHECK(pool.sizes()[row] == static_cast<double>(1 + hexValue(draws[2 * row + 1]) % 1000));
+        }
+
+        for (const auto &row : nonEmpty(instance["table_rows"])) {
+            const auto at = static_cast<std::size_t>(row["row"].asInteger());
+
+            CHECK(pool.prices()[at] == row["price"].asNumber());
+            CHECK(pool.sizes()[at] == row["size"].asNumber());
+        }
+
+        // The table takes 2048 draws, then each event of the first batch takes one.
+        state = pool.initialState();
+
+        for (std::size_t at = 0; at < 2 * EventPool::TABLE_SIZE; ++at) {
+            EventPool::nextDraw(state);
+        }
+
+        const auto &first = nonEmpty(events["first_events"]);
+        constexpr std::int64_t epochNanos = 1'763'380'800'123'456'789LL;
+        EventBatch batch;
+
+        pool.fillAt(batch, first.size(), epochNanos);
+        REQUIRE(batch.size() == first.size());
+
+        for (std::size_t at = 0; at < first.size(); ++at) {
+            const auto &expected = first[at];
+            const auto draw = EventPool::nextDraw(state);
+            const auto trade = std::dynamic_pointer_cast<Trade>(batch[at]);
+            const auto symbolIndex = static_cast<std::size_t>(expected["symbol_index"].asInteger());
+            const auto row = static_cast<std::size_t>(expected["row"].asInteger());
+
+            INFO("event " << at);
+            CHECK(draw == hexValue(expected["draw"]));
+            CHECK((draw >> 32) % poolSize == symbolIndex);
+            CHECK((draw >> 8) % EventPool::TABLE_SIZE == row);
+            REQUIRE(trade != nullptr);
+            CHECK(trade->getEventSymbol() == (*symbols)[symbolIndex]);
+            CHECK(trade->getPrice() == expected["price"].asNumber());
+            CHECK(trade->getSize() == expected["size"].asNumber());
+            CHECK(trade->getTimeNanoPart() == 456'789);
+            CHECK(trade->getTime() == 1'763'380'800'123LL);
+            CHECK(trade->getTimeSequence() == packTimeSequence(epochNanos, static_cast<std::uint32_t>(at)));
+        }
+    }
+}
+
+TEST_CASE("NetTest: the pool of TimeAndSale events and the reuse of the pool events") {
+    const auto symbols = std::make_shared<const std::vector<std::string>>(generateSymbols(3));
+    constexpr std::int64_t epochNanos = 1'763'380'800'123'456'789LL;
+    EventBatch batch;
+
+    EventPool reusing(1, symbols, EventKind::TIME_AND_SALE, true);
+
+    reusing.fillAt(batch, 20, epochNanos);
+    REQUIRE(batch.size() == 20);
+
+    for (std::size_t at = 0; at < batch.size(); ++at) {
+        const auto sale = std::dynamic_pointer_cast<TimeAndSale>(batch[at]);
+
+        REQUIRE(sale != nullptr);
+
+        // 20 draws of 3 symbols: the events are the pool objects.
+        CHECK((batch[at] == reusing.poolEvent(0) || batch[at] == reusing.poolEvent(1) ||
+               batch[at] == reusing.poolEvent(2)));
+        CHECK(sale->getTimeNanoPart() == 456'789);
+        CHECK(sale->getTime() == 1'763'380'800'123LL);
+    }
+
+    // The sequence of the instance goes on between the batches.
+    CHECK(reusing.nextSequence() == 20);
+
+    EventPool copying(1, symbols, EventKind::TIME_AND_SALE, false);
+
+    copying.fillAt(batch, 20, epochNanos);
+    REQUIRE(batch.size() == 20);
+
+    for (std::size_t at = 0; at < batch.size(); ++at) {
+        const auto sale = std::dynamic_pointer_cast<TimeAndSale>(batch[at]);
+
+        REQUIRE(sale != nullptr);
+        CHECK((batch[at] != copying.poolEvent(0) && batch[at] != copying.poolEvent(1) &&
+               batch[at] != copying.poolEvent(2)));
+        CHECK(sale->getIndex() == packTimeSequence(epochNanos, static_cast<std::uint32_t>(at)));
+        CHECK(sale->getEventSymbol().empty() == false);
+    }
+
+    // The pool events themselves keep their defaults: only the copies carry the stamp.
+    const auto pooled = std::dynamic_pointer_cast<TimeAndSale>(copying.poolEvent(0));
+
+    REQUIRE(pooled != nullptr);
+    CHECK(pooled->getIndex() == 0);
+}
+
+TEST_CASE("NetTest kit: the time packing of pool-vectors.json through Trade and TimeAndSale") {
+    const auto directory = kitDirectory();
+
+    if (!directory) {
+        return;
+    }
+
+    const auto vectors = kit::readJson(*directory + "/pool-vectors.json");
+
+    for (const auto &entry : nonEmpty(vectors["pack_time_sequence"])) {
+        const auto epochNanos = entry["epoch_ns"].asInteger();
+        const auto sequence = static_cast<std::uint32_t>(entry["sequence"].asInteger());
+        const auto packed = static_cast<std::int64_t>(hexValue(entry["packed"]));
+        const auto nanoPart = static_cast<std::int32_t>(entry["nano_part"].asInteger());
+
+        INFO("epoch_ns " << epochNanos << " sequence " << sequence);
+        CHECK(packTimeSequence(epochNanos, sequence) == packed);
+        CHECK(epochNanos / 1'000'000 == entry["time_ms"].asInteger());
+        CHECK(epochNanos % 1'000'000 == nanoPart);
+
+        Trade trade;
+
+        trade.setTimeSequence(packed);
+        trade.setTimeNanoPart(nanoPart);
+        CHECK(trade.getTimeSequence() == packed);
+        CHECK(trade.getTime() == entry["time_ms"].asInteger());
+        CHECK(trade.getTimeNanoPart() == nanoPart);
+        CHECK(trade.getSequence() == static_cast<std::int32_t>(sequence & EventPool::SEQUENCE_MASK));
+
+        TimeAndSale sale;
+
+        sale.setIndex(packed);
+        sale.setTimeNanoPart(nanoPart);
+        CHECK(sale.getIndex() == packed);
+        CHECK(sale.getTime() == entry["time_ms"].asInteger());
+        CHECK(sale.getTimeNanoPart() == nanoPart);
+        CHECK(sale.getSequence() == static_cast<std::int32_t>(sequence & EventPool::SEQUENCE_MASK));
+    }
+}
+
+TEST_CASE("NetTest: the symbols of an IPF file in file order, at most n") {
+    if (!ipfReadable()) {
+        return;
+    }
+
+    const auto result = readSymbolsFromFile(IPF_FILE, 3);
+
+    REQUIRE(result.ok);
+    CHECK(result.warning.empty());
+    CHECK(result.error.empty());
+    REQUIRE(result.symbols != nullptr);
+    CHECK(*result.symbols == std::vector<std::string>{"TEST", "/TSTZ23", ".TEST231117C100"});
+
+    const auto parsed = parseArguments({"p", ":7001", "-S", "2@" + IPF_FILE});
+
+    REQUIRE(parsed.ok);
+
+    const auto fromSettings = buildSymbolPool(parsed.settings);
+
+    REQUIRE(fromSettings.ok);
+    CHECK(*fromSettings.symbols == std::vector<std::string>{"TEST", "/TSTZ23"});
+
+    const auto generated = buildSymbolPool(parseArguments({"p", ":7001", "-S", "20"}).settings);
+
+    REQUIRE(generated.ok);
+    CHECK(generated.symbols->size() == 20);
+}
+
+TEST_CASE("NetTest: an IPF file with fewer symbols than n gives the smaller set and a warning") {
+    if (!ipfReadable()) {
+        return;
+    }
+
+    const auto result = readSymbolsFromFile(IPF_FILE, 100'000);
+
+    REQUIRE(result.ok);
+    REQUIRE(result.symbols != nullptr);
+    CHECK(result.symbols->size() >= 3);
+    CHECK(result.symbols->size() < 100'000);
+    CHECK(result.warning == "the IPF file '" + IPF_FILE + "' has " + std::to_string(result.symbols->size()) +
+                                " symbols, fewer than the requested 100000");
+}
+
+TEST_CASE("NetTest: an IPF file without symbols and a missing file are errors") {
+    if (!ipfReadable()) {
+        return;
+    }
+
+    const auto empty = (std::filesystem::path(DXFCXX_TEST_TEMP_DIR) / "nettest-empty.ipf").string();
+
+    {
+        std::ofstream out(empty, std::ios::binary);
+
+        out << "#STOCK::=TYPE,SYMBOL,DESCRIPTION\r\n##COMPLETE\r\n";
+    }
+
+    const auto noSymbols = readSymbolsFromFile(empty, 5);
+
+    CHECK_FALSE(noSymbols.ok);
+    CHECK(noSymbols.symbols == nullptr);
+    CHECK(noSymbols.error == "the IPF file '" + empty + "' has no symbols");
+
+    const auto missing = readSymbolsFromFile(IPF_FILE + ".missing", 5);
+
+    CHECK_FALSE(missing.ok);
+    CHECK(missing.symbols == nullptr);
+    CHECK(missing.error.find(".missing") != std::string::npos);
+
+    std::filesystem::remove(empty);
 }

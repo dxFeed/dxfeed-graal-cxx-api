@@ -140,7 +140,8 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     if (DXFC_TEST_SOURCE MATCHES "^tools/")
         target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp
                 ../tools/Tools/src/Diagnose/NetProbe.cpp ../tools/Tools/src/NetTest/Args.cpp
-                ../tools/Tools/src/NetTest/Run.cpp)
+                ../tools/Tools/src/NetTest/EventPool.cpp ../tools/Tools/src/NetTest/Run.cpp
+                ../tools/Tools/src/NetTest/SymbolPool.cpp)
     endif ()
 
     # The tests of NetTest read the kit of its specification from the archive of the Graal Native SDK (the stub of the

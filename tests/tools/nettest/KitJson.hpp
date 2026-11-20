@@ -55,6 +55,18 @@ struct Json {
         return integer;
     }
 
+    double asNumber() const {
+        if (kind == Kind::INTEGER) {
+            return static_cast<double>(integer);
+        }
+
+        if (kind != Kind::REAL) {
+            throw std::runtime_error("not a number");
+        }
+
+        return real;
+    }
+
     const std::string &asString() const {
         if (kind != Kind::STRING) {
             throw std::runtime_error("not a string");
