@@ -6,4 +6,3 @@
       with a GC other than the Serial GC of the SDK builds, `allocatedBytes` with GraalVM 25.5.
     * With a Graal Native SDK library that does not support the runtime statistics the call throws `RuntimeException`
       that names the feature and the version of the library.
-    * The Graal Native SDK 3.17.0 is the default and the minimum version.
