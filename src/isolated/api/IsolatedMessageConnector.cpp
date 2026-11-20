@@ -141,7 +141,9 @@ MessageConnectorInfo getInfo(/* dxfg_v4_message_connector_t * */ void *connector
 
         runGraalV4Function(dxfg_v4_MessageConnector_getIoStatistics, graalConnector, &ioStats);
 
-        auto &io = info.ioStatistics.emplace();
+        // Not ioStatistics.emplace(): clang rejects it, as a nested struct with default member initializers is not
+        // default constructible for std::optional declared inside the enclosing class.
+        MessageConnectorInfo::IoStatistics io{};
 
         io.readDataRecords = ioStats.read_data_records;
         io.writtenDataRecords = ioStats.written_data_records;
@@ -155,6 +157,7 @@ MessageConnectorInfo getInfo(/* dxfg_v4_message_connector_t * */ void *connector
         io.writtenRttSumMicros = ioStats.written_rtt_sum_us;
         io.activeConnectionCount = ioStats.active_connection_count;
         io.closedConnectionCount = ioStats.closed_connection_count;
+        info.ioStatistics = io;
     }
 
     info.lastError = takeError(runGraalV4FunctionWithResult(dxfg_v4_MessageConnector_getLastError, graalConnector));
