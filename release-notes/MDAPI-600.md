@@ -3,6 +3,11 @@
     * The producer mode `p` publishes generated `Trade` and `TimeAndSale` events and prints the statistics lines
       (`{*NetTestProducerSide-<name>*}`, one line per instance) and the runtime line (`{*NetTestRuntime-<name>*}`) once
       per period `-s`, aligned to the system clock.
+    * The consumer mode `c` receives the events, `-C` instances sharing the symbols, and prints the end-to-end lag of
+      the records (`{*NetTestConsumerSide-<name>*}`) from their time and nanosecond part; a negative lag (a clock skew
+      between the hosts) is kept with its sign. The consumer exits with 1 and `no_data` when the open connections bring
+      no records for 30 s after the last record (60 s after the connection), and with `nano_missing` when the first
+      1000 events have no nanosecond part (`-Ddxscheme.nanoTime=false` receives without it).
     * `Tools help NetTest` prints the usage with the line `spec_version nettest/1`.
     * The scheme of `Tools` is `ext:opt:sysprops,opt:dxprops,resource:dxlink.xml`, as in the Tools of the .NET API: the
       scheme properties of the endpoint builders and of the `-p` option, such as `dxscheme.nanoTime`, take effect. The

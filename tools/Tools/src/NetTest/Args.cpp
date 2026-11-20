@@ -754,13 +754,9 @@ bool isNanoTimeOn(const Settings &settings) {
     return true;
 }
 
-// The options that the parser takes but whose behavior comes with the next stages of the tool: the consumer mode, the
-// summary file, the warm-up and the /metrics port. One place, so that every stage narrows it.
+// The options that the parser takes but whose behavior comes with the next stages of the tool: the summary file, the
+// warm-up and the /metrics port. One place, so that every stage narrows it.
 std::optional<std::string> unsupportedOption(const Settings &settings) {
-    if (settings.mode == Mode::CONSUMER) {
-        return "unsupported option: c";
-    }
-
     if (!settings.summaryFile.empty()) {
         return "unsupported option: --summary";
     }
