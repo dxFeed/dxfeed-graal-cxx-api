@@ -643,7 +643,7 @@ TEST_CASE("NetTest: the options that the run does not implement yet are rejected
     const std::string summary = (std::filesystem::path(DXFCXX_TEST_TEMP_DIR) / "nettest-guard.json").string();
 
     const std::vector<std::pair<std::vector<std::string>, std::string>> cases{
-        {{"c", "127.0.0.1:7001", "-S", "10"}, "c"},
+        {{"c", "127.0.0.1:7001", "-S", "10", "--summary", summary}, "--summary"},
         {{"p", ":7001", "-S", "10", "--summary", summary}, "--summary"},
         {{"p", ":7001", "-S", "10", "--warmup", "1s"}, "--warmup"},
         {{"p", ":7001", "-S", "10", "--metrics-port", "0"}, "--metrics-port"},

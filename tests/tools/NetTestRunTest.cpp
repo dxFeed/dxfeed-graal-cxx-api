@@ -1,13 +1,15 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-// The producer of NetTest: the endpoints, the schedule of the rate limiter, the stop and the exit codes.
+// The runs of NetTest: the producer (the endpoints, the schedule of the rate limiter, the stop and the exit codes) and the
+// consumer (the slices, the e2e lag, the watchdog and the check of the nanosecond part) over the loopback.
 
 #include <doctest.h>
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include "../../tools/Tools/src/NetTest/Args.hpp"
+#include "../../tools/Tools/src/NetTest/EventPool.hpp"
 #include "../../tools/Tools/src/NetTest/NetTestTool.hpp"
 #include "../../tools/Tools/src/NetTest/RateLimiter.hpp"
 #include "../../tools/Tools/src/NetTest/Run.hpp"
@@ -29,6 +31,7 @@
 #include <sstream>
 #include <string>
 #include <thread>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -93,6 +96,69 @@ std::shared_ptr<DXEndpoint> connectedFeed(DXEndpoint::Role role, std::uint16_t p
 
     return nullptr;
 }
+
+// Waits until a producer listens on the port: a consumer refused before that reconnects only after 10-20 s.
+bool waitListening(std::uint16_t port) {
+    const auto probe = connectedFeed(DXEndpoint::Role::STREAM_FEED, port);
+
+    if (probe == nullptr) {
+        return false;
+    }
+
+    probe->closeAndAwaitTermination();
+
+    return true;
+}
+
+std::string clientAddress(std::uint16_t port) {
+    return "127.0.0.1:" + std::to_string(port);
+}
+
+std::vector<std::string> linesOf(const std::string &text) {
+    std::vector<std::string> lines;
+    std::istringstream stream(text);
+
+    for (std::string line; std::getline(stream, line);) {
+        lines.push_back(line);
+    }
+
+    return lines;
+}
+
+// The producer of the tool on a thread of the test, stopped and joined on every path.
+struct BackgroundProducer {
+    Settings settings;
+    Symbols symbols;
+    StopControl stop{};
+    std::ostringstream out{};
+    RunResult result{};
+    std::thread thread{};
+
+    explicit BackgroundProducer(const std::vector<std::string> &args)
+        : settings(settingsOf(args)), symbols(symbolsOf(settings)) {
+        thread = std::thread([this] {
+            result = runProducer(settings, symbols, stop, out);
+        });
+    }
+
+    BackgroundProducer(const BackgroundProducer &) = delete;
+    BackgroundProducer &operator=(const BackgroundProducer &) = delete;
+
+    // Stops the producer and returns its result.
+    const RunResult &finish() {
+        stop.request();
+
+        if (thread.joinable()) {
+            thread.join();
+        }
+
+        return result;
+    }
+
+    ~BackgroundProducer() {
+        finish();
+    }
+};
 
 // The Trade events that a subscription of the symbol receives.
 struct TradeCollector {
@@ -564,4 +630,309 @@ TEST_CASE("NetTest: SIGINT and SIGTERM request the stop and the previous handler
         CHECK(handledByTest.load() == 0);
         CHECK(std::signal(signalNumber, original == SIG_ERR ? SIG_DFL : original) == handleInTest);
     }
+}
+
+TEST_CASE("NetTest: the e2e lag comes from the packed time and the nano part of the event") {
+    // 2023-11-14T22:13:20.123456789Z: the packed time keeps the milliseconds, the nano part the rest.
+    const std::int64_t eventNanos = 1'700'000'000'123'456'789;
+    const auto packed = packTimeSequence(eventNanos, 7);
+    const auto nanoPart = static_cast<std::int32_t>(eventNanos % 1'000'000);
+
+    CHECK(eventLagNanos(eventNanos + 2'500, packed, nanoPart) == 2'500);
+    CHECK(eventLagNanos(eventNanos, packed, nanoPart) == 0);
+    // Without the nano part the event seems older by it.
+    CHECK(eventLagNanos(eventNanos, packed, 0) == nanoPart);
+    // A clock of the consumer behind the producer gives a negative lag.
+    CHECK(eventLagNanos(eventNanos - 1'000, packed, nanoPart) == -1'000);
+
+    // A negative lag enters the sum with its sign and the count of the negative ones.
+    LagTotals lags;
+
+    for (const std::int64_t lag : {2'500, -1'000, 300}) {
+        lags.add(lag);
+    }
+
+    CHECK(lags.count == 3);
+    CHECK(lags.sum == 1'800);
+    CHECK(lags.negative == 1);
+}
+
+TEST_CASE("NetTest: the consumer instances share the symbols without overlap") {
+    std::vector<std::string> symbols;
+
+    for (int index = 0; index < 10; ++index) {
+        symbols.push_back("S" + std::to_string(index));
+    }
+
+    CHECK(consumerSlice(symbols, 1, 3) == std::vector<std::string>{"S0", "S3", "S6", "S9"});
+    CHECK(consumerSlice(symbols, 2, 3) == std::vector<std::string>{"S1", "S4", "S7"});
+    CHECK(consumerSlice(symbols, 3, 3) == std::vector<std::string>{"S2", "S5", "S8"});
+    CHECK(consumerSlice(symbols, 1, 1) == symbols);
+    // More instances than symbols: the last ones get nothing.
+    CHECK(consumerSlice({"A", "B"}, 3, 4).empty());
+    CHECK(consumerSlice(symbols, 0, 3).empty());
+    CHECK(consumerSlice(symbols, 4, 3).empty());
+}
+
+// The producer and the consumer of the tool in one process: the consumer of two instances receives every symbol, its
+// mean e2e lag is positive and small, and the lines of both pass the expressions of the kit.
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the consumer receives the events of the producer and measures the e2e lag") {
+    const std::string directory = DXFCXX_NETTEST_KIT_DIR;
+    const bool kitFound = std::filesystem::is_directory(directory);
+#ifndef DXFCXX_NETTEST_SDK_STUB
+    REQUIRE_MESSAGE(kitFound, "The kit of the NetTest specification is not found: " << directory);
+#endif
+#ifdef DXFCXX_SANITIZERS_ENABLED
+    constexpr std::int64_t maxMeanLagNanos = 5'000'000'000;
+#else
+    constexpr std::int64_t maxMeanLagNanos = 1'000'000'000;
+#endif
+    const auto port = test::findFreeLoopbackPort();
+    BackgroundProducer producer({"p", listenAddress(port), "-S", "100", "-r", "*/10000", "-s", "1s"});
+
+    REQUIRE(waitListening(port));
+
+    const auto settings = settingsOf({"c", clientAddress(port), "-S", "100", "-C", "2", "-s", "1s", "--duration", "5s"});
+    StopControl stop;
+    std::ostringstream out;
+    const auto result = runConsumer(settings, symbolsOf(settings), stop, out);
+    const auto &produced = producer.finish();
+
+    CHECK_MESSAGE(produced.exitCode == 0, produced.error);
+    REQUIRE_MESSAGE(result.exitCode == 0, result.error);
+    CHECK(result.status == RunStatus::OK);
+    CHECK(result.endpointNames == std::vector<std::string>{"NetTest.1", "NetTest.2"});
+    REQUIRE(result.instanceRecords.size() == 2);
+    CHECK(result.instanceRecords[0] > 0);
+    CHECK(result.instanceRecords[1] > 0);
+    CHECK(result.symbolsSeen == 100);
+    REQUIRE(result.records > 0);
+    CHECK(result.lags.count == result.records);
+
+    const auto meanLagNanos = result.lags.sum / result.lags.count;
+
+    CHECK(meanLagNanos > 0);
+    CHECK(meanLagNanos < maxMeanLagNanos);
+
+    std::optional<std::regex> summary;
+    std::optional<std::regex> instance;
+    std::optional<std::regex> runtime;
+
+    if (kitFound) {
+        const auto expressions = kit::readJson(directory + "/regexes.json");
+
+        summary.emplace(expressions["regexes"]["summary"].asString(), std::regex::ECMAScript);
+        instance.emplace(expressions["regexes"]["instance"].asString(), std::regex::ECMAScript);
+        runtime.emplace(expressions["regexes"]["runtime"].asString(), std::regex::ECMAScript);
+    }
+
+    const auto checkBlocks = [&](const std::vector<std::string> &lines, const std::string &side,
+                                 std::size_t instances) {
+        const auto blockSize = instances + 2;
+
+        REQUIRE(lines.size() >= blockSize);
+        CHECK(lines.size() % blockSize == 0);
+
+        for (std::size_t index = 0; index + blockSize - 1 < lines.size(); index += blockSize) {
+            INFO(side << " block at line " << index);
+            CHECK(lines[index].rfind("{*NetTest" + side + "Side-NetTest*} data ", 0) == 0);
+
+            for (std::size_t number = 1; number <= instances; ++number) {
+                CHECK(lines[index + number].rfind("    NetTest." + std::to_string(number) + " data ", 0) == 0);
+            }
+
+            CHECK(lines[index + blockSize - 1].rfind("{*NetTestRuntime-NetTest*} heap ", 0) == 0);
+
+            if (kitFound) {
+                CHECK_MESSAGE(std::regex_search(lines[index], *summary), lines[index]);
+
+                for (std::size_t number = 1; number <= instances; ++number) {
+                    CHECK_MESSAGE(std::regex_search(lines[index + number], *instance), lines[index + number]);
+                }
+
+                CHECK_MESSAGE(std::regex_search(lines[index + blockSize - 1], *runtime), lines[index + blockSize - 1]);
+            }
+        }
+    };
+
+    checkBlocks(linesOf(out.str()), "Consumer", 2);
+    checkBlocks(linesOf(producer.out.str()), "Producer", 1);
+}
+
+// The time of a TimeAndSale comes from its index: the consumer of --event TimeAndSale measures a positive small lag.
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the consumer of TimeAndSale measures the e2e lag") {
+#ifdef DXFCXX_SANITIZERS_ENABLED
+    constexpr std::int64_t maxMeanLagNanos = 5'000'000'000;
+#else
+    constexpr std::int64_t maxMeanLagNanos = 1'000'000'000;
+#endif
+    const auto port = test::findFreeLoopbackPort();
+    BackgroundProducer producer({"p", listenAddress(port), "-S", "10", "--event", "TimeAndSale", "-r", "*/1000"});
+
+    REQUIRE(waitListening(port));
+
+    const auto settings =
+        settingsOf({"c", clientAddress(port), "-S", "10", "--event", "TimeAndSale", "--duration", "3s"});
+    StopControl stop;
+    std::ostringstream out;
+    const auto result = runConsumer(settings, symbolsOf(settings), stop, out);
+    const auto &produced = producer.finish();
+
+    CHECK_MESSAGE(produced.exitCode == 0, produced.error);
+    REQUIRE_MESSAGE(result.exitCode == 0, result.error);
+    CHECK(result.symbolsSeen == 10);
+    REQUIRE(result.records > 0);
+    CHECK(result.lags.count == result.records);
+
+    const auto meanLagNanos = result.lags.sum / result.lags.count;
+
+    CHECK(meanLagNanos > 0);
+    CHECK(meanLagNanos < maxMeanLagNanos);
+}
+
+// With open connections and no records the watchdog stops the consumer: the events of the producer are of another type.
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the watchdog stops the consumer without records after the connection") {
+    const auto port = test::findFreeLoopbackPort();
+    BackgroundProducer producer({"p", listenAddress(port), "-S", "10", "--event", "TimeAndSale", "-r", "*/1000"});
+
+    REQUIRE(waitListening(port));
+
+    const auto settings = settingsOf({"c", clientAddress(port), "-S", "10", "--duration", "30s"});
+    RunHooks hooks;
+
+    hooks.noDataAfterConnect = 1000ms;
+
+    StopControl stop;
+    std::ostringstream out;
+    const auto start = std::chrono::steady_clock::now();
+    const auto result = runConsumer(settings, symbolsOf(settings), stop, out, hooks);
+    const auto elapsed = std::chrono::steady_clock::now() - start;
+
+    CHECK(result.exitCode == 1);
+    CHECK(result.status == RunStatus::STARVED);
+    CHECK(result.records == 0);
+    CHECK_MESSAGE(result.error.rfind("no_data: no records for 1000 ms after the connection, with 1 open connections", 0) ==
+                      0,
+                  result.error);
+    CHECK(elapsed < 20s);
+}
+
+// The records stop while the connection stays open: the watchdog stops the consumer after the last record.
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the watchdog stops the consumer after the last record") {
+    const auto port = test::findFreeLoopbackPort();
+    const auto publisherEndpoint = DXEndpoint::newBuilder()
+                                       ->withRole(DXEndpoint::Role::PUBLISHER)
+                                       ->withName("NetTestRunPublisher")
+                                       ->withProperty(DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY, "true")
+                                       ->build();
+
+    // Set by the publisher when the subscription of the consumer arrives; shared with the listener of the SDK.
+    const auto subscribed = std::make_shared<std::atomic<bool>>(false);
+
+    publisherEndpoint->getPublisher()->getSubscription(Trade::TYPE)
+        ->addChangeListener(ObservableSubscriptionChangeListener::create(
+            [subscribed](const std::unordered_set<SymbolWrapper> &) {
+                subscribed->store(true);
+            },
+            [](const std::unordered_set<SymbolWrapper> &) {
+            },
+            [] {
+            }));
+    publisherEndpoint->connect(listenAddress(port));
+    REQUIRE(test::waitUntil([&] {
+        return publisherEndpoint->getState() == DXEndpoint::State::CONNECTED;
+    }));
+
+    const auto settings = settingsOf({"c", clientAddress(port), "-S", "10", "--duration", "60s"});
+    const auto symbols = symbolsOf(settings);
+    RunHooks hooks;
+
+    hooks.noDataAfterRecord = 1000ms;
+    hooks.noDataAfterConnect = 30s;
+
+    StopControl stop;
+    std::ostringstream out;
+    RunResult result;
+    std::thread consumer([&] {
+        result = runConsumer(settings, symbols, stop, out, hooks);
+    });
+
+    // Trades until 1 s after the subscription arrives (at most 20 s on a slow host), then nothing.
+    const auto trade = std::make_shared<Trade>(symbols->front());
+    const auto publishDeadline = std::chrono::steady_clock::now() + 20s;
+    std::optional<std::chrono::steady_clock::time_point> publishEnd{};
+
+    while (std::chrono::steady_clock::now() < publishDeadline &&
+           (!publishEnd || std::chrono::steady_clock::now() < *publishEnd)) {
+        if (!publishEnd && subscribed->load()) {
+            publishEnd = std::chrono::steady_clock::now() + 1s;
+        }
+
+        const auto now =
+            std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch())
+                .count();
+
+        trade->setTimeSequence(packTimeSequence(now, 1));
+        trade->setTimeNanoPart(static_cast<std::int32_t>(now % 1'000'000));
+        publisherEndpoint->getPublisher()->publishEvents(trade);
+        std::this_thread::sleep_for(50ms);
+    }
+
+    const auto silenceStart = std::chrono::steady_clock::now();
+
+    consumer.join();
+
+    const auto silence = std::chrono::steady_clock::now() - silenceStart;
+
+    publisherEndpoint->closeAndAwaitTermination();
+
+    CHECK(result.exitCode == 1);
+    CHECK(result.status == RunStatus::STARVED);
+    CHECK(result.records > 0);
+    CHECK_MESSAGE(
+        result.error.rfind("no_data: no records for 1000 ms after the last record, with 1 open connections", 0) == 0,
+        result.error);
+    CHECK(silence < 10s);
+}
+
+// A producer without the nano part: the consumer stops after the first 1000 events, unless it does not expect the nano
+// part itself.
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the consumer stops on events without the nano part") {
+    const auto port = test::findFreeLoopbackPort();
+    BackgroundProducer producer(
+        {"p", listenAddress(port), "-S", "20", "-r", "*/5000", "--batch", "20", "-Ddxscheme.nanoTime=false"});
+
+    REQUIRE(waitListening(port));
+
+    SUBCASE("the default of the consumer is nano_missing and exit 1") {
+        std::ostringstream out;
+        std::ostringstream err;
+        const auto start = std::chrono::steady_clock::now();
+        const auto exitCode =
+            NetTestTool::runProcess({"c", clientAddress(port), "-S", "20", "--duration", "30s"}, out, err);
+        const auto elapsed = std::chrono::steady_clock::now() - start;
+
+        CHECK(exitCode == 1);
+        CHECK_MESSAGE(err.str().rfind("NetTest: nano_missing: the first 1000 events have the nanosecond part 0: a hop "
+                                      "of the path lacks dxscheme.nanoTime=true (run with -Ddxscheme.nanoTime=false to "
+                                      "receive without it)\n",
+                                      0) == 0,
+                      err.str());
+        CHECK(elapsed < 20s);
+    }
+
+    SUBCASE("-Ddxscheme.nanoTime=false on the consumer receives to the end") {
+        const auto settings = settingsOf(
+            {"c", clientAddress(port), "-S", "20", "--duration", "3s", "-Ddxscheme.nanoTime=false"});
+        StopControl stop;
+        std::ostringstream out;
+        const auto result = runConsumer(settings, symbolsOf(settings), stop, out);
+
+        CHECK_MESSAGE(result.exitCode == 0, result.error);
+        CHECK(result.status == RunStatus::OK);
+        // More events than the check takes.
+        CHECK(result.records > NANO_CHECK_EVENTS);
+    }
+
+    CHECK_MESSAGE(producer.finish().exitCode == 0, producer.result.error);
 }
