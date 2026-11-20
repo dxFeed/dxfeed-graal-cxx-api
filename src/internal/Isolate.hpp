@@ -76,9 +76,10 @@ class DXFCPP_INTERNAL_EXPORT Isolate final {
     Isolate &operator=(const Isolate &) = delete;
 
     /**
-     * Returns the isolate, creating it on the first call. The isolate is never torn down (the tear-down waits for
-     * every Java thread, including the threads of open endpoints and live instrument profile connections): it lives
-     * until the process ends, and the OS ends its threads.
+     * Returns the isolate, creating it on the first call. The library never tears the isolate down (the tear-down waits
+     * for every Java thread, including the threads of open endpoints and live instrument profile connections): it lives
+     * until the process ends, and the OS ends its threads. Only the sanitizer builds of the tests tear it down (see
+     * shutdownAndTearDown()).
      */
     static Isolate &getInstance() noexcept;
 
@@ -176,6 +177,40 @@ class DXFCPP_INTERNAL_EXPORT Isolate final {
 
     /// See dxfcpp::shutdown().
     static void shutdown();
+
+    /// The result of shutdownAndTearDown().
+    struct TearDownResult {
+        enum class Status {
+            /// The isolate is torn down by this call.
+            TORN_DOWN,
+            /// There is nothing to tear down: the isolate was not created, its creation failed, or it is torn down.
+            NOTHING_TO_TEAR_DOWN,
+            /// The isolate is not torn down: the call is made from a listener or a callback of the library, or a
+            /// callback of the library is still in progress on another thread.
+            REFUSED,
+            /// The isolate is not torn down: the SDK returned an error (see `error`).
+            FAILED,
+        };
+
+        Status status{Status::NOTHING_TO_TEAR_DOWN};
+
+        /// The code of the SDK when the status is FAILED, CEntryPointErrorsEnum::NO_ERROR otherwise.
+        CEntryPointErrorsEnum error{CEntryPointErrorsEnum::NO_ERROR};
+    };
+
+    /**
+     * Shuts the library down (see shutdown()), then tears the isolate down: detaches all the threads attached to the
+     * isolate, stops the Java threads and frees the memory of the isolate. It does not create the isolate.
+     *
+     * For tests only: the sanitizer builds of the tests call it at the end of `main()` so that LeakSanitizer does not
+     * report the memory of the isolate. Never call it from a static destructor, an exit handler or a DLL detach: the
+     * tear-down waits for the Java threads, which may already be ended there. The threads of the application must not
+     * run Graal (Java) code during the call or afterwards; the tear-down may never return while a Java thread ignores
+     * the interruption (for example, a thread blocked in a socket read).
+     *
+     * @return The result; it does not throw.
+     */
+    static TearDownResult shutdownAndTearDown() noexcept;
 
     template <typename F>
     auto runIsolated(F &&f)
