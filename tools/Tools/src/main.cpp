@@ -5,6 +5,7 @@
 #include "Dump/DumpTool.hpp"
 #include "Help/HelpTool.hpp"
 #include "Tools.hpp"
+#include "ToolsProperties.hpp"
 #include <concepts>
 #include <iostream>
 #include <string>
@@ -37,11 +38,7 @@ using namespace dxfcpp::literals;
 
 int main(int argc, char *argv[]) {
     try {
-        System::setProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true");
-        // Enable experimental feature.
-        System::setProperty("dxfeed.experimental.dxlink.enable", "true");
-        // Set scheme for dxLink.
-        System::setProperty("scheme", "ext:opt:sysprops,resource:dxlink.xml");
+        tools::setToolsSystemProperties();
 
         const auto usage = tools::HelpTool::generateToolHelpScreen<tools::Tools>();
 
