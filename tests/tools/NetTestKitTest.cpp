@@ -640,12 +640,8 @@ TEST_CASE("NetTest: the options of the native runtime and --legacy are not suppo
 }
 
 TEST_CASE("NetTest: the options that the run does not implement yet are rejected after the parsing") {
-    const std::string summary = (std::filesystem::path(DXFCXX_TEST_TEMP_DIR) / "nettest-guard.json").string();
-
     const std::vector<std::pair<std::vector<std::string>, std::string>> cases{
-        {{"c", "127.0.0.1:7001", "-S", "10", "--summary", summary}, "--summary"},
-        {{"p", ":7001", "-S", "10", "--summary", summary}, "--summary"},
-        {{"p", ":7001", "-S", "10", "--warmup", "1s"}, "--warmup"},
+        {{"c", "127.0.0.1:7001", "-S", "10", "--metrics-port", "0"}, "--metrics-port"},
         {{"p", ":7001", "-S", "10", "--metrics-port", "0"}, "--metrics-port"},
     };
 

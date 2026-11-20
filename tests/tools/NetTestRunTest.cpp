@@ -18,6 +18,7 @@
 #include "../../tools/Tools/src/ToolsProperties.hpp"
 #include "../support/TestSupport.hpp"
 #include "nettest/KitJson.hpp"
+#include "nettest/KitSchema.hpp"
 
 #include <atomic>
 #include <chrono>
@@ -935,4 +936,187 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the consumer stops on events without t
     }
 
     CHECK_MESSAGE(producer.finish().exitCode == 0, producer.result.error);
+}
+
+namespace {
+
+// The summary file of a run, read and checked against the schema of the kit when the kit is there.
+kit::Json readSummary(const std::string &file) {
+    REQUIRE(std::filesystem::exists(file));
+    CHECK_FALSE(std::filesystem::exists(file + ".tmp"));
+
+    const auto text = kit::readText(file);
+    const std::string directory = DXFCXX_NETTEST_KIT_DIR;
+
+    if (std::filesystem::is_directory(directory)) {
+        std::vector<std::string> errors;
+
+        kit::checkSchema(kit::JsonReader(text).read(), kit::readJson(directory + "/nettest-summary.schema.json"), "$",
+                         errors);
+
+        std::string joined;
+
+        for (const auto &error : errors) {
+            joined += error + "; ";
+        }
+
+        INFO(text);
+        CHECK_MESSAGE(errors.empty(), joined);
+    }
+
+    return kit::JsonReader(text).read();
+}
+
+// The records of the intervals of a summary.
+std::int64_t intervalRecords(const kit::Json &summary) {
+    std::int64_t records = 0;
+
+    for (const auto &interval : summary["intervals"].array) {
+        records += interval["records"].asInteger();
+    }
+
+    return records;
+}
+
+// A summary file in the temporary directory of the tests, removed before the test writes it.
+std::string summaryFile(const std::string &name) {
+    const auto file = (std::filesystem::path(DXFCXX_TEST_TEMP_DIR) / name).string();
+
+    std::filesystem::remove(file);
+
+    return file;
+}
+
+} // namespace
+
+// The consumer writes its summary file at the end of the run; the report of the producer gives the same summary. The
+// warm-up of 1 s starts at the first batch (`p`) and the first record (`c`): the first intervals are warm-up, the last is
+// measured, and the e2e lag counts the records of the measured intervals only.
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the summaries of the producer and the consumer have the warm-up phases") {
+#ifndef DXFCXX_NETTEST_SDK_STUB
+    REQUIRE_MESSAGE(std::filesystem::is_directory(DXFCXX_NETTEST_KIT_DIR),
+                    "The kit of the NetTest specification is not found: " << DXFCXX_NETTEST_KIT_DIR);
+#endif
+    const auto port = test::findFreeLoopbackPort();
+    BackgroundProducer producer({"p", listenAddress(port), "-S", "10", "-r", "*/1000", "-s", "1s", "--warmup", "1s"});
+
+    REQUIRE(waitListening(port));
+
+    const auto file = summaryFile("nettest-summary-c.json");
+    std::ostringstream out;
+    std::ostringstream err;
+    const auto exitCode = NetTestTool::runProcess(
+        {"c", clientAddress(port), "-S", "10", "-s", "1s", "--warmup", "1s", "--duration", "4s", "--summary", file}, out,
+        err);
+    const auto &produced = producer.finish();
+
+    REQUIRE_MESSAGE(exitCode == 0, err.str());
+    REQUIRE_MESSAGE(produced.exitCode == 0, produced.error);
+
+    const auto consumer = readSummary(file);
+
+    CHECK(consumer["side"].asString() == "consumer");
+    CHECK(consumer["tool"]["implementation"].asString() == "cpp-api");
+    CHECK(consumer["status"].asString() == "ok");
+    CHECK(consumer["exit_code"].asInteger() == 0);
+    CHECK(consumer["error"].isNull());
+    CHECK(consumer["config"]["warmup_ms"].asInteger() == 1000);
+    CHECK(consumer["symbols_seen"].asInteger() == 10);
+
+    const auto &intervals = consumer["intervals"].array;
+
+    REQUIRE(intervals.size() >= 2);
+    CHECK(intervals.front()["phase"].asString() == "warmup");
+    CHECK(intervals.back()["phase"].asString() == "measure");
+
+    const auto records = consumer["records"].asInteger();
+    const auto &lag = consumer["e2e_lag"];
+
+    CHECK(records > 0);
+    CHECK(intervalRecords(consumer) == records);
+    CHECK(lag["count"].asInteger() > 0);
+    CHECK(lag["count"].asInteger() < records);
+    REQUIRE_FALSE(lag["p50_ns"].isNull());
+    CHECK(lag["p50_ns"].asInteger() <= lag["p99_ns"].asInteger());
+    REQUIRE(consumer["connectors"].array.size() == 1);
+    CHECK(consumer["connectors"].array.at(0)["address"].asString() == clientAddress(port));
+    CHECK(consumer["connectors"].array.at(0)["v1"]["read_data_records"].asInteger() > 0);
+
+    // The producer: its report gives the summary that its run would write.
+    const auto &report = produced.report;
+
+    REQUIRE(report.intervals.size() >= 2);
+    CHECK(report.intervals.front().warmup);
+    CHECK_FALSE(report.intervals.back().warmup);
+    CHECK(report.records == produced.records);
+    REQUIRE(report.publish.has_value());
+    CHECK(report.publish->calls == produced.batches);
+    CHECK(report.publish->events == produced.records);
+    CHECK(report.publish->nanos > 0);
+    CHECK(report.slip.has_value());
+    CHECK_FALSE(report.e2eLag.has_value());
+    CHECK_FALSE(report.connectors.empty());
+
+    const auto producerFile = summaryFile("nettest-summary-p.json");
+    std::string error;
+
+    REQUIRE_MESSAGE(writeSummary(producerFile, formatSummary(producer.settings, report, SummaryStatus{}), error),
+                    error);
+
+    const auto producerSummary = readSummary(producerFile);
+
+    CHECK(producerSummary["side"].asString() == "producer");
+    CHECK(intervalRecords(producerSummary) == producerSummary["records"].asInteger());
+}
+
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: a failure before the run writes the summary with the status error") {
+    const auto file = summaryFile("nettest-summary-before-run.json");
+    const auto symbols = (std::filesystem::path(DXFCXX_TEST_TEMP_DIR) / "nettest-no-such.ipf").string();
+    std::ostringstream out;
+    std::ostringstream err;
+    const auto exitCode = NetTestTool::runProcess({"p", ":7001", "-S", "10@" + symbols, "--summary", file}, out, err);
+
+    CHECK(exitCode == 1);
+    CHECK(err.str().find("NetTest: cannot read the IPF file") == 0);
+
+    const auto summary = readSummary(file);
+
+    CHECK(summary["status"].asString() == "error");
+    CHECK(summary["exit_code"].asInteger() == 1);
+    CHECK(summary["error"].asString().find("cannot read the IPF file") == 0);
+    CHECK(summary["records"].asInteger() == 0);
+    CHECK(summary["intervals"].array.empty());
+}
+
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: an endpoint that does not start gives the summary with the status error") {
+    // The server holds the port: the endpoint of the producer cannot bind it.
+    test::LoopbackTcpServer server;
+    const auto address = server.getAddress();
+    const auto port = address.substr(address.rfind(':') + 1);
+    const auto file = summaryFile("nettest-summary-busy-port.json");
+    std::ostringstream out;
+    std::ostringstream err;
+    const auto exitCode = NetTestTool::runProcess(
+        {"p", ":" + port + "[bindAddr=127.0.0.1]", "-S", "10", "--duration", "30s", "--summary", file}, out, err);
+
+    CHECK(exitCode == 1);
+
+    const auto summary = readSummary(file);
+
+    CHECK(summary["status"].asString() == "error");
+    CHECK(summary["exit_code"].asInteger() == 1);
+    CHECK(summary["error"].asString().find("the server socket") == 0);
+    CHECK(summary["records"].asInteger() == 0);
+    CHECK(summary["publish_call"]["calls"].asInteger() == 0);
+}
+
+TEST_CASE("NetTest: --summary into a directory that does not exist is a command line error") {
+    const auto file = (std::filesystem::path(DXFCXX_TEST_TEMP_DIR) / "nettest-no-such-dir" / "summary.json").string();
+    std::ostringstream out;
+    std::ostringstream err;
+    const auto exitCode = NetTestTool::runProcess({"c", "127.0.0.1:7001", "-S", "10", "--summary", file}, out, err);
+
+    CHECK(exitCode == 2);
+    CHECK(err.str().find("NetTest: --summary cannot write to the directory of '") == 0);
+    CHECK_FALSE(std::filesystem::exists(file));
 }

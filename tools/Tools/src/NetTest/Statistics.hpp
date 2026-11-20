@@ -109,13 +109,20 @@ using StatisticsSource = std::function<StatisticsSample()>;
 /// Receives the text of a block (with the line break at the end).
 using StatisticsSink = std::function<void(const std::string &)>;
 
+/// Receives every interval of the reporter, printed or not, so that the intervals cover the whole run: the sample at its
+/// start (with no instances for the first interval, whose counters start at 0), the sample at its end, and its bounds on
+/// the wall clock in nanoseconds since the Unix epoch.
+using IntervalSink = std::function<void(const StatisticsSample &previous, const StatisticsSample &current,
+                                        std::int64_t startNanos, std::int64_t endNanos)>;
+
 /// Runs on the calling thread until the clock stops it. Sleeps to the next wall-clock multiple of the period and prints
 /// the deltas against the previous tick; the first tick after the start only primes the counters and prints nothing. At
 /// the stop it prints the partial period since the last tick (or since the start when no tick came) at its real length,
 /// unless that period is shorter than one second. When both samples have runtime values, the runtime line follows the
-/// block in the same text. The side selects the label and the lag of the blocks.
+/// block in the same text. The side selects the label and the lag of the blocks. The interval sink, when given, gets the
+/// interval from the start to the first tick, each interval between two ticks and the one from the last tick to the stop.
 void runReporter(const std::string &name, std::int64_t periodMillis, const ReporterClock &clock,
                  const StatisticsSource &source, const StatisticsSink &sink,
-                 StatisticsSide side = StatisticsSide::PRODUCER);
+                 StatisticsSide side = StatisticsSide::PRODUCER, const IntervalSink &intervals = {});
 
 } // namespace dxfcpp::tools::nettest

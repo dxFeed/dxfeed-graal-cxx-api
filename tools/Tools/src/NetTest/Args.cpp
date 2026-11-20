@@ -757,14 +757,6 @@ bool isNanoTimeOn(const Settings &settings) {
 // The options that the parser takes but whose behavior comes with the next stages of the tool: the summary file, the
 // warm-up and the /metrics port. One place, so that every stage narrows it.
 std::optional<std::string> unsupportedOption(const Settings &settings) {
-    if (!settings.summaryFile.empty()) {
-        return "unsupported option: --summary";
-    }
-
-    if (settings.warmupMillis.has_value()) {
-        return "unsupported option: --warmup";
-    }
-
     if (settings.metricsPort.has_value()) {
         return "unsupported option: --metrics-port";
     }
