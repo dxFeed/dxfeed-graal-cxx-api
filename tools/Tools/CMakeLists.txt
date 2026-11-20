@@ -38,6 +38,8 @@ add_executable(${PROJECT_NAME}
         src/Tools.cpp
         src/Args/Args.cpp
         src/Diagnose/NetProbe.cpp
+        src/NetTest/Args.cpp
+        src/NetTest/Run.cpp
 )
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../third_party/range-v3-0.12/include)
