@@ -238,6 +238,9 @@ RunResult runProducer(const Settings &settings, const Symbols &symbols, StopCont
         stop.request();
     };
 
+    // The limiter outlives the generators that use it: the guards below join them before it is destroyed, on an
+    // exception too.
+    std::unique_ptr<RateLimiter> limiter;
     StopControl reporterStop;
     JoinGuard reporter(reporterStop);
     JoinGuard generators(stop);
@@ -261,8 +264,6 @@ RunResult runProducer(const Settings &settings, const Symbols &symbols, StopCont
         }
 
         if (failure.empty()) {
-            std::unique_ptr<RateLimiter> limiter;
-
             if (settings.recordsPerSecond.has_value()) {
                 limiter = std::make_unique<RateLimiter>(*settings.recordsPerSecond, settings.batch, stop);
             }
@@ -294,7 +295,7 @@ RunResult runProducer(const Settings &settings, const Symbols &symbols, StopCont
 
             // The thread of the caller waits for the stop or the duration.
             if (settings.durationMillis.has_value()) {
-                stop.waitFor(std::chrono::milliseconds(*settings.durationMillis));
+                stop.waitFor(std::chrono::milliseconds(std::min(*settings.durationMillis, MAX_WAIT_MILLIS)));
             } else {
                 stop.wait();
             }

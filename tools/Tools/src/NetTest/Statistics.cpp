@@ -181,7 +181,7 @@ ReporterClock systemReporterClock(StopControl &stop) {
 
 void runReporter(const std::string &name, std::int64_t periodMillis, const ReporterClock &clock,
                  const StatisticsSource &source, const StatisticsSink &sink, StatisticsSide side) {
-    const std::int64_t periodNanos = std::max<std::int64_t>(periodMillis, 1) * NANOS_PER_MILLI;
+    const std::int64_t periodNanos = std::clamp<std::int64_t>(periodMillis, 1, MAX_WAIT_MILLIS) * NANOS_PER_MILLI;
     auto previous = source();
     auto previousTime = clock.nowNanos();
     bool primed = false;

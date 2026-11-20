@@ -19,6 +19,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <csignal>
 #include <cstdint>
 #include <filesystem>
 #include <memory>
@@ -530,5 +531,37 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the statistics lines of a run pass the
             CHECK_MESSAGE(std::regex_search(lines[index + 2], *instance), lines[index + 2]);
             CHECK_MESSAGE(std::regex_search(lines[index + 3], *runtime), lines[index + 3]);
         }
+    }
+}
+
+namespace {
+
+std::atomic<int> handledByTest{0};
+
+extern "C" void handleInTest(int) {
+    handledByTest.fetch_add(1);
+}
+
+} // namespace
+
+TEST_CASE("NetTest: SIGINT and SIGTERM request the stop and the previous handlers come back") {
+    for (const int signalNumber : {SIGINT, SIGTERM}) {
+        INFO("signal " << signalNumber);
+
+        const auto original = std::signal(signalNumber, handleInTest);
+
+        {
+            StopControl stop;
+            const SignalWatcher watcher(stop);
+
+            CHECK_FALSE(watcher.received());
+            REQUIRE(std::raise(signalNumber) == 0);
+            CHECK(stop.waitFor(5s));
+            CHECK(watcher.received());
+        }
+
+        // The watcher took the signal instead of the handler of the test and gave that handler back.
+        CHECK(handledByTest.load() == 0);
+        CHECK(std::signal(signalNumber, original == SIG_ERR ? SIG_DFL : original) == handleInTest);
     }
 }

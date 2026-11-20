@@ -21,6 +21,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <optional>
 #include <regex>
 #include <sstream>
@@ -490,6 +491,35 @@ TEST_CASE("NetTest: the last block is printed only when it is not shorter than a
     REQUIRE(onlyLast.size() == 1);
     CHECK(onlyLast[0] == "{*NetTestProducerSide-t*} data 100 rps, lag 0 us, instances 1, connections 0\n"
                          "    t.1 data 100 rps, lag 0 us\n");
+}
+
+TEST_CASE("NetTest: a period longer than the longest wait ticks at the multiples of the longest wait") {
+    // The wall clock of 2026 in nanoseconds; the parser lets `-s` reach std::int64_t milliseconds.
+    constexpr std::int64_t now = 1'790'000'000'000'000'000;
+    constexpr std::int64_t longestNanos = MAX_WAIT_MILLIS * 1'000'000;
+    std::vector<std::int64_t> sleeps;
+    ReporterClock clock;
+
+    clock.nowNanos = [] {
+        return now;
+    };
+    clock.sleepUntilNanos = [&sleeps](std::int64_t nanos) {
+        sleeps.push_back(nanos);
+
+        return false;
+    };
+
+    runReporter(
+        "t", std::numeric_limits<std::int64_t>::max(), clock,
+        [] {
+            return StatisticsSample{};
+        },
+        [](const std::string &) {
+        });
+
+    REQUIRE(sleeps.size() == 1);
+    CHECK(sleeps[0] == (now / longestNanos + 1) * longestNanos);
+    CHECK(sleeps[0] > now);
 }
 
 TEST_CASE("NetTest kit: the parser gives the settings and the errors of cli-vectors.json") {

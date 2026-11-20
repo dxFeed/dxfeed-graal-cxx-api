@@ -9,9 +9,14 @@
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
+#include <cstdint>
 #include <mutex>
 
 namespace dxfcpp::tools::nettest {
+
+/// The longest wait of the tool, about three years: a longer `--duration` or `-s` waits this long, so that the
+/// deadlines in nanoseconds stay far from the overflow of std::int64_t.
+inline constexpr std::int64_t MAX_WAIT_MILLIS = 100'000'000'000;
 
 class StopControl {
     std::atomic<bool> stopped_{false};
