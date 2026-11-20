@@ -120,7 +120,7 @@ class DXFCPP_INTERNAL_EXPORT Isolate final {
     static void checkAdvancedRevision();
 
     /**
-     * Returns the version of the Graal Native SDK library that the isolate was created with, for example `3.17.0`. The
+     * Returns the version of the Graal Native SDK library that the isolate was created with, for example `3.18.0`. The
      * version is read when the isolate is created; the call creates the isolate if it is not created yet.
      *
      * @return The version, or an empty string if the creation of the isolate failed.

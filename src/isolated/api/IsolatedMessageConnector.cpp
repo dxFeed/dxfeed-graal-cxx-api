@@ -97,6 +97,10 @@ std::vector<std::string> takeStringList(dxfg_v4_string_list *list) {
 
 } // namespace
 
+// getInfo() maps the 12 values of the I/O statistics one to one.
+static_assert(sizeof(dxfg_v4_message_connector_io_stats_t) == 12 * sizeof(std::int64_t),
+              "dxfg_v4_message_connector_io_stats_t changed: update MessageConnectorInfo::IoStatistics");
+
 MessageConnectorInfo getInfo(/* dxfg_v4_message_connector_t * */ void *connector) {
     if (connector == nullptr) {
         throw InvalidArgumentException("Unable to read the message connector. The `connector` handle is nullptr");
@@ -129,6 +133,32 @@ MessageConnectorInfo getInfo(/* dxfg_v4_message_connector_t * */ void *connector
     info.statistics.writtenDataRecords = stats.written_data_records;
     info.statistics.activeConnectionCount = stats.active_connection_count;
     info.statistics.closedConnectionCount = stats.closed_connection_count;
+
+    // Defensive: the minimum version of the SDK supports the feature.
+    if (runGraalV4FunctionWithResult(dxfg_v4_system_is_feature_supported,
+                                     DXFG_V4_FEATURE_MESSAGE_CONNECTOR_IO_STATISTICS) != 0) {
+        dxfg_v4_message_connector_io_stats_t ioStats{};
+
+        runGraalV4Function(dxfg_v4_MessageConnector_getIoStatistics, graalConnector, &ioStats);
+
+        // Not ioStatistics.emplace(): clang rejects it, as a nested struct with default member initializers is not
+        // default constructible for std::optional declared inside the enclosing class.
+        MessageConnectorInfo::IoStatistics io{};
+
+        io.readDataRecords = ioStats.read_data_records;
+        io.writtenDataRecords = ioStats.written_data_records;
+        io.readSubRecords = ioStats.read_sub_records;
+        io.writtenSubRecords = ioStats.written_sub_records;
+        io.readBytes = ioStats.read_bytes;
+        io.writtenBytes = ioStats.written_bytes;
+        io.readDataLagSumMicros = ioStats.read_data_lag_sum_us;
+        io.writtenDataLagSumMicros = ioStats.written_data_lag_sum_us;
+        io.readRttSumMicros = ioStats.read_rtt_sum_us;
+        io.writtenRttSumMicros = ioStats.written_rtt_sum_us;
+        io.activeConnectionCount = ioStats.active_connection_count;
+        io.closedConnectionCount = ioStats.closed_connection_count;
+        info.ioStatistics = io;
+    }
 
     info.lastError = takeError(runGraalV4FunctionWithResult(dxfg_v4_MessageConnector_getLastError, graalConnector));
 

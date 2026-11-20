@@ -120,6 +120,64 @@ struct DXFCPP_EXPORT MessageConnectorInfo {
         std::int64_t closedConnectionCount{};
     };
 
+    /**
+     * The I/O statistics of a connector since it was created: the cumulative counters of QD's statistics, with the
+     * lags and the round-trip times of the records.
+     *
+     * The averages of an interval come from the differences of two snapshots:
+     * - `readDataLagSumMicros / readDataRecords` is the lag of the data received: the lag that the peer reported in its
+     *   last heartbeat (how long the data waited in the peer and upstream of it) plus the round-trip time of the
+     *   connection. It means something on a feed; on a publisher it stays 0.
+     * - `writtenDataLagSumMicros / writtenDataRecords` is the time a record spent in this process; on a publisher it is
+     *   close to 0 (the composing time only).
+     * - `readRttSumMicros / (readDataRecords + readSubRecords)` and
+     *   `writtenRttSumMicros / (writtenDataRecords + writtenSubRecords)` are the round-trip time of the connections.
+     *
+     * An interval without records has no average. The round-trip time is 0 until the first heartbeats have gone both
+     * ways (about a second after the connect), and a lag or round-trip time of more than about 537 s comes out wrong
+     * (QD's time marks wrap every 2^30 microseconds). On iOS the ten I/O counters stay 0. A connector stopped by a
+     * connect to another address, by DXEndpoint::disconnect() or by the close of its endpoint reads 0 for the ten I/O
+     * counters; the connection counts stay. The bytes are those of the QTP messages, heartbeats included, and may
+     * differ from the socket bytes of @ref Statistics, for example with TLS.
+     */
+    struct IoStatistics {
+        /// The number of data records read: it grows only when data arrives.
+        std::int64_t readDataRecords{};
+
+        /// The number of data records written.
+        std::int64_t writtenDataRecords{};
+
+        /// The number of subscription records read: those a publisher receives.
+        std::int64_t readSubRecords{};
+
+        /// The number of subscription records written: those a feed sends.
+        std::int64_t writtenSubRecords{};
+
+        /// The number of bytes of the QTP messages read, heartbeats included.
+        std::int64_t readBytes{};
+
+        /// The number of bytes of the QTP messages written, heartbeats included.
+        std::int64_t writtenBytes{};
+
+        /// The sum over the data records read of their lag, in microseconds.
+        std::int64_t readDataLagSumMicros{};
+
+        /// The sum over the data records written of their lag, in microseconds.
+        std::int64_t writtenDataLagSumMicros{};
+
+        /// The sum over the records read of the round-trip time of the connection, in microseconds.
+        std::int64_t readRttSumMicros{};
+
+        /// The sum over the records written of the round-trip time of the connection, in microseconds.
+        std::int64_t writtenRttSumMicros{};
+
+        /// The number of the open connections.
+        std::int64_t activeConnectionCount{};
+
+        /// The number of the closed connections.
+        std::int64_t closedConnectionCount{};
+    };
+
     /// The name of the connector, as in the log of QD, for example `ClientSocket-Distributor`. The connectors of
     /// different endpoints may have the same name.
     std::string name{};
@@ -150,6 +208,9 @@ struct DXFCPP_EXPORT MessageConnectorInfo {
 
     /// The statistics of the connector.
     Statistics statistics{};
+
+    /// The I/O statistics of the connector, or `std::nullopt` when the Graal Native SDK library does not support them.
+    std::optional<IoStatistics> ioStatistics{};
 
     /// The last connection error of the connector, or `std::nullopt` when it has had none.
     std::optional<ConnectionError> lastError{};

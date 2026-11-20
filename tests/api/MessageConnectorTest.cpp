@@ -373,6 +373,68 @@ TEST_CASE("MessageConnector: a listener that adds a listener while the endpoint 
     }));
 }
 
+TEST_CASE("MessageConnector: the I/O statistics grow, the round-trip time comes after a heartbeat, the publisher reads "
+          "no lag") {
+    const auto publisher = DXEndpoint::create(DXEndpoint::Role::PUBLISHER);
+    const auto feed = DXEndpoint::create(DXEndpoint::Role::FEED);
+    const auto port = std::to_string(test::findFreeLoopbackPort());
+
+    // A FEED refused before the PUBLISHER listens reconnects only after 10-20 s.
+    publisher->connect(":" + port + "[bindAddr=127.0.0.1]");
+    REQUIRE(test::waitUntil([&] {
+        return publisher->getState() == DXEndpoint::State::CONNECTED;
+    }));
+    feed->connect("127.0.0.1:" + port);
+
+    const auto subscription = feed->getFeed()->createSubscription(Quote::TYPE);
+
+    subscription->addSymbols("IO");
+
+    const auto ioStatistics = [](const std::shared_ptr<DXEndpoint> &endpoint) {
+        const auto connectors = endpoint->getConnectors();
+
+        REQUIRE(connectors.size() == 1);
+        REQUIRE(connectors[0].ioStatistics.has_value());
+
+        return *connectors[0].ioStatistics;
+    };
+
+    double price = 1.0;
+    MessageConnectorInfo::IoStatistics feedStats{};
+
+    // The round-trip time is known after the first heartbeats have gone both ways (about a second), and the lag of the
+    // data read comes with it: publish until both show up.
+    REQUIRE(test::waitUntil(
+        [&] {
+            const auto quote = std::make_shared<Quote>("IO");
+
+            // A new price for each quote: an unchanged one could be conflated.
+            quote->setBidPrice(price);
+            price += 1.0;
+            publisher->getPublisher()->publishEvents(quote);
+            feedStats = ioStatistics(feed);
+
+            return feedStats.readDataRecords > 0 && feedStats.readRttSumMicros > 0 &&
+                   feedStats.readDataLagSumMicros > 0;
+        },
+        30s, 50ms));
+
+    const auto publisherStats = ioStatistics(publisher);
+
+    CHECK(feedStats.writtenSubRecords > 0);
+    CHECK(feedStats.readBytes > 0);
+    CHECK(feedStats.writtenBytes > 0);
+    CHECK(feedStats.activeConnectionCount == 1);
+    CHECK(feedStats.closedConnectionCount == 0);
+    CHECK(publisherStats.readSubRecords > 0);
+    CHECK(publisherStats.writtenDataRecords > 0);
+    CHECK(publisherStats.readDataLagSumMicros == 0);
+    CHECK(publisherStats.activeConnectionCount == 1);
+
+    feed->close();
+    publisher->close();
+}
+
 TEST_CASE("ConnectionError::toString: the time in UTC, the category and the optional parts") {
     ConnectionError error{};
 
