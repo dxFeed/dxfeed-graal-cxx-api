@@ -40,6 +40,8 @@ add_executable(${PROJECT_NAME}
         src/Diagnose/NetProbe.cpp
         src/NetTest/Args.cpp
         src/NetTest/EventPool.cpp
+        src/NetTest/Generator.cpp
+        src/NetTest/RateLimiter.cpp
         src/NetTest/Run.cpp
         src/NetTest/SymbolPool.cpp
 )

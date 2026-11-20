@@ -108,6 +108,7 @@ set(DXFC_TEST_SOURCES
         system/SystemTest.cpp
         tools/DiagnoseToolTest.cpp
         tools/NetTestKitTest.cpp
+        tools/NetTestRunTest.cpp
         tools/ToolsArgsTest.cpp
         util/ToStringDoubleTest.cpp
         util/UtilHeadersTest.cpp)
@@ -140,7 +141,8 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     if (DXFC_TEST_SOURCE MATCHES "^tools/")
         target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp
                 ../tools/Tools/src/Diagnose/NetProbe.cpp ../tools/Tools/src/NetTest/Args.cpp
-                ../tools/Tools/src/NetTest/EventPool.cpp ../tools/Tools/src/NetTest/Run.cpp
+                ../tools/Tools/src/NetTest/EventPool.cpp ../tools/Tools/src/NetTest/Generator.cpp
+                ../tools/Tools/src/NetTest/RateLimiter.cpp ../tools/Tools/src/NetTest/Run.cpp
                 ../tools/Tools/src/NetTest/SymbolPool.cpp)
     endif ()
 
