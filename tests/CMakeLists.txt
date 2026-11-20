@@ -107,6 +107,8 @@ set(DXFC_TEST_SOURCES
         symbols/SymbolWrapperTest.cpp
         system/SystemTest.cpp
         tools/DiagnoseToolTest.cpp
+        tools/NetTestKitTest.cpp
+        tools/NetTestRunTest.cpp
         tools/ToolsArgsTest.cpp
         util/ToStringDoubleTest.cpp
         util/UtilHeadersTest.cpp)
@@ -138,7 +140,21 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     # executable.
     if (DXFC_TEST_SOURCE MATCHES "^tools/")
         target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp
-                ../tools/Tools/src/Diagnose/NetProbe.cpp)
+                ../tools/Tools/src/Diagnose/NetProbe.cpp ../tools/Tools/src/NetTest/Args.cpp
+                ../tools/Tools/src/NetTest/EventPool.cpp ../tools/Tools/src/NetTest/Generator.cpp
+                ../tools/Tools/src/NetTest/RateLimiter.cpp ../tools/Tools/src/NetTest/Run.cpp
+                ../tools/Tools/src/NetTest/Statistics.cpp ../tools/Tools/src/NetTest/SymbolPool.cpp)
+    endif ()
+
+    # The tests of NetTest read the kit of its specification from the archive of the Graal Native SDK (the stub of the
+    # SDK has no kit: the tests skip then).
+    if (DXFC_TEST_SOURCE MATCHES "^tools/NetTest")
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE
+                DXFCXX_NETTEST_KIT_DIR="$<TARGET_PROPERTY:DxFeedGraalNativeSdk,INTERFACE_INCLUDE_DIRECTORIES>/docs/wrapper-guide/nettest")
+
+        if (DXFCXX_USE_DXFG_STUB)
+            target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCXX_NETTEST_SDK_STUB=1)
+        endif ()
     endif ()
 
     # The tests build or read the structures of the C API of the dxFeed Graal SDK by hand, or call it.

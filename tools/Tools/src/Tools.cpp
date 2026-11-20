@@ -77,6 +77,19 @@ const std::vector<std::string> LatencyTest::ADDITIONAL_INFO{};
 const std::vector<ArgType> LatencyTest::ARGS{AddressArgRequired{}, TypesArg{},    SymbolsArg{},         PropertiesArg{},
                                              ForceStreamArg{},     IntervalArg{}, IgnoreExchangesArg{}, HelpArg{}};
 
+const std::string NetTestTool::NAME{"NetTest"};
+const std::string NetTestTool::SHORT_DESCRIPTION{"Publishes generated events and measures the end-to-end lag."};
+const std::string NetTestTool::DESCRIPTION{R"(
+Publishes generated events to an address, as the NetTest of the QD library, the Graal Native SDK and the Java API do,
+and prints the same statistics lines. The command line and the output follow the NetTest specification nettest/1.
+)"};
+const std::vector<std::string> NetTestTool::USAGE{
+    NAME + " p|c <address> -S <symbols> [<options>]",
+};
+const std::vector<std::string> NetTestTool::ADDITIONAL_INFO{nettest::usageText()};
+
+const std::vector<ArgType> NetTestTool::ARGS{HelpArg{}};
+
 const std::string PerfTestTool::NAME{"PerfTest"};
 const std::string PerfTestTool::SHORT_DESCRIPTION{"Connects to specified address and calculates performance counters."};
 const std::string PerfTestTool::DESCRIPTION{R"(
@@ -158,7 +171,7 @@ Connects to the tape file and subscribes for all events and all symbols:
   connect file:tape.csv all all -p dxfeed.wildcard.enable=true
 
 Connects to the demo-endpoint by dxLink and subscribes to Quote event for AAPL symbol:
-  connect "dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws" Quote AAPL -p dxfeed.experimental.dxlink.enable=true,scheme=ext:opt:sysprops,resource:dxlink.xml)"},
+  connect "dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws" Quote AAPL -p dxfeed.experimental.dxlink.enable=true,scheme=ext:opt:sysprops,opt:dxprops,resource:dxlink.xml)"},
     {"Dump",
      R"(This tool dumps all received data records and subscription items to a console. It can connect to any address including
 plain file.
@@ -436,7 +449,8 @@ const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::AL
     {ConnectTool::getName(), ConnectTool{}},   {DiagnoseTool::getName(), DiagnoseTool{}},
     {DumpTool::getName(), DumpTool{}},
     {HelpTool::getName(), HelpTool{}},         {LatencyTest::getName(), LatencyTest{}},
-    {PerfTestTool::getName(), PerfTestTool{}}, {PerfTest2Tool::getName(), PerfTest2Tool{}},
+    {NetTestTool::getName(), NetTestTool{}},   {PerfTestTool::getName(), PerfTestTool{}},
+    {PerfTest2Tool::getName(), PerfTest2Tool{}},
     {QdsTool::getName(), QdsTool{}},           {EventGenTool::getName(), EventGenTool{}},
 };
 
