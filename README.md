@@ -392,7 +392,7 @@ int main() {
     // Enable experimental feature.
     System::setProperty("dxfeed.experimental.dxlink.enable", "true");
     // Set scheme for dxLink.
-    System::setProperty("scheme", "ext:opt:sysprops,resource:dxlink.xml");
+    System::setProperty("scheme", "ext:opt:sysprops,opt:dxprops,resource:dxlink.xml");
     
     // For token-based authorization, use the following address format:
     // "dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws[login=dxlink:token]"
