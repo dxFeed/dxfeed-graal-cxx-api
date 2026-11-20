@@ -37,7 +37,7 @@ class EventPool {
     std::vector<double> sizes_{};
     std::vector<std::shared_ptr<EventType>> events_{};
 
-  public:
+    public:
     static constexpr std::size_t TABLE_SIZE = 1024;
     static constexpr std::uint32_t SEQUENCE_MASK = (1U << 22) - 1;
 
@@ -89,8 +89,8 @@ class EventPool {
     }
 
     /// Fills the batch (clearing it first) with `count` events of random symbols at the time given in nanoseconds
-    /// since the Unix epoch: each event gets the time, the nano part, the next sequence of the instance, and a price and
-    /// a size from the table. With `reuse` a symbol drawn twice appears twice, as one object with the later stamp.
+    /// since the Unix epoch: each event gets the time, the nano part, the next sequence of the instance, and a price
+    /// and a size from the table. With `reuse` a symbol drawn twice appears twice, as one object with the later stamp.
     void fillAt(EventBatch &batch, std::size_t count, std::int64_t epochNanos);
 
     /// The same at the current time of the system clock.

@@ -43,6 +43,7 @@ add_executable(${PROJECT_NAME}
         src/NetTest/Generator.cpp
         src/NetTest/RateLimiter.cpp
         src/NetTest/Run.cpp
+        src/NetTest/Statistics.cpp
         src/NetTest/SymbolPool.cpp
 )
 

@@ -36,7 +36,7 @@ class JavaRandom {
         return static_cast<std::int32_t>(seed_ >> (48 - bits));
     }
 
-  public:
+    public:
     explicit JavaRandom(std::int64_t seed) : seed_((static_cast<std::uint64_t>(seed) ^ MULTIPLIER) & MASK) {
     }
 

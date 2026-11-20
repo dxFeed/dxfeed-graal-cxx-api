@@ -1,7 +1,8 @@
 // Copyright (c) 2026 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-// The generator loop of one NetTest instance: wait for the batch of the schedule, build the batch, publish it, count it.
+// The generator loop of one NetTest instance: wait for the batch of the schedule, build the batch, publish it, count
+// it.
 
 #pragma once
 

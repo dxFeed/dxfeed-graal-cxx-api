@@ -18,7 +18,7 @@ class StopControl {
     std::mutex mutex_{};
     std::condition_variable condition_{};
 
-  public:
+    public:
     StopControl() = default;
     StopControl(const StopControl &) = delete;
     StopControl &operator=(const StopControl &) = delete;

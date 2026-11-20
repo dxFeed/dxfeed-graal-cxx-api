@@ -56,7 +56,7 @@ class SignalWatcher {
     std::vector<std::pair<int, void (*)(int)>> previous_{};
     std::thread thread_{};
 
-  public:
+    public:
     explicit SignalWatcher(StopControl &stop);
     SignalWatcher(const SignalWatcher &) = delete;
     SignalWatcher &operator=(const SignalWatcher &) = delete;

@@ -19,10 +19,10 @@ namespace dxfcpp::tools::nettest {
 /// wait); one that is behind gets its batch at once and catches up without a bound, never dropping a batch.
 /// Thread-safe.
 class RateLimiter {
-  public:
+    public:
     using Clock = std::chrono::steady_clock;
 
-  private:
+    private:
     StopControl &stop_;
     // The length of one batch of the schedule in nanoseconds: batch * 1e9 / rate.
     const double batchNanos_;
@@ -30,7 +30,7 @@ class RateLimiter {
     std::optional<Clock::time_point> start_{};
     std::int64_t next_ = 0;
 
-  public:
+    public:
     RateLimiter(std::int64_t recordsPerSecond, std::int64_t batch, StopControl &stop);
 
     RateLimiter(const RateLimiter &) = delete;

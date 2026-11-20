@@ -15,12 +15,16 @@
 #include "../../tools/Tools/src/NetTest/SymbolPool.hpp"
 #include "../../tools/Tools/src/ToolsProperties.hpp"
 #include "../support/TestSupport.hpp"
+#include "nettest/KitJson.hpp"
 
 #include <atomic>
 #include <chrono>
 #include <cstdint>
+#include <filesystem>
 #include <memory>
 #include <mutex>
+#include <optional>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <thread>
@@ -117,7 +121,8 @@ struct TradeCollector {
 
 // The nanosecond part of the event time reaches a STREAM_FEED through a producer endpoint that gets
 // `dxscheme.nanoTime` from its builder under the scheme of the Tools process.
-TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the nano part passes a producer endpoint that gets dxscheme.nanoTime from its builder") {
+TEST_CASE_FIXTURE(ToolsProcess,
+                  "NetTest: the nano part passes a producer endpoint that gets dxscheme.nanoTime from its builder") {
     for (const auto role : {DXEndpoint::Role::PUBLISHER, DXEndpoint::Role::STREAM_PUBLISHER}) {
         const auto port = test::findFreeLoopbackPort();
         const auto publisherEndpoint = DXEndpoint::newBuilder()
@@ -147,9 +152,9 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the nano part passes a producer endpoi
 
         const auto trade = std::make_shared<Trade>("NANO-TEST");
 
-        trade->setTime(std::chrono::duration_cast<std::chrono::milliseconds>(
-                           std::chrono::system_clock::now().time_since_epoch())
-                           .count());
+        trade->setTime(
+            std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
+                .count());
         trade->setTimeNanoPart(123456);
         trade->setPrice(10.5);
 
@@ -188,8 +193,8 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the producer publishes and stops on --
 
 TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the producer keeps the rate of -r") {
     const auto port = test::findFreeLoopbackPort();
-    const auto settings = settingsOf({"p", listenAddress(port), "-S", "100", "-r", "*/1000", "--batch", "100",
-                                      "--duration", "3s"});
+    const auto settings =
+        settingsOf({"p", listenAddress(port), "-S", "100", "-r", "*/1000", "--batch", "100", "--duration", "3s"});
     StopControl stop;
     std::ostringstream out;
     const auto result = runProducer(settings, symbolsOf(settings), stop, out);
@@ -260,8 +265,8 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: -C 4 publishes for 2 seconds from four
 
 TEST_CASE_FIXTURE(ToolsProcess, "NetTest: -C 4 with a connected peer and a rate") {
     test::LoopbackTcpServer server;
-    const auto settings = settingsOf({"p", server.getAddress(), "-S", "1000", "-C", "4", "-r", "*/20000",
-                                      "--duration", "2s"});
+    const auto settings =
+        settingsOf({"p", server.getAddress(), "-S", "1000", "-C", "4", "-r", "*/20000", "--duration", "2s"});
     StopControl stop;
     std::ostringstream out;
     const auto result = runProducer(settings, symbolsOf(settings), stop, out);
@@ -283,8 +288,8 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: a busy listen port is exit 1 within 3 
     std::ostringstream out;
     std::ostringstream err;
     const auto start = std::chrono::steady_clock::now();
-    const auto exitCode = NetTestTool::runProcess(
-        {"p", ":" + port + "[bindAddr=127.0.0.1]", "-S", "10", "--duration", "30s"}, out, err);
+    const auto exitCode =
+        NetTestTool::runProcess({"p", ":" + port + "[bindAddr=127.0.0.1]", "-S", "10", "--duration", "30s"}, out, err);
     const auto elapsed = std::chrono::steady_clock::now() - start;
 
     CHECK(exitCode == 1);
@@ -294,8 +299,8 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: a busy listen port is exit 1 within 3 
 }
 
 TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the system properties are set in the command line order") {
-    const auto settings = settingsOf({"p", ":7001", "-S", "5", "-Dnettest.test.key=first", "-Dnettest.test.key=second",
-                                      "-Dnettest.test.other=x"});
+    const auto settings = settingsOf(
+        {"p", ":7001", "-S", "5", "-Dnettest.test.key=first", "-Dnettest.test.key=second", "-Dnettest.test.other=x"});
     std::string error;
 
     REQUIRE(applySystemProperties(settings, error));
@@ -307,7 +312,8 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the system properties are set in the c
 // The producer of the tool, a STREAM_FEED as the consumer: the events carry the nano part, and the stop request ends
 // the run without a duration.
 // With -Ddxscheme.nanoTime=false the producer endpoint drops the nano part: every event arrives with 0.
-TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the events of the producer reach a STREAM_FEED with or without the nano part") {
+TEST_CASE_FIXTURE(ToolsProcess,
+                  "NetTest: the events of the producer reach a STREAM_FEED with or without the nano part") {
     struct Case {
         std::vector<std::string> extra;
         bool nanoPart;
@@ -372,7 +378,8 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the events of the producer reach a STR
         }
 
         if (nanoPart) {
-            // The nano part of a batch is the time of the clock in nanoseconds within the millisecond: 0 by chance only.
+            // The nano part of a batch is the time of the clock in nanoseconds within the millisecond: 0 by chance
+            // only.
             CHECK(nonZero > 0);
         } else {
             CHECK(nonZero == 0);
@@ -466,4 +473,62 @@ TEST_CASE("RateLimiter: the batches of all generators share one schedule") {
     // 20 batches of 50 ms: the last one is due at 950 ms, whichever thread takes it.
     CHECK(granted.load() == 20);
     CHECK(std::chrono::steady_clock::now() - start >= 600ms);
+}
+
+// The lines of the statistics of a real run pass the expressions of the kit: a block of the producer (the summary line,
+// the line of each instance) and the runtime line after it, with the period of 1 s at the wall clock.
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the statistics lines of a run pass the expressions of regexes.json") {
+    const std::string directory = DXFCXX_NETTEST_KIT_DIR;
+    const bool kitFound = std::filesystem::is_directory(directory);
+#ifndef DXFCXX_NETTEST_SDK_STUB
+    REQUIRE_MESSAGE(kitFound, "The kit of the NetTest specification is not found: " << directory);
+#endif
+    test::LoopbackTcpServer server;
+    const auto settings =
+        settingsOf({"p", server.getAddress(), "-S", "100", "-C", "2", "-s", "1s", "--duration", "3s"});
+    StopControl stop;
+    std::ostringstream out;
+    const auto result = runProducer(settings, symbolsOf(settings), stop, out);
+
+    CHECK_MESSAGE(result.exitCode == 0, result.error);
+
+    std::vector<std::string> lines;
+    std::istringstream text(out.str());
+
+    for (std::string line; std::getline(text, line);) {
+        lines.push_back(line);
+    }
+
+    // Three seconds at the period of 1 s: the first tick only starts the count, so two blocks of 3 lines (the summary
+    // and 2 instances) with the runtime line, or three blocks when the last one is not shorter than a second.
+    REQUIRE(lines.size() >= 2 * 4);
+    CHECK(lines.size() % 4 == 0);
+    CHECK(lines.size() <= 3 * 4);
+
+    std::optional<std::regex> summary;
+    std::optional<std::regex> instance;
+    std::optional<std::regex> runtime;
+
+    if (kitFound) {
+        const auto expressions = kit::readJson(directory + "/regexes.json");
+
+        summary.emplace(expressions["regexes"]["summary"].asString(), std::regex::ECMAScript);
+        instance.emplace(expressions["regexes"]["instance"].asString(), std::regex::ECMAScript);
+        runtime.emplace(expressions["regexes"]["runtime"].asString(), std::regex::ECMAScript);
+    }
+
+    for (std::size_t index = 0; index + 3 < lines.size(); index += 4) {
+        INFO("block at line " << index);
+        CHECK(lines[index].rfind("{*NetTestProducerSide-NetTest*} data ", 0) == 0);
+        CHECK(lines[index + 1].rfind("    NetTest.1 data ", 0) == 0);
+        CHECK(lines[index + 2].rfind("    NetTest.2 data ", 0) == 0);
+        CHECK(lines[index + 3].rfind("{*NetTestRuntime-NetTest*} heap ", 0) == 0);
+
+        if (kitFound) {
+            CHECK_MESSAGE(std::regex_search(lines[index], *summary), lines[index]);
+            CHECK_MESSAGE(std::regex_search(lines[index + 1], *instance), lines[index + 1]);
+            CHECK_MESSAGE(std::regex_search(lines[index + 2], *instance), lines[index + 2]);
+            CHECK_MESSAGE(std::regex_search(lines[index + 3], *runtime), lines[index + 3]);
+        }
+    }
 }

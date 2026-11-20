@@ -7,12 +7,14 @@
 #include "EventPool.hpp"
 #include "Generator.hpp"
 #include "RateLimiter.hpp"
+#include "Statistics.hpp"
 
 #include <algorithm>
 #include <csignal>
 #include <exception>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <ostream>
 #include <string>
 #include <thread>
@@ -88,9 +90,10 @@ struct Instance {
     }
 
     // Connects the endpoint. A server socket must bind: the connector of a bound server socket reports itself as
-    // connected within milliseconds, one that cannot bind (the port is taken) stays connecting, so the start waits until
-    // every server socket connector is connected, at most SERVER_START_TIMEOUT. A client address never waits: with no
-    // peer the connector stays connecting, which is a normal state. Returns false and fills `error` on a timeout.
+    // connected within milliseconds, one that cannot bind (the port is taken) stays connecting, so the start waits
+    // until every server socket connector is connected, at most SERVER_START_TIMEOUT. A client address never waits:
+    // with no peer the connector stays connecting, which is a normal state. Returns false and fills `error` on a
+    // timeout.
     bool connect(const std::string &address, std::string &error) {
         endpoint->connect(address);
 
@@ -139,11 +142,61 @@ struct JoinGuard {
     }
 };
 
-// The reporter thread: it lives until `stop` is requested, which comes after the generators have ended.
-// TODO: MDAPI-600: print the statistics lines of every period from the live counters here, and the last block at the
-// stop.
-void reportUntilStopped(const Settings &, const LiveCounters &, StopControl &stop, std::ostream &) {
-    stop.wait();
+// The runtime values of the isolate, or nothing when the isolate does not give them.
+std::optional<RuntimeSample> readRuntime() {
+    try {
+        const auto statistics = System::getRuntimeStatistics();
+        RuntimeSample sample;
+
+        sample.heapUsedBytes = statistics.heapUsedBytes;
+        sample.heapCommittedBytes = statistics.heapCommittedBytes;
+        sample.youngGcCount = statistics.youngGcCount;
+        sample.youngGcTimeMs = statistics.youngGcTimeMs;
+        sample.fullGcCount = statistics.fullGcCount;
+        sample.fullGcTimeMs = statistics.fullGcTimeMs;
+        sample.processCpuTimeNs = statistics.processCpuTimeNs;
+
+        return sample;
+    } catch (const std::exception &) {
+        return std::nullopt;
+    }
+}
+
+// The open connections of all connectors of the endpoint.
+std::int64_t connectionsOf(const DXEndpoint &endpoint) {
+    std::int64_t total = 0;
+
+    for (const auto &connector : endpoint.getConnectors()) {
+        total += connector.connectionCount;
+    }
+
+    return total;
+}
+
+// The reporter thread: prints the statistics block and the runtime line of every period from the live counters, and
+// the last block at the stop; it lives until `stop` is requested, which comes after the generators have ended.
+void reportUntilStopped(const Settings &settings, const LiveCounters &live,
+                        const std::vector<std::unique_ptr<Instance>> &instances, StopControl &stop, std::ostream &out) {
+    runReporter(
+        settings.name, settings.periodMillis, systemReporterClock(stop),
+        [&] {
+            StatisticsSample sample;
+
+            for (std::size_t index = 0; index < instances.size(); ++index) {
+                const auto &counters = live.instances[index];
+
+                sample.instances.push_back({counters.records.load(std::memory_order_relaxed),
+                                            counters.weightedNanos.load(std::memory_order_relaxed)});
+                sample.connections += connectionsOf(*instances[index]->endpoint);
+            }
+
+            sample.runtime = readRuntime();
+
+            return sample;
+        },
+        [&](const std::string &text) {
+            out << text << std::flush;
+        });
 }
 
 } // namespace
@@ -216,7 +269,7 @@ RunResult runProducer(const Settings &settings, const Symbols &symbols, StopCont
 
             reporter.threads.emplace_back([&] {
                 try {
-                    reportUntilStopped(settings, live, reporterStop, out);
+                    reportUntilStopped(settings, live, instances, reporterStop, out);
                 } catch (const std::exception &e) {
                     fail(std::string("the report failed: ") + e.what());
                 }

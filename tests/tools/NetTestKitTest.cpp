@@ -12,6 +12,7 @@
 #include "../../tools/Tools/src/NetTest/Args.hpp"
 #include "../../tools/Tools/src/NetTest/EventPool.hpp"
 #include "../../tools/Tools/src/NetTest/NetTestTool.hpp"
+#include "../../tools/Tools/src/NetTest/Statistics.hpp"
 #include "../../tools/Tools/src/NetTest/SymbolPool.hpp"
 #include "nettest/KitJson.hpp"
 
@@ -21,6 +22,7 @@
 #include <fstream>
 #include <iostream>
 #include <optional>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -152,7 +154,8 @@ std::string kitValueText(const kit::Json &value) {
     }
 }
 
-// The tool has no isolate arguments and no deprecated publishing call: an entry that needs one of them is skipped, an\n// entry that needs their absence is checked.
+// The tool has no isolate arguments and no deprecated publishing call: an entry that needs one of them is skipped,
+// an entry that needs their absence is checked.
 bool needsFeature(const kit::Json &entry) {
     if (!entry.has("requires")) {
         return false;
@@ -220,7 +223,274 @@ bool ipfReadable() {
 
 const std::string IPF_FILE = (std::filesystem::path(DXFCXX_TEST_DATA_DIR) / "ipf" / "option-chains.ipf").string();
 
+// The value of a kit field of a runtime sample: null is a value the runtime does not give.
+std::int64_t sampleValue(const kit::Json &sample, const std::string &key) {
+    return sample[key].isNull() ? RUNTIME_VALUE_ABSENT : sample[key].asInteger();
+}
+
+// The runtime sample of lines.json: the kit gives one GC counter pair, which is the young one here, the full one is 0.
+RuntimeSample runtimeSampleOf(const kit::Json &sample) {
+    RuntimeSample result;
+
+    result.heapUsedBytes = sampleValue(sample, "heap_used_bytes");
+    result.heapCommittedBytes = sampleValue(sample, "heap_committed_bytes");
+    result.youngGcCount = sampleValue(sample, "gc_count");
+    result.youngGcTimeMs = sampleValue(sample, "gc_time_ms");
+    result.fullGcCount = 0;
+    result.fullGcTimeMs = 0;
+    result.processCpuTimeNs = sampleValue(sample, "cpu_ns");
+
+    return result;
+}
+
+// The clock of a reporter that jumps to the time it sleeps until and stops after the given number of ticks.
+struct FakeClock {
+    std::int64_t now = 0;
+    int ticks = 0;
+    std::int64_t stopAt = 0;
+
+    ReporterClock clock() {
+        ReporterClock result;
+
+        result.nowNanos = [this] {
+            return now;
+        };
+        result.sleepUntilNanos = [this](std::int64_t nanos) {
+            if (ticks == 0) {
+                now = stopAt;
+
+                return false;
+            }
+
+            --ticks;
+            now = nanos;
+
+            return true;
+        };
+
+        return result;
+    }
+};
+
+// The blocks that a reporter prints with a fake clock that starts at `start`, ticks `ticks` times and stops at `stop`;
+// every sample of the source holds 100 records more than the previous one.
+std::vector<std::string> reportedBlocks(std::int64_t periodMillis, std::int64_t start, int ticks, std::int64_t stop) {
+    FakeClock fake;
+    std::vector<std::string> blocks;
+    std::int64_t records = 0;
+
+    fake.now = start;
+    fake.ticks = ticks;
+    fake.stopAt = stop;
+    runReporter(
+        "t", periodMillis, fake.clock(),
+        [&] {
+            StatisticsSample sample;
+
+            records += 100;
+            sample.instances.push_back({records, 0});
+
+            return sample;
+        },
+        [&](const std::string &text) {
+            blocks.push_back(text);
+        });
+
+    return blocks;
+}
+
 } // namespace
+
+TEST_CASE("NetTest kit: grouping of lines.json") {
+    const auto directory = kitDirectory();
+
+    if (!directory) {
+        return;
+    }
+
+    const auto lines = kit::readJson(*directory + "/lines.json");
+
+    for (const auto &entry : nonEmpty(lines["grouping"])) {
+        INFO("value " << entry["value"].asInteger());
+        CHECK(groupDigits(entry["value"].asInteger()) == entry["text"].asString());
+    }
+}
+
+TEST_CASE("NetTest kit: the statistics blocks of lines.json are the same byte for byte") {
+    const auto directory = kitDirectory();
+
+    if (!directory) {
+        return;
+    }
+
+    const auto lines = kit::readJson(*directory + "/lines.json");
+
+    for (const auto &entry : nonEmpty(lines["statistics"])) {
+        const bool producer = entry["side"].asString() == "producer";
+        StatisticsSnapshot snapshot;
+
+        snapshot.side = producer ? StatisticsSide::PRODUCER : StatisticsSide::CONSUMER;
+        snapshot.name = entry["name"].asString();
+        snapshot.periodNanos = entry["interval_ns"].asInteger();
+        snapshot.connections = entry["connections"].asInteger();
+
+        for (const auto &instance : entry["instances"].array) {
+            snapshot.deltas.push_back(
+                {instance["records"].asInteger(), instance[producer ? "weighted_ns" : "lag_sum_ns"].asInteger()});
+        }
+
+        INFO(entry["text"].asString());
+        CHECK(formatStatistics(snapshot) == entry["text"].asString());
+    }
+}
+
+TEST_CASE("NetTest kit: the runtime lines of lines.json are the same byte for byte") {
+    const auto directory = kitDirectory();
+
+    if (!directory) {
+        return;
+    }
+
+    const auto lines = kit::readJson(*directory + "/lines.json");
+
+    for (const auto &entry : nonEmpty(lines["runtime"])) {
+        INFO(entry["text"].asString());
+        CHECK(formatRuntime(entry["name"].asString(), runtimeSampleOf(entry["previous"]),
+                            runtimeSampleOf(entry["current"]),
+                            entry["interval_ns"].asInteger()) == entry["text"].asString());
+    }
+}
+
+TEST_CASE("NetTest kit: every captured line passes an expression of regexes.json") {
+    const auto directory = kitDirectory();
+
+    if (!directory) {
+        return;
+    }
+
+    const auto lines = kit::readJson(*directory + "/lines.json");
+    const auto expressions = kit::readJson(*directory + "/regexes.json");
+    std::vector<std::regex> regexes;
+
+    for (const auto &name : {"summary", "instance", "runtime", "isolate_rejection"}) {
+        regexes.emplace_back(expressions["regexes"][name].asString(), std::regex::ECMAScript);
+    }
+
+    for (const auto &line : nonEmpty(lines["captured"])) {
+        INFO(line.asString());
+        CHECK(std::any_of(regexes.begin(), regexes.end(), [&](const std::regex &regex) {
+            return std::regex_search(line.asString(), regex);
+        }));
+    }
+
+    // The lines of the formatters pass the expressions of their own kind.
+    for (const auto &entry : nonEmpty(lines["statistics"])) {
+        std::istringstream text(entry["text"].asString());
+        std::string line;
+
+        std::getline(text, line);
+        CHECK(std::regex_search(line, regexes[0]));
+
+        while (std::getline(text, line)) {
+            INFO(line);
+            CHECK(std::regex_search(line, regexes[1]));
+        }
+    }
+
+    for (const auto &entry : nonEmpty(lines["runtime"])) {
+        INFO(entry["text"].asString());
+        CHECK(std::regex_search(entry["text"].asString(), regexes[2]));
+    }
+}
+
+TEST_CASE("NetTest: a missing value or a counter that went back is n/a in the runtime line") {
+    RuntimeSample previous;
+
+    previous.heapUsedBytes = 1;
+    previous.heapCommittedBytes = 2;
+    previous.youngGcCount = previous.fullGcCount = 0;
+    previous.youngGcTimeMs = previous.fullGcTimeMs = 0;
+    previous.processCpuTimeNs = 100;
+
+    auto current = previous;
+
+    current.heapUsedBytes = 3 * 1024 * 1024;
+    current.heapCommittedBytes = 4 * 1024 * 1024;
+    current.youngGcCount = 2;
+    current.youngGcTimeMs = 7;
+    current.fullGcCount = 1;
+    current.fullGcTimeMs = 5;
+    current.processCpuTimeNs = 100 + 500'000'000;
+    CHECK(formatRuntime("n", previous, current, 1'000'000'000) ==
+          "{*NetTestRuntime-n*} heap 3 MB of 4 MB, gc 3 (12 ms), cpu 50%");
+
+    auto missing = current;
+
+    missing.heapUsedBytes = RUNTIME_VALUE_ABSENT;
+    missing.heapCommittedBytes = RUNTIME_VALUE_ABSENT;
+    CHECK(formatRuntime("n", previous, missing, 1'000'000'000) ==
+          "{*NetTestRuntime-n*} heap n/a of n/a, gc 3 (12 ms), cpu 50%");
+
+    auto noGc = current;
+
+    noGc.fullGcCount = RUNTIME_VALUE_ABSENT;
+    CHECK(formatRuntime("n", previous, noGc, 1'000'000'000) ==
+          "{*NetTestRuntime-n*} heap 3 MB of 4 MB, gc n/a, cpu 50%");
+
+    auto noCpu = current;
+
+    noCpu.processCpuTimeNs = RUNTIME_VALUE_ABSENT;
+    CHECK(formatRuntime("n", previous, noCpu, 1'000'000'000) ==
+          "{*NetTestRuntime-n*} heap 3 MB of 4 MB, gc 3 (12 ms), cpu n/a");
+
+    auto cpuBack = current;
+
+    cpuBack.processCpuTimeNs = 50;
+    CHECK(formatRuntime("n", previous, cpuBack, 1'000'000'000) ==
+          "{*NetTestRuntime-n*} heap 3 MB of 4 MB, gc 3 (12 ms), cpu n/a");
+
+    auto gcBack = current;
+
+    previous.youngGcCount = 5;
+    gcBack.youngGcCount = 0;
+    CHECK(formatRuntime("n", previous, gcBack, 1'000'000'000) ==
+          "{*NetTestRuntime-n*} heap 3 MB of 4 MB, gc n/a, cpu 50%");
+}
+
+TEST_CASE("NetTest: the ticks are at the multiples of the period, the first one only starts the count") {
+    // The start at 10.2 s: the tick at 11 s primes, those at 12 s and 13 s print, the stop at 13 s adds no block.
+    const auto blocks = reportedBlocks(1000, 10'200'000'000, 3, 13'000'000'000);
+
+    REQUIRE(blocks.size() == 2);
+    // The source adds 100 records per sample, so each second has 100 records.
+    CHECK(blocks[0] == "{*NetTestProducerSide-t*} data 100 rps, lag 0 us, instances 1, connections 0\n"
+                       "    t.1 data 100 rps, lag 0 us\n");
+    CHECK(blocks[1] == blocks[0]);
+}
+
+TEST_CASE("NetTest: the last block is printed only when it is not shorter than a second") {
+    // The last tick at 12 s: a stop before 13 s gives no block, at 13 s and later one block of the real length.
+    CHECK(reportedBlocks(1000, 10'200'000'000, 2, 12'999'999'999).size() == 1);
+
+    const auto blocks = reportedBlocks(1000, 10'200'000'000, 2, 13'000'000'000);
+
+    REQUIRE(blocks.size() == 2);
+    CHECK(blocks[1] == "{*NetTestProducerSide-t*} data 100 rps, lag 0 us, instances 1, connections 0\n"
+                       "    t.1 data 100 rps, lag 0 us\n");
+
+    const auto longer = reportedBlocks(1000, 10'200'000'000, 2, 14'000'000'000);
+
+    REQUIRE(longer.size() == 2);
+    CHECK(longer[1] == "{*NetTestProducerSide-t*} data 50 rps, lag 0 us, instances 1, connections 0\n"
+                       "    t.1 data 50 rps, lag 0 us\n");
+
+    // Without a tick the last block covers the time since the start.
+    const auto onlyLast = reportedBlocks(1000, 10'200'000'000, 0, 11'200'000'000);
+
+    REQUIRE(onlyLast.size() == 1);
+    CHECK(onlyLast[0] == "{*NetTestProducerSide-t*} data 100 rps, lag 0 us, instances 1, connections 0\n"
+                         "    t.1 data 100 rps, lag 0 us\n");
+}
 
 TEST_CASE("NetTest kit: the parser gives the settings and the errors of cli-vectors.json") {
     const auto directory = kitDirectory();
@@ -305,8 +575,8 @@ TEST_CASE("NetTest kit: the parser gives the settings and the errors of cli-vect
         skippedList += "\n  " + command;
     }
 
-    MESSAGE("cli-vectors.json: " << checked << " checked, " << skipped.size() << " skipped (isolate, legacy):"
-                                 << skippedList);
+    MESSAGE("cli-vectors.json: " << checked << " checked, " << skipped.size()
+                                 << " skipped (isolate, legacy):" << skippedList);
     CHECK(checked + skipped.size() == vectors["vectors"].array.size());
     CHECK(checked >= 70);
 }
@@ -446,8 +716,8 @@ TEST_CASE("NetTest kit: the pools of the instances give the table and the first 
         const auto number = static_cast<std::int32_t>(instance["instance"].asInteger());
         const auto &events = instance["events"];
         const auto poolSize = static_cast<std::size_t>(events["pool_size"].asInteger());
-        const auto symbols = std::make_shared<const std::vector<std::string>>(
-            generateSymbols(static_cast<std::int64_t>(poolSize)));
+        const auto symbols =
+            std::make_shared<const std::vector<std::string>>(generateSymbols(static_cast<std::int64_t>(poolSize)));
 
         INFO("instance " << number);
 

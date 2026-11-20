@@ -189,8 +189,7 @@ struct Parser {
         return true;
     }
 
-    bool parseIntegerOption(const std::string &flag, const std::string &value, std::int64_t limit,
-                            std::int64_t &out) {
+    bool parseIntegerOption(const std::string &flag, const std::string &value, std::int64_t limit, std::int64_t &out) {
         const auto parsed = parsePositive(value, limit);
 
         if (!parsed) {
@@ -447,7 +446,8 @@ struct Parser {
                 continue;
             }
 
-            // The options of the native runtime (-Xmx, -XX:...) have no meaning here: the API starts its isolate itself.
+            // The options of the native runtime (-Xmx, -XX:...) have no meaning here: the API starts its isolate
+            // itself.
             if (argument.compare(0, 2, "-X") == 0) {
                 return fail("unsupported option: " + argument);
             }

@@ -64,12 +64,10 @@ GeneratorResult runGenerator(const std::shared_ptr<DXPublisher> &publisher, Even
 
             counters.records.fetch_add(published, std::memory_order_relaxed);
             counters.weightedNanos.fetch_add(published * elapsed, std::memory_order_relaxed);
-            publish.fillNanos.fetch_add(
-                std::chrono::duration_cast<std::chrono::nanoseconds>(filled - start).count(),
-                std::memory_order_relaxed);
-            publish.publishNanos.fetch_add(
-                std::chrono::duration_cast<std::chrono::nanoseconds>(end - filled).count(),
-                std::memory_order_relaxed);
+            publish.fillNanos.fetch_add(std::chrono::duration_cast<std::chrono::nanoseconds>(filled - start).count(),
+                                        std::memory_order_relaxed);
+            publish.publishNanos.fetch_add(std::chrono::duration_cast<std::chrono::nanoseconds>(end - filled).count(),
+                                           std::memory_order_relaxed);
             publish.batches.fetch_add(1, std::memory_order_relaxed);
         } catch (const std::exception &e) {
             result.ok = false;

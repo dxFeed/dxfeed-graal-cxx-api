@@ -295,7 +295,7 @@ class JsonReader {
         return value;
     }
 
-  public:
+    public:
     explicit JsonReader(const std::string &text) : text_(text) {
     }
 
