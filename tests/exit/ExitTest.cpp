@@ -8,6 +8,7 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 #include "../../src/internal/CallbackBarrier.hpp"
+#include "../../src/internal/Isolate.hpp"
 
 #include <atomic>
 #include <chrono>
@@ -170,6 +171,28 @@ enum class ShutdownFromListener : int { NOT_CALLED, REFUSED, RETURNED, OTHER_EXC
 constinit std::atomic<bool> callShutdownFromListener{};
 constinit std::atomic<ShutdownFromListener> shutdownFromListenerResult{ShutdownFromListener::NOT_CALLED};
 
+// The result of Isolate::shutdownAndTearDown() called from the event listener.
+constinit std::atomic<bool> callTearDownFromListener{};
+constinit std::atomic<bool> tearDownFromListenerCalled{};
+constinit std::atomic<Isolate::TearDownResult::Status> tearDownFromListenerStatus{
+    Isolate::TearDownResult::Status::NOTHING_TO_TEAR_DOWN};
+
+// The event listener leaks memory once: the allocation has the frames of the SDK library in its stack.
+constinit std::atomic<bool> leakFromListener{};
+constinit std::atomic<bool> leakedFromListenerDone{};
+constinit int *volatile leakedFromListener{};
+
+// The event listener closes a subscription: the release thread starts.
+constinit std::atomic<bool> closeFromListener{};
+constinit std::atomic<bool> closedFromListenerDone{};
+
+// The subscription that the event listener closes. Never destroyed: the listener may still be called at exit.
+std::shared_ptr<DXFeedSubscription> &closedFromListener() {
+    static auto &subscription = *new std::shared_ptr<DXFeedSubscription>{};
+
+    return subscription;
+}
+
 /**
  * Created before main(), so destroyed after the exit handler of the library (registered when the library is first
  * used). When enabled, the destructor fails the process if the listener is called after the handler has run.
@@ -217,6 +240,16 @@ std::shared_ptr<DXEndpoint> startEvents() {
 
     subscription->addEventListener([](const auto &events) {
         listenerCalls++;
+
+        if (leakFromListener.exchange(false)) {
+            leakedFromListener = new int[16]{};
+            leakedFromListenerDone = true;
+        }
+
+        if (callTearDownFromListener.exchange(false)) {
+            tearDownFromListenerStatus = Isolate::shutdownAndTearDown().status;
+            tearDownFromListenerCalled = true;
+        }
 
         if (callShutdownFromListener.exchange(false)) {
             try {
@@ -714,6 +747,215 @@ int shutdownFromListener() {
     return 0;
 }
 
+using TearDownStatus = Isolate::TearDownResult::Status;
+
+const char *toText(TearDownStatus status) {
+    switch (status) {
+    case TearDownStatus::TORN_DOWN:
+        return "TORN_DOWN";
+    case TearDownStatus::NOTHING_TO_TEAR_DOWN:
+        return "NOTHING_TO_TEAR_DOWN";
+    case TearDownStatus::REFUSED:
+        return "REFUSED";
+    case TearDownStatus::FAILED:
+        return "FAILED";
+    }
+
+    return "unknown";
+}
+
+/// Tears the isolate down; prints the result and returns false if the status is not the expected one.
+bool tearDownExpecting(TearDownStatus expected) {
+    const auto start = std::chrono::steady_clock::now();
+    const auto result = Isolate::shutdownAndTearDown();
+    const auto milliseconds =
+        std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+
+    std::fprintf(stderr, "Isolate::shutdownAndTearDown(): %s, error %u, %lld ms\n", toText(result.status),
+                 static_cast<unsigned>(result.error), static_cast<long long>(milliseconds));
+
+    if (result.status != expected) {
+        std::fprintf(stderr, "Expected %s\n", toText(expected));
+
+        return false;
+    }
+
+    return true;
+}
+
+/// The library is not entered after the tear-down: the calls throw, and the objects are released without the isolate.
+bool checkAfterTearDown() {
+    try {
+        DXFeed::getInstance();
+        std::fputs("DXFeed::getInstance() did not throw after the tear-down\n", stderr);
+
+        return false;
+    } catch (const GraalException &) {
+    }
+
+    return true;
+}
+
+/// Tears the isolate down while an endpoint delivers events; the endpoint is destroyed after the tear-down.
+int tearDown() {
+    auto endpoint = startEvents();
+
+    if (!tearDownExpecting(TearDownStatus::TORN_DOWN) || !checkAfterTearDown()) {
+        return 3;
+    }
+
+    const auto calls = listenerCalls.load();
+    std::this_thread::sleep_for(200ms);
+
+    if (listenerCalls.load() != calls) {
+        std::fputs("The listener was called after the tear-down\n", stderr);
+
+        return 3;
+    }
+
+    return 0;
+}
+
+/// The second tear-down does nothing.
+int tearDownTwice() {
+    auto endpoint = startEvents();
+
+    return tearDownExpecting(TearDownStatus::TORN_DOWN) && tearDownExpecting(TearDownStatus::NOTHING_TO_TEAR_DOWN) &&
+                   checkAfterTearDown()
+               ? 0
+               : 3;
+}
+
+/// The tear-down does not create the isolate.
+int tearDownNotCreated() {
+    if (!tearDownExpecting(TearDownStatus::NOTHING_TO_TEAR_DOWN)) {
+        return 3;
+    }
+
+    if (Isolate::isCreated()) {
+        std::fputs("The tear-down created the isolate\n", stderr);
+
+        return 3;
+    }
+
+    return 0;
+}
+
+/// The tear-down after dxfcpp::shutdown() tears the isolate down.
+int tearDownAfterShutdown() {
+    auto endpoint = startEvents();
+
+    shutdown();
+
+    return tearDownExpecting(TearDownStatus::TORN_DOWN) && checkAfterTearDown() ? 0 : 3;
+}
+
+/// The isolate is created on a thread that has ended; the main thread has never called into it.
+int tearDownOtherThread() {
+    std::shared_ptr<DXEndpoint> endpoint{};
+    std::exception_ptr error{};
+
+    std::thread{[&endpoint, &error] {
+        try {
+            endpoint = startEvents();
+        } catch (...) {
+            error = std::current_exception();
+        }
+    }}.join();
+
+    if (error) {
+        std::rethrow_exception(error);
+    }
+
+    return tearDownExpecting(TearDownStatus::TORN_DOWN) && checkAfterTearDown() ? 0 : 3;
+}
+
+/// The release thread of the library is attached to the isolate and waits forever.
+int tearDownReleaseThread() {
+    auto endpoint = DXEndpoint::create(DXEndpoint::Role::LOCAL_HUB);
+
+    closedFromListener() = endpoint->getFeed()->createSubscription(Quote::TYPE);
+    closedFromListener()->addEventListener([](const auto &) {
+    });
+    closedFromListener()->addSymbols("EXIT_TEST"s);
+    closeFromListener = true;
+
+    auto subscription = endpoint->getFeed()->createSubscription(Quote::TYPE);
+
+    subscription->addEventListener([](const auto &) {
+        if (closeFromListener.exchange(false)) {
+            // Passes the native listener of the subscription to the release thread, which stays attached.
+            closedFromListener()->close();
+            closedFromListenerDone = true;
+        }
+    });
+    subscription->addSymbols("EXIT_TEST"s);
+
+    if (!publishUntil(endpoint, [] {
+            return closedFromListenerDone.load();
+        })) {
+        throw std::runtime_error("The listener did not close the subscription");
+    }
+
+    return tearDownExpecting(TearDownStatus::TORN_DOWN) && checkAfterTearDown() ? 0 : 3;
+}
+
+/// The tear-down from a listener is refused; the tear-down after it, outside the listeners, tears the isolate down.
+int tearDownFromListener() {
+    callTearDownFromListener = true;
+
+    auto endpoint = startEvents();
+
+    if (!publishUntil(endpoint, [] {
+            return tearDownFromListenerCalled.load();
+        })) {
+        throw std::runtime_error("The listener did not call the tear-down");
+    }
+
+    if (tearDownFromListenerStatus.load() != TearDownStatus::REFUSED) {
+        std::fprintf(stderr, "The tear-down from a listener was not refused: %s\n",
+                     toText(tearDownFromListenerStatus.load()));
+
+        return 3;
+    }
+
+    return tearDownExpecting(TearDownStatus::TORN_DOWN) && checkAfterTearDown() ? 0 : 3;
+}
+
+/// Tears the isolate down after a live instrument profile connection is closed.
+int tearDownLiveIpf() {
+    auto endpoint = startEvents();
+    auto connection = startLiveIpf();
+
+    connection->close();
+
+    return tearDownExpecting(TearDownStatus::TORN_DOWN) && checkAfterTearDown() ? 0 : 3;
+}
+
+/**
+ * Leaks memory from a listener and tears the isolate down: LeakSanitizer must report the leak, which the suppression of
+ * the SDK library would hide (a canary of the teardown scenarios).
+ */
+int tearDownLeakCanary() {
+    leakFromListener = true;
+
+    auto endpoint = startEvents();
+
+    if (!publishUntil(endpoint, [] {
+            return leakedFromListenerDone.load();
+        })) {
+        throw std::runtime_error("The listener did not leak");
+    }
+
+    if (!tearDownExpecting(TearDownStatus::TORN_DOWN)) {
+        return 3;
+    }
+
+    leakedFromListener = nullptr;
+
+    return 0;
+}
+
 } // namespace
 
 int main(int argc, char *argv[]) {
@@ -726,7 +968,9 @@ int main(int argc, char *argv[]) {
         std::fputs("Usage: <executable> endpoint | late-callback | callback-in-progress | ipf-live | ipf-live-close | "
                    "shutdown | shutdown-callbacks-in-progress | shutdown-from-listener | error-manager | "
                    "release-after-shutdown | detach-after-shutdown | versions-once | versions-get-instance | "
-                   "versions-default-handler | versions-failed-creation\n",
+                   "versions-default-handler | versions-failed-creation | teardown | teardown-twice | "
+                   "teardown-not-created | teardown-after-shutdown | teardown-other-thread | "
+                   "teardown-release-thread | teardown-from-listener | teardown-live-ipf | teardown-leak-canary\n",
                    stderr);
 
         return 1;
@@ -793,6 +1037,42 @@ int main(int argc, char *argv[]) {
 
         if (scenario == "versions-failed-creation") {
             return versionsFailedCreation();
+        }
+
+        if (scenario == "teardown") {
+            return tearDown();
+        }
+
+        if (scenario == "teardown-twice") {
+            return tearDownTwice();
+        }
+
+        if (scenario == "teardown-not-created") {
+            return tearDownNotCreated();
+        }
+
+        if (scenario == "teardown-after-shutdown") {
+            return tearDownAfterShutdown();
+        }
+
+        if (scenario == "teardown-other-thread") {
+            return tearDownOtherThread();
+        }
+
+        if (scenario == "teardown-release-thread") {
+            return tearDownReleaseThread();
+        }
+
+        if (scenario == "teardown-from-listener") {
+            return tearDownFromListener();
+        }
+
+        if (scenario == "teardown-live-ipf") {
+            return tearDownLiveIpf();
+        }
+
+        if (scenario == "teardown-leak-canary") {
+            return tearDownLeakCanary();
         }
     } catch (const std::exception &e) {
         std::fprintf(stderr, "Exception: %s\n", e.what());

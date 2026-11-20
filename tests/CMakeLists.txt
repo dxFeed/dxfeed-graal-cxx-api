@@ -123,6 +123,21 @@ endif ()
 
 set(DXFC_TEST_SUPPORT_SOURCES support/TestSupport.cpp support/EventFactory.cpp support/TapeSupport.cpp)
 
+# LeakSanitizer reports the memory of the Graal isolate, which the library never tears down. With LeakSanitizer (ASan on
+# Linux) the tests of main.cpp tear the isolate down at the end of main() (DXFCXX_TEST_TEAR_DOWN_ISOLATE), as the
+# teardown scenarios of the exit test do, and run without the suppression of the SDK library (sanitizers/lsan.supp): a
+# leak of the library through the frames of the SDK is reported. The other test processes keep the isolate alive and
+# keep the suppression.
+if (DXFCXX_ASAN_ACTIVE AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(DXFC_TEST_TEAR_DOWN_ISOLATE ON)
+else ()
+    set(DXFC_TEST_TEAR_DOWN_ISOLATE OFF)
+endif ()
+
+set(DXFC_LSAN_ISOLATE_ALIVE_OPTIONS "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+# Set, not inherited: the environment that runs ctest may suppress the SDK library.
+set(DXFC_LSAN_TEAR_DOWN_OPTIONS "LSAN_OPTIONS=")
+
 # Temporary files of the tests (tapes written by the tests).
 set(DXFC_TEST_TEMP_DIR "${CMAKE_CURRENT_BINARY_DIR}/tmp")
 file(MAKE_DIRECTORY "${DXFC_TEST_TEMP_DIR}")
@@ -231,9 +246,16 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES LABELS network TIMEOUT 240)
     endif ()
 
+    if (DXFC_TEST_TEAR_DOWN_ISOLATE)
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCXX_TEST_TEAR_DOWN_ISOLATE=1)
+        set(DXFC_TEST_LSAN_OPTIONS "${DXFC_LSAN_TEAR_DOWN_OPTIONS}")
+    else ()
+        set(DXFC_TEST_LSAN_OPTIONS "${DXFC_LSAN_ISOLATE_ALIVE_OPTIONS}")
+    endif ()
+
     if (DXFCXX_SANITIZERS_ENABLED)
         set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES ENVIRONMENT
-                "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+                "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1;${DXFC_TEST_LSAN_OPTIONS}")
     endif ()
 endforeach ()
 
@@ -519,12 +541,19 @@ foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
     set(DXFC_EXIT_TARGET dxFeedGraalCxxApi_Exit_${DXFC_EXIT_VARIANT})
     set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown shutdown-callbacks-in-progress
             shutdown-from-listener error-manager release-after-shutdown detach-after-shutdown versions-once
-            versions-get-instance versions-default-handler versions-failed-creation)
+            versions-get-instance versions-default-handler versions-failed-creation teardown teardown-twice
+            teardown-not-created teardown-after-shutdown teardown-other-thread teardown-release-thread
+            teardown-from-listener teardown-live-ipf)
 
     # The exit handler of a MinGW DLL runs after the statics of the executable are destroyed, so the checks of the
     # callbacks from such a static do not apply to it.
     if (DXFC_EXIT_VARIANT STREQUAL "static" OR NOT WIN32 OR MSVC)
         list(APPEND DXFC_EXIT_SCENARIOS late-callback callback-in-progress)
+    endif ()
+
+    # The canary of the teardown scenarios needs LeakSanitizer.
+    if (DXFC_TEST_TEAR_DOWN_ISOLATE)
+        list(APPEND DXFC_EXIT_SCENARIOS teardown-leak-canary)
     endif ()
     add_executable(${DXFC_EXIT_TARGET} exit/ExitTest.cpp)
     list(APPEND DXFC_TEST_TARGETS ${DXFC_EXIT_TARGET})
@@ -563,9 +592,25 @@ foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
                     FAIL_REGULAR_EXPRESSION "Exception:")
         endif ()
 
+        # LeakSanitizer reports the leak of the listener with the frames of the SDK library in its stack: without the
+        # suppression of the SDK library, and with LeakSanitizer active. The exit code of the report is ignored.
+        if (DXFC_EXIT_SCENARIO STREQUAL "teardown-leak-canary")
+            set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES
+                    PASS_REGULAR_EXPRESSION "LeakSanitizer: detected memory leaks.*libDxFeedGraalNativeSdk"
+                    FAIL_REGULAR_EXPRESSION "Exception:;Expected ")
+        endif ()
+
+        # The teardown scenarios tear the isolate down and check that LeakSanitizer reports nothing without the
+        # suppression of the SDK library.
+        if (DXFC_TEST_TEAR_DOWN_ISOLATE AND DXFC_EXIT_SCENARIO MATCHES "^teardown")
+            set(DXFC_EXIT_LSAN_OPTIONS "${DXFC_LSAN_TEAR_DOWN_OPTIONS}")
+        else ()
+            set(DXFC_EXIT_LSAN_OPTIONS "${DXFC_LSAN_ISOLATE_ALIVE_OPTIONS}")
+        endif ()
+
         if (DXFCXX_SANITIZERS_ENABLED)
             set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES ENVIRONMENT
-                    "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+                    "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp;${DXFC_EXIT_LSAN_OPTIONS}")
         endif ()
     endforeach ()
 endforeach ()

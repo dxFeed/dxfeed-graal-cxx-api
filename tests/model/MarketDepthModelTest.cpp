@@ -212,6 +212,10 @@ class MarketDepthModelTestFixture {
     }
 
     ~MarketDepthModelTestFixture() {
+        // As LocalHubFixture does: dxfcpp::shutdown() at the end of the tests never returns while an endpoint with an
+        // in-place executor is open.
+        // TODO: MDAPI-603 remove the workaround once the SDK runs the pending tasks while it awaits the termination.
+        endpoint_->close();
         listenerCalls_ = 0;
         publishedEvents_.clear();
         buyOrders_.clear();

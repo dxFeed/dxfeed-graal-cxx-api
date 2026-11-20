@@ -269,6 +269,17 @@ constinit std::atomic<bool> shuttingDown{false};
 // The isolate is not entered anymore (Isolate::isShutDown()).
 constinit std::atomic<bool> shutDown{false};
 
+// The isolate is torn down (Isolate::shutdownAndTearDown()). Written under shutdownMutex().
+constinit bool tornDown{false};
+
+// Orders Isolate::shutdown() and Isolate::shutdownAndTearDown(): a concurrent call waits for the first one. Never
+// destroyed: shutdown() may be called from a static destructor.
+std::mutex &shutdownMutex() noexcept {
+    static auto &mutex = *new std::mutex{};
+
+    return mutex;
+}
+
 // The Graal callbacks of the library in progress (Isolate::CallbackScope), on all threads and on this one.
 constinit std::atomic<std::size_t> callbacksInProgress{0};
 constinit thread_local std::size_t threadCallbacksInProgress{0};
@@ -835,9 +846,7 @@ void Isolate::shutdown() {
         throw RuntimeException("dxfcpp::shutdown() cannot be called from a listener or a callback of the library");
     }
 
-    // A concurrent call waits for the first one. Never destroyed: shutdown() may be called from a static destructor.
-    static auto &mutex = *new std::mutex{};
-    std::lock_guard lock(mutex);
+    std::lock_guard lock(shutdownMutex());
 
     if (isShutDown()) {
         return;
@@ -866,6 +875,65 @@ void Isolate::shutdown() {
     }
 
     shutDown = true;
+}
+
+Isolate::TearDownResult Isolate::shutdownAndTearDown() noexcept {
+    using Status = TearDownResult::Status;
+
+    try {
+        shutdown();
+    } catch (...) {
+        // Called from a listener or a callback of the library.
+        return {Status::REFUSED};
+    }
+
+    // shutdown() is complete: the isolate is not entered anymore, and the handles are released.
+    std::lock_guard lock(shutdownMutex());
+
+    // Checked before getInstance(): it would create the isolate. After a failed creation there is no isolate.
+    if (tornDown || !isCreated() || getCreationError() != CEntryPointErrorsEnum::NO_ERROR) {
+        return {Status::NOTHING_TO_TEAR_DOWN};
+    }
+
+    // A callback in progress (one that does not stop on the shutdown, or one on this thread) runs Java code: the
+    // tear-down would detach its thread under it.
+    if (callbacksInProgress.load() != 0) {
+        return {Status::REFUSED};
+    }
+
+    auto &instance = getInstance();
+
+    if (!instance.handle_) {
+        return {Status::NOTHING_TO_TEAR_DOWN};
+    }
+
+    // The tear-down needs a thread attached to the isolate: the current thread may never have called into it.
+    if (const auto result = instance.attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
+        return {Status::FAILED, result};
+    }
+
+    auto *thread = static_cast<graal_isolatethread_t *>(instance.get());
+
+    if (thread == nullptr) {
+        return {Status::FAILED, CEntryPointErrorsEnum::UNATTACHED_THREAD};
+    }
+
+    // graal_tear_down_isolate() would wait for the threads that stay attached (the release thread waits forever), so
+    // all of them are detached, the current one too.
+    if (const auto result = static_cast<CEntryPointErrorsEnum>(graal_detach_all_threads_and_tear_down_isolate(thread));
+        result != CEntryPointErrorsEnum::NO_ERROR) {
+        return {Status::FAILED, result};
+    }
+
+    tornDown = true;
+
+    // The thread is detached: its destructor must not detach it again.
+    auto &current = currentIsolateThread();
+
+    current.handle = nullptr;
+    current.detachOnDestruction = false;
+
+    return {Status::TORN_DOWN};
 }
 
 std::string Isolate::toString() const {

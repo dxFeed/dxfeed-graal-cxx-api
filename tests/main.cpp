@@ -107,6 +107,90 @@ void setSignalHandler() {
 }
 #endif
 
+#ifdef DXFCXX_TEST_TEAR_DOWN_ISOLATE
+#    include "../src/internal/Isolate.hpp"
+
+#    include <chrono>
+#    include <condition_variable>
+#    include <cstdio>
+#    include <mutex>
+#    include <thread>
+
+namespace {
+
+// How long the tear-down may take: a Java thread that ignores the interruption blocks it forever.
+constexpr auto TEAR_DOWN_TIMEOUT = std::chrono::seconds(60);
+
+// The exit code of a tear-down that hangs (as timeout(1)) and of a tear-down that is refused or fails.
+constexpr int TEAR_DOWN_HANG_EXIT_CODE = 124;
+constexpr int TEAR_DOWN_FAILURE_EXIT_CODE = 125;
+
+const char *toText(dxfcpp::Isolate::TearDownResult::Status status) {
+    using Status = dxfcpp::Isolate::TearDownResult::Status;
+
+    switch (status) {
+    case Status::TORN_DOWN:
+        return "torn down";
+    case Status::NOTHING_TO_TEAR_DOWN:
+        return "nothing to tear down";
+    case Status::REFUSED:
+        return "refused (a callback of the library is in progress)";
+    case Status::FAILED:
+        return "failed";
+    }
+
+    return "unknown";
+}
+
+/**
+ * Tears the Graal isolate down, so that LeakSanitizer does not report its memory and reports the leaks of the library
+ * through the frames of the SDK. A watchdog ends the process with TEAR_DOWN_HANG_EXIT_CODE if the tear-down hangs.
+ *
+ * @return `true` if the isolate is torn down or there is nothing to tear down.
+ */
+bool tearDownIsolate() {
+    std::mutex mutex{};
+    std::condition_variable done{};
+    bool finished = false;
+
+    std::thread watchdog{[&] {
+        std::unique_lock lock{mutex};
+
+        if (!done.wait_for(lock, TEAR_DOWN_TIMEOUT, [&] {
+                return finished;
+            })) {
+            std::fprintf(stderr, "[tests] The tear-down of the Graal isolate did not complete in %lld s\n",
+                         static_cast<long long>(TEAR_DOWN_TIMEOUT.count()));
+            std::fflush(stderr);
+            std::_Exit(TEAR_DOWN_HANG_EXIT_CODE);
+        }
+    }};
+
+    const auto start = std::chrono::steady_clock::now();
+    const auto result = dxfcpp::Isolate::shutdownAndTearDown();
+    const auto milliseconds =
+        std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+
+    {
+        std::lock_guard lock{mutex};
+
+        finished = true;
+    }
+
+    done.notify_all();
+    watchdog.join();
+
+    std::fprintf(stderr, "[tests] The tear-down of the Graal isolate: %s, error %u, %lld ms\n", toText(result.status),
+                 static_cast<unsigned>(result.error), static_cast<long long>(milliseconds));
+
+    using Status = dxfcpp::Isolate::TearDownResult::Status;
+
+    return result.status == Status::TORN_DOWN || result.status == Status::NOTHING_TO_TEAR_DOWN;
+}
+
+} // namespace
+#endif
+
 int main(int argc, char **argv) {
     setSignalHandler();
 
@@ -119,6 +203,12 @@ int main(int argc, char **argv) {
         return res;           // propagate the result of the tests
 
     context.clearFilters(); // removes all filters added up to this point
+
+#ifdef DXFCXX_TEST_TEAR_DOWN_ISOLATE
+    if (!tearDownIsolate() && res == 0) {
+        return TEAR_DOWN_FAILURE_EXIT_CODE;
+    }
+#endif
 
     return res;
 }
