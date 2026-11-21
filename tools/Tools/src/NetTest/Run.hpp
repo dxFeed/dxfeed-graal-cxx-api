@@ -7,8 +7,10 @@
 
 #include "Args.hpp"
 #include "StopControl.hpp"
+#include "Summary.hpp"
 #include "SymbolPool.hpp"
 
+#include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <cstdint>
@@ -46,20 +48,28 @@ enum class RunStatus {
 /// The name of the status: `ok`, `error`, `no_data`, `nano_missing`.
 std::string runStatusName(RunStatus status);
 
-/// The e2e lags of received records: their count, their sum in nanoseconds with the signs, and how many are negative.
+/// The e2e lags of received records: their count, their sum in nanoseconds with the signs, how many are negative and
+/// the largest one, which is valid when the count is not 0.
 struct LagTotals {
     std::int64_t count = 0;
     std::int64_t sum = 0;
     std::int64_t negative = 0;
+    std::int64_t max = 0;
 
     /// Adds one lag; a negative lag (a clock step or a skew between the hosts) enters the sum with its sign.
     void add(std::int64_t lag) {
+        max = count == 0 ? lag : std::max(max, lag);
         ++count;
         sum += lag;
         negative += lag < 0 ? 1 : 0;
     }
 
     void add(const LagTotals &other) {
+        if (other.count == 0) {
+            return;
+        }
+
+        max = count == 0 ? other.max : std::max(max, other.max);
         count += other.count;
         sum += other.sum;
         negative += other.negative;
@@ -83,6 +93,8 @@ struct RunResult {
     /// On `c`: the e2e lags of all received records, and the distinct symbols received by all instances.
     LagTotals lags{};
     std::int64_t symbolsSeen = 0;
+    /// What the summary file of the run writes.
+    RunReport report{};
 };
 
 /// The seams of the tests; the defaults are the behavior of the tool.

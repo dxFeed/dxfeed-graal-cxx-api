@@ -8,6 +8,11 @@
       between the hosts) is kept with its sign. The consumer exits with 1 and `no_data` when the open connections bring
       no records for 30 s after the last record (60 s after the connection), and with `nano_missing` when the first
       1000 events have no nanosecond part (`-Ddxscheme.nanoTime=false` receives without it).
+    * `--summary <file>` writes the summary of the run in the format `nettest-summary/1`: the intervals of the
+      statistics, the end-to-end lag percentiles of the consumer (an HdrHistogram with the layout of the Java one),
+      the publishing time and the schedule slip of the producer, the runtime and the statistics of the connectors. The
+      file is written through `<file>.tmp` and a rename, also when the run fails. `--warmup <time>` marks the intervals
+      from the first batch or record as warm-up: they stay out of the percentiles of the summary.
     * `Tools help NetTest` prints the usage with the line `spec_version nettest/1`.
     * The scheme of `Tools` is `ext:opt:sysprops,opt:dxprops,resource:dxlink.xml`, as in the Tools of the .NET API: the
       scheme properties of the endpoint builders and of the `-p` option, such as `dxscheme.nanoTime`, take effect. The

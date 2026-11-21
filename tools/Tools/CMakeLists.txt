@@ -39,11 +39,15 @@ add_executable(${PROJECT_NAME}
         src/Args/Args.cpp
         src/Diagnose/NetProbe.cpp
         src/NetTest/Args.cpp
+        src/NetTest/Consumer.cpp
         src/NetTest/EventPool.cpp
         src/NetTest/Generator.cpp
+        src/NetTest/Histogram.cpp
         src/NetTest/RateLimiter.cpp
         src/NetTest/Run.cpp
+        src/NetTest/RunSupport.cpp
         src/NetTest/Statistics.cpp
+        src/NetTest/Summary.cpp
         src/NetTest/SymbolPool.cpp
 )
 
