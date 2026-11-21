@@ -108,6 +108,7 @@ set(DXFC_TEST_SOURCES
         system/SystemTest.cpp
         tools/DiagnoseToolTest.cpp
         tools/NetTestKitTest.cpp
+        tools/NetTestMetricsTest.cpp
         tools/NetTestRunTest.cpp
         tools/NetTestSummaryTest.cpp
         tools/ToolsArgsTest.cpp
@@ -159,6 +160,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
                 ../tools/Tools/src/Diagnose/NetProbe.cpp ../tools/Tools/src/NetTest/Args.cpp
                 ../tools/Tools/src/NetTest/Consumer.cpp ../tools/Tools/src/NetTest/EventPool.cpp
                 ../tools/Tools/src/NetTest/Generator.cpp ../tools/Tools/src/NetTest/Histogram.cpp
+                ../tools/Tools/src/NetTest/Metrics.cpp ../tools/Tools/src/NetTest/MetricsRequest.cpp
                 ../tools/Tools/src/NetTest/RateLimiter.cpp ../tools/Tools/src/NetTest/Run.cpp
                 ../tools/Tools/src/NetTest/RunSupport.cpp ../tools/Tools/src/NetTest/Statistics.cpp
                 ../tools/Tools/src/NetTest/Summary.cpp ../tools/Tools/src/NetTest/SymbolPool.cpp)

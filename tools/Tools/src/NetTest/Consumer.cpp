@@ -41,14 +41,16 @@ class ConsumerState {
     std::atomic<std::int64_t> lastRecordNanos_{0};
     // The wall-clock time of the first listener call with records, 0 before it: the start of the warm-up.
     std::atomic<std::int64_t> firstRecordEpochNanos_{0};
+    // The live counters, which /metrics may share.
+    std::shared_ptr<LiveCounters> liveOwner_;
 
     public:
-    LiveCounters live;
+    LiveCounters &live;
     // The distinct symbols received by all instances.
     std::atomic<std::int64_t> symbolsSeen{0};
 
-    ConsumerState(std::int32_t instances, bool nanoCheck)
-        : nanoPending_(nanoCheck), live(instances) {
+    ConsumerState(std::shared_ptr<LiveCounters> counters, bool nanoCheck)
+        : nanoPending_(nanoCheck), liveOwner_(std::move(counters)), live(*liveOwner_) {
     }
 
     bool nanoPending() const {
@@ -74,15 +76,24 @@ class ConsumerState {
     }
 
     // Counts the records of one listener call of instance `index` (from 0) at the wall-clock time `epochNanos`: their
-    // totals and each of their lags.
+    // totals, each of their lags and the buckets of /metrics.
     void addRecords(std::size_t index, std::int64_t epochNanos, const LagTotals &lags,
                     const std::vector<std::int64_t> &values) {
         auto &counters = live.instances[index];
         std::int64_t unset = 0;
+        LagBuckets buckets{};
+        std::int64_t positiveSum = 0;
+
+        // The buckets and the sum of /metrics take a negative lag as 0.
+        for (const auto value : values) {
+            ++buckets[lagBucketIndex(value)];
+            positiveSum += value > 0 ? value : 0;
+        }
 
         firstRecordEpochNanos_.compare_exchange_strong(unset, epochNanos, std::memory_order_relaxed);
         counters.records.fetch_add(lags.count, std::memory_order_relaxed);
         counters.weightedNanos.fetch_add(lags.sum, std::memory_order_relaxed);
+        live.addLags(buckets, lags.count, positiveSum, lags.negative);
 
         {
             std::lock_guard<std::mutex> lock(lagsMutex_);
@@ -357,10 +368,11 @@ std::int64_t eventLagNanos(std::int64_t nowNanos, std::int64_t packedTime, std::
 }
 
 RunResult runConsumer(const Settings &settings, const Symbols &symbols, StopControl &stop, std::ostream &out,
-                      const RunHooks &hooks) {
+                      const RunHooks &hooks, std::shared_ptr<LiveCounters> live) {
     RunResult result;
     const auto startEpochNs = systemNanos();
-    const auto state = std::make_shared<ConsumerState>(settings.instances, isNanoTimeOn(settings));
+    const auto state =
+        std::make_shared<ConsumerState>(liveCountersOf(settings, std::move(live)), isNanoTimeOn(settings));
     std::vector<std::unique_ptr<Consumer>> consumers;
     std::mutex failureMutex;
     std::string failure;
@@ -445,7 +457,8 @@ RunResult runConsumer(const Settings &settings, const Symbols &symbols, StopCont
             });
 
             // The thread of the caller waits for the stop or the duration and wakes every WATCHDOG_PERIOD to check the
-            // watchdog with the connections now, and the nanosecond part.
+            // watchdog and the nanosecond part. The watchdog takes the connections that the reporter read last: the
+            // connectors are read at most once per period.
             using Steady = std::chrono::steady_clock;
             const auto deadline = settings.durationMillis.has_value()
                                       ? std::optional<Steady::time_point>(
@@ -471,13 +484,8 @@ RunResult runConsumer(const Settings &settings, const Symbols &symbols, StopCont
                     break;
                 }
 
-                std::int64_t connections = 0;
-
-                for (const auto &endpoint : endpoints) {
-                    connections += connectionsOf(*endpoint);
-                }
-
-                if (const auto starved = watchdog.check(connections, state->lastRecordNanos()); !starved.empty()) {
+                if (const auto starved = watchdog.check(state->live.openConnections(), state->lastRecordNanos());
+                    !starved.empty()) {
                     fail(starved, RunStatus::STARVED);
                 }
             }

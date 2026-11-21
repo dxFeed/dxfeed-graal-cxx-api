@@ -43,6 +43,8 @@ add_executable(${PROJECT_NAME}
         src/NetTest/EventPool.cpp
         src/NetTest/Generator.cpp
         src/NetTest/Histogram.cpp
+        src/NetTest/Metrics.cpp
+        src/NetTest/MetricsRequest.cpp
         src/NetTest/RateLimiter.cpp
         src/NetTest/Run.cpp
         src/NetTest/RunSupport.cpp
@@ -53,7 +55,7 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../third_party/range-v3-0.12/include)
 
-# The network probe of Diagnose uses the sockets.
+# The network probe of Diagnose and the /metrics server of NetTest use the sockets.
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
 endif ()

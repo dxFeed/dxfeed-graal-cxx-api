@@ -639,21 +639,6 @@ TEST_CASE("NetTest: the options of the native runtime and --legacy are not suppo
     }
 }
 
-TEST_CASE("NetTest: the options that the run does not implement yet are rejected after the parsing") {
-    const std::vector<std::pair<std::vector<std::string>, std::string>> cases{
-        {{"c", "127.0.0.1:7001", "-S", "10", "--metrics-port", "0"}, "--metrics-port"},
-        {{"p", ":7001", "-S", "10", "--metrics-port", "0"}, "--metrics-port"},
-    };
-
-    for (const auto &[args, option] : cases) {
-        const auto result = runTool(args);
-
-        INFO(option);
-        CHECK(result.exitCode == 2);
-        CHECK(firstLine(result.err) == "NetTest: unsupported option: " + option);
-    }
-}
-
 TEST_CASE("NetTest: the system properties keep the command line order") {
     const auto parsed = parseArguments({"p", ":7001", "-S", "5", "-Ddxscheme.nanoTime=false", "-Da=b=c"});
 

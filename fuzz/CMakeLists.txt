@@ -16,6 +16,7 @@ set(DXFCXX_FUZZ_TARGETS
         candle_symbol
         cmd_args
         market_event_symbols
+        metrics_request
         order_fields
         order_source
         string_utils
@@ -31,5 +32,9 @@ foreach (DXFCXX_FUZZ_TARGET ${DXFCXX_FUZZ_TARGETS})
     target_link_options(${DXFCXX_FUZZ_EXECUTABLE} PRIVATE -fsanitize=fuzzer)
     set_target_properties(${DXFCXX_FUZZ_EXECUTABLE} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
 endforeach ()
+
+# The parser of the requests of the /metrics server of Tools NetTest: its source is compiled into the target, the tool
+# is not a library.
+target_sources(fuzz_metrics_request PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../tools/Tools/src/NetTest/MetricsRequest.cpp)
 
 dxfcxx_copy_runtime(dxfcxx_fuzz_runtime FILES $<TARGET_FILE:dxfcxx::graal> TARGETS ${DXFCXX_FUZZ_EXECUTABLES})

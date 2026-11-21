@@ -7,6 +7,8 @@
 #include "RateLimiter.hpp"
 #include "RunSupport.hpp"
 
+#include "../../../../src/internal/Isolate.hpp"
+
 #include <algorithm>
 #include <csignal>
 #include <exception>
@@ -50,10 +52,17 @@ struct Instance {
     }
 };
 
-// The version of the tool: that of the C++ API, unknown outside the build of the tool.
+// The version of the tool: that of the C++ API without the leading `v` of its tag (`9.0.0`, as the other tools give
+// theirs), unknown outside the build of the tool.
 std::string toolVersion() {
 #ifdef DXFCXX_VERSION
-    return DXFCXX_VERSION;
+    std::string version = DXFCXX_VERSION;
+
+    if (version.size() > 1 && version.front() == 'v') {
+        version.erase(0, 1);
+    }
+
+    return version;
 #else
     return {};
 #endif
@@ -112,11 +121,13 @@ bool applySystemProperties(const Settings &settings, std::string &error) {
     return true;
 }
 
-RunResult runProducer(const Settings &settings, const Symbols &symbols, StopControl &stop, std::ostream &out) {
+RunResult runProducer(const Settings &settings, const Symbols &symbols, StopControl &stop, std::ostream &out,
+                      std::shared_ptr<LiveCounters> liveCounters) {
     RunResult result;
     const auto startEpochNs = systemNanos();
     const bool scheduled = settings.recordsPerSecond.has_value();
-    LiveCounters live(settings.instances);
+    const auto liveOwner = liveCountersOf(settings, std::move(liveCounters));
+    auto &live = *liveOwner;
     std::vector<std::unique_ptr<Instance>> instances;
     std::mutex failureMutex;
     std::string failure;
@@ -350,9 +361,46 @@ int run(const Settings &settings, std::ostream &out, std::ostream &err) {
         return failBeforeRun(error);
     }
 
+    // Empty, so `null` in the summary, when the isolate could not be created.
+    status.sdkVersion = Isolate::getGraalNativeSdkVersion();
+
     // An exception that the run does not handle itself (an allocation, a thread that does not start) ends it with the
     // summary of the status `error` and the exit code 1 too.
     try {
+        const bool producer = settings.mode == Mode::PRODUCER;
+        // The server of /metrics reads only the live counters; declared after them, it stops first.
+        const auto live = std::make_shared<LiveCounters>(settings.instances);
+        std::unique_ptr<MetricsServer> metrics;
+
+        // The /metrics port is bound before the first endpoint.
+        if (settings.metricsPort.has_value()) {
+            metrics = std::make_unique<MetricsServer>(settings.metricsHost, *settings.metricsPort);
+
+            if (!metrics->ok()) {
+                return failBeforeRun(metrics->error());
+            }
+
+            if (!metrics->loopback()) {
+                err << "NetTest: warning: the metrics on " << settings.metricsHost << ":" << metrics->port()
+                    << " have no authentication and no TLS\n";
+            }
+
+            MetricsInfo info;
+
+            info.side = producer ? "producer" : "consumer";
+            info.name = settings.name;
+            info.version = status.version;
+            info.sdkVersion = status.sdkVersion;
+            info.role = roleName(endpointRole(settings));
+            info.event = eventName(settings.event);
+            info.collector = settings.collector.has_value() ? collectorName(*settings.collector) : "";
+            info.scheduled = producer && settings.recordsPerSecond.has_value();
+            metrics->start([info, live] {
+                return formatMetrics(info, *live);
+            });
+            out << "{*NetTestMetrics-" << settings.name << "*} " << metrics->url() << std::endl;
+        }
+
         const auto pool = buildSymbolPool(settings);
 
         if (!pool.warning.empty()) {
@@ -367,8 +415,8 @@ int run(const Settings &settings, std::ostream &out, std::ostream &err) {
         // the endpoints close and the exit code is 0.
         StopControl stop;
         const SignalWatcher signalWatcher(stop);
-        const auto result = settings.mode == Mode::PRODUCER ? runProducer(settings, pool.symbols, stop, out)
-                                                            : runConsumer(settings, pool.symbols, stop, out);
+        const auto result = producer ? runProducer(settings, pool.symbols, stop, out, live)
+                                     : runConsumer(settings, pool.symbols, stop, out, {}, live);
 
         if (result.exitCode != 0) {
             err << "NetTest: " << result.error << "\n";

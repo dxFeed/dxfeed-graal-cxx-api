@@ -50,27 +50,6 @@ struct PublishCounters {
     }
 };
 
-/// The live counters of a run: one set per instance and the common one, which the generators write and the reporter
-/// reads.
-struct LiveCounters {
-    std::vector<InstanceCounters> instances;
-    PublishCounters publish{};
-
-    explicit LiveCounters(std::int32_t instanceCount) : instances(static_cast<std::size_t>(instanceCount)) {
-    }
-
-    /// The records of all instances.
-    std::int64_t records() const {
-        std::int64_t total = 0;
-
-        for (const auto &instance : instances) {
-            total += instance.records.load(std::memory_order_relaxed);
-        }
-
-        return total;
-    }
-};
-
 /// Raises the atomic to the value when the value is larger.
 inline void raiseTo(std::atomic<std::int64_t> &target, std::int64_t value) {
     auto current = target.load(std::memory_order_relaxed);
