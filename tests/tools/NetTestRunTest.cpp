@@ -844,7 +844,8 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the watchdog stops the consumer after 
         return publisherEndpoint->getState() == DXEndpoint::State::CONNECTED;
     }));
 
-    const auto settings = settingsOf({"c", clientAddress(port), "-S", "10", "--duration", "60s"});
+    // The watchdog sees the connections that the reporter read last: a short period keeps that delay below the silence.
+    const auto settings = settingsOf({"c", clientAddress(port), "-S", "10", "-s", "1s", "--duration", "60s"});
     const auto symbols = symbolsOf(settings);
     RunHooks hooks;
 

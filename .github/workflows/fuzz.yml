@@ -14,6 +14,7 @@ on:
       - 'src/**'
       - 'include/**'
       - 'fuzz/**'
+      - 'tools/Tools/src/NetTest/MetricsRequest.*'
       - 'CMakeLists.txt'
       - 'cmake/**'
       - 'third_party/**'
@@ -34,7 +35,7 @@ jobs:
   fuzz:
     name: "fuzz"
     runs-on: ubuntu-24.04
-    # The nightly run takes 7 targets x 30 min.
+    # The nightly run takes 8 targets x 30 min.
     timeout-minutes: 300
 
     steps:

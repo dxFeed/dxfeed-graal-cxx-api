@@ -1,0 +1,5 @@
+GET /metrics HTTP/1.1
+Host: 127.0.0.1:9100
+User-Agent: Prometheus/2.53.0
+Accept: text/plain
+

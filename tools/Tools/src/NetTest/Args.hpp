@@ -16,6 +16,9 @@ namespace dxfcpp::tools::nettest {
 /// The version of the NetTest specification that the tool follows; --help prints it as `spec_version nettest/1`.
 inline constexpr const char *SPEC_VERSION = "nettest/1";
 
+/// The implementation of the tool: the `implementation` of the summary and the label `tool` of /metrics.
+inline constexpr const char *IMPLEMENTATION = "cpp-api";
+
 /// The mode of the run: the first argument, `p` or `c`.
 enum class Mode {
     PRODUCER,
@@ -142,9 +145,5 @@ std::string endpointNanoTime(const Settings &settings);
 /// Whether the endpoints carry the nanosecond part: endpointNanoTime() is `true` in any case, as Java's
 /// Boolean.parseBoolean reads it.
 bool isNanoTimeOn(const Settings &settings);
-
-/// The first option that the parser accepts but the run does not implement yet, as the message of the error
-/// `unsupported option: <option>`; nullopt when the run supports all the options given.
-std::optional<std::string> unsupportedOption(const Settings &settings);
 
 } // namespace dxfcpp::tools::nettest

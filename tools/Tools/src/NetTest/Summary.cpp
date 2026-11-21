@@ -244,7 +244,7 @@ std::string formatSummary(const Settings &settings, const RunReport &report, con
     const bool producer = settings.mode == Mode::PRODUCER;
     const auto build = Object().add("vendor", "null").add("march", "null").add("gc", "null").text();
     const auto tool = Object()
-                          .add("implementation", "\"cpp-api\"")
+                          .add("implementation", jsonString(IMPLEMENTATION))
                           .add("name", "\"NetTest\"")
                           .add("version", stringOrNull(status.version))
                           .add("sdk_version", stringOrNull(status.sdkVersion))

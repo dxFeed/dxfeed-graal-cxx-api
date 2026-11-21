@@ -13,6 +13,11 @@
       the publishing time and the schedule slip of the producer, the runtime and the statistics of the connectors. The
       file is written through `<file>.tmp` and a rename, also when the run fails. `--warmup <time>` marks the intervals
       from the first batch or record as warm-up: they stay out of the percentiles of the summary.
+    * `--metrics-port [<host>:]<port>` serves `/metrics` in the Prometheus text format over HTTP (127.0.0.1 without a
+      host, a free port for 0): the records and the connections per instance, the publishing calls and the schedule
+      slip of the producer, the end-to-end lag histogram of the consumer, the statistics of the connectors and the
+      runtime. The tool prints `{*NetTestMetrics-<name>*} http://<host>:<port>/metrics` and warns when the host is not a
+      loopback one, since the endpoint has no authentication and no TLS; a port in use ends the run with 1.
     * `Tools help NetTest` prints the usage with the line `spec_version nettest/1`.
     * The scheme of `Tools` is `ext:opt:sysprops,opt:dxprops,resource:dxlink.xml`, as in the Tools of the .NET API: the
       scheme properties of the endpoint builders and of the `-p` option, such as `dxscheme.nanoTime`, take effect. The

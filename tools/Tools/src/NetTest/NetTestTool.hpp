@@ -70,13 +70,6 @@ struct NetTestTool {
             return 0;
         }
 
-        // The options that the parser takes and the run does not implement yet.
-        if (const auto unsupported = nettest::unsupportedOption(parsed.settings); unsupported.has_value()) {
-            err << "NetTest: " << *unsupported << "\n";
-
-            return EXIT_BAD_ARGUMENTS;
-        }
-
         return nettest::run(parsed.settings, out, err);
     }
 };

@@ -754,14 +754,4 @@ bool isNanoTimeOn(const Settings &settings) {
     return true;
 }
 
-// The options that the parser takes but whose behavior comes with the next stages of the tool: the summary file, the
-// warm-up and the /metrics port. One place, so that every stage narrows it.
-std::optional<std::string> unsupportedOption(const Settings &settings) {
-    if (settings.metricsPort.has_value()) {
-        return "unsupported option: --metrics-port";
-    }
-
-    return std::nullopt;
-}
-
 } // namespace dxfcpp::tools::nettest

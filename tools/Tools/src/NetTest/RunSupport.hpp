@@ -8,6 +8,7 @@
 
 #include "../../../../include/dxfeed_graal_cpp_api/api.hpp"
 #include "Generator.hpp"
+#include "Metrics.hpp"
 #include "Run.hpp"
 #include "Statistics.hpp"
 #include "Summary.hpp"
@@ -70,8 +71,8 @@ struct JoinGuard {
     }
 };
 
-/// The open connections of all connectors of the endpoint.
-std::int64_t connectionsOf(const DXEndpoint &endpoint);
+/// The live counters of a run: `live` when it has a set per instance of the settings, else new ones.
+std::shared_ptr<LiveCounters> liveCountersOf(const Settings &settings, std::shared_ptr<LiveCounters> live);
 
 /// What the reporter collects for the summary besides the lines it prints: the intervals and the first and the last
 /// runtime samples. Only the reporter thread writes it; it is read after that thread has been joined.
@@ -89,8 +90,11 @@ struct ReportCollector {
 
 /// The reporter thread: prints the statistics block and the runtime line of every period from the live counters, and
 /// the last block at the stop, and collects the intervals of the run; it lives until `stop` is requested, which comes
-/// after the generators have ended (on `p`) or after the run has stopped (on `c`).
-void reportUntilStopped(const Settings &settings, const LiveCounters &live,
+/// after the generators have ended (on `p`) or after the run has stopped (on `c`). It is the only thread of the run that
+/// reads the connectors and the runtime of the SDK, once at the start, once per tick and once at the stop, and keeps the
+/// open connections of each instance, the connector totals and the runtime values in the live counters, where the
+/// watchdog and /metrics read them.
+void reportUntilStopped(const Settings &settings, LiveCounters &live,
                         const std::vector<std::shared_ptr<DXEndpoint>> &endpoints, StopControl &stop,
                         std::ostream &out, ReportCollector &collector);
 

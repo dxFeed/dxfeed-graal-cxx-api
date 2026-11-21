@@ -15,6 +15,7 @@
 #include <chrono>
 #include <cstdint>
 #include <iosfwd>
+#include <memory>
 #include <string>
 #include <thread>
 #include <utility>
@@ -104,18 +105,24 @@ struct RunHooks {
     std::chrono::milliseconds noDataAfterConnect = NO_DATA_AFTER_CONNECT;
 };
 
+struct LiveCounters;
+
 /// Runs the producer until the stop is requested, the duration of the settings passes or a failure: creates the
 /// endpoints (a publisher with its generator thread each), publishes the batches on the schedule of -r, closes the
 /// endpoints and joins the threads on every path. The system properties of the settings must already be set. The
-/// statistics lines go to `out`.
-RunResult runProducer(const Settings &settings, const Symbols &symbols, StopControl &stop, std::ostream &out);
+/// statistics lines go to `out`. The run counts in `live` (the counters of /metrics) when it has a set per instance,
+/// else in its own.
+RunResult runProducer(const Settings &settings, const Symbols &symbols, StopControl &stop, std::ostream &out,
+                      std::shared_ptr<LiveCounters> live = nullptr);
 
 /// Runs the consumer until the stop is requested, the duration of the settings passes, the starvation watchdog fires or
 /// the check of the nanosecond part fails: creates the feed endpoints (the listener first, then the symbols of the slice
 /// of the instance, then the connection), measures the e2e lag of every record, closes the endpoints and joins the
 /// threads on every path. The system properties of the settings must already be set. The statistics lines go to `out`.
+/// The watchdog sees the open connections that the reporter read last, so it sees a connection up to one period of -s
+/// late. The run counts in `live` (the counters of /metrics) when it has a set per instance, else in its own.
 RunResult runConsumer(const Settings &settings, const Symbols &symbols, StopControl &stop, std::ostream &out,
-                      const RunHooks &hooks = {});
+                      const RunHooks &hooks = {}, std::shared_ptr<LiveCounters> live = nullptr);
 
 /// The symbols of consumer instance `instance` (from 1) of `instances`: those with the index j (from 0) where
 /// j % instances == instance - 1, in the order of the set.

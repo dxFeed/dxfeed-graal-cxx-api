@@ -90,6 +90,35 @@ ConnectorSummary connectorSummary(const MessageConnectorInfo &connector) {
     return summary;
 }
 
+// Reads the connectors of the endpoint once: adds their statistics to the totals, taken as the summary takes them
+// (connectorSummary), and returns their open connections.
+std::int64_t readConnectors(const DXEndpoint &endpoint, ConnectorTotals &totals) {
+    std::int64_t connections = 0;
+
+    for (const auto &connector : endpoint.getConnectors()) {
+        const auto summary = connectorSummary(connector);
+
+        connections += connector.connectionCount;
+        totals.readBytes += summary.readBytes;
+        totals.writtenBytes += summary.writtenBytes;
+        totals.readRecords += summary.readDataRecords;
+        totals.writtenRecords += summary.writtenDataRecords;
+
+        if (summary.v2.has_value()) {
+            const auto &v2 = *summary.v2;
+            const auto add = [](std::int64_t &total, std::int64_t value) {
+                total = (total == CONNECTOR_V2_ABSENT ? 0 : total) + value;
+            };
+
+            add(totals.subRecords, v2.readSubRecords + v2.writtenSubRecords);
+            add(totals.readLagMicros, v2.readDataLagMicros);
+            add(totals.rttMicros, v2.readRttMicros + v2.writtenRttMicros);
+        }
+    }
+
+    return connections;
+}
+
 } // namespace
 
 std::shared_ptr<DXEndpoint> buildEndpoint(const Settings &settings, const std::string &name) {
@@ -143,17 +172,15 @@ std::int64_t steadyNanos() {
         .count();
 }
 
-std::int64_t connectionsOf(const DXEndpoint &endpoint) {
-    std::int64_t total = 0;
-
-    for (const auto &connector : endpoint.getConnectors()) {
-        total += connector.connectionCount;
+std::shared_ptr<LiveCounters> liveCountersOf(const Settings &settings, std::shared_ptr<LiveCounters> live) {
+    if (live != nullptr && live->instances.size() == static_cast<std::size_t>(settings.instances)) {
+        return live;
     }
 
-    return total;
+    return std::make_shared<LiveCounters>(settings.instances);
 }
 
-void reportUntilStopped(const Settings &settings, const LiveCounters &live,
+void reportUntilStopped(const Settings &settings, LiveCounters &live,
                         const std::vector<std::shared_ptr<DXEndpoint>> &endpoints, StopControl &stop,
                         std::ostream &out, ReportCollector &collector) {
     const auto side = settings.mode == Mode::PRODUCER ? StatisticsSide::PRODUCER : StatisticsSide::CONSUMER;
@@ -163,16 +190,21 @@ void reportUntilStopped(const Settings &settings, const LiveCounters &live,
         settings.name, settings.periodMillis, systemReporterClock(stop),
         [&] {
             StatisticsSample sample;
+            ConnectorTotals totals;
 
             for (std::size_t index = 0; index < endpoints.size(); ++index) {
                 const auto &counters = live.instances[index];
+                const auto connections = readConnectors(*endpoints[index], totals);
 
                 sample.instances.push_back({counters.records.load(std::memory_order_relaxed),
                                             counters.weightedNanos.load(std::memory_order_relaxed)});
-                sample.connections += connectionsOf(*endpoints[index]);
+                sample.connections += connections;
+                live.connections[index].store(connections, std::memory_order_relaxed);
             }
 
+            live.setConnectors(totals);
             sample.runtime = readRuntime();
+            live.setRuntime(sample.runtime.value_or(RuntimeSample{}));
 
             if (sample.runtime.has_value()) {
                 const auto now = systemNanos();
