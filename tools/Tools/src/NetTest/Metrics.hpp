@@ -146,7 +146,10 @@ class MetricsServer {
     bool loopback_ = false;
     std::atomic<bool> stopping_{false};
     std::thread thread_{};
-    [[maybe_unused]] bool winsock_ = false;
+#ifdef _WIN32
+    // WSAStartup succeeded: the destructor calls WSACleanup.
+    bool winsock_ = false;
+#endif
 
     void serve(const std::function<std::string()> &body);
 
