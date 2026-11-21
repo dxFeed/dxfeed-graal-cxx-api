@@ -121,8 +121,52 @@ bool applySystemProperties(const Settings &settings, std::string &error) {
     return true;
 }
 
+std::string isolateRejectionLine(const std::vector<std::string> &arguments) {
+    std::string line = "NetTest: the isolate rejected one of the options:";
+
+    for (const auto &argument : arguments) {
+        line += ' ';
+        line += argument;
+    }
+
+    return line;
+}
+
+int createIsolate(const Settings &settings, std::ostream &err) {
+    if (settings.isolateArguments.empty()) {
+        return 0;
+    }
+
+    if (!System::setIsolateArguments(settings.isolateArguments)) {
+        err << "NetTest: the isolate is already created, so its options cannot be applied\n";
+
+        return 1;
+    }
+
+    // The first call into the isolate creates it with the arguments.
+    static_cast<void>(Isolate::getInstance());
+
+    const auto error = Isolate::getCreationError();
+
+    if (error == CEntryPointErrorsEnum::NO_ERROR) {
+        return 0;
+    }
+
+    // The reason that the isolate prints (GraalVM "Error: ...") stays above the line.
+    if (error == CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED) {
+        err << isolateRejectionLine(settings.isolateArguments) << "\n";
+
+        // A rejected option is an error of the command line.
+        return 2;
+    }
+
+    err << "NetTest: cannot create the isolate (error " << static_cast<std::uint32_t>(error) << ")\n";
+
+    return 1;
+}
+
 RunResult runProducer(const Settings &settings, const Symbols &symbols, StopControl &stop, std::ostream &out,
-                      std::shared_ptr<LiveCounters> liveCounters) {
+                      const RunHooks &hooks, std::shared_ptr<LiveCounters> liveCounters) {
     RunResult result;
     const auto startEpochNs = systemNanos();
     const bool scheduled = settings.recordsPerSecond.has_value();
@@ -216,7 +260,7 @@ RunResult runProducer(const Settings &settings, const Symbols &symbols, StopCont
                         auto &instance = *instances[index];
                         const auto generated =
                             runGenerator(instance.publisher, instance.pool, static_cast<std::size_t>(settings.batch),
-                                         limiter.get(), stop, live.instances[index], live.publish);
+                                         limiter.get(), stop, live.instances[index], live.publish, hooks.holdAhead);
 
                         if (!generated.ok) {
                             fail("publishing failed: " + generated.error);
@@ -287,8 +331,18 @@ std::atomic<bool> signalReceived{false};
 
 static_assert(std::atomic<bool>::is_always_lock_free, "the signal handler needs a lock-free flag");
 
-extern "C" void onSignal(int) {
-    signalReceived.store(true);
+extern "C" void onSignal(int signalNumber) {
+    // The second signal ends the process at once, as without the watcher: the run may wait for something that does
+    // not check the stop (the symbols of a large or remote IPF file).
+    if (signalReceived.exchange(true)) {
+        std::signal(signalNumber, SIG_DFL);
+        std::raise(signalNumber);
+
+        return;
+    }
+
+    // Windows restores the default handler before calling this one.
+    std::signal(signalNumber, onSignal);
 }
 
 std::vector<int> watchedSignals() {
@@ -367,6 +421,11 @@ int run(const Settings &settings, std::ostream &out, std::ostream &err) {
     // An exception that the run does not handle itself (an allocation, a thread that does not start) ends it with the
     // summary of the status `error` and the exit code 1 too.
     try {
+        // Ctrl+C and SIGTERM end the run like --duration does: the last statistics are printed, the summary is written,
+        // the endpoints close and the exit code is 0. The watcher is installed once the isolate exists, so that a signal
+        // while the symbols are read (a large IPF file) also ends with the summary; a second signal ends the process.
+        StopControl stop;
+        const SignalWatcher signalWatcher(stop);
         const bool producer = settings.mode == Mode::PRODUCER;
         // The server of /metrics reads only the live counters; declared after them, it stops first.
         const auto live = std::make_shared<LiveCounters>(settings.instances);
@@ -411,11 +470,16 @@ int run(const Settings &settings, std::ostream &out, std::ostream &err) {
             return failBeforeRun(pool.error);
         }
 
-        // Ctrl+C and SIGTERM end the run like --duration does: the last statistics are printed, the summary is written,
-        // the endpoints close and the exit code is 0.
-        StopControl stop;
-        const SignalWatcher signalWatcher(stop);
-        const auto result = producer ? runProducer(settings, pool.symbols, stop, out, live)
+        // A signal before the start of the endpoints: the summary of the empty run, without the endpoints.
+        if (stop.stopped()) {
+            failedReport.endEpochNs = systemNanos();
+            status.status = "stopped_by_signal";
+            status.exitCode = 0;
+
+            return finish(settings, failedReport, status, err);
+        }
+
+        const auto result = producer ? runProducer(settings, pool.symbols, stop, out, {}, live)
                                      : runConsumer(settings, pool.symbols, stop, out, {}, live);
 
         if (result.exitCode != 0) {

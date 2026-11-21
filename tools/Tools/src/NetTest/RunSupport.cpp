@@ -38,11 +38,12 @@ bool serverSocketsBound(const DXEndpoint &endpoint) {
     return true;
 }
 
-// The runtime values of the isolate, or nothing when the isolate does not give them.
-std::optional<RuntimeSample> readRuntime() {
+// The runtime values of the isolate; all absent when it does not give them, so that the runtime line shows `n/a`.
+RuntimeSample readRuntime() {
+    RuntimeSample sample;
+
     try {
         const auto statistics = System::getRuntimeStatistics();
-        RuntimeSample sample;
 
         sample.heapUsedBytes = statistics.heapUsedBytes;
         sample.heapCommittedBytes = statistics.heapCommittedBytes;
@@ -51,11 +52,11 @@ std::optional<RuntimeSample> readRuntime() {
         sample.fullGcCount = statistics.fullGcCount;
         sample.fullGcTimeMs = statistics.fullGcTimeMs;
         sample.processCpuTimeNs = statistics.processCpuTimeNs;
-
-        return sample;
     } catch (const std::exception &) {
-        return std::nullopt;
+        return RuntimeSample{};
     }
+
+    return sample;
 }
 
 // The statistics of a connector: those of the socket, or the I/O statistics with the subscription records, the lags
@@ -203,20 +204,20 @@ void reportUntilStopped(const Settings &settings, LiveCounters &live,
             }
 
             live.setConnectors(totals);
-            sample.runtime = readRuntime();
-            live.setRuntime(sample.runtime.value_or(RuntimeSample{}));
+            const auto runtime = readRuntime();
+            const auto now = systemNanos();
 
-            if (sample.runtime.has_value()) {
-                const auto now = systemNanos();
+            live.setRuntime(runtime);
+            sample.runtime = runtime;
 
-                if (!collector.firstRuntime.has_value()) {
-                    collector.firstRuntime = sample.runtime;
-                    collector.firstRuntimeNanos = now;
-                }
-
-                collector.lastRuntime = sample.runtime;
-                collector.lastRuntimeNanos = now;
+            // The runtime of the summary counts from the first sample, taken before the first tick.
+            if (!collector.firstRuntime.has_value()) {
+                collector.firstRuntime = runtime;
+                collector.firstRuntimeNanos = now;
             }
+
+            collector.lastRuntime = runtime;
+            collector.lastRuntimeNanos = now;
 
             return sample;
         },

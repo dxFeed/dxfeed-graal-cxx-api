@@ -135,10 +135,10 @@ struct BackgroundProducer {
     RunResult result{};
     std::thread thread{};
 
-    explicit BackgroundProducer(const std::vector<std::string> &args)
+    explicit BackgroundProducer(const std::vector<std::string> &args, const RunHooks &hooks = {})
         : settings(settingsOf(args)), symbols(symbolsOf(settings)) {
-        thread = std::thread([this] {
-            result = runProducer(settings, symbols, stop, out);
+        thread = std::thread([this, hooks] {
+            result = runProducer(settings, symbols, stop, out, hooks);
         });
     }
 
@@ -758,6 +758,53 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the consumer receives the events of th
 
     checkBlocks(linesOf(out.str()), "Consumer", 2);
     checkBlocks(linesOf(producer.out.str()), "Producer", 1);
+}
+
+// The e2e lag starts at the clock read after the wait of the schedule: a producer held 50 ms ahead of its schedule waits
+// that long before every batch, and the consumer's mean lag stays well below it.
+TEST_CASE_FIXTURE(ToolsProcess, "NetTest: the wait of a producer ahead of its schedule is not in the e2e lag") {
+#ifdef DXFCXX_SANITIZERS_ENABLED
+    // The delivery itself takes longer with the sanitizers.
+    constexpr auto HOLD = 200ms;
+#else
+    constexpr auto HOLD = 50ms;
+#endif
+    const auto port = test::findFreeLoopbackPort();
+    RunHooks hooks;
+
+    hooks.holdAhead = HOLD;
+
+    // Without the hold the schedule would grant a batch every millisecond.
+    const auto start = std::chrono::steady_clock::now();
+    BackgroundProducer producer({"p", listenAddress(port), "-S", "100", "-r", "*/100k", "--batch", "100", "-s", "1s"},
+                                hooks);
+
+    REQUIRE(waitListening(port));
+
+    const auto settings = settingsOf({"c", clientAddress(port), "-S", "100", "-s", "1s", "--duration", "5s"});
+    StopControl stop;
+    std::ostringstream out;
+    const auto result = runConsumer(settings, symbolsOf(settings), stop, out);
+    const auto &produced = producer.finish();
+    const auto elapsed = std::chrono::steady_clock::now() - start;
+
+    REQUIRE_MESSAGE(produced.exitCode == 0, produced.error);
+    REQUIRE_MESSAGE(result.exitCode == 0, result.error);
+    INFO(out.str());
+
+    // Every batch waited for the hold, and the slip does not show it.
+    CHECK(produced.batches > 0);
+    CHECK(produced.batches <= elapsed / HOLD + 1);
+    REQUIRE(produced.report.slip.has_value());
+    CHECK(produced.report.slip->maxNs < std::chrono::nanoseconds(HOLD).count());
+
+    REQUIRE(result.records > 0);
+    CHECK(result.lags.count == result.records);
+
+    const auto meanLagNanos = result.lags.sum / result.lags.count;
+
+    CHECK(meanLagNanos > 0);
+    CHECK(meanLagNanos < std::chrono::nanoseconds(HOLD).count() / 2);
 }
 
 // The time of a TimeAndSale comes from its index: the consumer of --event TimeAndSale measures a positive small lag.

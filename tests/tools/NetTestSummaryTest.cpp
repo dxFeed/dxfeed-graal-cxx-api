@@ -316,7 +316,7 @@ TEST_CASE("NetTest kit: the summary of a consumer stopped by a signal is valid a
         return;
     }
 
-    const auto settings = settingsOf({"c", "127.0.0.1:7001", "-S", "100", "-c", "stream"});
+    const auto settings = settingsOf({"c", "127.0.0.1:7001", "-S", "100", "-c", "stream", "-Xmx512m", "-XX:+PrintGC"});
     SummaryStatus status;
 
     status.status = "stopped_by_signal";
@@ -333,6 +333,9 @@ TEST_CASE("NetTest kit: the summary of a consumer stopped by a signal is valid a
     CHECK(value["status"].asString() == "stopped_by_signal");
     CHECK(value["tool"]["version"].isNull());
     CHECK(value["config"]["reuse_effective"].isNull());
+    REQUIRE(value["config"]["isolate_arguments"].array.size() == 2);
+    CHECK(value["config"]["isolate_arguments"].array[0].asString() == "-Xmx512m");
+    CHECK(value["config"]["isolate_arguments"].array[1].asString() == "-XX:+PrintGC");
     CHECK(value["e2e_lag"]["negative"].asInteger() == 3);
     CHECK(value["e2e_lag"]["mean_ns"].asInteger() == -12);
     CHECK(value["publish_call"].isNull());

@@ -74,8 +74,7 @@ std::string configOf(const Settings &settings) {
         .add("warmup_ms", number(settings.warmupMillis))
         .add("duration_ms", number(settings.durationMillis))
         .add("nano_time", boolean(isNanoTimeOn(settings)))
-        // The tool takes no arguments of the isolate.
-        .add("isolate_arguments", "[]")
+        .add("isolate_arguments", stringArray(settings.isolateArguments))
         .text();
 }
 

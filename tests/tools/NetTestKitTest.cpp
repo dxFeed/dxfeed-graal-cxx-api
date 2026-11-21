@@ -136,6 +136,16 @@ std::string settingOf(const Settings &settings, const std::string &key) {
         return isConflated(settings) ? "true" : "false";
     }
 
+    if (key == "isolate_arguments") {
+        std::string text = "[";
+
+        for (const auto &argument : settings.isolateArguments) {
+            text += (text.size() == 1 ? "" : ", ") + quoted(argument);
+        }
+
+        return text + "]";
+    }
+
     return "unknown setting " + key;
 }
 
@@ -150,13 +160,22 @@ std::string kitValueText(const kit::Json &value) {
         return std::to_string(value.integer);
     case kit::Json::Kind::STRING:
         return "\"" + value.string + "\"";
+    case kit::Json::Kind::ARRAY: {
+        std::string text = "[";
+
+        for (const auto &item : value.array) {
+            text += (text.size() == 1 ? "" : ", ") + kitValueText(item);
+        }
+
+        return text + "]";
+    }
     default:
         return "unsupported kit value";
     }
 }
 
-// The tool has no isolate arguments and no deprecated publishing call: an entry that needs one of them is skipped,
-// an entry that needs their absence is checked.
+// The tool has the isolate arguments but no deprecated publishing call (the C++ API has none): an entry is skipped when
+// it needs a feature that the tool lacks (`legacy`) or the absence of one that it has (`!isolate`).
 bool needsFeature(const kit::Json &entry) {
     if (!entry.has("requires")) {
         return false;
@@ -165,7 +184,11 @@ bool needsFeature(const kit::Json &entry) {
     const auto &features = entry["requires"].array;
 
     return std::any_of(features.begin(), features.end(), [](const kit::Json &feature) {
-        return !feature.asString().empty() && feature.asString()[0] != '!';
+        const auto &name = feature.asString();
+        const bool absent = !name.empty() && name[0] == '!';
+        const bool supported = (absent ? name.substr(1) : name) == "isolate";
+
+        return absent == supported;
     });
 }
 
@@ -456,6 +479,10 @@ TEST_CASE("NetTest: a missing value or a counter that went back is n/a in the ru
     gcBack.youngGcCount = 0;
     CHECK(formatRuntime("n", previous, gcBack, 1'000'000'000) ==
           "{*NetTestRuntime-n*} heap 3 MB of 4 MB, gc n/a, cpu 50%");
+
+    // A sample that the isolate did not give at all: the line stays, with every value n/a.
+    CHECK(formatRuntime("n", current, RuntimeSample{}, 1'000'000'000) ==
+          "{*NetTestRuntime-n*} heap n/a of n/a, gc n/a, cpu n/a");
 }
 
 TEST_CASE("NetTest: the ticks are at the multiples of the period, the first one only starts the count") {
@@ -606,7 +633,7 @@ TEST_CASE("NetTest kit: the parser gives the settings and the errors of cli-vect
     }
 
     MESSAGE("cli-vectors.json: " << checked << " checked, " << skipped.size()
-                                 << " skipped (isolate, legacy):" << skippedList);
+                                 << " skipped (legacy, !isolate):" << skippedList);
     CHECK(checked + skipped.size() == vectors["vectors"].array.size());
     CHECK(checked >= 70);
 }
@@ -629,14 +656,49 @@ TEST_CASE("NetTest: no arguments print the usage and exit with 2") {
     CHECK(result.err.empty());
 }
 
-TEST_CASE("NetTest: the options of the native runtime and --legacy are not supported") {
-    for (const auto &option : {"-Xmx512m", "-Xss1m", "-XX:+PrintGC", "--legacy"}) {
+TEST_CASE("NetTest: --legacy is not supported") {
+    const auto result = runTool({"p", ":7001", "-S", "100", "--legacy"});
+
+    CHECK(result.exitCode == 2);
+    CHECK(firstLine(result.err) == "NetTest: unsupported option: --legacy");
+}
+
+TEST_CASE("NetTest: the options of the isolate keep the command line order, other -X arguments are errors") {
+    const auto parsed =
+        parseArguments({"p", ":7001", "-XX:+PrintGC", "-S", "100", "-Xmx512m", "-Xms64m", "-Xmn16m", "-Xss1m"});
+
+    REQUIRE_MESSAGE(parsed.ok, parsed.error);
+    CHECK(parsed.settings.isolateArguments ==
+          std::vector<std::string>{"-XX:+PrintGC", "-Xmx512m", "-Xms64m", "-Xmn16m", "-Xss1m"});
+    CHECK(parsed.settings.properties.empty());
+
+    // Without a value the isolate would ignore them; -X alone and the options of a JVM are not those of the isolate.
+    for (const auto &option : {"-X", "-Xmx", "-XX:", "-Xint", "-Xnm2m", "-Xbatch"}) {
         const auto result = runTool({"p", ":7001", "-S", "100", option});
 
         INFO(option);
         CHECK(result.exitCode == 2);
-        CHECK(firstLine(result.err) == std::string("NetTest: unsupported option: ") + option);
+        CHECK(firstLine(result.err) == std::string("NetTest: ") + option +
+                                           " is not an option of the isolate, which takes -Xmx<size>, -Xms<size>, "
+                                           "-Xmn<size>, -Xss<size> and -XX:<option>");
     }
+
+    CHECK(isolateRejectionLine({"-Xmx64m", "-XX:+NetTestNoSuchOption"}) ==
+          "NetTest: the isolate rejected one of the options: -Xmx64m -XX:+NetTestNoSuchOption");
+}
+
+TEST_CASE("NetTest: a rate above 1e12 is a bad rate, and -n takes --help as its value") {
+    const auto rate = runTool({"p", ":7001", "-S", "100", "-r", "*/1001G"});
+
+    CHECK(rate.exitCode == 2);
+    CHECK(firstLine(rate.err) ==
+          "NetTest: -r has a bad rate (a positive number with an optional k, M or G): '*/1001G'");
+
+    const auto parsed = parseArguments({"p", ":7001", "-S", "100", "-n", "--help"});
+
+    REQUIRE_MESSAGE(parsed.ok, parsed.error);
+    CHECK_FALSE(parsed.settings.help);
+    CHECK(parsed.settings.name == "--help");
 }
 
 TEST_CASE("NetTest: the system properties keep the command line order") {

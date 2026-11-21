@@ -88,6 +88,8 @@ struct Settings {
     std::vector<std::string> arguments{};
     /// The system properties (-D<key>=<value>) in the command line order.
     std::vector<std::pair<std::string, std::string>> properties{};
+    /// The arguments of the Graal isolate (-Xmx, -Xms, -Xmn, -Xss, -XX:<option>) as they are, in the command line order.
+    std::vector<std::string> isolateArguments{};
 };
 
 /// The result of the parsing: the settings, or the message of the first error.

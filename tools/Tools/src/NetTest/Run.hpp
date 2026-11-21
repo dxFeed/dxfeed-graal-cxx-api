@@ -103,6 +103,9 @@ struct RunHooks {
     /// The timeouts of the starvation watchdog of the consumer.
     std::chrono::milliseconds noDataAfterRecord = NO_DATA_AFTER_RECORD;
     std::chrono::milliseconds noDataAfterConnect = NO_DATA_AFTER_CONNECT;
+    /// With -r: how far ahead of the schedule each generator is held (see runGenerator()), so that every batch waits at
+    /// least this long before its clock read; 0 is the schedule of -r alone.
+    std::chrono::nanoseconds holdAhead{0};
 };
 
 struct LiveCounters;
@@ -113,7 +116,7 @@ struct LiveCounters;
 /// statistics lines go to `out`. The run counts in `live` (the counters of /metrics) when it has a set per instance,
 /// else in its own.
 RunResult runProducer(const Settings &settings, const Symbols &symbols, StopControl &stop, std::ostream &out,
-                      std::shared_ptr<LiveCounters> live = nullptr);
+                      const RunHooks &hooks = {}, std::shared_ptr<LiveCounters> live = nullptr);
 
 /// Runs the consumer until the stop is requested, the duration of the settings passes, the starvation watchdog fires or
 /// the check of the nanosecond part fails: creates the feed endpoints (the listener first, then the symbols of the slice
@@ -136,6 +139,18 @@ std::int64_t eventLagNanos(std::int64_t nowNanos, std::int64_t packedTime, std::
 /// Sets the system properties of the settings (-D) in the command line order. Returns false and fills `error` on a
 /// failure.
 bool applySystemProperties(const Settings &settings, std::string &error);
+
+/// The line that NetTest prints to stderr when the isolate rejects one of its arguments, the same in the NetTest of every
+/// language API: "NetTest: the isolate rejected one of the options: " and the arguments as they are, in the command line
+/// order, separated by one space; no line break.
+std::string isolateRejectionLine(const std::vector<std::string> &arguments);
+
+/// Creates the Graal isolate with the isolate arguments of the settings (-X, -XX:), followed by those of the
+/// `DXFCPP_ISOLATE_ARGUMENTS` variable. Does nothing without isolate arguments. Call it before anything else of the
+/// process creates the isolate. Returns 0 when the isolate is created; 2 when it rejects one of the arguments (the
+/// isolate prints its reason to stderr, then the line of isolateRejectionLine() goes to `err`); 1 when the isolate is
+/// already created or cannot be created otherwise, with the message on `err`.
+int createIsolate(const Settings &settings, std::ostream &err);
 
 /// Requests the stop of the run on SIGINT, SIGTERM and, on Windows, SIGBREAK. The handler only sets a flag; a watcher
 /// thread calls StopControl::request(). One object at a time; the previous handlers come back in the destructor.

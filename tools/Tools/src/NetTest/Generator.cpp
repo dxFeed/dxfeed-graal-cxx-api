@@ -11,8 +11,8 @@
 namespace dxfcpp::tools::nettest {
 
 GeneratorResult runGenerator(const std::shared_ptr<DXPublisher> &publisher, EventPool &pool, std::size_t batchSize,
-                             RateLimiter *limiter, const StopControl &stop, InstanceCounters &counters,
-                             PublishCounters &publish) {
+                             RateLimiter *limiter, StopControl &stop, InstanceCounters &counters,
+                             PublishCounters &publish, std::chrono::nanoseconds holdAhead) {
     using Clock = std::chrono::steady_clock;
 
     GeneratorResult result;
@@ -27,6 +27,15 @@ GeneratorResult runGenerator(const std::shared_ptr<DXPublisher> &publisher, Even
 
             if (!due.has_value()) {
                 break;
+            }
+
+            // The seam of the tests: the generator waits as if it were holdAhead ahead of its schedule.
+            if (holdAhead.count() > 0) {
+                if (stop.waitFor(holdAhead)) {
+                    break;
+                }
+
+                due = Clock::now();
             }
         }
 

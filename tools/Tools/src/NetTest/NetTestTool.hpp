@@ -12,14 +12,16 @@
 
 #include <cstddef>
 #include <iostream>
+#include <optional>
 #include <string>
 #include <vector>
 
 namespace dxfcpp::tools {
 
 /// The load generator and the lag meter of the NetTest specification: the command line, the exit codes and the output
-/// follow the specification, so the tool does not use the common parser of the arguments. The process runs it through
-/// runProcess() with the raw arguments (see main.cpp).
+/// follow the specification, so the tool does not use the common parser of the arguments. The process calls
+/// prepareProcess() first, before the isolate exists, then runs the tool through runProcess() with the raw arguments
+/// (see main.cpp).
 struct NetTestTool {
     /// The exit code of a command line error.
     static constexpr int EXIT_BAD_ARGUMENTS = 2;
@@ -44,6 +46,25 @@ struct NetTestTool {
                                                  std::size_t) noexcept {
         return fmt::format("{:{}}{:<{}}{:{}}{}\n", "", namePadding, getFullName(), nameFieldSize - 2 * namePadding, "",
                            namePadding, SHORT_DESCRIPTION);
+    }
+
+    /// Prepares the process before anything creates the Graal isolate: a valid command line with the options of the
+    /// isolate (-X<option>, -XX:<option>) creates it with them. Returns the exit code when the process must end: 2 when
+    /// the isolate rejects one of the options (after its reason and the line `NetTest: the isolate rejected one of the
+    /// options: ...` on `err`), 1 when it cannot be created otherwise. An invalid command line and --help are left to
+    /// runProcess().
+    static std::optional<int> prepareProcess(const std::vector<std::string> &args, std::ostream &err) {
+        const auto parsed = nettest::parseArguments(args);
+
+        if (!parsed.ok || parsed.settings.help) {
+            return std::nullopt;
+        }
+
+        if (const auto exitCode = nettest::createIsolate(parsed.settings, err); exitCode != 0) {
+            return exitCode;
+        }
+
+        return std::nullopt;
     }
 
     /// Runs the tool with the arguments after its name. A command line error: the first line of `err` is

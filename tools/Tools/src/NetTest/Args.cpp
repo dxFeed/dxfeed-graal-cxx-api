@@ -270,6 +270,24 @@ struct Parser {
         return true;
     }
 
+    // The isolate checks the -XX: options and the values of -Xmx, -Xms, -Xmn and -Xss (a wrong one fails its creation),
+    // but ignores the other -X arguments, so that a typo there would go unnoticed: they are rejected here.
+    bool parseIsolateArgument(const std::string &argument) {
+        const bool hasValue = argument.size() > 4;
+        const bool size = hasValue && (argument.compare(0, 4, "-Xmx") == 0 || argument.compare(0, 4, "-Xms") == 0 ||
+                                       argument.compare(0, 4, "-Xmn") == 0 || argument.compare(0, 4, "-Xss") == 0);
+        const bool runtimeOption = hasValue && argument.compare(0, 4, "-XX:") == 0;
+
+        if (!size && !runtimeOption) {
+            return fail(argument + " is not an option of the isolate, which takes -Xmx<size>, -Xms<size>, -Xmn<size>, " +
+                        "-Xss<size> and -XX:<option>");
+        }
+
+        settings.isolateArguments.push_back(argument);
+
+        return true;
+    }
+
     // Applies one option with its value (empty for a switch).
     bool apply(const OptionSpec &spec, const std::string &flag, const std::string &value) {
         switch (spec.option) {
@@ -446,10 +464,13 @@ struct Parser {
                 continue;
             }
 
-            // The options of the native runtime (-Xmx, -XX:...) have no meaning here: the API starts its isolate
-            // itself.
+            // The options of the Graal isolate go to it when it is created (NetTestTool::prepareProcess()).
             if (argument.compare(0, 2, "-X") == 0) {
-                return fail("unsupported option: " + argument);
+                if (!parseIsolateArgument(argument)) {
+                    return false;
+                }
+
+                continue;
             }
 
             if (argument.size() < 2 || argument[0] != '-') {
@@ -718,6 +739,11 @@ std::string usageText() {
                "  -D<key>=<value>      set a system property before the first endpoint is created\n"
                "                       (dxscheme.nanoTime also goes to the builder of every endpoint, default "
                "true)\n"
+               "  -Xmx<size>, -Xms<size>, -Xmn<size>\n"
+               "                       the maximum, initial and young generation heap sizes of the isolate "
+               "(512m, 1g)\n"
+               "  -Xss<size>           the stack size of the threads that the isolate starts (1m)\n"
+               "  -XX:<option>         an option of the isolate (for example -XX:+PrintGC)\n"
                "  --help               print this text and exit\n"
                "\n"
                "A long option also takes its value as --option=value.\n"
