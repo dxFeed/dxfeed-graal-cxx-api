@@ -23,8 +23,6 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * Type of orders on the Nuam Market.
  *
- * This is an experimental API, it may change in future versions.
- *
  * Java: <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamOrderType.html">NuamOrderType</a>
  */
 struct NuamOrderType : Enum<NuamOrderType, std::uint32_t> {

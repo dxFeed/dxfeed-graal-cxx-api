@@ -23,8 +23,6 @@ DXFCPP_BEGIN_NAMESPACE
 /**
  * Type of Time in Force for the orders on the Nuam Market.
  *
- * This is an experimental API, it may change in future versions.
- *
  * Java:
  * <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTimeInForceType.html">NuamTimeInForceType</a>
  */

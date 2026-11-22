@@ -30,8 +30,6 @@ struct EventMapper;
  *
  * It includes the Nuam Exchange internal data, obtained directly from the matching engine, such as different IDs.
  *
- * This is an experimental API, it may change in future versions.
- *
  * Java:
  * <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTimeAndSale.html">NuamTimeAndSale</a>
  *
