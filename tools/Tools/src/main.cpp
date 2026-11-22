@@ -8,6 +8,7 @@
 #include "ToolsProperties.hpp"
 #include <concepts>
 #include <iostream>
+#include <optional>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -32,16 +33,20 @@ concept HasProcessEntry = requires(const std::vector<std::string> &args, std::os
     { T::runProcess(args, out, err) } -> std::same_as<int>;
 };
 
+// A tool that acts before the first call of the library creates the Graal isolate (NetTest gives it the options of its
+// command line): a static function that takes the arguments after the name of the tool and the stream of the errors,
+// and returns the exit code when the process must end at once.
+template <typename T>
+concept HasProcessPreparation = requires(const std::vector<std::string> &args, std::ostream &err) {
+    { T::prepareProcess(args, err) } -> std::same_as<std::optional<int>>;
+};
+
 using namespace std::literals;
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 
 int main(int argc, char *argv[]) {
     try {
-        tools::setToolsSystemProperties();
-
-        const auto usage = tools::HelpTool::generateToolHelpScreen<tools::Tools>();
-
         std::vector<std::string> args{};
 
         if (argc > 1) {
@@ -49,6 +54,38 @@ int main(int argc, char *argv[]) {
                 args.emplace_back(argv[argIndex]);
             }
         }
+
+        // The system properties below create the isolate, so a tool that must act before that does it here.
+        if (!args.empty()) {
+            for (auto &&[name, tool] : tools::HelpTool::ALL_TOOLS) {
+                if (!iEquals(args[0], name)) {
+                    continue;
+                }
+
+                std::optional<int> exitCode{};
+
+                std::visit(
+                    [&args, &exitCode]<typename Tool>(Tool &&) {
+                        using T = std::decay_t<Tool>;
+
+                        if constexpr (HasProcessPreparation<T>) {
+                            exitCode = T::prepareProcess(args | ranges::views::drop(1) | ranges::to<std::vector>,
+                                                         std::cerr);
+                        }
+                    },
+                    tool);
+
+                if (exitCode.has_value()) {
+                    return *exitCode;
+                }
+
+                break;
+            }
+        }
+
+        tools::setToolsSystemProperties();
+
+        const auto usage = tools::HelpTool::generateToolHelpScreen<tools::Tools>();
 
         if (args.empty() || args[0] == "--help" || args[0] == "-h") {
             std::cout << usage << std::endl;

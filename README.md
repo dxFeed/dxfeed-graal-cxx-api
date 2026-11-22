@@ -497,11 +497,43 @@ be downloaded from [Release](https://github.com/dxFeed/dxfeed-graal-cxx-api/rele
   connects to the specified address(es) and calculates latency
 * [Qds](https://github.com/dxFeed/dxfeed-graal-cxx-api/blob/main/tools/Tools/src/Qds/QdsTool.hpp)
   collection of tools ported from the Java qds-tools
+* [NetTest](#nettest) publishes generated events or receives them and measures the end-to-end lag, by the NetTest
+  specification of the Graal Native SDK
 
 On macOS, it might be required to remove the quarantine attribute to run certain tools:
 ```shell
 sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 ```
+
+### NetTest
+
+`Tools NetTest` is the C++ API tool of the NetTest specification `nettest/1` of the Graal Native SDK 3.18.0
+(`docs/wrapper-guide/nettest.md` of the SDK sources): the command line, the output lines, the summary file, the
+`/metrics` endpoint and the exit codes are those of the NetTest of the other APIs, so one stand runs and compares them.
+`Tools NetTest --help` prints the options. For example, a producer at 500,000 events per second and a consumer of the
+stream contract with the summary of each side:
+
+```shell
+Tools NetTest p :7001 -S 100000 -c stream -r */500k --duration 5m --summary producer.json
+Tools NetTest c 127.0.0.1:7001 -S 100000 -c stream --warmup 30s --duration 5m --summary consumer.json
+```
+
+The `-Xmx<size>`, `-Xms<size>`, `-Xmn<size>`, `-Xss<size>` and `-XX:<option>` options go to the Graal isolate, in the
+command line order, when it is created (as `System::setIsolateArguments()` does); the `DXFCPP_ISOLATE_ARGUMENTS`
+environment variable adds its arguments after them. Other `-X` arguments are command line errors. An option that the isolate rejects (`-Xmx64q`, an unknown `-XX:` option)
+ends the tool with exit code 2: the isolate prints its reason to stderr, and the tool adds the line
+`NetTest: the isolate rejected one of the options: <the options>`.
+
+#### Differences from the specification
+
+- `--legacy` is not supported (`unsupported option: --legacy`, exit code 2): the C++ API has no deprecated publishing
+  call.
+- `reuse_effective` of the producer summary is always `false`: the C++ API copies the published events into the isolate, so
+  `--reuse` changes only the C++ objects.
+- `qd_version` and the values of `build` (`vendor`, `march`, `gc`) of the summary are `null` until SDK 3.19.0, which
+  gives them.
+- The isolate is not torn down at the end of the run, so the options of the isolate that print at its tear-down, such
+  as `-XX:+PrintGCSummary`, print nothing.
 
 ## Samples
 

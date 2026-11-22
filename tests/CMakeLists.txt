@@ -332,10 +332,31 @@ if (DXFCXX_BUILD_TOOLS)
             "-DEXPECTED_OUTPUT=Verdict: CANNOT RESOLVE" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
     set_tests_properties(dxFeedGraalCxxApi_tools_DiagnoseCannotResolve PROPERTIES TIMEOUT 120)
 
+    # NetTest gives the -X and -XX: options of its command line to the Graal isolate, which Tools creates only after
+    # them: a run with valid options, and an option that the isolate rejects (exit code 2 and the line of the
+    # specification). The stub of the SDK has no isolate to reject an option. The blocks are printed at the ticks of the
+    # wall clock, so the run takes 4 periods of 1 s: it always prints a full block after its first tick.
+    if (NOT DXFCXX_USE_DXFG_STUB)
+        add_test(NAME dxFeedGraalCxxApi_tools_NetTestIsolateArguments
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=NetTest -DARG1=p -DARG2=127.0.0.1:1
+                -DARG3=-S -DARG4=10 -DARG5=-Xmx256m -DARG6=-XX:+PrintGC -DARG7=-s -DARG8=1s -DARG9=--duration
+                -DARG10=4s -DEXPECTED_EXIT=0 "-DEXPECTED_OUTPUT=NetTestProducerSide-NetTest"
+                -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        set_tests_properties(dxFeedGraalCxxApi_tools_NetTestIsolateArguments PROPERTIES TIMEOUT 120)
+
+        add_test(NAME dxFeedGraalCxxApi_tools_NetTestIsolateRejected
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=NetTest -DARG1=p -DARG2=127.0.0.1:1
+                -DARG3=-S -DARG4=10 -DARG5=-Xmx256m -DARG6=-XX:+NetTestNoSuchOption -DEXPECTED_EXIT=2
+                "-DEXPECTED_OUTPUT=NetTest: the isolate rejected one of the options: -Xmx256m -XX:.NetTestNoSuchOption"
+                -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        set_tests_properties(dxFeedGraalCxxApi_tools_NetTestIsolateRejected PROPERTIES TIMEOUT 120)
+    endif ()
+
     # The exit code is checked: the leaks of the Graal isolate at exit are suppressed, as for the other tests.
     if (DXFCXX_SANITIZERS_ENABLED)
         foreach (DXFC_DIAGNOSE_TEST dxFeedGraalCxxApi_tools_DiagnoseCannotConnect
-                dxFeedGraalCxxApi_tools_DiagnoseCannotResolve dxFeedGraalCxxApi_network_ToolsDiagnoseData)
+                dxFeedGraalCxxApi_tools_DiagnoseCannotResolve dxFeedGraalCxxApi_network_ToolsDiagnoseData
+                dxFeedGraalCxxApi_tools_NetTestIsolateArguments dxFeedGraalCxxApi_tools_NetTestIsolateRejected)
             if (TEST ${DXFC_DIAGNOSE_TEST})
                 set_property(TEST ${DXFC_DIAGNOSE_TEST} APPEND PROPERTY ENVIRONMENT
                         "UBSAN_OPTIONS=print_stacktrace=1"

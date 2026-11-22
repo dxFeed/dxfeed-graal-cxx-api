@@ -12,6 +12,7 @@
 #include "StopControl.hpp"
 
 #include <atomic>
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <memory>
@@ -69,8 +70,11 @@ struct GeneratorResult {
 /// slip, (3) the fill, (4) the publishing call, (5) the elapsed time of (3) and (4). The limiter is shared by all
 /// generators; null means flat out, without a schedule.
 /// @param batchSize the number of the events of a batch.
+/// @param holdAhead a seam of the tests (RunHooks::holdAhead): with a limiter, each batch also waits this long after its
+/// time of the schedule, and the end of that wait is its due time, as for a generator that is this far ahead of its
+/// schedule; the slip stays 0, and nothing measured may include the wait.
 GeneratorResult runGenerator(const std::shared_ptr<DXPublisher> &publisher, EventPool &pool, std::size_t batchSize,
-                             RateLimiter *limiter, const StopControl &stop, InstanceCounters &counters,
-                             PublishCounters &publish);
+                             RateLimiter *limiter, StopControl &stop, InstanceCounters &counters,
+                             PublishCounters &publish, std::chrono::nanoseconds holdAhead = {});
 
 } // namespace dxfcpp::tools::nettest

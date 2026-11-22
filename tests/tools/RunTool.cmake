@@ -2,12 +2,12 @@
 # SPDX-License-Identifier: MPL-2.0
 
 # Runs a tool and checks its exit code and its output; CTest checks only one of them when a test has a regex.
-# Usage: cmake -DTOOL=<path> -DARG0=<arg> [-DARG1=<arg> ... -DARG9=<arg>] -DEXPECTED_EXIT=<code>
+# Usage: cmake -DTOOL=<path> -DARG0=<arg> [-DARG1=<arg> ... -DARG11=<arg>] -DEXPECTED_EXIT=<code>
 #              -DEXPECTED_OUTPUT=<regex> -P RunTool.cmake
 
 set(TOOL_ARGS)
 
-foreach (INDEX RANGE 0 9)
+foreach (INDEX RANGE 0 11)
     if (DEFINED ARG${INDEX})
         list(APPEND TOOL_ARGS "${ARG${INDEX}}")
     endif ()
