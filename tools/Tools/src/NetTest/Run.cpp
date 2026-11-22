@@ -471,7 +471,7 @@ int run(const Settings &settings, std::ostream &out, std::ostream &err) {
         }
 
         // A signal before the start of the endpoints: the summary of the empty run, without the endpoints.
-        if (stop.stopped()) {
+        if (signalWatcher.received()) {
             failedReport.endEpochNs = systemNanos();
             status.status = "stopped_by_signal";
             status.exitCode = 0;

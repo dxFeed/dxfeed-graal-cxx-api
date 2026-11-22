@@ -18,7 +18,9 @@
       slip of the producer, the end-to-end lag histogram of the consumer, the statistics of the connectors and the
       runtime. The tool prints `{*NetTestMetrics-<name>*} http://<host>:<port>/metrics` and warns when the host is not a
       loopback one, since the endpoint has no authentication and no TLS; a port in use ends the run with 1.
-    * `Tools help NetTest` prints the usage with the line `spec_version nettest/1`.
+    * `Tools help NetTest` prints the usage with the line `spec_version nettest/1`, as `--help`, `-h` or `-help`
+      anywhere in the arguments of `Tools NetTest` (except as the value of an option) does, also after an invalid
+      argument.
     * The scheme of `Tools` is `ext:opt:sysprops,opt:dxprops,resource:dxlink.xml`, as in the Tools of the .NET API: the
       scheme properties of the endpoint builders and of the `-p` option, such as `dxscheme.nanoTime`, take effect. The
       dxLink example of the README and the `dxfeed.system.properties` of the samples show the same scheme.
