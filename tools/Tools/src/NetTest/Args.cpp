@@ -101,6 +101,8 @@ constexpr OptionSpec OPTIONS[] = {
     {"--summary", Option::SUMMARY, true, false},
     {"--metrics-port", Option::METRICS_PORT, true, false},
     {"--help", Option::HELP, false, false},
+    {"-h", Option::HELP, false, false},
+    {"-help", Option::HELP, false, false},
     {"-w", Option::WILDCARD, false, false},
     {"--wildcard", Option::WILDCARD, false, false},
 };
@@ -113,6 +115,28 @@ const OptionSpec *findOption(const std::string &name) {
     }
 
     return nullptr;
+}
+
+// --help and its short forms -h and -help.
+bool isHelpFlag(const std::string &argument) {
+    return argument == "--help" || argument == "-h" || argument == "-help";
+}
+
+// Whether --help (-h, -help) comes anywhere in the arguments outside the value of an option: then the usage is printed
+// whatever the other arguments are, as the specification says. A value is skipped as the parsing skips it; an unknown
+// flag takes no value.
+bool asksForHelp(const std::vector<std::string> &args) {
+    for (std::size_t index = 0; index < args.size(); ++index) {
+        if (isHelpFlag(args[index])) {
+            return true;
+        }
+
+        if (const auto *spec = findOption(args[index]); spec != nullptr && spec->hasValue) {
+            ++index;
+        }
+    }
+
+    return false;
 }
 
 // The state of one parsing: the error is set by the first failure.
@@ -437,7 +461,7 @@ struct Parser {
             return fail("no mode");
         }
 
-        if (args[0] == "--help") {
+        if (asksForHelp(args)) {
             settings.help = true;
 
             return true;
@@ -521,11 +545,6 @@ struct Parser {
 
             if (!apply(*spec, flag, value)) {
                 return false;
-            }
-
-            // --help ends the parsing: the usage is printed whatever follows.
-            if (settings.help) {
-                return true;
             }
         }
 
@@ -744,7 +763,7 @@ std::string usageText() {
                "(512m, 1g)\n"
                "  -Xss<size>           the stack size of the threads that the isolate starts (1m)\n"
                "  -XX:<option>         an option of the isolate (for example -XX:+PrintGC)\n"
-               "  --help               print this text and exit\n"
+               "  --help, -h, -help    print this text and exit\n"
                "\n"
                "A long option also takes its value as --option=value.\n"
                "\n"

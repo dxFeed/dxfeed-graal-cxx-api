@@ -639,12 +639,39 @@ TEST_CASE("NetTest kit: the parser gives the settings and the errors of cli-vect
 }
 
 TEST_CASE("NetTest: --help prints the usage with the version of the specification") {
-    for (const auto &args : std::vector<std::vector<std::string>>{{"--help"}, {"p", ":7001", "-S", "100", "--help"}}) {
+    // -h and -help are its short forms; it is looked for before the arguments are checked, so an invalid argument or
+    // an unknown mode before or after it does not matter. An unknown flag takes no value.
+    for (const auto &args : std::vector<std::vector<std::string>>{{"--help"},
+                                                                  {"-h"},
+                                                                  {"-help"},
+                                                                  {"p", ":7001", "-S", "100", "--help"},
+                                                                  {"c", ":7001", "-S", "100", "-h"},
+                                                                  {"p", ":7001", "-S", "abc", "--help"},
+                                                                  {"c", ":7001", "--no-such-flag", "-h"},
+                                                                  {"x", "-help"},
+                                                                  {"p", "-h", ":7001"}}) {
         const auto result = runTool(args);
 
+        INFO(args.back());
         CHECK(result.exitCode == 0);
+        CHECK(result.out == usageText());
         CHECK(result.out.find("spec_version nettest/1") != std::string::npos);
         CHECK(result.err.empty());
+    }
+}
+
+TEST_CASE("NetTest: the value of an option is taken as it is, also -h and --help") {
+    for (const auto &[args, name] : std::vector<std::pair<std::vector<std::string>, std::string>>{
+             {{"p", ":7001", "-S", "100", "-n", "-h"}, "-h"},
+             {{"p", ":7001", "-S", "100", "-n", "-help"}, "-help"},
+             {{"p", ":7001", "-S", "100", "--name=-h"}, "-h"},
+             {{"p", ":7001", "-S", "100", "--name", "--help"}, "--help"}}) {
+        const auto parsed = parseArguments(args);
+
+        INFO(name);
+        REQUIRE_MESSAGE(parsed.ok, parsed.error);
+        CHECK_FALSE(parsed.settings.help);
+        CHECK(parsed.settings.name == name);
     }
 }
 
