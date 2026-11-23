@@ -59,6 +59,15 @@ RuntimeSample readRuntime() {
     return sample;
 }
 
+// A value of the build info of the SDK library; empty when the SDK does not give it or it cannot be read.
+std::string buildInfo(const char *key) {
+    try {
+        return System::getBuildInfo(key).value_or("");
+    } catch (const std::exception &) {
+        return "";
+    }
+}
+
 // The statistics of a connector: those of the socket, or the I/O statistics with the subscription records, the lags
 // and the round-trip times when the SDK has them, as the summary of the C tool takes them.
 ConnectorSummary connectorSummary(const MessageConnectorInfo &connector) {
@@ -161,6 +170,13 @@ bool connectEndpoint(DXEndpoint &endpoint, const std::string &name, const std::s
     }
 
     return true;
+}
+
+void readBuildInfo(SummaryStatus &status) {
+    status.qdVersion = buildInfo(System::BUILD_INFO_QD_VERSION);
+    status.buildVendor = buildInfo(System::BUILD_INFO_VENDOR);
+    status.buildMarch = buildInfo(System::BUILD_INFO_MARCH);
+    status.buildGc = buildInfo(System::BUILD_INFO_GC);
 }
 
 std::int64_t systemNanos() {

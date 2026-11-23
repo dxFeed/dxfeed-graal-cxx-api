@@ -13,6 +13,8 @@
       the publishing time and the schedule slip of the producer, the runtime and the statistics of the connectors. The
       file is written through `<file>.tmp` and a rename, also when the run fails. `--warmup <time>` marks the intervals
       from the first batch or record as warm-up: they stay out of the percentiles of the summary.
+    * The summary names the QDS version (`tool.qd_version`) and the runtime of the Graal Native SDK library
+      (`tool.build`: the vendor, the target machine and the garbage collectors) from `System::getBuildInfo()`.
     * `--metrics-port [<host>:]<port>` serves `/metrics` in the Prometheus text format over HTTP (127.0.0.1 without a
       host, a free port for 0): the records and the connections per instance, the publishing calls and the schedule
       slip of the producer, the end-to-end lag histogram of the consumer, the statistics of the connectors and the

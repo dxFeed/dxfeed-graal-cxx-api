@@ -37,6 +37,10 @@ void closeEndpoint(const std::shared_ptr<DXEndpoint> &endpoint) noexcept;
 /// stays connecting, which is a normal state. Returns false and fills `error` on a timeout.
 bool connectEndpoint(DXEndpoint &endpoint, const std::string &name, const std::string &address, std::string &error);
 
+/// Fills the version of QDS and the build of the SDK library in the status (System::getBuildInfo()). A value that the
+/// SDK does not give, or that cannot be read, stays empty, so it is `null` in the summary; the run goes on.
+void readBuildInfo(SummaryStatus &status);
+
 /// The wall clock in nanoseconds since the Unix epoch.
 std::int64_t systemNanos();
 
