@@ -8,7 +8,7 @@
 #include "../../internal/Common.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -22,7 +22,7 @@ void OtcMarketsOrder::fillData(void *graalNative) noexcept {
 
     Order::fillData(graalNative);
 
-    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_v4_otc_markets_order_t *>(graalNative);
 
     otcMarketsOrderData_ = {
         .quoteAccessPayment = graalOtcMarketsOrder->quote_access_payment,
@@ -37,7 +37,7 @@ void OtcMarketsOrder::fillGraalData(void *graalNative) const {
 
     Order::fillGraalData(graalNative);
 
-    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_v4_otc_markets_order_t *>(graalNative);
 
     graalOtcMarketsOrder->order_base.order_base.market_event.event_type.clazz = DXFG_EVENT_OTC_MARKETS_ORDER;
     graalOtcMarketsOrder->quote_access_payment = otcMarketsOrderData_.quoteAccessPayment;
@@ -49,10 +49,10 @@ OtcMarketsOrder::Ptr OtcMarketsOrder::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create OtcMarketsOrder. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OTC_MARKETS_ORDER) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OTC_MARKETS_ORDER) {
         throw InvalidArgumentException(
             fmt::format("Unable to create OtcMarketsOrder. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_OTC_MARKETS_ORDER)));
     }
 
@@ -69,7 +69,7 @@ void *OtcMarketsOrder::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_otc_markets_order_t>(
+    return newGraalEvent<dxfg_v4_otc_markets_order_t>(
         DXFG_EVENT_OTC_MARKETS_ORDER,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -82,14 +82,14 @@ void OtcMarketsOrder::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OTC_MARKETS_ORDER) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OTC_MARKETS_ORDER) {
         throw InvalidArgumentException(
             fmt::format("Unable to free OtcMarketsOrder's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_OTC_MARKETS_ORDER)));
     }
 
-    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_v4_otc_markets_order_t *>(graalNative);
 
     freeGraalData(graalNative);
 

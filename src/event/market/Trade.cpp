@@ -8,7 +8,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -31,7 +31,7 @@ void Trade::fillGraalData(void *graalNative) const {
 
     TradeBase::fillGraalData(graalNative);
 
-    const auto graalTrade = static_cast<dxfg_trade_t *>(graalNative);
+    const auto graalTrade = static_cast<dxfg_v4_trade_t *>(graalNative);
 
     graalTrade->trade_base.market_event.event_type.clazz = DXFG_EVENT_TRADE;
 }
@@ -41,10 +41,10 @@ std::shared_ptr<Trade> Trade::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Trade. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TRADE) {
-        throw InvalidArgumentException(fmt::format("Unable to create Trade. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_TRADE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TRADE) {
+        throw InvalidArgumentException(fmt::format(
+            "Unable to create Trade. Wrong event class {}! Expected: {}.",
+            std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_TRADE)));
     }
 
     auto trade = std::make_shared<Trade>();
@@ -59,7 +59,7 @@ void *Trade::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_trade_t>(
+    return newGraalEvent<dxfg_v4_trade_t>(
         DXFG_EVENT_TRADE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -72,13 +72,13 @@ void Trade::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TRADE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TRADE) {
         throw InvalidArgumentException(fmt::format(
             "Unable to free Trade's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_TRADE)));
+            std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_TRADE)));
     }
 
-    const auto graalTrade = static_cast<dxfg_trade_t *>(graalNative);
+    const auto graalTrade = static_cast<dxfg_v4_trade_t *>(graalNative);
 
     freeGraalData(graalNative);
 

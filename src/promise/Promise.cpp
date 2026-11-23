@@ -8,7 +8,7 @@
 #include "PromiseContext.hpp"
 
 #include <chrono>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <memory>
 #include <optional>
 #include <string>
@@ -158,7 +158,7 @@ std::size_t PromiseListImpl::getSize(void *handle) {
         return {};
     }
 
-    using ListType = dxfg_java_object_handler_list;
+    using ListType = dxfg_v4_java_object_handler_list;
 
     auto list = static_cast<ListType *>(handle);
 
@@ -174,7 +174,7 @@ void *PromiseListImpl::getElement(void *handle, std::size_t index) {
         return {};
     }
 
-    using ListType = dxfg_java_object_handler_list;
+    using ListType = dxfg_v4_java_object_handler_list;
     auto list = static_cast<ListType *>(handle);
 
     return list->elements[index];

@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../internal/Isolate.hpp"
 #include "SdkString.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <cstdint>
 #include <memory>
@@ -24,7 +24,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated {
 
-inline std::string_view toString(dxfg_event_clazz_t eventClazz) {
+inline std::string_view toString(dxfg_v4_event_clazz_t eventClazz) {
     switch (eventClazz) {
     case DXFG_EVENT_QUOTE:
         return "DXFG_EVENT_QUOTE";

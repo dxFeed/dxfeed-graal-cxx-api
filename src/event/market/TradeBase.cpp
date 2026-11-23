@@ -8,7 +8,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -21,7 +21,7 @@ void TradeBase::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalTradeBase = static_cast<dxfg_trade_base_t *>(graalNative);
+    const auto graalTradeBase = static_cast<dxfg_v4_trade_base_t *>(graalNative);
 
     tradeBaseData_ = {
         .timeSequence = graalTradeBase->time_sequence,
@@ -45,7 +45,7 @@ void TradeBase::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalTradeBase = static_cast<dxfg_trade_base_t *>(graalNative);
+    const auto graalTradeBase = static_cast<dxfg_v4_trade_base_t *>(graalNative);
 
     graalTradeBase->time_sequence = tradeBaseData_.timeSequence;
     graalTradeBase->time_nano_part = tradeBaseData_.timeNanoPart;

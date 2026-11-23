@@ -7,11 +7,11 @@
 #include "../../IsolatedCommon.hpp"
 #include "../../internal/IsolatedString.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
-InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state);
+InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_v4_ipf_connection_state_t state);
 
 namespace isolated::ipf::live {
 

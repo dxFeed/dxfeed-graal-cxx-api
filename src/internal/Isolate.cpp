@@ -18,7 +18,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <deque>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <exception>
 #include <iterator>
 #include <memory>

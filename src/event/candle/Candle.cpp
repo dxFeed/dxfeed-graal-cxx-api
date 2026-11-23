@@ -12,7 +12,7 @@
 #include "../../isolated/IsolatedCommon.hpp"
 
 #include <cassert>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 #include <new>
@@ -39,7 +39,7 @@ void Candle::fillData(void *graalNative) {
         return;
     }
 
-    const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+    const auto graalCandle = static_cast<dxfg_v4_candle_t *>(graalNative);
 
     if (graalCandle->event_symbol != nullptr) {
         // The symbol of an event comes from the SDK, not from the user: it gets no hints.
@@ -71,7 +71,7 @@ void Candle::fillGraalData(void *graalNative) const {
         return;
     }
 
-    const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+    const auto graalCandle = static_cast<dxfg_v4_candle_t *>(graalNative);
 
     graalCandle->event_type.clazz = DXFG_EVENT_CANDLE;
     graalCandle->event_symbol = eventSymbol_ ? createCString(eventSymbol_->toString(), "Candle::eventSymbol") : nullptr;
@@ -96,7 +96,7 @@ void Candle::freeGraalData(void *graalNative) noexcept {
         return;
     }
 
-    const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+    const auto graalCandle = static_cast<dxfg_v4_candle_t *>(graalNative);
 
     delete[] graalCandle->event_symbol;
 }
@@ -108,8 +108,8 @@ std::shared_ptr<Candle> Candle::fromGraal(void *graalNative) {
         throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNABLE_TO_CREATE, "Candle", "graalNative"));
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNABLE_TO_CREATE2, "Candle",
                                                    isolated::toString(eventType), std::to_string(eventType),
@@ -129,7 +129,7 @@ void *Candle::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_candle_t>(
+    return newGraalEvent<dxfg_v4_candle_t>(
         DXFG_EVENT_CANDLE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -149,15 +149,15 @@ void Candle::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_CANDLE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNABLE_TO_FREE, "Candle",
                                                    isolated::toString(eventType), std::to_string(eventType),
                                                    isolated::toString(DXFG_EVENT_CANDLE)));
     }
 
-    const auto graalCandle = static_cast<dxfg_candle_t *>(graalNative);
+    const auto graalCandle = static_cast<dxfg_v4_candle_t *>(graalNative);
 
     freeGraalData(graalNative);
 

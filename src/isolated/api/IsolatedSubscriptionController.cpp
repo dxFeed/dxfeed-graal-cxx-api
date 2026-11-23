@@ -7,7 +7,7 @@
 #include "../IsolatedCommon.hpp"
 #include "../util/IsolatedTimePeriod.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <string>
 

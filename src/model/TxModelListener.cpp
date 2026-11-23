@@ -15,9 +15,6 @@
 #include "../isolated/model/IsolatedTimeSeriesTxModel.hpp"
 #include "../isolated/model/IsolatedTxModelListener.hpp"
 
-struct dxfg_indexed_event_source_t;
-struct dxfg_event_type_list;
-
 DXFCPP_BEGIN_NAMESPACE
 
 struct TxModelListenerCommon::Impl {
@@ -25,10 +22,10 @@ struct TxModelListenerCommon::Impl {
         return ApiContext::getInstance().getManager<WeakEntityManager<TxModelListenerCommon, TxModelListenerTag>>();
     }
 
-    // typedef void (*dxfg_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,
-    // dxfg_indexed_event_source_t* source, dxfg_event_type_list* events, int32_t isSnapshot, void* user_data);
-    static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_indexed_event_source_t *source,
-                                 dxfg_event_type_list *events, int32_t isSnapshot, void *userData) {
+    // typedef void (*dxfg_v4_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,
+    // dxfg_v4_indexed_event_source_t* source, dxfg_v4_event_type_list* events, int32_t isSnapshot, void* user_data);
+    static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_v4_indexed_event_source_t *source,
+                                 dxfg_v4_event_type_list *events, int32_t isSnapshot, void *userData) {
         runCallback("TxModelListener", [&] {
             if (!source || !events) {
                 return;

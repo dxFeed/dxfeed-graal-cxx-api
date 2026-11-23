@@ -8,14 +8,14 @@
 #include "../../internal/managers/EntityManager.hpp"
 #include "../../isolated/api/osub/IsolatedObservableSubscriptionChangeListener.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 using ObservableSubscriptionChangeListenerManager = WeakEntityManager<ObservableSubscriptionChangeListener>;
 
 struct ObservableSubscriptionChangeListener::Impl {
-    static void onSymbolsAdded(graal_isolatethread_t * /* thread */, dxfg_symbol_list *symbols, void *userData) {
+    static void onSymbolsAdded(graal_isolatethread_t * /* thread */, dxfg_v4_symbol_list *symbols, void *userData) {
         runCallback("ObservableSubscriptionChangeListener", [&] {
             if (!symbols) {
                 return;
@@ -34,7 +34,7 @@ struct ObservableSubscriptionChangeListener::Impl {
         });
     }
 
-    static void onSymbolsRemoved(graal_isolatethread_t * /* thread */, dxfg_symbol_list *symbols, void *userData) {
+    static void onSymbolsRemoved(graal_isolatethread_t * /* thread */, dxfg_v4_symbol_list *symbols, void *userData) {
         runCallback("ObservableSubscriptionChangeListener", [&] {
             if (!symbols) {
                 return;

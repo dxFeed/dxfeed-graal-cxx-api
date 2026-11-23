@@ -37,7 +37,7 @@
 
 #include <cstdint>
 #include <cstring>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <map>
 #include <string>
@@ -46,9 +46,9 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace {
 
-// The class of a native event as an integer: a newer SDK can send a class that dxfg_event_clazz_t does not have, and
+// The class of a native event as an integer: a newer SDK can send a class that dxfg_v4_event_clazz_t does not have, and
 // loading such a value as the enum is undefined behaviour.
-std::int32_t eventClass(const dxfg_event_type_t *event) noexcept {
+std::int32_t eventClass(const dxfg_v4_event_type_t *event) noexcept {
     std::int32_t clazz{};
 
     static_assert(sizeof(clazz) == sizeof(event->clazz));
@@ -85,7 +85,7 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
     }
 
     // TODO: implement other types [EN-8235]
-    switch (auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNativeEvent); eventClass(e)) {
+    switch (auto *e = dxfcpp::bit_cast<dxfg_v4_event_type_t *>(graalNativeEvent); eventClass(e)) {
     case DXFG_EVENT_QUOTE:
         return Quote::fromGraal(e);
     case DXFG_EVENT_PROFILE:
@@ -146,7 +146,7 @@ std::shared_ptr<EventType> EventMapper::fromGraal(void *graalNativeEvent) {
 }
 
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalListSkippingErrors(void *graalNativeList) {
-    const auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
+    const auto list = static_cast<dxfg_v4_event_type_list *>(graalNativeList);
 
     if (list == nullptr || list->size <= 0) {
         return {};
@@ -163,7 +163,7 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalListSkippingErrors
     result.reserve(static_cast<std::size_t>(list->size));
 
     for (std::size_t i = 0; i < static_cast<std::size_t>(list->size); i++) {
-        auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(list->elements[i]);
+        auto *e = dxfcpp::bit_cast<dxfg_v4_event_type_t *>(list->elements[i]);
 
         if (e == nullptr) {
             continue;
@@ -199,7 +199,7 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalListSkippingErrors
 }
 
 std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNativeList) {
-    const auto list = static_cast<dxfg_event_type_list *>(graalNativeList);
+    const auto list = static_cast<dxfg_v4_event_type_list *>(graalNativeList);
 
     if (list == nullptr || list->size <= 0) {
         return {};
@@ -223,7 +223,7 @@ void EventMapper::freeGraal(void *graalNativeEvent) {
     }
 
     // TODO: implement other types [EN-8235]
-    switch (auto *e = dxfcpp::bit_cast<dxfg_event_type_t *>(graalNativeEvent); eventClass(e)) {
+    switch (auto *e = dxfcpp::bit_cast<dxfg_v4_event_type_t *>(graalNativeEvent); eventClass(e)) {
     case DXFG_EVENT_QUOTE:
         Quote::freeGraal(e);
 
@@ -340,7 +340,7 @@ void EventMapper::freeGraalList(void *graalList) {
         Debugger::debug("EventMapper::freeGraalList(graalList = " + toStringAny(graalList) + ")");
     }
 
-    using ListType = dxfg_event_type_list;
+    using ListType = dxfg_v4_event_type_list;
     using SizeType = decltype(ListType::size);
 
     if (graalList == nullptr) {
@@ -361,7 +361,7 @@ void EventMapper::freeGraalList(void *graalList) {
 }
 
 std::ptrdiff_t EventMapper::calculateGraalListSize(std::ptrdiff_t initSize) noexcept {
-    using ListType = dxfg_event_type_list;
+    using ListType = dxfg_v4_event_type_list;
     using SizeType = decltype(ListType::size);
 
     if (initSize < 0) {
@@ -376,9 +376,9 @@ std::ptrdiff_t EventMapper::calculateGraalListSize(std::ptrdiff_t initSize) noex
 }
 
 void *EventMapper::newGraalList(std::ptrdiff_t size) {
-    using ListType = dxfg_event_type_list;
+    using ListType = dxfg_v4_event_type_list;
     using SizeType = decltype(ListType::size);
-    using ElementType = dxfg_event_type_t;
+    using ElementType = dxfg_v4_event_type_t;
 
     auto *list = new ListType{static_cast<SizeType>(size), nullptr};
 
@@ -394,9 +394,9 @@ void *EventMapper::newGraalList(std::ptrdiff_t size) {
 }
 
 bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx, void *element) noexcept {
-    using ListType = dxfg_event_type_list;
+    using ListType = dxfg_v4_event_type_list;
     using SizeType = decltype(ListType::size);
-    using ElementType = dxfg_event_type_t;
+    using ElementType = dxfg_v4_event_type_t;
 
     if (graalList == nullptr || elementIdx < 0 || elementIdx >= std::numeric_limits<SizeType>::max() ||
         element == nullptr) {
@@ -409,7 +409,7 @@ bool EventMapper::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx
 }
 
 bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
-    using ListType = dxfg_event_type_list;
+    using ListType = dxfg_v4_event_type_list;
     using SizeType = decltype(ListType::size);
 
     if (graalList == nullptr || count < 0 || count >= std::numeric_limits<SizeType>::max()) {

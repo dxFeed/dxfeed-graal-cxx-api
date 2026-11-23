@@ -4,15 +4,15 @@
 #include "../../include/dxfeed_graal_cpp_api/event/IndexedEventSource.hpp"
 #include "../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 constinit const IndexedEventSource IndexedEventSource::DEFAULT{0, ConstString::Literal{"DEFAULT"}};
 
 void *IndexedEventSource::toGraal() const {
-    auto *graalSource = new dxfg_indexed_event_source_t{orderSource_ ? ORDER_SOURCE : INDEXED_EVENT_SOURCE, id_,
-                                                        createCString(name_.view(), "IndexedEventSource(name)")};
+    auto *graalSource = new dxfg_v4_indexed_event_source_t{orderSource_ ? ORDER_SOURCE : INDEXED_EVENT_SOURCE, id_,
+                                                           createCString(name_.view(), "IndexedEventSource(name)")};
 
     return graalSource;
 }
@@ -22,7 +22,7 @@ void IndexedEventSource::freeGraal(void *graalNative) {
         return;
     }
 
-    const auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
+    const auto *graalSource = static_cast<dxfg_v4_indexed_event_source_t *>(graalNative);
 
     delete[] graalSource->name;
     delete graalSource;
@@ -33,7 +33,7 @@ std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> IndexedEventSour
 }
 
 IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) {
-    auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
+    auto *graalSource = static_cast<dxfg_v4_indexed_event_source_t *>(graalNative);
 
     if (graalSource == nullptr) {
         return {};

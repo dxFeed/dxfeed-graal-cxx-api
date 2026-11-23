@@ -26,7 +26,7 @@
 #include <cctype>
 #include <chrono>
 #include <cstdint>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <exception>
 #include <filesystem>
 #include <memory>
@@ -216,8 +216,8 @@ struct DXEndpoint::Impl {
         releaseOutsideCallbacks(std::move(released));
     }
 
-    static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
-                                 dxfg_endpoint_state_t newState, void *userData) {
+    static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_v4_endpoint_state_t oldState,
+                                 dxfg_v4_endpoint_state_t newState, void *userData) {
         runCallback("DXEndpoint", [&] {
             const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
             auto endpoint = getManager()->getEntity(id);

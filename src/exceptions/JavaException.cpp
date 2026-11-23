@@ -7,7 +7,7 @@
 #include "../internal/Isolate.hpp"
 #include "../isolated/IsolatedCommon.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE

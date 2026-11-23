@@ -81,7 +81,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     std::optional<CandleSymbol> eventSymbol_{};
 
     struct Data {
-        // dxfg_event_type_t event_type;
+        // dxfg_v4_event_type_t event_type;
         // const char *event_symbol;
         std::int64_t eventTime{};
         std::int32_t eventFlags{};

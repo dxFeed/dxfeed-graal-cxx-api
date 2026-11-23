@@ -10,7 +10,7 @@
 #include "../../internal/Common.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -25,7 +25,7 @@ void Underlying::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
+    auto graalUnderlying = static_cast<dxfg_v4_underlying_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalUnderlying->event_flags,
@@ -46,7 +46,7 @@ void Underlying::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
+    const auto graalUnderlying = static_cast<dxfg_v4_underlying_t *>(graalNative);
 
     graalUnderlying->market_event.event_type.clazz = DXFG_EVENT_UNDERLYING;
     graalUnderlying->event_flags = data_.eventFlags;
@@ -64,10 +64,11 @@ std::shared_ptr<Underlying> Underlying::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Underlying. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
-        throw InvalidArgumentException(fmt::format("Unable to create Underlying. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_UNDERLYING)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create Underlying. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_UNDERLYING)));
     }
 
     auto underlying = std::make_shared<Underlying>();
@@ -83,7 +84,7 @@ void *Underlying::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_underlying_t>(
+    return newGraalEvent<dxfg_v4_underlying_t>(
         DXFG_EVENT_UNDERLYING,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -96,14 +97,14 @@ void Underlying::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
         throw InvalidArgumentException(
             fmt::format("Unable to free Underlying's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_UNDERLYING)));
     }
 
-    const auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
+    const auto graalUnderlying = static_cast<dxfg_v4_underlying_t *>(graalNative);
 
     freeGraalData(graalNative);
 

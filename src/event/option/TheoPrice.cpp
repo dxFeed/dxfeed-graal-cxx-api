@@ -10,7 +10,7 @@
 #include "../../internal/Common.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -25,7 +25,7 @@ void TheoPrice::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);
+    const auto graalTheoPrice = static_cast<dxfg_v4_theo_price_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalTheoPrice->event_flags,
@@ -46,7 +46,7 @@ void TheoPrice::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);
+    auto graalTheoPrice = static_cast<dxfg_v4_theo_price_t *>(graalNative);
 
     graalTheoPrice->market_event.event_type.clazz = DXFG_EVENT_THEO_PRICE;
     graalTheoPrice->event_flags = data_.eventFlags;
@@ -64,10 +64,11 @@ std::shared_ptr<TheoPrice> TheoPrice::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create TheoPrice. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_THEO_PRICE) {
-        throw InvalidArgumentException(fmt::format("Unable to create TheoPrice. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_THEO_PRICE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_THEO_PRICE) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create TheoPrice. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_THEO_PRICE)));
     }
 
     auto theoPrice = std::make_shared<TheoPrice>();
@@ -83,7 +84,7 @@ void *TheoPrice::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_theo_price_t>(
+    return newGraalEvent<dxfg_v4_theo_price_t>(
         DXFG_EVENT_THEO_PRICE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -96,14 +97,14 @@ void TheoPrice::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_THEO_PRICE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_THEO_PRICE) {
         throw InvalidArgumentException(
             fmt::format("Unable to free TheoPrice's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_THEO_PRICE)));
     }
 
-    const auto graalTheoPrice = static_cast<dxfg_theo_price_t *>(graalNative);
+    const auto graalTheoPrice = static_cast<dxfg_v4_theo_price_t *>(graalNative);
 
     freeGraalData(graalNative);
 

@@ -10,7 +10,7 @@
 #include "../../internal/utils/StringConstants.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 #include <optional>
@@ -27,7 +27,7 @@ void NuamOrder::fillData(void *graalNative) noexcept {
 
     Order::fillData(graalNative);
 
-    const auto graalNuamOrder = static_cast<dxfg_nuam_order_t *>(graalNative);
+    const auto graalNuamOrder = static_cast<dxfg_v4_nuam_order_t *>(graalNative);
 
     nuamOrderData_ = {
         .actorId = graalNuamOrder->actor_id,
@@ -58,7 +58,7 @@ void NuamOrder::fillGraalData(void *graalNative) const {
 
     Order::fillGraalData(graalNative);
 
-    const auto graalNuamOrder = static_cast<dxfg_nuam_order_t *>(graalNative);
+    const auto graalNuamOrder = static_cast<dxfg_v4_nuam_order_t *>(graalNative);
 
     graalNuamOrder->order_base.order_base.market_event.event_type.clazz = DXFG_EVENT_NUAM_ORDER;
     graalNuamOrder->actor_id = nuamOrderData_.actorId;
@@ -88,7 +88,7 @@ void NuamOrder::freeGraalData(void *graalNative) noexcept {
 
     Order::freeGraalData(graalNative);
 
-    const auto graalNuamOrder = static_cast<dxfg_nuam_order_t *>(graalNative);
+    const auto graalNuamOrder = static_cast<dxfg_v4_nuam_order_t *>(graalNative);
 
     delete[] graalNuamOrder->client_order_id;
     delete[] graalNuamOrder->customer_account;
@@ -101,8 +101,8 @@ NuamOrder::Ptr NuamOrder::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create NuamOrder. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_ORDER) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_ORDER) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format("Unable to create NuamOrder. Wrong event class {}({})! Expected: {}",
                                                    isolated::toString(eventType), std::to_string(eventType),
@@ -122,7 +122,7 @@ void *NuamOrder::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_nuam_order_t>(
+    return newGraalEvent<dxfg_v4_nuam_order_t>(
         DXFG_EVENT_NUAM_ORDER,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -135,15 +135,15 @@ void NuamOrder::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_ORDER) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_ORDER) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to free NuamOrder's Graal data. Wrong event class {}({})! Expected: {}",
             isolated::toString(eventType), std::to_string(eventType), isolated::toString(DXFG_EVENT_NUAM_ORDER)));
     }
 
-    const auto graalNuamOrder = static_cast<dxfg_nuam_order_t *>(graalNative);
+    const auto graalNuamOrder = static_cast<dxfg_v4_nuam_order_t *>(graalNative);
 
     freeGraalData(graalNative);
 

@@ -28,7 +28,7 @@
 #include <chrono>
 #include <condition_variable>
 #include <cstdint>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <exception>
 #include <fmt/format.h>
 #include <fmt/ranges.h>
@@ -559,7 +559,8 @@ struct DXFeedSubscription::Impl {
         return generation;
     }
 
-    static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
+    static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_v4_event_type_list *graalNativeEvents,
+                         void *userData) {
         runCallback("DXFeedSubscription", [&] {
 #if defined(DXFCXX_ENABLE_METRICS)
             StopWatch sw{};

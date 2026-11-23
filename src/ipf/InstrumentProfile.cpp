@@ -5,7 +5,7 @@
 
 #include "../isolated/ipf/IsolatedInstrumentProfile.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <memory>
 #include <utility>
 
@@ -335,7 +335,7 @@ InstrumentProfile::Ptr InstrumentProfile::create(JavaObjectHandle<InstrumentProf
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfile::List::fromGraal(void *graalList) {
-    using ListType = dxfg_instrument_profile_list;
+    using ListType = dxfg_v4_instrument_profile_list;
     using SizeType = decltype(ListType::size);
 
     if (!graalList) {

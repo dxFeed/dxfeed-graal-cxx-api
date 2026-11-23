@@ -11,7 +11,7 @@
 #include "../../internal/Common.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -24,7 +24,7 @@ void Message::fillData(void *graalNative) {
         return;
     }
 
-    auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
+    auto graalMessage = static_cast<dxfg_v4_message_t *>(graalNative);
 
     setEventTime(graalMessage->event_time);
 
@@ -42,7 +42,7 @@ void Message::fillGraalData(void *graalNative) const {
         return;
     }
 
-    const auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
+    const auto graalMessage = static_cast<dxfg_v4_message_t *>(graalNative);
 
     graalMessage->event_type.clazz = DXFG_EVENT_MESSAGE;
     graalMessage->event_symbol = createCString(eventSymbol_, "Message::eventSymbol");
@@ -55,7 +55,7 @@ void Message::freeGraalData(void *graalNative) noexcept {
         return;
     }
 
-    const auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
+    const auto graalMessage = static_cast<dxfg_v4_message_t *>(graalNative);
 
     delete[] graalMessage->event_symbol;
 
@@ -69,10 +69,11 @@ std::shared_ptr<Message> Message::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Message. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MESSAGE) {
-        throw InvalidArgumentException(fmt::format("Unable to create Message. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_MESSAGE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MESSAGE) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create Message. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_MESSAGE)));
     }
 
     auto message = std::make_shared<Message>();
@@ -88,7 +89,7 @@ void *Message::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_message_t>(
+    return newGraalEvent<dxfg_v4_message_t>(
         DXFG_EVENT_MESSAGE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -101,13 +102,14 @@ void Message::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MESSAGE) {
-        throw InvalidArgumentException(fmt::format(
-            "Unable to free Message's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_MESSAGE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MESSAGE) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to free Message's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_MESSAGE)));
     }
 
-    auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
+    auto graalMessage = static_cast<dxfg_v4_message_t *>(graalNative);
 
     freeGraalData(graalNative);
 

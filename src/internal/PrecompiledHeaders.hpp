@@ -7,7 +7,7 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4996)
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #ifdef __cpp_lib_bit_cast
 #    include <bit>

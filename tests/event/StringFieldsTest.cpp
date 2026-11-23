@@ -7,7 +7,7 @@
 #include <doctest.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <optional>
 #include <string>
@@ -97,8 +97,8 @@ TEST_CASE("The event symbol is passed to the SDK as null when unset and as text 
     SUBCASE("A market event") {
         const Profile noSymbol{};
         const Profile textSymbol{"<null>"};
-        auto *noSymbolGraal = static_cast<dxfg_profile_t *>(noSymbol.toGraal());
-        auto *textSymbolGraal = static_cast<dxfg_profile_t *>(textSymbol.toGraal());
+        auto *noSymbolGraal = static_cast<dxfg_v4_profile_t *>(noSymbol.toGraal());
+        auto *textSymbolGraal = static_cast<dxfg_v4_profile_t *>(textSymbol.toGraal());
 
         CHECK(textOf(noSymbolGraal->market_event.event_symbol) == std::nullopt);
         CHECK(textOf(textSymbolGraal->market_event.event_symbol) == "<null>");
@@ -112,8 +112,8 @@ TEST_CASE("The event symbol is passed to the SDK as null when unset and as text 
     SUBCASE("A candle") {
         const Candle noSymbol{};
         const Candle textSymbol{CandleSymbol::valueOf("<null>")};
-        auto *noSymbolGraal = static_cast<dxfg_candle_t *>(noSymbol.toGraal());
-        auto *textSymbolGraal = static_cast<dxfg_candle_t *>(textSymbol.toGraal());
+        auto *noSymbolGraal = static_cast<dxfg_v4_candle_t *>(noSymbol.toGraal());
+        auto *textSymbolGraal = static_cast<dxfg_v4_candle_t *>(textSymbol.toGraal());
 
         CHECK(textOf(noSymbolGraal->event_symbol) == std::nullopt);
         CHECK(textOf(textSymbolGraal->event_symbol) == "<null>");
@@ -131,7 +131,7 @@ TEST_CASE("A string field with the text \"<null>\" is passed to the SDK and back
 
         profile.setDescription("<null>");
 
-        auto *graal = static_cast<dxfg_profile_t *>(profile.toGraal());
+        auto *graal = static_cast<dxfg_v4_profile_t *>(profile.toGraal());
 
         CHECK(textOf(graal->description) == "<null>");
         CHECK(textOf(graal->status_reason) == std::nullopt);
@@ -146,7 +146,7 @@ TEST_CASE("A string field with the text \"<null>\" is passed to the SDK and back
 
     SUBCASE("TextConfiguration") {
         const TextConfiguration configuration{"AAPL", "<null>"};
-        auto *graal = static_cast<dxfg_text_configuration_t *>(configuration.toGraal());
+        auto *graal = static_cast<dxfg_v4_text_configuration_t *>(configuration.toGraal());
 
         CHECK(textOf(graal->text) == "<null>");
 
@@ -160,22 +160,22 @@ TEST_CASE("A string field with the text \"<null>\" is passed to the SDK and back
 
 TEST_CASE("Message, TextMessage and TextConfiguration keep null apart from \"<null>\" in the symbol and the text") {
     SUBCASE("Message") {
-        checkNullAndNullText<dxfg_message_t, Message>(
+        checkNullAndNullText<dxfg_v4_message_t, Message>(
             [](auto &e, auto &&v) { e.setAttachment(std::forward<decltype(v)>(v)); },
-            [](const dxfg_message_t *g) { return static_cast<const char *>(g->attachment); },
+            [](const dxfg_v4_message_t *g) { return static_cast<const char *>(g->attachment); },
             [](const auto &e) { return e.getAttachmentOpt(); });
     }
 
     SUBCASE("TextMessage") {
-        checkNullAndNullText<dxfg_text_message_t, TextMessage>(
+        checkNullAndNullText<dxfg_v4_text_message_t, TextMessage>(
             [](auto &e, auto &&v) { e.setText(std::forward<decltype(v)>(v)); },
-            [](const dxfg_text_message_t *g) { return g->text; }, [](const auto &e) { return e.getTextOpt(); });
+            [](const dxfg_v4_text_message_t *g) { return g->text; }, [](const auto &e) { return e.getTextOpt(); });
     }
 
     SUBCASE("TextConfiguration") {
-        checkNullAndNullText<dxfg_text_configuration_t, TextConfiguration>(
+        checkNullAndNullText<dxfg_v4_text_configuration_t, TextConfiguration>(
             [](auto &e, auto &&v) { e.setText(std::forward<decltype(v)>(v)); },
-            [](const dxfg_text_configuration_t *g) { return g->text; },
+            [](const dxfg_v4_text_configuration_t *g) { return g->text; },
             [](const auto &e) { return e.getTextOpt(); });
     }
 }

@@ -11,7 +11,7 @@
 #include "../../internal/utils/StringConstants.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -24,7 +24,7 @@ void TextConfiguration::fillData(void *graalNative) {
         return;
     }
 
-    const auto graalConfiguration = static_cast<dxfg_text_configuration_t *>(graalNative);
+    const auto graalConfiguration = static_cast<dxfg_v4_text_configuration_t *>(graalNative);
 
     eventSymbol_ = toStringOpt(graalConfiguration->event_symbol);
     eventTime_ = graalConfiguration->event_time;
@@ -38,7 +38,7 @@ void TextConfiguration::fillGraalData(void *graalNative) const {
         return;
     }
 
-    const auto graalConfiguration = static_cast<dxfg_text_configuration_t *>(graalNative);
+    const auto graalConfiguration = static_cast<dxfg_v4_text_configuration_t *>(graalNative);
 
     graalConfiguration->event_type.clazz = DXFG_EVENT_TEXT_CONFIGURATION;
     graalConfiguration->event_symbol = createCString(eventSymbol_, "TextConfiguration::eventSymbol");
@@ -53,7 +53,7 @@ void TextConfiguration::freeGraalData(void *graalNative) noexcept {
         return;
     }
 
-    const auto graalConfiguration = static_cast<dxfg_text_configuration_t *>(graalNative);
+    const auto graalConfiguration = static_cast<dxfg_v4_text_configuration_t *>(graalNative);
 
     delete[] graalConfiguration->event_symbol;
     delete[] graalConfiguration->text;
@@ -64,8 +64,8 @@ std::shared_ptr<TextConfiguration> TextConfiguration::fromGraal(void *graalNativ
         throw InvalidArgumentException("Unable to create TextConfiguration. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TEXT_CONFIGURATION) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TEXT_CONFIGURATION) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to create TextConfiguration. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
@@ -85,7 +85,7 @@ void *TextConfiguration::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_text_configuration_t>(
+    return newGraalEvent<dxfg_v4_text_configuration_t>(
         DXFG_EVENT_TEXT_CONFIGURATION,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -98,8 +98,8 @@ void TextConfiguration::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TEXT_CONFIGURATION) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TEXT_CONFIGURATION) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(
             fmt::format("Unable to free TextConfiguration's Graal data. Wrong event class {}({})! Expected: {}",
@@ -107,7 +107,7 @@ void TextConfiguration::freeGraal(void *graalNative) {
                         isolated::toString(DXFG_EVENT_TEXT_CONFIGURATION)));
     }
 
-    const auto graalConfiguration = static_cast<dxfg_text_configuration_t *>(graalNative);
+    const auto graalConfiguration = static_cast<dxfg_v4_text_configuration_t *>(graalNative);
 
     freeGraalData(graalNative);
 

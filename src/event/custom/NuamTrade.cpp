@@ -10,7 +10,7 @@
 #include "../../internal/utils/JavaUtils.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 #include <string>
@@ -26,7 +26,7 @@ void NuamTrade::fillData(void *graalNative) noexcept {
 
     Trade::fillData(graalNative);
 
-    const auto graalNuamTrade = static_cast<dxfg_nuam_trade_t *>(graalNative);
+    const auto graalNuamTrade = static_cast<dxfg_v4_nuam_trade_t *>(graalNative);
 
     nuamTradeData_ = {
         .tradeStatTime = graalNuamTrade->trade_stat_time,
@@ -44,7 +44,7 @@ void NuamTrade::fillGraalData(void *graalNative) const {
 
     Trade::fillGraalData(graalNative);
 
-    const auto graalNuamTrade = static_cast<dxfg_nuam_trade_t *>(graalNative);
+    const auto graalNuamTrade = static_cast<dxfg_v4_nuam_trade_t *>(graalNative);
 
     graalNuamTrade->trade_base.trade_base.market_event.event_type.clazz = DXFG_EVENT_NUAM_TRADE;
     graalNuamTrade->trade_stat_time = nuamTradeData_.tradeStatTime;
@@ -59,8 +59,8 @@ NuamTrade::Ptr NuamTrade::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create NuamTrade. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_TRADE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_TRADE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format("Unable to create NuamTrade. Wrong event class {}({})! Expected: {}",
                                                    isolated::toString(eventType), std::to_string(eventType),
@@ -80,7 +80,7 @@ void *NuamTrade::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_nuam_trade_t>(
+    return newGraalEvent<dxfg_v4_nuam_trade_t>(
         DXFG_EVENT_NUAM_TRADE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -93,15 +93,15 @@ void NuamTrade::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_TRADE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_TRADE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to free NuamTrade's Graal data. Wrong event class {}({})! Expected: {}",
             isolated::toString(eventType), std::to_string(eventType), isolated::toString(DXFG_EVENT_NUAM_TRADE)));
     }
 
-    const auto graalNuamTrade = static_cast<dxfg_nuam_trade_t *>(graalNative);
+    const auto graalNuamTrade = static_cast<dxfg_v4_nuam_trade_t *>(graalNative);
 
     freeGraalData(graalNative);
 

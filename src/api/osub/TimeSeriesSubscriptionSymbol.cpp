@@ -6,7 +6,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -24,10 +24,10 @@ void *TimeSeriesSubscriptionSymbol::toGraal() const {
         Debugger::debug("TimeSeriesSubscriptionSymbol::toGraal()");
     }
 
-    auto *graalSymbol =
-        new dxfg_time_series_subscription_symbol_t{.supper = {.type = TIME_SERIES_SUBSCRIPTION},
-                                                   .symbol = static_cast<dxfg_symbol_t *>(getEventSymbol()->toGraal()),
-                                                   .from_time = fromTime_};
+    auto *graalSymbol = new dxfg_v4_time_series_subscription_symbol_t{
+        .supper = {.type = TIME_SERIES_SUBSCRIPTION},
+        .symbol = static_cast<dxfg_v4_symbol_t *>(getEventSymbol()->toGraal()),
+        .from_time = fromTime_};
 
     return static_cast<void *>(graalSymbol);
 }
@@ -42,7 +42,7 @@ void TimeSeriesSubscriptionSymbol::freeGraal(void *graalNative) {
         return;
     }
 
-    auto *graalSymbol = static_cast<dxfg_time_series_subscription_symbol_t *>(graalNative);
+    auto *graalSymbol = static_cast<dxfg_v4_time_series_subscription_symbol_t *>(graalNative);
 
     SymbolWrapper::freeGraal(graalSymbol->symbol);
 
@@ -60,7 +60,7 @@ TimeSeriesSubscriptionSymbol TimeSeriesSubscriptionSymbol::fromGraal(void *graal
             "Unable to create TimeSeriesSubscriptionSymbol. The `graalNative` parameter is nullptr");
     }
 
-    auto *graalSymbol = static_cast<dxfg_time_series_subscription_symbol_t *>(graalNative);
+    auto *graalSymbol = static_cast<dxfg_v4_time_series_subscription_symbol_t *>(graalNative);
 
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), graalSymbol->from_time};
 }

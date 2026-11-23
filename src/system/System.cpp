@@ -10,7 +10,7 @@
 #include "../isolated/IsolatedCommon.hpp"
 #include "../isolated/internal/IsolatedString.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 #include <cstdint>

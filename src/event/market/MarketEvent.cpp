@@ -6,7 +6,7 @@
 #include "../../internal/utils/StringConstants.hpp"
 #include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <cstdint>
 #include <string>
@@ -54,7 +54,7 @@ void MarketEvent::fillData(void *graalNative) noexcept {
         return;
     }
 
-    const auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
+    const auto graalMarketEvent = static_cast<dxfg_v4_market_event_t *>(graalNative);
 
     eventSymbol_ = toStringOpt(graalMarketEvent->event_symbol);
     setEventTime(graalMarketEvent->event_time);
@@ -65,7 +65,7 @@ void MarketEvent::fillGraalData(void *graalNative) const {
         return;
     }
 
-    const auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
+    const auto graalMarketEvent = static_cast<dxfg_v4_market_event_t *>(graalNative);
 
     // The class is set by toGraal() of the event type before the fill (newGraalEvent()).
     graalMarketEvent->event_symbol =
@@ -78,7 +78,7 @@ void MarketEvent::freeGraalData(void *graalNative) noexcept {
         return;
     }
 
-    const auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
+    const auto graalMarketEvent = static_cast<dxfg_v4_market_event_t *>(graalNative);
 
     delete[] graalMarketEvent->event_symbol;
 }

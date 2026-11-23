@@ -5,30 +5,30 @@
 #include "../internal/utils/debug/Debug.hpp"
 #include "../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 std::ptrdiff_t SymbolWrapper::SymbolListUtils::calculateGraalListSize(std::ptrdiff_t initSize) noexcept {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::calculateSize(initSize);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::calculateSize(initSize);
 }
 
 void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::newList(size);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::newList(size);
 }
 
 bool SymbolWrapper::SymbolListUtils::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx,
                                                          void *element) noexcept {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::setElement(graalList, elementIdx, element);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::setElement(graalList, elementIdx, element);
 }
 
 bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::freeElements(graalList, count);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::freeElements(graalList, count);
 }
 
 void SymbolWrapper::SymbolListUtils::freeGraalList(void *graalList) {
-    GraalListUtils<dxfg_symbol_list, SymbolWrapper>::freeList(graalList);
+    GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::freeList(graalList);
 }
 
 std::unique_ptr<void, decltype(&SymbolWrapper::SymbolListUtils::freeGraalList)>
@@ -37,7 +37,7 @@ SymbolWrapper::SymbolListUtils::toGraalListUnique(std::initializer_list<SymbolWr
 }
 
 std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *graalList) {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::fromList(graalList);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::fromList(graalList);
 }
 
 SymbolWrapper::SymbolWrapper(const SymbolWrapper &) noexcept = default;
@@ -98,7 +98,7 @@ void SymbolWrapper::freeGraal(void *graalNative) {
         return;
     }
 
-    switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
+    switch (static_cast<dxfg_v4_symbol_t *>(graalNative)->type) {
     case STRING:
         StringSymbol::freeGraal(graalNative);
 
@@ -136,7 +136,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create SymbolWrapper. The `graalNative` parameter is nullptr");
     }
 
-    switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
+    switch (static_cast<dxfg_v4_symbol_t *>(graalNative)->type) {
     case STRING:
         return StringSymbol::fromGraal(graalNative);
 
@@ -154,7 +154,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
 
     default:
         throw RuntimeException(fmt::format("Unable to create SymbolWrapper. Unknown symbol type: {}",
-                                           static_cast<int>(static_cast<dxfg_symbol_t *>(graalNative)->type)));
+                                           static_cast<int>(static_cast<dxfg_v4_symbol_t *>(graalNative)->type)));
     }
 }
 
