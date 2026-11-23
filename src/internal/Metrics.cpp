@@ -162,14 +162,8 @@ std::string MetricsManager::dump() {
         }
     }
 
-    const auto dxfgMetrics = isolated::metrics::IsolatedMetrics::dump();
-
-    result += dxfgMetrics;
-
     if (!result.empty()) {
-        if (dxfgMetrics.empty()) {
-            return result.substr(0, result.size() - 1);
-        }
+        return result.substr(0, result.size() - 1);
     }
 
     return result;

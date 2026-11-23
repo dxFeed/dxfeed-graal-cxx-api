@@ -455,7 +455,6 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/ipf/live/IsolatedInstrumentProfileCollector.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
         src/isolated/logging/IsolatedLogging.cpp
-        src/isolated/metrics/IsolatedMetrics.cpp
         src/isolated/model/IsolatedTxModelListener.cpp
         src/isolated/model/IsolatedIndexedTxModel.cpp
         src/isolated/model/IsolatedIndexedEventTxModel.cpp
