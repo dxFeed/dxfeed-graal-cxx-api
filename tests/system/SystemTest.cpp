@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <chrono>
+#include <regex>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -263,4 +264,41 @@ TEST_CASE("Runtime statistics of the isolate are read on the Serial GC") {
 
     CHECK(second.uptimeMs > first.uptimeMs);
     CHECK(second.heapMaxBytes > 0);
+}
+
+TEST_CASE("The build info of the SDK library gives the version of QDS, the runtime, the machine and the GCs") {
+    using namespace dxfcpp;
+
+    const auto qdVersion = System::getBuildInfo(System::BUILD_INFO_QD_VERSION);
+
+    REQUIRE(qdVersion.has_value());
+    // For example 3.358: the digits of the version start it.
+    CHECK(std::regex_search(*qdVersion, std::regex{R"(^\d+\.\d+)"}));
+
+    const auto vendor = System::getBuildInfo(System::BUILD_INFO_VENDOR);
+
+    REQUIRE(vendor.has_value());
+    CHECK_FALSE(vendor->empty());
+
+    // The desktop libraries are built for a target machine; only the iOS ones have none.
+    const auto march = System::getBuildInfo(System::BUILD_INFO_MARCH);
+
+    REQUIRE(march.has_value());
+    CHECK_FALSE(march->empty());
+
+    const auto gc = System::getBuildInfo(System::BUILD_INFO_GC);
+
+    REQUIRE(gc.has_value());
+    CHECK_FALSE(gc->empty());
+
+    CHECK(System::getBuildInfo(std::string{System::BUILD_INFO_QD_VERSION}) == qdVersion);
+}
+
+TEST_CASE("The build info of an unknown or an empty key is empty, of an invalid key throws") {
+    using namespace dxfcpp;
+
+    CHECK_FALSE(System::getBuildInfo("no_such_key").has_value());
+    CHECK_FALSE(System::getBuildInfo("").has_value());
+    CHECK_THROWS_WITH_AS(System::getBuildInfo("qd_version\xff"),
+                         "System::getBuildInfo(key): invalid UTF-8 at byte 10: 0xFF", InvalidArgumentException);
 }

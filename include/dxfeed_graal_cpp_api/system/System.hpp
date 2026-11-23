@@ -11,6 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./RuntimeStatistics.hpp"
 
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -166,6 +167,47 @@ struct DXFCPP_EXPORT System {
      * the library is shut down (dxfcpp::shutdown()).
      */
     static RuntimeStatistics getRuntimeStatistics();
+
+    /// The key of getBuildInfo() for the version of QDS that the Graal Native SDK library is built with, e.g. `3.358`.
+    static constexpr char BUILD_INFO_QD_VERSION[] = "qd_version";
+
+    /// The key of getBuildInfo() for the vendor and the version of the runtime that the Graal Native SDK library is
+    /// built with, e.g. `GraalVM CE 25.0.1+8.1`.
+    static constexpr char BUILD_INFO_VENDOR[] = "vendor";
+
+    /// The key of getBuildInfo() for the target machine of the build of the Graal Native SDK library (`-march` of
+    /// native-image), e.g. `compatibility` (the baseline CPU of the architecture) or `x86-64-v3`. The iOS libraries have
+    /// no value.
+    static constexpr char BUILD_INFO_MARCH[] = "march";
+
+    /// The key of getBuildInfo() for the garbage collectors of the runtime of the Graal Native SDK library, separated by
+    /// `, `.
+    static constexpr char BUILD_INFO_GC[] = "gc";
+
+    /**
+     * Returns a value that tells how the Graal Native SDK library was built and what runs it: the version of QDS, the
+     * vendor of the runtime, the target machine and the garbage collectors (the `BUILD_INFO_` keys). A tool records
+     * them next to its measurements, as the NetTest summary does (`tool.qd_version` and `tool.build`).
+     *
+     * An unknown key, also an empty one, is not an error: the result is empty, as it is for a value that the library
+     * does not know (#BUILD_INFO_MARCH of an iOS library). The values are for display and records: their text may change
+     * with the runtime or the build, so a program must not parse them. A newer SDK may add keys: they are read with the
+     * same function. The call creates the isolate if it is not created yet.
+     *
+     * ```cpp
+     * std::cout << System::getBuildInfo(System::BUILD_INFO_QD_VERSION).value_or("unknown") << '\n';
+     * ```
+     *
+     * @param key The key (UTF-8 string), one of the `BUILD_INFO_` keys.
+     * @return The value (UTF-8 string), or an empty optional.
+     * @throws InvalidArgumentException if the key is not valid UTF-8.
+     * @throws RuntimeException if the Graal Native SDK library does not support the build info (the message names the
+     * feature and the version of the library).
+     * @throws JavaException if the Graal Native SDK failed to read the value.
+     * @throws GraalException if the creation of the isolate failed (@ref isolate_arguments "Isolate arguments") or
+     * the library is shut down (dxfcpp::shutdown()).
+     */
+    static std::optional<std::string> getBuildInfo(StringParam key);
 };
 
 /**

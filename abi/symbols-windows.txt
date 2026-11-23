@@ -1461,6 +1461,10 @@ static char const * const dxfcpp::v8::MarketEventSymbols::EXCHANGES_PATTERN
 static char const * const dxfcpp::v8::MarketEventSymbols::SUPPORTED_EXCHANGES
 static char const * const dxfcpp::v8::String::EMPTY
 static char const * const dxfcpp::v8::String::NUL
+static char const * const dxfcpp::v8::System::BUILD_INFO_GC
+static char const * const dxfcpp::v8::System::BUILD_INFO_MARCH
+static char const * const dxfcpp::v8::System::BUILD_INFO_QD_VERSION
+static char const * const dxfcpp::v8::System::BUILD_INFO_VENDOR
 static char const * const dxfcpp::v8::WildcardSymbol::RESERVED_PREFIX
 static char const * dxfcpp::v8::ConnectionError::categoryToString(enum dxfcpp::v8::ConnectionError::Category)
 static char const * dxfcpp::v8::MessageConnectorInfo::kindToString(enum dxfcpp::v8::MessageConnectorInfo::Kind)
@@ -1679,6 +1683,7 @@ static class std::basic_string_view<char,struct std::char_traits<char> > const d
 static class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > dxfcpp::v8::MarketEventSymbols::getAttributeInternal(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned __int64,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)
 static class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > dxfcpp::v8::MarketEventSymbols::getAttributeStringByKey(struct dxfcpp::v8::StringParam,struct dxfcpp::v8::StringParam)
 static class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > dxfcpp::v8::MarketEventSymbols::getKeyInternal(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned __int64)
+static class std::optional<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > > dxfcpp::v8::System::getBuildInfo(struct dxfcpp::v8::StringParam)
 static class std::optional<class std::reference_wrapper<class dxfcpp::v8::InstrumentProfileField const > > dxfcpp::v8::InstrumentProfileField::find(struct dxfcpp::v8::StringParam)
 static class std::optional<struct dxfcpp::v8::ErrorInfo> dxfcpp::v8::ErrorManager::getLastError(void)
 static class std::reference_wrapper<struct dxfcpp::v8::CandleAlignment const > dxfcpp::v8::CandleAlignment::getAttributeForSymbol(struct dxfcpp::v8::StringParam)
