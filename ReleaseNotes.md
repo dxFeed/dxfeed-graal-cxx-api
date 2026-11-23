@@ -1,3 +1,82 @@
+## v8.2.0
+
+* **\[MDAPI-511]\[C++]** Migrated to the Graal Native SDK 3.16.0. The Windows `-static-mt` archives have no
+  `dxFeedGraalCxxApi.dll` and its import library, and the Full Source Bundle is split into two, one for each C runtime
+  of the SDK. See "Full Source Bundles" in `HOW_TO_BUILD.md`.
+    * With the static C runtime, the DLL and the code that uses it each have their own C runtime, and the C++ API
+      passes standard library objects between them; link `dxFeedGraalCxxApi_static.lib`. The DLL is still built with
+      `/MT` (`/MTd`) but not installed: only its C API can be used across this boundary.
+    * `dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle.zip` has the SDK with the dynamic C runtime,
+      Release and Debug. `dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle-static-mt.zip` has the SDK
+      with the static C runtime, Release and Debug, DLL and static library, and builds with
+      `DXFCXX_LINK_STATIC_RUNTIME=ON` by default.
+    * CMake takes the SDK of a bundle that `DXFCXX_LINK_STATIC_RUNTIME` and `DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK`
+      select, as for the downloaded SDK. An option that needs the SDK of the other bundle fails the configuration
+      with the name of that bundle (the v8.1.0 bundle built with `DXFCXX_LINK_STATIC_RUNTIME=ON` and the SDK with the
+      dynamic C runtime, with a warning).
+    * Fixed: TLS connections trusted certificate authorities that are no longer trusted. The SDK is built with
+      GraalVM 25.5 and trusts the root CAs of its JDK, so it no longer trusts the eMudhra and Comodo roots that
+      JDK 25.0.5 removed and rejects the eMudhra TLS CAs G3B that it blocks (CVE-2026-91403, CVE-2026-114820). A
+      connection to a server whose certificate chains up to one of them now fails the TLS handshake, unless the
+      application sets `javax.net.ssl.trustStore`. See the
+      [Graal Native SDK release notes](https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/tag/v3.15.0).
+* **\[MDAPI-521]\[C++]** Fixed the shared library (DLL) on Windows: the `==` and `<` operators of
+  `std::reference_wrapper<const EventTypeEnum>` (also used by `std::set` of these references) were not exported, so
+  the code that used them did not link.
+* **\[MDAPI-512]\[C++]** Fixed the shared library (DLL) on Windows: the listeners of the subscriptions and tx models
+  that the code of the public headers creates were not called, and the listener ids of the application and of the
+  library collided. Applications that use `dxFeedGraalCxxApi.dll` are rebuilt with the new headers: the layout of
+  `Handler`, `SimpleHandler` and `InstrumentProfileCollector` changed.
+    * The managers of the entities are kept in the library, one of each type for the library and the application.
+    * The listener ids are unique within a handler (`Handler`, `SimpleHandler`), not across handlers.
+* **\[MDAPI-445]\[C++]** Fixed: the Linux packages (library, Samples, Tools; x64 and aarch64) did not load on
+  Ubuntu 22.04, Debian 12 and Oracle Linux / RHEL 8 and 9: they needed glibc 2.38 and the `libstdc++` of GCC 13.
+  * The packages are built on Oracle Linux 8 with GCC Toolset 14 and need glibc 2.28 and the `libstdc++` of GCC 8.
+  * The release workflow checks that the packages load on Oracle Linux 8 and Ubuntu 22.04.
+  * The library targets link the thread library (`Threads::Threads`, public): with glibc older than 2.34 the
+    programs that use the library did not link (`libpthread.so.0: error adding symbols: DSO missing from command line`).
+  * With CMake older than 3.28, the installation no longer contains the CMake package of `bits`.
+* **\[MDAPI-305]\[C++]** The Windows `-static-mt` archives need no Visual C++ Redistributable, and a single exe or
+  dll can be built from them. See "Windows without the Visual C++ Redistributable" in `README.md`.
+    * The archives take the SDK DLL built with the static C runtime.
+    * The archives add `lib\DxFeedGraalNativeSdk.lib`, `lib\DxFeedGraalNativeSdk_static.lib` and
+      `lib\link-flags.txt`: `dxFeedGraalCxxApi_static.lib` links either with the SDK DLL or with the static SDK
+      library into one exe or dll that depends only on Windows DLLs.
+    * The Windows archives are built with Visual Studio 2022 17.14 (v8.1.0 was built with Visual Studio 2026), so
+      their static libraries link with Visual Studio 2022 17.14 and newer.
+    * `StringLike`, `StringHash`, `EventFlagsMask`, `operator""_c` and `DXFeedTimeSeriesSubscription` are exported
+      from `dxFeedGraalCxxApi.dll`: a program that used them with the DLL failed to link.
+    * The release workflow checks the archives: no DLL imports the dynamic C runtime, and a program linked in each of
+      the two ways runs in Windows Server Core without the Redistributable.
+    * Known issue: a process that uses `dxFeedGraalCxxApi.dll` on Windows does not exit after `main()` returns.
+* **\[MDAPI-438]\[C++]** Migrated to Graal SDK v3.9.0 (QDS 3.356).
+    * Added `DXEndpoint::Builder::withExecutor()`: it sets the executor of the endpoint's notifications before the
+      endpoint is built. `DXEndpoint::executor()` still works but is deprecated: called after `DXEndpoint::getFeed()`
+      or `DXEndpoint::getPublisher()`, it leaves the feed with the default executor, which is shut down, and the last
+      event promises (`DXFeed::getLastEventPromise()`, etc.) never complete (QD-1795). Until the migration, call it
+      right after the endpoint is created. Its first call in a process logs a deprecation warning of the SDK.
+    * QD: absolute Windows paths are accepted in `tape:` addresses (QD-1796); concurrent creation of endpoints with
+      the `ext` scheme no longer fails (QD-1794); `MarketMaker` can be written to XML (QD-1799).
+    * QD, incompatible: the `TimeAndSale` time in the XML format of tapes is an ISO 8601 date and time
+      (`2025-10-02T09:00:00.000Z`) instead of milliseconds, as in the other events (QD-1798).
+* **\[MDAPI-435]\[C++]** Portals (used by `MarketDepthModelSample`) is updated to v0.2.0 from its new repository
+  (the old one was renamed, and the `v0.1.1` fallback no longer resolves): `third_party/portals-0.2.0`, or the pinned
+  v0.2.0 commit when it is not vendored. The sample uses the `portals::legacy` API and is built with C++23. Portals is
+  configured only for the samples: when CMake is older than 3.24 or the standard library lacks the C++23 and C++20
+  parts it uses (`std::expected`, `std::format`, `std::move_only_function`, `std::stop_token`; Apple libc++ of
+  Xcode 16 lacks the last two), `MarketDepthModelSample` is skipped with a status message. The library still needs
+  CMake 3.21 and C++20. [#125](https://github.com/dxFeed/dxfeed-graal-cxx-api/issues/125)
+* **\[MDAPI-434]\[C++]** Fixed `MarketDepthModel` with a nonzero aggregation period: `close()` now cancels the
+  pending notification, the listener is not called after `close()` or after the model is destroyed, and the listener
+  can call the model (`close()` included) without a deadlock. `Timer` no longer leaks itself and the state of its
+  task (each aggregated notification leaked one): the task runs on a detached thread.
+  [#124](https://github.com/dxFeed/dxfeed-graal-cxx-api/issues/124)
+* **\[MDAPI-433]\[C++]** Added `scripts/release.cmake` (CMake only) and `scripts/release.py` (Python), which prepare a
+  release: they set the version in all the places and the heading of `ReleaseNotes.md` (for the pre-releases `-alphaN`,
+  `-betaN`, `-preN` and `-rcN` too), commit and tag it, and with `--push` push the branch and the tag; `-draftN` is a
+  trial run of the release workflow. The text of a GitHub release is now the section of its version in
+  `ReleaseNotes.md`. See `HOW_TO_RELEASE.md`.
+
 ## v8.1.0
 
 * **\[MDAPI-427]\[C++]** Improved the quality infrastructure and the build.

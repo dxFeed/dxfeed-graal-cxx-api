@@ -15,7 +15,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 include(cmake/ParseVersion.cmake)
 
-set(DXFCXX_VERSION "v8.1.0" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v8.2.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
@@ -112,7 +112,17 @@ option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
 
-option(DXFCXX_LINK_STATIC_RUNTIME "Compile and link with -MT/-MTd or equivalent flag(s) to use a multi-threaded statically-linked runtime library. Visual Studio only." OFF)
+# The static-mt Full Source Bundle has only the Graal Native SDK with the static C runtime, so it builds with the static
+# runtime by default. The platform is not detected yet, hence the literal Windows directory names (see the SDK selection).
+set(DXFCXX_LINK_STATIC_RUNTIME_DEFAULT OFF)
+
+if (WIN32
+        AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-amd64-windows-static-crt/CMakeLists.txt"
+        AND NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-amd64-windows/CMakeLists.txt")
+    set(DXFCXX_LINK_STATIC_RUNTIME_DEFAULT ON)
+endif ()
+
+option(DXFCXX_LINK_STATIC_RUNTIME "Compile and link with -MT/-MTd or equivalent flag(s) to use a multi-threaded statically-linked runtime library. Visual Studio only." ${DXFCXX_LINK_STATIC_RUNTIME_DEFAULT})
 option(DXFCXX_NODEFAULTLIB "Ignore libcmt/libcmtd/msvcrt/msvcrtd. Use if DXFCXX_LINK_STATIC_RUNTIME == ON." ${DXFCXX_LINK_STATIC_RUNTIME})
 
 option(DXFCXX_ENABLE_METRICS "Enable metrics collection" OFF)
@@ -167,8 +177,70 @@ include(cmake/SetupStaticRuntimeMSVC.cmake)
 # the library too.
 set(GRAAL_NATIVE_SDK_INSTALL ${DXFCXX_INSTALL})
 
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM}/CMakeLists.txt")
-    add_subdirectory(third_party/graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-${DXFCXX_GRAAL_TARGET_PLATFORM})
+# The Graal Native SDK archive that the options select, named as on the releases page: the platform, -debug, and on
+# Windows with the static runtime the SDK DLL with the static C runtime (-static-crt) and the static library of the SDK
+# (-static-lib) that is only installed (both archives define the target DxFeedGraalNativeSdk).
+set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFCXX_GRAAL_TARGET_PLATFORM})
+
+if (DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK)
+    set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-debug)
+endif ()
+
+if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
+    set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-lib)
+    set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-crt)
+endif ()
+
+# The Full Source Bundles have the SDK archives unpacked into third_party/graal-native-sdk-<version>-<archive>. If there
+# is one for the platform, the archive that the options select must be there too.
+set(DXFCXX_BUNDLED_SDK_NAME_PREFIX "graal-native-sdk-${DXFEED_GRAAL_NATIVE_SDK_VERSION}-")
+set(DXFCXX_BUNDLED_SDK_PREFIX "third_party/${DXFCXX_BUNDLED_SDK_NAME_PREFIX}")
+file(GLOB DXFCXX_BUNDLED_SDK_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/third_party" LIST_DIRECTORIES false
+        "${CMAKE_CURRENT_SOURCE_DIR}/${DXFCXX_BUNDLED_SDK_PREFIX}${DXFCXX_GRAAL_TARGET_PLATFORM}*/CMakeLists.txt")
+
+if (DXFCXX_BUNDLED_SDK_FILES)
+    set(DXFCXX_BUNDLED_SDK_MISSING "")
+
+    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${DXFCXX_BUNDLED_SDK_PREFIX}${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}/CMakeLists.txt")
+        list(APPEND DXFCXX_BUNDLED_SDK_MISSING ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE})
+    endif ()
+
+    if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE AND NOT EXISTS
+            "${CMAKE_CURRENT_SOURCE_DIR}/${DXFCXX_BUNDLED_SDK_PREFIX}${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE}/DxFeedGraalNativeSdk_static.lib")
+        list(APPEND DXFCXX_BUNDLED_SDK_MISSING ${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE})
+    endif ()
+
+    if (DXFCXX_BUNDLED_SDK_MISSING)
+        set(DXFCXX_BUNDLED_SDK_ARCHIVES "")
+
+        # graal-native-sdk-<version>-<archive>/CMakeLists.txt -> <archive>
+        foreach (DXFCXX_BUNDLED_SDK_FILE IN LISTS DXFCXX_BUNDLED_SDK_FILES)
+            string(REPLACE "${DXFCXX_BUNDLED_SDK_NAME_PREFIX}" "" DXFCXX_BUNDLED_SDK_FILE "${DXFCXX_BUNDLED_SDK_FILE}")
+            string(REPLACE "/CMakeLists.txt" "" DXFCXX_BUNDLED_SDK_FILE "${DXFCXX_BUNDLED_SDK_FILE}")
+            list(APPEND DXFCXX_BUNDLED_SDK_ARCHIVES ${DXFCXX_BUNDLED_SDK_FILE})
+        endforeach ()
+
+        list(SORT DXFCXX_BUNDLED_SDK_ARCHIVES)
+        list(JOIN DXFCXX_BUNDLED_SDK_ARCHIVES ", " DXFCXX_BUNDLED_SDK_ARCHIVES_TEXT)
+        list(JOIN DXFCXX_BUNDLED_SDK_MISSING " and " DXFCXX_BUNDLED_SDK_MISSING_TEXT)
+        set(DXFCXX_BUNDLED_SDK_ERROR "third_party has the Graal Native SDK ${DXFEED_GRAAL_NATIVE_SDK_VERSION} ${DXFCXX_BUNDLED_SDK_ARCHIVES_TEXT}, but not ${DXFCXX_BUNDLED_SDK_MISSING_TEXT} that DXFCXX_LINK_STATIC_RUNTIME=${DXFCXX_LINK_STATIC_RUNTIME} and DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=${DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK} select.")
+
+        if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
+            string(APPEND DXFCXX_BUNDLED_SDK_ERROR " The SDK with the static C runtime is in the *-Full-Source-Bundle-static-mt.zip bundle. To build from *-Full-Source-Bundle.zip, set DXFCXX_LINK_STATIC_RUNTIME=OFF.")
+        elseif (WIN32)
+            string(APPEND DXFCXX_BUNDLED_SDK_ERROR " The SDK with the dynamic C runtime is in the *-Full-Source-Bundle.zip bundle. To build from *-Full-Source-Bundle-static-mt.zip, set DXFCXX_LINK_STATIC_RUNTIME=ON (its default).")
+        endif ()
+
+        message(FATAL_ERROR "${DXFCXX_BUNDLED_SDK_ERROR}")
+    endif ()
+
+    message(STATUS "Graal Native SDK: ${DXFCXX_BUNDLED_SDK_PREFIX}${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}")
+    add_subdirectory(${DXFCXX_BUNDLED_SDK_PREFIX}${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE})
+
+    if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+        message(STATUS "Graal Native SDK static library: ${DXFCXX_BUNDLED_SDK_PREFIX}${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE}")
+        set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${DXFCXX_BUNDLED_SDK_PREFIX}${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE}")
+    endif ()
 else ()
     if (NOT DXFG_LOCAL_ARCHIVE_PATH STREQUAL "")
         FetchContent_Declare(DxFeedGraalNativeSdk
@@ -210,19 +282,6 @@ else ()
                     message(FATAL_ERROR "Unsupported platform ${DXFCXX_GRAAL_TARGET_PLATFORM}: the Graal Native SDK archives are built for ${DXFCXX_GRAAL_SUPPORTED_PLATFORMS_TEXT}. To use another build, set DXFG_LOCAL_ARCHIVE_PATH or the DXFEED_GRAAL_NATIVE_SDK_URL environment variable.")
                 endif ()
 
-                set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFCXX_GRAAL_TARGET_PLATFORM})
-
-                if (DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK)
-                    set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-debug)
-                endif ()
-
-                # The static runtime on Windows: the SDK DLL with the static CRT, and the static library of the SDK that
-                # is only installed (both archives define the target DxFeedGraalNativeSdk).
-                if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
-                    set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-lib)
-                    set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE ${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}-static-crt)
-                endif ()
-
                 set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE_URL_PREFIX ${DXFEED_GRAAL_NATIVE_SDK_URL})
                 set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}.zip)
                 set(DXFEED_GRAAL_NATIVE_SDK_URL_HASH "")
@@ -249,6 +308,7 @@ else ()
                             DOWNLOAD_NO_EXTRACT FALSE
                     )
                     FetchContent_MakeAvailable(DxFeedGraalNativeSdkStaticLib)
+                    set(DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR "${dxfeedgraalnativesdkstaticlib_SOURCE_DIR}")
                 endif ()
 
                 FetchContent_Declare(
@@ -267,8 +327,8 @@ else ()
     # DxFeedGraalNativeSdk_SOURCE_DIR
 endif ()
 
-if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME AND NOT DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
-    message(WARNING "DXFCXX_LINK_STATIC_RUNTIME: the Graal Native SDK is not taken from the releases page, so its C runtime and its static library are up to the given SDK")
+if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME AND NOT DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR)
+    message(WARNING "DXFCXX_LINK_STATIC_RUNTIME: the Graal Native SDK is taken neither from the releases page nor from the static-mt Full Source Bundle, so its C runtime and its static library are up to the given SDK")
 endif ()
 
 
@@ -1047,27 +1107,27 @@ if (DXFCXX_INSTALL)
                 ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
         # The CMake package (find_package(dxFeedGraalCxxApi)): the targets dxfcxx::dxfcxx and dxfcxx::static.
-        # The shared library of the -static-mt archives has its own static C runtime, which a program cannot share
-        # objects of the C++ API with: it is installed, but not in the package.
         install(TARGETS ${PROJECT_NAME}_static EXPORT ${PROJECT_NAME}Targets ${DXFCXX_INSTALL_DESTINATIONS})
 
-        if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
-            install(TARGETS ${PROJECT_NAME} ${DXFCXX_INSTALL_DESTINATIONS})
-        else ()
+        # With the static runtime on Windows the DLL has its own C runtime and heap, and the C++ API passes the objects
+        # of the standard library across the DLL boundary, so the DLL is built but not installed: only its C API could
+        # be used safely, and those who need it build the DLL themselves.
+        if (NOT (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME))
             install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets ${DXFCXX_INSTALL_DESTINATIONS})
         endif ()
 
         install(DIRECTORY "include/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" PATTERN "build" EXCLUDE)
 
         # The static library links the SDK import library on Windows. The -static-mt archives also link it with the
-        # static library of the SDK and the Windows libraries of link-flags.txt.
+        # static library of the SDK (downloaded or from the static-mt Full Source Bundle) and the Windows libraries of
+        # link-flags.txt.
         if (WIN32)
             install(FILES $<TARGET_LINKER_FILE:DxFeedGraalNativeSdk> DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-            if (DXFCXX_LINK_STATIC_RUNTIME AND DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_ARCHIVE)
+            if (DXFCXX_LINK_STATIC_RUNTIME AND DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR)
                 install(FILES
-                        "${dxfeedgraalnativesdkstaticlib_SOURCE_DIR}/DxFeedGraalNativeSdk_static.lib"
-                        "${dxfeedgraalnativesdkstaticlib_SOURCE_DIR}/link-flags.txt"
+                        "${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR}/DxFeedGraalNativeSdk_static.lib"
+                        "${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR}/link-flags.txt"
                         DESTINATION ${CMAKE_INSTALL_LIBDIR})
             endif ()
         endif ()

@@ -278,9 +278,10 @@ libraries one per line (`psapi.lib`, `winhttp.lib`, `ws2_32.lib`, etc.), so `cl`
 `@lib\link-flags.txt`. The `Debug` archive contains the same SDK libraries as the other archives: they do not depend
 on the C runtime variant.
 
-Do not link with `dxFeedGraalCxxApi.dll` of these archives: with the static C runtime, the DLL and your code each have
-their own C runtime, and the interface of the C++ API passes standard library objects (`std::string`,
-`std::shared_ptr`, etc.) between them. The `Debug` C runtime stops on such objects with a debug heap assertion.
+These archives have no `dxFeedGraalCxxApi.dll`: with the static C runtime, the DLL and your code would each have their
+own C runtime, and the interface of the C++ API passes standard library objects (`std::string`, `std::shared_ptr`,
+etc.) between them. To build the libraries yourself, or the DLL for its C API, use the static-mt Full Source Bundle
+(see "Full Source Bundles" in [HOW_TO_BUILD.md](HOW_TO_BUILD.md)).
 
 With CMake, `find_package(dxFeedGraalCxxApi CONFIG)` gives `dxfcxx::static` (the first way) and `dxfcxx::graal`; set
 `CMAKE_MSVC_RUNTIME_LIBRARY` to `MultiThreaded$<$<CONFIG:Debug>:Debug>` in your project.

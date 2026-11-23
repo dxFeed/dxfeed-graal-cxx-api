@@ -179,6 +179,10 @@ bool dxfcpp::v8::TxModelListenerCommon::operator==(struct dxfcpp::v8::TxModelLis
 bool dxfcpp::v8::WildcardSymbol::operator<(struct dxfcpp::v8::WildcardSymbol const &)const
 bool dxfcpp::v8::WildcardSymbol::operator==(struct dxfcpp::v8::WildcardSymbol const &)const
 bool dxfcpp::v8::detail::isReleaseExceptionReported(void)
+bool dxfcpp::v8::operator<(class std::reference_wrapper<class dxfcpp::v8::EventTypeEnum const > const &,class dxfcpp::v8::EventTypeEnum const &)
+bool dxfcpp::v8::operator<(class std::reference_wrapper<class dxfcpp::v8::EventTypeEnum const > const &,class std::reference_wrapper<class dxfcpp::v8::EventTypeEnum const > const &)
+bool dxfcpp::v8::operator==(class std::reference_wrapper<class dxfcpp::v8::EventTypeEnum const > const &,class dxfcpp::v8::EventTypeEnum const &)
+bool dxfcpp::v8::operator==(class std::reference_wrapper<class dxfcpp::v8::EventTypeEnum const > const &,class std::reference_wrapper<class dxfcpp::v8::EventTypeEnum const > const &)
 char dxfcpp::v8::CFI::Value::getCodeChar(void)const
 char dxfcpp::v8::CFI::getCategoryChar(void)const
 char dxfcpp::v8::CFI::getGroupChar(void)const

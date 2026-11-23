@@ -17,6 +17,55 @@ cmake --build . --config Release
 
 or use the `scripts/build.sh` or `scripts/build.cmd`. Make sure that you use `command prompt for VS` on Win.
 
+## Full Source Bundles (Windows x64, offline)
+
+A release has two source bundles for Windows x64. Each has the sources and all the dependencies, the Graal Native SDK
+too, so it builds without network access. They differ in the C runtime of the SDK:
+
+| Bundle                                                                        | C runtime        | Graal Native SDK in `third_party`                                                                    |
+|-------------------------------------------------------------------------------|------------------|------------------------------------------------------------------------------------------------------|
+| `dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle.zip`           | dynamic (`/MD`)  | `amd64-windows`, `amd64-windows-debug`                                                               |
+| `dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle-static-mt.zip` | static (`/MT`)   | `amd64-windows-static-crt`, `amd64-windows-debug-static-crt`, `amd64-windows-static-lib`, `amd64-windows-debug-static-lib` |
+
+The SDK of a bundle is in `third_party/graal-native-sdk-<SDK version>-<variant>`, and CMake takes the variant that the
+options select, as it does when it downloads the SDK:
+
+- `DXFCXX_LINK_STATIC_RUNTIME` - the static C runtime: the SDK DLL with the static C runtime (`-static-crt`) and the
+  static library of the SDK (`-static-lib`). It is `ON` by default with the static-mt bundle and `OFF` otherwise.
+- `DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON` - the Debug SDK (`-debug`). It does not depend on the build type.
+
+An option that needs the SDK of the other bundle fails the configuration, and the message names that bundle. Without
+the SDK in `third_party` (a git checkout), CMake downloads it.
+
+In the x64 Native Tools Command Prompt for VS 2022:
+
+```shell
+tar -xf dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle.zip
+cd dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle
+cmake -B build -A x64 -DFETCHCONTENT_FULLY_DISCONNECTED=ON -DDXFCXX_BUILD_DOC=OFF
+cmake --build build --config Release
+cmake --install build --config Release --prefix install
+```
+
+The static-mt bundle builds the libraries the same way; this installs the content of a `-static-mt` archive (see
+"Windows without the Visual C++ Redistributable" in `README.md`):
+
+```shell
+tar -xf dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle-static-mt.zip
+cd dxFeedGraalCxxApi-<version>-x86_64-windows-Full-Source-Bundle-static-mt
+cmake -B build -A x64 -DFETCHCONTENT_FULLY_DISCONNECTED=ON -DDXFCXX_BUILD_DOC=OFF -DDXFCXX_BUILD_UNIT_TESTS=OFF ^
+    -DDXFCXX_BUILD_SAMPLES=OFF -DDXFCXX_BUILD_TOOLS=OFF -DDXFCXX_INSTALL_SAMPLES=OFF -DDXFCXX_INSTALL_TOOLS=OFF
+cmake --build build --config Release
+cmake --install build --config Release --prefix install
+```
+
+Add `-DDXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON` and build with `--config Debug` for the Debug SDK and C runtime.
+
+With the static C runtime, `dxFeedGraalCxxApi.dll` is built but not installed: the DLL has its own C runtime, and the
+C++ API passes standard library objects (`std::string`, `std::shared_ptr`, etc.) between the DLL and the code that uses
+it. Link `dxFeedGraalCxxApi_static.lib` instead. Only the C API of the DLL (`include/dxfeed_graal_c_api/api.h`) can be
+used across this boundary; take the DLL and its import library from the build directory if you need it.
+
 ## Run Tests
 
 ```shell

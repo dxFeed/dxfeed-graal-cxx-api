@@ -115,11 +115,13 @@ class ParseArchiveTest(unittest.TestCase):
             name("Tools", "aarch64-osx", extension=".tar.gz"): (sbom.TOOLS, "aarch64-osx", ""),
             name("Docs", platform=""): (sbom.DOCS, "", ""),
             name("Full-Source-Bundle"): (sbom.BUNDLE, "x86_64-windows", ""),
+            name("Full-Source-Bundle-static-mt"): (sbom.BUNDLE, "x86_64-windows", ""),
         }
         for file_name, (kind, platform, build_type) in cases.items():
             with self.subTest(file_name):
                 archive = self.parse(file_name)
                 self.assertEqual((archive.kind, archive.platform, archive.build_type), (kind, platform, build_type))
+                self.assertEqual(archive.static_runtime, "-static-mt." in file_name)
 
     def test_version_with_a_suffix(self):
         archive = self.parse(name("Release", "x86_64-linux", "v9.0.0-rc1", ".tar.gz"), "v9.0.0-rc1")
@@ -135,6 +137,7 @@ class ParseArchiveTest(unittest.TestCase):
                 (name("Release", platform=""), VERSION),
                 (name("Release-static-mt", "x86_64-linux", extension=".tar.gz"), VERSION),
                 (name("Full-Source-Bundle", "x86_64-linux"), VERSION),
+                (name("Full-Source-Bundle-static-mt", "x86_64-linux"), VERSION),
                 ("abi-x86_64-linux.xml", VERSION),
         ):
             with self.subTest(file_name), self.assertRaises(SbomError):
@@ -172,6 +175,7 @@ class GenerateTest(unittest.TestCase):
         self.archive(name("Tools", "x86_64-linux", extension=".tar.gz"), "amd64-linux", "build-Tools")
         self.archive(name("Docs", platform=""))
         self.archive(name("Full-Source-Bundle"))
+        self.archive(name("Full-Source-Bundle-static-mt"))
 
     def generate(self, version=VERSION):
         return sbom.generate(self.artifacts, version, self.pom, TIMESTAMP)
@@ -183,10 +187,15 @@ class GenerateTest(unittest.TestCase):
     def sdk(self, document):
         return next(c for c in document["components"] if c["name"] == "graal-native-sdk")
 
+    def distributions(self, sdk):
+        """The SDK archives of the SDK component: the file name and its SHA-256."""
+        return {r["url"].rsplit("/", 1)[1]: r["hashes"][0]["content"] for r in sdk["externalReferences"]
+                if r["type"] == "distribution"}
+
     def test_one_sbom_per_archive_next_to_it(self):
         self.release()
         written = self.generate()
-        self.assertEqual(len(written), 8)
+        self.assertEqual(len(written), 9)
         self.assertTrue((self.artifacts / "build-Samples" /
                          "dxFeedGraalCxxApi-v9.0.0-x86_64-linux-Samples.cdx.json").is_file())
         self.assertTrue((self.artifacts / "build-Tools" / "dxFeedGraalCxxApi-v9.0.0-x86_64-linux-Tools.cdx.json").is_file())
@@ -260,8 +269,7 @@ class GenerateTest(unittest.TestCase):
 
         mt = self.sdk(self.load(name("Release-static-mt")))
         self.assertEqual(mt["hashes"][0]["content"], CMAKE["DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt"])
-        distributions = {r["url"].rsplit("/", 1)[1]: r["hashes"][0]["content"] for r in mt["externalReferences"]
-                         if r["type"] == "distribution"}
+        distributions = self.distributions(mt)
         self.assertEqual(distributions, {
             f"graal-native-sdk-{SDK}-amd64-windows-static-crt.zip":
                 CMAKE["DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt"],
@@ -269,8 +277,24 @@ class GenerateTest(unittest.TestCase):
                 CMAKE["DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib"],
         })
 
+        # The source bundles also carry the Debug SDK archives.
         bundle = self.sdk(self.load(name("Full-Source-Bundle")))
-        self.assertEqual(bundle["hashes"][0]["content"], expected)
+        self.assertEqual(bundle["hashes"], release["hashes"])
+        self.assertEqual(self.distributions(bundle), {
+            f"graal-native-sdk-{SDK}-amd64-windows.zip": expected,
+            f"graal-native-sdk-{SDK}-amd64-windows-debug.zip":
+                CMAKE["DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug"],
+        })
+
+        bundle_mt = self.sdk(self.load(name("Full-Source-Bundle-static-mt")))
+        self.assertEqual(bundle_mt["hashes"], mt["hashes"])
+        self.assertEqual(self.distributions(bundle_mt), {
+            **distributions,
+            f"graal-native-sdk-{SDK}-amd64-windows-debug-static-crt.zip":
+                CMAKE["DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt"],
+            f"graal-native-sdk-{SDK}-amd64-windows-debug-static-lib.zip":
+                CMAKE["DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib"],
+        })
 
     def test_graalvm_and_jdk_from_the_build_info(self):
         self.release()
@@ -344,6 +368,12 @@ class GenerateTest(unittest.TestCase):
     def test_source_bundle_needs_the_windows_release_archive(self):
         self.archive(name("Full-Source-Bundle"))
         with self.assertRaisesRegex(SbomError, "Release library archive"):
+            self.generate()
+
+    def test_static_mt_source_bundle_needs_the_windows_release_static_mt_archive(self):
+        self.archive(name("Release"), "amd64-windows")
+        self.archive(name("Full-Source-Bundle-static-mt"))
+        with self.assertRaisesRegex(SbomError, "Release-static-mt library archive"):
             self.generate()
 
     def test_pom_of_another_version(self):
