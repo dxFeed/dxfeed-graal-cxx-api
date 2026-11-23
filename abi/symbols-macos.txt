@@ -2242,6 +2242,7 @@ dxfcpp::v8::SymbolWrapper::toGraalUnique() const
 dxfcpp::v8::SymbolWrapper::toString() const
 dxfcpp::v8::SymbolWrapper::toStringUnderlying() const
 dxfcpp::v8::SymbolWrapper::~SymbolWrapper()
+dxfcpp::v8::System::getBuildInfo(dxfcpp::v8::StringParam)
 dxfcpp::v8::System::getProperty(dxfcpp::v8::StringParam)
 dxfcpp::v8::System::getRuntimeStatistics()
 dxfcpp::v8::System::setIsolateArguments(std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>>)

@@ -27,7 +27,7 @@ set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.19.0" CACHE STRING "")
 # The library calls the dxfg_v4_ functions of the SDK; every way of getting the SDK (third_party, DXFG_LOCAL_ARCHIVE_PATH,
 # the stub, DXFEED_GRAAL_NATIVE_SDK_URL, the releases page) is checked here. The library checks the version of the SDK
 # library at run time as well (the creation of the isolate fails with an older one).
-set(DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION "3.18.0")
+set(DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION "3.19.0")
 if (DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION)
     message(FATAL_ERROR "The dxFeed Graal C++ API needs the Graal Native SDK ${DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION} or newer, not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
 endif ()

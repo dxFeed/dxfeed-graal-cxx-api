@@ -8,11 +8,13 @@
 #include "../internal/Isolate.hpp"
 #include "../internal/utils/debug/Debug.hpp"
 #include "../isolated/IsolatedCommon.hpp"
+#include "../isolated/internal/IsolatedString.hpp"
 
 #include <dxfg_api.h>
 #include <fmt/format.h>
 
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <utf8.h>
@@ -86,6 +88,29 @@ RuntimeStatistics System::getRuntimeStatistics() {
         .totalStartedThreadCount = stats.total_started_thread_count,
         .availableProcessors = stats.available_processors,
     };
+}
+
+std::optional<std::string> System::getBuildInfo(StringParam key) {
+    throwIfIsolateFailed();
+
+    const isolated::SdkString graalKey{key.view(), "System::getBuildInfo(key)"};
+
+    // Defensive: the minimum version of the SDK supports the feature.
+    if (isolated::runGraalV4FunctionWithResult(dxfg_v4_system_is_feature_supported, DXFG_V4_FEATURE_BUILD_INFO) == 0) {
+        throw RuntimeException(fmt::format("The build info (the feature '{}') is not supported by the Graal Native SDK "
+                                           "library {}",
+                                           DXFG_V4_FEATURE_BUILD_INFO, Isolate::getGraalNativeSdkVersion()));
+    }
+
+    // NULL: an unknown key or a value that the library does not know.
+    const auto value = isolated::internal::IsolatedString::toUnique(
+        isolated::runGraalV4FunctionWithResult(dxfg_v4_system_get_build_info, graalKey.c_str()));
+
+    if (!value) {
+        return std::nullopt;
+    }
+
+    return validUtf8Prefix(value.get());
 }
 
 bool System::setProperty(StringParam key, StringParam value) {

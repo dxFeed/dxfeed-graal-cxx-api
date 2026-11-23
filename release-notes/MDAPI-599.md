@@ -1,4 +1,4 @@
-* **\[MDAPI-599]\[C++]** The Graal Native SDK 3.18.0 is the minimum version.
+* **\[MDAPI-599]\[C++]** The features of the Graal Native SDK 3.18.0.
     * `MessageConnectorInfo::ioStatistics` has the I/O statistics of a message connector (`IoStatistics`): the data
       and subscription records read and written, the bytes of the QTP messages, the sums of the lags and of the
       round-trip times of the records in microseconds, and the counts of the open and the closed connections. It is
