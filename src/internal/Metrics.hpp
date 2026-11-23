@@ -8,7 +8,6 @@
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../isolated/metrics/IsolatedMetrics.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #include "./Common.hpp"
 #include "./NonCopyable.hpp"
