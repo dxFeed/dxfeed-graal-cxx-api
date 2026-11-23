@@ -8,7 +8,7 @@
 #include "../../internal/utils/GraalEventUtils.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 
@@ -23,7 +23,7 @@ void AnalyticOrder::fillData(void *graalNative) noexcept {
 
     Order::fillData(graalNative);
 
-    const auto graalAnalyticOrder = static_cast<dxfg_analytic_order_t *>(graalNative);
+    const auto graalAnalyticOrder = static_cast<dxfg_v4_analytic_order_t *>(graalNative);
 
     analyticOrderData_ = {.icebergPeakSize = graalAnalyticOrder->iceberg_peak_size,
                           .icebergHiddenSize = graalAnalyticOrder->iceberg_hidden_size,
@@ -38,7 +38,7 @@ void AnalyticOrder::fillGraalData(void *graalNative) const {
 
     Order::fillGraalData(graalNative);
 
-    const auto graalAnalyticOrder = static_cast<dxfg_analytic_order_t *>(graalNative);
+    const auto graalAnalyticOrder = static_cast<dxfg_v4_analytic_order_t *>(graalNative);
 
     graalAnalyticOrder->order_base.order_base.market_event.event_type.clazz = DXFG_EVENT_ANALYTIC_ORDER;
     graalAnalyticOrder->iceberg_peak_size = analyticOrderData_.icebergPeakSize;
@@ -52,8 +52,8 @@ std::shared_ptr<AnalyticOrder> AnalyticOrder::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create AnalyticOrder. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to create AnalyticOrder. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
@@ -73,7 +73,7 @@ void *AnalyticOrder::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_analytic_order_t>(
+    return newGraalEvent<dxfg_v4_analytic_order_t>(
         DXFG_EVENT_ANALYTIC_ORDER,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -86,15 +86,15 @@ void AnalyticOrder::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ANALYTIC_ORDER) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to free AnalyticOrder's Graal data. Wrong event class {}({})! Expected: {}",
             isolated::toString(eventType), std::to_string(eventType), isolated::toString(DXFG_EVENT_ANALYTIC_ORDER)));
     }
 
-    const auto graalAnalyticOrder = static_cast<dxfg_analytic_order_t *>(graalNative);
+    const auto graalAnalyticOrder = static_cast<dxfg_v4_analytic_order_t *>(graalNative);
 
     freeGraalData(graalNative);
 

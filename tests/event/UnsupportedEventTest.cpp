@@ -11,7 +11,7 @@
 #include "../support/TapeSupport.hpp"
 #include "../support/TestSupport.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <memory>
 #include <mutex>
@@ -23,8 +23,8 @@ using dxfcpp::test::ErrorManagerGuard;
 
 namespace {
 
-dxfg_quote_t createQuote(const char *symbol) {
-    dxfg_quote_t quote{};
+dxfg_v4_quote_t createQuote(const char *symbol) {
+    dxfg_v4_quote_t quote{};
 
     quote.market_event.event_type.clazz = DXFG_EVENT_QUOTE;
     quote.market_event.event_symbol = symbol;
@@ -84,10 +84,10 @@ TEST_CASE("A subscription to CONFIGURATION delivers the other events of the batc
 TEST_CASE("The conversion of the events of a callback skips an event that cannot be converted") {
     ErrorManagerGuard guard{};
     auto first = createQuote("A");
-    dxfg_event_type_t unknown{static_cast<dxfg_event_clazz_t>(9999)};
+    dxfg_v4_event_type_t unknown{static_cast<dxfg_v4_event_clazz_t>(9999)};
     auto second = createQuote("B");
-    dxfg_event_type_t *elements[] = {&first.market_event.event_type, &unknown, &second.market_event.event_type};
-    dxfg_event_type_list list{3, elements};
+    dxfg_v4_event_type_t *elements[] = {&first.market_event.event_type, &unknown, &second.market_event.event_type};
+    dxfg_v4_event_type_list list{3, elements};
 
     const auto events = EventMapper::fromGraalListSkippingErrors(&list);
 
@@ -104,9 +104,9 @@ TEST_CASE("The conversion of the events of a callback skips an event that cannot
 
 TEST_CASE("The strict conversion of a list still throws on an event type that is not implemented") {
     ErrorManagerGuard guard{};
-    dxfg_event_type_t configuration{DXFG_EVENT_CONFIGURATION};
-    dxfg_event_type_t *elements[] = {&configuration};
-    dxfg_event_type_list list{1, elements};
+    dxfg_v4_event_type_t configuration{DXFG_EVENT_CONFIGURATION};
+    dxfg_v4_event_type_t *elements[] = {&configuration};
+    dxfg_v4_event_type_list list{1, elements};
 
     CHECK_THROWS_AS(EventMapper::fromGraalList(&list), InvalidArgumentException);
     CHECK(ErrorManager::getErrors().empty());

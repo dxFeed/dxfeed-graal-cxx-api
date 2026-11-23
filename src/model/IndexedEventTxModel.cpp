@@ -9,7 +9,7 @@
 #include "../internal/CallbackBarrier.hpp"
 #include "../isolated/model/IsolatedIndexedEventTxModel.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <utility>
 
@@ -26,10 +26,10 @@ struct IndexedEventTxModelImpl::Listener {
         : eventsReceived(std::make_shared<EventsReceived>(std::move(onEvents))) {
     }
 
-    // typedef void (*dxfg_IndexedEventTxModel_Listener_eventsReceived_f)(graal_isolatethread_t *thread,
-    // dxfg_event_type_list *events, int32_t isSnapshot, void *userData);
-    static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_event_type_list *events, int32_t isSnapshot,
-                                 void *userData) {
+    // typedef void (*dxfg_v4_IndexedEventTxModel_Listener_eventsReceived_f)(graal_isolatethread_t *thread,
+    // dxfg_v4_event_type_list *events, int32_t isSnapshot, void *userData);
+    static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_v4_event_type_list *events,
+                                 int32_t isSnapshot, void *userData) {
         runCallback("IndexedEventTxModel", [&] {
             if (!events || !userData) {
                 return;

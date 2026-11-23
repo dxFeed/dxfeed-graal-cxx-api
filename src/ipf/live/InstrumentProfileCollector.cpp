@@ -10,14 +10,14 @@
 #include "../../isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
 
 #include <cstring>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <memory>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
 struct NonOwningInstrumentProfileIterator {
-    dxfg_iterable_ip_t *iterable;
+    dxfg_v4_iterable_ip_t *iterable;
 
     [[nodiscard]] bool hasNext() const {
         if (!iterable) {
@@ -58,7 +58,7 @@ struct InstrumentProfileCollector::Impl {
         return ApiContext::getInstance().getManager<WeakEntityManager<InstrumentProfileCollector>>();
     }
 
-    static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_iterable_ip_t *profiles,
+    static void onInstrumentProfilesUpdate(graal_isolatethread_t * /* thread */, dxfg_v4_iterable_ip_t *profiles,
                                            void *userData) {
         runCallback("InstrumentProfileCollector", [&] {
             auto [collectorId, listenerId] = unpack(dxfcpp::bit_cast<std::size_t>(userData));

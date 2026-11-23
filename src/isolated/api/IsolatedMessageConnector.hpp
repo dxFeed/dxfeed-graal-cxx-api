@@ -12,7 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../../../include/dxfeed_graal_cpp_api/api/MessageConnectorInfo.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <cstdint>
 #include <optional>

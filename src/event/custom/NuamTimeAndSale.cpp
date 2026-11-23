@@ -8,7 +8,7 @@
 #include "../../internal/utils/GraalEventUtils.hpp"
 #include "../../isolated/IsolatedCommon.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 #include <string>
@@ -24,7 +24,7 @@ void NuamTimeAndSale::fillData(void *graalNative) noexcept {
 
     TimeAndSale::fillData(graalNative);
 
-    const auto graalNuamTimeAndSale = static_cast<dxfg_nuam_time_and_sale_t *>(graalNative);
+    const auto graalNuamTimeAndSale = static_cast<dxfg_v4_nuam_time_and_sale_t *>(graalNative);
 
     nuamTimeAndSaleData_ = {.matchId = graalNuamTimeAndSale->match_id};
 }
@@ -36,7 +36,7 @@ void NuamTimeAndSale::fillGraalData(void *graalNative) const {
 
     TimeAndSale::fillGraalData(graalNative);
 
-    const auto graalNuamTimeAndSale = static_cast<dxfg_nuam_time_and_sale_t *>(graalNative);
+    const auto graalNuamTimeAndSale = static_cast<dxfg_v4_nuam_time_and_sale_t *>(graalNative);
 
     graalNuamTimeAndSale->time_and_sale_base.market_event.event_type.clazz = DXFG_EVENT_NUAM_TIME_AND_SALE;
     graalNuamTimeAndSale->match_id = nuamTimeAndSaleData_.matchId;
@@ -47,8 +47,8 @@ NuamTimeAndSale::Ptr NuamTimeAndSale::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create NuamTimeAndSale. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_TIME_AND_SALE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_TIME_AND_SALE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to create NuamTimeAndSale. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
@@ -68,7 +68,7 @@ void *NuamTimeAndSale::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_nuam_time_and_sale_t>(
+    return newGraalEvent<dxfg_v4_nuam_time_and_sale_t>(
         DXFG_EVENT_NUAM_TIME_AND_SALE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -81,8 +81,8 @@ void NuamTimeAndSale::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_TIME_AND_SALE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_NUAM_TIME_AND_SALE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(
             fmt::format("Unable to free NuamTimeAndSale's Graal data. Wrong event class {}({})! Expected: {}",
@@ -90,7 +90,7 @@ void NuamTimeAndSale::freeGraal(void *graalNative) {
                         isolated::toString(DXFG_EVENT_NUAM_TIME_AND_SALE)));
     }
 
-    const auto graalNuamTimeAndSale = static_cast<dxfg_nuam_time_and_sale_t *>(graalNative);
+    const auto graalNuamTimeAndSale = static_cast<dxfg_v4_nuam_time_and_sale_t *>(graalNative);
 
     freeGraalData(graalNative);
 

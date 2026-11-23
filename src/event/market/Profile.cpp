@@ -11,7 +11,7 @@
 #include "../../internal/utils/StringConstants.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 
@@ -26,7 +26,7 @@ void Profile::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
+    const auto graalProfile = static_cast<dxfg_v4_profile_t *>(graalNative);
 
     data_ = {
         .description = toStringOpt(graalProfile->description),
@@ -55,7 +55,7 @@ void Profile::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
+    const auto graalProfile = static_cast<dxfg_v4_profile_t *>(graalNative);
 
     graalProfile->market_event.event_type.clazz = DXFG_EVENT_PROFILE;
     graalProfile->description = createCString(data_.description, "Profile::description");
@@ -83,7 +83,7 @@ void Profile::freeGraalData(void *graalNative) noexcept {
 
     MarketEvent::freeGraalData(graalNative);
 
-    const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
+    const auto graalProfile = static_cast<dxfg_v4_profile_t *>(graalNative);
 
     delete[] graalProfile->description;
     delete[] graalProfile->status_reason;
@@ -94,10 +94,10 @@ std::shared_ptr<Profile> Profile::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Profile. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_PROFILE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_PROFILE) {
         throw InvalidArgumentException(
             fmt::format("Unable to create Profile. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_PROFILE)));
     }
 
@@ -114,7 +114,7 @@ void *Profile::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_profile_t>(
+    return newGraalEvent<dxfg_v4_profile_t>(
         DXFG_EVENT_PROFILE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -127,14 +127,14 @@ void Profile::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_PROFILE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_PROFILE) {
         throw InvalidArgumentException(
             fmt::format("Unable to free Profile's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_PROFILE)));
     }
 
-    const auto graalProfile = static_cast<dxfg_profile_t *>(graalNative);
+    const auto graalProfile = static_cast<dxfg_v4_profile_t *>(graalNative);
 
     freeGraalData(graalNative);
 

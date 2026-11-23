@@ -119,7 +119,7 @@ Rules:
 The canonical example, without its metrics, is `DXFeedSubscription::Impl::onEvents` (`src/api/DXFeedSubscription.cpp`):
 
 ```cpp
-static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_event_type_list *graalNativeEvents, void *userData) {
+static void onEvents(graal_isolatethread_t * /*thread*/, dxfg_v4_event_type_list *graalNativeEvents, void *userData) {
     runCallback("DXFeedSubscription", [&] {
         const auto id = Id<DXFeedSubscription>::from(dxfcpp::bit_cast<Id<DXFeedSubscription>::ValueType>(userData));
 
@@ -235,19 +235,19 @@ example: `git show --stat 1d92540a` (and `aec2a65e` for `MarketMaker` and `TextC
    the same base as in Java (`MarketEvent`, `LastingEvent`, `IndexedEvent`, `TimeSeriesEvent`):
    - `static const EventTypeEnum &TYPE;`, defined as `EventTypeEnum::X` in the `.cpp` file;
    - `fromGraal(void *)`, `toGraal()`, `freeGraal(void *)` and the helpers `fillData`, `fillGraalData`,
-     `freeGraalData` (copy every field of `dxfg_x_t` of the SDK in both directions, release the strings);
+     `freeGraalData` (copy every field of `dxfg_v4_x_t` of the SDK in both directions, release the strings);
    - `assign()` and the `with*` setters, as in the other events;
    - `toString()` that prints what Java `toString()` prints: the same field names and order, numbers, unset values and
      quoted strings as in Java (use `TimeFormat::DEFAULT_WITH_MILLIS` for the times);
    - new enums of the event as their own classes (`AuctionType`, `ImbalanceSide`).
    Add the header to the module header (for example `event/market/MarketModule.hpp`).
 2. **`EventTypeEnum`**: the constant in `event/EventTypeEnum.hpp` and, in `src/event/EventTypeEnum.cpp`, its
-   definition (the `dxfg_event_clazz_t` value, the name, the class name and the flags `isLasting`, `isIndexed`,
+   definition (the `dxfg_v4_event_clazz_t` value, the name, the class name and the flags `isLasting`, `isIndexed`,
    `isTimeSeries`, `isMarket` as in Java; `isMarket` is `true` by default) and its entries in all the lists and maps
-   of that file (the list of all types, by name, by class name, by `dxfg_event_clazz_t`).
+   of that file (the list of all types, by name, by class name, by `dxfg_v4_event_clazz_t`).
 3. **`EventMapper`** (`src/event/EventMapper.cpp`): the include and the `case DXFG_EVENT_X` in `fromGraal` and in
    `freeGraal`. Without them the event is skipped in the callbacks and reported to `ErrorManager`.
-4. **`src/isolated/IsolatedCommon.hpp`**: the name of `DXFG_EVENT_X` in `toString(dxfg_event_clazz_t)`.
+4. **`src/isolated/IsolatedCommon.hpp`**: the name of `DXFG_EVENT_X` in `toString(dxfg_v4_event_clazz_t)`.
 5. **`OrderSource`**, if the event is published per order source as in Java: its flag in the masks of the sources and
    in `OrderSource::getEventTypeMask` (`src/event/market/OrderSource.cpp`), otherwise `isPublishable()` throws for the
    new type; `tests/api/OrderSourceTest.cpp`.
@@ -268,7 +268,7 @@ example: `git show --stat 1d92540a` (and `aec2a65e` for `MarketMaker` and `TextC
 9. **Release note**: see [Release notes](#release-notes).
 
 The SDK may send an event class that this version does not know (a newer SDK): `EventMapper` reads the class as an
-integer and skips such events with a report, so do not cast an unknown value to `dxfg_event_clazz_t` elsewhere.
+integer and skips such events with a report, so do not cast an unknown value to `dxfg_v4_event_clazz_t` elsewhere.
 
 ## Tests
 

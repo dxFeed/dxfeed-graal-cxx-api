@@ -9,14 +9,14 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
 
 using InstrumentProfileConnectionManager = WeakEntityManager<InstrumentProfileConnection>;
 
-InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state) {
+InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_v4_ipf_connection_state_t state) {
     switch (state) {
     case DXFG_IPF_CONNECTION_STATE_NOT_CONNECTED:
         return InstrumentProfileConnection::State::NOT_CONNECTED;
@@ -34,8 +34,8 @@ InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_conne
 }
 
 struct InstrumentProfileConnection::Impl {
-    static void onStateChange(graal_isolatethread_t * /*thread*/, dxfg_ipf_connection_state_t oldState,
-                              dxfg_ipf_connection_state_t newState, void *userData) noexcept {
+    static void onStateChange(graal_isolatethread_t * /*thread*/, dxfg_v4_ipf_connection_state_t oldState,
+                              dxfg_v4_ipf_connection_state_t newState, void *userData) noexcept {
         runCallback("InstrumentProfileConnection", [&] {
             const auto id = Id<InstrumentProfileConnection>::from(
                 dxfcpp::bit_cast<Id<InstrumentProfileConnection>::ValueType>(userData));

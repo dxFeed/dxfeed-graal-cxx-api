@@ -10,7 +10,7 @@
 #include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <cstdint>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 
@@ -162,7 +162,7 @@ void Quote::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_v4_quote_t *>(graalNative);
 
     data_ = {
         .timeMillisSequence = graalQuote->time_millis_sequence,
@@ -185,7 +185,7 @@ void Quote::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_v4_quote_t *>(graalNative);
 
     graalQuote->market_event.event_type.clazz = DXFG_EVENT_QUOTE;
     graalQuote->time_millis_sequence = data_.timeMillisSequence;
@@ -205,10 +205,10 @@ std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Quote. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
-        throw InvalidArgumentException(fmt::format("Unable to create Quote. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_QUOTE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
+        throw InvalidArgumentException(fmt::format(
+            "Unable to create Quote. Wrong event class {}! Expected: {}.",
+            std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_QUOTE)));
     }
 
     auto quote = std::make_shared<Quote>();
@@ -224,7 +224,7 @@ void *Quote::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_quote_t>(
+    return newGraalEvent<dxfg_v4_quote_t>(
         DXFG_EVENT_QUOTE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -237,13 +237,13 @@ void Quote::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
         throw InvalidArgumentException(fmt::format(
             "Unable to free Quote's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_QUOTE)));
+            std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_QUOTE)));
     }
 
-    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_v4_quote_t *>(graalNative);
 
     freeGraalData(graalNative);
 

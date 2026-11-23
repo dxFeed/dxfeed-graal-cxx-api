@@ -9,7 +9,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <cstdint>
 #include <utility>
@@ -18,7 +18,7 @@ DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXEndpoint {
 
-constexpr DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) noexcept {
+constexpr DXEndpoint::State graalStateToState(dxfg_v4_endpoint_state_t state) noexcept {
     switch (state) {
     case DXFG_ENDPOINT_STATE_NOT_CONNECTED:
         return DXEndpoint::State::NOT_CONNECTED;
@@ -41,7 +41,7 @@ constexpr DXEndpoint::State graalStateToState(dxfg_endpoint_state_t state) noexc
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+void /* int32_t */ close(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_closeAndAwaitTermination` in isolation.
@@ -52,7 +52,7 @@ void /* int32_t */ close(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */
-closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+closeAndAwaitTermination(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_user` in isolation.
@@ -63,7 +63,7 @@ closeAndAwaitTermination(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::D
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+void /* int32_t */ user(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
                         std::string_view user);
 
 /**
@@ -75,7 +75,7 @@ void /* int32_t */ user(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+void /* int32_t */ password(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
                             std::string_view password);
 
 /**
@@ -87,7 +87,7 @@ void /* int32_t */ password(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, std::string_view address);
+void connect(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint, std::string_view address);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_reconnect` in isolation.
@@ -97,7 +97,7 @@ void connect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+void reconnect(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_disconnect` in isolation.
@@ -107,7 +107,7 @@ void reconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint>
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+void disconnect(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_disconnectAndClear` in isolation.
@@ -117,7 +117,7 @@ void disconnect(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+void disconnectAndClear(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_awaitProcessed` in isolation.
@@ -127,7 +127,7 @@ void disconnectAndClear(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DX
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+void awaitProcessed(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_awaitNotConnected` in isolation.
@@ -137,7 +137,7 @@ void awaitProcessed(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndp
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void awaitNotConnected(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+void awaitNotConnected(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function in isolation to get the state of the endpoint.
@@ -148,7 +148,7 @@ void awaitNotConnected(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXE
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+dxfcpp::DXEndpoint::State getState(/* dxfg_v4_endpoint_t* */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function in isolation to add the state change listener to the endpoint.
@@ -160,8 +160,8 @@ dxfcpp::DXEndpoint::State getState(/* dxfg_endpoint_t* */ const JavaObjectHandle
  * @throws GraalException if something happened with the GraalVM.
  */
 void addStateChangeListener(
-    /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-    /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
+    /* dxfg_v4_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+    /* dxfg_v4_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
         &listener);
 
 /**
@@ -174,8 +174,8 @@ void addStateChangeListener(
  * @throws GraalException if something happened with the GraalVM.
  */
 void removeStateChangeListener(
-    /* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
-    /* dxfg_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
+    /* dxfg_v4_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint,
+    /* dxfg_v4_endpoint_state_change_listener_t * */ const JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
         &listener);
 
 /**
@@ -187,7 +187,7 @@ void removeStateChangeListener(
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+void * /* dxfg_v4_feed_t* */ getFeed(/* dxfg_v4_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_getPublisher` in isolation.
@@ -198,8 +198,8 @@ void * /* dxfg_feed_t* */ getFeed(/* dxfg_endpoint_t * */ const JavaObjectHandle
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void * /* dxfg_publisher_t* */
-getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+void * /* dxfg_v4_publisher_t* */
+getPublisher(/* dxfg_v4_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function in isolation to retrieve event types from the endpoint.
@@ -210,8 +210,8 @@ getPublisher(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> 
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-/* dxfg_event_clazz_list_t* */ std::unordered_set<EventTypeEnum>
-getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
+/* dxfg_v4_event_clazz_list* */ std::unordered_set<EventTypeEnum>
+getEventTypes(/* dxfg_v4_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_getRequestedAggregationPeriodMillis` in isolation.
@@ -222,7 +222,8 @@ getEventTypes(/* dxfg_endpoint_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint>
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-std::int64_t getRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint);
+std::int64_t
+getRequestedAggregationPeriodMillis(/* dxfg_v4_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_setRequestedAggregationPeriodMillis` in isolation.
@@ -233,7 +234,7 @@ std::int64_t getRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const J
  * @throws JavaException if something happened with the dxFeed API backend (the period exceeds 24 hours).
  * @throws GraalException if something happened with the GraalVM.
  */
-void setRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint,
+void setRequestedAggregationPeriodMillis(/* dxfg_v4_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint,
                                          std::int64_t period);
 
 /**
@@ -246,7 +247,7 @@ void setRequestedAggregationPeriodMillis(/* dxfg_endpoint_t * */ const JavaObjec
  * @throws GraalException if something happened with the GraalVM.
  */
 std::pair<std::int64_t, std::int64_t>
-getAggregationPeriodInfo(/* dxfg_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint);
+getAggregationPeriodInfo(/* dxfg_v4_endpoint_t * */ const JavaObjectHandle<DXEndpoint> &endpoint);
 
 namespace Builder {
 
@@ -257,7 +258,7 @@ namespace Builder {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void * /* dxfg_endpoint_builder_t* */ create();
+void * /* dxfg_v4_endpoint_builder_t* */ create();
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_withRole` in isolation.
@@ -268,8 +269,8 @@ void * /* dxfg_endpoint_builder_t* */ create();
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */
-withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-         /* dxfg_endpoint_role_t */ dxfcpp::DXEndpoint::Role role);
+withRole(/* dxfg_v4_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+         /* dxfg_v4_endpoint_role_t */ dxfcpp::DXEndpoint::Role role);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_withProperty` in isolation.
@@ -281,7 +282,7 @@ withRole(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoi
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */
-withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+withProperty(/* dxfg_v4_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
              std::string_view key, std::string_view value);
 
 /**
@@ -293,7 +294,7 @@ withProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */
-withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+withProperties(/* dxfg_v4_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
                std::string_view filePath);
 
 /**
@@ -305,7 +306,7 @@ withProperties(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DX
  * @throws GraalException if something happened with the GraalVM.
  */
 bool /* int32_t */
-supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+supportsProperty(/* dxfg_v4_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
                  std::string_view key);
 
 /**
@@ -318,8 +319,8 @@ supportsProperty(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::
  * @throws GraalException if something happened with the GraalVM.
  */
 void /* int32_t */
-withExecutor(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
-             /* dxfg_executor_t * */ const JavaObjectHandle<dxfcpp::ExecutorTag> &executor);
+withExecutor(/* dxfg_v4_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder,
+             /* dxfg_v4_executor_t * */ const JavaObjectHandle<dxfcpp::ExecutorTag> &executor);
 
 /**
  * Calls the Graal SDK function `dxfg_v4_DXEndpoint_Builder_build` in isolation.
@@ -330,8 +331,8 @@ withExecutor(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEn
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-void * /* dxfg_endpoint_t* */
-build(/* dxfg_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder);
+void * /* dxfg_v4_endpoint_t* */
+build(/* dxfg_v4_endpoint_builder_t * */ const JavaObjectHandle<dxfcpp::DXEndpoint::Builder> &builder);
 
 } // namespace Builder
 
@@ -347,8 +348,8 @@ namespace StateChangeListener {
  * @throws JavaException if something happened with the dxFeed API backend.
  * @throws GraalException if something happened with the GraalVM.
  */
-/* dxfg_endpoint_state_change_listener_t* */ JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
-create(/* dxfg_endpoint_state_change_listener_func */ void *userFunc, void *userData);
+/* dxfg_v4_endpoint_state_change_listener_t* */ JavaObjectHandle<dxfcpp::DXEndpointStateChangeListener>
+create(/* dxfg_v4_endpoint_state_change_listener_func */ void *userFunc, void *userData);
 
 } // namespace StateChangeListener
 

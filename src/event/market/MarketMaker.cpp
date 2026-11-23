@@ -12,7 +12,7 @@
 #include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <algorithm>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <iterator>
 #include <memory>
@@ -94,7 +94,7 @@ void MarketMaker::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalMarketMaker = static_cast<dxfg_market_maker_t *>(graalNative);
+    const auto graalMarketMaker = static_cast<dxfg_v4_market_maker_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalMarketMaker->event_flags,
@@ -117,7 +117,7 @@ void MarketMaker::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalMarketMaker = static_cast<dxfg_market_maker_t *>(graalNative);
+    const auto graalMarketMaker = static_cast<dxfg_v4_market_maker_t *>(graalNative);
 
     graalMarketMaker->market_event.event_type.clazz = DXFG_EVENT_MARKET_MAKER;
     graalMarketMaker->event_flags = data_.eventFlags;
@@ -145,8 +145,8 @@ std::shared_ptr<MarketMaker> MarketMaker::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create MarketMaker. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MARKET_MAKER) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MARKET_MAKER) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to create MarketMaker. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
@@ -166,7 +166,7 @@ void *MarketMaker::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_market_maker_t>(
+    return newGraalEvent<dxfg_v4_market_maker_t>(
         DXFG_EVENT_MARKET_MAKER,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -179,15 +179,15 @@ void MarketMaker::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MARKET_MAKER) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MARKET_MAKER) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to free MarketMaker's Graal data. Wrong event class {}({})! Expected: {}",
             isolated::toString(eventType), std::to_string(eventType), isolated::toString(DXFG_EVENT_MARKET_MAKER)));
     }
 
-    const auto graalMarketMaker = static_cast<dxfg_market_maker_t *>(graalNative);
+    const auto graalMarketMaker = static_cast<dxfg_v4_market_maker_t *>(graalNative);
 
     freeGraalData(graalNative);
 

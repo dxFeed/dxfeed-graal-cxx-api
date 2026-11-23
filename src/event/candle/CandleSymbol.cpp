@@ -23,8 +23,8 @@
 #include <tuple>
 #include <unordered_set>
 
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
-#include <dxfg_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -339,7 +339,7 @@ void *CandleSymbol::toGraal() const {
         Debugger::debug("CandleSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new dxfg_candle_symbol_t{{CANDLE}, createCString(symbol_, "CandleSymbol(symbol)")};
+    auto *graalSymbol = new dxfg_v4_candle_symbol_t{{CANDLE}, createCString(symbol_, "CandleSymbol(symbol)")};
 
     return graalSymbol;
 }
@@ -354,7 +354,7 @@ void CandleSymbol::freeGraal(void *graalNative) {
         return;
     }
 
-    const auto *graalSymbol = static_cast<dxfg_candle_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_v4_candle_symbol_t *>(graalNative);
 
     delete[] graalSymbol->symbol;
     delete graalSymbol;
@@ -370,7 +370,7 @@ CandleSymbol CandleSymbol::fromGraal(void *graalNative) {
         return {};
     }
 
-    const auto *graalSymbol = static_cast<dxfg_candle_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_v4_candle_symbol_t *>(graalNative);
 
     return CandleSymbol{graalSymbol->symbol};
 }

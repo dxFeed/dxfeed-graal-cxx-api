@@ -10,7 +10,7 @@
 #include "../../internal/Common.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -29,7 +29,7 @@ void TimeAndSale::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+    const auto graalTimeAndSale = static_cast<dxfg_v4_time_and_sale_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalTimeAndSale->event_flags,
@@ -55,7 +55,7 @@ void TimeAndSale::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+    const auto graalTimeAndSale = static_cast<dxfg_v4_time_and_sale_t *>(graalNative);
 
     graalTimeAndSale->market_event.event_type.clazz = DXFG_EVENT_TIME_AND_SALE;
     graalTimeAndSale->event_flags = data_.eventFlags;
@@ -81,7 +81,7 @@ void TimeAndSale::freeGraalData(void *graalNative) noexcept {
 
     MarketEvent::freeGraalData(graalNative);
 
-    const auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+    const auto graalTimeAndSale = static_cast<dxfg_v4_time_and_sale_t *>(graalNative);
 
     delete[] graalTimeAndSale->exchange_sale_conditions;
     delete[] graalTimeAndSale->buyer;
@@ -93,10 +93,11 @@ std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create TimeAndSale. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TIME_AND_SALE) {
-        throw InvalidArgumentException(fmt::format("Unable to create TimeAndSale. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_TIME_AND_SALE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TIME_AND_SALE) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create TimeAndSale. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_TIME_AND_SALE)));
     }
 
     auto timeAndSale = std::make_shared<TimeAndSale>();
@@ -112,7 +113,7 @@ void *TimeAndSale::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_time_and_sale_t>(
+    return newGraalEvent<dxfg_v4_time_and_sale_t>(
         DXFG_EVENT_TIME_AND_SALE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -125,14 +126,14 @@ void TimeAndSale::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TIME_AND_SALE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TIME_AND_SALE) {
         throw InvalidArgumentException(
             fmt::format("Unable to free TimeAndSale's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_TIME_AND_SALE)));
     }
 
-    const auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+    const auto graalTimeAndSale = static_cast<dxfg_v4_time_and_sale_t *>(graalNative);
 
     freeGraalData(graalNative);
 

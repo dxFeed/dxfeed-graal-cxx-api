@@ -7,7 +7,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
 #include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -28,12 +28,12 @@ const std::unique_ptr<IndexedEventSource> &IndexedEventSubscriptionSymbol::getSo
 void *IndexedEventSubscriptionSymbol::toGraal() const {
     // The symbol is owned here until the source is converted: a source name that is not valid UTF-8 throws.
     auto symbol = eventSymbol_->toGraalUnique();
-    auto *graalSymbol = new dxfg_indexed_event_subscription_symbol_t{
+    auto *graalSymbol = new dxfg_v4_indexed_event_subscription_symbol_t{
         .supper = {.type = INDEXED_EVENT_SUBSCRIPTION},
         .symbol = nullptr,
-        .source = static_cast<dxfg_indexed_event_source_t *>(source_->toGraal())};
+        .source = static_cast<dxfg_v4_indexed_event_source_t *>(source_->toGraal())};
 
-    graalSymbol->symbol = static_cast<dxfg_symbol_t *>(symbol.release());
+    graalSymbol->symbol = static_cast<dxfg_v4_symbol_t *>(symbol.release());
 
     return graalSymbol;
 }
@@ -43,7 +43,7 @@ void IndexedEventSubscriptionSymbol::freeGraal(void *graalNative) {
         return;
     }
 
-    const auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_v4_indexed_event_subscription_symbol_t *>(graalNative);
 
     SymbolWrapper::freeGraal(graalSymbol->symbol);
     IndexedEventSource::freeGraal(graalSymbol->source);
@@ -62,7 +62,7 @@ IndexedEventSubscriptionSymbol IndexedEventSubscriptionSymbol::fromGraal(void *g
             "Unable to create IndexedEventSubscriptionSymbol. The `graalNative` parameter is nullptr");
     }
 
-    const auto *graalSymbol = static_cast<dxfg_indexed_event_subscription_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_v4_indexed_event_subscription_symbol_t *>(graalNative);
 
     return {SymbolWrapper::fromGraal(graalSymbol->symbol), IndexedEventSource::fromGraal(graalSymbol->source)};
 }

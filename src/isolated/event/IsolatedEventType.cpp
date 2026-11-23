@@ -7,7 +7,7 @@
 #include "../../internal/CallbackBarrier.hpp"
 #include "../IsolatedCommon.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 

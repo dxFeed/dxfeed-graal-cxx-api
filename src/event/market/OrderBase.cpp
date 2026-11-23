@@ -6,7 +6,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 #include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -18,7 +18,7 @@ void OrderBase::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
+    const auto graalOrderBase = static_cast<dxfg_v4_order_base_t *>(graalNative);
 
     orderBaseData_ = {
         .eventFlags = graalOrderBase->event_flags,
@@ -46,7 +46,7 @@ void OrderBase::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
+    const auto graalOrderBase = static_cast<dxfg_v4_order_base_t *>(graalNative);
 
     graalOrderBase->event_flags = orderBaseData_.eventFlags;
     graalOrderBase->index = orderBaseData_.index;

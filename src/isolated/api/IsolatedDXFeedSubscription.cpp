@@ -8,7 +8,7 @@
 #include "../../internal/Common.hpp"
 #include "../IsolatedCommon.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <memory>
 

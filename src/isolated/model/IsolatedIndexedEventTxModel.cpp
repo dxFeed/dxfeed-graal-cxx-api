@@ -10,7 +10,7 @@
 #include "../internal/IsolatedString.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 #include <string>
 #include <utility>

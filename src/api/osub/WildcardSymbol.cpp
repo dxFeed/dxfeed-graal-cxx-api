@@ -5,7 +5,7 @@
 #include "../../internal/utils/debug/Debug.hpp"
 #include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -31,7 +31,7 @@ void *WildcardSymbol::toGraal() const noexcept {
         Debugger::debug("WildcardSymbol::toGraal()");
     }
 
-    static const dxfg_wildcard_symbol_t wildcardGraalSymbol{{WILDCARD}};
+    static const dxfg_v4_wildcard_symbol_t wildcardGraalSymbol{{WILDCARD}};
 
     return dxfcpp::bit_cast<void *>(&wildcardGraalSymbol);
 }

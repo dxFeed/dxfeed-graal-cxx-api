@@ -10,7 +10,7 @@
 #include "../../internal/utils/JavaUtils.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 #include <string>
@@ -27,7 +27,7 @@ void OrderImbalance::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalOrderImbalance = static_cast<dxfg_order_imbalance_t *>(graalNative);
+    const auto graalOrderImbalance = static_cast<dxfg_v4_order_imbalance_t *>(graalNative);
 
     data_ = {
         .sourceId = graalOrderImbalance->source_id,
@@ -48,7 +48,7 @@ void OrderImbalance::fillGraalData(void *graalNative) const {
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalOrderImbalance = static_cast<dxfg_order_imbalance_t *>(graalNative);
+    const auto graalOrderImbalance = static_cast<dxfg_v4_order_imbalance_t *>(graalNative);
 
     graalOrderImbalance->market_event.event_type.clazz = DXFG_EVENT_ORDER_IMBALANCE;
     graalOrderImbalance->source_id = data_.sourceId;
@@ -74,8 +74,8 @@ std::shared_ptr<OrderImbalance> OrderImbalance::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create OrderImbalance. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER_IMBALANCE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER_IMBALANCE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to create OrderImbalance. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
@@ -95,7 +95,7 @@ void *OrderImbalance::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_order_imbalance_t>(
+    return newGraalEvent<dxfg_v4_order_imbalance_t>(
         DXFG_EVENT_ORDER_IMBALANCE,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -108,15 +108,15 @@ void OrderImbalance::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER_IMBALANCE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER_IMBALANCE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to free OrderImbalance's Graal data. Wrong event class {}({})! Expected: {}",
             isolated::toString(eventType), std::to_string(eventType), isolated::toString(DXFG_EVENT_ORDER_IMBALANCE)));
     }
 
-    const auto graalOrderImbalance = static_cast<dxfg_order_imbalance_t *>(graalNative);
+    const auto graalOrderImbalance = static_cast<dxfg_v4_order_imbalance_t *>(graalNative);
 
     freeGraalData(graalNative);
 

@@ -9,7 +9,7 @@
 #include "../../internal/utils/StringConstants.hpp"
 #include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -23,7 +23,7 @@ void Order::fillData(void *graalNative) noexcept {
 
     OrderBase::fillData(graalNative);
 
-    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_v4_order_t *>(graalNative);
 
     orderData_ = {.marketMaker = toStringOpt(graalOrder->market_maker)};
 }
@@ -35,7 +35,7 @@ void Order::fillGraalData(void *graalNative) const {
 
     OrderBase::fillGraalData(graalNative);
 
-    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_v4_order_t *>(graalNative);
 
     graalOrder->order_base.market_event.event_type.clazz = DXFG_EVENT_ORDER;
     graalOrder->market_maker = createCString(orderData_.marketMaker, "Order::marketMaker");
@@ -48,7 +48,7 @@ void Order::freeGraalData(void *graalNative) noexcept {
 
     MarketEvent::freeGraalData(graalNative);
 
-    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_v4_order_t *>(graalNative);
 
     delete[] graalOrder->market_maker;
 }
@@ -58,8 +58,8 @@ std::shared_ptr<Order> Order::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Order. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to create Order. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
@@ -79,7 +79,7 @@ void *Order::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    return newGraalEvent<dxfg_order_t>(
+    return newGraalEvent<dxfg_v4_order_t>(
         DXFG_EVENT_ORDER,
         [this](void *graalNative) {
             fillGraalData(graalNative);
@@ -92,13 +92,13 @@ void Order::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER) {
         throw InvalidArgumentException(fmt::format(
             "Unable to free Order's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_ORDER)));
+            std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_ORDER)));
     }
 
-    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_v4_order_t *>(graalNative);
 
     freeGraalData(graalNative);
 

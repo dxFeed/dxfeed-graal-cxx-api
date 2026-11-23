@@ -7,7 +7,7 @@
 #include "../internal/utils/debug/Debug.hpp"
 #include "../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -77,7 +77,7 @@ void *StringSymbol::toGraal() const {
         Debugger::debug("StringSymbol::toGraal()");
     }
 
-    auto *graalSymbol = new dxfg_string_symbol_t{{STRING}, createCString(data_, "StringSymbol(symbol)")};
+    auto *graalSymbol = new dxfg_v4_string_symbol_t{{STRING}, createCString(data_, "StringSymbol(symbol)")};
 
     return graalSymbol;
 }
@@ -92,7 +92,7 @@ void StringSymbol::freeGraal(void *graalNative) {
         return;
     }
 
-    auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
+    auto *graalSymbol = static_cast<dxfg_v4_string_symbol_t *>(graalNative);
 
     delete[] graalSymbol->symbol;
     delete graalSymbol;
@@ -108,7 +108,7 @@ StringSymbol StringSymbol::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create StringSymbol. The `graalNative` parameter is nullptr");
     }
 
-    const auto *graalSymbol = static_cast<dxfg_string_symbol_t *>(graalNative);
+    const auto *graalSymbol = static_cast<dxfg_v4_string_symbol_t *>(graalNative);
 
     return {dxfcpp::toString(graalSymbol->symbol)};
 }
