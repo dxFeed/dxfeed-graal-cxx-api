@@ -482,8 +482,11 @@ struct BackgroundTool {
 };
 
 // Scrapes until the predicate holds for the text or the timeout passes; returns the last text.
+// The time for the tool to start the metrics server: the process, the arguments and the isolate, slow in Debug builds
+// on slow runners. The timeout of a scrape counts from the server's first answer, so the start does not consume it.
+constexpr auto METRICS_SERVER_START_TIMEOUT = 30s;
+
 template <typename Predicate> std::string scrapeUntil(std::int32_t port, Predicate &&predicate, std::chrono::seconds timeout) {
-    const auto deadline = std::chrono::steady_clock::now() + timeout;
     std::string text;
 
     // The tool binds the port in its own thread, after the arguments and the isolate, so the first connect may come
@@ -500,7 +503,9 @@ template <typename Predicate> std::string scrapeUntil(std::int32_t port, Predica
 
             return true;
         },
-        timeout, 50ms));
+        METRICS_SERVER_START_TIMEOUT, 50ms));
+
+    const auto deadline = std::chrono::steady_clock::now() + timeout;
 
     while (true) {
         const auto response = scrape(port);
@@ -981,7 +986,7 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest metrics: a scrape of a consumer run") {
 TEST_CASE_FIXTURE(ToolsProcess, "NetTest metrics: a scrape of a producer run") {
     const auto port = test::findFreeLoopbackPort();
     const auto metricsPort = static_cast<std::int32_t>(test::findFreeLoopbackPort());
-    BackgroundTool tool({"p", listenAddress(port), "-S", "10", "-r", "*/1000", "-s", "1s", "--duration", "4s",
+    BackgroundTool tool({"p", listenAddress(port), "-S", "10", "-r", "*/1000", "-s", "1s", "--duration", "6s",
                          "--metrics-port", std::to_string(metricsPort)});
     const std::string labels = "{tool=\"cpp-api\",side=\"producer\",name=\"NetTest\"";
     const auto text = scrapeUntil(
@@ -992,7 +997,7 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest metrics: a scrape of a producer run") {
                    seriesValue(body, "nettest_runtime_heap_used_bytes" + labels).value_or(0) > 0 &&
                    body.find("nettest_connector_rtt_seconds_total" + labels) != std::string::npos;
         },
-        3s);
+        5s);
 
     INFO(text);
     checkExposition(text, "producer");
