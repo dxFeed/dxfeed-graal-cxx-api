@@ -241,13 +241,17 @@ std::string jsonString(const std::string &text) {
 
 std::string formatSummary(const Settings &settings, const RunReport &report, const SummaryStatus &status) {
     const bool producer = settings.mode == Mode::PRODUCER;
-    const auto build = Object().add("vendor", "null").add("march", "null").add("gc", "null").text();
+    const auto build = Object()
+                           .add("vendor", stringOrNull(status.buildVendor))
+                           .add("march", stringOrNull(status.buildMarch))
+                           .add("gc", stringOrNull(status.buildGc))
+                           .text();
     const auto tool = Object()
                           .add("implementation", jsonString(IMPLEMENTATION))
                           .add("name", "\"NetTest\"")
                           .add("version", stringOrNull(status.version))
                           .add("sdk_version", stringOrNull(status.sdkVersion))
-                          .add("qd_version", "null")
+                          .add("qd_version", stringOrNull(status.qdVersion))
                           .add("build", build)
                           .text();
     const auto length = report.endEpochNs - report.startEpochNs;

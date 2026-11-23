@@ -418,6 +418,11 @@ int run(const Settings &settings, std::ostream &out, std::ostream &err) {
     // Empty, so `null` in the summary, when the isolate could not be created.
     status.sdkVersion = Isolate::getGraalNativeSdkVersion();
 
+    // Without the isolate there is nothing to read: the build stays `null` as well.
+    if (!status.sdkVersion.empty()) {
+        readBuildInfo(status);
+    }
+
     // An exception that the run does not handle itself (an allocation, a thread that does not start) ends it with the
     // summary of the status `error` and the exit code 1 too.
     try {

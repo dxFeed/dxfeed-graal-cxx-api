@@ -248,6 +248,10 @@ TEST_CASE("NetTest kit: the summary of a producer has every key that nettest-sum
     SummaryStatus status;
 
     status.version = "v9.0.0";
+    status.qdVersion = "3.356";
+    status.buildVendor = "Oracle Corporation 21.0.2";
+    status.buildMarch = "x86-64-v3";
+    // The garbage collectors stay empty: a value the SDK does not give is null.
 
     const auto text = formatSummary(settings, producerReport(), status);
     const auto errors = schemaErrors(*directory, text);
@@ -262,6 +266,10 @@ TEST_CASE("NetTest kit: the summary of a producer has every key that nettest-sum
     CHECK(value["tool"]["implementation"].asString() == "cpp-api");
     CHECK(value["tool"]["version"].asString() == "v9.0.0");
     CHECK(value["tool"]["sdk_version"].isNull());
+    CHECK(value["tool"]["qd_version"].asString() == "3.356");
+    CHECK(value["tool"]["build"]["vendor"].asString() == "Oracle Corporation 21.0.2");
+    CHECK(value["tool"]["build"]["march"].asString() == "x86-64-v3");
+    CHECK(value["tool"]["build"]["gc"].isNull());
     CHECK(value["config"]["warmup_ms"].asInteger() == 10'000);
     CHECK(value["config"]["rate_limit"].asInteger() == 5'000);
     // The C++ API copies every published event: --reuse is never effective.

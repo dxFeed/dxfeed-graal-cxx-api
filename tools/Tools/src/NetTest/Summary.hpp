@@ -124,6 +124,14 @@ struct SummaryStatus {
     std::string version{};
     /// The version of the Graal Native SDK; empty is null.
     std::string sdkVersion{};
+    /// The version of QDS that the SDK library is built with; empty is null.
+    std::string qdVersion{};
+    /// The vendor and the version of the runtime of the SDK library; empty is null.
+    std::string buildVendor{};
+    /// The target machine of the build of the SDK library (`-march` of native-image); empty is null.
+    std::string buildMarch{};
+    /// The garbage collectors of the runtime of the SDK library, separated by `, `; empty is null.
+    std::string buildGc{};
 };
 
 /// The JSON text of the summary file, with a line break at the end.

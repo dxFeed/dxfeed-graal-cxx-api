@@ -530,8 +530,6 @@ ends the tool with exit code 2: the isolate prints its reason to stderr, and the
   call.
 - `reuse_effective` of the producer summary is always `false`: the C++ API copies the published events into the isolate, so
   `--reuse` changes only the C++ objects.
-- `qd_version` and the values of `build` (`vendor`, `march`, `gc`) of the summary are `null` until SDK 3.19.0, which
-  gives them.
 - The isolate is not torn down at the end of the run, so the options of the isolate that print at its tear-down, such
   as `-XX:+PrintGCSummary`, print nothing.
 
