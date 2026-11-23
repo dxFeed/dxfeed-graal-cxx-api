@@ -742,8 +742,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     /**
      * Returns the total number of events that were dropped for this subscription since it was created.
      *
-     * <b>This method is experimental and may change in the future versions.</b>
-     *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html#getTotalDroppedEvents--)
      *
      * @return The total number of dropped events.

@@ -22,8 +22,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Type of auction.
- *
- * This is an experimental API, it may change in future versions.
  */
 struct AuctionType : Enum<AuctionType, std::uint32_t> {
     using Enum::Enum;

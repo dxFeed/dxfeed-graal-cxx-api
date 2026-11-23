@@ -38,8 +38,6 @@ struct EventMapper;
  * ids, customer additional info, extended matching options, info about triggers, the structure of quantity, etc.,
  * see the properties for details.
  *
- * This is an experimental API, it may change in future versions.
- *
  * Java: <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamOrder.html">NuamOrder</a>
  *
  * <h3>Nuam Flags</h3>

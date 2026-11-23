@@ -32,8 +32,6 @@ struct EventMapper;
  * It includes the most recent information about Nuam trade statistics published after every trade for
  * the current trading day such as number of trades, volume-weighted average price, etc.
  *
- * This is an experimental API, it may change in future versions.
- *
  * Java: <a href="https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTrade.html">NuamTrade</a>
  *
  * <h3>Properties</h3>

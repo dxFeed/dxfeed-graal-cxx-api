@@ -36,8 +36,6 @@ struct EventMapper;
  * along with reference pricing information that reflects the current auction state. The event
  * includes metrics such as paired size, imbalance shares, and hypothetical pricing scenarios.
  *
- * This is an experimental API, it may change in future versions.
- *
  * <h3>Properties</h3>
  *
  * OrderImbalance event has the following properties:

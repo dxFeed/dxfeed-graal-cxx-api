@@ -11,7 +11,7 @@ and [dxFeed Java API](https://docs.dxfeed.com/dxfeed/api/overview-summary.html) 
 the [Overview](#overview) section.<br>
 
 [![Build](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/dxFeed/dxfeed-graal-cxx-api/actions/workflows/build.yml)
-![Graal Native SDK](https://img.shields.io/badge/Graal%20Native%20SDK-v3.18.0-yellow)
+![Graal Native SDK](https://img.shields.io/badge/Graal%20Native%20SDK-v3.19.0-yellow)
 ![Platform](https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20linux--aarch64%20%7C%20osx--x64%20%7C%20osx--aarch64-lightgrey)
 ![](https://img.shields.io/badge/C++%20standard-C++20-blueviolet) ![](https://img.shields.io/badge/C%20standard-C11-blueviolet)
 [![Release](https://img.shields.io/github/v/release/dxFeed/dxfeed-graal-cxx-api)](https://github.com/dxFeed/dxfeed-graal-cxx-api/releases/latest)
@@ -465,7 +465,7 @@ what the endpoint restores after a reconnect are in [Troubleshooting](TROUBLESHO
 
 When a question goes to the support, start with these lines of the output of the program:
 
-- `[dxfcpp] INFO #1 DXEndpoint: dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.18.0, Windows x86_64(16 cores)`:
+- `[dxfcpp] INFO #1 DXEndpoint: dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.19.0, Windows x86_64(16 cores)`:
   the versions and the platform, written to `stderr` once per process when the first
   endpoint is created (through `ErrorManager`, see its documentation to redirect or turn off the output);
 - `Using QDS-<version>, (C) Devexperts`: the version of QD inside the SDK;
@@ -507,7 +507,7 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_tools>
 
 ### NetTest
 
-`Tools NetTest` is the C++ API tool of the NetTest specification `nettest/1` of the Graal Native SDK 3.18.0
+`Tools NetTest` is the C++ API tool of the NetTest specification `nettest/1` of the Graal Native SDK 3.19.0
 (`docs/wrapper-guide/nettest.md` of the SDK sources): the command line, the output lines, the summary file, the
 `/metrics` endpoint and the exit codes are those of the NetTest of the other APIs, so one stand runs and compares them.
 `Tools NetTest --help` prints the options. For example, a producer at 500,000 events per second and a consumer of the
@@ -747,20 +747,20 @@ sudo /usr/bin/xattr -r -d com.apple.quarantine <directory_with_samples>
   extension of `Order` for the symbols traded on the OTC Markets
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [OrderImbalance](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/OrderImbalance.html) (experimental)
-  shows the imbalance between buy and sell orders during auctions
+- [OrderImbalance](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/OrderImbalance.html) shows
+  the imbalance between buy and sell orders during auctions
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [NuamOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamOrder.html) (experimental) is an
+- [NuamOrder](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamOrder.html) is an
   extension of `Order` for the NUAM exchange
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [NuamTrade](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTrade.html) (experimental) is an
+- [NuamTrade](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTrade.html) is an
   extension of `Trade` for the NUAM exchange
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
-- [NuamTimeAndSale](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTimeAndSale.html) (experimental)
-  is an extension of `TimeAndSale` for the NUAM exchange
+- [NuamTimeAndSale](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/custom/NuamTimeAndSale.html) is an
+  extension of `TimeAndSale` for the NUAM exchange
   - [ ] dxFeed Graal C API
   - [x] dxFeed Graal C++ API
 - [MarketMaker](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/event/market/MarketMaker.html) is the bid and ask of a

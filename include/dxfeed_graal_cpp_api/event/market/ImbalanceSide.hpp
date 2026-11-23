@@ -22,8 +22,6 @@ DXFCPP_BEGIN_NAMESPACE
 
 /**
  * Side of an order imbalance.
- *
- * This is an experimental API, it may change in future versions.
  */
 struct ImbalanceSide : Enum<ImbalanceSide, std::uint32_t> {
     using Enum::Enum;
