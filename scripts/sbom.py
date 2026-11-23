@@ -11,7 +11,8 @@ in the same directory. The versions of the C++ dependencies come from CMakeLists
 The Graal Native SDK of an archive is described by <archive>.sdk-build-info.properties next to it (the
 docs/graal-native-sdk-build-info.properties of the SDK archive that the build used: the GraalVM and the JDK) and by
 <pom.xml>, the pom.xml of the SDK at its release tag (the Java libraries compiled into the SDK library). The full
-source bundle has no build of its own: it takes the build-info of the x86_64-windows Release library archive.
+source bundles have no build of their own: they take the build-info of the x86_64-windows Release library archive
+(the static-mt bundle: of the Release-static-mt one).
 
 The output depends only on the inputs: the same archives, files and timestamp give the same SBOMs.
 """
@@ -46,7 +47,7 @@ WITH_LIB = (LIB, LIB_MT, SAMPLES, TOOLS)  # the archives with the built library 
 ARCHIVE_NAME = re.compile(
     r"^" + PROJECT + r"-(?P<version>v\d+\.\d+\.\d+(?:-[a-z]+\d+)?)"
     r"(?:-(?P<platform>(?:x86_64|aarch64)-(?:windows|linux|osx)))?"
-    r"-(?P<rest>(?:Release|Debug|RelWithDebInfo|MinSizeRel)(?:-static-mt)?|Samples|Tools|Docs|Full-Source-Bundle)"
+    r"-(?P<rest>(?:Release|Debug|RelWithDebInfo|MinSizeRel)(?:-static-mt)?|Samples|Tools|Docs|Full-Source-Bundle(?:-static-mt)?)"
     r"(?P<extension>\.zip|\.tar\.gz)$")
 
 # The platforms of the archives and of the Graal Native SDK archives (CMakeLists.txt: DXFCXX_GRAAL_TARGET_PLATFORM).
@@ -109,6 +110,7 @@ class Archive:
     kind: str
     platform: str  # empty for the documentation
     build_type: str  # empty for the archives without one
+    static_runtime: bool = False  # the -static-mt library archives and the static-mt source bundle
 
     @property
     def base_name(self):
@@ -129,7 +131,7 @@ def parse_archive(path, version):
     rest, platform = match["rest"], match["platform"] or ""
     if rest == "Docs":
         kind, build_type = DOCS, ""
-    elif rest == "Full-Source-Bundle":
+    elif rest.startswith("Full-Source-Bundle"):
         kind, build_type = BUNDLE, ""
     elif rest in ("Samples", "Tools"):
         kind, build_type = (SAMPLES if rest == "Samples" else TOOLS), ""
@@ -144,7 +146,7 @@ def parse_archive(path, version):
         raise SbomError(f"The archive {path.name}: the static runtime archives are made on Windows only")
     if kind == BUNDLE and platform != "x86_64-windows":
         raise SbomError(f"The source bundle {path.name} is expected for x86_64-windows only")
-    return Archive(path, kind, platform, build_type)
+    return Archive(path, kind, platform, build_type, rest.endswith("-static-mt"))
 
 
 def find_archives(artifacts_dir, version):
@@ -201,10 +203,12 @@ def read_build_info(path):
 def build_info_path(archive, archives):
     if archive.kind != BUNDLE:
         return archive.path.with_name(archive.path.name + BUILD_INFO_SUFFIX)
+    kind = LIB_MT if archive.static_runtime else LIB
     for other in archives:
-        if other.kind == LIB and other.platform == archive.platform and other.build_type == "Release":
+        if other.kind == kind and other.platform == archive.platform and other.build_type == "Release":
             return other.path.with_name(other.path.name + BUILD_INFO_SUFFIX)
-    raise SbomError(f"No {archive.platform} Release library archive for the build-info of {archive.path.name}")
+    build = "Release-static-mt" if archive.static_runtime else "Release"
+    raise SbomError(f"No {archive.platform} {build} library archive for the build-info of {archive.path.name}")
 
 
 def read_pom(path, sdk_version):
@@ -336,12 +340,16 @@ def cxx_components(kind, versions, programs=frozenset()):
 
 
 def sdk_archives(archive, versions):
-    """The names and SHA-256 of the SDK archives that the build of the archive downloads (CMakeLists.txt)."""
+    """The names and SHA-256 of the SDK archives that the build of the archive downloads (CMakeLists.txt), and for a
+    source bundle also the Debug ones that it carries (scripts/make-source-bundle.ps1)."""
     sdk_version = versions["DXFEED_GRAAL_NATIVE_SDK_VERSION"]
     platform = SDK_PLATFORMS.get(archive.platform)
     if platform is None:
         raise SbomError(f"No Graal Native SDK archive for the platform {archive.platform}")
-    names = [platform + "-static-crt", platform + "-static-lib"] if archive.kind == LIB_MT else [platform]
+    suffixes = ["-static-crt", "-static-lib"] if archive.static_runtime else [""]
+    names = [platform + suffix for suffix in suffixes]
+    if archive.kind == BUNDLE:
+        names += [platform + "-debug" + suffix for suffix in suffixes]
     if versions.get("DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION") != sdk_version:
         raise SbomError(f"CMakeLists.txt has no SHA-256 of the Graal Native SDK {sdk_version} archives")
     result = []

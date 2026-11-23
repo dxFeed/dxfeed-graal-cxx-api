@@ -1,6 +1,9 @@
 <#
     .SYNOPSIS
-        This script prepares a full source bundle.
+        This script prepares the two full source bundles for Windows x64:
+        *-Full-Source-Bundle.zip with the Graal Native SDK with the dynamic C runtime (Release and Debug), and
+        *-Full-Source-Bundle-static-mt.zip with the Graal Native SDK with the static C runtime (Release and Debug, the
+        DLL and the static library).
     .PARAMETER DxFeedGraalCxxApiVersion
         The dxFeed Graal CXX API version (https://github.com/dxFeed/dxfeed-graal-cxx-api).
 #>
@@ -76,7 +79,6 @@ else
         throw "CMakeLists.txt has the SHA-256 of the Graal Native SDK $sdkSha256Version, not $graalNativeSdkVer"
     }
 
-    $sdkSha256 = Get-CMakeValue -Variable "DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows" -Pattern "[0-9a-f]{64}"
     $glfwSha256 = Get-CMakeValue -Variable "GLFW_SHA256" -Pattern "[0-9a-f]{64}"
     $imguiSha256 = Get-CMakeValue -Variable "IMGUI_SHA256" -Pattern "[0-9a-f]{64}"
 
@@ -84,22 +86,45 @@ else
     Write-Host "GLFW: $glfwVer"
     Write-Host "Dear ImGui: $imguiVer"
 
-    $bundleName = "dxFeedGraalCxxApi-$DxFeedGraalCxxApiVersion-x86_64-windows-Full-Source-Bundle"
     $downloadPath = "$buildBundleDir/download"
-    $bundlePath = "$buildBundleDir/$bundleName"
 
     New-Item -ItemType Directory -Force -Path $downloadPath
 
-    if (Test-Path -LiteralPath $bundlePath)
+    # Downloads an archive into the download directory once (a file left by an earlier run is reused if its SHA-256
+    # matches) and returns its path.
+    function Get-VerifiedArchive
     {
-        Remove-Item -LiteralPath $bundlePath -Recurse -Force
-    }
+        param (
+            [Parameter(Mandatory = $true)] [string] $Uri,
+            [Parameter(Mandatory = $true)] [string] $FileName,
+            [Parameter(Mandatory = $true)] [string] $Sha256
+        )
 
-    New-Item -ItemType Directory -Force -Path $bundlePath
+        $archivePath = "$downloadPath/$FileName"
+
+        if (Test-Path -LiteralPath $archivePath)
+        {
+            $existing = (Get-FileHash -Algorithm SHA256 -LiteralPath $archivePath).Hash.ToLowerInvariant()
+
+            if ($existing -eq $Sha256)
+            {
+                Write-Host "Using the downloaded $FileName"
+
+                return $archivePath
+            }
+        }
+
+        Write-Host "Downloading $Uri"
+        Invoke-WebRequest -Uri $Uri -OutFile $archivePath -ErrorAction Stop
+        Assert-Sha256 -Path $archivePath -Expected $Sha256
+
+        return $archivePath
+    }
 
     function Add-GitHubArchiveToBundle
     {
         param (
+            [Parameter(Mandatory = $true)] [string] $BundlePath,
             [Parameter(Mandatory = $true)] [string] $Repository,
             [Parameter(Mandatory = $true)] [string] $Tag,
             [Parameter(Mandatory = $true)] [string] $ExpectedDirectory,
@@ -107,42 +132,95 @@ else
         )
 
         $archiveFileName = ($Repository -replace '/', '-') + "-$Tag.zip"
-        $archivePath = "$downloadPath/$archiveFileName"
         $uri = "https://github.com/$Repository/archive/refs/tags/$Tag.zip"
+        $archivePath = Get-VerifiedArchive -Uri $uri -FileName $archiveFileName -Sha256 $Sha256
 
-        Write-Host "Downloading $uri"
-        Invoke-WebRequest -Uri $uri -OutFile $archivePath -ErrorAction Stop
-        Assert-Sha256 -Path $archivePath -Expected $Sha256
-        Expand-Archive -Path $archivePath -Force -DestinationPath "$bundlePath/third_party"
+        Expand-Archive -Path $archivePath -Force -DestinationPath "$BundlePath/third_party"
 
-        if (!(Test-Path "$bundlePath/third_party/$ExpectedDirectory" -PathType Container))
+        if (!(Test-Path "$BundlePath/third_party/$ExpectedDirectory" -PathType Container))
         {
             throw "The $Repository archive did not create the expected third_party/$ExpectedDirectory directory"
         }
     }
 
-    Copy-Item -Path "$thisDir/../.github" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../cmake" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../docs" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../include" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../resources" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../samples" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../scripts" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../src" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../tests" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../third_party" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../tools" -Recurse -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../*.md" -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../*.json" -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../*.txt" -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../LICENSE" -Force -Destination "$bundlePath"
-    Copy-Item -Path "$thisDir/../.clang-format" -Force -Destination "$bundlePath"
-    Invoke-WebRequest -Uri "https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/download/v${graalNativeSdkVer}/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -OutFile "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -ErrorAction Stop
-    Assert-Sha256 -Path "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -Expected $sdkSha256
-    Expand-Archive -Path "$downloadPath/graal-native-sdk-${graalNativeSdkVer}-amd64-windows.zip" -Force -DestinationPath "$bundlePath/third_party/graal-native-sdk-${graalNativeSdkVer}-amd64-windows"
+    # Unpacks the SDK archive <variant> of the releases page into third_party/graal-native-sdk-<version>-<variant>, the
+    # directory where CMakeLists.txt looks for it. ExpectedFile is a file that must be at the top of the archive.
+    function Add-GraalNativeSdkToBundle
+    {
+        param (
+            [Parameter(Mandatory = $true)] [string] $BundlePath,
+            [Parameter(Mandatory = $true)] [string] $Variant,
+            [Parameter(Mandatory = $true)] [string] $ExpectedFile
+        )
 
-    Add-GitHubArchiveToBundle -Repository "glfw/glfw" -Tag $glfwVer -ExpectedDirectory "glfw-$glfwVer" -Sha256 $glfwSha256
-    Add-GitHubArchiveToBundle -Repository "ocornut/imgui" -Tag "v$imguiVer" -ExpectedDirectory "imgui-$imguiVer" -Sha256 $imguiSha256
+        $sha256 = Get-CMakeValue -Variable "DXFEED_GRAAL_NATIVE_SDK_SHA256_$Variant" -Pattern "[0-9a-f]{64}"
+        $archiveFileName = "graal-native-sdk-$graalNativeSdkVer-$Variant.zip"
+        $uri = "https://github.com/dxFeed/dxfeed-graal-native-sdk/releases/download/v$graalNativeSdkVer/$archiveFileName"
+        $archivePath = Get-VerifiedArchive -Uri $uri -FileName $archiveFileName -Sha256 $sha256
+        $sdkDirectory = "$BundlePath/third_party/graal-native-sdk-$graalNativeSdkVer-$Variant"
 
-    Compress-Archive -Force -Path "$bundlePath" -DestinationPath "$buildBundleDir/$bundleName.zip"
+        Expand-Archive -Path $archivePath -Force -DestinationPath $sdkDirectory
+
+        if (!(Test-Path "$sdkDirectory/$ExpectedFile" -PathType Leaf))
+        {
+            throw "The Graal Native SDK archive $archiveFileName has no $ExpectedFile at the top"
+        }
+    }
+
+    function New-Bundle
+    {
+        param (
+            [Parameter(Mandatory = $true)] [string] $BundleName,
+            [Parameter(Mandatory = $true)] [string[]] $SdkVariants,
+            [string[]] $SdkStaticLibVariants = @()
+        )
+
+        $bundlePath = "$buildBundleDir/$BundleName"
+
+        if (Test-Path -LiteralPath $bundlePath)
+        {
+            Remove-Item -LiteralPath $bundlePath -Recurse -Force
+        }
+
+        New-Item -ItemType Directory -Force -Path $bundlePath
+
+        Copy-Item -Path "$thisDir/../.github" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../cmake" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../docs" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../include" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../resources" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../samples" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../scripts" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../src" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../tests" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../third_party" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../tools" -Recurse -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../*.md" -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../*.json" -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../*.txt" -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../LICENSE" -Force -Destination "$bundlePath"
+        Copy-Item -Path "$thisDir/../.clang-format" -Force -Destination "$bundlePath"
+
+        foreach ($variant in $SdkVariants)
+        {
+            Add-GraalNativeSdkToBundle -BundlePath $bundlePath -Variant $variant -ExpectedFile "CMakeLists.txt"
+        }
+
+        foreach ($variant in $SdkStaticLibVariants)
+        {
+            Add-GraalNativeSdkToBundle -BundlePath $bundlePath -Variant $variant -ExpectedFile "DxFeedGraalNativeSdk_static.lib"
+        }
+
+        Add-GitHubArchiveToBundle -BundlePath $bundlePath -Repository "glfw/glfw" -Tag $glfwVer -ExpectedDirectory "glfw-$glfwVer" -Sha256 $glfwSha256
+        Add-GitHubArchiveToBundle -BundlePath $bundlePath -Repository "ocornut/imgui" -Tag "v$imguiVer" -ExpectedDirectory "imgui-$imguiVer" -Sha256 $imguiSha256
+
+        Compress-Archive -Force -Path "$bundlePath" -DestinationPath "$buildBundleDir/$BundleName.zip"
+    }
+
+    $bundlePrefix = "dxFeedGraalCxxApi-$DxFeedGraalCxxApiVersion-x86_64-windows-Full-Source-Bundle"
+
+    New-Bundle -BundleName $bundlePrefix -SdkVariants @("amd64-windows", "amd64-windows-debug")
+    New-Bundle -BundleName "$bundlePrefix-static-mt" `
+        -SdkVariants @("amd64-windows-static-crt", "amd64-windows-debug-static-crt") `
+        -SdkStaticLibVariants @("amd64-windows-static-lib", "amd64-windows-debug-static-lib")
 }
