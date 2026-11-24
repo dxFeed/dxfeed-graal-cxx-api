@@ -15,7 +15,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 include(cmake/ParseVersion.cmake)
 
-set(DXFCXX_VERSION "v8.2.0" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v9.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
