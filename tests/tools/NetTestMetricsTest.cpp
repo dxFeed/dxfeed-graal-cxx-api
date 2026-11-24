@@ -481,33 +481,51 @@ struct BackgroundTool {
     }
 };
 
-// Scrapes until the predicate holds for the text or the timeout passes; returns the last text.
 // The time for the tool to start the metrics server: the process, the arguments and the isolate, slow in Debug builds
 // on slow runners. The timeout of a scrape counts from the server's first answer, so the start does not consume it.
 constexpr auto METRICS_SERVER_START_TIMEOUT = 30s;
 
+// The time from the server's first answer until the predicate of a scrape holds. The endpoints start after the server,
+// and on macOS runners the first endpoint after a pause may take 5 s more (the start of the JVM self-monitoring). The
+// predicate ends a scrape early, so the timeout only bounds a failure. The duration of a run counts from the start of
+// its endpoints, so a slow start does not shorten the run either.
+constexpr auto SCRAPE_TIMEOUT = 30s;
+
+// Whether the server accepts a connection. A connection closed without a request gets no response, and the server moves
+// on.
+bool serverAccepts(std::int32_t port) {
+    const auto socket = Connection::connectTo(port);
+
+    if (socket == NO_CLIENT_SOCKET) {
+        return false;
+    }
+
+    closeClientSocket(socket);
+
+    return true;
+}
+
+// Scrapes until the predicate holds for the text, the timeout passes or the run stops its server; returns the last
+// text, so that a failed predicate shows what the scrape had.
 template <typename Predicate> std::string scrapeUntil(std::int32_t port, Predicate &&predicate, std::chrono::seconds timeout) {
     std::string text;
 
     // The tool binds the port in its own thread, after the arguments and the isolate, so the first connect may come
-    // too early. A connection closed without a request gets no response, and the server moves on.
+    // too early.
     REQUIRE(test::waitUntil(
         [port] {
-            const auto socket = Connection::connectTo(port);
-
-            if (socket == NO_CLIENT_SOCKET) {
-                return false;
-            }
-
-            closeClientSocket(socket);
-
-            return true;
+            return serverAccepts(port);
         },
         METRICS_SERVER_START_TIMEOUT, 50ms));
 
     const auto deadline = std::chrono::steady_clock::now() + timeout;
 
     while (true) {
+        // The timeout may outlast the run: its server stops at the end of the duration.
+        if (!serverAccepts(port)) {
+            return text;
+        }
+
         const auto response = scrape(port);
 
         checkMetricsResponse(response);
@@ -954,7 +972,7 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest metrics: a scrape of a consumer run") {
                    seriesValue(body, "nettest_runtime_heap_used_bytes" + labels).value_or(0) > 0 &&
                    body.find("nettest_connector_rtt_seconds_total" + labels) != std::string::npos;
         },
-        5s);
+        SCRAPE_TIMEOUT);
 
     INFO(text);
     checkExposition(text, "consumer");
@@ -997,7 +1015,7 @@ TEST_CASE_FIXTURE(ToolsProcess, "NetTest metrics: a scrape of a producer run") {
                    seriesValue(body, "nettest_runtime_heap_used_bytes" + labels).value_or(0) > 0 &&
                    body.find("nettest_connector_rtt_seconds_total" + labels) != std::string::npos;
         },
-        5s);
+        SCRAPE_TIMEOUT);
 
     INFO(text);
     checkExposition(text, "producer");
