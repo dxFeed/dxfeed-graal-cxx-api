@@ -91,6 +91,24 @@ Pre-releases are ordered alpha < beta < pre < rc, then by the number. When the h
 since the pre-release join its section. Anything else (an earlier or the same pre-release, an older version, no
 unreleased items) is an error.
 
+### The CI of the branch
+
+Release only a commit whose `CI` push run on the branch is green, or whose every red job is a known flaky test that
+passes when the failed jobs are rerun. A pull request runs only the short set (the `pullRequest` rows of
+`.github/ci/build-matrix.json`), and the `release` workflow builds no sanitizers, so a job that fails only in the full
+matrix (a sanitizer build of one compiler, a runner image with a new compiler) is seen only in the push runs. Look at
+each red job, not at the status of the run, which is red as long as any flaky job is:
+
+```shell
+gh run list --branch main --event push --workflow CI --limit 1
+```
+
+```shell
+gh run view <run id> --json jobs --jq '.jobs[] | select(.conclusion == "failure") | .name'
+```
+
+For `release/vN` list the runs of that branch.
+
 ### Draft
 
 Run a draft before each release, on the commit the release is made from (the commit `vX.Y.Z` only adds the version
