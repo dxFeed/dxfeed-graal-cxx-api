@@ -3,14 +3,16 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
-#include "../internal/utils/StringUtils.hpp"
+#include "../detail/Conf.hpp"
+#include "../detail/ConstString.hpp"
+#include "../detail/StringParam.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <string_view>
 
 /**
  * \addtogroup dxfcpp_event
@@ -30,11 +32,38 @@ class DXFCPP_EXPORT IndexedEventSource {
     friend struct EventSourceWrapper;
 
     std::int32_t id_{};
-    std::string name_{};
+    ConstString name_{};
+    // Set by OrderSource: toGraal() writes the type of an order source then. The flag replaces the virtual functions,
+    // so the class is not polymorphic and its constants do not change when they are destroyed at exit. A copy to this
+    // class does not copy the flag, as a copy of an order source to this class did not keep its virtual functions.
+    bool orderSource_{};
+
+    protected:
+    /**
+     * Creates a constant source in constant expressions.
+     *
+     * @param id The identifier.
+     * @param name The name with static storage duration.
+     * @param orderSource `true` for an OrderSource.
+     */
+    constexpr IndexedEventSource(std::int32_t id, ConstString::Literal name, bool orderSource = false) noexcept
+        : id_{id}, name_{name}, orderSource_{orderSource} {
+    }
+
+    /// Creates a source of an OrderSource by id and name.
+    IndexedEventSource(std::int32_t id, StringParam name, bool orderSource);
+
+    /// Creates a copy of the source for an OrderSource.
+    IndexedEventSource(const IndexedEventSource &other, bool orderSource) noexcept;
+
+    /// @return The name without a copy.
+    [[nodiscard]] constexpr std::string_view nameView() const noexcept {
+        return name_.view();
+    }
 
     public:
     /**
-     * The default source with zero @ref ::id() "identifier" for all events that do not support multiple sources.
+     * The default source with zero @ref id() "identifier" for all events that do not support multiple sources.
      */
     static const IndexedEventSource DEFAULT;
 
@@ -45,7 +74,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
      */
-    virtual void *toGraal() const;
+    void *toGraal() const;
 
     /**
      * Releases the memory occupied by the dxFeed Graal SDK structure (recursively if necessary).
@@ -55,7 +84,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      */
     static void freeGraal(void *graalNative);
 
-    virtual std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept;
+    std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const;
 
     /**
      * Creates an object of the current type and fills it with data from the dxFeed Graal SDK structure.
@@ -67,7 +96,6 @@ class DXFCPP_EXPORT IndexedEventSource {
     static IndexedEventSource fromGraal(void *graalNative);
 
     IndexedEventSource() noexcept;
-    virtual ~IndexedEventSource() noexcept;
 
     /**
      * Creates the new IndexedEvent's source by id and name.
@@ -75,7 +103,22 @@ class DXFCPP_EXPORT IndexedEventSource {
      * @param id The source id
      * @param name The source name
      */
-    IndexedEventSource(std::int32_t id, const StringLike &name) noexcept;
+    IndexedEventSource(std::int32_t id, StringParam name);
+
+    /**
+     * Creates a copy of the source. A copy of an OrderSource is a source of the IndexedEventSource type.
+     *
+     * @param other The source to copy.
+     */
+    IndexedEventSource(const IndexedEventSource &other) noexcept;
+
+    /**
+     * Copies the identifier and the name of the source; the type of this source is kept.
+     *
+     * @param other The source to copy.
+     * @return This source.
+     */
+    IndexedEventSource &operator=(const IndexedEventSource &other) noexcept;
 
     /**
      * Returns the source identifier. Source identifier is non-negative.
@@ -89,7 +132,7 @@ class DXFCPP_EXPORT IndexedEventSource {
      *
      * @return The string representation of the object.
      */
-    const std::string &name() const noexcept;
+    std::string name() const;
 
     /**
      * Returns the string representation of the object.

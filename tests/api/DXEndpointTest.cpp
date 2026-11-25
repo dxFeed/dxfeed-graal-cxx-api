@@ -5,10 +5,14 @@
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include "../../src/internal/EndpointAddress.hpp"
+#include "../support/TapeSupport.hpp"
 #include "../support/TestSupport.hpp"
 
 #include <algorithm>
+#include <cstdint>
 #include <iostream>
+#include <limits>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -210,6 +214,132 @@ TEST_CASE("dxfc_dxendpoint_builder_t: the state follows connect, disconnect and 
     REQUIRE(dxfc_dxendpoint_builder_free(builder) == DXFC_EC_SUCCESS);
 }
 
+TEST_CASE("dxfc_dxendpoint_t: invalid UTF-8 is an error code, not an exception") {
+    dxfc_dxendpoint_builder_t builder{};
+
+    REQUIRE(dxfc_dxendpoint_new_builder(&builder) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_builder_with_role(builder, DXFC_DXENDPOINT_ROLE_FEED) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_builder_with_property(builder, "dxfeed.test.key", "a\xFF") == DXFC_EC_ERROR);
+
+    int supports{};
+
+    REQUIRE(dxfc_dxendpoint_builder_supports_property(builder, "a\xFF", &supports) == DXFC_EC_ERROR);
+
+    dxfc_dxendpoint_t endpoint{};
+
+    REQUIRE(dxfc_dxendpoint_builder_build(builder, nullptr, &endpoint) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_user(endpoint, "a\xFF") == DXFC_EC_ERROR);
+    REQUIRE(dxfc_dxendpoint_password(endpoint, "a\xFF") == DXFC_EC_ERROR);
+    REQUIRE(dxfc_dxendpoint_connect(endpoint, "a\xC3\x28") == DXFC_EC_ERROR);
+    REQUIRE(cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_NOT_CONNECTED);
+
+    REQUIRE(dxfc_dxendpoint_close(endpoint) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_free(endpoint) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_builder_free(builder) == DXFC_EC_SUCCESS);
+}
+
+namespace {
+
+constexpr std::string_view REJECTED = "InvalidArgumentException: ";
+
+// Returns REJECTED and the message if connect() throws InvalidArgumentException, otherwise a description of what
+// happened.
+std::string connectFailure(const std::shared_ptr<DXEndpoint> &endpoint, const std::string &address) {
+    try {
+        endpoint->connect(address);
+    } catch (const InvalidArgumentException &e) {
+        return std::string(REJECTED) + e.what();
+    } catch (const std::exception &e) {
+        return "another exception: "s + e.what();
+    }
+
+    return "no exception";
+}
+
+bool isRejected(const std::string &failure) {
+    return failure.rfind(REJECTED, 0) == 0;
+}
+
+} // namespace
+
+TEST_CASE("DXEndpoint::connect: an http(s) or ws(s) URL throws InvalidArgumentException with the expected address") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    for (const std::string address : {"https://tools.dxfeed.com/ipf", "https://tools.dxfeed.com/webservice/rest",
+                                      "http://localhost:7300", "  HTTPS://host:443", "\thttps://tools.dxfeed.com/ipf",
+                                      "\r\nhttp://localhost:7300", "https://host/x.config"}) {
+        CAPTURE(address);
+        const auto message = connectFailure(endpoint, address);
+
+        CAPTURE(message);
+        CHECK(isRejected(message));
+        CHECK(message.find("host:port[login=...]") != std::string::npos);
+        CHECK(message.find("REST, CometD and IPF") != std::string::npos);
+    }
+
+    for (const std::string address : {"wss://demo.dxfeed.com/dxlink-ws", "ws://localhost:80", "WSS://host/ws"}) {
+        CAPTURE(address);
+        const auto message = connectFailure(endpoint, address);
+
+        CAPTURE(message);
+        CHECK(isRejected(message));
+        CHECK(message.find("host:port[login=...]") != std::string::npos);
+        CHECK(message.find("dxlink:wss://") != std::string::npos);
+    }
+
+    // The message does not repeat the address: it may have a login or a password.
+    const auto withSecret = connectFailure(endpoint, "https://user:secret@host/x[login=entitle:token]");
+
+    CHECK(isRejected(withSecret));
+    CHECK(withSecret.find("secret") == std::string::npos);
+    CHECK(withSecret.find("token") == std::string::npos);
+
+    CHECK(endpoint->getState() == DXEndpoint::State::NOT_CONNECTED);
+    endpoint->close();
+}
+
+TEST_CASE("DXEndpoint::connect: a QD configuration URL and the QD addresses are not rejected") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    // A local port that nobody listens on: QD may fail to read the file, but not with InvalidArgumentException.
+    CHECK_FALSE(isRejected(connectFailure(endpoint, "http://127.0.0.1:1/x.config#name")));
+    CHECK_FALSE(isRejected(connectFailure(endpoint, "localhost:7300[login=entitle:token]")));
+    endpoint->close();
+
+    const auto tape = DXEndpoint::create(DXEndpoint::Role::STREAM_FEED);
+
+    CHECK(connectFailure(tape, "file:" + test::testDataPath("tapes/edge-values.txt")) == "no exception");
+    tape->close();
+}
+
+TEST_CASE("The check of the address of DXEndpoint::connect passes the forms that QD accepts") {
+    for (const std::string address :
+         {"localhost:7300", ":7400", "host1:7300,host2:7300", "localhost:7300[login=entitle:token]",
+          "tls+localhost:7300", "ssl+zlib+localhost:7300", "(localhost:7300)(localhost:7301)",
+          "dxlink:wss://demo.dxfeed.com/dxlink-ws", "dxlink:wss://demo.dxfeed.com/dxlink-ws[login=dxlink:token]",
+          "file:///tmp/x.tape", "tape:x.tape", "ondemand:demo.dxfeed.com:7680", "demo.dxfeed.com", "",
+          "https://host/path/x.config#name", " HTTP://host/path/X.CONFIG#name", "localhost:7300,https://host/x",
+          "httpx://host", "http:host:7300"}) {
+        CAPTURE(address);
+        CHECK_NOTHROW(detail::checkEndpointAddress(address));
+    }
+
+    // The configuration URL needs the name after `#`, and the path before it ends with `.config`.
+    CHECK_THROWS_AS(detail::checkEndpointAddress("https://host/x.config"), InvalidArgumentException);
+    CHECK_THROWS_AS(detail::checkEndpointAddress("https://host/x.conf#name"), InvalidArgumentException);
+    CHECK_THROWS_AS(detail::checkEndpointAddress("ws://host/x.config#name"), InvalidArgumentException);
+}
+
+TEST_CASE("dxfc_dxendpoint_connect: an https URL is an error code") {
+    dxfc_dxendpoint_t endpoint{};
+
+    REQUIRE(dxfc_dxendpoint_create(nullptr, &endpoint) == DXFC_EC_SUCCESS);
+    CHECK(dxfc_dxendpoint_connect(endpoint, "https://tools.dxfeed.com/ipf") == DXFC_EC_ERROR);
+    CHECK(cApiGetState(endpoint) == DXFC_DXENDPOINT_STATE_NOT_CONNECTED);
+    REQUIRE(dxfc_dxendpoint_close(endpoint) == DXFC_EC_SUCCESS);
+    REQUIRE(dxfc_dxendpoint_free(endpoint) == DXFC_EC_SUCCESS);
+}
+
 TEST_CASE("DXFeedSubscription") {
     auto s0 = dxfcpp::DXFeedSubscription::create(dxfcpp::EventTypeEnum::QUOTE);
     auto s1 = dxfcpp::DXFeedSubscription::create({dxfcpp::EventTypeEnum::QUOTE});
@@ -240,6 +370,34 @@ TEST_CASE("DXEndpoint::getFeed and getPublisher") {
 
     REQUIRE(DXFeed::getInstance() == feed);
     REQUIRE(DXPublisher::getInstance() == publisher);
+}
+
+TEST_CASE("DXEndpoint::Builder::supportsProperty: a known property is supported, a made-up one is not") {
+    const auto builder = DXEndpoint::newBuilder();
+
+    CHECK(builder->supportsProperty(DXEndpoint::DXFEED_ADDRESS_PROPERTY));
+    CHECK_FALSE(builder->supportsProperty("dxfeed.no.such.property.for.the.test"));
+}
+
+TEST_CASE("DXEndpoint::getEventTypes: a FEED endpoint has event types") {
+    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
+
+    for (int i = 0; i < 5; ++i) {
+        CHECK_FALSE(endpoint->getEventTypes().empty());
+    }
+
+    endpoint->close();
+}
+
+TEST_CASE("DXEndpoint: awaitNotConnected and disconnectAndClear of a not connected endpoint do not throw") {
+    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::FEED)->build();
+
+    REQUIRE(endpoint->getState() == DXEndpoint::State::NOT_CONNECTED);
+    CHECK_NOTHROW(endpoint->awaitNotConnected());
+    CHECK_NOTHROW(endpoint->disconnectAndClear());
+    CHECK(endpoint->getState() == DXEndpoint::State::NOT_CONNECTED);
+
+    endpoint->close();
 }
 
 TEST_CASE("Test DXEndpoint + multi-thread setProperty") {
@@ -274,4 +432,105 @@ TEST_CASE("Test DXEndpoint + multi-thread setProperty v2") {
     std::this_thread::sleep_for(1s);
 
     endpoint->close();
+}
+TEST_CASE("DXEndpoint: the property keys of QDS 3.330-3.351 as in Java") {
+    CHECK(std::string(DXEndpoint::DXFEED_STRIPE_PROPERTY) == "dxfeed.stripe");
+    CHECK(std::string(DXEndpoint::DXFEED_STICKY_SUBSCRIPTION_PROPERTY) == "dxfeed.stickySubscriptionPeriod");
+    CHECK(std::string(DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY) == "dxfeed.requestedAggregationPeriod");
+
+    const auto builder = DXEndpoint::newBuilder();
+
+    CHECK(builder->supportsProperty(DXEndpoint::DXFEED_STRIPE_PROPERTY));
+    CHECK(builder->supportsProperty(DXEndpoint::DXFEED_STICKY_SUBSCRIPTION_PROPERTY));
+    CHECK(builder->supportsProperty(DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY));
+
+    // The builder accepts the properties and builds the endpoint with them.
+    const auto endpoint = DXEndpoint::newBuilder()
+                              ->withRole(DXEndpoint::Role::FEED)
+                              ->withProperty(DXEndpoint::DXFEED_STICKY_SUBSCRIPTION_PROPERTY, "1s")
+                              ->withProperty(DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY, "0.5s")
+                              ->build();
+
+    REQUIRE(endpoint);
+    endpoint->close();
+}
+
+TEST_CASE("DXFeedSubscription batch limits can be bound by reference") {
+    // Binds the constants by reference (an ODR use): links only when they are defined (static constexpr).
+    const auto &optimal = DXFeedSubscription::OPTIMAL_BATCH_LIMIT;
+    const auto &max = DXFeedSubscription::MAX_BATCH_LIMIT;
+
+    CHECK(optimal == 0);
+    CHECK(max == std::numeric_limits<std::int32_t>::max());
+    CHECK(std::max(DXFeedSubscription::OPTIMAL_BATCH_LIMIT, DXFeedSubscription::MAX_BATCH_LIMIT) == max);
+}
+
+namespace {
+
+// A kind of invalid UTF-8 after a valid prefix: the suffix and the bytes the error names.
+struct InvalidUtf8 {
+    const char *kind;
+    const char *suffix;
+    const char *bytes;
+};
+
+const std::vector<InvalidUtf8> INVALID_UTF8 = {
+    {"a stray byte", "\xFF", "0xFF"},
+    {"a broken sequence", "\xC3\x28", "0xC3 0x28"},
+    {"a truncated sequence", "\xE2\x82", "0xE2 0x82"},
+    {"an overlong form", "\xC0\xAF", "0xC0 0xAF"},
+    {"an encoded surrogate", "\xED\xA0\x80", "0xED 0xA0 0x80"},
+};
+
+// Cyrillic and an emoji (U+1F600).
+constexpr auto VALID_MULTIBYTE = "\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82 \xF0\x9F\x98\x80";
+
+} // namespace
+
+TEST_CASE("DXEndpoint: an API parameter with invalid UTF-8 throws with the place, the offset and the bytes") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    for (const auto &[kind, suffix, bytes] : INVALID_UTF8) {
+        CAPTURE(kind);
+        const auto expected = "DXEndpoint::connect(address): invalid UTF-8 at byte 4: "s + bytes;
+
+        CHECK_THROWS_WITH_AS(endpoint->connect("demo"s + suffix), expected.c_str(), InvalidArgumentException);
+    }
+
+    CHECK(endpoint->getState() == DXEndpoint::State::NOT_CONNECTED);
+    endpoint->close();
+}
+
+TEST_CASE("DXEndpoint: a secret with invalid UTF-8 throws with the place and the offset, without the bytes") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+
+    for (const auto &[kind, suffix, bytes] : INVALID_UTF8) {
+        CAPTURE(kind);
+        CHECK_THROWS_WITH_AS(endpoint->password("p"s + suffix),
+                             "DXEndpoint::password(password): invalid UTF-8 at byte 1", InvalidArgumentException);
+        CHECK_THROWS_WITH_AS(endpoint->user("u"s + suffix), "DXEndpoint::user(user): invalid UTF-8 at byte 1",
+                             InvalidArgumentException);
+    }
+
+    CHECK_NOTHROW(endpoint->user(VALID_MULTIBYTE));
+    CHECK_NOTHROW(endpoint->password(VALID_MULTIBYTE));
+    endpoint->close();
+}
+
+TEST_CASE("DXEndpoint::Builder::withProperty: invalid UTF-8 throws, the user and the password without the bytes") {
+    const auto builder = DXEndpoint::newBuilder();
+
+    CHECK_THROWS_WITH_AS(builder->withProperty(DXEndpoint::DXFEED_PASSWORD_PROPERTY, "p\xC3\x28"),
+                         "DXEndpoint::Builder::withProperty(value): invalid UTF-8 at byte 1", InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(builder->withProperty(DXEndpoint::DXFEED_USER_PROPERTY, "u\xFF"),
+                         "DXEndpoint::Builder::withProperty(value): invalid UTF-8 at byte 1", InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(builder->withProperty("custom.property", "v\xFF"),
+                         "DXEndpoint::Builder::withProperty(value): invalid UTF-8 at byte 1: 0xFF",
+                         InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(builder->withProperty("custom\xFF", "v"),
+                         "DXEndpoint::Builder::withProperty(key): invalid UTF-8 at byte 6: 0xFF",
+                         InvalidArgumentException);
+
+    builder->withProperty("custom.property", VALID_MULTIBYTE);
+    builder->build()->close();
 }

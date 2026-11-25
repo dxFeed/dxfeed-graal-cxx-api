@@ -3,11 +3,13 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./IcebergType.hpp"
 #include "./Order.hpp"
@@ -75,7 +77,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
     AnalyticOrderData analyticOrderData_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the AnalyticOrder object
@@ -124,7 +126,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit AnalyticOrder(const StringLike &eventSymbol) noexcept;
+    explicit AnalyticOrder(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -134,7 +136,7 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param eventSymbol The symbol of this event.
      * @return The current analytic order.
      */
-    AnalyticOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override;
+    AnalyticOrder &withEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes the event's creation time and returns the current analytic order.
@@ -181,8 +183,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param index unique per-symbol index of this analytic order.
      * @return The current analytic order.
+     * @throws InvalidArgumentException if the index is negative.
      */
-    AnalyticOrder &withIndex(std::int64_t index) noexcept override;
+    AnalyticOrder &withIndex(std::int64_t index) override;
 
     /**
      * Changes time of this analytic order and returns it.
@@ -324,8 +327,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param exchangeCode The exchange code of this analytic order.
      * @return The current analytic order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    AnalyticOrder &withExchangeCode(char exchangeCode) noexcept override;
+    AnalyticOrder &withExchangeCode(char exchangeCode) override;
 
     /**
      * Changes exchange code of this analytic order.
@@ -333,8 +337,9 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      *
      * @param exchangeCode The exchange code of this analytic order.
      * @return The current analytic order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) noexcept override;
+    AnalyticOrder &withExchangeCode(std::int16_t exchangeCode) override;
 
     /**
      * Changes side of this analytic order.
@@ -363,7 +368,20 @@ class DXFCPP_EXPORT AnalyticOrder final : public Order {
      * @param marketMaker The market maker or another aggregate identifier of this analytic order.
      * @return The current analytic order.
      */
-    AnalyticOrder &withMarketMaker(const StringLike &marketMaker) noexcept override;
+    AnalyticOrder &withMarketMaker(StringParam marketMaker) override;
+
+    /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> AnalyticOrder &withMarketMaker(S &&marketMaker) noexcept {
+        Order::setMarketMaker(std::forward<S>(marketMaker));
+
+        return *this;
+    }
 
     // AnalyticOrder methods
 

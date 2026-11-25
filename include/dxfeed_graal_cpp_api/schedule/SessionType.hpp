@@ -3,16 +3,15 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
-
-#include "../internal/utils/StringUtils.hpp"
 
 #include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <string_view>
 
 /**
  * \addtogroup dxfcpp_schedule
@@ -21,6 +20,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+/**
+ * The codes of the session types.
+ */
 enum class SessionTypeEnum : std::uint32_t {
     /// Non-trading session type is used to mark periods of time during which trading is not allowed.
     NO_TRADING = 0,
@@ -43,6 +45,8 @@ enum class SessionTypeEnum : std::uint32_t {
  * Such sessions can be of any appropriate type, trading or non-trading.
  */
 struct DXFCPP_EXPORT SessionType {
+    friend struct SessionFilter;
+
     /// Non-trading session type is used to mark periods of time during which trading is not allowed.
     static const SessionType NO_TRADING;
     /// Pre-market session type marks extended trading session before regular trading hours.
@@ -54,18 +58,19 @@ struct DXFCPP_EXPORT SessionType {
 
     private:
     SessionTypeEnum code_{};
-    std::string name_{};
+    std::string_view name_{};
     bool trading_{};
 
-    SessionType(SessionTypeEnum code, const StringLike &name, bool trading) noexcept;
+    constexpr SessionType(SessionTypeEnum code, std::string_view name, bool trading) noexcept
+        : code_{code}, name_{name}, trading_{trading} {
+    }
 
     public:
     SessionType() noexcept;
-    virtual ~SessionType() noexcept;
 
     SessionTypeEnum getCode() const noexcept;
 
-    const std::string &getName() const & noexcept;
+    std::string getName() const;
 
     /**
      * Returns `true` if trading activity is allowed for this type of session.
@@ -75,7 +80,7 @@ struct DXFCPP_EXPORT SessionType {
      */
     bool isTrading() const noexcept;
 
-    const std::string &toString() const & noexcept;
+    std::string toString() const;
 
     bool operator==(const SessionType &sessionType) const noexcept;
 };

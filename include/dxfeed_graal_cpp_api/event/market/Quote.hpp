@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
 #include "./MarketEvent.hpp"
@@ -57,7 +58,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
     void recomputeTimeMillisPart() noexcept;
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the Quote object
@@ -113,7 +114,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Quote(const StringLike &eventSymbol) noexcept;
+    explicit Quote(StringParam eventSymbol);
 
     /**
      * Changes an event's symbol and returns the current quote.
@@ -121,7 +122,7 @@ class DXFCPP_EXPORT Quote final : public MarketEvent, public LastingEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current quote.
      */
-    Quote &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    Quote &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes event's creation time and returns the current quote.

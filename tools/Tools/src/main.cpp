@@ -5,6 +5,13 @@
 #include "Dump/DumpTool.hpp"
 #include "Help/HelpTool.hpp"
 #include "Tools.hpp"
+#include "ToolsProperties.hpp"
+#include <concepts>
+#include <iostream>
+#include <optional>
+#include <string>
+#include <type_traits>
+#include <utility>
 #include <variant>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
@@ -19,20 +26,27 @@ template <class... Ts> struct overloaded : Ts... {
 
 template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
+// A tool with its own process contract: a static function that takes the arguments after the name of the tool and the
+// streams of the output and the errors, and returns the exit code.
+template <typename T>
+concept HasProcessEntry = requires(const std::vector<std::string> &args, std::ostream &out, std::ostream &err) {
+    { T::runProcess(args, out, err) } -> std::same_as<int>;
+};
+
+// A tool that acts before the first call of the library creates the Graal isolate (NetTest gives it the options of its
+// command line): a static function that takes the arguments after the name of the tool and the stream of the errors,
+// and returns the exit code when the process must end at once.
+template <typename T>
+concept HasProcessPreparation = requires(const std::vector<std::string> &args, std::ostream &err) {
+    { T::prepareProcess(args, err) } -> std::same_as<std::optional<int>>;
+};
+
 using namespace std::literals;
 using namespace dxfcpp;
 using namespace dxfcpp::literals;
 
 int main(int argc, char *argv[]) {
     try {
-        System::setProperty(DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY, "true");
-        // Enable experimental feature.
-        System::setProperty("dxfeed.experimental.dxlink.enable", "true");
-        // Set scheme for dxLink.
-        System::setProperty("scheme", "ext:opt:sysprops,resource:dxlink.xml");
-
-        const auto usage = tools::HelpTool::generateToolHelpScreen<tools::Tools>();
-
         std::vector<std::string> args{};
 
         if (argc > 1) {
@@ -40,6 +54,38 @@ int main(int argc, char *argv[]) {
                 args.emplace_back(argv[argIndex]);
             }
         }
+
+        // The system properties below create the isolate, so a tool that must act before that does it here.
+        if (!args.empty()) {
+            for (auto &&[name, tool] : tools::HelpTool::ALL_TOOLS) {
+                if (!iEquals(args[0], name)) {
+                    continue;
+                }
+
+                std::optional<int> exitCode{};
+
+                std::visit(
+                    [&args, &exitCode]<typename Tool>(Tool &&) {
+                        using T = std::decay_t<Tool>;
+
+                        if constexpr (HasProcessPreparation<T>) {
+                            exitCode = T::prepareProcess(args | ranges::views::drop(1) | ranges::to<std::vector>,
+                                                         std::cerr);
+                        }
+                    },
+                    tool);
+
+                if (exitCode.has_value()) {
+                    return *exitCode;
+                }
+
+                break;
+            }
+        }
+
+        tools::setToolsSystemProperties();
+
+        const auto usage = tools::HelpTool::generateToolHelpScreen<tools::Tools>();
 
         if (args.empty() || args[0] == "--help" || args[0] == "-h") {
             std::cout << usage << std::endl;
@@ -58,35 +104,69 @@ int main(int argc, char *argv[]) {
                 continue;
             }
 
+            // A tool whose run returns an int sets the exit code (Diagnose); the others exit with 0.
+            int exitCode = 0;
+
             std::visit(
-                [&args]<typename Tool>(Tool &&) {
-                    try {
-                        using T = std::decay_t<Tool>;
-                        auto parseResult = T::Args::parse(args | ranges::views::drop(1) | ranges::to<std::vector>);
+                [&args, &exitCode]<typename Tool>(Tool &&) {
+                    using T = std::decay_t<Tool>;
 
-                        if (parseResult.isHelp) {
-                            std::cout << tools::Tools::getName() << "\n";
-                            std::cout << tools::HelpTool::generateToolHelpScreen<T>() << "\n";
-
-                            return;
+                    // A tool with its own process contract (the command line, the output and the exit codes of a
+                    // specification) takes the raw arguments and the streams, and returns the exit code.
+                    if constexpr (HasProcessEntry<T>) {
+                        try {
+                            exitCode = T::runProcess(args | ranges::views::drop(1) | ranges::to<std::vector>,
+                                                     std::cout, std::cerr);
+                        } catch (const RuntimeException &e) {
+                            std::cerr << e << '\n';
+                            exitCode = 1;
                         }
 
-                        if (parseResult.isError) {
-                            std::cout << tools::Tools::getName() << "\n";
-                            std::cout << tools::HelpTool::generateToolHelpScreen<T>(parseResult.errorString) << "\n";
+                        return;
+                    } else {
+                        constexpr bool returnsExitCode =
+                            std::is_same_v<decltype(T::run(std::declval<const typename T::Args &>())), int>;
 
-                            return;
+                        try {
+                            auto parseResult = T::Args::parse(args | ranges::views::drop(1) | ranges::to<std::vector>);
+
+                            if (parseResult.isHelp) {
+                                std::cout << tools::Tools::getName() << "\n";
+                                std::cout << tools::HelpTool::generateToolHelpScreen<T>() << "\n";
+
+                                return;
+                            }
+
+                            if (parseResult.isError) {
+                                std::cout << tools::Tools::getName() << "\n";
+                                std::cout << tools::HelpTool::generateToolHelpScreen<T>(parseResult.errorString)
+                                          << "\n";
+
+                                if constexpr (returnsExitCode) {
+                                    exitCode = 1;
+                                }
+
+                                return;
+                            }
+
+                            // std::cout << tools::Tools::getName() << "\n";
+                            if constexpr (returnsExitCode) {
+                                exitCode = T::run(parseResult.result);
+                            } else {
+                                T::run(parseResult.result);
+                            }
+                        } catch (const RuntimeException &e) {
+                            std::cerr << e << '\n';
+
+                            if constexpr (returnsExitCode) {
+                                exitCode = 1;
+                            }
                         }
-
-                        // std::cout << tools::Tools::getName() << "\n";
-                        T::run(parseResult.result);
-                    } catch (const RuntimeException &e) {
-                        std::cerr << e << '\n';
                     }
                 },
                 tool);
 
-            return 0;
+            return exitCode;
         }
 
         std::cout << usage << "\n";

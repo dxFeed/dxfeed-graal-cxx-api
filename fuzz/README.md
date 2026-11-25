@@ -11,6 +11,7 @@ ASan and UBSan) and, where Java defines it, that parsing the result of `toString
 | `fuzz_market_event_symbols` | `MarketEventSymbols` (exchange code, base symbol, attributes); input: `[exchange][symbol]\0[key]\0[value]\0[new base]` |
 | `fuzz_string_utils` | string, UTF-8/UTF-16 and time formatting utilities |
 | `fuzz_cmd_args` | `CmdArgsUtils::parseProperties`, `CmdArgsUtils::parseEventSources` |
+| `fuzz_metrics_request` | the request head parser of the `/metrics` server of `Tools NetTest` |
 | `fuzz_order_source` | `OrderSource::valueOf(name)`, `OrderSource::valueOf(id)` and the name-id codec |
 | `fuzz_order_fields` | packed fields of `Order` (index and source, time and sequence, exchange code) and `day_util` |
 

@@ -3,12 +3,11 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
-#include "../../internal/Enum.hpp"
+#include "../../detail/Enum.hpp"
 
 #include <cstdint>
 
@@ -70,6 +69,9 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      */
     static const DXFCPP_EXPORT OrderAction MODIFY;
 
+// windows.h defines DELETE as a macro: it is hidden here and restored after the declaration.
+#pragma push_macro("DELETE")
+#undef DELETE
     /**
      * Order is fully canceled and removed from Order Book.
      * Order's @ref Order::getSize() "size" will be equal to 0.
@@ -82,6 +84,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * </ul>
      */
     static const DXFCPP_EXPORT OrderAction DELETE;
+#pragma pop_macro("DELETE")
 
     /**
      * Size is changed (usually reduced) due to partial order execution.
@@ -100,7 +103,7 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
 
     /**
      * Order is fully executed and removed from the Order Book.
-     * Order's {@ref Order#getSize() size} will be equal to 0.
+     * Order's @ref Order::getSize() "size" will be equal to 0.
      *
      * <p>Full Order Book fields:
      * <ul>
@@ -139,10 +142,10 @@ struct OrderAction : Enum<OrderAction, std::uint32_t> {
      * </ul>
      */
     static const DXFCPP_EXPORT OrderAction BUST;
-};
 
-template <>
-const std::unordered_map<OrderAction::CodeType, std::reference_wrapper<const OrderAction>> OrderAction::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const OrderAction>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

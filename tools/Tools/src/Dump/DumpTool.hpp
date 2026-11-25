@@ -51,7 +51,7 @@ struct DumpTool {
         std::optional<std::string> symbols;
         std::optional<std::string> properties;
         std::optional<std::string> tape;
-        bool isQuite;
+        bool isQuiet;
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
             std::size_t index = 0;
@@ -95,7 +95,7 @@ struct DumpTool {
             std::optional<std::string> properties{};
             bool tapeIsParsed{};
             std::optional<std::string> tape{};
-            bool isQuite{};
+            bool isQuiet{};
 
             for (; index < args.size();) {
                 if (!propertiesIsParsed && PropertiesArg::canParse(args, index)) {
@@ -112,7 +112,7 @@ struct DumpTool {
                     index = parseResult.nextIndex;
                 } else {
                     // ReSharper disable once CppUsingResultOfAssignmentAsCondition
-                    if (!isQuite && (isQuite = QuiteArg::parse(args, index).result)) {
+                    if (!isQuiet && (isQuiet = QuietArg::parse(args, index).result)) {
                         index++;
                         continue;
                     }
@@ -121,7 +121,7 @@ struct DumpTool {
                 }
             }
 
-            return ParseResult<Args>::ok({parsedAddress.result, types, symbols, properties, tape, isQuite});
+            return ParseResult<Args>::ok({parsedAddress.result, types, symbols, properties, tape, isQuiet});
         }
     };
 
@@ -159,7 +159,7 @@ struct DumpTool {
 
             auto sub = inputEndpoint->getFeed()->createSubscription(parsedTypes);
 
-            if (!args.isQuite) {
+            if (!args.isQuiet) {
                 sub->addEventListener([](auto &&events) {
                     for (auto &&e : events) {
                         std::cout << e << "\n";

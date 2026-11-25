@@ -37,6 +37,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     trade->setTime(T + 3'456);
     trade->setSequence(9);
     trade->setExchangeCode('Q');
+    trade->setTradeId(7001);
     trade->setPrice(100.5);
     trade->setSize(10);
     trade->setTickDirection(Direction::UP);
@@ -52,6 +53,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     tradeEth->setTime(T + 4'567);
     tradeEth->setSequence(11);
     tradeEth->setExchangeCode('P');
+    tradeEth->setTradeId(7002);
     tradeEth->setPrice(101.75);
     tradeEth->setSize(20);
     tradeEth->setTickDirection(Direction::DOWN);
@@ -67,6 +69,7 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     timeAndSale->setTime(T + 5'678);
     timeAndSale->setSequence(13);
     timeAndSale->setExchangeCode('T');
+    timeAndSale->setTradeId(7003);
     timeAndSale->setPrice(102.5);
     timeAndSale->setSize(30);
     timeAndSale->setBidPrice(102.25);
@@ -281,6 +284,164 @@ std::vector<std::shared_ptr<EventType>> createTapeEvents() {
     message->setEventTime(T + 18);
     events.push_back(message);
 
+    // OrderImbalance is not an order: its source is only the record suffix (OrderImbalance#NTV), so it comes twice to
+    // show that two sources of one symbol stay apart.
+    auto orderImbalanceNtv = std::make_shared<OrderImbalance>(TAPE_SYMBOL);
+    orderImbalanceNtv->setEventTime(T + 19);
+    orderImbalanceNtv->setSource(OrderSource::NTV);
+    orderImbalanceNtv->setTime(T + 19'234);
+    orderImbalanceNtv->setSequence(41);
+    orderImbalanceNtv->setRefPrice(150.25);
+    orderImbalanceNtv->setPairedSize(1'200);
+    orderImbalanceNtv->setImbalanceSize(300);
+    orderImbalanceNtv->setNearPrice(150.5);
+    orderImbalanceNtv->setFarPrice(149.75);
+    orderImbalanceNtv->setImbalanceSide(ImbalanceSide::BUY);
+    orderImbalanceNtv->setAuctionType(AuctionType::OPENING);
+    events.push_back(orderImbalanceNtv);
+
+    auto orderImbalanceNuam = std::make_shared<OrderImbalance>(TAPE_SYMBOL);
+    orderImbalanceNuam->setEventTime(T + 20);
+    orderImbalanceNuam->setSource(OrderSource::NUAM);
+    orderImbalanceNuam->setTime(T + 20'345);
+    orderImbalanceNuam->setSequence(43);
+    orderImbalanceNuam->setRefPrice(99.5);
+    orderImbalanceNuam->setPairedSize(2'500);
+    orderImbalanceNuam->setImbalanceSize(700.5);
+    orderImbalanceNuam->setNearPrice(99.75);
+    orderImbalanceNuam->setFarPrice(99.25);
+    orderImbalanceNuam->setImbalanceSide(ImbalanceSide::SELL);
+    orderImbalanceNuam->setAuctionType(AuctionType::CLOSING);
+    events.push_back(orderImbalanceNuam);
+
+    // The Nuam events; the order comes twice, on the NUAM and on the lowercase nuam source (they are different
+    // sources).
+    auto nuamOrder = std::make_shared<NuamOrder>(TAPE_SYMBOL);
+    nuamOrder->setEventTime(T + 21);
+    nuamOrder->setIndex(25);
+    nuamOrder->setSource(OrderSource::NUAM);
+    nuamOrder->setTime(T + 21'456);
+    nuamOrder->setSequence(45);
+    nuamOrder->setPrice(120.5);
+    nuamOrder->setSize(300);
+    nuamOrder->setExchangeCode('U');
+    nuamOrder->setOrderSide(Side::BUY);
+    nuamOrder->setScope(Scope::ORDER);
+    nuamOrder->setActorId(101);
+    nuamOrder->setParticipantId(102);
+    nuamOrder->setSubmitterId(103);
+    nuamOrder->setOnBehalfOfSubmitterId(104);
+    nuamOrder->setClientOrderId("CL-ORD-1");
+    nuamOrder->setCustomerAccount("ACC-0042");
+    nuamOrder->setCustomerInfo("Customer info");
+    nuamOrder->setExchangeInfo("Exchange info");
+    nuamOrder->setTimeInForce(NuamTimeInForceType::GTC);
+    nuamOrder->setTimeInForceData(5);
+    nuamOrder->setTriggerOrderBookId(77);
+    nuamOrder->setTriggerPrice(118.75);
+    nuamOrder->setTriggerSessionType(3);
+    nuamOrder->setOrderType(NuamOrderType::LIMIT);
+    nuamOrder->setOrderQuantity(1'000);
+    nuamOrder->setDisplayQuantity(300);
+    nuamOrder->setRefreshQuantity(150);
+    nuamOrder->setLeavesQuantity(700);
+    nuamOrder->setMatchedQuantity(300);
+    events.push_back(nuamOrder);
+
+    auto nuamOrderLower = std::make_shared<NuamOrder>(TAPE_SYMBOL);
+    nuamOrderLower->setEventTime(T + 22);
+    nuamOrderLower->setIndex(26);
+    nuamOrderLower->setSource(OrderSource::valueOf("nuam"));
+    nuamOrderLower->setTime(T + 22'567);
+    nuamOrderLower->setSequence(47);
+    nuamOrderLower->setPrice(121.25);
+    nuamOrderLower->setSize(310);
+    nuamOrderLower->setExchangeCode('V');
+    nuamOrderLower->setOrderSide(Side::SELL);
+    nuamOrderLower->setScope(Scope::ORDER);
+    nuamOrderLower->setActorId(201);
+    nuamOrderLower->setParticipantId(202);
+    nuamOrderLower->setSubmitterId(203);
+    nuamOrderLower->setOnBehalfOfSubmitterId(204);
+    nuamOrderLower->setClientOrderId("CL-ORD-2");
+    nuamOrderLower->setCustomerAccount("ACC-0043");
+    nuamOrderLower->setCustomerInfo("Lower info");
+    nuamOrderLower->setExchangeInfo("Lower exchange");
+    nuamOrderLower->setTimeInForce(NuamTimeInForceType::IMMEDIATE_OR_CANCEL);
+    nuamOrderLower->setTimeInForceData(6);
+    nuamOrderLower->setTriggerOrderBookId(78);
+    nuamOrderLower->setTriggerPrice(119.5);
+    nuamOrderLower->setTriggerSessionType(4);
+    nuamOrderLower->setOrderType(NuamOrderType::MARKET_TO_LIMIT);
+    nuamOrderLower->setOrderQuantity(2'000);
+    nuamOrderLower->setDisplayQuantity(310);
+    nuamOrderLower->setRefreshQuantity(155);
+    nuamOrderLower->setLeavesQuantity(1'690);
+    nuamOrderLower->setMatchedQuantity(310);
+    events.push_back(nuamOrderLower);
+
+    auto nuamTrade = std::make_shared<NuamTrade>(TAPE_SYMBOL);
+    nuamTrade->setEventTime(T + 23);
+    nuamTrade->setTime(T + 23'678);
+    nuamTrade->setSequence(49);
+    nuamTrade->setExchangeCode('Y');
+    nuamTrade->setTradeId(7004);
+    nuamTrade->setPrice(130.25);
+    nuamTrade->setChange(-0.75);
+    nuamTrade->setSize(15);
+    nuamTrade->setDayId(DAY_ID);
+    nuamTrade->setDayVolume(1'500);
+    nuamTrade->setDayTurnover(195'375);
+    nuamTrade->setTickDirection(Direction::DOWN);
+    nuamTrade->setExtendedTradingHours(false);
+    nuamTrade->setTradeStatTime(T + 23'800);
+    nuamTrade->setLastSignificantPrice(130.5);
+    nuamTrade->setLastPriceForAll(130.25);
+    nuamTrade->setNumberOfTrades(321);
+    nuamTrade->setVWAP(129.875);
+    events.push_back(nuamTrade);
+
+    auto nuamTimeAndSale = std::make_shared<NuamTimeAndSale>(TAPE_SYMBOL);
+    nuamTimeAndSale->setEventTime(T + 24);
+    nuamTimeAndSale->setTime(T + 24'789);
+    nuamTimeAndSale->setSequence(51);
+    nuamTimeAndSale->setExchangeCode('X');
+    nuamTimeAndSale->setTradeId(7005);
+    nuamTimeAndSale->setPrice(131.5);
+    nuamTimeAndSale->setSize(25);
+    nuamTimeAndSale->setBidPrice(131.25);
+    nuamTimeAndSale->setAskPrice(131.75);
+    nuamTimeAndSale->setExchangeSaleConditions("TI");
+    nuamTimeAndSale->setTradeThroughExempt('Z');
+    nuamTimeAndSale->setAggressorSide(Side::SELL);
+    nuamTimeAndSale->setSpreadLeg(false);
+    nuamTimeAndSale->setExtendedTradingHours(true);
+    nuamTimeAndSale->setValidTick(true);
+    nuamTimeAndSale->setType(TimeAndSaleType::CANCEL);
+    nuamTimeAndSale->setMatchId(9'876'543'210LL);
+    events.push_back(nuamTimeAndSale);
+
+    // The default scheme transfers the bid and ask times of MarketMaker in seconds.
+    auto marketMaker = std::make_shared<MarketMaker>(TAPE_SYMBOL);
+    marketMaker->setEventTime(T + 25);
+    marketMaker->setExchangeCode('Q');
+    marketMaker->setMarketMaker("NSDQ");
+    marketMaker->setBidTime(T + 25'000);
+    marketMaker->setBidPrice(132.25);
+    marketMaker->setBidSize(400);
+    marketMaker->setBidCount(4);
+    marketMaker->setAskTime(T + 26'000);
+    marketMaker->setAskPrice(132.75);
+    marketMaker->setAskSize(500);
+    marketMaker->setAskCount(5);
+    events.push_back(marketMaker);
+
+    auto textConfiguration = std::make_shared<TextConfiguration>(TAPE_SYMBOL, "{\"limit\": 100}", 3);
+    textConfiguration->setEventTime(T + 27);
+    textConfiguration->setTime(T + 27'890);
+    textConfiguration->setSequence(53);
+    events.push_back(textConfiguration);
+
     return events;
 }
 
@@ -294,6 +455,14 @@ std::vector<std::shared_ptr<EventType>> createDefaultEvents() {
     analyticOrder->setSource(OrderSource::GLBX);
     otcMarketsOrder->setSource(OrderSource::pink);
     spreadOrder->setSource(OrderSource::ISE);
+
+    const auto orderImbalance = std::make_shared<OrderImbalance>(DEFAULTS_SYMBOL);
+
+    orderImbalance->setSource(OrderSource::NTV);
+
+    const auto nuamOrder = std::make_shared<NuamOrder>(DEFAULTS_SYMBOL);
+
+    nuamOrder->setSource(OrderSource::NUAM);
 
     std::vector<std::shared_ptr<EventType>> events{
         std::make_shared<Quote>(DEFAULTS_SYMBOL),
@@ -314,6 +483,12 @@ std::vector<std::shared_ptr<EventType>> createDefaultEvents() {
         std::make_shared<OptionSale>(DEFAULTS_SYMBOL),
         std::make_shared<TextMessage>(DEFAULTS_SYMBOL),
         std::make_shared<Message>(DEFAULTS_SYMBOL),
+        orderImbalance,
+        nuamOrder,
+        std::make_shared<NuamTrade>(DEFAULTS_SYMBOL),
+        std::make_shared<NuamTimeAndSale>(DEFAULTS_SYMBOL),
+        std::make_shared<MarketMaker>(DEFAULTS_SYMBOL),
+        std::make_shared<TextConfiguration>(DEFAULTS_SYMBOL),
     };
 
     for (const auto &event : events) {
@@ -424,6 +599,19 @@ std::vector<std::shared_ptr<EventType>> createEdgeEvents() {
                                                                &TradingStatus::ACTIVE};
     const std::array<const OtcMarketsPriceType *, 3> otcMarketsPriceTypes{
         &OtcMarketsPriceType::UNPRICED, &OtcMarketsPriceType::ACTUAL, &OtcMarketsPriceType::WANTED};
+
+    // The sources of the NuamOrder: NUAM, the lowercase nuam (another source) and the default one.
+    const std::array<const OrderSource *, 3> nuamSources{&OrderSource::NUAM, &OrderSource::valueOf("nuam"),
+                                                         &OrderSource::DEFAULT};
+
+    const std::array<const OrderSource *, 4> imbalanceSources{&OrderSource::NTV, &OrderSource::NUAM, &OrderSource::ARCA,
+                                                              &OrderSource::DEFAULT};
+    const std::array<const ImbalanceSide *, 6> imbalanceSides{
+        &ImbalanceSide::UNDEFINED,           &ImbalanceSide::BUY,   &ImbalanceSide::SELL, &ImbalanceSide::NO_IMBALANCE,
+        &ImbalanceSide::INSUFFICIENT_ORDERS, &ImbalanceSide::PAUSED};
+    const std::array<const AuctionType *, 5> auctionTypes{&AuctionType::UNDEFINED, &AuctionType::OPENING,
+                                                          &AuctionType::CLOSING, &AuctionType::REOPENING,
+                                                          &AuctionType::OTHER};
 
     std::vector<std::shared_ptr<EventType>> events{};
 
@@ -645,6 +833,113 @@ std::vector<std::shared_ptr<EventType>> createEdgeEvents() {
         events.push_back(textMessage);
 
         events.push_back(std::make_shared<Message>(symbol, s));
+
+        // The sources cycle through all the publishable ones, including the default (the record without a suffix).
+        auto orderImbalance = std::make_shared<OrderImbalance>(symbol);
+
+        orderImbalance->setSource(pick(imbalanceSources, k));
+        orderImbalance->setTime(l);
+        orderImbalance->setSequence(sequence);
+        orderImbalance->setRefPrice(d);
+        orderImbalance->setPairedSize(d);
+        orderImbalance->setImbalanceSize(d);
+        orderImbalance->setNearPrice(d);
+        orderImbalance->setFarPrice(d);
+        orderImbalance->setImbalanceSide(pick(imbalanceSides, k));
+        orderImbalance->setAuctionType(pick(auctionTypes, k));
+        events.push_back(orderImbalance);
+
+        auto nuamOrder = std::make_shared<NuamOrder>(symbol);
+
+        nuamOrder->setIndex(index);
+        nuamOrder->setSource(pick(nuamSources, k));
+        nuamOrder->setTime(l);
+        nuamOrder->setSequence(sequence);
+        nuamOrder->setPrice(d);
+        nuamOrder->setSize(d);
+        nuamOrder->setExchangeCode(c);
+        nuamOrder->setOrderSide(pick(orderSides, k));
+        nuamOrder->setScope(pick(scopes, k));
+        nuamOrder->setActorId(i);
+        nuamOrder->setParticipantId(i);
+        nuamOrder->setSubmitterId(i);
+        nuamOrder->setOnBehalfOfSubmitterId(i);
+        nuamOrder->setClientOrderId(s);
+        nuamOrder->setCustomerAccount(s);
+        nuamOrder->setCustomerInfo(s);
+        nuamOrder->setExchangeInfo(s);
+        nuamOrder->setTimeInForce(NuamTimeInForceType::ALL[k % NuamTimeInForceType::ALL.size()]);
+        nuamOrder->setTimeInForceData(i);
+        nuamOrder->setTriggerOrderBookId(i);
+        nuamOrder->setTriggerPrice(d);
+        nuamOrder->setTriggerSessionType(i);
+        nuamOrder->setOrderType(NuamOrderType::ALL[k % NuamOrderType::ALL.size()]);
+        nuamOrder->setOrderQuantity(d);
+        nuamOrder->setDisplayQuantity(d);
+        nuamOrder->setRefreshQuantity(d);
+        nuamOrder->setLeavesQuantity(d);
+        nuamOrder->setMatchedQuantity(d);
+        events.push_back(nuamOrder);
+
+        auto nuamTrade = std::make_shared<NuamTrade>(symbol);
+
+        nuamTrade->setTime(l);
+        nuamTrade->setSequence(sequence);
+        nuamTrade->setExchangeCode(c);
+        nuamTrade->setPrice(d);
+        nuamTrade->setSize(d);
+        nuamTrade->setTickDirection(pick(directions, k));
+        nuamTrade->setChange(d);
+        nuamTrade->setDayId(i);
+        nuamTrade->setDayVolume(d);
+        nuamTrade->setDayTurnover(d);
+        nuamTrade->setExtendedTradingHours(b);
+        nuamTrade->setTradeStatTime(l);
+        nuamTrade->setLastSignificantPrice(d);
+        nuamTrade->setLastPriceForAll(d);
+        nuamTrade->setNumberOfTrades(i);
+        nuamTrade->setVWAP(d);
+        events.push_back(nuamTrade);
+
+        auto nuamTimeAndSale = std::make_shared<NuamTimeAndSale>(symbol);
+
+        nuamTimeAndSale->setTime(l);
+        nuamTimeAndSale->setSequence(sequence);
+        nuamTimeAndSale->setExchangeCode(c);
+        nuamTimeAndSale->setPrice(d);
+        nuamTimeAndSale->setSize(d);
+        nuamTimeAndSale->setBidPrice(d);
+        nuamTimeAndSale->setAskPrice(d);
+        nuamTimeAndSale->setExchangeSaleConditions(shortString);
+        nuamTimeAndSale->setTradeThroughExempt(c);
+        nuamTimeAndSale->setAggressorSide(pick(sides, k));
+        nuamTimeAndSale->setSpreadLeg(b);
+        nuamTimeAndSale->setExtendedTradingHours(!b);
+        nuamTimeAndSale->setValidTick(b);
+        nuamTimeAndSale->setType(pick(timeAndSaleTypes, k));
+        nuamTimeAndSale->setMatchId(l);
+        events.push_back(nuamTimeAndSale);
+
+        // The market maker id keeps the last 4 characters of the short string, as in the Java API.
+        auto marketMaker = std::make_shared<MarketMaker>(symbol);
+
+        marketMaker->setExchangeCode(c);
+        marketMaker->setMarketMaker(shortString);
+        marketMaker->setBidTime(l);
+        marketMaker->setBidPrice(d);
+        marketMaker->setBidSize(d);
+        marketMaker->setBidCount(l);
+        marketMaker->setAskTime(l);
+        marketMaker->setAskPrice(d);
+        marketMaker->setAskSize(d);
+        marketMaker->setAskCount(l);
+        events.push_back(marketMaker);
+
+        auto textConfiguration = std::make_shared<TextConfiguration>(symbol, s, i);
+
+        textConfiguration->setTime(l);
+        textConfiguration->setSequence(sequence);
+        events.push_back(textConfiguration);
     }
 
     // All 256 values of the event flags byte on an Order with index 0 (setIndex() after setSource() resets the source

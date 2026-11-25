@@ -27,3 +27,16 @@ TEST_CASE("JavaException::throwException()") {
         std::cerr << e.getStackTrace() << '\n';
     }
 }
+
+TEST_CASE("RuntimeException should put the additional stacktrace first and share the stacktrace with its copies") {
+    const RuntimeException e("message", "additional");
+    const RuntimeException copy{e};
+
+    CHECK(e.getStackTrace().rfind("additional", 0) == 0);
+    CHECK(&copy.getStackTrace() == &e.getStackTrace());
+#ifdef DXFCXX_FEATURE_STACKTRACE
+    CHECK(e.getStackTrace().size() > std::string("additional\n").size());
+#else
+    CHECK(e.getStackTrace() == "additional");
+#endif
+}

@@ -4,78 +4,79 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleAlignment.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEventSymbols.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/resources/Strings.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
+#include "../../internal/resources/Strings.hpp"
+#include "../../internal/utils/StringUtils.hpp"
 
 #include <fmt/format.h>
 
-DXFCPP_BEGIN_NAMESPACE
+#include "../../internal/utils/CandleUtils.hpp"
 
-CandleAlignment::CandleAlignment(const StringLike &string) noexcept : string_{string} {
-}
+DXFCPP_BEGIN_NAMESPACE
 
 CandleAlignment::CandleAlignment() noexcept {
 }
 
-CandleAlignment::~CandleAlignment() noexcept {
-}
-
-std::string CandleAlignment::changeAttributeForSymbol(const StringLike &symbol) const {
-    return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
-                            : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
+std::string CandleAlignment::changeAttributeForSymbol(StringParam symbol) const {
+    return *this == DEFAULT
+               ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY)
+               : MarketEventSymbols::changeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY, toString());
 }
 
 std::string CandleAlignment::toString() const {
-    return string_;
+    return std::string{string_};
 }
 
 bool CandleAlignment::operator==(const CandleAlignment &candleAlignment) const noexcept {
     return string_ == candleAlignment.string_;
 }
 
-std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(const StringLike &s) {
-    if (const auto found = BY_STRING.find(s); found != BY_STRING.end()) {
-        return found->second;
-    }
-
+std::reference_wrapper<const CandleAlignment> CandleAlignment::parse(StringParam s) {
     for (const auto &alignmentRef : VALUES) {
-        if (const auto &alignmentStr = alignmentRef.get().toString(); iEquals(alignmentStr, s)) {
+        if (alignmentRef.get().string_ == s.view()) {
             return alignmentRef;
         }
     }
 
-    throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "alignment", s.toStringView()));
+    for (const auto &alignmentRef : VALUES) {
+        if (const auto alignmentStr = alignmentRef.get().toString(); iEquals(alignmentStr, s.view())) {
+            return alignmentRef;
+        }
+    }
+
+    throw InvalidArgumentException(fmt::format(ires::Strings::Events::UNKNOWN_CANDLE_, "alignment", s.view()));
 }
 
-std::reference_wrapper<const CandleAlignment> CandleAlignment::getAttributeForSymbol(const StringLike &symbol) {
-    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+std::reference_wrapper<const CandleAlignment> CandleAlignment::getAttributeForSymbol(StringParam symbol) {
+    const auto stringOpt = MarketEventSymbols::getAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY);
 
     return !stringOpt ? std::cref(DEFAULT) : parse(stringOpt.value());
 }
 
-std::string CandleAlignment::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+std::string CandleAlignment::normalizeAttributeForSymbol(StringParam symbol) {
+    const std::string_view sv = symbol.view();
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY);
 
     if (!a) {
-        return symbol;
+        return std::string{sv};
     }
 
     try {
         const auto other = parse(a.value());
 
         if (other.get() == DEFAULT) {
-            return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+            return candle::removeDefaultAttribute(symbol.view(), CandleAlignment::ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.get().toString()) {
-            return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.get().toString());
+            return MarketEventSymbols::changeAttributeStringByKey(symbol, CandleAlignment::ATTRIBUTE_KEY,
+                                                                  other.get().toString());
         }
 
-        return symbol;
+        return std::string{sv};
     } catch (const InvalidArgumentException &) {
-        return symbol;
+        return std::string{sv};
     } catch (const std::invalid_argument &) {
-        return symbol;
+        return std::string{sv};
     }
 }
 

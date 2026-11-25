@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -22,16 +22,16 @@ DXFCPP_BEGIN_NAMESPACE
 struct DXFCPP_EXPORT EventMapper {
     static std::shared_ptr<EventType> fromGraal(void *graalNativeEvent);
 
+    // Throws on an event that cannot be converted (for example, of a type that the C++ API does not implement).
     static std::vector<std::shared_ptr<EventType>> fromGraalList(void *graalNativeList);
+
+    // For the event callbacks of the dxFeed Graal SDK: an event that cannot be converted is skipped, and one error per
+    // event type with the number of the skipped events is reported to ErrorManager.
+    static std::vector<std::shared_ptr<EventType>> fromGraalListSkippingErrors(void *graalNativeList);
 
     static void freeGraal(void *graalNativeEvent);
 
     template <typename EventIt> static void *toGraalList(EventIt begin, EventIt end) {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("EventMapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto size = calculateGraalListSize(std::distance(begin, end));
 
         // Zero size is needed, for example, to clear the list of symbols.
@@ -44,16 +44,23 @@ struct DXFCPP_EXPORT EventMapper {
         std::ptrdiff_t elementIdx = 0;
         bool needToFree = false;
 
-        for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
-            if constexpr (requires { it->toGraal(); }) { // It<EventType>
-                needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
-            } else if constexpr (requires { (*it)->toGraal(); }) { // It<Ptr<EventType>>
-                needToFree = setGraalListElement(list, elementIdx, (*it)->toGraal()) == false;
-            }
+        try {
+            for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
+                if constexpr (requires { it->toGraal(); }) { // It<EventType>
+                    needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
+                } else if constexpr (requires { (*it)->toGraal(); }) { // It<Ptr<EventType>>
+                    needToFree = setGraalListElement(list, elementIdx, (*it)->toGraal()) == false;
+                }
 
-            if (needToFree) {
-                break;
+                if (needToFree) {
+                    break;
+                }
             }
+        } catch (...) {
+            // For example, a string field that is not valid UTF-8: the events converted before are freed.
+            freeGraalListElements(list, elementIdx);
+
+            throw;
         }
 
         if (needToFree) {

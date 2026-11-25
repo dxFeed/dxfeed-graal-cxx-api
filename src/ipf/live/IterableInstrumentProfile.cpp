@@ -4,7 +4,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/ipf/live/IterableInstrumentProfile.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfile.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
+#include "../../isolated/ipf/live/IsolatedInstrumentProfileCollector.hpp"
 
 #include <memory>
 

@@ -2,17 +2,15 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../../include/dxfeed_graal_cpp_api/api.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const std::string WildcardSymbol::RESERVED_PREFIX = "*";
-
-const WildcardSymbol WildcardSymbol::ALL{RESERVED_PREFIX};
-
-WildcardSymbol::WildcardSymbol(const std::string &symbol) noexcept : symbol_{symbol} {
-}
+// ALL is constant-initialized.
+constinit const WildcardSymbol WildcardSymbol::ALL{"*"};
 
 WildcardSymbol::WildcardSymbol(const WildcardSymbol &) noexcept = default;
 
@@ -24,10 +22,8 @@ WildcardSymbol &WildcardSymbol::operator=(WildcardSymbol &&) noexcept = default;
 
 WildcardSymbol::WildcardSymbol() noexcept = default;
 
-WildcardSymbol::~WildcardSymbol() noexcept = default;
-
-const std::string &WildcardSymbol::getSymbol() const noexcept {
-    return symbol_;
+std::string WildcardSymbol::getSymbol() const {
+    return std::string{symbol_};
 }
 
 void *WildcardSymbol::toGraal() const noexcept {
@@ -35,7 +31,7 @@ void *WildcardSymbol::toGraal() const noexcept {
         Debugger::debug("WildcardSymbol::toGraal()");
     }
 
-    static const dxfg_wildcard_symbol_t wildcardGraalSymbol{{WILDCARD}};
+    static const dxfg_v4_wildcard_symbol_t wildcardGraalSymbol{{WILDCARD}};
 
     return dxfcpp::bit_cast<void *>(&wildcardGraalSymbol);
 }
@@ -57,9 +53,9 @@ const WildcardSymbol &WildcardSymbol::fromGraal(void *) {
 std::string WildcardSymbol::toString() const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        return "WildcardSymbol{" + symbol_ + "}";
+        return "WildcardSymbol{" + getSymbol() + "}";
     } else {
-        return symbol_;
+        return getSymbol();
     }
 }
 

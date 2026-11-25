@@ -7,37 +7,40 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../include/dxfeed_graal_cpp_api/event/IndexedEventSource.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/Id.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTimeSeriesTxModel.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/model/IsolatedTxModelListener.hpp"
-
-struct dxfg_indexed_event_source_t;
-struct dxfg_event_type_list;
+#include "../internal/CallbackBarrier.hpp"
+#include "../internal/Id.hpp"
+#include "../internal/context/ApiContext.hpp"
+#include "../internal/managers/EntityManager.hpp"
+#include "../isolated/IsolatedCommon.hpp"
+#include "../isolated/model/IsolatedTimeSeriesTxModel.hpp"
+#include "../isolated/model/IsolatedTxModelListener.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
 struct TxModelListenerCommon::Impl {
-    // typedef void (*dxfg_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,
-    // dxfg_indexed_event_source_t* source, dxfg_event_type_list* events, int32_t isSnapshot, void* user_data);
-    static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_indexed_event_source_t *source,
-                                 dxfg_event_type_list *events, int32_t isSnapshot, void *userData) {
-        if (!source || !events) {
-            return;
-        }
+    static auto getManager() {
+        return ApiContext::getInstance().getManager<WeakEntityManager<TxModelListenerCommon, TxModelListenerTag>>();
+    }
 
-        auto id = Id<TxModelListenerTag>::from(userData);
-        auto listener = ApiContext::getInstance()
-                            ->getManager<EntityManager<TxModelListenerCommon, TxModelListenerTag>>()
-                            ->getEntity(id);
+    // typedef void (*dxfg_v4_TxModelListener_function_eventsReceived)(graal_isolatethread_t* thread,
+    // dxfg_v4_indexed_event_source_t* source, dxfg_v4_event_type_list* events, int32_t isSnapshot, void* user_data);
+    static void onEventsReceived(graal_isolatethread_t * /* thread */, dxfg_v4_indexed_event_source_t *source,
+                                 dxfg_v4_event_type_list *events, int32_t isSnapshot, void *userData) {
+        runCallback("TxModelListener", [&] {
+            if (!source || !events) {
+                return;
+            }
 
-        if (!listener) {
-            return;
-        }
+            auto id = Id<TxModelListenerTag>::from(userData);
+            auto listener = getManager()->getEntity(id);
 
-        listener->onEventsReceived_(IndexedEventSource::fromGraal(source), EventMapper::fromGraalList(events),
-                                    isSnapshot == 1);
+            if (!listener) {
+                return;
+            }
+
+            listener->onEventsReceived_(IndexedEventSource::fromGraal(source), EventMapper::fromGraalListSkippingErrors(events),
+                                        isSnapshot == 1);
+        });
     }
 };
 
@@ -45,6 +48,15 @@ TxModelListenerCommon::TxModelListenerCommon() : handle_{}, impl_{std::make_uniq
 }
 
 TxModelListenerCommon::~TxModelListenerCommon() noexcept {
+    runRelease("TxModelListener", [this] {
+        ignoreUnused(Impl::getManager()->unregisterEntity(Id<TxModelListenerTag>::from(id_)));
+
+        // Releasing the native listener waits for its calls in progress on the other threads, which cannot reach
+        // this listener anymore.
+        if (handle_) {
+            releaseOutsideCallbacks(std::make_shared<JavaObjectHandle<TxModelListenerTag>>(std::move(handle_)));
+        }
+    });
 }
 
 const JavaObjectHandle<TxModelListenerTag> &TxModelListenerCommon::getHandle() const {
@@ -62,14 +74,15 @@ std::size_t TxModelListenerCommon::hashCode() const noexcept {
 }
 
 bool TxModelListenerCommon::operator==(const TxModelListenerCommon &other) const {
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
-void TxModelListenerCommon::createHandle(Id<TxModelListenerTag> id) {
+void TxModelListenerCommon::createHandle() {
     std::lock_guard guard{mutex_};
 
+    id_ = Impl::getManager()->registerEntity(sharedAs<TxModelListenerCommon>()).getValue();
     handle_ = isolated::model::IsolatedTxModelListener::create(dxfcpp::bit_cast<void *>(&Impl::onEventsReceived),
-                                                               dxfcpp::bit_cast<void *>(id.getValue()));
+                                                               dxfcpp::bit_cast<void *>(id_));
 }
 
 DXFCPP_END_NAMESPACE

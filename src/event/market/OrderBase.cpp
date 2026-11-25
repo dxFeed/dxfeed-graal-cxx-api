@@ -3,9 +3,10 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/OrderBase.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -17,7 +18,7 @@ void OrderBase::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
+    const auto graalOrderBase = static_cast<dxfg_v4_order_base_t *>(graalNative);
 
     orderBaseData_ = {
         .eventFlags = graalOrderBase->event_flags,
@@ -38,14 +39,14 @@ void OrderBase::fillData(void *graalNative) noexcept {
     };
 }
 
-void OrderBase::fillGraalData(void *graalNative) const noexcept {
+void OrderBase::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalOrderBase = static_cast<dxfg_order_base_t *>(graalNative);
+    const auto graalOrderBase = static_cast<dxfg_v4_order_base_t *>(graalNative);
 
     graalOrderBase->event_flags = orderBaseData_.eventFlags;
     graalOrderBase->index = orderBaseData_.index;
@@ -75,10 +76,10 @@ void OrderBase::assign(std::shared_ptr<EventType> event) {
 OrderBase::OrderBase() noexcept {
 }
 
-OrderBase::OrderBase(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+OrderBase::OrderBase(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-const OrderSource &OrderBase::getSource() const & noexcept {
+const OrderSource &OrderBase::getSource() const & {
     auto sourceId = static_cast<std::int32_t>(sar(orderBaseData_.index, SPECIAL_SOURCE_ID_SHIFT));
 
     if (!OrderSource::isSpecialSourceId(sourceId)) {
@@ -290,7 +291,12 @@ void OrderBase::setExchangeCode(char exchangeCode) {
         setBits(orderBaseData_.flags, EXCHANGE_MASK, EXCHANGE_SHIFT, static_cast<unsigned char>(exchangeCode));
 }
 
-void OrderBase::setExchangeCode(std::int16_t exchangeCode) noexcept {
+void OrderBase::setExchangeCode(std::int16_t exchangeCode) {
+    // The whole code is checked: utf16to8() gives 0 for a code above U+00FF.
+    if ((static_cast<std::uint16_t>(exchangeCode) & ~EXCHANGE_MASK) != 0) {
+        throw InvalidArgumentException("Invalid exchangeCode: " + encodeChar(exchangeCode));
+    }
+
     setExchangeCode(utf16to8(exchangeCode));
 }
 
@@ -316,7 +322,7 @@ std::string OrderBase::baseFieldsToString() const {
         "timeNanoPart={}, action={}, actionTime={}, orderId={}, auxOrderId={}, price={}, "
         "size={}, executedSize={}, count={}, exchange={}, side={}, scope={}, tradeId={}, tradePrice={}, tradeSize={}",
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getSource().toString(), getEventFlagsMask().getMask(), getIndex(),
+        getSource().toString(), getEventFlagsMask().getMask(), static_cast<std::uint64_t>(getIndex()),
         TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), getTimeNanoPart(), getAction().toString(),
         TimeFormat::DEFAULT_WITH_MILLIS.format(getActionTime()), getOrderId(), getAuxOrderId(),
         dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()), dxfcpp::toString(getExecutedSize()), getCount(),

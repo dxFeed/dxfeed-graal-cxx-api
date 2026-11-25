@@ -1,13 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp"
+#include "IsolatedObject.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
+#include "../../internal/CallbackBarrier.hpp"
+#include "../IsolatedCommon.hpp"
+#include "IsolatedString.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -18,70 +19,90 @@ void freeGraal(void *pointer) {
         return;
     }
 
-    runGraalFunctionAndThrowIfMinusOne(dxfg_free, pointer);
+    runGraalV4Function(dxfg_v4_free, pointer);
 }
 
 namespace IsolatedObject {
 
-/// dxfg_Object_toString
-/* const char* */ std::string toString(/* dxfg_java_object_handler* */ void *object) {
+/// dxfg_v4_Object_toString
+/* const char* */ std::string toString(/* dxfg_v4_java_object_handler* */ void *object) {
     if (!object) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Object_toString`. The `object` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_Object_toString`. The `object` is null");
     }
 
-    const auto value = IsolatedString::toUnique(
-        runGraalFunctionAndThrowIfNullptr(dxfg_Object_toString, static_cast<dxfg_java_object_handler *>(object)));
+    const auto value = IsolatedString::toUnique(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_Object_toString, static_cast<dxfg_v4_java_object_handler *>(object)));
     return dxfcpp::toString(value.get());
 }
 
-/// dxfg_Object_equals
-std::int32_t equals(/* dxfg_java_object_handler* */ void *object, /* dxfg_java_object_handler* */ void *other) {
+/// dxfg_v4_Object_equals
+std::int32_t equals(/* dxfg_v4_java_object_handler* */ void *object, /* dxfg_v4_java_object_handler* */ void *other) {
     if (!object) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Object_equals`. The `object` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_Object_equals`. The `object` is null");
     }
 
     if (!other) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Object_equals`. The `other` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_Object_equals`. The `other` is null");
     }
 
-    return runGraalFunctionAndThrowIfMinusMin(dxfg_Object_equals, static_cast<dxfg_java_object_handler *>(object),
-                                              static_cast<dxfg_java_object_handler *>(other));
+    return runGraalV4FunctionWithResult(dxfg_v4_Object_equals, static_cast<dxfg_v4_java_object_handler *>(object),
+                                        static_cast<dxfg_v4_java_object_handler *>(other));
 }
 
-/// dxfg_Object_hashCode
-/* int32_t */ std::size_t hashCode(/* dxfg_java_object_handler* */ void *object) {
+/// dxfg_v4_Object_hashCode
+/* int32_t */ std::size_t hashCode(/* dxfg_v4_java_object_handler* */ void *object) {
     if (!object) {
-        throw InvalidArgumentException("Unable to execute function `dxfg_Object_hashCode`. The `object` is null");
+        throw InvalidArgumentException("Unable to execute function `dxfg_v4_Object_hashCode`. The `object` is null");
     }
 
     return static_cast<std::size_t>(
-        runGraalFunctionAndThrowIfMinusMin(dxfg_Object_hashCode, static_cast<dxfg_java_object_handler *>(object)));
+        runGraalV4FunctionWithResult(dxfg_v4_Object_hashCode, static_cast<dxfg_v4_java_object_handler *>(object)));
 }
 
-bool release(void *handle) {
+bool release(void *handle) noexcept {
     if (!handle) {
         return false;
     }
 
-    return runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            return dxfg_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                  static_cast<dxfg_java_object_handler *>(handle)) == 0;
-        },
-        false);
+    bool released = false;
+
+    runRelease("JavaObjectHandle", [handle, &released] {
+        released = runIsolatedOrElse(
+            [handle](auto threadHandle) {
+                auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+                throwIfFailed(thread, dxfg_v4_JavaObjectHandler_release(
+                                          thread, static_cast<dxfg_v4_java_object_handler *>(handle)));
+
+                return true;
+            },
+            false);
+    });
+
+    return released;
 }
 
-bool List::release(void *handle) {
+bool List::release(void *handle) noexcept {
     if (!handle) {
         return false;
     }
 
-    return runIsolatedOrElse(
-        [handle = handle](auto threadHandle) {
-            return dxfg_CList_JavaObjectHandler_release(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                        static_cast<dxfg_java_object_handler_list *>(handle)) == 0;
-        },
-        false);
+    bool released = false;
+
+    runRelease("JavaObjectHandle", [handle, &released] {
+        released = runIsolatedOrElse(
+            [handle](auto threadHandle) {
+                auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+                throwIfFailed(thread, dxfg_v4_java_object_handler_list_release(
+                                          thread, static_cast<dxfg_v4_java_object_handler_list *>(handle)));
+
+                return true;
+            },
+            false);
+    });
+
+    return released;
 }
 
 } // namespace IsolatedObject

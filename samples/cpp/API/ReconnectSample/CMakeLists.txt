@@ -36,12 +36,11 @@ endif ()
 add_executable(${PROJECT_NAME} src/main.cpp)
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx fmt::fmt-header-only)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static fmt::fmt-header-only)
 
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    if (MSVC)
         if (DXFCXX_LINK_STATIC_RUNTIME)
             set_target_properties(${PROJECT_NAME} PROPERTIES
                     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
@@ -65,9 +64,20 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E
         $<TARGET_FILE:dxfcxx::graal>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
+# The MSVC ASan runtime, so the sample also starts outside a developer prompt (the CTest runs of the recipes).
+if (COMMAND dxfcxx_sanitizer_runtime_files)
+    dxfcxx_sanitizer_runtime_files(DXFCXX_SAMPLE_SANITIZER_RUNTIME_FILES)
+
+    if (DXFCXX_SAMPLE_SANITIZER_RUNTIME_FILES)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${DXFCXX_SAMPLE_SANITIZER_RUNTIME_FILES}
+                $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+    endif ()
+endif ()
+
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx>
+            ${DXFCXX_SHARED_LIBRARY_RUNTIME_FILE}
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif ()
 

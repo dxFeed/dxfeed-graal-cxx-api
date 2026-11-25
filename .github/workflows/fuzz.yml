@@ -7,8 +7,18 @@
 # The corpus found by earlier runs is kept in the cache.
 name: Fuzzing
 
+# A pull request runs it only when something that the targets are built from changes.
 on:
   pull_request:
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'fuzz/**'
+      - 'tools/Tools/src/NetTest/MetricsRequest.*'
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'third_party/**'
+      - '.github/workflows/fuzz.yml'
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
@@ -16,11 +26,16 @@ on:
 permissions:
   contents: read
 
+# A newer run of a pull request (a push) cancels the older one; the nightly and the manual runs are never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   fuzz:
     name: "fuzz"
     runs-on: ubuntu-24.04
-    # The nightly run takes 7 targets x 30 min.
+    # The nightly run takes 8 targets x 30 min.
     timeout-minutes: 300
 
     steps:
@@ -60,7 +75,7 @@ jobs:
 
       - name: Upload failing inputs and logs
         if: ${{ always() }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: fuzz-artifacts
           path: fuzz-artifacts

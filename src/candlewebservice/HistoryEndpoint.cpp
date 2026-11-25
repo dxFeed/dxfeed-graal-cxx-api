@@ -4,9 +4,7 @@
 #include "../../include/dxfeed_graal_cpp_api/candlewebservice/HistoryEndpoint.hpp"
 
 #include "../../include/dxfeed_graal_c_api/api.h"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/candlewebservice/IsolatedHistoryEndpoint.hpp"
+#include "../isolated/candlewebservice/IsolatedHistoryEndpoint.hpp"
 
 #include <memory>
 #include <utility>
@@ -35,26 +33,26 @@ HistoryEndpoint::Builder::Builder(LockExternalConstructionTag,
 HistoryEndpoint::Builder::~Builder() {
 }
 
-std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAddress(const StringLike &address) {
-    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withAddress(handle_, address);
+std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAddress(StringParam address) {
+    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withAddress(handle_, address.view());
 
     return this->sharedAs<Builder>();
 }
 
-std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withUserName(const StringLike &userName) {
-    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withUserName(handle_, userName);
+std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withUserName(StringParam userName) {
+    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withUserName(handle_, userName.view());
 
     return this->sharedAs<Builder>();
 }
 
-std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withPassword(const StringLike &password) {
-    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withPassword(handle_, password);
+std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withPassword(StringParam password) {
+    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withPassword(handle_, password.view());
 
     return this->sharedAs<Builder>();
 }
 
-std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAuthToken(const StringLike &authToken) {
-    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withAuthToken(handle_, authToken);
+std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withAuthToken(StringParam authToken) {
+    isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::withAuthToken(handle_, authToken.view());
 
     return this->sharedAs<Builder>();
 }
@@ -72,21 +70,11 @@ std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::Builder::withFormat(F
 }
 
 std::shared_ptr<HistoryEndpoint> HistoryEndpoint::Builder::build() const {
-    auto endpoint = HistoryEndpoint::createShared(
-        isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::build(handle_));
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<HistoryEndpoint>>()->registerEntity(endpoint);
-    ignoreUnused(id);
-
-    return endpoint;
+    return HistoryEndpoint::createShared(isolated::candlewebservice::IsolatedHistoryEndpoint::Builder::build(handle_));
 }
 
 std::shared_ptr<HistoryEndpoint::Builder> HistoryEndpoint::newBuilder() {
-    auto builder = Builder::createShared(
-        isolated::candlewebservice::IsolatedHistoryEndpoint::newBuilder());
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<Builder>>()->registerEntity(builder);
-    ignoreUnused(id);
-
-    return builder;
+    return Builder::createShared(isolated::candlewebservice::IsolatedHistoryEndpoint::newBuilder());
 }
 
 DXFCPP_END_NAMESPACE

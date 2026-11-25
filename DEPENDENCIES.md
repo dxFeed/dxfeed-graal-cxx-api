@@ -2,7 +2,7 @@
 
 ## Compile-time
 
-- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.16.0
+- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.19.0
   - [Bundles](https://dxfeed.jfrog.io/artifactory/maven-open/com/dxfeed/graal-native-sdk/) 
 - \[opt] [Boost](https://github.com/boostorg/boost) v1.84.0
   - Boost.Stacktrace 1.0
@@ -16,7 +16,7 @@
 - [Process](https://github.com/ttldtor/Process) v3.0.1 (Tools)
 - [Console](https://github.com/ttldtor/Console) v1.0.1 (Tools)
 - [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) v0.40.2
-- [bits](https://github.com/ttldtor/bits) v1.0.0 (header-only, used by the public headers)
+- [bits](https://github.com/ttldtor/bits) v1.0.0 (header-only, private: not installed)
 - [Portals](https://github.com/ttldtor/portals) v0.2.0 (MarketDepthModelSample; needs CMake 3.24 and C++23, the sample
   is skipped otherwise)
   - utf8proc v2.12.0 (bundled with Portals)
@@ -32,12 +32,24 @@
     - libbacktrace \[opt] (Diagnostic backtraces)
     - libdl \[opt] (Diagnostic backtraces)
     - addr2line \[opt] (Diagnostic backtraces)
+## Documentation
+
+- [Doxygen](https://github.com/doxygen/doxygen) v1.18.0 (the release workflow downloads it and checks its SHA-256)
+- [Doxygen Awesome](https://github.com/jothepro/doxygen-awesome-css) v2.5.0, the theme of the documentation: a copy
+  of its `doxygen-awesome.css` and `LICENSE` in `docs/doxygen-awesome-css`; to update it, replace both with those of
+  the new tag
+
 ## Updating a dependency
 
 The archives that CMake downloads are verified with SHA-256 (`URL_HASH`); the hashes are next to the versions at the
 top of `CMakeLists.txt`. After changing a version, update its hash as well:
 
-- a GitHub release asset: `gh api repos/<owner>/<repo>/releases/tags/<tag> --jq '.assets[] | "\(.name) \(.digest)"'`;
+- a GitHub release asset:
+
+  ```sh
+  gh api repos/<owner>/<repo>/releases/tags/<tag> --jq '.assets[] | "\(.name) \(.digest)"'
+  ```
+
 - any other archive: `sha256sum` (or `certutil -hashfile <file> SHA256` on Windows) of the downloaded file;
 - the Graal Native SDK: `DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION` and the hashes of all platforms; with another
   `DXFEED_GRAAL_NATIVE_SDK_VERSION`, the archive is downloaded without verification and a warning is printed.
@@ -46,9 +58,16 @@ Git dependencies are pinned by tag or commit. GitHub Actions in `.github/workflo
 version in a comment; Dependabot (`.github/dependabot.yml`) proposes their updates weekly: the minor and patch
 updates in one pull request, every major update in a pull request of its own.
 
+The SBOMs of the release archives (`scripts/sbom.py`) take the versions from `CMakeLists.txt` (utf8proc from the
+sources of Portals, Doxygen Awesome from this file), so a new version needs no change there. A new dependency that goes into an archive (linked into the library, the samples or the tools, or
+included in the source bundle) needs a row in `DEPENDENCIES` of `scripts/sbom.py` (its CMake variable, repository,
+license and the kinds of archives), besides `deps.json`, this file and `THIRD_PARTY_LICENSES.md`. The tests of the
+scripts (`python3 -m unittest discover -s scripts/tests`) check that the versions agree with `deps.json` and the
+licenses with `THIRD_PARTY_LICENSES.md`.
+
 ## Run-time
 
-- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.16.0
+- [dxFeed Graal Native SDK](https://github.com/dxFeed/dxfeed-graal-native-sdk) v3.19.0
 - [doctest](https://github.com/doctest/doctest) v2.4.11 (Tests)
 - [nanobench](https://github.com/martinus/nanobench) v4.3.11 (Tests::Benchmarks)
 

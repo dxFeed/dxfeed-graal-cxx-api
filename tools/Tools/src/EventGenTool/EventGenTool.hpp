@@ -6,8 +6,8 @@
 #include "../../../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/api/osub/ObservableSubscriptionChangeListener.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/event/market/Quote.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/Timer.hpp"
+#include "../../../../src/internal/Common.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/util/Timer.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
 #include "../Args/Args.hpp"
 #include <chrono>

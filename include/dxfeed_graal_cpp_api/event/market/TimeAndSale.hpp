@@ -3,12 +3,15 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/Concepts.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/Common.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../TimeSeriesEvent.hpp"
@@ -55,7 +58,7 @@ class OptionSale;
  *
  * This event is implemented on top of QDS record `TimeAndSale`.
  */
-class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEvent {
+class DXFCPP_EXPORT TimeAndSale : public MarketEvent, public TimeSeriesEvent {
     friend struct EventMapper;
     friend class OptionSale;
 
@@ -103,6 +106,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
         std::int64_t index{};
         std::int32_t timeNanoPart{};
         std::int16_t exchangeCode{};
+        std::int64_t tradeId{};
         double price = math::NaN;
         double size = math::NaN;
         double bidPrice = math::NaN;
@@ -115,9 +119,18 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
 
     Data data_{};
 
+    protected:
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
     static void freeGraalData(void *graalNative) noexcept;
+
+    /**
+     * Returns a string representation of the fields of this event, without the class name and the braces.
+     * The inheritors append their own fields to it.
+     *
+     * @return a string representation of the fields
+     */
+    std::string baseFieldsToString() const;
 
     public:
     /// The alias to a type of shared pointer to the TimeAndSale object
@@ -173,7 +186,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TimeAndSale(const StringLike &eventSymbol) noexcept;
+    explicit TimeAndSale(StringParam eventSymbol);
 
     ///
     const IndexedEventSource &getSource() const & noexcept override;
@@ -192,7 +205,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
 
     /**
      * Returns a unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
+     * The index is composed of @ref getTime() "time" and @ref getSequence() "sequence".
      * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
@@ -201,10 +214,10 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
 
     /**
      * Changes the unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence" and
+     * The index is composed of @ref getTime() "time" and @ref getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref setTime() "time" and/or @ref setSequence() "sequence".
      *
      * @param index the event index.
      * @see ::getIndex()
@@ -257,7 +270,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     std::int32_t getTimeNanoPart() const noexcept;
 
     /**
-     * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() "time".
+     * Returns the sequence number of this event to distinguish events that have the same @ref getTime() "time".
      * This sequence number does not have to be unique and does not need to be sequential.
      * Sequence can range from 0 to ::MAX_SEQUENCE.
      *
@@ -266,7 +279,7 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
     std::int32_t getSequence() const noexcept;
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of this event.
+     * Changes @ref getSequence() "sequence number" of this event.
      *
      * @param sequence the sequence.
      * @see ::getSequence()
@@ -301,6 +314,21 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      * @param exchangeCode exchange code of this time and sale event.
      */
     void setExchangeCode(std::int16_t exchangeCode) noexcept;
+
+    /**
+     * Returns trade ID of this time and sale event. Trade ID is set for the events with a trade-related action
+     * (execution, correction, cancellation).
+     *
+     * @return trade ID or 0 if not available.
+     */
+    std::int64_t getTradeId() const noexcept;
+
+    /**
+     * Changes trade ID of this time and sale event.
+     *
+     * @param tradeId trade ID.
+     */
+    void setTradeId(std::int64_t tradeId) noexcept;
 
     /**
      * Returns price of this time and sale event.
@@ -380,7 +408,17 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param exchangeSaleConditions sale conditions.
      */
-    void setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept;
+    void setExchangeSaleConditions(StringParam exchangeSaleConditions);
+
+    /**
+     * Changes the sale conditions, or makes it null with `std::nullopt`.
+     * `setExchangeSaleConditions(other.getExchangeSaleConditionsOpt())` copies it from another event, null included.
+     *
+     * @param exchangeSaleConditions the sale conditions or `std::nullopt`.
+     */
+    template <OptionalString S> void setExchangeSaleConditions(S &&exchangeSaleConditions) noexcept {
+        data_.exchangeSaleConditions = std::forward<S>(exchangeSaleConditions);
+    }
 
     /**
      * Returns TradeThroughExempt flag of this time and sale event.
@@ -510,7 +548,17 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param buyer buyer of this time and sale event.
      */
-    void setBuyer(const StringLike &buyer) noexcept;
+    void setBuyer(StringParam buyer);
+
+    /**
+     * Changes the buyer of this time and sale event, or makes it null with `std::nullopt`.
+     * `setBuyer(other.getBuyerOpt())` copies it from another event, null included.
+     *
+     * @param buyer the buyer of this time and sale event or `std::nullopt`.
+     */
+    template <OptionalString S> void setBuyer(S &&buyer) noexcept {
+        data_.buyer = std::forward<S>(buyer);
+    }
 
     /**
      * Returns seller of this time and sale event.
@@ -531,7 +579,17 @@ class DXFCPP_EXPORT TimeAndSale final : public MarketEvent, public TimeSeriesEve
      *
      * @param seller seller of this time and sale event.
      */
-    void setSeller(const StringLike &seller) noexcept;
+    void setSeller(StringParam seller);
+
+    /**
+     * Changes the seller of this time and sale event, or makes it null with `std::nullopt`.
+     * `setSeller(other.getSellerOpt())` copies it from another event, null included.
+     *
+     * @param seller the seller of this time and sale event or `std::nullopt`.
+     */
+    template <OptionalString S> void setSeller(S &&seller) noexcept {
+        data_.seller = std::forward<S>(seller);
+    }
 
     /**
      * Returns a string representation of the current object.

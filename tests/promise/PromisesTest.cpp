@@ -125,6 +125,11 @@ TEST_CASE_FIXTURE(PromisesFixture, "getLastEventPromise completes when the event
     publishTrade("A");
     assertRemoved("A");
     REQUIRE(aPromise->isDone());
+    REQUIRE(aPromise->hasResult());
+    REQUIRE_FALSE(aPromise->hasException());
+    REQUIRE_FALSE(aPromise->isCancelled());
+    REQUIRE(aPromise->getException().getJavaClassName().empty());
+    REQUIRE(aPromise->awaitWithoutException(100ms));
     REQUIRE(aPromise->getResult()->getEventSymbol() == "A");
     REQUIRE_FALSE(bPromise->isDone());
     REQUIRE_FALSE(cPromise->isDone());
@@ -150,11 +155,18 @@ TEST_CASE_FIXTURE(PromisesFixture, "A cancelled getLastEventPromise removes its 
     const auto promise = feed->getLastEventPromise<Trade>("T");
     assertAdded("T");
     REQUIRE_FALSE(promise->isDone());
+    // A pending promise has no exception: the SDK returns NULL, which is not an error.
+    REQUIRE_FALSE(promise->hasException());
+    REQUIRE(promise->getException().getJavaClassName().empty());
 
     promise->cancel();
     assertRemoved("T");
     REQUIRE(promise->isDone());
     REQUIRE(promise->isCancelled());
+    REQUIRE(promise->hasException());
+    REQUIRE_FALSE(promise->hasResult());
+    REQUIRE(promise->getResult() == nullptr);
+    REQUIRE(promise->getException().getJavaClassName().find("CancellationException") != std::string::npos);
 }
 
 TEST_CASE_FIXTURE(PromisesFixture, "getLastEventsPromises and Promises::allOf complete when all events are published") {
@@ -184,7 +196,8 @@ TEST_CASE_FIXTURE(PromisesFixture, "getLastEventsPromises and Promises::allOf co
     REQUIRE(quotes[1]->getAskPrice() == 21.0);
 }
 
-// Requires Graal SDK v3.5.0+: before it, dxfg_Promise_awaitWithoutException returned 0 ("completed") on timeout.
+// dxfg_v4_Promise_awaitWithoutException returns DXFG_PROMISE_AWAIT_TIMED_OUT on timeout (the old function of SDK
+// versions before 3.5.0 returned 0, "completed").
 TEST_CASE_FIXTURE(PromisesFixture, "awaitWithoutException returns false and cancels the promise on timeout") {
     const auto promise = feed->getLastEventPromise<Quote>("NO-DATA");
 
@@ -227,6 +240,9 @@ TEST_CASE_FIXTURE(PromisesFixture, "getIndexedEventsPromise completes on the end
     const auto promise = feed->getIndexedEventsPromise<Series>(SERIES_SYMBOL, IndexedEventSource::DEFAULT);
     assertAdded(SERIES_SYMBOL);
     REQUIRE_FALSE(promise->isDone());
+    // A pending promise has no result: the SDK returns an empty list, which is released as well.
+    REQUIRE_FALSE(promise->hasResult());
+    REQUIRE(promise->getResult().empty());
 
     publishAndProcess(createSeries(3, 300, 10.01, EventFlag::SNAPSHOT_BEGIN.getFlag()));
     REQUIRE_FALSE(promise->isDone());
@@ -312,13 +328,10 @@ TEST_CASE_FIXTURE(PromisesFixture, "getTimeSeriesPromise completes when the requ
     checkCandle(list[2], CANDLE_TIME, 0);
 }
 
-// DXEndpoint::executor() is deprecated (QD-1795), but works when it is called before DXEndpoint::getFeed().
-TEST_CASE("getLastEventPromise completes with the executor set by DXEndpoint::executor() before getFeed()") {
+TEST_CASE("getLastEventPromise completes with the executor set by DXEndpoint::Builder::withExecutor()") {
     const auto executor = InPlaceExecutor::create();
-    const auto endpoint = DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB)->build();
-
-    endpoint->executor(executor);
-
+    const auto endpoint =
+        DXEndpoint::newBuilder()->withRole(DXEndpoint::Role::LOCAL_HUB)->withExecutor(executor)->build();
     const auto feed = endpoint->getFeed();
     const auto publisher = endpoint->getPublisher();
     const auto promise = feed->getLastEventPromise<Trade>("A");

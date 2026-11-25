@@ -3,16 +3,18 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../event/EventMapper.hpp"
-#include "../internal/JavaObjectHandle.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 #include "./DXFeedSubscription.hpp"
 
+#include <cstdint>
 #include <memory>
 #include <mutex>
+#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_api
@@ -69,11 +71,16 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
     private:
     mutable std::recursive_mutex mutex_{};
     JavaObjectHandle<DXPublisher> handle_;
-    std::unordered_map<std::reference_wrapper<const dxfcpp::EventTypeEnum>, std::shared_ptr<ObservableSubscription>>
-        subscriptions_{};
+
+    // The subscriptions by the id of the event type. Guarded by mutex_.
+    mutable std::unordered_map<std::uint32_t, std::shared_ptr<ObservableSubscription>> subscriptions_{};
+    mutable bool closed_{}; // the endpoint is closed. Guarded by mutex_.
 
     static std::shared_ptr<DXPublisher> create(void *handle);
     void publishEventsImpl(void *graalEventsList) const;
+
+    // The endpoint is closed: releases the subscriptions.
+    void releaseSubscriptions() const;
 
     protected:
     DXPublisher() noexcept;
@@ -159,6 +166,8 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      *
      * @tparam EventsCollection The type of events collection (for example, `std::vector<::EventType::Ptr>`)
      * @param events The collection of events to publish.
+     * @throws InvalidArgumentException if a string field or the symbol of an event is not valid UTF-8; nothing is
+     * published then.
      */
     template <typename EventsCollection>
     void publishEvents(EventsCollection &&events) const
@@ -178,6 +187,8 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * Publishes events to the corresponding feed.
      *
      * @param events The collection of events to publish.
+     * @throws InvalidArgumentException if a string field or the symbol of an event is not valid UTF-8; nothing is
+     * published then.
      */
     void publishEvents(std::initializer_list<std::shared_ptr<EventType>> events) const {
         publishEvents(std::begin(events), std::end(events));
@@ -187,6 +198,8 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * Publishes an event to the corresponding feed.
      *
      * @param event The event to publish.
+     * @throws InvalidArgumentException if a string field or the symbol of an event is not valid UTF-8; nothing is
+     * published then.
      */
     void publishEvents(std::shared_ptr<EventType> event) const;
 
@@ -196,13 +209,10 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * @tparam EventIt The collection's iterator type
      * @param begin The beginning of the collection of events.
      * @param end The end of the events' collection.
+     * @throws InvalidArgumentException if a string field or the symbol of an event is not valid UTF-8; nothing is
+     * published then.
      */
     template <typename EventIt> void publishEvents(EventIt begin, EventIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::publishEvents(events = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = EventMapper::toGraalListUnique(begin, end);
 
         publishEventsImpl(list.get());

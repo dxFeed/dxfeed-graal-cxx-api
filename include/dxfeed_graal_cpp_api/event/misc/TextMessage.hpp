@@ -3,17 +3,22 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/Concepts.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/Common.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventType.hpp"
 #include "../EventTypeEnum.hpp"
 
 #include <cstdint>
+#include <memory>
+#include <optional>
 #include <string>
+#include <utility>
 
 /**
  * \addtogroup dxfcpp_misc
@@ -45,7 +50,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     std::optional<std::string> eventSymbol_{};
     std::int64_t eventTime_{};
     std::int64_t timeSequence_{};
-    std::string text_{};
+    std::optional<std::string> text_{};
 
     void fillData(void *graalNative);
     void fillGraalData(void *graalNative) const;
@@ -106,7 +111,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * Creates a new message with the specified event symbol.
      * @param eventSymbol event symbol.
      */
-    explicit TextMessage(const StringLike &eventSymbol) noexcept;
+    explicit TextMessage(StringParam eventSymbol);
 
     /**
      * Creates a new message with the specified event symbol and text.
@@ -114,7 +119,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol event symbol.
      * @param text text.
      */
-    TextMessage(const StringLike &eventSymbol, const StringLike &text) noexcept;
+    TextMessage(StringParam eventSymbol, StringParam text);
 
     /**
      * Creates a new message with the specified event symbol, time and text.
@@ -122,7 +127,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param time time.
      * @param text text.
      */
-    TextMessage(const StringLike &eventSymbol, std::int64_t time, const StringLike &text) noexcept;
+    TextMessage(StringParam eventSymbol, std::int64_t time, StringParam text);
 
     /**
      * Returns a symbol of this event.
@@ -143,7 +148,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @param eventSymbol The symbol of this event.
      */
-    void setEventSymbol(const StringLike &eventSymbol) noexcept override;
+    void setEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes an event's symbol and returns the current message.
@@ -151,7 +156,7 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      * @param eventSymbol The symbol of this event.
      * @return The current message.
      */
-    TextMessage &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    TextMessage &withEventSymbol(StringParam eventSymbol);
 
     ///
     std::int64_t getEventTime() const noexcept override;
@@ -239,16 +244,33 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
     /**
      * Returns text.
      *
-     * @return text.
+     * @return text or dxfcpp::String::NUL (`std::string{"<null>"}`).
      */
     const std::string &getText() const &;
+
+    /**
+     * Returns text.
+     *
+     * @return text or std::nullopt
+     */
+    const std::optional<std::string> &getTextOpt() const & noexcept;
 
     /**
      * Changes text.
      *
      * @param text text.
      */
-    void setText(const StringLike &text);
+    void setText(StringParam text);
+
+    /**
+     * Changes the text, or makes it null with `std::nullopt`.
+     * `setText(other.getTextOpt())` copies it from another event, null included.
+     *
+     * @param text the text or `std::nullopt`.
+     */
+    template <OptionalString S> void setText(S &&text) {
+        text_ = std::forward<S>(text);
+    }
 
     /**
      * Changes text and returns the current message.
@@ -257,7 +279,20 @@ class DXFCPP_EXPORT TextMessage : public EventTypeWithSymbol<std::string> {
      *
      * @return The current message.
      */
-    TextMessage &withText(const StringLike &text) noexcept;
+    TextMessage &withText(StringParam text);
+
+    /**
+     * Changes the text, or makes it null with `std::nullopt`.
+     * Returns the current text message.
+     *
+     * @param text the text or `std::nullopt`.
+     * @return The current text message.
+     */
+    template <OptionalString S> TextMessage &withText(S &&text) noexcept {
+        setText(std::forward<S>(text));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.

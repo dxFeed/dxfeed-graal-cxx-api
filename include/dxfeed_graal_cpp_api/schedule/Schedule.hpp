@@ -3,13 +3,17 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/JavaObjectHandle.hpp"
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringParam.hpp"
 
+#include <cstdint>
 #include <memory>
+#include <string>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_schedule
@@ -22,8 +26,6 @@ struct SessionFilter;
 struct InstrumentProfile;
 struct Day;
 struct Session;
-struct StringLike;
-
 /**
  * <b>Schedule</b> class provides API to retrieve and explore trading schedules of different exchanges
  * and different classes of financial instruments. Each instance of schedule covers separate trading schedule
@@ -55,6 +57,25 @@ struct DXFCPP_EXPORT Schedule {
 
     public:
     /**
+     * The default schedule for the UTC time zone (a 5-day week with no holidays):
+     * `UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)`.
+     *
+     * It is created at the first call, so it can be used by the initializers of global variables.
+     *
+     * @return The default schedule for the UTC time zone.
+     */
+    static const Ptr &UTC();
+
+    /**
+     * The default schedule for the NYSE exchange: `XNYS()`.
+     *
+     * It is created at the first call, so it can be used by the initializers of global variables.
+     *
+     * @return The default schedule for the NYSE exchange.
+     */
+    static const Ptr &NYSE();
+
+    /**
      * Returns default schedule instance for specified instrument profile.
      *
      * @param profile The instrument profile those schedule is requested
@@ -68,7 +89,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param scheduleDefinition The schedule definition of the requested schedule
      * @return The default schedule instance for specified schedule definition
      */
-    static Schedule::Ptr getInstance(const StringLike &scheduleDefinition);
+    static Schedule::Ptr getInstance(StringParam scheduleDefinition);
 
     /**
      * Returns schedule instance for a specified instrument profile and trading venue.
@@ -77,7 +98,7 @@ struct DXFCPP_EXPORT Schedule {
      * @param venue The trading venue those schedule is requested
      * @return The schedule instance for a specified instrument profile and trading venue
      */
-    static Schedule::Ptr getInstance(const std::shared_ptr<InstrumentProfile> &profile, const StringLike &venue);
+    static Schedule::Ptr getInstance(const std::shared_ptr<InstrumentProfile> &profile, StringParam venue);
 
     /**
      * Returns trading venues for specified instrument profile.
@@ -98,7 +119,7 @@ struct DXFCPP_EXPORT Schedule {
      *
      * @param downloadConfig download config
      */
-    static void downloadDefaults(const StringLike &downloadConfig);
+    static void downloadDefaults(StringParam downloadConfig);
 
     /**
      * Sets shared defaults that are used by individual schedule instances.
@@ -228,6 +249,17 @@ struct DXFCPP_EXPORT Schedule {
      * @return time zone id in which this schedule is defined
      */
     std::string getTimeZoneId() const;
+
+    /**
+     * Returns the definition of this schedule: the string that getInstance(StringParam) accepts to return this
+     * schedule, for example `XNYS()`.
+     *
+     * @return The definition of this schedule.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    std::string getDefinition() const;
 };
 
 DXFCPP_END_NAMESPACE

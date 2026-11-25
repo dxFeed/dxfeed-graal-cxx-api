@@ -3,14 +3,12 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
-
-#include <mutex>
+#include "../util/Tristate.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 
 /**
  * \addtogroup dxfcpp_schedule
@@ -19,7 +17,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
-/// Helper enum for DayFilter
+/// Helper enum for %DayFilter
 enum class DayFilterEnum : std::uint32_t {
     /// Accepts any day - useful for pure calendar navigation.
     ANY = 0,
@@ -125,7 +123,7 @@ struct DXFCPP_EXPORT DayFilter {
     private:
     DayFilterEnum code_;
 
-    std::string name_;
+    std::string_view name_{};
 
     /// Bitwise mask of required days (2 for Monday, 4 for Tuesday, 128 for Sunday), <code>0</code> if not relevant.
     std::uint32_t dayOfWeekMask_;
@@ -151,9 +149,6 @@ struct DXFCPP_EXPORT DayFilter {
     /// Required trading flag, Tristate::NONE if not relevant.
     Tristate trading_;
 
-    mutable std::mutex mtx_{};
-    mutable JavaObjectHandle<DayFilter> handle_;
-
     /**
      * Creates a filter with specified conditions.
      * <p>
@@ -172,8 +167,11 @@ struct DXFCPP_EXPORT DayFilter {
      * @param shortDay The required short day flag, Tristate::NONE if not relevant
      * @param trading The required trading flag, Tristate::NONE if not relevant
      */
-    DayFilter(DayFilterEnum code, const StringLike &name, std::uint32_t dayOfWeekMask, Tristate holiday,
-              Tristate shortDay, Tristate trading) noexcept;
+    constexpr DayFilter(DayFilterEnum code, std::string_view name, std::uint32_t dayOfWeekMask, Tristate holiday,
+                        Tristate shortDay, Tristate trading) noexcept
+        : code_{code}, name_{name}, dayOfWeekMask_{dayOfWeekMask}, holiday_{holiday}, shortDay_{shortDay},
+          trading_{trading} {
+    }
 
     public:
     const JavaObjectHandle<DayFilter> &getHandle() const &;

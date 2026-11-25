@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../detail/Concepts.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./Order.hpp"
 #include "./OtcMarketsPriceType.hpp"
@@ -40,9 +41,9 @@ struct EventMapper;
  * <p> For more information about display requirements, see <a href="https://downloads.dxfeed.com/specifications/OTC_Markets_Data_Display_Requirements.pdf">OTC Markets Display Requirements</a>.
  *
  * <p> Like regular orders, OTC Markets order events arrive from multiple sources for the same market symbol and are
- * distinguished by their @ref ::getIndex "index".
+ * distinguished by their @ref getIndex "index".
  * It is unique across all the sources of depth information for the symbol.
- * The event with @ref ::getSize() "size" either `0` or `NaN` is a signal to remove previously received order for the
+ * The event with @ref getSize() "size" either `0` or `NaN` is a signal to remove previously received order for the
  * corresponding index.
  * The method ::hasSize() is a convenient method to test for size presence.
  *
@@ -65,42 +66,42 @@ struct EventMapper;
  *     <li>NMSConditionalQuoteFlag - @ref OtcMarketsOrder::isNmsConditional() "nmsConditional"
  * </ul>
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="otcMarketsOrderEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * OTC Markets order event sources provide a consistent view of the order book. Their updates
  * may incorporate multiple changes to individual orders that have to be processed at the same time.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref getEventFlags() "eventFlags" property.
  *
  * <p> See the "Event Flags" section of OrderBase class documentation for details.
  *
  * <h3>Publishing order books</h3>
  *
  * When publishing an order event with DXPublisher::publishEvents() method, least significant 32 bits of
- * order @ref ::getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()`
+ * order @ref getIndex() "index" must be in a range of from 0 to `std::numeric_limits<std::int32_t>::max()`
  * inclusive. Use ::setSource() method after ::setIndex() to properly include source identifier into the
  * index.
  *
- * A snapshot has to be published in the <em>descending</em> order of @ref ::getIndex() "index", starting with
- * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref ::getEventFlags()
+ * A snapshot has to be published in the <em>descending</em> order of @ref getIndex() "index", starting with
+ * an event with the largest index and marking it with EventFlag::SNAPSHOT_BEGIN bit in @ref getEventFlags()
  * "eventFlags", and finishing the snapshot with an event that has zero 32 least significant bits of index.
- * EventFlag::SNAPSHOT_END bit in @ref ::getEventFlags() "eventFlags" is optional during publishing.
+ * EventFlag::SNAPSHOT_END bit in @ref getEventFlags() "eventFlags" is optional during publishing.
  * It will be properly set on receiving end anyway.
  *
  * <h3>Limitations</h3>
  *
  * This event type cannot be used with DXFeed::getLastEvent() method.
  *
- * <h3><a name="fobSection">Full Order Book Support</a></h3>
+ * <h3><a name="otcMarketsOrderFobSection">Full Order Book Support</a></h3>
  *
  * Some feeds provide support for "Full Order Book" (FOB) where additional fields will be available:
  * <ul>
- * <li>@ref ::getAction() "action" - event business meaning (see OrderAction for more details)</li>
- * <li>@ref ::getActionTime() "actionTime" - time of the last action</li>
- * <li>@ref ::getOrderId() "orderId" - ID of this OTC Markets order</li>
- * <li>@ref ::getAuxOrderId() "auxOrderId" - additional ID for this OTC Markets order</li>
- * <li>@ref ::getTradeId() "tradeId" - trade (order execution) ID</li>
- * <li>@ref ::getTradePrice() "tradePrice" - price of the trade</li>
- * <li>@ref ::getTradeSize() "tradeSize" - size of the trade</li>
+ * <li>@ref getAction() "action" - event business meaning (see OrderAction for more details)</li>
+ * <li>@ref getActionTime() "actionTime" - time of the last action</li>
+ * <li>@ref getOrderId() "orderId" - ID of this OTC Markets order</li>
+ * <li>@ref getAuxOrderId() "auxOrderId" - additional ID for this OTC Markets order</li>
+ * <li>@ref getTradeId() "tradeId" - trade (order execution) ID</li>
+ * <li>@ref getTradePrice() "tradePrice" - price of the trade</li>
+ * <li>@ref getTradeSize() "tradeSize" - size of the trade</li>
  * </ul>
  *
  * <h3>Implementation details</h3>
@@ -140,7 +141,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
     OtcMarketsOrderData otcMarketsOrderData_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the OtcMarketsOrder object
@@ -189,7 +190,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OtcMarketsOrder(const StringLike& eventSymbol) noexcept;
+    explicit OtcMarketsOrder(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -199,7 +200,7 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param eventSymbol The symbol of this event.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withEventSymbol(const StringLike &eventSymbol) noexcept override;
+    OtcMarketsOrder &withEventSymbol(StringParam eventSymbol) override;
 
     /**
      * Changes event's creation time and returns the current OTC Markets order.
@@ -246,8 +247,9 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param index unique per-symbol index of this OTC Markets order.
      * @return The current OTC Markets order.
+     * @throws InvalidArgumentException if the index is negative.
      */
-    OtcMarketsOrder &withIndex(std::int64_t index) noexcept override;
+    OtcMarketsOrder &withIndex(std::int64_t index) override;
 
     /**
      * Changes time of this OTC Markets order and returns it.
@@ -389,8 +391,9 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param exchangeCode The exchange code of this OTC Markets order.
      * @return The current OTC Markets order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    OtcMarketsOrder &withExchangeCode(char exchangeCode) noexcept override;
+    OtcMarketsOrder &withExchangeCode(char exchangeCode) override;
 
     /**
      * Changes exchange code of this OTC Markets order.
@@ -398,8 +401,9 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      *
      * @param exchangeCode The exchange code of this OTC Markets order.
      * @return The current OTC Markets order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    OtcMarketsOrder &withExchangeCode(std::int16_t exchangeCode) noexcept override;
+    OtcMarketsOrder &withExchangeCode(std::int16_t exchangeCode) override;
 
     /**
      * Changes side of this OTC Markets order.
@@ -428,7 +432,20 @@ class DXFCPP_EXPORT OtcMarketsOrder final : public Order {
      * @param marketMaker The market maker or another aggregate identifier of this OTC Markets order.
      * @return The current OTC Markets order.
      */
-    OtcMarketsOrder &withMarketMaker(const StringLike& marketMaker) noexcept override;
+    OtcMarketsOrder &withMarketMaker(StringParam marketMaker) override;
+
+    /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> OtcMarketsOrder &withMarketMaker(S &&marketMaker) noexcept {
+        Order::setMarketMaker(std::forward<S>(marketMaker));
+
+        return *this;
+    }
 
     // OtcMarketsOrder methods
 

@@ -3,15 +3,17 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
+#include "../detail/ConstString.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/JavaObjectHandle.hpp"
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/Math.hpp"
+#include "../detail/StringParam.hpp"
 #include "./SessionType.hpp"
-#include "../internal/Common.hpp"
 
-#include <mutex>
+#include <optional>
 
 /**
  * \addtogroup dxfcpp_schedule
@@ -20,6 +22,9 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCPP_BEGIN_NAMESPACE
 
+/**
+ * The codes of the predefined session filters.
+ */
 enum class SessionFilterEnum : std::uint32_t {
     /** Accepts any session - useful for pure schedule navigation. */
     ANY = 0,
@@ -68,19 +73,26 @@ struct DXFCPP_EXPORT SessionFilter final {
     protected:
     SessionFilterEnum code_{};
 
-    std::string name_{};
+    ConstString name_{};
 
     /// Required type, std::nullopt if not relevant.
     std::optional<SessionType> type_{};
     /// Required trading flag, std::nullopt if not relevant.
     std::optional<bool> trading_{};
 
-    mutable std::mutex mtx_{};
-    mutable JavaObjectHandle<SessionFilter> handle_{};
+    private:
+    // The constants: constant-initialized, a session type is created in place.
+    constexpr SessionFilter(SessionFilterEnum code, ConstString::Literal name, std::optional<bool> trading) noexcept
+        : code_{code}, name_{name}, trading_{trading} {
+    }
+
+    constexpr SessionFilter(SessionFilterEnum code, ConstString::Literal name, SessionTypeEnum typeCode,
+                            std::string_view typeName, bool typeTrading) noexcept
+        : code_{code}, name_{name}, type_{SessionType{typeCode, typeName, typeTrading}} {
+    }
 
     public:
     SessionFilter() noexcept;
-    ~SessionFilter() noexcept;
 
     SessionFilter(const SessionFilter &) = delete;
     SessionFilter(SessionFilter &&) noexcept = delete;
@@ -98,8 +110,8 @@ struct DXFCPP_EXPORT SessionFilter final {
      * @param type required type, `std::nullopt` if not relevant
      * @param trading required trading flag, `std::nullopt` if not relevant
      */
-    SessionFilter(SessionFilterEnum code, const StringLike &name, std::optional<SessionType> type,
-                  std::optional<bool> trading) noexcept;
+    SessionFilter(SessionFilterEnum code, StringParam name, std::optional<SessionType> type,
+                  std::optional<bool> trading);
 
     /**
      * Tests whether or not the specified session is an acceptable result.
@@ -108,7 +120,7 @@ struct DXFCPP_EXPORT SessionFilter final {
      * @return `true` if specified session is accepted
      */
     template <typename Session> bool accept(Session session) const noexcept {
-        return (!type_ || type_.value() == session.getType()) && (!trading_ || trading_.value() == session.isTrading());
+        return (!type_ || *type_ == session.getType()) && (!trading_ || *trading_ == session.isTrading());
     }
 
     bool operator==(const SessionFilter &sessionFilter) const noexcept;
@@ -131,11 +143,11 @@ template <> struct std::hash<dxfcpp::SessionFilter> {
         std::size_t result = 0;
 
         if (sessionFilter.getType()) {
-            dxfcpp::hashCombine(result, sessionFilter.getType().value());
+            dxfcpp::hashCombine(result, *sessionFilter.getType());
         }
 
         if (sessionFilter.getTrading()) {
-            dxfcpp::hashCombine(result, sessionFilter.getTrading().value());
+            dxfcpp::hashCombine(result, *sessionFilter.getTrading());
         }
 
         return result;

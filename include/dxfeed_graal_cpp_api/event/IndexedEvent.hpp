@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -29,7 +29,7 @@ DXFCPP_BEGIN_NAMESPACE
  * multiple periods available.
  * The ::Candle is also an example of ::TimeSeriesEvent that is a more specific event type.
  *
- * Index for each event is available via @ref ::getIndex() "index" property.
+ * Index for each event is available via @ref getIndex() "index" property.
  * Indexed events retain information about multiple events per symbol based on the event index
  * and are conflated based on the event index. Last indexed event for each symbol and index is always
  * delivered to event listeners on subscription, but intermediate (next-to-last) events for each
@@ -41,7 +41,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The value of @ref IndexedEvent::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT"
  * for time-series events and other singe-sourced events like ::Series, that do not support this feature.
  *
- * See also the <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+ * See also the @ref eventFlagsSection "Event Flags" section
  */
 struct DXFCPP_EXPORT IndexedEvent {
     virtual ~IndexedEvent();
@@ -71,8 +71,9 @@ struct DXFCPP_EXPORT IndexedEvent {
      * Returns the source of this event.
      *
      * @return The source of this event.
+     * @throws InvalidArgumentException if the source id of the event is not valid (see OrderBase::getSource()).
      */
-    virtual const IndexedEventSource &getSource() const & noexcept = 0;
+    virtual const IndexedEventSource &getSource() const & = 0;
 
     /**
      * Returns transactional event flags.

@@ -5,15 +5,18 @@
 
 #include "../../../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/utils/CmdArgsUtils.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/utils/EnumUtils.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/util/CmdArgsUtils.hpp"
+#include "../../../../src/internal/utils/EnumUtils.hpp"
 #include "../../../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #include "../Args/Args.hpp"
 #include <fmt/format.h>
 #include <fmt/std.h>
+#include <cstdint>
 #include <iostream>
 #include <memory>
+#include <string>
+#include <unordered_map>
 #include <variant>
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
@@ -55,7 +58,7 @@ struct ConnectTool {
         std::optional<std::string> source;
         std::optional<std::string> properties;
         std::optional<std::string> tape;
-        bool isQuite{};
+        bool isQuiet{};
         bool forceStream{};
 
         static ParseResult<Args> parse(const std::vector<std::string> &args) noexcept {
@@ -97,7 +100,7 @@ struct ConnectTool {
             std::optional<std::string> properties{};
             bool tapeIsParsed{};
             std::optional<std::string> tape{};
-            bool isQuite{};
+            bool isQuiet{};
             bool forceStream{};
 
             while (index < args.size()) {
@@ -127,7 +130,7 @@ struct ConnectTool {
                     index = parseResult.nextIndex;
                 } else {
                     // ReSharper disable once CppUsingResultOfAssignmentAsCondition
-                    if (!isQuite && (isQuite = QuiteArg::parse(args, index).result)) {
+                    if (!isQuiet && (isQuiet = QuietArg::parse(args, index).result)) {
                         index++;
                         continue;
                     }
@@ -143,9 +146,33 @@ struct ConnectTool {
             }
 
             return ParseResult<Args>::ok({parsedAddress.result, parsedTypes.result, parsedSymbols.result, fromTime,
-                                          source, properties, tape, isQuite, forceStream});
+                                          source, properties, tape, isQuiet, forceStream});
         }
     };
+
+    // Prints each new connection error of the endpoint to stderr: a failed connect attempt or a dropped connection.
+    // The connector listener is called after the error is recorded, one call at a time.
+    static void addConnectionErrorPrinter(const std::shared_ptr<DXEndpoint> &endpoint) noexcept {
+        try {
+            endpoint->addMessageConnectorListener(
+                [lastCounts = std::unordered_map<std::string, std::int64_t>{}](const MessageConnectorInfo &info) mutable {
+                    if (!info.lastError) {
+                        return;
+                    }
+
+                    // The count of the errors of a connector grows with each new error.
+                    auto &lastCount = lastCounts[info.name + " " + info.address];
+
+                    if (info.lastError->count > lastCount) {
+                        lastCount = info.lastError->count;
+                        std::cerr << "Connection error: " << info.lastError->toString() << std::endl;
+                    }
+                });
+        } catch (const RuntimeException &e) {
+            // The tool works without the printer.
+            std::cerr << "The connection errors are not printed: " << e << '\n';
+        }
+    }
 
     static void run(const Args &args) noexcept {
         try {
@@ -195,7 +222,7 @@ struct ConnectTool {
 
             std::shared_ptr<DXFeedSubscription> sub = endpoint->getFeed()->createSubscription(parsedTypes);
 
-            if (!args.isQuite) {
+            if (!args.isQuiet) {
                 sub->addEventListener([](auto &&events) {
                     for (auto &&e : events) {
                         std::cout << e << "\n";
@@ -222,6 +249,7 @@ struct ConnectTool {
                 });
             }
 
+            addConnectionErrorPrinter(endpoint);
             sub->addSymbols(parsedSymbols);
             endpoint->connect(args.address);
             std::this_thread::sleep_for(std::chrono::days(365));

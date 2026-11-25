@@ -3,16 +3,19 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/utils/StringUtils.hpp"
+#include "../../detail/ConstantMap.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
+#include <span>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <vector>
@@ -36,7 +39,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandlePrice::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePrice::toString()
  */
-struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandlePrice final : CandleSymbolAttribute {
     /**
      * Last trading price.
      */
@@ -75,38 +78,39 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
      * The value of this constant is "price".
      * The value that this key shall be set to is equal to the corresponding CandlePrice::toString()
      */
-    static const std::string ATTRIBUTE_KEY;
+    static constexpr char ATTRIBUTE_KEY[] = "price";
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandlePrice>, StringHash, std::equal_to<>>
-        BY_STRING;
+    /// The elements by their string representations (constant-initialized, so it can be used in the dynamic
+    /// initialization and the destruction of global variables).
+    static const ConstantMap<std::string_view, CandlePrice> BY_STRING;
 
-    static const std::vector<std::reference_wrapper<const CandlePrice>> VALUES;
+    /// All elements (constant-initialized, so the initializers of global variables can use it).
+    static const std::span<const std::reference_wrapper<const CandlePrice>> VALUES;
 
     private:
-    std::string string_;
+    std::string_view string_{};
 
-    explicit CandlePrice(const StringLike &string) noexcept;
+    constexpr explicit CandlePrice(std::string_view string) noexcept : string_{string} {
+    }
 
     public:
     CandlePrice() noexcept;
-
-    ~CandlePrice() noexcept override;
 
     /**
      * Returns candle event symbol string with this candle price type set.
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price type set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Returns string representation of this candle price type.
      * The string representation of a candle price type is a lower case string that corresponds to
-     * its @ref CandlePrice::name() "name". For example, CandlePrice::LAST is represented as "last".
+     * its name. For example, CandlePrice::LAST is represented as "last".
      *
      * @return string representation of this candle price type.
      */
-    const std::string &toString() const & noexcept;
+    std::string toString() const;
 
     bool operator==(const CandlePrice &candlePrice) const noexcept;
 
@@ -118,7 +122,7 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
      * @return The candle price type (reference).
      * @throws InvalidArgumentException if the argument is empty or invalid
      */
-    static std::reference_wrapper<const CandlePrice> parse(const StringLike &s);
+    static std::reference_wrapper<const CandlePrice> parse(StringParam s);
 
     /**
      * Returns the candle price type of the given candle symbol string.
@@ -127,7 +131,7 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle price type of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandlePrice> getAttributeForSymbol(const StringLike &symbol);
+    static std::reference_wrapper<const CandlePrice> getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle price type attribute.
@@ -135,7 +139,7 @@ struct DXFCPP_EXPORT CandlePrice : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle price type attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

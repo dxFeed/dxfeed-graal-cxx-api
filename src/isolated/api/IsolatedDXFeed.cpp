@@ -1,69 +1,68 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
+#include "IsolatedDXFeed.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/event/EventMapper.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/Common.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
+#include "../../internal/Common.hpp"
+#include "../IsolatedCommon.hpp"
+#include "../event/IsolatedEventType.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace isolated::api::IsolatedDXFeed {
 
-// dxfg_time_series_subscription_t* dxfg_DXFeed_createTimeSeriesSubscription(graal_isolatethread_t *thread, dxfg_feed_t
-// *feed, dxfg_event_clazz_t eventClazz);
+/// dxfg_v4_DXFeed_createTimeSeriesSubscription
 JavaObjectHandle<DXFeedSubscription> createTimeSeriesSubscription(const JavaObjectHandle<DXFeed> &feed,
                                                                   const EventTypeEnum &eventType) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_createTimeSeriesSubscription`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_createTimeSeriesSubscription`. The `feed` handle is invalid");
     }
 
-    return JavaObjectHandle<DXFeedSubscription>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeed_createTimeSeriesSubscription, static_cast<dxfg_feed_t *>(feed.get()),
-        dxfcpp::bit_cast<dxfg_event_clazz_t>(eventType.getId())));
+    return JavaObjectHandle<DXFeedSubscription>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXFeed_createTimeSeriesSubscription, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId())));
 }
 
-// dxfg_time_series_subscription_t*  dxfg_DXFeed_createTimeSeriesSubscription2(graal_isolatethread_t *thread,
-// dxfg_feed_t *feed, dxfg_event_clazz_list_t *eventClazzes);
+/// dxfg_v4_DXFeed_createTimeSeriesSubscriptionWithEventTypes
 JavaObjectHandle<DXFeedSubscription>
 createTimeSeriesSubscription(const JavaObjectHandle<DXFeed> &feed,
                              const std::unique_ptr<EventClassList> &eventClassList) {
     if (!feed) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_createTimeSeriesSubscription2`. The `feed` handle is invalid");
+        throw InvalidArgumentException("Unable to execute function "
+                                       "`dxfg_v4_DXFeed_createTimeSeriesSubscriptionWithEventTypes`. The `feed` handle "
+                                       "is invalid");
     }
 
     if (!eventClassList) {
-        throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_createTimeSeriesSubscription2`. The `eventClassList` is nullptr");
+        throw InvalidArgumentException("Unable to execute function "
+                                       "`dxfg_v4_DXFeed_createTimeSeriesSubscriptionWithEventTypes`. The "
+                                       "`eventClassList` is nullptr");
     }
 
-    return JavaObjectHandle<DXFeedSubscription>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeed_createTimeSeriesSubscription2, static_cast<dxfg_feed_t *>(feed.get()),
-        static_cast<dxfg_event_clazz_list_t *>(eventClassList->getHandle())));
+    return JavaObjectHandle<DXFeedSubscription>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXFeed_createTimeSeriesSubscriptionWithEventTypes, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_list *>(eventClassList->getHandle())));
 }
 
-// dxfg_DXFeed_getLastEventIfSubscribed
-/* dxfg_event_type_t* */ std::shared_ptr<EventType>
-getLastEventIfSubscribed(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
-                         /* dxfg_event_clazz_t */ const EventTypeEnum &eventType,
-                         /* dxfg_symbol_t * */ const SymbolWrapper &symbol) {
+/// dxfg_v4_DXFeed_getLastEventIfSubscribed
+std::shared_ptr<EventType> getLastEventIfSubscribed(const JavaObjectHandle<DXFeed> &feed,
+                                                    const EventTypeEnum &eventType, const SymbolWrapper &symbol) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getLastEventIfSubscribed`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_getLastEventIfSubscribed`. The `feed` handle is invalid");
     }
 
     auto graalSymbol = symbol.toGraalUnique();
 
-    const auto e = static_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeed_getLastEventIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
-        static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get())));
+    // NULL is a valid result: there is no subscription.
+    const auto e = static_cast<void *>(runGraalV4FunctionWithResult(
+        dxfg_v4_DXFeed_getLastEventIfSubscribed, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId()), static_cast<dxfg_v4_symbol_t *>(graalSymbol.get())));
 
     if (!e) {
         return {};
@@ -74,23 +73,23 @@ getLastEventIfSubscribed(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &fee
     return EventMapper::fromGraal(u.get());
 }
 
-// dxfg_event_type_list* dxfg_DXFeed_getIndexedEventsIfSubscribed(graal_isolatethread_t *thread, dxfg_feed_t *feed,
-// dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, const char *source);
+/// dxfg_v4_DXFeed_getIndexedEventsIfSubscribed
 std::vector<std::shared_ptr<EventType>> getIndexedEventsIfSubscribed(const JavaObjectHandle<DXFeed> &feed,
                                                                      const EventTypeEnum &eventType,
                                                                      const SymbolWrapper &symbol,
                                                                      const IndexedEventSource &source) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getIndexedEventsIfSubscribed`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_getIndexedEventsIfSubscribed`. The `feed` handle is invalid");
     }
 
     auto graalSymbol = symbol.toGraalUnique();
 
-    const auto list = static_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeed_getIndexedEventsIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
-        static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get()),
-        source.toString().c_str()));
+    // An empty list is a valid result and is released like a non-empty one.
+    const auto list = static_cast<void *>(runGraalV4FunctionWithResult(
+        dxfg_v4_DXFeed_getIndexedEventsIfSubscribed, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId()), static_cast<dxfg_v4_symbol_t *>(graalSymbol.get()),
+        SdkString{source.toString(), "DXFeed::getIndexedEventsIfSubscribed(source)"}.c_str()));
 
     if (!list) {
         return {};
@@ -101,127 +100,115 @@ std::vector<std::shared_ptr<EventType>> getIndexedEventsIfSubscribed(const JavaO
     return EventMapper::fromGraalList(u.get());
 }
 
-// dxfg_event_type_list*  dxfg_DXFeed_getTimeSeriesIfSubscribed(graal_isolatethread_t *thread, dxfg_feed_t *feed,
-// dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, int64_t from_time, int64_t to_time);
+/// dxfg_v4_DXFeed_getTimeSeriesIfSubscribed
 std::vector<std::shared_ptr<EventType>> getTimeSeriesIfSubscribed(const JavaObjectHandle<DXFeed> &feed,
                                                                   const EventTypeEnum &eventType,
                                                                   const SymbolWrapper &symbol, std::int64_t fromTime,
                                                                   std::int64_t toTime) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getTimeSeriesIfSubscribed`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_getTimeSeriesIfSubscribed`. The `feed` handle is invalid");
     }
 
     auto graalSymbol = symbol.toGraalUnique();
 
-    const auto list = static_cast<void *>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_DXFeed_getTimeSeriesIfSubscribed, static_cast<dxfg_feed_t *>(feed.get()),
-                                          static_cast<dxfg_event_clazz_t>(eventType.getId()),
-                                          static_cast<dxfg_symbol_t *>(graalSymbol.get()), fromTime, toTime));
+    // An empty list is a valid result and is released like a non-empty one.
+    const auto list = static_cast<void *>(runGraalV4FunctionWithResult(
+        dxfg_v4_DXFeed_getTimeSeriesIfSubscribed, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId()), static_cast<dxfg_v4_symbol_t *>(graalSymbol.get()),
+        fromTime, toTime));
+
+    if (!list) {
+        return {};
+    }
 
     auto u = event::IsolatedEventTypeList::toUnique(list);
 
     return EventMapper::fromGraalList(u.get());
 }
 
-// dxfg_DXFeed_getLastEvent2
-/* int32_t */ std::shared_ptr<EventType> getLastEvent(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
-                                                      /* dxfg_event_type_t * */ const StringLike &symbolName,
-                                                      const EventTypeEnum &eventType) {
+/// dxfg_v4_DXFeed_getLastEvent
+std::shared_ptr<EventType> getLastEvent(const JavaObjectHandle<DXFeed> &feed, std::string_view symbolName,
+                                        const EventTypeEnum &eventType) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getLastEvent2`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_getLastEvent`. The `feed` handle is invalid");
     }
 
     const auto e = event::IsolatedEventType::toUnique(event::IsolatedEventType::create(symbolName, eventType));
-    dxfg_event_type_t *lastEvent = nullptr;
 
     // Only reads the given event and writes a new one: the last event, or a copy of the given one when it is missing.
-    runGraalFunctionAndThrowIfMinusOne(dxfg_DXFeed_getLastEvent2, static_cast<dxfg_feed_t *>(feed.get()),
-                                       static_cast<const dxfg_event_type_t *>(e.get()), &lastEvent);
-
-    const auto u = event::IsolatedEventType::toUnique(lastEvent);
+    const auto u = event::IsolatedEventType::toUnique(
+        static_cast<void *>(runGraalV4FunctionWithNonNullResult(dxfg_v4_DXFeed_getLastEvent,
+                                                                static_cast<dxfg_v4_feed_t *>(feed.get()),
+                                                                static_cast<const dxfg_v4_event_type_t *>(e.get()))));
 
     return EventMapper::fromGraal(u.get());
 }
 
-/*
-int32_t                           dxfg_DXFeed_getLastEvents(graal_isolatethread_t *thread, dxfg_feed_t *feed,
-dxfg_event_type_list *events); dxfg_promise_event_t*             dxfg_DXFeed_getLastEventPromise(graal_isolatethread_t
-*thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol); dxfg_promise_list*
-dxfg_DXFeed_getLastEventsPromises(graal_isolatethread_t *thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz,
-dxfg_symbol_list *symbols); dxfg_promise_events_t*            dxfg_DXFeed_getIndexedEventsPromise(graal_isolatethread_t
-*thread, dxfg_feed_t *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, dxfg_indexed_event_source_t* source);
-
-*/
-
-// dxfg_promise_event_t*             dxfg_DXFeed_getLastEventPromise(graal_isolatethread_t *thread, dxfg_feed_t *feed,
-// dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol);
+/// dxfg_v4_DXFeed_getLastEventPromise
 void *getLastEventPromise(const JavaObjectHandle<DXFeed> &feed, const EventTypeEnum &eventType,
                           const SymbolWrapper &symbol) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getLastEventPromise`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_getLastEventPromise`. The `feed` handle is invalid");
     }
 
     auto graalSymbol = symbol.toGraalUnique();
 
-    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeed_getLastEventPromise, static_cast<dxfg_feed_t *>(feed.get()),
-        static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get())));
+    return static_cast<void *>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXFeed_getLastEventPromise, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId()), static_cast<dxfg_v4_symbol_t *>(graalSymbol.get())));
 }
 
-// dxfg_promise_list*                dxfg_DXFeed_getLastEventsPromises(graal_isolatethread_t *thread, dxfg_feed_t *feed,
-// dxfg_event_clazz_t eventClazz, dxfg_symbol_list *symbols);
+/// dxfg_v4_DXFeed_getLastEventsPromises
 void *getLastEventsPromises(const JavaObjectHandle<DXFeed> &feed, const EventTypeEnum &eventType, void *symbols) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getLastEventsPromises`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_getLastEventsPromises`. The `feed` handle is invalid");
     }
 
     if (!symbols) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getLastEventsPromises`. The `symbols` is nullptr");
+            "Unable to execute function `dxfg_v4_DXFeed_getLastEventsPromises`. The `symbols` is nullptr");
     }
 
-    return runGraalFunctionAndThrowIfNullptr(dxfg_DXFeed_getLastEventsPromises, static_cast<dxfg_feed_t *>(feed.get()),
-                                             static_cast<dxfg_event_clazz_t>(eventType.getId()),
-                                             static_cast<dxfg_symbol_list *>(symbols));
+    return static_cast<void *>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXFeed_getLastEventsPromises, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId()), static_cast<dxfg_v4_symbol_list *>(symbols)));
 }
 
-// dxfg_promise_events_t*            dxfg_DXFeed_getIndexedEventsPromise(graal_isolatethread_t *thread, dxfg_feed_t
-// *feed, dxfg_event_clazz_t eventClazz, dxfg_symbol_t *symbol, dxfg_indexed_event_source_t* source);
+/// dxfg_v4_DXFeed_getIndexedEventsPromise
 void *getIndexedEventsPromise(const JavaObjectHandle<DXFeed> &feed, const EventTypeEnum &eventType,
                               const SymbolWrapper &symbol, const IndexedEventSource &source) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getIndexedEventsPromise`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_getIndexedEventsPromise`. The `feed` handle is invalid");
     }
 
     auto graalSymbol = symbol.toGraalUnique();
     auto graalSource = source.toGraalUnique();
 
-    return dxfcpp::bit_cast<void *>(runGraalFunctionAndThrowIfNullptr(
-        dxfg_DXFeed_getIndexedEventsPromise, static_cast<dxfg_feed_t *>(feed.get()),
-        static_cast<dxfg_event_clazz_t>(eventType.getId()), static_cast<dxfg_symbol_t *>(graalSymbol.get()),
-        static_cast<dxfg_indexed_event_source_t *>(graalSource.get())));
+    return static_cast<void *>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXFeed_getIndexedEventsPromise, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId()), static_cast<dxfg_v4_symbol_t *>(graalSymbol.get()),
+        static_cast<dxfg_v4_indexed_event_source_t *>(graalSource.get())));
 }
 
-/* dxfg_promise_events_t* */ void *getTimeSeriesPromise(/* dxfg_feed_t * */ const JavaObjectHandle<DXFeed> &feed,
-                                                        /* dxfg_event_clazz_t */ const EventTypeEnum &eventType,
-                                                        /* dxfg_symbol_t * */ const SymbolWrapper &symbol,
-                                                        std::int64_t fromTime, std::int64_t toTime) {
+/// dxfg_v4_DXFeed_getTimeSeriesPromise
+void *getTimeSeriesPromise(const JavaObjectHandle<DXFeed> &feed, const EventTypeEnum &eventType,
+                           const SymbolWrapper &symbol, std::int64_t fromTime, std::int64_t toTime) {
     if (!feed) {
         throw InvalidArgumentException(
-            "Unable to execute function `dxfg_DXFeed_getTimeSeriesPromise`. The `feed` handle is invalid");
+            "Unable to execute function `dxfg_v4_DXFeed_getTimeSeriesPromise`. The `feed` handle is invalid");
     }
 
     auto graalSymbol = symbol.toGraalUnique();
 
-    return dxfcpp::bit_cast<void *>(
-        runGraalFunctionAndThrowIfNullptr(dxfg_DXFeed_getTimeSeriesPromise, static_cast<dxfg_feed_t *>(feed.get()),
-                                          static_cast<dxfg_event_clazz_t>(eventType.getId()),
-                                          static_cast<dxfg_symbol_t *>(graalSymbol.get()), fromTime, toTime));
+    return static_cast<void *>(runGraalV4FunctionWithNonNullResult(
+        dxfg_v4_DXFeed_getTimeSeriesPromise, static_cast<dxfg_v4_feed_t *>(feed.get()),
+        static_cast<dxfg_v4_event_clazz_t>(eventType.getId()), static_cast<dxfg_v4_symbol_t *>(graalSymbol.get()),
+        fromTime, toTime));
 }
 
 } // namespace isolated::api::IsolatedDXFeed

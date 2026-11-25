@@ -3,9 +3,11 @@
 
 name: CI
 
-# A pull request runs the short set: the `pullRequest` rows of .github/ci/build-matrix.json and the other jobs except
-# the network tests. The full matrix runs on a push to main or release/*, nightly, on a manual run, and on a pull
-# request with the `full-ci` label (adding the label starts it).
+# A pull request runs the short set: the `pullRequest` rows of .github/ci/build-matrix.json and the other jobs,
+# the network tests included. The full matrix runs on a push to main or release/*, nightly, on a manual run, and on a
+# pull request with the `full-ci` label (adding the label starts it). A pull request that changes only documentation
+# (*.md, docs/, release-notes/) skips the compiling jobs, and one that does not touch scripts/ skips the script tests;
+# see the `plan` job.
 on:
   pull_request:
     types: [ opened, synchronize, reopened, labeled ]
@@ -24,14 +26,52 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && 'other-label' || 'run' }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+# Retries and a network timeout (seconds) for apt-get; the steps that install packages also have a time limit,
+# so a stalled mirror or PPA fails the step instead of holding the job.
+env:
+  APT_OPTIONS: -o Acquire::Retries=3 -o Acquire::http::Timeout=60 -o Acquire::https::Timeout=60
+  # The compiler cache (Linux and macOS jobs) and the cache of the sources that CPM downloads (Boost and others). Both
+  # directories are in the workspace so that the same path is used on every run, and the paths in the cache keys match.
+  # The sloppiness is needed for the precompiled headers: without it ccache does not cache a compilation that uses
+  # a precompiled header. CMake passes -fpch-preprocess to GCC itself when a compiler launcher is set.
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+  CCACHE_BASEDIR: ${{ github.workspace }}
+  CCACHE_MAXSIZE: 500M
+  CCACHE_SLOPPINESS: pch_defines,time_macros,include_file_mtime,include_file_ctime
+  CCACHE_COMPILERCHECK: content
+  CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
+  # The packages of the gcc from the ubuntu-toolchain-r PPA (the rows with gcc_version).
+  GCC_DEB_CACHE: ${{ github.workspace }}/.gcc-debs
+  # The CMake options that make the compiler launcher ccache; only the CI passes them.
+  CCACHE_LAUNCHER: -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+
 jobs:
-  # The short set of the pull requests or the full matrix, both from .github/ci/build-matrix.json.
+  # What to run: the short set of the pull requests or the full matrix, both from .github/ci/build-matrix.json, and
+  # which groups of jobs the changed files need.
+  #
+  # `code`: the compiling jobs (build, headers, dynamic-link-tests, tsan, symbols); false only for a pull request
+  # that changes nothing but *.md, docs/ and release-notes/. `scripts`: the tests of scripts/; false for a pull
+  # request that changes neither scripts/ nor this workflow. A push, the nightly run, a manual run and a pull request
+  # with the full-ci label are full: both are true.
+  #
+  # The changed files come from the GitHub API (the files of the pull request), not from git diff: the checkout is
+  # sparse and shallow, a diff against the base branch would need its history (a two-dot diff against a moved base
+  # also lists the base's own changes, a three-dot diff needs the merge base), and the API gives exactly the files of
+  # the pull request. A renamed file is counted by both names, so moving a source into docs/ is still a code change.
+  # If the API fails or lists 3000 files (its limit), both are true: a run that is too big is better than a skipped
+  # check.
   plan:
     if: ${{ github.event.action != 'labeled' || github.event.label.name == 'full-ci' }}
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
     outputs:
       full: ${{ steps.plan.outputs.full }}
       build: ${{ steps.plan.outputs.build }}
+      code: ${{ steps.changes.outputs.code }}
+      scripts: ${{ steps.changes.outputs.scripts }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -47,8 +87,49 @@ jobs:
           build=$(python3 .github/ci/build_matrix.py "$([ "$FULL" = true ] && echo full || echo pr)")
           echo "build=$build" >> "$GITHUB_OUTPUT"
 
+      - name: Classify the changed files
+        id: changes
+        env:
+          FULL: ${{ steps.plan.outputs.full }}
+          GH_TOKEN: ${{ github.token }}
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
+        run: |
+          code=true
+          scripts=true
+
+          if [ "$FULL" != true ]; then
+            if files=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PULL_REQUEST/files" --paginate \
+                --jq '.[] | .filename, (.previous_filename // empty)') && [ "$(echo "$files" | wc -l)" -lt 3000 ]; then
+              code=false
+              scripts=false
+
+              while IFS= read -r file; do
+                case "$file" in
+                  '') ;;
+                  *.md | docs/* | release-notes/*) ;;
+                  *) code=true ;;
+                esac
+
+                case "$file" in
+                  # The tests of the scripts also read the release notes, the places of the version and the versions
+                  # and the licenses of the dependencies (sbom.py).
+                  scripts/* | .github/workflows/build.yml | release-notes/* | ReleaseNotes.md | CMakeLists.txt | \
+                    docs/Doxyfile | include/dxfeed_graal_cpp_api/detail/Conf.hpp | deps.json | DEPENDENCIES.md | \
+                    THIRD_PARTY_LICENSES.md | third_party/*) scripts=true ;;
+                esac
+              done <<< "$files"
+            else
+              echo "::warning::The changed files are not known, running everything"
+            fi
+          fi
+
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          echo "scripts=$scripts" >> "$GITHUB_OUTPUT"
+          echo "Classification: full=$FULL code=$code scripts=$scripts"
+
   build:
     needs: plan
+    if: ${{ needs.plan.outputs.code == 'true' }}
     strategy:
       fail-fast: false
       matrix:
@@ -56,17 +137,44 @@ jobs:
 
     name: "${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}"
     runs-on: ${{ matrix.config.image }}
-
+    timeout-minutes: 90
     env:
-      # The packages of the gcc from the ubuntu-toolchain-r PPA (the rows with gcc_version).
-      GCC_DEB_CACHE: ${{ github.workspace }}/.gcc-debs
-
+      # The rows that make the packages (Release, NO_SAN) export only the API. The others also export the internal
+      # classes, so the shared variants of the StaticInit, Exit and IsolateArgs tests run in Debug and with sanitizers.
+      EXPORT_INTERNALS: ${{ (matrix.buildType == 'Release' && matrix.sanitizers == 'NO_SAN') && 'OFF' || 'ON' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Select Xcode version
         if: ${{ contains(matrix.config.os, 'macos') }}
         run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
+
+      # The sources of the dependencies downloaded by CPM (Boost is the biggest); the key changes with the files that
+      # hold their versions and URLs, and a CPM source directory is named by its hash, so an older cache only adds
+      # what is missing.
+      - name: Restore dependency sources
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ runner.os }}-${{ hashFiles('CMakeLists.txt', 'cmake/Portals.cmake') }}
+          restore-keys: cpm-${{ runner.os }}-
+
+      # The key is new on every run, so the objects of the run are saved; the previous cache of the same row is
+      # restored by the prefix.
+      - name: Restore ccache
+        if: ${{ matrix.config.os != 'windows' }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-${{ matrix.config.name }}-${{ matrix.buildType }}-${{ matrix.sanitizers }}-${{ github.sha }}
+          restore-keys: ccache-${{ matrix.config.name }}-${{ matrix.buildType }}-${{ matrix.sanitizers }}-
+
+      - name: Install ccache
+        if: ${{ matrix.config.os != 'windows' }}
+        timeout-minutes: 10
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
 
       - name: Prepare build
         run: |
@@ -81,11 +189,13 @@ jobs:
 
       - name: Install clang from LLVM apt repo
         if: ${{ matrix.config.llvm_version != '' && matrix.config.llvm_version != null }}
+        timeout-minutes: 10
         run: |
-          wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
+          wget -qO- --tries=3 --timeout=60 https://apt.llvm.org/llvm-snapshot.gpg.key \
+            | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
           echo "deb https://apt.llvm.org/noble/ llvm-toolchain-noble-${{ matrix.config.llvm_version }} main" | sudo tee /etc/apt/sources.list.d/llvm.list
-          sudo apt-get update
-          sudo apt-get install -y clang-${{ matrix.config.llvm_version }}
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y clang-${{ matrix.config.llvm_version }}
           
       # The packages of the gcc from the PPA are kept in a cache: when Launchpad is down, every gcc row of the matrix
       # would fail on the install. The PPA is used only when there is no cache or its packages no longer install on the
@@ -110,7 +220,7 @@ jobs:
           packages="gcc-$GCC_VERSION g++-$GCC_VERSION"
 
           if [ "$CACHE_HIT" = true ]; then
-            if sudo apt-get update && sudo apt-get install -y "$GCC_DEB_CACHE"/*.deb; then
+            if sudo apt-get $APT_OPTIONS update && sudo apt-get $APT_OPTIONS install -y "$GCC_DEB_CACHE"/*.deb; then
               echo "gcc $GCC_VERSION is installed from the cached packages"
               exit 0
             fi
@@ -119,11 +229,11 @@ jobs:
           fi
 
           sudo add-apt-repository -y -n ppa:ubuntu-toolchain-r/test
-          sudo apt-get update
+          sudo apt-get $APT_OPTIONS update
           # Only the packages of this install are left in the archive of apt; they are copied before the install, which
           # may clean the archive.
-          sudo apt-get clean
-          sudo apt-get install -y --download-only $packages
+          sudo apt-get $APT_OPTIONS clean
+          sudo apt-get $APT_OPTIONS install -y --download-only $packages
 
           debs=(/var/cache/apt/archives/*.deb)
 
@@ -133,7 +243,7 @@ jobs:
             echo "save=true" >> "$GITHUB_OUTPUT"
           fi
 
-          sudo apt-get install -y $packages
+          sudo apt-get $APT_OPTIONS install -y $packages
 
       # Saved at once, not at the end of the job, so that a failed build or test does not lose it. The rows of the
       # same gcc race for the key: the first one saves, the others only warn.
@@ -145,16 +255,27 @@ jobs:
           path: ${{ env.GCC_DEB_CACHE }}
           key: gcc-debs-${{ matrix.config.image }}-gcc-${{ matrix.config.gcc_version }}-1
 
+      # The arm64 image has its own set of compilers; the package comes from the Ubuntu archive (nothing to do if it is
+      # already there).
+      - name: Install gcc from the Ubuntu archive
+        if: ${{ matrix.config.install_gcc != '' && matrix.config.install_gcc != null }}
+        timeout-minutes: 10
+        run: |
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y gcc-${{ matrix.config.install_gcc }} g++-${{ matrix.config.install_gcc }}
+
       - name: Install Linux UI dependencies
         if: ${{ contains(matrix.config.os, 'linux') }}
+        timeout-minutes: 10
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'mac') }}
         run: >
           cmake -B ${{github.workspace}}/build
+          ${{ env.CCACHE_LAUNCHER }}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
@@ -164,11 +285,13 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
+          -DDXFCXX_EXPORT_INTERNALS=${{ env.EXPORT_INTERNALS }}
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'linux') }}
         run: >
           cmake -B ${{github.workspace}}/build
+          ${{ env.CCACHE_LAUNCHER }}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
@@ -178,11 +301,13 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
+          -DDXFCXX_EXPORT_INTERNALS=${{ env.EXPORT_INTERNALS }}
 
       - name: Configure CMake
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
           cmake -B ${{github.workspace}}/build
+          ${{ matrix.config.toolset && format('-T {0}', matrix.config.toolset) || '' }}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}
@@ -190,11 +315,13 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_ENABLE_${{matrix.sanitizers}}=ON
+          -DDXFCXX_EXPORT_INTERNALS=${{ env.EXPORT_INTERNALS }}
 
       - name: Configure CMake (Win MT)
         if: ${{ contains(matrix.config.os, 'win') }}
         run: >
           cmake -B ${{github.workspace}}/build-mt
+          ${{ matrix.config.toolset && format('-T {0}', matrix.config.toolset) || '' }}
           -DCMAKE_BUILD_TYPE=${{matrix.buildType}}
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DDXFCXX_PACKAGE_SUFFIX=-${{matrix.buildType}}-static-mt
@@ -202,6 +329,15 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_FEATURE_STACKTRACE=ON
           -DDXFCXX_LINK_STATIC_RUNTIME=ON
+
+      # GCC and Clang fail the build on a call of a deprecated SDK function; MSVC does not (C4996 is disabled), so the
+      # sources are checked against the list of the deprecated functions of the SDK that the configuration downloaded.
+      - name: Check for deprecated Graal SDK functions
+        if: ${{ contains(matrix.config.os, 'win') }}
+        run: >
+          python scripts/check_deprecated_sdk_calls.py
+          ${{github.workspace}}/build/_deps/dxfeedgraalnativesdk-src/dxfg-api.json
+          src include tests samples tools
 
       - name: Build
         if: ${{ !contains(matrix.config.os, 'win') }}
@@ -234,7 +370,7 @@ jobs:
 
       - name: Upload artifacts
         if: ${{ matrix.buildType == 'Release' && matrix.sanitizers == 'NO_SAN' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: artifacts-${{ matrix.config.name }}-${{matrix.buildType}}-${{matrix.sanitizers}}
           path: |
@@ -248,28 +384,375 @@ jobs:
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{matrix.buildType}} --extra-verbose --output-on-failure --parallel ${{matrix.config.cores}}
 
+      - name: ccache statistics
+        if: ${{ always() && matrix.config.os != 'windows' }}
+        run: ccache --show-stats
+
   release-script:
     needs: plan
+    if: ${{ needs.plan.outputs.scripts == 'true' }}
     name: "release-script-tests"
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # release.py, release.cmake (in a git repository) and their agreement
-      - name: Test scripts/release.py and scripts/release.cmake
+      # release.py, release.cmake (in a git repository) and their agreement; symbols.py; check_deprecated_sdk_calls.py;
+      # sbom.py
+      - name: Test scripts/release.py, scripts/release.cmake, scripts/symbols.py, scripts/check_deprecated_sdk_calls.py and scripts/sbom.py
         run: python3 -m unittest discover -s scripts/tests -v
 
       - name: Test the functions of scripts/release.cmake
         run: cmake -P scripts/tests/test_release.cmake
 
-  tsan:
+  # The exported symbols of the Release library (as in the packages: no DXFCXX_EXPORT_INTERNALS) against the list of its
+  # platform, abi/symbols-<platform>.txt: any difference fails. The list of the library is always uploaded as the
+  # artifact symbols-<platform>: the symbols-report job compares it, `python3 scripts/symbols.py fetch` takes it into
+  # abi/. Each architecture of the packages has its own list. macOS: AppleClang exports on x86-64 the typeinfo of the
+  # classes without a key function, which arm64 keeps hidden, so the std:: total of arm64 is 0.
+  # The compilers are those of the packages (release.yml): Linux (x86-64 and arm64) in oraclelinux:8 with
+  # gcc-toolset-14, so the list is the one of the library that is shipped. The steps use paths relative to the
+  # workspace: in a container, ${{github.workspace}} is the path on the runner.
+  symbols:
     needs: plan
-    name: "ubuntu-24.04-clang-18-RelWithDebInfo-TSAN"
+    if: ${{ needs.plan.outputs.code == 'true' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: oraclelinux-8-gcc-toolset-14
+            image: ubuntu-24.04
+            container: oraclelinux:8
+            os: linux
+            cc: 'gcc'
+            cxx: 'g++'
+            python: python3.11
+            library: build/libdxFeedGraalCxxApi.so
+            symbols: linux
+          - name: oraclelinux-8-arm-gcc-toolset-14
+            image: ubuntu-24.04-arm
+            container: oraclelinux:8
+            os: linux
+            cc: 'gcc'
+            cxx: 'g++'
+            python: python3.11
+            library: build/libdxFeedGraalCxxApi.so
+            symbols: linux-aarch64
+          - name: macos-15-xcode-16-4
+            image: macos-15
+            os: macos
+            xcode: '16.4'
+            cc: 'clang'
+            cxx: 'clang++'
+            python: python3
+            library: build/libdxFeedGraalCxxApi.dylib
+            symbols: macos
+          - name: macos-15-intel-xcode-16-4
+            image: macos-15-intel
+            os: macos
+            xcode: '16.4'
+            cc: 'clang'
+            cxx: 'clang++'
+            python: python3
+            library: build/libdxFeedGraalCxxApi.dylib
+            symbols: macos-x86_64
+          - name: win2022-vs2022
+            image: windows-2022
+            os: windows
+            cc: 'cl'
+            cxx: 'cl'
+            python: python
+            library: build/Release/dxFeedGraalCxxApi.dll
+            symbols: windows
+
+    name: "${{ matrix.config.name }}-Release-symbols"
+    runs-on: ${{ matrix.config.image }}
+    container: ${{ matrix.config.container }}
+    timeout-minutes: 45
+
+    steps:
+      # Before the checkout: git for it and for the dependencies that CMake fetches.
+      - name: Install Linux build dependencies
+        if: ${{ matrix.config.os == 'linux' }}
+        timeout-minutes: 15
+        run: |
+          dnf -y install gcc-toolset-14-gcc-c++ gcc-toolset-14-binutils cmake git make python3.11
+          echo "/opt/rh/gcc-toolset-14/root/usr/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Select Xcode version
+        if: ${{ matrix.config.os == 'macos' }}
+        run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
+
+      - name: Configure CMake
+        run: >
+          cmake -B build
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
+
+      - name: Build the shared library
+        run: cmake --build build --config Release --target dxFeedGraalCxxApi -j 4
+
+      - name: Compare the exported symbols with abi/symbols-${{ matrix.config.symbols }}.txt
+        shell: bash
+        run: |
+          python=${{ matrix.config.python }}
+          "$python" scripts/symbols.py extract ${{ matrix.config.library }} > symbols-${{ matrix.config.symbols }}.txt
+          "$python" scripts/symbols.py compare ${{ matrix.config.library }} abi/symbols-${{ matrix.config.symbols }}.txt
+
+      - name: Upload the list of the library
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: symbols-${{ matrix.config.symbols }}
+          overwrite: true
+          path: symbols-${{ matrix.config.symbols }}.txt
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # The reference of the ABI check (scripts/abi_check.sh): the latest published release of the major of this branch
+  # with the asset abi-x86_64-linux.xml (none until the first release of a major: a notice, the abi job only dumps).
+  abi_baseline:
+    needs: plan
+    if: ${{ needs.plan.outputs.code == 'true' }}
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      found: ${{ steps.baseline.outputs.found }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: |
+            /scripts/abi_check.sh
+            /abi/
+            /CMakeLists.txt
+          sparse-checkout-cone-mode: false
+
+      - name: Find the reference
+        id: baseline
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash scripts/abi_check.sh baseline "$(bash scripts/abi_check.sh major)" abi-reference.xml
+          if [ -f abi-reference.xml ]; then found=true; else found=false; fi
+          echo "found=$found" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the reference
+        if: ${{ steps.baseline.outputs.found == 'true' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: abi-reference
+          path: abi-reference.xml
+
+  # The ABI of the shared library as the release builds it (Oracle Linux 8, gcc-toolset-14, RelWithDebInfo, the
+  # options of the Linux [Lib] build of release.yml) against the latest release of the major: an incompatible change
+  # fails, additions pass with the report in the summary of the run. Without a reference the job only dumps the ABI,
+  # so that a broken dump is found here and not on the day of the release.
+  abi:
+    needs: [ plan, abi_baseline ]
+    if: ${{ needs.plan.outputs.code == 'true' }}
+    name: "oraclelinux-8-gcc-toolset-14-RelWithDebInfo-abi"
+    runs-on: ubuntu-24.04
+    container: oraclelinux:8
+    timeout-minutes: 60
+
+    steps:
+      # Before the checkout: git for it and for the dependencies that CMake fetches.
+      - name: Install build dependencies
+        timeout-minutes: 15
+        run: |
+          dnf -y install dnf-plugins-core oracle-epel-release-el8
+          dnf config-manager --set-enabled ol8_codeready_builder
+          dnf -y install gcc-toolset-14-gcc-c++ gcc-toolset-14-binutils cmake git make unzip libabigail
+          echo "/opt/rh/gcc-toolset-14/root/usr/bin" >> "$GITHUB_PATH"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Configure CMake
+        run: >
+          cmake -B build
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=g++
+          -DCMAKE_INSTALL_LIBDIR=lib
+          -DDXFCXX_BUILD_UNIT_TESTS=OFF
+          -DDXFCXX_BUILD_SAMPLES=OFF
+          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_INSTALL_SAMPLES=OFF
+          -DDXFCXX_INSTALL_TOOLS=OFF
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_FEATURE_STACKTRACE=ON
+
+      - name: Build the shared library
+        run: cmake --build build --target dxFeedGraalCxxApi -j 4
+
+      - name: Dump the ABI
+        run: bash scripts/abi_check.sh dump "$(readlink -f build/libdxFeedGraalCxxApi.so)" include abi-x86_64-linux.xml
+
+      - name: Download the ABI reference
+        if: ${{ needs.abi_baseline.outputs.found == 'true' }}
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: abi-reference
+
+      - name: Compare the ABI with the latest release of the major
+        if: ${{ needs.abi_baseline.outputs.found == 'true' }}
+        env:
+          ABI_REPORT: abi-report.txt
+        run: bash scripts/abi_check.sh compare abi-reference.xml "$(readlink -f build/libdxFeedGraalCxxApi.so)" include
+
+      # The verdict and the report of abidiff for the symbols-report job.
+      - name: Upload the report of the comparison
+        if: ${{ !cancelled() && needs.abi_baseline.outputs.found == 'true' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: abi-report
+          overwrite: true
+          path: abi-report.txt
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload the ABI
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: abi-x86_64-linux
+          path: abi-x86_64-linux.xml
+          if-no-files-found: ignore
+
+  # One report of the symbols jobs of all platforms and of the abi job: what is changed, removed and added, and whether
+  # it breaks the ABI (scripts/symbols.py report). It goes to the summary of the run and the artifact
+  # exported-symbols-report, and in a pull request of this repository to one comment, updated by each run (a new
+  # comment only when something changed). A pull request from a fork has a read-only token: the summary only.
+  symbols-report:
+    needs: [ plan, symbols, abi_baseline, abi ]
+    if: ${{ !cancelled() && needs.plan.outputs.code == 'true' }}
+    name: "symbols-report"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: |
+            /scripts/symbols.py
+            /abi/
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      # The lists of the base branch: the report of a pull request shows its changes after the lists are taken too.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          sparse-checkout: |
+            /abi/
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      # A list or the ABI report is missing when its job ended before it: the report says so.
+      - name: Download the lists of the symbols jobs
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: symbols-*
+          path: ci-lists
+        continue-on-error: true
+
+      - name: Download the report of the ABI check
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: abi-report
+          path: ci-abi
+        continue-on-error: true
+
+      - name: Make the report
+        id: report
+        env:
+          ABI_BASELINE: ${{ needs.abi_baseline.result != 'success' && 'unknown' || (needs.abi_baseline.outputs.found == 'true' && 'found' || 'none') }}
+        run: |
+          mkdir -p ci-lists ci-abi
+          args=(ci-lists --abi-baseline "$ABI_BASELINE")
+          abi_report="$(find ci-abi -name abi-report.txt | head -n 1)"
+          [ -z "$abi_report" ] || args+=(--abi-report "$abi_report")
+          [ ! -d base/abi ] || args+=(--base-dir base/abi)
+          python3 scripts/symbols.py report "${args[@]}" --output exported-symbols-report.md
+          # A comment of a pull request takes 65536 characters.
+          python3 scripts/symbols.py report "${args[@]}" --limit 60000 --output report.md --github-output "$GITHUB_OUTPUT"
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the report
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: exported-symbols-report
+          overwrite: true
+          path: exported-symbols-report.md
+          retention-days: 14
+
+      # The comment is found by the marker of its first line (scripts/symbols.py REPORT_MARKER).
+      - name: Comment on the pull request
+        # Pull requests of forks and of Dependabot get a read-only token.
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PULL_REQUEST: ${{ github.event.pull_request.number }}
+          COMMENT: ${{ steps.report.outputs.comment }}
+        run: |
+          marker='<!-- exported-symbols-report -->'
+          id="$(gh api --paginate "repos/$REPOSITORY/issues/$PULL_REQUEST/comments" \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and (.body | startswith(\"$marker\"))) | .id" |
+            head -n 1)"
+          if [ -n "$id" ]; then
+            gh api --method PATCH "repos/$REPOSITORY/issues/comments/$id" -F body=@report.md > /dev/null
+            echo "Updated the comment $id"
+          elif [ "$COMMENT" = true ]; then
+            gh api "repos/$REPOSITORY/issues/$PULL_REQUEST/comments" -F body=@report.md > /dev/null
+            echo "Added a comment"
+          else
+            echo "The exported symbols are unchanged: no comment"
+          fi
+
+  tsan:
+    needs: plan
+    if: ${{ needs.plan.outputs.code == 'true' }}
+    name: "ubuntu-24.04-clang-18-RelWithDebInfo-TSAN"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Restore dependency sources
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ runner.os }}-${{ hashFiles('CMakeLists.txt', 'cmake/Portals.cmake') }}
+          restore-keys: cpm-${{ runner.os }}-
+
+      - name: Restore ccache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-tsan-ubuntu-24.04-clang-18-${{ github.sha }}
+          restore-keys: ccache-tsan-ubuntu-24.04-clang-18-
+
+      - name: Install ccache
+        timeout-minutes: 10
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
 
       # ThreadSanitizer of clang 18 cannot map its shadow memory with the default ASLR entropy of the runner kernel.
       - name: Reduce ASLR entropy for TSan
@@ -278,6 +761,7 @@ jobs:
       - name: Configure CMake
         run: >
           cmake -B ${{github.workspace}}/build
+          ${{ env.CCACHE_LAUNCHER }}
           -DCMAKE_BUILD_TYPE=RelWithDebInfo
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=clang-18
@@ -286,6 +770,7 @@ jobs:
           -DDXFCXX_BUILD_SAMPLES=OFF
           -DDXFCXX_BUILD_TOOLS=OFF
           -DDXFCXX_ENABLE_TSAN=ON
+          -DDXFCXX_EXPORT_INTERNALS=ON
 
       - name: Build
         run: cmake --build ${{github.workspace}}/build -j 4
@@ -293,6 +778,10 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         run: ctest --extra-verbose --output-on-failure --parallel 4
+
+      - name: ccache statistics
+        if: ${{ always() }}
+        run: ccache --show-stats
 
   # Every public header must compile on its own, and the whole project must build without precompiled headers.
   headers:
@@ -324,7 +813,9 @@ jobs:
             cxx: 'clang++'
 
     name: "${{ matrix.config.name }}-Debug-headers-no-pch"
+    if: ${{ needs.plan.outputs.code == 'true' }}
     runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 90
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -333,17 +824,41 @@ jobs:
         if: ${{ contains(matrix.config.os, 'macos') }}
         run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
 
+      - name: Restore dependency sources
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ runner.os }}-${{ hashFiles('CMakeLists.txt', 'cmake/Portals.cmake') }}
+          restore-keys: cpm-${{ runner.os }}-
+
+      - name: Restore ccache
+        if: ${{ matrix.config.os != 'windows' }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-headers-${{ matrix.config.name }}-${{ github.sha }}
+          restore-keys: ccache-headers-${{ matrix.config.name }}-
+
+      - name: Install ccache
+        if: ${{ matrix.config.os != 'windows' }}
+        timeout-minutes: 10
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
+
       # Only the Wayland backend of the UI samples here (the build matrix has both X11 and Wayland), so that the
       # Wayland-only configuration is built as well.
       - name: Install Linux UI dependencies (Wayland only)
         if: ${{ contains(matrix.config.os, 'linux') }}
+        timeout-minutes: 10
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libwayland-dev libxkbcommon-dev
+          sudo apt-get $APT_OPTIONS update
+          sudo apt-get $APT_OPTIONS install -y libgl1-mesa-dev libwayland-dev libxkbcommon-dev
 
       - name: Configure CMake
         run: >
           cmake -B ${{github.workspace}}/build
+          ${{ matrix.config.os != 'windows' && env.CCACHE_LAUNCHER || '' }}
           -DCMAKE_BUILD_TYPE=Debug
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
@@ -352,6 +867,7 @@ jobs:
           -DDXFCXX_BUILD_UI_SAMPLES=ON
           -DDXFCXX_USE_PRECOMPILED_HEADERS=OFF
           -DDXFCXX_BUILD_HEADER_CHECK=ON
+          -DDXFCXX_FEATURE_STACKTRACE=ON
 
       - name: Check that public headers are self-contained
         run: cmake --build ${{github.workspace}}/build --config Debug --target dxfcxx_header_check -j 4
@@ -359,14 +875,84 @@ jobs:
       - name: Build without precompiled headers
         run: cmake --build ${{github.workspace}}/build --config Debug -j 4
 
-  # Smoke tests against demo.dxfeed.com (CTest label "network"). They depend on an external service, so a failure
-  # does not fail the workflow; the other unit tests do not use external network.
+      # The headers a user gets: each installed header must compile with only the include directory of the
+      # installation (and, on Windows, after <windows.h>).
+      - name: Install
+        run: cmake --install ${{github.workspace}}/build --config Debug --prefix ${{github.workspace}}/build/install
+
+      - name: Configure the installed headers check
+        run: >
+          cmake -S ${{github.workspace}}/.github/ci/installed-headers-check
+          -B ${{github.workspace}}/build/installed-headers-check
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_INSTALL_PREFIX=${{github.workspace}}/build/install
+
+      - name: Check that installed headers compile on their own
+        run: cmake --build ${{github.workspace}}/build/installed-headers-check --config Debug -j 4
+
+      # The ways to use the API (.github/ci/package-consumer-check): the installed CMake package, and the sources as a
+      # subproject added by add_subdirectory and by FetchContent. Each builds and runs programs with dxfcxx::static and
+      # dxfcxx::dxfcxx. The subprojects take the SDK downloaded by the build above.
+      - name: Configure the consumer of the installed package
+        run: >
+          cmake -S ${{github.workspace}}/.github/ci/package-consumer-check
+          -B ${{github.workspace}}/build/consumer-package
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_CONSUMER_MODE=package
+          -DCMAKE_PREFIX_PATH=${{github.workspace}}/build/install
+
+      - name: Build and run the consumer of the installed package
+        run: >
+          cmake --build ${{github.workspace}}/build/consumer-package --config Debug -j 4
+          && ctest --test-dir ${{github.workspace}}/build/consumer-package -C Debug --output-on-failure
+
+      - name: Configure the consumer of the sources (add_subdirectory)
+        run: >
+          cmake -S ${{github.workspace}}/.github/ci/package-consumer-check
+          -B ${{github.workspace}}/build/consumer-subdirectory
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_CONSUMER_MODE=subdirectory
+          -DDXFCXX_SOURCE_DIR=${{github.workspace}}
+          -DFETCHCONTENT_SOURCE_DIR_DXFEEDGRAALNATIVESDK=${{github.workspace}}/build/_deps/dxfeedgraalnativesdk-src
+
+      - name: Build and run the consumer of the sources (add_subdirectory)
+        run: >
+          cmake --build ${{github.workspace}}/build/consumer-subdirectory --config Debug -j 4
+          && ctest --test-dir ${{github.workspace}}/build/consumer-subdirectory -C Debug --output-on-failure
+
+      - name: Configure the consumer of the sources (FetchContent)
+        run: >
+          cmake -S ${{github.workspace}}/.github/ci/package-consumer-check
+          -B ${{github.workspace}}/build/consumer-fetchcontent
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_CONSUMER_MODE=fetchcontent
+          -DDXFCXX_SOURCE_DIR=${{github.workspace}}
+          -DFETCHCONTENT_SOURCE_DIR_DXFEEDGRAALNATIVESDK=${{github.workspace}}/build/_deps/dxfeedgraalnativesdk-src
+
+      - name: Build and run the consumer of the sources (FetchContent)
+        run: >
+          cmake --build ${{github.workspace}}/build/consumer-fetchcontent --config Debug -j 4
+          && ctest --test-dir ${{github.workspace}}/build/consumer-fetchcontent -C Debug --output-on-failure
+
+      - name: ccache statistics
+        if: ${{ always() && matrix.config.os != 'windows' }}
+        run: ccache --show-stats
+
+  # Tests over a network connection (CTest label "network") against a local QDS server that sends a test tape: CTest
+  # starts the server of the Tools before the tests and stops it after them, so no external service is involved. They
+  # run on every change of the code, as any change may break the connection or the events.
   network-tests:
     needs: plan
-    if: ${{ needs.plan.outputs.full == 'true' }}
+    if: ${{ needs.plan.outputs.code == 'true' }}
     name: "ubuntu-24.04-clang-18-Release-network-tests"
     runs-on: ubuntu-24.04
-    continue-on-error: true
+    timeout-minutes: 40
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -379,20 +965,24 @@ jobs:
           -DCMAKE_C_COMPILER=clang-18
           -DCMAKE_CXX_COMPILER=clang++-18
           -DDXFCXX_BUILD_DOC=OFF
-          -DDXFCXX_BUILD_SAMPLES=OFF
-          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_BUILD_SAMPLES=ON
+          -DDXFCXX_BUILD_TOOLS=ON
           -DDXFCXX_ENABLE_NETWORK_TESTS=ON
 
+      # The test target depends on the Tools, which run the local server. The recipe samples of TROUBLESHOOTING.md
+      # run against the same server.
       - name: Build
-        run: cmake --build ${{github.workspace}}/build -j 4 --target dxFeedGraalCxxApi_network_NetworkTest
+        run: >
+          cmake --build ${{github.workspace}}/build -j 4 --target dxFeedGraalCxxApi_network_NetworkTest
+          ReconnectSample CandleSample SimpleOrderBookSample
 
       - name: Test
         working-directory: ${{github.workspace}}/build
-        run: ctest -L network --extra-verbose --output-on-failure
+        run: ctest -L network --no-tests=error --extra-verbose --output-on-failure
 
-  # Unit tests linked against the shared library, as applications that use the DLL: a function of the public API
-  # without DXFCPP_EXPORT is a link error here, and state that the public headers keep outside the library (a copy in
-  # each module on Windows) fails the tests. The rules are in include/dxfeed_graal_cpp_api/internal/Conf.hpp.
+  # Unit tests, samples and Tools linked against the shared library, as applications that use the DLL: a class or
+  # function of the public API without DXFCPP_EXPORT is a link error here (the library is built with hidden visibility).
+  # The library also exports its internal classes (DXFCXX_EXPORT_INTERNALS) because the tests and the Tools use them.
   dynamic-link-tests:
     needs: plan
     strategy:
@@ -404,6 +994,11 @@ jobs:
             os: windows
             cc: 'cl'
             cxx: 'cl'
+          - name: ubuntu-24.04-gcc-14
+            image: ubuntu-24.04
+            os: linux
+            cc: 'gcc-14'
+            cxx: 'g++-14'
           - name: ubuntu-24.04-clang-18
             image: ubuntu-24.04
             os: linux
@@ -417,7 +1012,9 @@ jobs:
             cxx: 'clang++'
 
     name: "${{ matrix.config.name }}-Release-dynamic-link-tests"
+    if: ${{ needs.plan.outputs.code == 'true' }}
     runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -426,16 +1023,40 @@ jobs:
         if: ${{ contains(matrix.config.os, 'macos') }}
         run: sudo xcode-select -s '/Applications/Xcode_${{matrix.config.xcode}}.app/Contents/Developer'
 
+      - name: Restore dependency sources
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ runner.os }}-${{ hashFiles('CMakeLists.txt', 'cmake/Portals.cmake') }}
+          restore-keys: cpm-${{ runner.os }}-
+
+      - name: Restore ccache
+        if: ${{ matrix.config.os != 'windows' }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-dynamic-${{ matrix.config.name }}-${{ github.sha }}
+          restore-keys: ccache-dynamic-${{ matrix.config.name }}-
+
+      - name: Install ccache
+        if: ${{ matrix.config.os != 'windows' }}
+        timeout-minutes: 10
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
+
       - name: Configure CMake
         run: >
           cmake -B ${{github.workspace}}/build
+          ${{ matrix.config.os != 'windows' && env.CCACHE_LAUNCHER || '' }}
           -DCMAKE_BUILD_TYPE=Release
           -DDXFCXX_WARNINGS_AS_ERRORS=ON
           -DCMAKE_C_COMPILER=${{matrix.config.cc}}
           -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
           -DDXFCXX_BUILD_DOC=OFF
-          -DDXFCXX_BUILD_SAMPLES=OFF
-          -DDXFCXX_BUILD_TOOLS=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=OFF
+          -DDXFCXX_DYNAMICALLY_LINK_SAMPLES=ON
+          -DDXFCXX_DYNAMICALLY_LINK_TOOLS=ON
           -DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON
 
       - name: Build
@@ -444,3 +1065,7 @@ jobs:
       - name: Test
         working-directory: ${{github.workspace}}/build
         run: ctest -C Release --extra-verbose --output-on-failure --parallel 4
+
+      - name: ccache statistics
+        if: ${{ always() && matrix.config.os != 'windows' }}
+        run: ccache --show-stats

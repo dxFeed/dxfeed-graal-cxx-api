@@ -3,20 +3,19 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventType.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/TimeSeriesEvent.hpp"
-#include "../internal/Handler.hpp"
-#include "../internal/Id.hpp"
-#include "../internal/JavaObjectHandle.hpp"
-#include "../internal/context/ApiContext.hpp"
-#include "../internal/managers/EntityManager.hpp"
+#include "../util/Handler.hpp"
 
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -60,13 +59,15 @@ struct DXFCPP_EXPORT TxModelListenerCommon : virtual SharedEntity {
     JavaObjectHandle<TxModelListenerTag> handle_;
     SimpleHandler<void(const IndexedEventSource & /* source */,
                        const std::vector<std::shared_ptr<EventType>> & /* events */, bool /* isSnapshot */)>
-        onEventsReceived_{};
+        onEventsReceived_{"TxModelListener"};
 
     struct Impl;
 
     std::unique_ptr<Impl> impl_;
+    std::size_t id_{};
 
-    void createHandle(Id<TxModelListenerTag> id);
+    // Registers this listener for the lookup by its callback and creates the native listener.
+    void createHandle();
 };
 
 /**
@@ -107,9 +108,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModelListener final : TxModelListenerCommon,
                               const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
                onEventsReceived) {
         auto listener = RequireMakeShared<IndexedTxModelListener<E>>::createShared();
-        listener->createHandle(ApiContext::getInstance()
-                                   ->getManager<EntityManager<TxModelListenerCommon, TxModelListenerTag>>()
-                                   ->registerEntity(listener));
+        listener->createHandle();
 
         listener->onEventsReceived_ +=
             [l = onEventsReceived](const IndexedEventSource &source,
@@ -182,9 +181,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModelListener final : TxModelListenerComm
     create(std::function<void(const std::vector<std::shared_ptr<E>> & /* events */, bool /* isSnapshot */)>
                onEventsReceived) {
         auto listener = RequireMakeShared<TimeSeriesTxModelListener<E>>::createShared();
-        listener->createHandle(ApiContext::getInstance()
-                                   ->getManager<EntityManager<TxModelListenerCommon, TxModelListenerTag>>()
-                                   ->registerEntity(listener));
+        listener->createHandle();
 
         listener->onEventsReceived_ +=
             [l = onEventsReceived](const IndexedEventSource &, const std::vector<std::shared_ptr<EventType>> &events,

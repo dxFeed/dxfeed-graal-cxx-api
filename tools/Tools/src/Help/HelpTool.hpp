@@ -5,9 +5,11 @@
 
 #include "../Args/Args.hpp"
 #include "../Connect/ConnectTool.hpp"
+#include "../Diagnose/DiagnoseTool.hpp"
 #include "../Dump/DumpTool.hpp"
 #include "../EventGenTool/EventGenTool.hpp"
 #include "../LatencyTest/LatencyTestTool.hpp"
+#include "../NetTest/NetTestTool.hpp"
 #include "../PerfTest/PerfTestTool.hpp"
 #include "../PerfTest2/PerfTest2Tool.hpp"
 #include "../Qds/QdsTool.hpp"
@@ -31,8 +33,8 @@ DXFCXX_DISABLE_MSC_WARNINGS_POP()
 namespace dxfcpp::tools {
 
 struct HelpTool {
-    using Tool = std::variant<ConnectTool, DumpTool, HelpTool, LatencyTest,
-                              PerfTestTool, PerfTest2Tool, QdsTool, EventGenTool>;
+    using Tool = std::variant<ConnectTool, DiagnoseTool, DumpTool, HelpTool, LatencyTest, NetTestTool, PerfTestTool,
+                              PerfTest2Tool, QdsTool, EventGenTool>;
 
     static const std::unordered_map<std::string, std::string> EMBEDDED_ARTICLES;
     static const std::string NAME;

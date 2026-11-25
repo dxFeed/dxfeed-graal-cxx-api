@@ -3,22 +3,21 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../event/LastingEvent.hpp"
-#include "../internal/CEntryPointErrors.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/Isolate.hpp"
-#include "../internal/JavaObjectHandle.hpp"
-#include "../internal/managers/EntityManager.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 #include "../promise/Promise.hpp"
 #include "./DXFeedSubscription.hpp"
 
 #include <iterator>
 #include <memory>
+#include <mutex>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 
 /**
@@ -83,7 +82,7 @@ concept LastingEventCollection =
  * auto sub = @ref DXFeed "DXFeed"::@ref DXFeed::getInstance() "getInstance"()->@ref DXFeed::createSubscription()
  * "createSubscription"(Quote::TYPE);
  *
- * sub->@ref DXFeedSubscription::addEventListener() "addEventListener"<Quote>([](const auto& quotes) {
+ * sub->@ref DXFeedSubscription::addEventListener() "addEventListener"&lt;Quote&gt;([](const auto& quotes) {
  *     for (const auto& quote : quotes) {
  *         std::cout << "Mid = " + (quote->@ref Quote::getBidPrice() "getBidPrice"() + quote->@ref Quote::getAskPrice()
  * "getAskPrice"()) / 2) << std::endl;
@@ -137,6 +136,8 @@ concept LastingEventCollection =
  * <h3>Threads and locks</h3>
  *
  * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
+ *
+ * The functions that take symbols throw InvalidArgumentException if a symbol is not valid UTF-8 (see StringParam).
  */
 struct DXFCPP_EXPORT DXFeed : SharedEntity {
     /// The alias to a type of shared pointer to the DXFeed object
@@ -148,10 +149,45 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     friend struct DXEndpoint;
     friend struct TimeSeriesTxModelImpl;
     friend struct IndexedTxModelImpl;
+    friend struct IndexedEventTxModelImpl;
+    friend struct SubscriptionController;
+    friend class DXFeedSubscription;
 
     private:
     JavaObjectHandle<DXFeed> handle_{};
+
+    // The attached subscriptions: the feed owns them until they are detached or closed, or the endpoint is closed.
+    mutable std::mutex subscriptionsMutex_{};
+    mutable std::unordered_map<const DXFeedSubscription *, std::shared_ptr<DXFeedSubscription>> subscriptions_{};
+    mutable bool closed_{}; // the endpoint is closed: the feed owns no subscriptions. Guarded by subscriptionsMutex_.
+
+    // The endpoint that created the feed. It is weak (the endpoint owns the feed): the feed only reads the state of the
+    // endpoint to describe a timeout of a promise. Set once by DXEndpoint, before the feed is returned to anyone.
+    std::weak_ptr<const DXEndpoint> endpoint_{};
+
     static std::shared_ptr<DXFeed> create(void *feedHandle);
+
+    // The descriptions of the requests of the promises: they are added to the text of the timeout exception.
+    std::shared_ptr<const PromiseContext> createLastEventPromiseContext(const EventTypeEnum &eventType,
+                                                                        const SymbolWrapper &symbol) const;
+
+    std::vector<std::shared_ptr<const PromiseContext>>
+    createLastEventsPromisesContexts(const EventTypeEnum &eventType, const std::vector<SymbolWrapper> &symbols) const;
+
+    std::shared_ptr<const PromiseContext> createIndexedEventsPromiseContext(const EventTypeEnum &eventType,
+                                                                            const SymbolWrapper &symbol,
+                                                                            const IndexedEventSource &source) const;
+
+    std::shared_ptr<const PromiseContext> createTimeSeriesPromiseContext(const EventTypeEnum &eventType,
+                                                                         const SymbolWrapper &symbol,
+                                                                         std::int64_t fromTime,
+                                                                         std::int64_t toTime) const;
+
+    // Stops owning the subscription. The subscription is released outside of the mutex: its destructor closes it.
+    void releaseSubscription(const DXFeedSubscription *subscription) const;
+
+    // The endpoint is closed: stops owning all the subscriptions and does not own the ones attached later.
+    void releaseSubscriptions() const;
 
     void *getLastEventPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol) const;
 
@@ -245,7 +281,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * corresponding symbol and event type.
      * WildcardSymbol::ALL subscription does not count for that purpose.
      *
-     * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the absence
+     * <p>Use @ref getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the absence
      * of subscription.
      *
      * <p> This method fills in the values for the last event into the `event` argument.
@@ -255,9 +291,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <p>This method provides no way to distinguish a case when there is no subscription from the case when
      * there is a subscription, but the event data have not arrived yet. It is recommended to use
-     * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method instead of this `getLastEvent` method to
+     * @ref getLastEventIfSubscribed() "getLastEventIfSubscribed" method instead of this `getLastEvent` method to
      * fail-fast in case when the subscription was supposed to be set by the logic of the code, since
-     * @ref ::getLastEventIfSubscribed() "getLastEventIfSubscribed" method returns `std::shared_ptr<E>(nullptr)` when
+     * @ref getLastEventIfSubscribed() "getLastEventIfSubscribed" method returns `std::shared_ptr<E>(nullptr)` when
      * there is no subscription.
      *
      * <p>Note that this method does not work when DXEndpoint was created with
@@ -277,7 +313,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
 
     /**
      * Returns the last events for the specified list of event instances.
-     * This is a bulk version of @ref ::getLastEvent() "getLastEvent" method.
+     * This is a bulk version of @ref getLastEvent() "getLastEvent" method.
      *
      * <p>Note, that this method does not work when DXEndpoint was created with
      * @ref DXEndpoint::Role::STREAM_FEED "STREAM_FEED" role.
@@ -311,10 +347,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * If there is no subscription, then this method returns `std::shared_ptr<E>(nullptr)`.
      *
      * <p>If there is a subscription, but the event has not arrived from the uplink data provider,
-     * this method returns a non-initialized event object: its @ref EventType#getEventSymbol() "eventSymbol"
+     * this method returns a non-initialized event object: its @ref EventTypeWithSymbol::getEventSymbol() "eventSymbol"
      * property is set to the requested symbol, but all the other properties have their default values.
      *
-     * <p>Use @ref ::getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the
+     * <p>Use @ref getLastEventPromise() "getLastEventPromise" method if an event needs to be requested in the
      * absence of subscription.
      *
      * <p>Note that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
@@ -386,11 +422,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      */
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedSubscription> createSubscription(EventTypeIt begin, EventTypeIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("{}::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         auto sub = DXFeedSubscription::create(begin, end);
 
         attachSubscription(sub);
@@ -436,14 +467,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      */
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedSubscription> createSubscription(const EventTypesCollection &eventTypes) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            auto begin = std::begin(eventTypes);
-            auto end = std::end(eventTypes);
-
-            Debugger::debug(toString() + "::createSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         auto sub = DXFeedSubscription::create(eventTypes);
 
         attachSubscription(sub);
@@ -499,11 +522,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <typename EventTypeIt>
     std::shared_ptr<DXFeedTimeSeriesSubscription> createTimeSeriesSubscription(EventTypeIt begin,
                                                                                EventTypeIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("{}::createTimeSeriesSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         for (EventTypeIt iter = begin; iter != end; ++iter) {
             if (!iter->isTimeSeries()) {
                 throw InvalidArgumentException("DXFeed::createTimeSeriesSubscription(): event type " +
@@ -514,10 +532,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
         auto list = EventClassList::create(begin, end);
         auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(
             begin, end, std::move(createTimeSeriesSubscriptionHandleFromEventClassList(list)));
-        auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
-
-        dxfcpp::ignoreUnused(id);
-
+        DXFeedSubscription::registerSubscription(sub);
         attachSubscription(sub);
 
         return sub;
@@ -565,16 +580,6 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <typename EventTypesCollection>
     std::shared_ptr<DXFeedTimeSeriesSubscription>
     createTimeSeriesSubscription(const EventTypesCollection &eventTypes) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            auto dbgBegin = std::begin(eventTypes);
-            auto dbgEnd = std::end(eventTypes);
-
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() +
-                            "::createTimeSeriesSubscription(eventTypes = " + namesToString(dbgBegin, dbgEnd) + ")");
-        }
-
         auto begin = std::begin(eventTypes);
         auto end = std::end(eventTypes);
 
@@ -600,13 +605,19 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Note that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
      *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request, the waiting time
+     * and the state of the endpoint.
+     *
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @return The promise for the result of the request.
      */
     template <Derived<LastingEvent> E>
     std::shared_ptr<Promise<std::shared_ptr<E>>> getLastEventPromise(const SymbolWrapper &symbol) const {
-        return std::make_shared<Promise<std::shared_ptr<E>>>(getLastEventPromiseImpl(E::TYPE, symbol));
+        auto context = createLastEventPromiseContext(E::TYPE, symbol);
+
+        return std::make_shared<Promise<std::shared_ptr<E>>>(getLastEventPromiseImpl(E::TYPE, symbol), true,
+                                                             std::move(context));
     }
 
     /**
@@ -646,6 +657,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
      *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request (its own symbol for
+     * each promise), the waiting time and the state of the endpoint.
+     *
      * @tparam E The event type.
      * @tparam SymbolIt The symbols collection's iterator type.
      * @param begin The beginning of the collection of symbols (SymbolWrapper).
@@ -654,9 +668,18 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      */
     template <Derived<LastingEvent> E, typename SymbolIt>
     std::shared_ptr<PromiseList<E>> getLastEventsPromises(SymbolIt begin, SymbolIt end) const {
-        auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
+        // The symbols are walked once (the iterators may be single-pass): the list for the SDK and the descriptions of
+        // the requests are built from the same vector.
+        std::vector<SymbolWrapper> symbols{};
 
-        return PromiseList<E>::create(getLastEventsPromisesImpl(E::TYPE, list.get()));
+        for (auto it = begin; it != end; ++it) {
+            symbols.emplace_back(*it);
+        }
+
+        auto contexts = createLastEventsPromisesContexts(E::TYPE, symbols);
+        auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(symbols.begin(), symbols.end());
+
+        return PromiseList<E>::create(getLastEventsPromisesImpl(E::TYPE, list.get()), contexts);
     }
 
     /**
@@ -693,6 +716,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
+     *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request (its own symbol for
+     * each promise), the waiting time and the state of the endpoint.
      *
      * @tparam E The event type.
      * @tparam SymbolsCollection The symbol collection's type.
@@ -740,6 +766,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <p>Note, that this method does not work when DXEndpoint was created with @ref DXEndpoint::Role::STREAM_FEED
      * "STREAM_FEED" role (promise completes exceptionally).
+     *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request (its own symbol for
+     * each promise), the waiting time and the state of the endpoint.
      *
      * @tparam E The event type.
      * @param collection The symbol collection.
@@ -792,6 +821,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * the latter expects events in a different order and with an appropriate flags set. See documentation on a specific
      * event class for details on how they should be published.
      *
+     * <p>If Promise::await() with a timeout times out, the text of the exception names the request, the waiting time
+     * and the state of the endpoint.
+     *
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @param source The source.
@@ -800,8 +832,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<IndexedEvent> E>
     std::shared_ptr<Promise<std::vector<std::shared_ptr<E>>>>
     getIndexedEventsPromise(const SymbolWrapper &symbol, const IndexedEventSource &source) const {
+        auto context = createIndexedEventsPromiseContext(E::TYPE, symbol, source);
+
         return std::make_shared<Promise<std::vector<std::shared_ptr<E>>>>(
-            getIndexedEventsPromiseImpl(E::TYPE, symbol, source));
+            getIndexedEventsPromiseImpl(E::TYPE, symbol, source), true, std::move(context));
     }
 
     /**
@@ -834,7 +868,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      *
      * <p>This method does not accept an instance of IndexedEventSubscriptionSymbol as a `symbol`.
      * The later class is designed for use with DXFeedSubscription and to observe source-specific subscription
-     * in @DXPublisher.
+     * in DXPublisher.
      *
      * <h3>Event flags and consistent snapshot</h3>
      *
@@ -900,6 +934,9 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
      * because the latter expects events in a different order and with an appropriate flags set. See documentation on a
      * specific event class for details on how they should be published.
      *
+     * <p>If EventsPromiseMixin::await() with a timeout times out, the text of the exception names the request, the
+     * waiting time and the state of the endpoint.
+     *
      * @tparam E The type of event.
      * @param symbol The symbol.
      * @param fromTime The time, inclusive, to request events from (see TimeSeriesEvent::getTime()).
@@ -911,8 +948,10 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<TimeSeriesEvent> E>
     std::shared_ptr<Promise<std::vector<std::shared_ptr<E>>>>
     getTimeSeriesPromise(const SymbolWrapper &symbol, std::int64_t fromTime, std::int64_t toTime) const {
+        auto context = createTimeSeriesPromiseContext(E::TYPE, symbol, fromTime, toTime);
+
         return std::make_shared<Promise<std::vector<std::shared_ptr<E>>>>(
-            getTimeSeriesPromiseImpl(E::TYPE, symbol, fromTime, toTime));
+            getTimeSeriesPromiseImpl(E::TYPE, symbol, fromTime, toTime), true, std::move(context));
     }
 
     /**
@@ -1032,7 +1071,7 @@ struct DXFCPP_EXPORT DXFeed : SharedEntity {
     template <Derived<TimeSeriesEvent> E>
     std::vector<std::shared_ptr<E>> getTimeSeriesIfSubscribed(const SymbolWrapper &symbol,
                                                               std::int64_t fromTime) const {
-        return getTimeSeriesIfSubscribed<E>(symbol, fromTime, std::numeric_limits<std::int64_t>::max());
+        return getTimeSeriesIfSubscribed<E>(symbol, fromTime, (std::numeric_limits<std::int64_t>::max)());
     }
 
     /**

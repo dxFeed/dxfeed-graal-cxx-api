@@ -2,15 +2,51 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/MarketEvent.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/event/EventTypeEnum.hpp"
+#include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
+
+#include <cstdint>
+#include <string>
+#include <string_view>
+#include <unordered_map>
 
 DXFCPP_BEGIN_NAMESPACE
+
+namespace {
+
+/**
+ * @param clazz The class of the SDK structure of the event, set by `toGraal()` before the fill
+ * @return The place of the event symbol in the error about invalid UTF-8: `"Quote::eventSymbol"`, or
+ * `"MarketEvent::eventSymbol"` for an unknown class
+ */
+std::string_view eventSymbolPlace(std::uint32_t clazz) {
+    // Made once, so that the conversion of an event allocates no place.
+    static const auto places = [] {
+        std::unordered_map<std::uint32_t, std::string> result{};
+
+        for (const auto &type : EventTypeEnum::ALL) {
+            result.emplace(type.get().getId(), type.get().getClassName() + "::eventSymbol");
+        }
+
+        return result;
+    }();
+
+    if (const auto found = places.find(clazz); found != places.end()) {
+        return found->second;
+    }
+
+    return "MarketEvent::eventSymbol";
+}
+
+} // namespace
 
 MarketEvent::MarketEvent() noexcept {
 }
 
-MarketEvent::MarketEvent(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+MarketEvent::MarketEvent(StringParam eventSymbol) : eventSymbol_{eventSymbol.view()} {
 }
 
 void MarketEvent::fillData(void *graalNative) noexcept {
@@ -18,20 +54,22 @@ void MarketEvent::fillData(void *graalNative) noexcept {
         return;
     }
 
-    const auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
+    const auto graalMarketEvent = static_cast<dxfg_v4_market_event_t *>(graalNative);
 
-    setEventSymbol(dxfcpp::toString(graalMarketEvent->event_symbol));
+    eventSymbol_ = toStringOpt(graalMarketEvent->event_symbol);
     setEventTime(graalMarketEvent->event_time);
 }
 
-void MarketEvent::fillGraalData(void *graalNative) const noexcept {
+void MarketEvent::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
-    const auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
+    const auto graalMarketEvent = static_cast<dxfg_v4_market_event_t *>(graalNative);
 
-    graalMarketEvent->event_symbol = createCString(getEventSymbol());
+    // The class is set by toGraal() of the event type before the fill (newGraalEvent()).
+    graalMarketEvent->event_symbol =
+        createCString(getEventSymbolOpt(), {eventSymbolPlace(graalMarketEvent->event_type.clazz), false});
     graalMarketEvent->event_time = getEventTime();
 }
 
@@ -40,7 +78,7 @@ void MarketEvent::freeGraalData(void *graalNative) noexcept {
         return;
     }
 
-    const auto graalMarketEvent = static_cast<dxfg_market_event_t *>(graalNative);
+    const auto graalMarketEvent = static_cast<dxfg_v4_market_event_t *>(graalNative);
 
     delete[] graalMarketEvent->event_symbol;
 }
@@ -54,19 +92,18 @@ void MarketEvent::assign(std::shared_ptr<EventType> event) {
 
 const std::string &MarketEvent::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL;
+        return nulString();
     }
 
-    return eventSymbol_.value();
+    return *eventSymbol_;
 }
 
 const std::optional<std::string> &MarketEvent::getEventSymbolOpt() const & noexcept {
     return eventSymbol_;
 }
 
-void MarketEvent::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    // TODO: check invalid utf-8 [EN-8233]
-    eventSymbol_ = std::string(eventSymbol);
+void MarketEvent::setEventSymbol(StringParam eventSymbol) {
+    eventSymbol_ = std::string(eventSymbol.view());
 }
 
 std::int64_t MarketEvent::getEventTime() const noexcept {

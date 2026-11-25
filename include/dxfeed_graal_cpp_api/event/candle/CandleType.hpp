@@ -3,14 +3,18 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/utils/StringUtils.hpp"
+#include "../../detail/ConstantMap.hpp"
+#include "../../detail/StringParam.hpp"
 
+#include <functional>
+#include <span>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -27,6 +31,8 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref CandlePeriod::getValue() "value".
  */
 struct DXFCPP_EXPORT CandleType {
+    friend struct CandlePeriod;
+
     /**
      * Certain number of ticks.
      */
@@ -112,22 +118,23 @@ struct DXFCPP_EXPORT CandleType {
      */
     static const CandleType PRICE_RENKO;
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleType>, StringHash,
-                                    std::equal_to<>>
-        BY_STRING;
-    static const std::vector<std::reference_wrapper<const CandleType>> VALUES;
+    /// The elements by their string representations (constant-initialized, so it can be used in the dynamic
+    /// initialization and the destruction of global variables).
+    static const ConstantMap<std::string_view, CandleType> BY_STRING;
+    /// All elements (constant-initialized, so the initializers of global variables can use it).
+    static const std::span<const std::reference_wrapper<const CandleType>> VALUES;
 
     private:
-    std::string name_{};
-    std::string string_{};
+    std::string_view name_{};
+    std::string_view string_{};
     std::int64_t periodIntervalMillis_{};
 
-    CandleType(const StringLike &name, const StringLike &string,
-               std::int64_t periodIntervalMillis) noexcept;
+    constexpr CandleType(std::string_view name, std::string_view string, std::int64_t periodIntervalMillis) noexcept
+        : name_{name}, string_{string}, periodIntervalMillis_{periodIntervalMillis} {
+    }
 
     public:
     CandleType() noexcept;
-    virtual ~CandleType() noexcept;
 
     /**
      * Returns a candle type period in milliseconds as closely as possible.
@@ -145,7 +152,7 @@ struct DXFCPP_EXPORT CandleType {
      *
      * @return A name of this candle type
      */
-    const std::string &getName() const & noexcept;
+    std::string getName() const;
 
     /**
      * Returns string representation of this candle type.
@@ -157,7 +164,7 @@ struct DXFCPP_EXPORT CandleType {
      * @return string representation of this candle price type.
      * @throws InvalidArgumentException if the string representation is invalid.
      */
-    const std::string &toString() const & noexcept;
+    std::string toString() const;
 
     /**
      * Parses string representation of a candle type into an object.
@@ -168,7 +175,7 @@ struct DXFCPP_EXPORT CandleType {
      * @return A candle type.
      * @throws InvalidArgumentException if the argument is empty or invalid
      */
-    static std::reference_wrapper<const CandleType> parse(const StringLike &s);
+    static std::reference_wrapper<const CandleType> parse(StringParam s);
 
     bool operator==(const CandleType &candleType) const noexcept;
 };

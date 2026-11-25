@@ -3,14 +3,19 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/StringParam.hpp"
+#include "../util/StringUtils.hpp"
+
+#include <atomic>
+#include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <ostream>
 #include <string>
 
@@ -35,10 +40,10 @@ DXFCPP_BEGIN_NAMESPACE
  */
 struct DXFCPP_EXPORT AuthToken {
     /// String representation for Basic (`Base64(login:password)`) authorization.
-    static const std::string BASIC_SCHEME;
+    static constexpr char BASIC_SCHEME[] = "Basic";
 
     /// String representation for the Bearer (`token`) authorization.
-    static const std::string BEARER_SCHEME;
+    static constexpr char BEARER_SCHEME[] = "Bearer";
 
     /// A stub that is needed to simulate null AuthToken without using std::optional.
     static const AuthToken NULL_TOKEN;
@@ -52,7 +57,7 @@ struct DXFCPP_EXPORT AuthToken {
      * format does not comply with RFC2617
      * @see ::toString()
      */
-    static AuthToken valueOf(const StringLike &string);
+    static AuthToken valueOf(StringParam string);
 
     /**
      * Constructs an AuthToken with the specified username and password per RFC2617.
@@ -61,9 +66,11 @@ struct DXFCPP_EXPORT AuthToken {
      * @param userPassword the string (or c-string or string view) containing the username and password in the format
      * "username:password"
      * @return The constructed AuthToken.
+     * @throws InvalidArgumentException if the userPassword is not valid UTF-8 (the message names the offset, not the
+     * bytes).
      * @throws JavaException("InvalidFormatException") if the userPassword is malformed
      */
-    static AuthToken createBasicToken(const StringLike &userPassword);
+    static AuthToken createBasicToken(StringParam userPassword);
 
     /**
      * Constructs an AuthToken with the specified username and password per RFC2617.
@@ -72,8 +79,10 @@ struct DXFCPP_EXPORT AuthToken {
      * @param user The username.
      * @param password The password.
      * @return The constructed AuthToken.
+     * @throws InvalidArgumentException if the username or the password is not valid UTF-8 (the message names the
+     * offset, not the bytes).
      */
-    static AuthToken createBasicToken(const StringLike &user, const StringLike &password);
+    static AuthToken createBasicToken(StringParam user, StringParam password);
 
     /**
      * Constructs an AuthToken with the specified username and password per RFC2617.
@@ -83,16 +92,17 @@ struct DXFCPP_EXPORT AuthToken {
      * @param password the password
      * @return the constructed AuthToken or AuthToken::NULL_TOKEN
      */
-    static AuthToken createBasicTokenOrNull(const StringLike &user, const StringLike &password);
+    static AuthToken createBasicTokenOrNull(StringParam user, StringParam password);
 
     /**
      * Constructs an AuthToken with the specified bearer token per RFC6750.
      *
      * @param token the access token
      * @return the constructed AuthToken
+     * @throws InvalidArgumentException if the token is not valid UTF-8 (the message names the offset, not the bytes).
      * @throws JavaException("InvalidFormatException") if the token is empty
      */
-    static AuthToken createBearerToken(const StringLike &token);
+    static AuthToken createBearerToken(StringParam token);
 
     /**
      * Constructs an AuthToken with the specified bearer token per RFC6750.
@@ -100,7 +110,7 @@ struct DXFCPP_EXPORT AuthToken {
      * @param token the access token
      * @return the constructed AuthToken or AuthToken::NULL_TOKEN.
      */
-    static AuthToken createBearerTokenOrNull(const StringLike &token);
+    static AuthToken createBearerTokenOrNull(StringParam token);
 
     /**
      * Constructs an AuthToken with a custom scheme and value.
@@ -108,9 +118,11 @@ struct DXFCPP_EXPORT AuthToken {
      * @param scheme the custom scheme
      * @param value the custom value
      * @return the constructed AuthToken
+     * @throws InvalidArgumentException if the scheme or the value is not valid UTF-8 (for the value the message names
+     * the offset, not the bytes).
      * @throws JavaException("InvalidFormatException") if the scheme or value is empty
      */
-    static AuthToken createCustomToken(const StringLike &scheme, const StringLike &value);
+    static AuthToken createCustomToken(StringParam scheme, StringParam value);
 
     /**
      * Returns the HTTP authorization header value.
@@ -157,8 +169,6 @@ struct DXFCPP_EXPORT AuthToken {
 
     bool operator==(const AuthToken &other) const;
 
-    virtual ~AuthToken() noexcept;
-
     AuthToken(const AuthToken &) = delete;
     AuthToken(AuthToken &&) noexcept = delete;
     AuthToken &operator=(const AuthToken &) = delete;
@@ -174,6 +184,10 @@ struct DXFCPP_EXPORT AuthToken {
 
     private:
     std::atomic<bool> isNull_;
+
+    // The constructor of NULL_TOKEN: constant initialization.
+    constexpr AuthToken() noexcept : isNull_{true} {
+    }
 
     explicit AuthToken(JavaObjectHandle<AuthToken> &&handle, bool isNull = false);
 };

@@ -4,26 +4,30 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/Direction.hpp"
 
 #include "../../../include/dxfeed_graal_c_api/api.h"
+#include <array>
+#include <functional>
+#include <span>
 
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const Direction Direction::UNDEFINED{0, "UNDEFINED"};
-const Direction Direction::DOWN{1, "DOWN"};
-const Direction Direction::ZERO_DOWN{2, "ZERO_DOWN"};
-const Direction Direction::ZERO{3, "ZERO"};
-const Direction Direction::ZERO_UP{4, "ZERO_UP"};
-const Direction Direction::UP{5, "UP"};
+constinit const Direction Direction::UNDEFINED{0, "UNDEFINED"};
+constinit const Direction Direction::DOWN{1, "DOWN"};
+constinit const Direction Direction::ZERO_DOWN{2, "ZERO_DOWN"};
+constinit const Direction Direction::ZERO{3, "ZERO"};
+constinit const Direction Direction::ZERO_UP{4, "ZERO_UP"};
+constinit const Direction Direction::UP{5, "UP"};
 
-template <>
-const std::unordered_map<Direction::CodeType, std::reference_wrapper<const Direction>> Direction::ParentType::ALL{
-    {Direction::UNDEFINED.getCode(), std::cref(Direction::UNDEFINED)},
-    {Direction::DOWN.getCode(), std::cref(Direction::DOWN)},
-    {Direction::ZERO_DOWN.getCode(), std::cref(Direction::ZERO_DOWN)},
-    {Direction::ZERO.getCode(), std::cref(Direction::ZERO)},
-    {Direction::ZERO_UP.getCode(), std::cref(Direction::ZERO_UP)},
-    {Direction::UP.getCode(), std::cref(Direction::UP)},
+namespace {
+
+constinit const std::array<std::reference_wrapper<const Direction>, 6> ALL_ELEMENTS{
+    std::cref(Direction::UNDEFINED), std::cref(Direction::DOWN),    std::cref(Direction::ZERO_DOWN),
+    std::cref(Direction::ZERO),      std::cref(Direction::ZERO_UP), std::cref(Direction::UP),
 };
+
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const Direction>> Direction::ALL{ALL_ELEMENTS};
 
 DXFCPP_END_NAMESPACE

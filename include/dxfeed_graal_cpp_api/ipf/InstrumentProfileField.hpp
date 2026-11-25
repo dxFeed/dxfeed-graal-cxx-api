@@ -3,16 +3,18 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/Common.hpp"
+#include "../detail/StringParam.hpp"
 
+
+#include <functional>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <type_traits>
-#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_ipf
@@ -59,14 +61,19 @@ enum class InstrumentProfileFieldTypeEnum { STRING, DOUBLE, DATE };
 
 class DXFCPP_EXPORT InstrumentProfileField {
     InstrumentProfileFieldEnum fieldEnum_;
-    std::string name_;
+    std::string_view name_;
     InstrumentProfileFieldTypeEnum typeEnum_;
     bool numericField_;
 
-    InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike& name,
-                           InstrumentProfileFieldTypeEnum typeEnum) noexcept;
+    constexpr InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, std::string_view name,
+                                     InstrumentProfileFieldTypeEnum typeEnum) noexcept
+        : fieldEnum_{fieldEnum}, name_{name}, typeEnum_{typeEnum},
+          numericField_{typeEnum != InstrumentProfileFieldTypeEnum::STRING} {
+    }
 
-    explicit InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, const StringLike &name) noexcept;
+    constexpr explicit InstrumentProfileField(InstrumentProfileFieldEnum fieldEnum, std::string_view name) noexcept
+        : InstrumentProfileField(fieldEnum, name, InstrumentProfileFieldTypeEnum::STRING) {
+    }
 
     public:
     const static InstrumentProfileField TYPE;
@@ -101,16 +108,12 @@ class DXFCPP_EXPORT InstrumentProfileField {
     const static InstrumentProfileField PRICE_INCREMENTS;
     const static InstrumentProfileField TRADING_HOURS;
 
-    [[nodiscard]] const std::string &getName() const & noexcept;
+    [[nodiscard]] std::string getName() const;
 
-    private:
-    const static std::unordered_map<std::string, std::reference_wrapper<const InstrumentProfileField>> MAP;
-
-    public:
     /**
      * Returns cref to field for specified name or std::nullopt if field is not found.
      */
-    static std::optional<std::reference_wrapper<const InstrumentProfileField>> find(const StringLike &name) noexcept;
+    static std::optional<std::reference_wrapper<const InstrumentProfileField>> find(StringParam name) noexcept;
 
     InstrumentProfileFieldEnum getFieldEnum() const;
 

@@ -31,3 +31,5 @@
     SPDX-License-Identifier: MIT
 15. bits - https://github.com/ttldtor/bits/blob/default/LICENSE.txt
     SPDX-License-Identifier: BSL-1.0
+16. Doxygen Awesome (the theme of the documentation) - https://github.com/jothepro/doxygen-awesome-css/blob/v2.5.0/LICENSE  
+    SPDX-License-Identifier: MIT

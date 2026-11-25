@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -22,6 +22,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "./LastingEvent.hpp"
 #include "./TimeSeriesEvent.hpp"
 #include "./candle/CandleModule.hpp"
+#include "./custom/CustomModule.hpp"
 #include "./market/MarketModule.hpp"
 #include "./misc/MiscModule.hpp"
 #include "./option/OptionModule.hpp"

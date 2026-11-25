@@ -3,14 +3,16 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/CallbackBarrier.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventTypeEnum.hpp"
 #include "../event/TimeSeriesEvent.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "./TxModelListener.hpp"
 
@@ -176,7 +178,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withBatchProcessing(bool isBatchProcessing) const {
-            return this->createShared(std::move(withBatchProcessingImpl(handle_, isBatchProcessing)));
+            return this->createShared(std::move(withBatchProcessingImpl(handle_, isBatchProcessing)), listener_);
         }
 
         /**
@@ -198,7 +200,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const {
-            return this->createShared(std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)));
+            return this->createShared(std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)), listener_);
         }
 
         /**
@@ -210,7 +212,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withFeed(const std::shared_ptr<DXFeed> &feed) const {
-            return this->createShared(std::move(withFeedImpl(handle_, feed)));
+            return this->createShared(std::move(withFeedImpl(handle_, feed)), listener_);
         }
 
         /**
@@ -221,7 +223,7 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const {
-            return this->createShared(std::move(withSymbolImpl(handle_, symbol)));
+            return this->createShared(std::move(withSymbolImpl(handle_, symbol)), listener_);
         }
 
         /**
@@ -294,11 +296,14 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * subscribed. This time can be changed later, after the model has been created, by calling @ref
          * TimeSeriesTxModel::setFromTime() "setFromTime".
          *
+         * <p>A time that is now or in the future is set too, but no events come before it: ErrorManager reports
+         * a warning (ErrorInfo::Level::WARN, component `TimeSeriesTxModel`).
+         *
          * @param fromTime The time in milliseconds, since Unix epoch of January 1, 1970.
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withFromTime(std::int64_t fromTime) const {
-            return this->createShared(std::move(withFromTimeImpl(handle_, fromTime)));
+            return this->createShared(std::move(withFromTimeImpl(handle_, fromTime)), listener_);
         }
 
         /**
@@ -307,6 +312,9 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
          * <p>This time defaults to **`std::chrono::milliseconds(std::numeric_limits<std::int64_t>::max())`**, which
          * means that this model is not subscribed. This time can be changed later, after the model has been created, by
          * calling @ref TimeSeriesTxModel::setFromTime() "setFromTime".
+         *
+         * <p>A time that is now or in the future is set too, but no events come before it: ErrorManager reports
+         * a warning (ErrorInfo::Level::WARN, component `TimeSeriesTxModel`).
          *
          * @param fromTime The duration in milliseconds, since Unix epoch of January 1, 1970.
          * @return The builder instance.
@@ -346,7 +354,9 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
 
     /// Calls @ref TimeSeriesTxModel::close "close" method and destructs this model.
     ~TimeSeriesTxModel() noexcept override {
-        close();
+        runRelease("TimeSeriesTxModel", [this] {
+            close();
+        });
     }
 
     /**
@@ -424,6 +434,8 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
     /**
      * Sets the time from which to subscribe for time-series.
      * If this time has already been set, nothing happens.
+     * A time that is now or in the future is set too, but no events come before it: ErrorManager reports a warning
+     * (ErrorInfo::Level::WARN, component `TimeSeriesTxModel`).
      *
      * @param fromTime The time in milliseconds, since Unix epoch of January 1, 1970.
      */
@@ -434,6 +446,8 @@ struct /* DXFCPP_EXPORT */ TimeSeriesTxModel final : TimeSeriesTxModelImpl, Requ
     /**
      * Sets the time from which to subscribe for time-series.
      * If this time has already been set, nothing happens.
+     * A time that is now or in the future is set too, but no events come before it: ErrorManager reports a warning
+     * (ErrorInfo::Level::WARN, component `TimeSeriesTxModel`).
      *
      * @param fromTime The duration in milliseconds, since Unix epoch of January 1, 1970.
      */

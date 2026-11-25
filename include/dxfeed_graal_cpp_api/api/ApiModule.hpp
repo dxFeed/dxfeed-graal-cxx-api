@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -13,12 +13,16 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * \ingroup dxfcpp_modules
  */
 
+#include "./AutoClose.hpp"
+#include "./ConnectionError.hpp"
 #include "./DXEndpoint.hpp"
 #include "./DXFeed.hpp"
 #include "./DXFeedSubscription.hpp"
 #include "./DXPublisher.hpp"
 #include "./DXPublisherObservableSubscription.hpp"
 #include "./FilteredSubscriptionSymbol.hpp"
+#include "./MessageConnectorInfo.hpp"
+#include "./SubscriptionController.hpp"
 #include "./osub/OsubModule.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

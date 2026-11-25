@@ -3,15 +3,17 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/CallbackBarrier.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/IndexedEvent.hpp"
 #include "../event/market/OrderSource.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 #include "./TxModelListener.hpp"
 
 #include <memory>
@@ -88,12 +90,18 @@ struct DXFCPP_EXPORT IndexedTxModelImpl {
  *
  * <p>This model must be configured using the @ref IndexedTxModel::Builder "builder", as most configuration
  * settings cannot be changed once the model is built. This model requires configuration with
- * a @ref IndexedTxModel::Builder::Builder#withSymbol() "symbol" and a @ref IndexedTxModel::Builder::withSources()
- * sources for subscription, and it must be @ref IndexedTxModel::Builder::withFeed() "attached" to a DXFeed instance to
+ * a @ref IndexedTxModel::Builder::withSymbol() "symbol" and @ref IndexedTxModel::Builder::withSources() "sources"
+ * for subscription, and it must be @ref IndexedTxModel::Builder::withFeed() "attached" to a DXFeed instance to
  * begin operation. For ease of use, some of these configurations can be changed after the model is built, see
  * @ref IndexedTxModel::setSources() "setSources" and @ref IndexedTxModel::attach() "attach" and their overloads.
+ * The functions that take sources throw InvalidArgumentException if the name of a source is not valid UTF-8 (see
+ * StringParam).
  *
  * <p>This model only supports single symbol subscriptions; multiple symbols cannot be configured.
+ *
+ * <p>IndexedEventTxModel is the model of dxFeed Java API with one source and a SubscriptionController (the events
+ * batch limit, the aggregation period and the executor of the subscription). Choose IndexedTxModel for several sources
+ * that can be changed later or for the batch and snapshot processing flags.
  *
  * <h3>Resource management and closed models</h3>
  *
@@ -176,7 +184,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withBatchProcessing(bool isBatchProcessing) const {
-            return this->createShared(std::move(withBatchProcessingImpl(handle_, isBatchProcessing)));
+            return this->createShared(std::move(withBatchProcessingImpl(handle_, isBatchProcessing)), listener_);
         }
 
         /**
@@ -198,7 +206,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withSnapshotProcessing(bool isSnapshotProcessing) const {
-            return this->createShared(std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)));
+            return this->createShared(std::move(withSnapshotProcessingImpl(handle_, isSnapshotProcessing)), listener_);
         }
 
         /**
@@ -210,7 +218,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withFeed(const std::shared_ptr<DXFeed> &feed) const {
-            return this->createShared(std::move(withFeedImpl(handle_, feed)));
+            return this->createShared(std::move(withFeedImpl(handle_, feed)), listener_);
         }
 
         /**
@@ -221,7 +229,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
          * @return The builder instance.
          */
         std::shared_ptr<Builder> withSymbol(const SymbolWrapper &symbol) const {
-            return this->createShared(std::move(withSymbolImpl(handle_, symbol)));
+            return this->createShared(std::move(withSymbolImpl(handle_, symbol)), listener_);
         }
 
         /**
@@ -310,7 +318,7 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
         std::shared_ptr<Builder> withSources(EventSourceIt begin, EventSourceIt end) const {
             auto list = EventSourceWrapper::ListUtils::toGraalListUnique(begin, end);
 
-            return this->createShared(std::move(withSourcesImpl(handle_, list.get())));
+            return this->createShared(std::move(withSourcesImpl(handle_, list.get())), listener_);
         }
 
         /**
@@ -389,7 +397,9 @@ struct /* DXFCPP_EXPORT */ IndexedTxModel final : IndexedTxModelImpl, RequireMak
 
     /// Calls @ref IndexedTxModel::close "close" method and destructs this model.
     ~IndexedTxModel() noexcept override {
-        close();
+        runRelease("IndexedTxModel", [this] {
+            close();
+        });
     }
 
     /**

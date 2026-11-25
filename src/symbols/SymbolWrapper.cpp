@@ -2,31 +2,33 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../include/dxfeed_graal_cpp_api/symbols/SymbolWrapper.hpp"
+#include "../internal/utils/debug/Debug.hpp"
+#include "../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 std::ptrdiff_t SymbolWrapper::SymbolListUtils::calculateGraalListSize(std::ptrdiff_t initSize) noexcept {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::calculateSize(initSize);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::calculateSize(initSize);
 }
 
 void *SymbolWrapper::SymbolListUtils::newGraalList(std::ptrdiff_t size) {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::newList(size);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::newList(size);
 }
 
 bool SymbolWrapper::SymbolListUtils::setGraalListElement(void *graalList, std::ptrdiff_t elementIdx,
                                                          void *element) noexcept {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::setElement(graalList, elementIdx, element);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::setElement(graalList, elementIdx, element);
 }
 
 bool SymbolWrapper::SymbolListUtils::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::freeElements(graalList, count);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::freeElements(graalList, count);
 }
 
 void SymbolWrapper::SymbolListUtils::freeGraalList(void *graalList) {
-    GraalListUtils<dxfg_symbol_list, SymbolWrapper>::freeList(graalList);
+    GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::freeList(graalList);
 }
 
 std::unique_ptr<void, decltype(&SymbolWrapper::SymbolListUtils::freeGraalList)>
@@ -35,58 +37,52 @@ SymbolWrapper::SymbolListUtils::toGraalListUnique(std::initializer_list<SymbolWr
 }
 
 std::vector<SymbolWrapper> SymbolWrapper::SymbolListUtils::fromGraalList(void *graalList) {
-    return GraalListUtils<dxfg_symbol_list, SymbolWrapper>::fromList(graalList);
+    return GraalListUtils<dxfg_v4_symbol_list, SymbolWrapper>::fromList(graalList);
 }
 
 SymbolWrapper::SymbolWrapper(const SymbolWrapper &) noexcept = default;
 SymbolWrapper::SymbolWrapper(SymbolWrapper &&) noexcept = default;
-SymbolWrapper &SymbolWrapper::operator=(const SymbolWrapper &) noexcept = default;
-SymbolWrapper &SymbolWrapper::operator=(SymbolWrapper &&) noexcept = default;
+// The bad_variant_access of the visit of a valueless variant: data_ never is one, it is set only by noexcept functions,
+// where a throwing copy terminates.
+SymbolWrapper &SymbolWrapper::operator=(const SymbolWrapper &) noexcept = default; // NOLINT(bugprone-exception-escape)
+SymbolWrapper &SymbolWrapper::operator=(SymbolWrapper &&) noexcept = default;      // NOLINT(bugprone-exception-escape)
 SymbolWrapper::SymbolWrapper() noexcept {
 }
 SymbolWrapper::~SymbolWrapper() noexcept {
 }
 
-SymbolWrapper::SymbolWrapper(const StringSymbol &stringSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const StringSymbol &stringSymbol) noexcept : data_{stringSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper(stringSymbol = " + toStringAny(stringSymbol) + ")");
     }
-
-    data_ = stringSymbol;
 }
 
-SymbolWrapper::SymbolWrapper(const WildcardSymbol &wildcardSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const WildcardSymbol &wildcardSymbol) noexcept : data_{wildcardSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper(wildcardSymbol = " + toStringAny(wildcardSymbol) + ")");
     }
-
-    data_ = wildcardSymbol;
 }
 
-SymbolWrapper::SymbolWrapper(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const IndexedEventSubscriptionSymbol &indexedEventSubscriptionSymbol) noexcept
+    : data_{indexedEventSubscriptionSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug(
             "SymbolWrapper(indexedEventSubscriptionSymbol = " + toStringAny(indexedEventSubscriptionSymbol) + ")");
     }
-
-    data_ = indexedEventSubscriptionSymbol;
 }
 
-SymbolWrapper::SymbolWrapper(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const TimeSeriesSubscriptionSymbol &timeSeriesSubscriptionSymbol) noexcept
+    : data_{timeSeriesSubscriptionSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper(timeSeriesSubscriptionSymbol = " + toStringAny(timeSeriesSubscriptionSymbol) +
                         ")");
     }
-
-    data_ = timeSeriesSubscriptionSymbol;
 }
 
-SymbolWrapper::SymbolWrapper(const CandleSymbol &candleSymbol) noexcept {
+SymbolWrapper::SymbolWrapper(const CandleSymbol &candleSymbol) noexcept : data_{candleSymbol} {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper(candleSymbol = " + toStringAny(candleSymbol) + ")");
     }
-
-    data_ = candleSymbol;
 }
 
 template void *SymbolWrapper::SymbolListUtils::toGraalList<SymbolWrapper const *>(SymbolWrapper const *,
@@ -102,7 +98,7 @@ void SymbolWrapper::freeGraal(void *graalNative) {
         return;
     }
 
-    switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
+    switch (static_cast<dxfg_v4_symbol_t *>(graalNative)->type) {
     case STRING:
         StringSymbol::freeGraal(graalNative);
 
@@ -140,7 +136,7 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create SymbolWrapper. The `graalNative` parameter is nullptr");
     }
 
-    switch (static_cast<dxfg_symbol_t *>(graalNative)->type) {
+    switch (static_cast<dxfg_v4_symbol_t *>(graalNative)->type) {
     case STRING:
         return StringSymbol::fromGraal(graalNative);
 
@@ -158,11 +154,11 @@ SymbolWrapper SymbolWrapper::fromGraal(void *graalNative) {
 
     default:
         throw RuntimeException(fmt::format("Unable to create SymbolWrapper. Unknown symbol type: {}",
-                                           static_cast<int>(static_cast<dxfg_symbol_t *>(graalNative)->type)));
+                                           static_cast<int>(static_cast<dxfg_v4_symbol_t *>(graalNative)->type)));
     }
 }
 
-void *SymbolWrapper::toGraal() const noexcept {
+void *SymbolWrapper::toGraal() const {
     if constexpr (Debugger::isDebug) {
         Debugger::debug("SymbolWrapper::toGraal()");
     }
@@ -174,7 +170,7 @@ void *SymbolWrapper::toGraal() const noexcept {
         data_);
 }
 
-std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> SymbolWrapper::toGraalUnique() const noexcept {
+std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> SymbolWrapper::toGraalUnique() const {
     return {toGraal(), SymbolWrapper::freeGraal};
 }
 
@@ -201,7 +197,9 @@ bool SymbolWrapper::isStringSymbol() const noexcept {
 }
 
 std::string SymbolWrapper::asStringSymbol() const noexcept {
-    return isStringSymbol() ? std::get<StringSymbol>(data_).getData() : String::EMPTY;
+    const auto *stringSymbol = std::get_if<StringSymbol>(&data_);
+
+    return stringSymbol ? stringSymbol->getData() : String::EMPTY;
 }
 
 bool SymbolWrapper::isWildcardSymbol() const noexcept {
@@ -217,9 +215,9 @@ bool SymbolWrapper::isIndexedEventSubscriptionSymbol() const noexcept {
 }
 
 std::optional<IndexedEventSubscriptionSymbol> SymbolWrapper::asIndexedEventSubscriptionSymbol() const noexcept {
-    return isIndexedEventSubscriptionSymbol()
-               ? std::make_optional<IndexedEventSubscriptionSymbol>(std::get<IndexedEventSubscriptionSymbol>(data_))
-               : std::nullopt;
+    const auto *value = std::get_if<IndexedEventSubscriptionSymbol>(&data_);
+
+    return value ? std::make_optional<IndexedEventSubscriptionSymbol>(*value) : std::nullopt;
 }
 
 bool SymbolWrapper::isTimeSeriesSubscriptionSymbol() const noexcept {
@@ -227,9 +225,9 @@ bool SymbolWrapper::isTimeSeriesSubscriptionSymbol() const noexcept {
 }
 
 std::optional<TimeSeriesSubscriptionSymbol> SymbolWrapper::asTimeSeriesSubscriptionSymbol() const noexcept {
-    return isTimeSeriesSubscriptionSymbol()
-               ? std::make_optional<TimeSeriesSubscriptionSymbol>(std::get<TimeSeriesSubscriptionSymbol>(data_))
-               : std::nullopt;
+    const auto *value = std::get_if<TimeSeriesSubscriptionSymbol>(&data_);
+
+    return value ? std::make_optional<TimeSeriesSubscriptionSymbol>(*value) : std::nullopt;
 }
 
 bool SymbolWrapper::isCandleSymbol() const noexcept {
@@ -237,7 +235,9 @@ bool SymbolWrapper::isCandleSymbol() const noexcept {
 }
 
 std::optional<CandleSymbol> SymbolWrapper::asCandleSymbol() const noexcept {
-    return isCandleSymbol() ? std::make_optional<CandleSymbol>(std::get<CandleSymbol>(data_)) : std::nullopt;
+    const auto *value = std::get_if<CandleSymbol>(&data_);
+
+    return value ? std::make_optional<CandleSymbol>(*value) : std::nullopt;
 }
 
 const SymbolWrapper::DataType &SymbolWrapper::getData() const noexcept {

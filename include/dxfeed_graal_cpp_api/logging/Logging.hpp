@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/Common.hpp"
-#include "../internal/Handler.hpp"
+#include "../detail/StringParam.hpp"
+#include "../util/Handler.hpp"
 
 /**
  * \defgroup dxfcpp_logging "Logging" Module
@@ -42,8 +42,12 @@ struct DXFCPP_EXPORT Logging final {
         /// Is a message level indicating a potential problem.
         WARN,
 
+// windows.h defines ERROR as a macro: it is hidden here and restored after the enumerator.
+#pragma push_macro("ERROR")
+#undef ERROR
         /// Is a message level indicating a serious failure.
         ERROR,
+#pragma pop_macro("ERROR")
 
         /// Is a special level that can be used to turn off logging.
         OFF,
@@ -94,7 +98,7 @@ struct DXFCPP_EXPORT Logging final {
      * @param logFile The logging file.
      * @param logLevel The logging level.
      */
-    static void init(const StringLike &logFile, Level logLevel = Level::INFO);
+    static void init(StringParam logFile, Level logLevel = Level::INFO);
 
     /**
      * Initializes logging, sets the path to the file for logging, to the file for outputting errors and warnings, and
@@ -115,7 +119,7 @@ struct DXFCPP_EXPORT Logging final {
      * @param logLevel The logging level.
      * @param errFileLevel The err file logging level.
      */
-    static void init(const StringLike &logFile, const StringLike &errFile, Level logLevel = Level::INFO,
+    static void init(StringParam logFile, StringParam errFile, Level logLevel = Level::INFO,
                      Level errFileLevel = Level::WARN);
 };
 

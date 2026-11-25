@@ -4,14 +4,20 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXFeed.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXFeed.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../internal/context/ApiContext.hpp"
+#include "../internal/utils/debug/Debug.hpp"
+#include "../isolated/IsolatedCommon.hpp"
+#include "../isolated/api/IsolatedDXFeed.hpp"
+#include "../promise/PromiseContext.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
-#    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#    include "../internal/Metrics.hpp"
 #endif
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -31,17 +37,39 @@ void DXFeed::attachSubscription(const std::shared_ptr<DXFeedSubscription> &subsc
         Debugger::debug(toString() + "::attachSubscription(" + subscription->toString() + ")");
     }
 
-    if (!handle_ || !subscription || !subscription->handle_) {
+    // A closed subscription is not attached.
+    if (!handle_ || !subscription || !subscription->handle_ || subscription->closed_) {
         return;
     }
 
-    if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_attachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      subHandle) == 0;
-            },
-            false)) {
+    // After the shutdown of the library there is nothing to attach or detach.
+    ignoreUnused(runIsolatedOrElse(
+        [handle = static_cast<dxfg_v4_feed_t *>(handle_.get()),
+         subHandle = static_cast<dxfg_v4_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+            isolated::throwIfFailed(thread, dxfg_v4_DXFeed_attachSubscription(thread, handle, subHandle));
+
+            return 0;
+        },
+        0));
+
+    {
+        std::lock_guard guard{subscriptionsMutex_};
+
+        if (closed_) {
+            return;
+        }
+
+        subscriptions_.insert_or_assign(subscription.get(), subscription);
+    }
+
+    subscription->addFeed(sharedAs<const DXFeed>());
+
+    // close() takes the feeds of the subscription after it sets the flag, so a subscription closed meanwhile either is
+    // released by close() or is seen closed here.
+    if (subscription->closed_) {
+        releaseSubscription(subscription.get());
     }
 }
 
@@ -55,14 +83,20 @@ void DXFeed::detachSubscription(const std::shared_ptr<DXFeedSubscription> &subsc
         return;
     }
 
-    if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscription(static_cast<graal_isolatethread_t *>(threadHandle), handle,
-                                                      subHandle) == 0;
-            },
-            false)) {
-    }
+    // After the shutdown of the library there is nothing to attach or detach.
+    ignoreUnused(runIsolatedOrElse(
+        [handle = static_cast<dxfg_v4_feed_t *>(handle_.get()),
+         subHandle = static_cast<dxfg_v4_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+            isolated::throwIfFailed(thread, dxfg_v4_DXFeed_detachSubscription(thread, handle, subHandle));
+
+            return 0;
+        },
+        0));
+
+    subscription->removeFeed(this);
+    releaseSubscription(subscription.get());
 }
 
 void DXFeed::detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription> &subscription) const {
@@ -75,14 +109,59 @@ void DXFeed::detachSubscriptionAndClear(const std::shared_ptr<DXFeedSubscription
         return;
     }
 
-    if (runIsolatedOrElse(
-            [handle = static_cast<dxfg_feed_t *>(handle_.get()),
-             subHandle = static_cast<dxfg_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
-                return dxfg_DXFeed_detachSubscriptionAndClear(static_cast<graal_isolatethread_t *>(threadHandle),
-                                                              handle, subHandle) == 0;
-            },
-            false)) {
+    // After the shutdown of the library there is nothing to attach or detach.
+    ignoreUnused(runIsolatedOrElse(
+        [handle = static_cast<dxfg_v4_feed_t *>(handle_.get()),
+         subHandle = static_cast<dxfg_v4_subscription_t *>(subscription->handle_.get())](auto threadHandle) {
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+            isolated::throwIfFailed(thread, dxfg_v4_DXFeed_detachSubscriptionAndClear(thread, handle, subHandle));
+
+            return 0;
+        },
+        0));
+
+    subscription->removeFeed(this);
+    releaseSubscription(subscription.get());
+}
+
+void DXFeed::releaseSubscription(const DXFeedSubscription *subscription) const {
+    std::shared_ptr<DXFeedSubscription> released{};
+
+    {
+        std::lock_guard guard{subscriptionsMutex_};
+
+        if (const auto found = subscriptions_.find(subscription); found != subscriptions_.end()) {
+            released = std::move(found->second);
+            subscriptions_.erase(found);
+        }
     }
+
+    // The subscription is released here, outside the mutex: the destructor of the last reference closes it.
+}
+
+void DXFeed::releaseSubscriptions() const {
+    auto released =
+        std::make_shared<std::unordered_map<const DXFeedSubscription *, std::shared_ptr<DXFeedSubscription>>>();
+
+    {
+        std::lock_guard guard{subscriptionsMutex_};
+
+        closed_ = true;
+        released->swap(subscriptions_);
+    }
+
+    if (released->empty()) {
+        return;
+    }
+
+    for (const auto &[_, subscription] : *released) {
+        subscription->removeFeed(this);
+    }
+
+    // Called from a callback (the CLOSED notification, close() of the endpoint from a listener), the subscriptions are
+    // released on another thread: the destructor of a subscription closes it.
+    releaseOutsideCallbacks(std::move(released));
 }
 
 std::shared_ptr<DXFeedSubscription> DXFeed::createSubscription(const EventTypeEnum &eventType) const {
@@ -125,9 +204,7 @@ DXFeed::createTimeSeriesSubscription(const EventTypeEnum &eventType) const {
 
     auto sub = RequireMakeShared<DXFeedTimeSeriesSubscription>::createShared(
         eventType, isolated::api::IsolatedDXFeed::createTimeSeriesSubscription(handle_, eventType));
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
-
-    ignoreUnused(id);
+    DXFeedSubscription::registerSubscription(sub);
     attachSubscription(sub);
 
     return sub;
@@ -152,9 +229,6 @@ std::shared_ptr<DXFeed> DXFeed::create(void *feedHandle) {
 
     std::shared_ptr<DXFeed> feed{new DXFeed{}};
 
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeed>>()->registerEntity(feed);
-    ignoreUnused(id);
-
     feed->handle_ = JavaObjectHandle<DXFeed>(feedHandle);
 
     return feed;
@@ -176,6 +250,65 @@ void *DXFeed::getIndexedEventsPromiseImpl(const EventTypeEnum &eventType, const 
 void *DXFeed::getTimeSeriesPromiseImpl(const EventTypeEnum &eventType, const SymbolWrapper &symbol,
                                        std::int64_t fromTime, std::int64_t toTime) const {
     return isolated::api::IsolatedDXFeed::getTimeSeriesPromise(handle_, eventType, symbol, fromTime, toTime);
+}
+
+namespace {
+
+// The fields every description has; the callers add the source or the time range.
+std::shared_ptr<PromiseContext> makePromiseContext(std::string method, const EventTypeEnum &eventType,
+                                                   const SymbolWrapper &symbol,
+                                                   const std::weak_ptr<const DXEndpoint> &endpoint) {
+    auto context = std::make_shared<PromiseContext>();
+
+    context->method = std::move(method);
+    context->eventType = eventType.getClassName();
+    context->symbol = symbol.toStringUnderlying();
+    context->endpoint = endpoint;
+
+    return context;
+}
+
+} // namespace
+
+std::shared_ptr<const PromiseContext> DXFeed::createLastEventPromiseContext(const EventTypeEnum &eventType,
+                                                                           const SymbolWrapper &symbol) const {
+    return makePromiseContext("getLastEventPromise", eventType, symbol, endpoint_);
+}
+
+std::vector<std::shared_ptr<const PromiseContext>>
+DXFeed::createLastEventsPromisesContexts(const EventTypeEnum &eventType,
+                                         const std::vector<SymbolWrapper> &symbols) const {
+    std::vector<std::shared_ptr<const PromiseContext>> result{};
+
+    result.reserve(symbols.size());
+
+    for (const auto &symbol : symbols) {
+        result.push_back(makePromiseContext("getLastEventsPromises", eventType, symbol, endpoint_));
+    }
+
+    return result;
+}
+
+std::shared_ptr<const PromiseContext> DXFeed::createIndexedEventsPromiseContext(const EventTypeEnum &eventType,
+                                                                               const SymbolWrapper &symbol,
+                                                                               const IndexedEventSource &source) const {
+    auto context = makePromiseContext("getIndexedEventsPromise", eventType, symbol, endpoint_);
+
+    context->source = source.toString();
+
+    return context;
+}
+
+std::shared_ptr<const PromiseContext> DXFeed::createTimeSeriesPromiseContext(const EventTypeEnum &eventType,
+                                                                            const SymbolWrapper &symbol,
+                                                                            std::int64_t fromTime,
+                                                                            std::int64_t toTime) const {
+    auto context = makePromiseContext("getTimeSeriesPromise", eventType, symbol, endpoint_);
+
+    context->fromTime = fromTime;
+    context->toTime = toTime;
+
+    return context;
 }
 
 std::shared_ptr<EventType> DXFeed::getLastEventIfSubscribedImpl(const EventTypeEnum &eventType,
@@ -208,7 +341,7 @@ DXFeed::DXFeed() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", 1);
 #endif
 }
 
@@ -219,7 +352,7 @@ DXFeed::~DXFeed() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXFeed", -1);
 #endif
 }
 

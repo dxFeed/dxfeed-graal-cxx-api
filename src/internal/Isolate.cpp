@@ -1,17 +1,47 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "Isolate.hpp"
+#include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "CallbackBarrier.hpp"
+#include "../../include/dxfeed_graal_cpp_api/util/Handler.hpp"
+#include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
+#include "utils/debug/Debug.hpp"
+#include "../isolated/IsolatedCommon.hpp"
 
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
 #include <config/config.hpp>
+#include <cstdint>
 #include <cstdlib>
-#include <dxfg_api.h>
+#include <cstring>
+#include <deque>
+#include <dxfg_v4_api.h>
+#include <exception>
+#include <iterator>
+#include <memory>
+#include <mutex>
 #include <optional>
 #include <string>
+#include <string_view>
+#include <thread>
 #include <utility>
+#include <vector>
 
-#include <fmt/format.h>
+#ifdef _WIN32
+#    ifndef WIN32_LEAN_AND_MEAN
+#        define WIN32_LEAN_AND_MEAN
+#    endif
+#    ifndef NOMINMAX
+#        define NOMINMAX
+#    endif
+#    if defined(_MSC_VER) && defined(_DLL)
+#        include <corecrt_startup.h>
+#    endif
+#    include <windows.h>
+#endif
 
 #ifdef NO_ERROR
 #    undef NO_ERROR
@@ -49,7 +79,9 @@ DXFCPP_BEGIN_NAMESPACE
 
 Isolate::IsolateThread::IsolateThread(GraalIsolateThreadHandle threadHandle) noexcept
     : handle{threadHandle}, tid{std::this_thread::get_id()} {
-    this->idx = Id<IsolateThread>::getNext().getValue();
+    static std::atomic<std::size_t> lastIdx{0};
+
+    this->idx = ++lastIdx;
 
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
@@ -93,52 +125,23 @@ CEntryPointErrorsEnum Isolate::IsolateThread::detach() noexcept {
     return result;
 }
 
-CEntryPointErrorsEnum Isolate::IsolateThread::detachAllThreadsAndTearDownIsolate() noexcept {
-    if constexpr (Debugger::traceIsolates) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate()");
-    }
-
-    if (!handle) {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() + "::detachAllThreadsAndTearDownIsolate(): !handle => Not attached");
-        }
-
-        return CEntryPointErrorsEnum::NO_ERROR;
-    }
-
-    const auto result = static_cast<CEntryPointErrorsEnum>(
-        graal_detach_all_threads_and_tear_down_isolate(static_cast<graal_isolatethread_t *>(handle)));
-
-    if (result == CEntryPointErrorsEnum::NO_ERROR) {
-        if constexpr (Debugger::traceIsolates) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::trace(toString() +
-                            "::detachAllThreadsAndTearDownIsolate(): CEntryPointErrorsEnum::NO_ERROR => All "
-                            "threads have been detached. The isolate has been teared down.");
-        }
-
-        handle = nullptr;
-        detachOnDestruction = false;
-    }
-
-    return result;
-}
-
 Isolate::IsolateThread::~IsolateThread() noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::~()");
     }
 
-    if (detachOnDestruction) {
+    // At the process exit the thread is not detached: the other threads may already be ended, and the isolate
+    // ends with the process.
+    if (detachOnDestruction && !Isolate::isShutDown()) {
         ignoreUnused(detach());
     }
 }
 
 std::string Isolate::IsolateThread::toString() const {
-    return fmt::format("IsolateThread{{{}, tid = {}, idx = {}}}", dxfcpp::toString(handle), dxfcpp::toString(tid), idx);
+    // Without fmt (its formatting is not noexcept): the traces of the noexcept functions call it.
+    return "IsolateThread{" + dxfcpp::toString(handle) + ", tid = " + dxfcpp::toString(tid) +
+           ", idx = " + std::to_string(idx) + "}";
 }
 
 Isolate::IsolateThread &Isolate::currentIsolateThread() noexcept {
@@ -147,25 +150,315 @@ Isolate::IsolateThread &Isolate::currentIsolateThread() noexcept {
     return current;
 }
 
+namespace {
+// Constant-initialized, so they can be read before the dynamic initialization of the library and after the
+// destruction of its statics.
+constinit std::atomic<bool> isolateCreated{false};
+
+// The environment variable with the arguments of the isolate, added after the arguments of the code.
+constexpr const char *ISOLATE_ARGUMENTS_VARIABLE = "DXFCPP_ISOLATE_ARGUMENTS";
+
+// The arguments of the isolate and the mutex that orders the setter against the creation. Never destroyed: the setter may
+// be called from a static initializer, and the isolate is created at any moment up to the exit of the process.
+struct IsolateArguments {
+    std::mutex mutex{};
+    std::vector<std::string> arguments{};
+};
+
+IsolateArguments &isolateArguments() noexcept {
+    static auto &result = *new IsolateArguments{};
+
+    return result;
+}
+
+// The failure of the creation of the isolate (Isolate::getCreationError()): the constructor writes it once, the details
+// first and the code after them, before the first call that needs the isolate returns. Never destroyed, as the isolate.
+constinit std::atomic<CEntryPointErrorsEnum> creationErrorCode{CEntryPointErrorsEnum::NO_ERROR};
+
+std::string &creationErrorDetails() noexcept {
+    static auto &result = *new std::string{};
+
+    return result;
+}
+
+void failCreation(CEntryPointErrorsEnum code, std::string details) noexcept {
+    creationErrorDetails() = std::move(details);
+    creationErrorCode.store(code, std::memory_order_release);
+}
+
+// The oldest Graal Native SDK the library works with (DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION of CMakeLists.txt).
+constexpr const char *MINIMUM_SDK_VERSION = DXFCXX_GRAAL_NATIVE_SDK_MINIMUM_VERSION;
+
+// The advanced revision of the SDK library (Isolate::checkAdvancedRevision()), read once by the constructor; empty if
+// it was not read.
+constinit std::optional<std::int32_t> advancedRevision{};
+
+// The version of the SDK library (Isolate::getGraalNativeSdkVersion()), read once by the constructor; empty if it was
+// not read. Immortal: read by the threads of the SDK during the exit of the process.
+std::string &graalNativeSdkVersion() noexcept {
+    static auto *version = new std::string{};
+
+    return *version;
+}
+
+// Takes the exception of the thread after a failed call on the thread of graal_create_isolate().
+std::string takeThreadExceptionText(graal_isolatethread_t *thread) noexcept {
+    try {
+        dxfg_v4_exception_t *exception{};
+
+        if (dxfg_v4_get_and_clear_thread_exception(thread, &exception) != DXFG_EXECUTE_SUCCESSFULLY ||
+            exception == nullptr) {
+            return "no exception";
+        }
+
+        std::string text = exception->class_name ? exception->class_name : "an exception";
+
+        if (exception->message) {
+            text += ": ";
+            text += exception->message;
+        }
+
+        dxfg_v4_Exception_release(thread, exception);
+
+        return text;
+    } catch (...) {
+        return "no text";
+    }
+}
+
+// Checks the version of the SDK library on the thread of graal_create_isolate() and reads its advanced revision: the
+// library may be replaced at run time. The calls do not go through runGraalV4Function(): the isolate is not ready.
+// Returns the reason of the failure, empty if the library is supported.
+std::optional<std::string> checkLibrary(graal_isolatethread_t *thread) noexcept {
+    try {
+        const char *version{};
+
+        if (dxfg_v4_system_get_version(thread, &version) != DXFG_EXECUTE_SUCCESSFULLY || version == nullptr) {
+            return "Unable to get the version of the Graal Native SDK library (" + takeThreadExceptionText(thread) +
+                   "), the dxFeed Graal C++ API needs " + MINIMUM_SDK_VERSION + " or newer.";
+        }
+
+        const std::string versionText = version;
+
+        dxfg_v4_String_release(thread, version);
+
+        if (!isGraalNativeSdkVersionSupported(versionText, MINIMUM_SDK_VERSION)) {
+            return "The Graal Native SDK library is " + versionText + ", the dxFeed Graal C++ API needs " +
+                   MINIMUM_SDK_VERSION + " or newer.";
+        }
+
+        graalNativeSdkVersion() = versionText;
+
+        // An unread revision is not a failure of the creation: only the experimental functions need it.
+        if (std::int32_t revision{};
+            dxfg_v4_system_get_advanced_revision(thread, &revision) == DXFG_EXECUTE_SUCCESSFULLY) {
+            advancedRevision = revision;
+        } else {
+            static_cast<void>(takeThreadExceptionText(thread));
+        }
+
+        return std::nullopt;
+    } catch (...) {
+        return "Unable to check the version of the Graal Native SDK library.";
+    }
+}
+
+// The Graal callbacks return at once (Isolate::isShuttingDown()).
+constinit std::atomic<bool> shuttingDown{false};
+
+// The isolate is not entered anymore (Isolate::isShutDown()).
+constinit std::atomic<bool> shutDown{false};
+
+// The isolate is torn down (Isolate::shutdownAndTearDown()). Written under shutdownMutex().
+constinit bool tornDown{false};
+
+// Orders Isolate::shutdown() and Isolate::shutdownAndTearDown(): a concurrent call waits for the first one. Never
+// destroyed: shutdown() may be called from a static destructor.
+std::mutex &shutdownMutex() noexcept {
+    static auto &mutex = *new std::mutex{};
+
+    return mutex;
+}
+
+// The Graal callbacks of the library in progress (Isolate::CallbackScope), on all threads and on this one.
+constinit std::atomic<std::size_t> callbacksInProgress{0};
+constinit thread_local std::size_t threadCallbacksInProgress{0};
+
+// How long the exit handler waits for the callbacks in progress: a listener may block, for example, on a lock that
+// the exiting thread holds. With the UCRT the handler runs under the exit lock, so a callback that registers an exit
+// function meanwhile (for example, initializes a function-local static with a destructor) blocks until the timeout.
+constexpr auto CALLBACKS_TIMEOUT = std::chrono::seconds(2);
+
+// The exit handler does not wait when it runs at DLL_PROCESS_DETACH: the other threads are already ended, and a
+// thread ended in a callback never leaves it.
+constinit std::atomic<bool> waitAtExit{true};
+
+// Waits for the callbacks in progress on the other threads, not for those of this thread: the process may exit from
+// a listener. Call it after setting shuttingDown.
+void waitForCallbacks() noexcept {
+    const auto deadline = std::chrono::steady_clock::now() + CALLBACKS_TIMEOUT;
+
+    while (callbacksInProgress.load() > threadCallbacksInProgress && std::chrono::steady_clock::now() < deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+}
+
+// Registered when the isolate is created (registerExitHandler()), so it runs before the destructors of the statics
+// created earlier, and after those of the statics created later (they must not depend on the Graal threads).
+void onExit() noexcept {
+    shuttingDown = true;
+
+    if (waitAtExit) {
+        waitForCallbacks();
+    }
+
+    shutDown = true;
+}
+
+#if defined(_MSC_VER) && defined(_DLL)
+// Sets the flags at DLL_PROCESS_DETACH if onExit() has not run: the exit table of the process is not run when the
+// executable has its own C runtime or the process ends by ExitProcess().
+void onDetach() noexcept {
+    shuttingDown = true;
+    shutDown = true;
+}
+#endif
+
+void registerExitHandler() noexcept {
+#if defined(_MSC_VER) && defined(_DLL)
+    // std::atexit of a DLL runs the handler at DLL_PROCESS_DETACH, after the statics of the executable are destroyed
+    // and the other threads are ended. So the handler goes to the exit table of the process, as std::atexit of an
+    // executable does, and the module is pinned: it must not be unloaded before the process exits. onDetach() is
+    // registered first: in an executable both go to the same table, and onExit() runs first.
+    HMODULE module{};
+
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_PIN,
+                       reinterpret_cast<LPCWSTR>(&isolateCreated), &module);
+    std::atexit(onDetach);
+    _crt_atexit(onExit);
+#else
+#    ifdef _WIN32
+    // In a DLL (MinGW, the static C runtime) std::atexit runs the handler at DLL_PROCESS_DETACH.
+    HMODULE module{};
+
+    if (GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                           reinterpret_cast<LPCWSTR>(&isolateCreated), &module) &&
+        module != GetModuleHandleW(nullptr)) {
+        waitAtExit = false;
+    }
+#    endif
+    std::atexit(onExit);
+#endif
+}
+} // namespace
+
+Isolate::CallbackScope::CallbackScope() noexcept {
+    // Counted before the check: the exit handler sets the flag before it reads the counter.
+    callbacksInProgress.fetch_add(1);
+    threadCallbacksInProgress++;
+    active_ = !shuttingDown.load();
+}
+
+Isolate::CallbackScope::~CallbackScope() noexcept {
+    threadCallbacksInProgress--;
+    callbacksInProgress.fetch_sub(1);
+}
+
+Isolate::CallbackScope::operator bool() const noexcept {
+    return active_;
+}
+
+bool Isolate::isInCallback() noexcept {
+    return threadCallbacksInProgress > 0;
+}
+
 Isolate::Isolate() noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace("Isolate::Isolate()");
     }
 
-    // The handle registry must outlive the isolate so that cached Java handles
-    // can be released while calls into Graal are still valid.
-    ignoreUnused(JavaObjectHandleRegistry::getInstance());
+    std::vector<std::string> arguments{};
+
+    {
+        auto &state = isolateArguments();
+        std::lock_guard lock(state.mutex);
+
+        // From now on the setter returns false: the arguments are final.
+        isolateCreated.store(true);
+        arguments = state.arguments;
+    }
+
+    // The arguments of the variable go after the arguments of the code: the last value of an option wins. An unset,
+    // empty or whitespace-only variable gives no arguments.
+    if (const auto variable = getEnvironmentVariable(ISOLATE_ARGUMENTS_VARIABLE); variable) {
+        auto parsed = parseIsolateArguments(*variable);
+
+        if (parsed.ok()) {
+            arguments.insert(arguments.end(), std::make_move_iterator(parsed.arguments.begin()),
+                             std::make_move_iterator(parsed.arguments.end()));
+        } else {
+            // The SDK is not called with a part of the arguments. The reason of the tokenizer has the position, not the
+            // value: the value may have secrets.
+            failCreation(CEntryPointErrorsEnum::ARGUMENT_PARSING_FAILED,
+                         std::string(ISOLATE_ARGUMENTS_VARIABLE) + ": " + parsed.error);
+        }
+    }
+
+    if constexpr (Debugger::traceIsolates) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::trace("Isolate::Isolate(): " + std::to_string(arguments.size()) + " argument(s)" +
+                        (getCreationError() != CEntryPointErrorsEnum::NO_ERROR ? ", the variable is not parsed" : ""));
+    }
+
+    // The SDK is not called: the isolate does not exist.
+    if (getCreationError() != CEntryPointErrorsEnum::NO_ERROR) {
+        return;
+    }
 
     graal_isolate_t *graalIsolateHandle{};
     graal_isolatethread_t *graalIsolateThreadHandle{};
 
+    // The parameters only when there are arguments: otherwise the defaults of the SDK, as before. The strings live until
+    // the call returns.
+    std::string programName{"dxfcpp"};
+    std::vector<char *> argv{};
+    graal_create_isolate_params_t params;
+    graal_create_isolate_params_t *paramsPointer = nullptr;
+
+    if (!arguments.empty()) {
+        argv.reserve(arguments.size() + 1);
+        // The SDK skips the first one: it is the name of the program.
+        argv.push_back(programName.data());
+
+        for (auto &argument : arguments) {
+            argv.push_back(argument.data());
+        }
+
+        std::memset(&params, 0, sizeof(params));
+        params.version = __graal_create_isolate_params_version;
+        params.argc = static_cast<int>(argv.size());
+        params.argv = argv.data();
+        // An unknown option fails the creation instead of being silently dropped.
+        params.ignore_unrecognized_args = 0;
+        paramsPointer = &params;
+    }
+
     if (const auto result = static_cast<CEntryPointErrorsEnum>(
-            graal_create_isolate(nullptr, &graalIsolateHandle, &graalIsolateThreadHandle));
+            graal_create_isolate(paramsPointer, &graalIsolateHandle, &graalIsolateThreadHandle));
         result == CEntryPointErrorsEnum::NO_ERROR) {
 
-        handle_ = graalIsolateHandle;
-        currentIsolateThread().handle = graalIsolateThreadHandle;
+        if (auto failure = checkLibrary(graalIsolateThreadHandle); failure) {
+            // The isolate is not kept: it is never entered after a failed creation.
+            graal_tear_down_isolate(graalIsolateThreadHandle);
+            failCreation(CEntryPointErrorsEnum::ISOLATE_INITIALIZATION_FAILED, std::move(*failure));
+        } else {
+            handle_ = graalIsolateHandle;
+            currentIsolateThread().handle = graalIsolateThreadHandle;
+        }
+    } else {
+        // The SDK prints the reason of an invalid argument to the standard error output.
+        failCreation(result, "See the standard error output of the process for the reason.");
     }
 
     if constexpr (Debugger::traceIsolates) {
@@ -179,6 +472,13 @@ CEntryPointErrorsEnum Isolate::attach() const noexcept {
     if constexpr (Debugger::traceIsolates) {
         // ReSharper disable once CppDFAUnreachableCode
         Debugger::trace(toString() + "::attach()");
+    }
+
+    // There is no isolate to attach to after a failed creation. The callers check it before: it is a protection.
+    if (!handle_) {
+        const auto creationError = getCreationError();
+
+        return creationError != CEntryPointErrorsEnum::NO_ERROR ? creationError : CEntryPointErrorsEnum::NULL_ARGUMENT;
     }
 
     // We will not re-attach.
@@ -227,6 +527,10 @@ GraalIsolateThreadHandle Isolate::get() const noexcept {
         Debugger::trace(toString() + "::get()");
     }
 
+    if (!handle_) {
+        return nullptr;
+    }
+
     // ReSharper disable once CppRedundantCastExpression
     return static_cast<void *>(graal_get_current_thread(dxfcpp::bit_cast<graal_isolate_t *>(handle_)));
 }
@@ -253,11 +557,21 @@ void Isolate::init(Isolate &isolate) noexcept {
     config.addSource(otc::EnvSource(ENV_PREFIX));
 
     for (auto &&[k, v] : config) {
-        isolate.runIsolated([key = k, value = v](auto threadHandle) {
-            return static_cast<CEntryPointErrorsEnum>(dxfg_system_set_property(
-                       static_cast<graal_isolatethread_t *>(threadHandle), key.c_str(), value.c_str())) ==
-                   CEntryPointErrorsEnum::NO_ERROR;
-        });
+        try {
+            isolate.runIsolated([&key = k, &value = v](auto threadHandle) {
+                return isolated::setSystemProperty(
+                    static_cast<graal_isolatethread_t *>(threadHandle),
+                    isolated::SdkString{key, "dxfeed.system.properties(key)"}.c_str(),
+                    isolated::SdkString{value, StringLabel::ofPropertyValue("dxfeed.system.properties(value)", key)}
+                        .c_str());
+            });
+        } catch (const InvalidArgumentException &e) {
+            // A property that is not valid UTF-8 is not set: this function cannot throw.
+            if constexpr (Debugger::isDebug) {
+                // ReSharper disable once CppDFAUnreachableCode
+                Debugger::debug(std::string{"Isolate::init(): "} + e.what());
+            }
+        }
     }
 }
 
@@ -267,11 +581,17 @@ Isolate &Isolate::getInstance() noexcept {
         Debugger::trace("Isolate::getInstance()");
     }
 
-    static Isolate instance{};
+    // Never deleted: see the description of the function.
+    static Isolate &instance = *new Isolate{};
     static std::once_flag flag{};
 
     std::call_once(flag, []() {
-        init(instance);
+        // There is no isolate to set the properties of after a failed creation.
+        if (getCreationError() == CEntryPointErrorsEnum::NO_ERROR) {
+            init(instance);
+        }
+
+        registerExitHandler();
     });
 
     if constexpr (Debugger::traceIsolates) {
@@ -282,19 +602,343 @@ Isolate &Isolate::getInstance() noexcept {
     return instance;
 }
 
-Isolate::~Isolate() {
-    if constexpr (Debugger::traceIsolates) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::trace("~Isolate()");
+bool Isolate::isCreated() noexcept {
+    return isolateCreated.load();
+}
+
+CEntryPointErrorsEnum Isolate::getCreationError() noexcept {
+    return creationErrorCode.load(std::memory_order_acquire);
+}
+
+void Isolate::throwCreationError() {
+    if (const auto code = getCreationError(); code != CEntryPointErrorsEnum::NO_ERROR) {
+        throw GraalException(code, creationErrorDetails());
+    }
+}
+
+void Isolate::checkAdvancedRevision() {
+    // The revision is read by the creation of the isolate.
+    static_cast<void>(getInstance());
+    throwCreationError();
+    checkGraalNativeSdkAdvancedRevision(advancedRevision, DXFG_V4_ADVANCED_REVISION);
+}
+
+std::string Isolate::getGraalNativeSdkVersion() {
+    // The version is read by the creation of the isolate.
+    static_cast<void>(getInstance());
+
+    return graalNativeSdkVersion();
+}
+
+namespace {
+
+// Parses the number at the start of the text and removes it; empty if there is no number or it is too long.
+std::optional<std::int32_t> takeVersionNumber(std::string_view &text) noexcept {
+    constexpr std::size_t MAX_DIGITS = 9;
+    std::size_t length = 0;
+    std::int32_t result = 0;
+
+    while (length < text.size() && text[length] >= '0' && text[length] <= '9') {
+        if (length == MAX_DIGITS) {
+            return std::nullopt;
+        }
+
+        result = result * 10 + (text[length] - '0');
+        length++;
     }
 
-    JavaObjectHandleRegistry::getInstance().releaseAll();
-    ignoreUnused(currentIsolateThread().detachAllThreadsAndTearDownIsolate());
-    handle_ = nullptr;
+    if (length == 0) {
+        return std::nullopt;
+    }
+
+    text.remove_prefix(length);
+
+    return result;
+}
+
+// Parses `major.minor.patch` at the start of the text; the rest (`-SNAPSHOT`) is ignored.
+std::optional<std::array<std::int32_t, 3>> parseVersion(std::string_view text) noexcept {
+    std::array<std::int32_t, 3> result{};
+
+    for (std::size_t i = 0; i < result.size(); i++) {
+        if (i > 0) {
+            if (text.empty() || text.front() != '.') {
+                return std::nullopt;
+            }
+
+            text.remove_prefix(1);
+        }
+
+        const auto number = takeVersionNumber(text);
+
+        if (!number) {
+            return std::nullopt;
+        }
+
+        result[i] = *number;
+    }
+
+    return result;
+}
+
+} // namespace
+
+bool isGraalNativeSdkVersionSupported(std::string_view version, std::string_view minimum) noexcept {
+    const auto parsedVersion = parseVersion(version);
+    const auto parsedMinimum = parseVersion(minimum);
+
+    // A version that cannot be parsed passes: the check must not reject a library with an unusual version.
+    if (!parsedVersion || !parsedMinimum) {
+        return true;
+    }
+
+    return *parsedVersion >= *parsedMinimum;
+}
+
+void checkGraalNativeSdkAdvancedRevision(std::optional<std::int32_t> libraryRevision, std::int32_t requiredRevision) {
+    if (libraryRevision == requiredRevision) {
+        return;
+    }
+
+    throw RuntimeException("The experimental functions of the Graal Native SDK library have the advanced revision " +
+                           (libraryRevision ? std::to_string(*libraryRevision) : std::string("unknown")) +
+                           ", the dxFeed Graal C++ API is built for the revision " + std::to_string(requiredRevision) +
+                           ".");
+}
+
+bool Isolate::setArguments(std::vector<std::string> arguments) {
+    // A string with a NUL would be cut by the C string of argv without a word. The value is not in the message.
+    for (std::size_t i = 0; i < arguments.size(); i++) {
+        if (arguments[i].find('\0') != std::string::npos) {
+            throw InvalidArgumentException("The isolate argument #" + std::to_string(i) +
+                                           " contains a NUL character.");
+        }
+    }
+
+    auto &state = isolateArguments();
+    std::lock_guard lock(state.mutex);
+
+    if (isolateCreated.load()) {
+        return false;
+    }
+
+    state.arguments = std::move(arguments);
+
+    return true;
+}
+
+bool Isolate::isShuttingDown() noexcept {
+    return shuttingDown.load(std::memory_order_acquire);
+}
+
+bool Isolate::isShutDown() noexcept {
+    return shutDown.load(std::memory_order_acquire);
+}
+
+bool detail::isReleaseExceptionReported() noexcept {
+    // After a failed creation of the isolate the objects cannot be released by Java either, as after the shutdown.
+    return !Isolate::isShuttingDown() && Isolate::getCreationError() == CEntryPointErrorsEnum::NO_ERROR;
+}
+
+namespace {
+
+// The objects that releaseOutsideCallbacks() passes to the release thread. Never destroyed: the thread waits on it
+// until the process ends.
+struct ReleaseQueue {
+    std::mutex mutex{};
+    std::condition_variable changed{};
+    std::deque<std::shared_ptr<void>> objects{};
+    bool started{};
+    bool releasing{};
+    bool stopped{};
+};
+
+ReleaseQueue &getReleaseQueue() noexcept {
+    static auto &queue = *new ReleaseQueue{};
+
+    return queue;
+}
+
+// The release thread is not joined: after stopReleaseThread() it waits forever, so it does not leave the isolate while
+// the library is shutting down.
+void runReleaseThread() noexcept {
+    auto &queue = getReleaseQueue();
+    std::unique_lock lock{queue.mutex};
+
+    while (true) {
+        queue.changed.wait(lock, [&queue] {
+            return !queue.objects.empty();
+        });
+
+        auto object = std::move(queue.objects.front());
+
+        queue.objects.pop_front();
+        queue.releasing = true;
+        lock.unlock();
+        object.reset();
+        lock.lock();
+        queue.releasing = false;
+        queue.changed.notify_all();
+    }
+}
+
+// Releases the queued objects (they hold native handles) before the handles are released by the shutdown. The objects
+// passed later are released at once. Waits no longer than for the callbacks: the release waits for the calls of the
+// listener in progress, which may block.
+void stopReleaseThread() noexcept {
+    auto &queue = getReleaseQueue();
+    std::unique_lock lock{queue.mutex};
+
+    queue.stopped = true;
+    queue.changed.wait_for(lock, CALLBACKS_TIMEOUT, [&queue] {
+        return queue.objects.empty() && !queue.releasing;
+    });
+}
+
+} // namespace
+
+void releaseOutsideCallbacks(std::shared_ptr<void> object) noexcept {
+    if (!object) {
+        return;
+    }
+
+    std::exception_ptr error{};
+
+    if (ListenerCallScope::isActive()) {
+        auto &queue = getReleaseQueue();
+        std::lock_guard lock{queue.mutex};
+
+        if (!queue.stopped) {
+            try {
+                if (!queue.started) {
+                    std::thread{runReleaseThread}.detach();
+                    queue.started = true;
+                }
+
+                queue.objects.push_back(std::move(object));
+                queue.changed.notify_all();
+
+                return;
+            } catch (...) {
+                // The thread could not be started or the queue could not grow: the object is released at once.
+                error = std::current_exception();
+            }
+        }
+    }
+
+    if (error) {
+        ErrorManager::reportException("Isolate", error);
+    }
+
+    object.reset();
+}
+
+void Isolate::shutdown() {
+    // A second call, or the exit handler has run.
+    if (isShutDown()) {
+        return;
+    }
+
+    // dxfg_v4_system_shutdown() waits without a limit for the calls of the native listeners in progress and for the
+    // termination of the endpoints, so from a listener it would wait for itself. Checked before the lock: a listener
+    // must not wait for a shutdown in progress on another thread either, as that shutdown waits for the listener.
+    if (ListenerCallScope::isActive()) {
+        throw RuntimeException("dxfcpp::shutdown() cannot be called from a listener or a callback of the library");
+    }
+
+    std::lock_guard lock(shutdownMutex());
+
+    if (isShutDown()) {
+        return;
+    }
+
+    // The new callbacks return at once. The barrier stays for the callbacks that the SDK does not stop: the handlers
+    // of the promises, the finalizers and the filters.
+    shuttingDown = true;
+    waitForCallbacks();
+    stopReleaseThread();
+
+    if (isCreated()) {
+        // Deactivates all the native listeners (waits for their calls in progress, closes the event queues), then
+        // closes all the endpoints and the instrument profile connections and waits for the termination of the
+        // endpoints.
+        ignoreUnused(getInstance().runIsolated([](auto threadHandle) {
+            auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
+
+            if (dxfg_v4_system_shutdown(thread) != DXFG_EXECUTE_SUCCESSFULLY) {
+                isolated::clearThreadException(thread);
+            }
+
+            return 0;
+        }));
+        JavaObjectHandleRegistry::getInstance().releaseAll();
+    }
+
+    shutDown = true;
+}
+
+Isolate::TearDownResult Isolate::shutdownAndTearDown() noexcept {
+    using Status = TearDownResult::Status;
+
+    try {
+        shutdown();
+    } catch (...) {
+        // Called from a listener or a callback of the library.
+        return {Status::REFUSED};
+    }
+
+    // shutdown() is complete: the isolate is not entered anymore, and the handles are released.
+    std::lock_guard lock(shutdownMutex());
+
+    // Checked before getInstance(): it would create the isolate. After a failed creation there is no isolate.
+    if (tornDown || !isCreated() || getCreationError() != CEntryPointErrorsEnum::NO_ERROR) {
+        return {Status::NOTHING_TO_TEAR_DOWN};
+    }
+
+    // A callback in progress (one that does not stop on the shutdown, or one on this thread) runs Java code: the
+    // tear-down would detach its thread under it.
+    if (callbacksInProgress.load() != 0) {
+        return {Status::REFUSED};
+    }
+
+    auto &instance = getInstance();
+
+    if (!instance.handle_) {
+        return {Status::NOTHING_TO_TEAR_DOWN};
+    }
+
+    // The tear-down needs a thread attached to the isolate: the current thread may never have called into it.
+    if (const auto result = instance.attach(); result != CEntryPointErrorsEnum::NO_ERROR) {
+        return {Status::FAILED, result};
+    }
+
+    auto *thread = static_cast<graal_isolatethread_t *>(instance.get());
+
+    if (thread == nullptr) {
+        return {Status::FAILED, CEntryPointErrorsEnum::UNATTACHED_THREAD};
+    }
+
+    // graal_tear_down_isolate() would wait for the threads that stay attached (the release thread waits forever), so
+    // all of them are detached, the current one too.
+    if (const auto result = static_cast<CEntryPointErrorsEnum>(graal_detach_all_threads_and_tear_down_isolate(thread));
+        result != CEntryPointErrorsEnum::NO_ERROR) {
+        return {Status::FAILED, result};
+    }
+
+    tornDown = true;
+
+    // The thread is detached: its destructor must not detach it again.
+    auto &current = currentIsolateThread();
+
+    current.handle = nullptr;
+    current.detachOnDestruction = false;
+
+    return {Status::TORN_DOWN};
 }
 
 std::string Isolate::toString() const {
-    return fmt::format("Isolate{{{}, current = {}}}", dxfcpp::toString(handle_), currentIsolateThread().toString());
+    // Without fmt, as IsolateThread::toString().
+    return "Isolate{" + dxfcpp::toString(handle_) + ", current = " + currentIsolateThread().toString() + "}";
 }
 
 DXFCPP_END_NAMESPACE

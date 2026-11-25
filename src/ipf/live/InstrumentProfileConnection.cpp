@@ -3,18 +3,20 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/ipf/live/InstrumentProfileConnection.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp"
+#include "../../internal/CallbackBarrier.hpp"
+#include "../../internal/context/ApiContext.hpp"
+#include "../../internal/managers/EntityManager.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../isolated/ipf/live/IsolatedInstrumentProfileConnection.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
 
 using InstrumentProfileConnectionManager = WeakEntityManager<InstrumentProfileConnection>;
 
-InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_connection_state_t state) {
+InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_v4_ipf_connection_state_t state) {
     switch (state) {
     case DXFG_IPF_CONNECTION_STATE_NOT_CONNECTED:
         return InstrumentProfileConnection::State::NOT_CONNECTED;
@@ -32,51 +34,49 @@ InstrumentProfileConnection::State graalIpfConnectionStateToState(dxfg_ipf_conne
 }
 
 struct InstrumentProfileConnection::Impl {
-    static void onStateChange(graal_isolatethread_t * /*thread*/, dxfg_ipf_connection_state_t oldState,
-                              dxfg_ipf_connection_state_t newState, void *userData) noexcept {
-        const auto id = Id<InstrumentProfileConnection>::from(
-            dxfcpp::bit_cast<Id<InstrumentProfileConnection>::ValueType>(userData));
-        const auto connection =
-            ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->getEntity(id);
+    static void onStateChange(graal_isolatethread_t * /*thread*/, dxfg_v4_ipf_connection_state_t oldState,
+                              dxfg_v4_ipf_connection_state_t newState, void *userData) noexcept {
+        runCallback("InstrumentProfileConnection", [&] {
+            const auto id = Id<InstrumentProfileConnection>::from(
+                dxfcpp::bit_cast<Id<InstrumentProfileConnection>::ValueType>(userData));
+            const auto connection =
+                ApiContext::getInstance().getManager<InstrumentProfileConnectionManager>()->getEntity(id);
 
-        if constexpr (Debugger::isDebug) {
-            Debugger::debug("InstrumentProfileConnection::Impl::onStateChange: id = " + std::to_string(id.getValue()));
-        }
-
-        if (connection) {
-            connection->onStateChange_(graalIpfConnectionStateToState(oldState),
-                                       graalIpfConnectionStateToState(newState));
-
-            if (newState == DXFG_IPF_CONNECTION_STATE_CLOSED) {
-                ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id);
+            if constexpr (Debugger::isDebug) {
+                Debugger::debug("InstrumentProfileConnection::Impl::onStateChange: id = " + std::to_string(id.getValue()));
             }
-        }
+
+            if (connection) {
+                connection->onStateChange_(graalIpfConnectionStateToState(oldState),
+                                           graalIpfConnectionStateToState(newState));
+
+                if (newState == DXFG_IPF_CONNECTION_STATE_CLOSED) {
+                    ApiContext::getInstance().getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id);
+                }
+            }
+        });
     }
 };
 
-InstrumentProfileConnection::InstrumentProfileConnection() noexcept
-    : id_{Id<InstrumentProfileConnection>::UNKNOWN} {
+InstrumentProfileConnection::InstrumentProfileConnection() noexcept {
 }
 
 InstrumentProfileConnection::~InstrumentProfileConnection() noexcept {
     if (handle_ && stateChangeListenerHandle_) {
-        try {
+        runRelease("InstrumentProfileConnection", [&] {
             isolated::ipf::live::IsolatedInstrumentProfileConnection::removeStateChangeListener(
                 handle_, stateChangeListenerHandle_);
-        } catch (...) {
-            // Destructors must remain noexcept even if the native isolate is already shutting down.
-        }
+        });
     }
 
     if (handle_) {
-        try {
+        runRelease("InstrumentProfileConnection", [&] {
             isolated::ipf::live::IsolatedInstrumentProfileConnection::close(handle_);
-        } catch (...) {
-            // Destructors must remain noexcept even if the native isolate is already shutting down.
-        }
+        });
     }
 
-    ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->unregisterEntity(id_);
+    ApiContext::getInstance().getManager<InstrumentProfileConnectionManager>()->unregisterEntity(
+        Id<InstrumentProfileConnection>::from(id_));
 }
 
 std::string InstrumentProfileConnection::stateToString(State state) noexcept {
@@ -97,17 +97,19 @@ std::string InstrumentProfileConnection::stateToString(State state) noexcept {
 }
 
 InstrumentProfileConnection::Ptr
-InstrumentProfileConnection::createConnection(const StringLike &address,
+InstrumentProfileConnection::createConnection(StringParam address,
                                               InstrumentProfileCollector::Ptr collector) {
     std::shared_ptr<InstrumentProfileConnection> connection(new InstrumentProfileConnection{});
 
-    connection->id_ =
-        ApiContext::getInstance()->getManager<InstrumentProfileConnectionManager>()->registerEntity(connection);
+    connection->id_ = ApiContext::getInstance()
+                          .getManager<InstrumentProfileConnectionManager>()
+                          ->registerEntity(connection)
+                          .getValue();
     connection->handle_ =
-        isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address, collector->handle_);
+        isolated::ipf::live::IsolatedInstrumentProfileConnection::createConnection(address.view(), collector->handle_);
+    connection->collector_ = std::move(collector);
     connection->stateChangeListenerHandle_ = isolated::ipf::live::IsolatedIpfPropertyChangeListener::create(
-        dxfcpp::bit_cast<void *>(&Impl::onStateChange),
-        dxfcpp::bit_cast<void *>(connection->id_.getValue()));
+        dxfcpp::bit_cast<void *>(&Impl::onStateChange), dxfcpp::bit_cast<void *>(connection->id_));
 
     isolated::ipf::live::IsolatedInstrumentProfileConnection::addStateChangeListener(
         connection->handle_, connection->stateChangeListenerHandle_);

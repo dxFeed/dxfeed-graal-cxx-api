@@ -1,25 +1,43 @@
 # Copyright (c) 2026 Devexperts LLC.
 # SPDX-License-Identifier: MPL-2.0
 
-# The compiler warnings of this project's own code (the libraries, tests, samples, tools, fuzzers) on top of the
-# warnings of the libraries (-Wall -Wextra -pedantic, /W4). They come from the dxfcxx_warnings interface target, which
-# is linked PRIVATE, so they do not reach the projects that use the library. MSVC: C4365 is the signed/unsigned
-# conversion warning (-Wsign-conversion); the shadowing warnings C4456-C4459 are in /W4 already.
+# The compiler warnings of this project's own code (the libraries, tests, samples, tools, fuzzers): -Wall -Wextra
+# -pedantic (/W4) and a few more. They come from the dxfcxx_warnings interface target, which is linked PRIVATE, so they
+# do not reach the projects that use the library. MSVC: C4365 is the signed/unsigned conversion warning
+# (-Wsign-conversion); the shadowing warnings C4456-C4459 are in /W4 already. /sdl of the hardening options
+# (cmake/Hardening.cmake) makes C4996 (the use of a deprecated function) an error; without warnings as errors,
+# /w34996 after it makes it a warning again (the options of dxfcxx_warnings come after the target's own ones).
 option(DXFCXX_WARNINGS_AS_ERRORS
         "Treat the compiler warnings of this project's own code as errors (not of the dependencies)" OFF)
 
 add_library(dxfcxx_warnings INTERFACE)
+# The base warning level and the options that the project's own sources need: /utf-8 (UTF-8 sources), /bigobj (fatal
+# error C1128: number of sections exceeded object file format limit). clang-cl takes the MSVC options.
+target_compile_options(dxfcxx_warnings INTERFACE
+        "$<$<AND:$<COMPILE_LANGUAGE:CXX>,$<BOOL:${MSVC}>>:/W4;/bigobj;/utf-8>"
+        "$<$<AND:$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>:-Wall;-Wextra;-pedantic>")
 target_compile_options(dxfcxx_warnings INTERFACE
         "$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Wshadow;-Wsign-conversion;-Wfloat-equal;-Wextra-semi>"
         "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/w44365>")
+# The project's own code calls only the dxfg_v4_ functions of the Graal Native SDK: a call of a deprecated function
+# (DXFG_DEPRECATED, the dxfg_ functions that have a dxfg_v4_ twin) is an error in every GCC and Clang build, with or
+# without DXFCXX_WARNINGS_AS_ERRORS. MSVC cannot do the same without /WX (see below), so
+# scripts/check_deprecated_sdk_calls.py checks the sources against the list of the deprecated functions of the SDK.
+target_compile_options(dxfcxx_warnings INTERFACE
+        "$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Werror=deprecated-declarations>")
 
 if (DXFCXX_WARNINGS_AS_ERRORS)
     # GCC reports -Wmaybe-uninitialized in third-party code inlined into ours (range-v3 with ASan in Release), even from
     # system headers, and documents its false positives with sanitizers: it stays a warning.
+    # MSVC cannot turn a single warning back from an error under /WX, so C4996 (the use of a deprecated function) is
+    # disabled there, with its "unsafe" CRT functions.
     target_compile_options(dxfcxx_warnings INTERFACE
             "$<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>:-Werror>"
             "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wno-error=maybe-uninitialized>"
-            "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX>")
+            "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/WX;/wd4996>")
+else ()
+    # Only without /wd4996: the Visual Studio generators move /wd4996 to its own property and put /w34996 after it.
+    target_compile_options(dxfcxx_warnings INTERFACE "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/w34996>")
 endif ()
 
 # Clang 22+ reports __COUNTER__ with -pedantic as a C2y extension at the macro use site, even when the macro comes from a

@@ -3,16 +3,18 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../exceptions/JavaException.hpp"
-#include "../internal/Common.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/Math.hpp"
 
 #include <atomic>
 #include <chrono>
 #include <memory>
+#include <utility>
 #include <vector>
 
 /**
@@ -27,12 +29,18 @@ struct EventType;
 struct JavaException;
 struct Promises;
 
+/// The description of the request of a promise: it is added to the text of the timeout exception. Defined in src/.
+struct PromiseContext;
+
 struct DXFCPP_EXPORT PromiseImpl {
     protected:
     std::atomic<void *> handle = nullptr;
 
     public:
-    explicit PromiseImpl(void *promiseHandle);
+    /// The description of the request that created the promise; empty for the promises without one. Immutable.
+    std::shared_ptr<const PromiseContext> context{};
+
+    explicit PromiseImpl(void *promiseHandle, std::shared_ptr<const PromiseContext> promiseContext = {});
 
     bool isDone() const;
     bool hasResult() const;
@@ -49,7 +57,8 @@ struct DXFCPP_EXPORT VoidPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
-    explicit VoidPromiseImpl(void *promiseHandle, bool isOwned = true);
+    explicit VoidPromiseImpl(void *promiseHandle, bool isOwned = true,
+                             std::shared_ptr<const PromiseContext> promiseContext = {});
     ~VoidPromiseImpl();
     void getResult() const;
 };
@@ -58,7 +67,8 @@ struct DXFCPP_EXPORT EventPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
-    explicit EventPromiseImpl(void *promiseHandle, bool isOwned = true);
+    explicit EventPromiseImpl(void *promiseHandle, bool isOwned = true,
+                              std::shared_ptr<const PromiseContext> promiseContext = {});
     ~EventPromiseImpl();
     std::shared_ptr<EventType> getResult() const;
 };
@@ -67,7 +77,8 @@ struct DXFCPP_EXPORT EventsPromiseImpl : PromiseImpl {
     std::atomic<void *> handle = nullptr;
     std::atomic<bool> own = true;
 
-    explicit EventsPromiseImpl(void *promiseHandle, bool isOwned = true);
+    explicit EventsPromiseImpl(void *promiseHandle, bool isOwned = true,
+                               std::shared_ptr<const PromiseContext> promiseContext = {});
     ~EventsPromiseImpl();
     std::vector<std::shared_ptr<EventType>> getResult() const;
 };
@@ -120,7 +131,7 @@ template <typename P> struct CommonPromiseMixin {
      * Returns exceptional outcome of computation. If the computation has no ::hasException() exception,
      * then this method returns an exception with a message "null". If a computation has completed exceptionally or was
      * cancelled, then the result of this method is not an exception with a message "null". If computation was @ref
-     * ::isCancelled() "cancelled", then this method returns "an instance of CancellationException".
+     * isCancelled() "cancelled", then this method returns "an instance of CancellationException".
      *
      * @return exceptional outcome of computation.
      * @see ::hasException()
@@ -131,10 +142,10 @@ template <typename P> struct CommonPromiseMixin {
 
     /**
      * Wait for computation to complete or timeout or throw an exception in case of exceptional completion.
-     * If the wait is interrupted, then the computation is @ref ::cancel() "canceled",
+     * If the wait is interrupted, then the computation is @ref cancel() "canceled",
      * the interruption flag on the current thread is set, and "CancellationException" is thrown.
      *
-     * <p>If the wait times are out, then the computation is @ref ::cancel() "canceled" and this method returns `false`.
+     * <p>If the wait times are out, then the computation is @ref cancel() "canceled" and this method returns `false`.
      * Use this method in the code that shall continue normal execution in case of timeout.
      *
      * @param timeoutInMilliseconds The timeout.
@@ -148,10 +159,10 @@ template <typename P> struct CommonPromiseMixin {
 
     /**
      * Wait for computation to complete or timeout or throw an exception in case of exceptional completion.
-     * If the wait is interrupted, then the computation is @ref ::cancel() "canceled",
+     * If the wait is interrupted, then the computation is @ref cancel() "canceled",
      * the interruption flag on the current thread is set, and "CancellationException" is thrown.
      *
-     * <p>If the wait times are out, then the computation is @ref ::cancel() "canceled" and this method returns `false`.
+     * <p>If the wait times are out, then the computation is @ref cancel() "canceled" and this method returns `false`.
      * Use this method in the code that shall continue normal execution in case of timeout.
      *
      * @param timeoutInMilliseconds The timeout.
@@ -165,12 +176,12 @@ template <typename P> struct CommonPromiseMixin {
     }
 
     /**
-     * This method cancels computation. This method does nothing if the computation has already @ref ::isDone() "completed".
+     * This method cancels computation. This method does nothing if the computation has already @ref isDone() "completed".
      *
      * <p>If cancelled, then ::getException() will return "CancellationException",
-     * @ref ::isDone() "isDone", @ref ::isCancelled() "isCancelled", and @ref ::hasException() "hasException" will
+     * @ref isDone() "isDone", @ref isCancelled() "isCancelled", and @ref hasException() "hasException" will
      * return `true`, all handlers that were installed with `whenDone` method are notified by invoking their
-     * `promiseDone` method, and all waiters on @ref ::await() "join" method throw "CancellationException".
+     * `promiseDone` method, and all waiters on `await` method throw "CancellationException".
      */
     void cancel() const {
         static_cast<const P *>(this)->impl.cancel();
@@ -186,7 +197,6 @@ template <typename P> struct VoidPromiseMixin {
     /**
      * Returns result of computation.
      *
-     * @return The result of computation.
      * @see CommonPromiseMixin::hasResult()
      */
     void getResult() const {
@@ -195,7 +205,6 @@ template <typename P> struct VoidPromiseMixin {
 
     /**
      * Wait for the computation to complete and return its result or throw an exception in case of exceptional completion.
-     * @return result of computation.
      * @throws CancellationException if computation was canceled.
      * @throws PromiseException if computation has completed exceptionally.
      */
@@ -210,8 +219,8 @@ template <typename P> struct VoidPromiseMixin {
      * completion or timeout.
      *
      * @param timeoutInMilliseconds The timeout.
-     * @return The result of computation.
-     * @throws CancellationException if computation was canceled or timed out.
+     * @throws CancellationException if computation was canceled or timed out. On a timeout of a promise returned by
+     * DXFeed, the text of the exception names the request, the waiting time and the state of the endpoint.
      * @throws PromiseException if computation has completed exceptionally.
      */
     void await(std::int32_t timeoutInMilliseconds) const & {
@@ -225,8 +234,8 @@ template <typename P> struct VoidPromiseMixin {
      * completion or timeout.
      *
      * @param timeoutInMilliseconds The timeout.
-     * @return The result of computation.
-     * @throws CancellationException if computation was cancelled or timed out.
+     * @throws CancellationException if computation was cancelled or timed out. On a timeout of a promise returned by
+     * DXFeed, the text of the exception names the request, the waiting time and the state of the endpoint.
      * @throws PromiseException if computation has completed exceptionally.
      */
     void await(const std::chrono::milliseconds &timeoutInMilliseconds) const & {
@@ -271,7 +280,8 @@ template <typename E, typename P> struct EventPromiseMixin {
      *
      * @param timeoutInMilliseconds The timeout.
      * @return The result of computation.
-     * @throws CancellationException if computation was canceled or timed out.
+     * @throws CancellationException if computation was canceled or timed out. On a timeout of a promise returned by
+     * DXFeed, the text of the exception names the request, the waiting time and the state of the endpoint.
      * @throws PromiseException if computation has completed exceptionally.
      */
     std::shared_ptr<E> await(std::int32_t timeoutInMilliseconds) const & {
@@ -286,7 +296,8 @@ template <typename E, typename P> struct EventPromiseMixin {
      *
      * @param timeoutInMilliseconds The timeout.
      * @return The result of computation.
-     * @throws CancellationException if computation was cancelled or timed out.
+     * @throws CancellationException if computation was cancelled or timed out. On a timeout of a promise returned by
+     * DXFeed, the text of the exception names the request, the waiting time and the state of the endpoint.
      * @throws PromiseException if computation has completed exceptionally.
      */
     std::shared_ptr<E> await(const std::chrono::milliseconds &timeoutInMilliseconds) const & {
@@ -326,7 +337,8 @@ template <typename E, typename P> struct EventsPromiseMixin {
      *
      * @param timeoutInMilliseconds The timeout.
      * @return The result of computation.
-     * @throws CancellationException if computation was cancelled or timed out.
+     * @throws CancellationException if computation was cancelled or timed out. On a timeout of a promise returned by
+     * DXFeed, the text of the exception names the request, the waiting time and the state of the endpoint.
      * @throws PromiseException if computation has completed exceptionally.
      */
     std::vector<std::shared_ptr<E>> await(std::int32_t timeoutInMilliseconds) const & {
@@ -341,7 +353,8 @@ template <typename E, typename P> struct EventsPromiseMixin {
      *
      * @param timeoutInMilliseconds The timeout.
      * @return The result of computation.
-     * @throws CancellationException if computation was cancelled or timed out.
+     * @throws CancellationException if computation was cancelled or timed out. On a timeout of a promise returned by
+     * DXFeed, the text of the exception names the request, the waiting time and the state of the endpoint.
      * @throws PromiseException if computation has completed exceptionally.
      */
     std::vector<std::shared_ptr<E>> await(const std::chrono::milliseconds &timeoutInMilliseconds) const & {
@@ -369,13 +382,14 @@ template <> struct Promise<void> : CommonPromiseMixin<Promise<void>>, VoidPromis
     VoidPromiseImpl impl;
 
     public:
-    explicit Promise(void *handle, bool own = true) : impl(handle, own) {
+    explicit Promise(void *handle, bool own = true, std::shared_ptr<const PromiseContext> context = {})
+        : impl(handle, own, std::move(context)) {
     }
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
 
-    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own, other.impl.context) {
         other.impl.handle = nullptr;
         other.impl.own = false;
     }
@@ -398,7 +412,8 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
     EventPromiseImpl impl;
 
     public:
-    explicit Promise(void *handle, bool own = true) : impl(handle, own) {
+    explicit Promise(void *handle, bool own = true, std::shared_ptr<const PromiseContext> context = {})
+        : impl(handle, own, std::move(context)) {
     }
 
     template <Derived<E> D>
@@ -410,13 +425,13 @@ struct Promise<std::shared_ptr<E>> : CommonPromiseMixin<Promise<std::shared_ptr<
             impl.own = false;
         }
 
-        return std::make_shared<Promise<std::shared_ptr<B>>>(impl.handle, transferOwnership);
+        return std::make_shared<Promise<std::shared_ptr<B>>>(impl.handle, transferOwnership, impl.context);
     }
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
 
-    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own, other.impl.context) {
         other.impl.handle = nullptr;
         other.impl.own = false;
     }
@@ -469,7 +484,15 @@ template <typename E> struct PromiseList {
     explicit PromiseList(void *handle = nullptr) : impl(handle) {
     }
 
-    static std::shared_ptr<PromiseList> create(void *handle) {
+    /**
+     * Creates the list of promises from the native list.
+     *
+     * @param handle The native list.
+     * @param contexts The descriptions of the requests, indexed by the element index of the native list (a null
+     * element of the native list is skipped, its description too). May be empty or shorter than the list.
+     */
+    static std::shared_ptr<PromiseList>
+    create(void *handle, const std::vector<std::shared_ptr<const PromiseContext>> &contexts = {}) {
         if (!handle) {
             return {};
         }
@@ -482,7 +505,8 @@ template <typename E> struct PromiseList {
 
         for (std::size_t elementIndex = 0; elementIndex < size; elementIndex++) {
             if (auto element = PromiseListImpl::getElement(handle, elementIndex)) {
-                promiseList->data_.emplace_back(element, false);
+                promiseList->data_.emplace_back(element, false,
+                                                elementIndex < contexts.size() ? contexts[elementIndex] : nullptr);
             }
         }
 
@@ -601,13 +625,14 @@ struct Promise<std::vector<std::shared_ptr<E>>> : CommonPromiseMixin<Promise<std
     EventsPromiseImpl impl;
 
     public:
-    explicit Promise(void *handle, bool own = true) : impl(handle, own) {
+    explicit Promise(void *handle, bool own = true, std::shared_ptr<const PromiseContext> context = {})
+        : impl(handle, own, std::move(context)) {
     }
 
     Promise(const Promise &) = delete;
     Promise &operator=(const Promise &) = delete;
 
-    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own) {
+    Promise(Promise && other) noexcept : impl(other.impl.handle, other.impl.own, other.impl.context) {
         other.impl.handle = nullptr;
         other.impl.own = false;
     }

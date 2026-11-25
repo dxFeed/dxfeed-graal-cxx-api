@@ -3,9 +3,12 @@
 
 #include <dxfeed_graal_cpp_api/api.hpp>
 
+#include <chrono>
+#include <cstddef>
 #include <iostream>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <string>
 #include <thread>
 #include <unordered_map>
@@ -16,11 +19,13 @@ static const std::string DXFEED_IPF_URL = "https://demo:demo@tools.dxfeed.com/ip
 void printUsage() {
     const auto usageString = R"(
 Usage:
-IpfLiveSample [<ipf-url>]
+IpfLiveSample [<ipf-url>] [--duration <seconds>]
 
 Where:
-    <ipf-url> - URL for the instruments profiles, default: )" +
-                             DXFEED_IPF_URL;
+    <ipf-url>  - URL for the instruments profiles, default: )" +
+                             DXFEED_IPF_URL + R"(
+    --duration - Run for the given number of seconds and exit: the exit code is 0 if a profile was loaded,
+                 1 otherwise. Without it the sample runs until it is stopped.)";
 
     std::cout << usageString << std::endl;
 }
@@ -39,7 +44,29 @@ int main(int argc, char *argv[]) {
         // Disable QD logging.
         // Logging::init();
 
-        const std::string url = argc > 1 ? argv[1] : DXFEED_IPF_URL;
+        std::string url = DXFEED_IPF_URL;
+        std::optional<std::chrono::duration<double>> duration{};
+
+        for (int i = 1; i < argc; i++) {
+            if (argv[i] == "--duration"s) {
+                if (i + 1 == argc) {
+                    std::cerr << "No value of --duration\n";
+                    printUsage();
+
+                    return 1;
+                }
+
+                duration = std::chrono::duration<double>(std::stod(argv[++i]));
+            } else if (i == 1) {
+                url = argv[i];
+            } else {
+                std::cerr << "Unexpected argument: " << argv[i] << '\n';
+                printUsage();
+
+                return 1;
+            }
+        }
+
         auto collector = InstrumentProfileCollector::create();
         const auto connection = InstrumentProfileConnection::createConnection(url, collector);
 
@@ -60,7 +87,14 @@ int main(int argc, char *argv[]) {
         std::mutex mutex{};
 
         // It is possible to add listener after connection is started - updates will not be missed in this case
-        collector->addUpdateListener([&profiles, &mutex, self = collector](auto &&instruments) {
+        // The listener does not own the collector: the collector owns the listener
+        collector->addUpdateListener([&profiles, &mutex, weakCollector = std::weak_ptr(collector)](auto &&instruments) {
+            const auto self = weakCollector.lock();
+
+            if (!self) {
+                return;
+            }
+
             std::cout << "\nInstrument Profiles:" << std::endl;
             // We can observe REMOVED elements - need to add necessary filtering
             // See documentation for `InstrumentProfileCollector` for more details
@@ -100,11 +134,34 @@ int main(int argc, char *argv[]) {
                       << std::endl;
         });
 
+        if (duration) {
+            std::this_thread::sleep_for(*duration);
+            connection->close();
+
+            std::size_t profileCount = 0;
+            const auto view = collector->view();
+
+            while (view->hasNext()) {
+                if (view->next()->getType() != InstrumentProfileType::REMOVED.getName()) {
+                    profileCount++;
+                }
+            }
+
+            std::cout << "Loaded " << profileCount << " instrument profiles" << std::endl;
+
+            return profileCount > 0 ? 0 : 1;
+        }
+
         std::this_thread::sleep_for(std::chrono::days(365));
 
         connection->close();
     } catch (const RuntimeException &e) {
         std::cerr << e << '\n';
+
+        return 1;
+    } catch (const std::exception &e) {
+        // For example, std::stod of an invalid number.
+        std::cerr << e.what() << '\n';
 
         return 1;
     }

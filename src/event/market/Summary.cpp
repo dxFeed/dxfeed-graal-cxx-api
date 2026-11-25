@@ -4,9 +4,12 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/Summary.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -21,7 +24,7 @@ void Summary::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
+    const auto graalSummary = static_cast<dxfg_v4_summary_t *>(graalNative);
 
     data_ = {
         .dayId = graalSummary->day_id,
@@ -37,14 +40,14 @@ void Summary::fillData(void *graalNative) noexcept {
     };
 }
 
-void Summary::fillGraalData(void *graalNative) const noexcept {
+void Summary::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
+    const auto graalSummary = static_cast<dxfg_v4_summary_t *>(graalNative);
 
     graalSummary->market_event.event_type.clazz = DXFG_EVENT_SUMMARY;
     graalSummary->day_id = data_.dayId;
@@ -64,10 +67,11 @@ std::shared_ptr<Summary> Summary::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Summary. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SUMMARY) {
-        throw InvalidArgumentException(fmt::format("Unable to create Summary. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_SUMMARY)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SUMMARY) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create Summary. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_SUMMARY)));
     }
 
     auto summary = std::make_shared<Summary>();
@@ -83,11 +87,12 @@ void *Summary::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSummary = new dxfg_summary_t{};
-
-    fillGraalData(graalSummary);
-
-    return graalSummary;
+    return newGraalEvent<dxfg_v4_summary_t>(
+        DXFG_EVENT_SUMMARY,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Summary::freeGraal(void *graalNative) {
@@ -95,13 +100,14 @@ void Summary::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SUMMARY) {
-        throw InvalidArgumentException(fmt::format(
-            "Unable to free Summary's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_SUMMARY)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SUMMARY) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to free Summary's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_SUMMARY)));
     }
 
-    const auto graalSummary = static_cast<dxfg_summary_t *>(graalNative);
+    const auto graalSummary = static_cast<dxfg_v4_summary_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -119,7 +125,7 @@ void Summary::assign(std::shared_ptr<EventType> event) {
 Summary::Summary() noexcept {
 }
 
-Summary::Summary(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Summary::Summary(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 std::int32_t Summary::getDayId() const noexcept {
@@ -211,7 +217,7 @@ void Summary::setOpenInterest(std::int64_t openInterest) noexcept {
 }
 
 std::string Summary::toString() const {
-    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow='{}', "
+    return fmt::format("Summary{{{}, eventTime={}, day={}, dayOpen={}, dayHigh={}, dayLow={}, "
                        "dayClose={}, dayCloseType={}, prevDay={}, prevDayClose={}, prevDayCloseType={}, "
                        "prevDayVolume={}, openInterest={}}}",
                        MarketEvent::getEventSymbol(),

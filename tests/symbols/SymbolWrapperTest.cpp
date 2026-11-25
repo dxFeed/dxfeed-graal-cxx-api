@@ -24,20 +24,25 @@ TEST_CASE("SymbolWrapper::toStringUnderlying should return the result of toStrin
     REQUIRE(SymbolWrapper(WildcardSymbol::ALL).toString() != WildcardSymbol::ALL.toString());
 }
 
-TEST_CASE("StringLike should preserve owned data when copied and moved") {
-    auto original = StringLike(std::string{"short value"});
-    auto copy = original;
-    auto moved = std::move(copy);
+TEST_CASE("DXFeedSubscription::addSymbols: a symbol with invalid UTF-8 throws with the symbol kind and the bytes") {
+    const auto endpoint = DXEndpoint::create(DXEndpoint::Role::FEED);
+    const auto subscription = endpoint->getFeed()->createSubscription({Quote::TYPE, Order::TYPE});
 
-    original = StringLike(std::string{"a different and longer value"});
+    CHECK_THROWS_WITH_AS(subscription->addSymbols("\xE2\x82"s),
+                         "StringSymbol(symbol): invalid UTF-8 at byte 0: 0xE2 0x82", InvalidArgumentException);
+    // The symbols converted before the invalid one are freed (a leak fails the sanitizer runs).
+    CHECK_THROWS_WITH_AS(subscription->addSymbols({"AAPL"s, "IBM"s, "x\xFF"s}),
+                         "StringSymbol(symbol): invalid UTF-8 at byte 1: 0xFF", InvalidArgumentException);
+    CHECK_THROWS_WITH_AS(subscription->addSymbols(CandleSymbol::valueOf("AAPL\xFF")),
+                         "CandleSymbol(symbol): invalid UTF-8 at byte 4: 0xFF", InvalidArgumentException);
+    // The symbol is converted before the source and is freed when the source throws.
+    CHECK_THROWS_WITH_AS(
+        subscription->addSymbols(IndexedEventSubscriptionSymbol("AAPL", IndexedEventSource(1000, "s\xC3\x28"s))),
+        "IndexedEventSource(name): invalid UTF-8 at byte 1: 0xC3 0x28", InvalidArgumentException);
+    CHECK(subscription->getSymbols().empty());
 
-    CHECK(std::string{moved} == "short value");
-    CHECK(std::string{moved.c_str()} == "short value");
-}
+    CHECK_NOTHROW(subscription->addSymbols("\xD0\x9F\xD1\x80\xD0\xB8\xD0\xB2\xD0\xB5\xD1\x82"s)); // Привет
+    CHECK(subscription->getSymbols().size() == 1);
 
-TEST_CASE("StringLike::c_str should terminate a sliced string view at its boundary") {
-    const auto storage = std::string{"visible-hidden"};
-    const auto slice = StringLike(std::string_view{storage}.substr(0, 7));
-
-    CHECK(std::string{slice.c_str()} == "visible");
+    endpoint->close();
 }

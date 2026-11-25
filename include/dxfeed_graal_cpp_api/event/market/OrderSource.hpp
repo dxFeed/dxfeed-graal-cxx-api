@@ -3,18 +3,20 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/ConstantMap.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
-#include "../../internal/utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <memory>
-#include <mutex>
+#include <span>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <variant>
 
@@ -28,7 +30,7 @@ DXFCPP_BEGIN_NAMESPACE
 struct EventSourceWrapper;
 
 /**
- * Identifies a source of Order, AnalyticOrder, OtcMarketsOrder, and SpreadOrder events.
+ * Identifies a source of Order, AnalyticOrder, OtcMarketsOrder, NuamOrder, SpreadOrder, and OrderImbalance events.
  * There are the following kinds of order sources:
  * <ul>
  * <li><em>Synthetic</em> sources OrderSource::COMPOSITE_BID, OrderSource::COMPOSITE_ASK,
@@ -50,46 +52,88 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     static constexpr std::uint32_t PUB_SPREAD_ORDER = 0x0008U;
     static constexpr std::uint32_t FULL_ORDER_BOOK = 0x0010U;
     static constexpr std::uint32_t PUB_NUAM_ORDER  = 0x0020U;
+    static constexpr std::uint32_t PUB_ORDER_IMBALANCE = 0x0040U;
 
-    static constexpr std::uint32_t FLAGS_SIZE = 6U;
+    static constexpr std::uint32_t FLAGS_SIZE = 7U;
 
     public:
-    static const std::unordered_map<std::variant<std::int32_t, std::string>, std::reference_wrapper<const OrderSource>>
-        PREDEFINED_SOURCES;
+    /**
+     * The predefined sources by identifier and by name.
+     *
+     * It is constant-initialized, so it can be used in the dynamic initialization and the destruction of global
+     * variables.
+     */
+    static const ConstantMap<std::variant<std::int32_t, std::string_view>, OrderSource> PREDEFINED_SOURCES;
 
     private:
-    static inline std::mutex MTX_{};
-    static std::unordered_map<std::int32_t, OrderSource> USER_SOURCES_;
+    // The predefined sources (constant-initialized).
+    static const std::span<const std::reference_wrapper<const OrderSource>> PREDEFINED_;
+
+    // The entries of PREDEFINED_SOURCES (in OrderSource.cpp).
+    struct PredefinedSources;
 
     std::uint32_t pubFlags_{};
     bool builtin_{};
 
-    OrderSource(std::int32_t id, const StringLike& name, std::uint32_t pubFlags) noexcept;
+    constexpr OrderSource(std::int32_t id, ConstString::Literal name, std::uint32_t pubFlags) noexcept
+        : IndexedEventSource(id, name, true), pubFlags_{pubFlags}, builtin_{true} {
+    }
 
-    OrderSource(const StringLike &name, std::uint32_t pubFlags);
+    constexpr OrderSource(ConstString::Literal name, std::uint32_t pubFlags)
+        : OrderSource(composeId(name.view), name, pubFlags) {
+    }
 
-    OrderSource(std::int32_t id, const StringLike &name) noexcept;
+    OrderSource(std::int32_t id, StringParam name);
 
-    static std::int32_t composeId(const StringLike &name);
+    // A name that is not valid makes a constant not constant-initialized: a compilation error.
+    static constexpr std::int32_t composeId(std::string_view name) {
+        std::int32_t sourceId = 0;
 
-    static void checkChar(char c);
+        if (name.empty() || name.size() > 4) {
+            throwInvalidName("Source name must contain from 1 to 4 characters");
+        }
+
+        for (const auto c : name) {
+            checkChar(c);
+            sourceId = static_cast<std::int32_t>((static_cast<std::uint32_t>(sourceId) << 8U) |
+                                                 static_cast<std::uint32_t>(static_cast<unsigned char>(c)));
+        }
+
+        return sourceId;
+    }
+
+    static constexpr void checkChar(char c) {
+        if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')) {
+            return;
+        }
+
+        throwInvalidName("Source name must contain only alphanumeric characters");
+    }
+
+    [[noreturn]] static void throwInvalidName(const char *message);
 
     static std::string decodeName(std::int32_t id);
 
     static std::uint32_t getEventTypeMask(const EventTypeEnum &eventType);
 
-    /**
-     * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
-     * Fills the dxFeed Graal SDK structure's fields by the data of the current entity (recursively if necessary).
-     * Returns the pointer to the filled structure.
-     *
-     * @return The pointer to the filled dxFeed Graal SDK structure
-     */
-    void *toGraal() const override;
-
-    std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> toGraalUnique() const noexcept override;
+    static std::span<const std::reference_wrapper<const OrderSource>> publishableByFlag(std::uint32_t flag);
 
     public:
+    /**
+     * Creates a copy of the order source.
+     *
+     * @param other The order source to copy.
+     */
+    OrderSource(const OrderSource &other) noexcept;
+
+    /**
+     * Copies the order source.
+     *
+     * @param other The order source to copy.
+     * @return This order source.
+     */
+    OrderSource &operator=(const OrderSource &other) noexcept = default;
+
     /**
      * Bid side of a composite Quote.
      * It is a <em>synthetic</em> source.
@@ -176,23 +220,24 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
 
     /**
      * Default source for publishing custom order books.
-     * Order, AnalyticOrder, OtcMarketsOrder, and SpreadOrder events are @ref ::isPublishable() "publishable"
-     * on this source and the corresponding subscription can be observed via DXPublisher.
+     * Order, AnalyticOrder, OtcMarketsOrder, NuamOrder, SpreadOrder, and OrderImbalance events are
+     * @ref isPublishable() "publishable" on this source and the corresponding subscription can be observed via
+     * DXPublisher.
      */
     static const OrderSource DEFAULT;
 
     /**
      * NASDAQ Total View.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
-     * observed via DXPublisher.
+     * Order and OrderImbalance events are @ref isPublishable() "publishable" on this source and the corresponding
+     * subscription can be observed via DXPublisher.
      */
     static const OrderSource NTV;
 
     /**
      * NASDAQ Total View. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource ntv;
@@ -200,7 +245,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * NASDAQ Futures Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource NFX;
@@ -208,7 +253,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * NASDAQ eSpeed.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource ESPD;
@@ -216,7 +261,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * NASDAQ Fixed Income.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource XNFI;
@@ -224,7 +269,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Intercontinental Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource ICE;
@@ -232,7 +277,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * International Securities Exchange.
      *
-     * Order and SpreadOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
+     * Order and SpreadOrder events are @ref isPublishable() "publishable" on this source and the corresponding
      * subscription can be observed via DXPublisher.
      */
     static const OrderSource ISE;
@@ -240,7 +285,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Direct-Edge EDGA Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource DEA;
@@ -248,7 +293,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Direct-Edge EDGX Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource DEX;
@@ -256,7 +301,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Direct-Edge EDGX Exchange. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
 
@@ -265,7 +310,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bats BYX Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource BYX;
@@ -273,7 +318,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bats BZX Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource BZX;
@@ -281,7 +326,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bats BZX Exchange. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource bzx;
@@ -289,7 +334,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bats Europe BXE Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource BATE;
@@ -297,7 +342,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bats Europe CXE Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource CHIX;
@@ -305,7 +350,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bats Europe DXE Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource CEUX;
@@ -313,7 +358,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Bats Europe TRF.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource BXTR;
@@ -321,7 +366,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Borsa Istanbul Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource IST;
@@ -329,7 +374,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Borsa Istanbul Exchange. Record for a particular top 20 order book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource BI20;
@@ -337,7 +382,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * ABE (abe.io) exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource ABE;
@@ -345,7 +390,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * FAIR (FairX) exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource FAIR;
@@ -353,7 +398,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * CME Globex.
      *
-     * Order and AnalyticOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
+     * Order and AnalyticOrder events are @ref isPublishable() "publishable" on this source and the corresponding
      * subscription can be observed via DXPublisher.
      */
     static const OrderSource GLBX;
@@ -361,7 +406,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * CME Globex. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource glbx;
@@ -369,7 +414,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Eris Exchange group of companies.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource ERIS;
@@ -377,7 +422,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Eurex Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource XEUR;
@@ -385,7 +430,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Eurex Exchange. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource xeur;
@@ -393,7 +438,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * CBOE Futures Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource CFE;
@@ -401,7 +446,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * CBOE Options C2 Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource C2OX;
@@ -409,7 +454,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Small Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource SMFE;
@@ -417,7 +462,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Small Exchange. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource smfe;
@@ -425,7 +470,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Investors exchange. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource iex;
@@ -433,7 +478,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Members Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource MEMX;
@@ -441,7 +486,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Members Exchange. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource memx;
@@ -449,14 +494,14 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Blue Ocean Technologies Alternative Trading System.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource OCEA;
 
     /**
      * Blue Ocean Technologies Alternative Trading System. Record for a price level book.
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource ocea;
@@ -465,7 +510,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * Pink Sheets. Record for a price level book.
      * Pink sheets are listings for stocks that trade over-the-counter (OTC).
      *
-     * Order and OtcMarketsOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
+     * Order and OtcMarketsOrder events are @ref isPublishable() "publishable" on this source and the corresponding
      * subscription can be observed via DXPublisher.
      */
     static const OrderSource pink;
@@ -473,15 +518,15 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * NYSE Arca traded securities
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
-     * observed via DXPublisher.
+     * Order and OrderImbalance events are @ref isPublishable() "publishable" on this source and the corresponding
+     * subscription can be observed via DXPublisher.
      */
     static const OrderSource ARCA;
 
     /**
      * NYSE Arca traded securities. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource arca;
@@ -489,7 +534,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Cboe European Derivatives.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource CEDX;
@@ -497,7 +542,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Cboe European Derivatives. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource cedx;
@@ -505,7 +550,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * IG CFDs Gate.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource IGC;
@@ -513,7 +558,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * IG CFDs Gate. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource igc;
@@ -521,7 +566,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * EDX Exchange.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource EDX;
@@ -529,7 +574,7 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * EDX Exchange. Record for a price level book.
      *
-     * Order events are @ref ::isPublishable() "publishable" on this source and the corresponding subscription can be
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
      * observed via DXPublisher.
      */
     static const OrderSource edx;
@@ -537,18 +582,82 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
     /**
      * Nuam Exchange Gate.
      *
-     * Order and NuamOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
-     * subscription can be observed via DXPublisher.
+     * Order, NuamOrder, and OrderImbalance events are @ref isPublishable() "publishable" on this source and the
+     * corresponding subscription can be observed via DXPublisher.
      */
     static const OrderSource NUAM;
 
     /**
      * Nuam Exchange Gate. Record for a price level book.
      *
-     * Order and NuamOrder events are @ref ::isPublishable() "publishable" on this source and the corresponding
+     * Order and NuamOrder events are @ref isPublishable() "publishable" on this source and the corresponding
      * subscription can be observed via DXPublisher.
      */
     static const OrderSource nuam;
+
+    /**
+     * MOON ATS.
+     *
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource MOON;
+
+    /**
+     * MOON ATS. Record for a price level book.
+     *
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource moon;
+
+    /**
+     * OTC Overnight.
+     *
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource OTCM;
+
+    /**
+     * OTC Overnight. Record for a price level book.
+     *
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource otcm;
+
+    /**
+     * Bruce book.
+     *
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource BOSS;
+
+    /**
+     * Bruce book. Record for a price level book.
+     *
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource boss;
+
+    /**
+     * CBOE NEO book.
+     *
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource NEO;
+
+    /**
+     * CBOE NEO book. Record for a price level book.
+     *
+     * Order events are @ref isPublishable() "publishable" on this source and the corresponding subscription can be
+     * observed via DXPublisher.
+     */
+    static const OrderSource neo;
 
     /**
      * Determines whether the specified source identifier refers to a special order source.
@@ -574,7 +683,50 @@ class DXFCPP_EXPORT OrderSource final : public IndexedEventSource {
      * @param name the name of the source.
      * @return order source.
      */
-    static const OrderSource &valueOf(const StringLike &name);
+    static const OrderSource &valueOf(StringParam name);
+
+    /**
+     * Returns a list of the publishable order sources for the given event type: the sources whose
+     * @ref isPublishable() "isPublishable" is `true`, in the order of their declaration. Events can be directly
+     * published with these sources, and their subscription can be observed directly via DXPublisher.
+     *
+     * @param eventType EventTypeEnum::ORDER, EventTypeEnum::ANALYTIC_ORDER, EventTypeEnum::OTC_MARKETS_ORDER,
+     * EventTypeEnum::NUAM_ORDER, EventTypeEnum::SPREAD_ORDER or EventTypeEnum::ORDER_IMBALANCE.
+     * @return a list of the publishable order sources.
+     * @throws InvalidArgumentException if the event type is not one of the above.
+     *
+     * The lists are created at the first call and destroyed at exit, so the destructors of global variables should not
+     * use them.
+     */
+    static std::span<const std::reference_wrapper<const OrderSource>> publishable(const EventTypeEnum &eventType);
+
+    /**
+     * Returns a list of the publishable order sources that support Full Order Book, in the order of their declaration.
+     *
+     * @return a list of the publishable order sources that support Full Order Book.
+     *
+     * The list is created at the first call and destroyed at exit, so the destructors of global variables should not
+     * use it.
+     */
+    static std::span<const std::reference_wrapper<const OrderSource>> fullOrderBook();
+
+    /**
+     * Returns `true` if the events of the given type can be directly published with this source.
+     * Subscription on such sources can be observed directly via DXPublisher.
+     *
+     * @param eventType EventTypeEnum::ORDER, EventTypeEnum::ANALYTIC_ORDER, EventTypeEnum::OTC_MARKETS_ORDER,
+     * EventTypeEnum::NUAM_ORDER, EventTypeEnum::SPREAD_ORDER or EventTypeEnum::ORDER_IMBALANCE.
+     * @return `true` if the events of the given type can be directly published with this source.
+     * @throws InvalidArgumentException if the event type is not one of the above.
+     */
+    bool isPublishable(const EventTypeEnum &eventType) const;
+
+    /**
+     * Returns `true` if this source supports Full Order Book.
+     *
+     * @return `true` if this source supports Full Order Book.
+     */
+    bool isFullOrderBook() const noexcept;
 };
 
 DXFCPP_END_NAMESPACE

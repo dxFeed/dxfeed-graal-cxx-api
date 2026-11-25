@@ -3,17 +3,21 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 DXFCXX_DISABLE_GCC_WARNINGS_PUSH("-Wvirtual-move-assign")
 
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/Math.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 
+#include <cstddef>
 #include <cstdint>
+#include <functional>
+#include <memory>
 #include <optional>
 #include <ostream>
 #include <string>
@@ -80,7 +84,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param type The type of instrument.
      */
-    void setType(const StringLike &type) const;
+    void setType(StringParam type) const;
 
     /**
      * Returns identifier of instrument, preferable an international one in Latin alphabet.
@@ -98,7 +102,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param symbol The identifier of instrument.
      */
-    void setSymbol(const StringLike &symbol) const;
+    void setSymbol(StringParam symbol) const;
 
     /**
      * Returns the description of instrument, preferable an international one in Latin alphabet.
@@ -114,7 +118,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param description The description of instrument.
      */
-    void setDescription(const StringLike &description) const;
+    void setDescription(StringParam description) const;
 
     /**
      * Returns identifier of instrument in national language.
@@ -130,7 +134,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param localSymbol The identifier of instrument in national language.
      */
-    void setLocalSymbol(const StringLike &localSymbol) const;
+    void setLocalSymbol(StringParam localSymbol) const;
 
     /**
      * Returns description of instrument in national language.
@@ -146,7 +150,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param localDescription The description of instrument in national language.
      */
-    void setLocalDescription(const StringLike &localDescription) const;
+    void setLocalDescription(StringParam localDescription) const;
 
     /**
      * Returns country of origin (incorporation) of corresponding company or parent entity.
@@ -166,7 +170,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param country The country of origin (incorporation) of corresponding company or parent entity.
      */
-    void setCountry(const StringLike &country) const;
+    void setCountry(StringParam country) const;
 
     /**
      * Returns official Place Of Listing, the organization that have listed this instrument.
@@ -190,7 +194,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param opol The official Place Of Listing, the organization that have listed this instrument.
      */
-    void setOPOL(const StringLike &opol) const;
+    void setOPOL(StringParam opol) const;
 
     /**
      * Returns exchange-specific data required to properly identify instrument when communicating with exchange.
@@ -207,7 +211,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * @param exchangeData The exchange-specific data required to properly identify instrument when communicating with
      * exchange.
      */
-    void setExchangeData(const StringLike &exchangeData) const;
+    void setExchangeData(StringParam exchangeData) const;
 
     /**
      * Returns list of exchanges where instrument is quoted or traded.
@@ -237,7 +241,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param exchanges The list of exchanges where instrument is quoted or traded.
      */
-    void setExchanges(const StringLike &exchanges) const;
+    void setExchanges(StringParam exchanges) const;
 
     /**
      * Returns currency of quotation, pricing and trading.
@@ -257,7 +261,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param currency Currency of quotation, pricing and trading.
      */
-    void setCurrency(const StringLike &currency) const;
+    void setCurrency(StringParam currency) const;
 
     /**
      * Returns base currency of currency pair (FOREX instruments).
@@ -273,7 +277,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param baseCurrency The base currency of currency pair (FOREX instruments).
      */
-    void setBaseCurrency(const StringLike &baseCurrency) const;
+    void setBaseCurrency(StringParam baseCurrency) const;
 
     /**
      * Returns Classification of Financial Instruments code.
@@ -299,7 +303,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param cfi CFI code.
      */
-    void setCFI(const StringLike &cfi) const;
+    void setCFI(StringParam cfi) const;
 
     /**
      * Returns International Securities Identifying Number.
@@ -321,7 +325,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param isin International Securities Identifying Number.
      */
-    void setISIN(const StringLike &isin) const;
+    void setISIN(StringParam isin) const;
 
     /**
      * Returns Stock Exchange Daily Official List.
@@ -343,7 +347,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param sedol Stock Exchange Daily Official List.
      */
-    void setSEDOL(const StringLike &sedol) const;
+    void setSEDOL(StringParam sedol) const;
 
     /**
      * Returns Committee on Uniform Security Identification Procedures code.
@@ -363,7 +367,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param cusip CUSIP code.
      */
-    void setCUSIP(const StringLike &cusip) const;
+    void setCUSIP(StringParam cusip) const;
 
     /**
      * Returns Industry Classification Benchmark.
@@ -439,7 +443,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param product The product for futures and options on futures (underlying asset name).
      */
-    void setProduct(const StringLike &product) const;
+    void setProduct(StringParam product) const;
 
     /**
      * Returns primary underlying symbol for options.
@@ -455,7 +459,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param underlying The primary underlying symbol for options.
      */
-    void setUnderlying(const StringLike &underlying) const;
+    void setUnderlying(StringParam underlying) const;
 
     /**
      * Returns shares per contract for options.
@@ -501,15 +505,15 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param additionalUnderlyings The additional underlyings for options, including additional cash.
      */
-    void setAdditionalUnderlyings(const StringLike &additionalUnderlyings) const;
+    void setAdditionalUnderlyings(StringParam additionalUnderlyings) const;
 
     /**
      * Returns maturity month-year as provided for corresponding FIX tag (200).
      * It can use several different formats depending on data source:
      * <ul>
-     * <li>YYYYMM – if only year and month are specified
-     * <li>YYYYMMDD – if full date is specified
-     * <li>YYYYMMwN – if week number (within a month) is specified
+     * <li>YYYYMM - if only year and month are specified
+     * <li>YYYYMMDD - if full date is specified
+     * <li>YYYYMMwN - if week number (within a month) is specified
      * </ul>
      *
      * @return The maturity month-year as provided for corresponding FIX tag (200).
@@ -520,18 +524,18 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * Changes maturity month-year as provided for corresponding FIX tag (200).
      * It can use several different formats depending on data source:
      * <ul>
-     * <li>YYYYMM – if only year and month are specified
-     * <li>YYYYMMDD – if full date is specified
-     * <li>YYYYMMwN – if week number (within a month) is specified
+     * <li>YYYYMM - if only year and month are specified
+     * <li>YYYYMMDD - if full date is specified
+     * <li>YYYYMMwN - if week number (within a month) is specified
      * </ul>
      *
      * @param mmy The maturity month-year as provided for corresponding FIX tag (200).
      */
-    void setMMY(const StringLike &mmy) const;
+    void setMMY(StringParam mmy) const;
 
     /**
      * Returns day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @return The day id of expiration.
      */
@@ -539,7 +543,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
 
     /**
      * Changes day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @param expiration The day id of expiration.
      */
@@ -547,7 +551,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
 
     /**
      * Returns day id of last trading day.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 16)`.
      *
      * @return The day id of last trading day.
      */
@@ -555,7 +559,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
 
     /**
      * Changes day id of last trading day.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 16)`.
      *
      * @param lastTrade The day id of last trading day.
      */
@@ -609,7 +613,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param optionType The type of option.
      */
-    void setOptionType(const StringLike &optionType) const;
+    void setOptionType(StringParam optionType) const;
 
     /**
      * Returns expiration cycle style, such as "Weeklys", "Quarterlys".
@@ -623,7 +627,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param expirationStyle The expiration cycle style.
      */
-    void setExpirationStyle(const StringLike &expirationStyle) const;
+    void setExpirationStyle(StringParam expirationStyle) const;
 
     /**
      * Returns settlement price determination style, such as "Open", "Close".
@@ -637,7 +641,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param settlementStyle The settlement price determination style.
      */
-    void setSettlementStyle(const StringLike &settlementStyle) const;
+    void setSettlementStyle(StringParam settlementStyle) const;
 
     /**
      * Returns minimum allowed price increments with corresponding price ranges.
@@ -667,7 +671,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param priceIncrements The minimum allowed price increments with corresponding price ranges.
      */
-    void setPriceIncrements(const StringLike &priceIncrements) const;
+    void setPriceIncrements(StringParam priceIncrements) const;
 
     /**
      * Returns trading hours specification.
@@ -683,7 +687,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      *
      * @param tradingHours The trading hours specification.
      */
-    void setTradingHours(const StringLike &tradingHours) const;
+    void setTradingHours(StringParam tradingHours) const;
 
     /**
      * Returns field value with a specified name.
@@ -691,7 +695,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * @param name name of field.
      * @return field value.
      */
-    std::string getField(const StringLike &name) const;
+    std::string getField(StringParam name) const;
 
     /**
      * Changes field value with a specified name.
@@ -699,7 +703,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * @param name name of field.
      * @param value field value.
      */
-    void setField(const StringLike &name, const StringLike &value) const;
+    void setField(StringParam name, StringParam value) const;
 
     /**
      * Returns numeric field value with a specified name.
@@ -707,7 +711,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * @param name name of field.
      * @return field value.
      */
-    double getNumericField(const StringLike &name) const;
+    double getNumericField(StringParam name) const;
 
     /**
      * Changes numeric field value with a specified name.
@@ -715,7 +719,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * @param name name of field.
      * @param value field value.
      */
-    void setNumericField(const StringLike &name, double value) const;
+    void setNumericField(StringParam name, double value) const;
 
     /**
      * Returns day id value for a date field with a specified name.
@@ -723,7 +727,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * @param name name of field.
      * @return day id value.
      */
-    std::int32_t getDateField(const StringLike &name) const;
+    std::int32_t getDateField(StringParam name) const;
 
     /**
      * Changes day id value for a date field with a specified name.
@@ -731,7 +735,7 @@ struct DXFCPP_EXPORT InstrumentProfile final : RequireMakeShared<InstrumentProfi
      * @param name name of field.
      * @param value day id value.
      */
-    void setDateField(const StringLike &name, std::int32_t value) const;
+    void setDateField(StringParam name, std::int32_t value) const;
 
     /**
      * Returns names of non-empty custom fields

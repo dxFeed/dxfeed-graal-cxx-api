@@ -3,22 +3,28 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/PriceType.hpp"
 
+#include <array>
 #include <functional>
-#include <unordered_map>
+#include <span>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const PriceType PriceType::REGULAR{0, "REGULAR"};
-const PriceType PriceType::INDICATIVE{1, "INDICATIVE"};
-const PriceType PriceType::PRELIMINARY{2, "PRELIMINARY"};
-const PriceType PriceType::FINAL{3, "FINAL"};
+constinit const PriceType PriceType::REGULAR{0, "REGULAR"};
+constinit const PriceType PriceType::INDICATIVE{1, "INDICATIVE"};
+constinit const PriceType PriceType::PRELIMINARY{2, "PRELIMINARY"};
+constinit const PriceType PriceType::FINAL{3, "FINAL"};
 
-template <>
-const std::unordered_map<PriceType::CodeType, std::reference_wrapper<const PriceType>> PriceType::ParentType::ALL{
-    {PriceType::REGULAR.getCode(), std::cref(PriceType::REGULAR)},
-    {PriceType::INDICATIVE.getCode(), std::cref(PriceType::INDICATIVE)},
-    {PriceType::PRELIMINARY.getCode(), std::cref(PriceType::PRELIMINARY)},
-    {PriceType::FINAL.getCode(), std::cref(PriceType::FINAL)},
+namespace {
+
+constinit const std::array<std::reference_wrapper<const PriceType>, 4> ALL_ELEMENTS{
+    std::cref(PriceType::REGULAR),
+    std::cref(PriceType::INDICATIVE),
+    std::cref(PriceType::PRELIMINARY),
+    std::cref(PriceType::FINAL),
 };
+
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const PriceType>> PriceType::ALL{ALL_ELEMENTS};
 
 DXFCPP_END_NAMESPACE

@@ -3,15 +3,14 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Enum.hpp"
+#include "../../detail/Enum.hpp"
 
 #include <cstdint>
 #include <type_traits>
-#include <unordered_map>
 
 /**
  * \addtogroup dxfcpp_market
@@ -40,11 +39,10 @@ struct TradingStatus : Enum<TradingStatus, std::uint32_t> {
      * Trading is active.
      */
     static const DXFCPP_EXPORT TradingStatus ACTIVE;
-};
 
-template <>
-const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>>
-    TradingStatus::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const TradingStatus>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

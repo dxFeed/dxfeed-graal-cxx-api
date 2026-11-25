@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/utils/StringUtils.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
@@ -31,7 +31,7 @@ DXFCPP_BEGIN_NAMESPACE
  * @ref MarketEventSymbols::getExchangeCode() "MarketEventSymbols.getExchangeCode" and
  * @ref MarketEventSymbols::changeExchangeCode() "changeExchangeCode" methods.
  */
-struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandleExchange final : public CandleSymbolAttribute {
     /**
      * Composite exchange where data is taken from all exchanges.
      */
@@ -43,17 +43,16 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
     static const CandleExchange DEFAULT;
 
     private:
-    const char exchangeCode_{};
+    char exchangeCode_{};
 
-    explicit CandleExchange(char exchangeCode) noexcept;
+    constexpr explicit CandleExchange(char exchangeCode) noexcept : exchangeCode_{exchangeCode} {
+    }
 
     public:
     CandleExchange() noexcept;
 
-    ~CandleExchange() noexcept override;
-
     /**
-     * Returns exchange code. It is `'\0'` for CandleExchange::COMPOSITE exchange.
+     * Returns exchange code. It is <code>'\0'</code> for CandleExchange::COMPOSITE exchange.
      * @return exchange code.
      */
     char getExchangeCode() const noexcept;
@@ -64,7 +63,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this exchange set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Returns string representation of this exchange.
@@ -92,7 +91,7 @@ struct DXFCPP_EXPORT CandleExchange : public CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return exchange attribute object of the given candle symbol string.
      */
-    static CandleExchange getAttributeForSymbol(const StringLike &symbol);
+    static CandleExchange getAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

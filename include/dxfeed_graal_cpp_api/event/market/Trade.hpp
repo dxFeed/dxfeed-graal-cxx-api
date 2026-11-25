@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./TradeBase.hpp"
 
@@ -72,11 +73,12 @@ struct EventMapper;
  * for regional exchange trades.
  * Regional records do not explicitly store a field for @ref Trade::getExchangeCode() "exchangeCode" property.
  */
-class DXFCPP_EXPORT Trade final : public TradeBase {
+class DXFCPP_EXPORT Trade : public TradeBase {
     friend struct EventMapper;
 
+    protected:
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the Trade object
@@ -125,7 +127,7 @@ class DXFCPP_EXPORT Trade final : public TradeBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Trade(const StringLike& eventSymbol) noexcept;
+    explicit Trade(StringParam eventSymbol);
 
     /**
      * Returns a string representation of the current object.

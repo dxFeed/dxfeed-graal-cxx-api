@@ -4,26 +4,19 @@
 #include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfileReader.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/auth/AuthToken.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/context/ApiContext.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/managers/EntityManager.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfile.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/ipf/IsolatedInstrumentProfileReader.hpp"
+#include "../isolated/ipf/IsolatedInstrumentProfile.hpp"
+#include "../isolated/ipf/IsolatedInstrumentProfileReader.hpp"
 
 #include <memory>
 
 DXFCPP_BEGIN_NAMESPACE
 
-InstrumentProfileReader::InstrumentProfileReader() : id_{Id<InstrumentProfileReader>::UNKNOWN} {
+InstrumentProfileReader::InstrumentProfileReader() {
     handle_ = isolated::ipf::IsolatedInstrumentProfileReader::create();
 }
 
 InstrumentProfileReader::Ptr InstrumentProfileReader::create() {
-    auto reader = std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
-
-    reader->id_ =
-        ApiContext::getInstance()->getManager<EntityManager<InstrumentProfileReader>>()->registerEntity(reader);
-
-    return reader;
+    return std::shared_ptr<InstrumentProfileReader>(new InstrumentProfileReader());
 }
 
 std::int64_t InstrumentProfileReader::getLastModified() const {
@@ -34,32 +27,32 @@ bool InstrumentProfileReader::wasComplete() const {
     return isolated::ipf::IsolatedInstrumentProfileReader::wasComplete(handle_);
 }
 
-std::string InstrumentProfileReader::resolveSourceURL(const StringLike &address) {
-    return isolated::ipf::IsolatedInstrumentProfileReader::resolveSourceURL(address);
+std::string InstrumentProfileReader::resolveSourceURL(StringParam address) {
+    return isolated::ipf::IsolatedInstrumentProfileReader::resolveSourceURL(address.view());
 }
 
-std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(const StringLike &address) const {
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(StringParam address) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
-        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address));
+        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address.view()));
     auto result = InstrumentProfile::List::fromGraal(list.get());
 
     return result;
 }
 
 std::vector<std::shared_ptr<InstrumentProfile>>
-InstrumentProfileReader::readFromFile(const StringLike &address, const StringLike &user,
-                                      const StringLike &password) const {
+InstrumentProfileReader::readFromFile(StringParam address, StringParam user, StringParam password) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
-        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, user, password));
+        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address.view(), user.view(),
+                                                                     password.view()));
     auto result = InstrumentProfile::List::fromGraal(list.get());
 
     return result;
 }
 
-std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(const StringLike &address,
+std::vector<std::shared_ptr<InstrumentProfile>> InstrumentProfileReader::readFromFile(StringParam address,
                                                                                       const AuthToken &token) const {
     const auto list = isolated::ipf::IsolatedInstrumentProfileList::toUniqueWrapper(
-        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address, token.getHandle()));
+        isolated::ipf::IsolatedInstrumentProfileReader::readFromFile(handle_, address.view(), token.getHandle()));
     auto result = InstrumentProfile::List::fromGraal(list.get());
 
     return result;

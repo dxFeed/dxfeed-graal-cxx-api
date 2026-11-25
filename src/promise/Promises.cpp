@@ -3,7 +3,7 @@
 
 #include "../../include/dxfeed_graal_cpp_api/promise/Promises.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/promise/IsolatedPromise.hpp"
+#include "../isolated/promise/IsolatedPromise.hpp"
 #include "../../include/dxfeed_graal_cpp_api/promise/Promise.hpp"
 
 #include <memory>

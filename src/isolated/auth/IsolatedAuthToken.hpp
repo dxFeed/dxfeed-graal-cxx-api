@@ -1,0 +1,67 @@
+// Copyright (c) 2025 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
+
+#pragma once
+
+#include "../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
+
+#include <string>
+
+DXFCPP_BEGIN_NAMESPACE
+
+struct AuthToken;
+
+namespace isolated::auth::IsolatedAuthToken {
+
+/// dxfg_v4_AuthToken_valueOf
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken> valueOf(/* const char* */ std::string_view string);
+
+/// dxfg_v4_AuthToken_createBasicToken
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBasicToken(/* const char* */ std::string_view userPassword);
+
+/// dxfg_v4_AuthToken_createBasicTokenWithUserAndPassword
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken> createBasicToken(/* const char* */ std::string_view user,
+                                                                         /* const char* */ std::string_view password);
+
+/// dxfg_v4_AuthToken_createBasicTokenOrNull
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBasicTokenOrNull(/* const char* */ std::string_view user,
+                       /* const char* */ std::string_view password);
+
+/// dxfg_v4_AuthToken_createBearerToken
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken> createBearerToken(/* const char* */ std::string_view token);
+
+/// dxfg_v4_AuthToken_createBearerTokenOrNull
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken>
+createBearerTokenOrNull(/* const char* */ std::string_view token);
+
+/// dxfg_v4_AuthToken_createCustomToken
+/* dxfg_v4_auth_token_t* */ JavaObjectHandle<AuthToken> createCustomToken(/* const char* */ std::string_view scheme,
+                                                                          /* const char* */ std::string_view value);
+
+/// dxfg_v4_AuthToken_getHttpAuthorization
+/* const char* */ std::string
+getHttpAuthorization(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+
+/// dxfg_v4_AuthToken_getUser
+/* const char* */ std::string getUser(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+
+/// dxfg_v4_AuthToken_getPassword
+/* const char* */ std::string getPassword(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+
+/// dxfg_v4_AuthToken_getScheme
+/* const char* */ std::string getScheme(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+
+/// dxfg_v4_AuthToken_getValue
+/* const char* */ std::string getValue(/* dxfg_v4_auth_token_t* */ const JavaObjectHandle<AuthToken> &authToken);
+
+} // namespace isolated::auth::IsolatedAuthToken
+
+DXFCPP_END_NAMESPACE
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

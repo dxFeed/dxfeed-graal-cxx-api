@@ -3,6 +3,7 @@
 
 // Fuzz internal string / time utilities (StringUtils.hpp). Most are declared noexcept.
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../src/internal/utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <cstring>
@@ -47,11 +48,6 @@ extern "C" int LLVMFuzzerTestOneInput(const std::uint8_t *data, std::size_t size
             (void)formatTimeStampWithMillisWithTimeZone(ts);
         } catch (const std::exception &) {
         }
-    }
-
-    try {
-        (void)static_cast<double>(StringLike(s));
-    } catch (const std::exception &) {
     }
 
     return 0;

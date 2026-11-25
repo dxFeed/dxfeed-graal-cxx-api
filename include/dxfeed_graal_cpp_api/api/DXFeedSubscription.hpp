@@ -3,28 +3,77 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../entity/EntityModule.hpp"
 #include "../event/EventType.hpp"
 #include "../event/EventTypeEnum.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/EventClassList.hpp"
-#include "../internal/Handler.hpp"
-#include "../internal/JavaObjectHandle.hpp"
-#include "../internal/context/ApiContext.hpp"
-#include "../internal/managers/EntityManager.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/EventClassList.hpp"
+#include "../util/Handler.hpp"
+#include "../detail/JavaObjectHandle.hpp"
 #include "../symbols/SymbolWrapper.hpp"
 #include "../util/TimePeriod.hpp"
+#include "../util/TimePeriodInfo.hpp"
 #include "./osub/ObservableSubscription.hpp"
 
+#include <atomic>
+#include <chrono>
 #include <concepts>
+#include <cstddef>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <type_traits>
 #include <unordered_set>
+#include <vector>
+
+/**
+ * @page listener_threads Listeners and threads
+ *
+ * The event listeners of a subscription (DXFeedSubscription::addEventListener()) are called on a thread of the
+ * executor of the endpoint (DXEndpoint::Builder::withExecutor(); by default a pool of `dxfeed.threadPoolSize` threads,
+ * see DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY). The calls for one subscription are serial: the next batch of
+ * events is delivered only after all the listeners have returned from the previous one, so the order of the events is
+ * kept.
+ *
+ * A listener that blocks or works long delays all the events of its subscription. The events wait in the buffers of
+ * the endpoint and of the server: the lasting events (for example Quote) are conflated, the newest values come late,
+ * and the other events may be dropped (DXFeedSubscription::getTotalDroppedEvents()). From the outside it looks like a
+ * delayed feed. A listener should only take the events and return: copy them into a queue of its own and process them
+ * on another thread, do not wait for locks, network or user input in the listener.
+ *
+ * The library checks this and reports warnings through ErrorManager (ErrorInfo::Level::WARN, the component
+ * `DXFeedSubscription`, see @ref error_handling "Error handling"):
+ *
+ * - **A slow listener.** When the listeners of a subscription take longer than the threshold for one batch, a
+ *   warning names the subscription (its number and event types), the time and the size of the batch. The threshold is
+ *   the system property DXFeedSubscription::SLOW_LISTENER_THRESHOLD_PROPERTY, `0.1s` by default; `0` turns the check
+ *   off.
+ * - **Events that lag behind.** When the system property DXFeedSubscription::EVENT_LAG_THRESHOLD_PROPERTY is set
+ *   (it is `0`, off, by default), a warning is reported when the newest event of a batch is older than the threshold
+ *   when the batch is received: the current time minus the time of the event. Only the events with the time of a
+ *   market action are checked: Quote, Trade, TradeETH (TradeBase::getTime()) and TimeAndSale; a zero time is skipped.
+ *   A DXFeedTimeSeriesSubscription is not checked, its history comes with past times. The lag includes the delay
+ *   before the data reaches dxFeed and the difference between the clocks of this computer and of the source; the
+ *   time of Quote and Trade is often in whole seconds; the first Quote or Trade of a symbol that does not trade often
+ *   is old; a replay of recorded data comes with past times. Set the threshold to several seconds.
+ *
+ * Each check of a subscription reports at most one warning per the period DXFeedSubscription::WARNING_PERIOD_PROPERTY
+ * (`1m` by default; `0` reports every excess, `inf` only the first). The first excess is reported at once; the next
+ * warning tells how many excesses were since the previous one and the largest of them.
+ *
+ * The values of the properties are time periods, as TimePeriod::valueOf() reads them: `0.1s`, `5s`, `1m`, `inf`
+ * (never). A subscription reads the properties when it is created (System::setProperty() or the isolate arguments,
+ * see @ref isolate_arguments "Isolate arguments"): a change does not affect the subscriptions that exist. A value that
+ * is not a time period is reported as a warning once, and the default is used.
+ *
+ * The opposite problem, a subscription that receives no events while its endpoint stays connected, is reported by the
+ * silence watchdog of the subscription, which is off by default: see DXFeedSubscription::setSilenceWatchdog(). Its
+ * function is called on a thread of the library, not of the executor of the endpoint.
+ */
 
 /**
  * \addtogroup dxfcpp_api
@@ -41,10 +90,45 @@ struct LastingEvent;
 
 /**
  * Subscription for a set of symbols and event types.
+ *
+ * The functions that take symbols throw InvalidArgumentException if a symbol is not valid UTF-8 (see StringParam); the
+ * set of subscribed symbols is not changed then.
+ *
+ * <h3>Threads and locks</h3>
+ *
+ * This class is thread-safe. The event listeners are called on a thread of the executor of the endpoint, one batch at a
+ * time, and must not block: see @ref listener_threads "Listeners and threads".
  */
 class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscription>, public ObservableSubscription {
     public:
     static constexpr std::size_t FAKE_CHANGE_LISTENER_ID{static_cast<std::size_t>(-1)};
+
+    /**
+     * `"dxfcpp.subscription.slowListenerThreshold"`
+     *
+     * The system property with the time that the listeners of a subscription may take for one batch of events; a
+     * longer time is reported as a warning. A time period, `0.1s` by default; `0` turns the check off. Read when a
+     * subscription is created. See @ref listener_threads "Listeners and threads".
+     */
+    static constexpr char SLOW_LISTENER_THRESHOLD_PROPERTY[] = "dxfcpp.subscription.slowListenerThreshold";
+
+    /**
+     * `"dxfcpp.subscription.eventLagThreshold"`
+     *
+     * The system property with the age of the newest event of a received batch above which a warning is reported. A
+     * time period, `0` (the check is off) by default. Read when a subscription is created. See
+     * @ref listener_threads "Listeners and threads".
+     */
+    static constexpr char EVENT_LAG_THRESHOLD_PROPERTY[] = "dxfcpp.subscription.eventLagThreshold";
+
+    /**
+     * `"dxfcpp.subscription.warningPeriod"`
+     *
+     * The system property with the period of the warnings of a slow listener and of lagging events: each check of a
+     * subscription reports at most one warning per period. A time period, `1m` by default. Read when a subscription
+     * is created. See @ref listener_threads "Listeners and threads".
+     */
+    static constexpr char WARNING_PERIOD_PROPERTY[] = "dxfcpp.subscription.warningPeriod";
 
     ///
     using OnEventHandler = SimpleHandler<void(const std::vector<std::shared_ptr<EventType>> &)>;
@@ -53,12 +137,12 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     /**
      * The optimal events' batch limit for a single notification in OnEventHandler.
      */
-    static const std::int32_t OPTIMAL_BATCH_LIMIT = 0;
+    static constexpr std::int32_t OPTIMAL_BATCH_LIMIT = 0;
 
     /**
      * The maximum events' batch limit for a single notification in OnEventHandler.
      */
-    static const std::int32_t MAX_BATCH_LIMIT = std::numeric_limits<std::int32_t>::max();
+    static constexpr std::int32_t MAX_BATCH_LIMIT = (std::numeric_limits<std::int32_t>::max)();
 
     protected:
     friend struct DXFeed;
@@ -72,16 +156,32 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     std::unordered_set<EventTypeEnum> eventTypes_;
     JavaObjectHandle<DXFeedSubscription> handle_;
 
-    std::mutex eventListenerMutex_{};
-    JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
-    OnEventHandler onEvent_{};
+    // Set first by close(): the callbacks drop the batches of a closed subscription, its methods do nothing.
+    mutable std::atomic<bool> closed_{false};
+
+    // The id of the registration for the callbacks (see registerSubscription()); close() removes the registration.
+    std::size_t id_{};
+
+    mutable std::mutex eventListenerMutex_{};
+    mutable JavaObjectHandle<DXFeedEventListener> eventListenerHandle_;
+    mutable OnEventHandler onEvent_{"DXFeedSubscription"};
     mutable std::unordered_map<std::size_t, std::shared_ptr<ObservableSubscriptionChangeListener>> changeListeners_;
     mutable std::recursive_mutex changeListenersMutex_{};
+
+    // The feeds that own this subscription while it is attached to them (see DXFeed::attachSubscription()).
+    mutable std::mutex feedsMutex_{};
+    mutable std::vector<std::weak_ptr<const DXFeed>> feeds_{};
 
     static JavaObjectHandle<DXFeedSubscription>
     createSubscriptionHandleFromEventClassList(const std::unique_ptr<EventClassList> &list);
 
-    void setEventListenerHandle(Id<DXFeedSubscription> id);
+    // Registers a new subscription for the callbacks of its native listener.
+    static void registerSubscription(const std::shared_ptr<DXFeedSubscription> &subscription);
+
+    void addFeed(const std::shared_ptr<const DXFeed> &feed) const;
+    void removeFeed(const DXFeed *feed) const;
+
+    void setEventListenerHandle(std::size_t id);
 
     bool tryToSetEventListenerHandle();
 
@@ -102,11 +202,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         }
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end) : DXFeedSubscription() {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         eventTypes_ = std::unordered_set<EventTypeEnum>{begin, end};
 
         auto list = EventClassList::create(eventTypes_.begin(), eventTypes_.end());
@@ -122,11 +217,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 #endif
     DXFeedSubscription(EventTypeIt begin, EventTypeIt end, JavaObjectHandle<DXFeedSubscription> &&handle)
         : DXFeedSubscription() {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         eventTypes_ = std::unordered_set<EventTypeEnum>{begin, end};
         handle_ = std::move(handle);
     }
@@ -213,15 +303,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
         }
 #endif
     static std::shared_ptr<DXFeedSubscription> create(EventTypeIt begin, EventTypeIt end) {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("DXFeedSubscription::create(eventTypes = " + namesToString(begin, end) + ")");
-        }
-
         auto sub = createShared(begin, end);
-        auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
-
-        dxfcpp::ignoreUnused(id);
+        registerSubscription(sub);
 
         return sub;
     }
@@ -260,9 +343,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
     template <typename EventTypesCollection>
     static std::shared_ptr<DXFeedSubscription> create(EventTypesCollection &&eventTypes) {
         auto sub = createShared(std::forward<EventTypesCollection>(eventTypes));
-        auto id = ApiContext::getInstance()->getManager<EntityManager<DXFeedSubscription>>()->registerEntity(sub);
-
-        dxfcpp::ignoreUnused(id);
+        registerSubscription(sub);
 
         return sub;
     }
@@ -296,8 +377,79 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * while holding the lock for this subscription. This method clears lists of all installed
      * event listeners and subscription change listeners and makes sure that no more listeners
      * can be added.
+     *
+     * The subscription is detached from all the feeds, which do not own it anymore. After this method returns, the
+     * event listeners are not called; called from a listener or a callback of the library, it does not wait for the
+     * calls in progress on the other threads. Adding a listener to a closed subscription or attaching it to a feed does
+     * nothing, as a second close() does. A subscription that is attached to no feed is closed when its last pointer is
+     * released. See @ref entity_lifetime "Lifetime of the entities" and AutoClose.
      */
     void close() const;
+
+    /**
+     * The function that the silence watchdog calls (see setSilenceWatchdog()): the subscription and the time since its
+     * silence began.
+     */
+    using OnSilenceHandler =
+        std::function<void(const std::shared_ptr<DXFeedSubscription> &subscription, std::chrono::milliseconds silence)>;
+
+    /**
+     * Turns the silence watchdog of this subscription on or off. It is off by default.
+     *
+     * When the subscription receives no events for `timeout` while the endpoint of its feed is connected
+     * (DXEndpoint::State::CONNECTED), the library reports a warning through ErrorManager (ErrorInfo::Level::WARN, the
+     * component `DXFeedSubscription`) with the name of the subscription (its number and event types) and the time of
+     * the silence, then calls `onSilence`. This happens once per silence: the next batch of events, a new connection of
+     * the endpoint or an attach to a feed arm the watchdog again. The silence is counted from the latest of these: the
+     * last batch of events, this call, the attach to a feed and the transition of the endpoint to CONNECTED. A
+     * subscription that is attached to no feed, or whose endpoints are not connected, is not watched; with several
+     * connected endpoints the earliest connection counts.
+     *
+     * The data can stop while the connection stays up: the state of the endpoint does not change, and nothing else
+     * tells about it. The watchdog is off by default because a silence is not always a failure: a symbol that does not
+     * trade, a quiet market, the hours outside the trading session and a subscription without symbols receive no events
+     * for a long time. Choose a timeout above the usual pause of the symbols of the subscription, or watch a separate
+     * subscription to a symbol that is always active.
+     *
+     * `onSilence` is called on a thread of the library, one for all the subscriptions, outside of its locks. It may
+     * call the methods of the subscription and of the endpoint, for example reconnect:
+     *
+     * ```cpp
+     * auto endpoint = DXEndpoint::create()->connect("demo.dxfeed.com:7300");
+     * auto sub = endpoint->getFeed()->createSubscription(Quote::TYPE);
+     *
+     * sub->addEventListener<Quote>([](const auto &quotes) { ... });
+     * sub->addSymbols("AAPL");
+     *
+     * // A weak pointer: the subscription must not own its endpoint.
+     * sub->setSilenceWatchdog(std::chrono::seconds(30),
+     *                         [weakEndpoint = std::weak_ptr<DXEndpoint>(endpoint)](const auto &, auto silence) {
+     *                             if (const auto endpoint = weakEndpoint.lock()) {
+     *                                 endpoint->reconnect();
+     *                             }
+     *                         });
+     * ```
+     *
+     * Each new connection arms the watchdog again: if the symbols stay silent, such a function reconnects once per
+     * timeout. Count the reconnects or pause them if this is not wanted.
+     *
+     * `onSilence` should return soon: it delays the watchdog of the other subscriptions and the shutdown of the library
+     * at exit. Like a listener, it must not
+     * call dxfcpp::shutdown(). Its exception is reported through ErrorManager. close() of the subscription and a call
+     * with a zero timeout stop the watchdog, but do not wait for a call of `onSilence` in progress.
+     *
+     * A new call replaces the timeout and the function and arms the watchdog again. On a closed subscription it does
+     * nothing.
+     *
+     * The watchdog receives the events as an event listener does. So, like addEventListener(), on a subscription
+     * without event listeners it must be turned on before symbols are added to the attached subscription.
+     *
+     * @param timeout The silence to report; 0 or less turns the watchdog off.
+     * @param onSilence The function to call, or an empty one for the warning only.
+     * @throws JavaException IllegalStateException if the subscription has no event listeners, is attached and has
+     * symbols. The watchdog does not change then.
+     */
+    void setSilenceWatchdog(std::chrono::milliseconds timeout, OnSilenceHandler onSilence = {});
 
     /**
      * Returns a set of subscribed event types.
@@ -357,11 +509,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void setSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::setSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         setSymbolsImpl(list.get());
@@ -403,8 +550,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * Adds the specified symbol to the set of subscribed symbols.
      * This is a convenience method to subscribe to one symbol at a time that has a return fast-path for a case when
      * the symbol is already in the set.
-     * When subscribing to multiple symbols at once, it is preferable to use @ref DXFeedSubscription::addSymbols(const
-     * SymbolsCollection &collection) "addSymbols(symbols)" method.
+     * When subscribing to multiple symbols at once, it is preferable to use
+     * @ref DXFeedSubscription::addSymbols(const SymbolsCollection &) const "addSymbols(symbols)" method.
      *
      * Example:
      * ```cpp
@@ -432,11 +579,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void addSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::addSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         addSymbolsImpl(list.get());
@@ -475,8 +617,8 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
 
     /**
      * Removes the specified symbol from the set of subscribed symbols.
-     * To conveniently remove one or few symbols, you can use @ref DXFeedSubscription::removeSymbols(const
-     * SymbolsCollection &collection) "removeSymbols(symbols)" method.
+     * To conveniently remove one or few symbols, you can use
+     * @ref DXFeedSubscription::removeSymbols(SymbolsCollection &&) const "removeSymbols(symbols)" method.
      *
      * Example:
      * ```cpp
@@ -504,11 +646,6 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param end The end of the symbol collection.
      */
     template <typename SymbolIt> void removeSymbols(SymbolIt begin, SymbolIt end) const {
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug(toString() + "::removeSymbols(symbols = " + elementsToString(begin, end) + ")");
-        }
-
         auto list = SymbolWrapper::SymbolListUtils::toGraalListUnique(begin, end);
 
         removeSymbolsImpl(list.get());
@@ -584,6 +721,35 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
      * @param aggregationPeriod the new aggregation period (in millis) for data
      */
     void setAggregationPeriod(std::int64_t aggregationPeriod) const;
+
+    /**
+     * Returns the aggregation period that was applied to the events delivered to this subscription: the maximum of the
+     * period that the server applies (see DXEndpoint::getAggregationPeriodInfo()) and getAggregationPeriod(), as it
+     * was used when the events were delivered.
+     *
+     * The value is informational and updates when the events are delivered: it is TimePeriodInfo::UNKNOWN until the
+     * first events arrive.
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html#getAggregationPeriodInfo--)
+     *
+     * @return The applied aggregation period info, or TimePeriodInfo::UNKNOWN.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    TimePeriodInfo getAggregationPeriodInfo() const;
+
+    /**
+     * Returns the total number of events that were dropped for this subscription since it was created.
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXFeedSubscription.html#getTotalDroppedEvents--)
+     *
+     * @return The total number of dropped events.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    std::int64_t getTotalDroppedEvents() const;
 
     /**
      * Adds listener for events.
@@ -785,7 +951,7 @@ class DXFCPP_EXPORT DXFeedSubscription : public RequireMakeShared<DXFeedSubscrip
  */
 class DXFCPP_EXPORT DXFeedTimeSeriesSubscription : public RequireMakeShared<DXFeedTimeSeriesSubscription>,
                                                    public DXFeedSubscription {
-    std::atomic<std::int64_t> fromTime_{std::numeric_limits<std::int64_t>::max()};
+    std::atomic<std::int64_t> fromTime_{(std::numeric_limits<std::int64_t>::max)()};
 
     static void registerEntity();
 

@@ -10,6 +10,8 @@
 #include <deque>
 #include <memory>
 #include <mutex>
+#include <set>
+#include <unordered_set>
 #include <vector>
 
 using namespace std::literals;
@@ -126,6 +128,17 @@ struct IndexedTxModelFixture : test::LocalHubFixture {
 // Not EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END: they are statics of the library, not constants.
 constexpr std::int32_t SNAPSHOT_BEGIN_END = 0x04 | 0x08;
 
+// The ids of the sources (getSources() reads the source list of the SDK and releases it).
+std::set<std::int32_t> sourceIds(const std::unordered_set<EventSourceWrapper> &sources) {
+    std::set<std::int32_t> ids{};
+
+    for (const auto &source : sources) {
+        ids.insert(source.isOrderSource() ? source.asOrderSource()->id() : source.asIndexedEventSource()->id());
+    }
+
+    return ids;
+}
+
 } // namespace
 
 TEST_CASE_FIXTURE(IndexedTxModelFixture, "IndexedTxModel: initial state") {
@@ -147,6 +160,8 @@ TEST_CASE_FIXTURE(IndexedTxModelFixture, "IndexedTxModel: change sources") {
                 ->withSources({OrderSource::ntv, OrderSource::NTV})                     // override previous sources
                 ->build();
 
+    REQUIRE(sourceIds(model->getSources()) == std::set{OrderSource::ntv.id(), OrderSource::NTV.id()});
+
     publishAndProcess(dex); // publish an unsubscribed source
     assertIsChanged(false);
 
@@ -156,6 +171,8 @@ TEST_CASE_FIXTURE(IndexedTxModelFixture, "IndexedTxModel: change sources") {
     assertReceivedEventCount(2);
 
     model->setSources({OrderSource::DEX}); // change source
+
+    REQUIRE(sourceIds(model->getSources()) == std::set{OrderSource::DEX.id()});
 
     publishAndProcess(dex); // publish a subscribed source
     assertIsChanged(true);
@@ -169,6 +186,8 @@ TEST_CASE_FIXTURE(IndexedTxModelFixture, "IndexedTxModel: empty sources subscrib
     const auto ntv = createOrder(0, OrderSource::NTV, 3, SNAPSHOT_BEGIN_END);
 
     model = builder()->build();
+
+    REQUIRE(model->getSources().empty());
 
     publishAndProcess(std::vector<std::shared_ptr<Order>>{ntvLower, ntv, dex});
     assertIsChanged(true);

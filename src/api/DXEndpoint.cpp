@@ -4,103 +4,383 @@
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 
 #include "../../include/dxfeed_graal_c_api/api.h"
-#include "../../include/dxfeed_graal_cpp_api/isolated/api/IsolatedDXEndpoint.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../internal/EndpointAddress.hpp"
+#include "../internal/ErrorReporting.hpp"
+#include "../internal/Isolate.hpp"
+#include "../internal/Platform.hpp"
+#include "../internal/context/ApiContext.hpp"
+#include "../internal/managers/EntityManager.hpp"
+#include "../internal/utils/debug/Debug.hpp"
+#include "../isolated/api/IsolatedDXEndpoint.hpp"
+#include "../isolated/api/IsolatedMessageConnector.hpp"
+#include "../isolated/util/IsolatedTimePeriod.hpp"
+#include "../../include/dxfeed_graal_cpp_api/ondemand/OnDemandService.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 #if defined(DXFCXX_ENABLE_METRICS)
-#    include "../../include/dxfeed_graal_cpp_api/internal/Metrics.hpp"
+#    include "../internal/Metrics.hpp"
 #endif
 
-#include <dxfg_api.h>
+#include <algorithm>
+#include <atomic>
+#include <cctype>
+#include <chrono>
+#include <cstdint>
+#include <dxfg_v4_api.h>
+#include <exception>
 #include <filesystem>
 #include <memory>
+#include <mutex>
+#include <optional>
 #include <string>
+#include <unordered_map>
 #include <utility>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const std::string DXEndpoint::NAME_PROPERTY = "name";
-const std::string DXEndpoint::DXFEED_PROPERTIES_PROPERTY = "dxfeed.properties";
-const std::string DXEndpoint::DXFEED_ADDRESS_PROPERTY = "dxfeed.address";
-const std::string DXEndpoint::DXFEED_USER_PROPERTY = "dxfeed.user";
-const std::string DXEndpoint::DXFEED_PASSWORD_PROPERTY = "dxfeed.password";
-const std::string DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY = "dxfeed.threadPoolSize";
-const std::string DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY = "dxfeed.aggregationPeriod";
-const std::string DXEndpoint::DXFEED_WILDCARD_ENABLE_PROPERTY = "dxfeed.wildcard.enable";
-const std::string DXEndpoint::DXPUBLISHER_PROPERTIES_PROPERTY = "dxpublisher.properties";
-const std::string DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY = "dxpublisher.address";
-const std::string DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY = "dxpublisher.threadPoolSize";
-const std::string DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY = "dxendpoint.eventTime";
-const std::string DXEndpoint::DXENDPOINT_STORE_EVERYTHING_PROPERTY = "dxendpoint.storeEverything";
-const std::string DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY = "dxscheme.nanoTime";
-const std::string DXEndpoint::DXSCHEME_ENABLED_PROPERTY_PREFIX = "dxscheme.enabled.";
+namespace {
+
+// The line of the versions is reported (reportVersionsOnce()).
+constinit std::atomic<bool> versionsReported{false};
+
+// Set while this thread holds a lock of the endpoints: the line of the versions is reported after the lock is released,
+// because the handler of ErrorManager may create an endpoint itself.
+constinit thread_local bool versionsDeferred = false;
+
+struct DeferVersionsScope {
+    DeferVersionsScope() noexcept : previous_{versionsDeferred} {
+        versionsDeferred = true;
+    }
+
+    ~DeferVersionsScope() noexcept {
+        versionsDeferred = previous_;
+    }
+
+    DeferVersionsScope(const DeferVersionsScope &) = delete;
+    DeferVersionsScope &operator=(const DeferVersionsScope &) = delete;
+
+  private:
+    bool previous_;
+};
+
+// Reports the versions of the C++ API and of the SDK and the platform as an INFO message of ErrorManager, once per
+// process. Called after an endpoint is created, out of the locks of the library.
+void reportVersionsOnce() noexcept {
+    if (versionsDeferred || versionsReported.exchange(true)) {
+        return;
+    }
+
+    try {
+        auto sdkVersion = Isolate::getGraalNativeSdkVersion();
+
+        detail::reportInfo("DXEndpoint", std::string("dxFeed Graal C++ API ") + DXFCXX_VERSION +
+                                             ", dxFeed Graal Native SDK " +
+                                             (sdkVersion.empty() ? std::string("unknown") : std::move(sdkVersion)) +
+                                             ", " + Platform::getPlatformInfo());
+    } catch (...) {
+        // The line is lost; the endpoint is created anyway.
+    }
+}
+
+bool startsWithIgnoreCase(std::string_view text, std::string_view prefix) noexcept {
+    return text.size() >= prefix.size() &&
+           std::equal(prefix.begin(), prefix.end(), text.begin(), [](char a, char b) {
+               return std::tolower(static_cast<unsigned char>(a)) == std::tolower(static_cast<unsigned char>(b));
+           });
+}
+
+bool endsWithIgnoreCase(std::string_view text, std::string_view suffix) noexcept {
+    return text.size() >= suffix.size() && startsWithIgnoreCase(text.substr(text.size() - suffix.size()), suffix);
+}
+
+} // namespace
+
+// Doxygen skips src/internal, where this function is declared, and would warn on its definition.
+/// @cond
+void detail::checkEndpointAddress(std::string_view address) {
+    // QD trims the address as String.trim() does: the characters up to the space.
+    const auto start = std::find_if(address.begin(), address.end(), [](char c) {
+        return static_cast<unsigned char>(c) > ' ';
+    });
+    const auto text = address.substr(static_cast<std::size_t>(start - address.begin()));
+
+    for (const std::string_view scheme : {"http://", "https://"}) {
+        if (!startsWithIgnoreCase(text, scheme)) {
+            continue;
+        }
+
+        // A configuration URL of QD: http(s)://.../<name>.config#<name>.
+        if (const auto hash = text.find('#'); hash != std::string_view::npos &&
+                                              endsWithIgnoreCase(text.substr(0, hash), ".config")) {
+            return;
+        }
+
+        throw InvalidArgumentException(
+            std::string("DXEndpoint::connect(address): an ") + std::string(scheme) +
+            " URL is not an address of an endpoint. Use a QD address host:port[login=...], for example "
+            "demo.dxfeed.com:7300; the URLs of REST, CometD and IPF services do not work here");
+    }
+
+    for (const std::string_view scheme : {"ws://", "wss://"}) {
+        if (startsWithIgnoreCase(text, scheme)) {
+            throw InvalidArgumentException(
+                std::string("DXEndpoint::connect(address): a ") + std::string(scheme) +
+                " URL is not an address of an endpoint. Use a QD address host:port[login=...], or "
+                "dxlink:wss://host/path[login=dxlink:token] for dxLink");
+        }
+    }
+}
+/// @endcond
 
 struct DXEndpoint::Impl {
     struct Registry {
         std::mutex mutex;
         std::unordered_map<Role, std::shared_ptr<DXEndpoint>> instances;
+
+        // The created endpoints: the library owns them until they are closed. A separate mutex: getInstance() creates
+        // the default endpoint under the mutex of the instances.
+        std::mutex liveMutex;
+        std::unordered_map<const DXEndpoint *, std::shared_ptr<DXEndpoint>> live;
     };
 
     static Registry& getRegistry() {
-        // The registry owns Java handles, so it must be destroyed before the Graal isolate.
-        ignoreUnused(Isolate::getInstance());
-        static Registry registry;
+        // Never deleted: the default endpoints are not closed at exit (it would call Graal).
+        static Registry &registry = *new Registry{};
 
         return registry;
     }
 
-    static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_endpoint_state_t oldState,
-                                 dxfg_endpoint_state_t newState, void *userData) {
-        const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
-        const auto endpoint = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getEntity(id);
-
-        if constexpr (Debugger::isDebug) {
-            // ReSharper disable once CppDFAUnreachableCode
-            Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
-                            ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr"));
-        }
-
-        if (endpoint) {
-            endpoint->onStateChange_(isolated::api::IsolatedDXEndpoint::graalStateToState(oldState),
-                                     isolated::api::IsolatedDXEndpoint::graalStateToState(newState));
-
-            if (newState == DXFG_ENDPOINT_STATE_CLOSED) {
-                // TODO: fix endpoint lifetime
-                // ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->unregisterEntity(id);
-            }
-        }
+    static auto getManager() {
+        return ApiContext::getInstance().getManager<WeakEntityManager<DXEndpoint>>();
     }
 
-    static std::shared_ptr<DXEndpoint> getInstance(Role role) noexcept {
+    // The endpoint is closed: the library stops owning it, its feed stops owning the attached subscriptions, its
+    // publisher releases its subscriptions. Runs once, whichever way the endpoint was closed (close(),
+    // closeAndAwaitTermination(), the CLOSED notification).
+    static void onClosed(const DXEndpoint &endpoint) {
+        auto &impl = *endpoint.impl_;
+
+        if (impl.closed_.exchange(true)) {
+            return;
+        }
+
+        std::shared_ptr<DXFeed> feed{};
+        std::shared_ptr<DXPublisher> publisher{};
+        JavaObjectHandle<DXEndpointMessageConnectorListener> connectorListener{};
+
+        {
+            std::lock_guard lock{impl.mutex_};
+
+            feed = impl.feed_;
+            publisher = impl.publisher_;
+            connectorListener = std::move(impl.connectorListenerHandle_);
+        }
+
+        // Removed and released out of the lock: the release waits for a call of the listener in progress, and a
+        // listener may take the lock (addMessageConnectorListener(), getFeed()).
+        if (connectorListener) {
+            try {
+                isolated::api::IsolatedMessageConnector::Listener::remove(endpoint.handle_, connectorListener);
+            } catch (...) {
+                ErrorManager::reportException("DXEndpoint", std::current_exception());
+            }
+
+            releaseOutsideCallbacks(
+                std::make_shared<JavaObjectHandle<DXEndpointMessageConnectorListener>>(std::move(connectorListener)));
+        }
+
+        // A listener that holds the endpoint must not keep it alive after the close.
+        impl.onConnectorChange_.removeAll();
+
+        if (feed) {
+            feed->releaseSubscriptions();
+        }
+
+        if (publisher) {
+            publisher->releaseSubscriptions();
+        }
+
+        std::shared_ptr<DXEndpoint> released{};
+
+        {
+            auto &registry = getRegistry();
+            std::lock_guard lock{registry.liveMutex};
+
+            if (const auto found = registry.live.find(&endpoint); found != registry.live.end()) {
+                released = std::move(found->second);
+                registry.live.erase(found);
+            }
+        }
+
+        // The last pointer released inside a callback would remove the state listener that is being called.
+        releaseOutsideCallbacks(std::move(released));
+    }
+
+    static void onPropertyChange(graal_isolatethread_t * /*thread*/, dxfg_v4_endpoint_state_t oldState,
+                                 dxfg_v4_endpoint_state_t newState, void *userData) {
+        runCallback("DXEndpoint", [&] {
+            const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
+            auto endpoint = getManager()->getEntity(id);
+
+            if constexpr (Debugger::isDebug) {
+                // ReSharper disable once CppDFAUnreachableCode
+                Debugger::debug("onStateChange: id = " + std::to_string(id.getValue()) +
+                                ", endpoint = " + ((endpoint) ? endpoint->toString() : "nullptr"));
+            }
+
+            if (!endpoint) {
+                return;
+            }
+
+            // Before the listeners: the silence of subscriptions is counted from this transition.
+            endpoint->impl_->onStateNotified(newState == DXFG_ENDPOINT_STATE_CONNECTED);
+
+            // CLOSED is the last notification.
+            const bool closing = newState == DXFG_ENDPOINT_STATE_CLOSED;
+
+            if (closing ? !endpoint->impl_->closedNotified_.exchange(true) : !endpoint->impl_->closedNotified_) {
+                endpoint->onStateChange_(isolated::api::IsolatedDXEndpoint::graalStateToState(oldState),
+                                         isolated::api::IsolatedDXEndpoint::graalStateToState(newState));
+
+                if (closing) {
+                    endpoint->onStateChange_.removeAll();
+                    onClosed(*endpoint);
+                    ignoreUnused(getManager()->unregisterEntity(id));
+                }
+            }
+
+            releaseOutsideCallbacks(std::move(endpoint));
+        });
+    }
+
+    // The listener of the message connectors of the SDK: called on the thread of the SDK listeners, one call at a time.
+    // The connector handle is valid during the call only, so the snapshot is taken here.
+    static void onMessageConnectorChange(graal_isolatethread_t * /*thread*/, dxfg_v4_message_connector_t *connector,
+                                         void *userData) {
+        runCallback("DXEndpoint", [&] {
+            const auto id = Id<DXEndpoint>::from(dxfcpp::bit_cast<Id<DXEndpoint>::ValueType>(userData));
+            auto endpoint = getManager()->getEntity(id);
+
+            if (!endpoint) {
+                return;
+            }
+
+            auto &impl = *endpoint->impl_;
+            std::optional<MessageConnectorInfo> info{};
+            std::exception_ptr error{};
+
+            if (!impl.closed_) {
+                try {
+                    info = isolated::api::IsolatedMessageConnector::getInfo(connector);
+                } catch (...) {
+                    error = std::current_exception();
+                }
+            }
+
+            if (info) {
+                impl.onConnectorChange_(*info);
+            }
+
+            // The last pointer released inside the callback would release the listener that is being called.
+            releaseOutsideCallbacks(std::move(endpoint));
+
+            if (error) {
+                std::rethrow_exception(error);
+            }
+        });
+    }
+
+    static std::shared_ptr<DXEndpoint> getInstance(Role role) {
         if constexpr (Debugger::isDebug) {
             // ReSharper disable once CppDFAUnreachableCode
             Debugger::debug("DXEndpoint::Impl::getInstance(role = " + roleToString(role) + ")");
         }
 
-        auto &[mutex, instances] = getRegistry();
+        auto &registry = getRegistry();
+        std::shared_ptr<DXEndpoint> result{};
 
-        std::lock_guard lock(mutex);
+        {
+            DeferVersionsScope deferVersions{};
+            std::lock_guard lock(registry.mutex);
 
-        auto& instance = instances[role];
+            // The default endpoint created earlier is closed and released.
+            if (Isolate::isShutDown()) {
+                throw GraalException(CEntryPointErrorsEnum::SHUT_DOWN);
+            }
 
-        if (!instance) {
-            instance = create(role);
+            auto &instance = registry.instances[role];
+
+            if (!instance) {
+                instance = create(role);
+            }
+
+            result = instance;
         }
 
-        return instance;
+        reportVersionsOnce();
+
+        return result;
+    }
+
+    Id<DXEndpoint>::ValueType id_{};
+    std::atomic<bool> closed_{false};         // onClosed() has run
+    std::atomic<bool> closedNotified_{false}; // CLOSED was passed to the state listeners
+
+    // The time of the last transition to CONNECTED in nanoseconds of steady_clock (see getConnectedSince()).
+    // NOT_NOTIFIED until the first notification of the state, NOT_CONNECTED while the endpoint is not connected.
+    static constexpr std::int64_t NOT_NOTIFIED = 0;
+    static constexpr std::int64_t NOT_CONNECTED = -1;
+    std::atomic<std::int64_t> connectedSince_{NOT_NOTIFIED};
+
+    static std::int64_t steadyNowNanos() noexcept {
+        const std::int64_t now = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                             std::chrono::steady_clock::now().time_since_epoch())
+                             .count();
+
+        // 0 and -1 are reserved.
+        return (std::max)(now, std::int64_t{1});
+    }
+
+    void onStateNotified(bool connected) noexcept {
+        connectedSince_.store(connected ? steadyNowNanos() : NOT_CONNECTED);
+    }
+
+    // The endpoint may have been connected before its state listener was registered (by build()). A notification that
+    // came meanwhile is newer and wins: the state is taken only while no notification has come.
+    void initConnectedSince(bool connected) noexcept {
+        if (!connected) {
+            return;
+        }
+
+        auto expected = NOT_NOTIFIED;
+
+        connectedSince_.compare_exchange_strong(expected, steadyNowNanos());
     }
 
     mutable std::mutex mutex_{};
     std::shared_ptr<DXFeed> feed_{};
     std::shared_ptr<DXPublisher> publisher_{};
+    std::shared_ptr<OnDemandService> onDemandService_{};
 
-    std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint> &handle) {
+    // The listeners of the message connectors. The listener of the SDK that calls them is registered at the first
+    // addMessageConnectorListener(), so no snapshot is read before, and is removed and released when the endpoint is
+    // closed (onClosed()) or destroyed. The handle is guarded by mutex_.
+    SimpleHandler<void(const MessageConnectorInfo &)> onConnectorChange_{"DXEndpoint"};
+    JavaObjectHandle<DXEndpointMessageConnectorListener> connectorListenerHandle_{};
+
+    std::shared_ptr<DXFeed> getFeed(const JavaObjectHandle<DXEndpoint> &handle, std::weak_ptr<const DXEndpoint> endpoint) {
         std::lock_guard lock{mutex_};
 
         if (feed_) {
             return feed_;
         }
 
-        return feed_ = DXFeed::create(isolated::api::IsolatedDXEndpoint::getFeed(handle));
+        auto feed = DXFeed::create(isolated::api::IsolatedDXEndpoint::getFeed(handle));
+
+        // The feed knows its endpoint weakly: it only describes the endpoint in the text of a promise timeout.
+        feed->endpoint_ = std::move(endpoint);
+
+        return feed_ = std::move(feed);
     }
 
     std::shared_ptr<DXPublisher> getPublisher(const JavaObjectHandle<DXEndpoint> &handle) {
@@ -127,45 +407,65 @@ std::shared_ptr<DXEndpoint> DXEndpoint::create(void *endpointHandle, Role role,
     }
 
     auto endpoint = createShared(JavaObjectHandle<DXEndpoint>(endpointHandle), role, properties.at(NAME_PROPERTY));
-    const auto id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->registerEntity(endpoint);
+    const auto id = Impl::getManager()->registerEntity(endpoint);
 
+    endpoint->impl_->id_ = id.getValue();
     endpoint->stateChangeListenerHandle_ = isolated::api::IsolatedDXEndpoint::StateChangeListener::create(
         dxfcpp::bit_cast<void *>(&Impl::onPropertyChange), dxfcpp::bit_cast<void *>(id.getValue()));
     isolated::api::IsolatedDXEndpoint::addStateChangeListener(endpoint->handle_, endpoint->stateChangeListenerHandle_);
 
-    return endpoint;
-}
+    try {
+        endpoint->impl_->initConnectedSince(endpoint->getState() == State::CONNECTED);
+    } catch (...) {
+        // The state comes with the next notification.
+    }
 
-void DXEndpoint::executorImpl(const JavaObjectHandle<ExecutorTag> &executor) const {
-    isolated::api::IsolatedDXEndpoint::executor(handle_, executor);
+    {
+        auto &registry = Impl::getRegistry();
+        std::lock_guard lock{registry.liveMutex};
+
+        registry.live.emplace(endpoint.get(), endpoint);
+    }
+
+    return endpoint;
 }
 
 DXEndpoint::State DXEndpoint::getState() const {
     return isolated::api::IsolatedDXEndpoint::getState(handle_);
 }
 
-std::shared_ptr<DXEndpoint> DXEndpoint::user(const StringLike &user) {
-    // TODO: check invalid utf-8 [EN-8233]
-    isolated::api::IsolatedDXEndpoint::user(handle_, user);
+std::optional<std::chrono::steady_clock::time_point> DXEndpoint::getConnectedSince() const noexcept {
+    const auto since = impl_->connectedSince_.load();
 
-    return sharedAs<DXEndpoint>();
-}
-
-std::shared_ptr<DXEndpoint> DXEndpoint::password(const StringLike &password) {
-    // TODO: check invalid utf-8 [EN-8233]
-    isolated::api::IsolatedDXEndpoint::password(handle_, password);
-
-    return sharedAs<DXEndpoint>();
-}
-
-std::shared_ptr<DXEndpoint> DXEndpoint::connect(const StringLike &address) {
-    // TODO: check invalid utf-8 [EN-8233]
-    if constexpr (Debugger::isDebug) {
-        // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + address + ")");
+    if (since <= 0) {
+        return std::nullopt;
     }
 
-    isolated::api::IsolatedDXEndpoint::connect(handle_, address);
+    return std::chrono::steady_clock::time_point{
+        std::chrono::duration_cast<std::chrono::steady_clock::duration>(std::chrono::nanoseconds{since})};
+}
+
+std::shared_ptr<DXEndpoint> DXEndpoint::user(StringParam user) {
+    isolated::api::IsolatedDXEndpoint::user(handle_, user.view());
+
+    return sharedAs<DXEndpoint>();
+}
+
+std::shared_ptr<DXEndpoint> DXEndpoint::password(StringParam password) {
+    isolated::api::IsolatedDXEndpoint::password(handle_, password.view());
+
+    return sharedAs<DXEndpoint>();
+}
+
+std::shared_ptr<DXEndpoint> DXEndpoint::connect(StringParam address) {
+    if constexpr (Debugger::isDebug) {
+        // ReSharper disable once CppDFAUnreachableCode
+        Debugger::debug("DXEndpoint{" + handle_.toString() + "}::connect(address = " + std::string(address.view()) +
+                        ")");
+    }
+
+    detail::checkEndpointAddress(address.view());
+    isolated::api::IsolatedDXEndpoint::connect(handle_, address.view());
 
     return sharedAs<DXEndpoint>();
 }
@@ -222,6 +522,7 @@ void DXEndpoint::closeAndAwaitTermination() const {
     }
 
     isolated::api::IsolatedDXEndpoint::closeAndAwaitTermination(handle_);
+    Impl::onClosed(*this);
 }
 
 std::shared_ptr<DXFeed> DXEndpoint::getFeed() const {
@@ -230,7 +531,7 @@ std::shared_ptr<DXFeed> DXEndpoint::getFeed() const {
         Debugger::debug("DXEndpoint{" + handle_.toString() + "}::getFeed()");
     }
 
-    return impl_->getFeed(handle_);
+    return impl_->getFeed(handle_, sharedAs<const DXEndpoint>());
 }
 
 std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() const {
@@ -240,6 +541,52 @@ std::shared_ptr<DXPublisher> DXEndpoint::getPublisher() const {
     }
 
     return impl_->getPublisher(handle_);
+}
+
+std::shared_ptr<OnDemandService> DXEndpoint::getOnDemandService() {
+    std::lock_guard lock{impl_->mutex_};
+
+    if (impl_->onDemandService_) {
+        return impl_->onDemandService_;
+    }
+
+    return impl_->onDemandService_ = OnDemandService::create(sharedAs<DXEndpoint>());
+}
+
+std::optional<TimePeriod> DXEndpoint::getRequestedAggregationPeriod() const {
+    const auto period = isolated::api::IsolatedDXEndpoint::getRequestedAggregationPeriodMillis(handle_);
+
+    if (period < 0) {
+        return std::nullopt;
+    }
+
+    // TimePeriod can not move, so the value is created in place.
+    return std::optional<TimePeriod>{std::in_place, TimePeriod::ConstructionKey{},
+                                     isolated::util::IsolatedTimePeriod::valueOf(period)};
+}
+
+void DXEndpoint::setRequestedAggregationPeriod(const TimePeriod &requestedAggregationPeriod) const {
+    isolated::api::IsolatedDXEndpoint::setRequestedAggregationPeriodMillis(handle_,
+                                                                           requestedAggregationPeriod.getTime());
+}
+
+void DXEndpoint::setRequestedAggregationPeriod(std::chrono::milliseconds requestedAggregationPeriod) const {
+    setRequestedAggregationPeriod(TimePeriod::valueOf(requestedAggregationPeriod));
+}
+
+void DXEndpoint::setRequestedAggregationPeriod(std::int64_t requestedAggregationPeriod) const {
+    setRequestedAggregationPeriod(TimePeriod::valueOf(requestedAggregationPeriod));
+}
+
+void DXEndpoint::setRequestedAggregationPeriod(std::nullopt_t) const {
+    // A negative period clears the requested one.
+    isolated::api::IsolatedDXEndpoint::setRequestedAggregationPeriodMillis(handle_, -1);
+}
+
+TimePeriodInfo DXEndpoint::getAggregationPeriodInfo() const {
+    const auto [min, max] = isolated::api::IsolatedDXEndpoint::getAggregationPeriodInfo(handle_);
+
+    return min < 0 || max < 0 ? TimePeriodInfo::UNKNOWN : TimePeriodInfo::valueOf(min, max);
 }
 
 std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() {
@@ -258,7 +605,7 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::create() {
 void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
     // The default properties file is only valid for the
     // Feed, OnDemandFeed and Publisher roles.
-    const auto &propertiesFileKey = [](auto role) constexpr -> const auto & {
+    const std::string propertiesFileKey = [](auto role) -> const char * {
         switch (role) {
         case Role::FEED:
         case Role::ON_DEMAND_FEED:
@@ -272,7 +619,7 @@ void DXEndpoint::Builder::loadDefaultPropertiesImpl() {
         default:;
         }
 
-        return String::EMPTY;
+        return "";
     }(role_);
 
     if (propertiesFileKey.empty()) {
@@ -310,17 +657,17 @@ std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withRole(Role role) {
     return sharedAs<Builder>();
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(const StringLike &key, const StringLike &value) {
-    // TODO: check invalid utf-8 [EN-8233]
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withProperty(StringParam key, StringParam value) {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperty(key = " + key +
-                        ", value = " + value + ")");
+        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperty(key = " +
+                        std::string(key.view()) + ", value = " + std::string(value.view()) + ")");
     }
 
-    properties_[key] = value;
+    // The SDK first: a key or a value that is not valid UTF-8 throws and leaves the builder unchanged.
+    isolated::api::IsolatedDXEndpoint::Builder::withProperty(handle_, key.view(), value.view());
 
-    isolated::api::IsolatedDXEndpoint::Builder::withProperty(handle_, key, value);
+    properties_[std::string(key.view())] = value.view();
 
     return sharedAs<Builder>();
 }
@@ -335,14 +682,14 @@ void DXEndpoint::Builder::withExecutorImpl(const JavaObjectHandle<ExecutorTag> &
     isolated::api::IsolatedDXEndpoint::Builder::withExecutor(handle_, executor);
 }
 
-bool DXEndpoint::Builder::supportsProperty(const StringLike &key) const {
-    // TODO: check invalid utf-8 [EN-8233]
+bool DXEndpoint::Builder::supportsProperty(StringParam key) const {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::supportsProperty(key = " + key + ")");
+        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() +
+                        "}::supportsProperty(key = " + std::string(key.view()) + ")");
     }
 
-    return isolated::api::IsolatedDXEndpoint::Builder::supportsProperty(handle_, key);
+    return isolated::api::IsolatedDXEndpoint::Builder::supportsProperty(handle_, key.view());
 }
 
 std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
@@ -354,16 +701,22 @@ std::shared_ptr<DXEndpoint> DXEndpoint::Builder::build() {
     loadDefaultPropertiesImpl();
 
     if (auto name = properties_.contains(NAME_PROPERTY) ? properties_.at(NAME_PROPERTY) : std::string{}; name.empty()) {
-        const std::size_t id = ApiContext::getInstance()->getManager<EntityManager<DXEndpoint>>()->getLastId() + 1;
+        const std::size_t id = Impl::getManager()->getLastId() + 1;
 
-        name = std::string("qdcxx") + ((id <= 1) ? String::EMPTY : std::string("-") + std::to_string(id));
+        name = std::string("qdcxx") + ((id <= 1) ? std::string{} : std::string("-") + std::to_string(id));
 
         const auto newBuilder = withProperty(NAME_PROPERTY, name);
 
         return newBuilder->build();
     }
 
-    return DXEndpoint::create(isolated::api::IsolatedDXEndpoint::Builder::build(handle_), role_, properties_);
+    auto endpoint =
+        DXEndpoint::create(isolated::api::IsolatedDXEndpoint::Builder::build(handle_), role_, properties_);
+
+    // No lock of the library is held here; a caller that holds one sets DeferVersionsScope.
+    reportVersionsOnce();
+
+    return endpoint;
 }
 
 DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept {
@@ -373,7 +726,7 @@ DXEndpoint::Builder::Builder(LockExternalConstructionTag) noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", 1);
 #endif
 }
 
@@ -384,15 +737,15 @@ DXEndpoint::Builder::~Builder() noexcept {
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint_Builder", -1);
 #endif
 }
 
-std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(const StringLike &name) {
-    // TODO: check invalid utf-8 [EN-8233]
+std::shared_ptr<DXEndpoint::Builder> DXEndpoint::Builder::withName(StringParam name) {
     if constexpr (Debugger::isDebug) {
         // ReSharper disable once CppDFAUnreachableCode
-        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + name + ")");
+        Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withName(name = " + std::string(name.view()) +
+                        ")");
     }
 
     return withProperty(NAME_PROPERTY, name);
@@ -443,7 +796,7 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag) : role_{}, impl_(std::make_u
     }
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
 #endif
 }
 
@@ -457,7 +810,7 @@ DXEndpoint::DXEndpoint(LockExternalConstructionTag, JavaObjectHandle<DXEndpoint>
     handle_ = std::move(handle);
 
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", 1);
 #endif
 }
 
@@ -468,23 +821,31 @@ DXEndpoint::~DXEndpoint() noexcept {
     }
 
     if (handle_ && stateChangeListenerHandle_) {
-        try {
+        runRelease("DXEndpoint", [&] {
             isolated::api::IsolatedDXEndpoint::removeStateChangeListener(handle_, stateChangeListenerHandle_);
-        } catch (...) {
-            // Destructors must not propagate errors during process shutdown.
-        }
+        });
+    }
+
+    // The endpoint was not closed: the listener of the message connectors is removed here and released with impl_.
+    if (handle_ && impl_->connectorListenerHandle_) {
+        runRelease("DXEndpoint", [&] {
+            isolated::api::IsolatedMessageConnector::Listener::remove(handle_, impl_->connectorListenerHandle_);
+        });
     }
 
     if (handle_) {
-        try {
+        runRelease("DXEndpoint", [&] {
             isolated::api::IsolatedDXEndpoint::close(handle_);
-        } catch (...) {
-            // Destructors must not propagate errors during process shutdown.
-        }
+        });
     }
 
+    // The CLOSED notification may not have come.
+    runRelease("DXEndpoint", [&] {
+        ignoreUnused(Impl::getManager()->unregisterEntity(Id<DXEndpoint>::from(impl_->id_)));
+    });
+
 #if defined(DXFCXX_ENABLE_METRICS)
-    ApiContext::getInstance()->getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", -1);
+    ApiContext::getInstance().getManager<dxfcpp::MetricsManager>()->add("Entity.DXEndpoint", -1);
 #endif
 }
 
@@ -546,11 +907,50 @@ const std::string &DXEndpoint::getName() const & noexcept {
 }
 
 void DXEndpoint::removeStateChangeListener(std::size_t listenerId) noexcept {
-    onStateChange_ -= listenerId;
+    try {
+        onStateChange_ -= listenerId;
+    } catch (...) {
+        // SimpleHandler::remove() copies the list of listeners: it can fail to allocate.
+        ErrorManager::reportException("DXEndpoint", std::current_exception());
+    }
 }
 
 SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &DXEndpoint::onStateChange() noexcept {
     return onStateChange_;
+}
+
+std::optional<ConnectionError> DXEndpoint::getLastConnectionError() const {
+    return isolated::api::IsolatedMessageConnector::getLastConnectionError(handle_);
+}
+
+std::vector<MessageConnectorInfo> DXEndpoint::getConnectors() const {
+    return isolated::api::IsolatedMessageConnector::getConnectors(handle_);
+}
+
+std::size_t DXEndpoint::addMessageConnectorListener(std::function<void(const MessageConnectorInfo &)> listener) {
+    auto &impl = *impl_;
+    std::lock_guard lock{impl.mutex_};
+
+    // A closed endpoint calls no listener: nothing is registered for it.
+    if (!impl.connectorListenerHandle_ && !impl.closed_) {
+        auto connectorListener = isolated::api::IsolatedMessageConnector::Listener::create(
+            dxfcpp::bit_cast<void *>(&Impl::onMessageConnectorChange), dxfcpp::bit_cast<void *>(impl.id_));
+
+        isolated::api::IsolatedMessageConnector::Listener::add(handle_, connectorListener);
+        impl.connectorListenerHandle_ = std::move(connectorListener);
+    }
+
+    return impl.onConnectorChange_ += std::move(listener);
+}
+
+void DXEndpoint::removeMessageConnectorListener(std::size_t listenerId) noexcept {
+    try {
+        // The listener of the SDK stays registered until the endpoint is closed.
+        impl_->onConnectorChange_ -= listenerId;
+    } catch (...) {
+        // SimpleHandler::remove() copies the list of listeners: it can fail to allocate.
+        ErrorManager::reportException("DXEndpoint", std::current_exception());
+    }
 }
 
 void DXEndpoint::close() const {
@@ -560,6 +960,7 @@ void DXEndpoint::close() const {
     }
 
     isolated::api::IsolatedDXEndpoint::close(handle_);
+    Impl::onClosed(*this);
 }
 
 std::unordered_set<EventTypeEnum> DXEndpoint::getEventTypes() const {
@@ -570,14 +971,12 @@ struct BuilderHandle {};
 
 namespace BuilderRegistry {
 static std::shared_ptr<DXEndpoint::Builder> get(BuilderHandle *handle) {
-    return ApiContext::getInstance()->getManager<EntityManager<DXEndpoint::Builder>>()->getEntity(handle);
+    return ApiContext::getInstance().getManager<EntityManager<DXEndpoint::Builder>>()->getEntity(handle);
 }
 
 static BuilderHandle *add(const std::shared_ptr<DXEndpoint::Builder> &builder) noexcept {
-    return dxfcpp::bit_cast<BuilderHandle *>(ApiContext::getInstance()
-                                                 ->getManager<EntityManager<DXEndpoint::Builder>>()
-                                                 ->registerEntity(builder)
-                                                 .getValue());
+    return dxfcpp::bit_cast<BuilderHandle *>(
+        ApiContext::getInstance().getManager<EntityManager<DXEndpoint::Builder>>()->registerEntity(builder).getValue());
 }
 
 static bool remove(BuilderHandle *handle) {
@@ -587,7 +986,7 @@ static bool remove(BuilderHandle *handle) {
         return false;
     }
 
-    return ApiContext::getInstance()->getManager<EntityManager<DXEndpoint::Builder>>()->unregisterEntity(handle);
+    return ApiContext::getInstance().getManager<EntityManager<DXEndpoint::Builder>>()->unregisterEntity(handle);
 }
 } // namespace BuilderRegistry
 
@@ -609,12 +1008,12 @@ struct EndpointWrapper : std::enable_shared_from_this<EndpointWrapper> {
 
 namespace EndpointWrapperRegistry {
 static std::shared_ptr<EndpointWrapper> get(EndpointWrapperHandle *handle) {
-    return ApiContext::getInstance()->getManager<EntityManager<EndpointWrapper>>()->getEntity(handle);
+    return ApiContext::getInstance().getManager<EntityManager<EndpointWrapper>>()->getEntity(handle);
 }
 
 static EndpointWrapperHandle *add(const std::shared_ptr<EndpointWrapper> &endpointWrapper) noexcept {
     return dxfcpp::bit_cast<EndpointWrapperHandle *>(ApiContext::getInstance()
-                                                         ->getManager<EntityManager<EndpointWrapper>>()
+                                                         .getManager<EntityManager<EndpointWrapper>>()
                                                          ->registerEntity(endpointWrapper)
                                                          .getValue());
 }
@@ -626,7 +1025,7 @@ static bool remove(EndpointWrapperHandle *handle) {
         return false;
     }
 
-    return ApiContext::getInstance()->getManager<EntityManager<EndpointWrapper>>()->unregisterEntity(handle);
+    return ApiContext::getInstance().getManager<EntityManager<EndpointWrapper>>()->unregisterEntity(handle);
 }
 } // namespace EndpointWrapperRegistry
 
@@ -686,19 +1085,24 @@ static dxfc_dxendpoint_state_t stateToCApiState(DXEndpoint::State state) {
 DXFCPP_END_NAMESPACE
 
 dxfc_error_code_t dxfc_dxendpoint_new_builder(DXFC_OUT dxfc_dxendpoint_builder_t *builderHandle) {
-    if (!builderHandle) {
+    try {
+        if (!builderHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result = dxfcpp::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *builderHandle = static_cast<dxfc_dxendpoint_builder_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    const auto result = dxfcpp::BuilderRegistry::add(dxfcpp::DXEndpoint::newBuilder());
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *builderHandle = static_cast<dxfc_dxendpoint_builder_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_builder_with_role(dxfc_dxendpoint_builder_t builderHandle,
@@ -729,7 +1133,12 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_name(dxfc_dxendpoint_builder_t bu
         return DXFC_EC_ERROR;
     }
 
-    builder->withName(name);
+    try {
+        builder->withName(name);
+    } catch (...) {
+        // For example, the name is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -746,7 +1155,12 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_property(dxfc_dxendpoint_builder_
         return DXFC_EC_ERROR;
     }
 
-    builder->withProperty(key, value);
+    try {
+        builder->withProperty(key, value);
+    } catch (...) {
+        // For example, the key or the value is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -763,16 +1177,21 @@ dxfc_error_code_t dxfc_dxendpoint_builder_with_properties(dxfc_dxendpoint_builde
         return DXFC_EC_ERROR;
     }
 
-    for (std::size_t i = 0; i < size; i++) {
-        if (!properties[i]) {
-            continue;
-        }
+    try {
+        for (std::size_t i = 0; i < size; i++) {
+            if (!properties[i]) {
+                continue;
+            }
 
-        if (!properties[i]->key || !properties[i]->value) {
-            continue;
-        }
+            if (!properties[i]->key || !properties[i]->value) {
+                continue;
+            }
 
-        builder->withProperty(properties[i]->key, properties[i]->value);
+            builder->withProperty(properties[i]->key, properties[i]->value);
+        }
+    } catch (...) {
+        // For example, a key or a value is not valid UTF-8; the properties before it stay set.
+        return DXFC_EC_ERROR;
     }
 
     return DXFC_EC_SUCCESS;
@@ -790,7 +1209,12 @@ dxfc_error_code_t dxfc_dxendpoint_builder_supports_property(dxfc_dxendpoint_buil
         return DXFC_EC_ERROR;
     }
 
-    *supports = builder->supportsProperty(key);
+    try {
+        *supports = builder->supportsProperty(key);
+    } catch (...) {
+        // For example, the key is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -838,97 +1262,117 @@ dxfc_error_code_t dxfc_dxendpoint_builder_free(dxfc_dxendpoint_builder_t builder
 }
 
 dxfc_error_code_t dxfc_dxendpoint_get_instance(void *userData, DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
-    if (!endpointHandle) {
+    try {
+        if (!endpointHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        auto endpoint = dxfcpp::DXEndpoint::getInstance();
+
+        if (!endpoint) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result =
+            dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    auto endpoint = dxfcpp::DXEndpoint::getInstance();
-
-    if (!endpoint) {
-        return DXFC_EC_ERROR;
-    }
-
-    const auto result =
-        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_get_instance2(dxfc_dxendpoint_role_t role, void *userData,
                                                 DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
-    if (!endpointHandle) {
+    try {
+        if (!endpointHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        auto endpoint = dxfcpp::DXEndpoint::getInstance(dxfcpp::cApiRoleToRole(role));
+
+        if (!endpoint) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result =
+            dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    auto endpoint = dxfcpp::DXEndpoint::getInstance(dxfcpp::cApiRoleToRole(role));
-
-    if (!endpoint) {
-        return DXFC_EC_ERROR;
-    }
-
-    const auto result =
-        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_create(void *userData, DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
-    if (!endpointHandle) {
+    try {
+        if (!endpointHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        auto endpoint = dxfcpp::DXEndpoint::create();
+
+        if (!endpoint) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result =
+            dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    auto endpoint = dxfcpp::DXEndpoint::create();
-
-    if (!endpoint) {
-        return DXFC_EC_ERROR;
-    }
-
-    const auto result =
-        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_create2(dxfc_dxendpoint_role_t role, void *userData,
                                           DXFC_OUT dxfc_dxendpoint_t *endpointHandle) {
-    if (!endpointHandle) {
+    try {
+        if (!endpointHandle) {
+            return DXFC_EC_ERROR;
+        }
+
+        auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::cApiRoleToRole(role));
+
+        if (!endpoint) {
+            return DXFC_EC_ERROR;
+        }
+
+        const auto result =
+            dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
+
+        if (!result) {
+            return DXFC_EC_ERROR;
+        }
+
+        *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
+
+        return DXFC_EC_SUCCESS;
+    } catch (...) {
+        // For example, the creation of the isolate failed: an exception does not leave the C function.
         return DXFC_EC_ERROR;
     }
-
-    auto endpoint = dxfcpp::DXEndpoint::create(dxfcpp::cApiRoleToRole(role));
-
-    if (!endpoint) {
-        return DXFC_EC_ERROR;
-    }
-
-    const auto result =
-        dxfcpp::EndpointWrapperRegistry::add(std::make_shared<dxfcpp::EndpointWrapper>(endpoint, userData));
-
-    if (!result) {
-        return DXFC_EC_ERROR;
-    }
-
-    *endpointHandle = static_cast<dxfc_dxendpoint_t>(result);
-
-    return DXFC_EC_SUCCESS;
 }
 
 dxfc_error_code_t dxfc_dxendpoint_close(dxfc_dxendpoint_t endpointHandle) {
@@ -994,7 +1438,12 @@ dxfc_error_code_t dxfc_dxendpoint_user(dxfc_dxendpoint_t endpointHandle, const c
         return DXFC_EC_ERROR;
     }
 
-    endpointWrapper->endpoint->user(user);
+    try {
+        endpointWrapper->endpoint->user(user);
+    } catch (...) {
+        // For example, the user name is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -1011,7 +1460,12 @@ dxfc_error_code_t dxfc_dxendpoint_password(dxfc_dxendpoint_t endpointHandle, con
         return DXFC_EC_ERROR;
     }
 
-    endpointWrapper->endpoint->password(password);
+    try {
+        endpointWrapper->endpoint->password(password);
+    } catch (...) {
+        // For example, the password is not valid UTF-8: an exception does not leave the C function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }
@@ -1028,7 +1482,13 @@ dxfc_error_code_t dxfc_dxendpoint_connect(dxfc_dxendpoint_t endpointHandle, cons
         return DXFC_EC_ERROR;
     }
 
-    endpointWrapper->endpoint->connect(address);
+    try {
+        endpointWrapper->endpoint->connect(address);
+    } catch (...) {
+        // For example, the address is not valid UTF-8 or the SDK rejects it: an exception does not leave the C
+        // function.
+        return DXFC_EC_ERROR;
+    }
 
     return DXFC_EC_SUCCESS;
 }

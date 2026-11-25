@@ -4,10 +4,13 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/Quote.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <cstdint>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 
@@ -159,7 +162,7 @@ void Quote::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_v4_quote_t *>(graalNative);
 
     data_ = {
         .timeMillisSequence = graalQuote->time_millis_sequence,
@@ -175,14 +178,14 @@ void Quote::fillData(void *graalNative) noexcept {
     };
 }
 
-void Quote::fillGraalData(void *graalNative) const noexcept {
+void Quote::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_v4_quote_t *>(graalNative);
 
     graalQuote->market_event.event_type.clazz = DXFG_EVENT_QUOTE;
     graalQuote->time_millis_sequence = data_.timeMillisSequence;
@@ -202,10 +205,10 @@ std::shared_ptr<Quote> Quote::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Quote. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
-        throw InvalidArgumentException(fmt::format("Unable to create Quote. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_QUOTE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
+        throw InvalidArgumentException(fmt::format(
+            "Unable to create Quote. Wrong event class {}! Expected: {}.",
+            std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_QUOTE)));
     }
 
     auto quote = std::make_shared<Quote>();
@@ -221,11 +224,12 @@ void *Quote::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalQuote = new dxfg_quote_t{};
-
-    fillGraalData(graalQuote);
-
-    return graalQuote;
+    return newGraalEvent<dxfg_v4_quote_t>(
+        DXFG_EVENT_QUOTE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Quote::freeGraal(void *graalNative) {
@@ -233,13 +237,13 @@ void Quote::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_QUOTE) {
         throw InvalidArgumentException(fmt::format(
             "Unable to free Quote's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_QUOTE)));
+            std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_QUOTE)));
     }
 
-    const auto graalQuote = static_cast<dxfg_quote_t *>(graalNative);
+    const auto graalQuote = static_cast<dxfg_v4_quote_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -257,10 +261,10 @@ void Quote::assign(std::shared_ptr<EventType> event) {
 Quote::Quote() noexcept {
 }
 
-Quote::Quote(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Quote::Quote(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-Quote &Quote::withEventSymbol(const StringLike &eventSymbol) noexcept {
+Quote &Quote::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;
@@ -291,7 +295,7 @@ Quote &Quote::withSequence(std::int32_t sequence) {
 }
 
 std::int64_t Quote::getTime() const noexcept {
-    return math::floorDiv(std::max(data_.bidTime, data_.askTime), 1000LL) * 1000LL +
+    return math::floorDiv<1000LL>(std::max(data_.bidTime, data_.askTime)) * 1000LL +
            shr(data_.timeMillisSequence, MILLISECONDS_SHIFT);
 }
 

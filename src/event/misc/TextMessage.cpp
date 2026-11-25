@@ -5,9 +5,13 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -20,7 +24,7 @@ void TextMessage::fillData(void *graalNative) {
         return;
     }
 
-    auto graalMessage = static_cast<dxfg_text_message_t *>(graalNative);
+    auto graalMessage = static_cast<dxfg_v4_text_message_t *>(graalNative);
 
     if (graalMessage->event_symbol != nullptr) {
         setEventSymbol(dxfcpp::toString(graalMessage->event_symbol));
@@ -29,11 +33,7 @@ void TextMessage::fillData(void *graalNative) {
     eventTime_ = graalMessage->event_time;
     timeSequence_ = graalMessage->time_sequence;
 
-    if (graalMessage->text != nullptr) {
-        setText(dxfcpp::toString(dxfcpp::bit_cast<const char *>(graalMessage->text)));
-    } else {
-        setText(String::NUL);
-    }
+    text_ = toStringOpt(graalMessage->text);
 }
 
 void TextMessage::fillGraalData(void *graalNative) const {
@@ -41,13 +41,13 @@ void TextMessage::fillGraalData(void *graalNative) const {
         return;
     }
 
-    const auto graalMessage = static_cast<dxfg_text_message_t *>(graalNative);
+    const auto graalMessage = static_cast<dxfg_v4_text_message_t *>(graalNative);
 
     graalMessage->event_type.clazz = DXFG_EVENT_TEXT_MESSAGE;
-    graalMessage->event_symbol = createCString(eventSymbol_);
+    graalMessage->event_symbol = createCString(eventSymbol_, "TextMessage::eventSymbol");
     graalMessage->event_time = eventTime_;
     graalMessage->time_sequence = timeSequence_;
-    graalMessage->text = createCString(text_);
+    graalMessage->text = createCString(text_, "TextMessage::text");
 }
 
 void TextMessage::freeGraalData(void *graalNative) noexcept {
@@ -55,7 +55,7 @@ void TextMessage::freeGraalData(void *graalNative) noexcept {
         return;
     }
 
-    auto graalMessage = static_cast<dxfg_text_message_t *>(graalNative);
+    auto graalMessage = static_cast<dxfg_v4_text_message_t *>(graalNative);
 
     delete[] graalMessage->event_symbol;
     delete[] graalMessage->text;
@@ -66,10 +66,11 @@ std::shared_ptr<TextMessage> TextMessage::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create TextMessage. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TEXT_MESSAGE) {
-        throw InvalidArgumentException(fmt::format("Unable to create TextMessage. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_TEXT_MESSAGE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TEXT_MESSAGE) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create TextMessage. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_TEXT_MESSAGE)));
     }
 
     auto message = std::make_shared<TextMessage>();
@@ -85,11 +86,12 @@ void *TextMessage::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalMessage = new dxfg_text_message_t{};
-
-    fillGraalData(graalMessage);
-
-    return graalMessage;
+    return newGraalEvent<dxfg_v4_text_message_t>(
+        DXFG_EVENT_TEXT_MESSAGE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void TextMessage::freeGraal(void *graalNative) {
@@ -97,14 +99,14 @@ void TextMessage::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TEXT_MESSAGE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TEXT_MESSAGE) {
         throw InvalidArgumentException(
             fmt::format("Unable to free TextMessage's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_TEXT_MESSAGE)));
     }
 
-    const auto graalMessage = static_cast<dxfg_text_message_t *>(graalNative);
+    const auto graalMessage = static_cast<dxfg_v4_text_message_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -123,37 +125,36 @@ void TextMessage::assign(std::shared_ptr<EventType> event) {
 TextMessage::TextMessage() noexcept {
 }
 
-TextMessage::TextMessage(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+TextMessage::TextMessage(StringParam eventSymbol) : eventSymbol_{eventSymbol.view()} {
 }
 
-TextMessage::TextMessage(const StringLike &eventSymbol, const StringLike &text) noexcept
-    : eventSymbol_{eventSymbol}, text_{text} {
+TextMessage::TextMessage(StringParam eventSymbol, StringParam text)
+    : eventSymbol_{eventSymbol.view()}, text_{text.view()} {
 }
 
-TextMessage::TextMessage(const StringLike &eventSymbol, std::int64_t time, const StringLike &text) noexcept
-    : eventSymbol_{eventSymbol}, text_{text} {
+TextMessage::TextMessage(StringParam eventSymbol, std::int64_t time, StringParam text)
+    : eventSymbol_{eventSymbol.view()}, text_{text.view()} {
 
     setTime(time);
 }
 
 const std::string &TextMessage::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL;
+        return nulString();
     }
 
-    return eventSymbol_.value();
+    return *eventSymbol_;
 }
 
 const std::optional<std::string> &TextMessage::getEventSymbolOpt() const & noexcept {
     return eventSymbol_;
 }
 
-void TextMessage::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    // TODO: check invalid utf-8 [EN-8233]
-    eventSymbol_ = std::string(eventSymbol);
+void TextMessage::setEventSymbol(StringParam eventSymbol) {
+    eventSymbol_ = std::string(eventSymbol.view());
 }
 
-TextMessage &TextMessage::withEventSymbol(const StringLike &eventSymbol) noexcept {
+TextMessage &TextMessage::withEventSymbol(StringParam eventSymbol) {
     TextMessage::setEventSymbol(eventSymbol);
 
     return *this;
@@ -216,24 +217,31 @@ TextMessage &TextMessage::withSequence(std::int32_t sequence) {
 }
 
 const std::string &TextMessage::getText() const & {
+    if (!text_) {
+        return nulString();
+    }
+
+    return *text_;
+}
+
+const std::optional<std::string> &TextMessage::getTextOpt() const & noexcept {
     return text_;
 }
 
-void TextMessage::setText(const StringLike &text) {
-    // TODO: check invalid utf-8 [EN-8233]
-    text_ = std::string(text);
+void TextMessage::setText(StringParam text) {
+    text_ = std::string(text.view());
 }
 
-TextMessage &TextMessage::withText(const StringLike &text) noexcept {
+TextMessage &TextMessage::withText(StringParam text) {
     setText(text);
 
     return *this;
 }
 
 std::string TextMessage::toString() const {
-    return fmt::format("TextMessage{{{}, eventTime={}, time={}, sequence={}, text={}}}", getEventSymbol(),
+    return fmt::format("TextMessage{{{}, eventTime={}, time={}, sequence={}, text='{}'}}", getEventSymbol(),
                        TimeFormat::DEFAULT_WITH_MILLIS.format(getEventTime()),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), text_);
+                       TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(), text_.value_or("null"));
 }
 
 DXFCPP_END_NAMESPACE

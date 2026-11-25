@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include "../internal/CEntryPointErrors.hpp"
+#include "../detail/CEntryPointErrors.hpp"
 #include "./RuntimeException.hpp"
 
 #include <stdexcept>
@@ -31,7 +31,18 @@ struct DXFCPP_EXPORT GraalException : RuntimeException {
      */
     explicit GraalException(CEntryPointErrorsEnum entryPointErrorsEnum);
 
+    /**
+     * Constructs an exception of the failed creation of the GraalVM isolate. The message has the code, its text and
+     * the details.
+     *
+     * @param entryPointErrorsEnum The error code returned by GraalVM, or the code of the failure of the isolate arguments.
+     * @param details The reason of the failure. It must not contain the values of the isolate arguments.
+     */
+    GraalException(CEntryPointErrorsEnum entryPointErrorsEnum, const std::string &details);
+
     GraalException(const GraalException &other) noexcept;
+
+    GraalException &operator=(const GraalException &other) = default;
 
     private:
     static std::string createMessage(CEntryPointErrorsEnum entryPointErrorsEnum);

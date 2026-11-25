@@ -152,6 +152,18 @@ TEST_CASE_FIXTURE(TimeSeriesTxModelFixture, "TimeSeriesTxModel: initial state") 
     REQUIRE(model->getFromTime() == std::numeric_limits<std::int64_t>::max());
 }
 
+// The time is returned through an out parameter: -1 is a time, not a failure.
+TEST_CASE_FIXTURE(TimeSeriesTxModelFixture, "TimeSeriesTxModel: getFromTime returns -1") {
+    model = builder()->withFromTime(-1)->build();
+    REQUIRE(model->getFromTime() == -1);
+
+    model->setFromTime(0);
+    REQUIRE(model->getFromTime() == 0);
+
+    model->setFromTime(-1);
+    REQUIRE(model->getFromTime() == -1);
+}
+
 TEST_CASE_FIXTURE(TimeSeriesTxModelFixture, "TimeSeriesTxModel: change fromTime") {
     model = builder()->withFromTime(std::numeric_limits<std::int64_t>::max())->build(); // no subscription
 
@@ -163,6 +175,7 @@ TEST_CASE_FIXTURE(TimeSeriesTxModelFixture, "TimeSeriesTxModel: change fromTime"
     assertIsChanged(true);
 
     model->setFromTime(1000);
+    REQUIRE(model->getFromTime() == 1000);
     publishAndProcess(createEventWithTime(1000, 3, 0));
     assertIsChanged(true);
 
@@ -184,6 +197,9 @@ TEST_CASE("TimeSeriesTxModel: attach and detach the feed") {
                       ->withBatchProcessing(isBatchProcessing)
                       ->withSnapshotProcessing(isSnapshotProcessing)
                       ->build();
+        REQUIRE(f.model->isBatchProcessing() == isBatchProcessing);
+        REQUIRE(f.model->isSnapshotProcessing() == isSnapshotProcessing);
+        REQUIRE(f.model->getFromTime() == 0);
 
         f.addToPublish(0, 1, SNAPSHOT_BEGIN_END);
         f.publishDeferred();

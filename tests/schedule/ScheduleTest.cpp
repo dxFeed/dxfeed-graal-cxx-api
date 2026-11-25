@@ -8,6 +8,8 @@
 
 #include <dxfeed_graal_c_api/api.h>
 #include <dxfeed_graal_cpp_api/api.hpp>
+#include "../../src/internal/Common.hpp"
+#include "../../src/internal/utils/StringUtils.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4702)
 DXFCXX_DISABLE_CLANG_WARNINGS_PUSH("-Wdeprecated-declarations")
@@ -192,4 +194,116 @@ TEST_CASE("Test hd sets and days intersect with wrong syntax") {
     REQUIRE_FALSE_MESSAGE(gmt(def)->getDayByYearMonthDay(20210524)->isHoliday(), "CA Holiday");
     REQUIRE_FALSE_MESSAGE(gmt(def)->getDayByYearMonthDay(20210215)->isHoliday(), "US and CA Holiday");
     REQUIRE_MESSAGE(gmt(def)->getDayByYearMonthDay(20210101)->isHoliday(), "Only one remain holiday");
+}
+
+// The expected values are printed by the Java API 3.356 for Schedule.UTC and Schedule.NYSE.
+TEST_CASE("Schedule::UTC and Schedule::NYSE as in Java") {
+    const auto &utc = Schedule::UTC();
+
+    REQUIRE(utc);
+    CHECK(&Schedule::UTC() == &utc);
+    CHECK(utc->getName() == "UTC");
+    CHECK(utc->getTimeZoneId() == "UTC");
+    CHECK(utc->getDayByTime(0)->getStartTime() == 0);
+    CHECK(utc->getDayByTime(0)->isTrading());
+
+    const auto &nyse = Schedule::NYSE();
+
+    REQUIRE(nyse);
+    CHECK(&Schedule::NYSE() == &nyse);
+    CHECK(nyse->getName() == "NYSE");
+    CHECK(nyse->getTimeZoneId() == "America/New_York");
+    CHECK(nyse->getDayByYearMonthDay(20240101)->isHoliday());
+    CHECK(nyse->getDayByYearMonthDay(20240102)->isTrading());
+}
+
+// The expected definitions are the output of Java `Schedule.getDefinition()` (dxFeed Java API 3.356).
+TEST_CASE("Schedule::getDefinition() returns the definition of the schedule") {
+    REQUIRE(Schedule::getInstance("XNYS()")->getDefinition() == "XNYS()");
+
+    const std::string utcDefinition = "UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)";
+
+    REQUIRE(Schedule::getInstance(utcDefinition)->getDefinition() == utcDefinition);
+}
+
+// The expected definitions are the output of Java `Schedule.UTC.getDefinition()` and `Schedule.NYSE.getDefinition()`
+// (dxFeed Java API 3.356).
+TEST_CASE("Schedule::getDefinition() of Schedule::UTC() and Schedule::NYSE() as in Java") {
+    CHECK(Schedule::UTC()->getDefinition() == "UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)");
+    CHECK(Schedule::NYSE()->getDefinition() == "XNYS()");
+}
+
+// NULL is the normal result of the find functions of the SDK when nothing is found: no exception.
+TEST_CASE("The find functions give nullptr when nothing is found") {
+    const auto schedule = gmt("0=");
+    const auto day = schedule->getDayById(42);
+    const auto session = day->getFirstSession(SessionFilter::ANY);
+
+    CHECK(day->findFirstSession(SessionFilter::TRADING) == nullptr);
+    CHECK(day->findLastSession(SessionFilter::TRADING) == nullptr);
+    CHECK(day->findPrevDay(DayFilter::TRADING) == nullptr);
+    CHECK(day->findNextDay(DayFilter::TRADING) == nullptr);
+    CHECK(session->findPrevSession(SessionFilter::TRADING) == nullptr);
+    CHECK(session->findNextSession(SessionFilter::TRADING) == nullptr);
+    CHECK(schedule->findNearestSessionByTime(now(), SessionFilter::TRADING) == nullptr);
+}
+// Day 0 of the UTC schedule is 1970-01-01 (Thursday); the whole day is one trading session (definition of the Java
+// `Schedule.UTC`).
+TEST_CASE("Day getters, navigation and equality on the UTC schedule") {
+    const auto &utc = Schedule::UTC();
+    const auto day = utc->getDayById(0);
+
+    CHECK(day->getDayId() == 0);
+    CHECK(day->getYearMonthDay() == 19700101);
+    CHECK(day->getYear() == 1970);
+    CHECK(day->getMonthOfYear() == 1);
+    CHECK(day->getDayOfMonth() == 1);
+    CHECK(day->getDayOfWeek() == 4);
+    CHECK(day->getStartTime() == 0);
+    CHECK(day->getEndTime() == time_util::DAY);
+    CHECK(day->containsTime(0));
+    CHECK_FALSE(day->containsTime(time_util::DAY));
+    CHECK_FALSE(day->isHoliday());
+    CHECK(day->isTrading());
+
+    CHECK(day->getNextDay(DayFilter::ANY)->getDayId() == 1);
+    CHECK(day->getPrevDay(DayFilter::ANY)->getDayId() == -1);
+    CHECK(day->findNextDay(DayFilter::ANY)->getDayId() == 1);
+    CHECK(utc->getDayByYearMonthDay(19700101)->getDayId() == 0);
+
+    const auto sameDay = utc->getDayByTime(0);
+
+    CHECK(*day == *sameDay);
+    CHECK(day->hashCode() == sameDay->hashCode());
+    CHECK_FALSE(*day == *day->getNextDay(DayFilter::ANY));
+    CHECK(day->getSchedule()->getName() == "UTC");
+    CHECK_FALSE(day->toString().empty());
+
+    const auto sessions = day->getSessions();
+
+    REQUIRE(sessions.size() == 1);
+    CHECK(sessions[0]->getStartTime() == 0);
+    CHECK(sessions[0]->getEndTime() == time_util::DAY);
+    CHECK(sessions[0]->containsTime(0));
+    CHECK(*sessions[0]->getDay() == *day);
+    CHECK(*utc->getSessionByTime(0) == *sessions[0]);
+    CHECK(*utc->getNearestSessionByTime(0, SessionFilter::ANY) == *sessions[0]);
+}
+
+TEST_CASE("Schedule::getInstance() with a broken definition throws") {
+    CHECK_THROWS_AS(Schedule::getInstance("(tz=NoSuchZone"), JavaException);
+
+    // The failure leaves no pending exception behind: the next call succeeds.
+    CHECK(Schedule::getInstance("UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)")->getName() == "UTC");
+}
+
+TEST_CASE("Schedule of an instrument profile and its trading venues") {
+    const auto profile = InstrumentProfile::create();
+
+    profile->setTradingHours("UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)");
+
+    CHECK(Schedule::getTradingVenues(profile) == std::vector<std::string>{"UTC"});
+    CHECK(Schedule::getInstance(profile)->getName() == "UTC");
+    CHECK(Schedule::getInstance(profile, "UTC")->getName() == "UTC");
+    CHECK_THROWS_AS(Schedule::getInstance(profile, "XNYS"), JavaException);
 }

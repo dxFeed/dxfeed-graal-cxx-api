@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/Enum.hpp"
+#include "../detail/Enum.hpp"
 #include <cstdint>
 
 /**
@@ -37,15 +37,15 @@ struct InstrumentProfileType : Enum<InstrumentProfileType, std::uint32_t> {
     static const DXFCPP_EXPORT InstrumentProfileType FUTURE;
     static const DXFCPP_EXPORT InstrumentProfileType OPTION;
     static const DXFCPP_EXPORT InstrumentProfileType WARRANT;
+    static const DXFCPP_EXPORT InstrumentProfileType CERTIFICATE;
     static const DXFCPP_EXPORT InstrumentProfileType CFD;
     static const DXFCPP_EXPORT InstrumentProfileType SPREAD;
     static const DXFCPP_EXPORT InstrumentProfileType OTHER;
     static const DXFCPP_EXPORT InstrumentProfileType REMOVED;
-};
 
-template <>
-const std::unordered_map<InstrumentProfileType::CodeType, std::reference_wrapper<const InstrumentProfileType>>
-    InstrumentProfileType::ParentType::ALL;
+    /// All elements of the enum (constant-initialized).
+    static const DXFCPP_EXPORT std::span<const std::reference_wrapper<const InstrumentProfileType>> ALL;
+};
 
 DXFCPP_END_NAMESPACE
 

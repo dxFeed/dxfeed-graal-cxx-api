@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -12,6 +12,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
  * \ingroup dxfcpp_modules
  */
 
+#include "ErrorManager.hpp"
 #include "GraalException.hpp"
 #include "InvalidArgumentException.hpp"
 #include "JavaException.hpp"

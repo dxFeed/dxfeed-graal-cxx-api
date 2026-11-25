@@ -3,17 +3,21 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 
+#include <cstddef>
+#include <cstdint>
 #include <functional>
-#include <mutex>
+#include <memory>
 #include <ostream>
+#include <string>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_glossary
@@ -36,21 +40,22 @@ struct DXFCPP_EXPORT CFI : RequireMakeShared<CFI> {
     using Unique = std::unique_ptr<CFI>;
 
     private:
-    mutable JavaObjectHandle<CFI> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<CFI>()> initializer_;
+    LazyJavaObjectHandle<CFI> handle_;
 
-    void init() const;
+    const JavaObjectHandle<CFI> &getHandle() const {
+        return handle_.get();
+    }
 
     public:
     /**
      * Empty CFI - it has code "XXXXXX".
+     *
+     * It is created at the first call, so it can be used by the initializers of global variables.
      */
-    static const Ptr EMPTY;
+    static const Ptr &EMPTY();
 
     // lazy c-tor
-    CFI(LockExternalConstructionTag, std::function<JavaObjectHandle<CFI>()> initializer);
+    CFI(LockExternalConstructionTag, JavaObjectHandle<CFI> (*initializer)());
 
     CFI(LockExternalConstructionTag, JavaObjectHandle<CFI> &&handle);
 
@@ -64,7 +69,7 @@ struct DXFCPP_EXPORT CFI : RequireMakeShared<CFI> {
      * @return The CFI.
      * @throws JavaException("IllegalArgumentException") if the `code` is invalid.
      */
-    static Ptr valueOf(const StringLike &code);
+    static Ptr valueOf(StringParam code);
 
     /**
      * Returns an instance of CFI for a specified integer representation of CFI code.

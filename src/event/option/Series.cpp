@@ -5,9 +5,12 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -22,7 +25,7 @@ void Series::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalSeries = static_cast<dxfg_series_t *>(graalNative);
+    const auto graalSeries = static_cast<dxfg_v4_series_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalSeries->event_flags,
@@ -39,14 +42,14 @@ void Series::fillData(void *graalNative) noexcept {
     };
 }
 
-void Series::fillGraalData(void *graalNative) const noexcept {
+void Series::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     MarketEvent::fillGraalData(graalNative);
 
-    auto graalSeries = static_cast<dxfg_series_t *>(graalNative);
+    auto graalSeries = static_cast<dxfg_v4_series_t *>(graalNative);
 
     graalSeries->market_event.event_type.clazz = DXFG_EVENT_SERIES;
     graalSeries->event_flags = data_.eventFlags;
@@ -67,10 +70,11 @@ std::shared_ptr<Series> Series::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Series. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SERIES) {
-        throw InvalidArgumentException(fmt::format("Unable to create Series. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_SERIES)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SERIES) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create Series. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_SERIES)));
     }
 
     auto series = std::make_shared<Series>();
@@ -176,11 +180,12 @@ void *Series::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalSeries = new dxfg_series_t{};
-
-    fillGraalData(graalSeries);
-
-    return graalSeries;
+    return newGraalEvent<dxfg_v4_series_t>(
+        DXFG_EVENT_SERIES,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Series::freeGraal(void *graalNative) {
@@ -188,13 +193,14 @@ void Series::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SERIES) {
-        throw InvalidArgumentException(fmt::format(
-            "Unable to free Series's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_SERIES)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_SERIES) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to free Series's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_SERIES)));
     }
 
-    const auto graalSeries = static_cast<dxfg_series_t *>(graalNative);
+    const auto graalSeries = static_cast<dxfg_v4_series_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -212,10 +218,10 @@ void Series::assign(std::shared_ptr<EventType> event) {
 Series::Series() noexcept {
 }
 
-Series::Series(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Series::Series(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-Series &Series::withEventSymbol(const StringLike &eventSymbol) noexcept {
+Series &Series::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;
@@ -304,7 +310,8 @@ std::string Series::toString() const {
         "Series{{{}, eventTime={}, eventFlags={:#x}, index={:#x}, time={}, sequence={}, expiration={}, "
         "volatility={}, callVolume={}, putVolume={}, putCallRatio={}, forwardPrice={}, dividend={}, interest={}}}",
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
+        getEventFlagsMask().getMask(), static_cast<std::uint64_t>(getIndex()),
+        TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getSequence(),
         day_util::getYearMonthDayByDayId(getExpiration()), dxfcpp::toString(getVolatility()),
         dxfcpp::toString(getCallVolume()), dxfcpp::toString(getPutVolume()), dxfcpp::toString(getPutCallRatio()),
         dxfcpp::toString(getForwardPrice()), dxfcpp::toString(getDividend()), dxfcpp::toString(getInterest()));

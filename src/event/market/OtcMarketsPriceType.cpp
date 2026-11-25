@@ -3,21 +3,27 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/OtcMarketsPriceType.hpp"
 
+#include <array>
 #include <functional>
-#include <unordered_map>
+#include <span>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const OtcMarketsPriceType OtcMarketsPriceType::UNPRICED{0, "UNPRICED"};
-const OtcMarketsPriceType OtcMarketsPriceType::ACTUAL{1, "ACTUAL"};
-const OtcMarketsPriceType OtcMarketsPriceType::WANTED{2, "WANTED"};
+constinit const OtcMarketsPriceType OtcMarketsPriceType::UNPRICED{0, "UNPRICED"};
+constinit const OtcMarketsPriceType OtcMarketsPriceType::ACTUAL{1, "ACTUAL"};
+constinit const OtcMarketsPriceType OtcMarketsPriceType::WANTED{2, "WANTED"};
 
-template <>
-const std::unordered_map<OtcMarketsPriceType::CodeType, std::reference_wrapper<const OtcMarketsPriceType>>
-    OtcMarketsPriceType::ParentType::ALL{
-        {OtcMarketsPriceType::UNPRICED.getCode(), std::cref(OtcMarketsPriceType::UNPRICED)},
-        {OtcMarketsPriceType::ACTUAL.getCode(), std::cref(OtcMarketsPriceType::ACTUAL)},
-        {OtcMarketsPriceType::WANTED.getCode(), std::cref(OtcMarketsPriceType::WANTED)},
-    };
+namespace {
+
+constinit const std::array<std::reference_wrapper<const OtcMarketsPriceType>, 3> ALL_ELEMENTS{
+    std::cref(OtcMarketsPriceType::UNPRICED),
+    std::cref(OtcMarketsPriceType::ACTUAL),
+    std::cref(OtcMarketsPriceType::WANTED),
+};
+
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const OtcMarketsPriceType>> OtcMarketsPriceType::ALL{
+    ALL_ELEMENTS};
 
 DXFCPP_END_NAMESPACE

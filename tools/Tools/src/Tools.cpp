@@ -18,7 +18,32 @@ const std::vector<std::string> ConnectTool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> ConnectTool::ARGS{
     AddressArgRequired{}, TypesArgRequired{}, SymbolsArgRequired{}, FromTimeArg{},    SourceArg{},
-    PropertiesArg{},      TapeArg{},          QuiteArg{},           ForceStreamArg{}, HelpArg{}};
+    PropertiesArg{},      TapeArg{},          QuietArg{},           ForceStreamArg{}, HelpArg{}};
+
+const std::string DiagnoseTool::NAME{"Diagnose"};
+const std::string DiagnoseTool::SHORT_DESCRIPTION{"Checks the way to the data of an address, step by step."};
+const std::string DiagnoseTool::DESCRIPTION{R"(
+Checks the way to the data of the address and prints a verdict: the versions (API, Graal Native SDK, platform, QD),
+DNS and a TCP connect to each IP address of each host, the states of the endpoint with their times and the connection
+errors, the first events of each type, their flags, the number of events per type, the time of the last event per
+symbol and the receive time minus the event time.
+The verdict is DATA, PARTIAL DATA, CONNECTED, NO DATA, CANNOT CONNECT or CANNOT RESOLVE, with a hint.
+The exit code is 0 for DATA, 2 for PARTIAL DATA, 3 for CONNECTED, NO DATA, 4 for CANNOT CONNECT, 5 for CANNOT RESOLVE
+and 1 for an error; with --compare it is the worse of the two.
+--compare diagnoses the second address after the first one (the run takes twice as long) and compares them.
+--report writes the same text to a file. Logins, passwords and tokens are hidden in the output and in the file.
+The QD log of the run goes into the output; when the logging is already set up otherwise, it is not there.
+)"};
+const std::vector<std::string> DiagnoseTool::USAGE{
+    NAME + " <address> <types> <symbols> [<options>]",
+};
+const std::vector<std::string> DiagnoseTool::ADDITIONAL_INFO{
+    {R"(Example: Diagnose demo.dxfeed.com:7300 Quote,Trade AAPL,IBM --report diagnose.txt)"},
+};
+
+const std::vector<ArgType> DiagnoseTool::ARGS{AddressArgRequired{}, TypesArgRequired{}, SymbolsArgRequired{},
+                                              CompareArg{},         DurationArg{},      ReportArg{},
+                                              PropertiesArg{},      HelpArg{}};
 
 const std::string DumpTool::NAME{"Dump"};
 const std::string DumpTool::SHORT_DESCRIPTION{"Dumps all events received from address."};
@@ -37,7 +62,7 @@ const std::vector<std::string> DumpTool::USAGE{
 const std::vector<std::string> DumpTool::ADDITIONAL_INFO{};
 
 const std::vector<ArgType> DumpTool::ARGS{AddressArgRequired{}, TypesArg{}, SymbolsArg{}, PropertiesArg{}, TapeArg{},
-                                          QuiteArg{},           HelpArg{}};
+                                          QuietArg{},           HelpArg{}};
 
 const std::string LatencyTest::NAME{"LatencyTest"};
 const std::string LatencyTest::SHORT_DESCRIPTION{"Connects to the specified address(es) and calculates latency."};
@@ -49,8 +74,21 @@ const std::vector<std::string> LatencyTest::USAGE{
 };
 const std::vector<std::string> LatencyTest::ADDITIONAL_INFO{};
 
-const std::vector<ArgType> LatencyTest::ARGS{AddressArgRequired{}, TypesArg{},    SymbolsArg{}, PropertiesArg{},
-                                             ForceStreamArg{},     IntervalArg{}, HelpArg{}};
+const std::vector<ArgType> LatencyTest::ARGS{AddressArgRequired{}, TypesArg{},    SymbolsArg{},         PropertiesArg{},
+                                             ForceStreamArg{},     IntervalArg{}, IgnoreExchangesArg{}, HelpArg{}};
+
+const std::string NetTestTool::NAME{"NetTest"};
+const std::string NetTestTool::SHORT_DESCRIPTION{"Publishes generated events and measures the end-to-end lag."};
+const std::string NetTestTool::DESCRIPTION{R"(
+Publishes generated events to an address, as the NetTest of the QD library, the Graal Native SDK and the Java API do,
+and prints the same statistics lines. The command line and the output follow the NetTest specification nettest/1.
+)"};
+const std::vector<std::string> NetTestTool::USAGE{
+    NAME + " p|c <address> -S <symbols> [<options>]",
+};
+const std::vector<std::string> NetTestTool::ADDITIONAL_INFO{nettest::usageText()};
+
+const std::vector<ArgType> NetTestTool::ARGS{HelpArg{}};
 
 const std::string PerfTestTool::NAME{"PerfTest"};
 const std::string PerfTestTool::SHORT_DESCRIPTION{"Connects to specified address and calculates performance counters."};
@@ -133,7 +171,7 @@ Connects to the tape file and subscribes for all events and all symbols:
   connect file:tape.csv all all -p dxfeed.wildcard.enable=true
 
 Connects to the demo-endpoint by dxLink and subscribes to Quote event for AAPL symbol:
-  connect "dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws" Quote AAPL -p dxfeed.experimental.dxlink.enable=true,scheme=ext:opt:sysprops,resource:dxlink.xml)"},
+  connect "dxlink:wss://demo.dxfeed.com/market-data/dxlink-ws" Quote AAPL -p dxfeed.experimental.dxlink.enable=true,scheme=ext:opt:sysprops,opt:dxprops,resource:dxlink.xml)"},
     {"Dump",
      R"(This tool dumps all received data records and subscription items to a console. It can connect to any address including
 plain file.
@@ -408,9 +446,11 @@ const std::vector<std::string> HelpTool::ALL_ARTICLE_NAMES =
     EMBEDDED_ARTICLES | ranges::views::keys | ranges::to<std::vector<std::string>>();
 
 const std::unordered_map<std::string, tools::HelpTool::Tool> tools::HelpTool::ALL_TOOLS{
-    {ConnectTool::getName(), ConnectTool{}},   {DumpTool::getName(), DumpTool{}},
+    {ConnectTool::getName(), ConnectTool{}},   {DiagnoseTool::getName(), DiagnoseTool{}},
+    {DumpTool::getName(), DumpTool{}},
     {HelpTool::getName(), HelpTool{}},         {LatencyTest::getName(), LatencyTest{}},
-    {PerfTestTool::getName(), PerfTestTool{}}, {PerfTest2Tool::getName(), PerfTest2Tool{}},
+    {NetTestTool::getName(), NetTestTool{}},   {PerfTestTool::getName(), PerfTestTool{}},
+    {PerfTest2Tool::getName(), PerfTest2Tool{}},
     {QdsTool::getName(), QdsTool{}},           {EventGenTool::getName(), EventGenTool{}},
 };
 

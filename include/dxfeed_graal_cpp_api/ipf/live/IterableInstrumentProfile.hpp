@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/JavaObjectHandle.hpp"
+#include "../../detail/JavaObjectHandle.hpp"
 
 /**
  * \addtogroup dxfcpp_ipf
@@ -26,7 +26,7 @@ class DXFCPP_EXPORT IterableInstrumentProfile final {
     friend InstrumentProfileCollector;
 
     JavaObjectHandle<IterableInstrumentProfile> handle_;
-    // dxfg_iterable_ip_t *iterable;
+    // dxfg_v4_iterable_ip_t *iterable;
 
     explicit IterableInstrumentProfile(void *handle = nullptr) noexcept;
 

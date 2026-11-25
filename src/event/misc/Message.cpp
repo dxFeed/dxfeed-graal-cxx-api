@@ -5,9 +5,13 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -20,7 +24,7 @@ void Message::fillData(void *graalNative) {
         return;
     }
 
-    auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
+    auto graalMessage = static_cast<dxfg_v4_message_t *>(graalNative);
 
     setEventTime(graalMessage->event_time);
 
@@ -38,12 +42,12 @@ void Message::fillGraalData(void *graalNative) const {
         return;
     }
 
-    const auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
+    const auto graalMessage = static_cast<dxfg_v4_message_t *>(graalNative);
 
     graalMessage->event_type.clazz = DXFG_EVENT_MESSAGE;
-    graalMessage->event_symbol = createCString(eventSymbol_);
+    graalMessage->event_symbol = createCString(eventSymbol_, "Message::eventSymbol");
     graalMessage->event_time = eventTime_;
-    graalMessage->attachment = dxfcpp::bit_cast<void *>(createCString(attachment_));
+    graalMessage->attachment = dxfcpp::bit_cast<void *>(createCString(attachment_, "Message::attachment"));
 }
 
 void Message::freeGraalData(void *graalNative) noexcept {
@@ -51,7 +55,7 @@ void Message::freeGraalData(void *graalNative) noexcept {
         return;
     }
 
-    const auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
+    const auto graalMessage = static_cast<dxfg_v4_message_t *>(graalNative);
 
     delete[] graalMessage->event_symbol;
 
@@ -65,10 +69,11 @@ std::shared_ptr<Message> Message::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Message. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MESSAGE) {
-        throw InvalidArgumentException(fmt::format("Unable to create Message. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_MESSAGE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MESSAGE) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create Message. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_MESSAGE)));
     }
 
     auto message = std::make_shared<Message>();
@@ -84,11 +89,12 @@ void *Message::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalMessage = new dxfg_message_t{};
-
-    fillGraalData(graalMessage);
-
-    return graalMessage;
+    return newGraalEvent<dxfg_v4_message_t>(
+        DXFG_EVENT_MESSAGE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Message::freeGraal(void *graalNative) {
@@ -96,13 +102,14 @@ void Message::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MESSAGE) {
-        throw InvalidArgumentException(fmt::format(
-            "Unable to free Message's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_MESSAGE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_MESSAGE) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to free Message's Graal data. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_MESSAGE)));
     }
 
-    auto graalMessage = static_cast<dxfg_message_t *>(graalNative);
+    auto graalMessage = static_cast<dxfg_v4_message_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -120,31 +127,30 @@ void Message::assign(std::shared_ptr<EventType> event) {
 Message::Message() noexcept {
 }
 
-Message::Message(const StringLike &eventSymbol) noexcept : eventSymbol_{eventSymbol} {
+Message::Message(StringParam eventSymbol) : eventSymbol_{eventSymbol.view()} {
 }
 
-Message::Message(const StringLike &eventSymbol, const StringLike &attachment) noexcept
-    : eventSymbol_{eventSymbol}, attachment_{attachment} {
+Message::Message(StringParam eventSymbol, StringParam attachment)
+    : eventSymbol_{eventSymbol.view()}, attachment_{attachment.view()} {
 }
 
 const std::string &Message::getEventSymbol() const & noexcept {
     if (!eventSymbol_) {
-        return String::NUL;
+        return nulString();
     }
 
-    return eventSymbol_.value();
+    return *eventSymbol_;
 }
 
 const std::optional<std::string> &Message::getEventSymbolOpt() const & noexcept {
     return eventSymbol_;
 }
 
-void Message::setEventSymbol(const StringLike &eventSymbol) noexcept {
-    // TODO: check invalid utf-8 [EN-8233]
-    eventSymbol_ = std::string(eventSymbol);
+void Message::setEventSymbol(StringParam eventSymbol) {
+    eventSymbol_ = std::string(eventSymbol.view());
 }
 
-Message &Message::withEventSymbol(const StringLike &eventSymbol) noexcept {
+Message &Message::withEventSymbol(StringParam eventSymbol) {
     Message::setEventSymbol(eventSymbol);
 
     return *this;
@@ -166,7 +172,7 @@ Message &Message::withEventTime(std::int64_t eventTime) noexcept {
 
 const std::string &Message::getAttachment() const & {
     if (!attachment_) {
-        return String::NUL;
+        return nulString();
     }
 
     return attachment_.value();
@@ -176,11 +182,11 @@ const std::optional<std::string> &Message::getAttachmentOpt() const & noexcept {
     return attachment_;
 }
 
-void Message::setAttachment(const StringLike &attachment) {
-    attachment_ = std::string(attachment);
+void Message::setAttachment(StringParam attachment) {
+    attachment_ = std::string(attachment.view());
 }
 
-Message &Message::withAttachment(const StringLike &attachment) noexcept {
+Message &Message::withAttachment(StringParam attachment) {
     setAttachment(attachment);
 
     return *this;

@@ -3,11 +3,13 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./OrderBase.hpp"
 
@@ -45,7 +47,7 @@ struct EventMapper;
  * is a signal to remove a previously received order for the corresponding index.
  * The method @ref SpreadOrder::hasSize() "hasSize" is a convenient method to test for size presence.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="spreadOrderEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some spread order event sources provide a consistent view of the price-level or detailed order book. Their updates
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
@@ -74,7 +76,7 @@ struct EventMapper;
  *
  * This event type cannot be used with @ref DXFeed::getLastEvent() method.
  *
- * <h3><a name="fobSection">Full Order Book Support</a></h3>
+ * <h3><a name="spreadOrderFobSection">Full Order Book Support</a></h3>
  *
  * Some feeds provide support for "Full Order Book" (FOB) where additional fields will be available:
  * <ul>
@@ -103,7 +105,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
     SpreadOrderData spreadOrderData_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
     static void freeGraalData(void *graalNative) noexcept;
 
     public:
@@ -153,7 +155,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit SpreadOrder(const StringLike &eventSymbol) noexcept;
+    explicit SpreadOrder(StringParam eventSymbol);
 
     /**
      * Changes event's symbol and returns the current spread order.
@@ -161,7 +163,7 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param eventSymbol The symbol of this event.
      * @return The current spread order.
      */
-    SpreadOrder &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    SpreadOrder &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes the event's creation time and returns the current spread order.
@@ -206,8 +208,9 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param index The unique per-symbol index of this spread order.
      * @return The current spread order.
+     * @throws InvalidArgumentException if the index is negative.
      */
-    SpreadOrder &withIndex(std::int64_t index) noexcept;
+    SpreadOrder &withIndex(std::int64_t index);
 
     /**
      * Changes time of this spread order and returns it.
@@ -349,8 +352,9 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param exchangeCode The exchange code of this spread order.
      * @return The current spread order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    SpreadOrder &withExchangeCode(char exchangeCode) noexcept;
+    SpreadOrder &withExchangeCode(char exchangeCode);
 
     /**
      * Changes exchange code of this spread order.
@@ -358,8 +362,9 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param exchangeCode The exchange code of this spread order.
      * @return The current spread order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    SpreadOrder &withExchangeCode(std::int16_t exchangeCode) noexcept;
+    SpreadOrder &withExchangeCode(std::int16_t exchangeCode);
 
     /**
      * Changes side of this spread order.
@@ -398,7 +403,17 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      *
      * @param spreadSymbol spread symbol of this event.
      */
-    void setSpreadSymbol(const StringLike &spreadSymbol) noexcept;
+    void setSpreadSymbol(StringParam spreadSymbol);
+
+    /**
+     * Changes the spread symbol of this event, or makes it null with `std::nullopt`.
+     * `setSpreadSymbol(other.getSpreadSymbolOpt())` copies it from another event, null included.
+     *
+     * @param spreadSymbol the spread symbol of this event or `std::nullopt`.
+     */
+    template <OptionalString S> void setSpreadSymbol(S &&spreadSymbol) noexcept {
+        spreadOrderData_.spreadSymbol = std::forward<S>(spreadSymbol);
+    }
 
     /**
      * Changes spread symbol of this event.
@@ -407,7 +422,20 @@ class DXFCPP_EXPORT SpreadOrder : public OrderBase {
      * @param spreadSymbol spread symbol of this event.
      * @return The current spread order.
      */
-    SpreadOrder &withSpreadSymbol(const StringLike &spreadSymbol) noexcept;
+    SpreadOrder &withSpreadSymbol(StringParam spreadSymbol);
+
+    /**
+     * Changes the spread symbol of this event, or makes it null with `std::nullopt`.
+     * Returns the current spread order.
+     *
+     * @param spreadSymbol the spread symbol of this event or `std::nullopt`.
+     * @return The current spread order.
+     */
+    template <OptionalString S> SpreadOrder &withSpreadSymbol(S &&spreadSymbol) noexcept {
+        setSpreadSymbol(std::forward<S>(spreadSymbol));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.

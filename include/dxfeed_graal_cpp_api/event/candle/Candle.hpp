@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
 #include "../EventType.hpp"
 #include "../LastingEvent.hpp"
 #include "../TimeSeriesEvent.hpp"
@@ -15,6 +15,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 
 /**
@@ -34,11 +35,11 @@ struct EventMapper;
  * CandleAlignment.
  *
  * <p> Event symbol of the candle is represented with CandleSymbol class.
- * Since the `Candle is a time-series event, it is typically subscribed to using DXFeedTimeSeriesSubscription class
+ * Since the Candle is a time-series event, it is typically subscribed to using DXFeedTimeSeriesSubscription class
  * that handles the necessary wrapping of the symbol into TimeSeriesSubscriptionSymbol to specify a subscription
  * time range.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions, and snapshots.</a></h3>
+ * <h3><a name="candleEventFlagsSection">Event flags, transactions, and snapshots.</a></h3>
  *
  * Some candle sources provide a consistent view of the set of known candles.
  * The corresponding information is carried in @ref Candle::getEventFlags() "eventFlags" property.
@@ -80,7 +81,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     std::optional<CandleSymbol> eventSymbol_{};
 
     struct Data {
-        // dxfg_event_type_t event_type;
+        // dxfg_v4_event_type_t event_type;
         // const char *event_symbol;
         std::int64_t eventTime{};
         std::int32_t eventFlags{};
@@ -166,7 +167,7 @@ class DXFCPP_EXPORT Candle final : public EventTypeWithSymbol<CandleSymbol>,
     /**
      * Returns a symbol of this event.
      *
-     * @return symbol of this event or dxfcpp::CandleSymbol::NUL (`dxfcpp::CandleSymbol{"<null>"}`)
+     * @return symbol of this event or dxfcpp::CandleSymbol::NUL() (`dxfcpp::CandleSymbol{"<null>"}`)
      */
     const CandleSymbol &getEventSymbol() const & noexcept override;
 

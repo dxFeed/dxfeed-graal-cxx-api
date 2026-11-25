@@ -85,7 +85,6 @@ add_executable(${PROJECT_NAME} src/main.cpp src/TimeAndSalesStore.hpp src/UiMail
 target_link_libraries(${PROJECT_NAME} PRIVATE DXFeedTimeAndSalesImGui fmt::fmt-header-only)
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static)
@@ -108,7 +107,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx>
+            ${DXFCXX_SHARED_LIBRARY_RUNTIME_FILE}
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif ()
 
@@ -122,14 +121,13 @@ if (DXFCXX_BUILD_UNIT_TESTS)
 endif ()
 
 if (DXFCXX_INSTALL AND DXFCXX_INSTALL_SAMPLES)
-    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR}/UI/${PROJECT_NAME})
-    install(FILES dxfeed.system.properties DESTINATION ${CMAKE_INSTALL_BINDIR}/UI/${PROJECT_NAME})
+    install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
     if (WIN32)
-        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR}/UI/${PROJECT_NAME})
+        install(FILES $<TARGET_FILE:dxfcxx::graal> DESTINATION ${CMAKE_INSTALL_BINDIR})
 
         if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
-            install(FILES $<TARGET_FILE:dxfcxx> DESTINATION ${CMAKE_INSTALL_BINDIR}/UI/${PROJECT_NAME})
+            install(FILES $<TARGET_FILE:dxfcxx> DESTINATION ${CMAKE_INSTALL_BINDIR})
         endif ()
     endif ()
 endif ()

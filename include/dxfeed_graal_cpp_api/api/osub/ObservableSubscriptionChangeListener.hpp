@@ -3,15 +3,16 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/JavaObjectHandle.hpp"
 #include "../../entity/SharedEntity.hpp"
-#include "../../internal/Id.hpp"
 #include "../../symbols/SymbolWrapper.hpp"
-#include "../../internal/Handler.hpp"
+#include "../../util/Handler.hpp"
 
+#include <cstddef>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -94,11 +95,13 @@ struct DXFCPP_EXPORT ObservableSubscriptionChangeListener : RequireMakeShared<Ob
 
     private:
     mutable std::recursive_mutex mutex_{};
-    Id<ObservableSubscriptionChangeListener> id_{Id<ObservableSubscriptionChangeListener>::UNKNOWN};
+    std::size_t id_{static_cast<std::size_t>(-1)};
     JavaObjectHandle<ObservableSubscriptionChangeListener> handle_{};
-    SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded_{};
-    SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved_{};
-    SimpleHandler<void()> onSubscriptionClosed_{};
+    SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsAdded_{
+        "ObservableSubscriptionChangeListener"};
+    SimpleHandler<void(const std::unordered_set<SymbolWrapper> &symbols)> onSymbolsRemoved_{
+        "ObservableSubscriptionChangeListener"};
+    SimpleHandler<void()> onSubscriptionClosed_{"ObservableSubscriptionChangeListener"};
 
     struct Impl;
 

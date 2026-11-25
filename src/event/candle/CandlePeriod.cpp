@@ -4,24 +4,39 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandlePeriod.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/event/candle/CandleType.hpp"
 
+#include "../../internal/utils/CandleUtils.hpp"
+#include "../../internal/utils/JavaUtils.hpp"
+
 DXFCPP_BEGIN_NAMESPACE
 
-CandlePeriod::CandlePeriod(double value, const CandleType &type) noexcept : value_{value}, type_{type} {
+namespace {
+
+// Java CandlePeriod.toString(): the type alone for the value 1, otherwise the value (a long when it equals its long
+// cast, otherwise Double.toString) followed by the type.
+std::string toJavaString(double value, const CandleType &type) {
+    if (math::exactlyEquals(value, 1.0)) {
+        return type.toString();
+    }
+
+    return java::longOrDoubleToString(value) + type.toString();
 }
 
-CandlePeriod::CandlePeriod() noexcept {
+} // namespace
+
+CandlePeriod::CandlePeriod(double value, const CandleType &type) : value_{value}, type_{type} {
 }
 
-CandlePeriod::~CandlePeriod() noexcept {
+CandlePeriod::CandlePeriod() : CandlePeriod(0.0, CandleType{}) {
 }
 
 std::int64_t CandlePeriod::getPeriodIntervalMillis() const noexcept {
-    return static_cast<std::int64_t>(static_cast<double>(type_.getPeriodIntervalMillis()) * value_);
+    return java::longCast(static_cast<double>(type_.getPeriodIntervalMillis()) * value_);
 }
 
-std::string CandlePeriod::changeAttributeForSymbol(const StringLike &symbol) const {
-    return *this == DEFAULT ? MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY)
-                            : MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, toString());
+std::string CandlePeriod::changeAttributeForSymbol(StringParam symbol) const {
+    return *this == DEFAULT
+               ? MarketEventSymbols::removeAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY)
+               : MarketEventSymbols::changeAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY, toString());
 }
 
 double CandlePeriod::getValue() const noexcept {
@@ -32,50 +47,49 @@ const CandleType &CandlePeriod::getType() const & noexcept {
     return type_;
 }
 
-const std::string &CandlePeriod::toString() const & {
-    if (string_.empty()) {
-        string_ = math::doubleEquals(value_, DEFAULT_PERIOD_VALUE) ? type_.toString()
-                  : math::isInt64(value_)
-                      ? std::to_string(static_cast<std::int64_t>(value_)) + "" + type_.toString()
-                      : dxfcpp::toString(value_) + "" + type_.toString();
-    }
-
-    return string_;
+std::string CandlePeriod::toString() const {
+    // Not stored: the period stays trivially destructible.
+    return toJavaString(value_, type_);
 }
 
 bool CandlePeriod::operator==(const CandlePeriod &candlePeriod) const {
     return math::doubleEquals(value_, candlePeriod.getValue()) && type_ == candlePeriod.getType();
 }
 
-CandlePeriod CandlePeriod::parse(const StringLike &s) {
-    if (s == CandleType::DAY.toString()) {
+CandlePeriod CandlePeriod::parse(StringParam s) {
+    const std::string_view sv = s.view();
+
+    if (sv == CandleType::DAY.toString()) {
         return DAY;
     }
 
-    if (s == CandleType::TICK.toString()) {
+    if (sv == CandleType::TICK.toString()) {
         return TICK;
     }
 
-    const auto sw = s.operator std::string_view();
     std::size_t i = 0;
 
-    for (; i < sw.length(); i++) {
-        auto c = sw[i];
+    for (; i < sv.length(); i++) {
+        auto c = sv[i];
 
         if ((c < '0' || c > '9') && c != '.' && c != '-' && c != '+' && c != 'e' && c != 'E')
             break;
     }
 
-    const auto valueStr = sw.substr(0, i);
-    const auto typeStr = sw.substr(i);
-    // ReSharper disable once CppFunctionalStyleCast
-    const auto value = valueStr.empty() ? 1.0 : double(s);
+    const auto valueStr = sv.substr(0, i);
+    const auto typeStr = sv.substr(i);
+    const auto value = valueStr.empty() ? std::optional<double>{1.0} : java::parseDouble(valueStr);
+
+    if (!value) {
+        throw InvalidArgumentException("Invalid candle period value: " + std::string(valueStr));
+    }
+
     const auto type = CandleType::parse(typeStr);
 
-    return valueOf(value, type.get());
+    return valueOf(*value, type.get());
 }
 
-CandlePeriod CandlePeriod::valueOf(double value, const CandleType &type) noexcept {
+CandlePeriod CandlePeriod::valueOf(double value, const CandleType &type) {
     if (math::exactlyEquals(value, 1.0) && type == CandleType::DAY) {
         return DAY;
     }
@@ -87,35 +101,37 @@ CandlePeriod CandlePeriod::valueOf(double value, const CandleType &type) noexcep
     return {value, type};
 }
 
-CandlePeriod CandlePeriod::getAttributeForSymbol(const StringLike &symbol) {
-    const auto string = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+CandlePeriod CandlePeriod::getAttributeForSymbol(StringParam symbol) {
+    const auto string = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY);
 
     return !string ? DEFAULT : parse(string.value());
 }
 
-std::string CandlePeriod::normalizeAttributeForSymbol(const StringLike &symbol) {
-    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+std::string CandlePeriod::normalizeAttributeForSymbol(StringParam symbol) {
+    const std::string_view sv = symbol.view();
+    const auto a = MarketEventSymbols::getAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY);
 
     if (!a) {
-        return symbol;
+        return std::string{sv};
     }
 
     try {
         const auto other = parse(a.value());
 
         if (other == DEFAULT) {
-            return MarketEventSymbols::removeAttributeStringByKey(symbol, ATTRIBUTE_KEY);
+            return candle::removeDefaultAttribute(symbol.view(), CandlePeriod::ATTRIBUTE_KEY, DEFAULT.toString());
         }
 
         if (a.value() != other.toString()) {
-            return MarketEventSymbols::changeAttributeStringByKey(symbol, ATTRIBUTE_KEY, other.toString());
+            return MarketEventSymbols::changeAttributeStringByKey(symbol, CandlePeriod::ATTRIBUTE_KEY,
+                                                                  other.toString());
         }
 
-        return symbol;
+        return std::string{sv};
     } catch (const InvalidArgumentException &) {
-        return symbol;
+        return std::string{sv};
     } catch (const std::invalid_argument &) {
-        return symbol;
+        return std::string{sv};
     }
 }
 

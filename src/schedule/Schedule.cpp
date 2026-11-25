@@ -4,9 +4,9 @@
 #include "../../include/dxfeed_graal_cpp_api/schedule/Schedule.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
 #include "../../include/dxfeed_graal_cpp_api/ipf/InstrumentProfile.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/schedule/IsolatedSchedule.hpp"
+#include "../isolated/schedule/IsolatedSchedule.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/Day.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/Session.hpp"
 #include "../../include/dxfeed_graal_cpp_api/schedule/SessionFilter.hpp"
@@ -33,16 +33,28 @@ Schedule::Ptr Schedule::getInstance(const std::shared_ptr<InstrumentProfile> &pr
     return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_));
 }
 
-Schedule::Ptr Schedule::getInstance(const StringLike &scheduleDefinition) {
-    return create(isolated::schedule::IsolatedSchedule::getInstance(scheduleDefinition));
+Schedule::Ptr Schedule::getInstance(StringParam scheduleDefinition) {
+    return create(isolated::schedule::IsolatedSchedule::getInstance(scheduleDefinition.view()));
 }
 
-Schedule::Ptr Schedule::getInstance(const std::shared_ptr<InstrumentProfile> &profile, const StringLike &venue) {
+const Schedule::Ptr &Schedule::UTC() {
+    static const Ptr value = getInstance("UTC(tz=UTC;td=12345;de=+0000;0=0000+0000)");
+
+    return value;
+}
+
+const Schedule::Ptr &Schedule::NYSE() {
+    static const Ptr value = getInstance("XNYS()");
+
+    return value;
+}
+
+Schedule::Ptr Schedule::getInstance(const std::shared_ptr<InstrumentProfile> &profile, StringParam venue) {
     if (!profile) {
         throw InvalidArgumentException("The `profile` is nullptr");
     }
 
-    return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_, venue));
+    return create(isolated::schedule::IsolatedSchedule::getInstance(profile->handle_, venue.view()));
 }
 
 std::vector<std::string> Schedule::getTradingVenues(const std::shared_ptr<InstrumentProfile> &profile) {
@@ -53,8 +65,8 @@ std::vector<std::string> Schedule::getTradingVenues(const std::shared_ptr<Instru
     return isolated::schedule::IsolatedSchedule::getTradingVenues(profile->handle_);
 }
 
-void Schedule::downloadDefaults(const StringLike &downloadConfig) {
-    isolated::schedule::IsolatedSchedule::downloadDefaults(downloadConfig);
+void Schedule::downloadDefaults(StringParam downloadConfig) {
+    isolated::schedule::IsolatedSchedule::downloadDefaults(downloadConfig.view());
 }
 
 void Schedule::setDefaults(const std::vector<char> &data) {
@@ -103,6 +115,10 @@ std::string Schedule::getTimeZoneDisplayName() const {
 
 std::string Schedule::getTimeZoneId() const {
     return isolated::schedule::IsolatedSchedule::getTimeZoneId(handle_);
+}
+
+std::string Schedule::getDefinition() const {
+    return isolated::schedule::IsolatedSchedule::getDefinition(handle_);
 }
 
 DXFCPP_END_NAMESPACE

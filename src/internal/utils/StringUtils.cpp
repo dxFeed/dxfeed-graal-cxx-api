@@ -3,9 +3,15 @@
 
 #define _CRT_SECURE_NO_WARNINGS // NOLINT(*-reserved-identifier)
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
+#include "StringUtils.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+
+#include "JavaUtils.hpp"
+#include "StringConstants.hpp"
+
+#include <new>
 
 #include <fmt/chrono.h>
 #include <fmt/format.h>
@@ -22,145 +28,13 @@ DXFCXX_DISABLE_CLANG_WARNINGS_POP()
 
 DXFCPP_BEGIN_NAMESPACE
 
+const std::string &nulString() noexcept {
+    // The string is short, so the standard libraries keep it in the object itself, without the heap (only the debug
+    // iterators of MSVC allocate a small proxy). The object is created in a static buffer and is never destroyed.
+    alignas(std::string) static unsigned char storage[sizeof(std::string)];
+    static const auto *const value = new (storage) std::string{String::NUL};
 
-StringLike::StringLike() {
-}
-
-StringLike::StringLike(const char *s) : owned_(s ? s : ""), view_(owned_) {
-}
-
-StringLike::StringLike(std::string_view sv) : view_(sv) {
-}
-
-StringLike::StringLike(const std::string &s) : owned_(s), view_(owned_) {
-}
-
-StringLike::StringLike(std::string &&s) noexcept : owned_(std::move(s)), view_(owned_) {
-}
-
-StringLike::StringLike(const StringLike &other) : owned_(other.owned_) {
-    view_ = other.view_.data() == other.owned_.data() ? std::string_view{owned_} : other.view_;
-}
-
-StringLike::StringLike(StringLike &&other) noexcept {
-    const auto ownsView = other.view_.data() == other.owned_.data();
-
-    owned_ = std::move(other.owned_);
-    view_ = ownsView ? std::string_view{owned_} : other.view_;
-}
-
-StringLike &StringLike::operator=(const StringLike &other) {
-    if (this == &other) {
-        return *this;
-    }
-
-    const auto ownsView = other.view_.data() == other.owned_.data();
-
-    owned_ = other.owned_;
-    view_ = ownsView ? std::string_view{owned_} : other.view_;
-
-    return *this;
-}
-
-StringLike &StringLike::operator=(StringLike &&other) noexcept {
-    if (this == &other) {
-        return *this;
-    }
-
-    const auto ownsView = other.view_.data() == other.owned_.data();
-
-    owned_ = std::move(other.owned_);
-    view_ = ownsView ? std::string_view{owned_} : other.view_;
-
-    return *this;
-}
-
-StringLike::operator std::string_view() const noexcept {
-    return view_;
-}
-
-StringLike::operator std::string() const {
-    return std::string(view_);
-}
-
-const char *StringLike::data() const noexcept {
-    return view_.data();
-}
-
-const char *StringLike::c_str() const {
-    if (owned_.empty() && !view_.empty()) {
-        owned_ = std::string(view_);
-        view_ = owned_;
-    }
-
-    return owned_.c_str();
-}
-
-std::string_view::const_iterator StringLike::begin() const noexcept {
-    return view_.begin();
-}
-
-std::string_view::const_iterator StringLike::end() const noexcept {
-    return view_.end();
-}
-
-std::string_view::const_iterator StringLike::cbegin() const noexcept {
-    return view_.cbegin();
-}
-
-std::string_view::const_iterator StringLike::cend() const noexcept {
-    return view_.cend();
-}
-
-bool StringLike::empty() const noexcept {
-    return view_.empty();
-}
-
-std::size_t StringLike::size() const noexcept {
-    return view_.size();
-}
-
-std::size_t StringLike::length() const noexcept {
-    return view_.size();
-}
-
-bool StringLike::ends_with(const StringLike &other) const noexcept {
-#if __cpp_lib_ends_with >= 201907L
-    return view_.ends_with(other.view_);
-#else
-    const auto sv = other.view_;
-
-    return sv.size() <= view_.size() && view_.compare(view_.size() - sv.size(), sv.size(), sv) == 0;
-#endif
-}
-
-std::string StringLike::substr(std::size_t pos, std::size_t count) const {
-    const auto sv2 = view_.substr(pos, count);
-
-    return std::string(sv2);
-}
-
-bool StringLike::operator==(const StringLike &other) const noexcept {
-    return view_ == other.view_;
-}
-
-StringLike::operator double() const {
-    double result{};
-#if defined(_LIBCPP_VERSION)
-    result = std::stod(std::string(view_));
-#else
-    if (auto [ptr, ec] = std::from_chars(view_.data(), view_.data() + view_.size(), result); ec != std::errc{})
-        throw std::invalid_argument("StringLike: cannot convert to double");
-#endif
-    return result;
-}
-
-std::string StringLike::toString() const noexcept {
-    return std::string(view_);
-}
-
-std::string_view StringLike::toStringView() const noexcept {
-    return view_;
+    return *value;
 }
 
 std::size_t StringHash::operator()(const char *str) const {
@@ -173,10 +47,6 @@ std::size_t StringHash::operator()(std::string_view sv) const {
 
 std::size_t StringHash::operator()(const std::string &str) const {
     return HashType{}(str);
-}
-
-std::size_t StringHash::operator()(const StringLike &s) const {
-    return HashType{}(s);
 }
 
 std::string toString(bool b) noexcept {
@@ -220,21 +90,7 @@ std::string toString(void *ptr) {
 }
 
 std::string toString(double d) {
-    if (std::isnan(d)) {
-        return "NaN";
-    }
-
-    if (std::isinf(d)) {
-        return std::signbit(d) ? "-Infinity" : "Infinity";
-    }
-
-    auto result = fmt::format("{}", d);
-
-    if (result.find_first_of(".eE") == std::string::npos) {
-        result += ".0";
-    }
-
-    return result;
+    return java::doubleToString(d);
 }
 
 std::string encodeChar(std::int16_t c) {
@@ -246,24 +102,17 @@ std::string encodeChar(std::int16_t c) {
         return "\\0";
     }
 
-    return fmt::format("\\u{:04x}", c);
+    // The code is a UTF-16 unit: 0x8000-0xFFFF are negative int16 values.
+    return fmt::format("\\u{:04x}", static_cast<std::uint16_t>(c));
 }
 
 detail::IsIEqual::IsIEqual(const std::locale &locale) : locale_{locale} {
 }
 
 char utf16to8(std::int16_t in) noexcept {
-    try {
-        std::string out{};
-        auto utf16in = {in};
+    const auto code = static_cast<std::uint16_t>(in);
 
-        utf8::utf16to8(std::begin(utf16in), std::end(utf16in), std::back_inserter(out));
-
-        return out.empty() ? char{} : out[0];
-    } catch (...) {
-        // TODO: error handling
-        return char{};
-    }
+    return code <= 0xFF ? static_cast<char>(static_cast<unsigned char>(code)) : char{};
 }
 
 std::string utf16toUtf8String(std::int16_t in) noexcept {
@@ -307,17 +156,7 @@ std::string utf16toUtf8String(const std::vector<std::int16_t> &in) noexcept {
 }
 
 std::int16_t utf8to16(char in) noexcept {
-    try {
-        std::u16string out{};
-        auto utf8in = {in};
-
-        utf8::utf8to16(std::begin(utf8in), std::end(utf8in), std::back_inserter(out));
-
-        return out.empty() ? std::int16_t{} : static_cast<std::int16_t>(out[0]);
-    } catch (...) {
-        // TODO: error handling
-        return std::int16_t{};
-    }
+    return static_cast<std::int16_t>(static_cast<unsigned char>(in));
 }
 
 std::string formatTimeStamp(std::int64_t timestamp) {
@@ -359,21 +198,92 @@ std::string formatTimeStampWithMillisWithTimeZone(std::int64_t timestamp) {
     return TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(timestamp);
 }
 
-char *createCString(const StringLike &s) {
-    if (s == String::NUL) {
-        return nullptr;
+namespace {
+
+bool isContinuationByte(unsigned char b) noexcept {
+    return (b & 0xC0U) == 0x80U;
+}
+
+// The length of the sequence the bit pattern of its lead byte announces; 0 for a continuation byte (0x80-0xBF) and for
+// 0xF8-0xFF. An overlong lead (0xC0, 0xC1) and a lead above U+10FFFF (0xF5-0xF7) keep their length, so their sequence is
+// shown whole.
+std::size_t sequenceLength(unsigned char lead) noexcept {
+    if (lead < 0x80U) {
+        return 1;
     }
+
+    if ((lead >> 5U) == 0x6U) {
+        return 2;
+    }
+
+    if ((lead >> 4U) == 0xEU) {
+        return 3;
+    }
+
+    if ((lead >> 3U) == 0x1EU) {
+        return 4;
+    }
+
+    return 0;
+}
+
+// The bytes of the invalid sequence at the offset: the lead byte and its continuations, including the first byte that
+// broke the sequence; one byte when sequenceLength() is 0.
+std::string invalidBytes(std::string_view s, std::size_t offset) {
+    const auto lead = static_cast<unsigned char>(s[offset]);
+    const std::size_t length = sequenceLength(lead);
+    std::string result = fmt::format("0x{:02X}", lead);
+
+    for (std::size_t i = offset + 1; i < s.size() && i < offset + length; i++) {
+        const auto b = static_cast<unsigned char>(s[i]);
+
+        result += fmt::format(" 0x{:02X}", b);
+
+        if (!isContinuationByte(b)) {
+            break;
+        }
+    }
+
+    return result;
+}
+
+} // namespace
+
+StringLabel StringLabel::ofPropertyValue(std::string_view place, std::string_view key) noexcept {
+    // The values of DXEndpoint::DXFEED_USER_PROPERTY and DXEndpoint::DXFEED_PASSWORD_PROPERTY (DXEndpointTest checks
+    // that they are secret). Not the constants themselves: a comparison with them makes the shared library export them.
+    return {place, key == "dxfeed.user" || key == "dxfeed.password"};
+}
+
+void checkUtf8(std::string_view s, const StringLabel &label) {
+    const auto found = utf8::find_invalid(s.begin(), s.end());
+
+    if (found == s.end()) {
+        return;
+    }
+
+    const auto offset = static_cast<std::size_t>(found - s.begin());
+
+    if (label.secret) {
+        throw InvalidArgumentException(fmt::format("{}: invalid UTF-8 at byte {}", label.place, offset));
+    }
+
+    throw InvalidArgumentException(
+        fmt::format("{}: invalid UTF-8 at byte {}: {}", label.place, offset, invalidBytes(s, offset)));
+}
+
+char *createCString(std::string_view s, const StringLabel &label) {
+    checkUtf8(s, label);
 
     char *cString = new char[s.size() + 1];
 
-    auto sw = std::string_view(s);
-    std::copy(sw.begin(), sw.end(), cString);
+    std::copy(s.begin(), s.end(), cString);
     cString[s.size()] = '\0';
 
     return cString;
 }
 
-std::string trimStr(const StringLike &s) noexcept {
+std::string trimStr(std::string_view s) noexcept {
     auto trimPredicate = [](auto c) {
         return c == ' ' || c == '\t' || c == '\v' || c == '\r' || c == '\n';
     };
@@ -390,16 +300,82 @@ inline auto split = [](const std::string &s, char sep = ',') noexcept {
     return s | ranges::views::split(sep) | transformToString;
 };
 
-std::vector<std::string> splitStr(const StringLike &s, char sep) noexcept {
-    return split(s, sep) | ranges::to<std::vector<std::string>>();
+std::vector<std::string> splitStr(std::string_view s, char sep) noexcept {
+    return split(std::string{s}, sep) | ranges::to<std::vector<std::string>>();
 }
 
-std::string joinStr(const std::vector<StringLike> &v, const StringLike &sep) noexcept {
-    return fmt::format("{}", fmt::join(v, sep.toStringView()));
+std::string joinStr(const std::vector<std::string_view> &v, std::string_view sep) noexcept {
+    // Without fmt: its formatting is not noexcept.
+    std::string result{};
+
+    for (std::size_t i = 0; i < v.size(); i++) {
+        if (i > 0) {
+            result += sep;
+        }
+
+        result += v[i];
+    }
+
+    return result;
 }
 
-bool toBool(const StringLike &s) noexcept {
+bool toBool(std::string_view s) noexcept {
     return iEquals(s, "true") || iEquals(s, "yes") || iEquals(s, "y") || iEquals(s, "on");
+}
+
+IsolateArgumentsParseResult parseIsolateArguments(std::string_view text) {
+    // Without std::isspace: it depends on the locale.
+    auto isSpace = [](char c) {
+        return c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r';
+    };
+
+    IsolateArgumentsParseResult result{};
+    const auto size = text.size();
+    std::size_t i = 0;
+
+    while (i < size) {
+        if (isSpace(text[i])) {
+            i++;
+
+            continue;
+        }
+
+        if (text[i] == '@') {
+            result.arguments.clear();
+            result.error = "argument files (@file) are not supported, found at offset " + std::to_string(i);
+
+            return result;
+        }
+
+        std::string argument{};
+
+        while (i < size && !isSpace(text[i])) {
+            const auto c = text[i];
+
+            if (c != '\'' && c != '"') {
+                argument += c;
+                i++;
+
+                continue;
+            }
+
+            const auto end = text.find(c, i + 1);
+
+            if (end == std::string_view::npos) {
+                result.arguments.clear();
+                result.error = std::string{"unmatched quote "} + c + " at offset " + std::to_string(i);
+
+                return result;
+            }
+
+            argument.append(text.substr(i + 1, end - i - 1));
+            i = end + 1;
+        }
+
+        result.arguments.push_back(std::move(argument));
+    }
+
+    return result;
 }
 
 DXFCPP_END_NAMESPACE

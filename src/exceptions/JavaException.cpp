@@ -3,58 +3,111 @@
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/JavaException.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/internal/Isolate.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../internal/Isolate.hpp"
+#include "../isolated/IsolatedCommon.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 namespace {
 
-void releaseStackTraceMethodNames(graal_isolatethread_t *thread, dxfg_exception_t *exception) noexcept {
-    if (exception == nullptr) {
-        return;
-    }
-
-    if (const auto *stackTrace = exception->stack_trace; stackTrace != nullptr && stackTrace->elements != nullptr) {
-        for (std::int32_t i = 0; i < stackTrace->size; ++i) {
-            auto *element = stackTrace->elements[i];
-
-            if (element != nullptr && element->method_name != nullptr &&
-                dxfg_free(thread, const_cast<char *>(element->method_name)) != -1) {
-                // Native SDK 3.2.13 does not release this field. Keep the standard release safe for fixed SDKs.
-                element->method_name = nullptr;
-            }
-        }
-    }
-
-    releaseStackTraceMethodNames(thread, exception->cause);
-}
-
 void releaseException(void *exceptionHandle) noexcept {
-    try {
+    runRelease("JavaException", [&] {
         runIsolatedThrow(
             [](auto threadHandle, auto *exception) {
-                auto *thread = static_cast<graal_isolatethread_t *>(threadHandle);
-
-                releaseStackTraceMethodNames(thread, exception);
-                dxfg_Exception_release(thread, exception);
+                dxfg_v4_Exception_release(static_cast<graal_isolatethread_t *>(threadHandle), exception);
             },
-            static_cast<dxfg_exception_t *>(exceptionHandle));
-    } catch (...) {
-        // Cleanup must not replace the Java exception that is already being handled.
+            static_cast<dxfg_v4_exception_t *>(exceptionHandle));
+    });
+}
+
+// Throws the Java exception of the calling thread, if it has one.
+void throwIfThreadExceptionExists(graal_isolatethread_t *thread) {
+    auto exception = isolated::fetchThreadException(thread);
+
+    if (!exception) {
+        throw RuntimeException("Unable to get the Java exception of a failed dxFeed Graal SDK function");
+    }
+
+    if (*exception != nullptr) {
+        throw JavaException::create(exception->get());
     }
 }
 
 } // namespace
 
-JavaException::JavaException(const StringLike &message, const StringLike &className, const StringLike &stackTrace)
-    : RuntimeException(fmt::format("Java exception of type '{}' was thrown. {}", className.c_str(), message.c_str()),
-                       stackTrace) {
+namespace isolated {
+
+void ThreadExceptionDeleter::operator()(dxfg_v4_exception_t *exception) const noexcept {
+    dxfg_v4_Exception_release(thread, exception);
 }
 
-JavaException::JavaException(const JavaException &other) noexcept : RuntimeException(other) {
+std::optional<ThreadException> fetchThreadException(graal_isolatethread_t *thread) noexcept {
+    dxfg_v4_exception_t *exception = nullptr;
+
+    if (dxfg_v4_get_and_clear_thread_exception(thread, &exception) == DXFG_EXECUTE_SUCCESSFULLY) {
+        return ThreadException{exception, ThreadExceptionDeleter{thread}};
+    }
+
+    // The SDK failed to convert the exception and stored the exception of that failure instead: take it too, so that a
+    // later call does not get it. Its status is not checked, there is nothing more to do.
+    dxfg_v4_exception_t *conversionException = nullptr;
+
+    if (dxfg_v4_get_and_clear_thread_exception(thread, &conversionException) == DXFG_EXECUTE_SUCCESSFULLY) {
+        dxfg_v4_Exception_release(thread, conversionException);
+    }
+
+    return std::nullopt;
+}
+
+void throwThreadException(graal_isolatethread_t *thread) {
+    throwIfThreadExceptionExists(thread);
+
+    throw RuntimeException("Unexpected failure of a dxFeed Graal SDK function without a Java exception");
+}
+
+void throwUnexpectedNullResult() {
+    throw RuntimeException("Unexpected null result of a dxFeed Graal SDK function without a Java exception");
+}
+
+void clearThreadException(graal_isolatethread_t *thread) noexcept {
+    // The exception, if any, is released at once.
+    static_cast<void>(fetchThreadException(thread));
+}
+
+} // namespace isolated
+
+struct JavaException::JavaData {
+    std::string className;
+    std::string message;
+    std::string stackTrace;
+};
+
+JavaException::JavaException(StringParam message, StringParam className, StringParam stackTrace)
+    : RuntimeException(fmt::format("Java exception of type '{}' was thrown. {}", className.view(), message.view()),
+                       stackTrace),
+      javaData_(std::make_shared<const JavaData>(
+          JavaData{std::string(className.view()), std::string(message.view()),
+                   std::string(stackTrace.view())})) {
+}
+
+JavaException::JavaException(const JavaException &other) noexcept
+    : RuntimeException(other), javaData_(other.javaData_) {
+}
+
+const std::string &JavaException::getJavaClassName() const & noexcept {
+    return javaData_->className;
+}
+
+const std::string &JavaException::getJavaMessage() const & noexcept {
+    return javaData_->message;
+}
+
+const std::string &JavaException::getJavaStackTrace() const & noexcept {
+    return javaData_->stackTrace;
 }
 
 JavaException JavaException::create(void *exceptionHandle) {
@@ -62,7 +115,7 @@ JavaException JavaException::create(void *exceptionHandle) {
         return {"null", "", ""};
     }
 
-    auto *exception = dxfcpp::bit_cast<dxfg_exception_t *>(exceptionHandle);
+    auto *exception = dxfcpp::bit_cast<dxfg_v4_exception_t *>(exceptionHandle);
 
     return {toString(exception->message), toString(exception->class_name), toString(exception->print_stack_trace)};
 }
@@ -76,23 +129,14 @@ JavaException JavaException::createAndRelease(void *exceptionHandle) {
 }
 
 void JavaException::throwIfJavaThreadExceptionExists() {
-    dxfg_exception_t *exception = runIsolatedThrow([](auto threadHandle) {
-        return dxfg_get_and_clear_thread_exception_t(static_cast<graal_isolatethread_t *>(threadHandle));
+    runIsolatedThrow([](auto threadHandle) {
+        throwIfThreadExceptionExists(static_cast<graal_isolatethread_t *>(threadHandle));
     });
-
-    if (exception == nullptr) {
-        return;
-    }
-
-    auto javaException = createAndRelease(exception);
-
-    throw javaException; // NOLINT(*-throw-by-value-catch-by-reference)
 }
 
 void JavaException::throwException() {
-    runIsolatedThrow([](auto threadHandle) {
-        return throwIfNullptr(dxfg_throw_exception(static_cast<graal_isolatethread_t *>(threadHandle)));
-    });
+    // The function always fails: it writes no object.
+    static_cast<void>(isolated::runGraalV4FunctionWithResult(dxfg_v4_throw_exception));
 }
 
 DXFCPP_END_NAMESPACE

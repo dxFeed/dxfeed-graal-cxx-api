@@ -3,16 +3,22 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
+#include "../../util/StringUtils.hpp"
 
 #include <algorithm>
+#include <cmath>
+#include <cstddef>
 #include <cstdint>
+#include <functional>
+#include <iterator>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <set>
 #include <sstream>
 #include <string>
@@ -59,14 +65,12 @@ template <typename T> class OptionSeries final {
     public:
     /**
      * Default constructor for the OptionSeries class.
-     *
-     * @return A default-initialized instance of OptionSeries.
      */
     OptionSeries() {}
 
     /**
      * Returns day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @return day id of expiration.
      */
@@ -76,7 +80,7 @@ template <typename T> class OptionSeries final {
 
     /**
      * Returns day id of last trading day.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090116).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 16)`.
      *
      * @return The day id of last trading day.
      */
@@ -112,7 +116,7 @@ template <typename T> class OptionSeries final {
      *     <LIST> ::= <AU> | <AU> <semicolon> <space> <LIST>
      *     <AU> ::= <UNDERLYING> <space> <SPC>
      * ```
-     * The list shall be sorted by <UNDERLYING>.
+     * The list shall be sorted by &lt;UNDERLYING&gt;.
      * Example: "SE 50", "FIS 53; US$ 45.46".
      *
      * @return The additional underlyings for options, including additional cash.
@@ -125,9 +129,9 @@ template <typename T> class OptionSeries final {
      * Returns maturity month-year as provided for corresponding FIX tag (200).
      * It can use several different formats depending on data source:
      * <ul>
-     * <li>YYYYMM – if only year and month are specified
-     * <li>YYYYMMDD – if full date is specified
-     * <li>YYYYMMwN – if week number (within a month) is specified
+     * <li>YYYYMM - if only year and month are specified
+     * <li>YYYYMMDD - if full date is specified
+     * <li>YYYYMMwN - if week number (within a month) is specified
      * </ul>
      *
      * @return The maturity month-year as provided for corresponding FIX tag (200).
@@ -241,7 +245,7 @@ template <typename T> class OptionSeries final {
         const auto it = std::lower_bound(strikesVector.begin(), strikesVector.end(), strike);
         const auto index = static_cast<std::size_t>(std::distance(strikesVector.begin(), it));
         const std::size_t fromIndex = (index < n / 2) ? 0 : (index - n / 2);
-        const std::size_t toIndex = std::min(strikesVector.size(), fromIndex + n);
+        const std::size_t toIndex = (std::min)(strikesVector.size(), fromIndex + n);
 
         return std::vector<double>(strikesVector.begin() + static_cast<std::ptrdiff_t>(fromIndex),
                                    strikesVector.begin() + static_cast<std::ptrdiff_t>(toIndex));
@@ -313,18 +317,18 @@ template <typename T> class OptionSeries final {
     std::string toString() const {
         std::ostringstream ss{};
 
-        ss << "expiration=" << expiration_;
+        ss << "expiration=" << day_util::getYearMonthDayByDayId(expiration_);
 
         if (lastTrade_ != 0) {
-            ss << ", lastTrade=" << lastTrade_;
+            ss << ", lastTrade=" << day_util::getYearMonthDayByDayId(lastTrade_);
         }
 
         if (!math::exactlyEquals(multiplier_, 0.0)) {
-            ss << ", multiplier=" << multiplier_;
+            ss << ", multiplier=" << dxfcpp::toString(multiplier_);
         }
 
         if (!math::exactlyEquals(spc_, 0.0)) {
-            ss << ", spc=" << spc_;
+            ss << ", spc=" << dxfcpp::toString(spc_);
         }
 
         if (!additionalUnderlyings_.empty()) {

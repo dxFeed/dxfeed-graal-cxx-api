@@ -3,21 +3,30 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringParam.hpp"
 #include "../executors/InPlaceExecutor.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/Handler.hpp"
-#include "../internal/JavaObjectHandle.hpp"
+#include "../util/Handler.hpp"
+#include "../util/TimePeriod.hpp"
+#include "../util/TimePeriodInfo.hpp"
+#include "./ConnectionError.hpp"
 #include "./DXFeed.hpp"
 #include "./DXPublisher.hpp"
+#include "./MessageConnectorInfo.hpp"
 
+#include <chrono>
+#include <cstdint>
+#include <functional>
+#include <optional>
 #include <string>
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_api
@@ -36,8 +45,8 @@ struct OnDemandService;
  * that are available with DXEndpoint::getInstance() and DXEndpoint::getInstance(Role) methods as well as
  * factory methods DXEndpoint::create() and DXEndpoint::create(Role), and a number of configuration methods. Advanced
  * properties can be configured using
- * @ref DXEndpoint::newBuilder() "newBuilder()"->@ref DXEndpoint::Builder::withProperty(const StringLike&, const
- * StringLike&) "withProperty(key, value)"->@ref DXEndpoint::Builder::build() "build()".
+ * @ref DXEndpoint::newBuilder() "newBuilder()"->@ref DXEndpoint::Builder::withProperty(StringParam, StringParam)
+ * "withProperty(key, value)"->@ref DXEndpoint::Builder::build() "build()".
  *
  * See DXFeed for details on how to subscribe to symbols and receive events.
  *
@@ -48,7 +57,7 @@ struct OnDemandService;
  * Endpoints with other roles are created with DXEndpoint::create(Role) factory method. Endpoint role is
  * represented by @ref Role "DXEndpoint::Role" enumeration.
  *
- * Endpoint role defines the behavior of its @ref DXEndpoint::connect(const StringLike&) "connect" method:
+ * Endpoint role defines the behavior of its @ref DXEndpoint::connect(StringParam) "connect" method:
  *
  * - @ref Role::FEED "FEED" connects to the remote data feed provider and is optimized for real-time or
  *   delayed data processing (<b>this is a default role</b>).
@@ -100,7 +109,7 @@ struct OnDemandService;
  * not connected to any remote endpoint. Its state is @ref State::NOT_CONNECTED "NOT_CONNECTED".
  *
  * @ref Role::FEED "Feed" and @ref Role::PUBLISHER "publisher" endpoints can connect to remote endpoints of the opposite
- * role. Connection is initiated by @ref DXEndpoint::connect(const StringLike&) "connect" method.
+ * role. Connection is initiated by @ref DXEndpoint::connect(StringParam) "connect" method.
  * The endpoint state becomes @ref State::CONNECTING "CONNECTING".
  *
  * When the actual connection to the remote endpoint is established, the endpoint state becomes
@@ -133,11 +142,11 @@ struct OnDemandService;
  * @ref Role::STREAM_FEED "STREAM_FEED" and @ref Role::LOCAL_HUB "LOCAL_HUB" do not support the properties file.
  *
  * The location of this file can be specified using
- * @ref Builder::withProperty(const StringLike&, const StringLike&) "withProperty"(::DXFEED_PROPERTIES_PROPERTY, path)
+ * @ref Builder::withProperty(StringParam, StringParam) "withProperty"(::DXFEED_PROPERTIES_PROPERTY, path)
  * or
- * @ref Builder::withProperty(const StringLike&, const StringLike&) "withProperty"(::DXPUBLISHER_PROPERTIES_PROPERTY,
+ * @ref Builder::withProperty(StringParam, StringParam) "withProperty"(::DXPUBLISHER_PROPERTIES_PROPERTY,
  * path) correspondingly. When the location of this file is not explicitly specified using
- * @ref Builder::withProperty(const StringLike&, const StringLike&) "withProperty" method, then the file path is taken
+ * @ref Builder::withProperty(StringParam, StringParam) "withProperty" method, then the file path is taken
  * from a system property with the corresponding name.
  *
  * Defaults for individual properties can be also provided using system properties when they are not specified
@@ -145,15 +154,16 @@ struct OnDemandService;
  *
  * The DXEndpoint::NAME_PROPERTY is the exception to the above rule. It is never loaded from system properties.
  * It can be only specified in the configuration file or programmatically. There is a convenience
- * @ref Builder::withName(const StringLike&) "Builder.withName" method for it. It is recommended to assign short and
+ * @ref Builder::withName(StringParam) "Builder.withName" method for it. It is recommended to assign short and
  * meaningful endpoint names when multiple endpoints are used in the same process (one GraalVM Isolate for now).
  * The name of the endpoint shall describe its role in the particular application.
  *
- * Note that individual properties that are programmatically set using @ref Builder::withProperty(const StringLike&,
- * const StringLike&) "withProperty" method always take precedence.
+ * Note that individual properties that are programmatically set using @ref Builder::withProperty(StringParam,
+ * StringParam) "withProperty" method always take precedence.
  *
  * @ref Role::FEED "FEED" and @ref Role::PUBLISHER "PUBLISHER" automatically establish connection on creation
- * when the corresponding DXEndpoint::DXFEED_ADDRESS_PROPERTY or DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY is specified.
+ * when the corresponding DXEndpoint::DXFEED_ADDRESS_PROPERTY or DXEndpoint::DXPUBLISHER_ADDRESS_PROPERTY is
+ * specified.
  *
  * <h3>Permanent subscription</h3>
  *
@@ -190,10 +200,10 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * Defines property for endpoint name that is used to distinguish multiple endpoints
      * in the same process in logs and in other diagnostic means.
-     * Use Builder::withProperty(const StringLike&, const StringLike&) method.
-     * This property is also changed by the Builder::withName(const StringLike&) method.
+     * Use Builder::withProperty(StringParam, StringParam) method.
+     * This property is also changed by the Builder::withName(StringParam) method.
      */
-    static const std::string NAME_PROPERTY;
+    static constexpr char NAME_PROPERTY[] = "name";
 
     /**
      * `"dxfeed.properties"`
@@ -202,9 +212,13 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED".
      * By default, properties are loaded from a path resource named "dxfeed.properties".
      *
-     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     * The SDK writes to its log (at the INFO level) the name of the loaded file, `DXEndpoint is loading properties
+     * from <name>`, and the resulting address, `<name> DXEndpoint with dxfeed.address=<address>`: look for these lines
+     * when the endpoint connects to an unexpected address.
+     *
+     * @see Builder::withProperty(StringParam, StringParam)
      */
-    static const std::string DXFEED_PROPERTIES_PROPERTY;
+    static constexpr char DXFEED_PROPERTIES_PROPERTY[] = "dxfeed.properties";
 
     /**
      * `"dxfeed.address"`
@@ -215,15 +229,15 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * while the role @ref Role::ON_DEMAND_FEED "ON_DEMAND_FEED" waits until OnDemandService::(std::int64_t, double) is
      * invoked before connecting.
      *
-     * By default, without this property, a connection is not established until @ref DXEndpoint::connect(const
-     * StringLike&) "connect(address)" is invoked.
+     * By default, without this property, a connection is not established until @ref DXEndpoint::connect(StringParam)
+     * "connect(address)" is invoked.
      *
      * Credentials for access to premium services may be configured with
      * DXEndpoint::DXFEED_USER_PROPERTY and DXEndpoint::DXFEED_PASSWORD_PROPERTY.
      *
-     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     * @see Builder::withProperty(StringParam, StringParam)
      */
-    static const std::string DXFEED_ADDRESS_PROPERTY;
+    static constexpr char DXFEED_ADDRESS_PROPERTY[] = "dxfeed.address";
 
     /**
      * `"dxfeed.user"`
@@ -231,9 +245,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Defines default username for an endpoint with the role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
      * "ON_DEMAND_FEED".
      *
-     * @see DXEndpoint::user(const StringLike&)
+     * @see DXEndpoint::user(StringParam)
      */
-    static const std::string DXFEED_USER_PROPERTY;
+    static constexpr char DXFEED_USER_PROPERTY[] = "dxfeed.user";
 
     /**
      * `"dxfeed.password"`
@@ -241,18 +255,18 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Defines default password for an endpoint with role @ref Role::FEED "FEED" or @ref Role::ON_DEMAND_FEED
      * "ON_DEMAND_FEED".
      *
-     * @see DXEndpoint::password(const StringLike&)
+     * @see DXEndpoint::password(StringParam)
      */
-    static const std::string DXFEED_PASSWORD_PROPERTY;
+    static constexpr char DXFEED_PASSWORD_PROPERTY[] = "dxfeed.password";
 
     /**
      * `"dxfeed.threadPoolSize"`
      *
      * Defines thread pool size for an endpoint with the role @ref Role::FEED "FEED".
      * By default, the thread pool size is equal to the number of available processors.
-     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     * @see Builder::withProperty(StringParam, StringParam)
      */
-    static const std::string DXFEED_THREAD_POOL_SIZE_PROPERTY;
+    static constexpr char DXFEED_THREAD_POOL_SIZE_PROPERTY[] = "dxfeed.threadPoolSize";
 
     /**
      * `"dxfeed.aggregationPeriod"`
@@ -260,9 +274,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Defines a data aggregation period for an endpoint with the role @ref Role::FEED "FEED" that
      * limits the rate of data notifications. For example, setting the value of this property
      * to "0.1s" limits notification to once every "100ms" (at most 10 per second).
-     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     * @see Builder::withProperty(StringParam, StringParam)
      */
-    static const std::string DXFEED_AGGREGATION_PERIOD_PROPERTY;
+    static constexpr char DXFEED_AGGREGATION_PERIOD_PROPERTY[] = "dxfeed.aggregationPeriod";
 
     /**
      * `"dxfeed.wildcard.enable"`
@@ -271,35 +285,68 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * By default, the endpoint does not support wildcards. This property is needed for
      * WildcardSymbol support and for the use of "tape:..." address in DXPublisher.
      */
-    static const std::string DXFEED_WILDCARD_ENABLE_PROPERTY;
+    static constexpr char DXFEED_WILDCARD_ENABLE_PROPERTY[] = "dxfeed.wildcard.enable";
+
+    /**
+     * `"dxfeed.stripe"`
+     *
+     * Defines a symbol striping strategy for an endpoint.
+     * @see Builder::withProperty(StringParam, StringParam)
+     */
+    static constexpr char DXFEED_STRIPE_PROPERTY[] = "dxfeed.stripe";
+
+    /**
+     * `"dxfeed.stickySubscriptionPeriod"`
+     *
+     * Defines a sticky subscription period in the format of TimePeriod.
+     * @see Builder::withProperty(StringParam, StringParam)
+     */
+    static constexpr char DXFEED_STICKY_SUBSCRIPTION_PROPERTY[] = "dxfeed.stickySubscriptionPeriod";
+
+    /**
+     * `"dxfeed.requestedAggregationPeriod"`
+     *
+     * Defines a requested aggregation period to be negotiated with the server. The server applies its own rules and
+     * limits to the request and applies the resulting period on the server side to control the data transmission rate
+     * (reduces network traffic and server load).
+     *
+     * Differs from DXEndpoint::DXFEED_AGGREGATION_PERIOD_PROPERTY, which is local and client-side only: the client
+     * throttles locally, but the server sends at its own rate.
+     *
+     * Format: a TimePeriod string (e.g., "1s", "0.5s", "0" for real-time). If not specified, the server uses its
+     * default.
+     * @see DXEndpoint::setRequestedAggregationPeriod()
+     * @see Builder::withProperty(StringParam, StringParam)
+     */
+    static constexpr char DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY[] = "dxfeed.requestedAggregationPeriod";
 
     /**
      * `"dxpublisher.properties"`
      *
      * Defines a path to a file with properties for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * By default, properties are loaded from a classpath resource named "dxpublisher.properties".
-     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     * @see Builder::withProperty(StringParam, StringParam)
      */
-    static const std::string DXPUBLISHER_PROPERTIES_PROPERTY;
+    static constexpr char DXPUBLISHER_PROPERTIES_PROPERTY[] = "dxpublisher.properties";
 
     /**
      * `"dxpublisher.address"`
      *
      * Defines default connection address for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * Connection is established to this address as soon as an endpoint is created.
-     * By default, the connection is not established until DXEndpoint::connect(const StringLike&) is invoked.
-     * @see Builder::withProperty(const StringLike&, const StringLike&)
+     * By default, the connection is not established until DXEndpoint::connect(StringParam) is invoked.
+     * @see Builder::withProperty(StringParam, StringParam)
      */
-    static const std::string DXPUBLISHER_ADDRESS_PROPERTY;
+    static constexpr char DXPUBLISHER_ADDRESS_PROPERTY[] = "dxpublisher.address";
 
     /**
      * `"dxpublisher.threadPoolSize"`
      *
      * Defines thread pool size for an endpoint with the role @ref Role::PUBLISHER "PUBLISHER".
      * By default, the thread pool size is equal to the number of available processors.
-     * @see Builder#withProperty(const StringLike&, const StringLike&)
+     * @see Builder#withProperty(StringParam, StringParam)
      */
-    static const std::string DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY;
+    static constexpr char DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY[] = "dxpublisher.threadPoolSize";
 
     /**
      * `"dxendpoint.eventTime"`
@@ -316,7 +363,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Use this property if you need to work with historical data coming from files
      * or from OnDemandService or writing data with times to file via DXPublisher using a "tape:..." address.
      */
-    static const std::string DXENDPOINT_EVENT_TIME_PROPERTY;
+    static constexpr char DXENDPOINT_EVENT_TIME_PROPERTY[] = "dxendpoint.eventTime";
 
     /**
      * `"dxendpoint.storeEverything"`
@@ -329,7 +376,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * since API does not currently provide any means to remove those events from the storage, and there might
      * be an effective memory leak if the spaces of symbols on which events are published grow without a bound.
      */
-    static const std::string DXENDPOINT_STORE_EVERYTHING_PROPERTY;
+    static constexpr char DXENDPOINT_STORE_EVERYTHING_PROPERTY[] = "dxendpoint.storeEverything";
 
     /**
      * `"dxscheme.nanoTime"`
@@ -349,7 +396,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * dxscheme.enabled.TimeNanoPart=*
      * ```
      */
-    static const std::string DXSCHEME_NANO_TIME_PROPERTY;
+    static constexpr char DXSCHEME_NANO_TIME_PROPERTY[] = "dxscheme.nanoTime";
 
     /**
      * `"dxscheme.enabled."`
@@ -363,7 +410,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      *
      * There is a shortcut for turning on nano-time support using DXEndpoint::DXSCHEME_NANO_TIME_PROPERTY.
      */
-    static const std::string DXSCHEME_ENABLED_PROPERTY_PREFIX;
+    static constexpr char DXSCHEME_ENABLED_PROPERTY_PREFIX[] = "dxscheme.enabled.";
 
     /**
      * Represents the role of an endpoint that was specified during its @ref DXEndpoint::create() "creation".
@@ -448,7 +495,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         NOT_CONNECTED,
 
         /**
-         * The @ref DXEndpoint::connect(const StringLike&) "connect" method was called to establish connection to
+         * The @ref DXEndpoint::connect(StringParam) "connect" method was called to establish connection to
          * remove endpoint, but the connection is not established yet or was lost.
          */
         CONNECTING,
@@ -471,7 +518,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     Role role_ = Role::FEED;
     std::string name_{};
     JavaObjectHandle<DXEndpointStateChangeListener> stateChangeListenerHandle_{};
-    SimpleHandler<void(State, State)> onStateChange_{};
+    SimpleHandler<void(State, State)> onStateChange_{"DXEndpoint"};
 
     // Throws:
     //   - std::bad_alloc if it was not possible to allocate the required amount of memory
@@ -481,7 +528,14 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     static std::shared_ptr<DXEndpoint> create(void *endpointHandle, Role role,
                                               const std::unordered_map<std::string, std::string> &properties);
 
-    void executorImpl(const JavaObjectHandle<ExecutorTag> &executor) const;
+    // Returns the on-demand service of this endpoint: one instance, created on the first call.
+    std::shared_ptr<OnDemandService> getOnDemandService();
+
+    // The silence watchdog of a subscription counts the silence only while the endpoint of its feed is connected.
+    friend class DXFeedSubscription;
+
+    // Returns the time of the last transition to CONNECTED, or nothing while the endpoint is not connected.
+    std::optional<std::chrono::steady_clock::time_point> getConnectedSince() const noexcept;
 
     struct Impl;
 
@@ -517,7 +571,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * explained in <a href="#defaultPropertiesSection">the default properties section</a> of DXEndpoint class
      * documentation. You can provide configuration via system properties as explained there.
      *
-     * The configuration does not have to include an address. You can use @ref DXEndpoint::connect(const StringLike&)
+     * The configuration does not have to include an address. You can use @ref DXEndpoint::connect(StringParam)
      * "connect(address)" and DXEndpoint::disconnect() methods on the instance that is returned by this method to
      * programmatically establish and tear-down connection to a user-provided address.
      *
@@ -629,7 +683,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     void removeStateChangeListener(std::size_t listenerId) noexcept;
 
     /**
-     * Returns the onStateChange @ref SimpleHandler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * Returns the onStateChange @ref SimpleHandler "handler" that can be used to add or remove
      * listeners.
      *
      * @return onStateChange handler with `void(State, State)` signature
@@ -637,54 +691,111 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     SimpleHandler<void(DXEndpoint::State, DXEndpoint::State)> &onStateChange() noexcept;
 
     /**
-     * Changes the executor that is used for notifications (events, state changes, etc.) of this endpoint.
+     * Returns the last connection error of this endpoint: the newest failed connect attempt or dropped connection of
+     * all its connectors.
      *
-     * Call it right after the endpoint is created, before DXEndpoint::getFeed() and DXEndpoint::getPublisher():
-     * called later, it leaves the feed with the default executor, which is shut down, and the last event promises
-     * (DXFeed::getLastEventPromise(), etc.) never complete.
+     * A successful connection clears nothing: the time of the error tells how old it is. The error stays after a
+     * connect to another address and after the endpoint is closed.
      *
-     * @deprecated Use DXEndpoint::Builder::withExecutor(): the builder sets the executor before the endpoint exists.
+     * Read the error in a @ref DXEndpoint::addMessageConnectorListener() "connector listener": the error is recorded
+     * before that listener is called. A @ref DXEndpoint::addStateChangeListener() "state change listener" gives no such
+     * order (the state of the endpoint is computed on another thread, so the listener may be called before the error
+     * of that change is recorded), and failed connect attempts do not change the state of the endpoint at all: it stays
+     * @ref State::CONNECTING "CONNECTING" between them. There, compare the time or the count of the error with those
+     * seen before. See @ref connection_troubleshooting "Connection troubleshooting".
      *
-     * @tparam Executor The executor's type (for example, InPlaceExecutor).
-     * @param executor The executor.
-     * @return this DXEndpoint.
-     * @throws InvalidArgumentException
-     * @throws JavaException
-     * @throws GraalException
+     * This is an experimental API, it may change in future versions.
+     *
+     * @return The last connection error, or `std::nullopt` when the endpoint has had none.
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM, or the dxFeed Graal Native SDK library does not
+     * match the one the library was built with.
      */
-    template <typename Executor> std::shared_ptr<DXEndpoint> executor(const std::shared_ptr<Executor> &executor) {
-        executorImpl(executor->getHandle());
+    std::optional<ConnectionError> getLastConnectionError() const;
 
-        return sharedAs<DXEndpoint>();
-    }
+    /**
+     * Returns the snapshots of the message connectors of this endpoint: one for each address it connects to.
+     *
+     * The list is empty when the endpoint is not connected, has the @ref Role::LOCAL_HUB "LOCAL_HUB" role, or is
+     * closed. Each call reads the connectors anew; the values of a snapshot are read one by one (see
+     * MessageConnectorInfo). See @ref connection_troubleshooting "Connection troubleshooting".
+     *
+     * This is an experimental API, it may change in future versions.
+     *
+     * @return The snapshots of the connectors.
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM, or the dxFeed Graal Native SDK library does not
+     * match the one the library was built with.
+     */
+    std::vector<MessageConnectorInfo> getConnectors() const;
+
+    /**
+     * Adds a listener called after the state of a message connector of this endpoint changes, with a snapshot of that
+     * connector taken at the call.
+     *
+     * The listener is called on one thread of the dxFeed Graal Native SDK for all the endpoints, not on the executor of
+     * the endpoint, one call at a time, never inside DXEndpoint::connect(); it should return quickly, since the next call
+     * waits for it. The connection error of a change is recorded before the call, so
+     * MessageConnectorInfo::lastError and DXEndpoint::getLastConnectionError() already return it. Fast changes of one
+     * connector may come as one call, and the first call for a new connector may read
+     * @ref MessageConnectorInfo::State::DISCONNECTED "DISCONNECTED" before a later one reads
+     * @ref MessageConnectorInfo::State::CONNECTING "CONNECTING". The current states are not passed to a listener when
+     * it is added: call DXEndpoint::getConnectors() after adding it. An exception of the listener is reported to
+     * ErrorManager. Once the endpoint is closed no new call starts and the listeners are removed. DXEndpoint::close()
+     * may wait for a call in progress, so the listener must not wait for the thread that closes the endpoint; the call
+     * may also end after DXEndpoint::close() returns.
+     *
+     * The first call registers a listener of the endpoint in the dxFeed Graal Native SDK, so it can fail.
+     *
+     * This is an experimental API, it may change in future versions.
+     *
+     * @param listener The listener to add.
+     * @return The listener id, for DXEndpoint::removeMessageConnectorListener().
+     * @throws JavaException if something happened with the dxFeed API backend.
+     * @throws GraalException if something happened with the GraalVM, or the dxFeed Graal Native SDK library does not
+     * match the one the library was built with.
+     */
+    std::size_t addMessageConnectorListener(std::function<void(const MessageConnectorInfo &)> listener);
+
+    /**
+     * Removes a listener added with DXEndpoint::addMessageConnectorListener(). Outside a listener of the library, waits
+     * for the calls of the listener in progress on the other threads.
+     *
+     * This is an experimental API, it may change in future versions.
+     *
+     * @param listenerId The listener id.
+     */
+    void removeMessageConnectorListener(std::size_t listenerId) noexcept;
 
     /**
      * Changes username for this endpoint.
-     * This method shall be called before @ref DXEndpoint::connect(const StringLike&) "connect"
-     * with @ref DXEndpoint::password(const StringLike&) "password" to configure service access credentials.
+     * This method shall be called before @ref DXEndpoint::connect(StringParam) "connect"
+     * with @ref DXEndpoint::password(StringParam) "password" to configure service access credentials.
      *
      * @param user The username.
      *
      * @return this DXEndpoint.
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException if the username is not valid UTF-8 (the message names the offset, not the
+     * bytes).
      * @throws JavaException
      * @throws GraalException
      */
-    std::shared_ptr<DXEndpoint> user(const StringLike &user);
+    std::shared_ptr<DXEndpoint> user(StringParam user);
 
     /**
      * Changes password for this endpoint.
-     * This method shall be called before @ref DXEndpoint::connect(const StringLike&) "connect"
-     * with @ref DXEndpoint::user(const StringLike&) "user" to configure service access credentials.
+     * This method shall be called before @ref DXEndpoint::connect(StringParam) "connect"
+     * with @ref DXEndpoint::user(StringParam) "user" to configure service access credentials.
      *
      * @param password The password.
      *
      * @return this DXEndpoint.
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException if the password is not valid UTF-8 (the message names the offset, not the
+     * bytes).
      * @throws JavaException
      * @throws GraalException
      */
-    std::shared_ptr<DXEndpoint> password(const StringLike &password);
+    std::shared_ptr<DXEndpoint> password(StringParam password);
 
     /**
      * Connects to the specified remote address. Previously established connections are closed if
@@ -700,9 +811,15 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * * `host:port` to establish a TCP/IP connection.
      * * `:port` to listen for a TCP/IP connection with a plain socket connector (good for up to a
      * few hundred of connections).
+     * * `host:port[login=entitle:token]` to log in with a token.
+     * * `dxlink:wss://host/path[login=dxlink:token]` to connect to dxLink (an experimental feature of the SDK).
+     *
+     * <p>An address that starts with `http://`, `https://`, `ws://` or `wss://` is not an address of an endpoint
+     * (for example, the URLs of REST, CometD and IPF services): such an address throws InvalidArgumentException before
+     * the SDK is called. A QD configuration URL `http(s)://host/path/<name>.config#<name>` is passed to the SDK.
      *
      * <p>For premium services access credentials must be configured before invocation of `connect` method
-     * using @ref ::user(const StringLike&) "user" and @ref ::password(const StringLike&) "password" methods.
+     * using @ref user(StringParam) "user" and @ref password(StringParam) "password" methods.
      *
      * <p> <b>This method does not wait until the connection actually gets established</b>. The actual connection
      * establishment happens asynchronously after the invocation of this method. However, this method waits until
@@ -714,22 +831,24 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * @param address The data source address.
      * @return this DXEndpoint.
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidArgumentException if the address is not valid UTF-8, for example
+     * `DXEndpoint::connect(address): invalid UTF-8 at byte 12: 0xC3 0x28`, or if it is an `http(s)://` or `ws(s)://`
+     * URL; the message names the expected form of the address and does not repeat the address.
      * @throws JavaException if something happened with the dxFeed API backend or if the address string is malformed.
      * @throws GraalException
      */
-    std::shared_ptr<DXEndpoint> connect(const StringLike &address);
+    std::shared_ptr<DXEndpoint> connect(StringParam address);
 
     /**
      * Terminates all established network connections and initiates connecting again with the same address.
      *
-     * <p>The effect of the method is alike to invoking ::disconnect() and ::connect(const StringLike&)
+     * <p>The effect of the method is alike to invoking ::disconnect() and ::connect(StringParam)
      * with the current address, but internal resources used for connections may be reused by implementation.
      * TCP connections with multiple target addresses will try to switch to an alternative address, configured
      * reconnect timeouts will apply.
      *
      * <p><b>Note:</b> The method will not connect an endpoint that was not initially connected with
-     * ::connect(const StringLike&) method or was disconnected with ::disconnect() method.
+     * ::connect(StringParam) method or was disconnected with ::disconnect() method.
      *
      * <p>The method initiates a short-pathway for reconnecting, so whether observers will have a chance to see
      * an intermediate state State#NOT_CONNECTED depends on the implementation.
@@ -745,7 +864,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Terminates all remote network connections.
      * This method does nothing if this endpoint is @ref State#CLOSED "CLOSED".
-     * The endpoint @ref ::getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
+     * The endpoint @ref getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
      *
      * <p>This method does not release all resources that are associated with this endpoint.
      * Use ::close() method to release all resources.
@@ -761,7 +880,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     /**
      * Terminates all remote network connections and clears stored data.
      * This method does nothing if this endpoint is @ref State::CLOSED "CLOSED".
-     * The endpoint @ref ::getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
+     * The endpoint @ref getState() "state" immediately becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" otherwise.
      *
      * <p>This method does not release all resources that are associated with this endpoint.
      * Use the close() method to release all resources.
@@ -778,8 +897,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
      * Closes this endpoint. All network connections are terminated as with the ::disconnect() method, and no further
      * connections can be established.
      *
-     * The endpoint @ref ::getState() "state" immediately becomes @ref State::CLOSED "CLOSED".
+     * The endpoint @ref getState() "state" immediately becomes @ref State::CLOSED "CLOSED".
      * All resources associated with this endpoint are released.
+     * A created endpoint lives until it is closed: see @ref entity_lifetime "Lifetime of the entities" and AutoClose.
      *
      * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#close--)
      *
@@ -790,9 +910,9 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     void close() const;
 
     /**
-     * Waits while this endpoint @ref ::getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
+     * Waits while this endpoint @ref getState() "state" becomes @ref State::NOT_CONNECTED "NOT_CONNECTED" or
      * @ref State::CLOSED "CLOSED". It is a signal that any files opened with the
-     * @ref connect(const StringLike&) "connect(\"file:...\")" method were finished reading, but not necessarily were
+     * @ref connect(StringParam) "connect(\"file:...\")" method were finished reading, but not necessarily were
      * completely processed by the corresponding subscription listeners. Use closeAndAwaitTermination() after this
      * method returns to make sure that all processing has completed.
      *
@@ -855,6 +975,89 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
     std::shared_ptr<DXPublisher> getPublisher() const;
 
     /**
+     * Returns the aggregation period that this endpoint requests from the server, or an empty value if no period is
+     * requested.
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#getRequestedAggregationPeriod--)
+     *
+     * @return The requested aggregation period or `std::nullopt`.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    std::optional<TimePeriod> getRequestedAggregationPeriod() const;
+
+    /**
+     * Sets the aggregation period that this endpoint requests from the server.
+     *
+     * The server applies the period on its side, reducing the network traffic and the load of the server and the
+     * client, and may adjust it by its own rules and limits: getAggregationPeriodInfo() returns the period in effect.
+     * TimePeriod::ZERO requests real-time delivery (no aggregation). The period can also be requested with the
+     * DXEndpoint::DXFEED_REQUESTED_AGGREGATION_PERIOD_PROPERTY property.
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#setRequestedAggregationPeriod-com.devexperts.util.TimePeriod-)
+     *
+     * @param requestedAggregationPeriod The requested aggregation period. It must not exceed 24 hours.
+     * @throws InvalidArgumentException
+     * @throws JavaException "IllegalArgumentException" if the period exceeds 24 hours.
+     * @throws GraalException
+     */
+    void setRequestedAggregationPeriod(const TimePeriod &requestedAggregationPeriod) const;
+
+    /**
+     * Sets the aggregation period that this endpoint requests from the server.
+     * See setRequestedAggregationPeriod(const TimePeriod &) const.
+     *
+     * @param requestedAggregationPeriod The requested aggregation period. It must not be negative or exceed 24 hours.
+     * @throws InvalidArgumentException
+     * @throws JavaException "IllegalArgumentException" if the period is negative or exceeds 24 hours.
+     * @throws GraalException
+     */
+    void setRequestedAggregationPeriod(std::chrono::milliseconds requestedAggregationPeriod) const;
+
+    /**
+     * Sets the aggregation period that this endpoint requests from the server.
+     * See setRequestedAggregationPeriod(const TimePeriod &) const.
+     *
+     * @param requestedAggregationPeriod The requested aggregation period in milliseconds. It must not be negative or
+     * exceed 24 hours (86400000).
+     * @throws InvalidArgumentException
+     * @throws JavaException "IllegalArgumentException" if the period is negative or exceeds 24 hours.
+     * @throws GraalException
+     */
+    void setRequestedAggregationPeriod(std::int64_t requestedAggregationPeriod) const;
+
+    /**
+     * Clears the aggregation period that this endpoint requests from the server: the server falls back to its default
+     * period. The same as `setRequestedAggregationPeriod(null)` in Java.
+     *
+     * ```cpp
+     * endpoint->setRequestedAggregationPeriod(std::nullopt);
+     * ```
+     *
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    void setRequestedAggregationPeriod(std::nullopt_t) const;
+
+    /**
+     * Returns the aggregation period that the servers report, over all connections of this endpoint.
+     *
+     * The servers report the period when a connection is established, so the result is TimePeriodInfo::UNKNOWN until
+     * then, and also when no server reports it (for example, without connections or with an older server). The
+     * period applied to the events of a subscription is returned by DXFeedSubscription::getAggregationPeriodInfo().
+     *
+     * [Javadoc.](https://docs.dxfeed.com/dxfeed/api/com/dxfeed/api/DXEndpoint.html#getAggregationPeriodInfo--)
+     *
+     * @return The aggregation period info reported by the servers, or TimePeriodInfo::UNKNOWN.
+     * @throws InvalidArgumentException
+     * @throws JavaException
+     * @throws GraalException
+     */
+    TimePeriodInfo getAggregationPeriodInfo() const;
+
+    /**
      * Builder class for DXEndpoint that supports additional configuration properties.
      *
      * Some methods that are not marked `noexcept` may throw exceptions:
@@ -904,7 +1107,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
         /**
          * Changes the name used to distinguish multiple endpoints
          * in the same process (GraalVM Isolate) in logs and in other diagnostic means.
-         * This is a shortcut for @ref ::withProperty "withProperty"(::NAME_PROPERTY, `name`)
+         * This is a shortcut for @ref withProperty "withProperty"(::NAME_PROPERTY, `name`)
          *
          * @param name The endpoint's name
          *
@@ -913,7 +1116,7 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @throws JavaException
          * @throws GraalException
          */
-        std::shared_ptr<Builder> withName(const StringLike &name);
+        std::shared_ptr<Builder> withName(StringParam name);
 
         /**
          * Sets role for the created DXEndpoint.
@@ -935,12 +1138,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param value The endpoint's property value
          * @return `this` endpoint builder.
          *
-         * @see ::supportsProperty(const StringLike&)
+         * @see ::supportsProperty(StringParam)
          * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
-        std::shared_ptr<Builder> withProperty(const StringLike &key, const StringLike &value);
+        std::shared_ptr<Builder> withProperty(StringParam key, StringParam value);
 
         /**
          * Sets all supported properties from the provided properties object.
@@ -949,17 +1152,12 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param properties The endpoint's properties
          * @return `this` endpoint builder.
          *
-         * @see ::withProperty(const StringLike&, const StringLike&)
+         * @see ::withProperty(StringParam, StringParam)
          * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
         template <typename Properties> std::shared_ptr<Builder> withProperties(Properties &&properties) {
-            if constexpr (Debugger::isDebug) {
-                Debugger::debug("DXEndpoint::Builder{" + handle_.toString() + "}::withProperties(properties[" +
-                                std::to_string(properties.size()) + "])");
-            }
-
             for (auto &&[k, v] : properties) {
                 withProperty(k, v);
             }
@@ -973,17 +1171,18 @@ struct DXFCPP_EXPORT DXEndpoint : public RequireMakeShared<DXEndpoint> {
          * @param key The property's key to be checked for support
          * @return `true` if the corresponding property key is supported.
          *
-         * @see ::withProperty(const StringLike&, const StringLike&)
+         * @see ::withProperty(StringParam, StringParam)
          * @throws InvalidArgumentException
          * @throws JavaException
          * @throws GraalException
          */
-        bool supportsProperty(const StringLike &key) const;
+        bool supportsProperty(StringParam key) const;
 
         /**
          * Sets the executor that is used for notifications (events, state changes, etc.) of the endpoint to build.
          * By default, the endpoint uses a thread pool whose size is set by the
-         * DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY or DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY property.
+         * DXEndpoint::DXFEED_THREAD_POOL_SIZE_PROPERTY or DXEndpoint::DXPUBLISHER_THREAD_POOL_SIZE_PROPERTY
+         * property.
          *
          * @tparam Executor The executor's type (for example, InPlaceExecutor).
          * @param executor The executor.

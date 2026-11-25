@@ -2,12 +2,15 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <doctest.h>
-#include <dxfeed_graal_cpp_api/internal/Common.hpp>
+#include "../../src/internal/Common.hpp"
 
 #include <bit>
+#include <climits>
+#include <cstddef>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
+#include <utility>
 
 using namespace dxfcpp;
 
@@ -180,4 +183,59 @@ TEST_CASE("getBits and setBits should read and replace a bit field") {
     CHECK(setBits(std::int32_t{0x12345678}, 0xFF, 8, 0x1AB) == 0x1234AB78);
     CHECK(setBits(std::int64_t{-1}, 0xFF, 56, 0) == 0x00FFFFFFFFFFFFFF);
     CHECK(setBits(std::uint16_t{0}, std::uint16_t{0x3}, std::uint16_t{14}, std::uint16_t{0x3}) == 0xC000);
+}
+
+// The user data of a native listener of InstrumentProfileCollector packs two ids into one pointer, half of its bits
+// each: an id that does not fit its half would change the other one, and the notification would go to another listener.
+TEST_CASE("pack and unpack should keep two values that fit half of std::size_t, pack should reject the others") {
+    constexpr auto halfBits = sizeof(std::size_t) * CHAR_BIT / 2;
+    constexpr auto max = (std::size_t{1} << halfBits) - 1;
+
+    CHECK(unpack(pack(std::size_t{1}, std::size_t{2})) == std::pair<std::size_t, std::size_t>{1, 2});
+    CHECK(unpack(pack(max, max)) == std::pair{max, max});
+    CHECK_THROWS_AS(pack(std::size_t{1}, max + 1), InvalidArgumentException);
+    CHECK_THROWS_AS(pack(max + 1, std::size_t{1}), InvalidArgumentException);
+    CHECK_THROWS_AS(pack(-1, 1), InvalidArgumentException);
+}
+
+// The expected values are the results of the Java DayUtil, whose int arithmetic wraps around modulo 2^32.
+TEST_CASE("day_util should give the results of the Java DayUtil for any int32, the limits included") {
+    constexpr auto min = std::numeric_limits<std::int32_t>::min();
+    constexpr auto max = std::numeric_limits<std::int32_t>::max();
+
+    // A constant evaluation rejects an overflow, so these also check that there is none.
+    static_assert(day_util::getYearMonthDayByDayId(0) == 19700101);
+    static_assert(day_util::getYearMonthDayByDayId(max) == 1353131522);
+    static_assert(day_util::getYearMonthDayByDayId(min) == 1353131521);
+
+    SUBCASE("getYearMonthDayByDayId") {
+        CHECK(day_util::getYearMonthDayByDayId(0) == 19700101);
+        CHECK(day_util::getYearMonthDayByDayId(-1) == 19691231);
+        CHECK(day_util::getYearMonthDayByDayId(18000) == 20190414);
+        CHECK(day_util::getYearMonthDayByDayId(19782) == 20240229);
+        CHECK(day_util::getYearMonthDayByDayId(19783) == 20240301);
+        CHECK(day_util::getYearMonthDayByDayId(-25508) == 19000301);
+        CHECK(day_util::getYearMonthDayByDayId(-2472632) == -48000301);
+        CHECK(day_util::getYearMonthDayByDayId(max) == 1353131522);
+        CHECK(day_util::getYearMonthDayByDayId(min) == 1353131521);
+        CHECK(day_util::getYearMonthDayByDayId(2000000000) == -1056734742);
+        CHECK(day_util::getYearMonthDayByDayId(-2000000000) == 1096123621);
+    }
+
+    SUBCASE("getDayIdByYearMonthDay") {
+        CHECK(day_util::getDayIdByYearMonthDay(2026, 10, 29) == 20755);
+        CHECK(day_util::getDayIdByYearMonthDay(0, 1, 1) == -719528);
+        CHECK(day_util::getDayIdByYearMonthDay(2024, 2, 29) == 19782);
+        CHECK(day_util::getDayIdByYearMonthDay(2024, 3, 1) == 19783);
+        CHECK(day_util::getDayIdByYearMonthDay(2023, 3, 1) == 19417);
+        CHECK(day_util::getDayIdByYearMonthDay(2000, 3, 1) == 11017);
+        CHECK(day_util::getDayIdByYearMonthDay(1900, 3, 1) == -25508);
+        CHECK(day_util::getDayIdByYearMonthDay(1900, 2, 29) == -25508);
+        CHECK(day_util::getDayIdByYearMonthDay(max, 12, 31) == -1627438392);
+        CHECK(day_util::getDayIdByYearMonthDay(min, 1, 1) == -1627438391);
+        CHECK(day_util::getDayIdByYearMonthDay(2000, 1, max) == -2147472693);
+        CHECK_THROWS_WITH_AS(day_util::getDayIdByYearMonthDay(1970, 13, 1), "invalid month 13",
+                             InvalidArgumentException);
+        CHECK_THROWS_WITH_AS(day_util::getDayIdByYearMonthDay(1970, 0, 1), "invalid month 0", InvalidArgumentException);
+    }
 }

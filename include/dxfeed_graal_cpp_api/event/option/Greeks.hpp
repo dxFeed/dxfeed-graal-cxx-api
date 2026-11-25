@@ -3,16 +3,17 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEventSource.hpp"
 #include "../LastingEvent.hpp"
-#include "../TimeSeriesEvent.hpp"
 #include "../market/MarketEvent.hpp"
+#include "../TimeSeriesEvent.hpp"
 
 #include <cstdint>
 #include <memory>
@@ -32,16 +33,16 @@ struct EventMapper;
  * It represents the most recent information that is available about the corresponding values on
  * the market at any given moment of time.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots.</a></h3>
+ * <h3><a name="greeksEventFlagsSection">Event flags, transactions and snapshots.</a></h3>
  *
  * Some greeks sources provide a consistent view of the set of known greeks.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
  * Multiple event sources for the same symbol are not supported for greeks, thus
- * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ * @ref getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * TimeSeriesEventModel class handles all the snapshot and transaction logic and conveniently represents
- * a list current of time-series events order by their @ref ::getTime() "time".
+ * a list current of time-series events order by their @ref getTime() "time".
  *
  * <h3>Publishing Greeks</h3>
  *
@@ -80,7 +81,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     Data data_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the Greeks object
@@ -136,7 +137,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Greeks(const StringLike & eventSymbol) noexcept;
+    explicit Greeks(StringParam eventSymbol);
 
     ///
     const IndexedEventSource &getSource() const & noexcept override;
@@ -155,7 +156,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
 
     /**
      * Returns a unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
+     * The index is composed of @ref getTime() "time" and @ref getSequence() "sequence".
      * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
@@ -164,10 +165,10 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
 
     /**
      * Changes the unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence" and
+     * The index is composed of @ref getTime() "time" and @ref getSequence() "sequence" and
      * invocation of this method changes time and sequence.
      * <b>Do not use this method directly.</b>
-     * Change @ref ::setTime() "time" and/or @ref ::setSequence() "sequence".
+     * Change @ref setTime() "time" and/or @ref setSequence() "sequence".
      *
      * @param index the event index.
      * @see ::getIndex()
@@ -190,7 +191,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     void setTime(std::int64_t time) noexcept;
 
     /**
-     * Returns the sequence number of this event to distinguish events that have the same @ref ::getTime() "time".
+     * Returns the sequence number of this event to distinguish events that have the same @ref getTime() "time".
      * This sequence number does not have to be unique and does not need to be sequential.
      * Sequence can range from 0 to ::MAX_SEQUENCE.
      *
@@ -199,7 +200,7 @@ class DXFCPP_EXPORT Greeks final : public MarketEvent, public TimeSeriesEvent, p
     std::int32_t getSequence() const noexcept;
 
     /**
-     * Changes @ref ::getSequence() "sequence number" of this event.
+     * Changes @ref getSequence() "sequence number" of this event.
      * @param sequence the sequence.
      * @see ::getSequence()
      * @throws InvalidArgumentException

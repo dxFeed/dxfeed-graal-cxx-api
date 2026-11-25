@@ -5,9 +5,12 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/EventType.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -22,7 +25,7 @@ void Underlying::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
+    auto graalUnderlying = static_cast<dxfg_v4_underlying_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalUnderlying->event_flags,
@@ -36,14 +39,14 @@ void Underlying::fillData(void *graalNative) noexcept {
     };
 }
 
-void Underlying::fillGraalData(void *graalNative) const noexcept {
+void Underlying::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
+    const auto graalUnderlying = static_cast<dxfg_v4_underlying_t *>(graalNative);
 
     graalUnderlying->market_event.event_type.clazz = DXFG_EVENT_UNDERLYING;
     graalUnderlying->event_flags = data_.eventFlags;
@@ -61,10 +64,11 @@ std::shared_ptr<Underlying> Underlying::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Underlying. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
-        throw InvalidArgumentException(fmt::format("Unable to create Underlying. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_UNDERLYING)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create Underlying. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_UNDERLYING)));
     }
 
     auto underlying = std::make_shared<Underlying>();
@@ -80,11 +84,12 @@ void *Underlying::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalUnderlying = new dxfg_underlying_t{};
-
-    fillGraalData(graalUnderlying);
-
-    return graalUnderlying;
+    return newGraalEvent<dxfg_v4_underlying_t>(
+        DXFG_EVENT_UNDERLYING,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Underlying::freeGraal(void *graalNative) {
@@ -92,14 +97,14 @@ void Underlying::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_UNDERLYING) {
         throw InvalidArgumentException(
             fmt::format("Unable to free Underlying's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_UNDERLYING)));
     }
 
-    const auto graalUnderlying = static_cast<dxfg_underlying_t *>(graalNative);
+    const auto graalUnderlying = static_cast<dxfg_v4_underlying_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -117,7 +122,7 @@ void Underlying::assign(std::shared_ptr<EventType> event) {
 Underlying::Underlying() noexcept {
 }
 
-Underlying::Underlying(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+Underlying::Underlying(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 const IndexedEventSource &Underlying::getSource() const & noexcept {

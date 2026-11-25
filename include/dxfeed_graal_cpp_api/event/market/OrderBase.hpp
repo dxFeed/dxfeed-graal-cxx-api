@@ -3,12 +3,14 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/JavaObjectHandle.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/Common.hpp"
 #include "../IndexedEvent.hpp"
 #include "./MarketEvent.hpp"
 #include "./OrderAction.hpp"
@@ -51,7 +53,7 @@ struct EventMapper;
  * for the corresponding index.
  * The method @ref OrderBase::hasSize() "hasSize" is a convenient method to test for size presence.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions, and snapshots.</a></h3>
+ * <h3><a name="orderBaseEventFlagsSection">Event flags, transactions, and snapshots.</a></h3>
  *
  * Some order event sources provide a consistent view of the price-level or detailed order book. Their updates
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
@@ -158,7 +160,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
     OrderBaseData orderBaseData_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /**
@@ -179,15 +181,16 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit OrderBase(const StringLike &eventSymbol) noexcept;
+    explicit OrderBase(StringParam eventSymbol);
 
     /**
      * Returns source of this event.
      * The source is stored in the highest bits of the @ref getIndex() "index" of this event.
      *
      * @return source of this event.
+     * @throws InvalidArgumentException if the source id stored in the index is not a valid source id.
      */
-    const OrderSource &getSource() const & noexcept override;
+    const OrderSource &getSource() const & override;
 
     /**
      * Changes source of this event.
@@ -502,6 +505,7 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * Changes exchange code of this order.
      *
      * @param exchangeCode exchange code of this order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
     void setExchangeCode(char exchangeCode);
 
@@ -509,8 +513,9 @@ class DXFCPP_EXPORT OrderBase : public MarketEvent, public IndexedEvent {
      * Changes exchange code of this order.
      *
      * @param exchangeCode exchange code of this order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    void setExchangeCode(std::int16_t exchangeCode) noexcept;
+    void setExchangeCode(std::int16_t exchangeCode);
 
     /**
      * Returns side of this order.

@@ -39,12 +39,11 @@ add_executable(${PROJECT_NAME} src/main.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE ../../../../third_party/range-v3-0.12/include)
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx portals::core fmt::fmt-header-only)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static portals::core fmt::fmt-header-only)
 
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    if (MSVC)
         if (DXFCXX_LINK_STATIC_RUNTIME)
             set_target_properties(${PROJECT_NAME} PROPERTIES
                     MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
@@ -70,7 +69,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E
 
 if (DXFCXX_DYNAMICALLY_LINK_SAMPLES)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx>
+            ${DXFCXX_SHARED_LIBRARY_RUNTIME_FILE}
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif ()
 

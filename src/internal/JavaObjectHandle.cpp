@@ -1,13 +1,14 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../include/dxfeed_graal_cpp_api/internal/JavaObjectHandle.hpp"
+#include "../../include/dxfeed_graal_cpp_api/detail/JavaObjectHandle.hpp"
 
 #include "../../include/dxfeed_graal_cpp_api/api/DXEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/candlewebservice/HistoryEndpoint.hpp"
 #include "../../include/dxfeed_graal_cpp_api/glossary/CFI.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedObject.hpp"
+#include "../isolated/internal/IsolatedObject.hpp"
 #include "../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
+#include "./Common.hpp"
 
 #include <mutex>
 
@@ -22,7 +23,8 @@ struct JavaObjectHandleRegistryState final {
 };
 
 JavaObjectHandleRegistryState &getJavaObjectHandleRegistryState() noexcept {
-    static JavaObjectHandleRegistryState state{};
+    // Never deleted: the handles owned by statics are destroyed at exit in any order.
+    static auto &state = *new JavaObjectHandleRegistryState{};
 
     return state;
 }
@@ -66,10 +68,7 @@ void JavaObjectHandleRegistry::linkHandle(JavaObjectHandleState &state) noexcept
 }
 
 JavaObjectHandleRegistry &JavaObjectHandleRegistry::getInstance() noexcept {
-    // Construct the registry state while the isolate is being constructed. This
-    // guarantees that it remains alive until after the isolate is torn down.
-    ignoreUnused(getJavaObjectHandleRegistryState());
-    static JavaObjectHandleRegistry instance{};
+    static JavaObjectHandleRegistry instance{}; // stateless
 
     return instance;
 }
@@ -153,6 +152,12 @@ JavaObjectHandleState::JavaObjectHandleState(void *handle, Deleter deleter) noex
 }
 
 JavaObjectHandleState::~JavaObjectHandleState() noexcept {
+    // An empty state is not in the registry. A constant-initialized handle (the constexpr constructor) can be
+    // destroyed after the registry at exit, so the registry is not touched.
+    if (!registered_ && !handle_.load(std::memory_order_acquire)) {
+        return;
+    }
+
     reset();
 }
 
@@ -168,10 +173,16 @@ struct PriceIncrements;
 struct CFI;
 struct AdditionalUnderlyings;
 struct HistoryEndpoint;
+struct PriceLevelService;
+struct AuthOrderSource;
 struct TimeSeriesTxModelBuilderTag;
 struct TimeSeriesTxModelTag;
 struct IndexedTxModelBuilderTag;
 struct IndexedTxModelTag;
+struct IndexedEventTxModelTag;
+struct IndexedEventTxModelBuilderTag;
+struct IndexedEventTxModelListenerTag;
+struct SubscriptionController;
 struct TxModelListenerTag;
 struct AuthToken;
 struct DXPublisherObservableSubscription;
@@ -205,9 +216,28 @@ bool JavaObject::equals(void *objectHandle1, void *objectHandle2) {
     return isolated::internal::IsolatedObject::equals(objectHandle1, objectHandle2) == 1;
 }
 
+void JavaObject::release(void *handle) noexcept {
+    if (!handle) {
+        return;
+    }
+
+    const auto result = isolated::internal::IsolatedObject::release(handle);
+    ignoreUnused(result);
+}
+
+void JavaObject::releaseList(void *handle) noexcept {
+    if (!handle) {
+        return;
+    }
+
+    const auto result = isolated::internal::IsolatedObject::List::release(handle);
+    ignoreUnused(result);
+}
+
 template struct JavaObjectHandle<DXEndpoint>;
 template struct JavaObjectHandle<DXEndpoint::Builder>;
 template struct JavaObjectHandle<DXEndpointStateChangeListener>;
+template struct JavaObjectHandle<DXEndpointMessageConnectorListener>;
 
 template struct JavaObjectHandle<DXFeed>;
 template struct JavaObjectHandle<DXPublisher>;
@@ -247,6 +277,10 @@ template struct JavaObjectHandle<AuthToken>;
 template struct JavaObjectHandle<TxModelListenerTag>;
 template struct JavaObjectHandle<IndexedTxModelTag>;
 template struct JavaObjectHandle<IndexedTxModelBuilderTag>;
+template struct JavaObjectHandle<IndexedEventTxModelTag>;
+template struct JavaObjectHandle<IndexedEventTxModelBuilderTag>;
+template struct JavaObjectHandle<IndexedEventTxModelListenerTag>;
+template struct JavaObjectHandle<SubscriptionController>;
 template struct JavaObjectHandle<TimeSeriesTxModelTag>;
 template struct JavaObjectHandle<TimeSeriesTxModelBuilderTag>;
 
@@ -256,6 +290,9 @@ template struct JavaObjectHandle<Logging::ListenerTag>;
 
 template struct JavaObjectHandle<HistoryEndpoint>;
 template struct JavaObjectHandle<HistoryEndpoint::Builder>;
+
+template struct JavaObjectHandle<PriceLevelService>;
+template struct JavaObjectHandle<AuthOrderSource>;
 
 template struct JavaObjectHandle<AdditionalUnderlyings>;
 template struct JavaObjectHandle<CFI>;

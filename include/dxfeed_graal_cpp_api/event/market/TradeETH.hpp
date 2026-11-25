@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./TradeBase.hpp"
 #include <memory>
@@ -32,9 +33,9 @@ struct EventMapper;
  *
  * <h3>Trading sessions</h3>
  *
- * The TradeETH event defines the last trade TradeETH::getPrice @ref () "price" as officially defined
+ * The TradeETH event defines the last trade @ref TradeETH::getPrice() "price" as officially defined
  * by the corresponding exchange for its <b>extended trading hours</b> (ETH).
- * It also includes @ref TradeETH::getDayVolume() "dayVolume" and @ref ::getDayTurnover() "dayTurnover"
+ * It also includes @ref TradeETH::getDayVolume() "dayVolume" and @ref getDayTurnover() "dayTurnover"
  * <b>for the extended trading hours only</b> of the trading day identified by @ref TradeETH::getDayId "dayId".
  * This event is not defined for symbols that have no concept of ETH.
  *
@@ -58,7 +59,7 @@ struct EventMapper;
  * <h3>Volume and Turnover</h3>
  *
  * <p>Note that one can compute volume-weighted average price (VWAP) for extended trading hours by this formula:
- * <br><code>vwap = @ref TradeETH::getDayTurnover() "dayTurnover" / @ref ::getDayVolume() "dayVolume";</code>
+ * <br><code>vwap = @ref TradeETH::getDayTurnover() "dayTurnover" / @ref getDayVolume() "dayVolume";</code>
  *
  * <h3>Daily reset</h3>
  *
@@ -99,7 +100,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
     friend struct EventMapper;
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the TradeETH object
@@ -148,7 +149,7 @@ class DXFCPP_EXPORT TradeETH final : public TradeBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit TradeETH(std::string eventSymbol) noexcept;
+    explicit TradeETH(StringParam eventSymbol);
 
     /**
      * Returns a string representation of the current object.

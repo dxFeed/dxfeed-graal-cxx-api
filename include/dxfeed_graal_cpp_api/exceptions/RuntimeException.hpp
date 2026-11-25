@@ -3,13 +3,14 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251 4275)
 
-#include "../internal/utils/StringUtils.hpp"
+#include "../detail/StringParam.hpp"
 
 #include <iosfwd>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -30,17 +31,25 @@ struct DXFCPP_EXPORT RuntimeException : std::runtime_error {
      * @param message The exception's message.
      * @param additionalStackTrace The additional stacktrace that will be concatenated with the current stacktrace.
      */
-    explicit RuntimeException(const StringLike &message, const StringLike &additionalStackTrace = "");
+    explicit RuntimeException(StringParam message, StringParam additionalStackTrace = "");
 
     RuntimeException(const RuntimeException &other) noexcept;
 
+    RuntimeException &operator=(const RuntimeException &other) = default;
+
     /**
-     * @return The current stacktrace + the additional stacktrace if present.
+     * Returns the stacktrace. The frames are captured when the exception is created and are formatted on the first
+     * call.
+     *
+     * @return The additional stacktrace if present + the current stacktrace.
      */
     const std::string &getStackTrace() const &;
 
     private:
-    std::string stackTrace_;
+    struct StackTrace;
+
+    // Shared by the copies, so a copy is cheap and the stacktrace is formatted once.
+    std::shared_ptr<StackTrace> stackTrace_;
 };
 
 DXFCPP_END_NAMESPACE

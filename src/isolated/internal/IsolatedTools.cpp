@@ -1,25 +1,27 @@
 // Copyright (c) 2025 Devexperts LLC.
 // SPDX-License-Identifier: MPL-2.0
 
-#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedTools.hpp"
+#include "IsolatedTools.hpp"
 
-#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/internal/IsolatedString.hpp"
+#include "../IsolatedCommon.hpp"
+#include "IsolatedString.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
 void gc() {
-    isolated::runGraalFunction(dxfg_gc);
+    isolated::runGraalV4Function(dxfg_v4_gc);
 }
 
 namespace isolated::internal::IsolatedTools {
-std::unordered_set<std::string> /* dxfg_string_list* */
-parseSymbols(const StringLike& symbolList) {
+std::unordered_set<std::string> /* dxfg_v4_string_list* */
+parseSymbols(std::string_view symbolList) {
     std::unordered_set<std::string> result{};
 
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.c_str());
+    const auto graalStringList =
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_Tools_parseSymbols,
+                                            SdkString{symbolList, "CmdArgsUtils::parseSymbols(symbols)"}.c_str());
 
     for (auto i = 0; i < graalStringList->size; i++) {
         result.emplace(dxfcpp::toString(graalStringList->elements[i]));
@@ -30,10 +32,13 @@ parseSymbols(const StringLike& symbolList) {
     return result;
 }
 
-std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(const StringLike& symbolList) {
+std::vector<std::string> /* dxfg_v4_string_list* */ parseSymbolsAndSaveOrder(std::string_view symbolList) {
     std::vector<std::string> result{};
 
-    auto graalStringList = runGraalFunctionAndThrowIfNullptr(dxfg_Tools_parseSymbols, symbolList.c_str());
+    const auto graalStringList =
+        runGraalV4FunctionWithNonNullResult(dxfg_v4_Tools_parseSymbols,
+                                            SdkString{symbolList, "CmdArgsUtils::parseSymbolsAndSaveOrder(symbols)"}
+                                                .c_str());
 
     if (graalStringList->size > 0) {
         result.reserve(static_cast<std::size_t>(graalStringList->size));
@@ -48,12 +53,12 @@ std::vector<std::string> /* dxfg_string_list* */ parseSymbolsAndSaveOrder(const 
     return result;
 }
 
-using NativeStringList = NativeStringListWrapper<dxfg_string_list>;
+using NativeStringList = NativeStringListWrapper<dxfg_v4_string_list>;
 
-void /* int32_t */ runTool(/* dxfg_string_list* */ const std::vector<std::string> &args) {
-    NativeStringList l{args};
+void /* int32_t */ runTool(/* dxfg_v4_string_list* */ const std::vector<std::string> &args) {
+    NativeStringList l{args, "IsolatedTools::runTool(args)"};
 
-    runGraalFunctionAndThrowIfLessThanZero(dxfg_Tools_main, l.list);
+    runGraalV4Function(dxfg_v4_Tools_main, l.list);
 }
 } // namespace isolated::internal::IsolatedTools
 

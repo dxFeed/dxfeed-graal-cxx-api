@@ -3,14 +3,17 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/ConstantMap.hpp"
+#include "../../detail/StringParam.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
+#include <span>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <vector>
@@ -34,7 +37,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandleAlignment::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandleAlignment::toString()
  */
-struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandleAlignment final : CandleSymbolAttribute {
     /**
      * Align candles at midnight.
      */
@@ -56,23 +59,23 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
      * The value of this constant is "a".
      * The value that this key shall be set to is equal to the corresponding CandleAlignment::toString()
      */
-    static const std::string ATTRIBUTE_KEY;
+    static constexpr char ATTRIBUTE_KEY[] = "a";
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleAlignment>, StringHash,
-                                    std::equal_to<>>
-        BY_STRING;
+    /// The elements by their string representations (constant-initialized, so it can be used in the dynamic
+    /// initialization and the destruction of global variables).
+    static const ConstantMap<std::string_view, CandleAlignment> BY_STRING;
 
-    static const std::vector<std::reference_wrapper<const CandleAlignment>> VALUES;
+    /// All elements (constant-initialized, so the initializers of global variables can use it).
+    static const std::span<const std::reference_wrapper<const CandleAlignment>> VALUES;
 
     private:
-    std::string string_{};
+    std::string_view string_{};
 
-    explicit CandleAlignment(const StringLike &string) noexcept;
+    constexpr explicit CandleAlignment(std::string_view string) noexcept : string_{string} {
+    }
 
     public:
     CandleAlignment() noexcept;
-
-    ~CandleAlignment() noexcept override;
 
     /**
      * Returns candle event symbol string with this candle alignment set.
@@ -80,7 +83,7 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
      * @param symbol The original candle event symbol.
      * @return candle event symbol string with this candle alignment set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Returns string representation of this candle alignment.
@@ -101,7 +104,7 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
      * @return The candle alignment (reference)
      * @throws InvalidArgumentException if the string representation is invalid.
      */
-    static std::reference_wrapper<const CandleAlignment> parse(const StringLike &s);
+    static std::reference_wrapper<const CandleAlignment> parse(StringParam s);
 
     /**
      * Returns candle alignment of the given candle symbol string.
@@ -110,7 +113,7 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle alignment of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(const StringLike &symbol);
+    static std::reference_wrapper<const CandleAlignment> getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle alignment attribute.
@@ -118,7 +121,7 @@ struct DXFCPP_EXPORT CandleAlignment : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return candle symbol string with the normalized representation of the candle alignment attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

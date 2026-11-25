@@ -16,9 +16,23 @@ using namespace std::literals;
 
 namespace otp = portals::legacy;
 
+// The exchange code as printable text: a printable ASCII character as is, the others as an escape sequence.
+std::string encodeExchangeCode(std::int16_t exchangeCode) {
+    if (exchangeCode >= 32 && exchangeCode <= 126) {
+        return std::string(1, static_cast<char>(exchangeCode));
+    }
+
+    if (exchangeCode == 0) {
+        return "\\0";
+    }
+
+    // The code is a UTF-16 unit: 0x8000-0xFFFF are negative int16 values.
+    return fmt::format("\\u{:04x}", static_cast<std::uint16_t>(exchangeCode));
+}
+
 auto drawHeader() {
     std::cout << fmt::format("{:=^78}\n", "");
-    std::cout << fmt::format("{:^38}||{:^38}\n", "ASK", "BID");
+    std::cout << fmt::format("{:^38}||{:^38}\n", "BID", "ASK");
     std::cout << fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}||{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}\n", "EX",
                              "Source", "MM", "Price", "Size");
     std::cout << fmt::format("{:-^78}\n", "");
@@ -29,7 +43,7 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
     for (std::size_t i = 0; i < depth; i++) {
         if (i < buy.size()) {
             std::cout << otp::moveTo(5 + i, 0) + fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}",
-                                                             encodeChar(buy[i]->getExchangeCode()),
+                                                             encodeExchangeCode(buy[i]->getExchangeCode()),
                                                              buy[i]->getSource().toString(), buy[i]->getMarketMaker(),
                                                              toString(buy[i]->getPrice()), toString(buy[i]->getSize()));
         }
@@ -38,7 +52,8 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
 
         if (i < sell.size()) {
             std::cout << otp::moveTo(5 + i, 41) +
-                             fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}", encodeChar(sell[i]->getExchangeCode()),
+                             fmt::format("{0:^2}|{1:^13}|{2:^4}|{3:^8}|{4:^7}",
+                                         encodeExchangeCode(sell[i]->getExchangeCode()),
                                          sell[i]->getSource().toString(), sell[i]->getMarketMaker(),
                                          toString(sell[i]->getPrice()), toString(sell[i]->getSize()));
         }
@@ -47,7 +62,7 @@ auto render(const std::vector<std::shared_ptr<Order>> &buy, const std::vector<st
 
 int main(int /*argc*/, char * /*argv*/[]) {
     otp::VirtualTerminal::enable();
-    otp::hideCursor();
+    std::cout << otp::hideCursor();
 
     try {
         const auto address = "demo.dxfeed.com:7300";
@@ -84,11 +99,12 @@ int main(int /*argc*/, char * /*argv*/[]) {
 
         std::cin.get();
     } catch (const RuntimeException &e) {
+        std::cout << otp::showCursor();
         std::cerr << e << '\n';
 
         return 1;
     }
 
-    otp::showCursor();
+    std::cout << otp::showCursor();
     return 0;
 }

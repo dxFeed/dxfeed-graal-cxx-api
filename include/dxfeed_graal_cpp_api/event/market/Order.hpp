@@ -3,11 +3,13 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "./OrderBase.hpp"
 
@@ -44,7 +46,7 @@ struct EventMapper;
  * to the end-user, order events must be filtered to remove coarse-grained events that
  * are superseded by the finer-grained events.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="orderEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Some order event sources provide a consistent view of the price-level or detailed order book. Their updates
  * may incorporate multiple changes to price levels or to individual orders that have to be processed at the same time.
@@ -106,7 +108,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
     OrderData orderData_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
     static void freeGraalData(void *graalNative) noexcept;
 
     public:
@@ -156,7 +158,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Order(const StringLike &eventSymbol) noexcept;
+    explicit Order(StringParam eventSymbol);
 
     // MarketEvent methods
 
@@ -166,7 +168,7 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param eventSymbol The symbol of this event.
      * @return The current order.
      */
-    virtual Order &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    virtual Order &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes the event's creation time and returns the current order.
@@ -213,8 +215,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param index unique per-symbol index of this order.
      * @return The current order.
+     * @throws InvalidArgumentException if the index is negative.
      */
-    virtual Order &withIndex(std::int64_t index) noexcept;
+    virtual Order &withIndex(std::int64_t index);
 
     /**
      * Changes time of this order and returns it.
@@ -356,8 +359,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param exchangeCode The exchange code of this order.
      * @return The current order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    virtual Order &withExchangeCode(char exchangeCode) noexcept;
+    virtual Order &withExchangeCode(char exchangeCode);
 
     /**
      * Changes exchange code of this order.
@@ -365,8 +369,9 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param exchangeCode The exchange code of this order.
      * @return The current order.
+     * @throws InvalidArgumentException if the exchange code is not a 7-bit character.
      */
-    virtual Order &withExchangeCode(std::int16_t exchangeCode) noexcept;
+    virtual Order &withExchangeCode(std::int16_t exchangeCode);
 
     /**
      * Changes side of this order.
@@ -410,7 +415,17 @@ class DXFCPP_EXPORT Order : public OrderBase {
      *
      * @param marketMaker market maker or the other aggregate identifier of this order.
      */
-    void setMarketMaker(const StringLike &marketMaker) noexcept;
+    void setMarketMaker(StringParam marketMaker);
+
+    /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * `setMarketMaker(other.getMarketMakerOpt())` copies it from another event, null included.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     */
+    template <OptionalString S> void setMarketMaker(S &&marketMaker) noexcept {
+        orderData_.marketMaker = std::forward<S>(marketMaker);
+    }
 
     /**
      * Changes market maker or other aggregate identifier of this order.
@@ -419,7 +434,20 @@ class DXFCPP_EXPORT Order : public OrderBase {
      * @param marketMaker The market maker or the other aggregate identifier of this order.
      * @return The current order.
      */
-    virtual Order &withMarketMaker(const StringLike &marketMaker) noexcept;
+    virtual Order &withMarketMaker(StringParam marketMaker);
+
+    /**
+     * Changes the market maker or the other aggregate identifier of this order, or makes it null with `std::nullopt`.
+     * Returns the current order.
+     *
+     * @param marketMaker the market maker or the other aggregate identifier of this order or `std::nullopt`.
+     * @return The current order.
+     */
+    template <OptionalString S> Order &withMarketMaker(S &&marketMaker) noexcept {
+        setMarketMaker(std::forward<S>(marketMaker));
+
+        return *this;
+    }
 
     /**
      * Returns a string representation of the current object.

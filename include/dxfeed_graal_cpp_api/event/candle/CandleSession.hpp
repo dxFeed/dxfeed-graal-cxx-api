@@ -3,17 +3,20 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/utils/StringUtils.hpp"
+#include "../../detail/ConstantMap.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../schedule/SessionFilter.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
+#include <span>
 #include <string>
+#include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <vector>
@@ -62,21 +65,24 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * The value that this key shall be set to is equal to
      * the corresponding CandleSession::toString()
      */
-    static const std::string ATTRIBUTE_KEY;
+    static constexpr char ATTRIBUTE_KEY[] = "tho";
 
-    static const std::unordered_map<std::string, std::reference_wrapper<const CandleSession>> BY_STRING;
-    static const std::vector<std::reference_wrapper<const CandleSession>> VALUES;
+    /// The elements by their string representations (constant-initialized, so it can be used in the dynamic
+    /// initialization and the destruction of global variables).
+    static const ConstantMap<std::string_view, CandleSession> BY_STRING;
+    /// All elements (constant-initialized, so the initializers of global variables can use it).
+    static const std::span<const std::reference_wrapper<const CandleSession>> VALUES;
 
     private:
     const SessionFilter *sessionFilter_{};
-    std::string string_;
+    std::string_view string_{};
 
-    CandleSession(const SessionFilter &sessionFilter, const StringLike &string) noexcept;
+    constexpr CandleSession(const SessionFilter &sessionFilter, std::string_view string) noexcept
+        : sessionFilter_{&sessionFilter}, string_{string} {
+    }
 
     public:
     CandleSession() noexcept;
-
-    virtual ~CandleSession() noexcept;
 
     /**
      * Returns a session filter that corresponds to this session attribute.
@@ -89,16 +95,16 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this session attribute set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Returns string representation of this candle session attribute.
      * The string representation of the candle session attribute is a lower case string that corresponds to its
-     * @ref CandleSession::name() "name". For example, CandleSession::ANY is represented as "any".
+     * name. For example, CandleSession::ANY is represented as "any".
      *
      * @return string representation of this candle session attribute.
      */
-    const std::string &toString() const & noexcept;
+    std::string toString() const;
 
     bool operator==(const CandleSession &candleSession) const noexcept;
 
@@ -110,7 +116,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * @return The candle session attribute (reference).
      * @throws InvalidArgumentException if the argument is empty or invalid
      */
-    static std::reference_wrapper<const CandleSession> parse(const StringLike &s);
+    static std::reference_wrapper<const CandleSession> parse(StringParam s);
 
     /**
      * Returns candle session attribute of the given candle symbol string.
@@ -119,7 +125,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * @param symbol The candle symbol string.
      * @return The candle session attribute of the given candle symbol string.
      */
-    static std::reference_wrapper<const CandleSession> getAttributeForSymbol(const StringLike &symbol);
+    static std::reference_wrapper<const CandleSession> getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle session attribute.
@@ -127,7 +133,7 @@ struct DXFCPP_EXPORT CandleSession final : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return The candle symbol string with the normalized representation of the candle session attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol) noexcept;
+    static std::string normalizeAttributeForSymbol(StringParam symbol) noexcept;
 };
 
 DXFCPP_END_NAMESPACE

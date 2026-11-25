@@ -124,6 +124,11 @@ void printCurrentSession(auto &&profile, auto time) {
     std::cout << "Current session for " + profile->getSymbol() + ": " + session->toString() + " in " +
                      session->getDay()->toString()
               << std::endl;
+
+    // Is the market open: the session of the time is a trading one (regular or extended hours).
+    std::cout << "Trading at " + TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(time) + ": " +
+                     (session->isTrading() ? "yes" : "no")
+              << std::endl;
 }
 
 void printNextTradingSession(auto &&profile, auto time) {

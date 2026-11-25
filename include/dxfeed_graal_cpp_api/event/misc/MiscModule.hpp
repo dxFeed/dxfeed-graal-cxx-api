@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -14,6 +14,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "./Configuration.hpp"
 #include "./Message.hpp"
+#include "./TextConfiguration.hpp"
 #include "./TextMessage.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_POP()

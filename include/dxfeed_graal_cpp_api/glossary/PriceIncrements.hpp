@@ -3,17 +3,21 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 
+#include <cstddef>
+#include <cstdint>
 #include <functional>
-#include <mutex>
+#include <memory>
 #include <ostream>
+#include <string>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_glossary
@@ -79,8 +83,8 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards positive infinity. If the result is positive, behaves as for
-     * #ROUNDING_MODE_UP; if negative, behaves as for #ROUNDING_MODE_DOWN. Note that this rounding mode never
-     * decreases the calculated value.
+     * RoundingMode::ROUNDING_MODE_UP; if negative, behaves as for RoundingMode::ROUNDING_MODE_DOWN. Note that this
+     * rounding mode never decreases the calculated value.
      *
      *<p>Example:
      *<table border>
@@ -103,8 +107,8 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards negative infinity. If the result is positive, behave as for
-     * #ROUNDING_MODE_DOWN; if negative, behave as for #ROUNDING_MODE_UP. Note that this rounding mode never
-     * increases the calculated value.
+     * RoundingMode::ROUNDING_MODE_DOWN; if negative, behave as for RoundingMode::ROUNDING_MODE_UP. Note that this
+     * rounding mode never increases the calculated value.
      *
      *<p>Example:
      *<table border>
@@ -127,8 +131,8 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round up.
-     * Behaves as for #ROUNDING_MODE_UP if the discarded fraction is <= 0.5; otherwise, behaves as for
-     * #ROUNDING_MODE_DOWN. Note that this is the rounding mode commonly taught at school.
+     * Behaves as for RoundingMode::ROUNDING_MODE_UP if the discarded fraction is <= 0.5; otherwise, behaves as for
+     * RoundingMode::ROUNDING_MODE_DOWN. Note that this is the rounding mode commonly taught at school.
      *
      *<p>Example:
      *<table border>
@@ -151,8 +155,8 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards "nearest neighbor" unless both neighbors are equidistant, in which case round
-     * down. Behaves as for #ROUNDING_MODE_UP if the discarded fraction is > 0.5; otherwise, behaves as for
-     * #ROUNDING_MODE_DOWN.
+     * down. Behaves as for RoundingMode::ROUNDING_MODE_UP if the discarded fraction is > 0.5; otherwise, behaves as for
+     * RoundingMode::ROUNDING_MODE_DOWN.
      *
      *<p>Example:
      *<table border>
@@ -175,9 +179,9 @@ enum class RoundingMode : std::int32_t {
 
     /**
      * Rounding mode to round towards the "nearest neighbor" unless both neighbors are equidistant, in which case, round
-     * towards the even neighbor. Behaves as for #ROUNDING_MODE_HALF_UP if the digit to the left of the
-     * discarded fraction is odd; behaves as for #ROUNDING_MODE_HALF_DOWN if it's even. Note that this is the
-     * rounding mode that statistically minimizes cumulative error when applied repeatedly over a sequence of
+     * towards the even neighbor. Behaves as for RoundingMode::ROUNDING_MODE_HALF_UP if the digit to the left of the
+     * discarded fraction is odd; behaves as for RoundingMode::ROUNDING_MODE_HALF_DOWN if it's even. Note that this is
+     * the rounding mode that statistically minimizes cumulative error when applied repeatedly over a sequence of
      * calculations. It is sometimes known as "Banker's rounding" and is chiefly used in the USA. This rounding mode is
      * analogous to the rounding policy used for `float` and `double` arithmetic in Java.
      *
@@ -236,7 +240,7 @@ enum class RoundingMode : std::int32_t {
  * limits, with extreme limits (0 and infinity) omitted for short.
  * Negative space (from negative infinity to 0) uses symmetrical price ranges.
  * <p>
- * There is a special value PriceIncrements::EMPTY that is used to represent unknown or undefined rules.
+ * There is a special value PriceIncrements::EMPTY() that is used to represent unknown or undefined rules.
  * This value has empty textual representation and is considered to have a sole increment with value 0.
  * <p>
  * See PriceIncrements::getText() and PriceIncrements::getPriceIncrements() for details about used formats
@@ -253,21 +257,22 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
     using Unique = std::unique_ptr<PriceIncrements>;
 
     private:
-    mutable JavaObjectHandle<PriceIncrements> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<PriceIncrements>()> initializer_;
+    LazyJavaObjectHandle<PriceIncrements> handle_;
 
-    void init() const;
+    const JavaObjectHandle<PriceIncrements> &getHandle() const {
+        return handle_.get();
+    }
 
     public:
     /**
      * Empty price increments - it has empty text and sole increment with value 0.
+     *
+     * It is created at the first call, so it can be used by the initializers of global variables.
      */
-    static const Ptr EMPTY;
+    static const Ptr &EMPTY();
 
     // lazy c-tor
-    PriceIncrements(LockExternalConstructionTag, std::function<JavaObjectHandle<PriceIncrements>()> initializer);
+    PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<PriceIncrements> (*initializer)());
 
     PriceIncrements(LockExternalConstructionTag, JavaObjectHandle<PriceIncrements> &&handle);
 
@@ -281,7 +286,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * @return The price increments instance.
      * @throws JavaException("IllegalArgumentException") if text uses wrong format or contains invalid values.
      */
-    static Ptr valueOf(const StringLike &text);
+    static Ptr valueOf(StringParam text);
 
     /**
      * Returns an instance of price increments for a specified single increment.
@@ -322,7 +327,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * Where `INCREMENT` is a price increment in the given price range and `UPPER_LIMIT` is the upper bound of that
      * range. All ranges are listed in the ascending order of upper limits, and the last range is considered to extend
      * toward infinity and is therefore specified without upper limit. All increments and limits are finite positive
-     * numbers. The case with empty text is a special stub used for PriceIncrements::EMPTY value, it uses a sole
+     * numbers. The case with empty text is a special stub used for PriceIncrements::EMPTY() value, it uses a sole
      * increment with value 0.
      *
      * @return The textual representation.
@@ -334,7 +339,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * This array specifies all numbers from textual representation (see PriceIncrements::getText()) in the same order.
      * Therefore, numbers at even positions are increments and numbers at odd positions are upper limits.
      * The array always has an odd length - the infinite upper limit of the last range is always omitted, and
-     * the first increment (for price range adjacent to 0) is always included even for PriceIncrements::EMPTY value.
+     * the first increment (for price range adjacent to 0) is always included even for PriceIncrements::EMPTY() value.
      *
      * @return The internal representation of price increments.
      */
@@ -342,7 +347,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
 
     /**
      * Returns the first price increment (for price range adjacent to 0), usually the smallest one.
-     * Returns 0 for PriceIncrements::EMPTY price increments.
+     * Returns 0 for PriceIncrements::EMPTY() price increments.
      *
      * @return The first price increment.
      */
@@ -352,7 +357,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * Returns price increment which shall be applied to the specified price.
      * If the price is Not-a-Number (`NaN`), then the first price increment is returned.
      * If price is a breakpoint between two ranges, then a minimum of upward and downward increments is returned.
-     * This method is equivalent to calling @ref PriceIncrements::getPriceIncrement(double, int) "PriceIncrements::getPriceIncrement(price, 0)".
+     * This method is equivalent to calling
+     * @ref PriceIncrements::getPriceIncrement(double, std::int32_t) const "PriceIncrements::getPriceIncrement(price, 0)".
      *
      * @param price The price.
      * @return The price increment.
@@ -373,7 +379,7 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
 
     /**
      * Returns first price precision (for price range adjacent to 0), usually the largest one.
-     * Returns 0 for PriceIncrements::EMPTY price increments.
+     * Returns 0 for PriceIncrements::EMPTY() price increments.
      *
      * @return The first price precision.
      */
@@ -396,7 +402,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * Returns specified price rounded to nearest valid value.
      * If the price is Not-a-Number (`NaN`), then NaN is returned.
      * If the appropriate price increment is 0, then the specified price is returned as is.
-     * This method is equivalent to calling @ref PriceIncrements::roundPrice(double, int) "PriceIncrements::roundPrice(price, 0)".
+     * This method is equivalent to calling
+     * @ref PriceIncrements::roundPrice(double, std::int32_t) const "PriceIncrements::roundPrice(price, 0)".
      *
      * @param price The price to round.
      * @return The rounded price.
@@ -433,7 +440,8 @@ struct DXFCPP_EXPORT PriceIncrements : RequireMakeShared<PriceIncrements> {
      * by appropriate increment and then rounded to the nearest valid value.
      * If the price is Not-a-Number (`NaN`), then NaN is returned.
      * If the appropriate price increment is 0, then the specified price is returned as is.
-     * This method is equivalent to calling @ref PriceIncrements::incrementPrice(double, int, double) "PriceIncrements::incrementPrice(price, direction, 0)".
+     * This method is equivalent to calling @ref PriceIncrements::incrementPrice(double, std::int32_t, double) const
+     * "PriceIncrements::incrementPrice(price, direction, 0)".
      *
      * @param price The price to increment.
      * @param direction The direction.

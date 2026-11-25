@@ -3,17 +3,19 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/Common.hpp"
+#include "../detail/Concepts.hpp"
 
 #include <algorithm>
 #include <cstdint>
+#include <memory>
 #include <numeric>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <utility>
 
 /**
@@ -102,76 +104,82 @@ DXFCPP_BEGIN_NAMESPACE
  * also set to `true`.
  */
 class DXFCPP_EXPORT EventFlag final {
-    std::uint32_t flag_;
-    std::string name_;
+    friend struct IndexedEvent;
 
-    EventFlag(std::uint32_t flag, std::string name) noexcept;
+    std::uint32_t flag_;
+    std::string_view name_;
+
+    constexpr EventFlag(std::uint32_t flag, std::string_view name) noexcept : flag_{flag}, name_{name} {
+    }
 
     public:
     /**
-     * `0x01` - A bitmask to get transaction pending indicator from the value of @ref ::getEventFlags() "eventFlags"
-     * property.
+     * `0x01` - A bitmask to get transaction pending indicator from the value of @ref IndexedEvent::getEventFlags()
+     * "eventFlags" property.
      *
      * ```cpp
      * bool txPending = (event-> getEventFlags() & IndexedEvent::TX_PENDING) != 0;
      * ```
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag TX_PENDING;
 
     /**
-     * `0x02` - A bitmask to get removal indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     * `0x02` - A bitmask to get removal indicator from the value of @ref IndexedEvent::getEventFlags() "eventFlags"
+     * property.
      *
      * ```cpp
      * bool removeEvent = (event-> getEventFlags() & IndexedEvent::REMOVE_EVENT) != 0;
      * ```
      *
-     * See <a href="#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag REMOVE_EVENT;
 
     /**
-     * `0x04` - A bitmask to get snapshot begin indicator from the value of @ref ::getEventFlags() "eventFlags"
-     * property.
+     * `0x04` - A bitmask to get snapshot begin indicator from the value of @ref IndexedEvent::getEventFlags()
+     * "eventFlags" property.
      *
      * ```cpp
      * bool snapshotBegin = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_BEGIN) != 0;
      * ```
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag SNAPSHOT_BEGIN;
 
     /**
-     * `0x08` - A bitmask to get snapshot end indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     * `0x08` - A bitmask to get snapshot end indicator from the value of @ref IndexedEvent::getEventFlags()
+     * "eventFlags" property.
      *
      * ```cpp
      * bool snapshotEnd = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_END) != 0;
      * ```
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag SNAPSHOT_END;
 
     /**
-     * `0x10` - A bitmask to get snapshot snip indicator from the value of @ref ::getEventFlags() "eventFlags" property.
+     * `0x10` - A bitmask to get snapshot snip indicator from the value of @ref IndexedEvent::getEventFlags()
+     * "eventFlags" property.
      *
      * ```cpp
      * bool snapshotSnip = (event-> getEventFlags() & IndexedEvent::SNAPSHOT_SNIP) != 0;
      * ```
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag SNAPSHOT_SNIP;
 
     // 0x20 is reserved. This flag will fit into 1-byte on the wire in QTP protocol
 
     /**
-     * `0x40` - A bitmask to set snapshot mode indicator into the value of @ref ::setEventFlags() "eventFlags" property.
-     * This flag is intended for publishing only.
+     * `0x40` - A bitmask to set snapshot mode indicator into the value of @ref IndexedEvent::setEventFlags()
+     * "eventFlags" property. This flag is intended for publishing only.
      *
-     * See <a href="./de/d03/classdxfcpp_1_1_event_flag.html#eventFlagsSection">"Event Flags" section</a>
+     * See the @ref eventFlagsSection "Event Flags" section
      */
     static const EventFlag SNAPSHOT_MODE;
 
@@ -219,10 +227,10 @@ class DXFCPP_EXPORT EventFlag final {
     }
 
     ///
-    const std::string &getName() const & noexcept;
+    std::string getName() const;
 
     ///
-    const std::string &toString() const & noexcept;
+    std::string toString() const;
 
     /**
      * Performs a bit `or` operation with two event flags
@@ -232,7 +240,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator|(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
-        return static_cast<std::int32_t>(orOp(eventFlag1.getFlag(), eventFlag2));
+        return static_cast<std::int32_t>(eventFlag1.getFlag() | static_cast<std::uint32_t>(eventFlag2));
     }
 
     /**
@@ -243,7 +251,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator|(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return orOp(eventFlag1, eventFlag2.getFlag());
+        return static_cast<std::int32_t>(static_cast<std::uint32_t>(eventFlag1) | eventFlag2.getFlag());
     }
 
     /**
@@ -254,7 +262,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator&(const EventFlag &eventFlag1, std::int32_t eventFlag2) noexcept {
-        return static_cast<std::int32_t>(andOp(eventFlag1.getFlag(), eventFlag2));
+        return static_cast<std::int32_t>(eventFlag1.getFlag() & static_cast<std::uint32_t>(eventFlag2));
     }
 
     /**
@@ -265,7 +273,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::int32_t)
      */
     friend std::int32_t operator&(std::int32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return andOp(eventFlag1, eventFlag2.getFlag());
+        return static_cast<std::int32_t>(static_cast<std::uint32_t>(eventFlag1) & eventFlag2.getFlag());
     }
 
     /**
@@ -287,7 +295,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator|(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return orOp(eventFlag1, eventFlag2.getFlag());
+        return eventFlag1 | eventFlag2.getFlag();
     }
 
     /**
@@ -298,7 +306,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(const EventFlag &eventFlag1, std::uint32_t eventFlag2) noexcept {
-        return static_cast<std::uint32_t>(andOp(eventFlag1.getFlag(), eventFlag2));
+        return eventFlag1.getFlag() & eventFlag2;
     }
 
     /**
@@ -309,7 +317,7 @@ class DXFCPP_EXPORT EventFlag final {
      * @return The result (std::uint32_t)
      */
     friend std::uint32_t operator&(std::uint32_t eventFlag1, const EventFlag &eventFlag2) noexcept {
-        return andOp(eventFlag1, eventFlag2.getFlag());
+        return eventFlag1 & eventFlag2.getFlag();
     }
 
     /**

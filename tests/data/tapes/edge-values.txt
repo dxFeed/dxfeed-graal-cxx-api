@@ -473,4 +473,81 @@ Order	EDGE-FLAGS-252	20231114-221320.000+0000	0	0	0	1	1	0	4	\NULL	EventFlags=SNA
 Order	EDGE-FLAGS-253	20231114-221320.000+0000	0	0	0	1	1	0	4	\NULL	EventFlags=TX_PENDING,SNAPSHOT_BEGIN,SNAPSHOT_END,SNAPSHOT_SNIP,SNAPSHOT_MODE
 Order	EDGE-FLAGS-254	20231114-221320.000+0000	0	0	0	1	1	0	4	\NULL	EventFlags=REMOVE_EVENT,SNAPSHOT_BEGIN,SNAPSHOT_END,SNAPSHOT_SNIP,SNAPSHOT_MODE
 Order	EDGE-FLAGS-255	20231114-221320.000+0000	0	0	0	1	1	0	4	\NULL	EventFlags=TX_PENDING,REMOVE_EVENT,SNAPSHOT_BEGIN,SNAPSHOT_END,SNAPSHOT_SNIP,SNAPSHOT_MODE
+=OrderImbalance#NTV	EventSymbol	EventTime	Time	Sequence	RefPrice	PairedSize	ImbalanceSize	NearPrice	FarPrice	Flags
+OrderImbalance#NTV	EDGE-NAN	20231114-221320.000+0000	0	0	NaN	NaN	NaN	NaN	NaN	0
+=OrderImbalance#NUAM	EventSymbol	EventTime	Time	Sequence	RefPrice	PairedSize	ImbalanceSize	NearPrice	FarPrice	Flags
+OrderImbalance#NUAM	EDGE-ZERO	20231114-221320.000+0000	0	0	0	0	0	0	0	9
+=OrderImbalance#ARCA	EventSymbol	EventTime	Time	Sequence	RefPrice	PairedSize	ImbalanceSize	NearPrice	FarPrice	Flags
+OrderImbalance#ARCA	EDGE-NEG-ZERO	20231114-221320.000+0000	19691231-235959+0000	999:1	0	0	0	0	0	18
+=OrderImbalance	EventSymbol	EventTime	Time	Sequence	RefPrice	PairedSize	ImbalanceSize	NearPrice	FarPrice	Flags
+OrderImbalance	EDGE-INF	20231114-221320.000+0000	20380119-031407+0000	807:4194303	Infinity	Infinity	Infinity	Infinity	Infinity	27
+OrderImbalance#NTV	EDGE-NEG-INF	20231114-221320.000+0000	19011213-204552+0000	192:4194303	-Infinity	-Infinity	-Infinity	-Infinity	-Infinity	36
+OrderImbalance#NUAM	EDGE-MAX	20231114-221320.000+0000	20380119-031407+0000	807:4194303	Infinity	Infinity	Infinity	Infinity	Infinity	5
+OrderImbalance#ARCA	EDGE-LOWEST	20231114-221320.000+0000	19011213-204552+0000	192:0	-Infinity	-Infinity	-Infinity	-Infinity	-Infinity	8
+OrderImbalance	EDGE-DENORM	20231114-221320.000+0000	0	1:1	0	0	0	0	0	17
+OrderImbalance#NTV	EDGE-FRACTION	20231114-221320.000+0000	20231114-221320+0000	123:2	0.1	0.1	0.1	0.1	0.1	26
+OrderImbalance#NUAM	EDGE-LARGE	20231114-221320.000+0000	19160218-014639+0000	877:3	1000000000000001	1000000000000001	1000000000000001	1000000000000001	1000000000000001	35
+OrderImbalance#ARCA	EDGE-SMALL	20231114-221320.000+0000	19700125-203123+0000	648:4	-0.00000015	-0.00000015	-0.00000015	-0.00000015	-0.00000015	4
+=NuamOrder#NUAM	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	ActorId	ParticipantId	SubmitterId	OnBehalfOfSubmitterId	TimeInForceData	TriggerOrderBookId	TriggerPrice	TriggerSessionType	OrderQuantity	DisplayQuantity	RefreshQuantity	LeavesQuantity	MatchedQuantity	NuamFlags	ClientOrderId	CustomerAccount	CustomerInfo	ExchangeInfo
+NuamOrder#NUAM	EDGE-NAN	20231114-221320.000+0000	1	0	0	NaN	NaN	4	0	0	0	0	0	0	NaN	0	NaN	NaN	NaN	NaN	NaN	0	""	""	""	""
+=NuamTrade	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	Tick	Change	DayId	DayVolume	DayTurnover	Flags	TradeStatTime	LastSignificantPrice	LastPriceForAll	NumberOfTrades	VWAP
+NuamTrade	EDGE-NAN	20231114-221320.000+0000	0	0	\0	0	NaN	NaN	0	NaN	0	NaN	NaN	1	0	NaN	NaN	0	NaN
+=NuamTimeAndSale	EventSymbol	EventTime	Time	Sequence	ExchangeCode	TradeId	Price	Size	BidPrice	AskPrice	SaleConditions	Flags	MatchId
+NuamTimeAndSale	EDGE-NAN	20231114-221320.000+0000	0	0	\0	0	NaN	NaN	NaN	NaN	\NULL	20	0
+=NuamOrder#nuam	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Flags	ActorId	ParticipantId	SubmitterId	OnBehalfOfSubmitterId	TimeInForceData	TriggerOrderBookId	TriggerPrice	TriggerSessionType	OrderQuantity	DisplayQuantity	RefreshQuantity	LeavesQuantity	MatchedQuantity	NuamFlags	ClientOrderId	CustomerAccount	CustomerInfo	ExchangeInfo
+NuamOrder#nuam	EDGE-ZERO	20231114-221320.000+0000	2	0	0	0	0	521	0	0	0	0	0	0	0	0	0	0	0	0	0	17	<null>	<null>	<null>	<null>
+NuamTrade	EDGE-ZERO	20231114-221320.000+0000	0	0	" "	0	0	0	2	0	0	0	0	2	0	0	0	0	0
+NuamTimeAndSale	EDGE-ZERO	20231114-221320.000+0000	0	0	" "	0	0	0	0	0	ull>	8233	0
+=NuamOrder	EventSymbol	EventTime	Index	Time	Sequence	Price	Size	Count	Flags	ActorId	ParticipantId	SubmitterId	OnBehalfOfSubmitterId	TimeInForceData	TriggerOrderBookId	TriggerPrice	TriggerSessionType	OrderQuantity	DisplayQuantity	RefreshQuantity	LeavesQuantity	MatchedQuantity	NuamFlags	ClientOrderId	CustomerAccount	CustomerInfo	ExchangeInfo
+NuamOrder	EDGE-NEG-ZERO	20231114-221320.000+0000	3	19691231-235959+0000	999:1	0	0	0	2022	-1	-1	-1	-1	-1	-1	0	-1	0	0	0	0	0	34	\\NULL	\\NULL	\\NULL	\\NULL
+NuamTrade	EDGE-NEG-ZERO	20231114-221320.000+0000	19691231-235959+0000	999:1	~	0	0	0	2	0	19691231	0	0	5	19691231-235959.999+0000	0	0	-1	0
+NuamTimeAndSale	EDGE-NEG-ZERO	20231114-221320.000+0000	19691231-235959+0000	999:1	~	0	0	0	0	0	NULL	32342	-1
+NuamOrder#NUAM	EDGE-INF	20231114-221320.000+0000	4	20380119-031407+0000	807:4194303	Infinity	Infinity	11	2147483647	2147483647	2147483647	2147483647	2147483647	2147483647	Infinity	2147483647	Infinity	Infinity	Infinity	Infinity	Infinity	51	\u00DC\u20AC\uD83D\uDE00	\u00DC\u20AC\uD83D\uDE00	\u00DC\u20AC\uD83D\uDE00	\u00DC\u20AC\uD83D\uDE00
+NuamTrade	EDGE-INF	20231114-221320.000+0000	20380119-031407+0000	807:4194303	\0	0	Infinity	Infinity	0	Infinity	1353131522	Infinity	Infinity	6	9223372036854775807	Infinity	Infinity	2147483647	Infinity
+NuamTimeAndSale	EDGE-INF	20231114-221320.000+0000	20380119-031407+0000	807:4194303	\0	0	Infinity	Infinity	Infinity	Infinity	A	8	9223372036854775807
+NuamOrder#nuam	EDGE-NEG-INF	20231114-221320.000+0000	5	19011213-204552+0000	192:4194303	-Infinity	-Infinity	516	-2147483648	-2147483648	-2147483648	-2147483648	-2147483648	-2147483648	-Infinity	-2147483648	-Infinity	-Infinity	-Infinity	-Infinity	-Infinity	68	tab\tnew\nline	tab\tnew\nline	tab\tnew\nline	tab\tnew\nline
+NuamTrade	EDGE-NEG-INF	20231114-221320.000+0000	19011213-204552+0000	192:4194303	" "	0	-Infinity	-Infinity	1	-Infinity	1353131521	-Infinity	-Infinity	9	-9223372036854775808	-Infinity	-Infinity	-2147483648	-Infinity
+NuamTimeAndSale	EDGE-NEG-INF	20231114-221320.000+0000	19011213-204552+0000	192:4194303	" "	0	-Infinity	-Infinity	-Infinity	-Infinity	Z9	8245	-9223372036854775808
+NuamOrder	EDGE-MAX	20231114-221320.000+0000	6	20380119-031407+0000	807:4194303	Infinity	Infinity	0	2025	2147483647	2147483647	2147483647	2147483647	2147483647	2147483647	Infinity	2147483647	Infinity	Infinity	Infinity	Infinity	Infinity	85	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+NuamTrade	EDGE-MAX	20231114-221320.000+0000	20380119-031407+0000	807:4194303	~	0	Infinity	Infinity	1	Infinity	1353131522	Infinity	Infinity	10	9223372036854775807	Infinity	Infinity	2147483647	Infinity
+NuamTimeAndSale	EDGE-MAX	20231114-221320.000+0000	20380119-031407+0000	807:4194303	~	0	Infinity	Infinity	Infinity	Infinity	~	32330	9223372036854775807
+NuamOrder#NUAM	EDGE-LOWEST	20231114-221320.000+0000	7	19011213-204552+0000	192:0	-Infinity	-Infinity	6	-2147483648	-2147483648	-2147483648	-2147483648	-2147483648	-2147483648	-Infinity	-2147483648	-Infinity	-Infinity	-Infinity	-Infinity	-Infinity	96	" spaces "	" spaces "	" spaces "	" spaces "
+NuamTrade	EDGE-LOWEST	20231114-221320.000+0000	19011213-204552+0000	192:0	\0	0	-Infinity	-Infinity	0	-Infinity	1353131521	-Infinity	-Infinity	1	-9223372036854775808	-Infinity	-Infinity	-2147483648	-Infinity
+NuamTimeAndSale	EDGE-LOWEST	20231114-221320.000+0000	19011213-204552+0000	192:0	\0	0	-Infinity	-Infinity	-Infinity	-Infinity	"ces "	20	-9223372036854775808
+NuamOrder#nuam	EDGE-DENORM	20231114-221320.000+0000	8	0	1:1	0	0	523	1	1	1	1	1	1	0	1	0	0	0	0	0	1	\"quoted\"	\"quoted\"	\"quoted\"	\"quoted\"
+NuamTrade	EDGE-DENORM	20231114-221320.000+0000	0	1:1	" "	0	0	0	2	0	19700102	0	0	2	19700101-000000.001+0000	0	0	1	0
+NuamTimeAndSale	EDGE-DENORM	20231114-221320.000+0000	0	1:1	" "	0	0	0	0	0	\"q\"	8233	1
+NuamOrder	EDGE-FRACTION	20231114-221320.000+0000	9	20231114-221320+0000	123:2	0.1	0.1	0	2020	19675	19675	19675	19675	19675	19675	0.1	19675	0.1	0.1	0.1	0.1	0.1	18	back\\slash	back\\slash	back\\slash	back\\slash
+NuamTrade	EDGE-FRACTION	20231114-221320.000+0000	20231114-221320+0000	123:2	~	0	0.1	0.1	2	0.1	20231114	0.1	0.1	5	20231114-221320.123+0000	0.1	0.1	19675	0.1
+NuamTimeAndSale	EDGE-FRACTION	20231114-221320.000+0000	20231114-221320+0000	123:2	~	0	0.1	0.1	0.1	0.1	a\\b	32342	1700000000123
+NuamOrder#NUAM	EDGE-LARGE	20231114-221320.000+0000	10	19160218-014639+0000	877:3	1000000000000001	1000000000000001	9	-19675	-19675	-19675	-19675	-19675	-19675	1000000000000001	-19675	1000000000000001	1000000000000001	1000000000000001	1000000000000001	1000000000000001	35	,;=#	,;=#	,;=#	,;=#
+NuamTrade	EDGE-LARGE	20231114-221320.000+0000	19160218-014639+0000	877:3	\0	0	1000000000000001	1000000000000001	0	1000000000000001	19160219	1000000000000001	1000000000000001	6	19160218-014639.877+0000	1000000000000001	1000000000000001	-19675	1000000000000001
+NuamTimeAndSale	EDGE-LARGE	20231114-221320.000+0000	19160218-014639+0000	877:3	\0	0	1000000000000001	1000000000000001	1000000000000001	1000000000000001	,;=#	8	-1700000000123
+NuamOrder#nuam	EDGE-SMALL	20231114-221320.000+0000	11	19700125-203123+0000	648:4	-0.00000015	-0.00000015	518	65536	65536	65536	65536	65536	65536	-0.00000015	65536	-0.00000015	-0.00000015	-0.00000015	-0.00000015	-0.00000015	52	ASCII	ASCII	ASCII	ASCII
+NuamTrade	EDGE-SMALL	20231114-221320.000+0000	19700125-203123+0000	648:4	" "	0	-0.00000015	-0.00000015	1	-0.00000015	21490607	-0.00000015	-0.00000015	9	19700125-203123.648+0000	-0.00000015	-0.00000015	65536	-0.00000015
+NuamTimeAndSale	EDGE-SMALL	20231114-221320.000+0000	19700125-203123+0000	648:4	" "	0	-0.00000015	-0.00000015	-0.00000015	-0.00000015	SCII	8245	2147483648
+=MarketMaker	EventSymbol	EventTime	ExchangeCode	MarketMaker	BidTime	BidPrice	BidSize	BidCount	AskTime	AskPrice	AskSize	AskCount
+MarketMaker	EDGE-NAN	20231114-221320.000+0000	\0	\NULL	0	NaN	NaN	0	0	NaN	NaN	0
+=TextConfiguration	EventSymbol	EventTime	Time	Sequence	Version	Text
+TextConfiguration	EDGE-NAN	20231114-221320.000+0000	0	0	0	""
+MarketMaker	EDGE-ZERO	20231114-221320.000+0000	" "	ull>	0	0	0	0	0	0	0	0
+TextConfiguration	EDGE-ZERO	20231114-221320.000+0000	0	0	0	<null>
+MarketMaker	EDGE-NEG-ZERO	20231114-221320.000+0000	~	NULL	19691231-235959+0000	0	0	-1	19691231-235959+0000	0	0	-1
+TextConfiguration	EDGE-NEG-ZERO	20231114-221320.000+0000	19691231-235959+0000	999:1	-1	\\NULL
+MarketMaker	EDGE-INF	20231114-221320.000+0000	\0	A	20380119-031407+0000	Infinity	Infinity	-1	20380119-031407+0000	Infinity	Infinity	-1
+TextConfiguration	EDGE-INF	20231114-221320.000+0000	20380119-031407+0000	807:4194303	2147483647	\u00DC\u20AC\uD83D\uDE00
+MarketMaker	EDGE-NEG-INF	20231114-221320.000+0000	" "	Z9	19011213-204552+0000	-Infinity	-Infinity	0	19011213-204552+0000	-Infinity	-Infinity	0
+TextConfiguration	EDGE-NEG-INF	20231114-221320.000+0000	19011213-204552+0000	192:4194303	-2147483648	tab\tnew\nline
+MarketMaker	EDGE-MAX	20231114-221320.000+0000	~	~	20380119-031407+0000	Infinity	Infinity	-1	20380119-031407+0000	Infinity	Infinity	-1
+TextConfiguration	EDGE-MAX	20231114-221320.000+0000	20380119-031407+0000	807:4194303	2147483647	xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+MarketMaker	EDGE-LOWEST	20231114-221320.000+0000	\0	"ces "	19011213-204552+0000	-Infinity	-Infinity	0	19011213-204552+0000	-Infinity	-Infinity	0
+TextConfiguration	EDGE-LOWEST	20231114-221320.000+0000	19011213-204552+0000	192:0	-2147483648	" spaces "
+MarketMaker	EDGE-DENORM	20231114-221320.000+0000	" "	\"q\"	0	0	0	1	0	0	0	1
+TextConfiguration	EDGE-DENORM	20231114-221320.000+0000	0	1:1	1	\"quoted\"
+MarketMaker	EDGE-FRACTION	20231114-221320.000+0000	~	a\\b	20231114-221320+0000	0.1	0.1	-807049093	20231114-221320+0000	0.1	0.1	-807049093
+TextConfiguration	EDGE-FRACTION	20231114-221320.000+0000	20231114-221320+0000	123:2	19675	back\\slash
+MarketMaker	EDGE-LARGE	20231114-221320.000+0000	\0	,;=#	19160218-014639+0000	1000000000000001	1000000000000001	807049093	19160218-014639+0000	1000000000000001	1000000000000001	807049093
+TextConfiguration	EDGE-LARGE	20231114-221320.000+0000	19160218-014639+0000	877:3	-19675	,;=#
+MarketMaker	EDGE-SMALL	20231114-221320.000+0000	" "	SCII	19700125-203123+0000	-0.00000015	-0.00000015	-2147483648	19700125-203123+0000	-0.00000015	-0.00000015	-2147483648
+TextConfiguration	EDGE-SMALL	20231114-221320.000+0000	19700125-203123+0000	648:4	65536	ASCII
 ==

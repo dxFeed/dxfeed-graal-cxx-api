@@ -34,48 +34,111 @@ if (DXFCXX_BUILD_BENCHMARKS)
 endif ()
 
 set(DXFC_TEST_SOURCES
+        api/AggregationPeriodTest.cpp
+        api/AutoCloseTest.cpp
+        api/CandleAttributesTest.cpp
+        api/CandleDataTypeTest.cpp
+        api/CandleSymbolHintsLimitTest.cpp
+        api/CandleSymbolHintsTest.cpp
         api/CandleSymbolTest.cpp
         api/DataIntegrityTest.cpp
         api/DXFeedTest.cpp
         api/DXEndpointTest.cpp
         api/DXPublisherTest.cpp
+        api/EqualityTest.cpp
         api/EventsTest.cpp
         api/ExportsTest.cpp
+        api/LifetimeTest.cpp
         api/MarketEventSymbolsTest.cpp
+        api/MarketMakerTest.cpp
+        api/MessageConnectorTest.cpp
+        api/NuamEventsTest.cpp
         api/ObservableSubscriptionLifecycleTest.cpp
+        api/OrderImbalanceTest.cpp
         api/OrderSourceTest.cpp
+        api/SilenceWatchdogTest.cpp
+        api/SlowListenerWarningTest.cpp
+        api/StringParamApiTest.cpp
+        api/StringParamTest.cpp
+        api/TextConfigurationTest.cpp
+        auth/AuthTokenTest.cpp
+        event/ConstantsTest.cpp
         event/EdgeValuesTapeTest.cpp
         event/EventsTest.cpp
+        event/EventsToStringTest.cpp
+        event/StringFieldsTest.cpp
+        event/EventTypeTest.cpp
+        event/NetworkTapeTest.cpp
         event/TapeRoundTripTest.cpp
+        event/UnsupportedEventTest.cpp
+        exceptions/CallbackBarrierTest.cpp
+        exceptions/ErrorManagerTest.cpp
         exceptions/ExceptionsTest.cpp
+        exceptions/JavaExceptionStateTest.cpp
+        exceptions/ReleaseTest.cpp
         glossary/AdditionalUnderlyingsTest.cpp
+        glossary/CFITest.cpp
         glossary/PriceIncrementsTest.cpp
         internal/CommonTest.cpp
+        internal/ConstStringTest.cpp
         internal/EntityManagerTest.cpp
         internal/HandlerTest.cpp
+        internal/IsolateTest.cpp
+        internal/SdkStringTest.cpp
+        internal/StringUtilsTest.cpp
+        internal/Utf8CheckTest.cpp
         ipf/InstrumentProfileCollectorTest.cpp
+        ipf/InstrumentProfileConnectionTest.cpp
+        ipf/InstrumentProfileReaderTest.cpp
+        ipf/InstrumentProfileTest.cpp
         ipf/OptionChainsTest.cpp
         ipf/OptionSeriesTest.cpp
+        model/IndexedEventTxModelTest.cpp
         model/IndexedTxModelTest.cpp
         model/TimeSeriesTxModelTest.cpp
+        model/TimeSeriesTxModelFromTimeTest.cpp
         model/TxModelTapeTest.cpp
         model/MarketDepthModelTest.cpp
+        ondemand/OnDemandServiceTest.cpp
+        orcs/PriceLevelServiceTest.cpp
         promise/PromisesTest.cpp
+        promise/PromiseTimeoutTest.cpp
         schedule/ScheduleTest.cpp
         symbols/SymbolWrapperTest.cpp
-        system/SystemTest.cpp)
+        system/SystemTest.cpp
+        tools/DiagnoseToolTest.cpp
+        tools/NetTestKitTest.cpp
+        tools/NetTestMetricsTest.cpp
+        tools/NetTestRunTest.cpp
+        tools/NetTestSummaryTest.cpp
+        tools/ToolsArgsTest.cpp
+        util/ToStringDoubleTest.cpp
+        util/UtilHeadersTest.cpp)
 #add_definitions(-DDXFCPP_DEBUG -DDXFCPP_DEBUG_ISOLATES)
 
-if (DXFCXX_BUILD_BENCHMARKS)
-    list(APPEND DXFC_TEST_SOURCES bench/StringLikeBench.cpp)
-endif ()
-
-# Tests that need external network access (demo.dxfeed.com). They are labeled "network": `ctest -L network`.
+# Tests over a network connection to a QDS server that sends tests/data/tapes/network.txt. They are labeled "network":
+# `ctest -L network`. On Linux CTest starts the server on 127.0.0.1:DXFCXX_NETWORK_TEST_PORT itself (the fixture below);
+# elsewhere DXFCXX_NETWORK_TEST_ADDRESS must give the address of such a server.
 if (DXFCXX_ENABLE_NETWORK_TESTS)
     list(APPEND DXFC_TEST_SOURCES network/NetworkTest.cpp)
 endif ()
 
 set(DXFC_TEST_SUPPORT_SOURCES support/TestSupport.cpp support/EventFactory.cpp support/TapeSupport.cpp)
+
+# LeakSanitizer reports the memory of the Graal isolate, which the library never tears down. With LeakSanitizer (ASan on
+# Linux) the tests of main.cpp tear the isolate down at the end of main() (DXFCXX_TEST_TEAR_DOWN_ISOLATE), as the
+# teardown scenarios of the exit test do, and run without the suppression of the SDK library (sanitizers/lsan.supp): a
+# leak of the library through the frames of the SDK is reported. The other test processes keep the isolate alive and
+# keep the suppression.
+if (DXFCXX_ASAN_ACTIVE AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(DXFC_TEST_TEAR_DOWN_ISOLATE ON)
+else ()
+    set(DXFC_TEST_TEAR_DOWN_ISOLATE OFF)
+endif ()
+
+set(DXFC_LSAN_ISOLATE_ALIVE_OPTIONS "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+# Set, not inherited: the environment that runs ctest may suppress the SDK library.
+set(DXFC_LSAN_TEAR_DOWN_OPTIONS "LSAN_OPTIONS=")
 
 # Temporary files of the tests (tapes written by the tests).
 set(DXFC_TEST_TEMP_DIR "${CMAKE_CURRENT_BINARY_DIR}/tmp")
@@ -89,13 +152,48 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     #    message("${DXFC_TEST_BASENAME}: ${DXFC_TEST_SOURCE}")
 
     add_executable(${DXFC_TEST_BASENAME} ${DXFC_TEST_SOURCE} main.cpp ${DXFC_TEST_SUPPORT_SOURCES})
+
+    # The argument parsing and the network probe of the tools are compiled into their tests: the tools are an
+    # executable.
+    if (DXFC_TEST_SOURCE MATCHES "^tools/")
+        target_sources(${DXFC_TEST_BASENAME} PRIVATE ../tools/Tools/src/Args/Args.cpp
+                ../tools/Tools/src/Diagnose/NetProbe.cpp ../tools/Tools/src/NetTest/Args.cpp
+                ../tools/Tools/src/NetTest/Consumer.cpp ../tools/Tools/src/NetTest/EventPool.cpp
+                ../tools/Tools/src/NetTest/Generator.cpp ../tools/Tools/src/NetTest/Histogram.cpp
+                ../tools/Tools/src/NetTest/Metrics.cpp ../tools/Tools/src/NetTest/MetricsRequest.cpp
+                ../tools/Tools/src/NetTest/RateLimiter.cpp ../tools/Tools/src/NetTest/Run.cpp
+                ../tools/Tools/src/NetTest/RunSupport.cpp ../tools/Tools/src/NetTest/Statistics.cpp
+                ../tools/Tools/src/NetTest/Summary.cpp ../tools/Tools/src/NetTest/SymbolPool.cpp)
+    endif ()
+
+    # The tests of NetTest read the kit of its specification from the archive of the Graal Native SDK (the stub of the
+    # SDK has no kit: the tests skip then).
+    if (DXFC_TEST_SOURCE MATCHES "^tools/NetTest")
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE
+                DXFCXX_NETTEST_KIT_DIR="$<TARGET_PROPERTY:DxFeedGraalNativeSdk,INTERFACE_INCLUDE_DIRECTORIES>/docs/wrapper-guide/nettest")
+
+        if (DXFCXX_USE_DXFG_STUB)
+            target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCXX_NETTEST_SDK_STUB=1)
+        endif ()
+    endif ()
+
+    # The tests build or read the structures of the C API of the dxFeed Graal SDK by hand, or call it.
+    if (DXFC_TEST_SOURCE MATCHES "^(event/(UnsupportedEvent|StringFields)|exceptions/JavaExceptionState)Test\\.cpp$")
+        target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE
+                $<TARGET_PROPERTY:DxFeedGraalNativeSdk,INTERFACE_INCLUDE_DIRECTORIES>)
+    endif ()
+
+    # The test calls the C API: the shared library links the SDK library privately and does not pass it on.
+    if (DXFC_TEST_SOURCE STREQUAL "exceptions/JavaExceptionStateTest.cpp")
+        target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE DxFeedGraalNativeSdk)
+    endif ()
     list(APPEND DXFC_TEST_TARGETS ${DXFC_TEST_BASENAME})
     target_include_directories(${DXFC_TEST_BASENAME} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
     target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE ${DXFC_TEST_SYSTEM_INCLUDE_DIRS})
     target_compile_options(${DXFC_TEST_BASENAME} PRIVATE ${DXFCXX_DOCTEST_COMPILE_OPTIONS})
     target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE
             DXFCXX_TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data" DXFCXX_TEST_TEMP_DIR="${DXFC_TEST_TEMP_DIR}")
-    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only)
+    target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE fmt::fmt-header-only bits::bits)
 
     if (WIN32)
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE ws2_32)
@@ -107,11 +205,10 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
 
     if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx)
-        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_TEST_BASENAME} PRIVATE dxfcxx::static)
 
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        if (MSVC)
             if (DXFCXX_LINK_STATIC_RUNTIME)
                 set_target_properties(${DXFC_TEST_BASENAME} PROPERTIES
                         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>"
@@ -149,14 +246,225 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     add_test(NAME ${DXFC_TEST_BASENAME} COMMAND ${DXFC_TEST_BASENAME})
 
     if (DXFC_TEST_SOURCE MATCHES "^network/")
-        set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES LABELS network)
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCXX_NETWORK_TEST_PORT=${DXFCXX_NETWORK_TEST_PORT})
+        # More than the sum of the 30-second waits of the cases: without a server the cases fail on their checks.
+        set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES LABELS network TIMEOUT 240)
+    endif ()
+
+    if (DXFC_TEST_TEAR_DOWN_ISOLATE)
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCXX_TEST_TEAR_DOWN_ISOLATE=1)
+        set(DXFC_TEST_LSAN_OPTIONS "${DXFC_LSAN_TEAR_DOWN_OPTIONS}")
+    else ()
+        set(DXFC_TEST_LSAN_OPTIONS "${DXFC_LSAN_ISOLATE_ALIVE_OPTIONS}")
     endif ()
 
     if (DXFCXX_SANITIZERS_ENABLED)
         set_tests_properties(${DXFC_TEST_BASENAME} PROPERTIES ENVIRONMENT
-                "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+                "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp:second_deadlock_stack=1;${DXFC_TEST_LSAN_OPTIONS}")
     endif ()
 endforeach ()
+
+# The generator of tests/data/tapes/network.txt, the tape of the network tests (tests/data/tapes/README.md).
+if (DXFCXX_ENABLE_NETWORK_TESTS)
+    set(DXFC_TAPE_GENERATOR_TARGET dxFeedGraalCxxApi_GenerateNetworkTape)
+    add_executable(${DXFC_TAPE_GENERATOR_TARGET} network/GenerateNetworkTape.cpp)
+    target_include_directories(${DXFC_TAPE_GENERATOR_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+
+    if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
+        target_link_libraries(${DXFC_TAPE_GENERATOR_TARGET} PRIVATE dxfcxx)
+    else ()
+        target_link_libraries(${DXFC_TAPE_GENERATOR_TARGET} PRIVATE dxfcxx::static)
+
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_TAPE_GENERATOR_TARGET} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    target_link_libraries(${DXFC_TAPE_GENERATOR_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_TAPE_GENERATOR_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+endif ()
+
+# The local server of the network tests on Linux: a CTest fixture that starts the QDS of the Tools with the tape before
+# the network tests and stops it after them. The label network_server excludes the fixture: `ctest -L network -LE
+# network_server -FA '.*'` runs the tests against the server of DXFCXX_NETWORK_TEST_ADDRESS.
+if (DXFCXX_ENABLE_NETWORK_TESTS AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(DXFC_LOCAL_SERVER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/network/local-server.sh")
+    set(DXFC_LOCAL_SERVER_DIR "${CMAKE_CURRENT_BINARY_DIR}/local-server")
+
+    add_test(NAME dxFeedGraalCxxApi_network_LocalServerStart
+            COMMAND bash "${DXFC_LOCAL_SERVER_SCRIPT}" start $<TARGET_FILE:Tools>
+            "${CMAKE_CURRENT_SOURCE_DIR}/data/tapes/network.txt" ${DXFCXX_NETWORK_TEST_PORT} "${DXFC_LOCAL_SERVER_DIR}")
+    add_test(NAME dxFeedGraalCxxApi_network_LocalServerStop
+            COMMAND bash "${DXFC_LOCAL_SERVER_SCRIPT}" stop "${DXFC_LOCAL_SERVER_DIR}")
+    set_tests_properties(dxFeedGraalCxxApi_network_LocalServerStart PROPERTIES
+            FIXTURES_SETUP network_server LABELS "network;network_server" TIMEOUT 60)
+    set_tests_properties(dxFeedGraalCxxApi_network_LocalServerStop PROPERTIES
+            FIXTURES_CLEANUP network_server LABELS "network;network_server" TIMEOUT 60)
+    set_tests_properties(dxFeedGraalCxxApi_network_NetworkTest PROPERTIES FIXTURES_REQUIRED network_server)
+    add_dependencies(dxFeedGraalCxxApi_network_NetworkTest Tools)
+
+    # Diagnose against a live server: the local server sends Quote AAPL.
+    if (DXFCXX_BUILD_TOOLS)
+        add_test(NAME dxFeedGraalCxxApi_network_ToolsDiagnoseData
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=Diagnose
+                -DARG1=127.0.0.1:${DXFCXX_NETWORK_TEST_PORT} -DARG2=Quote -DARG3=AAPL -DARG4=--duration -DARG5=5
+                -DEXPECTED_EXIT=0 "-DEXPECTED_OUTPUT=Verdict: DATA" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        set_tests_properties(dxFeedGraalCxxApi_network_ToolsDiagnoseData PROPERTIES
+                FIXTURES_REQUIRED network_server LABELS network TIMEOUT 120)
+    endif ()
+endif ()
+
+# Diagnose without a network: a closed local port (the password of the address must not be printed) and a host name
+# that never resolves (.invalid, RFC 2606). RunTool.cmake checks both the verdict and the exit code.
+if (DXFCXX_BUILD_TOOLS)
+    add_test(NAME dxFeedGraalCxxApi_tools_DiagnoseCannotConnect
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=Diagnose
+            "-DARG1=127.0.0.1:1[user=diagnose,password=s3cr3t-sentinel]" -DARG2=Quote -DARG3=AAPL -DARG4=--duration
+            -DARG5=3 -DEXPECTED_EXIT=4 "-DEXPECTED_OUTPUT=Verdict: CANNOT CONNECT" -P
+            ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+    set_tests_properties(dxFeedGraalCxxApi_tools_DiagnoseCannotConnect PROPERTIES TIMEOUT 120
+            FAIL_REGULAR_EXPRESSION "s3cr3t-sentinel")
+
+    add_test(NAME dxFeedGraalCxxApi_tools_DiagnoseCannotResolve
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=Diagnose -DARG1=diagnose-test.invalid:7300
+            -DARG2=Quote -DARG3=AAPL -DARG4=--duration -DARG5=3 -DEXPECTED_EXIT=5
+            "-DEXPECTED_OUTPUT=Verdict: CANNOT RESOLVE" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+    set_tests_properties(dxFeedGraalCxxApi_tools_DiagnoseCannotResolve PROPERTIES TIMEOUT 120)
+
+    # NetTest gives the -X and -XX: options of its command line to the Graal isolate, which Tools creates only after
+    # them: a run with valid options, and an option that the isolate rejects (exit code 2 and the line of the
+    # specification). The stub of the SDK has no isolate to reject an option. The blocks are printed at the ticks of the
+    # wall clock, so the run takes 4 periods of 1 s: it always prints a full block after its first tick.
+    if (NOT DXFCXX_USE_DXFG_STUB)
+        add_test(NAME dxFeedGraalCxxApi_tools_NetTestIsolateArguments
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=NetTest -DARG1=p -DARG2=127.0.0.1:1
+                -DARG3=-S -DARG4=10 -DARG5=-Xmx256m -DARG6=-XX:+PrintGC -DARG7=-s -DARG8=1s -DARG9=--duration
+                -DARG10=4s -DEXPECTED_EXIT=0 "-DEXPECTED_OUTPUT=NetTestProducerSide-NetTest"
+                -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        set_tests_properties(dxFeedGraalCxxApi_tools_NetTestIsolateArguments PROPERTIES TIMEOUT 120)
+
+        add_test(NAME dxFeedGraalCxxApi_tools_NetTestIsolateRejected
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:Tools> -DARG0=NetTest -DARG1=p -DARG2=127.0.0.1:1
+                -DARG3=-S -DARG4=10 -DARG5=-Xmx256m -DARG6=-XX:+NetTestNoSuchOption -DEXPECTED_EXIT=2
+                "-DEXPECTED_OUTPUT=NetTest: the isolate rejected one of the options: -Xmx256m -XX:.NetTestNoSuchOption"
+                -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        set_tests_properties(dxFeedGraalCxxApi_tools_NetTestIsolateRejected PROPERTIES TIMEOUT 120)
+    endif ()
+
+    # The exit code is checked: the leaks of the Graal isolate at exit are suppressed, as for the other tests.
+    if (DXFCXX_SANITIZERS_ENABLED)
+        foreach (DXFC_DIAGNOSE_TEST dxFeedGraalCxxApi_tools_DiagnoseCannotConnect
+                dxFeedGraalCxxApi_tools_DiagnoseCannotResolve dxFeedGraalCxxApi_network_ToolsDiagnoseData
+                dxFeedGraalCxxApi_tools_NetTestIsolateArguments dxFeedGraalCxxApi_tools_NetTestIsolateRejected)
+            if (TEST ${DXFC_DIAGNOSE_TEST})
+                set_property(TEST ${DXFC_DIAGNOSE_TEST} APPEND PROPERTY ENVIRONMENT
+                        "UBSAN_OPTIONS=print_stacktrace=1"
+                        "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
+                        "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+            endif ()
+        endforeach ()
+    endif ()
+endif ()
+
+# The recipe samples of TROUBLESHOOTING.md, run with a time limit: RunTool.cmake checks the exit code and the output.
+# The offline ones run wherever the samples are built; the others need the local server of the network tests.
+if (DXFCXX_BUILD_SAMPLES)
+    set(DXFC_SAMPLE_TESTS)
+
+    # Is the market open at a time, the session and the holidays (the IBM schedule of the sample IPF file).
+    add_test(NAME dxFeedGraalCxxApi_samples_ScheduleSample
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ScheduleSample>
+            -DARG0=$<TARGET_FILE_DIR:ScheduleSample>/schedule.properties
+            -DARG1=$<TARGET_FILE_DIR:ScheduleSample>/sample.ipf.zip -DARG2=IBM -DARG3=2011-05-26-14:15:00-0400
+            -DEXPECTED_EXIT=0 "-DEXPECTED_OUTPUT=Trading at .*: yes" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+    add_test(NAME dxFeedGraalCxxApi_samples_ScheduleSampleUnknownSymbol
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ScheduleSample>
+            -DARG0=$<TARGET_FILE_DIR:ScheduleSample>/schedule.properties
+            -DARG1=$<TARGET_FILE_DIR:ScheduleSample>/sample.ipf.zip -DARG2=NO-SUCH-SYMBOL -DEXPECTED_EXIT=2
+            "-DEXPECTED_OUTPUT=Could not find profile for NO-SUCH-SYMBOL" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    # Instrument profiles from a file instead of the IPF service.
+    add_test(NAME dxFeedGraalCxxApi_samples_IpfLiveSample
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:IpfLiveSample>
+            -DARG0=${CMAKE_CURRENT_SOURCE_DIR}/data/ipf/option-chains.ipf -DARG1=--duration -DARG2=5 -DEXPECTED_EXIT=0
+            "-DEXPECTED_OUTPUT=Loaded [1-9][0-9]* instrument profiles" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    # The connection log of a closed local port: the error category, and no connection.
+    add_test(NAME dxFeedGraalCxxApi_samples_ReconnectSampleCannotConnect
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ReconnectSample> -DARG0=127.0.0.1:1 -DARG1=--duration
+            -DARG2=5 -DEXPECTED_EXIT=1 "-DEXPECTED_OUTPUT=CONNECT_FAILED" -P
+            ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    # An unknown scope is rejected before connecting.
+    add_test(NAME dxFeedGraalCxxApi_samples_SimpleOrderBookSampleUnknownScope
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:SimpleOrderBookSample> -DARG0=AAPL -DARG1=ntv
+            -DARG2=127.0.0.1:1 -DARG3=scope=nothing -DEXPECTED_EXIT=1 "-DEXPECTED_OUTPUT=Unknown scope: nothing" -P
+            ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    # --duration without a value is rejected, not taken for the address.
+    add_test(NAME dxFeedGraalCxxApi_samples_ReconnectSampleNoDuration
+            COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ReconnectSample> -DARG0=--duration -DEXPECTED_EXIT=1
+            "-DEXPECTED_OUTPUT=No value of --duration" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+    list(APPEND DXFC_SAMPLE_TESTS dxFeedGraalCxxApi_samples_ScheduleSample
+            dxFeedGraalCxxApi_samples_ScheduleSampleUnknownSymbol dxFeedGraalCxxApi_samples_IpfLiveSample
+            dxFeedGraalCxxApi_samples_ReconnectSampleCannotConnect
+            dxFeedGraalCxxApi_samples_SimpleOrderBookSampleUnknownScope
+            dxFeedGraalCxxApi_samples_ReconnectSampleNoDuration)
+
+    # Against the local server only: the tests expect the data of its tape.
+    if (DXFCXX_ENABLE_NETWORK_TESTS AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        set(DXFC_LOCAL_SERVER 127.0.0.1:${DXFCXX_NETWORK_TEST_PORT})
+
+        # An address list in the given order: the first address fails, the connection moves to the local server.
+        add_test(NAME dxFeedGraalCxxApi_network_ReconnectSampleFailover
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:ReconnectSample>
+                "-DARG0=127.0.0.1:1,${DXFC_LOCAL_SERVER}[connectOrder=ordered,reconnectDelay=100]" -DARG1=--duration
+                -DARG2=10 -DEXPECTED_EXIT=0 "-DEXPECTED_OUTPUT=CONNECT_FAILED" -P
+                ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+        # The history of daily candles.
+        add_test(NAME dxFeedGraalCxxApi_network_CandleSample
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:CandleSample> -DARG0=${DXFC_LOCAL_SERVER}
+                "-DARG1=AAPL{=d}" -DARG2=2024-01-01 -DARG3=--duration -DARG4=10 -DEXPECTED_EXIT=0
+                "-DEXPECTED_OUTPUT=Received [1-9][0-9]* candles" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+        # The order book of one source with the scope of each order; the filter by the scope of these orders keeps
+        # them, by another scope it drops them all. The tape has the orders of the source NTV (individual orders), not
+        # of ntv (price levels).
+        add_test(NAME dxFeedGraalCxxApi_network_SimpleOrderBookSample
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:SimpleOrderBookSample> -DARG0=AAPL -DARG1=NTV
+                -DARG2=${DXFC_LOCAL_SERVER} -DARG3=--duration -DARG4=10 -DEXPECTED_EXIT=0
+                "-DEXPECTED_OUTPUT=Scope: ORDER" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        add_test(NAME dxFeedGraalCxxApi_network_SimpleOrderBookSampleSameScope
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:SimpleOrderBookSample> -DARG0=AAPL -DARG1=NTV
+                -DARG2=${DXFC_LOCAL_SERVER} -DARG3=scope=order -DARG4=--duration -DARG5=10 -DEXPECTED_EXIT=0
+                "-DEXPECTED_OUTPUT=Scope: ORDER" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+        add_test(NAME dxFeedGraalCxxApi_network_SimpleOrderBookSampleOtherScope
+                COMMAND ${CMAKE_COMMAND} -DTOOL=$<TARGET_FILE:SimpleOrderBookSample> -DARG0=AAPL -DARG1=NTV
+                -DARG2=${DXFC_LOCAL_SERVER} -DARG3=scope=composite -DARG4=--duration -DARG5=5 -DEXPECTED_EXIT=1
+                "-DEXPECTED_OUTPUT=No orders" -P ${CMAKE_CURRENT_SOURCE_DIR}/tools/RunTool.cmake)
+
+        set(DXFC_NETWORK_SAMPLE_TESTS dxFeedGraalCxxApi_network_ReconnectSampleFailover
+                dxFeedGraalCxxApi_network_CandleSample dxFeedGraalCxxApi_network_SimpleOrderBookSample
+                dxFeedGraalCxxApi_network_SimpleOrderBookSampleSameScope
+                dxFeedGraalCxxApi_network_SimpleOrderBookSampleOtherScope)
+        set_tests_properties(${DXFC_NETWORK_SAMPLE_TESTS} PROPERTIES LABELS network FIXTURES_REQUIRED network_server)
+
+        list(APPEND DXFC_SAMPLE_TESTS ${DXFC_NETWORK_SAMPLE_TESTS})
+    endif ()
+
+    set_tests_properties(${DXFC_SAMPLE_TESTS} PROPERTIES TIMEOUT 120)
+
+    # The exit code is checked: the leaks of the Graal isolate at exit are suppressed, as for the other tests.
+    if (DXFCXX_SANITIZERS_ENABLED)
+        set_property(TEST ${DXFC_SAMPLE_TESTS} APPEND PROPERTY ENVIRONMENT
+                "UBSAN_OPTIONS=print_stacktrace=1"
+                "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
+                "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+    endif ()
+endif ()
 
 # Sanitizer canaries: a deliberately defective LIBRARY function must produce the report of each active sanitizer.
 # They fail when a sanitizer is silently not applied, or when the library itself is not instrumented.
@@ -167,11 +475,10 @@ if (DXFCXX_SANITIZERS_ENABLED)
 
     if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
         target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx)
-        target_compile_definitions(${DXFC_CANARY_TARGET} PRIVATE DXFCPP_USE_DLLS)
     else ()
         target_link_libraries(${DXFC_CANARY_TARGET} PRIVATE dxfcxx::static)
 
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND DXFCXX_LINK_STATIC_RUNTIME)
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
             set_target_properties(${DXFC_CANARY_TARGET} PROPERTIES MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
         endif ()
     endif ()
@@ -204,12 +511,238 @@ if (DXFCXX_SANITIZERS_ENABLED)
     endif ()
 endif ()
 
+# The library constants read from the global initializers of a user translation unit, with each kind of linking.
+# The shared variant is not built with the static C runtime: the library and the test would have separate heaps. It
+# uses the internal Isolate, so it is built only when the shared library exports the internals (DXFCXX_EXPORT_INTERNALS,
+# the dynamic-link-tests CI jobs). The static_nograal variant reads only the constants that do not need Java and checks
+# that the Graal isolate is not created.
+set(DXFC_STATIC_INIT_VARIANTS static static_nograal)
+
+if (DXFCXX_EXPORT_INTERNALS AND NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+    list(APPEND DXFC_STATIC_INIT_VARIANTS shared)
+endif ()
+
+foreach (DXFC_STATIC_INIT_VARIANT IN LISTS DXFC_STATIC_INIT_VARIANTS)
+    set(DXFC_STATIC_INIT_TARGET dxFeedGraalCxxApi_StaticInit_${DXFC_STATIC_INIT_VARIANT})
+    add_executable(${DXFC_STATIC_INIT_TARGET} static-init/StaticInitTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_STATIC_INIT_TARGET})
+    target_include_directories(${DXFC_STATIC_INIT_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+
+    if (DXFC_STATIC_INIT_VARIANT STREQUAL "shared")
+        target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx)
+    else ()
+        target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE dxfcxx::static)
+
+        if (DXFC_STATIC_INIT_VARIANT STREQUAL "static_nograal")
+            target_compile_definitions(${DXFC_STATIC_INIT_TARGET} PRIVATE DXFC_STATIC_INIT_NO_GRAAL)
+        endif ()
+
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    target_link_libraries(${DXFC_STATIC_INIT_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+    add_test(NAME ${DXFC_STATIC_INIT_TARGET} COMMAND ${DXFC_STATIC_INIT_TARGET})
+    # The process exits after it used the Graal isolate: a hang at exit fails the test.
+    set_tests_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES TIMEOUT 60)
+
+    if (DXFCXX_SANITIZERS_ENABLED)
+        set_tests_properties(${DXFC_STATIC_INIT_TARGET} PROPERTIES ENVIRONMENT
+                "ASAN_OPTIONS=check_initialization_order=1:strict_init_order=1;UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp;LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+    endif ()
+endforeach ()
+
+# The process exits while the Graal threads are running, with each kind of linking; a hang at exit fails the test by its
+# timeout. The shared variant is built as above: without the static C runtime and with the internals exported.
+set(DXFC_EXIT_VARIANTS static)
+
+if (DXFCXX_EXPORT_INTERNALS AND NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+    list(APPEND DXFC_EXIT_VARIANTS shared)
+endif ()
+
+foreach (DXFC_EXIT_VARIANT IN LISTS DXFC_EXIT_VARIANTS)
+    set(DXFC_EXIT_TARGET dxFeedGraalCxxApi_Exit_${DXFC_EXIT_VARIANT})
+    set(DXFC_EXIT_SCENARIOS endpoint ipf-live ipf-live-close shutdown shutdown-callbacks-in-progress
+            shutdown-from-listener error-manager release-after-shutdown detach-after-shutdown versions-once
+            versions-get-instance versions-default-handler versions-failed-creation teardown teardown-twice
+            teardown-not-created teardown-after-shutdown teardown-other-thread teardown-release-thread
+            teardown-from-listener teardown-live-ipf)
+
+    # The exit handler of a MinGW DLL runs after the statics of the executable are destroyed, so the checks of the
+    # callbacks from such a static do not apply to it.
+    if (DXFC_EXIT_VARIANT STREQUAL "static" OR NOT WIN32 OR MSVC)
+        list(APPEND DXFC_EXIT_SCENARIOS late-callback callback-in-progress)
+    endif ()
+
+    # The canary of the teardown scenarios needs LeakSanitizer.
+    if (DXFC_TEST_TEAR_DOWN_ISOLATE)
+        list(APPEND DXFC_EXIT_SCENARIOS teardown-leak-canary)
+    endif ()
+    add_executable(${DXFC_EXIT_TARGET} exit/ExitTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_EXIT_TARGET})
+    target_include_directories(${DXFC_EXIT_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+
+    if (DXFC_EXIT_VARIANT STREQUAL "shared")
+        target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE dxfcxx)
+    else ()
+        target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE dxfcxx::static)
+
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_EXIT_TARGET} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    if (WIN32)
+        target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE ws2_32)
+    endif ()
+
+    target_link_libraries(${DXFC_EXIT_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_EXIT_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+    # The version of the C++ API that the line of the versions names.
+    target_compile_definitions(${DXFC_EXIT_TARGET} PRIVATE DXFC_TEST_CXX_API_VERSION="${DXFCXX_VERSION}")
+
+    foreach (DXFC_EXIT_SCENARIO IN LISTS DXFC_EXIT_SCENARIOS)
+        set(DXFC_EXIT_TEST ${DXFC_EXIT_TARGET}_${DXFC_EXIT_SCENARIO})
+        add_test(NAME ${DXFC_EXIT_TEST} COMMAND ${DXFC_EXIT_TARGET} ${DXFC_EXIT_SCENARIO})
+        set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES TIMEOUT 60)
+
+        # The default handler of ErrorManager writes the line of the versions to stderr. A failure of the scenario
+        # prints "Exception:" or a reason without the line.
+        if (DXFC_EXIT_SCENARIO STREQUAL "versions-default-handler")
+            set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES
+                    PASS_REGULAR_EXPRESSION "\\[dxfcpp\\] INFO #[0-9]+ DXEndpoint: dxFeed Graal C\\+\\+ API "
+                    FAIL_REGULAR_EXPRESSION "Exception:")
+        endif ()
+
+        # LeakSanitizer reports the leak of the listener with the frames of the SDK library in its stack: without the
+        # suppression of the SDK library, and with LeakSanitizer active. The exit code of the report is ignored.
+        if (DXFC_EXIT_SCENARIO STREQUAL "teardown-leak-canary")
+            set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES
+                    PASS_REGULAR_EXPRESSION "LeakSanitizer: detected memory leaks.*libDxFeedGraalNativeSdk"
+                    FAIL_REGULAR_EXPRESSION "Exception:;Expected ")
+        endif ()
+
+        # The teardown scenarios tear the isolate down and check that LeakSanitizer reports nothing without the
+        # suppression of the SDK library.
+        if (DXFC_TEST_TEAR_DOWN_ISOLATE AND DXFC_EXIT_SCENARIO MATCHES "^teardown")
+            set(DXFC_EXIT_LSAN_OPTIONS "${DXFC_LSAN_TEAR_DOWN_OPTIONS}")
+        else ()
+            set(DXFC_EXIT_LSAN_OPTIONS "${DXFC_LSAN_ISOLATE_ALIVE_OPTIONS}")
+        endif ()
+
+        if (DXFCXX_SANITIZERS_ENABLED)
+            set_tests_properties(${DXFC_EXIT_TEST} PROPERTIES ENVIRONMENT
+                    "UBSAN_OPTIONS=print_stacktrace=1;TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp;${DXFC_EXIT_LSAN_OPTIONS}")
+        endif ()
+    endforeach ()
+endforeach ()
+
+# A test of a scenario: the environment of ctest has no DXFCPP_ISOLATE_ARGUMENTS, then the optional third argument
+# (the value) is set. The unset goes first, the set after it.
+function (dxfc_add_isolate_args_test target scenario)
+    set(env_arguments --unset=DXFCPP_ISOLATE_ARGUMENTS)
+
+    if (ARGC GREATER 2)
+        list(APPEND env_arguments "DXFCPP_ISOLATE_ARGUMENTS=${ARGV2}")
+    endif ()
+
+    set(test ${target}_${scenario})
+    add_test(NAME ${test} COMMAND ${CMAKE_COMMAND} -E env ${env_arguments} $<TARGET_FILE:${target}> ${scenario})
+    set_tests_properties(${test} PROPERTIES TIMEOUT 60)
+
+    if (DXFCXX_SANITIZERS_ENABLED)
+        set_property(TEST ${test} APPEND PROPERTY ENVIRONMENT
+                "UBSAN_OPTIONS=print_stacktrace=1"
+                "TSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/tsan.supp"
+                "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/sanitizers/lsan.supp")
+    endif ()
+endfunction ()
+
+# The arguments of the Graal isolate, with each kind of linking, as above. The arguments must be given before the
+# isolate is created, so each scenario is a separate process. DXFCPP_ISOLATE_ARGUMENTS of the environment that runs ctest
+# is removed: a scenario that does not check it must not see it.
+set(DXFC_ISOLATE_ARGS_VARIANTS static)
+
+if (DXFCXX_EXPORT_INTERNALS AND NOT (MSVC AND DXFCXX_LINK_STATIC_RUNTIME))
+    list(APPEND DXFC_ISOLATE_ARGS_VARIANTS shared)
+endif ()
+
+foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
+    set(DXFC_ISOLATE_ARGS_TARGET dxFeedGraalCxxApi_IsolateArgs_${DXFC_ISOLATE_ARGS_VARIANT})
+    set(DXFC_ISOLATE_ARGS_SCENARIOS args-visible setter-twice setter-empty setter-after-creation setter-nul
+            setter-concurrent env-non-ascii bad-value unknown-option repeat-same concurrent-first setter-after-failure
+            system-property error-shutdown)
+
+    # SIGPIPE: the handlers of the signals of the isolate are for Linux and macOS.
+    if (NOT WIN32)
+        list(APPEND DXFC_ISOLATE_ARGS_SCENARIOS signals signals-disabled)
+    endif ()
+    add_executable(${DXFC_ISOLATE_ARGS_TARGET} isolate-args/IsolateArgsTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_ISOLATE_ARGS_TARGET})
+    target_include_directories(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+
+    if (DXFC_ISOLATE_ARGS_VARIANT STREQUAL "shared")
+        target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE dxfcxx)
+    else ()
+        target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE dxfcxx::static)
+
+        if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+            set_target_properties(${DXFC_ISOLATE_ARGS_TARGET} PROPERTIES
+                    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+        endif ()
+    endif ()
+
+    target_link_libraries(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE bits::bits dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_ISOLATE_ARGS_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+
+    foreach (DXFC_ISOLATE_ARGS_SCENARIO IN LISTS DXFC_ISOLATE_ARGS_SCENARIOS)
+        dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} ${DXFC_ISOLATE_ARGS_SCENARIO})
+    endforeach ()
+
+    # The scenarios that check the variable: the value is exactly what the process must receive (the scenario checks it).
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-applied "-Dmdapi428.e=env")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-wins "-Dmdapi428.p=env")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-whitespace "  \t  ")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-quoted "-Dmdapi428.q=\"a b\"")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-unmatched-quote "-Dp=\"a")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-argfile "@args.txt")
+    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} c-api "-Xmx64q")
+endforeach ()
+
+# The API headers included after and before windows.h, without NOMINMAX and WIN32_LEAN_AND_MEAN: the macros of the user
+# stay defined, the names they hide are reachable.
+if (WIN32)
+    set(DXFC_WINDOWS_MACROS_TARGET dxFeedGraalCxxApi_WindowsMacros)
+    add_executable(${DXFC_WINDOWS_MACROS_TARGET}
+            windows-macros/WindowsMacrosTest.cpp windows-macros/WindowsMacrosLateTest.cpp)
+    list(APPEND DXFC_TEST_TARGETS ${DXFC_WINDOWS_MACROS_TARGET})
+    target_include_directories(${DXFC_WINDOWS_MACROS_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
+    target_link_libraries(${DXFC_WINDOWS_MACROS_TARGET} PRIVATE dxfcxx::static)
+
+    if (MSVC AND DXFCXX_LINK_STATIC_RUNTIME)
+        set_target_properties(${DXFC_WINDOWS_MACROS_TARGET} PROPERTIES
+                MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    endif ()
+
+    target_link_libraries(${DXFC_WINDOWS_MACROS_TARGET} PRIVATE dxfcxx_mingw_debug_link_options_interface dxfcxx_warnings)
+    set_target_properties(${DXFC_WINDOWS_MACROS_TARGET} PROPERTIES CXX_STANDARD 20 CXX_EXTENSIONS OFF)
+    add_test(NAME ${DXFC_WINDOWS_MACROS_TARGET} COMMAND ${DXFC_WINDOWS_MACROS_TARGET})
+    set_tests_properties(${DXFC_WINDOWS_MACROS_TARGET} PROPERTIES TIMEOUT 60)
+endif ()
+
+# Calls that must not compile (see compile-fail/CMakeLists.txt).
+add_subdirectory(compile-fail)
+
 # The libraries that the tests and the canary load, copied next to them once (see dxfcxx_copy_runtime).
 set(DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx::graal>)
 set(DXFC_TEST_RUNTIME_DEPENDS "")
 
-if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS)
-    list(APPEND DXFC_TEST_RUNTIME_FILES $<TARGET_FILE:dxfcxx>)
+if (DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS OR "shared" IN_LIST DXFC_STATIC_INIT_VARIANTS)
+    list(APPEND DXFC_TEST_RUNTIME_FILES ${DXFCXX_SHARED_LIBRARY_RUNTIME_FILE})
     list(APPEND DXFC_TEST_RUNTIME_DEPENDS dxfcxx)
 endif ()
 

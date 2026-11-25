@@ -4,8 +4,11 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/OtcMarketsOrder.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -19,7 +22,7 @@ void OtcMarketsOrder::fillData(void *graalNative) noexcept {
 
     Order::fillData(graalNative);
 
-    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_v4_otc_markets_order_t *>(graalNative);
 
     otcMarketsOrderData_ = {
         .quoteAccessPayment = graalOtcMarketsOrder->quote_access_payment,
@@ -27,14 +30,14 @@ void OtcMarketsOrder::fillData(void *graalNative) noexcept {
     };
 }
 
-void OtcMarketsOrder::fillGraalData(void *graalNative) const noexcept {
+void OtcMarketsOrder::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     Order::fillGraalData(graalNative);
 
-    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_v4_otc_markets_order_t *>(graalNative);
 
     graalOtcMarketsOrder->order_base.order_base.market_event.event_type.clazz = DXFG_EVENT_OTC_MARKETS_ORDER;
     graalOtcMarketsOrder->quote_access_payment = otcMarketsOrderData_.quoteAccessPayment;
@@ -46,10 +49,10 @@ OtcMarketsOrder::Ptr OtcMarketsOrder::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create OtcMarketsOrder. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OTC_MARKETS_ORDER) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OTC_MARKETS_ORDER) {
         throw InvalidArgumentException(
             fmt::format("Unable to create OtcMarketsOrder. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_OTC_MARKETS_ORDER)));
     }
 
@@ -66,11 +69,12 @@ void *OtcMarketsOrder::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOtcMarketsOrder = new dxfg_otc_markets_order_t{};
-
-    fillGraalData(graalOtcMarketsOrder);
-
-    return graalOtcMarketsOrder;
+    return newGraalEvent<dxfg_v4_otc_markets_order_t>(
+        DXFG_EVENT_OTC_MARKETS_ORDER,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void OtcMarketsOrder::freeGraal(void *graalNative) {
@@ -78,14 +82,14 @@ void OtcMarketsOrder::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OTC_MARKETS_ORDER) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OTC_MARKETS_ORDER) {
         throw InvalidArgumentException(
             fmt::format("Unable to free OtcMarketsOrder's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_OTC_MARKETS_ORDER)));
     }
 
-    const auto graalOtcMarketsOrder = static_cast<dxfg_otc_markets_order_t *>(graalNative);
+    const auto graalOtcMarketsOrder = static_cast<dxfg_v4_otc_markets_order_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -103,10 +107,10 @@ void OtcMarketsOrder::assign(std::shared_ptr<EventType> event) {
 OtcMarketsOrder::OtcMarketsOrder() noexcept {
 }
 
-OtcMarketsOrder::OtcMarketsOrder(const StringLike &eventSymbol) noexcept : Order(eventSymbol) {
+OtcMarketsOrder::OtcMarketsOrder(StringParam eventSymbol) : Order(eventSymbol) {
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withEventSymbol(const StringLike &eventSymbol) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withEventSymbol(StringParam eventSymbol) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withEventSymbol(eventSymbol));
 }
 
@@ -126,7 +130,7 @@ OtcMarketsOrder &OtcMarketsOrder::withEventFlags(const EventFlagsMask &eventFlag
     return dynamic_cast<OtcMarketsOrder &>(Order::withEventFlags(eventFlags));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withIndex(std::int64_t index) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withIndex(std::int64_t index) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withIndex(index));
 }
 
@@ -190,11 +194,11 @@ OtcMarketsOrder &OtcMarketsOrder::withTradeSize(double tradeSize) noexcept {
     return dynamic_cast<OtcMarketsOrder &>(Order::withTradeSize(tradeSize));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withExchangeCode(char exchangeCode) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withExchangeCode(char exchangeCode) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withExchangeCode(exchangeCode));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withExchangeCode(std::int16_t exchangeCode) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withExchangeCode(std::int16_t exchangeCode) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withExchangeCode(exchangeCode));
 }
 
@@ -206,7 +210,7 @@ OtcMarketsOrder &OtcMarketsOrder::withScope(const Scope &scope) noexcept {
     return dynamic_cast<OtcMarketsOrder &>(Order::withScope(scope));
 }
 
-OtcMarketsOrder &OtcMarketsOrder::withMarketMaker(const StringLike &marketMaker) noexcept {
+OtcMarketsOrder &OtcMarketsOrder::withMarketMaker(StringParam marketMaker) {
     return dynamic_cast<OtcMarketsOrder &>(Order::withMarketMaker(marketMaker));
 }
 
@@ -331,10 +335,11 @@ OtcMarketsOrder &OtcMarketsOrder::withNmsConditional(bool nmsConditional) noexce
 }
 
 std::string OtcMarketsOrder::toString() const {
-    return fmt::format("OtcMarketsOrder{{{}, marketMaker={}, QAP={}, open={}, unsolicited={}, priceType={}, "
+    return fmt::format("OtcMarketsOrder{{{}, marketMaker='{}', QAP={}, open={}, unsolicited={}, priceType={}, "
                        "saturated={}, autoEx={}, NMS={}}}",
-                       baseFieldsToString(), getMarketMaker(), getQuoteAccessPayment(), isOpen(), isUnsolicited(),
-                       getOtcMarketsPriceType().toString(), isSaturated(), isAutoExecution(), isNmsConditional());
+                       baseFieldsToString(), getMarketMakerOpt().value_or("null"), getQuoteAccessPayment(), isOpen(),
+                       isUnsolicited(), getOtcMarketsPriceType().toString(), isSaturated(), isAutoExecution(),
+                       isNmsConditional());
 }
 
 DXFCPP_END_NAMESPACE

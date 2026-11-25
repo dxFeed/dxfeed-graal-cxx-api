@@ -332,6 +332,11 @@ void checkEvents(const std::vector<std::shared_ptr<EventType>> &expected,
             key += "#" + order->getSource().name();
         }
 
+        // Not an order, but also published per source (the record OrderImbalance#NTV).
+        if (const auto orderImbalance = event->sharedAs<OrderImbalance>()) {
+            key += "#" + orderImbalance->getSource().name();
+        }
+
         if (const auto candle = event->sharedAs<Candle>()) {
             return key + "@" + candle->getEventSymbol().toString();
         }

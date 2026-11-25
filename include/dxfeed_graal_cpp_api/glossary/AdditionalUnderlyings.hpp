@@ -3,19 +3,28 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/Concepts.hpp"
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 
+#include <concepts>
+#include <cstddef>
 #include <functional>
-#include <mutex>
+#include <iterator>
+#include <map>
+#include <memory>
 #include <ostream>
 #include <string>
+#include <string_view>
+#include <type_traits>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 /**
  * \addtogroup dxfcpp_glossary
@@ -41,12 +50,11 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     using Unique = std::unique_ptr<AdditionalUnderlyings>;
 
     private:
-    mutable JavaObjectHandle<AdditionalUnderlyings> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer_;
+    LazyJavaObjectHandle<AdditionalUnderlyings> handle_;
 
-    void init() const;
+    const JavaObjectHandle<AdditionalUnderlyings> &getHandle() const {
+        return handle_.get();
+    }
 
     static JavaObjectHandle<AdditionalUnderlyings>
     valueOfImpl(const std::vector<std::pair<const char *, double>> &mapLikeEntries);
@@ -54,12 +62,13 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
     public:
     /**
      * Empty additional underlyings - it has empty text and empty map.
+     *
+     * It is created at the first call, so it can be used by the initializers of global variables.
      */
-    static const Ptr EMPTY;
+    static const Ptr &EMPTY();
 
     // lazy c-tor
-    AdditionalUnderlyings(LockExternalConstructionTag,
-                          std::function<JavaObjectHandle<AdditionalUnderlyings>()> initializer);
+    AdditionalUnderlyings(LockExternalConstructionTag, JavaObjectHandle<AdditionalUnderlyings> (*initializer)());
 
     AdditionalUnderlyings(LockExternalConstructionTag, JavaObjectHandle<AdditionalUnderlyings> &&handle);
 
@@ -72,7 +81,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param text The textual representation.
      * @throws JavaException("IllegalArgumentException") if text uses wrong format or contains invalid values.
      */
-    static Ptr valueOf(const StringLike &text);
+    static Ptr valueOf(StringParam text);
 
     /**
      * Returns an instance of additional underlyings for specified internal representation.
@@ -86,7 +95,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @throws JavaException("IllegalArgumentException") if data contains invalid values.
      */
     template <typename MapLikeType>
-        requires(!std::convertible_to<MapLikeType, StringLike>)
+        requires(!std::convertible_to<MapLikeType, StringParam>)
     static Ptr valueOf(const MapLikeType &map);
 
     /**
@@ -98,7 +107,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param symbol The underlying symbol.
      * @return SPC by the text and symbol.
      */
-    static double getSPC(const StringLike &text, const StringLike &symbol);
+    static double getSPC(StringParam text, StringParam symbol);
 
     /**
      * Returns textual representation of additional underlyings in the format:
@@ -129,7 +138,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
      * @param symbol The underlying symbol.
      * @return The SPC for the symbol.
      */
-    double getSPC(const StringLike &symbol) const;
+    double getSPC(StringParam symbol) const;
 
     /**
      * Returns `true` if this object is equal to `other` object
@@ -171,7 +180,7 @@ struct DXFCPP_EXPORT AdditionalUnderlyings : RequireMakeShared<AdditionalUnderly
 };
 
 template <typename MapLikeType>
-    requires(!std::convertible_to<MapLikeType, StringLike>)
+    requires(!std::convertible_to<MapLikeType, StringParam>)
 AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map) {
     static_assert(MapLike<MapLikeType>, "AdditionalUnderlyings::valueOf(): argument must be a map-like container "
                                         "(e.g. std::map, std::unordered_map, QMap, or std::vector<std::pair<K, V>>)");
@@ -207,7 +216,7 @@ AdditionalUnderlyings::Ptr AdditionalUnderlyings::valueOf(const MapLikeType &map
     } else {
         static_assert(
             std::is_convertible_v<KeyType, std::string_view> || requires { KeyType{}.toStdString(); },
-            "AdditionalUnderlyings::valueOf(): unsupported key type — must be convertible to std::string_view or "
+            "AdditionalUnderlyings::valueOf(): unsupported key type - must be convertible to std::string_view or "
             "provide .toStdString()");
 
         return {};

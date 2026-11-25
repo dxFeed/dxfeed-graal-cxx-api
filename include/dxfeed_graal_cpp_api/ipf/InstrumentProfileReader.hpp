@@ -3,17 +3,17 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringParam.hpp"
 #include "../entity/SharedEntity.hpp"
-#include "../internal/Common.hpp"
-#include "../internal/Id.hpp"
-#include "../internal/JavaObjectHandle.hpp"
 #include "./InstrumentProfile.hpp"
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -38,12 +38,11 @@ struct AuthToken;
  * the strategy for missing "##COMPLETE" tag when reading IPF, possible values are:
  * <ul>
  *     <li>`warn` - show warning in the log (default)</li>
- *     <li>`error - throw exception (future default)</li>
+ *     <li>`error` - throw exception (future default)</li>
  *     <li>`ignore` - do nothing (for backward compatibility)</li>
  * </ul>
  */
 class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
-    Id<InstrumentProfileReader> id_;
     JavaObjectHandle<InstrumentProfileReader> handle_{};
 
     InstrumentProfileReader();
@@ -77,7 +76,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * Converts a specified string address specification into an URL that will be read by
      * InstrumentProfileReader::readFromFile() method.
      */
-    static std::string resolveSourceURL(const StringLike &address);
+    static std::string resolveSourceURL(StringParam address);
 
     /**
      * Reads and returns instrument profiles from specified file.
@@ -87,14 +86,14 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * In other cases data considered uncompressed and will be parsed as is.
      *
      * <p>Authentication information can be supplied to this method as part of URL user info
-     * like {@code "http://user:password@host:port/path/file.ipf"}.
+     * like `"http://user:password@host:port/path/file.ipf"`.
      *
-     * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
+     * <p>This operation updates @ref getLastModified() "lastModified" and @ref wasComplete() "wasComplete".
      *
      * @param address URL of file to read from
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(StringParam address) const;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified basic user and password
@@ -105,18 +104,17 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * In other cases data considered uncompressed and will be parsed as is.
      *
      * <p>Specified user and password take precedence over authentication information that is supplied to this method
-     * as part of URL user info like {@code "http://user:password@host:port/path/file.ipf"}.
+     * as part of URL user info like `"http://user:password@host:port/path/file.ipf"`.
      *
-     * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
+     * <p>This operation updates @ref getLastModified() "lastModified" and @ref wasComplete() "wasComplete".
      *
      * @param address URL of file to read from
      * @param user the user name
      * @param password the password
      * @return list of instrument profiles
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address,
-                                                                 const StringLike &user,
-                                                                 const StringLike &password) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(StringParam address, StringParam user,
+                                                                 StringParam password) const;
 
     /**
      * Reads and returns instrument profiles from specified address with a specified token credentials.
@@ -126,9 +124,9 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * In other cases data considered uncompressed and will be parsed as is.
      *
      * <p>Specified token take precedence over authentication information that is supplied to this method
-     * as part of URL user info like {@code "http://user:password@host:port/path/file.ipf"}.
+     * as part of URL user info like `"http://user:password@host:port/path/file.ipf"`.
      *
-     * <p>This operation updates @ref ::getLastModified() "lastModified" and @ref ::wasComplete() "wasComplete".
+     * <p>This operation updates @ref getLastModified() "lastModified" and @ref wasComplete() "wasComplete".
      *
      * @param address URL of file to read from
      * @param token the token
@@ -137,8 +135,7 @@ class DXFCPP_EXPORT InstrumentProfileReader final : public SharedEntity {
      * Profile Format
      * @throws JavaException("IOException") If an I/O error occurs
      */
-    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(const StringLike &address,
-                                                                 const AuthToken &token) const;
+    std::vector<std::shared_ptr<InstrumentProfile>> readFromFile(StringParam address, const AuthToken &token) const;
 };
 
 DXFCPP_END_NAMESPACE

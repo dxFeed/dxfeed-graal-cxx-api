@@ -118,6 +118,24 @@ struct LocalHubFixture {
     }
 };
 
+/// Turns the output of ErrorManager off and clears its journal for a test, then restores the defaults.
+struct ErrorManagerGuard {
+    ErrorManagerGuard() {
+        ErrorManager::setHandler({});
+        ErrorManager::setCapacity(ErrorManager::DEFAULT_CAPACITY);
+        ErrorManager::clearErrors();
+    }
+
+    ~ErrorManagerGuard() {
+        ErrorManager::resetHandler();
+        ErrorManager::setCapacity(ErrorManager::DEFAULT_CAPACITY);
+        ErrorManager::clearErrors();
+    }
+
+    ErrorManagerGuard(const ErrorManagerGuard &) = delete;
+    ErrorManagerGuard &operator=(const ErrorManagerGuard &) = delete;
+};
+
 } // namespace dxfcpp::test
 
 // Lets doctest print endpoint states in failed assertions (MSVC does not print scoped enums otherwise).

@@ -3,34 +3,28 @@
 
 #include "../../include/dxfeed_graal_cpp_api/glossary/CFI.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/glossary/IsolatedCFI.hpp"
+#include "../isolated/glossary/IsolatedCFI.hpp"
+#include "../internal/Common.hpp"
 
 DXFCPP_BEGIN_NAMESPACE
 
-void CFI::init() const {
-    if (!initialized_) {
-        handle_ = initializer_();
-        initialized_ = true;
-    }
+const CFI::Ptr &CFI::EMPTY() {
+    static const Ptr value = createShared(&isolated::glossary::IsolatedCFI::EMPTY);
+
+    return value;
 }
 
-const CFI::Ptr CFI::EMPTY(createShared([] {
-    return isolated::glossary::IsolatedCFI::EMPTY();
-}));
-
-CFI::CFI(LockExternalConstructionTag, std::function<JavaObjectHandle<CFI>()> initializer)
-    : initializer_(std::move(initializer)) {
+CFI::CFI(LockExternalConstructionTag, JavaObjectHandle<CFI> (*initializer)()) : handle_(initializer) {
 }
 
 CFI::CFI(LockExternalConstructionTag, JavaObjectHandle<CFI> &&handle) : handle_(std::move(handle)) {
-    initialized_ = true;
 }
 
 CFI::~CFI() noexcept {
 }
 
-CFI::Ptr CFI::valueOf(const StringLike &code) {
-    return createShared(isolated::glossary::IsolatedCFI::valueOf(code));
+CFI::Ptr CFI::valueOf(StringParam code) {
+    return createShared(isolated::glossary::IsolatedCFI::valueOf(code.view()));
 }
 
 CFI::Ptr CFI::valueOf(std::int32_t intCode) {
@@ -38,27 +32,15 @@ CFI::Ptr CFI::valueOf(std::int32_t intCode) {
 }
 
 std::string CFI::getCode() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::getCode(handle_);
+    return isolated::glossary::IsolatedCFI::getCode(getHandle());
 }
 
 std::int32_t CFI::getIntCode() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::getIntCode(handle_);
+    return isolated::glossary::IsolatedCFI::getIntCode(getHandle());
 }
 
 std::int16_t CFI::getCategory() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::getCategory(handle_);
+    return isolated::glossary::IsolatedCFI::getCategory(getHandle());
 }
 
 char CFI::getCategoryChar() const {
@@ -68,11 +50,7 @@ char CFI::getCategoryChar() const {
 }
 
 std::int16_t CFI::getGroup() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::getGroup(handle_);
+    return isolated::glossary::IsolatedCFI::getGroup(getHandle());
 }
 
 char CFI::getGroupChar() const {
@@ -82,59 +60,31 @@ char CFI::getGroupChar() const {
 }
 
 bool CFI::isEquity() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::isEquity(handle_);
+    return isolated::glossary::IsolatedCFI::isEquity(getHandle());
 }
 
 bool CFI::isDebtInstrument() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::isDebtInstrument(handle_);
+    return isolated::glossary::IsolatedCFI::isDebtInstrument(getHandle());
 }
 
 bool CFI::isEntitlement() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::isEntitlement(handle_);
+    return isolated::glossary::IsolatedCFI::isEntitlement(getHandle());
 }
 
 bool CFI::isOption() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::isOption(handle_);
+    return isolated::glossary::IsolatedCFI::isOption(getHandle());
 }
 
 bool CFI::isFuture() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::isFuture(handle_);
+    return isolated::glossary::IsolatedCFI::isFuture(getHandle());
 }
 
 bool CFI::isOther() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::isOther(handle_);
+    return isolated::glossary::IsolatedCFI::isOther(getHandle());
 }
 
 std::vector<std::shared_ptr<CFI::Value>> CFI::decipher() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    auto values = isolated::glossary::IsolatedCFI::decipher(handle_);
+    auto values = isolated::glossary::IsolatedCFI::decipher(getHandle());
     std::vector<std::shared_ptr<Value>> result{};
 
     result.reserve(values.size());
@@ -149,40 +99,27 @@ std::vector<std::shared_ptr<CFI::Value>> CFI::decipher() const {
 }
 
 std::string CFI::describe() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return isolated::glossary::IsolatedCFI::describe(handle_);
+    return isolated::glossary::IsolatedCFI::describe(getHandle());
 }
 
 bool CFI::operator==(const CFI &other) const {
-    std::scoped_lock lock(mtx_, other.mtx_);
+    if (this == &other) {
+        return true;
+    }
 
-    init();
-    other.init();
-
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(getHandle().get(), other.getHandle().get());
 }
 
 std::size_t CFI::hashCode() const noexcept {
     try {
-        std::lock_guard lock(mtx_);
-
-        init();
-
-        return JavaObject::hashCode(handle_.get());
+        return JavaObject::hashCode(getHandle().get());
     } catch (...) {
         return 0;
     }
 }
 
 std::string CFI::toString() const {
-    std::lock_guard lock(mtx_);
-
-    init();
-
-    return JavaObject::toString(handle_.get());
+    return JavaObject::toString(getHandle().get());
 }
 
 CFI::Attribute::Attribute(LockExternalConstructionTag, JavaObjectHandle<Attribute> &&handle)
@@ -216,7 +153,7 @@ std::vector<std::shared_ptr<CFI::Value>> CFI::Attribute::getValues() const {
 }
 
 bool CFI::Attribute::operator==(const Attribute &other) const {
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 std::size_t CFI::Attribute::hashCode() const noexcept {
@@ -256,7 +193,7 @@ std::string CFI::Value::getDescription() const {
 }
 
 bool CFI::Value::operator==(const Value &other) const {
-    return JavaObject::equals(handle_.get(), other.handle_.get()) == 0;
+    return JavaObject::equals(handle_.get(), other.handle_.get());
 }
 
 std::size_t CFI::Value::hashCode() const noexcept {

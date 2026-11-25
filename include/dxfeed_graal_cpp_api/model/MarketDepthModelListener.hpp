@@ -3,13 +3,14 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/Concepts.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/market/OrderBase.hpp"
-#include "../internal/Handler.hpp"
+#include "../util/Handler.hpp"
 
 #include <memory>
 #include <mutex>
@@ -40,7 +41,7 @@ struct /* DXFCPP_EXPORT */ MarketDepthModelListener final : RequireMakeShared<Ma
                            const std::vector<std::shared_ptr<O>> & /* sell */);
 
     protected:
-    SimpleHandler<Signature> onEventsReceived_{};
+    SimpleHandler<Signature> onEventsReceived_{"MarketDepthModelListener"};
     mutable std::recursive_mutex mutex_{};
 
     public:

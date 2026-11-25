@@ -5,11 +5,14 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/TimeAndSale.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../isolated/IsolatedCommon.hpp"
+#include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
 #include <cstring>
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <memory>
 #include <utility>
@@ -25,7 +28,7 @@ void OptionSale::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalOptionSale = static_cast<dxfg_option_sale_t *>(graalNative);
+    const auto graalOptionSale = static_cast<dxfg_v4_option_sale_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalOptionSale->event_flags,
@@ -46,14 +49,14 @@ void OptionSale::fillData(void *graalNative) noexcept {
     };
 }
 
-void OptionSale::fillGraalData(void *graalNative) const noexcept {
+void OptionSale::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalOptionSale = static_cast<dxfg_option_sale_t *>(graalNative);
+    const auto graalOptionSale = static_cast<dxfg_v4_option_sale_t *>(graalNative);
 
     graalOptionSale->market_event.event_type.clazz = DXFG_EVENT_OPTION_SALE;
     graalOptionSale->event_flags = data_.eventFlags;
@@ -65,12 +68,13 @@ void OptionSale::fillGraalData(void *graalNative) const noexcept {
     graalOptionSale->size = data_.size;
     graalOptionSale->bid_price = data_.bidPrice;
     graalOptionSale->ask_price = data_.askPrice;
-    graalOptionSale->exchange_sale_conditions = createCString(data_.exchangeSaleConditions);
+    graalOptionSale->exchange_sale_conditions =
+        createCString(data_.exchangeSaleConditions, "OptionSale::exchangeSaleConditions");
     graalOptionSale->flags = data_.flags;
     graalOptionSale->underlying_price = data_.underlyingPrice;
     graalOptionSale->volatility = data_.volatility;
     graalOptionSale->delta = data_.delta;
-    graalOptionSale->option_symbol = createCString(data_.optionSymbol);
+    graalOptionSale->option_symbol = createCString(data_.optionSymbol, "OptionSale::optionSymbol");
 }
 
 void OptionSale::freeGraalData(void *graalNative) noexcept {
@@ -80,7 +84,7 @@ void OptionSale::freeGraalData(void *graalNative) noexcept {
 
     MarketEvent::freeGraalData(graalNative);
 
-    const auto graalOptionSale = static_cast<dxfg_option_sale_t *>(graalNative);
+    const auto graalOptionSale = static_cast<dxfg_v4_option_sale_t *>(graalNative);
 
     delete[] graalOptionSale->exchange_sale_conditions;
     delete[] graalOptionSale->option_symbol;
@@ -91,8 +95,8 @@ std::shared_ptr<OptionSale> OptionSale::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create OptionSale. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OPTION_SALE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OPTION_SALE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to create OptionSale. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
@@ -112,11 +116,12 @@ void *OptionSale::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOptionSale = new dxfg_option_sale_t{};
-
-    fillGraalData(graalOptionSale);
-
-    return graalOptionSale;
+    return newGraalEvent<dxfg_v4_option_sale_t>(
+        DXFG_EVENT_OPTION_SALE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void OptionSale::freeGraal(void *graalNative) {
@@ -124,15 +129,15 @@ void OptionSale::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OPTION_SALE) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_OPTION_SALE) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to free OptionSale's Graal data. Wrong event class {}({})! Expected: {}",
             isolated::toString(eventType), std::to_string(eventType), isolated::toString(DXFG_EVENT_OPTION_SALE)));
     }
 
-    const auto graalOptionSale = static_cast<dxfg_option_sale_t *>(graalNative);
+    const auto graalOptionSale = static_cast<dxfg_v4_option_sale_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -150,10 +155,10 @@ void OptionSale::assign(std::shared_ptr<EventType> event) {
 OptionSale::OptionSale() noexcept {
 }
 
-OptionSale::OptionSale(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+OptionSale::OptionSale(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
-OptionSale &OptionSale::withEventSymbol(const StringLike &eventSymbol) noexcept {
+OptionSale &OptionSale::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;
@@ -378,21 +383,21 @@ OptionSale &OptionSale::withAskPrice(double askPrice) noexcept {
 
 const std::string &OptionSale::getExchangeSaleConditions() const & noexcept {
     if (!data_.exchangeSaleConditions) {
-        return String::NUL;
+        return nulString();
     }
 
-    return data_.exchangeSaleConditions.value();
+    return *data_.exchangeSaleConditions;
 }
 
 const std::optional<std::string> &OptionSale::getExchangeSaleConditionsOpt() const & noexcept {
     return data_.exchangeSaleConditions;
 }
 
-void OptionSale::setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept {
-    data_.exchangeSaleConditions = std::string(exchangeSaleConditions);
+void OptionSale::setExchangeSaleConditions(StringParam exchangeSaleConditions) {
+    data_.exchangeSaleConditions = std::string(exchangeSaleConditions.view());
 }
 
-OptionSale &OptionSale::withExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept {
+OptionSale &OptionSale::withExchangeSaleConditions(StringParam exchangeSaleConditions) {
     setExchangeSaleConditions(exchangeSaleConditions);
 
     return *this;
@@ -541,21 +546,21 @@ OptionSale &OptionSale::withDelta(double delta) noexcept {
 
 const std::string &OptionSale::getOptionSymbol() const & noexcept {
     if (!data_.optionSymbol) {
-        return String::NUL;
+        return nulString();
     }
 
-    return data_.optionSymbol.value();
+    return *data_.optionSymbol;
 }
 
 const std::optional<std::string> &OptionSale::getOptionSymbolOpt() const & noexcept {
     return data_.optionSymbol;
 }
 
-void OptionSale::setOptionSymbol(const StringLike &optionSymbol) noexcept {
-    data_.optionSymbol = std::string(optionSymbol);
+void OptionSale::setOptionSymbol(StringParam optionSymbol) {
+    data_.optionSymbol = std::string(optionSymbol.view());
 }
 
-OptionSale &OptionSale::withOptionSymbol(const StringLike &optionSymbol) noexcept {
+OptionSale &OptionSale::withOptionSymbol(StringParam optionSymbol) {
     setOptionSymbol(optionSymbol);
 
     return *this;
@@ -567,12 +572,14 @@ std::string OptionSale::toString() const {
         "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
         "validTick={}, type={}, underlyingPrice={}, volatility={}, delta={}, optionSymbol='{}'}}",
         MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-        getEventFlagsMask().getMask(), getIndex(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
-        getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()),
-        dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()), getExchangeSaleConditions(),
-        encodeChar(getTradeThroughExempt()), getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(),
-        isValidTick(), getType().toString(), dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getVolatility()),
-        dxfcpp::toString(getDelta()), getOptionSymbol());
+        getEventFlagsMask().getMask(), static_cast<std::uint64_t>(getIndex()),
+        TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(), getSequence(),
+        encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()), dxfcpp::toString(getSize()),
+        dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
+        getExchangeSaleConditionsOpt().value_or("null"), encodeChar(getTradeThroughExempt()),
+        getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
+        dxfcpp::toString(getUnderlyingPrice()), dxfcpp::toString(getVolatility()), dxfcpp::toString(getDelta()),
+        getOptionSymbolOpt().value_or("null"));
 }
 
 DXFCPP_END_NAMESPACE

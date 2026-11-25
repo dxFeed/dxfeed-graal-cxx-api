@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../exceptions/InvalidArgumentException.hpp"
-#include "../../internal/utils/StringUtils.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../market/MarketEventSymbols.hpp"
 #include "./CandleSymbolAttribute.hpp"
 
@@ -29,8 +29,8 @@ DXFCPP_BEGIN_NAMESPACE
  * <li>Price interval may be equal to zero. It means every unique price creates a particular candle
  * to aggregate all events with this price for the chosen CandlePeriod.
  * <li>Non-zero price level creates a sequence of intervals starting from 0:
- * `..., [-pl; 0), [0; pl), [pl; 2 * pl), ..., [n * pl, n * pl + pl)`. Events aggregated by chosen CandlePeriod and price
- * intervals.
+ * `..., [-pl; 0), [0; pl), [pl; 2 * pl), ..., [n * pl, n * pl + pl)`. Events aggregated by chosen CandlePeriod and
+ * price intervals.
  * </ul>
  *
  * <h3>Implementation details</h3>
@@ -42,7 +42,7 @@ DXFCPP_BEGIN_NAMESPACE
  * The key to use with these methods is available via CandlePriceLevel::ATTRIBUTE_KEY constant.
  * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
  */
-struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
+struct DXFCPP_EXPORT CandlePriceLevel final : CandleSymbolAttribute {
     /**
      * Default price level corresponds to `NaN (std::numeric_limits<double>::quiet_NaN())`
      */
@@ -54,17 +54,16 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
      * The value of this constant is "pl".
      * The value that this key shall be set to is equal to the corresponding CandlePriceLevel::toString()
      */
-    static const std::string ATTRIBUTE_KEY;
+    static constexpr char ATTRIBUTE_KEY[] = "pl";
 
     private:
     double value_{};
 
-    explicit CandlePriceLevel(double value) noexcept;
+    constexpr explicit CandlePriceLevel(double value) noexcept : value_{value} {
+    }
 
     public:
     CandlePriceLevel() noexcept;
-
-    ~CandlePriceLevel() noexcept override;
 
     /**
      * Returns price level value. For example, the value of `1` represents `[0;1), [1;2)` and so on intervals
@@ -91,7 +90,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
      * @param symbol original candle event symbol.
      * @return candle event symbol string with this candle price level set.
      */
-    std::string changeAttributeForSymbol(const StringLike &symbol) const override;
+    std::string changeAttributeForSymbol(StringParam symbol) const override;
 
     /**
      * Parses string representation of candle price level into an object.
@@ -101,7 +100,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
      * @param s string representation of candle price level.
      * @return candle price level.
      */
-    static CandlePriceLevel parse(const StringLike &s);
+    static CandlePriceLevel parse(StringParam s);
 
     /**
      * Returns candle price level with the given value.
@@ -119,7 +118,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle price level of the given candle symbol string.
      */
-    static CandlePriceLevel getAttributeForSymbol(const StringLike &symbol);
+    static CandlePriceLevel getAttributeForSymbol(StringParam symbol);
 
     /**
      * Returns candle symbol string with the normalized representation of the candle price level attribute.
@@ -127,7 +126,7 @@ struct DXFCPP_EXPORT CandlePriceLevel : CandleSymbolAttribute {
      * @param symbol candle symbol string.
      * @return candle symbol string with the normalized representation of the candle price level attribute.
      */
-    static std::string normalizeAttributeForSymbol(const StringLike &symbol);
+    static std::string normalizeAttributeForSymbol(StringParam symbol);
 };
 
 DXFCPP_END_NAMESPACE

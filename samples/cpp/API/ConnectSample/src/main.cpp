@@ -17,6 +17,26 @@ using namespace dxfcpp;
 using namespace dxfcpp::literals;
 using namespace std::literals;
 
+// The names of the event types (sorted by name), separated by commas.
+template <typename EventTypesMap>
+std::string joinEventTypeNames(const EventTypesMap &eventTypes, bool onlyMarket = false) {
+    std::string result;
+
+    for (const auto &[name, eventType] : eventTypes) {
+        if (onlyMarket && !eventType.get().isMarket()) {
+            continue;
+        }
+
+        if (!result.empty()) {
+            result += ",";
+        }
+
+        result += name;
+    }
+
+    return result;
+}
+
 void printUsage() {
     const auto usageString = R"(
 Usage:
@@ -27,12 +47,12 @@ Where:
               To pass an authorization token, add to the address: "[login=entitle:<token>]",
               e.g.: demo.dxfeed.com:7300[login=entitle:<token>]
     types   - Is comma-separated list of dxfeed event types ()" +
-                             enum_utils::getEventTypeEnumNamesList() + " or " +
-                             enum_utils::getEventTypeEnumClassNamesList() + R"().
+                             joinEventTypeNames(EventTypeEnum::ALL_BY_NAME) + " or " +
+                             joinEventTypeNames(EventTypeEnum::ALL_BY_CLASS_NAME) + R"().
     symbols - Is comma-separated list of symbol names to get events for (e.g. "IBM,AAPL,MSFT").
               for Candle event specify symbol with aggregation like in "AAPL{=d}"
     time    - Is from-time for history subscription in standard formats.
-              Same examples of valid from-time:
+              Some examples of valid from-time:
                   20070101-123456
                   20070101-123456.123
                   2005-12-31 21:00:00
@@ -76,10 +96,14 @@ int main(int argc, char *argv[]) {
         }
 
         // Create an endpoint and connect to a specified address.
-        const auto endpoint = DXEndpoint::create()->connect(address);
+        // AutoClose closes the endpoint at the end of the scope: a created endpoint is not closed when its last pointer
+        // is released.
+        const AutoClose endpoint{DXEndpoint::create()->connect(address)};
 
         // Create a subscription with specified types attached to the feed.
-        const auto sub = endpoint->getFeed()->createSubscription(parsedTypes);
+        // AutoClose closes the subscription at the end of the scope before the endpoint, and close() waits for the
+        // listener calls in progress: the listener does not use ioMtx after it is destroyed.
+        const AutoClose sub{endpoint->getFeed()->createSubscription(parsedTypes)};
 
         // Add an event listener.
         sub->addEventListener([&ioMtx](const auto &events) {

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include <atomic>
+#include <future>
 #include <random>
 #include <string>
 #include <thread>
@@ -12,6 +13,8 @@
 #include <dxfeed_graal_cpp_api/api.hpp>
 
 #include <doctest.h>
+
+#include "../support/TestSupport.hpp"
 
 using namespace std::literals;
 using namespace dxfcpp;
@@ -495,4 +498,295 @@ TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestCloseFromListener") {
     std::this_thread::sleep_for(200ms);
 
     REQUIRE_EQ(calls.load(), 1);
+}
+
+// MDAPI-441: close() on another thread returns after the listener call in progress ends.
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestCloseWaitsForListenerCallInProgress") {
+    std::promise<void> entered{};
+    std::promise<void> release{};
+    auto releaseFuture = release.get_future().share();
+    std::atomic<bool> enteredOnce{false};
+    std::atomic<bool> callEnded{false};
+
+    auto model = createBuilder()
+                     ->withAggregationPeriod(50ms)
+                     ->withListener([&](const auto &, const auto &) {
+                         if (!enteredOnce.exchange(true)) {
+                             entered.set_value();
+                             releaseFuture.wait();
+                             callEnded = true;
+                         }
+                     })
+                     ->build();
+
+    publishAndProcess(createOrder(0, Side::BUY, 1, 1, 0));
+    REQUIRE(entered.get_future().wait_for(5s) == std::future_status::ready);
+
+    std::atomic<bool> closeReturned{false};
+    std::atomic<bool> endedBeforeCloseReturned{false};
+    std::thread closer{[&] {
+        model->close();
+        endedBeforeCloseReturned = callEnded.load();
+        closeReturned = true;
+    }};
+
+    std::this_thread::sleep_for(100ms);
+    CHECK_FALSE(closeReturned.load());
+
+    release.set_value();
+    closer.join();
+
+    CHECK(endedBeforeCloseReturned.load());
+}
+
+// A new snapshot of a source (after a reconnection) clears the orders of that source from the book.
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestClearBySourceRemovesAllOrdersOfTheSource") {
+    using Set = MarketDepthModel<Order>::SortedOrderSet<MarketDepthModel<Order>::BuyLess>;
+
+    const auto order = [this](std::int64_t index, double price, const OrderSource &source) {
+        return createOrder(index, Side::BUY, price, 1, 0)->withSource(source).sharedAs<Order>();
+    };
+    const auto sources = [](const std::vector<std::shared_ptr<Order>> &orders) {
+        std::vector<std::int32_t> result{};
+
+        for (const auto &o : orders) {
+            result.push_back(o->getSource().id());
+        }
+
+        return result;
+    };
+
+    Set set{};
+
+    SUBCASE("Two orders of the source") {
+        set.insert(order(1, 2, OrderSource::NTV));
+        set.insert(order(0, 1, OrderSource::NTV));
+        set.toVector();
+        set.clearBySource(OrderSource::NTV);
+
+        CHECK(set.isChanged());
+        CHECK(set.toVector().empty());
+    }
+
+    SUBCASE("Orders of the source before an order of another source") {
+        set.insert(order(2, 3, OrderSource::NTV));
+        set.insert(order(1, 2, OrderSource::NTV));
+        set.insert(order(0, 1, OrderSource::ISE));
+        set.clearBySource(OrderSource::NTV);
+
+        CHECK(sources(set.toVector()) == std::vector<std::int32_t>{OrderSource::ISE.id()});
+    }
+
+    SUBCASE("Three orders of the source") {
+        set.insert(order(2, 3, OrderSource::NTV));
+        set.insert(order(1, 2, OrderSource::NTV));
+        set.insert(order(0, 1, OrderSource::NTV));
+        set.clearBySource(OrderSource::NTV);
+
+        CHECK(set.toVector().empty());
+    }
+
+    SUBCASE("No orders of the source") {
+        set.insert(order(0, 1, OrderSource::ISE));
+        set.toVector();
+        set.clearBySource(OrderSource::NTV);
+
+        CHECK_FALSE(set.isChanged());
+        CHECK(set.toVector().size() == 1);
+    }
+}
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestSnapshotKeepsOrdersOfOtherSources") {
+    const auto snapshot = (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END).getMask();
+    const auto withSource = [](const std::shared_ptr<Order> &order, const OrderSource &source) {
+        return order->withSource(source).sharedAs<Order>();
+    };
+
+    model_->close();
+    model_ = createBuilder()->withSources({OrderSource::DEFAULT, OrderSource::NTV})->build();
+
+    auto ntv = withSource(createOrder(0, Side::BUY, 1, 1, snapshot), OrderSource::NTV);
+
+    publishAndProcess(true, ntv);
+    publishAndProcess(true, {createOrder(1, Side::BUY, 3, 1, EventFlag::SNAPSHOT_BEGIN.getFlag()),
+                             createOrder(0, Side::BUY, 2, 1, EventFlag::SNAPSHOT_END.getFlag())});
+    checkBuySize(3);
+
+    auto order = createOrder(0, Side::BUY, 10, 1, snapshot);
+
+    publishAndProcess(true, order);
+    checkBuySize(2);
+    checkOrder(Side::BUY, order, 0);
+    checkOrder(Side::BUY, ntv, 1);
+}
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestModelWithoutListener") {
+    model_->close();
+
+    auto model = MarketDepthModel<Order>::newBuilder()
+                     ->withFeed(feed_)
+                     ->withSymbol(symbol_)
+                     ->withSources({OrderSource::DEFAULT})
+                     ->build();
+
+    publishAndProcess(createOrder(0, Side::BUY, 1, 1, (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END).getMask()));
+    publishAndProcess(createOrder(1, Side::SELL, 2, 1, 0));
+    model->close();
+}
+
+namespace {
+
+// The warnings of the market depth models.
+std::vector<ErrorInfo> crossedBookWarnings() {
+    std::vector<ErrorInfo> result{};
+
+    for (const auto &error : ErrorManager::getErrors()) {
+        if (error.level == ErrorInfo::Level::WARN && error.component == "MarketDepthModel") {
+            result.push_back(error);
+        }
+    }
+
+    return result;
+}
+
+bool contains(const std::string &string, const std::string &part) {
+    return string.find(part) != std::string::npos;
+}
+
+std::uint32_t snapshot() {
+    return (EventFlag::SNAPSHOT_BEGIN | EventFlag::SNAPSHOT_END).getMask();
+}
+
+} // namespace
+
+TEST_CASE_FIXTURE(MarketDepthModelTestFixture, "TestCrossedBookWarning") {
+    test::ErrorManagerGuard errorManagerGuard{};
+
+    SUBCASE("One warning per period") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(true)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        REQUIRE(crossedBookWarnings().empty());
+
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+
+        auto warnings = crossedBookWarnings();
+
+        REQUIRE_EQ(warnings.size(), 1u);
+        CHECK(contains(warnings[0].message, symbol_));
+        CHECK(contains(warnings[0].message, "the best bid 101.0 (source DEFAULT)"));
+        CHECK(contains(warnings[0].message, "the best ask 100.0 (source DEFAULT)"));
+
+        publishAndProcess(true, createOrder(1, Side::SELL, 99, 1, 0));
+        publishAndProcess(true, createOrder(1, Side::SELL, 98, 1, 0));
+        CHECK_EQ(crossedBookWarnings().size(), 1u);
+    }
+
+    SUBCASE("Disabled by default") {
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        checkBuySize(1);
+        checkSellSize(1);
+        CHECK(crossedBookWarnings().empty());
+    }
+
+    SUBCASE("Disabled explicitly") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(false)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        CHECK(crossedBookWarnings().empty());
+    }
+
+    SUBCASE("Period 0 reports every crossing") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(true, 0ms)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        publishAndProcess(true, createOrder(1, Side::SELL, 99, 1, 0));
+        CHECK_EQ(crossedBookWarnings().size(), 2u);
+    }
+
+    SUBCASE("The next warning counts the suppressed crossings") {
+        model_->close();
+        // A period long enough for the two transactions on a loaded machine.
+        model_ = createBuilder()->withCrossedBookWarning(true, 1s)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        publishAndProcess(true, createOrder(1, Side::SELL, 99, 1, 0));
+        REQUIRE_EQ(crossedBookWarnings().size(), 1u);
+
+        std::this_thread::sleep_for(1200ms);
+        publishAndProcess(true, createOrder(1, Side::SELL, 98, 1, 0));
+
+        const auto warnings = crossedBookWarnings();
+
+        REQUIRE_EQ(warnings.size(), 2u);
+        CHECK_FALSE(contains(warnings[0].message, "since the previous warning"));
+        CHECK(contains(warnings[1].message, "the best ask 98.0"));
+        CHECK(contains(warnings[1].message, "Transactions with a crossed book since the previous warning: 1."));
+    }
+
+    SUBCASE("A locked book or one side is not a crossing") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(true, 0ms)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(true, createOrder(2, Side::BUY, 102, 1, 0));
+        publishAndProcess(true, createOrder(1, Side::SELL, 102, 1, 0));
+        checkBuySize(2);
+        checkSellSize(1);
+        CHECK(crossedBookWarnings().empty());
+    }
+
+    SUBCASE("The depth limit does not hide a crossing") {
+        model_->close();
+        model_ = createBuilder()->withDepthLimit(1)->withCrossedBookWarning(true)->build();
+
+        publishAndProcess(true, {createOrder(2, Side::BUY, 101, 1, EventFlag::SNAPSHOT_BEGIN.getFlag()),
+                                 createOrder(0, Side::BUY, 90, 1, EventFlag::SNAPSHOT_END.getFlag())});
+        publishAndProcess(true, createOrder(1, Side::SELL, 100, 1, 0));
+        checkBuySize(1);
+
+        const auto warnings = crossedBookWarnings();
+
+        REQUIRE_EQ(warnings.size(), 1u);
+        CHECK(contains(warnings[0].message, "the best bid 101.0"));
+    }
+
+    SUBCASE("A warning is reported before an aggregated notification") {
+        model_->close();
+        model_ = createBuilder()->withAggregationPeriod(1h)->withCrossedBookWarning(true)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+        publishAndProcess(false, createOrder(1, Side::SELL, 100, 1, 0));
+        CHECK_EQ(crossedBookWarnings().size(), 1u);
+    }
+
+    SUBCASE("The handler of the warning can close the model") {
+        model_->close();
+        model_ = createBuilder()->withCrossedBookWarning(true)->build();
+
+        publishAndProcess(true, createOrder(0, Side::BUY, 101, 1, snapshot()));
+
+        std::size_t handlerCalls = 0;
+
+        // The warning comes before the listener and outside the locks of the model: closing it does not deadlock,
+        // and the listener is not called for the transaction.
+        ErrorManager::setHandler([&](const ErrorInfo &error) {
+            if (error.component == "MarketDepthModel") {
+                handlerCalls++;
+                model_->close();
+            }
+        });
+
+        publishAndProcess(false, createOrder(1, Side::SELL, 100, 1, 0));
+        CHECK_EQ(handlerCalls, 1u);
+    }
+
+    model_->close();
 }

@@ -3,20 +3,26 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/IcebergType.hpp"
 
+#include <array>
 #include <functional>
-#include <unordered_map>
+#include <span>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const IcebergType IcebergType::UNDEFINED{0, "UNDEFINED"};
-const IcebergType IcebergType::NATIVE{1, "NATIVE"};
-const IcebergType IcebergType::SYNTHETIC{2, "SYNTHETIC"};
+constinit const IcebergType IcebergType::UNDEFINED{0, "UNDEFINED"};
+constinit const IcebergType IcebergType::NATIVE{1, "NATIVE"};
+constinit const IcebergType IcebergType::SYNTHETIC{2, "SYNTHETIC"};
 
-template <>
-const std::unordered_map<IcebergType::CodeType, std::reference_wrapper<const IcebergType>> IcebergType::ParentType::ALL{
-    {IcebergType::UNDEFINED.getCode(), std::cref(IcebergType::UNDEFINED)},
-    {IcebergType::NATIVE.getCode(), std::cref(IcebergType::NATIVE)},
-    {IcebergType::SYNTHETIC.getCode(), std::cref(IcebergType::SYNTHETIC)},
+namespace {
+
+constinit const std::array<std::reference_wrapper<const IcebergType>, 3> ALL_ELEMENTS{
+    std::cref(IcebergType::UNDEFINED),
+    std::cref(IcebergType::NATIVE),
+    std::cref(IcebergType::SYNTHETIC),
 };
+
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const IcebergType>> IcebergType::ALL{ALL_ELEMENTS};
 
 DXFCPP_END_NAMESPACE

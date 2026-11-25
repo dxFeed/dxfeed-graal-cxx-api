@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - CMake
-- clang\gcc\Visual Studio
+- clang, gcc or Visual Studio
 
 ## Build
 
@@ -73,18 +73,34 @@ cd build
 ctest -C Release --extra-verbose --parallel 4
 ```
 
-The unit tests do not need external network: they use a `LOCAL_HUB` endpoint or a loopback TCP server. The smoke tests
-against `demo.dxfeed.com` are built only with `-DDXFCXX_ENABLE_NETWORK_TESTS=ON` and have the CTest label `network`:
+The unit tests do not need external network: they use a `LOCAL_HUB` endpoint or a loopback TCP server. The tests over
+a network connection to a QDS server that sends a test tape (`tests/data/tapes/network.txt`) are built only with
+`-DDXFCXX_ENABLE_NETWORK_TESTS=ON` and have the CTest label `network`:
 
 ```shell
 ctest -C Release -L network
 ```
 
+On Linux CTest starts the server itself with the Tools (so `-DDXFCXX_BUILD_TOOLS=ON` is required) on
+`127.0.0.1:17300` and stops it after the tests; `-DDXFCXX_NETWORK_TEST_PORT=<port>` changes the port. On other systems,
+or to run the tests against another server that sends the same tape, set `DXFCXX_NETWORK_TEST_ADDRESS` and exclude the
+local server:
+
+```shell
+DXFCXX_NETWORK_TEST_ADDRESS=host:port ctest -C Release -L network -LE network_server -FA '.*'
+```
+
 With `-DDXFCXX_DYNAMICALLY_LINK_UNIT_TESTS=ON` the tests are linked with the shared library instead of the static one,
 as an application that uses the DLL. This finds what works only with the static library: a function that is not
 exported (a link error) and state that the public headers keep outside the library (on Windows, the DLL and each
-executable have their own copies of it). The rules for the public headers are in `include/dxfeed_graal_cpp_api/internal/Conf.hpp`
+executable have their own copies of it). The rules for the public headers are in `include/dxfeed_graal_cpp_api/detail/Conf.hpp`
 next to `DXFCPP_EXPORT`.
+
+The shared library exports only what `DXFCPP_EXPORT` marks (hidden visibility with gcc and clang). The tests and the
+Tools also use internal classes of `src/`, marked `DXFCPP_INTERNAL_EXPORT`: the option `DXFCXX_EXPORT_INTERNALS`
+exports them too. It is ON when the tests or the Tools are linked dynamically (`DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS`,
+`DXFCXX_DYNAMICALLY_LINK_TOOLS`), and the shared variants of the static-init, exit and isolate-args tests are built
+only with it. Do not ship a library built with it: its symbols differ from `abi/symbols-<os>.txt`.
 
 ## UI Samples
 
@@ -134,13 +150,33 @@ Sanitized builds also add the `dxFeedGraalCxxApi_SanitizerCanary_<asan|ubsan|tsa
 defective library function and pass only if the sanitizer reports it, so a sanitizer that is silently not applied to the
 library makes them fail.
 
+## Hardening
+
+The libraries are built with the hardening options of the compiler and the linker (`DXFCXX_HARDENING`, ON by default):
+
+- GCC and Clang on Linux and macOS: `-D_FORTIFY_SOURCE=3` (glibc before 2.34 takes it as 2),
+  `-fstack-protector-strong`, `-fstack-clash-protection` (Linux), `-fcf-protection=full` (x86_64); the shared library
+  is linked with `-z relro -z now` (Linux).
+- MSVC: `/guard:cf`, `/sdl`, `/CETCOMPAT` (x64). With `/sdl` the DLL also exports the compiler-generated
+  `__autoclassinit2` members of its classes, which `abi/symbols-windows.txt` lists. A DLL built with
+  `DXFCXX_HARDENING=OFF` lacks them; programs that use the DLL do not call them.
+
+The options are used in the optimized configurations only (Release, RelWithDebInfo, MinSizeRel; not in Debug or a
+build without a build type), not in sanitized builds, and are not passed to the projects that use the library. MinGW
+builds are not hardened.
+
+```shell
+cmake -DDXFCXX_HARDENING=OFF ..
+```
+
 ## Warnings
 
 This project's own code (the libraries, tests, samples, tools, fuzzers) is compiled with `-Wshadow`,
 `-Wsign-conversion`, `-Wfloat-equal` and `-Wextra-semi` (MSVC: C4365) on top of `-Wall -Wextra -pedantic` (`/W4`).
 These warnings are not passed to the projects that use the library, and the headers of the dependencies are included
 as system headers, so their warnings are not reported. With `-DDXFCXX_WARNINGS_AS_ERRORS=ON` (the CI builds) the
-warnings of this project's code are errors (`-Werror`, `/WX`).
+warnings of this project's code are errors (`-Werror`, `/WX`), except the use of deprecated functions, which stays a
+warning (MSVC: C4996 is disabled).
 
 ```shell
 cmake -DDXFCXX_WARNINGS_AS_ERRORS=ON ..
@@ -155,3 +191,12 @@ cmake --build . --target dxfcxx_header_check
 
 `DXFCXX_BUILD_HEADER_CHECK` compiles every public header on its own to check that it includes everything it uses.
 Build with `DXFCXX_USE_PRECOMPILED_HEADERS=OFF`, since precompiled headers hide missing includes.
+
+The installed headers are checked separately: each one must compile with the include directory of the installation as
+the only include directory (on Windows, also after `<windows.h>`).
+
+```shell
+cmake --install . --prefix install
+cmake -S ../.github/ci/installed-headers-check -B installed-headers-check -DDXFCXX_INSTALL_PREFIX=$PWD/install
+cmake --build installed-headers-check
+```

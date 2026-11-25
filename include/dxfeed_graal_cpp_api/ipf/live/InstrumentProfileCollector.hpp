@@ -3,18 +3,17 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
 #include "../../entity/SharedEntity.hpp"
-#include "../../internal/Common.hpp"
-#include "../../internal/Id.hpp"
-#include "../../internal/JavaObjectHandle.hpp"
+#include "../../detail/JavaObjectHandle.hpp"
 #include "../InstrumentProfile.hpp"
 #include "./IterableInstrumentProfile.hpp"
-#include "../../internal/Handler.hpp"
+#include "../../util/Handler.hpp"
 
+#include <cstddef>
 #include <mutex>
 #include <unordered_map>
 
@@ -39,7 +38,7 @@ class InstrumentProfileConnection;
  *
  * <p>Removal of instrument profile is represented by an InstrumentProfile instance with a
  * @ref InstrumentProfile::getType() "type" equal to
- * <code>@ref InstrumentProfileType "InstrumentProfileType"::@ref InstrumentProfileType::REMOVED "REMOVED".@ref
+ * <code>@ref InstrumentProfileType "InstrumentProfileType"::REMOVED.@ref
  * InstrumentProfileType::getName() "getName()"</code>.
  *
  * <p><b>This class is thread-safe.</b>
@@ -47,13 +46,27 @@ class InstrumentProfileConnection;
 class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
     friend InstrumentProfileConnection;
 
-    Id<InstrumentProfileCollector> id_;
+    std::size_t id_{static_cast<std::size_t>(-1)};
     JavaObjectHandle<InstrumentProfileCollector> handle_;
 
+    // An update listener: a handler of its own with the one listener. A callback calls it by a shared pointer, without
+    // the lock.
+    struct UpdateListener final {
+        SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> handler{
+            "InstrumentProfileCollector"};
+        std::size_t handlerListenerId{};
+    };
+
+    // An update listener and the native listener that calls it. The native listener is released by the collector, not
+    // by the last owner of the listener, which can be a callback of this native listener.
+    struct UpdateListenerEntry final {
+        std::shared_ptr<UpdateListener> listener{};
+        JavaObjectHandle<InstrumentProfileUpdateListener> handle{};
+    };
+
+    // Guards the containers only: the listeners and the native functions are called without it.
     std::mutex listenersMutex_{};
-    std::unordered_map<std::size_t, JavaObjectHandle<InstrumentProfileUpdateListener>> listenerHandles_{};
-    std::unordered_map<std::size_t, SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)>>
-        onInstrumentProfilesUpdateHandlers_{};
+    std::unordered_map<std::size_t, UpdateListenerEntry> updateListeners_{};
     // The ids of the update listeners, unique within this collector. Each listener has a handler of its own, so the ids
     // of the handlers (unique within a handler) cannot identify the listeners.
     std::size_t lastListenerId_{};
@@ -62,10 +75,8 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
 
     struct Impl;
 
-    void addListenerHandle(std::size_t id);
-    void removeListenerHandle(std::size_t id);
-
-    void removeUpdateListenerImpl(std::size_t listenerId);
+    std::size_t addUpdateListenerImpl(std::shared_ptr<UpdateListener> listener);
+    static void releaseListenerHandle(JavaObjectHandle<InstrumentProfileUpdateListener> &&handle);
 
     public:
     /// The alias to a type of shared pointer to the InstrumentProfileCollector object
@@ -111,7 +122,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * Returns a concurrent view of the set of instrument profiles.
      * Note, that removal of instrument profile is represented by an InstrumentProfile instance with a
      * @ref InstrumentProfile::getType() "type" equal to
-     * <code>@ref InstrumentProfileType "InstrumentProfileType"::@ref InstrumentProfileType::REMOVED "REMOVED".@ref
+     * <code>@ref InstrumentProfileType "InstrumentProfileType"::REMOVED.@ref
      * InstrumentProfileType::getName() "getName()"</code>. Normally, this view exposes only non-removed profiles.
      * However, if iteration is concurrent with removal, then a removed instrument profile (with a removed type) can be
      * exposed by this view.
@@ -130,19 +141,20 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * ```cpp
      * collector->addUpdateListener([](const std::vector<std::shared_ptr<dxfcpp::InstrumentProfile>> &profiles) {
      *     for (const auto &p : profiles) {
-     *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
+     *         if (InstrumentProfileType::REMOVED.getName() == p->getType()) {
      *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
      *         } else {
      *             std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
      *         }
      *     }
      * });
+     * ```
      *
      * Example:
      * ```cpp
      * collector->addUpdateListener([](auto &&profiles) -> void {
      *     for (const auto &p : profiles) {
-     *         if (InstrumentProfileType::REMOVED->getName() == p->getType()) {
+     *         if (InstrumentProfileType::REMOVED.getName() == p->getType()) {
      *             std::cout << p->getSymbol() + ": " + p->getType() + "\n";
      *         } else {
      *             std::cout << p->getSymbol() + " (" + p->getDescription() + ")\n";
@@ -155,6 +167,8 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * @param listener The profile update listener. The listener can be callable with signature: `void(const
      * std::vector<std::shared_ptr<InstrumentProfile>&)`
      * @return The listener id
+     * @throws InvalidArgumentException if the listener ids of this collector are exhausted (about 2^32 listeners were
+     * added on a 64-bit platform)
      */
     template <typename InstrumentProfileUpdateListener>
     std::size_t addUpdateListener(InstrumentProfileUpdateListener listener)
@@ -164,18 +178,11 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
         }
 #endif
     {
-        std::lock_guard guard{listenersMutex_};
+        auto updateListener = std::make_shared<UpdateListener>();
 
-        SimpleHandler<void(const std::vector<std::shared_ptr<InstrumentProfile>> &)> h{};
+        updateListener->handlerListenerId = updateListener->handler.add(listener);
 
-        h.add(listener);
-
-        const auto id = ++lastListenerId_;
-
-        onInstrumentProfilesUpdateHandlers_.try_emplace(id, std::move(h));
-        addListenerHandle(id);
-
-        return id;
+        return addUpdateListenerImpl(std::move(updateListener));
     }
 
     /**
@@ -185,7 +192,7 @@ class DXFCPP_EXPORT InstrumentProfileCollector final : public SharedEntity {
      * ```cpp
      * auto id = collector->addUpdateListener([](auto){});
      *
-     * collector->removeEventListener(id);
+     * collector->removeUpdateListener(id);
      * ```
      *
      * @param listenerId The listener id

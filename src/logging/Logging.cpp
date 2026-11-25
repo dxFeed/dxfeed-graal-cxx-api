@@ -3,11 +3,12 @@
 
 #include "../../include/dxfeed_graal_cpp_api/logging/Logging.hpp"
 
-#include "../../include/dxfeed_graal_cpp_api/isolated/event/IsolatedEventType.hpp"
-#include "../../include/dxfeed_graal_cpp_api/isolated/logging/IsolatedLogging.hpp"
+#include "../internal/CallbackBarrier.hpp"
+#include "../isolated/event/IsolatedEventType.hpp"
+#include "../isolated/logging/IsolatedLogging.hpp"
 #include "../../include/dxfeed_graal_cpp_api/system/System.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -34,15 +35,22 @@ std::string Logging::levelToString(Level level) {
 
 SimpleHandler<void(Logging::Level, std::int64_t /*timestamp*/, const std::string & /*threadName*/,
                    std::int64_t /*threadId*/, const std::string & /*loggerName*/, const std::string & /*message*/)>
-    Logging::handler_{};
+    Logging::handler_{"Logging"};
 
 struct Logging::Impl {
     static JavaObjectHandle<ListenerTag> listenerHandle;
 
-    static void onLog(graal_isolatethread_t * /*thread*/, dxfg_logging_level_t level, int64_t timestamp,
+    static void onLog(graal_isolatethread_t * /*thread*/, dxfg_v4_logging_level_t level, int64_t timestamp,
                       const char *threadName, int64_t threadId, const char *loggerName, const char *message,
-                      dxfg_exception_t * /*exception*/, const char * /*formattedMessage*/, void * /*userData*/) {
-        handler_(static_cast<Level>(level), timestamp, threadName, threadId, loggerName, message);
+                      dxfg_v4_exception_t * /*exception*/, const char * /*formattedMessage*/, void * /*userData*/) {
+        runCallback("Logging", [&] {
+            const auto orEmpty = [](const char *s) {
+                return s == nullptr ? std::string{} : std::string{s};
+            };
+
+            handler_(static_cast<Level>(level), timestamp, orEmpty(threadName), threadId, orEmpty(loggerName),
+                     orEmpty(message));
+        });
     }
 };
 
@@ -54,13 +62,13 @@ void Logging::init(Level level) {
     System::setProperty("err.level", levelToString(level));
 }
 
-void Logging::init(const StringLike &logFile, Level logLevel) {
+void Logging::init(StringParam logFile, Level logLevel) {
     System::setProperty("log.className", "com.devexperts.logging.InterceptableLogging");
     System::setProperty("log.file", logFile);
     System::setProperty("log.level", levelToString(logLevel));
 }
 
-void Logging::init(const StringLike &logFile, const StringLike &errFile, Level logLevel, Level errFileLevel) {
+void Logging::init(StringParam logFile, StringParam errFile, Level logLevel, Level errFileLevel) {
     System::setProperty("log.className", "com.devexperts.logging.InterceptableLogging");
     System::setProperty("log.file", logFile);
     System::setProperty("log.level", levelToString(logLevel));

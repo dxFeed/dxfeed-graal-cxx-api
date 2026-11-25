@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
@@ -11,7 +11,7 @@ DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 #include "../api/osub/TimeSeriesSubscriptionSymbol.hpp"
 #include "../api/osub/WildcardSymbol.hpp"
 #include "../event/candle/CandleSymbol.hpp"
-#include "../internal/Common.hpp"
+#include "../detail/Concepts.hpp"
 #include "./StringSymbol.hpp"
 
 #include <cstdint>
@@ -74,10 +74,6 @@ struct DXFCPP_EXPORT SymbolWrapper final {
 
         public:
         template <typename SymbolIt> static void *toGraalList(SymbolIt begin, SymbolIt end) {
-            if constexpr (Debugger::isDebug) {
-                Debugger::debug("SymbolWrapper::toGraalList(symbols = " + elementsToString(begin, end) + ")");
-            }
-
             auto size = calculateGraalListSize(std::distance(begin, end));
 
             // Zero size is needed, for example, to clear the list of symbols.
@@ -90,17 +86,24 @@ struct DXFCPP_EXPORT SymbolWrapper final {
             std::ptrdiff_t elementIdx = 0;
             bool needToFree = false;
 
-            for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
-                if constexpr (requires { it->toGraal(); }) {
-                    needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
-                } else if constexpr (std::is_convertible_v<decltype(*it), SymbolWrapper> ||
-                                     dxfcpp::ConvertibleToSymbolWrapper<decltype(*it)>) {
-                    needToFree = setGraalListElement(list, elementIdx, SymbolWrapper(*it).toGraal()) == false;
-                }
+            try {
+                for (auto it = begin; it != end && elementIdx < size; it++, elementIdx++) {
+                    if constexpr (requires { it->toGraal(); }) {
+                        needToFree = setGraalListElement(list, elementIdx, it->toGraal()) == false;
+                    } else if constexpr (std::is_convertible_v<decltype(*it), SymbolWrapper> ||
+                                         dxfcpp::ConvertibleToSymbolWrapper<decltype(*it)>) {
+                        needToFree = setGraalListElement(list, elementIdx, SymbolWrapper(*it).toGraal()) == false;
+                    }
 
-                if (needToFree) {
-                    break;
+                    if (needToFree) {
+                        break;
+                    }
                 }
+            } catch (...) {
+                // For example, a symbol that is not valid UTF-8: the symbols converted before are freed.
+                freeGraalListElements(list, elementIdx);
+
+                throw;
             }
 
             if (needToFree) {
@@ -159,10 +162,6 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      */
     template <ConvertibleToStringSymbol Symbol>
     SymbolWrapper(Symbol &&symbol) noexcept : SymbolWrapper(StringSymbol(std::forward<Symbol>(symbol))) {
-        if constexpr (Debugger::isDebug) {
-            // Could be "perfectly" moved, so it won't show up in the logs
-            Debugger::debug("SymbolWrapper(symbol = " + toStringAny(symbol) + ")");
-        }
     }
 
     /**
@@ -225,8 +224,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      * Returns the pointer to the filled structure.
      *
      * @return The pointer to the filled dxFeed Graal SDK structure
+     * @throws InvalidArgumentException if a string of the symbol is not valid UTF-8.
      */
-    void *toGraal() const noexcept;
+    void *toGraal() const;
 
     /**
      * Allocates memory for the dxFeed Graal SDK structure (recursively if necessary).
@@ -234,8 +234,9 @@ struct DXFCPP_EXPORT SymbolWrapper final {
      * Returns the pointer to the filled structure.
      *
      * @return The smart unique pointer to the filled dxFeed Graal SDK structure
+     * @throws InvalidArgumentException if a string of the symbol is not valid UTF-8.
      */
-    std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const noexcept;
+    std::unique_ptr<void, decltype(&SymbolWrapper::freeGraal)> toGraalUnique() const;
 
     /**
      * Returns a string representation of the current object.

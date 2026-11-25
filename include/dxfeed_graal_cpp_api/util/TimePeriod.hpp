@@ -3,15 +3,15 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../internal/JavaObjectHandle.hpp"
+#include "../detail/JavaObjectHandle.hpp"
+#include "../detail/StringParam.hpp"
 
+#include <chrono>
 #include <cstdint>
-#include <functional>
-#include <mutex>
 
 /**
  * \defgroup dxfcpp_util "Util" Module
@@ -28,7 +28,15 @@ class DXFeedSubscription;
  */
 struct DXFCPP_EXPORT TimePeriod {
     friend DXFeedSubscription;
+    friend struct DXEndpoint;
 
+    private:
+    // The key of the constructor for `std::optional<TimePeriod>`: only the friends of TimePeriod can create it.
+    struct ConstructionKey {
+        explicit ConstructionKey() = default;
+    };
+
+    public:
     /// Time-period of zero.
     static const TimePeriod ZERO;
 
@@ -67,7 +75,7 @@ struct DXFCPP_EXPORT TimePeriod {
      * @param value The string representation
      * @return TimePeriod represented with a given string.
      */
-    static TimePeriod valueOf(const StringLike &value);
+    static TimePeriod valueOf(StringParam value);
 
     /**
      * Returns value in milliseconds.
@@ -90,7 +98,8 @@ struct DXFCPP_EXPORT TimePeriod {
      */
     std::int64_t getNanos() const;
 
-    virtual ~TimePeriod() noexcept;
+    /// Not a part of the API: it lets `std::optional<TimePeriod>` create the value in place (TimePeriod can not move).
+    TimePeriod(ConstructionKey, JavaObjectHandle<TimePeriod> &&handle);
 
     TimePeriod(const TimePeriod &) = delete;
     TimePeriod(TimePeriod &&) noexcept = delete;
@@ -98,16 +107,18 @@ struct DXFCPP_EXPORT TimePeriod {
     TimePeriod &operator=(const TimePeriod &&) noexcept = delete;
 
     private:
-    mutable JavaObjectHandle<TimePeriod> handle_;
-    mutable std::mutex mtx_{};
-    mutable bool initialized_{};
-    std::function<JavaObjectHandle<TimePeriod>()> initializer_;
+    using Initializer = LazyJavaObjectHandle<TimePeriod>::Initializer;
 
-    // lazy c-tor
-    explicit TimePeriod(std::function<JavaObjectHandle<TimePeriod>()> &&initializer);
+    LazyJavaObjectHandle<TimePeriod> handle_;
+
+    // The constructor of the constants: constant initialization, the Java object is created at the first use.
+    constexpr explicit TimePeriod(Initializer initializer) noexcept
+        : handle_{initializer, LazyJavaObjectHandle<TimePeriod>::ConstantTag{}} {
+    }
+
     explicit TimePeriod(JavaObjectHandle<TimePeriod> &&handle);
 
-    void init() const;
+    const JavaObjectHandle<TimePeriod> &getHandle() const;
 };
 
 DXFCPP_END_NAMESPACE

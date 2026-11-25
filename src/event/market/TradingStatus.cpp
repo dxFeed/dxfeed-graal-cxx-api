@@ -3,21 +3,27 @@
 
 #include "../../../include/dxfeed_graal_cpp_api/event/market/TradingStatus.hpp"
 
+#include <array>
+#include <functional>
+#include <span>
 #include <type_traits>
-#include <unordered_map>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const TradingStatus TradingStatus::UNDEFINED{0, "UNDEFINED"};
-const TradingStatus TradingStatus::HALTED{1, "HALTED"};
-const TradingStatus TradingStatus::ACTIVE{2, "ACTIVE"};
+constinit const TradingStatus TradingStatus::UNDEFINED{0, "UNDEFINED"};
+constinit const TradingStatus TradingStatus::HALTED{1, "HALTED"};
+constinit const TradingStatus TradingStatus::ACTIVE{2, "ACTIVE"};
 
-template <>
-const std::unordered_map<TradingStatus::CodeType, std::reference_wrapper<const TradingStatus>>
-    TradingStatus::ParentType::ALL{
-        {TradingStatus::UNDEFINED.getCode(), std::cref(TradingStatus::UNDEFINED)},
-        {TradingStatus::HALTED.getCode(), std::cref(TradingStatus::HALTED)},
-        {TradingStatus::ACTIVE.getCode(), std::cref(TradingStatus::ACTIVE)},
-    };
+namespace {
+
+constinit const std::array<std::reference_wrapper<const TradingStatus>, 3> ALL_ELEMENTS{
+    std::cref(TradingStatus::UNDEFINED),
+    std::cref(TradingStatus::HALTED),
+    std::cref(TradingStatus::ACTIVE),
+};
+
+} // namespace
+
+constinit const std::span<const std::reference_wrapper<const TradingStatus>> TradingStatus::ALL{ALL_ELEMENTS};
 
 DXFCPP_END_NAMESPACE

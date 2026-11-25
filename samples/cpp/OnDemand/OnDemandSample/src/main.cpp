@@ -16,6 +16,13 @@ int main(int /* argc */, char * /* argv */[]) {
     using namespace std::literals;
 
     try {
+        // The on-demand service of the demo feed. The properties are set here rather than in dxfeed.system.properties:
+        // the samples share one such file in bin/, with the address of the demo feed.
+        System::setProperty(DXEndpoint::DXFEED_ADDRESS_PROPERTY, "(ondemand:demo.dxfeed.com:7680)");
+        System::setProperty(DXEndpoint::DXENDPOINT_EVENT_TIME_PROPERTY, "true");
+        System::setProperty(DXEndpoint::DXFEED_USER_PROPERTY, "demo");
+        System::setProperty(DXEndpoint::DXFEED_PASSWORD_PROPERTY, "demo");
+
         // get on-demand-only data feed
         const auto onDemand = OnDemandService::getInstance();
         const auto feed = onDemand->getEndpoint()->getFeed();
@@ -25,7 +32,7 @@ int main(int /* argc */, char * /* argv */[]) {
 
         sub->addEventListener<Quote>([](auto &&events) {
             for (auto &&quote : events) {
-                std::cout << dxfcpp::formatTimeStampWithMillisWithTimeZone(quote->getEventTime()) + " : " +
+                std::cout << TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(quote->getEventTime()) + " : " +
                                  quote->getEventSymbol() + " bid " + dxfcpp::toString(quote->getBidPrice()) +
                                  " / ask " + dxfcpp::toString(quote->getAskPrice())
                           << std::endl;
@@ -44,7 +51,8 @@ int main(int /* argc */, char * /* argv */[]) {
         // replaying events until end time reached
         while (onDemand->getTime() < to) {
             std::cout << "Current state is "s + DXEndpoint::stateToString(onDemand->getEndpoint()->getState()) + "," +
-                             " on-demand time is " + formatTimeStampWithMillisWithTimeZone(onDemand->getTime())
+                             " on-demand time is " +
+                             TimeFormat::DEFAULT_WITH_MILLIS_WITH_TIMEZONE.format(onDemand->getTime())
                       << std::endl;
 
             std::this_thread::sleep_for(1s);

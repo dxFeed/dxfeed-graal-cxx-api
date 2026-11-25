@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../IndexedEvent.hpp"
 #include "../IndexedEventSource.hpp"
@@ -38,15 +39,15 @@ struct EventMapper;
  * an OptionSeries is established via @ref Series::getExpiration() "expiration" property.
  * If case where there are multiple series at the same expiration day id, then series events are
  * are ordered by their @ref Series::getIndex() "index" in the same order as the corresponding
- * OptionSeries are @ref OptionSeries::compareTo(OptionSeries) "ordered" by their attributes.
+ * OptionSeries are ordered by their attributes.
  *
- * <h3><a name="eventFlagsSection">Event flags, transactions and snapshots</a></h3>
+ * <h3><a name="seriesEventFlagsSection">Event flags, transactions and snapshots</a></h3>
  *
  * Series data source provides a consistent view of the set of known series.
- * The corresponding information is carried in @ref ::getEventFlags() "eventFlags" property.
+ * The corresponding information is carried in @ref getEventFlags() "eventFlags" property.
  * The logic behind this property is detailed in IndexedEvent class documentation.
  * Multiple event sources for the same symbol are not supported for series, thus
- * @ref ::getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
+ * @ref getSource() "source" property is always @ref IndexedEventSource::DEFAULT "DEFAULT".
  *
  * <p>IndexedEventModel class handles all the snapshot and transaction logic and conveniently represents
  * a list current of events.
@@ -90,7 +91,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     Data data_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the Series object
@@ -146,7 +147,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Series(const StringLike & eventSymbol) noexcept;
+    explicit Series(StringParam eventSymbol);
 
     /**
      * Changes an event's symbol and returns the current series.
@@ -154,7 +155,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
      * @param eventSymbol The symbol of this event.
      * @return The current series.
      */
-    Series &withEventSymbol(const StringLike &eventSymbol) noexcept;
+    Series &withEventSymbol(StringParam eventSymbol);
 
     /**
      * Changes event's creation time and returns the current series.
@@ -202,7 +203,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns a unique per-symbol index of this event.
-     * The index is composed of @ref ::getTime() "time" and @ref ::getSequence() "sequence".
+     * The index is composed of @ref getTime() "time" and @ref getSequence() "sequence".
      * Changing either time or sequence changes the event index.
      *
      * @return unique index of this event.
@@ -269,7 +270,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     /**
      * Returns sequence number of this series event to distinguish trades that have the same
-     * @ref ::getTime() "time". This sequence number does not have to be unique and
+     * @ref getTime() "time". This sequence number does not have to be unique and
      * does not need to be sequential. Sequence can range from 0 to ::MAX_SEQUENCE.
      *
      * @return sequence of this series event.
@@ -298,7 +299,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
     /**
      * Returns day id of expiration.
      *
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @return day id of expiration.
      */
@@ -306,7 +307,7 @@ class DXFCPP_EXPORT Series final : public MarketEvent, public IndexedEvent {
 
     /**
      * Changes day id of expiration.
-     * Example: @ref day_util::#getDayIdByYearMonthDay() "dxfcpp::day_util::getDayIdByYearMonthDay"(20090117).
+     * Example: `dxfcpp::day_util::getDayIdByYearMonthDay(2009, 1, 17)`.
      *
      * @param expiration The day id of expiration.
      */

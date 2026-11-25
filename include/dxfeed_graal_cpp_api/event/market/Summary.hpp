@@ -3,11 +3,12 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
 #include "./MarketEvent.hpp"
@@ -66,7 +67,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
     Data data_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
 
     public:
     /// The alias to a type of shared pointer to the Summary object
@@ -115,7 +116,7 @@ class DXFCPP_EXPORT Summary final : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Summary(const StringLike& eventSymbol) noexcept;
+    explicit Summary(StringParam eventSymbol);
 
     /**
      * Returns the identifier of the day that this summary represents.

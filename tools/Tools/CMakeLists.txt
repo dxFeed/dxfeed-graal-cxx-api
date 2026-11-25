@@ -37,19 +37,44 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Tools.cpp
         src/Args/Args.cpp
+        src/Diagnose/NetProbe.cpp
+        src/NetTest/Args.cpp
+        src/NetTest/Consumer.cpp
+        src/NetTest/EventPool.cpp
+        src/NetTest/Generator.cpp
+        src/NetTest/Histogram.cpp
+        src/NetTest/Metrics.cpp
+        src/NetTest/MetricsRequest.cpp
+        src/NetTest/RateLimiter.cpp
+        src/NetTest/Run.cpp
+        src/NetTest/RunSupport.cpp
+        src/NetTest/Statistics.cpp
+        src/NetTest/Summary.cpp
+        src/NetTest/SymbolPool.cpp
 )
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ../../third_party/range-v3-0.12/include)
+
+# The network probe of Diagnose and the /metrics server of NetTest use the sockets.
+if (WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32)
+endif ()
+
+# The definitions of the library are PRIVATE: the version in the name of the tools and the metrics are set here.
+target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_VERSION="${DXFCXX_VERSION}")
+
+if (DXFCXX_ENABLE_METRICS)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_ENABLE_METRICS=1)
+endif ()
 
 if (TARGET dxfcxx_warnings)
     target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx_warnings)
 endif ()
 
 if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_USE_DLLS)
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process console::console fmt::fmt-header-only)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx process::process console::console fmt::fmt-header-only bits::bits)
 else ()
-    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dxfcxx::static process::process console::console fmt::fmt-header-only bits::bits)
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
         if (DXFCXX_LINK_STATIC_RUNTIME)
@@ -68,9 +93,18 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E
         $<TARGET_FILE:dxfcxx::graal>
         $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 
+# The MSVC ASan runtime, so the Tools also start outside a developer prompt (the CTest runs of the Diagnose command).
+dxfcxx_sanitizer_runtime_files(DXFCXX_TOOLS_SANITIZER_RUNTIME_FILES)
+
+if (DXFCXX_TOOLS_SANITIZER_RUNTIME_FILES)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${DXFCXX_TOOLS_SANITIZER_RUNTIME_FILES}
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+endif ()
+
 if (DXFCXX_DYNAMICALLY_LINK_TOOLS)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:dxfcxx>
+            ${DXFCXX_SHARED_LIBRARY_RUNTIME_FILE}
             $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif ()
 

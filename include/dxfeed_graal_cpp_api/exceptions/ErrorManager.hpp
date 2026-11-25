@@ -1,0 +1,243 @@
+// Copyright (c) 2026 Devexperts LLC.
+// SPDX-License-Identifier: MPL-2.0
+
+#pragma once
+
+#include "../detail/Conf.hpp"
+
+DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
+
+#include "../detail/StringParam.hpp"
+
+#include <cstddef>
+#include <cstdint>
+#include <exception>
+#include <functional>
+#include <optional>
+#include <source_location>
+#include <string>
+#include <vector>
+
+/**
+ * @page error_handling Error handling
+ *
+ * The library reports an error through one of two channels.
+ *
+ * - **A call that fails** throws an exception to its caller: JavaException when the Java code of the dxFeed Graal
+ *   SDK throws, GraalException when the call cannot enter the isolate, InvalidArgumentException, RuntimeException.
+ *   The Java exception belongs to the call that failed, a later call does not get it, even when the failure is
+ *   reported by a result (System::setProperty() returns `false`). When an SDK function that has no null result returns
+ *   null without a Java exception, the call throws RuntimeException.
+ * - **An error without a caller** goes to ErrorManager. Such an error happens in the code that the library runs on
+ *   its own: a callback of the dxFeed Graal SDK (events of a subscription, a state change of an endpoint or of an
+ *   instrument profile connection, a change of a subscription, instrument profiles of a collector, the events of a
+ *   model). An exception of that code would otherwise terminate the process, and the caller's thread could not see
+ *   it anyway: the callback runs on a thread of the SDK.
+ * - **A release that fails** goes to ErrorManager as well: a destructor or a function that frees the native data of
+ *   the SDK (for example, the destructor of a subscription or of a model that closes it) does not throw. From the
+ *   start of the shutdown of the library (dxfcpp::shutdown(), the exit of the process) a failure of a release is not
+ *   reported: the SDK is being closed or is closed already.
+ * - **A failed creation of the Graal isolate** (an invalid argument of System::setIsolateArguments() or of the
+ *   `DXFCPP_ISOLATE_ARGUMENTS` environment variable, see @ref isolate_arguments "Isolate arguments") is reported to the
+ *   caller of the first call that needs Java and of every next one: GraalException with the numeric code, its text and
+ *   the reason. The library does not try to create the isolate again. System::getProperty() and System::setProperty()
+ *   throw it too, instead of returning an empty string or `false`; the functions of the C API return `DXFC_EC_ERROR`.
+ *   The messages never contain the values of the arguments.
+ * - **A warning** is reported from inside a call that goes on (for example, a `fromTime` in the future given to a
+ *   TimeSeriesTxModel, a candle symbol string without a period given to CandleSymbol::valueOf(), see
+ *   @ref candle_symbols "Candle symbols"; a slow listener of a subscription, see
+ *   @ref listener_threads "Listeners and threads"; a subscription without events while its endpoint is connected,
+ *   when its silence watchdog is on, see DXFeedSubscription::setSilenceWatchdog()): the call does not throw and does
+ *   not change its result. The
+ *   library reports it with ErrorManager::reportWarning(), and it has the level ErrorInfo::Level::WARN, while the
+ *   errors have ErrorInfo::Level::ERROR (ErrorInfo::level). A warning shares the handler, the journal and
+ *   ErrorManager::getLastError() with the errors.
+ * - **An INFO message** (ErrorInfo::Level::INFO) is not a problem: the library reports it on its own, once per process,
+ *   when the first endpoint is created (DXEndpoint::create(), DXEndpoint::Builder::build(), DXEndpoint::getInstance(),
+ *   DXFeed::getInstance(), DXPublisher::getInstance()). It names the versions of the dxFeed Graal C++ API and of the
+ *   dxFeed Graal Native SDK and the platform, the first thing to send to the support:
+ *   `[dxfcpp] INFO #1 DXEndpoint: dxFeed Graal C++ API v9.0.0, dxFeed Graal Native SDK 3.18.0, Windows x86_64(16 cores)`. The version of QD follows in the log of the SDK: `Using QDS-<version>, (C) Devexperts`.
+ *
+ * ErrorManager passes each error, warning and INFO message to the handler and keeps the last ones in a journal:
+ *
+ * - The default handler writes one line per error to `stderr`; a warning is marked with `WARN ` before its number,
+ *   an INFO message with `INFO `: `[dxfcpp] WARN #7 Component (File.cpp:42): message`. ErrorManager::setHandler()
+ *   replaces it, a null handler turns the output off, ErrorManager::resetHandler() restores the default one. A
+ *   handler that logs the errors may check ErrorInfo::level to log the INFO messages at a lower level.
+ * - The handler is called on the thread where the error happened, without the locks of ErrorManager held: it may
+ *   read the journal and change the handler. Errors of several threads call it at the same time, so it must be
+ *   thread-safe. Keep it short, it delays the thread that reported the error (for example, the delivery of the
+ *   events of a subscription). An exception of the handler is ignored; an error reported from inside the handler
+ *   goes to the journal only.
+ * - The journal keeps the last ErrorManager::getCapacity() errors (ErrorManager::DEFAULT_CAPACITY by default):
+ *   ErrorManager::getErrors(), ErrorManager::getLastError(), ErrorManager::clearErrors().
+ *
+ * Events of the types that the C++ API does not implement (for example, EventTypeEnum::CONFIGURATION) are skipped
+ * in the event callbacks: the other events of the batch are delivered, and one error per type and batch is reported
+ * with the number of the skipped events. A listener of a subscription is not called when all the events of a batch
+ * are skipped.
+ *
+ * ErrorManager works during the exit of the process and after dxfcpp::shutdown(): it is never destroyed and does not
+ * call the SDK. The handler can be called at exit from a thread of the SDK while the static objects of the program
+ * are being destroyed, as the listeners can (see dxfcpp::shutdown()).
+ *
+ * ```cpp
+ * dxfcpp::ErrorManager::setHandler([](const dxfcpp::ErrorInfo &error) {
+ *     myLogger.error(error.toString());
+ * });
+ * ```
+ */
+
+/**
+ * \addtogroup dxfcpp_exceptions
+ * @{
+ */
+
+DXFCPP_BEGIN_NAMESPACE
+
+/**
+ * An error without a caller, reported to ErrorManager. A value: copies do not change when ErrorManager gets new
+ * errors.
+ */
+struct DXFCPP_EXPORT ErrorInfo {
+    /// The number of the error, from 1, increasing in the order of the reports.
+    std::uint64_t id{};
+
+    /// The time of the report, in milliseconds since the UNIX epoch (UTC).
+    std::int64_t time{};
+
+    /// The hash of the `std::thread::id` of the thread that reported the error.
+    std::uint64_t threadId{};
+
+    /// The part of the library that reported the error, for example `DXFeedSubscription`.
+    std::string component{};
+
+    /// The source file and the line of the report, for example `DXFeedSubscription.cpp:42`.
+    std::string location{};
+
+    /// The message of the error. For a Java exception, the message of the Java exception.
+    std::string message{};
+
+    /// The class of the Java exception, or an empty string when the error is not a Java exception.
+    std::string javaClassName{};
+
+    /// The stack trace of the Java exception, or an empty string when the error is not a Java exception.
+    std::string javaStackTrace{};
+
+    /// The level of a report.
+    enum class Level {
+        // windows.h defines ERROR as a macro: it is hidden here and restored after the enumerator.
+#pragma push_macro("ERROR")
+#undef ERROR
+        /// A failure: reported by ErrorManager::report() and ErrorManager::reportException(). The default level.
+        ERROR,
+#pragma pop_macro("ERROR")
+
+        /// A warning: reported by ErrorManager::reportWarning(). The call that reported it went on.
+        WARN,
+
+        /// A message of the library that is not a problem, for example the line of the versions at the creation of
+        /// the first endpoint. Only the library reports it.
+        INFO
+    };
+
+    /// The level of the report, the last member: a value of ErrorInfo without it gets the level of an error.
+    Level level{};
+
+    /**
+     * Returns a string representation of the error: the component, the location, the Java class (if any) and the
+     * message, in one line. A warning starts with `WARN `, an INFO message with `INFO ` and has no location.
+     *
+     * @return The string representation of the error.
+     */
+    std::string toString() const;
+};
+
+/**
+ * Receives the errors that have no caller: the exceptions of the callbacks of the dxFeed Graal SDK and of the code
+ * the library runs on its own. See @ref error_handling "Error handling".
+ */
+struct DXFCPP_EXPORT ErrorManager final {
+    /// The handler of the errors. A null handler turns the output off.
+    using Handler = std::function<void(const ErrorInfo &)>;
+
+    /// The default capacity of the journal.
+    static constexpr std::size_t DEFAULT_CAPACITY = 128;
+
+    ErrorManager() = delete;
+
+    /**
+     * Reports an error: adds it to the journal and passes it to the handler.
+     *
+     * @param component The part of the code that reports the error.
+     * @param message The message of the error.
+     * @param location The source location of the report.
+     */
+    static void report(StringParam component, StringParam message,
+                       const std::source_location &location = std::source_location::current()) noexcept;
+
+    /**
+     * Reports an exception: adds it to the journal and passes it to the handler. A JavaException gives the Java
+     * class and stack trace, another `std::exception` its `what()`, any other exception the message
+     * `unknown exception`.
+     *
+     * @param component The part of the code that reports the error.
+     * @param exception The exception, usually `std::current_exception()` in a `catch` block.
+     * @param location The source location of the report.
+     */
+    static void reportException(StringParam component, const std::exception_ptr &exception,
+                                const std::source_location &location = std::source_location::current()) noexcept;
+
+    /**
+     * Reports a warning: adds it to the journal and passes it to the handler like an error, with the level
+     * ErrorInfo::Level::WARN. The ids come from the same counter as the ids of the errors.
+     *
+     * @param component The part of the code that reports the warning.
+     * @param message The message of the warning.
+     * @param location The source location of the report.
+     */
+    static void reportWarning(StringParam component, StringParam message,
+                              const std::source_location &location = std::source_location::current()) noexcept;
+
+    /**
+     * Sets the handler of the errors.
+     *
+     * @param handler The new handler, or a null handler to turn the output off (the journal keeps the errors).
+     */
+    static void setHandler(Handler handler);
+
+    /// Restores the default handler, which writes one line per error to `stderr`.
+    static void resetHandler() noexcept;
+
+    /**
+     * The default handler: writes ErrorInfo::toString() of the error as one line to `stderr`.
+     *
+     * @param error The error.
+     */
+    static void defaultHandler(const ErrorInfo &error) noexcept;
+
+    /**
+     * Sets the number of the last errors that the journal keeps. Older errors are dropped at once if there are more.
+     *
+     * @param capacity The capacity; 0 turns the journal off.
+     */
+    static void setCapacity(std::size_t capacity);
+
+    /// @return The number of the last errors that the journal keeps.
+    static std::size_t getCapacity() noexcept;
+
+    /// @return The copies of the errors in the journal, from the oldest to the newest.
+    static std::vector<ErrorInfo> getErrors();
+
+    /// @return The copy of the newest error in the journal, or an empty optional when the journal is empty.
+    static std::optional<ErrorInfo> getLastError();
+
+    /// Removes all the errors from the journal. The numbers of the next errors continue.
+    static void clearErrors() noexcept;
+};
+
+DXFCPP_END_NAMESPACE
+
+/// @}
+
+DXFCXX_DISABLE_MSC_WARNINGS_POP()

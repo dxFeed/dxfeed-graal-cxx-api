@@ -3,11 +3,14 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
-#include "../../internal/Common.hpp"
+#include "../../detail/Concepts.hpp"
+#include "../../detail/Math.hpp"
+#include "../../detail/StringParam.hpp"
+#include "../../util/StringUtils.hpp"
 #include "../EventTypeEnum.hpp"
 #include "../LastingEvent.hpp"
 #include "./MarketEvent.hpp"
@@ -74,7 +77,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     Data data_{};
 
     void fillData(void *graalNative) noexcept override;
-    void fillGraalData(void *graalNative) const noexcept override;
+    void fillGraalData(void *graalNative) const override;
     static void freeGraalData(void *graalNative) noexcept;
 
     public:
@@ -124,7 +127,7 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @param eventSymbol The event symbol.
      */
-    explicit Profile(const StringLike &eventSymbol) noexcept;
+    explicit Profile(StringParam eventSymbol);
 
     /**
      * Returns description of the security instrument.
@@ -145,7 +148,17 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @param description description of the security instrument.
      */
-    void setDescription(const StringLike &description) noexcept;
+    void setDescription(StringParam description);
+
+    /**
+     * Changes the description of the security instrument, or makes it null with `std::nullopt`.
+     * `setDescription(other.getDescriptionOpt())` copies it from another event, null included.
+     *
+     * @param description the description of the security instrument or `std::nullopt`.
+     */
+    template <OptionalString S> void setDescription(S &&description) noexcept {
+        data_.description = std::forward<S>(description);
+    }
 
     /**
      * Returns short sale restriction of the security instrument.
@@ -208,7 +221,17 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
      *
      * @param statusReason description of the reason that trading was halted.
      */
-    void setStatusReason(const StringLike &statusReason) noexcept;
+    void setStatusReason(StringParam statusReason);
+
+    /**
+     * Changes the description of the reason that trading was halted, or makes it null with `std::nullopt`.
+     * `setStatusReason(other.getStatusReasonOpt())` copies it from another event, null included.
+     *
+     * @param statusReason the description of the reason that trading was halted or `std::nullopt`.
+     */
+    template <OptionalString S> void setStatusReason(S &&statusReason) noexcept {
+        data_.statusReason = std::forward<S>(statusReason);
+    }
 
     /**
      * Returns starting time of the trading halt interval.
@@ -313,14 +336,14 @@ class DXFCPP_EXPORT Profile final : public MarketEvent, public LastingEvent {
     void setBeta(double beta) noexcept;
 
     /**
-     * Returns earnings per share (the company’s profits divided by the number of shares).
+     * Returns earnings per share (the company's profits divided by the number of shares).
      *
      * @return earnings per share
      */
     double getEarningsPerShare() const noexcept;
 
     /**
-     * Changes Earnings per share (the company’s profits divided by the number of shares).
+     * Changes Earnings per share (the company's profits divided by the number of shares).
      *
      * @param earningsPerShare earnings per share
      */

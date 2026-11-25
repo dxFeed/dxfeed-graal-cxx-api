@@ -6,9 +6,11 @@ writes these files the same way.
 
 | File | Content | Used by |
 |---|---|---|
-| `all-events.txt` | One event of each of the 18 event types, every transferred field has its own value (the events of `test::createTapeEvents()`, plus the Java-only fields: `TradeId` of `Trade`, `TradeETH`, `TimeAndSale` and the `Message` attachment) | `tests/event/TapeRoundTripTest.cpp` |
-| `defaults.txt` | Default-constructed events of the 18 types, written by the Java API | `tests/event/TapeRoundTripTest.cpp` |
+| `all-events.txt` | One event of each of the 24 event types (`OrderImbalance` on two sources, NTV and NUAM, `NuamOrder` on two sources, NUAM and nuam), every transferred field has its own value (the events of `test::createTapeEvents()`, plus the Java-only field: the `Message` attachment) | `tests/event/TapeRoundTripTest.cpp` |
+| `configuration.txt` | Three `Configuration` events (a type that the C++ API does not implement) and one `Quote`, written by hand | `tests/event/UnsupportedEventTest.cpp` |
+| `defaults.txt` | Default-constructed events of the 24 types, written by the Java API | `tests/event/TapeRoundTripTest.cpp` |
 | `edge-values.txt` | The edge values of `test::createEdgeEvents()` (NaN, ±0.0, infinities, number limits, special strings, all enum values, all 256 values of the event flags byte), written by the Java API from the same values | `tests/event/EdgeValuesTapeTest.cpp` |
+| `network.txt` | The data of the local server of the network tests: quotes of AAPL and IBM, a snapshot of AAPL orders on NTV and three years of daily AAPL candles, generated from `tests/network/NetworkTapeData.hpp` (see below) | `tests/network/NetworkTest.cpp` (through the server), `tests/event/NetworkTapeTest.cpp` |
 | `edge-values-round-trip.txt` | `edge-values.txt` read by the Java API (`STREAM_FEED`) and written back (`PUBLISHER`): QD does not read back every value it writes, e.g. the day ids of the int32 limits become 0 | `tests/event/EdgeValuesTapeTest.cpp` |
 
 ## Format
@@ -19,6 +21,15 @@ writes these files the same way.
 - `Sequence` of time series events packs `<milliseconds>:<sequence>`; `Flags` packs the enum and boolean fields.
 - `\NULL` is a null string, `\0` is an empty exchange code.
 - `EventTime` is written because the tests enable `dxendpoint.eventTime`.
+- `OrderImbalance` is written per source: the record `OrderImbalance#NTV` has the NTV source, the plain `OrderImbalance`
+  the DEFAULT one. `Sequence` packs `<milliseconds>:<sequence>` and `Flags` packs the imbalance side and the auction type.
+- `NuamOrder` is written per source as well: `NuamOrder#NUAM`, `NuamOrder#nuam` (the lowercase source is another
+  source) and the plain `NuamOrder` for the DEFAULT source. `Flags` packs the enum fields as in `Order`, `NuamFlags`
+  packs the time in force and the order type. `NuamTrade` and `NuamTimeAndSale` are plain records that
+  repeat the columns of `Trade` and `TimeAndSale` (including `TradeId`) and add their own.
+- `MarketMaker` is a plain record keyed by the symbol, the exchange code and the market maker id (`ExchangeCode`,
+  `MarketMaker`); the default scheme writes `BidTime` and `AskTime` in seconds. `TextConfiguration` packs
+  `<milliseconds>:<sequence>` in `Sequence`, as `TextMessage` does.
 - Event flags follow the columns as `EventFlags=TX_PENDING,SNAPSHOT_END`.
 - QD writes the UTC offset in whole minutes. For times before a zone switched to standard time (local mean time with
   seconds, e.g. `+02:30:17` in Europe/Moscow until 1919) a tape written in that zone is up to 59 seconds off, so the
@@ -32,7 +43,9 @@ The edge-value tapes are written by the Java API, so they show what Java passes 
   written as `"ces "`, `<null>` as `ull>`);
 - the event flags `0x20` and `REMOVE_SYMBOL` (`0x80`) are not written;
 - times are stored in whole seconds of an int32 (`Long.MAX_VALUE` is `20380119-031407`), day ids as `yyyyMMdd`
-  (the int32 limits give numbers that QD does not read back).
+  (the int32 limits give numbers that QD does not read back);
+- doubles are stored in the QD decimal format: `Double.MAX_VALUE` and the lowest value are written as
+  `Infinity` and `-Infinity`, the smallest subnormal value as `0`.
 
 The values that the Java API rejects on publishing are not in the tapes (the tests check that C++ rejects them too):
 an order with the UNDEFINED side that is not empty, QD short strings (market maker, sale conditions) of more than
@@ -45,8 +58,34 @@ Edit the files by hand. When a value or a column changes, keep `test::createTape
 3.5.0): Java reads `all-events.txt` as the intended events (including the packed flags) and writes `defaults.txt`
 for default-constructed events. A new QD version needs no change unless QD changes the tape format or the scheme.
 
+The `OrderImbalance` and Nuam records (QD 3.356, the version in Graal SDK 3.9.0) are appended to the end of each file, before
+the closing `==`, as the Java API wrote them. The header of the file keeps `version=QDS-3.355` and the records of the
+other types are unchanged: a tape may list the columns of a record anywhere in the file, so the mixed file is read as
+a whole (the tests read it). The other records are not regenerated: they need nothing from QD 3.356, and a new tape
+would change the header and every line without new coverage. The records come from a Java program that sets the
+same values as the `OrderImbalance` and Nuam events of `test::createTapeEvents()`, `test::createDefaultEvents()`
+and `test::createEdgeEvents()` (the sources NTV, NUAM, ARCA and DEFAULT of the `OrderImbalance`, and NUAM, nuam and
+DEFAULT of the `NuamOrder`, cycle through the value sets of the edge values). The `TradeId` of `NuamTrade` and
+`NuamTimeAndSale` is 0 in the edge tapes and 7004 and 7005 in `all-events.txt`, as for `Trade` and `TimeAndSale`.
+
 `edge-values.txt` and `edge-values-round-trip.txt` are regenerated with the Java API when `test::createEdgeEvents()`
 changes: a Java program sets the same values on the Java events and writes them with a `PUBLISHER` to
 `tape:edge-values.txt[format=text]`, then reads that file with a `STREAM_FEED` (`file:...[speed=max]`) and writes the
 events back to `tape:edge-values-round-trip.txt[format=text]`. Run it with `-Duser.timezone=UTC` and convert the line
 endings to LF (on Windows Java writes CRLF).
+
+## Network tape
+
+`network.txt` is written by the C++ API, not by hand: `NetworkTapeData.hpp` describes the events, the generator
+`dxFeedGraalCxxApi_GenerateNetworkTape` (built with `DXFCXX_ENABLE_NETWORK_TESTS=ON`) writes them, and
+`NetworkTapeTest` fails when the file and the description differ. After a change of the description, regenerate the
+file on Linux in UTC, so that the times keep the `+0000` offset:
+
+```shell
+TZ=UTC <build>/tests/dxFeedGraalCxxApi_GenerateNetworkTape tests/data/tapes/network.txt
+```
+
+The tape has no event times (the server reads it with `time=none`). The snapshot flags are part of the data: the
+newest candle has `SNAPSHOT_BEGIN` and the oldest `SNAPSHOT_SNIP` (without the snip the server does not end the snapshot
+of a subscription from a time older than the oldest candle), the first order has `SNAPSHOT_BEGIN` and the last one, with
+the index 0, `SNAPSHOT_END`.

@@ -4,9 +4,12 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/Order.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/isolated/IsolatedCommon.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../isolated/IsolatedCommon.hpp"
+#include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 
 DXFCPP_BEGIN_NAMESPACE
@@ -20,22 +23,22 @@ void Order::fillData(void *graalNative) noexcept {
 
     OrderBase::fillData(graalNative);
 
-    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_v4_order_t *>(graalNative);
 
     orderData_ = {.marketMaker = toStringOpt(graalOrder->market_maker)};
 }
 
-void Order::fillGraalData(void *graalNative) const noexcept {
+void Order::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     OrderBase::fillGraalData(graalNative);
 
-    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_v4_order_t *>(graalNative);
 
     graalOrder->order_base.market_event.event_type.clazz = DXFG_EVENT_ORDER;
-    graalOrder->market_maker = createCString(orderData_.marketMaker);
+    graalOrder->market_maker = createCString(orderData_.marketMaker, "Order::marketMaker");
 }
 
 void Order::freeGraalData(void *graalNative) noexcept {
@@ -45,7 +48,7 @@ void Order::freeGraalData(void *graalNative) noexcept {
 
     MarketEvent::freeGraalData(graalNative);
 
-    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_v4_order_t *>(graalNative);
 
     delete[] graalOrder->market_maker;
 }
@@ -55,8 +58,8 @@ std::shared_ptr<Order> Order::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create Order. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER) {
-        const auto eventType = static_cast<dxfg_event_type_t *>(graalNative)->clazz;
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER) {
+        const auto eventType = static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz;
 
         throw InvalidArgumentException(fmt::format(
             "Unable to create Order. Wrong event class {}({})! Expected: {}", isolated::toString(eventType),
@@ -76,11 +79,12 @@ void *Order::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalOrder = new dxfg_order_t{};
-
-    fillGraalData(graalOrder);
-
-    return graalOrder;
+    return newGraalEvent<dxfg_v4_order_t>(
+        DXFG_EVENT_ORDER,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void Order::freeGraal(void *graalNative) {
@@ -88,13 +92,13 @@ void Order::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_ORDER) {
         throw InvalidArgumentException(fmt::format(
             "Unable to free Order's Graal data. Wrong event class {}! Expected: {}.",
-            std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_ORDER)));
+            std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz), std::to_string(DXFG_EVENT_ORDER)));
     }
 
-    const auto graalOrder = static_cast<dxfg_order_t *>(graalNative);
+    const auto graalOrder = static_cast<dxfg_v4_order_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -112,10 +116,10 @@ void Order::assign(std::shared_ptr<EventType> event) {
 Order::Order() noexcept {
 }
 
-Order::Order(const StringLike &eventSymbol) noexcept : OrderBase(eventSymbol) {
+Order::Order(StringParam eventSymbol) : OrderBase(eventSymbol) {
 }
 
-Order &Order::withEventSymbol(const StringLike &eventSymbol) noexcept {
+Order &Order::withEventSymbol(StringParam eventSymbol) {
     MarketEvent::setEventSymbol(eventSymbol);
 
     return *this;
@@ -145,7 +149,7 @@ Order &Order::withEventFlags(const EventFlagsMask &eventFlags) noexcept {
     return *this;
 }
 
-Order &Order::withIndex(std::int64_t index) noexcept {
+Order &Order::withIndex(std::int64_t index) {
     OrderBase::setIndex(index);
 
     return *this;
@@ -241,13 +245,13 @@ Order &Order::withTradeSize(double tradeSize) noexcept {
     return *this;
 }
 
-Order &Order::withExchangeCode(char exchangeCode) noexcept {
+Order &Order::withExchangeCode(char exchangeCode) {
     setExchangeCode(exchangeCode);
 
     return *this;
 }
 
-Order &Order::withExchangeCode(std::int16_t exchangeCode) noexcept {
+Order &Order::withExchangeCode(std::int16_t exchangeCode) {
     setExchangeCode(exchangeCode);
 
     return *this;
@@ -267,28 +271,28 @@ Order &Order::withScope(const Scope &scope) noexcept {
 
 const std::string &Order::getMarketMaker() const & noexcept {
     if (!orderData_.marketMaker) {
-        return String::NUL;
+        return nulString();
     }
 
-    return orderData_.marketMaker.value();
+    return *orderData_.marketMaker;
 }
 
 const std::optional<std::string> &Order::getMarketMakerOpt() const & noexcept {
     return orderData_.marketMaker;
 }
 
-void Order::setMarketMaker(const StringLike &marketMaker) noexcept {
-    orderData_.marketMaker = std::string(marketMaker);
+void Order::setMarketMaker(StringParam marketMaker) {
+    orderData_.marketMaker = std::string(marketMaker.view());
 }
 
-Order &Order::withMarketMaker(const StringLike &marketMaker) noexcept {
+Order &Order::withMarketMaker(StringParam marketMaker) {
     setMarketMaker(marketMaker);
 
     return *this;
 }
 
 std::string Order::toString() const {
-    return fmt::format("Order{{{}, marketMaker={}}}", baseFieldsToString(), getMarketMaker());
+    return fmt::format("Order{{{}, marketMaker='{}'}}", baseFieldsToString(), getMarketMakerOpt().value_or("null"));
 }
 
 DXFCPP_END_NAMESPACE

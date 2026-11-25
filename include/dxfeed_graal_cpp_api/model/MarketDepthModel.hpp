@@ -3,21 +3,29 @@
 
 #pragma once
 
-#include "../internal/Conf.hpp"
+#include "../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../detail/CallbackBarrier.hpp"
+#include "../detail/Concepts.hpp"
+#include "../detail/Math.hpp"
 #include "../entity/SharedEntity.hpp"
 #include "../event/EventSourceWrapper.hpp"
 #include "../event/market/Order.hpp"
 #include "../event/market/OrderBase.hpp"
-#include "../internal/Timer.hpp"
+#include "../exceptions/ErrorManager.hpp"
+#include "../util/StringUtils.hpp"
+#include "../util/Timer.hpp"
 #include "./IndexedTxModel.hpp"
 #include "./MarketDepthModelListener.hpp"
 
+#include <chrono>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <set>
+#include <string>
 #include <unordered_set>
 #include <utility>
 
@@ -59,6 +67,20 @@ struct SymbolWrapper;
  * becomes permanently detached from all feeds, removes all its listeners.
  *
  * This class is thread-safe and can be used concurrently from multiple threads without external synchronization.
+ *
+ * <h3>Crossed book</h3>
+ *
+ * The model shows the orders that the endpoint has received, as they are: it does not correct them. A book can be
+ * crossed (the best buy order is above the best sell order) or show stale orders for reasons outside the API:
+ * - packets lost on the way from the exchange, so that the removal or the change of an order never arrived;
+ * - an overflow of the buffers of a slow client or of the network, after which the data is conflated or lost;
+ * - conflation of the updates by the server, which delivers the latest state with a delay;
+ * - sources that deliver only one side of the book, or a book that combines several sources or exchanges, whose prices
+ *   can legitimately cross for a short time.
+ *
+ * MarketDepthModel::Builder::withCrossedBookWarning() enables a check that reports a crossed book as a warning of the
+ * ErrorManager (see @ref error_handling "Error handling"), so that such cases are seen in the log of the application.
+ * The check is disabled by default.
  *
  * Sample:
  *
@@ -120,6 +142,9 @@ struct SymbolWrapper;
  */
 template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel final : RequireMakeShared<MarketDepthModel<O>> {
 
+    /**
+     * A builder class for creating an instance of MarketDepthModel.
+     */
     struct /* DXFCPP_EXPORT */ Builder final : RequireMakeShared<Builder> {
         friend struct MarketDepthModel;
 
@@ -128,6 +153,8 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         std::shared_ptr<MarketDepthModelListener<O>> listener_{};
         std::size_t depthLimit_{};
         std::int64_t aggregationPeriodMillis_{};
+        bool crossedBookWarning_{};
+        std::int64_t crossedBookWarningPeriodMillis_{60'000};
 
         public:
         explicit Builder(RequireMakeShared<Builder>::LockExternalConstructionTag) {
@@ -273,6 +300,30 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         }
 
         /**
+         * Enables or disables the warning on a crossed book (see @ref MarketDepthModel "Crossed book").
+         *
+         * When the check is enabled, the model compares the best buy order with the best sell order of the whole book
+         * after each transaction, whatever the depth limit. If the price of the best buy order is above the price of
+         * the best sell order, the model reports a warning with ErrorManager::reportWarning() (the component
+         * `MarketDepthModel`): the symbol, the source and the price of both orders. Equal prices are not reported.
+         * The first crossing is reported at once, the next ones at most once per period, with the number of the
+         * transactions with a crossed book since the previous warning.
+         *
+         * @remark The check is disabled by default.
+         * @param enabled `true` to enable the check.
+         * @param period The minimum time between two warnings of this model (1 minute by default); 0 reports every
+         * crossing.
+         * @return The builder instance.
+         */
+        std::shared_ptr<Builder> withCrossedBookWarning(bool enabled,
+                                                        std::chrono::milliseconds period = std::chrono::minutes{1}) {
+            crossedBookWarning_ = enabled;
+            crossedBookWarningPeriodMillis_ = period.count();
+
+            return this->template sharedAs<Builder>();
+        }
+
+        /**
          * Builds an instance of MarketDepthModel based on the provided parameters.
          *
          * @return The created MarketDepthModel.
@@ -409,7 +460,7 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         bool isDepthLimitUnbounded() const {
             auto temp = depthLimit_.load();
 
-            return temp == 0 || temp == std::numeric_limits<decltype(temp)>::max();
+            return temp == 0 || temp == (std::numeric_limits<decltype(temp)>::max)();
         }
 
         bool isOrderCountWithinDepthLimit() const {
@@ -434,7 +485,7 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
             isChanged_ = false;
             snapshot_.clear();
 
-            const auto limit = isDepthLimitUnbounded() ? std::numeric_limits<std::size_t>::max() : depthLimit_.load();
+            const auto limit = isDepthLimitUnbounded() ? (std::numeric_limits<std::size_t>::max)() : depthLimit_.load();
             std::size_t i = 0;
 
             for (auto it = orders_.begin(); i < limit && it != orders_.end(); ++it) {
@@ -456,6 +507,13 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         }
 
         public:
+        /// @return The first order of the set (the best price), or `nullptr` if the set is empty.
+        std::shared_ptr<O> first() const {
+            std::lock_guard lock(mutex_);
+
+            return orders_.empty() ? nullptr : *orders_.begin();
+        }
+
         /// @return A value indicating whether this set has changed.
         bool isChanged() const {
             return isChanged_;
@@ -521,15 +579,11 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         void clearBySource(const IndexedEventSource &source) {
             std::lock_guard lock(mutex_);
 
-            std::size_t size = orders_.size();
-
-            for (auto it = orders_.begin(); it != orders_.end(); ++it) {
-                if ((*it)->getSource() == source) {
-                    it = orders_.erase(it);
-                }
+            if (std::erase_if(orders_, [&source](const auto &order) {
+                    return order->getSource() == source;
+                }) > 0) {
+                isChanged_ = true;
             }
-
-            isChanged_ = orders_.size() != size;
         }
 
         std::vector<std::shared_ptr<O>> toVector() {
@@ -545,9 +599,9 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
 
     private:
     mutable std::recursive_mutex mtx_{};
-    // Serializes the listener calls. The listener is called without mtx_: the handler runs it on another thread and
-    // waits, so a listener that calls the model (close() included) would otherwise deadlock.
-    std::recursive_mutex notifyMtx_{};
+    // Serializes the listener calls (the event thread and the timer thread), and close() waits on it for the call in
+    // progress. The listener is called without mtx_, so it can call the model (close() included).
+    mutable std::recursive_mutex notifyMtx_{};
     std::unordered_map<std::int64_t, std::shared_ptr<O>> ordersByIndex_{};
     SortedOrderSet<BuyLess> buyOrders_{};
     SortedOrderSet<SellLess> sellOrders_{};
@@ -558,6 +612,11 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
     mutable std::atomic<bool> taskScheduled_{};
     mutable std::shared_ptr<Timer> taskTimer_{};
     mutable bool closed_{};
+    // The warning on a crossed book; the state of its rate limit is guarded by mtx_.
+    bool crossedBookWarning_{};
+    std::int64_t crossedBookWarningPeriodMillis_{};
+    std::optional<std::chrono::steady_clock::time_point> lastCrossedBookWarning_{};
+    std::int64_t suppressedCrossedBooks_{};
 
     static std::shared_ptr<MarketDepthModel> create(std::shared_ptr<Builder> builder) {
         auto marketDepthModel = MarketDepthModel::createShared(builder);
@@ -582,6 +641,9 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
 
     void eventsReceived(const IndexedEventSource &source, const std::vector<std::shared_ptr<O>> &events,
                         bool isSnapshot) {
+        std::optional<std::string> crossedBookWarning{};
+        bool notifyNow = false;
+
         {
             std::lock_guard guard(mtx_);
 
@@ -589,16 +651,68 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
                 return;
             }
 
-            if (!isSnapshot && aggregationPeriodMillis_ != 0) {
-                scheduleTaskIfNeeded(std::chrono::milliseconds(aggregationPeriodMillis_));
-
-                return;
+            if (crossedBookWarning_) {
+                crossedBookWarning = checkCrossedBook();
             }
 
-            tryCancelTask();
+            if (!isSnapshot && aggregationPeriodMillis_ != 0) {
+                scheduleTaskIfNeeded(std::chrono::milliseconds(aggregationPeriodMillis_));
+            } else {
+                tryCancelTask();
+                notifyNow = true;
+            }
         }
 
-        notifyListeners();
+        // Outside mtx_: the handler of the ErrorManager is user code.
+        if (crossedBookWarning) {
+            ErrorManager::reportWarning("MarketDepthModel", *crossedBookWarning);
+        }
+
+        if (notifyNow) {
+            notifyListeners();
+        }
+    }
+
+    // Must be called with mtx_ held. Returns the message of a warning if the book is crossed and the rate limit lets
+    // it through.
+    std::optional<std::string> checkCrossedBook() noexcept {
+        try {
+            const auto bid = buyOrders_.first();
+            const auto ask = sellOrders_.first();
+
+            // Equal prices (a locked book) are not reported; a NaN price is not a crossing.
+            if (!bid || !ask || !(bid->getPrice() > ask->getPrice())) {
+                return std::nullopt;
+            }
+
+            const auto now = std::chrono::steady_clock::now();
+
+            if (lastCrossedBookWarning_ &&
+                std::chrono::duration_cast<std::chrono::milliseconds>(now - *lastCrossedBookWarning_).count() <
+                    crossedBookWarningPeriodMillis_) {
+                suppressedCrossedBooks_++;
+
+                return std::nullopt;
+            }
+
+            auto message = "The book of " + bid->getEventSymbol() + " is crossed: the best bid " +
+                           toString(bid->getPrice()) + " (source " + bid->getSource().name() +
+                           ") is above the best ask " + toString(ask->getPrice()) + " (source " +
+                           ask->getSource().name() + ").";
+
+            if (suppressedCrossedBooks_ > 0) {
+                message += " Transactions with a crossed book since the previous warning: " +
+                           std::to_string(suppressedCrossedBooks_) + ".";
+            }
+
+            lastCrossedBookWarning_ = now;
+            suppressedCrossedBooks_ = 0;
+
+            return message;
+        } catch (...) {
+            // No memory for the message: the transaction is processed anyway.
+            return std::nullopt;
+        }
     }
 
     // Must be called without mtx_ held.
@@ -619,7 +733,9 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
             taskScheduled_ = false;
         }
 
-        listener_->getHandler()(buyOrders, sellOrders);
+        if (listener_) {
+            listener_->getHandler()(buyOrders, sellOrders);
+        }
     }
 
     void scheduleTaskIfNeeded(std::chrono::milliseconds delay) {
@@ -736,10 +852,14 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
         sellOrders_.setDepthLimit(depthLimit_);
         aggregationPeriodMillis_ = builder->aggregationPeriodMillis_;
         listener_ = builder->listener_;
+        crossedBookWarning_ = builder->crossedBookWarning_;
+        crossedBookWarningPeriodMillis_ = builder->crossedBookWarningPeriodMillis_;
     }
 
-    ~MarketDepthModel() override {
-        close();
+    ~MarketDepthModel() noexcept override {
+        runRelease("MarketDepthModel", [this] {
+            close();
+        });
     }
 
     /**
@@ -819,19 +939,32 @@ template <Derived<OrderBase> O> struct /* DXFCPP_EXPORT */ MarketDepthModel fina
     /**
      * Closes this model and makes it <i>permanently detached</i>.
      *
-     * A pending aggregated notification is cancelled, and no new listener call starts after this method returns; a call
-     * that has already started is not waited for. The method can be called from the listener.
+     * A pending aggregated notification is cancelled, and the listener is not called after this method returns: it
+     * waits for the listener call in progress on another thread. The method can be called from the listener; called
+     * from a listener or a callback of the library, it does not wait (see ListenerCallScope).
      */
     void close() const {
-        std::lock_guard guard(mtx_);
+        bool closing = false;
 
-        if (closed_) {
-            return;
+        {
+            std::lock_guard guard(mtx_);
+
+            if (!closed_) {
+                closed_ = true;
+                closing = true;
+                tryCancelTask();
+            }
         }
 
-        closed_ = true;
-        tryCancelTask();
-        indexedTxModel_->close();
+        if (closing) {
+            indexedTxModel_->close();
+        }
+
+        // A repeated close() waits too: the first one may not have waited yet.
+        if (!ListenerCallScope::isActive()) {
+            // A call that started before closed_ was set ends before the lock is taken.
+            std::lock_guard notifyGuard(notifyMtx_);
+        }
     }
 };
 

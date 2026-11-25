@@ -3,14 +3,15 @@
 
 #pragma once
 
-#include "../../../../include/dxfeed_graal_cpp_api/internal/Conf.hpp"
-#include "../../../../include/dxfeed_graal_cpp_api/internal/utils/StringUtils.hpp"
+#include "../../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "../../../../src/internal/utils/StringUtils.hpp"
 
 #include <cstdint>
 #include <fmt/chrono.h>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <fmt/std.h>
+#include <unordered_set>
 #include <utility>
 #include <variant>
 
@@ -163,7 +164,7 @@ struct NamedArg : Arg {
         }
 
         if (!A::LONG_NAME.empty()) {
-            result += (!A::SHORT_NAME.empty() ? ", " : String::EMPTY) + "--" + A::LONG_NAME;
+            result += std::string(!A::SHORT_NAME.empty() ? ", " : String::EMPTY) + "--" + A::LONG_NAME;
         }
 
         return result;
@@ -484,20 +485,22 @@ struct TapeArg : NamedArg {
     }
 };
 
-struct QuiteArg : FlagArg {
+struct QuietArg : FlagArg {
     const static std::string NAME;
     const static std::string SHORT_NAME;
     const static std::string LONG_NAME;
+    // The former misspelled name: still accepted, not shown in the help.
+    const static std::string LEGACY_LONG_NAME;
     const static std::string HELP_TEXT;
 
     [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
                                                  std::size_t nameFieldSize /* padding + name + padding */,
                                                  std::size_t windowSize) noexcept {
-        return Arg::prepareHelp<QuiteArg>(namePadding, nameFieldSize, windowSize);
+        return Arg::prepareHelp<QuietArg>(namePadding, nameFieldSize, windowSize);
     }
 
     [[nodiscard]] static std::string getFullName() noexcept {
-        return NamedArg::getFullName<QuiteArg>();
+        return NamedArg::getFullName<QuietArg>();
     }
 
     [[nodiscard]] static std::string getFullHelpText() noexcept {
@@ -505,7 +508,11 @@ struct QuiteArg : FlagArg {
     }
 
     static ParseResult<bool> parse(const std::vector<std::string> &args, std::size_t index) {
-        return FlagArg::parse<QuiteArg>(args, index);
+        if (args.size() > index && args[index] == "--" + LEGACY_LONG_NAME) {
+            return ParseResult<bool>::ok(true, index + 1);
+        }
+
+        return FlagArg::parse<QuietArg>(args, index);
     }
 };
 
@@ -613,6 +620,141 @@ struct IntervalArg : NamedUnsignedIntArg {
     }
 };
 
+struct IgnoreExchangesArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<IgnoreExchangesArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<IgnoreExchangesArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<IgnoreExchangesArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<IgnoreExchangesArg>(args, index);
+    }
+
+    /**
+     * Parses a comma-separated list of exchange codes (e.g. "Q,Z"): each code is one character, spaces around the
+     * codes and empty items are skipped.
+     */
+    static ParseResult<std::unordered_set<std::int16_t>> parseExchangeCodes(const std::string &list) {
+        std::unordered_set<std::int16_t> codes{};
+
+        for (auto &&code : splitAndTrim(list) | filterNonEmpty) {
+            if (code.size() != 1) {
+                return ParseResult<std::unordered_set<std::int16_t>>::error(fmt::format(
+                    "\"{}\" argument parsing error. \"{}\" is not a one-character exchange code.", NAME, code));
+            }
+
+            codes.insert(static_cast<std::int16_t>(static_cast<unsigned char>(code[0])));
+        }
+
+        return ParseResult<std::unordered_set<std::int16_t>>::ok(std::move(codes));
+    }
+};
+
+struct CompareArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<CompareArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<CompareArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<CompareArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<CompareArg>(args, index);
+    }
+};
+
+struct DurationArg : NamedUnsignedIntArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<DurationArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<DurationArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<DurationArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::size_t>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedUnsignedIntArg::parse<DurationArg>(args, index);
+    }
+};
+
+struct ReportArg : NamedArg {
+    const static std::string NAME;
+    const static std::string SHORT_NAME;
+    const static std::string LONG_NAME;
+    const static std::string HELP_TEXT;
+
+    [[nodiscard]] static std::string prepareHelp(std::size_t namePadding,
+                                                 std::size_t nameFieldSize /* padding + name + padding */,
+                                                 std::size_t windowSize) noexcept {
+        return Arg::prepareHelp<ReportArg>(namePadding, nameFieldSize, windowSize);
+    }
+
+    [[nodiscard]] static std::string getFullName() noexcept {
+        return NamedArg::getFullName<ReportArg>();
+    }
+
+    [[nodiscard]] static std::string getFullHelpText() noexcept {
+        return trimStr(HELP_TEXT);
+    }
+
+    static bool canParse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::canParse<ReportArg>(args, index);
+    }
+
+    static ParseResult<std::optional<std::string>> parse(const std::vector<std::string> &args, std::size_t index) {
+        return NamedArg::parse<ReportArg>(args, index);
+    }
+};
+
 struct HelpArg : FlagArg {
     const static std::string NAME;
     const static std::string SHORT_NAME;
@@ -701,8 +843,9 @@ Represents the arguments passed to the qds-tools.
 using ArgType =
     std::variant<tools::AddressArg<>, tools::AddressArgRequired<>, tools::TypesArg<>, tools::TypesArgRequired<>,
                  tools::SymbolsArg<>, tools::SymbolsArgRequired<>, tools::SymbolsArgRequired<1>, tools::PropertiesArg,
-                 tools::FromTimeArg, tools::SourceArg, tools::TapeArg, tools::QuiteArg, tools::ForceStreamArg,
-                 tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg, tools::HelpArg,
-                 tools::ArticleArgRequired<>, QdsArgs<>>;
+                 tools::FromTimeArg, tools::SourceArg, tools::TapeArg, tools::QuietArg, tools::ForceStreamArg,
+                 tools::CPUUsageByCoreArg, tools::DetachListenerArg, tools::IntervalArg, tools::IgnoreExchangesArg,
+                 tools::CompareArg, tools::DurationArg, tools::ReportArg, tools::HelpArg, tools::ArticleArgRequired<>,
+                 QdsArgs<>>;
 
 } // namespace dxfcpp::tools

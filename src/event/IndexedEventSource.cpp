@@ -2,15 +2,17 @@
 // SPDX-License-Identifier: MPL-2.0
 
 #include "../../include/dxfeed_graal_cpp_api/event/IndexedEventSource.hpp"
+#include "../internal/Common.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 
 DXFCPP_BEGIN_NAMESPACE
 
-const IndexedEventSource IndexedEventSource::DEFAULT{0, "DEFAULT"};
+constinit const IndexedEventSource IndexedEventSource::DEFAULT{0, ConstString::Literal{"DEFAULT"}};
 
 void *IndexedEventSource::toGraal() const {
-    auto *graalSource = new dxfg_indexed_event_source_t{INDEXED_EVENT_SOURCE, id_, createCString(name_)};
+    auto *graalSource = new dxfg_v4_indexed_event_source_t{orderSource_ ? ORDER_SOURCE : INDEXED_EVENT_SOURCE, id_,
+                                                           createCString(name_.view(), "IndexedEventSource(name)")};
 
     return graalSource;
 }
@@ -20,18 +22,18 @@ void IndexedEventSource::freeGraal(void *graalNative) {
         return;
     }
 
-    const auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
+    const auto *graalSource = static_cast<dxfg_v4_indexed_event_source_t *>(graalNative);
 
     delete[] graalSource->name;
     delete graalSource;
 }
 
-std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> IndexedEventSource::toGraalUnique() const noexcept {
+std::unique_ptr<void, decltype(&IndexedEventSource::freeGraal)> IndexedEventSource::toGraalUnique() const {
     return {toGraal(), freeGraal};
 }
 
 IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) {
-    auto *graalSource = static_cast<dxfg_indexed_event_source_t *>(graalNative);
+    auto *graalSource = static_cast<dxfg_v4_indexed_event_source_t *>(graalNative);
 
     if (graalSource == nullptr) {
         return {};
@@ -43,22 +45,37 @@ IndexedEventSource IndexedEventSource::fromGraal(void *graalNative) {
 IndexedEventSource::IndexedEventSource() noexcept {
 }
 
-IndexedEventSource::~IndexedEventSource() noexcept {
+IndexedEventSource::IndexedEventSource(std::int32_t id, StringParam name) : IndexedEventSource(id, name.view(), false) {
 }
 
-IndexedEventSource::IndexedEventSource(std::int32_t id, const StringLike &name) noexcept : id_{id}, name_{name} {
+IndexedEventSource::IndexedEventSource(std::int32_t id, StringParam name, bool orderSource)
+    : id_{id}, name_{ConstString::copyOf(name.view())}, orderSource_{orderSource} {
+}
+
+IndexedEventSource::IndexedEventSource(const IndexedEventSource &other) noexcept : IndexedEventSource(other, false) {
+}
+
+IndexedEventSource::IndexedEventSource(const IndexedEventSource &other, bool orderSource) noexcept
+    : id_{other.id_}, name_{other.name_}, orderSource_{orderSource} {
+}
+
+IndexedEventSource &IndexedEventSource::operator=(const IndexedEventSource &other) noexcept {
+    id_ = other.id_;
+    name_ = other.name_;
+
+    return *this;
 }
 
 std::int32_t IndexedEventSource::id() const noexcept {
     return id_;
 }
 
-const std::string &IndexedEventSource::name() const noexcept {
-    return name_;
+std::string IndexedEventSource::name() const {
+    return name_.str();
 }
 
 std::string IndexedEventSource::toString() const {
-    return name_;
+    return name_.str();
 }
 
 bool IndexedEventSource::operator==(const IndexedEventSource &indexedEventSource) const {

@@ -3,16 +3,15 @@
 
 #pragma once
 
-#include "../../internal/Conf.hpp"
+#include "../../detail/Conf.hpp"
 
 DXFCXX_DISABLE_MSC_WARNINGS_PUSH(4251)
 
+#include "../../detail/JavaObjectHandle.hpp"
+#include "../../detail/StringParam.hpp"
 #include "../../entity/SharedEntity.hpp"
-#include "../../internal/Common.hpp"
-#include "../../internal/Id.hpp"
-#include "../../internal/JavaObjectHandle.hpp"
+#include "../../util/Handler.hpp"
 #include "./InstrumentProfileCollector.hpp"
-#include "../../internal/Handler.hpp"
 
 /**
  * \addtogroup dxfcpp_ipf
@@ -66,10 +65,12 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     };
 
     private:
-    Id<InstrumentProfileConnection> id_;
+    std::size_t id_{static_cast<std::size_t>(-1)};
     JavaObjectHandle<InstrumentProfileConnection> handle_{};
     JavaObjectHandle<IpfPropertyChangeListener> stateChangeListenerHandle_{};
-    SimpleHandler<void(State, State)> onStateChange_{};
+    // The collector that the connection updates, as in the Java API.
+    InstrumentProfileCollector::Ptr collector_{};
+    SimpleHandler<void(State, State)> onStateChange_{"InstrumentProfileConnection"};
 
     InstrumentProfileConnection() noexcept;
 
@@ -100,7 +101,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
      *
      * @return new instrument profile connection.
      */
-    static Ptr createConnection(const StringLike &address, InstrumentProfileCollector::Ptr collector);
+    static Ptr createConnection(StringParam address, InstrumentProfileCollector::Ptr collector);
 
     /**
      * Returns the address of this instrument profile connection.
@@ -207,7 +208,7 @@ class DXFCPP_EXPORT InstrumentProfileConnection final : public SharedEntity {
     void removeStateChangeListener(std::size_t listenerId);
 
     /**
-     * Returns the onStateChange @ref SimpleHandler<void(ArgTypes...)> "handler" that can be used to add or remove
+     * Returns the onStateChange @ref SimpleHandler "handler" that can be used to add or remove
      * listeners.
      *
      * @return onStateChange handler with `void(State, State)` signature

@@ -4,9 +4,13 @@
 #include "../../../include/dxfeed_graal_cpp_api/event/market/TimeAndSale.hpp"
 
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
-#include "../../../include/dxfeed_graal_cpp_api/internal/TimeFormat.hpp"
+#include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
+#include "../../internal/utils/debug/Debug.hpp"
+#include "../../internal/utils/StringConstants.hpp"
+#include "../../internal/Common.hpp"
+#include "../../internal/utils/GraalEventUtils.hpp"
 
-#include <dxfg_api.h>
+#include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <string>
 
@@ -25,13 +29,14 @@ void TimeAndSale::fillData(void *graalNative) noexcept {
 
     MarketEvent::fillData(graalNative);
 
-    const auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+    const auto graalTimeAndSale = static_cast<dxfg_v4_time_and_sale_t *>(graalNative);
 
     data_ = {
         .eventFlags = graalTimeAndSale->event_flags,
         .index = graalTimeAndSale->index,
         .timeNanoPart = graalTimeAndSale->time_nano_part,
         .exchangeCode = graalTimeAndSale->exchange_code,
+        .tradeId = graalTimeAndSale->trade_id,
         .price = graalTimeAndSale->price,
         .size = graalTimeAndSale->size,
         .bidPrice = graalTimeAndSale->bid_price,
@@ -43,14 +48,14 @@ void TimeAndSale::fillData(void *graalNative) noexcept {
     };
 }
 
-void TimeAndSale::fillGraalData(void *graalNative) const noexcept {
+void TimeAndSale::fillGraalData(void *graalNative) const {
     if (graalNative == nullptr) {
         return;
     }
 
     MarketEvent::fillGraalData(graalNative);
 
-    const auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+    const auto graalTimeAndSale = static_cast<dxfg_v4_time_and_sale_t *>(graalNative);
 
     graalTimeAndSale->market_event.event_type.clazz = DXFG_EVENT_TIME_AND_SALE;
     graalTimeAndSale->event_flags = data_.eventFlags;
@@ -61,10 +66,12 @@ void TimeAndSale::fillGraalData(void *graalNative) const noexcept {
     graalTimeAndSale->size = data_.size;
     graalTimeAndSale->bid_price = data_.bidPrice;
     graalTimeAndSale->ask_price = data_.askPrice;
-    graalTimeAndSale->exchange_sale_conditions = createCString(data_.exchangeSaleConditions);
+    graalTimeAndSale->exchange_sale_conditions =
+        createCString(data_.exchangeSaleConditions, "TimeAndSale::exchangeSaleConditions");
     graalTimeAndSale->flags = data_.flags;
-    graalTimeAndSale->buyer = createCString(data_.buyer);
-    graalTimeAndSale->seller = createCString(data_.seller);
+    graalTimeAndSale->buyer = createCString(data_.buyer, "TimeAndSale::buyer");
+    graalTimeAndSale->seller = createCString(data_.seller, "TimeAndSale::seller");
+    graalTimeAndSale->trade_id = data_.tradeId;
 }
 
 void TimeAndSale::freeGraalData(void *graalNative) noexcept {
@@ -74,7 +81,7 @@ void TimeAndSale::freeGraalData(void *graalNative) noexcept {
 
     MarketEvent::freeGraalData(graalNative);
 
-    const auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+    const auto graalTimeAndSale = static_cast<dxfg_v4_time_and_sale_t *>(graalNative);
 
     delete[] graalTimeAndSale->exchange_sale_conditions;
     delete[] graalTimeAndSale->buyer;
@@ -86,10 +93,11 @@ std::shared_ptr<TimeAndSale> TimeAndSale::fromGraal(void *graalNative) {
         throw InvalidArgumentException("Unable to create TimeAndSale. The `graalNative` parameter is nullptr");
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TIME_AND_SALE) {
-        throw InvalidArgumentException(fmt::format("Unable to create TimeAndSale. Wrong event class {}! Expected: {}.",
-                                                   std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
-                                                   std::to_string(DXFG_EVENT_TIME_AND_SALE)));
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TIME_AND_SALE) {
+        throw InvalidArgumentException(
+            fmt::format("Unable to create TimeAndSale. Wrong event class {}! Expected: {}.",
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
+                        std::to_string(DXFG_EVENT_TIME_AND_SALE)));
     }
 
     auto timeAndSale = std::make_shared<TimeAndSale>();
@@ -105,11 +113,12 @@ void *TimeAndSale::toGraal() const {
         Debugger::debug(toString() + "::toGraal()");
     }
 
-    auto *graalTimeAndSale = new dxfg_time_and_sale_t{};
-
-    fillGraalData(graalTimeAndSale);
-
-    return graalTimeAndSale;
+    return newGraalEvent<dxfg_v4_time_and_sale_t>(
+        DXFG_EVENT_TIME_AND_SALE,
+        [this](void *graalNative) {
+            fillGraalData(graalNative);
+        },
+        freeGraalData);
 }
 
 void TimeAndSale::freeGraal(void *graalNative) {
@@ -117,14 +126,14 @@ void TimeAndSale::freeGraal(void *graalNative) {
         return;
     }
 
-    if (static_cast<dxfg_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TIME_AND_SALE) {
+    if (static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz != DXFG_EVENT_TIME_AND_SALE) {
         throw InvalidArgumentException(
             fmt::format("Unable to free TimeAndSale's Graal data. Wrong event class {}! Expected: {}.",
-                        std::to_string(static_cast<dxfg_event_type_t *>(graalNative)->clazz),
+                        std::to_string(static_cast<dxfg_v4_event_type_t *>(graalNative)->clazz),
                         std::to_string(DXFG_EVENT_TIME_AND_SALE)));
     }
 
-    const auto graalTimeAndSale = static_cast<dxfg_time_and_sale_t *>(graalNative);
+    const auto graalTimeAndSale = static_cast<dxfg_v4_time_and_sale_t *>(graalNative);
 
     freeGraalData(graalNative);
 
@@ -142,7 +151,7 @@ void TimeAndSale::assign(std::shared_ptr<EventType> event) {
 TimeAndSale::TimeAndSale() noexcept {
 }
 
-TimeAndSale::TimeAndSale(const StringLike &eventSymbol) noexcept : MarketEvent(eventSymbol) {
+TimeAndSale::TimeAndSale(StringParam eventSymbol) : MarketEvent(eventSymbol) {
 }
 
 const IndexedEventSource &TimeAndSale::getSource() const & noexcept {
@@ -226,6 +235,14 @@ void TimeAndSale::setExchangeCode(std::int16_t exchangeCode) noexcept {
     data_.exchangeCode = exchangeCode;
 }
 
+std::int64_t TimeAndSale::getTradeId() const noexcept {
+    return data_.tradeId;
+}
+
+void TimeAndSale::setTradeId(std::int64_t tradeId) noexcept {
+    data_.tradeId = tradeId;
+}
+
 double TimeAndSale::getPrice() const noexcept {
     return data_.price;
 }
@@ -260,18 +277,18 @@ void TimeAndSale::setAskPrice(double askPrice) noexcept {
 
 const std::string &TimeAndSale::getExchangeSaleConditions() const & noexcept {
     if (!data_.exchangeSaleConditions) {
-        return String::NUL;
+        return nulString();
     }
 
-    return data_.exchangeSaleConditions.value();
+    return *data_.exchangeSaleConditions;
 }
 
 const std::optional<std::string> &TimeAndSale::getExchangeSaleConditionsOpt() const & noexcept {
     return data_.exchangeSaleConditions;
 }
 
-void TimeAndSale::setExchangeSaleConditions(const StringLike &exchangeSaleConditions) noexcept {
-    data_.exchangeSaleConditions = std::string(exchangeSaleConditions);
+void TimeAndSale::setExchangeSaleConditions(StringParam exchangeSaleConditions) {
+    data_.exchangeSaleConditions = std::string(exchangeSaleConditions.view());
 }
 
 char TimeAndSale::getTradeThroughExempt() const noexcept {
@@ -338,49 +355,53 @@ bool TimeAndSale::isCancel() const noexcept {
 
 const std::string &TimeAndSale::getBuyer() const & noexcept {
     if (!data_.buyer) {
-        return String::NUL;
+        return nulString();
     }
 
-    return data_.buyer.value();
+    return *data_.buyer;
 }
 
 const std::optional<std::string> &TimeAndSale::getBuyerOpt() const & noexcept {
     return data_.buyer;
 }
 
-void TimeAndSale::setBuyer(const StringLike &buyer) noexcept {
-    data_.buyer = std::string(buyer);
+void TimeAndSale::setBuyer(StringParam buyer) {
+    data_.buyer = std::string(buyer.view());
 }
 
 const std::string &TimeAndSale::getSeller() const & noexcept {
     if (!data_.seller) {
-        return String::NUL;
+        return nulString();
     }
 
-    return data_.seller.value();
+    return *data_.seller;
 }
 
 const std::optional<std::string> &TimeAndSale::getSellerOpt() const & noexcept {
     return data_.seller;
 }
 
-void TimeAndSale::setSeller(const StringLike &seller) noexcept {
-    data_.seller = std::string(seller);
+void TimeAndSale::setSeller(StringParam seller) {
+    data_.seller = std::string(seller.view());
+}
+
+std::string TimeAndSale::baseFieldsToString() const {
+    return fmt::format(
+        "{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
+        "exchange={}, tradeId={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
+        "validTick={}, type={}{}{}",
+        MarketEvent::getEventSymbol(), TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
+        getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()), getTimeNanoPart(),
+        getSequence(), encodeChar(getExchangeCode()), getTradeId(), dxfcpp::toString(getPrice()),
+        dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
+        getExchangeSaleConditionsOpt().value_or("null"), encodeChar(getTradeThroughExempt()),
+        getAggressorSide().toString(), isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
+        getBuyerOpt() ? fmt::format(", buyer='{}'", *getBuyerOpt()) : std::string{},
+        getSellerOpt() ? fmt::format(", seller='{}'", *getSellerOpt()) : std::string{});
 }
 
 std::string TimeAndSale::toString() const {
-    return fmt::format("TimeAndSale{{{}, eventTime={}, eventFlags={:#x}, time={}, timeNanoPart={}, sequence={}, "
-                       "exchange={}, price={}, size={}, bid={}, ask={}, ESC='{}', TTE={}, side={}, spread={}, ETH={}, "
-                       "validTick={}, type={}{}{}}}",
-                       MarketEvent::getEventSymbol(),
-                       TimeFormat::DEFAULT_WITH_MILLIS.format(MarketEvent::getEventTime()),
-                       getEventFlagsMask().getMask(), TimeFormat::DEFAULT_WITH_MILLIS.format(getTime()),
-                       getTimeNanoPart(), getSequence(), encodeChar(getExchangeCode()), dxfcpp::toString(getPrice()),
-                       dxfcpp::toString(getSize()), dxfcpp::toString(getBidPrice()), dxfcpp::toString(getAskPrice()),
-                       getExchangeSaleConditions(), encodeChar(getTradeThroughExempt()), getAggressorSide().toString(),
-                       isSpreadLeg(), isExtendedTradingHours(), isValidTick(), getType().toString(),
-                       getBuyer().empty() ? std::string{} : fmt::format(", buyer='{}'", getBuyer()),
-                       getSeller().empty() ? std::string{} : fmt::format(", seller='{}'", getSeller()));
+    return fmt::format("TimeAndSale{{{}}}", baseFieldsToString());
 }
 
 DXFCPP_END_NAMESPACE

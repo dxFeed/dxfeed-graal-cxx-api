@@ -13,15 +13,24 @@ endif ()
 
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-project(dxFeedGraalCxxApi)
-
 include(cmake/ParseVersion.cmake)
 
-set(DXFCXX_VERSION "v8.2.0" CACHE STRING "The dxFeed Graal CXX API package version")
+set(DXFCXX_VERSION "v9.0.0" CACHE STRING "The dxFeed Graal CXX API package version")
 
 dxfcxx_ParseVersion(${DXFCXX_VERSION} DXFCXX_MAJOR_VERSION DXFCXX_MINOR_VERSION DXFCXX_PATCH_VERSION DXFCXX_SUFFIX_VERSION)
 
-set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.16.0" CACHE STRING "")
+# The numbers of DXFCXX_VERSION without the suffix (-rcN, -draftN): the version of the package and of the shared library.
+project(dxFeedGraalCxxApi VERSION ${DXFCXX_MAJOR_VERSION}.${DXFCXX_MINOR_VERSION}.${DXFCXX_PATCH_VERSION})
+
+set(DXFEED_GRAAL_NATIVE_SDK_VERSION "3.19.0" CACHE STRING "")
+
+# The library calls the dxfg_v4_ functions of the SDK; every way of getting the SDK (third_party, DXFG_LOCAL_ARCHIVE_PATH,
+# the stub, DXFEED_GRAAL_NATIVE_SDK_URL, the releases page) is checked here. The library checks the version of the SDK
+# library at run time as well (the creation of the isolate fails with an older one).
+set(DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION "3.19.0")
+if (DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION)
+    message(FATAL_ERROR "The dxFeed Graal C++ API needs the Graal Native SDK ${DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION} or newer, not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
+endif ()
 set(FMTLIB_VERSION "12.1.0")
 set(BOOST_VERSION "1.84.0")
 set(UTFCPP_VERSION "3.2.3")
@@ -43,20 +52,20 @@ set(BOOST_SHA256 "2e64e5d79a738d0fa6fb546c6e5c2bd28f88d268a2a080546f74e5ff98f29d
 set(GLFW_SHA256 "a133ddc3d3c66143eba9035621db8e0bcf34dba1ee9514a9e23e96afd39fd57a")
 set(IMGUI_SHA256 "e1c46d676c2bcb7ced847ba27f50553e33a19db97b3cadaec7f8be64449139f8")
 # The Graal Native SDK archives of the releases page by platform, for DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION only.
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.16.0")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "b7eef6512bcc059f4c3629f288c7a8abfded0c7efa880aa63060ba5431484350")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "4e339d4e2c800d68bdbdec3783dc19bfe53907321d1c352793bc4acd346b2dc6")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "c9d3e2841309ba8de8cb8412dae03d263ccc0a299933bb4758a32abe81c4a077")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "018088f3d307233e7d368ea672f93339bae2e7d8ad8edca747bca0f046f5f850")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "a1866cb8176ddc2428f882be50e1b877ba94f8a9f6646f5f8439e936ea4913a5")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "c0ee20b5f3151259c33c298c410a414be5958a80e5d24130eea2bef754263e57")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt "71d73973e14742daf11336965b5478e74a93689e1ff503bee943b9076d321157")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt "c5e5a5332af8d24f9706ccf5ea3ad5e55e37fe922948f615009511d795329bf8")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib "4414249520112d1a7eb1b53053d691d411b86484447a8e2c818d08fbb2845386")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib "6841fb36352c716d5652a9bc0ec64a5764ab2816748904dc53807976f223775e")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "2a37f734742bd02139e9fec634b2356369c5b002233a33580c4f5c01c7529bfd")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "516046ec33d3fdddf0cfd86968fe3b76b8d3030f3677bd04de43fee9e96bbc8d")
-set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "8c730443570b2b35cd2d5ab0489e3e632a27c112971d49fd05d1b387cee55dd7")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION "3.19.0")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux "03a62e732defc22e0724ba1e776cdc80e2d25650b7f3602965ac10f4730e4b25")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-linux-debug "c8b524284cf98760fbdba8f5bfdcdb4e8b6fafea99037f5bfb1aac0567afef1d")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux "5fb2c19c15ad70f731b6875fadb9505e81104fc1cffdf33761a9f1bc5f870ea5")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-linux-debug "8b4b2c0e5f18895b6bd2dde0f4d3c59a32bb461bcf696c763ef7efb7c1628a5a")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows "6b42c8663956c2e39f334f9efaa0a3a1cd4d979c0dd9b03b0874ccfa63a1995f")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug "36b6a9b35985d81299b8e4740ba1b9436fc0c0d040f843aabf726db84145acc2")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-crt "d2e8752da50beb4d75482cad7dc81fe2fe984aeb94b723efe3dfe1f1deca99b1")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-crt "0c1943b5c543240b2ea2ecbc1207a5c41ada24f74a6596b10ead79bf57fba81a")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-static-lib "dcbcd66541ae79ff456a61ff4e077a917fa2a9daac19ba7fe03389bb8611348a")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_amd64-windows-debug-static-lib "6eb24a86a3aea1af15a61aee0cfe50b381d099d2a74e3166089f2e13a12e47fc")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_x86_64-osx "f4f68ef8cbe3333c5987cb8fdcdb48a1b1c41dc2f557838e539b3df8ebb54f4d")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-osx "ae64ac996faec2612e202be33cdb5711ad2b96082c6ba8759675ef33ea796bdd")
+set(DXFEED_GRAAL_NATIVE_SDK_SHA256_aarch64-ios "bd1116a2cad0db50c53eea01ef2e673e984d3d66084da58b718847c337718ba9")
 
 include(cmake/third_party/CPM.cmake-${CPM_CMAKE_VERSION}/CPM.cmake)
 
@@ -66,6 +75,9 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_C_EXTENSIONS OFF)
+
+# CMAKE_INSTALL_LIBDIR and the others: the RPATH below and the install rules use them.
+include(GNUInstallDirs)
 
 if (NOT DEFINED DXFCXX_IS_ROOT_PROJECT)
     if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -80,7 +92,8 @@ option(DXFCXX_BUILD_UNIT_TESTS "Build tests" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(DXFCXX_BUILD_FUZZERS "Build the libFuzzer targets in fuzz/ (Clang only; instruments the static library for coverage)" OFF)
 option(DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS "Dynamically link unit tests" OFF)
-option(DXFCXX_ENABLE_NETWORK_TESTS "Build the unit tests that connect to demo.dxfeed.com (CTest label: network)" OFF)
+option(DXFCXX_ENABLE_NETWORK_TESTS "Build the unit tests that connect to a local QDS server with a test tape (CTest label: network; on Linux CTest starts the server with the Tools)" OFF)
+set(DXFCXX_NETWORK_TEST_PORT "17300" CACHE STRING "The port of the local server of the network tests")
 option(DXFCXX_BUILD_SAMPLES "Build samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_DYNAMICALLY_LINK_SAMPLES "Dynamically link samples" OFF)
 set(DXFCXX_BUILD_UI_SAMPLES "AUTO" CACHE STRING "Build the UI samples (Dear ImGui, GLFW, OpenGL): AUTO when their dependencies are found, ON (fail without them) or OFF")
@@ -88,8 +101,13 @@ set_property(CACHE DXFCXX_BUILD_UI_SAMPLES PROPERTY STRINGS AUTO ON OFF)
 option(DXFCXX_SAMPLE_GLFW_BUILD_WAYLAND "Require the GLFW Wayland backend of the UI samples (it is built whenever found)" OFF)
 option(DXFCXX_BUILD_TOOLS "Build tools" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_DYNAMICALLY_LINK_TOOLS "Dynamically link tools" OFF)
+option(DXFCXX_EXPORT_INTERNALS "Export the internal classes of the library (DXFCPP_INTERNAL_EXPORT) from the shared library for the tests and the Tools of the build tree; ON with DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS or DXFCXX_DYNAMICALLY_LINK_TOOLS" OFF)
+if ((DXFCXX_BUILD_UNIT_TESTS AND DXFCXX_DYNAMICALLY_LINK_UNIT_TESTS) OR (DXFCXX_BUILD_TOOLS AND DXFCXX_DYNAMICALLY_LINK_TOOLS))
+    set(DXFCXX_EXPORT_INTERNALS ON)
+endif ()
 option(DXFCXX_BUILD_DOC "Build documentation" ${DXFCXX_IS_ROOT_PROJECT})
-option(DXFCXX_INSTALL "Prepare install" ON)
+# A project that adds this one as a subproject (add_subdirectory, FetchContent) installs only what it chooses to.
+option(DXFCXX_INSTALL "Prepare install" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_LIB "Prepare install the libraries" ON)
 option(DXFCXX_INSTALL_SAMPLES "Prepare install the samples" ${DXFCXX_IS_ROOT_PROJECT})
 option(DXFCXX_INSTALL_TOOLS "Prepare install the tools" ${DXFCXX_IS_ROOT_PROJECT})
@@ -151,8 +169,13 @@ set(DXFCXX_GRAAL_TARGET_CPU "unknown" CACHE STRING "")
 include(cmake/ParseAndDetectPlatforms.cmake)
 include(cmake/LinkStacktrace.cmake)
 include(cmake/Sanitizers.cmake)
+include(cmake/Hardening.cmake)
 include(cmake/CopyRuntime.cmake)
 include(cmake/SetupStaticRuntimeMSVC.cmake)
+
+# The install rule of the SDK library (an option of its CMakeLists.txt); the packages of the samples and the tools need
+# the library too.
+set(GRAAL_NATIVE_SDK_INSTALL ${DXFCXX_INSTALL})
 
 # The Graal Native SDK archive that the options select, named as on the releases page: the platform, -debug, and on
 # Windows with the static runtime the SDK DLL with the static C runtime (-static-crt) and the static library of the SDK
@@ -259,10 +282,6 @@ else ()
                     message(FATAL_ERROR "Unsupported platform ${DXFCXX_GRAAL_TARGET_PLATFORM}: the Graal Native SDK archives are built for ${DXFCXX_GRAAL_SUPPORTED_PLATFORMS_TEXT}. To use another build, set DXFG_LOCAL_ARCHIVE_PATH or the DXFEED_GRAAL_NATIVE_SDK_URL environment variable.")
                 endif ()
 
-                if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME AND DXFEED_GRAAL_NATIVE_SDK_VERSION VERSION_LESS "3.9.0")
-                    message(FATAL_ERROR "DXFCXX_LINK_STATIC_RUNTIME needs the Graal Native SDK 3.9.0 or newer (the static-crt and static-lib archives), not ${DXFEED_GRAAL_NATIVE_SDK_VERSION}")
-                endif ()
-
                 set(DXFEED_GRAAL_NATIVE_SDK_ARCHIVE_URL_PREFIX ${DXFEED_GRAAL_NATIVE_SDK_URL})
                 set(DXFEED_GRAAL_NATIVE_SDK_URL ${DXFEED_GRAAL_NATIVE_SDK_URL}-${DXFEED_GRAAL_NATIVE_SDK_ARCHIVE}.zip)
                 set(DXFEED_GRAAL_NATIVE_SDK_URL_HASH "")
@@ -333,9 +352,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
     SetupStaticRuntimeMSVC(console ${DXFCXX_LINK_STATIC_RUNTIME} ${DXFCXX_NODEFAULTLIB})
 endif ()
 
-# bits (header-only): the bit operations of the library headers. EXCLUDE_FROM_ALL disables its own install rules
-# (its headers are installed with the library below): FetchContent passes it to add_subdirectory() since CMake 3.28,
-# older versions ignore it there.
+# bits (header-only): the bit operations of the library sources, a private dependency. EXCLUDE_FROM_ALL disables its
+# own install rules: FetchContent passes it to add_subdirectory() since CMake 3.28, older versions ignore it there.
 if (NOT DEFINED FETCHCONTENT_SOURCE_DIR_BITS AND
         EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}/CMakeLists.txt")
     set(FETCHCONTENT_SOURCE_DIR_BITS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/bits-${BITS_VERSION}")
@@ -361,6 +379,14 @@ add_subdirectory(third_party/utfcpp-${UTFCPP_VERSION})
 
 set(FMT_INSTALL OFF)
 
+# find_package(fmt) and find_package(Boost) of the other subprojects find the dependencies of this project only when it
+# is the root one: a project that adds this one keeps its own.
+if (DXFCXX_IS_ROOT_PROJECT)
+    set(DXFCXX_OVERRIDE_FIND_PACKAGE OVERRIDE_FIND_PACKAGE)
+else ()
+    set(DXFCXX_OVERRIDE_FIND_PACKAGE "")
+endif ()
+
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/fmt-${FMTLIB_VERSION}/CMakeLists.txt")
     add_subdirectory(third_party/fmt-${FMTLIB_VERSION})
 else ()
@@ -371,7 +397,7 @@ else ()
             USES_TERMINAL_DOWNLOAD TRUE
             GIT_PROGRESS TRUE
             DOWNLOAD_NO_EXTRACT FALSE
-            OVERRIDE_FIND_PACKAGE
+            ${DXFCXX_OVERRIDE_FIND_PACKAGE}
     )
     FetchContent_MakeAvailable(fmt)
 endif ()
@@ -390,7 +416,8 @@ if (DXFCXX_FEATURE_STACKTRACE)
     if (DXFCXX_LINK_STATIC_RUNTIME AND
             (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR
                     (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")))
-        set(BOOST_RUNTIME_LINK static CACHE STRING "Boost runtime library selection for the MS ABI" FORCE)
+        # Not forced: a project that adds this one, or the user, may have chosen already.
+        set(BOOST_RUNTIME_LINK static CACHE STRING "Boost runtime library selection for the MS ABI")
     endif ()
 
     CPMAddPackage(
@@ -401,7 +428,7 @@ if (DXFCXX_FEATURE_STACKTRACE)
             OPTIONS "BOOST_ENABLE_CMAKE ON"
             USES_TERMINAL_DOWNLOAD TRUE
             GIT_PROGRESS TRUE
-            OVERRIDE_FIND_PACKAGE
+            ${DXFCXX_OVERRIDE_FIND_PACKAGE}
     )
 endif ()
 
@@ -419,6 +446,7 @@ endif ()
 
 set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/CEntryPointErrors.cpp
+        src/internal/Handler.cpp
         src/internal/Isolate.cpp
         src/internal/JavaObjectHandle.cpp
         src/internal/EventClassList.cpp
@@ -428,10 +456,13 @@ set(dxFeedGraalCxxApi_Internal_Sources
         src/internal/StopWatch.cpp
         src/internal/TimeFormat.cpp
         src/internal/Timer.cpp
+        src/internal/context/ApiContext.cpp
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources
         src/internal/utils/StringUtils.cpp
+        src/internal/utils/JavaUtils.cpp
+        src/internal/utils/CandleUtils.cpp
         src/internal/utils/EnumUtils.cpp
         src/internal/utils/CmdArgsUtils.cpp
 )
@@ -445,6 +476,7 @@ set(dxFeedGraalCxxApi_Exceptions_Sources
         src/exceptions/InvalidArgumentException.cpp
         src/exceptions/GraalException.cpp
         src/exceptions/JavaException.cpp
+        src/exceptions/ErrorManager.cpp
 )
 
 set(dxFeedGraalCxxApi_Executors_Sources
@@ -460,9 +492,11 @@ set(dxFeedGraalCxxApi_Glossary_Sources
 set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/api/IsolatedDXFeed.cpp
         src/isolated/api/IsolatedDXEndpoint.cpp
+        src/isolated/api/IsolatedMessageConnector.cpp
         src/isolated/api/IsolatedDXFeedSubscription.cpp
         src/isolated/api/IsolatedDXPublisher.cpp
         src/isolated/api/IsolatedDXPublisherObservableSubscription.cpp
+        src/isolated/api/IsolatedSubscriptionController.cpp
         src/isolated/api/osub/IsolatedObservableSubscriptionChangeListener.cpp
         src/isolated/candlewebservice/IsolatedHistoryEndpoint.cpp
         src/isolated/auth/IsolatedAuthToken.cpp
@@ -481,11 +515,12 @@ set(dxFeedGraalCxxApi_Isolated_Sources
         src/isolated/ipf/live/IsolatedInstrumentProfileCollector.cpp
         src/isolated/ipf/live/IsolatedInstrumentProfileConnection.cpp
         src/isolated/logging/IsolatedLogging.cpp
-        src/isolated/metrics/IsolatedMetrics.cpp
         src/isolated/model/IsolatedTxModelListener.cpp
         src/isolated/model/IsolatedIndexedTxModel.cpp
+        src/isolated/model/IsolatedIndexedEventTxModel.cpp
         src/isolated/model/IsolatedTimeSeriesTxModel.cpp
         src/isolated/ondemand/IsolatedOnDemandService.cpp
+        src/isolated/orcs/IsolatedPriceLevelService.cpp
         src/isolated/util/IsolatedTimePeriod.cpp
         src/isolated/schedule/IsolatedDay.cpp
         src/isolated/schedule/IsolatedSession.cpp
@@ -493,11 +528,14 @@ set(dxFeedGraalCxxApi_Isolated_Sources
 )
 
 set(dxFeedGraalCxxApi_Api_Sources
+        src/api/ConnectionError.cpp
         src/api/DXEndpoint.cpp
         src/api/DXFeed.cpp
+        src/api/MessageConnectorInfo.cpp
         src/api/DXFeedSubscription.cpp
         src/api/DXPublisherObservableSubscription.cpp
         src/api/DXPublisher.cpp
+        src/api/SubscriptionController.cpp
 )
 
 set(dxFeedGraalCxxApi_ApiOsub_Sources
@@ -532,6 +570,7 @@ set(dxFeedGraalCxxApi_Logging_Sources
 set(dxFeedGraalCxxApi_Model_Sources
         src/model/TxModelListener.cpp
         src/model/IndexedTxModel.cpp
+        src/model/IndexedEventTxModel.cpp
         src/model/TimeSeriesTxModel.cpp
         src/model/MarketDepthModel.cpp
 )
@@ -540,8 +579,15 @@ set(dxFeedGraalCxxApi_OnDemand_Sources
         src/ondemand/OnDemandService.cpp
 )
 
+set(dxFeedGraalCxxApi_Orcs_Sources
+        src/orcs/AuthOrderSource.cpp
+        src/orcs/PriceLevelChecker.cpp
+        src/orcs/PriceLevelService.cpp
+)
+
 set(dxFeedGraalCxxApi_Promise_Sources
         src/promise/Promise.cpp
+        src/promise/PromiseContext.cpp
         src/promise/Promises.cpp
 )
 
@@ -567,6 +613,7 @@ set(dxFeedGraalCxxApi_Event_Sources
 set(dxFeedGraalCxxApi_EventCandle_Sources
         src/event/candle/Candle.cpp
         src/event/candle/CandleAlignment.cpp
+        src/event/candle/CandleDataType.cpp
         src/event/candle/CandleExchange.cpp
         src/event/candle/CandlePeriod.cpp
         src/event/candle/CandlePrice.cpp
@@ -578,16 +625,20 @@ set(dxFeedGraalCxxApi_EventCandle_Sources
 
 set(dxFeedGraalCxxApi_EventMarket_Sources
         src/event/market/AnalyticOrder.cpp
+        src/event/market/AuctionType.cpp
         src/event/market/OtcMarketsPriceType.cpp
         src/event/market/OtcMarketsOrder.cpp
         src/event/market/Direction.cpp
         src/event/market/IcebergType.cpp
+        src/event/market/ImbalanceSide.cpp
         src/event/market/MarketEvent.cpp
         src/event/market/MarketEventSymbols.cpp
+        src/event/market/MarketMaker.cpp
         src/event/market/OptionSale.cpp
         src/event/market/Order.cpp
         src/event/market/OrderAction.cpp
         src/event/market/OrderBase.cpp
+        src/event/market/OrderImbalance.cpp
         src/event/market/OrderSource.cpp
         src/event/market/PriceType.cpp
         src/event/market/Profile.cpp
@@ -614,7 +665,16 @@ set(dxFeedGraalCxxApi_EventOption_Sources
 
 set(dxFeedGraalCxxApi_EventMisc_Sources
         src/event/misc/Message.cpp
+        src/event/misc/TextConfiguration.cpp
         src/event/misc/TextMessage.cpp
+)
+
+set(dxFeedGraalCxxApi_EventCustom_Sources
+        src/event/custom/NuamOrder.cpp
+        src/event/custom/NuamOrderType.cpp
+        src/event/custom/NuamTimeAndSale.cpp
+        src/event/custom/NuamTimeInForceType.cpp
+        src/event/custom/NuamTrade.cpp
 )
 
 set(dxFeedGraalCxxApi_Schedule_Sources
@@ -628,6 +688,7 @@ set(dxFeedGraalCxxApi_Schedule_Sources
 
 set(dxFeedGraalCxxApi_Util_Sources
         src/util/TimePeriod.cpp
+        src/util/TimePeriodInfo.cpp
 )
 
 set(dxFeedGraalCxxApi_Sources
@@ -646,6 +707,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_Logging_Sources}
         ${dxFeedGraalCxxApi_Model_Sources}
         ${dxFeedGraalCxxApi_OnDemand_Sources}
+        ${dxFeedGraalCxxApi_Orcs_Sources}
         ${dxFeedGraalCxxApi_Promise_Sources}
         ${dxFeedGraalCxxApi_Symbols_Sources}
         ${dxFeedGraalCxxApi_System_Sources}
@@ -654,6 +716,7 @@ set(dxFeedGraalCxxApi_Sources
         ${dxFeedGraalCxxApi_EventMarket_Sources}
         ${dxFeedGraalCxxApi_EventOption_Sources}
         ${dxFeedGraalCxxApi_EventMisc_Sources}
+        ${dxFeedGraalCxxApi_EventCustom_Sources}
         ${dxFeedGraalCxxApi_Schedule_Sources}
         ${dxFeedGraalCxxApi_Util_Sources}
 )
@@ -664,13 +727,13 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF)
     set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
-    set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path/../../../${CMAKE_INSTALL_LIBDIR};@loader_path;@executable_path;@executable_path/../Frameworks")
+    set(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path;@executable_path;@executable_path/../Frameworks")
 elseif (UNIX)
     set(CMAKE_SKIP_BUILD_RPATH ON)
     set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
     set(CMAKE_INSTALL_RPATH_USE_LINK_PATH OFF)
     set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../../../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN/../lib64:$ORIGIN/../lib:$ORIGIN")
 endif ()
 
 add_library(${PROJECT_NAME}_static STATIC
@@ -697,9 +760,26 @@ else ()
     )
 endif ()
 
+# The names of the targets for the projects that use the library, the same as in its CMake package
+# (dxFeedGraalCxxApiConfig.cmake): dxfcxx::dxfcxx (dxfcxx), dxfcxx::static, dxfcxx::graal.
 add_library(dxfcxx ALIAS ${PROJECT_NAME})
+add_library(dxfcxx::dxfcxx ALIAS ${PROJECT_NAME})
 add_library(dxfcxx::static ALIAS ${PROJECT_NAME}_static)
 add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
+set_target_properties(${PROJECT_NAME} PROPERTIES EXPORT_NAME dxfcxx)
+set_target_properties(${PROJECT_NAME}_static PROPERTIES EXPORT_NAME static)
+
+# libdxFeedGraalCxxApi.so.9 (SONAME) -> .so.9.1.0, libdxFeedGraalCxxApi.9.dylib (install name) -> .9.1.0.dylib.
+# The major version changes with every incompatible change of the ABI.
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})
+
+# The file of the shared library that programs load: the one named by the SONAME (the install name) on Linux (macOS).
+# The copies next to the samples, Tools and tests use it.
+if (WIN32)
+    set(DXFCXX_SHARED_LIBRARY_RUNTIME_FILE "$<TARGET_FILE:dxfcxx>")
+else ()
+    set(DXFCXX_SHARED_LIBRARY_RUNTIME_FILE "$<TARGET_SONAME_FILE:dxfcxx>")
+endif ()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
     # set_target_properties(${PROJECT_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -708,33 +788,60 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" OR (CMAKE_CXX_COMPILER_ID STREQUAL "Cl
     SetupStaticRuntimeMSVC(${PROJECT_NAME} ${DXFCXX_LINK_STATIC_RUNTIME} OFF)
 endif ()
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_include_directories(${PROJECT_NAME} PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+# The public headers need C++20: the users of the library targets get it without setting the standard themselves.
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
+# DXFCPP_USE_DLLS is PUBLIC: the users of the shared library get dllimport (MSVC) or default visibility (gcc, clang)
+# from DXFCPP_EXPORT without defining anything themselves.
+target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCPP_USE_DLLS)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-        DXFCPP_USE_DLLS LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
+        LIBDXFCPP_EXPORTS FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
+if (DXFCXX_EXPORT_INTERNALS)
+    # Only the targets of the build tree (tests, Tools) get the definition, never the users of the installed package.
+    target_compile_definitions(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:DXFCXX_EXPORT_INTERNALS>)
+endif ()
+# Only DXFCPP_EXPORT is exported. MinGW keeps exporting everything: its import side has no DXFCPP_EXPORT attribute.
+if (NOT MINGW)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+            CXX_VISIBILITY_PRESET hidden
+            C_VISIBILITY_PRESET hidden
+            VISIBILITY_INLINES_HIDDEN ON)
+endif ()
 
-target_include_directories(${PROJECT_NAME}_static PUBLIC include)
+target_include_directories(${PROJECT_NAME}_static PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_compile_features(${PROJECT_NAME}_static PUBLIC cxx_std_20)
 target_include_directories(${PROJECT_NAME}_static SYSTEM PRIVATE third_party/range-v3-${RANGE_VERSION}/include)
 target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         FMT_HEADER_ONLY=1 _SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS=1)
 
-# The Graal Native SDK marks the dxfg_ functions that have dxfg_v4_ twins deprecated (DXFG_DEPRECATED, SDK 3.12+).
-# The library still calls them, so it compiles without these warnings: GCC and Clang (clang-cl too) get an empty
-# DXFG_DEPRECATED, cl cannot define a function-like macro on the command line and disables its warning C4996 instead.
-# The definition goes through the compile options: CMake drops function-like macros from the compile definitions.
-foreach (DXFCXX_LIBRARY_TARGET IN ITEMS ${PROJECT_NAME} ${PROJECT_NAME}_static)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        target_compile_options(${DXFCXX_LIBRARY_TARGET} PRIVATE /wd4996)
-    else ()
-        target_compile_options(${DXFCXX_LIBRARY_TARGET} PRIVATE "-DDXFG_DEPRECATED(message)=")
-    endif ()
-endforeach ()
+# The public headers leave the windows.h macros to the user; the library sources get windows.h without min/max.
+if (WIN32)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+    target_compile_definitions(${PROJECT_NAME}_static PRIVATE NOMINMAX WIN32_LEAN_AND_MEAN)
+endif ()
 
-# fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
-set(DXFCXX_MSVC_COMPILE_OPTIONS /W4 /bigobj /utf-8)
+# The options and definitions of the library targets below are PRIVATE: the projects that use the library compile and
+# link with their own. The warning level, /bigobj and /utf-8 come from dxfcxx_warnings (cmake/Warnings.cmake).
 set(DXFCXX_MSVC_DEBUG_LINK_OPTIONS /PDBALTPATH:$<TARGET_PDB_FILE_NAME:${PROJECT_NAME}>)
-set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS -fPIC -Wall -Wextra -pedantic)
-set(DXFCXX_GCC_LIKE_LINK_OPTIONS "-fPIC")
+set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS "")
+set(DXFCXX_GCC_LIKE_LINK_OPTIONS "")
+
+# The static library goes into shared libraries of its users too. The shared one is position-independent anyway.
+set_target_properties(${PROJECT_NAME}_static PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# clang-cl takes the MSVC options.
+set(DXFCXX_MSVC_LIKE_CXX "$<AND:$<COMPILE_LANGUAGE:CXX>,$<BOOL:${MSVC}>>")
+set(DXFCXX_MSVC_LIKE_C "$<AND:$<COMPILE_LANGUAGE:C>,$<BOOL:${MSVC}>>")
+set(DXFCXX_GCC_LIKE_CXX "$<AND:$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>")
+set(DXFCXX_GCC_LIKE_C "$<AND:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>,$<NOT:$<BOOL:${MSVC}>>>")
+
+# The wide decimal conversion rounds a product before adding to it, as Java does; a fused multiply-add (aarch64)
+# would change the last digit.
+set_source_files_properties(src/internal/utils/JavaUtils.cpp PROPERTIES
+        COMPILE_OPTIONS "$<${DXFCXX_GCC_LIKE_CXX}:-ffp-contract=off>")
 
 #A workaround to fix 'relocation truncated to fit: IMAGE_REL_AMD64_SECREL' error (MinGW + Debug)
 set(DXFCXX_MINGW_DEBUG_LINK_OPTIONS "-Wl,--disable-dynamicbase,--disable-high-entropy-va,--default-image-base-low")
@@ -753,74 +860,74 @@ if (DXFCXX_MSVC_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
     # https://github.com/microsoft/STL/wiki/VS-2022-Changelog#vs-2022-1710
     # https://github.com/microsoft/STL/pull/3824
     # https://github.com/actions/runner-images/issues/10004
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-        target_compile_definitions(${PROJECT_NAME} PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
-        target_compile_definitions(${PROJECT_NAME}_static PUBLIC _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+    if (MSVC)
+        target_compile_definitions(${PROJECT_NAME} PRIVATE _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
+        target_compile_definitions(${PROJECT_NAME}_static PRIVATE _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR)
     endif ()
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(DXFCXX_GCC_LIKE_COMPILE_OPTIONS ${DXFCXX_GCC_LIKE_COMPILE_OPTIONS} "-Wa,--noexecstack")
-    set(DXFCXX_GCC_LIKE_LINK_OPTIONS ${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack")
+    # The GCC of Red Hat's gcc-toolset (Oracle Linux 8, the Linux packages) links the parts of its libstdc++ that the
+    # system one lacks from libstdc++_nonshared.a into the library; they are not part of the API and stay hidden.
+    set(DXFCXX_GCC_LIKE_LINK_OPTIONS ${DXFCXX_GCC_LIKE_LINK_OPTIONS} "-Wl,-z,noexecstack"
+            "-Wl,--exclude-libs,libstdc++_nonshared.a")
 endif ()
 
 target_compile_options(${PROJECT_NAME}
-        PUBLIC
-        $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        PRIVATE
+        $<${DXFCXX_GCC_LIKE_CXX}:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_C}:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
 )
 
 target_link_options(${PROJECT_NAME}
-        PUBLIC
-        $<$<AND:$<COMPILE_LANG_AND_ID:CXX,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
-        $<$<AND:$<COMPILE_LANG_AND_ID:C,MSVC>,$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        PRIVATE
+        $<$<AND:${DXFCXX_MSVC_LIKE_CXX},$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
+        $<$<AND:${DXFCXX_MSVC_LIKE_C},$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>>:${DXFCXX_MSVC_DEBUG_LINK_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_CXX}:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_C}:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
 )
 
+# A static library is not linked: its link options would only go to its users.
 target_compile_options(${PROJECT_NAME}_static
-        PUBLIC
-        $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,MSVC>:${DXFCXX_MSVC_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        PRIVATE
+        $<${DXFCXX_GCC_LIKE_CXX}:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
+        $<${DXFCXX_GCC_LIKE_C}:${DXFCXX_GCC_LIKE_COMPILE_OPTIONS}>
 )
 
-target_link_options(${PROJECT_NAME}_static
-        PUBLIC
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
-        $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang,Intel>:${DXFCXX_GCC_LIKE_LINK_OPTIONS}>
-)
+dxfcxx_harden(${PROJECT_NAME} ${PROJECT_NAME}_static)
 
 if (DXFCXX_USE_PRECOMPILED_HEADERS)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
-    target_precompile_headers(${PROJECT_NAME}_static PRIVATE include/dxfeed_graal_cpp_api/internal/PrecompiledHeaders.hpp)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE src/internal/PrecompiledHeaders.hpp)
+    target_precompile_headers(${PROJECT_NAME}_static PRIVATE src/internal/PrecompiledHeaders.hpp)
 endif ()
 
 target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-        bits::bits
         PRIVATE
         dxfcxx_warnings
-        DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
+        DxFeedGraalNativeSdk bits::bits utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
 )
 
+# The users of the static library link the SDK library too (its CMake package has a target of it). The other
+# dependencies are header-only or options of this build ($<BUILD_INTERFACE:>: not in the CMake package).
 target_link_libraries(${PROJECT_NAME}_static
-        PUBLIC
-        bits::bits
         PRIVATE
-        dxfcxx_warnings
-        DxFeedGraalNativeSdk utf8cpp fmt::fmt-header-only date::date config::config dxfcxx_mingw_debug_link_options_interface
+        DxFeedGraalNativeSdk
+        $<BUILD_INTERFACE:dxfcxx_warnings>
+        $<BUILD_INTERFACE:bits::bits>
+        $<BUILD_INTERFACE:utf8cpp>
+        $<BUILD_INTERFACE:fmt::fmt-header-only>
+        $<BUILD_INTERFACE:date::date>
+        $<BUILD_INTERFACE:config::config>
+        $<BUILD_INTERFACE:dxfcxx_mingw_debug_link_options_interface>
 )
 
 if (DXFCXX_FEATURE_STACKTRACE)
     LinkStacktrace(${PROJECT_NAME})
     LinkStacktrace(${PROJECT_NAME}_static)
 
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_FEATURE_STACKTRACE)
-    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_FEATURE_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_FEATURE_STACKTRACE)
+    target_compile_definitions(${PROJECT_NAME}_static PRIVATE DXFCXX_FEATURE_STACKTRACE)
 endif ()
 
 # Threads: before glibc 2.34, pthread is a separate library (libpthread). PUBLIC: the library and the programs that
@@ -829,9 +936,10 @@ find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
 target_link_libraries(${PROJECT_NAME}_static PUBLIC Threads::Threads)
 
-# Both library targets are instrumented; PUBLIC propagates the options and the sanitizer runtime to every consumer.
-target_link_libraries(${PROJECT_NAME} PUBLIC dxfcxx_sanitizers)
-target_link_libraries(${PROJECT_NAME}_static PUBLIC dxfcxx_sanitizers)
+# Both library targets are instrumented; PUBLIC propagates the options and the sanitizer runtime to every consumer of
+# the build tree. The packages are not made from sanitized builds.
+target_link_libraries(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:dxfcxx_sanitizers>)
+target_link_libraries(${PROJECT_NAME}_static PUBLIC $<BUILD_INTERFACE:dxfcxx_sanitizers>)
 
 if (DXFCXX_BUILD_FUZZERS)
     # libFuzzer ships with LLVM Clang only (not with AppleClang, GCC or MSVC).
@@ -880,41 +988,48 @@ endif ()
 dxfcxx_copy_runtime(dxfcxx_graal_runtime FILES $<TARGET_FILE:DxFeedGraalNativeSdk>
         TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_static)
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC
+target_compile_definitions(${PROJECT_NAME} PRIVATE
         DXFCXX_VERSION="${DXFCXX_VERSION}"
         DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
         DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
         DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+        DXFCXX_GRAAL_NATIVE_SDK_MINIMUM_VERSION="${DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION}"
 )
 
-target_compile_definitions(${PROJECT_NAME}_static PUBLIC
+target_compile_definitions(${PROJECT_NAME}_static PRIVATE
         DXFCXX_VERSION="${DXFCXX_VERSION}"
         DXFCXX_MAJOR_VERSION=${DXFCXX_MAJOR_VERSION}
         DXFCXX_MINOR_VERSION=${DXFCXX_MINOR_VERSION}
         DXFCXX_PATCH_VERSION=${DXFCXX_PATCH_VERSION}
+        DXFCXX_GRAAL_NATIVE_SDK_MINIMUM_VERSION="${DXFEED_GRAAL_NATIVE_SDK_MINIMUM_VERSION}"
 )
 
 if (DXFCXX_ENABLE_METRICS)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCXX_ENABLE_METRICS=1)
-    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCXX_ENABLE_METRICS=1)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCXX_ENABLE_METRICS=1)
+    target_compile_definitions(${PROJECT_NAME}_static PRIVATE DXFCXX_ENABLE_METRICS=1)
 endif ()
 
 if (DXFCXX_TRACING)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCPP_DEBUG=1)
-    target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCPP_DEBUG=1)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_DEBUG=1)
+    target_compile_definitions(${PROJECT_NAME}_static PRIVATE DXFCPP_DEBUG=1)
 
     if (DXFCXX_LIST_TRACING)
-        target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCPP_TRACE_LISTS=1)
-        target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCPP_TRACE_LISTS=1)
+        target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_TRACE_LISTS=1)
+        target_compile_definitions(${PROJECT_NAME}_static PRIVATE DXFCPP_TRACE_LISTS=1)
     endif ()
 
     if (DXFCXX_ISOLATES_TRACING)
-        target_compile_definitions(${PROJECT_NAME} PUBLIC DXFCPP_TRACE_ISOLATES=1)
-        target_compile_definitions(${PROJECT_NAME}_static PUBLIC DXFCPP_TRACE_ISOLATES=1)
+        target_compile_definitions(${PROJECT_NAME} PRIVATE DXFCPP_TRACE_ISOLATES=1)
+        target_compile_definitions(${PROJECT_NAME}_static PRIVATE DXFCPP_TRACE_ISOLATES=1)
     endif ()
 endif ()
 
 if (DXFCXX_BUILD_UNIT_TESTS)
+    # The local server of the network tests is the QDS of the Tools.
+    if (DXFCXX_ENABLE_NETWORK_TESTS AND CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT DXFCXX_BUILD_TOOLS)
+        message(FATAL_ERROR "DXFCXX_ENABLE_NETWORK_TESTS=ON needs DXFCXX_BUILD_TOOLS=ON on Linux: the Tools run the local server of the network tests")
+    endif ()
+
     include(CTest)
     add_subdirectory(tests)
 endif ()
@@ -931,6 +1046,7 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/API/QuoteAndTradeSample)
     add_subdirectory(samples/cpp/API/ReconnectSample)
     add_subdirectory(samples/cpp/API/RequestProfileSample)
+    add_subdirectory(samples/cpp/Candle/CandleSample)
     add_subdirectory(samples/cpp/Candle/FetchDailyCandlesSample)
     add_subdirectory(samples/cpp/Candle/CandleDataSample)
     add_subdirectory(samples/cpp/Console/LastEventConsoleSample)
@@ -943,7 +1059,9 @@ if (DXFCXX_BUILD_SAMPLES)
     add_subdirectory(samples/cpp/Model/IncOrderSnapshotSample)
     add_subdirectory(samples/cpp/Model/MultipleMarketDepthSample)
     add_subdirectory(samples/cpp/Model/PriceLevelBookSample)
+    add_subdirectory(samples/cpp/Model/SimpleOrderBookSample)
     add_subdirectory(samples/cpp/OnDemand/OnDemandSample)
+    add_subdirectory(samples/cpp/Orcs/PriceLevelServiceClientSample)
     add_subdirectory(samples/cpp/Schedule/ScheduleSample)
 
     include(cmake/Portals.cmake)
@@ -968,40 +1086,80 @@ if (DXFCXX_BUILD_TOOLS)
 endif ()
 
 if (DXFCXX_INSTALL)
-    include(GNUInstallDirs)
-    set(CPACK_OUTPUT_CONFIG_FILE "${CMAKE_BINARY_DIR}/${PROJECT_NAME}PackConfig.cmake")
-    set(CPACK_SOURCE_GENERATOR ZIP)
-    set(CPACK_PACKAGE_VENDOR "Devexperts LLC")
-    set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-    set(CPACK_PACKAGE_VERSION "${DXFCXX_VERSION}")
-    set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${DXFCXX_VERSION}-${DXFCXX_TARGET_PLATFORM}${DXFCXX_PACKAGE_SUFFIX}")
-    include(CPack)
+    # The packages are made by the root project only: CPack of a project that adds this one stays its own.
+    if (DXFCXX_IS_ROOT_PROJECT)
+        set(CPACK_OUTPUT_CONFIG_FILE "${CMAKE_BINARY_DIR}/${PROJECT_NAME}PackConfig.cmake")
+        set(CPACK_SOURCE_GENERATOR ZIP)
+        set(CPACK_PACKAGE_VENDOR "Devexperts LLC")
+        set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+        set(CPACK_PACKAGE_VERSION "${DXFCXX_VERSION}")
+        set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${DXFCXX_VERSION}-${DXFCXX_TARGET_PLATFORM}${DXFCXX_PACKAGE_SUFFIX}")
+        include(CPack)
+    endif ()
 
     if (DXFCXX_INSTALL_LIB)
-        #install(FILES $<TARGET_PDB_FILE:${PROJECT_NAME}> DESTINATION bin OPTIONAL)
+        include(CMakePackageConfigHelpers)
+
+        set(DXFCXX_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
+        set(DXFCXX_INSTALL_DESTINATIONS
+                RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+                LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+        # The CMake package (find_package(dxFeedGraalCxxApi)): the targets dxfcxx::dxfcxx and dxfcxx::static.
+        install(TARGETS ${PROJECT_NAME}_static EXPORT ${PROJECT_NAME}Targets ${DXFCXX_INSTALL_DESTINATIONS})
+
         # With the static runtime on Windows the DLL has its own C runtime and heap, and the C++ API passes the objects
         # of the standard library across the DLL boundary, so the DLL is built but not installed: only its C API could
         # be used safely, and those who need it build the DLL themselves.
         if (NOT (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME))
-            install(TARGETS ${PROJECT_NAME})
+            install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets ${DXFCXX_INSTALL_DESTINATIONS})
         endif ()
-        install(TARGETS ${PROJECT_NAME}_static)
-        install(DIRECTORY "include" DESTINATION "." PATTERN "build" EXCLUDE)
-        # The public headers include <bits/bits.hpp>.
-        install(DIRECTORY "${bits_SOURCE_DIR}/include/" DESTINATION "include")
 
-        # The -static-mt archives: _static.lib links either with the SDK import library and DLL, or with the static
-        # library of the SDK and the Windows libraries of link-flags.txt.
-        if (WIN32 AND DXFCXX_LINK_STATIC_RUNTIME)
-            install(FILES $<TARGET_LINKER_FILE:DxFeedGraalNativeSdk> DESTINATION lib)
+        install(DIRECTORY "include/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" PATTERN "build" EXCLUDE)
 
-            if (DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR)
+        # The static library links the SDK import library on Windows. The -static-mt archives also link it with the
+        # static library of the SDK (downloaded or from the static-mt Full Source Bundle) and the Windows libraries of
+        # link-flags.txt.
+        if (WIN32)
+            install(FILES $<TARGET_LINKER_FILE:DxFeedGraalNativeSdk> DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+            if (DXFCXX_LINK_STATIC_RUNTIME AND DEFINED DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR)
                 install(FILES
                         "${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR}/DxFeedGraalNativeSdk_static.lib"
                         "${DXFEED_GRAAL_NATIVE_SDK_STATIC_LIB_DIR}/link-flags.txt"
-                        DESTINATION lib)
+                        DESTINATION ${CMAKE_INSTALL_LIBDIR})
             endif ()
         endif ()
+
+        # The name of the SDK library file (Linux, macOS), for the imported target of the package.
+        get_target_property(DXFCXX_GRAAL_LIBRARY_FILE DxFeedGraalNativeSdk IMPORTED_LOCATION)
+        get_filename_component(DXFCXX_GRAAL_LIBRARY_FILE_NAME "${DXFCXX_GRAAL_LIBRARY_FILE}" NAME)
+
+        # The static library of Boost.Stacktrace that the static library of the API links (see LinkStacktrace).
+        set(DXFCXX_STACKTRACE_LIBRARY_FILE_NAME "")
+        set(DXFCXX_STACKTRACE_SYSTEM_LIBRARIES "")
+
+        if (DXFCXX_FEATURE_STACKTRACE)
+            dxfcxx_stacktrace_backend(DXFCXX_STACKTRACE_BACKEND DXFCXX_STACKTRACE_SYSTEM_LIBRARIES)
+            get_target_property(DXFCXX_STACKTRACE_BACKEND_TARGET ${DXFCXX_STACKTRACE_BACKEND} ALIASED_TARGET)
+            set(DXFCXX_STACKTRACE_LIBRARY_FILE_NAME
+                    "${CMAKE_STATIC_LIBRARY_PREFIX}${DXFCXX_STACKTRACE_BACKEND_TARGET}${CMAKE_STATIC_LIBRARY_SUFFIX}")
+            install(FILES $<TARGET_FILE:${DXFCXX_STACKTRACE_BACKEND}> DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                    RENAME "${DXFCXX_STACKTRACE_LIBRARY_FILE_NAME}")
+        endif ()
+
+        install(EXPORT ${PROJECT_NAME}Targets NAMESPACE dxfcxx:: DESTINATION "${DXFCXX_INSTALL_CMAKEDIR}")
+        configure_package_config_file(cmake/${PROJECT_NAME}Config.cmake.in
+                "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+                INSTALL_DESTINATION "${DXFCXX_INSTALL_CMAKEDIR}")
+        # A new major version is an incompatible change of the API and the ABI.
+        write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+                VERSION ${PROJECT_VERSION} COMPATIBILITY SameMajorVersion)
+        install(FILES
+                "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+                "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+                DESTINATION "${DXFCXX_INSTALL_CMAKEDIR}")
     endif ()
 
     install(FILES "DEPENDENCIES.md" "LICENSE" "README.md" "ReleaseNotes.md" "THIRD_PARTY_LICENSES.md" DESTINATION ".")
