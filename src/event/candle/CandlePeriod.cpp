@@ -129,10 +129,12 @@ std::string CandlePeriod::normalizeAttributeForSymbol(StringParam symbol) {
 
         return std::string{sv};
     } catch (const InvalidArgumentException &) {
-        return std::string{sv};
+        // An attribute that cannot be parsed keeps the symbol as is. The handlers leave the locals alone: MSVC 19.52
+        // at /O2 with /fsanitize=address reads them in a handler from a register that holds another value there.
     } catch (const std::invalid_argument &) {
-        return std::string{sv};
     }
+
+    return std::string{sv};
 }
 
 DXFCPP_END_NAMESPACE

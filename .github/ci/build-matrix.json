@@ -36,6 +36,7 @@
     {"name": "ubuntu-22.04-gcc-11", "buildType": "Release", "sanitizers": "NO_SAN"},
     {"name": "win2022-vs2022", "buildType": "Release", "sanitizers": "NO_SAN"},
     {"name": "win2022-vs2022", "buildType": "Debug", "sanitizers": "ASAN"},
+    {"name": "win2025-vs2026", "buildType": "Release", "sanitizers": "ASAN"},
     {"name": "win2022-vs2022-clang-cl", "buildType": "Debug", "sanitizers": "NO_SAN"},
     {"name": "macos-15-xcode-16-4", "buildType": "Release", "sanitizers": "NO_SAN"},
     {"name": "macos-15-xcode-16-4", "buildType": "Debug", "sanitizers": "UBSAN"}
