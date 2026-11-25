@@ -59,7 +59,7 @@ class DXFCPP_INTERNAL_EXPORT GraalArena final {
     static GraalArena *current() noexcept;
 
     /// Makes the arena current on this thread for its lifetime and restores the previous one after.
-    class Scope final {
+    class DXFCPP_INTERNAL_EXPORT Scope final {
         GraalArena *previous_;
 
         public:
