@@ -4,8 +4,11 @@
 #pragma once
 
 #include "../../../include/dxfeed_graal_cpp_api/detail/Conf.hpp"
+#include "GraalArena.hpp"
 
 #include <dxfg_v4_api.h>
+#include <new>
+#include <type_traits>
 
 DXFCPP_BEGIN_NAMESPACE
 
@@ -16,6 +19,9 @@ DXFCPP_BEGIN_NAMESPACE
  * an event symbol that is not valid UTF-8. When the fill throws (a string field that is not valid
  * UTF-8), the strings created before are freed together with the structure, and the exception goes on.
  *
+ * Under a GraalArena::Scope the structure is taken from the arena of the scope and is not freed on an exception: the
+ * arena frees it with the strings.
+ *
  * @tparam Native The SDK structure of the event (`dxfg_v4_quote_t`)
  * @param clazz The class of the event (`DXFG_EVENT_QUOTE`)
  * @param fill Fills the structure (`fillGraalData()` of the event)
@@ -25,7 +31,11 @@ DXFCPP_BEGIN_NAMESPACE
  */
 template <typename Native, typename Fill, typename FreeData>
 void *newGraalEvent(dxfg_v4_event_clazz_t clazz, Fill &&fill, FreeData &&freeData) {
-    auto *graalNative = new Native{};
+    static_assert(std::is_trivially_destructible_v<Native>);
+
+    auto *arena = GraalArena::current();
+    auto *graalNative =
+        arena != nullptr ? new (arena->allocate(sizeof(Native), alignof(Native))) Native{} : new Native{};
 
     // dxfg_v4_event_type_t is the first member of every event structure.
     static_cast<dxfg_v4_event_type_t *>(static_cast<void *>(graalNative))->clazz = clazz;
@@ -33,8 +43,10 @@ void *newGraalEvent(dxfg_v4_event_clazz_t clazz, Fill &&fill, FreeData &&freeDat
     try {
         fill(graalNative);
     } catch (...) {
-        freeData(graalNative);
-        delete graalNative;
+        if (arena == nullptr) {
+            freeData(graalNative);
+            delete graalNative;
+        }
 
         throw;
     }

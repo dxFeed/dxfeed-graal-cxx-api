@@ -213,7 +213,8 @@ struct DXFCPP_EXPORT DXPublisher : SharedEntity {
      * published then.
      */
     template <typename EventIt> void publishEvents(EventIt begin, EventIt end) const {
-        auto list = EventMapper::toGraalListUnique(begin, end);
+        // The SDK only reads the list: it is freed at once after the call.
+        auto list = EventMapper::toGraalListInArenaUnique(begin, end);
 
         publishEventsImpl(list.get());
     }
