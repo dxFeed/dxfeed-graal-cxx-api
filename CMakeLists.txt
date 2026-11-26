@@ -460,6 +460,7 @@ set(dxFeedGraalCxxApi_Internal_Sources
 )
 
 set(dxFeedGraalCxxApi_InternalUtils_Sources
+        src/internal/utils/GraalArena.cpp
         src/internal/utils/StringUtils.cpp
         src/internal/utils/JavaUtils.cpp
         src/internal/utils/CandleUtils.cpp

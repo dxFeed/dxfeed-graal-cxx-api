@@ -33,10 +33,16 @@
 
 #include "../../include/dxfeed_graal_cpp_api/exceptions/ErrorManager.hpp"
 #include "../internal/utils/debug/Debug.hpp"
+#include "../internal/utils/GraalArena.hpp"
 #include "../internal/Common.hpp"
 
+#include <algorithm>
+#include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <new>
+#include <type_traits>
+#include <typeinfo>
 #include <dxfg_v4_api.h>
 #include <fmt/format.h>
 #include <map>
@@ -426,6 +432,149 @@ bool EventMapper::freeGraalListElements(void *graalList, std::ptrdiff_t count) {
     delete list;
 
     return true;
+}
+
+namespace {
+
+// The list of an arena with the arena before it, so that freeGraalListInArena() finds the arena by the list.
+struct ArenaList {
+    GraalArena *arena;
+    dxfg_v4_event_type_list list;
+};
+
+static_assert(std::is_standard_layout_v<ArenaList>);
+
+// The first block holds the list, its array and this many bytes per event: a trade with a short symbol fits.
+constexpr std::size_t FIRST_BLOCK_BYTES_PER_EVENT = 160;
+constexpr std::size_t FIRST_BLOCK_MIN_CAPACITY = 1024;
+
+ArenaList *arenaListOf(void *graalList) noexcept {
+    return reinterpret_cast<ArenaList *>(static_cast<unsigned char *>(graalList) - offsetof(ArenaList, list));
+}
+
+// Whether the event is of a class of the library itself: its toGraal() takes all memory from newGraalEvent() and
+// createCString(), so it may run in the arena. A subclass outside the library may mix its own allocations with those of
+// the library (for example, its own structure with the strings of MarketEvent::fillGraalData()), so it runs without the
+// arena. A list mostly holds events of one class: the last class found is checked first.
+bool isLibraryEventClass(const EventType &event, const std::type_info *&lastFound) noexcept {
+    const auto &type = typeid(event);
+
+    if (&type == lastFound) {
+        return true;
+    }
+
+    static const std::type_info *const LIBRARY_CLASSES[] = {
+        &typeid(Trade),           &typeid(TradeETH),        &typeid(Quote),       &typeid(Profile),
+        &typeid(Summary),         &typeid(TimeAndSale),     &typeid(Order),       &typeid(SpreadOrder),
+        &typeid(AnalyticOrder),   &typeid(OtcMarketsOrder), &typeid(MarketMaker), &typeid(OptionSale),
+        &typeid(OrderImbalance),  &typeid(Candle),          &typeid(Greeks),      &typeid(Series),
+        &typeid(TheoPrice),       &typeid(Underlying),      &typeid(Message),     &typeid(TextMessage),
+        &typeid(TextConfiguration), &typeid(NuamOrder),     &typeid(NuamTrade),   &typeid(NuamTimeAndSale),
+    };
+
+    for (const auto *libraryClass : LIBRARY_CLASSES) {
+        if (*libraryClass == type) {
+            lastFound = &type;
+
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// The events whose conversion did not take its memory from the arena are freed on their own.
+void freeEventsOutsideArena(const GraalArena *arena, dxfg_v4_event_type_t *const *elements,
+                            std::size_t count) noexcept {
+    for (std::size_t i = 0; i < count; i++) {
+        if (elements[i] != nullptr && !arena->owns(elements[i])) {
+            try {
+                EventMapper::freeGraal(elements[i]);
+            } catch (...) {
+                // An event of an unknown class: nothing else can be done with it.
+            }
+        }
+    }
+}
+
+} // namespace
+
+void *EventMapper::newGraalListInArena(std::ptrdiff_t size, NextEvent next, void *state) {
+    using SizeType = decltype(dxfg_v4_event_type_list::size);
+    using ElementType = dxfg_v4_event_type_t;
+
+    const auto count = static_cast<std::size_t>(std::max<std::ptrdiff_t>(size, 0));
+    const auto capacity = std::clamp(sizeof(ArenaList) + count * (sizeof(ElementType *) + FIRST_BLOCK_BYTES_PER_EVENT),
+                                     FIRST_BLOCK_MIN_CAPACITY, GraalArena::BLOCK_CAPACITY);
+    auto *arena = GraalArena::create(capacity);
+    ElementType **elements = nullptr;
+    std::size_t converted = 0;
+
+    try {
+        auto *arenaList = new (arena->allocate(sizeof(ArenaList), alignof(ArenaList)))
+            ArenaList{arena, {static_cast<SizeType>(count), nullptr}};
+
+        // Zero size is needed, for example, to clear the list of symbols.
+        if (count == 0) {
+            return &arenaList->list;
+        }
+
+        elements = static_cast<ElementType **>(arena->allocate(count * sizeof(ElementType *), alignof(ElementType *)));
+        std::fill_n(elements, count, nullptr);
+        arenaList->list.elements = elements;
+
+        const std::type_info *lastLibraryClass = nullptr;
+
+        for (; converted < count; converted++) {
+            const auto *event = next(state);
+
+            if (event == nullptr) {
+                throw InvalidArgumentException("Unable to convert the event " + std::to_string(converted) +
+                                               " of the list: the event is null");
+            }
+
+            ElementType *element = nullptr;
+
+            {
+                // Another class converts its event on the heap, even if a scope of another arena is open.
+                const GraalArena::Scope scope(isLibraryEventClass(*event, lastLibraryClass) ? arena : nullptr);
+
+                element = static_cast<ElementType *>(event->toGraal());
+            }
+
+            if (element == nullptr) {
+                throw InvalidArgumentException("Unable to convert the event " + std::to_string(converted) +
+                                               " of the list: " + event->toString());
+            }
+
+            elements[converted] = element;
+        }
+
+        return &arenaList->list;
+    } catch (...) {
+        if (elements != nullptr) {
+            freeEventsOutsideArena(arena, elements, converted);
+        }
+
+        GraalArena::destroy(arena);
+
+        throw;
+    }
+}
+
+void EventMapper::freeGraalListInArena(void *graalList) noexcept {
+    if (graalList == nullptr) {
+        return;
+    }
+
+    const auto *arenaList = arenaListOf(graalList);
+    auto *arena = arenaList->arena;
+
+    if (arenaList->list.size > 0 && arenaList->list.elements != nullptr) {
+        freeEventsOutsideArena(arena, arenaList->list.elements, static_cast<std::size_t>(arenaList->list.size));
+    }
+
+    GraalArena::destroy(arena);
 }
 
 DXFCPP_END_NAMESPACE

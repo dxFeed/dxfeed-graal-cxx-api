@@ -64,6 +64,7 @@ set(DXFC_TEST_SOURCES
         auth/AuthTokenTest.cpp
         event/ConstantsTest.cpp
         event/EdgeValuesTapeTest.cpp
+        event/EventMapperArenaTest.cpp
         event/EventsTest.cpp
         event/EventsToStringTest.cpp
         event/StringFieldsTest.cpp
@@ -178,7 +179,7 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
     endif ()
 
     # The tests build or read the structures of the C API of the dxFeed Graal SDK by hand, or call it.
-    if (DXFC_TEST_SOURCE MATCHES "^(event/(UnsupportedEvent|StringFields)|exceptions/JavaExceptionState)Test\\.cpp$")
+    if (DXFC_TEST_SOURCE MATCHES "^(event/(UnsupportedEvent|StringFields|EventMapperArena)|exceptions/JavaExceptionState)Test\\.cpp$")
         target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE
                 $<TARGET_PROPERTY:DxFeedGraalNativeSdk,INTERFACE_INCLUDE_DIRECTORIES>)
     endif ()

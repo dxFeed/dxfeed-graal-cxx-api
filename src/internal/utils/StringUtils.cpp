@@ -8,6 +8,7 @@
 #include "../../../include/dxfeed_graal_cpp_api/exceptions/InvalidArgumentException.hpp"
 #include "../../../include/dxfeed_graal_cpp_api/util/TimeFormat.hpp"
 
+#include "GraalArena.hpp"
 #include "JavaUtils.hpp"
 #include "StringConstants.hpp"
 
@@ -275,7 +276,10 @@ void checkUtf8(std::string_view s, const StringLabel &label) {
 char *createCString(std::string_view s, const StringLabel &label) {
     checkUtf8(s, label);
 
-    char *cString = new char[s.size() + 1];
+    // Under a GraalArena::Scope the string is a part of the native list that the arena frees.
+    auto *arena = GraalArena::current();
+    char *cString = arena != nullptr ? static_cast<char *>(arena->allocate(s.size() + 1, alignof(char)))
+                                     : new char[s.size() + 1];
 
     std::copy(s.begin(), s.end(), cString);
     cString[s.size()] = '\0';
