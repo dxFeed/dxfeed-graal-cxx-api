@@ -236,23 +236,30 @@ TEST_CASE("Runtime statistics: a default object has every value not given") {
 TEST_CASE("Runtime statistics of the isolate are read on the Serial GC") {
     using namespace dxfcpp;
 
+#ifdef DXFCXX_TEST_SDK_G1
+    // The SDK of the oracle-g1 variant runs on the G1 GC: the values of the Serial GC collectors and pools are -1.
+    constexpr bool serialGc = false;
+#else
+    constexpr bool serialGc = true;
+#endif
+
     const auto first = System::getRuntimeStatistics();
 
     CHECK(first.heapUsedBytes > 0);
     CHECK(first.heapCommittedBytes > 0);
     CHECK(first.heapMaxBytes > 0);
-    CHECK(first.youngGcCount >= 0);
-    CHECK(first.youngGcTimeMs >= 0);
-    CHECK(first.fullGcCount >= 0);
-    CHECK(first.fullGcTimeMs >= 0);
+    CHECK((serialGc ? first.youngGcCount >= 0 : first.youngGcCount == -1));
+    CHECK((serialGc ? first.youngGcTimeMs >= 0 : first.youngGcTimeMs == -1));
+    CHECK((serialGc ? first.fullGcCount >= 0 : first.fullGcCount == -1));
+    CHECK((serialGc ? first.fullGcTimeMs >= 0 : first.fullGcTimeMs == -1));
     CHECK(first.threadCount > 0);
     CHECK(first.peakThreadCount > 0);
     CHECK(first.processCpuTimeNs >= 0);
     CHECK(first.uptimeMs >= 0);
     CHECK((first.allocatedBytes == -1 || first.allocatedBytes >= 0));
-    CHECK(first.edenUsedBytes >= 0);
-    CHECK(first.survivorUsedBytes >= 0);
-    CHECK(first.oldUsedBytes >= 0);
+    CHECK((serialGc ? first.edenUsedBytes >= 0 : first.edenUsedBytes == -1));
+    CHECK((serialGc ? first.survivorUsedBytes >= 0 : first.survivorUsedBytes == -1));
+    CHECK((serialGc ? first.oldUsedBytes >= 0 : first.oldUsedBytes == -1));
     CHECK(first.daemonThreadCount >= 0);
     CHECK(first.totalStartedThreadCount > 0);
     CHECK(first.availableProcessors > 0);
@@ -288,8 +295,13 @@ TEST_CASE("The build info of the SDK library gives the version of QDS, the runti
 
     const auto gc = System::getBuildInfo(System::BUILD_INFO_GC);
 
+#ifdef DXFCXX_TEST_SDK_G1
+    // The SDK of the oracle-g1 variant may not know its garbage collectors (a missing value is allowed for any key).
+    CHECK((!gc.has_value() || !gc->empty()));
+#else
     REQUIRE(gc.has_value());
     CHECK_FALSE(gc->empty());
+#endif
 
     CHECK(System::getBuildInfo(std::string{System::BUILD_INFO_QD_VERSION}) == qdVersion);
 }

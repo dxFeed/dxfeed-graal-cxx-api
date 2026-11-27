@@ -38,9 +38,10 @@ cmake -B build -DCMAKE_BUILD_TYPE=Release -DDXFCXX_GRAAL_NATIVE_SDK_VARIANT=orac
 - The variants have no Debug SDK (`DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK`) and, on Windows, no static C runtime
   (`DXFCXX_LINK_STATIC_RUNTIME`); such a combination, an unknown value or a platform without the variant fails the
   configuration. The archive of a variant is always checked against its SHA-256.
-- With `oracle-g1` (SDK 3.19.0), a wrong isolate argument (`System::setIsolateArguments`, `DXFCPP_ISOLATE_ARGUMENTS`)
-  ends the process with the message of the SDK instead of an error of the isolate creation, and the garbage collector
-  values of `System::getRuntimeStatistics` are `-1`; the tests of these features fail with this variant.
+- With `oracle-g1` (SDK 3.19.0), a wrong value of a heap option among the isolate arguments
+  (`System::setIsolateArguments`, `DXFCPP_ISOLATE_ARGUMENTS`), such as `-Xmx64q`, ends the process with the message of
+  the SDK instead of an error of the isolate creation; the tests skip such scenarios there. The garbage collector values
+  of `System::getRuntimeStatistics` are `-1` on G1, and `System::getBuildInfo(System::BUILD_INFO_GC)` may be empty.
 - The Full Source Bundles and the release packages of the C++ API have the `ce` SDK only.
 - `DXFG_LOCAL_ARCHIVE_PATH`, `DXFCXX_USE_DXFG_STUB` and the `DXFEED_GRAAL_NATIVE_SDK_URL` environment variable give
   the SDK themselves: the variant and the checks above are ignored then (a Full Source Bundle still takes precedence).
