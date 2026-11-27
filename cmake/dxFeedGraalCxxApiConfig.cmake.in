@@ -34,6 +34,10 @@ if (NOT TARGET dxfcxx::graal)
     add_library(dxfcxx::graal ALIAS DxFeedGraalNativeSdk)
 endif ()
 
+# The variant of the Graal Native SDK in the package (DXFCXX_GRAAL_NATIVE_SDK_VARIANT): ce, oracle, oracle-g1, or
+# custom when the build took the SDK from DXFG_LOCAL_ARCHIVE_PATH, the stub or DXFEED_GRAAL_NATIVE_SDK_URL.
+set(dxFeedGraalCxxApi_GRAAL_NATIVE_SDK_VARIANT "@DXFCXX_GRAAL_NATIVE_SDK_PACKAGE_VARIANT@")
+
 # The static library of Boost.Stacktrace, when the static library of the API captures stack traces.
 set(_dxfcxx_stacktrace_library "@DXFCXX_STACKTRACE_LIBRARY_FILE_NAME@")
 

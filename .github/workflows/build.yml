@@ -1069,3 +1069,117 @@ jobs:
       - name: ccache statistics
         if: ${{ always() && matrix.config.os != 'windows' }}
         run: ccache --show-stats
+
+  # The oracle variant of the Graal Native SDK (DXFCXX_GRAAL_NATIVE_SDK_VARIANT) builds and passes the tests, and the
+  # combinations without a released archive fail the configuration.
+  sdk-variant:
+    needs: plan
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: win2022-vs2022
+            image: windows-2022
+            os: windows
+            cc: 'cl'
+            cxx: 'cl'
+          - name: ubuntu-24.04-gcc-14
+            image: ubuntu-24.04
+            os: linux
+            cc: 'gcc-14'
+            cxx: 'g++-14'
+
+    name: "${{ matrix.config.name }}-Release-sdk-oracle"
+    if: ${{ needs.plan.outputs.code == 'true' }}
+    runs-on: ${{ matrix.config.image }}
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Restore dependency sources
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CPM_SOURCE_CACHE }}
+          key: cpm-${{ runner.os }}-${{ hashFiles('CMakeLists.txt', 'cmake/Portals.cmake') }}
+          restore-keys: cpm-${{ runner.os }}-
+
+      - name: Restore ccache
+        if: ${{ matrix.config.os != 'windows' }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ env.CCACHE_DIR }}
+          key: ccache-sdk-oracle-${{ matrix.config.name }}-${{ github.sha }}
+          restore-keys: ccache-sdk-oracle-${{ matrix.config.name }}-
+
+      - name: Install ccache
+        if: ${{ matrix.config.os != 'windows' }}
+        timeout-minutes: 10
+        uses: ./.github/actions/install-ccache
+        with:
+          apt-options: ${{ env.APT_OPTIONS }}
+
+      - name: Check that unsupported variants fail the configuration
+        shell: bash
+        run: |
+          expect_failure() {
+            local message="$1"
+            shift
+
+            if cmake -B "${{github.workspace}}/build-fail" -DDXFCXX_BUILD_DOC=OFF "$@" > configure.log 2>&1; then
+              echo "::error::The configuration with $* did not fail"
+              exit 1
+            fi
+
+            # CMake wraps the lines of the message.
+            local collapsed
+            collapsed=$(tr -s '[:space:]' ' ' < configure.log)
+
+            if ! grep -qF -- "$message" <<< "$collapsed"; then
+              cat configure.log
+              echo "::error::The configuration with $* failed without \"$message\""
+              exit 1
+            fi
+
+            rm -rf "${{github.workspace}}/build-fail"
+          }
+
+          expect_failure "Unknown DXFCXX_GRAAL_NATIVE_SDK_VARIANT=g1" -DDXFCXX_GRAAL_NATIVE_SDK_VARIANT=g1
+          expect_failure "does not combine with DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON" \
+            -DDXFCXX_GRAAL_NATIVE_SDK_VARIANT=oracle -DDXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK=ON
+
+          if [ "${{ matrix.config.os }}" = windows ]; then
+            expect_failure "is not available for amd64-windows" -DDXFCXX_GRAAL_NATIVE_SDK_VARIANT=oracle-g1
+            expect_failure "does not combine with DXFCXX_LINK_STATIC_RUNTIME=ON" \
+              -DDXFCXX_GRAAL_NATIVE_SDK_VARIANT=oracle -DDXFCXX_LINK_STATIC_RUNTIME=ON
+          fi
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{github.workspace}}/build
+          ${{ matrix.config.os != 'windows' && env.CCACHE_LAUNCHER || '' }}
+          -DCMAKE_BUILD_TYPE=Release
+          -DDXFCXX_WARNINGS_AS_ERRORS=ON
+          -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+          -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+          -DDXFCXX_BUILD_DOC=OFF
+          -DDXFCXX_BUILD_UI_SAMPLES=OFF
+          -DDXFCXX_GRAAL_NATIVE_SDK_VARIANT=oracle
+
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config Release -j 4
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: ctest -C Release --extra-verbose --output-on-failure --parallel 4
+
+      - name: Check the variant of the installed package
+        shell: bash
+        run: |
+          cmake --install "${{github.workspace}}/build" --config Release --prefix "${{github.workspace}}/install"
+          grep -q 'dxFeedGraalCxxApi_GRAAL_NATIVE_SDK_VARIANT "oracle"' \
+            "${{github.workspace}}"/install/lib*/cmake/dxFeedGraalCxxApi/dxFeedGraalCxxApiConfig.cmake
+
+      - name: ccache statistics
+        if: ${{ always() && matrix.config.os != 'windows' }}
+        run: ccache --show-stats

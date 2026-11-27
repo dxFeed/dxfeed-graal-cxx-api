@@ -178,6 +178,11 @@ foreach (DXFC_TEST_SOURCE ${DXFC_TEST_SOURCES})
         endif ()
     endif ()
 
+    # The SDK of the oracle-g1 variant runs on the G1 garbage collector: the values of the Serial GC are -1 there.
+    if (DXFC_TEST_SOURCE STREQUAL "system/SystemTest.cpp" AND DXFCXX_GRAAL_NATIVE_SDK_PACKAGE_VARIANT STREQUAL "oracle-g1")
+        target_compile_definitions(${DXFC_TEST_BASENAME} PRIVATE DXFCXX_TEST_SDK_G1=1)
+    endif ()
+
     # The tests build or read the structures of the C API of the dxFeed Graal SDK by hand, or call it.
     if (DXFC_TEST_SOURCE MATCHES "^(event/(UnsupportedEvent|StringFields|EventMapperArena)|exceptions/JavaExceptionState)Test\\.cpp$")
         target_include_directories(${DXFC_TEST_BASENAME} SYSTEM PRIVATE
@@ -682,6 +687,15 @@ foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
     if (NOT WIN32)
         list(APPEND DXFC_ISOLATE_ARGS_SCENARIOS signals signals-disabled)
     endif ()
+
+    # The SDK of the oracle-g1 variant ends the process on a wrong value of a heap option (-Xmx64q) instead of failing
+    # the creation of the isolate: the scenarios with such a value cannot run there.
+    # TODO: MDAPI-647 - run them on oracle-g1 again when the SDK fails the creation there.
+    if (DXFCXX_GRAAL_NATIVE_SDK_PACKAGE_VARIANT STREQUAL "oracle-g1")
+        list(REMOVE_ITEM DXFC_ISOLATE_ARGS_SCENARIOS bad-value repeat-same concurrent-first setter-after-failure
+                system-property error-shutdown)
+    endif ()
+
     add_executable(${DXFC_ISOLATE_ARGS_TARGET} isolate-args/IsolateArgsTest.cpp)
     list(APPEND DXFC_TEST_TARGETS ${DXFC_ISOLATE_ARGS_TARGET})
     target_include_directories(${DXFC_ISOLATE_ARGS_TARGET} PRIVATE ${DXFC_TEST_INCLUDE_DIRS})
@@ -711,7 +725,11 @@ foreach (DXFC_ISOLATE_ARGS_VARIANT IN LISTS DXFC_ISOLATE_ARGS_VARIANTS)
     dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-quoted "-Dmdapi428.q=\"a b\"")
     dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-unmatched-quote "-Dp=\"a")
     dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} env-argfile "@args.txt")
-    dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} c-api "-Xmx64q")
+
+    # TODO: MDAPI-647 - oracle-g1 ends the process on -Xmx64q (see above).
+    if (NOT DXFCXX_GRAAL_NATIVE_SDK_PACKAGE_VARIANT STREQUAL "oracle-g1")
+        dxfc_add_isolate_args_test(${DXFC_ISOLATE_ARGS_TARGET} c-api "-Xmx64q")
+    endif ()
 endforeach ()
 
 # The API headers included after and before windows.h, without NOMINMAX and WIN32_LEAN_AND_MEAN: the macros of the user
