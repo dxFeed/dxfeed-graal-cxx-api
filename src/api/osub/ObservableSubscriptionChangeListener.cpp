@@ -10,11 +10,23 @@
 
 #include <dxfg_v4_api.h>
 
+#include <iterator>
+#include <unordered_set>
+
 DXFCPP_BEGIN_NAMESPACE
 
 using ObservableSubscriptionChangeListenerManager = WeakEntityManager<ObservableSubscriptionChangeListener>;
 
 struct ObservableSubscriptionChangeListener::Impl {
+    // The symbols are moved into a set sized for them at once, without rehashing.
+    static std::unordered_set<SymbolWrapper> toSymbolSet(dxfg_v4_symbol_list *symbols) {
+        auto symbolList = SymbolWrapper::SymbolListUtils::fromGraalList(symbols);
+
+        // Parentheses, not braces: no initializer_list overload.
+        return std::unordered_set<SymbolWrapper>(std::make_move_iterator(symbolList.begin()),
+                                                 std::make_move_iterator(symbolList.end()), symbolList.size());
+    }
+
     static void onSymbolsAdded(graal_isolatethread_t * /* thread */, dxfg_v4_symbol_list *symbols, void *userData) {
         runCallback("ObservableSubscriptionChangeListener", [&] {
             if (!symbols) {
@@ -29,8 +41,7 @@ struct ObservableSubscriptionChangeListener::Impl {
                 return;
             }
 
-            auto symbolList = SymbolWrapper::SymbolListUtils::fromGraalList(symbols);
-            listener->onSymbolsAdded_({symbolList.begin(), symbolList.end()});
+            listener->onSymbolsAdded_(toSymbolSet(symbols));
         });
     }
 
@@ -48,8 +59,7 @@ struct ObservableSubscriptionChangeListener::Impl {
                 return;
             }
 
-            auto symbolList = SymbolWrapper::SymbolListUtils::fromGraalList(symbols);
-            listener->onSymbolsRemoved_({symbolList.begin(), symbolList.end()});
+            listener->onSymbolsRemoved_(toSymbolSet(symbols));
         });
     }
 

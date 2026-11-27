@@ -235,6 +235,8 @@ template <typename GraalList, typename ElementWrapper> struct GraalListUtils {
         auto list = static_cast<ListType *>(graalList);
 
         if (list->size > 0 && list->elements != nullptr) {
+            result.reserve(static_cast<std::size_t>(list->size));
+
             for (SizeType elementIndex = 0; elementIndex < list->size; elementIndex++) {
                 if (list->elements[elementIndex]) {
                     result.emplace_back(ElementWrapper::fromGraal(static_cast<void *>(list->elements[elementIndex])));

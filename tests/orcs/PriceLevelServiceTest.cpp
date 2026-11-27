@@ -70,6 +70,47 @@ TEST_CASE("PriceLevelChecker::validate rejects a time gap between the orders abo
     CHECK(PriceLevelChecker::validate(orders, std::chrono::minutes(5), false));
 }
 
+namespace {
+
+// A subclass defined outside the library: the list converts it on the heap, outside its arena.
+struct DerivedOrder final : Order {
+    using Order::Order;
+};
+
+std::shared_ptr<Order> derivedPriceLevel(std::int64_t time, const Side &side, double price, double size) {
+    auto order = std::make_shared<DerivedOrder>("AAPL");
+
+    order->setSource(OrderSource::NTV);
+    order->setTime(time);
+    order->setOrderSide(side);
+    order->setPrice(price);
+    order->setSize(size);
+
+    return order;
+}
+
+} // namespace
+
+TEST_CASE("PriceLevelChecker::validate accepts an empty list") {
+    CHECK(PriceLevelChecker::validate(std::vector<std::shared_ptr<Order>>{}, std::chrono::minutes(1), false));
+}
+
+TEST_CASE("PriceLevelChecker::validate reads the orders of a subclass defined outside the library") {
+    const std::vector accepted{
+        priceLevel(1'000, Side::BUY, 100.0, 10.0),
+        derivedPriceLevel(1'000, Side::SELL, 101.0, 10.0),
+        priceLevel(2'000, Side::BUY, 100.5, 5.0),
+    };
+    const std::vector rejected{
+        derivedPriceLevel(1'000, Side::BUY, 102.0, 10.0),
+        priceLevel(1'000, Side::SELL, 101.0, 10.0),
+        derivedPriceLevel(2'000, Side::BUY, 100.0, 5.0),
+    };
+
+    CHECK(PriceLevelChecker::validate(accepted, std::chrono::minutes(1), false));
+    CHECK_FALSE(PriceLevelChecker::validate(rejected, std::chrono::minutes(1), false));
+}
+
 TEST_CASE("PriceLevelChecker::validate rejects a null order") {
     const std::vector<std::shared_ptr<Order>> orders{priceLevel(1'000, Side::BUY, 100.0, 10.0), nullptr};
 

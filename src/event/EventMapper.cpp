@@ -218,8 +218,6 @@ std::vector<std::shared_ptr<EventType>> EventMapper::fromGraalList(void *graalNa
         result.emplace_back(fromGraal(list->elements[i]));
     }
 
-    result.shrink_to_fit();
-
     return result;
 }
 
