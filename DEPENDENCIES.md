@@ -51,8 +51,10 @@ top of `CMakeLists.txt`. After changing a version, update its hash as well:
   ```
 
 - any other archive: `sha256sum` (or `certutil -hashfile <file> SHA256` on Windows) of the downloaded file;
-- the Graal Native SDK: `DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION` and the hashes of all platforms; with another
-  `DXFEED_GRAAL_NATIVE_SDK_VERSION`, the archive is downloaded without verification and a warning is printed.
+- the Graal Native SDK: `DXFEED_GRAAL_NATIVE_SDK_SHA256_VERSION` and the hashes of all platforms and of the
+  `-oracle` and `-oracle-g1` variants; with another `DXFEED_GRAAL_NATIVE_SDK_VERSION`, the regular archive is
+  downloaded without verification and a warning is printed, and a variant (`DXFCXX_GRAAL_NATIVE_SDK_VARIANT`) fails
+  the configuration.
 
 Git dependencies are pinned by tag or commit. GitHub Actions in `.github/workflows` are pinned by commit SHA with the
 version in a comment; Dependabot (`.github/dependabot.yml`) proposes their updates weekly: the minor and patch

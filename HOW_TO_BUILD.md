@@ -17,6 +17,39 @@ cmake --build . --config Release
 
 or use the `scripts/build.sh` or `scripts/build.cmd`. Make sure that you use `command prompt for VS` on Win.
 
+## Graal Native SDK variants
+
+The releases of the Graal Native SDK have, besides the regular archives, variants built by Oracle GraalVM with the
+`-O3` optimization level. `DXFCXX_GRAAL_NATIVE_SDK_VARIANT` selects the variant that CMake downloads:
+
+| Value              | Archive                                               | Platforms                                                                |
+|--------------------|-------------------------------------------------------|--------------------------------------------------------------------------|
+| `ce` (the default) | `graal-native-sdk-<version>-<platform>.zip`           | all (see the releases page)                                              |
+| `oracle`           | `graal-native-sdk-<version>-<platform>-oracle.zip`    | `amd64-linux`, `aarch64-linux`, `amd64-windows`, `aarch64-osx`           |
+| `oracle-g1`        | `graal-native-sdk-<version>-<platform>-oracle-g1.zip` | `amd64-linux`, `aarch64-linux`, `aarch64-osx` (the G1 garbage collector) |
+
+```shell
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DDXFCXX_GRAAL_NATIVE_SDK_VARIANT=oracle
+```
+
+- On NetTest with the SDK 3.19.0 on Windows x64, the `oracle` variant publishes ~20 % more events per second and
+  spends ~20 % less CPU per received event than `ce`, with ~30 % lower latency.
+- The library of the SDK is larger: `DxFeedGraalNativeSdk.dll` of 3.19.0 is 99 MB instead of 56 MB.
+- The variants have no Debug SDK (`DXFCXX_USE_DEBUG_DXFEED_GRAAL_NATIVE_SDK`) and, on Windows, no static C runtime
+  (`DXFCXX_LINK_STATIC_RUNTIME`); such a combination, an unknown value or a platform without the variant fails the
+  configuration. The archive of a variant is always checked against its SHA-256.
+- With `oracle-g1` (SDK 3.19.0), a wrong isolate argument (`System::setIsolateArguments`, `DXFCPP_ISOLATE_ARGUMENTS`)
+  ends the process with the message of the SDK instead of an error of the isolate creation, and the garbage collector
+  values of `System::getRuntimeStatistics` are `-1`; the tests of these features fail with this variant.
+- The Full Source Bundles and the release packages of the C++ API have the `ce` SDK only.
+- `DXFG_LOCAL_ARCHIVE_PATH`, `DXFCXX_USE_DXFG_STUB` and the `DXFEED_GRAAL_NATIVE_SDK_URL` environment variable give
+  the SDK themselves: the variant and the checks above are ignored then (a Full Source Bundle still takes precedence).
+- The installed package sets `dxFeedGraalCxxApi_GRAAL_NATIVE_SDK_VARIANT` (`ce`, `oracle`, `oracle-g1`, or `custom`
+  for an SDK from those overrides). A process loads one SDK library: do not mix libraries built with different SDKs.
+- The variants are built by Oracle GraalVM, which is distributed under the
+  [GraalVM Free Terms and Conditions](https://www.oracle.com/downloads/licenses/graal-free-license.html); check that
+  they suit your use before you redistribute the library.
+
 ## Full Source Bundles (Windows x64, offline)
 
 A release has two source bundles for Windows x64. Each has the sources and all the dependencies, the Graal Native SDK
