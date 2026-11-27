@@ -997,6 +997,7 @@ INPUT                  = ../src \
                          ../DEPENDENCIES.md \
                          ../HOW_TO_BUILD.md \
                          ../TROUBLESHOOTING.md \
+                         ../PERFORMANCE.md \
                          ../DATA_MODEL.md \
                          ../THIRD_PARTY_LICENSES.md
 
