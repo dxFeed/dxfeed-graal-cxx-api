@@ -1,6 +1,6 @@
 # Exported symbols of the shared library (linux), made by scripts/symbols.py compare --update.
 # Own symbols one per line; the std:: instantiations only as their number.
-std-total: 346
+std-total: 345
 VTT for dxfcpp::v9::AdditionalUnderlyings
 VTT for dxfcpp::v9::AuthOrderSource
 VTT for dxfcpp::v9::CFI
@@ -664,6 +664,7 @@ dxfcpp::v9::EventMapper::fromGraalListSkippingErrors(void*)
 dxfcpp::v9::EventMapper::newGraalList(long)
 dxfcpp::v9::EventMapper::newGraalListInArena(long, dxfcpp::v9::EventType const* (*)(void*), void*)
 dxfcpp::v9::EventMapper::setGraalListElement(void*, long, void*)
+dxfcpp::v9::EventMapper::toGraalListInArenaUnique<__gnu_cxx::__normal_iterator<std::shared_ptr<dxfcpp::v9::Order> const*, std::vector<std::shared_ptr<dxfcpp::v9::Order>, std::allocator<std::shared_ptr<dxfcpp::v9::Order> > > > >(__gnu_cxx::__normal_iterator<std::shared_ptr<dxfcpp::v9::Order> const*, std::vector<std::shared_ptr<dxfcpp::v9::Order>, std::allocator<std::shared_ptr<dxfcpp::v9::Order> > > >, __gnu_cxx::__normal_iterator<std::shared_ptr<dxfcpp::v9::Order> const*, std::vector<std::shared_ptr<dxfcpp::v9::Order>, std::allocator<std::shared_ptr<dxfcpp::v9::Order> > > >)::{lambda(void*)#1}::_FUN(void*)
 dxfcpp::v9::EventMapper::toGraalListInArenaUnique<std::shared_ptr<dxfcpp::v9::EventType> const*>(std::shared_ptr<dxfcpp::v9::EventType> const*, std::shared_ptr<dxfcpp::v9::EventType> const*)::{lambda(void*)#1}::_FUN(void*)
 dxfcpp::v9::EventPromiseImpl::EventPromiseImpl(void*, bool, std::shared_ptr<dxfcpp::v9::PromiseContext const>)
 dxfcpp::v9::EventPromiseImpl::getResult() const

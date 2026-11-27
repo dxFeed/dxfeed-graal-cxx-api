@@ -185,8 +185,8 @@ namespace isolated::orcs::IsolatedPriceLevelChecker {
 
 /// dxfg_v4_PriceLevelChecker_validate
 bool validate(const std::vector<std::shared_ptr<Order>> &orders, std::int64_t timeGapBound, bool printQuotes) {
-    // The list stays with the caller: the SDK only reads it.
-    const auto list = EventMapper::toGraalListUnique(orders.begin(), orders.end());
+    // The list stays with the caller: the SDK only reads it. One arena for the list instead of allocations per order.
+    const auto list = EventMapper::toGraalListInArenaUnique(orders.begin(), orders.end());
 
     return runGraalV4FunctionWithResult(dxfg_v4_PriceLevelChecker_validate,
                                         static_cast<dxfg_v4_event_type_list *>(list.get()), timeGapBound,
