@@ -114,6 +114,8 @@ Warnings of the library (a suspicious candle symbol, a silent subscription) go t
   heap, the counts and the times of the collections, the threads and the CPU time of the process: log them next to the
   measured delay and compare two calls. A value that the platform does not give is `-1`; the first call may take some
   milliseconds, so make it once at start-up.
+- The build of the Graal Native SDK changes the latency too: its `-O3` variant lowered the median delay from ~450 to
+  ~340 µs in a loopback test. See [Performance](PERFORMANCE.md).
 
 ## Reconnect contract
 
@@ -194,4 +196,5 @@ next address of the list.
 - [Isolate arguments](include/dxfeed_graal_cpp_api/system/System.hpp): system properties that must be set before the
   first Java code runs
 - [Data model](DATA_MODEL.md): events, conflation, snapshots, order sources
+- [Performance](PERFORMANCE.md): the cost of an event, the variant of the SDK, batches, threads, the allocator
 - [README](README.md): [Tools](README.md#tools) and [Versions and addresses in the log](README.md#versions-and-addresses-in-the-log)

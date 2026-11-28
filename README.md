@@ -42,6 +42,7 @@ the [Overview](#overview) section.<br>
 - [Samples](#samples)
 - [Current State](#current-state)
 - [Troubleshooting](TROUBLESHOOTING.md)
+- [Performance](PERFORMANCE.md)
 - [Data Model](DATA_MODEL.md)
 - [Dependencies](DEPENDENCIES.md)
 - [How To Build](HOW_TO_BUILD.md)
@@ -120,6 +121,7 @@ Find useful information in our self-service dxFeed Knowledge Base or CXX API doc
 
 - [dxFeed Graal C/C++ API documentation](https://dxfeed.github.io/dxfeed-graal-cxx-api/)
 - [Troubleshooting](TROUBLESHOOTING.md): no data, connection errors, latency, what is restored after a reconnect
+- [Performance](PERFORMANCE.md): where the time goes, the `-O3` variant of the SDK, batches, threads, the allocator
 - [Data Model](DATA_MODEL.md): conflated events, event flags and snapshots, `NaN`, time precision, order sources
 - [dxFeed Knowledge Base](https://kb.dxfeed.com/index.html?lang=en)
   * [Getting Started](https://kb.dxfeed.com/en/getting-started.html)

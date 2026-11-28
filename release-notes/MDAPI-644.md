@@ -2,3 +2,5 @@
   the variant of the Graal Native SDK: the `oracle` variant (Oracle GraalVM, `-O3`) publishes ~20 % more events per
   second and spends ~20 % less CPU per received event on Windows x64 (see `HOW_TO_BUILD.md`).
     * The installed package sets `dxFeedGraalCxxApi_GRAAL_NATIVE_SDK_VARIANT`.
+    * The new page `PERFORMANCE.md` shows where the time of an event goes and what changes it, with the measured
+      values: the variant of the SDK, batches, threads, the memory allocator.
